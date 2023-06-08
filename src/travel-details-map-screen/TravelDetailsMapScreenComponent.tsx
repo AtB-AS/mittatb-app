@@ -250,14 +250,10 @@ const LiveVehicle = ({
     };
   })();
 
-  if (
-    !vehicle.location ||
-    zoomLevel < FOLLOW_MIN_ZOOM_LEVEL ||
-    vehicle.bearing === undefined
-  )
-    return null;
+  if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
 
-  const bearingRadians = ((90 - vehicle.bearing + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
+  const vehicleBearing = vehicle.bearing === undefined ? 0 : vehicle.bearing; // fallback to 0
+  const bearingRadians = ((90 - vehicleBearing + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
   const directionArrowOffsetFromCenter = 28;
 
   const scaleForBugfix = Platform.OS === 'android' ? 2 : 1; // fix android transform rendering bugs by scaling up parent and child back down
@@ -291,22 +287,24 @@ const LiveVehicle = ({
             />
           </TouchableOpacity>
 
-          {pitch < 7 && ( // allow just a tiny bit of pitch before hiding the live bus direction arrow
-            <DirectionArrow
-              bearingRadians={bearingRadians}
-              rotateDegrees={vehicle.bearing - heading}
-              directionArrowOffsetFromCenter={directionArrowOffsetFromCenter}
-              iconSize={iconSize}
-              iconScale={iconScale}
-              fill={
-                isError
-                  ? theme.interactive.interactive_destructive.default.background
-                  : isStale
-                  ? theme.interactive.interactive_1.default.background
-                  : fillColor
-              }
-            />
-          )}
+          {pitch < 7 && // allow just a tiny bit of pitch before hiding the live bus direction arrow
+            vehicle.bearing !== undefined && ( // only show direction if bearing is defined
+              <DirectionArrow
+                bearingRadians={bearingRadians}
+                rotateDegrees={vehicleBearing - heading}
+                directionArrowOffsetFromCenter={directionArrowOffsetFromCenter}
+                iconSize={iconSize}
+                iconScale={iconScale}
+                fill={
+                  isError
+                    ? theme.interactive.interactive_destructive.default
+                        .background
+                    : isStale
+                    ? theme.interactive.interactive_1.default.background
+                    : fillColor
+                }
+              />
+            )}
         </View>
       </MapboxGL.MarkerView>
     </>

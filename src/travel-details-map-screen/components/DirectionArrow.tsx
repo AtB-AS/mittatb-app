@@ -1,4 +1,5 @@
 import {View} from 'react-native';
+import {StyleSheet} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {BusLiveArrow} from '@atb/assets/svg/mono-icons/navigation';
 
@@ -18,26 +19,37 @@ export const DirectionArrow: React.FC<DirectionArrowProps> = ({
   iconSize,
   iconScale,
   fill,
-}) => (
-  <View
-    style={{
-      shadowColor: '#000000',
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.2,
-      shadowRadius: 2,
-      position: 'absolute',
-      top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
-      left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
-    }}
-  >
-    <ThemeIcon
-      svg={BusLiveArrow}
-      fill={fill}
-      width={iconSize}
-      height={iconSize}
+}) => {
+  const styles = useStyles();
+  return (
+    <View
       style={{
-        transform: [{rotate: `${rotateDegrees} deg`}, {scale: iconScale}],
+        ...styles.arrowIconContainer,
+        ...{
+          top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
+          left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
+        },
       }}
-    />
-  </View>
-);
+    >
+      <ThemeIcon
+        svg={BusLiveArrow}
+        fill={fill}
+        width={iconSize}
+        height={iconSize}
+        style={{
+          transform: [{rotate: `${rotateDegrees} deg`}, {scale: iconScale}],
+        }}
+      />
+    </View>
+  );
+};
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  arrowIconContainer: {
+    position: 'absolute',
+    shadowColor: '#000000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+}));
