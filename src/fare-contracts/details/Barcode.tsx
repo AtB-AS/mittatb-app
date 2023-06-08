@@ -241,6 +241,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: '#FFFFFF',
   },
   staticQrCode: {
-    aspectRatio: 1.25,
+    width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 }));
