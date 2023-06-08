@@ -30,10 +30,10 @@ import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
 import {TouchableOpacity} from 'react-native';
+import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {BusLiveArrow} from '@atb/assets/svg/mono-icons/navigation';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -180,47 +180,6 @@ export const TravelDetailsMapScreenComponent = ({
   );
 };
 
-export type DirectionArrowProps = {
-  bearingRadians: number;
-  rotateDegrees: number;
-  directionArrowOffsetFromCenter: number;
-  iconSize: number;
-  fill: string;
-};
-
-const DirectionArrow = ({
-  bearingRadians,
-  rotateDegrees,
-  directionArrowOffsetFromCenter,
-  iconSize,
-  fill,
-}: DirectionArrowProps): JSX.Element => (
-  <View
-    style={{
-      shadowColor: '#000000',
-      shadowOffset: {width: 0, height: 2},
-      shadowOpacity: 0.2,
-      shadowRadius: 2,
-      position: 'absolute',
-      top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
-      left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
-    }}
-  >
-    <ThemeIcon
-      svg={BusLiveArrow}
-      fill={fill}
-      width={iconSize}
-      height={iconSize}
-      style={{
-        transform: [
-          {rotate: `${rotateDegrees} deg`},
-          {scale: Platform.OS === 'android' ? 0.5 : 1},
-        ],
-      }}
-    />
-  </View>
-);
-
 type VehicleIconProps = {
   vehicle: VehicleWithPosition;
   mode?: AnyMode;
@@ -301,7 +260,9 @@ const LiveVehicle = ({
   const bearingRadians = ((90 - vehicle.bearing + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
   const directionArrowOffsetFromCenter = 28;
 
-  const iconSize = Platform.OS === 'android' ? 80 : 40; // kinda hacky fix due to lots of android bugs with transform
+  const scaleForBugfix = Platform.OS === 'android' ? 2 : 1; // fix android transform rendering bugs by scaling up parent and child back down
+  const iconSize = 40 * scaleForBugfix;
+  const iconScale = 1 / scaleForBugfix;
 
   return (
     <>
@@ -336,6 +297,7 @@ const LiveVehicle = ({
               rotateDegrees={vehicle.bearing - heading}
               directionArrowOffsetFromCenter={directionArrowOffsetFromCenter}
               iconSize={iconSize}
+              iconScale={iconScale}
               fill={
                 isError
                   ? theme.interactive.interactive_destructive.default.background
