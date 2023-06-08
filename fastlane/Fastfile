@@ -158,6 +158,8 @@ platform :ios do
         code_signing_identity: app_signing_identity_name
       )
     end
+
+    return app_prov_profile_name, widget_prov_profile_name, intent_prov_profile_name
   end
 
   desc 'Build the iOS application.'
@@ -169,7 +171,7 @@ platform :ios do
       build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
     )
-    setup_certificates
+    app_prov_profile_name, widget_prov_profile_name, intent_prov_profile_name = setup_certificates
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
