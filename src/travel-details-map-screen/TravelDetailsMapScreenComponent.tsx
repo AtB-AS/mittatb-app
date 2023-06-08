@@ -180,6 +180,47 @@ export const TravelDetailsMapScreenComponent = ({
   );
 };
 
+export type DirectionArrowParams = {
+  bearingRadians: number;
+  rotateDegrees: number;
+  directionArrowOffsetFromCenter: number;
+  iconSize: number;
+  fill: string;
+};
+
+const DirectionArrow = ({
+  bearingRadians,
+  rotateDegrees,
+  directionArrowOffsetFromCenter,
+  iconSize,
+  fill,
+}: DirectionArrowParams): JSX.Element => (
+  <View
+    style={{
+      shadowColor: '#000000',
+      shadowOffset: {width: 0, height: 2},
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      position: 'absolute',
+      top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
+      left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
+    }}
+  >
+    <ThemeIcon
+      svg={BusLiveArrow}
+      fill={fill}
+      width={iconSize}
+      height={iconSize}
+      style={{
+        transform: [
+          {rotate: `${rotateDegrees} deg`},
+          {scale: Platform.OS === 'android' ? 0.5 : 1},
+        ],
+      }}
+    />
+  </View>
+);
+
 type VehicleIconProps = {
   vehicle: VehicleWithPosition;
   mode?: AnyMode;
@@ -292,37 +333,19 @@ const LiveVehicle = ({
           </TouchableOpacity>
 
           {pitch < 7 && ( // allow just a tiny bit of pitch before hiding the live bus direction arrow
-            <View
-              style={{
-                shadowColor: '#000000',
-                shadowOffset: {width: 0, height: 2},
-                shadowOpacity: 0.2,
-                shadowRadius: 2,
-                position: 'absolute',
-                top: -Math.sin(bearingRadians) * directionArrowOffsetFromCenter,
-                left: Math.cos(bearingRadians) * directionArrowOffsetFromCenter,
-              }}
-            >
-              <ThemeIcon
-                svg={BusLiveArrow}
-                fill={
-                  isError
-                    ? theme.interactive.interactive_destructive.default
-                        .background
-                    : isStale
-                    ? theme.interactive.interactive_1.default.background
-                    : fillColor
-                }
-                width={iconSize}
-                height={iconSize}
-                style={{
-                  transform: [
-                    {rotate: `${vehicle.bearing - heading} deg`},
-                    {scale: Platform.OS === 'android' ? 0.5 : 1},
-                  ],
-                }}
-              />
-            </View>
+            <DirectionArrow
+              bearingRadians={bearingRadians}
+              rotateDegrees={vehicle.bearing - heading}
+              directionArrowOffsetFromCenter={directionArrowOffsetFromCenter}
+              iconSize={iconSize}
+              fill={
+                isError
+                  ? theme.interactive.interactive_destructive.default.background
+                  : isStale
+                  ? theme.interactive.interactive_1.default.background
+                  : fillColor
+              }
+            />
           )}
         </View>
       </MapboxGL.MarkerView>
