@@ -596,9 +596,8 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - AbtTokenCoreSDK (1.0.0):
-    - Kronos
-    - SwiftProtobuf
+  - AbtProtobufTokenIosStubs (2.661.0):
+    - SwiftProtobuf (~> 1.20.3)
   - boost (1.76.0)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
@@ -1284,16 +1283,23 @@ PODS:
     - React-Core
   - SocketRocket (0.6.0)
   - SwiftProtobuf (1.20.3)
-  - token-state-react-native-lib-ios (1.1.6):
-    - AbtTokenCoreSDK
+  - TimeReactNativeLib (1.1.13-SNAPSHOT):
+    - Kronos
     - React-Core
+  - TokenCore (1.0.0):
+    - AbtProtobufTokenIosStubs
+    - Kronos
+    - SwiftProtobuf (~> 1.20.3)
+  - TokenStateReactNativeLib (1.0.0):
+    - React-Core
+    - TokenCore
   - Turf (2.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AbtTokenCoreSDK (from `https://github.com/AtB-AS/temp-token-core-ios-lib.git`)
+  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.661.0`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
@@ -1384,7 +1390,9 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "token-state-react-native-lib-ios (from `../node_modules/@entur-private/abt-token-state-react-native-lib/ios`)"
+  - "TimeReactNativeLib (from `../node_modules/@entur-private/abt-time-react-native-lib`)"
+  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.1.13`)"
+  - "TokenStateReactNativeLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, branch `develop`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1434,8 +1442,9 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
-  AbtTokenCoreSDK:
-    :git: https://github.com/AtB-AS/temp-token-core-ios-lib.git
+  AbtProtobufTokenIosStubs:
+    :git: "git@github.com:entur/abt-protobuf-pods.git"
+    :tag: 2.661.0
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
@@ -1558,19 +1567,31 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  token-state-react-native-lib-ios:
-    :path: "../node_modules/@entur-private/abt-token-state-react-native-lib/ios"
+  TimeReactNativeLib:
+    :path: "../node_modules/@entur-private/abt-time-react-native-lib"
+  TokenCore:
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.13
+  TokenStateReactNativeLib:
+    :branch: develop
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 CHECKOUT OPTIONS:
-  AbtTokenCoreSDK:
-    :commit: 3c573a20cd7273bbf6fec70ed51dcf376c33ebb5
-    :git: https://github.com/AtB-AS/temp-token-core-ios-lib.git
+  AbtProtobufTokenIosStubs:
+    :git: "git@github.com:entur/abt-protobuf-pods.git"
+    :tag: 2.661.0
+  TokenCore:
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.13
+  TokenStateReactNativeLib:
+    :commit: 3dfdd845d2b247e1ea64c62cf7595f27488a0d6b
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
-  AbtTokenCoreSDK: 37dfb8d3f22568be581a7dbd04e290cb4b46b83f
+  AbtProtobufTokenIosStubs: 03f542d284191d515304cb56e96f8ce3503eac7b
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   BugsnagReactNative: e3debe54be51169ae09c653b059f1c1b0e594e39
@@ -1672,11 +1693,13 @@ SPEC CHECKSUMS:
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
-  token-state-react-native-lib-ios: 6548b638164e281d10fcf05e0832ed5d28b74caa
+  TimeReactNativeLib: 6627c6bc6644d9bcb47c0bfb3207572f1fca1ce3
+  TokenCore: 1579a2a2179a283048d9c0a007b4fd38861f4555
+  TokenStateReactNativeLib: cba98cbdb61af0255d2e636565a0feedb6cda069
   Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 9eea10f835a619085db1c8d1242d728e7fe557c6
+PODFILE CHECKSUM: 1b4e9b93908c458955a86893701859f838b1383e
 
 COCOAPODS: 1.11.3

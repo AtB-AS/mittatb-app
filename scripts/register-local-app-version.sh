@@ -13,6 +13,7 @@ export APP_ENVIRONMENT=staging
 export ENTUR_CLIENT_ID=$(echo $credentials | jq '.clientId' -r)
 export ENTUR_CLIENT_SECRET=$(echo $credentials | jq '.clientSecret' -r)
 export BUILD_ID=1
+export DISABLE_LISTED_ON_PLAY_STORE=true
 
 sh scripts/ios/register-app-version.sh
 sh scripts/android/register-app-version.sh
