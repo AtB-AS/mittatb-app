@@ -309,9 +309,7 @@ const LiveVehicle = ({
         <MapboxGL.CircleLayer id="liveVehicleCircle" style={circleStyle} />
       </MapboxGL.ShapeSource>
       <MapboxGL.MarkerView
-        //id="liveVehicleIcon"
         coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
-        //allowOverlap={true}
       >
         <View
           style={{
