@@ -33,7 +33,6 @@ import {TouchableOpacity} from 'react-native';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-
 import {BusLiveArrow} from '@atb/assets/svg/mono-icons/navigation';
 
 export type TravelDetailsMapScreenParams = {
