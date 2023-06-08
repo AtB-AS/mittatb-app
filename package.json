@@ -45,7 +45,7 @@
     "@react-navigation/material-top-tabs": "^6.5.2",
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/stack": "^6.3.11",
-    "@rnmapbox/maps": "^10.0.8-rc.1",
+    "@rnmapbox/maps": "^10.0.0-beta.66",
     "@seznam/compose-react-refs": "^1.0.6",
     "@turf/bbox-polygon": "^6.5.0",
     "@turf/boolean-point-in-polygon": "^6.5.0",
@@ -102,7 +102,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^7.5.1",
+    "@atb-as/generate-assets": "^7.4.0",
     "@babel/core": "^7.20.12",
     "@babel/plugin-transform-template-literals": "^7.18.9",
     "@babel/preset-env": "^7.20.2",

@@ -22,10 +22,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^7.5.1":
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.5.1.tgz#2d187823424309ece3fa0084e4592e5c5b4daaf3"
-  integrity sha512-hAFOwq8dQvDF6c+jVoKmhUxfPV7sD9b9Anf5y9tu7wsiT9gbirHdxU6T8cUE02xN2r5UsstzgcV1SMIBK53N5w==
+"@atb-as/generate-assets@^7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.4.0.tgz#29940c88880d969f98812871c52e90ec76c20ed6"
+  integrity sha512-fakqZ7inY8WstgCE/uNRAo18XBvwHeBcx1FlSifq9ziX+xGEelrpvxd1s6YEeb3a2BGKeDubvPBk+i2BBzf91Q==
   dependencies:
     "@atb-as/theme" "^7.1.0"
     commander "^9.4.0"
@@ -33,14 +33,6 @@
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
-
-"@atb-as/theme@^7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-7.1.0.tgz#ae2025d9b20fb36f97f079c07896bc9022cace82"
-  integrity sha512-JEX3ixJ07djS2Kduh3XjE/2A3ovGdzo/ewVe84uV9UX3SuTqVj0bWeJJDAGpyQd/LSgMnwZ1PINxmBC6kPIDbw==
-  dependencies:
-    hex-to-rgba "^2.0.1"
-    ts-deepmerge "^4.0.0"
 
 "@atb-as/theme@^7.1.0":
   version "7.1.0"
@@ -3247,12 +3239,24 @@
   resolved "https://registry.npmjs.org/@leile/lobo-t/-/lobo-t-1.0.5.tgz"
   integrity sha512-A2OaWFEFfs9Gvs5K8IhMgGeHvve+zABWM4kWs849ypvOKDNlWzUFp6rGe6SDAPdUyl3D/9zSNSm5WcKzsqpy1w==
 
+"@mapbox/geo-viewport@>=0.4.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/geo-viewport/-/geo-viewport-0.5.0.tgz#5e3b4ef19ed113169d168eec9c60840e430c52a6"
+  integrity sha512-h0b10JU+lSxw8/TLXGdzcVTPxMN9Ikv0os8sCo0OAHXUiSDkQs5fx4WWLJeQTnC++qaGFl6/Ssr+H5N6NIvE5g==
+  dependencies:
+    "@mapbox/sphericalmercator" "^1.2.0"
+
 "@mapbox/polyline@^1.1.1":
   version "1.1.1"
   resolved "https://registry.npmjs.org/@mapbox/polyline/-/polyline-1.1.1.tgz"
   integrity sha512-z9Sl7NYzsEIrAza658H92mc0OvpBjQwjp7Snv4xREKhsCMat7m1IKdWJMjQ5opiPYa0veMf7kCaSd1yx55AhmQ==
   dependencies:
     meow "^6.1.1"
+
+"@mapbox/sphericalmercator@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/sphericalmercator/-/sphericalmercator-1.2.0.tgz#55d4896be906bfff859e22a1d72267329a0fff90"
+  integrity sha512-ZTOuuwGuMOJN+HEmG/68bSEw15HHaMWmQ5gdTsWdWsjDe56K1kGvLOK6bOSC8gWgIvEO0w6un/2Gvv1q5hJSkQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -3501,6 +3505,11 @@
   resolved "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"
   integrity sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ==
 
+"@react-native/normalize-color@*":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native/normalize-color/-/normalize-color-2.1.0.tgz#939b87a9849e81687d3640c5efa2a486ac266f91"
+  integrity sha512-Z1jQI2NpdFJCVgpY+8Dq/Bt3d+YUi1928Q+/CZm/oh66fzM0RUl54vvuXlPJKybH4pdCZey1eDTPaLHkMPNgWA==
+
 "@react-native/normalize-color@2.0.0", "@react-native/normalize-color@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/normalize-color/-/normalize-color-2.0.0.tgz#da955909432474a9a0fe1cbffc66576a0447f567"
@@ -3571,11 +3580,12 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@rnmapbox/maps@^10.0.8-rc.1":
-  version "10.0.8-rc.1"
-  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.0.8-rc.1.tgz#3604400d13a2b7e10a3aac51ca6662773e297c6b"
-  integrity sha512-vCoUHFCeRCAPsjbAHnqLjFzl/jDHwwY/pMq9b3lgzGl/Y4Z52E4VTRGWHC1BBult/8aO08cHMaAm1IElffWqug==
+"@rnmapbox/maps@^10.0.0-beta.66":
+  version "10.0.0-beta.66"
+  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.0.0-beta.66.tgz#be98ec51b2322089f3bf8be77afc96f492aed48d"
+  integrity sha512-s7acA37GxvomYPGL8qJKOFnOj1zj2gfKOfjOnqn7mpiAfDcLJZLy2rwUJ9pCltSsZRCKQAX44kWssatmrbDNQw==
   dependencies:
+    "@mapbox/geo-viewport" ">=0.4.0"
     "@turf/along" "6.5.0"
     "@turf/distance" "6.5.0"
     "@turf/helpers" "6.5.0"
@@ -3583,6 +3593,7 @@
     "@turf/nearest-point-on-line" "6.5.0"
     "@types/geojson" "^7946.0.7"
     debounce "^1.2.0"
+    deprecated-react-native-prop-types "^2.3.0"
 
 "@seznam/compose-react-refs@^1.0.6":
   version "1.0.6"
@@ -5862,6 +5873,15 @@ depd@~1.1.2:
   resolved "https://registry.npmjs.org/depd/-/depd-1.1.2.tgz"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
 
+deprecated-react-native-prop-types@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/deprecated-react-native-prop-types/-/deprecated-react-native-prop-types-2.3.0.tgz#c10c6ee75ff2b6de94bb127f142b814e6e08d9ab"
+  integrity sha512-pWD0voFtNYxrVqvBMYf5gq3NA2GCpfodS1yNynTPc93AYA/KEMGeWDqqeUB6R2Z9ZofVhks2aeJXiuQqKNpesA==
+  dependencies:
+    "@react-native/normalize-color" "*"
+    invariant "*"
+    prop-types "*"
+
 destroy@~1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/destroy/-/destroy-1.0.4.tgz"
@@ -7276,7 +7296,7 @@ interpret@^1.0.0:
   resolved "https://registry.npmjs.org/interpret/-/interpret-1.4.0.tgz"
   integrity sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==
 
-invariant@2.2.4, invariant@^2.2.4:
+invariant@*, invariant@2.2.4, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -9989,6 +10009,15 @@ prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
+prop-types@*, prop-types@^15.8.1:
+  version "15.8.1"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
+  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.13.1"
+
 prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
@@ -9997,15 +10026,6 @@ prop-types@^15.7.2:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.8.1"
-
-prop-types@^15.8.1:
-  version "15.8.1"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
-  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
-  dependencies:
-    loose-envify "^1.4.0"
-    object-assign "^4.1.1"
-    react-is "^16.13.1"
 
 proper-lockfile@^3.0.2:
   version "3.2.0"

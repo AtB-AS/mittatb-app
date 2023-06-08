@@ -872,12 +872,12 @@ PODS:
   - Libuv-gRPC/Implementation (0.0.10):
     - Libuv-gRPC/Interface (= 0.0.10)
   - Libuv-gRPC/Interface (0.0.10)
-  - MapboxCommon (23.5.0)
-  - MapboxCoreMaps (10.13.1):
-    - MapboxCommon (~> 23.5)
-  - MapboxMaps (10.13.1):
-    - MapboxCommon (= 23.5.0)
-    - MapboxCoreMaps (= 10.13.1)
+  - MapboxCommon (23.2.3)
+  - MapboxCoreMaps (10.10.0):
+    - MapboxCommon (~> 23.2)
+  - MapboxMaps (10.10.2):
+    - MapboxCommon (= 23.2.3)
+    - MapboxCoreMaps (= 10.10.0)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.10)
@@ -1237,14 +1237,14 @@ PODS:
     - React-Core
   - RNLocalize (2.2.4):
     - React-Core
-  - rnmapbox-maps (10.0.8-rc.1):
-    - MapboxMaps (~> 10.13.1)
+  - rnmapbox-maps (10.0.0-beta.66):
+    - MapboxMaps (~> 10.10.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.8-rc.1)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.66)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.8-rc.1):
-    - MapboxMaps (~> 10.13.1)
+  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.66):
+    - MapboxMaps (~> 10.10.0)
     - React
     - React-Core
     - Turf
@@ -1610,9 +1610,9 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
-  MapboxCommon: fdf7fd31c90b7b607cd9c63e37797f023c01d860
-  MapboxCoreMaps: 24270c7c6b8cb71819fc2f3c549db9620ee4d019
-  MapboxMaps: cb76511b98d3b95c74b0771ed105bc69f30ace6b
+  MapboxCommon: e7948335faacbe6f8b9b115511fd0dd0354bf565
+  MapboxCoreMaps: 4075a9e415b9b3ab6229d09623fef5f791826a5b
+  MapboxMaps: d8cf7d214d94ec18790c338f3a3fe59dd4048e97
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -1665,7 +1665,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
-  rnmapbox-maps: 505547e44fe713b076b39fc24bacf382cf5e5b33
+  rnmapbox-maps: ab65faa9675f833e74693f0ca949d3f1647508b6
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
