@@ -43,16 +43,13 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       fareProductTypeConfig.configuration.requiresLogin &&
       authenticationType !== 'phone'
     ) {
-      navigation.navigate('LoginInApp', {
-        screen: 'LoginOnboardingInApp',
-        params: {
-          fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_PurchaseOverviewScreen',
-            params: {
-              fareProductTypeConfig,
-              mode: 'Ticket',
-            },
+      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        fareProductTypeConfig,
+        afterLogin: {
+          screen: 'Root_PurchaseOverviewScreen',
+          params: {
+            fareProductTypeConfig,
+            mode: 'Ticket',
           },
         },
       });

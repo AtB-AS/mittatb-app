@@ -22,6 +22,7 @@ export type ThemeIconProps = {
   size?: keyof Theme['icon']['size'];
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
   loading?: boolean;
+  allowFontScaling?: boolean;
 } & SvgProps;
 
 export const ThemeIcon = ({
@@ -32,6 +33,7 @@ export const ThemeIcon = ({
   notification,
   style,
   loading,
+  allowFontScaling = true,
   ...props
 }: ThemeIconProps): JSX.Element => {
   const {theme, themeName} = useTheme();
@@ -39,7 +41,9 @@ export const ThemeIcon = ({
   const fillToUse = fill || getFill(theme, themeName, colorType);
 
   const fontScale = useFontScale();
-  const iconSize = theme.icon.size[size] * fontScale;
+  const iconSize = allowFontScaling
+    ? theme.icon.size[size] * fontScale
+    : theme.icon.size[size];
 
   const settings = {
     fill: fillToUse,

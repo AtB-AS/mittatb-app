@@ -1,64 +1,35 @@
-import {useCallback, useEffect, useMemo} from 'react';
 import {
-  AbtClient,
-  encodeAsSecureContainer,
-  TokenAction,
-  NoTokenError,
-  Token,
   ActivatedToken,
+  createClient,
+  encodeAsSecureContainer,
+  Token,
+  TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
-import Bugsnag from '@bugsnag/react-native';
+import {logger} from '@atb/mobile-token/abtClientLogger';
+import {tokenService} from '@atb/mobile-token/tokenService';
 
-export function useMobileTokenClient(abtClient: AbtClient, contextId: string) {
-  useEffect(() => {
-    (async function () {
-      await abtClient.start();
-      return abtClient.close;
-    })();
-  }, []);
+const CONTEXT_ID = 'main';
 
-  const get = useCallback(async (traceId: string) => {
-    try {
-      return await abtClient.getToken(contextId, traceId);
-    } catch (err) {
-      if (err instanceof NoTokenError) {
-        Bugsnag.leaveBreadcrumb('No native token found');
-        return undefined;
-      }
-      throw err;
-    }
-  }, []);
+const abtClient = createClient({
+  tokenContextIds: [CONTEXT_ID],
+  attestation: {
+    attestationType: 'PlayIntegrityAPIAttestation',
+  },
+  remoteTokenService: tokenService,
+  logger,
+});
 
-  const create = useCallback(
-    async (traceId) => abtClient.createToken(contextId, traceId),
-    [],
-  );
-
-  const encode = useCallback(
-    async (token: Token, tokenActions?: TokenAction[]) =>
-      encodeAsSecureContainer(
-        token,
-        [],
-        tokenActions ?? [TokenAction.TOKEN_ACTION_TICKET_INSPECTION],
-        false,
-      ),
-    [],
-  );
-  const clear = useCallback(async () => abtClient.clearToken(contextId), []);
-  const renew = useCallback(
-    (token: ActivatedToken, traceId: string) =>
-      abtClient.renewToken(token, traceId),
-    [],
-  );
-
-  return useMemo(
-    () => ({
-      get,
-      create,
-      encode,
-      clear,
-      renew,
-    }),
-    [get, create, encode, clear],
-  );
-}
+export const mobileTokenClient = {
+  get: (traceId: string) => abtClient.getToken(CONTEXT_ID, traceId),
+  create: (traceId: string) => abtClient.createToken(CONTEXT_ID, traceId),
+  encode: (token: Token, tokenActions?: TokenAction[]) =>
+    encodeAsSecureContainer(
+      token,
+      [],
+      tokenActions ?? [TokenAction.TOKEN_ACTION_TICKET_INSPECTION],
+      false,
+    ),
+  clear: () => abtClient.clearToken(CONTEXT_ID),
+  renew: (token: ActivatedToken, traceId: string) =>
+    abtClient.renewToken(token, traceId),
+};

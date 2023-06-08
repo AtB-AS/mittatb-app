@@ -13,7 +13,12 @@ export const Dashboard_TripDetailsScreen = ({navigation, route}: Props) => {
     <TripDetailsScreenComponent
       {...route.params}
       onPressDetailsMap={(params) => {
-        analytics.logEvent('Trip details', 'Map clicked');
+        params.vehicleWithPosition
+          ? analytics.logEvent('Trip details', 'See live bus clicked', {
+              fromPlace: params.fromPlace,
+              toPlace: params.toPlace,
+            })
+          : analytics.logEvent('Trip details', 'Map clicked');
         navigation.navigate('Dashboard_TravelDetailsMapScreen', params);
       }}
       onPressBuyTicket={(params) => {

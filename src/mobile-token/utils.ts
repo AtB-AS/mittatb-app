@@ -10,17 +10,15 @@ export const isInspectable = (remoteToken: RemoteToken) =>
   );
 
 export const isTravelCardToken = (remoteToken?: RemoteToken) =>
-  remoteToken?.type === 'TOKEN_TYPE_TRAVELCARD';
+  remoteToken?.type === 'ENT:TypeOfTravelDocument:DesfireTravelCard';
 
 export const isMobileToken = (remoteToken?: RemoteToken) =>
-  remoteToken?.type === 'TOKEN_TYPE_MOBILE';
+  remoteToken?.type === 'ENT:TypeOfTravelDocument:MobileApplication';
 
 export const hasNoTokenType = (remoteToken?: RemoteToken) =>
-  remoteToken?.type !== 'TOKEN_TYPE_TRAVELCARD' &&
-  remoteToken?.type !== 'TOKEN_TYPE_MOBILE';
+  isTravelCardToken(remoteToken) && isMobileToken(remoteToken);
 
-export const getDeviceName = (remoteToken?: RemoteToken) =>
-  remoteToken?.keyValues?.find((kv) => kv.key === 'deviceName')?.value;
+export const getDeviceName = (remoteToken?: RemoteToken) => remoteToken?.name;
 
 export const getDeviceNameForCurrentToken = (
   currentTokenId?: string,

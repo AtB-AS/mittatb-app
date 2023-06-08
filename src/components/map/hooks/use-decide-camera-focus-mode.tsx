@@ -14,7 +14,7 @@ import {
   shouldShowMapLines,
   shouldZoomToFeature,
 } from '../utils';
-import {tripsSearch} from '@atb/api/trips_v2';
+import {tripsSearch} from '@atb/api/trips';
 import {StreetMode} from '@entur/sdk/lib/journeyPlanner/types';
 import MapboxGL from '@rnmapbox/maps';
 import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';

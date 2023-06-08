@@ -13,9 +13,11 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   return (
     <AnonymousPurchaseConsequencesScreenComponent
       onPressLogin={() =>
-        navigation.navigate('LoginInApp', {
-          screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
-          params: {
+        navigation.navigate(
+          enable_vipps_login
+            ? 'Root_LoginOptionsScreen'
+            : 'Root_LoginPhoneInputScreen',
+          {
             afterLogin: {
               screen: 'Root_TabNavigatorStack',
               params: {
@@ -29,7 +31,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
               },
             },
           },
-        })
+        )
       }
       onPressContinueWithoutLogin={navigation.goBack}
       showHeader={true}

@@ -1,44 +1,67 @@
-import {TripPattern} from '@atb/sdk';
 import {client} from './client';
-import {Location} from '@atb/favorites';
 import {AxiosRequestConfig} from 'axios';
+import {TripPattern, TripsQuery} from '@atb/api/types/trips';
+import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import Bugsnag from '@bugsnag/react-native';
 
-export async function search(
-  from: Location,
-  to: Location,
-  searchDate?: string,
-  arriveBy: boolean = false,
+export async function tripsSearch(
+  query: TripsQueryVariables,
   opts?: AxiosRequestConfig,
-) {
-  const url = 'bff/v1/journey/trip';
-  return await client.post<TripPattern[]>(
-    url,
-    {
-      from: {
-        place: from.resultType === 'geolocation' ? undefined : from.id,
-        name: from.name,
-        coordinates: from.coordinates,
-      },
-      to: {
-        place: to.resultType === 'geolocation' ? undefined : to.id,
-        name: to.name,
-        coordinates: to.coordinates,
-      },
-      searchDate,
-      arriveBy,
+): Promise<TripsQuery> {
+  const url = 'bff/v2/trips';
+  const cleanQuery: TripsQueryVariables = {
+    to: {
+      name: query.to.name,
+      coordinates: query.to.coordinates,
+      place: query.to.place,
     },
-    {...opts},
-  );
+    from: {
+      name: query.from.name,
+      coordinates: query.from.coordinates,
+      place: query.from.place,
+    },
+    when: query.when,
+    arriveBy: query.arriveBy,
+    cursor: query.cursor,
+    transferPenalty: query.transferPenalty,
+    waitReluctance: query.waitReluctance,
+    walkReluctance: query.walkReluctance,
+    walkSpeed: query.walkSpeed,
+    modes: query.modes,
+  };
+
+  const results = await post<TripsQuery>(url, cleanQuery, opts);
+
+  Bugsnag.leaveBreadcrumb('results', {
+    patterns: results.trip?.tripPatterns ?? 'none',
+  });
+
+  return results;
 }
 
-export async function getSingleTripPattern(
-  tripPatternId: string,
+export async function singleTripSearch(
+  queryString?: string,
   opts?: AxiosRequestConfig,
+): Promise<TripPattern | undefined> {
+  if (!queryString) {
+    return undefined;
+  }
+  const url = '/bff/v2/singleTrip';
+  const query = {
+    compressedQuery: queryString,
+  };
+  return await post<TripPattern>(url, query, opts);
+}
+
+async function post<T>(
+  url: string,
+  query: any,
+  opts?: AxiosRequestConfig<any>,
 ) {
-  const url = `bff/v1/journey/single-trip?id=${tripPatternId}`;
-  const result = await client.get<TripPattern>(url, {
+  const response = await client.post<T>(url, query, {
     ...opts,
     skipErrorLogging: (error) => error.response?.status === 410,
   });
-  return result.data;
+
+  return response.data;
 }

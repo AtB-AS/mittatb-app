@@ -3,7 +3,7 @@ import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
 import {Location} from '@atb/favorites';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {getVenueIconTypes} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {getVenueIconTypes} from './utils';
 import {
   Bus,
   Ferry,

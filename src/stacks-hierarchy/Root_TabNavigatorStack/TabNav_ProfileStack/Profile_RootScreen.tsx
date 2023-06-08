@@ -9,7 +9,6 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {LoginInAppStackParams} from '@atb/login/types';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -51,6 +50,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
+import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {BetaTag} from '@atb/components/beta-tag';
 
 const buildNumber = getBuildNumber();
@@ -101,7 +101,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
 
-  const {enable_departures_v2_as_default} = useRemoteConfig();
+  const {enable_departures_v2_as_default, disable_travelcard} =
+    useRemoteConfig();
   const setDeparturesV2Enabled = (value: boolean) => {
     if (enable_departures_v2_as_default) {
       updateMetadata({
@@ -207,25 +208,15 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   ProfileTexts.sections.account.linkSectionItems.login.label,
                 )}
                 onPress={() => {
-                  let screen: keyof LoginInAppStackParams = 'PhoneInputInApp';
+                  let screen: keyof RootStackParamList =
+                    'Root_LoginPhoneInputScreen';
                   if (hasActiveFareContracts) {
-                    screen = 'ActiveFareContractPromptInApp';
+                    screen = 'Root_LoginActiveFareContractWarningScreen';
                   } else if (enable_vipps_login) {
-                    screen = 'LoginOptionsScreen';
+                    screen = 'Root_LoginOptionsScreen';
                   }
 
-                  return navigation.navigate('LoginInApp', {
-                    screen,
-                    params: {
-                      afterLogin: {
-                        screen: 'Root_TabNavigatorStack',
-                        params: {
-                          screen: 'TabNav_ProfileStack',
-                          params: {screen: 'Profile_RootScreen'},
-                        },
-                      },
-                    },
-                  });
+                  return navigation.navigate(screen, {});
                 }}
                 icon={<ThemeIcon svg={LogIn} />}
                 testID="loginButton"
@@ -304,10 +295,17 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
           {authenticationType === 'phone' && hasEnabledMobileToken && (
             <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.travelToken
-                  .label,
-              )}
+              text={
+                disable_travelcard
+                  ? t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .travelToken.labelWithoutTravelcard,
+                    )
+                  : t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .travelToken.label,
+                    )
+              }
               label={'new'}
               onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
               testID="travelTokenButton"
@@ -606,11 +604,11 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
-  betaTag: {
-    marginHorizontal: theme.spacings.small,
-  },
   customerNumberHeading: {
     marginBottom: theme.spacings.xSmall,
+  },
+  betaTag: {
+    marginHorizontal: theme.spacings.small,
   },
   scrollView: {
     paddingVertical: theme.spacings.medium,

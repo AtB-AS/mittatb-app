@@ -11,6 +11,7 @@ import {ChangeTokenAction} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/Ta
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useIsFocused} from '@react-navigation/native';
 import {useTokenToggleDetails} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/use-token-toggle-details';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
 
@@ -19,6 +20,7 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const {isError, isLoading} = useMobileTokenContextState();
   const screenHasFocus = useIsFocused();
+  const {disable_travelcard} = useRemoteConfig();
   const shouldFetchTokenDetails = screenHasFocus && !isError && !isLoading;
   const {shouldShowLoader, toggleLimit, maxToggleLimit} = useTokenToggleDetails(
     shouldFetchTokenDetails,
@@ -26,7 +28,11 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(TravelTokenTexts.travelToken.header.title)}
+        title={
+          disable_travelcard
+            ? t(TravelTokenTexts.travelToken.header.titleWithoutTravelcard)
+            : t(TravelTokenTexts.travelToken.header.title)
+        }
         leftButton={{type: 'back'}}
       />
       <ScrollView style={styles.scrollView}>

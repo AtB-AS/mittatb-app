@@ -71,7 +71,7 @@ export const TripDetailsScreenComponent = ({
           color: themeColor,
         }}
         parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
-          <View>
+          <View style={styles.parallaxContent}>
             <View accessible={true} ref={focusRef}>
               <ThemeText
                 color={themeColor}
@@ -273,6 +273,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_0.background,
   },
   heading: {marginBottom: theme.spacings.medium},
+  parallaxContent: {marginHorizontal: theme.spacings.medium},
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },

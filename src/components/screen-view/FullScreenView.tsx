@@ -66,7 +66,7 @@ const ChildrenWithParallaxScrollContent = ({
     <View style={styles.container}>
       <ParallaxScroll
         header={
-          <View style={[styles.headerContainer, {backgroundColor}]}>
+          <View style={{backgroundColor}}>
             <View style={styles.childrenContainer}>
               {parallaxContent(focusRef)}
             </View>
@@ -87,9 +87,6 @@ const ChildrenInNormalScrollView = ({refreshControl, children}: Props) => (
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-  },
-  headerContainer: {
-    paddingHorizontal: theme.spacings.medium,
   },
   topContainer: {
     marginVertical: theme.spacings.medium,

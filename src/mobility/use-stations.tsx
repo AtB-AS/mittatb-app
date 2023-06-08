@@ -11,10 +11,10 @@ import {
 } from '@atb/components/map';
 import {FeatureCollection, GeoJSON} from 'geojson';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
-import {getStations} from '@atb/api/stations';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {useIsFocused} from '@react-navigation/native';
 import {useIsCarSharingEnabled} from './use-car-sharing-enabled';
+import {getStations} from '@atb/api/mobility';
 
 const MIN_ZOOM_LEVEL = 12;
 const BUFFER_DISTANCE_IN_METERS = 500;
@@ -37,26 +37,20 @@ export const useStations: () => StationsState | undefined = () => {
     });
   }, [isCityBikesEnabled, isCarSharingEnabled]);
 
-  const formFactorsFromFilter = (filter: StationsFilterType) => {
-    const formFactors = [];
-    if (filter.showCityBikeStations) formFactors.push(FormFactor.Bicycle);
-    if (filter.showCarSharingStations) formFactors.push(FormFactor.Car);
-    return formFactors;
-  };
-
   useEffect(() => {
     if (
       isCityBikesEnabled &&
       isFocused &&
       area &&
-      (filter?.showCityBikeStations || filter?.showCarSharingStations)
+      (showBikes(filter) || showCars(filter))
     ) {
       const abortCtrl = new AbortController();
       setIsLoading(true);
       getStations(
         {
           ...area,
-          availableFormFactors: formFactorsFromFilter(filter),
+          availableFormFactors: getFormFactorsFromFilter(filter),
+          operators: getOperatorsFromFilter(filter),
         },
         {signal: abortCtrl.signal},
       )
@@ -86,4 +80,28 @@ export const useStations: () => StationsState | undefined = () => {
         isLoading,
       }
     : undefined;
+};
+
+const showBikes = (filter: StationsFilterType | undefined) =>
+  filter?.cityBikeStations?.showAll ||
+  filter?.cityBikeStations?.operators.length;
+
+const showCars = (filter: StationsFilterType | undefined) =>
+  filter?.carSharingStations?.showAll ||
+  filter?.carSharingStations?.operators.length;
+
+const getFormFactorsFromFilter = (
+  filter: StationsFilterType | undefined,
+): FormFactor[] => {
+  const formFactors = [];
+  if (showBikes(filter)) formFactors.push(FormFactor.Bicycle);
+  if (showCars(filter)) formFactors.push(FormFactor.Car);
+  return formFactors;
+};
+
+const getOperatorsFromFilter = (filter: StationsFilterType | undefined) => {
+  return [
+    ...(filter?.cityBikeStations?.operators ?? []),
+    ...(filter?.carSharingStations?.operators ?? []),
+  ];
 };

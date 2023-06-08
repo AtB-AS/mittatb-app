@@ -10,16 +10,16 @@ import firestore, {
 } from '@react-native-firebase/firestore';
 import {
   CityZone,
+  PreassignedFareProduct,
   TariffZone,
   UserProfile,
-  PreassignedFareProduct,
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
+  defaultCityZones,
   defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
-  defaultCityZones,
   defaultUserProfiles,
 } from '@atb/reference-data/defaults';
 import {
@@ -33,10 +33,12 @@ import {
   mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
   mapToFlexibleTransportOption,
+  mapToMobilityOperators,
   mapToTransportModeFilterOptions,
 } from './converters';
 import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {LanguageAndTextType} from '@atb/translations';
+import {MobilityOperatorType} from '@atb/mobility';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
@@ -61,6 +63,7 @@ type ConfigurationContextState = {
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinks | undefined;
+  mobilityOperators: MobilityOperatorType[] | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -75,6 +78,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   travelSearchFilters: undefined,
   appTexts: undefined,
   configurableLinks: undefined,
+  mobilityOperators: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -101,6 +105,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [appTexts, setAppTexts] = useState<AppTexts>();
   const [configurableLinks, setConfigurableLinks] =
     useState<ConfigurableLinks>();
+  const [mobilityOperators, setMobilityOperators] = useState<
+    MobilityOperatorType[]
+  >([]);
 
   useEffect(() => {
     firestore()
@@ -165,6 +172,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (configurableLinks) {
             setConfigurableLinks(configurableLinks);
           }
+
+          const mobilityOperators = getMobilityOperatorsFromSnapshot(snapshot);
+          if (mobilityOperators) {
+            setMobilityOperators(mobilityOperators);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -188,6 +200,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       travelSearchFilters,
       appTexts,
       configurableLinks,
+      mobilityOperators,
     };
   }, [
     preassignedFareProducts,
@@ -201,6 +214,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     travelSearchFilters,
     appTexts,
     configurableLinks,
+    mobilityOperators,
   ]);
 
   return (
@@ -407,4 +421,11 @@ function getConfigurableLinksFromSnapshot(
     inspectionInfo,
     refundInfo,
   };
+}
+
+function getMobilityOperatorsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): MobilityOperatorType[] | undefined {
+  const operators = snapshot.docs.find((doc) => doc.id == 'mobility');
+  return mapToMobilityOperators(operators?.get('operators'));
 }

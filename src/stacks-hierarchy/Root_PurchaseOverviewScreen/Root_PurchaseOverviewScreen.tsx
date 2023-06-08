@@ -85,7 +85,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     }
   }, [params?.refreshOffer]);
 
-  const closeModal = () => navigation.pop();
+  const closeModal = () => navigation.popToTop();
 
   return (
     <View style={styles.container}>
@@ -186,13 +186,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             userProfilesWithCount={travellerSelection}
             fareProductTypeConfig={params.fareProductTypeConfig}
             onPressBuy={() => {
-              analytics.logEvent('Ticketing', 'Purchase confirmation clicked', {
+              analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: params.fareProductTypeConfig.name,
                 tariffZone: {from: fromTariffZone.id, to: toTariffZone.id},
                 userProfilesWithCount: travellerSelection.map((t) => ({
                   userType: t.userTypeString,
                   count: t.count,
                 })),
+                preassignedFareProduct: {
+                  id: preassignedFareProduct.id,
+                  name: preassignedFareProduct.name.value,
+                },
                 travelDate,
                 mode: params.mode,
               });

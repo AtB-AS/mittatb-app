@@ -10,6 +10,7 @@ import {isBikeStation, isCarStation, isVehicle} from '@atb/mobility/utils';
 import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 import {CarSharingStationSheet} from '@atb/mobility/components/CarSharingStationBottomSheet';
+import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -26,6 +27,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const analytics = useMapSelectionAnalytics();
 
   const closeWithCallback = () => {
     closeBottomSheet();
@@ -39,6 +41,9 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ? await findEntityAtClick(mapSelectionAction.feature, mapViewRef)
           : undefined;
       setSelectedFeature(selectedFeature);
+      if (selectedFeature) {
+        analytics.logMapSelection(selectedFeature);
+      }
     })();
   }, [mapSelectionAction]);
 
@@ -103,7 +108,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           () => {
             return (
               <ScooterSheet
-                vehicleId={selectedFeature.properties?.id}
+                vehicleId={selectedFeature.properties.id}
                 close={closeWithCallback}
               />
             );
@@ -115,5 +120,5 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         closeBottomSheet();
       }
     })();
-  }, [selectedFeature, isFocused, distance]);
+  }, [selectedFeature, isFocused, distance, analytics]);
 };
