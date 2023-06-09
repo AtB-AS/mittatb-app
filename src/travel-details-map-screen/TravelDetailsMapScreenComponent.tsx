@@ -275,27 +275,15 @@ const LiveVehicle = ({
             width: iconSize,
             height: iconSize,
           }}
-          onTouchEnd={() => {
-            if (Platform.OS === 'android') {
-              setShouldTrack(true);
-            }
-          }}
+          onTouchStart={() => setShouldTrack(true)}
         >
-          <TouchableOpacity
-            onPressOut={() => {
-              if (Platform.OS === 'ios') {
-                setShouldTrack(true);
-              }
-            }}
-          >
-            <LiveVehicleIcon
-              mode={mode}
-              subMode={subMode}
-              isError={isError}
-              isStale={isStale}
-              isLoading={isLoading}
-            />
-          </TouchableOpacity>
+          <LiveVehicleIcon
+            mode={mode}
+            subMode={subMode}
+            isError={isError}
+            isStale={isStale}
+            isLoading={isLoading}
+          />
 
           {!isError &&
             vehicle.bearing !== undefined && ( // only show direction if bearing is defined
