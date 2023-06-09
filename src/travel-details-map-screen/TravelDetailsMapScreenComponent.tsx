@@ -113,26 +113,20 @@ export const TravelDetailsMapScreenComponent = ({
   }, [vehicle, shouldTrack]);
 
   return (
-    <View
-      style={styles.mapView}
-      onStartShouldSetResponder={() => Platform.OS === 'ios'}
-      onResponderGrant={() => setShouldTrack(false)}
-    >
+    <View style={styles.mapView}>
       <MapboxGL.MapView
         ref={mapViewRef}
         style={styles.map}
         pitchEnabled={false}
         {...MapViewConfig}
-        onTouchMove={() => {
-          if (Platform.OS === 'android') {
-            setShouldTrack(false);
-          }
-        }}
         onCameraChanged={(state) => {
           setCameraState({
             zoomLevel: state.properties.zoom,
             heading: state.properties.heading,
           });
+          if (state.gestures.isGestureActive) {
+            setShouldTrack(false);
+          }
         }}
       >
         <MapboxGL.Camera
