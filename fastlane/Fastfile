@@ -188,14 +188,14 @@ platform :ios do
       build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
     )
-    
+
+    setup_certificates
+
     app_signing_identity_name, app_prov_profile_name, app_prov_profile_path = app_cert_info
 
     widget_prov_profile_name, widget_prov_profile_path = widget_cert_info
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
-
-    setup_certificates
 
     cocoapods(podfile: './ios/Podfile')
     build_app(
