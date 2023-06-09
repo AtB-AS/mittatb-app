@@ -165,13 +165,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
   },
-  topContainer: {
-    marginVertical: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
-  },
-  headerTitle: {
-    marginBottom: theme.spacings.medium,
-  },
   headerContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
