@@ -1,13 +1,20 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor} from '@atb/theme/colors';
-import {Animated, Easing, RefreshControlProps, View} from 'react-native';
+import {
+  LayoutChangeEvent,
+  LayoutRectangle,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  RefreshControlProps,
+  ScrollView,
+  View,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
+import {useMemo, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {ScrollView, useScroller} from '@atb/ScrollContext';
-import {useEffect, useState} from 'react';
 
 type Props = {
   headerProps: ScreenHeaderProps;
@@ -18,9 +25,12 @@ type Props = {
   parallaxContent?: (
     focusRef?: React.MutableRefObject<null>,
   ) => React.ReactNode;
-
+  handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   children?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
+  setLayoutFor?: (
+    element: keyof HeaderLayouts,
+  ) => ({nativeEvent: {layout}}: LayoutChangeEvent) => void;
 };
 
 type PropsWithParallaxContent = Props &
@@ -31,64 +41,42 @@ export function FullScreenView(props: Props) {
   const {themeName} = useTheme();
   const themeColor = props.headerProps.color ?? 'background_accent_0';
   const backgroundColor = getStaticColor(themeName, themeColor).background;
-  const {titleShowing, opacity} = useScroller();
-  const [titleFade] = useState(new Animated.Value(0));
+  const [opacity, setOpacity] = useState(0);
+  const {scrollMinOffset, scrollMaxOffset, setLayoutFor} = useScrollOffsets();
 
-  useEffect(() => {
-    !titleShowing &&
-      Animated.timing(titleFade, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start();
-
-    titleShowing &&
-      Animated.timing(titleFade, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-        easing: Easing.sin,
-      }).start();
-  }, [titleShowing]);
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setOpacity(
+      withinOpacityBounds(
+        ((event.nativeEvent.contentOffset.y - scrollMinOffset) * 2) /
+          scrollMaxOffset,
+        0,
+        1,
+      ),
+    );
+  };
 
   return (
     <>
-      {titleShowing ? (
-        <View
-          style={{
-            backgroundColor,
-            paddingTop: top,
-            shadowOpacity: opacity,
-          }}
-        >
-          <ScreenHeader
-            title={props.headerProps.title}
-            leftButton={{
-              ...props.headerProps.leftButton,
-              withIcon: false,
-              type: 'back',
-            }}
-            textOpacity={titleFade}
-            setFocusOnLoad={!props.parallaxContent}
-          />
-        </View>
-      ) : (
-        <View
-          style={{backgroundColor, paddingTop: top, shadowOpacity: opacity}}
-        >
-          <ScreenHeader
-            leftButton={props.headerProps.leftButton}
-            textOpacity={titleFade}
-            setFocusOnLoad={!props.parallaxContent}
-          />
-        </View>
-      )}
+      <View
+        style={{
+          backgroundColor,
+          paddingTop: top,
+        }}
+        onLayout={setLayoutFor('screenHeader')}
+      >
+        <ScreenHeader
+          {...props.headerProps}
+          textOpacity={opacity}
+          setFocusOnLoad={!props.parallaxContent}
+        />
+      </View>
 
       {hasParallaxContent(props) ? (
         <ChildrenWithParallaxScrollContent
           {...props}
+          handleScroll={handleScroll}
           backgroundColor={backgroundColor}
+          setLayoutFor={setLayoutFor}
         />
       ) : (
         <ChildrenInNormalScrollView {...props} />
@@ -105,6 +93,8 @@ const ChildrenWithParallaxScrollContent = ({
   refreshControl,
   children,
   backgroundColor,
+  handleScroll,
+  setLayoutFor,
 }: PropsWithParallaxContent & {backgroundColor: string}) => {
   const focusRef = useFocusOnLoad();
   const styles = useStyles();
@@ -112,13 +102,19 @@ const ChildrenWithParallaxScrollContent = ({
     <View style={styles.container}>
       <ParallaxScroll
         header={
-          <View style={[styles.headerContainer, {backgroundColor}]}>
+          <View
+            style={[styles.headerContainer, {backgroundColor}]}
+            onLayout={
+              setLayoutFor ? setLayoutFor('parallaxContent') : undefined
+            }
+          >
             <View style={styles.childrenContainer}>
               {parallaxContent(focusRef)}
             </View>
           </View>
         }
         refreshControl={refreshControl}
+        handleScroll={handleScroll}
       >
         {children}
       </ParallaxScroll>
@@ -129,6 +125,41 @@ const ChildrenWithParallaxScrollContent = ({
 const ChildrenInNormalScrollView = ({refreshControl, children}: Props) => (
   <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
 );
+const withinOpacityBounds = (
+  val: number,
+  minOpacity: number,
+  maxOpacity: number,
+): number =>
+  val > maxOpacity ? maxOpacity : val < minOpacity ? minOpacity : val;
+
+type HeaderLayouts = {
+  parallaxContent?: LayoutRectangle;
+  screenHeader?: LayoutRectangle;
+};
+const useScrollOffsets = () => {
+  const [headerLayouts, setHeaderLayouts] = useState<HeaderLayouts>({});
+  const setLayoutFor =
+    (element: keyof HeaderLayouts) =>
+    ({nativeEvent: {layout}}: LayoutChangeEvent) => {
+      setHeaderLayouts((prev) => ({...prev, [element]: layout}));
+    };
+  const parallaxContentHeight = useMemo(() => {
+    const {screenHeader, parallaxContent} = headerLayouts;
+    if (!parallaxContent || !screenHeader) {
+      return 0;
+    }
+    return parallaxContent.height;
+  }, [headerLayouts]);
+
+  const scrollMinOffset = parallaxContentHeight * 0.5;
+  const scrollMaxOffset = parallaxContentHeight;
+
+  return {
+    scrollMaxOffset,
+    scrollMinOffset,
+    setLayoutFor,
+  };
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

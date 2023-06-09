@@ -115,7 +115,7 @@ export const DepartureDetailsScreenComponent = ({
       <FullScreenView
         headerProps={{
           leftButton: {type: 'back', withIcon: true},
-          title: title,
+          title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
         parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
           <>
