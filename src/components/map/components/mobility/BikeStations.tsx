@@ -19,7 +19,7 @@ export const BikeStations = ({stations}: Props) => {
     <MapboxGL.ShapeSource id={'bikeStations'} shape={stations} tolerance={0}>
       <MapboxGL.SymbolLayer
         id="bikeStationPin"
-        minZoomLevel={13.5}
+        minZoomLevel={12.75}
         style={{
           textField: ['get', 'count'],
           textAnchor: 'center',
@@ -33,8 +33,8 @@ export const BikeStations = ({stations}: Props) => {
       />
       <MapboxGL.CircleLayer
         id="bikeStationMini"
-        maxZoomLevel={13.5}
-        minZoomLevel={12}
+        maxZoomLevel={12.75}
+        minZoomLevel={11}
         style={{
           circleColor: stationBackgroundColor,
           circleStrokeColor: stationTextColor,
