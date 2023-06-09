@@ -4,23 +4,30 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {BusLiveArrow} from '@atb/assets/svg/mono-icons/navigation';
 
 type DirectionArrowProps = {
-  bearingRadians: number;
-  rotateDegrees: number;
-  directionArrowOffsetFromCenter: number;
+  vehicleBearing: number;
+  heading: number;
   iconSize: number;
   iconScale: number;
   fill: string;
 };
 
 export const DirectionArrow: React.FC<DirectionArrowProps> = ({
-  bearingRadians,
-  rotateDegrees,
-  directionArrowOffsetFromCenter,
+  vehicleBearing,
+  heading,
   iconSize,
   iconScale,
   fill,
 }) => {
   const styles = useStyles();
+
+  const vehicleBearingDefined =
+    vehicleBearing === undefined ? 0 : vehicleBearing; // fallback to 0
+  const bearingRadians =
+    ((90 - vehicleBearingDefined + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
+  const rotateDegrees = vehicleBearingDefined - heading;
+
+  const directionArrowOffsetFromCenter = 28;
+
   return (
     <View
       style={{

@@ -110,7 +110,7 @@ export const TravelDetailsMapScreenComponent = ({
   return (
     <View
       style={styles.mapView}
-      onStartShouldSetResponder={() => true}
+      onStartShouldSetResponder={() => Platform.OS === 'ios'}
       onResponderGrant={() => setShouldTrack(false)}
     >
       <MapboxGL.MapView
@@ -118,6 +118,11 @@ export const TravelDetailsMapScreenComponent = ({
         style={styles.map}
         pitchEnabled={false}
         {...MapViewConfig}
+        onTouchMove={() => {
+          if (Platform.OS === 'android') {
+            setShouldTrack(false);
+          }
+        }}
         onCameraChanged={(state) => {
           setHeading(state.properties.heading);
           setZoomLevel(state.properties.zoom);
@@ -249,10 +254,6 @@ const LiveVehicle = ({
 
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
 
-  const vehicleBearing = vehicle.bearing === undefined ? 0 : vehicle.bearing; // fallback to 0
-  const bearingRadians = ((90 - vehicleBearing + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
-  const directionArrowOffsetFromCenter = 28;
-
   const scaleForBugfix = Platform.OS === 'android' ? 2 : 1; // fix android transform rendering bugs by scaling up parent and child back down
   const iconSize = 40 * scaleForBugfix;
   const iconScale = 1 / scaleForBugfix;
@@ -273,8 +274,19 @@ const LiveVehicle = ({
             width: iconSize,
             height: iconSize,
           }}
+          onTouchEnd={() => {
+            if (Platform.OS === 'android') {
+              setShouldTrack(true);
+            }
+          }}
         >
-          <TouchableOpacity onPressOut={() => setShouldTrack(true)}>
+          <TouchableOpacity
+            onPressOut={() => {
+              if (Platform.OS === 'ios') {
+                setShouldTrack(true);
+              }
+            }}
+          >
             <LiveVehicleIcon
               mode={mode}
               subMode={subMode}
@@ -287,9 +299,8 @@ const LiveVehicle = ({
           {!isError &&
             vehicle.bearing !== undefined && ( // only show direction if bearing is defined
               <DirectionArrow
-                bearingRadians={bearingRadians}
-                rotateDegrees={vehicleBearing - heading}
-                directionArrowOffsetFromCenter={directionArrowOffsetFromCenter}
+                vehicleBearing={vehicle.bearing}
+                heading={heading}
                 iconSize={iconSize}
                 iconScale={iconScale}
                 fill={
