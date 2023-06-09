@@ -75,11 +75,14 @@ export function useSubscription({
     // Cleanup
     return () => {
       if (retryTimeout) clearTimeout(retryTimeout);
-      if (webSocket) {
-        webSocket.onclose = null;
-        onClose && onClose({code: 1000, reason: 'Cleanup'});
-        webSocket.close();
-      }
+      setWebSocket((ws) => {
+        if (ws) {
+          ws.onclose = null;
+          onClose && onClose({code: 1000, reason: 'Cleanup'});
+          ws.close();
+        }
+        return null;
+      });
     };
   }, [url]);
 
