@@ -29,7 +29,6 @@ import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
-import {TouchableOpacity} from 'react-native';
 import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
