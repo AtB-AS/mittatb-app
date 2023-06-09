@@ -91,8 +91,13 @@ export const TravelDetailsMapScreenComponent = ({
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
-  const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
-  const [heading, setHeading] = useState<number>(0);
+  const [cameraState, setCameraState] = useState<{
+    zoomLevel: number;
+    heading: number;
+  }>({
+    zoomLevel: FOLLOW_ZOOM_LEVEL,
+    heading: 0,
+  });
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -124,8 +129,10 @@ export const TravelDetailsMapScreenComponent = ({
           }
         }}
         onCameraChanged={(state) => {
-          setHeading(state.properties.heading);
-          setZoomLevel(state.properties.zoom);
+          setCameraState({
+            zoomLevel: state.properties.zoom,
+            heading: state.properties.heading,
+          });
         }}
       >
         <MapboxGL.Camera
@@ -159,8 +166,8 @@ export const TravelDetailsMapScreenComponent = ({
             mode={mode}
             subMode={subMode}
             subscriptionState={subscriptionState}
-            zoomLevel={zoomLevel}
-            heading={heading}
+            zoomLevel={cameraState.zoomLevel}
+            heading={cameraState.heading}
           />
         )}
       </MapboxGL.MapView>
