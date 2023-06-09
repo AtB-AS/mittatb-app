@@ -132,8 +132,8 @@ export const TravelDetailsMapScreenComponent = ({
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
-          zoomLevel={FOLLOW_ZOOM_LEVEL}
-          centerCoordinate={centerPosition}
+          zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL : undefined}
+          centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
