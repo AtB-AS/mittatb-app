@@ -93,7 +93,6 @@ export const TravelDetailsMapScreenComponent = ({
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
   const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
   const [heading, setHeading] = useState<number>(0);
-  const [pitch, setPitch] = useState<number>(0);
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -113,6 +112,7 @@ export const TravelDetailsMapScreenComponent = ({
       <MapboxGL.MapView
         ref={mapViewRef}
         style={styles.map}
+        pitchEnabled={false}
         {...MapViewConfig}
         onTouchMove={() => {
           setShouldTrack(false);
@@ -120,7 +120,6 @@ export const TravelDetailsMapScreenComponent = ({
         onCameraChanged={(state) => {
           setHeading(state.properties.heading);
           setZoomLevel(state.properties.zoom);
-          setPitch(state.properties.pitch);
         }}
       >
         <MapboxGL.Camera
@@ -156,7 +155,6 @@ export const TravelDetailsMapScreenComponent = ({
             subscriptionState={subscriptionState}
             zoomLevel={zoomLevel}
             heading={heading}
-            pitch={pitch}
           />
         )}
       </MapboxGL.MapView>
@@ -188,7 +186,6 @@ type VehicleIconProps = {
   subscriptionState: SubscriptionState;
   zoomLevel: number;
   heading: number;
-  pitch: number;
 };
 
 const LiveVehicle = ({
@@ -199,7 +196,6 @@ const LiveVehicle = ({
   subscriptionState,
   zoomLevel,
   heading,
-  pitch,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'background');
@@ -287,7 +283,7 @@ const LiveVehicle = ({
             />
           </TouchableOpacity>
 
-          {pitch < 7 && // allow just a tiny bit of pitch before hiding the live bus direction arrow
+          {!isError &&
             vehicle.bearing !== undefined && ( // only show direction if bearing is defined
               <DirectionArrow
                 bearingRadians={bearingRadians}

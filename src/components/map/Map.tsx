@@ -101,6 +101,7 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
+          pitchEnabled={false}
           onDidFinishLoadingMap={onDidFinishLoadingMap}
           onMapIdle={onMapIdle}
           onPress={async (feature: Feature) => {
