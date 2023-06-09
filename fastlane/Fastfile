@@ -5,6 +5,34 @@ before_all do
   # git_pull
 end
 
+def app_cert_info
+  # App provisioning profile
+  app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+  app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
+  app_prov_profile_name = (ENV["sigh_#{app_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+  app_signing_identity_name = (ENV["sigh_#{app_prefix}_certificate-name"]).gsub('\xC3\xB8', 'ø')
+
+  return app_signing_identity_name, app_prov_profile_name, app_prov_profile_path
+end
+
+def widget_cert_info
+  # Widget provisioning profile
+  widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+  widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
+  widget_prov_profile_name = (ENV["sigh_#{widget_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+
+  return widget_prov_profile_name, widget_prov_profile_path
+end
+
+def intent_cert_info
+  # Intent provisioning profile
+  intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+  intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
+  intent_prov_profile_name = (ENV["sigh_#{intent_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+
+  return intent_prov_profile_name, intent_prov_profile_path
+end
+
 platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
@@ -109,21 +137,12 @@ platform :ios do
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
     )
-    # App provisioning profile
-    app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
-    app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
-    app_prov_profile_name = (ENV["sigh_#{app_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
-    app_signing_identity_name = (ENV["sigh_#{app_prefix}_certificate-name"]).gsub('\xC3\xB8', 'ø')
+    
+    app_signing_identity_name, app_prov_profile_name, app_prov_profile_path = app_cert_info
 
-    # Widget provisioning profile
-    widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
-    widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
-    widget_prov_profile_name = (ENV["sigh_#{widget_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+    widget_prov_profile_name, widget_prov_profile_path = widget_cert_info
 
-    # Intent provisioning profile
-    intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
-    intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
-    intent_prov_profile_name = (ENV["sigh_#{intent_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+    intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
 
     puts "Identity name: #{app_signing_identity_name}"
     puts "Certificate names: #{app_prov_profile_name}, #{widget_prov_profile_name}, #{intent_prov_profile_name}"
@@ -158,8 +177,6 @@ platform :ios do
         code_signing_identity: app_signing_identity_name
       )
     end
-
-    app_prov_profile_name, widget_prov_profile_name, intent_prov_profile_name
   end
 
   desc 'Build the iOS application.'
@@ -171,7 +188,15 @@ platform :ios do
       build_number: ENV["BUILD_ID"],
       xcodeproj: './ios/atb.xcodeproj/'
     )
-    app_prov_profile_name, widget_prov_profile_name, intent_prov_profile_name = setup_certificates
+    
+    app_signing_identity_name, app_prov_profile_name, app_prov_profile_path = app_cert_info
+
+    widget_prov_profile_name, widget_prov_profile_path = widget_cert_info
+
+    intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
+
+    setup_certificates
+
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
