@@ -107,5 +107,6 @@ jobs:
       - name: Register app version
         run: bash ./scripts/android/register-app-version.sh
         env:
-          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_STAGING}}
+          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_STAGING }}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_STAGING }}
+          DISABLE_LISTED_ON_PLAY_STORE: true

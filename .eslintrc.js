@@ -1,6 +1,13 @@
 const rulesDirPlugin = require('eslint-plugin-rulesdir');
 rulesDirPlugin.RULES_DIR = 'eslint-rules/';
 
+const noRestrictedImportsPatterns = [
+  {
+    group: ['@atb/components/*/'],
+    message: 'Components should be imported through their index file',
+  },
+];
+
 module.exports = {
   env: {
     es6: true,
@@ -28,7 +35,7 @@ module.exports = {
       {restrictDefaultExports: {direct: true}},
     ],
 
-    'no-restricted-imports': ['warn', {patterns: ['@atb/components/*/']}],
+    'no-restricted-imports': ['error', {patterns: noRestrictedImportsPatterns}],
 
     'no-restricted-syntax': [
       'error',
@@ -89,6 +96,21 @@ module.exports = {
       files: ['src/api/types/**'],
       rules: {
         'no-restricted-syntax': 'off',
+      },
+    },
+    {
+      files: ['src/components/**'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              ...noRestrictedImportsPatterns,
+              // Not allowed to import stuff from stacks-hierarchy from the components folder
+              {group: ['@atb/stacks-hierarchy/**']},
+            ],
+          },
+        ],
       },
     },
   ],

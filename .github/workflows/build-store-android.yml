@@ -15,10 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if release tag is org specific and exit for other orgs
-        if: >
-          ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') 
-          || (contains(github.ref, 'nfk') && matrix.org != 'nfk') 
-          || (contains(github.ref, 'fram') && matrix.org != 'fram') }}
+        if: ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') ||
+          (contains(github.ref, 'nfk') && matrix.org != 'nfk') ||
+          (contains(github.ref, 'fram') && matrix.org != 'fram') }}
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v1
@@ -113,5 +112,6 @@ jobs:
       - name: Register app version
         run: bash ./scripts/android/register-app-version.sh
         env:
-          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_PRODUCTION}}
-          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_PRODUCTION}}
+          ENTUR_CLIENT_ID: ${{ secrets.ABT_ENTUR_CLIENT_ID_PRODUCTION }}
+          ENTUR_CLIENT_SECRET: ${{ secrets.ABT_ENTUR_CLIENT_SECRET_PRODUCTION }}
+          DISABLE_LISTED_ON_PLAY_STORE: false

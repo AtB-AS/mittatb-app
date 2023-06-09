@@ -6,7 +6,6 @@ import {
 import {useSearchHistory} from '@atb/search-history';
 import {LocationSearchResultType} from './types';
 import {getLocationLayer} from '@atb/utils/location';
-import {FeatureCategory} from '@atb/sdk';
 
 export function useFilteredJourneySearch(searchText?: string) {
   const {journeyHistory} = useSearchHistory();
@@ -77,33 +76,4 @@ export const filterCurrentLocation = (
   return locations
     .filter((l) => !previousLocations.some((pl) => pl.location.id === l.id))
     .map((location) => ({location}));
-};
-
-export const getVenueIconTypes = (category: FeatureCategory[]) => {
-  return category
-    .map(mapLocationCategoryToVenueType)
-    .filter((v, i, arr) => arr.indexOf(v) === i); // get distinct values
-};
-
-const mapLocationCategoryToVenueType = (category: FeatureCategory) => {
-  switch (category) {
-    case 'onstreetBus':
-    case 'busStation':
-    case 'coachStation':
-      return 'bus';
-    case 'onstreetTram':
-    case 'tramStation':
-      return 'tram';
-    case 'railStation':
-    case 'metroStation':
-      return 'rail';
-    case 'airport':
-      return 'airport';
-    case 'harbourPort':
-    case 'ferryPort':
-    case 'ferryStop':
-      return 'boat';
-    default:
-      return 'unknown';
-  }
 };

@@ -7,6 +7,7 @@ import {OnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import {OnboardingScreenProps} from './navigation-types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -17,6 +18,7 @@ export const Onboarding_WelcomeScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
+  const {enable_extended_onboarding} = useRemoteConfig();
 
   return (
     <ScrollView
@@ -42,7 +44,11 @@ export const Onboarding_WelcomeScreen = ({navigation}: Props) => {
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('Onboarding_IntercomInfoScreen')}
+          onPress={() =>
+            enable_extended_onboarding
+              ? navigation.navigate('Onboarding_GoodToKnowScreen')
+              : navigation.navigate('Onboarding_IntercomInfoScreen')
+          }
           text={t(OnboardingTexts.welcome.mainButton)}
           testID="nextButtonOnboardingWelcome"
         />

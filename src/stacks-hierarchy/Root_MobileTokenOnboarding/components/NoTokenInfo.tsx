@@ -8,48 +8,60 @@ import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
 import {useAppState} from '@atb/AppContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export function NoTokenInfo({close}: {close: () => void}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {completeMobileTokenOnboarding} = useAppState();
+  const {
+    completeMobileTokenOnboarding,
+    completeMobileTokenWithoutTravelcardOnboarding,
+  } = useAppState();
+  const {disable_travelcard} = useRemoteConfig();
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.containerContent}
-    >
-      <View style={styles.viewContent}>
-        <View style={styles.mainView}>
-          <ThemeText
-            type="heading--jumbo"
-            style={styles.header}
-            color={themeColor}
-          >
-            {t(MobileTokenOnboardingTexts.error.heading)}
-          </ThemeText>
-          <View style={styles.illustration}>
-            <CrashSmall width="185px" height="185px" />
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.containerContent}>
+        <View style={styles.viewContent}>
+          <View style={styles.mainView}>
+            <ThemeText
+              type="heading--jumbo"
+              style={styles.header}
+              color={themeColor}
+            >
+              {t(MobileTokenOnboardingTexts.error.heading)}
+            </ThemeText>
+            <View style={styles.illustration}>
+              <CrashSmall width="185px" height="185px" />
+            </View>
+            <ThemeText style={styles.description} color={themeColor}>
+              {disable_travelcard
+                ? t(
+                    MobileTokenOnboardingTexts.withoutTravelcard.error
+                      .description,
+                  )
+                : t(MobileTokenOnboardingTexts.error.description)}
+            </ThemeText>
           </View>
-          <ThemeText style={styles.description} color={themeColor}>
-            {t(MobileTokenOnboardingTexts.error.description)}
-          </ThemeText>
+          <View style={styles.buttons}>
+            <Button
+              interactiveColor="interactive_0"
+              onPress={() => {
+                disable_travelcard
+                  ? completeMobileTokenWithoutTravelcardOnboarding()
+                  : completeMobileTokenOnboarding();
+                close();
+              }}
+              text={t(MobileTokenOnboardingTexts.next)}
+              testID="nextButton"
+            />
+          </View>
         </View>
-        <View style={styles.buttons}>
-          <Button
-            interactiveColor="interactive_0"
-            onPress={() => {
-              completeMobileTokenOnboarding();
-              close();
-            }}
-            text={t(MobileTokenOnboardingTexts.next)}
-            testID="nextButton"
-          />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

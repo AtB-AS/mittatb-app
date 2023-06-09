@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {getBikeStation} from '@atb/api/stations';
 import {BikeStationFragment} from '@atb/api/types/generated/fragments/stations';
+import {getBikeStation} from '@atb/api/mobility';
 
 export const useBikeStation = (id: string) => {
   const [station, setStation] = useState<BikeStationFragment | undefined>();

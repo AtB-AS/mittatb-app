@@ -1,131 +1,129 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {View} from 'react-native';
+import {
+  MapTexts,
+  ScreenHeaderTexts,
+  TripSearchTexts,
+  useTranslation,
+} from '@atb/translations';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {MapFilterType} from '../../types';
+import {MapFilterType, OperatorFilterType} from '../../types';
 import {useUserMapFilters} from '@atb/components/map';
-import {Section, ToggleSectionItem} from '@atb/components/sections';
-import {Scooter} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {StyleSheet} from '@atb/theme';
-import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
-import {useIsCarSharingEnabled} from '@atb/mobility/use-car-sharing-enabled';
+import {FullScreenFooter} from '@atb/components/screen-footer';
+import {Button} from '@atb/components/button';
+import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {MobilityFilters} from '@atb/mobility/components/filter/MobilityFilters';
 
 type MapFilterSheetProps = {
   close: () => void;
-  onFilterChange: (filter: MapFilterType) => void;
+  onFilterChanged: (filter: MapFilterType) => void;
 };
 export const MapFilterSheet = ({
   close,
-  onFilterChange,
+  onFilterChanged,
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
-  const isVehiclesEnabled = useIsVehiclesEnabled();
-  const isCityBikesEnabled = useIsCityBikesEnabled();
-  const isCarSharingEnabled = useIsCarSharingEnabled();
   const {getMapFilter, setMapFilter} = useUserMapFilters();
   const [initialFilter, setInitialFilter] = useState<MapFilterType>();
+  const [filter, setFilter] = useState<MapFilterType>();
 
   useEffect(() => {
-    getMapFilter().then(setInitialFilter);
+    getMapFilter().then((f) => {
+      setInitialFilter(f);
+      setFilter(f);
+    });
   }, []);
 
-  const onScooterToggle = (checked: boolean) => {
-    getMapFilter()
-      .then((currentFilter) => {
-        const newFilter = {
-          ...currentFilter,
-          vehicles: {
-            showVehicles: checked,
-          },
-        };
-        onFilterChange(newFilter);
-        return newFilter;
-      })
-      .then(setMapFilter);
+  if (!initialFilter || !filter) {
+    return (
+      <View style={style.activityIndicator}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  const onScootersChanged = (operatorFilter: OperatorFilterType) => {
+    const newFilter = {
+      ...filter,
+      vehicles: {
+        ...filter?.vehicles,
+        scooters: operatorFilter,
+      },
+    };
+    setFilter(newFilter);
   };
 
-  const onBicycleToggle = async (checked: boolean) => {
-    getMapFilter()
-      .then((currentFilter) => {
-        const newFilter = {
-          ...currentFilter,
-          stations: {
-            ...currentFilter.stations,
-            showCityBikeStations: checked,
-          },
-        };
-        onFilterChange(newFilter);
-        return newFilter;
-      })
-      .then(setMapFilter);
+  const onCityBikeStationsChanged = (operatorFilter: OperatorFilterType) => {
+    const newFilter = {
+      ...filter,
+      stations: {
+        ...filter?.stations,
+        cityBikeStations: operatorFilter,
+      },
+    };
+    setFilter(newFilter);
   };
 
-  const onCarToggle = async (checked: boolean) => {
-    getMapFilter()
-      .then((currentFilter) => {
-        const newFilter = {
-          ...currentFilter,
-          stations: {
-            ...currentFilter.stations,
-            showCarSharingStations: checked,
-          },
-        };
-        onFilterChange(newFilter);
-        return newFilter;
-      })
-      .then(setMapFilter);
+  const onCarSharingStationsChanged = (operatorFilter: OperatorFilterType) => {
+    const newFilter = {
+      ...filter,
+      stations: {
+        ...filter?.stations,
+        carSharingStations: operatorFilter,
+      },
+    };
+    setFilter(newFilter);
   };
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.9}>
       <ScreenHeaderWithoutNavigation
-        title=" "
+        title={t(MapTexts.filters.bottomSheet.heading)}
         color="background_1"
         leftButton={{
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-          type: 'close',
+          text: t(ScreenHeaderTexts.headerButton.cancel.text),
+          type: 'cancel',
           onPress: close,
         }}
       />
-      <View style={style.container}>
-        <Section withPadding>
-          {isVehiclesEnabled && (
-            <ToggleSectionItem
-              leftIcon={Scooter}
-              text={t(MobilityTexts.scooter)}
-              value={initialFilter?.vehicles?.showVehicles}
-              onValueChange={onScooterToggle}
-            />
-          )}
-          {isCityBikesEnabled && (
-            <ToggleSectionItem
-              leftIcon={Bicycle}
-              text={t(MobilityTexts.bicycle)}
-              value={initialFilter?.stations?.showCityBikeStations}
-              onValueChange={onBicycleToggle}
-            />
-          )}
-          {isCarSharingEnabled && (
-            <ToggleSectionItem
-              leftIcon={Car}
-              text={t(MobilityTexts.car)}
-              value={initialFilter?.stations?.showCarSharingStations}
-              onValueChange={onCarToggle}
-            />
-          )}
-        </Section>
-      </View>
+      <ScrollView style={style.container}>
+        <MobilityFilters
+          scooters={initialFilter.vehicles?.scooters}
+          cityBikeStations={initialFilter.stations?.cityBikeStations}
+          carSharingStations={initialFilter.stations?.carSharingStations}
+          onScootersChanged={onScootersChanged}
+          onCityBikeStationsChanged={onCityBikeStationsChanged}
+          onCarSharingStationsChanged={onCarSharingStationsChanged}
+        />
+      </ScrollView>
+      <FullScreenFooter>
+        <Button
+          text={t(TripSearchTexts.filters.bottomSheet.use)}
+          onPress={() => {
+            setMapFilter(filter);
+            onFilterChanged(filter);
+            close();
+          }}
+          rightIcon={{svg: Confirm}}
+        />
+      </FullScreenFooter>
     </BottomSheetContainer>
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    marginBottom: theme.spacings.large,
-  },
-}));
+const useStyle = StyleSheet.createThemeHook((theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    activityIndicator: {
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+    },
+    container: {
+      marginHorizontal: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
+    },
+  };
+});

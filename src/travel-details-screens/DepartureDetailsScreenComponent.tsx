@@ -118,7 +118,7 @@ export const DepartureDetailsScreenComponent = ({
           title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
         parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
-          <>
+          <View style={styles.parallaxContent}>
             <View style={styles.headerTitle} ref={focusRef} accessible={true}>
               {mode && (
                 <TransportationIconBox
@@ -174,7 +174,7 @@ export const DepartureDetailsScreenComponent = ({
                 ) : null}
               </View>
             ) : null}
-          </>
+          </View>
         )}
       >
         <View
@@ -533,6 +533,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  parallaxContent: {marginHorizontal: theme.spacings.medium},
   date: {
     alignItems: 'center',
   },

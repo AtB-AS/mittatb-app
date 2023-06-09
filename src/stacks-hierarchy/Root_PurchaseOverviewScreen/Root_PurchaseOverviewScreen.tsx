@@ -85,7 +85,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     }
   }, [params?.refreshOffer]);
 
-  const closeModal = () => navigation.pop();
+  const closeModal = () => navigation.popToTop();
 
   return (
     <View style={styles.container}>

@@ -50,7 +50,9 @@ export type RemoteConfig = {
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
+  disable_travelcard: boolean;
   live_vehicle_stale_threshold: number;
+  enable_extended_onboarding: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -107,6 +109,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_flexible_on_egressMode: true,
   use_trygg_overgang_qr_code: false,
   live_vehicle_stale_threshold: 15,
+  enable_extended_onboarding: false,
+  disable_travelcard: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -268,9 +272,17 @@ export function getConfig(): RemoteConfig {
     values['use_trygg_overgang_qr_code']?.asBoolean() ??
     defaultRemoteConfig.use_trygg_overgang_qr_code;
 
+  const disable_travelcard =
+    values['disable_travelcard']?.asBoolean() ??
+    defaultRemoteConfig.disable_travelcard;
+
   const live_vehicle_stale_threshold =
     values['live_vehicle_stale_threshold']?.asNumber() ??
     defaultRemoteConfig.live_vehicle_stale_threshold;
+
+  const enable_extended_onboarding =
+    values['enable_extended_onboarding']?.asBoolean() ??
+    defaultRemoteConfig.enable_extended_onboarding;
 
   return {
     enable_network_logging,
@@ -321,7 +333,9 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
+    disable_travelcard,
     live_vehicle_stale_threshold,
+    enable_extended_onboarding,
   };
 }
 

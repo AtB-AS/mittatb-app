@@ -8,17 +8,17 @@ import {shadows} from '../shadows';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
 
 type MapFilterProps = {
-  onFilterChange: (filter: MapFilterType) => void;
+  onFilterChanged: (filter: MapFilterType) => void;
   isLoading: boolean;
 };
-export const MapFilter = ({onFilterChange, isLoading}: MapFilterProps) => {
+export const MapFilter = ({onFilterChanged, isLoading}: MapFilterProps) => {
   const style = useStyle();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const onPress = () => {
     openBottomSheet(() => (
       <MapFilterSheet
-        onFilterChange={onFilterChange}
+        onFilterChanged={onFilterChanged}
         close={closeBottomSheet}
       />
     ));

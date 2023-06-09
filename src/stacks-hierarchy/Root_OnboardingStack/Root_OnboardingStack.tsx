@@ -13,6 +13,8 @@ import {OnboardingStackParams} from './navigation-types';
 import {Onboarding_WelcomeScreen} from './Onboarding_WelcomeScreen';
 import {Onboarding_AnonymousPurchaseConsequencesScreen} from './Onboarding_AnonymousPurchaseConsequencesScreen';
 import {Onboarding_IntercomInfoScreen} from './Onboarding_IntercomInfoScreen';
+import {Onboarding_GoodToKnowScreen} from './Onboarding_GoodToKnowScreen';
+import {Onboarding_AlsoGoodToKnowScreen} from './Onboarding_AlsoGoodToKnowScreen';
 
 const Tab = createMaterialTopTabNavigator<OnboardingStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -20,7 +22,7 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 export const Root_OnboardingStack = () => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {enable_ticketing} = useRemoteConfig();
+  const {enable_ticketing, enable_extended_onboarding} = useRemoteConfig();
   return (
     <>
       <StatusBar
@@ -38,6 +40,18 @@ export const Root_OnboardingStack = () => {
             name="Onboarding_WelcomeScreen"
             component={Onboarding_WelcomeScreen}
           />
+          {enable_extended_onboarding && (
+            <>
+              <Tab.Screen
+                name="Onboarding_GoodToKnowScreen"
+                component={Onboarding_GoodToKnowScreen}
+              />
+              <Tab.Screen
+                name="Onboarding_AlsoGoodToKnowScreen"
+                component={Onboarding_AlsoGoodToKnowScreen}
+              />
+            </>
+          )}
           <Tab.Screen
             name="Onboarding_IntercomInfoScreen"
             component={Onboarding_IntercomInfoScreen}

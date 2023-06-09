@@ -6,34 +6,29 @@ import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
-import {useNavigation} from '@react-navigation/native';
 import {Psst} from '@atb/assets/svg/color/illustrations';
 import {Ticket} from '@atb/assets/svg/color/images';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const LoginOnboarding = ({
-  headerLeftButton,
-  doAfterSubmit,
-  headerRightButton,
-  fareProductTypeConfig,
-}: {
-  doAfterSubmit: (hasActiveFareContracts: boolean) => void;
-  headerLeftButton?: LeftButtonProps;
-  headerRightButton?: RightButtonProps;
-  fareProductTypeConfig: FareProductTypeConfig;
-}) => {
+type Props = RootStackScreenProps<'Root_LoginRequiredForFareProductScreen'>;
+
+export const Root_LoginRequiredForFareProductScreen = ({
+  navigation,
+  route,
+}: Props) => {
+  const {fareProductTypeConfig, afterLogin} = route.params;
+  const {enable_vipps_login} = useRemoteConfig();
   const {t} = useTranslation();
-  const navigation = useNavigation();
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
 
@@ -41,7 +36,21 @@ export const LoginOnboarding = ({
   const activeFareContracts =
     filterActiveOrCanBeUsedFareContracts(fareContracts);
   const onNext = async () => {
-    doAfterSubmit(activeFareContracts.length > 0);
+    const hasActiveFareContracts = activeFareContracts.length > 0;
+    if (hasActiveFareContracts) {
+      navigation.navigate('Root_LoginActiveFareContractWarningScreen', {
+        afterLogin,
+      });
+    } else {
+      navigation.navigate(
+        enable_vipps_login
+          ? 'Root_LoginOptionsScreen'
+          : 'Root_LoginPhoneInputScreen',
+        {
+          afterLogin,
+        },
+      );
+    }
   };
 
   const productName = useTextForLanguage(fareProductTypeConfig.name);
@@ -49,8 +58,7 @@ export const LoginOnboarding = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={headerLeftButton}
-        rightButton={headerRightButton}
+        leftButton={{type: 'cancel'}}
         setFocusOnLoad={false}
         color={themeColor}
       />
