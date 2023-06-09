@@ -108,15 +108,16 @@ export const TravelDetailsMapScreenComponent = ({
   }, [vehicle, shouldTrack]);
 
   return (
-    <View style={styles.mapView}>
+    <View
+      style={styles.mapView}
+      onStartShouldSetResponder={() => true}
+      onResponderGrant={() => setShouldTrack(false)}
+    >
       <MapboxGL.MapView
         ref={mapViewRef}
         style={styles.map}
         pitchEnabled={false}
         {...MapViewConfig}
-        onTouchMove={() => {
-          setShouldTrack(false);
-        }}
         onCameraChanged={(state) => {
           setHeading(state.properties.heading);
           setZoomLevel(state.properties.zoom);
