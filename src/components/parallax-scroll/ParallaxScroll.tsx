@@ -13,7 +13,7 @@ import {
 type Props = PropsWithChildren<{
   header: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
-  handleScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  handleScroll?: (scrollPercentage: number) => void;
 }>;
 export function ParallaxScroll({
   header,
@@ -41,9 +41,18 @@ export function ParallaxScroll({
     refreshControl.props.progressViewOffset = contentHeight;
   }
 
-  const onScroll = Animated.event(
+  const onScroll = Animated.event<NativeScrollEvent>(
     [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-    {useNativeDriver: false, listener: handleScroll},
+    {
+      useNativeDriver: false,
+      listener: (ev) => {
+        if (handleScroll) {
+          handleScroll(
+            (ev.nativeEvent?.contentOffset.y / contentHeightRef.current) * 100,
+          );
+        }
+      },
+    },
   );
 
   const childrenProps: ChildrenProps = {
