@@ -26,7 +26,7 @@ export const BikeStations = ({stations}: Props) => {
           textOffset: [0.75, 0],
           textColor: stationBackgroundColor,
           textSize: 12,
-          iconImage: {uri: 'BikeChip'},
+          iconImage: 'BikeChip',
           iconAllowOverlap: true,
           iconSize: 0.85,
         }}
