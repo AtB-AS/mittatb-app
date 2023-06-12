@@ -118,7 +118,7 @@ export const TravelDetailsMapScreenComponent = ({
         style={styles.map}
         pitchEnabled={false}
         {...MapViewConfig}
-        onCameraChanged={(state) => {
+        /* onCameraChanged={(state) => {
           setCameraState({
             zoomLevel: state.properties.zoom,
             heading: state.properties.heading,
@@ -126,7 +126,7 @@ export const TravelDetailsMapScreenComponent = ({
           if (state.gestures.isGestureActive) {
             setShouldTrack(false);
           }
-        }}
+        }} */
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
