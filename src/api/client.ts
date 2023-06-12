@@ -33,14 +33,17 @@ declare module 'axios' {
 }
 
 function shouldRetry(error: AxiosError): boolean {
+  const isRateLimited = error.response?.status === 429;
+  if (isRateLimited) return false;
+
+  const shouldForceRefresh = error.config?.forceRefreshIdToken;
+  if (shouldForceRefresh) return true;
+
   const shouldRetryOnNetworkErrorOrIdempotentRequest =
     Boolean(error.config?.retry) &&
     (getAxiosErrorType(error) === 'network-error' ||
       isIdempotentRequestError(error));
-  return (
-    error.config?.forceRefreshIdToken ||
-    shouldRetryOnNetworkErrorOrIdempotentRequest
-  );
+  return shouldRetryOnNetworkErrorOrIdempotentRequest;
 }
 
 export function createClient(baseUrl: string | undefined) {
