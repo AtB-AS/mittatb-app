@@ -1,4 +1,4 @@
-import {SubscriptionState} from '@atb/api';
+import {SubscriptionStatus} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 import {
@@ -81,7 +81,7 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
-  const {state: subscriptionState} = useLiveVehicleSubscription({
+  const {status: subscriptionStatus} = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
@@ -158,7 +158,7 @@ export const TravelDetailsMapScreenComponent = ({
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
-            subscriptionState={subscriptionState}
+            subscriptionStatus={subscriptionStatus}
             zoomLevel={cameraState.zoomLevel}
             heading={cameraState.heading}
           />
@@ -189,7 +189,7 @@ type VehicleIconProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
-  subscriptionState: SubscriptionState;
+  subscriptionStatus: SubscriptionStatus;
   zoomLevel: number;
   heading: number;
 };
@@ -199,7 +199,7 @@ const LiveVehicle = ({
   setShouldTrack,
   mode,
   subMode,
-  subscriptionState,
+  subscriptionStatus,
   zoomLevel,
   heading,
 }: VehicleIconProps) => {
@@ -208,9 +208,9 @@ const LiveVehicle = ({
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
   const isError =
-    subscriptionState === 'CLOSING' || subscriptionState === 'CLOSED';
+    subscriptionStatus === 'CLOSING' || subscriptionStatus === 'CLOSED';
   const isLoading =
-    subscriptionState === 'CONNECTING' || subscriptionState === 'NOT_STARTED';
+    subscriptionStatus === 'CONNECTING' || subscriptionStatus === 'NOT_STARTED';
   const [isStale, setIsStale] = useState(false);
 
   useInterval(

@@ -1,10 +1,9 @@
 import Bugsnag from '@bugsnag/react-native';
-import {useEffect, useState} from 'react';
+import {MutableRefObject, useEffect, useRef, useState} from 'react';
 
-const MAX_NUMBER_OF_RECONNECTS = 10;
-const MAX_NUMBER_OF_RETRIES = 5;
+const RETRY_INTERVAL_CAP_IN_SECONDS = 10;
 
-export type SubscriptionState =
+export type SubscriptionStatus =
   | 'CONNECTING'
   | 'OPEN'
   | 'CLOSING'
@@ -25,81 +24,100 @@ export function useSubscription({
   onClose,
   onOpen,
 }: {url: string | null} & SubscriptionEventProps) {
-  const [state, setState] = useState<SubscriptionState>('NOT_STARTED');
+  const [status, setStatus] = useState<SubscriptionStatus>('NOT_STARTED');
   const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
-
-  const [reconnectCount, setReconnectCount] = useState(0);
-  const reconnect = () => setReconnectCount(reconnectCount + 1);
-
-  const [retryCount, setRetryCount] = useState(0);
-  const retryWithExponentialBackoff = () => {
-    const delay = Math.pow(2, retryCount) * 1000;
-    return setTimeout(() => setRetryCount(retryCount + 1), delay);
-  };
+  const retryCount = useRef<number>(0);
 
   useEffect(() => {
+    if (!url) return;
+
     let retryTimeout: NodeJS.Timeout | null = null;
-    if (url) {
+    const connect = () => {
       const webSocket = new WebSocket(url);
 
       webSocket.onmessage = (event) => {
-        setState(getSubscriptionStateCode(webSocket.readyState));
+        setStatus(getSubscriptionStatus(webSocket.readyState));
         onMessage && onMessage(event);
       };
 
       webSocket.onerror = (event) => {
-        setState(getSubscriptionStateCode(webSocket.readyState));
-        Bugsnag.notify(`WebSocket error "${event.message}" with url: ${url}`);
+        setStatus(getSubscriptionStatus(webSocket.readyState));
+        Bugsnag.notify(`WebSocket error "${event.message}"`);
         onError && onError(event);
       };
 
       webSocket.onclose = (event) => {
-        setState(getSubscriptionStateCode(webSocket.readyState));
+        setStatus(getSubscriptionStatus(webSocket.readyState));
         Bugsnag.leaveBreadcrumb(`WebSocket closed with url: ${url}`);
 
         // Reconnect immediately if close event is end of stream, otherwise use
         // exponetial backoff to retry.
-        if (event.code === 1001 && reconnectCount < MAX_NUMBER_OF_RECONNECTS) {
-          reconnect();
-        } else if (retryCount < MAX_NUMBER_OF_RETRIES) {
-          retryTimeout = retryWithExponentialBackoff();
+        if (event.code === 1001) {
+          connect();
+        } else {
+          retryTimeout = retryWithCappedBackoff(retryCount, connect);
         }
 
         onClose && onClose(event);
       };
 
       webSocket.onopen = () => {
-        setState(getSubscriptionStateCode(webSocket.readyState));
+        setStatus(getSubscriptionStatus(webSocket.readyState));
         Bugsnag.leaveBreadcrumb(`WebSocket opened with url: ${url}`);
-        setRetryCount(0);
+        retryCount.current = 0;
         onOpen && onOpen();
       };
 
       setWebSocket(webSocket);
-    }
+    };
+    connect();
 
     // Cleanup
     return () => {
       if (retryTimeout) clearTimeout(retryTimeout);
-      if (webSocket) {
-        webSocket.onclose = null;
-        onClose && onClose({code: 1000, reason: 'Cleanup'});
-        webSocket.close();
-      }
+      setWebSocket((ws) => {
+        if (ws) {
+          ws.onclose = null;
+          onClose && onClose({code: 1000, reason: 'Cleanup'});
+          ws.close();
+        }
+        return null;
+      });
     };
-  }, [url, reconnectCount, retryCount]);
+  }, [url]);
 
   return {
-    state,
+    status,
     send: (message: string) => webSocket?.send(message),
     close: webSocket?.close,
   };
 }
 
-function getSubscriptionStateCode(readyState?: number): SubscriptionState {
+function getSubscriptionStatus(readyState?: number): SubscriptionStatus {
   if (readyState === 0) return 'CONNECTING';
   if (readyState === 1) return 'OPEN';
   if (readyState === 2) return 'CLOSING';
   if (readyState === 3) return 'CLOSED';
   return 'NOT_STARTED';
 }
+
+/**
+ * Exponential backoff, capped at RETRY_INTERVAL_CAP_IN_SECONDS between retries.
+ *
+ * @param retryCount Mutable ref, number of times there has been a retry
+ * @param retry Retry function.
+ * @returns NodeJS Timeout, to use in cleanup or refresh.
+ */
+const retryWithCappedBackoff = (
+  retryCount: MutableRefObject<number>,
+  retry: () => void,
+) => {
+  const delay = Math.min(
+    Math.pow(2, retryCount.current) * 1000,
+    RETRY_INTERVAL_CAP_IN_SECONDS * 1000,
+  );
+  return setTimeout(() => {
+    retryCount.current = retryCount.current + 1;
+    retry();
+  }, delay);
+};
