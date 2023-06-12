@@ -15,7 +15,7 @@ export const CarStations = ({stations}: Props) => {
     <MapboxGL.ShapeSource id={'carStations'} shape={stations} tolerance={0}>
       <MapboxGL.SymbolLayer
         id="carStationPin"
-        minZoomLevel={13}
+        minZoomLevel={12}
         style={{
           textField: ['get', 'count'],
           textAnchor: 'center',
@@ -23,15 +23,15 @@ export const CarStations = ({stations}: Props) => {
           textColor: stationBackgroundColor,
           textSize: 12,
           textAllowOverlap: true,
-          iconImage: {uri: 'CarChip'},
+          iconImage: 'CarChip',
           iconAllowOverlap: true,
           iconSize: 0.85,
         }}
       />
       <MapboxGL.CircleLayer
         id="carStationMini"
-        maxZoomLevel={13}
-        minZoomLevel={12}
+        maxZoomLevel={12}
+        minZoomLevel={11}
         style={{
           circleColor: stationBackgroundColor,
           circleStrokeColor: stationTextColor,

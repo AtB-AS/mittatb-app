@@ -1,5 +1,6 @@
 import {RefObject} from 'react';
-import MapboxGL, {CameraAnimationMode, Expression} from '@rnmapbox/maps';
+import MapboxGL, {CameraAnimationMode} from '@rnmapbox/maps';
+import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
@@ -10,7 +11,7 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {Cluster, MapSelectionActionType} from './types';
+import {Cluster, MapSelectionActionType, MapPadding} from './types';
 import distance from '@turf/distance';
 import {isVehicle} from '@atb/mobility/utils';
 
@@ -34,7 +35,7 @@ export function fitBounds(
   fromCoordinates: Coordinates,
   toCoordinates: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
-  padding: MapboxGL.Padding = [100, 100],
+  padding: MapPadding = [100, 100],
 ) {
   mapCameraRef.current?.fitBounds(
     [fromCoordinates.longitude, fromCoordinates.latitude],
