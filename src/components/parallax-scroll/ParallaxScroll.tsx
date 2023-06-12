@@ -1,13 +1,26 @@
 import {StyleSheet} from '@atb/theme';
 import {useLayout} from '@atb/utils/use-layout';
 import React, {PropsWithChildren, useEffect, useRef} from 'react';
-import {Animated, Platform, RefreshControlProps, View} from 'react-native';
+import {
+  Animated,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Platform,
+  RefreshControlProps,
+  View,
+} from 'react-native';
 
 type Props = PropsWithChildren<{
   header: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
+  handleScroll?: (scrollPercentage: number) => void;
 }>;
-export function ParallaxScroll({header, children, refreshControl}: Props) {
+export function ParallaxScroll({
+  header,
+  children,
+  refreshControl,
+  handleScroll,
+}: Props) {
   const {onLayout: onHeaderContentLayout, height: contentHeight} = useLayout();
   const contentHeightRef = React.useRef(contentHeight);
   useEffect(() => {
@@ -28,9 +41,18 @@ export function ParallaxScroll({header, children, refreshControl}: Props) {
     refreshControl.props.progressViewOffset = contentHeight;
   }
 
-  const onScroll = Animated.event(
+  const onScroll = Animated.event<NativeScrollEvent>(
     [{nativeEvent: {contentOffset: {y: scrollYRef}}}],
-    {useNativeDriver: false},
+    {
+      useNativeDriver: false,
+      listener: (ev) => {
+        if (handleScroll) {
+          handleScroll(
+            (ev.nativeEvent?.contentOffset.y / contentHeightRef.current) * 100,
+          );
+        }
+      },
+    },
   );
 
   const childrenProps: ChildrenProps = {
@@ -61,7 +83,7 @@ export function ParallaxScroll({header, children, refreshControl}: Props) {
 type ChildrenProps = PropsWithChildren<{
   refreshControl: Props['refreshControl'];
   contentHeight: number;
-  onScroll: () => void;
+  onScroll: (nativeEvent: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }>;
 
 const ScrollChildrenAndroid = ({
