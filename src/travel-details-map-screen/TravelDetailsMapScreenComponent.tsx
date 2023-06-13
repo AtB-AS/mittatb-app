@@ -128,16 +128,16 @@ export const TravelDetailsMapScreenComponent = ({
           }
         }} */
       >
-        {/*<MapboxGL.Camera
+        <MapboxGL.Camera
           ref={mapCameraRef}
           bounds={bounds}
           {...MapCameraConfig}
           zoomLevel={vehicleWithPosition ? FOLLOW_ZOOM_LEVEL : undefined}
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
-        />*/}
-        {/*<MapboxGL.UserLocation showsUserHeadingIndicator />
-        <MapRoute lines={features} />*/}
+        />
+        <MapboxGL.UserLocation showsUserHeadingIndicator />
+        <MapRoute lines={features} />
         {/*toPlace && (
           <MapLabel
             point={pointOf(toPlace)}
