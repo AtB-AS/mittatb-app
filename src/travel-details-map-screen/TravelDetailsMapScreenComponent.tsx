@@ -1,38 +1,46 @@
-import {SubscriptionStatus} from '@atb/api';
+//import {SubscriptionStatus} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
-import {useLiveVehicleSubscription} from '@atb/api/vehicles';
+//import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 import {
   AnyMode,
   AnySubMode,
-  getTransportModeSvg,
+  //getTransportModeSvg,
 } from '@atb/components/icon-box';
 import {
-  BackArrow,
-  flyToLocation,
-  MapCameraConfig,
+  //BackArrow,
+  //flyToLocation,
+  //MapCameraConfig,
   MapLeg,
   MapViewConfig,
-  PositionArrow,
-  useControlPositionsStyle,
+  //PositionArrow,
+  //useControlPositionsStyle,
 } from '@atb/components/map';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useTheme, StyleSheet} from '@atb/theme';
-import {MapTexts, useTranslation} from '@atb/translations';
+//import {ThemeIcon} from '@atb/components/theme-icon';
+//import {useGeolocationState} from '@atb/GeolocationContext';
+//import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  //useTheme,
+  StyleSheet,
+} from '@atb/theme';
+//import {MapTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/utils/coordinates';
-import {secondsBetween} from '@atb/utils/date';
-import {useInterval} from '@atb/utils/use-interval';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
+//import {secondsBetween} from '@atb/utils/date';
+//import {useInterval} from '@atb/utils/use-interval';
+//import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
-import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
+//import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Position} from 'geojson';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {ActivityIndicator, Platform, View} from 'react-native';
-import {DirectionArrow} from './components/DirectionArrow';
-import {MapLabel} from './components/MapLabel';
-import {MapRoute} from './components/MapRoute';
-import {createMapLines, getMapBounds, pointOf} from './utils';
+import React, {
+  //useEffect,
+  //useMemo,
+  useRef,
+  //useState
+} from 'react';
+import {/*ActivityIndicator, Platform, */ View} from 'react-native';
+//import {DirectionArrow} from './components/DirectionArrow';
+//import {MapLabel} from './components/MapLabel';
+//import {MapRoute} from './components/MapRoute';
+//import {createMapLines, getMapBounds, pointOf} from './utils';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -47,24 +55,23 @@ type Props = TravelDetailsMapScreenParams & {
   onPressBack: () => void;
 };
 
-const FOLLOW_ZOOM_LEVEL = 14.5;
-const FOLLOW_MIN_ZOOM_LEVEL = 8;
-const FOLLOW_ANIMATION_DURATION = 500;
+//const FOLLOW_ZOOM_LEVEL = 14.5;
+//const FOLLOW_MIN_ZOOM_LEVEL = 8;
+//const FOLLOW_ANIMATION_DURATION = 500;
 
-export const TravelDetailsMapScreenComponent = ({
-  legs,
-  vehicleWithPosition,
-  toPlace,
+export const TravelDetailsMapScreenComponent = ({}: //legs,
+//vehicleWithPosition,
+/*toPlace,
   fromPlace,
   onPressBack,
   mode,
-  subMode,
-}: Props) => {
-  const mapCameraRef = useRef<MapboxGL.Camera>(null);
+  subMode,*/
+Props) => {
+  //const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
-  const {location: geolocation} = useGeolocationState();
+  //const {location: geolocation} = useGeolocationState();
 
-  const features = useMemo(() => createMapLines(legs), [legs]);
+  /*const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
   const centerPosition = vehicleWithPosition?.location
     ? [
@@ -74,10 +81,10 @@ export const TravelDetailsMapScreenComponent = ({
     : undefined;
 
   const {t} = useTranslation();
-  const controlStyles = useControlPositionsStyle();
+  const controlStyles = useControlPositionsStyle();*/
   const styles = useStyles();
 
-  const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
+  /*const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
     vehicleWithPosition,
   );
 
@@ -109,7 +116,7 @@ export const TravelDetailsMapScreenComponent = ({
         animationMode: 'easeTo',
       });
     }
-  }, [vehicle, shouldTrack]);
+  }, [vehicle, shouldTrack]);*/
 
   return (
     <View style={styles.mapView}>
@@ -184,7 +191,7 @@ export const TravelDetailsMapScreenComponent = ({
   );
 };
 
-type VehicleIconProps = {
+/*type VehicleIconProps = {
   vehicle: VehicleWithPosition;
   mode?: AnyMode;
   subMode?: AnySubMode;
@@ -341,7 +348,7 @@ const LiveVehicleIcon = ({
 
   return <ThemeIcon svg={svg} fill={fillColor} />;
 };
-
+*/
 const useStyles = StyleSheet.createThemeHook(() => ({
   mapView: {
     flex: 1,
