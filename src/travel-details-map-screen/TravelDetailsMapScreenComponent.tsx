@@ -34,7 +34,7 @@ import React, {
   //useEffect,
   //useMemo,
   useRef,
-  //useState
+  useState,
 } from 'react';
 import {/*ActivityIndicator, Platform, */ View} from 'react-native';
 //import {DirectionArrow} from './components/DirectionArrow';
@@ -55,7 +55,7 @@ type Props = TravelDetailsMapScreenParams & {
   onPressBack: () => void;
 };
 
-//const FOLLOW_ZOOM_LEVEL = 14.5;
+const FOLLOW_ZOOM_LEVEL = 14.5;
 //const FOLLOW_MIN_ZOOM_LEVEL = 8;
 //const FOLLOW_ANIMATION_DURATION = 500;
 
@@ -95,7 +95,7 @@ Props) => {
       setVehicle(vehicle);
     },
   });
-
+*/
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
   const [cameraState, setCameraState] = useState<{
     zoomLevel: number;
@@ -104,7 +104,7 @@ Props) => {
     zoomLevel: FOLLOW_ZOOM_LEVEL,
     heading: 0,
   });
-
+  /*
   useEffect(() => {
     const location = vehicle?.location;
     if (!location) return;
@@ -125,7 +125,7 @@ Props) => {
         style={styles.map}
         pitchEnabled={false}
         {...MapViewConfig}
-        /* onCameraChanged={(state) => {
+        onCameraChanged={(state) => {
           setCameraState({
             zoomLevel: state.properties.zoom,
             heading: state.properties.heading,
@@ -133,7 +133,7 @@ Props) => {
           if (state.gestures.isGestureActive) {
             setShouldTrack(false);
           }
-        }} */
+        }}
       >
         {/*<MapboxGL.Camera
           ref={mapCameraRef}
@@ -187,6 +187,8 @@ Props) => {
           }}
         />
       </View>*/}
+      {shouldTrack && <View />}
+      {cameraState.zoomLevel > 1 && <View />}
     </View>
   );
 };
