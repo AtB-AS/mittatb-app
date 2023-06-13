@@ -109,6 +109,11 @@ export const TravelDetailsMapScreenComponent = ({
         animationMode: 'easeTo',
       });
     }
+    setCameraState({
+      // temp just to remove lint error
+      zoomLevel: FOLLOW_ZOOM_LEVEL,
+      heading: 0,
+    });
   }, [vehicle, shouldTrack]);
 
   return (
