@@ -138,7 +138,7 @@ export const TravelDetailsMapScreenComponent = ({
         />
         <MapboxGL.UserLocation showsUserHeadingIndicator />
         <MapRoute lines={features} />
-        {/*toPlace && (
+        {toPlace && (
           <MapLabel
             point={pointOf(toPlace)}
             id="end"
@@ -162,9 +162,9 @@ export const TravelDetailsMapScreenComponent = ({
             zoomLevel={cameraState.zoomLevel}
             heading={cameraState.heading}
           />
-        )*/}
+        )}
       </MapboxGL.MapView>
-      {/*<View style={controlStyles.backArrowContainer}>
+      <View style={controlStyles.backArrowContainer}>
         <BackArrow
           accessibilityLabel={t(MapTexts.exitButton.a11yLabel)}
           onBack={onPressBack}
@@ -179,7 +179,7 @@ export const TravelDetailsMapScreenComponent = ({
             });
           }}
         />
-      </View>*/}
+      </View>
     </View>
   );
 };
