@@ -115,16 +115,14 @@ const ScrollChildrenIOS = ({
 }: ChildrenProps) => {
   const styles = useStyles();
   return (
-    <View style={{paddingTop: contentHeight}}>
-      <Animated.ScrollView
-        scrollEventThrottle={10}
-        refreshControl={refreshControl}
-        onScroll={onScroll}
-        style={styles.childrenIOS}
-      >
-        {children}
-      </Animated.ScrollView>
-    </View>
+    <Animated.ScrollView
+      scrollEventThrottle={10}
+      refreshControl={refreshControl}
+      onScroll={onScroll}
+      style={styles.childrenIOS}
+    >
+      <View style={{paddingTop: contentHeight}}>{children}</View>
+    </Animated.ScrollView>
   );
 };
 
