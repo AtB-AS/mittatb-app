@@ -12,7 +12,7 @@ import {ReserveOffer} from '@atb/ticketing';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 
-export type AfterLoginParams<T extends keyof RootStackParamList> = {
+export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
   /*
    Can use 'as any' when using these params when navigating, as type safety is
@@ -60,39 +60,46 @@ type FareContractDetailsRouteParams = {
 
 export type Root_LoginActiveFareContractWarningScreenParams = {
   afterLogin?:
-    | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
-    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
+    | NextScreenParams<'Root_TabNavigatorStack'>
+    | NextScreenParams<'Root_PurchaseOverviewScreen'>
+    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
 };
 
 export type Root_LoginOptionsScreenParams = {
   afterLogin?:
-    | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
-    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
+    | NextScreenParams<'Root_TabNavigatorStack'>
+    | NextScreenParams<'Root_PurchaseOverviewScreen'>
+    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
 };
 
 export type Root_LoginPhoneInputScreenParams = {
   afterLogin?:
-    | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
-    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
+    | NextScreenParams<'Root_TabNavigatorStack'>
+    | NextScreenParams<'Root_PurchaseOverviewScreen'>
+    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
 };
 
 export type Root_LoginConfirmCodeScreenParams = {
   phoneNumber: string;
   afterLogin?:
-    | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
-    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
+    | NextScreenParams<'Root_TabNavigatorStack'>
+    | NextScreenParams<'Root_PurchaseOverviewScreen'>
+    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
   afterLogin?:
-    | AfterLoginParams<'Root_TabNavigatorStack'>
-    | AfterLoginParams<'Root_PurchaseOverviewScreen'>
-    | AfterLoginParams<'Root_PurchaseConfirmationScreen'>;
+    | NextScreenParams<'Root_TabNavigatorStack'>
+    | NextScreenParams<'Root_PurchaseOverviewScreen'>
+    | NextScreenParams<'Root_PurchaseConfirmationScreen'>
+    | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
   fareProductTypeConfig: FareProductTypeConfig;
+};
+
+export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {
+  afterEnabled?:
+    | NextScreenParams<'Root_TabNavigatorStack'>
+    | NextScreenParams<'Root_PurchaseOverviewScreen'>;
 };
 
 export type RootStackParamList = {
@@ -125,6 +132,7 @@ export type RootStackParamList = {
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
   Root_LoginPhoneInputScreen: Root_LoginPhoneInputScreenParams;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
+  Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
