@@ -49,7 +49,7 @@ type Props = TravelDetailsMapScreenParams & {
 };
 
 const FOLLOW_ZOOM_LEVEL = 14.5;
-const FOLLOW_MIN_ZOOM_LEVEL = 8;
+const FOLLOW_MIN_ZOOM_LEVEL = 6; // keep below 6.32 to avoid mapbox bug
 const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
