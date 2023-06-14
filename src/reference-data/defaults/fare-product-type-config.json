@@ -173,5 +173,101 @@
       "offerEndpoint": "zones",
       "requiresLogin": true
     }
+  },
+  {
+    "type": "boat-single",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Enkeltbillett hurtigbåt"
+      },
+      {
+        "lang": "eng",
+        "value": "Single ticket express boat"
+      }
+    ],
+    "illustration": "boat",
+    "transportModes": [
+      {
+        "mode": "water",
+        "subMode": "highSpeedPassengerService"
+      },
+      {
+        "mode": "water",
+        "subMode": "highSpeedVehicleService"
+      }
+    ],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du skal reise av og til med båt"
+      },
+      {
+        "lang": "eng",
+        "value": "When you travel occasionally"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "none",
+      "offerEndpoint": "stop-places",
+      "requiresLogin": true,
+      "requiresTokenOnMobile": true
+    }
+  },
+  {
+    "type": "boat-period",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Båt Periodebillett"
+      },
+      {
+        "lang": "eng",
+        "value": "Boat Periodic ticket"
+      }
+    ],
+    "illustration": "boat",
+    "transportModes": [
+      {
+        "mode": "water",
+        "subMode": "highSpeedPassengerService"
+      },
+      {
+        "mode": "water",
+        "subMode": "highSpeedVehicleService"
+      }
+    ],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du reiser litt oftere med båt"
+      },
+      {
+        "lang": "eng",
+        "value": "When you travel more frequently by boat"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "productSelectionTitle": [
+        {
+          "lang": "nob",
+          "value": "Velg varighet"
+        },
+        {
+          "lang": "eng",
+          "value": "Select duration"
+        }
+      ],
+      "offerEndpoint": "stop-places",
+      "requiresLogin": true,
+      "requiresTokenOnMobile": true
+    }
   }
 ]
