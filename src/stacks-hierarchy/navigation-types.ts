@@ -58,41 +58,31 @@ type FareContractDetailsRouteParams = {
   orderId: string;
 };
 
+type AfterLoginScreenType =
+  | NextScreenParams<'Root_TabNavigatorStack'>
+  | NextScreenParams<'Root_PurchaseOverviewScreen'>
+  | NextScreenParams<'Root_PurchaseConfirmationScreen'>
+  | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
+
 export type Root_LoginActiveFareContractWarningScreenParams = {
-  afterLogin?:
-    | NextScreenParams<'Root_TabNavigatorStack'>
-    | NextScreenParams<'Root_PurchaseOverviewScreen'>
-    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
+  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginOptionsScreenParams = {
-  afterLogin?:
-    | NextScreenParams<'Root_TabNavigatorStack'>
-    | NextScreenParams<'Root_PurchaseOverviewScreen'>
-    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
+  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginPhoneInputScreenParams = {
-  afterLogin?:
-    | NextScreenParams<'Root_TabNavigatorStack'>
-    | NextScreenParams<'Root_PurchaseOverviewScreen'>
-    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
+  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginConfirmCodeScreenParams = {
   phoneNumber: string;
-  afterLogin?:
-    | NextScreenParams<'Root_TabNavigatorStack'>
-    | NextScreenParams<'Root_PurchaseOverviewScreen'>
-    | NextScreenParams<'Root_PurchaseConfirmationScreen'>;
+  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
-  afterLogin?:
-    | NextScreenParams<'Root_TabNavigatorStack'>
-    | NextScreenParams<'Root_PurchaseOverviewScreen'>
-    | NextScreenParams<'Root_PurchaseConfirmationScreen'>
-    | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
+  afterLogin?: AfterLoginScreenType;
   fareProductTypeConfig: FareProductTypeConfig;
 };
 

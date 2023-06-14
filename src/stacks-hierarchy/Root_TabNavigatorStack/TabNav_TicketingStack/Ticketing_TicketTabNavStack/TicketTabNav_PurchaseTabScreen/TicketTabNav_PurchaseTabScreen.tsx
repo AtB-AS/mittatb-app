@@ -16,6 +16,8 @@ import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAss
 import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 import {useAnalytics} from '@atb/analytics';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -33,6 +35,10 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const showTicketAssistant = useTicketingAssistantEnabled();
   const analytics = useAnalytics();
 
+  const {remoteTokens} = useMobileTokenContextState();
+  const inspectableToken = findInspectable(remoteTokens);
+  const isMobileTokenEnabled = isMobileToken(inspectableToken);
+
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
@@ -46,13 +52,35 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       navigation.navigate('Root_LoginRequiredForFareProductScreen', {
         fareProductTypeConfig,
         afterLogin: {
-          screen: 'Root_PurchaseOverviewScreen',
+          screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
           params: {
-            fareProductTypeConfig,
-            mode: 'Ticket',
+            afterEnabled: {
+              screen: 'Root_PurchaseOverviewScreen',
+              params: {
+                fareProductTypeConfig,
+                mode: 'Ticket',
+              },
+            },
           },
         },
       });
+    } else if (
+      fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+      authenticationType === 'phone' &&
+      !isMobileTokenEnabled
+    ) {
+      navigation.navigate(
+        'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
+        {
+          afterEnabled: {
+            screen: 'Root_PurchaseOverviewScreen',
+            params: {
+              fareProductTypeConfig,
+              mode: 'Ticket',
+            },
+          },
+        },
+      );
     } else {
       navigation.navigate('Root_PurchaseOverviewScreen', {
         fareProductTypeConfig: fareProductTypeConfig,
