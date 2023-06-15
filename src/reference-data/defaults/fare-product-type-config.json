@@ -179,11 +179,11 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Enkeltbillett hurtigbåt"
+        "value": "Enkeltbillett, hurtigbåt"
       },
       {
         "lang": "eng",
-        "value": "Single ticket express boat"
+        "value": "Single ticket, boat"
       }
     ],
     "illustration": "boat",
@@ -200,11 +200,11 @@
     "description": [
       {
         "lang": "nob",
-        "value": "Når du skal reise av og til med båt"
+        "value": "Når du skal reise én gang"
       },
       {
         "lang": "eng",
-        "value": "When you travel occasionally"
+        "value": "When you are going to travel once"
       }
     ],
     "configuration": {
@@ -222,11 +222,11 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Båt Periodebillett"
+        "value": "Periodebillett, hurtigbåt"
       },
       {
         "lang": "eng",
-        "value": "Boat Periodic ticket"
+        "value": "Periodic ticket, boat"
       }
     ],
     "illustration": "boat",
@@ -243,11 +243,11 @@
     "description": [
       {
         "lang": "nob",
-        "value": "Når du reiser litt oftere med båt"
+        "value": "Når du reiser litt oftere"
       },
       {
         "lang": "eng",
-        "value": "When you travel more frequently by boat"
+        "value": "When you travel a little more often"
       }
     ],
     "configuration": {
