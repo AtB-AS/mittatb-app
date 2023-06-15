@@ -92,11 +92,7 @@ export const TravelDetailsMapScreenComponent = ({
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
   const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
-  const [cameraState, setCameraState] = useState<{
-    heading: number;
-  }>({
-    heading: 0,
-  });
+  const [cameraHeading, setCameraHeading] = useState<number>(0);
 
   /* adding onCameraChanged to <MapView> caused an internal mapbox error in the iOS stage build version, so use the deprecated onRegionIsChanging instead for now and hope the error will be fixed when onRegionIsChanging is removed in the next mapbox version*/
   /* on Android, onRegionIsChanging is very laggy, so use the correct onCameraChanged instead */
@@ -104,9 +100,7 @@ export const TravelDetailsMapScreenComponent = ({
     Platform.OS === 'android'
       ? {
           onCameraChanged: (state: MapboxGL.MapState) => {
-            setCameraState({
-              heading: state.properties.heading,
-            });
+            setCameraHeading(state.properties.heading);
             if (state.gestures.isGestureActive) {
               setShouldTrack(false);
             }
@@ -114,9 +108,7 @@ export const TravelDetailsMapScreenComponent = ({
         }
       : {
           onRegionIsChanging: (state: Feature<Point, RegionPayload>) => {
-            setCameraState({
-              heading: state.properties.heading,
-            });
+            setCameraHeading(state.properties.heading);
             if (state.properties.isUserInteraction) {
               setShouldTrack(false);
             }
@@ -178,7 +170,7 @@ export const TravelDetailsMapScreenComponent = ({
             subMode={subMode}
             subscriptionStatus={subscriptionStatus}
             zoomLevel={zoomLevel}
-            heading={cameraState.heading}
+            heading={cameraHeading}
           />
         )}
       </MapboxGL.MapView>
