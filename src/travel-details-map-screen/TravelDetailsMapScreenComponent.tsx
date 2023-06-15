@@ -49,7 +49,7 @@ type Props = TravelDetailsMapScreenParams & {
 };
 
 const FOLLOW_ZOOM_LEVEL = 14.5;
-const FOLLOW_MIN_ZOOM_LEVEL = 6; // keep below 6.32 to avoid mapbox bug
+const FOLLOW_MIN_ZOOM_LEVEL = 8;
 const FOLLOW_ANIMATION_DURATION = 500;
 
 export const TravelDetailsMapScreenComponent = ({
@@ -91,11 +91,10 @@ export const TravelDetailsMapScreenComponent = ({
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
+  const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
   const [cameraState, setCameraState] = useState<{
-    zoomLevel: number;
     heading: number;
   }>({
-    zoomLevel: FOLLOW_ZOOM_LEVEL,
     heading: 0,
   });
 
@@ -106,7 +105,6 @@ export const TravelDetailsMapScreenComponent = ({
       ? {
           onCameraChanged: (state: MapboxGL.MapState) => {
             setCameraState({
-              zoomLevel: state.properties.zoom,
               heading: state.properties.heading,
             });
             if (state.gestures.isGestureActive) {
@@ -117,7 +115,6 @@ export const TravelDetailsMapScreenComponent = ({
       : {
           onRegionIsChanging: (state: Feature<Point, RegionPayload>) => {
             setCameraState({
-              zoomLevel: state.properties.zoomLevel,
               heading: state.properties.heading,
             });
             if (state.properties.isUserInteraction) {
@@ -147,6 +144,7 @@ export const TravelDetailsMapScreenComponent = ({
         pitchEnabled={false}
         {...MapViewConfig}
         {...mapCameraTrackingMethod}
+        onMapIdle={(state) => setZoomLevel(state.properties.zoom)}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -179,7 +177,7 @@ export const TravelDetailsMapScreenComponent = ({
             mode={mode}
             subMode={subMode}
             subscriptionStatus={subscriptionStatus}
-            zoomLevel={cameraState.zoomLevel}
+            zoomLevel={zoomLevel}
             heading={cameraState.heading}
           />
         )}
