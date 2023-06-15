@@ -45,15 +45,50 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     analytics.logEvent('Ticketing', 'Fare product selected', {
       type: fareProductTypeConfig.type,
     });
-    if (
-      fareProductTypeConfig.configuration.requiresLogin &&
-      authenticationType !== 'phone'
-    ) {
-      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-        fareProductTypeConfig,
-        afterLogin: {
-          screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
-          params: {
+
+    if (authenticationType !== 'phone') {
+      if (
+        fareProductTypeConfig.configuration.requiresLogin &&
+        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+        !isMobileTokenEnabled
+      ) {
+        return navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+          fareProductTypeConfig,
+          afterLogin: {
+            screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
+            params: {
+              afterEnabled: {
+                screen: 'Root_PurchaseOverviewScreen',
+                params: {
+                  fareProductTypeConfig,
+                  mode: 'Ticket',
+                },
+              },
+            },
+          },
+        });
+      }
+
+      if (fareProductTypeConfig.configuration.requiresLogin) {
+        return navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+          fareProductTypeConfig,
+          afterLogin: {
+            screen: 'Root_PurchaseOverviewScreen',
+            params: {
+              fareProductTypeConfig,
+              mode: 'Ticket',
+            },
+          },
+        });
+      }
+    } else {
+      if (
+        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+        !isMobileTokenEnabled
+      ) {
+        return navigation.navigate(
+          'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
+          {
             afterEnabled: {
               screen: 'Root_PurchaseOverviewScreen',
               params: {
@@ -62,31 +97,14 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
               },
             },
           },
-        },
-      });
-    } else if (
-      fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-      authenticationType === 'phone' &&
-      !isMobileTokenEnabled
-    ) {
-      navigation.navigate(
-        'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
-        {
-          afterEnabled: {
-            screen: 'Root_PurchaseOverviewScreen',
-            params: {
-              fareProductTypeConfig,
-              mode: 'Ticket',
-            },
-          },
-        },
-      );
-    } else {
-      navigation.navigate('Root_PurchaseOverviewScreen', {
-        fareProductTypeConfig: fareProductTypeConfig,
-        mode: 'Ticket',
-      });
+        );
+      }
     }
+
+    return navigation.navigate('Root_PurchaseOverviewScreen', {
+      fareProductTypeConfig: fareProductTypeConfig,
+      mode: 'Ticket',
+    });
   };
 
   const onFareContractSelect = (
