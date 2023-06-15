@@ -35,7 +35,7 @@ export async function autocomplete(
 
 export async function reverse(
   coordinates: Coordinates | null,
-  layers?: string,
+  layers?: string[],
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/reverse';
