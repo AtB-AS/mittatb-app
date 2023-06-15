@@ -1,6 +1,7 @@
 import {translation as _} from '../../commons';
 import {APP_ORG} from '@env';
 import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
+import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 
 enum TravellerType {
   adult = 'ADULT',
@@ -95,10 +96,37 @@ function generic(travellerType: string) {
   }
 }
 
+function userProfileDescriptionOverrides(
+  travellerType: string,
+  ticketType: string | undefined,
+) {
+  if (ticketType === undefined) return _('', '');
+  switch (ticketType) {
+    case 'travel-pass':
+      if (travellerType === TravellerType.adult) {
+        return _('Over 16 år', 'Age 16 or older');
+      } else if (travellerType === TravellerType.child) {
+        return _('Til og med 15 år', 'Age 15 or younger');
+      }
+      return _('', '');
+    default:
+      return _('', '');
+  }
+}
+
 const TicketTravellerTexts = {
   information: (travellerType: string, ticketType: string | undefined) => {
     return (
       specificOverrides(travellerType, ticketType) || generic(travellerType)
+    );
+  },
+  userProfileDescriptionOverride: (
+    userProfile: UserProfileWithCount,
+    ticketType: string | undefined,
+  ) => {
+    return userProfileDescriptionOverrides(
+      userProfile.userTypeString,
+      ticketType,
     );
   },
 };
