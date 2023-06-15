@@ -22,10 +22,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^7.5.1":
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.5.1.tgz#2d187823424309ece3fa0084e4592e5c5b4daaf3"
-  integrity sha512-hAFOwq8dQvDF6c+jVoKmhUxfPV7sD9b9Anf5y9tu7wsiT9gbirHdxU6T8cUE02xN2r5UsstzgcV1SMIBK53N5w==
+"@atb-as/generate-assets@^7.5.2":
+  version "7.5.2"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.5.2.tgz#b356ce03f46c023e1fe905f80e4a8e58e41d24e8"
+  integrity sha512-0tikuya37X8yle4luKODh0nznEnOGZeG89Tg4oq4cgro8gzEJS9HkdzkElfpyZQEC5sRRby5iAdgJM/LhA+htQ==
   dependencies:
     "@atb-as/theme" "^7.1.0"
     commander "^9.4.0"
