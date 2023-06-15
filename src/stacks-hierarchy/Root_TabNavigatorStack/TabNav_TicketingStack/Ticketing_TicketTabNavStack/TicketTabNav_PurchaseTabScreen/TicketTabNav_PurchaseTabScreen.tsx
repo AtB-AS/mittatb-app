@@ -57,7 +57,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           afterLogin: {
             screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
             params: {
-              afterEnabled: {
+              nextScreen: {
                 screen: 'Root_PurchaseOverviewScreen',
                 params: {
                   fareProductTypeConfig,
@@ -89,7 +89,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         return navigation.navigate(
           'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
           {
-            afterEnabled: {
+            nextScreen: {
               screen: 'Root_PurchaseOverviewScreen',
               params: {
                 fareProductTypeConfig,

@@ -36,7 +36,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
-  const {afterEnabled} = route.params;
+  const {nextScreen} = route.params;
 
   const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
   const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>();
@@ -49,14 +49,14 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
 
   const onSave = useCallback(async () => {
     if (selectedToken) {
-      if (isInspectable(selectedToken) && afterEnabled) {
-        navigation.navigate(afterEnabled.screen, afterEnabled.params as any);
+      if (isInspectable(selectedToken) && nextScreen) {
+        navigation.navigate(nextScreen.screen, nextScreen.params as any);
         return;
       }
       setSaveState({saving: true, error: false});
       const success = await toggleToken(selectedToken.id);
-      if (success && afterEnabled) {
-        navigation.navigate(afterEnabled.screen, afterEnabled.params as any);
+      if (success && nextScreen) {
+        navigation.navigate(nextScreen.screen, nextScreen.params as any);
       } else {
         setSaveState({saving: false, error: true});
       }
