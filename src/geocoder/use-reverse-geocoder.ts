@@ -14,7 +14,7 @@ type ReverseGeocoderState = GeocoderState & {
 
 export function useReverseGeocoder(
   coords: Coordinates | null,
-  layers?: string[],
+  layers?: string,
 ): ReverseGeocoderState {
   const [state, dispatch] = useGeocoderReducer();
   const timeoutRequest = useTimeoutRequest();
