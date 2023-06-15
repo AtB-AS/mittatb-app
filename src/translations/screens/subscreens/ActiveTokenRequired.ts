@@ -2,7 +2,7 @@ import {translation as _} from '../../commons';
 
 const ActiveTokenRequiredTexts = {
   ticketNotAvailable: _(
-    'Billeten er ikke tilgjengelig på',
+    'Billetten er ikke tilgjengelig på',
     'The ticket is not available on',
   ),
   switchToMobile: _(
