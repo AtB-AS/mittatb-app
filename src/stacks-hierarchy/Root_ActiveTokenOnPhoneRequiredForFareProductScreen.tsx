@@ -88,14 +88,15 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
               {t(Ticketing.travelCardInformation.cardType)}
             </ThemeText>
           </View>
-          <ThemeText
-            type={'body__primary'}
-            color={themeColor}
-            style={[styles.text, styles.textSpacing]}
-          >
-            {t(ActiveTokenRequiredTexts.switchToMobile)}
-          </ThemeText>
         </View>
+
+        <ThemeText
+          type={'body__primary'}
+          color={themeColor}
+          style={[styles.text, styles.textSpacing]}
+        >
+          {t(ActiveTokenRequiredTexts.switchToMobile)}
+        </ThemeText>
 
         {mobileTokens?.length ? (
           <Section type="spacious" style={styles.selectDeviceSection}>
