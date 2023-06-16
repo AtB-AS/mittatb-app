@@ -91,6 +91,20 @@ const PurchaseOverviewTexts = {
     title_single: _('Velg passasjerkategori', 'Select a traveller'),
     title_multiple: _('Velg passasjerkategorier', 'Select travellers'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
+    passengers_title: (numberOfPassengers: number) =>
+      _(
+        `${numberOfPassengers} Passasjerer`,
+        `${numberOfPassengers} Passengers`,
+      ),
+    no_passengers_selected: _(
+      'Ingen passasjerer valgt',
+      'No passengers selected',
+    ),
+  },
+  passengerSelectionSheet: {
+    title: _('Passasjerer', 'Passengers'),
+    close: _('Lukk', 'Close'),
+    confirm: _('Bekreft valg', 'Confirm choice'),
   },
   infoToggle: {
     label: _('Vis info', 'Show info'),
