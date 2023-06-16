@@ -411,7 +411,7 @@
   {
     "alternativeNames": [
       {"lang": "nno", "value": "Enkeltbillett hurtigbåt"},
-      {"lang": "eng", "value": "Single ticket express boat"}
+      {"lang": "eng", "value": "Single ticket boat"}
     ],
     "distributionChannel": ["app"],
     "id": "ATB:PreassignedFareProduct:c4467e3a",
@@ -430,7 +430,7 @@
   {
     "alternativeNames": [
       {"lang": "nno", "value": "7-dagersbillett hurtigbåt"},
-      {"lang": "eng", "value": "Weekly pass express boat"}
+      {"lang": "eng", "value": "Weekly pass boat"}
     ],
     "distributionChannel": ["app"],
     "id": "ATB:PreassignedFareProduct:5f61ee14",
@@ -449,7 +449,7 @@
   {
     "alternativeNames": [
       {"lang": "nno", "value": "30-dagersbillett hurtigbåt"},
-      {"lang": "eng", "value": "Monthly pass express boat"}
+      {"lang": "eng", "value": "Monthly pass boat"}
     ],
     "distributionChannel": ["app"],
     "id": "ATB:PreassignedFareProduct:7fb92850",
