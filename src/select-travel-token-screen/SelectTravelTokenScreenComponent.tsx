@@ -81,13 +81,13 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const travelCardToken = remoteTokens?.find(isTravelCardToken);
   const mobileTokens = remoteTokens?.filter(isMobileToken);
 
+  // Shows an error message if switching to a t:card,
+  // but the current inspectable token is in the mobile AND
+  // there is an active boat fare contract
   const isChangingToTravelCardWithActiveBoatTicket =
     selectedType === 'travelCard' &&
     isMobileToken(inspectableToken) &&
     hasActiveBoatFareContract;
-
-  const isSaveButtonDisabled =
-    !selectedToken || isChangingToTravelCardWithActiveBoatTicket;
 
   return (
     <View style={styles.container}>
@@ -180,6 +180,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               isMarkdown={false}
             />
           )}
+
         {isChangingToTravelCardWithActiveBoatTicket && (
           <MessageBox
             type={'error'}
@@ -230,13 +231,15 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {saveState.saving ? (
           <ActivityIndicator size="large" />
         ) : (
-          <Button
-            onPress={onSave}
-            text={t(TravelTokenTexts.toggleToken.saveButton)}
-            interactiveColor="interactive_0"
-            disabled={isSaveButtonDisabled}
-            testID="confirmSelectionButton"
-          />
+          !isChangingToTravelCardWithActiveBoatTicket && (
+            <Button
+              onPress={onSave}
+              text={t(TravelTokenTexts.toggleToken.saveButton)}
+              interactiveColor="interactive_0"
+              disabled={!!selectedToken}
+              testID="confirmSelectionButton"
+            />
+          )
         )}
       </ScrollView>
     </View>
