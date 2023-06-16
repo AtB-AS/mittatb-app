@@ -35,12 +35,14 @@ export async function autocomplete(
 
 export async function reverse(
   coordinates: Coordinates | null,
+  layers?: string[],
   config?: AxiosRequestConfig,
 ) {
   const url = 'bff/v1/geocoder/reverse';
   const query = qs.stringify({
     lat: coordinates?.latitude,
     lon: coordinates?.longitude,
+    layers: layers,
   });
 
   return await client.get<Feature[]>(stringifyUrl(url, query), config);

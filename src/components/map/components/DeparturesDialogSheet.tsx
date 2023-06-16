@@ -53,13 +53,11 @@ export const DeparturesDialogSheet = ({
     isSearching: isGeocoderSearching,
     error: geocoderError,
     forceRefresh: forceRefreshReverseGeocode,
-  } = useReverseGeocoder({longitude, latitude} || null);
+  } = useReverseGeocoder({longitude, latitude} || null, ['venue']);
   const appStateStatus = useAppStateStatus();
 
-  const filteredLocations = locations?.filter(
-    (location) =>
-      location.layer === 'venue' &&
-      stopPlaceFeature.properties?.name.includes(location.name),
+  const filteredLocations = locations?.filter((location) =>
+    stopPlaceFeature.properties?.name.includes(location.name),
   );
 
   const closestLocation = filteredLocations?.[0];
