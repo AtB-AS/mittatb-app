@@ -78,6 +78,12 @@ export function TravellerSelection({
       ? t(PurchaseOverviewTexts.travellerSelection.no_passengers_selected)
       : selectableUserProfilesWithCount.reduce((acc, sUPWC) => {
           if (sUPWC.count > 0) {
+            if (
+              numberOfPassengerCategoriesSelectedFrom == 1 &&
+              totalPassengersCount == 1
+            ) {
+              return getReferenceDataName(sUPWC, language); // don't show number in front when only one
+            }
             if (acc !== '') {
               acc += ', ';
             }
