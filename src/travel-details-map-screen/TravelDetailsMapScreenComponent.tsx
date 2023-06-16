@@ -253,11 +253,12 @@ const LiveVehicle = ({
 
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
 
-  const iconCircleSize = 44;
+  const iconBorderWidth = theme.border.width.medium;
+  const iconCircleSize = (theme.icon.size.normal + iconBorderWidth) * 2;
 
-  const scaleForBugfix = Platform.OS === 'android' ? 2 : 1; // fix android transform rendering bugs by scaling up parent and child back down
-  const iconSize = iconCircleSize * 0.9 * scaleForBugfix;
-  const iconScale = 1 / scaleForBugfix;
+  const iconScaleFactor = 2; // fix android transform rendering bugs by scaling up parent and child back down
+  const iconSize = iconCircleSize * 0.9 * iconScaleFactor;
+  const iconScale = 1 / iconScaleFactor;
 
   return (
     <MapboxGL.MarkerView
@@ -280,7 +281,7 @@ const LiveVehicle = ({
             height: iconCircleSize,
             backgroundColor: circleBackgroundColor,
             borderColor: circleBorderColor,
-            borderWidth: 2,
+            borderWidth: iconBorderWidth,
             borderRadius: 100,
           }}
         />
