@@ -52,7 +52,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         fareProductTypeConfig.configuration.requiresTokenOnMobile &&
         !hasInspectableMobileToken
       ) {
-        return navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
           fareProductTypeConfig,
           afterLogin: {
             screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
@@ -67,10 +67,11 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
             },
           },
         });
+        return;
       }
 
       if (fareProductTypeConfig.configuration.requiresLogin) {
-        return navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
           fareProductTypeConfig,
           afterLogin: {
             screen: 'Root_PurchaseOverviewScreen',
@@ -80,13 +81,14 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
             },
           },
         });
+        return;
       }
     } else {
       if (
         fareProductTypeConfig.configuration.requiresTokenOnMobile &&
         !hasInspectableMobileToken
       ) {
-        return navigation.navigate(
+        navigation.navigate(
           'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
           {
             nextScreen: {
@@ -98,10 +100,11 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
             },
           },
         );
+        return;
       }
     }
 
-    return navigation.navigate('Root_PurchaseOverviewScreen', {
+    navigation.navigate('Root_PurchaseOverviewScreen', {
       fareProductTypeConfig: fareProductTypeConfig,
       mode: 'Ticket',
     });
