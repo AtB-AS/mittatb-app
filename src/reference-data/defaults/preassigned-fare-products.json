@@ -421,7 +421,8 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
-      ]
+      ],
+      "minVersion": "1.39"
     },
     "name": {"lang": "nob", "value": "Enkeltbillett hurtigbåt"},
     "type": "boat-single",
@@ -440,7 +441,8 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
-      ]
+      ],
+      "minVersion": "1.39"
     },
     "name": {"lang": "nob", "value": "7-dagersbillett hurtigbåt"},
     "type": "boat-period",
@@ -459,7 +461,8 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
-      ]
+      ],
+      "minVersion": "1.39"
     },
     "name": {"lang": "nob", "value": "30-dagersbillett hurtigbåt"},
     "type": "boat-period",
@@ -478,7 +481,8 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
-      ]
+      ],
+      "minVersion": "1.39"
     },
     "name": {"lang": "nob", "value": "60-dagersbillett båt"},
     "type": "boat-period",
@@ -497,7 +501,8 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
-      ]
+      ],
+      "minVersion": "1.39"
     },
     "name": {"lang": "nob", "value": "90-dagersbillett båt"},
     "type": "boat-period",
@@ -516,7 +521,8 @@
         "ATB:UserProfile:d3e4ec09",
         "ATB:UserProfile:8ee842e3",
         "ATB:UserProfile:2832569f"
-      ]
+      ],
+      "minVersion": "1.39"
     },
     "name": {"lang": "nob", "value": "180-dagers billett båt"},
     "type": "boat-period",
