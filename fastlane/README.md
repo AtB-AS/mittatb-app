@@ -1,4 +1,5 @@
-## fastlane documentation
+fastlane documentation
+----
 
 # Installation
 
@@ -38,13 +39,21 @@ Generate new certificates
 
 Generate new certificates without nuking old ones
 
-### ios get_cert
+### ios get_certs
 
 ```sh
-[bundle exec] fastlane ios get_cert
+[bundle exec] fastlane ios get_certs
 ```
 
 Match certificates
+
+### ios setup_certificates
+
+```sh
+[bundle exec] fastlane ios setup_certificates
+```
+
+Setup certificates
 
 ### ios build
 
@@ -94,7 +103,8 @@ Upload the build to AppCenter
 
 Upload the build to AppCenter for distribution to TestFlight
 
----
+----
+
 
 ## Android
 
@@ -106,11 +116,21 @@ Upload the build to AppCenter for distribution to TestFlight
 
 Upload the build to AppCenter
 
+### android build_aab
+
+```sh
+[bundle exec] fastlane android build_aab
+```
+
+
+
 ### android firebase_distribution_staging
 
 ```sh
 [bundle exec] fastlane android firebase_distribution_staging
 ```
+
+
 
 ### android playstore_internal
 
@@ -118,11 +138,23 @@ Upload the build to AppCenter
 [bundle exec] fastlane android playstore_internal
 ```
 
+
+
+### android playstore_internal_aab
+
+```sh
+[bundle exec] fastlane android playstore_internal_aab
+```
+
+
+
 ### android appcenter_staging
 
 ```sh
 [bundle exec] fastlane android appcenter_staging
 ```
+
+
 
 ### android appcenter_alpha
 
@@ -130,7 +162,9 @@ Upload the build to AppCenter
 [bundle exec] fastlane android appcenter_alpha
 ```
 
----
+
+
+----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 

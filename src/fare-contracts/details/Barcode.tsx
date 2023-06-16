@@ -222,7 +222,7 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
   return (
     <GenericSectionItem>
       <View
-        style={styles.aztecCode}
+        style={[styles.aztecCode, styles.staticQrCode]}
         accessible={true}
         accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
         testID="staticQRCode"
@@ -239,5 +239,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     aspectRatio: 1,
     padding: theme.spacings.large,
     backgroundColor: '#FFFFFF',
+  },
+  staticQrCode: {
+    width: '80%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 }));

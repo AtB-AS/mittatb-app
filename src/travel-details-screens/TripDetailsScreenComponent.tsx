@@ -68,6 +68,7 @@ export const TripDetailsScreenComponent = ({
       <FullScreenView
         headerProps={{
           leftButton: {type: 'back', withIcon: true},
+          title: t(TripDetailsTexts.header.title),
           color: themeColor,
         }}
         parallaxContent={(focusRef?: React.MutableRefObject<null>) => (

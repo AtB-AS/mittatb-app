@@ -1,4 +1,4 @@
-import {SubscriptionState} from '@atb/api';
+import {SubscriptionStatus} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 import {
@@ -26,13 +26,14 @@ import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
 import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
-import {Position} from 'geojson';
+import {Feature, Point, Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
 import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -81,7 +82,7 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
-  const {state: subscriptionState} = useLiveVehicleSubscription({
+  const {status: subscriptionStatus} = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
@@ -90,13 +91,29 @@ export const TravelDetailsMapScreenComponent = ({
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
-  const [cameraState, setCameraState] = useState<{
-    zoomLevel: number;
-    heading: number;
-  }>({
-    zoomLevel: FOLLOW_ZOOM_LEVEL,
-    heading: 0,
-  });
+  const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
+  const [cameraHeading, setCameraHeading] = useState<number>(0);
+
+  /* adding onCameraChanged to <MapView> caused an internal mapbox error in the iOS stage build version, so use the deprecated onRegionIsChanging instead for now and hope the error will be fixed when onRegionIsChanging is removed in the next mapbox version*/
+  /* on Android, onRegionIsChanging is very laggy, so use the correct onCameraChanged instead */
+  const mapCameraTrackingMethod =
+    Platform.OS === 'android'
+      ? {
+          onCameraChanged: (state: MapboxGL.MapState) => {
+            setCameraHeading(state.properties.heading);
+            if (state.gestures.isGestureActive) {
+              setShouldTrack(false);
+            }
+          },
+        }
+      : {
+          onRegionIsChanging: (state: Feature<Point, RegionPayload>) => {
+            setCameraHeading(state.properties.heading);
+            if (state.properties.isUserInteraction) {
+              setShouldTrack(false);
+            }
+          },
+        };
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -118,15 +135,8 @@ export const TravelDetailsMapScreenComponent = ({
         style={styles.map}
         pitchEnabled={false}
         {...MapViewConfig}
-        onCameraChanged={(state) => {
-          setCameraState({
-            zoomLevel: state.properties.zoom,
-            heading: state.properties.heading,
-          });
-          if (state.gestures.isGestureActive) {
-            setShouldTrack(false);
-          }
-        }}
+        {...mapCameraTrackingMethod}
+        onMapIdle={(state) => setZoomLevel(state.properties.zoom)}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -158,9 +168,9 @@ export const TravelDetailsMapScreenComponent = ({
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
-            subscriptionState={subscriptionState}
-            zoomLevel={cameraState.zoomLevel}
-            heading={cameraState.heading}
+            subscriptionStatus={subscriptionStatus}
+            zoomLevel={zoomLevel}
+            heading={cameraHeading}
           />
         )}
       </MapboxGL.MapView>
@@ -189,7 +199,7 @@ type VehicleIconProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
-  subscriptionState: SubscriptionState;
+  subscriptionStatus: SubscriptionStatus;
   zoomLevel: number;
   heading: number;
 };
@@ -199,7 +209,7 @@ const LiveVehicle = ({
   setShouldTrack,
   mode,
   subMode,
-  subscriptionState,
+  subscriptionStatus,
   zoomLevel,
   heading,
 }: VehicleIconProps) => {
@@ -208,9 +218,9 @@ const LiveVehicle = ({
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
   const isError =
-    subscriptionState === 'CLOSING' || subscriptionState === 'CLOSED';
+    subscriptionStatus === 'CLOSING' || subscriptionStatus === 'CLOSED';
   const isLoading =
-    subscriptionState === 'CONNECTING' || subscriptionState === 'NOT_STARTED';
+    subscriptionStatus === 'CONNECTING' || subscriptionStatus === 'NOT_STARTED';
   const [isStale, setIsStale] = useState(false);
 
   useInterval(

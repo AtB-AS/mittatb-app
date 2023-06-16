@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
-import {API_BASE_URL, APP_VERSION} from '@env';
+import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
@@ -13,6 +13,7 @@ import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
 import {getBooleanConfigValue} from '../remote-config';
 import auth from '@react-native-firebase/auth';
+import {Platform} from 'react-native';
 
 export const client = createClient(API_BASE_URL);
 
@@ -94,6 +95,8 @@ async function requestIdTokenHandler(config: AxiosRequestConfig) {
     config.headers = {
       ...(config.headers || {}),
       Authorization: 'Bearer ' + idToken,
+      'atb-app-identifier': IOS_BUNDLE_IDENTIFIER,
+      'atb-app-platform': Platform.OS,
     };
   }
   return config;

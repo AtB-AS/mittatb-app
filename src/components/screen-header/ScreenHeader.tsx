@@ -13,10 +13,10 @@ import {
   HeaderButtonWithoutNavigation,
   HeaderButtonWithoutNavigationProps,
 } from './HeaderButton';
-import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {GlobalMessage, GlobalMessageContextType} from '@atb/global-messages';
+import {ThemeText} from '@atb/components/text';
 
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
@@ -47,6 +47,7 @@ export type ScreenHeaderProps = {
   style?: ViewStyle;
   color?: StaticColor;
   setFocusOnLoad?: boolean;
+  textOpacity?: number;
 };
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
@@ -108,6 +109,7 @@ const BaseHeader = ({
   globalMessageContext,
   leftIcon,
   rightIcon,
+  textOpacity = 1,
 }: BaseHeaderProps) => {
   const css = useHeaderStyle();
   const {theme, themeName} = useTheme();
@@ -135,14 +137,20 @@ const BaseHeader = ({
         onLayout={setLayoutFor('container')}
         ref={focusRef}
       >
-        <ThemeText
-          accessible={false}
-          onLayout={setLayoutFor('title')}
-          type="body__primary--bold"
-          color={themeColor}
+        <View
+          style={{
+            opacity: textOpacity,
+          }}
         >
-          {title ?? '\u00a0'}
-        </ThemeText>
+          <ThemeText
+            accessible={false}
+            onLayout={setLayoutFor('title')}
+            type="body__primary--bold"
+            color={themeColor}
+          >
+            {title && textOpacity > 0 ? title : '\u00a0'}
+          </ThemeText>
+        </View>
       </View>
 
       <View

@@ -33,10 +33,13 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
         maxZoomLevel={22}
         clusterMaxZoomLevel={21}
         onPress={async (e) => {
-          const [feature, ..._] = e.features;
+          const [feature, ,] = e.features;
           if (isClusterFeature(feature)) {
-            const zoomLevel =
-              await clustersSource.current?.getClusterExpansionZoom(feature);
+            const clusterExpansionZoom =
+              (await clustersSource.current?.getClusterExpansionZoom(
+                feature,
+              )) ?? 0;
+            const zoomLevel = Math.max(clusterExpansionZoom, 17.5);
             flyToLocation({
               coordinates: mapPositionToCoordinates(
                 feature.geometry.coordinates,
