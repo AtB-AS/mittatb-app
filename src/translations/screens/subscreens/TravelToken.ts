@@ -202,6 +202,13 @@ const SelectTravelTokenTexts = {
       'Du har et klippekort. Foreløpig fungerer ikke klippekort på mobil. Hvis du bytter til mobil vil du ikke kunne bruke klippekortet ditt.',
       `You have an active punch card. Currently punch cards cannot be activated using a phone. If you change to a phone now, you will not be able to use your punch card.`,
     ),
+    noCarnetWhenBoatTicketErrorMessage: {
+      title: _('Kan ikke brukes på t:kort', 'Cannot be used on t:cards'),
+      message: _(
+        'Du har en aktiv hurtigbåtbillett. Det er derfor ikke mulig å bytte til t:kort.',
+        'You have an active boat ticket. It is therefore not possible to switch to a t:card.',
+      ),
+    },
     unnamedDevice: _('Enhet uten navn', 'Unnamed device'),
   },
 };

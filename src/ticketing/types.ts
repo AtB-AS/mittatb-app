@@ -23,6 +23,8 @@ export type TravelRight = {
     | 'PreActivatedPeriodTicket'
     | 'CarnetTicket'
     | 'NightTicket'
+    | 'SingleBoatTicket'
+    | 'PeriodBoatTicket'
     | 'UnknownTicket';
 };
 
@@ -49,6 +51,14 @@ export type CarnetTravelRight = NormalTravelRight & {
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
   usedAccesses: CarnetTravelRightUsedAccess[];
+};
+
+export type SingleBoatTravelRight = TravelRight & {
+  type: 'SingleBoatTicket';
+};
+
+export type PeriodBoatTravelRight = TravelRight & {
+  type: 'PeriodBoatTicket';
 };
 
 export type PreActivatedSingleTravelRight = PreActivatedTravelRight & {

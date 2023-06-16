@@ -15,6 +15,7 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
+  isBoatTravelRight,
   isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
@@ -47,10 +48,14 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     inspectableToken,
   );
 
-  const hasActiveCarnetFareContract = flatMap(
+  const activeFareContracts = flatMap(
     filterActiveOrCanBeUsedFareContracts(fareContracts),
     (i) => i.travelRights,
-  ).some(isCarnetTravelRight);
+  );
+
+  const hasActiveCarnetFareContract =
+    activeFareContracts.some(isCarnetTravelRight);
+  const hasActiveBoatFareContract = activeFareContracts.some(isBoatTravelRight);
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -75,6 +80,14 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   const travelCardToken = remoteTokens?.find(isTravelCardToken);
   const mobileTokens = remoteTokens?.filter(isMobileToken);
+
+  const isChangingToTravelCardWithActiveBoatTicket =
+    selectedType === 'travelCard' &&
+    isMobileToken(inspectableToken) &&
+    hasActiveBoatFareContract;
+
+  const isSaveButtonDisabled =
+    !selectedToken || isChangingToTravelCardWithActiveBoatTicket;
 
   return (
     <View style={styles.container}>
@@ -167,6 +180,21 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               isMarkdown={false}
             />
           )}
+        {isChangingToTravelCardWithActiveBoatTicket && (
+          <MessageBox
+            type={'error'}
+            title={t(
+              TravelTokenTexts.toggleToken.noCarnetWhenBoatTicketErrorMessage
+                .title,
+            )}
+            message={t(
+              TravelTokenTexts.toggleToken.noCarnetWhenBoatTicketErrorMessage
+                .message,
+            )}
+            style={styles.errorMessageBox}
+            isMarkdown={false}
+          />
+        )}
         {selectedType === 'mobile' && mobileTokens?.length ? (
           <Section type="spacious" style={styles.selectDeviceSection}>
             <RadioGroupSection<RemoteToken>
@@ -206,7 +234,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             onPress={onSave}
             text={t(TravelTokenTexts.toggleToken.saveButton)}
             interactiveColor="interactive_0"
-            disabled={!selectedToken}
+            disabled={isSaveButtonDisabled}
             testID="confirmSelectionButton"
           />
         )}
