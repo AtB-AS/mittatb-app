@@ -37,7 +37,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
   const {remoteTokens} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
-  const isMobileTokenEnabled = isMobileToken(inspectableToken);
+  const hasInspectableMobileToken = isMobileToken(inspectableToken);
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -50,7 +50,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       if (
         fareProductTypeConfig.configuration.requiresLogin &&
         fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-        !isMobileTokenEnabled
+        !hasInspectableMobileToken
       ) {
         return navigation.navigate('Root_LoginRequiredForFareProductScreen', {
           fareProductTypeConfig,
@@ -84,7 +84,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     } else {
       if (
         fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-        !isMobileTokenEnabled
+        !hasInspectableMobileToken
       ) {
         return navigation.navigate(
           'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
