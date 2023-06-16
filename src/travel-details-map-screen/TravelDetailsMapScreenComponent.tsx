@@ -340,6 +340,7 @@ const LiveVehicleIcon = ({
       <ThemeIcon
         svg={svg}
         fill={theme.interactive.interactive_destructive.default.background}
+        allowFontScaling={false}
       />
     );
   if (isLoading || isStale)
@@ -349,7 +350,7 @@ const LiveVehicleIcon = ({
       />
     );
 
-  return <ThemeIcon svg={svg} fill={fillColor} />;
+  return <ThemeIcon svg={svg} fill={fillColor} allowFontScaling={false} />;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({
