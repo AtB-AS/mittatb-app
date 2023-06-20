@@ -43,13 +43,13 @@ target 'app' do
   $DontUseVendoredAbtMobile = true
 
   if ENV['GH_ACCESS_TOKEN']
-    pod 'TokenCore', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk', :tag => 'release-1.1.13'
-    pod 'TokenStateReactNativeLib', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk'
+    pod 'TokenCore', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk', :tag => 'release-1.1.14'
+    pod 'TokenStateReactNativeLib', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-mobile-client-sdk', :tag => 'release-1.1.14'
     pod 'AbtProtobufTokenIosStubs', :git => 'https://' + ENV['GH_ACCESS_TOKEN'] + '@github.com/entur/abt-protobuf-pods.git', :tag => '2.661.0'
   else
     # If no GH_ACCESS_TOKEN in env, then probably locally where the user uses personal ssh key
-    pod 'TokenCore', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :tag => 'release-1.1.13' # Possible to use ":branch => 'develop'" under local development
-    pod 'TokenStateReactNativeLib', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :branch => 'develop'
+    pod 'TokenCore', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :tag => 'release-1.1.14' # Possible to use ":branch => 'develop'" under local development
+    pod 'TokenStateReactNativeLib', :git => 'git@github.com:entur/abt-mobile-client-sdk.git', :tag => 'release-1.1.14'
     pod 'AbtProtobufTokenIosStubs', :git => 'git@github.com:entur/abt-protobuf-pods.git', :tag => '2.661.0'
   end
 

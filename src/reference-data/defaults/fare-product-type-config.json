@@ -173,5 +173,101 @@
       "offerEndpoint": "zones",
       "requiresLogin": true
     }
+  },
+  {
+    "type": "boat-single",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Enkeltbillett, hurtigbåt"
+      },
+      {
+        "lang": "eng",
+        "value": "Single ticket, boat"
+      }
+    ],
+    "illustration": "boat",
+    "transportModes": [
+      {
+        "mode": "water",
+        "subMode": "highSpeedPassengerService"
+      },
+      {
+        "mode": "water",
+        "subMode": "highSpeedVehicleService"
+      }
+    ],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du skal reise én gang"
+      },
+      {
+        "lang": "eng",
+        "value": "When you travel occasionally"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "none",
+      "offerEndpoint": "stop-places",
+      "requiresLogin": true,
+      "requiresTokenOnMobile": true
+    }
+  },
+  {
+    "type": "boat-period",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Periodebillett, hurtigbåt"
+      },
+      {
+        "lang": "eng",
+        "value": "Periodic ticket, boat"
+      }
+    ],
+    "illustration": "boat",
+    "transportModes": [
+      {
+        "mode": "water",
+        "subMode": "highSpeedPassengerService"
+      },
+      {
+        "mode": "water",
+        "subMode": "highSpeedVehicleService"
+      }
+    ],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du reiser litt oftere"
+      },
+      {
+        "lang": "eng",
+        "value": "When you travel more frequently"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "none",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "productSelectionTitle": [
+        {
+          "lang": "nob",
+          "value": "Velg varighet"
+        },
+        {
+          "lang": "eng",
+          "value": "Select duration"
+        }
+      ],
+      "offerEndpoint": "stop-places",
+      "requiresLogin": true,
+      "requiresTokenOnMobile": true
+    }
   }
 ]

@@ -38,7 +38,7 @@ import {
 } from './converters';
 import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {LanguageAndTextType} from '@atb/translations';
-import {MobilityOperatorType} from '@atb/mobility';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];

@@ -25,7 +25,6 @@ import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
-import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Feature, Point, Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
@@ -238,82 +237,80 @@ const LiveVehicle = ({
   );
 
   const circleColor = useTransportationColor(mode, subMode);
-  const circleStyle = ((): CircleLayerStyleProps => {
-    if (isError)
-      return {
-        circleColor:
-          theme.interactive.interactive_destructive.disabled.background,
-        circleRadius: 20,
-        circleStrokeColor:
-          theme.interactive.interactive_destructive.default.background,
-        circleStrokeWidth: 2,
-      };
-    if (isLoading || isStale)
-      return {
-        circleColor: theme.interactive.interactive_1.disabled.background,
-        circleRadius: 20,
-        circleStrokeColor: theme.interactive.interactive_1.default.background,
-        circleStrokeWidth: 2,
-      };
-    return {
-      circleColor,
-      circleRadius: 22,
-      circleStrokeWidth: 0,
-    };
-  })();
+
+  let circleBackgroundColor = circleColor;
+  let circleBorderColor = 'transparent';
+  if (isError) {
+    circleBackgroundColor =
+      theme.interactive.interactive_destructive.disabled.background;
+    circleBorderColor =
+      theme.interactive.interactive_destructive.default.background;
+  }
+  if (isLoading || isStale) {
+    circleBackgroundColor = theme.interactive.interactive_1.disabled.background;
+    circleBorderColor = theme.interactive.interactive_1.default.background;
+  }
 
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
 
-  const scaleForBugfix = Platform.OS === 'android' ? 2 : 1; // fix android transform rendering bugs by scaling up parent and child back down
-  const iconSize = 40 * scaleForBugfix;
-  const iconScale = 1 / scaleForBugfix;
+  const iconBorderWidth = theme.border.width.medium;
+  const iconCircleSize = (theme.icon.size.normal + iconBorderWidth) * 2;
+
+  const iconScaleFactor = 2; // fix android transform rendering bugs by scaling up parent and child back down
+  const iconSize = iconCircleSize * 0.9 * iconScaleFactor;
+  const iconScale = 1 / iconScaleFactor;
 
   return (
-    <>
-      <MapboxGL.ShapeSource id="liveVehicle" shape={pointOf(vehicle.location)}>
-        <MapboxGL.CircleLayer id="liveVehicleCircle" style={circleStyle} />
-      </MapboxGL.ShapeSource>
-      <MapboxGL.MarkerView
-        coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
+    <MapboxGL.MarkerView
+      coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
+    >
+      <View
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: iconSize,
+          height: iconSize,
+        }}
+        onTouchStart={() => setShouldTrack(true)}
       >
         <View
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: iconSize,
-            height: iconSize,
+            position: 'absolute',
+            width: iconCircleSize,
+            height: iconCircleSize,
+            backgroundColor: circleBackgroundColor,
+            borderColor: circleBorderColor,
+            borderWidth: iconBorderWidth,
+            borderRadius: 100,
           }}
-          onTouchStart={() => setShouldTrack(true)}
-        >
-          <LiveVehicleIcon
-            mode={mode}
-            subMode={subMode}
-            isError={isError}
-            isStale={isStale}
-            isLoading={isLoading}
-          />
+        />
+        <LiveVehicleIcon
+          mode={mode}
+          subMode={subMode}
+          isError={isError}
+          isStale={isStale}
+          isLoading={isLoading}
+        />
 
-          {!isError &&
-            vehicle.bearing !== undefined && ( // only show direction if bearing is defined
-              <DirectionArrow
-                vehicleBearing={vehicle.bearing}
-                heading={heading}
-                iconSize={iconSize}
-                iconScale={iconScale}
-                fill={
-                  isError
-                    ? theme.interactive.interactive_destructive.default
-                        .background
-                    : isStale
-                    ? theme.interactive.interactive_1.default.background
-                    : fillColor
-                }
-              />
-            )}
-        </View>
-      </MapboxGL.MarkerView>
-    </>
+        {!isError &&
+          vehicle.bearing !== undefined && ( // only show direction if bearing is defined
+            <DirectionArrow
+              vehicleBearing={vehicle.bearing}
+              heading={heading}
+              iconSize={iconSize}
+              iconScale={iconScale}
+              fill={
+                isError
+                  ? theme.interactive.interactive_destructive.default.background
+                  : isStale
+                  ? theme.interactive.interactive_1.default.background
+                  : fillColor
+              }
+            />
+          )}
+      </View>
+    </MapboxGL.MarkerView>
   );
 };
 
