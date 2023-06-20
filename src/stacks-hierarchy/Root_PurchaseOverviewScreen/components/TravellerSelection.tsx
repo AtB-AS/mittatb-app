@@ -41,8 +41,12 @@ export function TravellerSelection({
     accessible: true,
     accessibilityRole: 'button',
     accessibilityLabel:
-      'Todo: Some label in the correct language here' + screenReaderPause,
-    accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
+      t(
+        selectionMode == 'multiple'
+          ? PurchaseOverviewTexts.travellerSelection.title_multiple
+          : PurchaseOverviewTexts.travellerSelection.title_single,
+      ) + screenReaderPause,
+    accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
   };
 
   const [selectableUserProfilesWithCount, setSelectableUserProfilesWithCount] =
