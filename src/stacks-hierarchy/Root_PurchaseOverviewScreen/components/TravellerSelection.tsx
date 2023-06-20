@@ -63,11 +63,11 @@ export function TravellerSelection({
     return <></>;
   }
 
-  let numberOfPassengerCategoriesSelectedFrom = 0;
+  let activePassengerCategoryCount = 0;
   const totalPassengersCount = selectableUserProfilesWithCount.reduce(
     (acc, sUPWC) => {
       if (sUPWC.count > 0) {
-        numberOfPassengerCategoriesSelectedFrom += 1;
+        activePassengerCategoryCount += 1;
       }
       return acc + sUPWC.count;
     },
@@ -75,7 +75,7 @@ export function TravellerSelection({
   );
 
   const multiplePassengerCategoriesSelectedFrom =
-    numberOfPassengerCategoriesSelectedFrom > 1;
+    activePassengerCategoryCount > 1;
 
   const multiplePassengersDetailsText =
     totalPassengersCount == 0
