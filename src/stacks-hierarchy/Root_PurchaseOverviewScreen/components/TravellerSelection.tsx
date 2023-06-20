@@ -79,8 +79,14 @@ export function TravellerSelection({
     totalTravellersCount == 0
       ? t(PurchaseOverviewTexts.travellerSelection.no_travellers_selected)
       : selectableUserProfilesWithCount
-          .filter((up) => up.count > 0)
-          .map((up) => `${up.count} ${getReferenceDataName(up, language)}`)
+          .filter((userProfile) => userProfile.count > 0)
+          .map(
+            (userProfile) =>
+              `${userProfile.count} ${getReferenceDataName(
+                userProfile,
+                language,
+              )}`,
+          )
           .join(', ');
 
   const travellerSelectionOnPress = () => {
