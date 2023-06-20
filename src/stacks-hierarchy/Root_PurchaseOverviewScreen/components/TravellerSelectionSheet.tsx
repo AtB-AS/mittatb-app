@@ -1,6 +1,7 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {TravellerSelectionMode} from '@atb/configuration';
 import {ScrollView} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -15,7 +16,7 @@ import {
 } from './Travellers/use-user-count-state';
 
 type TravellerSelectionSheetProps = {
-  selectionMode: 'multiple' | 'single';
+  selectionMode: TravellerSelectionMode;
   fareProductType: string;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
   close: (chosenSelectableUserProfiles?: UserProfileWithCount[]) => void;

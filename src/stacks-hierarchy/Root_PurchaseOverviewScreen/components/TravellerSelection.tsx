@@ -60,19 +60,17 @@ export function TravellerSelection({
   }, [fareProductType, selectionMode, selectableUserProfilesWithCount]);
 
   if (selectionMode === 'none') {
-    return <></>;
+    return null;
   }
 
-  let activeTravellerCategoryCount = 0;
   const totalTravellersCount = selectableUserProfilesWithCount.reduce(
-    (acc, sUPWC) => {
-      if (sUPWC.count > 0) {
-        activeTravellerCategoryCount += 1;
-      }
-      return acc + sUPWC.count;
-    },
+    (acc, sUPWC) => acc + sUPWC.count,
     0,
   );
+
+  const activeTravellerCategoryCount = selectableUserProfilesWithCount.filter(
+    (u) => u.count,
+  ).length;
 
   const multipleTravellerCategoriesSelectedFrom =
     activeTravellerCategoryCount > 1;
@@ -80,21 +78,10 @@ export function TravellerSelection({
   const multipleTravellersDetailsText =
     totalTravellersCount == 0
       ? t(PurchaseOverviewTexts.travellerSelection.no_travellers_selected)
-      : selectableUserProfilesWithCount.reduce((acc, sUPWC) => {
-          if (sUPWC.count > 0) {
-            if (selectionMode == 'single') {
-              return getReferenceDataName(sUPWC, language);
-            }
-            if (acc !== '') {
-              acc += ', ';
-            }
-            return (
-              acc + sUPWC.count + ' ' + getReferenceDataName(sUPWC, language) // plural name values not ideal atm?
-            );
-          } else {
-            return acc;
-          }
-        }, '');
+      : selectableUserProfilesWithCount
+          .filter((up) => up.count > 0)
+          .map((up) => `${up.count} ${getReferenceDataName(up, language)}`)
+          .join(', ');
 
   const travellerSelectionOnPress = () => {
     openBottomSheet(() => (
@@ -128,7 +115,7 @@ export function TravellerSelection({
       <Section {...accessibility}>
         <GenericClickableSectionItem onPress={travellerSelectionOnPress}>
           <View style={styles.sectionContentContainer}>
-            <View>
+            <View style={{flex: 1}}>
               <ThemeText type="body__primary--bold">
                 {multipleTravellerCategoriesSelectedFrom
                   ? t(
