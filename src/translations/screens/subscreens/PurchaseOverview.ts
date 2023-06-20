@@ -91,11 +91,11 @@ const PurchaseOverviewTexts = {
     title_single: _('Velg reisende', 'Select a traveller'),
     title_multiple: _('Velg reisende', 'Select travellers'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
-    passengers_title: (numberOfPassengers: number) =>
-      _(`${numberOfPassengers} reisende`, `${numberOfPassengers} travellers`),
-    no_passengers_selected: _('Ingen reisende valgt', 'No travellers selected'),
+    travellers_title: (numberOfTravellers: number) =>
+      _(`${numberOfTravellers} reisende`, `${numberOfTravellers} travellers`),
+    no_travellers_selected: _('Ingen reisende valgt', 'No travellers selected'),
   },
-  passengerSelectionSheet: {
+  travellerSelectionSheet: {
     title: _('Reisende', 'Travellers'),
     close: _('Lukk', 'Close'),
     confirm: _('Bekreft valg', 'Confirm choice'),

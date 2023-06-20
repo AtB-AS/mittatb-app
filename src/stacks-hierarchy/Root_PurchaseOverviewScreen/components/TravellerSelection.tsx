@@ -11,7 +11,7 @@ import {StyleSheet} from '@atb/theme';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {PassengerSelectionSheet} from './PassengerSelectionSheet';
+import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -63,23 +63,23 @@ export function TravellerSelection({
     return <></>;
   }
 
-  let activePassengerCategoryCount = 0;
-  const totalPassengersCount = selectableUserProfilesWithCount.reduce(
+  let activeTravellerCategoryCount = 0;
+  const totalTravellersCount = selectableUserProfilesWithCount.reduce(
     (acc, sUPWC) => {
       if (sUPWC.count > 0) {
-        activePassengerCategoryCount += 1;
+        activeTravellerCategoryCount += 1;
       }
       return acc + sUPWC.count;
     },
     0,
   );
 
-  const multiplePassengerCategoriesSelectedFrom =
-    activePassengerCategoryCount > 1;
+  const multipleTravellerCategoriesSelectedFrom =
+    activeTravellerCategoryCount > 1;
 
-  const multiplePassengersDetailsText =
-    totalPassengersCount == 0
-      ? t(PurchaseOverviewTexts.travellerSelection.no_passengers_selected)
+  const multipleTravellersDetailsText =
+    totalTravellersCount == 0
+      ? t(PurchaseOverviewTexts.travellerSelection.no_travellers_selected)
       : selectableUserProfilesWithCount.reduce((acc, sUPWC) => {
           if (sUPWC.count > 0) {
             if (selectionMode == 'single') {
@@ -96,9 +96,9 @@ export function TravellerSelection({
           }
         }, '');
 
-  const passengerSelectionOnPress = () => {
+  const travellerSelectionOnPress = () => {
     openBottomSheet(() => (
-      <PassengerSelectionSheet
+      <TravellerSelectionSheet
         selectionMode={selectionMode}
         fareProductType={fareProductType}
         selectableUserProfilesWithCountInit={selectableUserProfilesWithCount}
@@ -126,26 +126,26 @@ export function TravellerSelection({
         </ThemeText>
       </View>
       <Section {...accessibility}>
-        <GenericClickableSectionItem onPress={passengerSelectionOnPress}>
+        <GenericClickableSectionItem onPress={travellerSelectionOnPress}>
           <View style={styles.sectionContentContainer}>
             <View>
               <ThemeText type="body__primary--bold">
-                {multiplePassengerCategoriesSelectedFrom
+                {multipleTravellerCategoriesSelectedFrom
                   ? t(
-                      PurchaseOverviewTexts.travellerSelection.passengers_title(
-                        totalPassengersCount,
+                      PurchaseOverviewTexts.travellerSelection.travellers_title(
+                        totalTravellersCount,
                       ),
                     )
-                  : multiplePassengersDetailsText}
+                  : multipleTravellersDetailsText}
               </ThemeText>
 
-              {multiplePassengerCategoriesSelectedFrom && (
+              {multipleTravellerCategoriesSelectedFrom && (
                 <ThemeText
                   type="body__secondary"
                   color="secondary"
-                  style={styles.multiplePassengersDetails}
+                  style={styles.multipleTravellersDetails}
                 >
-                  {multiplePassengersDetailsText}
+                  {multipleTravellersDetailsText}
                 </ThemeText>
               )}
             </View>
@@ -159,7 +159,7 @@ export function TravellerSelection({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  multiplePassengersDetails: {
+  multipleTravellersDetails: {
     marginTop: theme.spacings.small,
   },
   sectionTitleContainer: {

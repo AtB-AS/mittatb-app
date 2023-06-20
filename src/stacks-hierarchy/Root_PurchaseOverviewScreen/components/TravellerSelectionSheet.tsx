@@ -14,18 +14,18 @@ import {
   useUserCountState,
 } from './Travellers/use-user-count-state';
 
-type PassengerSelectionSheetProps = {
+type TravellerSelectionSheetProps = {
   selectionMode: 'multiple' | 'single';
   fareProductType: string;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
   close: (chosenSelectableUserProfiles?: UserProfileWithCount[]) => void;
 };
-export const PassengerSelectionSheet = ({
+export const TravellerSelectionSheet = ({
   selectionMode,
   fareProductType,
   selectableUserProfilesWithCountInit,
   close,
-}: PassengerSelectionSheetProps) => {
+}: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
 
@@ -38,10 +38,10 @@ export const PassengerSelectionSheet = ({
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
       <ScreenHeaderWithoutNavigation
-        title={t(PurchaseOverviewTexts.passengerSelectionSheet.title)}
+        title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
         color="background_1"
         leftButton={{
-          text: t(PurchaseOverviewTexts.passengerSelectionSheet.close),
+          text: t(PurchaseOverviewTexts.travellerSelectionSheet.close),
           type: 'cancel',
           onPress: () => close(),
         }}
@@ -63,7 +63,7 @@ export const PassengerSelectionSheet = ({
       </ScrollView>
       <FullScreenFooter>
         <Button
-          text={t(PurchaseOverviewTexts.passengerSelectionSheet.confirm)}
+          text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
           onPress={() => close(selectableUserProfilesWithCount)}
           rightIcon={{svg: Confirm}}
         />
