@@ -93,7 +93,6 @@ const PurchaseOverviewTexts = {
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
     travellers_title: (numberOfTravellers: number) =>
       _(`${numberOfTravellers} reisende`, `${numberOfTravellers} travellers`),
-    no_travellers_selected: _('Ingen reisende valgt', 'No travellers selected'),
   },
   travellerSelectionSheet: {
     title: _('Reisende', 'Travellers'),

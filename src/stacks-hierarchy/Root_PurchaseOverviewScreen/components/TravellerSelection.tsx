@@ -72,11 +72,10 @@ export function TravellerSelection({
   );
   const multipleTravellerCategoriesSelectedFrom =
     selectedUserProfiles.length > 1;
-  const multipleTravellersDetailsText =
-    selectedUserProfiles
-      .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
-      .join(', ') ||
-    t(PurchaseOverviewTexts.travellerSelection.no_travellers_selected);
+
+  const multipleTravellersDetailsText = selectedUserProfiles
+    .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+    .join(', ');
 
   const travellerSelectionOnPress = () => {
     openBottomSheet(() => (
