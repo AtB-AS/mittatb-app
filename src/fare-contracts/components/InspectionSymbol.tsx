@@ -3,26 +3,21 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {getReferenceDataName} from '@atb/reference-data/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {ContrastColor} from '@atb-as/theme';
 import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
   isInspectable: boolean;
   isLoading?: boolean;
 };
 
 export const InspectionSymbol = ({
   preassignedFareProduct,
-  fromTariffZone,
-  toTariffZone,
   isInspectable,
   isLoading,
 }: InspectionSymbolProps) => {
@@ -43,8 +38,6 @@ export const InspectionSymbol = ({
       {isInspectable ? (
         <InspectableContent
           preassignedFareProduct={preassignedFareProduct}
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
           themeColor={themeColor}
         />
       ) : (
@@ -55,17 +48,12 @@ export const InspectionSymbol = ({
 };
 
 const InspectableContent = ({
-  fromTariffZone,
-  toTariffZone,
   preassignedFareProduct,
   themeColor,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
-  fromTariffZone?: TariffZone;
-  toTariffZone?: TariffZone;
   themeColor: ContrastColor;
 }) => {
-  const {language} = useTranslation();
   const styles = useStyles();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
@@ -87,17 +75,6 @@ const InspectableContent = ({
         },
       ]}
     >
-      {fromTariffZone && toTariffZone && (
-        <ThemeText
-          type="body__primary--bold"
-          allowFontScaling={false}
-          color={shouldFill ? themeColor : undefined}
-        >
-          {getReferenceDataName(fromTariffZone, language)}
-          {fromTariffZone.id !== toTariffZone.id &&
-            '-' + getReferenceDataName(toTariffZone, language)}
-        </ThemeText>
-      )}
       <ThemeIcon
         svg={InspectionSvg}
         fill={shouldFill ? themeColor.text : undefined}
