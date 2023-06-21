@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {
-  useUserCountState,
-  UserProfileWithCount,
-} from './Travellers/use-user-count-state';
+import {useUserCountState} from './Travellers/use-user-count-state';
 import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
 import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
 import {InfoToggle} from './InfoToggle';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];

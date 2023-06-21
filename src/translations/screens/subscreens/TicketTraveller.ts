@@ -1,7 +1,6 @@
 import {translation as _} from '../../commons';
 import {APP_ORG} from '@env';
 import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
-import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 
 enum TravellerType {
   adult = 'ADULT',
@@ -121,13 +120,10 @@ const TicketTravellerTexts = {
     );
   },
   userProfileDescriptionOverride: (
-    userProfile: UserProfileWithCount,
+    travellerType: string,
     ticketType: string | undefined,
   ) => {
-    return userProfileDescriptionOverrides(
-      userProfile.userTypeString,
-      ticketType,
-    );
+    return userProfileDescriptionOverrides(travellerType, ticketType);
   },
 };
 

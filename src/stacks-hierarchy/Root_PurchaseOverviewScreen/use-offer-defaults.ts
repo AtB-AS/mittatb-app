@@ -7,9 +7,11 @@ import {
 } from '@atb/reference-data/types';
 import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {useMemo} from 'react';
-import {TariffZoneWithMetadata} from '../Root_PurchaseTariffZonesSearchByMapScreen';
-import {UserProfileWithCount} from './components/Travellers/use-user-count-state';
-import {useTariffZoneFromLocation} from '../utils';
+import {UserProfileWithCount} from '@atb/fare-contracts';
+import {
+  TariffZoneWithMetadata,
+  useTariffZoneFromLocation,
+} from '@atb/tariff-zones-selector';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;

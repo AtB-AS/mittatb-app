@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {storedFilters} from './storage';
-import {TravelSearchFiltersSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 
 type FiltersContextState = {
   filters: TravelSearchFiltersSelectionType | undefined;

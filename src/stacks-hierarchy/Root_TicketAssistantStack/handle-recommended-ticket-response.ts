@@ -1,6 +1,6 @@
 import {productIsSellableInApp} from '@atb/reference-data/utils';
-import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {TariffZone} from '@entur/sdk/lib/nsr/types';
 import {
