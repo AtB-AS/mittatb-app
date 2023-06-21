@@ -29,9 +29,12 @@ export const useSystem = <T extends {system: SystemFragment}>(
     t(MobilityTexts.unknownOperator) ??
     '';
 
+  const operatorId = entity?.system.operator.id;
+
   return {
     appStoreUri,
     brandLogoUrl,
+    operatorId,
     operatorName,
   };
 };

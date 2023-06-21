@@ -25,6 +25,8 @@ import {MessageBox} from '@atb/components/message-box';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {OperatorBenefits} from '@atb/mobility/components/OperatorBenefits';
+import {useBenefits} from '@atb/mobility/use-benefits';
 
 type Props = {
   stationId: string;
@@ -37,7 +39,8 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   const {themeName} = useTheme();
   const style = useSheetStyle();
   const {station, isLoading, error} = useBikeStation(stationId);
-  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
+  const {appStoreUri, brandLogoUrl, operatorId, operatorName} =
+    useSystem(station);
   const rentalAppUri = getRentalAppUri(station);
   const {openOperatorApp} = useOperatorApp({
     operatorName,
@@ -49,6 +52,7 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
+  const benefits = useBenefits(operatorId);
 
   return (
     <BottomSheetContainer>
@@ -102,6 +106,7 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
                   />
                 }
               />
+              <OperatorBenefits benefits={benefits} style={style.benefits} />
             </View>
             {rentalAppUri && (
               <View style={style.footer}>
@@ -137,6 +142,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
+    },
+    benefits: {
+      marginBottom: theme.spacings.medium,
     },
     container: {
       paddingHorizontal: theme.spacings.medium,
