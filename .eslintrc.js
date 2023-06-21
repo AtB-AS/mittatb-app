@@ -106,12 +106,11 @@ module.exports = {
           {
             patterns: [
               ...noRestrictedImportsPatterns,
-              /*
-              Not allowed to import stuff from stacks-hierarchy from the
-              outside. An exception may be made for ScreenParams types, and you
-              can disable the eslint check for those imports.
-               */
-              {group: ['@atb/stacks-hierarchy/**']},
+              {
+                group: ['@atb/stacks-hierarchy/**'],
+                message:
+                  'Not allowed to import stuff from stacks-hierarchy from the outside. An exception may be made for ScreenParams types, and you can disable the eslint check for those imports.',
+              },
             ],
           },
         ],
