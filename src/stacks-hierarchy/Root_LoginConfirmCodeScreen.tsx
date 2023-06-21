@@ -74,9 +74,13 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
     if (authenticationType === 'phone' && userCreationFinished) {
       console.log('pop.to.top!');
       navigation.popToTop();
+
       if (afterLogin) {
         navigation.navigate(afterLogin.screen, afterLogin.params as any);
       }
+      // This change is not needed if we navigate from RootTabNavStack??
+      // else if (authenticationType === 'phone' && !userCreationFinished) {
+      // navigate to new screen, send in afterLogin and use that for further navigation.
     }
   }, [authenticationType, userCreationFinished]);
 

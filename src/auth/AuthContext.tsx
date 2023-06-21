@@ -72,10 +72,6 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       };
     }
     case 'SET_USER_CREATION_FINISHED': {
-      console.log(
-        'SET_USER_CREATION_FINISHED, customer_number: ' +
-          action.customer_number,
-      );
       return {
         ...prevState,
         userCreationFinished: true,
@@ -187,19 +183,18 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
    * Will retry up to 10 times with an interval of 1 second.
    */
   // And this is where we want to check whether user profile with Entur has been created
-  // If we retry for more than 10 sec. we should log this in bugsnag and intercom
-  // When we initiate the call to create a new customer account we should navigate to a page with a spinner for instance.
-  // --> Then once we have confirmed that hasCustomerClaims / account was created with Entur we can navigate them to correct place in the app.
+  // If we retry for more than 10 sec. we should log this in bugsnag and intercom and show an error message to the user
+  // When we initiate the call to create a new customer account we should navigate to a page with a spinner for instance. This can be done in TabNavStack as that will do the same for all places we want to initiate the loader
+  // --> Then once we have confirmed that hasCustomerClaims / account was created with Entur we can navigate them to correct place in the app. Pop to top?
   // This navigation to new screen should be in a toggle, so that we can turn it off in case we see that many users are stuck with the spinner.
 
-  // her er kanskje SET_USER_CREATION_FINISHED tom eller på en måte ikke satt i state helt man gjør det her, så man kan sjekke opp i mot den om man skal navigere videre
   useEffect(() => {
     let retryCount = 0;
-    console.log('state.user?.uid: ' + state.user?.uid);
 
     const checkCustomClaims = async () => {
-      const token = await state.user?.getIdTokenResult(true);
-      console.log('token: ' + JSON.stringify(token));
+      const token = await state.user?.getIdTokenResult(true).catch((err) => {
+        console.log('this is an error: ' + err); // handle this error and do something when it fails. Test this by turning of network connection
+      });
       const abt_id = token?.claims['abt_id'];
       const customer_number = token?.claims['customer_number'];
       const hasCustomClaims = !!abt_id && !!customer_number;
@@ -207,18 +202,41 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
       if (hasCustomClaims) {
         dispatch({type: 'SET_USER_CREATION_FINISHED', customer_number});
       } else {
+        // move polling to loading screen?
         if (retryCount < 10) {
+          // This retries 10 times at start-up of app. Should we investigate how to stop that from happening when token=undefined?
           console.log('retryCount: ' + retryCount);
-          console.log('retry, hasCustomClaims: ' + hasCustomClaims);
-          // if retry cont 10 --> log to bugsnag that there must have been an error and we need to investigate backend
+          // if retry count 9 --> log to bugsnag that there must have been an error and we need to investigate backend
           retryCount++;
-          setTimeout(() => checkCustomClaims(), 10000);
+          setTimeout(() => checkCustomClaims(), 1000);
         }
       }
     };
-
-    checkCustomClaims();
+    if (state.user?.uid) {
+      checkCustomClaims();
+    }
   }, [state.user?.uid]);
+
+  // if (state.user?.uid) {
+  //   let success = checkCustomClaims();
+  //   while (!success && retryCount < 10) {
+  //     // This retries 10 times at start-up of app. Should we investigate how to stop that from happening when token=undefined?
+  //     console.log('retryCount: ' + retryCount);
+  //     console.log('retry, hasCustomClaims: ' + hasCustomClaims);
+  //     // if retry count 9 --> log to bugsnag that there must have been an error and we need to investigate backend
+  //     retryCount++;
+  //     const interval = setInterval(() {
+  //       success = checkCustomClaims
+  //     }, 1000)
+  //
+  //
+  //     setTimeout(() => checkCustomClaims(), 1000);
+  //   }
+  //
+  //   if (success) {
+  //     interval.clear();
+  //   }
+  // }
 
   // Subscribe to user changes. Will fire a onChangeEvent immediately on subscription.
   useEffect(() => {

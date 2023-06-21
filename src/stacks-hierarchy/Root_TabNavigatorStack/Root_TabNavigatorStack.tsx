@@ -32,6 +32,7 @@ import {useMapPage} from '@atb/components/map';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useAuthState} from '@atb/auth';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -40,6 +41,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
+  const {userCreationFinished} = useAuthState();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   const departuresV2Enabled = useDeparturesV2Enabled();
@@ -49,8 +51,16 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   useGoToMobileTokenOnboardingWhenNecessary();
 
   useEffect(() => {
-    if (!onboarded) navigation.navigate('Root_OnboardingStack');
-  }, [onboarded]);
+    if (userCreationFinished && !onboarded)
+      navigation.navigate('Root_OnboardingStack');
+  }, [onboarded, userCreationFinished]);
+
+  // This will navigate to the new loading screen and make it pop up from wherever as long as you have been in RootTabNavStack
+
+  useEffect(() => {
+    console.log('SHOW THE LOADING SCREEEEEN !! yolo');
+    // if (!userCreationFinished) navigation.navigate('NEW_SCREEN');
+  }, [userCreationFinished]);
 
   return (
     <Tab.Navigator
