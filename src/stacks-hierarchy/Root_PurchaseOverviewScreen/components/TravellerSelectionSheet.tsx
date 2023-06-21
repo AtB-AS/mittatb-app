@@ -35,6 +35,10 @@ export const TravellerSelectionSheet = ({
     userCountState.userProfilesWithCount.filter((a) =>
       selectableUserProfilesWithCountInit.some((b) => a.id === b.id),
     );
+  const totalTravellersCount = selectableUserProfilesWithCount.reduce(
+    (acc, {count}) => acc + count,
+    0,
+  );
 
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
@@ -65,6 +69,7 @@ export const TravellerSelectionSheet = ({
       <FullScreenFooter>
         <Button
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
+          disabled={totalTravellersCount < 1}
           onPress={() => close(selectableUserProfilesWithCount)}
           rightIcon={{svg: Confirm}}
         />
