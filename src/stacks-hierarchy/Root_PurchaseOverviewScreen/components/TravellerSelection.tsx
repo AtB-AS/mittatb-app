@@ -63,31 +63,20 @@ export function TravellerSelection({
     return null;
   }
 
-  const totalTravellersCount = selectableUserProfilesWithCount.reduce(
-    (acc, sUPWC) => acc + sUPWC.count,
+  const selectedUserProfiles = selectableUserProfilesWithCount.filter(
+    ({count}) => count,
+  );
+  const totalTravellersCount = selectedUserProfiles.reduce(
+    (acc, {count}) => acc + count,
     0,
   );
-
-  const activeTravellerCategoryCount = selectableUserProfilesWithCount.filter(
-    (u) => u.count,
-  ).length;
-
   const multipleTravellerCategoriesSelectedFrom =
-    activeTravellerCategoryCount > 1;
-
+    selectedUserProfiles.length > 1;
   const multipleTravellersDetailsText =
-    totalTravellersCount == 0
-      ? t(PurchaseOverviewTexts.travellerSelection.no_travellers_selected)
-      : selectableUserProfilesWithCount
-          .filter((userProfile) => userProfile.count > 0)
-          .map(
-            (userProfile) =>
-              `${userProfile.count} ${getReferenceDataName(
-                userProfile,
-                language,
-              )}`,
-          )
-          .join(', ');
+    selectedUserProfiles
+      .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+      .join(', ') ||
+    t(PurchaseOverviewTexts.travellerSelection.no_travellers_selected);
 
   const travellerSelectionOnPress = () => {
     openBottomSheet(() => (
