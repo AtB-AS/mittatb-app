@@ -15,7 +15,6 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  isBoatTravelRight,
   isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
@@ -27,6 +26,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 type Props = {onAfterSave: () => void};
 
@@ -44,6 +44,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     isTravelCardToken(inspectableToken) ? 'travelCard' : 'mobile',
   );
 
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+
   const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>(
     inspectableToken,
   );
@@ -55,7 +57,14 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   const hasActiveCarnetFareContract =
     activeFareContracts.some(isCarnetTravelRight);
-  const hasActiveBoatFareContract = activeFareContracts.some(isBoatTravelRight);
+
+  const requiresTokenOnMobile = activeFareContracts.some((travelRight) => {
+    const fareProductTypeConfig = fareProductTypeConfigs.find(
+      (c) => c.type === travelRight.type,
+    );
+
+    return fareProductTypeConfig?.configuration.requiresTokenOnMobile === true;
+  });
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -83,11 +92,11 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   // Shows an error message if switching to a t:card,
   // but the current inspectable token is in the mobile AND
-  // there is an active boat fare contract
+  // requires mobile token
   const isChangingToTravelCardWithActiveBoatTicket =
     selectedType === 'travelCard' &&
     isMobileToken(inspectableToken) &&
-    hasActiveBoatFareContract;
+    requiresTokenOnMobile;
 
   return (
     <View style={styles.container}>
