@@ -18,7 +18,11 @@ import {
   isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
-import {TravelTokenTexts, useTranslation} from '@atb/translations';
+import {
+  TravelTokenTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useState} from 'react';
@@ -27,12 +31,13 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type Props = {onAfterSave: () => void};
 
 export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {fareContracts} = useTicketingState();
   const {disable_travelcard} = useRemoteConfig();
@@ -58,13 +63,18 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const hasActiveCarnetFareContract =
     activeFareContracts.some(isCarnetTravelRight);
 
-  const requiresTokenOnMobile = activeFareContracts.some((travelRight) => {
-    const fareProductTypeConfig = fareProductTypeConfigs.find(
-      (c) => c.type === travelRight.type,
+  // Filter for unique fare product config types
+  const activeFareContractsTypes = activeFareContracts
+    .filter(onlyUniquesBasedOnField('type'))
+    .map((travelRight) =>
+      fareProductTypeConfigs.find((c) => c.type === travelRight.type),
     );
 
-    return fareProductTypeConfig?.configuration.requiresTokenOnMobile === true;
-  });
+  // Find the first fare contract that requires to have token on mobile as a requirement
+  const fareContractWithTokenOnMobile = activeFareContractsTypes.find(
+    (fareProductTypeConfig) =>
+      fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
+  );
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -93,10 +103,10 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   // Shows an error message if switching to a t:card,
   // but the current inspectable token is in the mobile AND
   // requires mobile token
-  const isChangingToTravelCardWithActiveBoatTicket =
+  const requiresTokenOnMobile =
     selectedType === 'travelCard' &&
     isMobileToken(inspectableToken) &&
-    requiresTokenOnMobile;
+    fareContractWithTokenOnMobile;
 
   return (
     <View style={styles.container}>
@@ -190,16 +200,19 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             />
           )}
 
-        {isChangingToTravelCardWithActiveBoatTicket && (
+        {requiresTokenOnMobile && (
           <MessageBox
             type={'error'}
             title={t(
-              TravelTokenTexts.toggleToken.noCarnetWhenBoatTicketErrorMessage
-                .title,
+              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.title,
             )}
             message={t(
-              TravelTokenTexts.toggleToken.noCarnetWhenBoatTicketErrorMessage
-                .message,
+              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.message(
+                getTextForLanguage(
+                  fareContractWithTokenOnMobile.name,
+                  language,
+                ) ?? '',
+              ),
             )}
             style={styles.errorMessageBox}
             isMarkdown={false}
@@ -240,7 +253,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {saveState.saving ? (
           <ActivityIndicator size="large" />
         ) : (
-          !isChangingToTravelCardWithActiveBoatTicket && (
+          !requiresTokenOnMobile && (
             <Button
               onPress={onSave}
               text={t(TravelTokenTexts.toggleToken.saveButton)}
