@@ -74,7 +74,7 @@ export function ProductSelectionByProducts({
             setProduct(fp);
             setSelectedProduct(fp);
           }}
-          color="interactive_2"
+          color="interactive_1"
           accessibilityHint={t(
             PurchaseOverviewTexts.productSelection.a11yTitle,
           )}
