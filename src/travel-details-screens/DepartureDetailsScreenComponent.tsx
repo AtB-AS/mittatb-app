@@ -116,7 +116,11 @@ export const DepartureDetailsScreenComponent = ({
     .map((s) => s.situationNumber)
     .filter((s): s is string => !!s);
 
-  const shouldShowMapButton = mapData && !screenReaderEnabled;
+  const shouldShowMapButton =
+    mapData &&
+    !screenReaderEnabled &&
+    !isLoading &&
+    estimatedCallsWithMetadata.length > 0;
 
   return (
     <View style={styles.container}>
