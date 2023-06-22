@@ -62,7 +62,7 @@ export const ScooterTexts = {
     price: (price: number) =>
       price > 0
         ? _(`+ ${price} kr for oppstart`, `+ ${price} kr to unlock`)
-        : _('Ingen oppstartskostnad', 'Free to unlock'),
+        : _('Gratis oppstart', 'Free to unlock'),
   },
   loadingFailed: _(
     'Ops! Vi fant ikke denne sparkesykkelen',

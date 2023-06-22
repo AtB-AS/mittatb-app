@@ -19,7 +19,7 @@ export const ScooterFilter = ({
   const {t} = useTranslation();
   const filterStyle = useFilterStyle();
   const operators = useOperators();
-  const scooterOperators = operators(FormFactor.Scooter);
+  const scooterOperators = operators.byFormFactor(FormFactor.Scooter);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
     scooterOperators,
     initialFilter,

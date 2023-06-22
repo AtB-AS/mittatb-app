@@ -19,7 +19,7 @@ export const BikeFilter = ({
   const {t} = useTranslation();
   const filterStyle = useFilterStyle();
   const operators = useOperators();
-  const bikeOperators = operators(FormFactor.Bicycle);
+  const bikeOperators = operators.byFormFactor(FormFactor.Bicycle);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
     bikeOperators,
     initialFilter,

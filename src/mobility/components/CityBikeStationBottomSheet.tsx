@@ -5,14 +5,9 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {useSystem} from '@atb/mobility/use-system';
-import {Button} from '@atb/components/button';
-import {
-  BicycleTexts,
-  MobilityTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {getAvailableVehicles, getRentalAppUri} from '@atb/mobility/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
@@ -26,7 +21,8 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OperatorBenefits} from '@atb/mobility/components/OperatorBenefits';
-import {useBenefits} from '@atb/mobility/use-benefits';
+import {useUserBenefits} from '@atb/mobility/use-user-benefits';
+import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
 
 type Props = {
   stationId: string;
@@ -42,17 +38,12 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   const {appStoreUri, brandLogoUrl, operatorId, operatorName} =
     useSystem(station);
   const rentalAppUri = getRentalAppUri(station);
-  const {openOperatorApp} = useOperatorApp({
-    operatorName,
-    appStoreUri,
-    rentalAppUri,
-  });
   const stationName = useTextForLanguage(station?.name.translation);
   const availableBikes = getAvailableVehicles(
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
-  const benefits = useBenefits(operatorId);
+  const userBenefits = useUserBenefits(operatorId);
 
   return (
     <BottomSheetContainer>
@@ -106,15 +97,20 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
                   />
                 }
               />
-              <OperatorBenefits benefits={benefits} style={style.benefits} />
+              <OperatorBenefits
+                operatorId={operatorId}
+                userBenefits={userBenefits}
+                style={style.benefits}
+              />
             </View>
             {rentalAppUri && (
               <View style={style.footer}>
-                <Button
-                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
-                  onPress={openOperatorApp}
-                  mode="primary"
-                  interactiveColor={'interactive_0'}
+                <CallToActionButton
+                  appStoreUri={appStoreUri}
+                  operatorId={operatorId}
+                  operatorName={operatorName}
+                  rentalAppUri={rentalAppUri}
+                  userBenefits={userBenefits}
                 />
               </View>
             )}

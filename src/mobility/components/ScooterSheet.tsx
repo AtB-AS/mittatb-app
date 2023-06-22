@@ -5,11 +5,7 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {Language, ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
-import {Button} from '@atb/components/button';
-import {
-  MobilityTexts,
-  ScooterTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {formatDecimalNumber} from '@atb/utils/numbers';
@@ -17,12 +13,14 @@ import {PricingPlan} from '@atb/mobility/components/PricingPlan';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {getRentalAppUri} from '@atb/mobility/utils';
 import {useSystem} from '@atb/mobility/use-system';
-import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {OperatorBenefits} from '@atb/mobility/components/OperatorBenefits';
+import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
+import {useUserBenefits} from '@atb/mobility/use-user-benefits';
 
 type Props = {
   vehicleId: VehicleId;
@@ -32,16 +30,12 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
   const {vehicle, isLoading, error} = useVehicle(id);
-  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(
+  const {appStoreUri, brandLogoUrl, operatorId, operatorName} = useSystem(
     vehicle,
     vehicle?.system.operator.name,
   );
+  const userBenefits = useUserBenefits(operatorId);
   const rentalAppUri = getRentalAppUri(vehicle);
-  const {openOperatorApp} = useOperatorApp({
-    operatorName,
-    appStoreUri,
-    rentalAppUri,
-  });
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -89,17 +83,20 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                   />
                 }
               />
+              <OperatorBenefits
+                operatorId={operatorId}
+                userBenefits={userBenefits}
+              />
             </ScrollView>
-            {rentalAppUri && (
-              <View style={style.footer}>
-                <Button
-                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
-                  onPress={openOperatorApp}
-                  mode="primary"
-                  interactiveColor={'interactive_0'}
-                />
-              </View>
-            )}
+            <View style={style.footer}>
+              <CallToActionButton
+                operatorName={operatorName}
+                operatorId={operatorId}
+                rentalAppUri={rentalAppUri}
+                appStoreUri={appStoreUri}
+                userBenefits={userBenefits}
+              />
+            </View>
           </>
         )}
         {!isLoading && (error || !vehicle) && (

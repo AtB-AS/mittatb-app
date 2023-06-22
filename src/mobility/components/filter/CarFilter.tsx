@@ -19,7 +19,7 @@ export const CarFilter = ({
   const {t} = useTranslation();
   const filterStyle = useFilterStyle();
   const operators = useOperators();
-  const carOperators = operators(FormFactor.Car);
+  const carOperators = operators.byFormFactor(FormFactor.Car);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
     carOperators,
     initialFilter,
