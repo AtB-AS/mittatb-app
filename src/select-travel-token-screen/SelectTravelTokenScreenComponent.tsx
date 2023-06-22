@@ -67,8 +67,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const hasActiveCarnetFareContract =
     activeTravelsRights.some(isCarnetTravelRight);
 
-  // Filter for unique fare product config types
-  const activeFareContractsTypes = activeTravelsRights
+  // Filter for unique travel rights config types
+  const activeTravelRightTypes = activeTravelsRights
     .filter(onlyUniquesBasedOnField('type'))
     .map((travelRight) => {
       const preassignedFareProduct = findReferenceDataById(
@@ -84,7 +84,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
       );
     });
 
-  const requiresTokenOnMobileConfig = activeFareContractsTypes.find(
+  const requiresTokenOnMobileConfig = activeTravelRightTypes.find(
     (fareProductTypeConfig) =>
       fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
   );
