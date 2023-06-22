@@ -32,6 +32,10 @@ import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {
+  findReferenceDataById,
+  isOfFareProductRef,
+} from '@atb/reference-data/utils';
 
 type Props = {onAfterSave: () => void};
 
@@ -41,6 +45,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   const {fareContracts} = useTicketingState();
   const {disable_travelcard} = useRemoteConfig();
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfiguration();
 
   const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
@@ -49,29 +55,36 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     isTravelCardToken(inspectableToken) ? 'travelCard' : 'mobile',
   );
 
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-
   const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>(
     inspectableToken,
   );
 
-  const activeFareContracts = flatMap(
+  const activeTravelsRights = flatMap(
     filterActiveOrCanBeUsedFareContracts(fareContracts),
     (i) => i.travelRights,
   );
 
   const hasActiveCarnetFareContract =
-    activeFareContracts.some(isCarnetTravelRight);
+    activeTravelsRights.some(isCarnetTravelRight);
 
   // Filter for unique fare product config types
-  const activeFareContractsTypes = activeFareContracts
+  const activeFareContractsTypes = activeTravelsRights
     .filter(onlyUniquesBasedOnField('type'))
-    .map((travelRight) =>
-      fareProductTypeConfigs.find((c) => c.type === travelRight.type),
-    );
+    .map((travelRight) => {
+      const preassignedFareProduct = findReferenceDataById(
+        preassignedFareProducts,
+        isOfFareProductRef(travelRight) ? travelRight.fareProductRef : '',
+      );
 
-  // Find the first fare contract that requires to have token on mobile as a requirement
-  const fareContractWithTokenOnMobile = activeFareContractsTypes.find(
+      return (
+        preassignedFareProduct &&
+        fareProductTypeConfigs.find(
+          (c) => c.type === preassignedFareProduct.type,
+        )
+      );
+    });
+
+  const requiresTokenOnMobileConfig = activeFareContractsTypes.find(
     (fareProductTypeConfig) =>
       fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
   );
@@ -106,7 +119,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const requiresTokenOnMobile =
     selectedType === 'travelCard' &&
     isMobileToken(inspectableToken) &&
-    fareContractWithTokenOnMobile;
+    requiresTokenOnMobileConfig;
 
   return (
     <View style={styles.container}>
@@ -209,7 +222,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             message={t(
               TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.message(
                 getTextForLanguage(
-                  fareContractWithTokenOnMobile.name,
+                  requiresTokenOnMobileConfig.name,
                   language,
                 ) ?? '',
               ),
