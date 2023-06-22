@@ -1,5 +1,5 @@
 import React from 'react';
-import {UserCountState, UserProfileWithCount} from './use-user-count-state';
+import {UserCountState} from './use-user-count-state';
 import {
   useTranslation,
   TicketTravellerTexts,
@@ -9,6 +9,7 @@ import {
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {usePreferences} from '@atb/preferences';
 import {RadioGroupSection, Section} from '@atb/components/sections';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -40,7 +41,10 @@ export function SingleTravellerSelection({
 
     return [
       t(
-        TicketTravellerTexts.userProfileDescriptionOverride(u, fareProductType),
+        TicketTravellerTexts.userProfileDescriptionOverride(
+          u.userTypeString,
+          fareProductType,
+        ),
       ) || genericUserProfileDescription,
       t(TicketTravellerTexts.information(u.userTypeString, fareProductType)),
     ].join(' ');

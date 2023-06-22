@@ -17,7 +17,6 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {
   SearchStateType,
-  TravelSearchFiltersSelectionType,
   TripPatternWithKey,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {flatMap} from '@atb/utils/array';
@@ -28,6 +27,7 @@ import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useJourneyModes} from './hooks';
 import {useAnalytics} from '@atb/analytics';
+import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,

@@ -9,7 +9,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
