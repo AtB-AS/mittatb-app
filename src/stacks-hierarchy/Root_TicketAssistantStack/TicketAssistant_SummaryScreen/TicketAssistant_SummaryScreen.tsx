@@ -14,6 +14,7 @@ import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useAnalytics} from '@atb/analytics';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -21,6 +22,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const {authenticationType} = useAuthState();
+  const analytics = useAnalytics();
   let {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
   const focusRef = useFocusOnLoad();
@@ -52,6 +54,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       : false;
 
   const onBuyButtonPress = () => {
+    analytics.logEvent('Ticket assistant', 'Clicked buy recommended ticket');
     if (!recommendedTicketSummary) return;
     const purchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
       {
@@ -174,6 +177,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             mode="secondary"
             text={t(TicketAssistantTexts.closeButton)}
             onPress={() => {
+              analytics.logEvent(
+                'Ticket assistant',
+                'Closed from summary screen',
+              );
               navigation.popToTop();
             }}
           />

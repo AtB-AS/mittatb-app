@@ -8,7 +8,7 @@ import React, {
 import PostHog, {PostHogProvider} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
 import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
-import {AnalyticsEventContext} from '@atb/analytics/analytics-event-context';
+import {AnalyticsEventContext} from './types';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 

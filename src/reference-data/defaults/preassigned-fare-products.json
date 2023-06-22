@@ -407,5 +407,125 @@
         "ATB:UserProfile:1ae560ba"
       ]
     }
+  },
+  {
+    "alternativeNames": [
+      {"lang": "nno", "value": "Enkeltbillett hurtigbåt"},
+      {"lang": "eng", "value": "Single ticket boat"}
+    ],
+    "distributionChannel": ["app"],
+    "id": "ATB:PreassignedFareProduct:c4467e3a",
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ],
+      "appVersionMin": "1.39"
+    },
+    "name": {"lang": "nob", "value": "Enkeltbillett hurtigbåt"},
+    "type": "boat-single",
+    "version": "ATB:Version:FP-bdf0941b-1f46-4e9a-8d33-8d0413aa6883"
+  },
+  {
+    "alternativeNames": [
+      {"lang": "nno", "value": "7-dagersbillett hurtigbåt"},
+      {"lang": "eng", "value": "Weekly pass boat"}
+    ],
+    "distributionChannel": ["app"],
+    "id": "ATB:PreassignedFareProduct:5f61ee14",
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ],
+      "appVersionMin": "1.39"
+    },
+    "name": {"lang": "nob", "value": "7-dagersbillett hurtigbåt"},
+    "type": "boat-period",
+    "version": "ATB:Version:b158a267-314f-4176-8462-aee1e16067f3"
+  },
+  {
+    "alternativeNames": [
+      {"lang": "nno", "value": "30-dagersbillett hurtigbåt"},
+      {"lang": "eng", "value": "Monthly pass boat"}
+    ],
+    "distributionChannel": ["app"],
+    "id": "ATB:PreassignedFareProduct:7fb92850",
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ],
+      "appVersionMin": "1.39"
+    },
+    "name": {"lang": "nob", "value": "30-dagersbillett hurtigbåt"},
+    "type": "boat-period",
+    "version": "ATB:Version:4c60d382-fd7f-4c83-b606-94c90a799c9a"
+  },
+  {
+    "alternativeNames": [
+      {"lang": "nno", "value": "60-dagersbillett båt"},
+      {"lang": "eng", "value": "60 days pass boat"}
+    ],
+    "distributionChannel": ["app"],
+    "id": "ATB:PreassignedFareProduct:450812f3",
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ],
+      "appVersionMin": "1.39"
+    },
+    "name": {"lang": "nob", "value": "60-dagersbillett båt"},
+    "type": "boat-period",
+    "version": "ATB:Version:7bd72f16-e107-49f3-be43-61f024241e9c"
+  },
+  {
+    "alternativeNames": [
+      {"lang": "nno", "value": "90-dagersbillett båt"},
+      {"lang": "eng", "value": "90 days pass boat"}
+    ],
+    "distributionChannel": ["app"],
+    "id": "ATB:PreassignedFareProduct:5d5f9574",
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ],
+      "appVersionMin": "1.39"
+    },
+    "name": {"lang": "nob", "value": "90-dagersbillett båt"},
+    "type": "boat-period",
+    "version": "ATB:Version:36144e69-e2ee-40c4-b715-706221701938"
+  },
+  {
+    "alternativeNames": [
+      {"lang": "nno", "value": "180-dagers billett båt"},
+      {"lang": "eng", "value": "180 days pass boat"}
+    ],
+    "distributionChannel": ["app"],
+    "id": "ATB:PreassignedFareProduct:ccb344d3",
+    "limitations": {
+      "userProfileRefs": [
+        "ATB:UserProfile:1ae560ba",
+        "ATB:UserProfile:d3e4ec09",
+        "ATB:UserProfile:8ee842e3",
+        "ATB:UserProfile:2832569f"
+      ],
+      "appVersionMin": "1.39"
+    },
+    "name": {"lang": "nob", "value": "180-dagers billett båt"},
+    "type": "boat-period",
+    "version": "ATB:Version:500a2e78-db4d-42b2-aa42-d869e586d18a"
   }
 ]
