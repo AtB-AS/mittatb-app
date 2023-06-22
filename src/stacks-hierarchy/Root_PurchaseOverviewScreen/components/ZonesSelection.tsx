@@ -14,6 +14,9 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
+import {ThemeIcon} from '@atb/components/theme-icon';
+
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   fromTariffZone: TariffZoneWithMetadata;
@@ -93,32 +96,37 @@ export function ZonesSelection({
           }
           testID="selectZonesButton"
         >
-          {displayAsOneZone ? (
-            <ZoneLabel tariffZone={fromTariffZone} />
-          ) : (
-            <>
-              <View style={styles.fromZone}>
-                <ThemeText
-                  color="secondary"
-                  type="body__secondary"
-                  style={styles.toFromLabel}
-                >
-                  {t(PurchaseOverviewTexts.zones.label.from)}
-                </ThemeText>
+          <View style={styles.sectionContentContainer}>
+            <View>
+              {displayAsOneZone ? (
                 <ZoneLabel tariffZone={fromTariffZone} />
-              </View>
-              <View style={styles.toZone}>
-                <ThemeText
-                  color="secondary"
-                  type="body__secondary"
-                  style={styles.toFromLabel}
-                >
-                  {t(PurchaseOverviewTexts.zones.label.to)}
-                </ThemeText>
-                <ZoneLabel tariffZone={toTariffZone} />
-              </View>
-            </>
-          )}
+              ) : (
+                <>
+                  <View style={styles.fromZone}>
+                    <ThemeText
+                      color="secondary"
+                      type="body__secondary"
+                      style={styles.toFromLabel}
+                    >
+                      {t(PurchaseOverviewTexts.zones.label.from)}
+                    </ThemeText>
+                    <ZoneLabel tariffZone={fromTariffZone} />
+                  </View>
+                  <View style={styles.toZone}>
+                    <ThemeText
+                      color="secondary"
+                      type="body__secondary"
+                      style={styles.toFromLabel}
+                    >
+                      {t(PurchaseOverviewTexts.zones.label.to)}
+                    </ThemeText>
+                    <ZoneLabel tariffZone={toTariffZone} />
+                  </View>
+                </>
+              )}
+            </View>
+            <ThemeIcon svg={Edit} size="normal" />
+          </View>
         </GenericClickableSectionItem>
       </Section>
     </View>
@@ -188,5 +196,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   toFromLabel: {
     minWidth: 40,
     marginRight: theme.spacings.small,
+  },
+  sectionContentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }));
