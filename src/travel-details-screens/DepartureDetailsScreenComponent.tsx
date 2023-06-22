@@ -28,7 +28,7 @@ import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
@@ -93,9 +93,17 @@ export const DepartureDetailsScreenComponent = ({
     shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
   );
 
-  const vehiclePosition = vehiclePositions?.find(
+  const vehicleLivePosition = vehiclePositions?.find(
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
+
+  const [showLiveButton, setShowLiveButton] = useState(
+    shouldShowLive && vehicleLivePosition,
+  );
+
+  useEffect(() => {
+    setShowLiveButton(shouldShowLive && vehicleLivePosition);
+  }, [vehicleLivePosition]);
 
   const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
 
@@ -108,11 +116,7 @@ export const DepartureDetailsScreenComponent = ({
     .map((s) => s.situationNumber)
     .filter((s): s is string => !!s);
 
-  const shouldShowMapButton =
-    mapData &&
-    !screenReaderEnabled &&
-    !isLoading &&
-    estimatedCallsWithMetadata.length > 0;
+  const shouldShowMapButton = mapData && !screenReaderEnabled;
 
   return (
     <View style={styles.container}>
@@ -148,13 +152,13 @@ export const DepartureDetailsScreenComponent = ({
                     leftIcon={{svg: Map}}
                     style={realtimeText ? styles.liveButton : undefined}
                     text={t(
-                      vehiclePosition
+                      showLiveButton
                         ? DepartureDetailsTexts.live
                         : DepartureDetailsTexts.map,
                     )}
                     interactiveColor="interactive_1"
                     onPress={() => {
-                      vehiclePosition &&
+                      showLiveButton &&
                         analytics.logEvent(
                           'Departure details',
                           'See live bus clicked',
@@ -169,7 +173,7 @@ export const DepartureDetailsScreenComponent = ({
                         legs: mapData.mapLegs,
                         fromPlace: mapData.start,
                         toPlace: mapData.stop,
-                        vehicleWithPosition: vehiclePosition,
+                        vehicleWithPosition: vehicleLivePosition,
                         mode: mode,
                         subMode: subMode,
                       });
