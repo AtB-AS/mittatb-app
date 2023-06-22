@@ -1,8 +1,6 @@
-export enum Benefit {
-  FREE_UNLOCK = 'free-unlock',
-}
+export type OperatorBenefitId = 'free-unlock';
 
-export type OperatorBenefitsType = {
+export type UserBenefitsType = {
   operator: string;
-  benefits: Benefit[];
+  benefits: OperatorBenefitId[];
 };

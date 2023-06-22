@@ -4,7 +4,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 export const useOperators = () => {
   const {mobilityOperators} = useFirestoreConfiguration();
 
-  return (types: undefined | FormFactor | FormFactor[]) => {
+  const byFormFactor = (types: undefined | FormFactor | FormFactor[]) => {
     if (!types) {
       return mobilityOperators ?? [];
     }
@@ -21,5 +21,13 @@ export const useOperators = () => {
         )
         .sort((a, b) => a.name.localeCompare(b.name)) ?? []
     );
+  };
+
+  const byId = (id: string | undefined) =>
+    mobilityOperators?.find((operator) => operator.id === id);
+
+  return {
+    byFormFactor,
+    byId,
   };
 };

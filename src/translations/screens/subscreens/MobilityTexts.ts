@@ -89,9 +89,9 @@ export const ScooterTexts = {
             `+ ${price} kr for å låse opp`,
           )
         : _(
-            'Ingen oppstartskostnad',
+            'Gratis oppstart',
             'Free to unlock',
-            'Ingen oppstartskostnad',
+            'Gratis oppstart',
           ),
   },
   loadingFailed: _(
