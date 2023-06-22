@@ -10,10 +10,8 @@ import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {MultipleTravellersSelection} from './Travellers/MultipleTravellersSelection';
 import {SingleTravellerSelection} from './Travellers/SingleTravellerSelection';
-import {
-  UserProfileWithCount,
-  useUserCountState,
-} from './Travellers/use-user-count-state';
+import {useUserCountState} from './Travellers/use-user-count-state';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 
 type TravellerSelectionSheetProps = {
   selectionMode: TravellerSelectionMode;
