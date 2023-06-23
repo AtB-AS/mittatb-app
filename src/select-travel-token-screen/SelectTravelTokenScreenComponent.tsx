@@ -18,7 +18,11 @@ import {
   isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
-import {TravelTokenTexts, useTranslation} from '@atb/translations';
+import {
+  TravelTokenTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useState} from 'react';
@@ -26,15 +30,23 @@ import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {
+  findReferenceDataById,
+  isOfFareProductRef,
+} from '@atb/reference-data/utils';
 
 type Props = {onAfterSave: () => void};
 
 export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {fareContracts} = useTicketingState();
   const {disable_travelcard} = useRemoteConfig();
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfiguration();
 
   const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
@@ -47,10 +59,36 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     inspectableToken,
   );
 
-  const hasActiveCarnetFareContract = flatMap(
+  const activeFareContracts = flatMap(
     filterActiveOrCanBeUsedFareContracts(fareContracts),
     (i) => i.travelRights,
-  ).some(isCarnetTravelRight);
+  );
+
+  const hasActiveCarnetFareContract =
+    activeFareContracts.some(isCarnetTravelRight);
+
+  // Filter for unique travel rights config types
+  const activeFareContractsTypes = activeFareContracts
+    .filter(onlyUniquesBasedOnField('type'))
+    .map((travelRight) => {
+      const preassignedFareProduct = findReferenceDataById(
+        preassignedFareProducts,
+        isOfFareProductRef(travelRight) ? travelRight.fareProductRef : '',
+      );
+
+      return (
+        preassignedFareProduct &&
+        fareProductTypeConfigs.find(
+          (c) => c.type === preassignedFareProduct.type,
+        )
+      );
+    });
+
+  const fareProductConfigWhichRequiresTokenOnMobile =
+    activeFareContractsTypes.find(
+      (fareProductTypeConfig) =>
+        fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
+    );
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -75,6 +113,14 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   const travelCardToken = remoteTokens?.find(isTravelCardToken);
   const mobileTokens = remoteTokens?.filter(isMobileToken);
+
+  // Shows an error message if switching to a t:card,
+  // but the current inspectable token is in the mobile AND
+  // requires mobile token
+  const requiresTokenOnMobile =
+    selectedType === 'travelCard' &&
+    isMobileToken(inspectableToken) &&
+    !!fareProductConfigWhichRequiresTokenOnMobile;
 
   return (
     <View style={styles.container}>
@@ -167,6 +213,25 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               isMarkdown={false}
             />
           )}
+
+        {requiresTokenOnMobile && (
+          <MessageBox
+            type={'error'}
+            title={t(
+              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.title,
+            )}
+            message={t(
+              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.message(
+                getTextForLanguage(
+                  fareProductConfigWhichRequiresTokenOnMobile.name,
+                  language,
+                ) ?? '',
+              ),
+            )}
+            style={styles.errorMessageBox}
+            isMarkdown={false}
+          />
+        )}
         {selectedType === 'mobile' && mobileTokens?.length ? (
           <Section type="spacious" style={styles.selectDeviceSection}>
             <RadioGroupSection<RemoteToken>
@@ -202,13 +267,15 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {saveState.saving ? (
           <ActivityIndicator size="large" />
         ) : (
-          <Button
-            onPress={onSave}
-            text={t(TravelTokenTexts.toggleToken.saveButton)}
-            interactiveColor="interactive_0"
-            disabled={!selectedToken}
-            testID="confirmSelectionButton"
-          />
+          !requiresTokenOnMobile && (
+            <Button
+              onPress={onSave}
+              text={t(TravelTokenTexts.toggleToken.saveButton)}
+              interactiveColor="interactive_0"
+              disabled={!!selectedToken}
+              testID="confirmSelectionButton"
+            />
+          )
         )}
       </ScrollView>
     </View>
