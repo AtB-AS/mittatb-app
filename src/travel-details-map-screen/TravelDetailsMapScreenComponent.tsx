@@ -85,7 +85,7 @@ export const TravelDetailsMapScreenComponent = ({
   const [isError, setIsError] = useState(false);
 
   const isFocused = useIsFocused();
-  const isActive = useAppStateStatus();
+  const appState = useAppStateStatus();
 
   useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
@@ -94,7 +94,7 @@ export const TravelDetailsMapScreenComponent = ({
       setVehicle(vehicle);
     },
     onError: () => setIsError(true),
-    enabled: isFocused && isActive === 'active',
+    enabled: isFocused && appState === 'active',
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
