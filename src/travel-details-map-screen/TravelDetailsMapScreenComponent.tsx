@@ -32,6 +32,8 @@ import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import {useIsFocused} from '@react-navigation/native';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -82,6 +84,9 @@ export const TravelDetailsMapScreenComponent = ({
 
   const [isError, setIsError] = useState(false);
 
+  const isFocused = useIsFocused();
+  const isActive = useAppStateStatus();
+
   useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
@@ -89,6 +94,7 @@ export const TravelDetailsMapScreenComponent = ({
       setVehicle(vehicle);
     },
     onError: () => setIsError(true),
+    enabled: isFocused && isActive === 'active',
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);

@@ -35,7 +35,11 @@ export const useLiveVehicleSubscription = ({
   onError,
   onMessage,
   onOpen,
-}: {serviceJourneyId?: string} & SubscriptionEventProps) => {
+  enabled,
+}: {
+  serviceJourneyId?: string;
+  enabled: boolean;
+} & SubscriptionEventProps) => {
   const query = qs.stringify({serviceJourneyId});
 
   const url = stringifyUrl(
@@ -44,7 +48,7 @@ export const useLiveVehicleSubscription = ({
   );
 
   return useSubscription({
-    url: serviceJourneyId ? url : null,
+    url: serviceJourneyId && enabled ? url : null,
     onMessage,
     onError,
     onOpen,
