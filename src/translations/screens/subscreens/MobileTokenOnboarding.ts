@@ -183,8 +183,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     ticketSafetyInfo: {
       description: _(
-        'Billetten din er trygt lagret på **Min bruker**. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
-        "Your ticket is safely stored on **My user**. That way you won't lose your ticket even if you lose your travel card or switch phones.",
+        'Billetten din er trygt lagret på din konto i skyen. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
+        "Your ticket is safely stored on your account in the cloud. That way you won't lose your ticket even if you lose your travel card or switch phones.",
       ),
     },
     tCard: {
@@ -228,8 +228,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       ticketSafetyInfo: {
         description: _(
-          'Billetten din er trygt lagret på **Min bruker**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
-          "Your ticket is safely stored on **My user**. That way you won't lose your ticket even if you lose or switch phones.",
+          'Billetten din er trygt lagret på din konto i skyen. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
+          "Your ticket is safely stored on your account in the cloud. That way you won't lose your ticket even if you lose or switch phones.",
         ),
       },
       phone: {
