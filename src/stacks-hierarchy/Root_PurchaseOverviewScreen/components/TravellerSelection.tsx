@@ -37,18 +37,6 @@ export function TravellerSelection({
   const styles = useStyles();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
-  const accessibility: AccessibilityProps = {
-    accessible: true,
-    accessibilityRole: 'button',
-    accessibilityLabel:
-      t(
-        selectionMode == 'multiple'
-          ? PurchaseOverviewTexts.travellerSelection.title_multiple
-          : PurchaseOverviewTexts.travellerSelection.title_single,
-      ) + screenReaderPause,
-    accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
-  };
-
   const [selectableUserProfilesWithCount, setSelectableUserProfilesWithCount] =
     useState<UserProfileWithCount[]>(selectableUserProfiles);
 
@@ -79,6 +67,21 @@ export function TravellerSelection({
       : selectedUserProfiles
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
+
+  const accessibility: AccessibilityProps = {
+    accessible: true,
+    accessibilityRole: 'button',
+    accessibilityLabel:
+      t(
+        selectionMode == 'multiple'
+          ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
+          : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
+      ) +
+      ' ' +
+      travellersDetailsText +
+      screenReaderPause,
+    accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
+  };
 
   const travellerSelectionOnPress = () => {
     openBottomSheet(() => (

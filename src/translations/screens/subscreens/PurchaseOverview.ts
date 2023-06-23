@@ -90,6 +90,8 @@ const PurchaseOverviewTexts = {
   travellerSelection: {
     title_single: _('Velg reisende', 'Select a traveller'),
     title_multiple: _('Velg reisende', 'Select travellers'),
+    a11yLabelPrefixSingle: _('Valgt reisende:', 'Selected traveller:'),
+    a11yLabelPrefixMultiple: _('Valgte reisende:', 'Selected travellers:'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
     travellers_title: (numberOfTravellers: number) =>
       _(`${numberOfTravellers} reisende`, `${numberOfTravellers} travellers`),
