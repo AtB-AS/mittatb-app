@@ -22,7 +22,6 @@ import {
 import {Language} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {
-  MobilityOperatorType,
   OperatorBenefitIdType,
   OperatorBenefitType,
 } from '@atb-as/config-specs/lib/mobility-operators';
