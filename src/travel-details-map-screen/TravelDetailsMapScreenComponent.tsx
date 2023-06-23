@@ -63,6 +63,7 @@ export const TravelDetailsMapScreenComponent = ({
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationState();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
@@ -82,8 +83,6 @@ export const TravelDetailsMapScreenComponent = ({
   );
 
   const [isError, setIsError] = useState(false);
-
-  const isFocusedAndActive = useIsFocusedAndActive();
 
   useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
