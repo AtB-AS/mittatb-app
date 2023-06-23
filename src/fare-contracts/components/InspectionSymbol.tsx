@@ -78,6 +78,17 @@ const InspectableContent = ({
   const InspectionSvg =
     fareProductTypeConfig?.illustration === 'night' ? Moon : Bus;
 
+  const fromTariffZoneName =
+    fromTariffZone && getReferenceDataName(fromTariffZone, language);
+  const toTariffZoneName =
+    toTariffZone && getReferenceDataName(toTariffZone, language);
+
+  const shouldShowZoneNames =
+    fromTariffZoneName &&
+    toTariffZoneName &&
+    fromTariffZoneName.length < 3 &&
+    toTariffZoneName.length < 3;
+
   return (
     <View
       style={[
@@ -87,15 +98,14 @@ const InspectableContent = ({
         },
       ]}
     >
-      {fromTariffZone && toTariffZone && (
+      {shouldShowZoneNames && (
         <ThemeText
           type="body__primary--bold"
           allowFontScaling={false}
           color={shouldFill ? themeColor : undefined}
         >
-          {getReferenceDataName(fromTariffZone, language)}
-          {fromTariffZone.id !== toTariffZone.id &&
-            '-' + getReferenceDataName(toTariffZone, language)}
+          {fromTariffZoneName}
+          {fromTariffZone.id !== toTariffZone.id && '-' + toTariffZoneName}
         </ThemeText>
       )}
       <ThemeIcon
