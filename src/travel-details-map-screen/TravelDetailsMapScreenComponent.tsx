@@ -1,4 +1,3 @@
-import {SubscriptionStatus} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 import {
@@ -81,12 +80,15 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
-  const {status: subscriptionStatus} = useLiveVehicleSubscription({
+  const [isError, setIsError] = useState(false);
+
+  useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
       setVehicle(vehicle);
     },
+    onError: () => setIsError(true),
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
@@ -167,9 +169,9 @@ export const TravelDetailsMapScreenComponent = ({
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
-            subscriptionStatus={subscriptionStatus}
             zoomLevel={zoomLevel}
             heading={cameraHeading}
+            isError={isError}
           />
         )}
       </MapboxGL.MapView>
@@ -198,9 +200,9 @@ type VehicleIconProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
-  subscriptionStatus: SubscriptionStatus;
   zoomLevel: number;
   heading: number;
+  isError: boolean;
 };
 
 const LiveVehicle = ({
@@ -208,18 +210,14 @@ const LiveVehicle = ({
   setShouldTrack,
   mode,
   subMode,
-  subscriptionStatus,
   zoomLevel,
   heading,
+  isError,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'background');
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
-  const isError =
-    subscriptionStatus === 'CLOSING' || subscriptionStatus === 'CLOSED';
-  const isLoading =
-    subscriptionStatus === 'CONNECTING' || subscriptionStatus === 'NOT_STARTED';
   const [isStale, setIsStale] = useState(false);
 
   useInterval(
@@ -246,7 +244,7 @@ const LiveVehicle = ({
     circleBorderColor =
       theme.interactive.interactive_destructive.default.background;
   }
-  if (isLoading || isStale) {
+  if (isStale) {
     circleBackgroundColor = theme.interactive.interactive_1.disabled.background;
     circleBorderColor = theme.interactive.interactive_1.default.background;
   }
@@ -290,7 +288,6 @@ const LiveVehicle = ({
           subMode={subMode}
           isError={isError}
           isStale={isStale}
-          isLoading={isLoading}
         />
 
         {!isError &&
@@ -315,7 +312,6 @@ const LiveVehicle = ({
 };
 
 type LiveVehicleIconProps = {
-  isLoading: boolean;
   isStale: boolean;
   isError: boolean;
   mode?: AnyMode;
@@ -324,7 +320,6 @@ type LiveVehicleIconProps = {
 const LiveVehicleIcon = ({
   mode,
   subMode,
-  isLoading,
   isStale,
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
@@ -340,7 +335,7 @@ const LiveVehicleIcon = ({
         allowFontScaling={false}
       />
     );
-  if (isLoading || isStale)
+  if (isStale)
     return (
       <ActivityIndicator
         color={theme.interactive.interactive_1.disabled.text}
