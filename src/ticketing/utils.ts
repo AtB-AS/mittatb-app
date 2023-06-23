@@ -19,13 +19,6 @@ export function isCarnetTravelRight(
   return travelRight?.type === 'CarnetTicket';
 }
 
-export function isBoatTravelRight(travelRight: TravelRight | undefined) {
-  return (
-    travelRight?.type === 'SingleBoatTicket' ||
-    travelRight?.type === 'PeriodBoatTicket'
-  );
-}
-
 export function isPreActivatedTravelRight(
   travelRight: TravelRight | undefined,
 ): travelRight is PreActivatedTravelRight {

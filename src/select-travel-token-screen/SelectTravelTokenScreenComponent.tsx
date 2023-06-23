@@ -59,16 +59,16 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     inspectableToken,
   );
 
-  const activeTravelsRights = flatMap(
+  const activeFareContracts = flatMap(
     filterActiveOrCanBeUsedFareContracts(fareContracts),
     (i) => i.travelRights,
   );
 
   const hasActiveCarnetFareContract =
-    activeTravelsRights.some(isCarnetTravelRight);
+    activeFareContracts.some(isCarnetTravelRight);
 
   // Filter for unique travel rights config types
-  const activeTravelRightTypes = activeTravelsRights
+  const activeFareContractsTypes = activeFareContracts
     .filter(onlyUniquesBasedOnField('type'))
     .map((travelRight) => {
       const preassignedFareProduct = findReferenceDataById(
@@ -84,10 +84,11 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
       );
     });
 
-  const requiresTokenOnMobileConfig = activeTravelRightTypes.find(
-    (fareProductTypeConfig) =>
-      fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
-  );
+  const fareProductConfigWhichRequiresTokenOnMobile =
+    activeFareContractsTypes.find(
+      (fareProductTypeConfig) =>
+        fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
+    );
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -119,7 +120,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const requiresTokenOnMobile =
     selectedType === 'travelCard' &&
     isMobileToken(inspectableToken) &&
-    requiresTokenOnMobileConfig;
+    !!fareProductConfigWhichRequiresTokenOnMobile;
 
   return (
     <View style={styles.container}>
@@ -222,7 +223,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             message={t(
               TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.message(
                 getTextForLanguage(
-                  requiresTokenOnMobileConfig.name,
+                  fareProductConfigWhichRequiresTokenOnMobile.name,
                   language,
                 ) ?? '',
               ),
