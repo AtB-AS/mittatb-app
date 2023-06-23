@@ -23,7 +23,7 @@ import {
   View,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {TariffZoneResults} from './TariffZoneResults';
+import {TariffZoneResults} from '@atb/tariff-zones-selector/TariffZoneResults';
 import {VenueResults, LocationAndTariffZone} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 

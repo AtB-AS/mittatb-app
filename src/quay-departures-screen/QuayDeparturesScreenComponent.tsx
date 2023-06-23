@@ -1,7 +1,7 @@
 import {StopPlace} from '@atb/api/types/trips';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {DeparturesList} from '@atb/departure-list/DeparturesList';
-import {useDepartureData} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_NearbyStack';
+import {useDepartureData} from './use-departure-data';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {RefreshControl, ScrollView, View} from 'react-native';

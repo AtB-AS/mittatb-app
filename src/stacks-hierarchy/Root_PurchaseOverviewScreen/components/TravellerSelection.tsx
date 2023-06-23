@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {UserProfileWithCount} from './Travellers/use-user-count-state';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
-import {ThemeText, screenReaderPause} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 
 import {StyleSheet} from '@atb/theme';
 import {getReferenceDataName} from '@atb/reference-data/utils';
@@ -15,6 +14,7 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
