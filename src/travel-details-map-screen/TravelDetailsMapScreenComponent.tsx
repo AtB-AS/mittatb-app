@@ -81,12 +81,15 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
+  const [isError, setIsError] = useState<boolean>(false);
+
   const {status: subscriptionStatus} = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
       setVehicle(vehicle);
     },
+    onError: () => setIsError(true),
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
@@ -170,6 +173,7 @@ export const TravelDetailsMapScreenComponent = ({
             subscriptionStatus={subscriptionStatus}
             zoomLevel={zoomLevel}
             heading={cameraHeading}
+            isError={isError}
           />
         )}
       </MapboxGL.MapView>
@@ -201,6 +205,7 @@ type VehicleIconProps = {
   subscriptionStatus: SubscriptionStatus;
   zoomLevel: number;
   heading: number;
+  isError: boolean;
 };
 
 const LiveVehicle = ({
@@ -211,13 +216,12 @@ const LiveVehicle = ({
   subscriptionStatus,
   zoomLevel,
   heading,
+  isError,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'background');
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
-  const isError =
-    subscriptionStatus === 'CLOSING' || subscriptionStatus === 'CLOSED';
   const isLoading =
     subscriptionStatus === 'CONNECTING' || subscriptionStatus === 'NOT_STARTED';
   const [isStale, setIsStale] = useState(false);
