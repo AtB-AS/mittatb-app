@@ -21,6 +21,11 @@ import {
 } from '@atb/api/types/generated/fragments/stations';
 import {Language} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
+import {
+  MobilityOperatorType,
+  OperatorBenefitIdType,
+  OperatorBenefitType,
+} from '@atb-as/config-specs/lib/mobility-operators';
 
 export const isScooter = (
   feature: Feature<Point> | undefined,
@@ -165,3 +170,18 @@ export const isShowAll = (
   filter: MobilityMapFilterType,
   formFactor: FormFactor,
 ) => !!filter[formFactor]?.showAll;
+
+export const isBenefitOffered = (
+  benefit: OperatorBenefitIdType,
+  operatorBenefits: OperatorBenefitType[] | undefined,
+) => operatorBenefits && operatorBenefits.map((b) => b.id).includes(benefit);
+
+export const getBenefit = (
+  benefit: OperatorBenefitIdType,
+  operatorBenefits: OperatorBenefitType[],
+) => operatorBenefits.find((b) => b.id === benefit);
+
+export const isUserEligibleForBenefit = (
+  benefit: OperatorBenefitIdType,
+  userBenefits: OperatorBenefitIdType[],
+) => userBenefits.includes(benefit);
