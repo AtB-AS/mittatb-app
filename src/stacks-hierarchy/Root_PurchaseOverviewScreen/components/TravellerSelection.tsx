@@ -73,9 +73,12 @@ export function TravellerSelection({
   const multipleTravellerCategoriesSelectedFrom =
     selectedUserProfiles.length > 1;
 
-  const multipleTravellersDetailsText = selectedUserProfiles
-    .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
-    .join(', ');
+  const travellersDetailsText =
+    selectionMode == 'single'
+      ? getReferenceDataName(selectedUserProfiles?.[0], language)
+      : selectedUserProfiles
+          .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
+          .join(', ');
 
   const travellerSelectionOnPress = () => {
     openBottomSheet(() => (
@@ -117,7 +120,7 @@ export function TravellerSelection({
                         totalTravellersCount,
                       ),
                     )
-                  : multipleTravellersDetailsText}
+                  : travellersDetailsText}
               </ThemeText>
 
               {multipleTravellerCategoriesSelectedFrom && (
@@ -126,7 +129,7 @@ export function TravellerSelection({
                   color="secondary"
                   style={styles.multipleTravellersDetails}
                 >
-                  {multipleTravellersDetailsText}
+                  {travellersDetailsText}
                 </ThemeText>
               )}
             </View>
