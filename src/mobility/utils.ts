@@ -15,7 +15,6 @@ import {
   VehicleTypeAvailabilityBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
-  MobilityOperatorType,
   OperatorBenefitIdType,
   OperatorBenefitType,
 } from '@atb-as/config-specs/lib/mobility-operators';
