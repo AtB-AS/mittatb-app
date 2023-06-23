@@ -1,4 +1,9 @@
-import {UserBenefitsType} from '../types';
+import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
+
+export type UserBenefitsType = {
+  operator: string;
+  benefits: OperatorBenefitIdType[];
+};
 
 export const getBenefits = (): Promise<UserBenefitsType[]> => {
   console.log('Calling GET /mobility/benefits');
