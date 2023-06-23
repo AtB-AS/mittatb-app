@@ -11,16 +11,21 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {getRentalAppUri} from '@atb/mobility/utils';
+import {
+  getBenefit,
+  getRentalAppUri,
+  isBenefitOffered,
+  isUserEligibleForBenefit,
+} from '@atb/mobility/utils';
 import {useSystem} from '@atb/mobility/use-system';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {OperatorBenefits} from '@atb/mobility/components/OperatorBenefits';
+import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
-import {useUserBenefits} from '@atb/mobility/use-user-benefits';
+import {useBenefits} from '@atb/mobility/use-benefits';
 
 type Props = {
   vehicleId: VehicleId;
@@ -34,7 +39,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
     vehicle,
     vehicle?.system.operator.name,
   );
-  const userBenefits = useUserBenefits(operatorId);
+  const {userBenefits, operatorBenefits} = useBenefits(operatorId);
   const rentalAppUri = getRentalAppUri(vehicle);
 
   return (
@@ -80,12 +85,25 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                   <PricingPlan
                     operator={operatorName}
                     plan={vehicle.pricingPlan}
+                    eligibleBenefits={
+                      isBenefitOffered('free-unlock', operatorBenefits) &&
+                      isUserEligibleForBenefit('free-unlock', userBenefits)
+                        ? ['free-unlock']
+                        : []
+                    }
                   />
                 }
               />
-              <OperatorBenefits
-                operatorId={operatorId}
-                userBenefits={userBenefits}
+              {/* The data model handles multiple benefits per operator,*/}
+              {/* but we currently know there is only one, and the UI has to change anyway*/}
+              {/* to support an undetermined number of benefits.*/}
+              <OperatorBenefit
+                benefit={getBenefit('free-unlock', operatorBenefits)}
+                isUserEligible={isUserEligibleForBenefit(
+                  'free-unlock',
+                  userBenefits,
+                )}
+                style={style.benefit}
               />
             </ScrollView>
             <View style={style.footer}>
@@ -95,6 +113,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                 rentalAppUri={rentalAppUri}
                 appStoreUri={appStoreUri}
                 userBenefits={userBenefits}
+                operatorBenefits={operatorBenefits}
               />
             </View>
           </>
@@ -129,6 +148,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   return {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
+    },
+    benefit: {
+      marginBottom: theme.spacings.medium,
     },
     container: {
       paddingHorizontal: theme.spacings.medium,

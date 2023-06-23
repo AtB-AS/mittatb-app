@@ -14,6 +14,11 @@ import {
   StationBasicFragment,
   VehicleTypeAvailabilityBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
+import {
+  MobilityOperatorType,
+  OperatorBenefitIdType,
+  OperatorBenefitType,
+} from '@atb-as/config-specs/lib/mobility-operators';
 
 export const isVehicle = (
   feature: Feature<Point> | undefined,
@@ -134,3 +139,18 @@ export const updateAreaState = (
     };
   };
 };
+
+export const isBenefitOffered = (
+  benefit: OperatorBenefitIdType,
+  operatorBenefits: OperatorBenefitType[] | undefined,
+) => operatorBenefits && operatorBenefits.map((b) => b.id).includes(benefit);
+
+export const getBenefit = (
+  benefit: OperatorBenefitIdType,
+  operatorBenefits: OperatorBenefitType[],
+) => operatorBenefits.find((b) => b.id === benefit);
+
+export const isUserEligibleForBenefit = (
+  benefit: OperatorBenefitIdType,
+  userBenefits: OperatorBenefitIdType[],
+) => userBenefits.includes(benefit);

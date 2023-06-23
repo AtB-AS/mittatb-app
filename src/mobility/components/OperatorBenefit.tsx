@@ -1,31 +1,24 @@
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {useOperators} from '@atb/mobility/use-operators';
-import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 import {MessageBox} from '@atb/components/message-box';
 import {getTextForLanguage} from '@atb/translations/utils';
 import {useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 
 type Props = {
-  operatorId: string | undefined;
-  userBenefits: OperatorBenefitIdType[];
+  benefit: OperatorBenefitType | undefined;
+  isUserEligible: boolean;
   style?: ViewStyle;
 };
-export const OperatorBenefits = ({operatorId, userBenefits, style}: Props) => {
-  const operators = useOperators();
+export const OperatorBenefit = ({isUserEligible, benefit, style}: Props) => {
   const {language} = useTranslation();
-  const operator = operators.byId(operatorId);
-  // The data model handles multiple benefits per operator,
-  // but we currently know there is only one, and the UI has to change anyway
-  // to support an undetermined number of benefits.
-  const benefit = operator?.benefits?.[0];
 
   if (!benefit) return null;
 
   return (
     <View style={style}>
-      {userBenefits.includes(benefit.id) ? (
+      {isUserEligible ? (
         <ThemeText type={'body__secondary'} style={{textAlign: 'center'}}>
           {getTextForLanguage(benefit.descriptionWhenActive, language)}
         </ThemeText>

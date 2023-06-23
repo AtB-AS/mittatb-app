@@ -6,7 +6,12 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {useSystem} from '@atb/mobility/use-system';
 import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {getAvailableVehicles, getRentalAppUri} from '@atb/mobility/utils';
+import {
+  getAvailableVehicles,
+  getBenefit,
+  getRentalAppUri,
+  isUserEligibleForBenefit,
+} from '@atb/mobility/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
@@ -20,8 +25,8 @@ import {MessageBox} from '@atb/components/message-box';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {OperatorBenefits} from '@atb/mobility/components/OperatorBenefits';
-import {useUserBenefits} from '@atb/mobility/use-user-benefits';
+import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
+import {useBenefits} from '@atb/mobility/use-benefits';
 import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
 
 type Props = {
@@ -43,7 +48,7 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
-  const userBenefits = useUserBenefits(operatorId);
+  const {userBenefits, operatorBenefits} = useBenefits(operatorId);
 
   return (
     <BottomSheetContainer>
@@ -97,10 +102,16 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
                   />
                 }
               />
-              <OperatorBenefits
-                operatorId={operatorId}
-                userBenefits={userBenefits}
-                style={style.benefits}
+              {/* The data model handles multiple benefits per operator,*/}
+              {/* but we currently know there is only one, and the UI has to change anyway*/}
+              {/* to support an undetermined number of benefits.*/}
+              <OperatorBenefit
+                benefit={getBenefit('free-unlock', operatorBenefits)}
+                isUserEligible={isUserEligibleForBenefit(
+                  'free-unlock',
+                  userBenefits,
+                )}
+                style={style.benefit}
               />
             </View>
             {rentalAppUri && (
@@ -111,6 +122,7 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
                   operatorName={operatorName}
                   rentalAppUri={rentalAppUri}
                   userBenefits={userBenefits}
+                  operatorBenefits={operatorBenefits}
                 />
               </View>
             )}
@@ -139,7 +151,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
-    benefits: {
+    benefit: {
       marginBottom: theme.spacings.medium,
     },
     container: {

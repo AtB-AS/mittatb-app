@@ -3,17 +3,21 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import React, {useEffect, useState} from 'react';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {OperatorBenefitId} from '@atb/mobility/types';
-import {useOperators} from '@atb/mobility/use-operators';
 import {Linking} from 'react-native';
 import {getValueCode} from '@atb/mobility/api/api';
+import {
+  OperatorBenefitIdType,
+  OperatorBenefitType,
+} from '@atb-as/config-specs/lib/mobility-operators';
+import {getBenefit, isUserEligibleForBenefit} from '@atb/mobility/utils';
 
 type Props = {
   appStoreUri: string | undefined;
   operatorId: string | undefined;
   operatorName: string;
   rentalAppUri: string | undefined;
-  userBenefits: OperatorBenefitId[];
+  userBenefits: OperatorBenefitIdType[];
+  operatorBenefits: OperatorBenefitType[];
 };
 export const CallToActionButton = ({
   appStoreUri,
@@ -21,13 +25,9 @@ export const CallToActionButton = ({
   operatorId,
   rentalAppUri,
   userBenefits,
+  operatorBenefits,
 }: Props) => {
   const {t, language} = useTranslation();
-  const operators = useOperators();
-  const operator = operators.byId(operatorId);
-  const operatorBenefit =
-    operator?.benefits.length === 1 ? operator.benefits[0] : undefined;
-  const callToAction = operatorBenefit?.callToAction;
   const [valueCode, setValueCode] = useState<string>();
 
   const {openOperatorApp} = useOperatorApp({
@@ -36,23 +36,30 @@ export const CallToActionButton = ({
     rentalAppUri,
   });
 
-  const userHasBenefit =
-    operatorBenefit && userBenefits.includes(operatorBenefit.id);
+  const isEligibleForBenefit = isUserEligibleForBenefit(
+    'free-unlock',
+    userBenefits,
+  );
+
+  const callToAction = getBenefit(
+    'free-unlock',
+    operatorBenefits,
+  )?.callToAction;
 
   useEffect(() => {
-    if (operatorId && userHasBenefit) {
+    if (operatorId && isEligibleForBenefit) {
       getValueCode(operatorId).then(setValueCode);
     }
-  }, [operatorId, userHasBenefit]);
+  }, [operatorId, isEligibleForBenefit]);
 
   const callToActionText =
-    callToAction?.name && userHasBenefit
+    callToAction?.name && isEligibleForBenefit
       ? getTextForLanguage(callToAction.name, language) ??
         t(MobilityTexts.operatorAppSwitchButton(operatorName))
       : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
   const onCallToAction = () =>
-    callToAction?.url && userHasBenefit
+    callToAction?.url && isEligibleForBenefit
       ? Linking.openURL(insertValueCode(callToAction.url, valueCode))
       : openOperatorApp();
 

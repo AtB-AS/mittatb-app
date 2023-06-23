@@ -8,17 +8,22 @@ import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
+import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
 
 type PricingPlanProps = {
   operator: string;
   plan: PricingPlanFragment;
+  eligibleBenefits?: OperatorBenefitIdType[];
 };
-export const PricingPlan = ({operator, plan}: PricingPlanProps) => {
+export const PricingPlan = ({
+  operator,
+  plan,
+  eligibleBenefits,
+}: PricingPlanProps) => {
   const {t} = useTranslation();
   const seAppForPrices = (
     <VehicleStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
   );
-
   if (hasMultiplePricingPlans(plan)) {
     return seAppForPrices;
   }
@@ -29,6 +34,7 @@ export const PricingPlan = ({operator, plan}: PricingPlanProps) => {
         price={plan.price}
         pricingSegment={plan.perMinPricing[0]}
         unit={'min'}
+        eligibleBenefits={eligibleBenefits}
       />
     );
   }
@@ -39,6 +45,7 @@ export const PricingPlan = ({operator, plan}: PricingPlanProps) => {
         price={plan.price}
         pricingSegment={plan.perKmPricing[0]}
         unit={'km'}
+        eligibleBenefits={eligibleBenefits}
       />
     );
   }
@@ -50,9 +57,15 @@ type PriceInfoProps = {
   price: number;
   pricingSegment: PricingSegmentFragment;
   unit: 'min' | 'km';
+  eligibleBenefits?: OperatorBenefitIdType[];
 };
 
-const PriceInfo = ({price, pricingSegment, unit}: PriceInfoProps) => {
+const PriceInfo = ({
+  price,
+  pricingSegment,
+  unit,
+  eligibleBenefits,
+}: PriceInfoProps) => {
   const {t, language} = useTranslation();
 
   const formatPrice = (
@@ -69,6 +82,11 @@ const PriceInfo = ({price, pricingSegment, unit}: PriceInfoProps) => {
     <VehicleStat
       primaryStat={`${formatPrice(pricingSegment, language)} kr/${unit}`}
       secondaryStat={t(ScooterTexts.pricingPlan.price(price))}
+      secondaryStatStyle={
+        price > 0 && eligibleBenefits?.includes('free-unlock')
+          ? {textDecorationLine: 'line-through'}
+          : undefined
+      }
     />
   );
 };
