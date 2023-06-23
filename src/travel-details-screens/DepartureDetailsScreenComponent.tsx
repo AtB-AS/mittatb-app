@@ -99,6 +99,10 @@ export const DepartureDetailsScreenComponent = ({
 
   const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
 
+  const isJourneyFinished = estimatedCallsWithMetadata.every(
+    (e) => e.actualArrivalTime,
+  );
+
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
     setActiveItem(newPage - 1);
@@ -112,7 +116,8 @@ export const DepartureDetailsScreenComponent = ({
     mapData &&
     !screenReaderEnabled &&
     !isLoading &&
-    estimatedCallsWithMetadata.length > 0;
+    estimatedCallsWithMetadata.length > 0 &&
+    !isJourneyFinished;
 
   return (
     <View style={styles.container}>
