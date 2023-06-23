@@ -215,8 +215,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     error: {
       description: _(
-        'Vi får ikke knyttet et reisekort eller en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM kundeservice om problemet vedvarer.',
-        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM customer service.",
+        'Vi får ikke knyttet et reisekort eller en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
       ),
     },
     withoutTravelcard: {
@@ -240,8 +240,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       error: {
         description: _(
-          'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM kundeservice om problemet vedvarer.',
-          "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM customer service.",
+          'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+          "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
         ),
       },
     },
