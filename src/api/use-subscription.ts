@@ -23,13 +23,14 @@ export function useSubscription({
   onError,
   onClose,
   onOpen,
-}: {url: string | null} & SubscriptionEventProps) {
+  enabled,
+}: {url: string | null; enabled: boolean} & SubscriptionEventProps) {
   const [status, setStatus] = useState<SubscriptionStatus>('NOT_STARTED');
   const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
   const retryCount = useRef<number>(0);
 
   useEffect(() => {
-    if (!url) return;
+    if (!url || !enabled) return;
 
     let retryTimeout: NodeJS.Timeout | null = null;
     const connect = () => {
@@ -84,7 +85,7 @@ export function useSubscription({
         return null;
       });
     };
-  }, [url]);
+  }, [url, enabled]);
 
   return {
     status,

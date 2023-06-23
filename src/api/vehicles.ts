@@ -48,10 +48,11 @@ export const useLiveVehicleSubscription = ({
   );
 
   return useSubscription({
-    url: serviceJourneyId && enabled ? url : null,
+    url: serviceJourneyId ? url : null,
     onMessage,
     onError,
     onOpen,
     onClose,
+    enabled,
   });
 };
