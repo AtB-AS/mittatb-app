@@ -107,7 +107,6 @@ const useTravellersWithPreselectedCounts = (
     ) {
       mappedUserProfiles[0].count = 1;
     }
-    //console.log('mappedUserProfiles', mappedUserProfiles);
     return mappedUserProfiles;
   }, [userProfiles, preassignedFareProduct]);
 
