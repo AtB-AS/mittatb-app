@@ -10,6 +10,7 @@ export type SectionProps = PropsWithChildren<{
   withTopPadding?: boolean;
   withBottomPadding?: boolean;
   type?: ContainerSizingType;
+  containerViewRef?: React.RefObject<View>;
   style?: ViewStyle;
   testID?: string;
 }> &
@@ -22,6 +23,7 @@ export function Section({
   withTopPadding = false,
   withBottomPadding = false,
   type = 'block',
+  containerViewRef,
   style,
   ...props
 }: SectionProps) {
@@ -40,7 +42,7 @@ export function Section({
   ];
 
   return (
-    <View style={containerStyle} {...props}>
+    <View style={containerStyle} {...props} ref={containerViewRef}>
       {React.Children.map(children, (child, index) => {
         if (!React.isValidElement(child)) return child;
         if (child == null) return child;

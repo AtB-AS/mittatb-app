@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  AccessibilityInfo,
+  AccessibilityProps,
+  StyleProp,
+  View,
+  ViewStyle,
+  findNodeHandle,
+} from 'react-native';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
@@ -35,6 +42,7 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const travellersInputSectionRef = useRef<View>(null);
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const [userProfilesState, setUserProfilesState] = useState<
@@ -108,6 +116,13 @@ export function TravellerSelection({
             setUserProfilesState(chosenSelectableUserProfilesWithCounts);
           }
           closeBottomSheet();
+
+          if (travellersInputSectionRef.current) {
+            const reactTag = findNodeHandle(travellersInputSectionRef.current);
+            if (reactTag) {
+              AccessibilityInfo.setAccessibilityFocus(reactTag);
+            }
+          }
         }}
       />
     ));
@@ -122,7 +137,7 @@ export function TravellerSelection({
             : t(PurchaseOverviewTexts.travellerSelection.title_single)}
         </ThemeText>
       </View>
-      <Section {...accessibility}>
+      <Section {...accessibility} containerViewRef={travellersInputSectionRef}>
         <GenericClickableSectionItem onPress={travellerSelectionOnPress}>
           <View style={styles.sectionContentContainer}>
             <View style={{flex: 1}}>
