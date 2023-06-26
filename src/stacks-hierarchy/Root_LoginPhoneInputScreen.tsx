@@ -18,7 +18,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StaticColorByType} from '@atb/theme/colors';
+import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -32,7 +32,7 @@ export const Root_LoginPhoneInputScreen = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {themeName} = useTheme();
   const {signInWithPhoneNumber} = useAuthState();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [prefix, setPrefix] = useState('47');
@@ -134,7 +134,7 @@ export const Root_LoginPhoneInputScreen = ({
               <ActivityIndicator
                 style={styles.activityIndicator}
                 size="large"
-                color={theme.text.colors.primary}
+                color={getStaticColor(themeName, themeColor).text}
               />
             )}
 
