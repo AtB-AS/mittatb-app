@@ -130,7 +130,6 @@ const mapBackendRecentFareContracts = (
     fromTariffZone?.id +
     toTariffZone?.id +
     userProfilesWithCount
-      .sort((u1, u2) => (u1.id > u2.id ? 1 : -1))
       .map((u) => u.id + u.count)
       .join();
 
