@@ -6,6 +6,7 @@ import {
 } from '@atb/translations';
 import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';
+import {CustomerProfile} from '@atb/ticketing';
 
 /**
  * Wrapper for getting the name of a NeTeX entity in the given language.
@@ -38,7 +39,10 @@ export function isOfFareProductRef(a: any): a is {fareProductRef: string} {
   return 'fareProductRef' in a;
 }
 
-export const productIsSellableInApp = (product: PreassignedFareProduct) => {
+export const isProductSellableInApp = (
+  product: PreassignedFareProduct,
+  customerProfile?: CustomerProfile,
+) => {
   if (
     (product.limitations.appVersionMin &&
       compareVersion(product.limitations.appVersionMin, APP_VERSION) > 0) ||
@@ -46,5 +50,12 @@ export const productIsSellableInApp = (product: PreassignedFareProduct) => {
       compareVersion(product.limitations.appVersionMax, APP_VERSION) < 0)
   )
     return false;
+
+  if (
+    product.distributionChannel.some((channel) => channel === 'debug-app') &&
+    customerProfile?.debug
+  )
+    return true;
+
   return product.distributionChannel.some((channel) => channel === 'app');
 };

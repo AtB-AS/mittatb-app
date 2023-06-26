@@ -5,13 +5,14 @@ import {
   TariffZone,
   UserProfile,
 } from '@atb/reference-data/types';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {useMemo} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {
   TariffZoneWithMetadata,
   useTariffZoneFromLocation,
 } from '@atb/tariff-zones-selector';
+import {useTicketingState} from '@atb/ticketing';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -27,11 +28,12 @@ export function useOfferDefaults(
 ) {
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
+  const {customerProfile} = useTicketingState();
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
   const selectableProducts = preassignedFareProducts
-    .filter(productIsSellableInApp)
+    .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
   const defaultPreassignedFareProduct =
     preassignedFareProduct ?? selectableProducts[0];
