@@ -44,6 +44,7 @@ import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useAnalytics} from '@atb/analytics';
+import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -99,6 +100,10 @@ export const DepartureDetailsScreenComponent = ({
 
   const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
 
+  const isJourneyFinished =
+    vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
+    estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
+
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
     setActiveItem(newPage - 1);
@@ -112,7 +117,8 @@ export const DepartureDetailsScreenComponent = ({
     mapData &&
     !screenReaderEnabled &&
     !isLoading &&
-    estimatedCallsWithMetadata.length > 0;
+    estimatedCallsWithMetadata.length > 0 &&
+    !isJourneyFinished;
 
   return (
     <View style={styles.container}>
