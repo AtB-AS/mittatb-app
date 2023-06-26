@@ -90,20 +90,26 @@ const useTravellersWithPreselectedCounts = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
-) => {
-  return useMemo(
-    () =>
-      userProfiles
-        .filter((u) =>
-          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-        )
-        .map((u) => ({
-          ...u,
-          count: getCountIfUserIsIncluded(u, defaultSelections),
-        })),
-    [userProfiles, preassignedFareProduct],
-  );
-};
+) =>
+  useMemo(() => {
+    let mappedUserProfiles = userProfiles
+      .filter((u) =>
+        preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+      )
+      .map((u) => ({
+        ...u,
+        count: getCountIfUserIsIncluded(u, defaultSelections),
+      }));
+
+    if (
+      !mappedUserProfiles.some(({count}) => count) &&
+      mappedUserProfiles.length > 0 // how to handle if length 0?
+    ) {
+      mappedUserProfiles[0].count = 1;
+    }
+    //console.log('mappedUserProfiles', mappedUserProfiles);
+    return mappedUserProfiles;
+  }, [userProfiles, preassignedFareProduct]);
 
 /**
  * Get the default tariff zone, either based on current location, default tariff
