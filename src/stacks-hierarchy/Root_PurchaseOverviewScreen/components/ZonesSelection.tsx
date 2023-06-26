@@ -19,6 +19,7 @@ type ZonesSelectionProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
+  selectionMode: 'single' | 'multiple';
   onSelect: (t: {
     fromTariffZone: TariffZoneWithMetadata;
     toTariffZone: TariffZoneWithMetadata;
@@ -33,6 +34,7 @@ export function ZonesSelection({
   fromTariffZone,
   toTariffZone,
   preassignedFareProduct,
+  selectionMode,
   onSelect,
   style,
 }: ZonesSelectionProps) {
@@ -46,24 +48,6 @@ export function ZonesSelection({
       a11yLabel(fromTariffZone, toTariffZone, language, t) + screenReaderPause,
     accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
   };
-
-  let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
-
-  if (selectionMode === 'none') {
-    return null;
-  }
-
-  // Only support multiple/single zone in app for now. Stop place is built into selector.
-  if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
-    selectionMode = 'multiple';
-  }
-  if (
-    preassignedFareProduct.zoneSelectionMode?.includes('single') ||
-    selectionMode == 'single-stop' ||
-    selectionMode == 'single-zone'
-  ) {
-    selectionMode = 'single';
-  }
 
   const displayAsOneZone =
     fromTariffZone.id === toTariffZone.id &&

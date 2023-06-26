@@ -81,7 +81,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
                 params: {orderId: fcOrReservation.orderId},
               });
             }}
-            key={fcOrReservation.orderId}
+            key={fcOrReservation.orderId + fcOrReservation.created}
             fcOrReservation={fcOrReservation}
             index={index}
           />

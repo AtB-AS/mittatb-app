@@ -28,6 +28,7 @@ export type ButtonSectionItemProps = SectionItemProps<{
   highlighted?: boolean;
   icon?: NavigationIconTypes | JSX.Element;
   containerStyle?: ViewStyle;
+  disabled?: boolean;
   testID?: string;
 }> &
   AccessibilityProps;
@@ -45,6 +46,8 @@ export function ButtonSectionItem({
   iconAccessibility,
 
   containerStyle,
+
+  disabled = true,
 
   ...props
 }: ButtonSectionItemProps) {
@@ -84,6 +87,7 @@ export function ButtonSectionItem({
         numberOfLines={1}
         type={value && highlighted ? 'body__primary--bold' : 'body__primary'}
         style={!value && styles.faded}
+        color={disabled ? 'secondary' : 'primary'}
       >
         {value ?? placeholder}
       </ThemeText>

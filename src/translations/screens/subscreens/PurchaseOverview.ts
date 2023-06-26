@@ -60,6 +60,18 @@ const PurchaseOverviewTexts = {
     '24-timersbilletten inkluderer ikke nattbuss.',
     'The 24 hour pass does not include night bus.',
   ),
+  stopPlaces: {
+    harborSelection: {
+      select: {
+        text: _('Velg kaier', 'Select harbors'),
+        a11yLabel: _('Velg kaier', 'Select harbors'),
+      },
+      noneSelected: {
+        text: _('Ingen kaier valgt', 'No harbors selected'),
+        a11yLabel: _('Ingen kaier valgt', 'No harbors selected'),
+      },
+    },
+  },
   zones: {
     title: {
       single: {

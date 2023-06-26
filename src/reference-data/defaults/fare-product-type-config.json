@@ -173,5 +173,73 @@
       "offerEndpoint": "zones",
       "requiresLogin": true
     }
+ },{
+    "type": "boat-single",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Enkeltbillett hurtigbåt"
+      },
+      {
+        "lang": "eng",
+        "value": "Single ticket express boat"
+      }
+    ],
+    "transportModes": [
+      {"mode": "water", "subMode": "highSpeedPassengerService"},
+      {"mode": "water", "subMode": "highSpeedVehicleService"}
+    ],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du skal reise av og til med båt"
+      },
+      {
+        "lang": "eng",
+        "value": "10 pre-purchased tickets that you have to validate before boarding"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "stop-places-harbor",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "none",
+      "offerEndpoint": "stop-places",
+      "requiresLogin": false,
+    }
+  },{
+    "type": "boat-period",
+    "name": [
+      {
+        "lang": "nob",
+        "value": "Periodebillett hurtigbåt"
+      },
+      {
+        "lang": "eng",
+        "value": "Single ticket express boat"
+      }
+    ],
+    "transportModes": [
+      {"mode": "water", "subMode": "highSpeedPassengerService"},
+      {"mode": "water", "subMode": "highSpeedVehicleService"}
+    ],
+    "description": [
+      {
+        "lang": "nob",
+        "value": "Når du reiser litt oftere med båt"
+      },
+      {
+        "lang": "eng",
+        "value": "When you travel more frequently by boat"
+      }
+    ],
+    "configuration": {
+      "zoneSelectionMode": "stop-places-harbor",
+      "travellerSelectionMode": "single",
+      "timeSelectionMode": "datetime",
+      "productSelectionMode": "duration",
+      "offerEndpoint": "stop-places",
+      "requiresLogin": false
+    }
   }
 ]

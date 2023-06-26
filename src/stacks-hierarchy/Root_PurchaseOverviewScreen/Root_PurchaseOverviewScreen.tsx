@@ -17,12 +17,12 @@ import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
-import {ZonesSelection} from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
+import {Selection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Selection';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -145,16 +145,18 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
           />
-
-          <ZonesSelection
+          <Selection
+            fareProductTypeConfig={params.fareProductTypeConfig}
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
-            fareProductTypeConfig={params.fareProductTypeConfig}
             preassignedFareProduct={preassignedFareProduct}
-            onSelect={(t) =>
-              navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t)
-            }
-            style={styles.selectionComponent}
+            onSelect={(t) => {
+              if ('toTariffZone' in t) {
+                navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t);
+              } else {
+                navigation.push('Root_PurchaseBoatStopPointSearchScreen', t);
+              }
+            }}
           />
 
           <StartTimeSelection
