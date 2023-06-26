@@ -27,6 +27,10 @@ export const Profile_DefaultUserProfileScreen = () => {
       (userProfile) => userProfile.userTypeString === defaultUserTypeString,
     ) ?? userProfiles[0];
 
+  const userProfilesWithoutHiddenCategories = userProfiles.filter(
+    (profile) => !profile.hideFromDefaultTravellerSelection,
+  );
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -39,7 +43,7 @@ export const Profile_DefaultUserProfileScreen = () => {
         </ThemeText>
 
         <RadioGroupSection<UserProfile>
-          items={userProfiles}
+          items={userProfilesWithoutHiddenCategories}
           keyExtractor={(u) => u.id}
           itemToText={(u) => getReferenceDataName(u, language)}
           selected={selectedProfile}
