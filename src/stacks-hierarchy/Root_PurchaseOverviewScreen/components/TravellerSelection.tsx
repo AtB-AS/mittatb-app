@@ -37,23 +37,35 @@ export function TravellerSelection({
   const styles = useStyles();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
-  const [selectableUserProfilesWithCount, setSelectableUserProfilesWithCount] =
-    useState<UserProfileWithCount[]>(selectableUserProfiles);
+  const [userProfilesState, setUserProfilesState] = useState<
+    UserProfileWithCount[]
+  >(selectableUserProfiles);
 
   useEffect(() => {
-    const filteredSelection = selectableUserProfilesWithCount.filter((u) =>
+    setUserProfilesState((prevState) => {
+      const updatedState = selectableUserProfiles.map((u) => ({
+        ...u,
+        count: prevState.find((p) => u.id === p.id)?.count || 0,
+      }));
+
+      return updatedState.some(({count}) => count)
+        ? updatedState
+        : selectableUserProfiles;
+    });
+  }, [selectableUserProfiles]);
+
+  useEffect(() => {
+    const filteredSelection = userProfilesState.filter((u) =>
       selectableUserProfiles.find((i) => i.id === u.id),
     );
     setTravellerSelection(filteredSelection);
-  }, [fareProductType, selectionMode, selectableUserProfilesWithCount]);
+  }, [fareProductType, selectionMode, userProfilesState]);
 
   if (selectionMode === 'none') {
     return null;
   }
 
-  const selectedUserProfiles = selectableUserProfilesWithCount.filter(
-    ({count}) => count,
-  );
+  const selectedUserProfiles = userProfilesState.filter(({count}) => count);
   const totalTravellersCount = selectedUserProfiles.reduce(
     (acc, {count}) => acc + count,
     0,
@@ -88,14 +100,12 @@ export function TravellerSelection({
       <TravellerSelectionSheet
         selectionMode={selectionMode}
         fareProductType={fareProductType}
-        selectableUserProfilesWithCountInit={selectableUserProfilesWithCount}
+        selectableUserProfilesWithCountInit={userProfilesState}
         close={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
         ) => {
           if (chosenSelectableUserProfilesWithCounts !== undefined) {
-            setSelectableUserProfilesWithCount(
-              chosenSelectableUserProfilesWithCounts,
-            );
+            setUserProfilesState(chosenSelectableUserProfilesWithCounts);
           }
           closeBottomSheet();
         }}
