@@ -95,6 +95,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
             retry: true,
           },
           scaExemption: false,
+          customerAccountId: user?.uid!,
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
         if (user) {
