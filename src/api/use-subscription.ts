@@ -38,6 +38,13 @@ export function useSubscription({
         onMessage && onMessage(event);
       };
 
+      webSocket.onerror = (event) => {
+        setStatus(getSubscriptionStatus(webSocket.readyState));
+        if (event.message !== null) {
+          Bugsnag.notify(`WebSocket error "${event.message}"`);
+        }
+      };
+
       webSocket.onclose = (event) => {
         setStatus(getSubscriptionStatus(webSocket.readyState));
         let isError: boolean;
