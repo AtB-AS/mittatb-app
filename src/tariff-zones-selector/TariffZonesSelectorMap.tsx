@@ -1,8 +1,5 @@
-import {
-  TariffZoneResultType,
-  TariffZoneSelection,
-} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {TariffZoneResults} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/TariffZoneResults';
+import {TariffZoneResultType, TariffZoneSelection} from './types';
+import {TariffZoneResults} from './TariffZoneResults';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';

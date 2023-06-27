@@ -8,12 +8,16 @@ export const useOperators = () => {
     if (!types) {
       return mobilityOperators ?? [];
     }
-    types = Array.isArray(types) ? types : [types];
+    const formFactors = (Array.isArray(types) ? types : [types]).map((t) =>
+      t.valueOf(),
+    );
     return (
       mobilityOperators
         ?.filter((o) => o.showInApp)
         .filter((o) =>
-          o.formFactors.some((f) => types?.length === 0 || types?.includes(f)),
+          o.formFactors.some(
+            (f) => types?.length === 0 || formFactors.includes(f),
+          ),
         ) ?? []
     );
   };

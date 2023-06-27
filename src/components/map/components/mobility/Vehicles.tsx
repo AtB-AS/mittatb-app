@@ -10,6 +10,7 @@ import {
 import {Cluster} from '../../types';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
@@ -21,6 +22,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
   const scooterColor = useTransportationColor(Mode.Scooter);
+  const analytics = useAnalytics();
 
   return (
     <>
@@ -48,6 +50,7 @@ export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
               zoomLevel,
               animationDuration: 400,
             });
+            analytics.logEvent('Map', 'Scooter cluster clicked', {zoomLevel});
             onClusterClick(feature);
           }
         }}

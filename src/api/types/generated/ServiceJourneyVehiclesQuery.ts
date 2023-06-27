@@ -5,6 +5,7 @@ export type GetServiceJourneyVehicleQuery = {
     lastUpdated?: any;
     bearing?: number;
     mode?: Types.VehicleModeEnumeration;
+    vehicleStatus?: Types.VehicleStatusEnumeration;
     location?: {latitude: number; longitude: number};
     serviceJourney?: {id: string};
   }>;

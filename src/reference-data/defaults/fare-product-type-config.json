@@ -173,73 +173,101 @@
       "offerEndpoint": "zones",
       "requiresLogin": true
     }
- },{
+  },
+  {
     "type": "boat-single",
     "name": [
       {
         "lang": "nob",
-        "value": "Enkeltbillett hurtigbåt"
+        "value": "Enkeltbillett, hurtigbåt"
       },
       {
         "lang": "eng",
-        "value": "Single ticket express boat"
+        "value": "Single ticket, boat"
       }
     ],
+    "illustration": "boat",
     "transportModes": [
-      {"mode": "water", "subMode": "highSpeedPassengerService"},
-      {"mode": "water", "subMode": "highSpeedVehicleService"}
+      {
+        "mode": "water",
+        "subMode": "highSpeedPassengerService"
+      },
+      {
+        "mode": "water",
+        "subMode": "highSpeedVehicleService"
+      }
     ],
     "description": [
       {
         "lang": "nob",
-        "value": "Når du skal reise av og til med båt"
+        "value": "Når du skal reise én gang"
       },
       {
         "lang": "eng",
-        "value": "10 pre-purchased tickets that you have to validate before boarding"
+        "value": "When you travel occasionally"
       }
     ],
     "configuration": {
-      "zoneSelectionMode": "stop-places-harbor",
+      "zoneSelectionMode": "none",
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "none",
       "offerEndpoint": "stop-places",
-      "requiresLogin": false,
+      "requiresLogin": true,
+      "requiresTokenOnMobile": true
     }
-  },{
+  },
+  {
     "type": "boat-period",
     "name": [
       {
         "lang": "nob",
-        "value": "Periodebillett hurtigbåt"
+        "value": "Periodebillett, hurtigbåt"
       },
       {
         "lang": "eng",
-        "value": "Single ticket express boat"
+        "value": "Periodic ticket, boat"
       }
     ],
+    "illustration": "boat",
     "transportModes": [
-      {"mode": "water", "subMode": "highSpeedPassengerService"},
-      {"mode": "water", "subMode": "highSpeedVehicleService"}
+      {
+        "mode": "water",
+        "subMode": "highSpeedPassengerService"
+      },
+      {
+        "mode": "water",
+        "subMode": "highSpeedVehicleService"
+      }
     ],
     "description": [
       {
         "lang": "nob",
-        "value": "Når du reiser litt oftere med båt"
+        "value": "Når du reiser litt oftere"
       },
       {
         "lang": "eng",
-        "value": "When you travel more frequently by boat"
+        "value": "When you travel more frequently"
       }
     ],
     "configuration": {
-      "zoneSelectionMode": "stop-places-harbor",
+      "zoneSelectionMode": "none",
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "duration",
+      "productSelectionTitle": [
+        {
+          "lang": "nob",
+          "value": "Velg varighet"
+        },
+        {
+          "lang": "eng",
+          "value": "Select duration"
+        }
+      ],
       "offerEndpoint": "stop-places",
-      "requiresLogin": false
+      "requiresLogin": true,
+      "requiresTokenOnMobile": true
     }
   }
 ]

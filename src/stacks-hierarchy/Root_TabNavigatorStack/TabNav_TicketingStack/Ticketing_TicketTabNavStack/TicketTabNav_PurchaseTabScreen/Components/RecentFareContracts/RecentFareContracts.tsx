@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
@@ -10,6 +10,7 @@ import {RecentFareContractComponent} from './RecentFareContractComponent';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {RecentFareContract} from '../../types';
+import {useTicketingState} from '@atb/ticketing';
 
 type Props = {
   onSelect: (
@@ -24,6 +25,7 @@ export const RecentFareContracts = ({onSelect}: Props) => {
   const {t} = useTranslation();
   const {recentFareContracts, loading} = useRecentFareContracts();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {customerProfile} = useTicketingState();
 
   const filterRecentFareContracts = (
     recentFareContracts: RecentFareContract[],
@@ -34,7 +36,9 @@ export const RecentFareContracts = ({onSelect}: Props) => {
           (c) => c.type === rfc.preassignedFareProduct.type,
         ),
       )
-      .filter((rfc) => productIsSellableInApp(rfc.preassignedFareProduct));
+      .filter((rfc) =>
+        isProductSellableInApp(rfc.preassignedFareProduct, customerProfile),
+      );
 
   const memoizedRecentFareContracts = useMemo(
     () => filterRecentFareContracts(recentFareContracts),
