@@ -1,4 +1,3 @@
-import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 import {translation as _} from '../../commons';
 
 const TripDetailsTexts = {
@@ -153,10 +152,9 @@ const TripDetailsTexts = {
 
   messages: {
     shortTime: _(
-      'Vær oppmerksom på kort byttetid.',
-      'Please note short changeover time.',
+      'Vær oppmerksom på kort byttetid',
+      'Please note short changeover time',
     ),
-    correspondenceNotGuaranteed: _('', ''),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',
       `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
@@ -189,13 +187,4 @@ const TripDetailsTexts = {
       ),
   },
 };
-export default orgSpecificTranslations(TripDetailsTexts, {
-  fram: {
-    messages: {
-      correspondenceNotGuaranteed: _(
-        'Kan ikke garantere korrespondanse.',
-        'Cannot guarantee correspondence.',
-      ),
-    },
-  },
-});
+export default TripDetailsTexts;

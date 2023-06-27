@@ -9,7 +9,7 @@ import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
 import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type PurchaseWarningsProps = {

@@ -25,6 +25,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
+import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {
   getNonInspectableTokenWarning,
   isValidFareContract,
@@ -42,7 +43,6 @@ import {Barcode} from '../fare-contracts/details/Barcode';
 import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
-import {UserProfileWithCount} from './types';
 
 export type FareContractInfoProps = {
   travelRights: PreActivatedTravelRight[];

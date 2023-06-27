@@ -18,7 +18,7 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {usePreferences} from '@atb/preferences';
-import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
+import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -34,9 +34,10 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Loading} from '@atb/components/loading';
 import {DepartureTimeSheet} from '@atb/place-screen/components/DepartureTimeSheet';
+import {useDepartureData} from './use-departure-data';
+import {SearchTime} from './types';
 import {NearbyScreenProps} from './navigation-types';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {SearchTime, useDepartureData} from '@atb/quay-departures-screen';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

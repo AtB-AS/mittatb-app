@@ -1,7 +1,7 @@
 import {
   TravelSearchFiltersSelectionType,
   TransportModeFilterOptionWithSelectionType,
-} from './types';
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {storage, StorageModelTypes} from '@atb/storage';
 
 class FilterStore<TravelSearchFiltersSelectionType> {

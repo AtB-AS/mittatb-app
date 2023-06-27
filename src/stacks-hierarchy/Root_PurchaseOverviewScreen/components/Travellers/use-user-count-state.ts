@@ -1,6 +1,7 @@
 import {useCallback, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfile} from '@atb/reference-data/types';
 
+export type UserProfileWithCount = UserProfile & {count: number};
 type ReducerState = {
   userProfilesWithCount: UserProfileWithCount[];
 };

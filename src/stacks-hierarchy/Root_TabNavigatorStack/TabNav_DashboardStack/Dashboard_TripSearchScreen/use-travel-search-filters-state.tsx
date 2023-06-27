@@ -3,11 +3,11 @@ import React, {useRef, useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchFiltersBottomSheet';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useTravelSearchFiltersEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
-import {useFilters} from '@atb/travel-search-filters';
-import {
+import type {
   FlexibleTransportOptionTypeWithSelectionType,
   TravelSearchFiltersSelectionType,
-} from '@atb/travel-search-filters';
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {useFilters} from '@atb/travel-search-filters';
 
 type TravelSearchFiltersState =
   | {

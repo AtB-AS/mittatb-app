@@ -9,8 +9,8 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {TravelCardInformation} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/TravelCardInformation';
 import {useAnalytics} from '@atb/analytics';
-import {TravelCardInformation} from '@atb/fare-contracts/components/TravelCardInformation';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 

@@ -36,10 +36,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
       <FullScreenHeader
         leftButton={
           activeTab === 0
-            ? {
-                type: 'close',
-                analyticsEventContext: 'Ticket assistant',
-              }
+            ? {type: 'close'}
             : {
                 type: 'back',
                 //Navigate to previous tab

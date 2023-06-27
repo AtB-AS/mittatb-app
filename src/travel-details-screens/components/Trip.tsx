@@ -23,7 +23,7 @@ import {
   CompactTravelDetailsMap,
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
-import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
+import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
 import {useRealtimeMapEnabled} from '@atb/components/map';
 import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';

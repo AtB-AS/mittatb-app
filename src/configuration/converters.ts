@@ -1,13 +1,13 @@
 import {
   FareProductTypeConfig,
   FlexibleTransportOptionType,
-  TransportModeFilterOptionType,
 } from '@atb-as/config-specs';
+import {TransportModeFilterOptionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
+import {MobilityOperator} from '@atb/mobility';
 import {isDefined} from '@atb/utils/presence';
-import {MobilityOperator} from '@atb-as/config-specs/lib/mobility-operators';
 
 export function mapToFareProductTypeConfigs(
   config: any,

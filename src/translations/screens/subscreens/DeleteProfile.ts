@@ -55,8 +55,8 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
   },
   fram: {
     unableToDeleteWithFareContracts: _(
-      'Kan ikke slette din bruker mens du har aktive billetter. Kontakt FRAM Kundesenter for refusjon eller vent til billettene har utløpt.',
-      'Unable to delete your user while you have active tickets. Please contact FRAM Customer Centre for refund or wait until tickets expire.',
+      'Kan ikke slette din bruker mens du har aktive billetter. Kontakt FRAM kundeservice for refusjon eller vent til billettene har utløpt.',
+      'Unable to delete your user while you have active tickets. Please contact FRAM customer support for refund or wait until tickets expire.',
     ),
     header: {
       title: _('Slett min bruker', 'Delete my user'),

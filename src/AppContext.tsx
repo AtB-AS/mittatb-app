@@ -214,29 +214,29 @@ export const AppContextProvider: React.FC = ({children}) => {
         dispatch({type: 'RESET_TICKETING'});
       },
       completeMobileTokenOnboarding: async () => {
-        dispatch({type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'});
         await storage.set(storeKey.mobileTokenOnboarding, JSON.stringify(true));
+        dispatch({type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'});
       },
       restartMobileTokenOnboarding: async () => {
-        dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
         await storage.set(
           storeKey.mobileTokenOnboarding,
           JSON.stringify(false),
         );
+        dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
       },
       completeMobileTokenWithoutTravelcardOnboarding: async () => {
-        dispatch({type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
         await storage.set(
           storeKey.mobileTokenWithoutTravelcardOnboarding,
           JSON.stringify(true),
         );
+        dispatch({type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
       },
       restartMobileTokenWithoutTravelcardOnboarding: async () => {
-        dispatch({type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
         await storage.set(
           storeKey.mobileTokenWithoutTravelcardOnboarding,
           JSON.stringify(false),
         );
+        dispatch({type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
       },
     }),
     [],

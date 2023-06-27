@@ -2,7 +2,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {StyleSheet} from '@atb/theme';
 import {
   FareContractTexts,

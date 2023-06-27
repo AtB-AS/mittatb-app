@@ -33,6 +33,7 @@ import {
   useMapDebugOverride,
   useRealtimeMapDebugOverride,
 } from '@atb/components/map';
+import {useFromTravelSearchToTicketDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
@@ -47,7 +48,6 @@ import {
 } from '@atb/components/sections';
 import {useDebugOverride} from '@atb/debug';
 import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
-import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);

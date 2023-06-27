@@ -1,7 +1,6 @@
 import {translation as _} from '../commons';
-import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 
-const FeedbackTextsInternal = {
+const FeedbackTexts = {
   alternatives: {
     a11yHints: {
       checked: _(
@@ -38,13 +37,4 @@ const FeedbackTextsInternal = {
   },
 };
 
-export default orgSpecificTranslations(FeedbackTextsInternal, {
-  fram: {
-    additionalFeedback: {
-      contactsheetButton: _(
-        'Kontakt FRAM Kundesenter',
-        'Contact FRAM Customer Centre',
-      ),
-    },
-  },
-});
+export default FeedbackTexts;

@@ -16,8 +16,6 @@ import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAss
 import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 import {useAnalytics} from '@atb/analytics';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -35,79 +33,32 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const showTicketAssistant = useTicketingAssistantEnabled();
   const analytics = useAnalytics();
 
-  const {remoteTokens} = useMobileTokenContextState();
-  const inspectableToken = findInspectable(remoteTokens);
-  const hasInspectableMobileToken = isMobileToken(inspectableToken);
-
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
     analytics.logEvent('Ticketing', 'Fare product selected', {
       type: fareProductTypeConfig.type,
     });
-
-    if (authenticationType !== 'phone') {
-      if (
-        fareProductTypeConfig.configuration.requiresLogin &&
-        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-        !hasInspectableMobileToken
-      ) {
-        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
-            params: {
-              nextScreen: {
-                screen: 'Root_PurchaseOverviewScreen',
-                params: {
-                  fareProductTypeConfig,
-                  mode: 'Ticket',
-                },
-              },
-            },
+    if (
+      fareProductTypeConfig.configuration.requiresLogin &&
+      authenticationType !== 'phone'
+    ) {
+      navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+        fareProductTypeConfig,
+        afterLogin: {
+          screen: 'Root_PurchaseOverviewScreen',
+          params: {
+            fareProductTypeConfig,
+            mode: 'Ticket',
           },
-        });
-        return;
-      }
-
-      if (fareProductTypeConfig.configuration.requiresLogin) {
-        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
-          fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_PurchaseOverviewScreen',
-            params: {
-              fareProductTypeConfig,
-              mode: 'Ticket',
-            },
-          },
-        });
-        return;
-      }
+        },
+      });
     } else {
-      if (
-        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-        !hasInspectableMobileToken
-      ) {
-        navigation.navigate(
-          'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
-          {
-            nextScreen: {
-              screen: 'Root_PurchaseOverviewScreen',
-              params: {
-                fareProductTypeConfig,
-                mode: 'Ticket',
-              },
-            },
-          },
-        );
-        return;
-      }
+      navigation.navigate('Root_PurchaseOverviewScreen', {
+        fareProductTypeConfig: fareProductTypeConfig,
+        mode: 'Ticket',
+      });
     }
-
-    navigation.navigate('Root_PurchaseOverviewScreen', {
-      fareProductTypeConfig: fareProductTypeConfig,
-      mode: 'Ticket',
-    });
   };
 
   const onFareContractSelect = (
@@ -167,10 +118,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <TicketAssistantTile
-            onPress={() => {
-              analytics.logEvent('Ticketing', 'Ticket assistant opened');
-              navigation.navigate('Root_TicketAssistantStack');
-            }}
+            onPress={() => navigation.navigate('Root_TicketAssistantStack')}
             testID="ticketAssistant"
           />
         )}

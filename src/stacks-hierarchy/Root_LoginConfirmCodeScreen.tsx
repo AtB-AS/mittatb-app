@@ -20,8 +20,8 @@ import {loginConfirmCodeInputId} from '@atb/test-ids';
 import {MessageBox} from '@atb/components/message-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -32,7 +32,6 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   const {phoneNumber, afterLogin} = route.params;
   const {t} = useTranslation();
   const styles = useStyles();
-  const {themeName} = useTheme();
   const {authenticationType, confirmCode, signInWithPhoneNumber} =
     useAuthState();
   const [code, setCode] = useState('');
@@ -122,7 +121,6 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
               <ActivityIndicator
                 style={styles.activityIndicator}
                 size="large"
-                color={getStaticColor(themeName, themeColor).text}
               />
             )}
 

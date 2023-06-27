@@ -5,14 +5,11 @@ import {
   TariffZone,
   UserProfile,
 } from '@atb/reference-data/types';
-import {isProductSellableInApp} from '@atb/reference-data/utils';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {useMemo} from 'react';
-import {UserProfileWithCount} from '@atb/fare-contracts';
-import {
-  TariffZoneWithMetadata,
-  useTariffZoneFromLocation,
-} from '@atb/tariff-zones-selector';
-import {useTicketingState} from '@atb/ticketing';
+import {TariffZoneWithMetadata} from '../Root_PurchaseTariffZonesSearchByMapScreen';
+import {UserProfileWithCount} from './components/Travellers/use-user-count-state';
+import {useTariffZoneFromLocation} from '../utils';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -28,12 +25,11 @@ export function useOfferDefaults(
 ) {
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
   const selectableProducts = preassignedFareProducts
-    .filter((product) => isProductSellableInApp(product, customerProfile))
+    .filter(productIsSellableInApp)
     .filter((product) => product.type === productType);
   const defaultPreassignedFareProduct =
     preassignedFareProduct ?? selectableProducts[0];
@@ -92,25 +88,20 @@ const useTravellersWithPreselectedCounts = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
-) =>
-  useMemo(() => {
-    let mappedUserProfiles = userProfiles
-      .filter((u) =>
-        preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-      )
-      .map((u) => ({
-        ...u,
-        count: getCountIfUserIsIncluded(u, defaultSelections),
-      }));
-
-    if (
-      !mappedUserProfiles.some(({count}) => count) &&
-      mappedUserProfiles.length > 0 // how to handle if length 0?
-    ) {
-      mappedUserProfiles[0].count = 1;
-    }
-    return mappedUserProfiles;
-  }, [userProfiles, preassignedFareProduct]);
+) => {
+  return useMemo(
+    () =>
+      userProfiles
+        .filter((u) =>
+          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+        )
+        .map((u) => ({
+          ...u,
+          count: getCountIfUserIsIncluded(u, defaultSelections),
+        })),
+    [userProfiles, preassignedFareProduct],
+  );
+};
 
 /**
  * Get the default tariff zone, either based on current location, default tariff

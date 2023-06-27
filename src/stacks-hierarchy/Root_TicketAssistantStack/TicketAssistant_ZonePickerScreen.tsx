@@ -1,4 +1,4 @@
-import {ScrollView, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
 import React, {useEffect, useState} from 'react';
@@ -6,6 +6,7 @@ import {
   TicketAssistant_ZonePickerScreenParams,
   TicketAssistantScreenProps,
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
+import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {
   TariffZonesTexts,
@@ -13,8 +14,8 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
+import {TariffZoneSelection} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {
-  TariffZoneSelection,
   TariffZonesSelectorButtons,
   TariffZonesSelectorMap,
 } from '@atb/tariff-zones-selector';

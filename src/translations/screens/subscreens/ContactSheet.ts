@@ -51,8 +51,5 @@ export default orgSpecificTranslations(ContactSheetTexts, {
     header: {
       title: _('Kontakt FRAM', 'Contact FRAM'),
     },
-    customer_service: {
-      button: _('Kontakt FRAM Kundesenter', 'Contact FRAM Customer Centre'),
-    },
   },
 });

@@ -9,7 +9,7 @@ import {
 } from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserProfileWithCount} from './components/Travellers/use-user-count-state';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;

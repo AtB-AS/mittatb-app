@@ -39,16 +39,6 @@ export type Location = {
   longitude: Scalars['Float'];
 };
 
-export enum OccupancyEnumeration {
-  FewSeatsAvailable = 'FEW_SEATS_AVAILABLE',
-  Full = 'FULL',
-  ManySeatsAvailable = 'MANY_SEATS_AVAILABLE',
-  NotAcceptingPassengers = 'NOT_ACCEPTING_PASSENGERS',
-  SeatsAvailable = 'SEATS_AVAILABLE',
-  StandingAvailable = 'STANDING_AVAILABLE',
-  Unknown = 'UNKNOWN',
-}
-
 export type Operator = {
   operatorRef: Scalars['String'];
 };
@@ -147,15 +137,6 @@ export enum VehicleModeEnumeration {
   Tram = 'TRAM',
 }
 
-export enum VehicleStatusEnumeration {
-  Assigned = 'ASSIGNED',
-  AtOrigin = 'AT_ORIGIN',
-  Cancelled = 'CANCELLED',
-  Completed = 'COMPLETED',
-  InProgress = 'IN_PROGRESS',
-  OffRoute = 'OFF_ROUTE',
-}
-
 export type VehicleUpdate = {
   bearing?: Maybe<Scalars['Float']>;
   codespace?: Maybe<Codespace>;
@@ -166,21 +147,16 @@ export type VehicleUpdate = {
   expirationEpochSecond?: Maybe<Scalars['Float']>;
   /** @deprecated Use 'bearing''. */
   heading?: Maybe<Scalars['Float']>;
-  /** Whether the vehicle is affected by traffic jams or other circumstances which may lead to further delays. If `null`, current status is unknown. */
-  inCongestion?: Maybe<Scalars['Boolean']>;
   lastUpdated?: Maybe<Scalars['DateTime']>;
   lastUpdatedEpochSecond?: Maybe<Scalars['Float']>;
   line?: Maybe<Line>;
   location?: Maybe<Location>;
   mode?: Maybe<VehicleModeEnumeration>;
   monitored?: Maybe<Scalars['Boolean']>;
-  occupancy?: Maybe<OccupancyEnumeration>;
   operator?: Maybe<Operator>;
   serviceJourney?: Maybe<ServiceJourney>;
   speed?: Maybe<Scalars['Float']>;
   vehicleId?: Maybe<Scalars['String']>;
   /** @deprecated Use 'vehicleId'. */
   vehicleRef?: Maybe<Scalars['String']>;
-  /** Reported status of the vehicle */
-  vehicleStatus?: Maybe<VehicleStatusEnumeration>;
 };

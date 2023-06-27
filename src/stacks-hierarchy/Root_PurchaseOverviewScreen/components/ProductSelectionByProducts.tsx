@@ -6,7 +6,7 @@ import {
 } from '@atb/translations';
 import {
   getReferenceDataName,
-  isProductSellableInApp,
+  productIsSellableInApp,
 } from '@atb/reference-data/utils';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -16,7 +16,6 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {StyleSheet} from '@atb/theme';
 import {RadioGroupSection, Section} from '@atb/components/sections';
-import {useTicketingState} from '@atb/ticketing';
 
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
@@ -34,11 +33,10 @@ export function ProductSelectionByProducts({
   const {t, language} = useTranslation();
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const styles = useStyles();
-  const {customerProfile} = useTicketingState();
 
   const selectableProducts = preassignedFareProducts
-    .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type);
+    .filter(productIsSellableInApp)
+    .filter((p) => p.type === selectedProduct.type);
   const [selected, setProduct] = useState(selectedProduct);
 
   const title = useTextForLanguage(

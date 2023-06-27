@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-imports
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {Platform} from 'react-native';

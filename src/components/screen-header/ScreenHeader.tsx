@@ -124,7 +124,7 @@ const BaseHeader = ({
     <View style={[css.container, style, {backgroundColor}]}>
       <View
         accessibilityLabel={titleA11yLabel}
-        accessible={!!title && !!textOpacity}
+        accessible={!!title}
         importantForAccessibility={!!title ? 'yes' : 'no-hide-descendants'}
         accessibilityRole="header"
         style={[

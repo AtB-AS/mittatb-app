@@ -99,18 +99,15 @@ module.exports = {
       },
     },
     {
-      files: ['!src/stacks-hierarchy/**'],
+      files: ['src/components/**'],
       rules: {
         'no-restricted-imports': [
           'error',
           {
             patterns: [
               ...noRestrictedImportsPatterns,
-              {
-                group: ['@atb/stacks-hierarchy/**'],
-                message:
-                  'Not allowed to import stuff from stacks-hierarchy from the outside. An exception may be made for ScreenParams types, and you can disable the eslint check for those imports.',
-              },
+              // Not allowed to import stuff from stacks-hierarchy from the components folder
+              {group: ['@atb/stacks-hierarchy/**']},
             ],
           },
         ],

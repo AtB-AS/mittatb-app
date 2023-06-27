@@ -26,7 +26,7 @@ export const DirectionArrow: React.FC<DirectionArrowProps> = ({
     ((90 - vehicleBearingDefined + heading) * Math.PI) / 180; // start at 90 degrees, go counter clockwise and convert from degrees to radians
   const rotateDegrees = vehicleBearingDefined - heading;
 
-  const directionArrowOffsetFromCenter = iconScale * iconSize * 0.7;
+  const directionArrowOffsetFromCenter = 28;
 
   return (
     <View

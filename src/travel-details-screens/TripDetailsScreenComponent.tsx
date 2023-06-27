@@ -11,10 +11,9 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {TariffZone} from '@atb/reference-data/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-// eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {useFromTravelSearchToTicketEnabled} from './use_from_travel_search_to_ticket_enabled';
+import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
+import {useFromTravelSearchToTicketEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_from_travel_search_to_ticket_enabled';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';

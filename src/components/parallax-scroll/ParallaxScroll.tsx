@@ -30,21 +30,12 @@ export function ParallaxScroll({
   const styles = useStyles();
   const scrollYRef = useRef(new Animated.Value(0)).current;
 
-  const headerTranslate = scrollYRef.interpolate(
-    Platform.OS === 'android'
-      ? {
-          inputRange: [0, contentHeight],
-          outputRange: [0, -(contentHeight / 2)],
-          extrapolateRight: 'extend',
-          extrapolateLeft: 'clamp',
-        }
-      : {
-          inputRange: [-contentHeight, contentHeight],
-          outputRange: [0, -contentHeight],
-          extrapolateRight: 'extend',
-          extrapolateLeft: 'clamp',
-        },
-  );
+  const headerTranslate = scrollYRef.interpolate({
+    inputRange: [0, contentHeight],
+    outputRange: [0, -(contentHeight / 2)],
+    extrapolateRight: 'extend',
+    extrapolateLeft: 'clamp',
+  });
 
   if (refreshControl) {
     refreshControl.props.progressViewOffset = contentHeight;
@@ -124,17 +115,16 @@ const ScrollChildrenIOS = ({
 }: ChildrenProps) => {
   const styles = useStyles();
   return (
-    <Animated.ScrollView
-      scrollEventThrottle={10}
-      refreshControl={refreshControl}
-      onScroll={onScroll}
-      style={styles.childrenIOS}
-      contentInset={{top: contentHeight}}
-      contentOffset={{x: 0, y: -contentHeight}}
-      automaticallyAdjustContentInsets={false}
-    >
-      {children}
-    </Animated.ScrollView>
+    <View style={{paddingTop: contentHeight}}>
+      <Animated.ScrollView
+        scrollEventThrottle={10}
+        refreshControl={refreshControl}
+        onScroll={onScroll}
+        style={styles.childrenIOS}
+      >
+        {children}
+      </Animated.ScrollView>
+    </View>
   );
 };
 

@@ -6,7 +6,6 @@ import {
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getRecommendedTicket} from '@atb/api/getRecommendedTicket';
 import {handleRecommendedTicketResponse} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/handle-recommended-ticket-response';
-import {useTicketingState} from '@atb/ticketing';
 
 type TicketAssistantState = {
   inputParams: InputParams;
@@ -54,7 +53,6 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     });
   };
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
 
   useEffect(() => {
     const fetchData = () => {
@@ -69,7 +67,6 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
               userProfiles,
               preassignedFareProducts,
               fareProductTypeConfigs,
-              customerProfile,
             ),
           );
         })

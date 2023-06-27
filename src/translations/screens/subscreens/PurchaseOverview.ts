@@ -100,18 +100,20 @@ const PurchaseOverviewTexts = {
     a11yTitle: _('Aktiver for å velge billett', 'Activate to select ticket'),
   },
   travellerSelection: {
-    title_single: _('Velg reisende', 'Select a traveller'),
-    title_multiple: _('Velg reisende', 'Select travellers'),
-    a11yLabelPrefixSingle: _('Valgt reisende:', 'Selected traveller:'),
-    a11yLabelPrefixMultiple: _('Valgte reisende:', 'Selected travellers:'),
+    title_single: _('Velg passasjerkategori', 'Select a traveller'),
+    title_multiple: _('Velg passasjerkategorier', 'Select travellers'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
-    travellers_title: (numberOfTravellers: number) =>
-      _(`${numberOfTravellers} reisende`, `${numberOfTravellers} travellers`),
   },
-  travellerSelectionSheet: {
-    title: _('Reisende', 'Travellers'),
-    close: _('Lukk', 'Close'),
-    confirm: _('Bekreft valg', 'Confirm choice'),
+  infoToggle: {
+    label: _('Vis info', 'Show info'),
+    travellerA11yLabel: _(
+      'Vis informasjon om passasjerkategorier',
+      'Show information about traveller categories',
+    ),
+    productTicketA11yLabel: _(
+      'Vis informasjon om produkter',
+      'Show information about products',
+    ),
   },
   startTime: {
     title: _('Velg oppstartstidspunkt', 'Select start time'),

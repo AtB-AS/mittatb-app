@@ -22,7 +22,6 @@ import {
 import {
   canSellCollabTicket,
   hasShortWaitTime,
-  hasShortWaitTimeAndNotGuaranteedCorrespondence,
 } from '@atb/travel-details-screens/utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
@@ -47,8 +46,6 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
   const styles = useStyles();
   const canSellCollab = canSellCollabTicket(tripPattern);
   const shortWaitTime = hasShortWaitTime(tripPattern.legs);
-  const shortWaitTimeAndNotGuaranteedCorrespondence =
-    hasShortWaitTimeAndNotGuaranteedCorrespondence(tripPattern.legs);
 
   const {enable_ticketing} = useRemoteConfig();
   const isTicketingEnabledAndSomeTicketsAreUnavailableInApp =
@@ -70,12 +67,7 @@ export const TripMessages: React.FC<TripMessagesProps> = ({
         <MessageBox
           style={styles.messageBox}
           type="info"
-          message={[
-            t(TripDetailsTexts.messages.shortTime),
-            shortWaitTimeAndNotGuaranteedCorrespondence
-              ? t(TripDetailsTexts.messages.correspondenceNotGuaranteed)
-              : '',
-          ].join(' ')}
+          message={t(TripDetailsTexts.messages.shortTime)}
         />
       )}
       {isTicketingEnabledAndSomeTicketsAreUnavailableInApp && (

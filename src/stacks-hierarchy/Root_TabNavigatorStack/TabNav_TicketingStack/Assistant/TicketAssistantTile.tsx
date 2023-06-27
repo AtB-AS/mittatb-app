@@ -8,9 +8,8 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {TicketMultiple} from '@atb/assets/svg/mono-icons/ticketing';
 import {FareProductTypeConfig} from '@atb-as/config-specs';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {isProductSellableInApp} from '@atb/reference-data/utils';
+import {productIsSellableInApp} from '@atb/reference-data/utils';
 import {BetaTag} from '@atb/components/beta-tag';
-import {useTicketingState} from '@atb/ticketing';
 
 type TicketAssistantProps = {
   accented?: boolean;
@@ -31,10 +30,9 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
-  const {customerProfile} = useTicketingState();
 
-  const sellableProductsInApp = preassignedFareProducts.filter((product) =>
-    isProductSellableInApp(product, customerProfile),
+  const sellableProductsInApp = preassignedFareProducts.filter(
+    productIsSellableInApp,
   );
 
   const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(

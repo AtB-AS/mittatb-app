@@ -1,3 +1,4 @@
+import {SubscriptionStatus} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 import {
@@ -24,14 +25,14 @@ import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL from '@rnmapbox/maps';
-import {Feature, Point, Position} from 'geojson';
+import {CircleLayerStyleProps} from '@rnmapbox/maps/src/utils/MapboxStyles';
+import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
 import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -80,41 +81,22 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
-  const [isError, setIsError] = useState(false);
-
-  useLiveVehicleSubscription({
+  const {status: subscriptionStatus} = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
       setVehicle(vehicle);
     },
-    onError: () => setIsError(true),
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
-  const [zoomLevel, setZoomLevel] = useState<number>(FOLLOW_ZOOM_LEVEL);
-  const [cameraHeading, setCameraHeading] = useState<number>(0);
-
-  /* adding onCameraChanged to <MapView> caused an internal mapbox error in the iOS stage build version, so use the deprecated onRegionIsChanging instead for now and hope the error will be fixed when onRegionIsChanging is removed in the next mapbox version*/
-  /* on Android, onRegionIsChanging is very laggy, so use the correct onCameraChanged instead */
-  const mapCameraTrackingMethod =
-    Platform.OS === 'android'
-      ? {
-          onCameraChanged: (state: MapboxGL.MapState) => {
-            setCameraHeading(state.properties.heading);
-            if (state.gestures.isGestureActive) {
-              setShouldTrack(false);
-            }
-          },
-        }
-      : {
-          onRegionIsChanging: (state: Feature<Point, RegionPayload>) => {
-            setCameraHeading(state.properties.heading);
-            if (state.properties.isUserInteraction) {
-              setShouldTrack(false);
-            }
-          },
-        };
+  const [cameraState, setCameraState] = useState<{
+    zoomLevel: number;
+    heading: number;
+  }>({
+    zoomLevel: FOLLOW_ZOOM_LEVEL,
+    heading: 0,
+  });
 
   useEffect(() => {
     const location = vehicle?.location;
@@ -136,8 +118,15 @@ export const TravelDetailsMapScreenComponent = ({
         style={styles.map}
         pitchEnabled={false}
         {...MapViewConfig}
-        {...mapCameraTrackingMethod}
-        onMapIdle={(state) => setZoomLevel(state.properties.zoom)}
+        onCameraChanged={(state) => {
+          setCameraState({
+            zoomLevel: state.properties.zoom,
+            heading: state.properties.heading,
+          });
+          if (state.gestures.isGestureActive) {
+            setShouldTrack(false);
+          }
+        }}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -169,9 +158,9 @@ export const TravelDetailsMapScreenComponent = ({
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
-            zoomLevel={zoomLevel}
-            heading={cameraHeading}
-            isError={isError}
+            subscriptionStatus={subscriptionStatus}
+            zoomLevel={cameraState.zoomLevel}
+            heading={cameraState.heading}
           />
         )}
       </MapboxGL.MapView>
@@ -200,9 +189,9 @@ type VehicleIconProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
+  subscriptionStatus: SubscriptionStatus;
   zoomLevel: number;
   heading: number;
-  isError: boolean;
 };
 
 const LiveVehicle = ({
@@ -210,14 +199,18 @@ const LiveVehicle = ({
   setShouldTrack,
   mode,
   subMode,
+  subscriptionStatus,
   zoomLevel,
   heading,
-  isError,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'background');
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
+  const isError =
+    subscriptionStatus === 'CLOSING' || subscriptionStatus === 'CLOSED';
+  const isLoading =
+    subscriptionStatus === 'CONNECTING' || subscriptionStatus === 'NOT_STARTED';
   const [isStale, setIsStale] = useState(false);
 
   useInterval(
@@ -235,83 +228,87 @@ const LiveVehicle = ({
   );
 
   const circleColor = useTransportationColor(mode, subMode);
-
-  let circleBackgroundColor = circleColor;
-  let circleBorderColor = 'transparent';
-  if (isError) {
-    circleBackgroundColor =
-      theme.interactive.interactive_destructive.disabled.background;
-    circleBorderColor =
-      theme.interactive.interactive_destructive.default.background;
-  }
-  if (isStale) {
-    circleBackgroundColor = theme.interactive.interactive_1.disabled.background;
-    circleBorderColor = theme.interactive.interactive_1.default.background;
-  }
+  const circleStyle = ((): CircleLayerStyleProps => {
+    if (isError)
+      return {
+        circleColor:
+          theme.interactive.interactive_destructive.disabled.background,
+        circleRadius: 20,
+        circleStrokeColor:
+          theme.interactive.interactive_destructive.default.background,
+        circleStrokeWidth: 2,
+      };
+    if (isLoading || isStale)
+      return {
+        circleColor: theme.interactive.interactive_1.disabled.background,
+        circleRadius: 20,
+        circleStrokeColor: theme.interactive.interactive_1.default.background,
+        circleStrokeWidth: 2,
+      };
+    return {
+      circleColor,
+      circleRadius: 22,
+      circleStrokeWidth: 0,
+    };
+  })();
 
   if (!vehicle.location || zoomLevel < FOLLOW_MIN_ZOOM_LEVEL) return null;
 
-  const iconBorderWidth = theme.border.width.medium;
-  const iconCircleSize = (theme.icon.size.normal + iconBorderWidth) * 2;
-
-  const iconScaleFactor = 2; // fix android transform rendering bugs by scaling up parent and child back down
-  const iconSize = iconCircleSize * 0.9 * iconScaleFactor;
-  const iconScale = 1 / iconScaleFactor;
+  const scaleForBugfix = Platform.OS === 'android' ? 2 : 1; // fix android transform rendering bugs by scaling up parent and child back down
+  const iconSize = 40 * scaleForBugfix;
+  const iconScale = 1 / scaleForBugfix;
 
   return (
-    <MapboxGL.MarkerView
-      coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
-    >
-      <View
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: iconSize,
-          height: iconSize,
-        }}
-        onTouchStart={() => setShouldTrack(true)}
+    <>
+      <MapboxGL.ShapeSource id="liveVehicle" shape={pointOf(vehicle.location)}>
+        <MapboxGL.CircleLayer id="liveVehicleCircle" style={circleStyle} />
+      </MapboxGL.ShapeSource>
+      <MapboxGL.MarkerView
+        coordinate={[vehicle.location.longitude, vehicle.location.latitude]}
       >
         <View
           style={{
-            position: 'absolute',
-            width: iconCircleSize,
-            height: iconCircleSize,
-            backgroundColor: circleBackgroundColor,
-            borderColor: circleBorderColor,
-            borderWidth: iconBorderWidth,
-            borderRadius: 100,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: iconSize,
+            height: iconSize,
           }}
-        />
-        <LiveVehicleIcon
-          mode={mode}
-          subMode={subMode}
-          isError={isError}
-          isStale={isStale}
-        />
+          onTouchStart={() => setShouldTrack(true)}
+        >
+          <LiveVehicleIcon
+            mode={mode}
+            subMode={subMode}
+            isError={isError}
+            isStale={isStale}
+            isLoading={isLoading}
+          />
 
-        {!isError &&
-          vehicle.bearing !== undefined && ( // only show direction if bearing is defined
-            <DirectionArrow
-              vehicleBearing={vehicle.bearing}
-              heading={heading}
-              iconSize={iconSize}
-              iconScale={iconScale}
-              fill={
-                isError
-                  ? theme.interactive.interactive_destructive.default.background
-                  : isStale
-                  ? theme.interactive.interactive_1.default.background
-                  : fillColor
-              }
-            />
-          )}
-      </View>
-    </MapboxGL.MarkerView>
+          {!isError &&
+            vehicle.bearing !== undefined && ( // only show direction if bearing is defined
+              <DirectionArrow
+                vehicleBearing={vehicle.bearing}
+                heading={heading}
+                iconSize={iconSize}
+                iconScale={iconScale}
+                fill={
+                  isError
+                    ? theme.interactive.interactive_destructive.default
+                        .background
+                    : isStale
+                    ? theme.interactive.interactive_1.default.background
+                    : fillColor
+                }
+              />
+            )}
+        </View>
+      </MapboxGL.MarkerView>
+    </>
   );
 };
 
 type LiveVehicleIconProps = {
+  isLoading: boolean;
   isStale: boolean;
   isError: boolean;
   mode?: AnyMode;
@@ -320,6 +317,7 @@ type LiveVehicleIconProps = {
 const LiveVehicleIcon = ({
   mode,
   subMode,
+  isLoading,
   isStale,
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
@@ -332,17 +330,16 @@ const LiveVehicleIcon = ({
       <ThemeIcon
         svg={svg}
         fill={theme.interactive.interactive_destructive.default.background}
-        allowFontScaling={false}
       />
     );
-  if (isStale)
+  if (isLoading || isStale)
     return (
       <ActivityIndicator
         color={theme.interactive.interactive_1.disabled.text}
       />
     );
 
-  return <ThemeIcon svg={svg} fill={fillColor} allowFontScaling={false} />;
+  return <ThemeIcon svg={svg} fill={fillColor} />;
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({

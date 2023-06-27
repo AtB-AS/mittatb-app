@@ -1,2 +1,4 @@
-export {AnalyticsContextProvider, useAnalytics} from './AnalyticsContext';
-export type {AnalyticsEventContext} from './types';
+export {
+  AnalyticsContextProvider,
+  useAnalytics,
+} from '@atb/analytics/AnalyticsContext';

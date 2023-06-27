@@ -9,6 +9,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {
+  BoatStopPoint,
   CityZone,
   PreassignedFareProduct,
   TariffZone,
@@ -16,6 +17,7 @@ import {
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
+  defaultBoatStopPoints,
   defaultCityZones,
   defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
@@ -36,9 +38,9 @@ import {
   mapToMobilityOperators,
   mapToTransportModeFilterOptions,
 } from './converters';
+import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {LanguageAndTextType} from '@atb/translations';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
-import {TravelSearchFiltersType} from '@atb-as/config-specs';
+import {MobilityOperatorType} from '@atb/mobility';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
@@ -54,6 +56,7 @@ type ConfigurableLinks = {
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
+  boatStopPoints: BoatStopPoint[];
   cityZones: CityZone[];
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
@@ -69,6 +72,7 @@ type ConfigurationContextState = {
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareProducts: defaultPreassignedFareProducts,
   tariffZones: defaultTariffZones,
+  boatStopPoints: defaultBoatStopPoints,
   cityZones: defaultCityZones,
   userProfiles: defaultUserProfiles,
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
@@ -90,6 +94,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     defaultPreassignedFareProducts,
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
+  const [boatStopPoints, setBoatStopPoints] = useState(defaultBoatStopPoints);
   const [cityZones, setCityZones] = useState(defaultCityZones);
   const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
@@ -114,15 +119,14 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          const preassignedFareProducts =
-            getPreassignedFareContractsFromSnapshot(snapshot);
-          if (preassignedFareProducts) {
-            setPreassignedFareProducts(preassignedFareProducts);
-          }
-
           const tariffZones = getTariffZonesFromSnapshot(snapshot);
           if (tariffZones) {
             setTariffZones(tariffZones);
+          }
+
+          const boatStopPoints = getBoatStopPointsFromSnapshot(snapshot);
+          if (boatStopPoints) {
+            setBoatStopPoints(boatStopPoints);
           }
 
           const cityZones = getCityZonesFromSnapshot(snapshot);
@@ -135,12 +139,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setUserProfiles(userProfiles);
           }
 
-          const modesWeSellTicketsFor =
-            getModesWeSellTicketsForFromSnapshot(snapshot);
-          if (modesWeSellTicketsFor) {
-            setModesWeSellTicketsFor(modesWeSellTicketsFor);
-          }
-
           const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
           if (paymentTypes) {
             setPaymentTypes(paymentTypes);
@@ -149,12 +147,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const vatPercent = getVatPercentFromSnapshot(snapshot);
           if (vatPercent) {
             setVatPercent(vatPercent);
-          }
-
-          const fareProductTypeConfigs =
-            getFareProductTypeConfigsFromSnapshot(snapshot);
-          if (fareProductTypeConfigs) {
-            setFareProductTypeConfigs(fareProductTypeConfigs);
           }
 
           const travelSearchFilters =
@@ -191,6 +183,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     return {
       preassignedFareProducts,
       tariffZones,
+      boatStopPoints,
       cityZones,
       userProfiles,
       modesWeSellTicketsFor,
@@ -205,6 +198,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   }, [
     preassignedFareProducts,
     tariffZones,
+    boatStopPoints,
     cityZones,
     userProfiles,
     modesWeSellTicketsFor,
@@ -259,6 +253,23 @@ function getTariffZonesFromSnapshot(
   const tariffZonesFromFirestore = snapshot.docs
     .find((doc) => doc.id == 'referenceData')
     ?.get<string>('tariffZones');
+
+  try {
+    if (tariffZonesFromFirestore) {
+      return JSON.parse(tariffZonesFromFirestore) as TariffZone[];
+    }
+  } catch (error: any) {
+    Bugsnag.notify(error);
+  }
+  return undefined;
+}
+
+function getBoatStopPointsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): TariffZone[] | undefined {
+  const tariffZonesFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('boatStopPoints');
 
   try {
     if (tariffZonesFromFirestore) {
