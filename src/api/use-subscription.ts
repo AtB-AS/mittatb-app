@@ -13,7 +13,7 @@ export function useSubscription({
   onMessage,
   onError,
 }: {url: string | null} & SubscriptionEventProps) {
-  const ws = useRef<WebSocket | null>(null);
+  const webSocket = useRef<WebSocket | null>(null);
   const retryCount = useRef<number>(0);
 
   useEffect(() => {
@@ -21,13 +21,13 @@ export function useSubscription({
 
     let retryTimeout: NodeJS.Timeout | null = null;
     const connect = () => {
-      const webSocket = new WebSocket(url);
+      const ws = new WebSocket(url);
 
-      webSocket.onmessage = (event) => {
+      ws.onmessage = (event) => {
         onMessage && onMessage(event);
       };
 
-      webSocket.onclose = (event) => {
+      ws.onclose = (event) => {
         // Reconnect immediately if close event is expected, otherwise use
         // exponetial backoff to retry.
         if (
@@ -46,23 +46,23 @@ export function useSubscription({
         }
       };
 
-      webSocket.onopen = () => {
+      ws.onopen = () => {
         Bugsnag.leaveBreadcrumb(`WebSocket opened with url: ${url}`);
         retryCount.current = 0;
       };
 
-      ws.current = webSocket;
+      webSocket.current = ws;
     };
     connect();
 
     // Cleanup
     return () => {
       if (retryTimeout) clearTimeout(retryTimeout);
-      if (ws.current) {
-        ws.current.onclose = null;
-        ws.current.close();
+      if (webSocket.current) {
+        webSocket.current.onclose = null;
+        webSocket.current.close();
       }
-      ws.current = null;
+      webSocket.current = null;
     };
   }, [url]);
 }
