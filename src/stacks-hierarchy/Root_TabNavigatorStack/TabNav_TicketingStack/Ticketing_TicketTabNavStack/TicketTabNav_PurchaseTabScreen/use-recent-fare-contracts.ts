@@ -129,9 +129,7 @@ const mapBackendRecentFareContracts = (
     preassignedFareProduct?.id +
     fromTariffZone?.id +
     toTariffZone?.id +
-    userProfilesWithCount
-      .map((u) => u.id + u.count)
-      .join();
+    userProfilesWithCount.map((u) => u.id + u.count).join();
 
   return {
     id,
