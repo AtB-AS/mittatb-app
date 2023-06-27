@@ -5,7 +5,6 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {useRecentFareContracts} from '../../use-recent-fare-contracts';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '@atb/configuration';
@@ -13,17 +12,22 @@ import {RecentFareContract} from '../../types';
 import {useTicketingState} from '@atb/ticketing';
 
 type Props = {
+  recentFareContracts: RecentFareContract[];
+  loading: boolean;
   onSelect: (
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
   ) => void;
 };
 
-export const RecentFareContracts = ({onSelect}: Props) => {
+export const RecentFareContracts = ({
+  recentFareContracts,
+  loading,
+  onSelect,
+}: Props) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {recentFareContracts, loading} = useRecentFareContracts();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 

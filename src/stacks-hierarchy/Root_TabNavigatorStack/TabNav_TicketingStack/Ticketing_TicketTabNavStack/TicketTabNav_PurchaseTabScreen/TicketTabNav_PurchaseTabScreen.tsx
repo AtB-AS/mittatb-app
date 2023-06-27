@@ -26,7 +26,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
-  const {recentFareContracts} = useRecentFareContracts();
+  const {recentFareContracts, loading} = useRecentFareContracts();
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
   const styles = useStyles();
@@ -135,9 +135,11 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
   return isSignedInAsAbtCustomer ? (
     <ScrollView>
-      {hasRecentFareContracts && (
-        <RecentFareContracts onSelect={onFareContractSelect} />
-      )}
+      <RecentFareContracts
+        recentFareContracts={recentFareContracts}
+        loading={loading}
+        onSelect={onFareContractSelect}
+      />
       <View
         style={[
           styles.container,
