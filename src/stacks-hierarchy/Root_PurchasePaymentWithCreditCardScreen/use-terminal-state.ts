@@ -56,6 +56,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
+              customerAccountId: user?.uid!,
             })
           : await reserveOffers({
               offers,
@@ -65,6 +66,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
+              customerAccountId: user?.uid!,
             });
         setReservation(response);
       } catch (err) {
