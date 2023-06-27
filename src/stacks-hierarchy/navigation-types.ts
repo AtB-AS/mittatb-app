@@ -11,7 +11,7 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ReserveOffer} from '@atb/ticketing';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
-import {Root_PurchaseBoatStopPointSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseBoatStopPointSearchScreen/navigation-types';
+import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
@@ -107,7 +107,7 @@ export type RootStackParamList = {
   Root_PurchaseConfirmationScreen: Root_PurchaseConfirmationScreenParams;
   Root_PurchaseTariffZonesSearchByMapScreen: Root_PurchaseTariffZonesSearchByMapScreenParams;
   Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
-  Root_PurchaseBoatStopPointSearchScreen: Root_PurchaseBoatStopPointSearchScreenParams;
+  Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
   Root_PurchaseAsAnonymousConsequencesScreen: undefined;
   Root_PurchasePaymentWithCreditCardScreen: PaymentParams & {
     paymentMethod: CardPaymentMethod;

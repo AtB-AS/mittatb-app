@@ -147,6 +147,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
           <Selection
             fareProductTypeConfig={params.fareProductTypeConfig}
+            fromHarbor={params.fromHarbor}
+            toHarbor={params.toHarbor}
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             preassignedFareProduct={preassignedFareProduct}
@@ -155,7 +157,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               if ('toTariffZone' in t) {
                 navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t);
               } else {
-                navigation.push('Root_PurchaseBoatStopPointSearchScreen', t);
+                navigation.push('Root_PurchaseHarborSearchScreen', t);
               }
             }}
           />

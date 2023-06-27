@@ -1,5 +1,4 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {BoatStopPoint} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {
   LocationSearchTexts,
@@ -21,7 +20,7 @@ import {GeoLocation} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useIsFocused} from '@react-navigation/native';
 import {useDebounce} from '@atb/utils/useDebounce';
-import {HarborResult} from '@atb/stacks-hierarchy/Root_PurchaseBoatStopPointSearchScreen/HarborResult';
+import {HarborResult} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResult';
 import BoatStopPointSearchTexts from '@atb/translations/screens/subscreens/BoatStopPointSearch';
 import haversine from 'haversine-distance';
 import {useIsLoading} from '@atb/utils/use-is-loading';
@@ -32,30 +31,27 @@ import {
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {getStopPlaceConnections, getStopPlaces} from '@atb/api/stop-places';
-import {StopPlaces} from '@atb/api/types/generated/stopPlaces';
+import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
 
-type Props = RootStackScreenProps<'Root_PurchaseBoatStopPointSearchScreen'>;
+type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
-export const Root_PurchaseBoatStopPointSearchScreen = ({
-  navigation,
-  route,
-}: Props) => {
-  const {fromBoatStopPoint, fareProductTypeConfig} = route.params;
+export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
+  const {fromHarbor, fareProductTypeConfig} = route.params;
 
   const {t} = useTranslation();
   const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const onSave = (selectedZone: BoatStopPoint) => {
+  const onSave = (selectedZone: StopPlace) => {
     selectedZone &&
       navigation.navigate({
         name: 'Root_PurchaseOverviewScreen',
         params: {
           mode: 'Ticket',
           fareProductTypeConfig,
-          fromBoatStopPoint: fromBoatStopPoint ?? selectedZone,
-          toBoatStopPoint: fromBoatStopPoint ? selectedZone : undefined,
+          fromHarbor: fromHarbor ?? selectedZone,
+          toHarbor: fromHarbor ? selectedZone : undefined,
         },
         merge: true,
       });
@@ -70,7 +66,7 @@ export const Root_PurchaseBoatStopPointSearchScreen = ({
     if (isFocused) focusInput();
   }, [isFocused]);
 
-  const {harbors, isLoading, error} = useGetHarbors(fromBoatStopPoint?.id);
+  const {harbors, isLoading, error} = useGetHarbors(fromHarbor?.id);
 
   useEffect(() => {
     if (error) {
@@ -85,9 +81,9 @@ export const Root_PurchaseBoatStopPointSearchScreen = ({
     onCurrentLocation();
   }, []);
 
-  const [boatStopPoints, setBoatStopPoints] = useState<
-    BoatStopPoint[] | undefined
-  >(undefined);
+  const [boatStopPoints, setBoatStopPoints] = useState<StopPlaces | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     harbors && setBoatStopPoints(sortHarbors(harbors, loc));
@@ -96,11 +92,10 @@ export const Root_PurchaseBoatStopPointSearchScreen = ({
   useEffect(() => {
     if (debouncedText.length > 1 && harbors) {
       setBoatStopPoints(
-        sortHarbors(harbors, loc)?.filter((harbor) => {
-          return (
-            harbor?.name &&
-            harbor.name.toLowerCase().includes(debouncedText.toLowerCase())
-          );
+        sortHarbors(harbors, loc).filter((harbor) => {
+          return harbor.name
+            .toLowerCase()
+            .includes(debouncedText.toLowerCase());
         }),
       );
     } else {
@@ -108,7 +103,7 @@ export const Root_PurchaseBoatStopPointSearchScreen = ({
     }
   }, [debouncedText]);
 
-  const boatStopPointResults: BoatStopPoint[] = useMemo(() => {
+  const boatStopPointResults: StopPlaces = useMemo(() => {
     return boatStopPoints ?? [];
   }, [boatStopPoints]);
 
@@ -119,7 +114,7 @@ export const Root_PurchaseBoatStopPointSearchScreen = ({
       <View style={styles.headerContainer}>
         <FullScreenHeader
           title={
-            fromBoatStopPoint
+            fromHarbor
               ? t(BoatStopPointSearchTexts.header.titleTo)
               : t(BoatStopPointSearchTexts.header.titleFrom)
           }
@@ -132,7 +127,7 @@ export const Root_PurchaseBoatStopPointSearchScreen = ({
             ref={inputRef}
             radius="top-bottom"
             label={
-              fromBoatStopPoint
+              fromHarbor
                 ? t(BoatStopPointSearchTexts.stopPlaces.to)
                 : t(BoatStopPointSearchTexts.stopPlaces.from)
             }
@@ -162,7 +157,7 @@ export const Root_PurchaseBoatStopPointSearchScreen = ({
         )}
 
         <HarborResult
-          boatStopPoints={boatStopPointResults}
+          harbors={boatStopPointResults}
           onSelect={onSave}
           showingNearest={!!loc && debouncedText.length < 2}
         />
@@ -206,15 +201,13 @@ function useCurrentLocation(onSelectLocation: (location: GeoLocation) => void) {
   return {onCurrentLocation};
 }
 
-function sortHarbors(harbors: StopPlaces, location?: GeoLocation) {
+function sortHarbors(harbors: StopPlaces, location?: GeoLocation): StopPlaces {
   return location
     ? harbors
-        ?.map((quay) => {
-          const stopPlace = quay.stopPlace;
-          if (!stopPlace) return undefined;
+        ?.map((stopPlace) => {
           return {
-            id: stopPlace?.id,
-            name: stopPlace?.name,
+            id: stopPlace.id,
+            name: stopPlace.name,
             distance:
               stopPlace?.latitude && stopPlace?.longitude
                 ? haversine(location.coordinates, [
@@ -224,21 +217,11 @@ function sortHarbors(harbors: StopPlaces, location?: GeoLocation) {
                 : 1,
           };
         })
-        .filter(
-          (
-            stopPlace,
-          ): stopPlace is {id: string; name: string; distance: number} =>
-            !!stopPlace,
-        )
+        .filter((stopPlace) => !!stopPlace.distance)
         .sort((a, b) => a.distance - b.distance)
-    : harbors
-        ?.map((harbor) => {
-          return {name: harbor.stopPlace?.name, id: harbor.stopPlace?.id};
-        })
-        .filter((harbor): harbor is BoatStopPoint => !!harbor)
-        .sort((a, b) => {
-          return a.name > b.name ? 1 : -1;
-        });
+    : harbors.sort((a, b) => {
+        return a.name > b.name ? 1 : -1;
+      });
 }
 
 function translateErrorType(

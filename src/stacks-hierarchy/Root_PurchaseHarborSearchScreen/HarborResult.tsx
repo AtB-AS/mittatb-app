@@ -1,6 +1,5 @@
 import {screenReaderPause} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
-import {BoatStopPoint} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
@@ -9,15 +8,16 @@ import {TouchableOpacity, View} from 'react-native';
 import BoatStopPointSearchTexts from '@atb/translations/screens/subscreens/BoatStopPointSearch';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat} from '@atb/assets/svg/mono-icons/transportation';
+import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
 
 type Props = {
-  boatStopPoints: BoatStopPoint[];
-  onSelect: (l: BoatStopPoint) => void;
+  harbors: StopPlaces;
+  onSelect: (l: StopPlace) => void;
   showingNearest?: boolean;
 };
 
 export const HarborResult: React.FC<Props> = ({
-  boatStopPoints,
+  harbors,
   onSelect,
   showingNearest = false,
 }) => {
@@ -34,15 +34,15 @@ export const HarborResult: React.FC<Props> = ({
         </ThemeText>
       </View>
       <View>
-        {boatStopPoints.map((boatStopPoint, index) => (
-          <View style={styles.rowContainer} key={boatStopPoint.id}>
+        {harbors.map((harbor, index) => (
+          <View style={styles.rowContainer} key={harbor.id}>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 accessible={true}
                 accessibilityLabel={
                   t(
                     BoatStopPointSearchTexts.results.item.a11yLabel(
-                      boatStopPoint.name,
+                      harbor.name,
                     ),
                   ) + screenReaderPause
                 }
@@ -51,7 +51,7 @@ export const HarborResult: React.FC<Props> = ({
                 )}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
-                onPress={() => onSelect(boatStopPoint)}
+                onPress={() => onSelect(harbor)}
                 style={styles.button}
                 testID={'venueResult' + index}
               >
@@ -60,7 +60,7 @@ export const HarborResult: React.FC<Props> = ({
                 </View>
                 <View style={styles.nameContainer}>
                   <ThemeText type={'body__primary--bold'}>
-                    {boatStopPoint.name}
+                    {harbor.name}
                   </ThemeText>
                 </View>
               </TouchableOpacity>

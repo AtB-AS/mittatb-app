@@ -30,6 +30,7 @@ import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
+import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
 import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithCreditCardScreen';
 import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
@@ -44,7 +45,6 @@ import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsSc
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
-import {Root_PurchaseBoatStopPointSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseBoatStopPointSearchScreen/Root_PurchaseBoatStopPointSearchScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 
 type ResultState = PartialState<NavigationState> & {
@@ -289,8 +289,8 @@ export const RootStack = () => {
                   }}
                 />
                 <Stack.Screen
-                  name="Root_PurchaseBoatStopPointSearchScreen"
-                  component={Root_PurchaseBoatStopPointSearchScreen}
+                  name="Root_PurchaseHarborSearchScreen"
+                  component={Root_PurchaseHarborSearchScreen}
                   options={{
                     ...TransitionPresets.SlideFromRightIOS,
                   }}

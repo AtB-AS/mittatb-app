@@ -7,7 +7,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {StopPlaces} from '@atb/api/types/generated/stopPlaces';
+import {StopPlaces} from '@atb/api/types/stopPlaces';
 
 export const getStopPlaces = async (
   transportModes?: TransportMode[],

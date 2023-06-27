@@ -10,42 +10,39 @@ import {
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
-import {BoatStopPoint, PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {StopPlace} from '@atb/api/types/stopPlaces';
 
-type DockSelectionProps = {
+export type StopPlaceProps = {
+  fromHarbor?: StopPlace;
   fareProductTypeConfig: FareProductTypeConfig;
-  fromBoatStopPoint?: BoatStopPoint;
-  toBoatStopPoint?: BoatStopPoint;
   preassignedFareProduct: PreassignedFareProduct;
-  onSelect: (t: {
-    fromBoatStopPoint?: BoatStopPoint;
-    toBoatStopPoint?: BoatStopPoint;
-    fareProductTypeConfig: FareProductTypeConfig;
-    preassignedFareProduct: PreassignedFareProduct;
-  }) => void;
+};
+
+type StopPlaceSelectionProps = {
+  fareProductTypeConfig: FareProductTypeConfig;
+  fromHarbor?: StopPlace;
+  toHarbor?: StopPlace;
+  preassignedFareProduct: PreassignedFareProduct;
+  onSelect: (t: StopPlaceProps) => void;
   style?: StyleProp<ViewStyle>;
 };
 
 export function HarborSelection({
   fareProductTypeConfig,
-  fromBoatStopPoint,
-  toBoatStopPoint,
+  fromHarbor,
+  toHarbor,
   preassignedFareProduct,
   onSelect,
   style,
-}: DockSelectionProps) {
+}: StopPlaceSelectionProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
 
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityLabel: a11yLabel(
-      language,
-      t,
-      fromBoatStopPoint,
-      toBoatStopPoint,
-    ),
+    accessibilityLabel: a11yLabel(language, t, fromHarbor, toHarbor),
     accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
   };
 
@@ -80,15 +77,15 @@ export function HarborSelection({
               >
                 {t(PurchaseOverviewTexts.zones.label.from)}
               </ThemeText>
-              <HarborLabel boatStopPoint={fromBoatStopPoint} />
+              <HarborLabel harbor={fromHarbor} />
             </View>
           </>
         </GenericClickableSectionItem>
         <GenericClickableSectionItem
           onPress={() =>
-            fromBoatStopPoint &&
+            fromHarbor &&
             onSelect({
-              fromBoatStopPoint,
+              fromHarbor,
               fareProductTypeConfig,
               preassignedFareProduct,
             })
@@ -97,16 +94,13 @@ export function HarborSelection({
         >
           <View style={styles.toHarbor}>
             <ThemeText
-              color={!!fromBoatStopPoint ? 'secondary' : 'disabled'}
+              color={!!fromHarbor ? 'secondary' : 'disabled'}
               type="body__secondary"
               style={styles.toFromLabel}
             >
               {t(PurchaseOverviewTexts.zones.label.to)}
             </ThemeText>
-            <HarborLabel
-              boatStopPoint={toBoatStopPoint}
-              disabled={!fromBoatStopPoint}
-            />
+            <HarborLabel harbor={toHarbor} disabled={!fromHarbor} />
           </View>
         </GenericClickableSectionItem>
       </Section>
@@ -115,13 +109,13 @@ export function HarborSelection({
 }
 
 const HarborLabel = ({
-  boatStopPoint,
+  harbor,
   disabled = false,
 }: {
-  boatStopPoint?: BoatStopPoint;
+  harbor?: StopPlace;
   disabled?: boolean;
 }) => {
-  const harborName = boatStopPoint?.name;
+  const harborName = harbor?.name;
 
   return harborName ? (
     <ThemeText type="body__primary--bold">{harborName}</ThemeText>
@@ -138,12 +132,12 @@ const HarborLabel = ({
 const a11yLabel = (
   language: Language,
   t: TranslateFunction,
-  from?: BoatStopPoint,
-  to?: BoatStopPoint,
+  from?: StopPlace,
+  to?: StopPlace,
 ): string => {
-  const getHarborText = (boatStopPoint?: BoatStopPoint) => {
-    const venueName = boatStopPoint?.name ? `${boatStopPoint.name}, ` : '';
-    const zoneName = boatStopPoint?.name;
+  const getHarborText = (harbor?: StopPlace) => {
+    const venueName = harbor?.name ? `${harbor.name}, ` : '';
+    const zoneName = harbor?.name;
     return (
       venueName +
       (zoneName ??
