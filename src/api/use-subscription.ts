@@ -1,29 +1,19 @@
 import Bugsnag from '@bugsnag/react-native';
-import {MutableRefObject, useEffect, useRef, useState} from 'react';
+import {MutableRefObject, useEffect, useRef} from 'react';
 
 const RETRY_INTERVAL_CAP_IN_SECONDS = 10;
 
-export type SubscriptionStatus =
-  | 'CONNECTING'
-  | 'OPEN'
-  | 'CLOSING'
-  | 'CLOSED'
-  | 'NOT_STARTED';
-
 export type SubscriptionEventProps = {
   onMessage?: (event: WebSocketMessageEvent) => void;
-  onOpen?: () => void;
-  onClose?: (event: WebSocketCloseEvent & {isError: boolean}) => void;
+  onError?: (event: WebSocketCloseEvent) => void;
 };
 
 export function useSubscription({
   url,
   onMessage,
-  onClose,
-  onOpen,
+  onError,
 }: {url: string | null} & SubscriptionEventProps) {
-  const [status, setStatus] = useState<SubscriptionStatus>('NOT_STARTED');
-  const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
+  const ws = useRef<WebSocket | null>(null);
   const retryCount = useRef<number>(0);
 
   useEffect(() => {
@@ -34,21 +24,10 @@ export function useSubscription({
       const webSocket = new WebSocket(url);
 
       webSocket.onmessage = (event) => {
-        setStatus(getSubscriptionStatus(webSocket.readyState));
         onMessage && onMessage(event);
       };
 
-      webSocket.onerror = (event) => {
-        setStatus(getSubscriptionStatus(webSocket.readyState));
-        if (event.message !== null) {
-          Bugsnag.notify(`WebSocket error "${event.message}"`);
-        }
-      };
-
       webSocket.onclose = (event) => {
-        setStatus(getSubscriptionStatus(webSocket.readyState));
-        let isError: boolean;
-
         // Reconnect immediately if close event is expected, otherwise use
         // exponetial backoff to retry.
         if (
@@ -57,57 +36,35 @@ export function useSubscription({
           event.code === undefined
         ) {
           Bugsnag.leaveBreadcrumb(`WebSocket closed with code ${event.code}`);
-          isError = false;
           connect();
         } else {
-          isError = true;
           Bugsnag.notify(
-            `WebSocket closed with unexpected event ${event.code} "${event.message}" (${event.reason})`,
+            `WebSocket closed with unexpected code ${event.code} "${event.message}" (${event.reason})`,
           );
           retryTimeout = retryWithCappedBackoff(retryCount, connect);
+          onError && onError(event);
         }
-
-        onClose && onClose({...event, isError});
       };
 
       webSocket.onopen = () => {
-        setStatus(getSubscriptionStatus(webSocket.readyState));
         Bugsnag.leaveBreadcrumb(`WebSocket opened with url: ${url}`);
         retryCount.current = 0;
-        onOpen && onOpen();
       };
 
-      setWebSocket(webSocket);
+      ws.current = webSocket;
     };
     connect();
 
     // Cleanup
     return () => {
       if (retryTimeout) clearTimeout(retryTimeout);
-      setWebSocket((ws) => {
-        if (ws) {
-          ws.onclose = null;
-          onClose && onClose({code: 1000, reason: 'Cleanup', isError: false});
-          ws.close();
-        }
-        return null;
-      });
+      if (ws.current) {
+        ws.current.onclose = null;
+        ws.current.close();
+      }
+      ws.current = null;
     };
   }, [url]);
-
-  return {
-    status,
-    send: (message: string) => webSocket?.send(message),
-    close: webSocket?.close,
-  };
-}
-
-function getSubscriptionStatus(readyState?: number): SubscriptionStatus {
-  if (readyState === 0) return 'CONNECTING';
-  if (readyState === 1) return 'OPEN';
-  if (readyState === 2) return 'CLOSING';
-  if (readyState === 3) return 'CLOSED';
-  return 'NOT_STARTED';
 }
 
 /**

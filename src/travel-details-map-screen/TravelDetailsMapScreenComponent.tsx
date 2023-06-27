@@ -89,9 +89,7 @@ export const TravelDetailsMapScreenComponent = ({
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
       setVehicle(vehicle);
     },
-    onClose: (event) => {
-      if (event.isError) setIsError(true);
-    },
+    onError: () => setIsError(true),
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
