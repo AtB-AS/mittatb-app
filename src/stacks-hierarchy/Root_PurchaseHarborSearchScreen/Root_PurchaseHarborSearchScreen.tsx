@@ -21,7 +21,6 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {useIsFocused} from '@react-navigation/native';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {HarborResult} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResult';
-import BoatStopPointSearchTexts from '@atb/translations/screens/subscreens/BoatStopPointSearch';
 import haversine from 'haversine-distance';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {ErrorType} from '@atb/api/utils';
@@ -32,6 +31,8 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {getStopPlaceConnections, getStopPlaces} from '@atb/api/stop-places';
 import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
+import sortBy from 'lodash.sortby';
+import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -42,6 +43,8 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const {location} = useGeolocationState();
+  const currentLocation = location || undefined;
 
   const onSave = (selectedZone: StopPlace) => {
     selectedZone &&
@@ -75,31 +78,28 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   }, [error]);
 
   const debouncedText = useDebounce(text, 200);
-  const [loc, setLoc] = useState<GeoLocation | undefined>(undefined);
-  const {onCurrentLocation} = useCurrentLocation(setLoc);
-  useEffect(() => {
-    onCurrentLocation();
-  }, []);
 
   const [boatStopPoints, setBoatStopPoints] = useState<StopPlaces | undefined>(
     undefined,
   );
 
   useEffect(() => {
-    harbors && setBoatStopPoints(sortHarbors(harbors, loc));
-  }, [harbors, loc]);
+    harbors && setBoatStopPoints(sortHarbors(harbors, currentLocation));
+  }, [harbors, location]);
 
   useEffect(() => {
     if (debouncedText.length > 1 && harbors) {
       setBoatStopPoints(
-        sortHarbors(harbors, loc).filter((harbor) => {
+        sortHarbors(harbors, currentLocation).filter((harbor) => {
           return harbor.name
             .toLowerCase()
             .includes(debouncedText.toLowerCase());
         }),
       );
     } else {
-      harbors && setBoatStopPoints(sortHarbors(harbors, loc));
+      harbors &&
+        location &&
+        setBoatStopPoints(sortHarbors(harbors, currentLocation));
     }
   }, [debouncedText]);
 
@@ -115,8 +115,8 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         <FullScreenHeader
           title={
             fromHarbor
-              ? t(BoatStopPointSearchTexts.header.titleTo)
-              : t(BoatStopPointSearchTexts.header.titleFrom)
+              ? t(HarborSearchTexts.header.titleTo)
+              : t(HarborSearchTexts.header.titleFrom)
           }
           leftButton={{type: 'back'}}
         />
@@ -128,14 +128,14 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
             radius="top-bottom"
             label={
               fromHarbor
-                ? t(BoatStopPointSearchTexts.stopPlaces.to)
-                : t(BoatStopPointSearchTexts.stopPlaces.from)
+                ? t(HarborSearchTexts.stopPlaces.to)
+                : t(HarborSearchTexts.stopPlaces.from)
             }
             value={text}
             onChangeText={setText}
             showClear={Boolean(text?.length)}
             onClear={() => setText('')}
-            placeholder={t(BoatStopPointSearchTexts.searchField.placeholder)}
+            placeholder={t(HarborSearchTexts.searchField.placeholder)}
             autoCorrect={false}
             autoComplete="off"
             testID="searchInput"
@@ -159,48 +159,23 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         <HarborResult
           harbors={boatStopPointResults}
           onSelect={onSave}
-          showingNearest={!!loc && debouncedText.length < 2}
+          showingNearest={!!currentLocation && debouncedText.length < 2}
+          fromHarborName={
+            debouncedText.length < 2 ? fromHarbor?.name : undefined
+          }
         />
 
         {showEmptyResultText && (
           <MessageBox
             type="info"
-            message={t(BoatStopPointSearchTexts.messages.emptyResult)}
+            message={t(HarborSearchTexts.messages.emptyResult)}
           />
         )}
       </ScrollView>
     </View>
   );
 };
-
-function useCurrentLocation(onSelectLocation: (location: GeoLocation) => void) {
-  const {location, requestPermission} = useGeolocationState();
-
-  const [recentlyAllowedGeo, setRecentlyAllowedGeo] = useState(false);
-
-  const onCurrentLocation = useCallback(
-    async function () {
-      if (location) {
-        onSelectLocation(location);
-      } else {
-        const status = await requestPermission();
-        if (status === 'granted') {
-          setRecentlyAllowedGeo(true);
-        }
-      }
-    },
-    [location, onSelectLocation, requestPermission],
-  );
-
-  useEffect(() => {
-    if (recentlyAllowedGeo && location) {
-      onSelectLocation(location);
-    }
-  }, [recentlyAllowedGeo, location]);
-
-  return {onCurrentLocation};
-}
-
+// sort by distance or alphabetically
 function sortHarbors(harbors: StopPlaces, location?: GeoLocation): StopPlaces {
   return location
     ? harbors
@@ -214,14 +189,12 @@ function sortHarbors(harbors: StopPlaces, location?: GeoLocation): StopPlaces {
                     stopPlace.longitude,
                     stopPlace.latitude,
                   ])
-                : 1,
+                : -1,
           };
         })
-        .filter((stopPlace) => !!stopPlace.distance)
+        .filter((stopPlace) => stopPlace.distance != -1)
         .sort((a, b) => a.distance - b.distance)
-    : harbors.sort((a, b) => {
-        return a.name > b.name ? 1 : -1;
-      });
+    : sortBy(harbors, ['name']);
 }
 
 function translateErrorType(

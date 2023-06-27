@@ -1,6 +1,6 @@
 import {translation as _} from '../../commons';
 
-const BoatStopPointSearchTexts = {
+const HarborSearchTexts = {
   searchField: {
     placeholder: _('Søk etter kai', 'Search for a harbor'),
   },
@@ -23,6 +23,11 @@ const BoatStopPointSearchTexts = {
   results: {
     resultsHeading: _('Søkeresultater', 'Search results'),
     nearestHeading: _('Nærmest deg', 'Nearest'),
+    arrivalHeading: (fromHarborName: string) =>
+      _(
+        `Ankomststeder fra ${fromHarborName}`,
+        `Arrival harbors from ${fromHarborName}`,
+      ),
     item: {
       a11yLabel: (venueName: string) =>
         _(`Kai ${venueName}`, `Harbor ${venueName}`),
@@ -44,4 +49,4 @@ const BoatStopPointSearchTexts = {
     emptyResult: _('Fant ingen søkeresultat', 'No search results to display'),
   },
 };
-export default BoatStopPointSearchTexts;
+export default HarborSearchTexts;

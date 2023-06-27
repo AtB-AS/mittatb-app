@@ -14,7 +14,7 @@ export const getStopPlaces = async (
   transportSubmodes?: TransportSubmode[],
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaces | undefined> => {
-  const url = '/bff/v1/stop-places';
+  const url = '/bff/v2/stop-places';
   const query = qs.stringify({
     authorities: AUTHORITY,
     transportModes,
@@ -31,7 +31,7 @@ export const getStopPlaceConnections = async (
   fromHarborId: string,
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaces | undefined> => {
-  const url = '/bff/v1/stop-places/connections';
+  const url = '/bff/v2/stop-places/connections';
   const query = qs.stringify({
     fromHarborId,
   });

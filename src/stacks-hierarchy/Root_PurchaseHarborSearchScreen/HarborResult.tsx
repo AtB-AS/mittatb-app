@@ -5,21 +5,23 @@ import {useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
-import BoatStopPointSearchTexts from '@atb/translations/screens/subscreens/BoatStopPointSearch';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat} from '@atb/assets/svg/mono-icons/transportation';
 import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
+import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 
 type Props = {
   harbors: StopPlaces;
   onSelect: (l: StopPlace) => void;
   showingNearest?: boolean;
+  fromHarborName?: string;
 };
 
 export const HarborResult: React.FC<Props> = ({
   harbors,
   onSelect,
   showingNearest = false,
+  fromHarborName,
 }) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
@@ -28,9 +30,11 @@ export const HarborResult: React.FC<Props> = ({
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
         <ThemeText type="body__secondary" color="secondary">
-          {showingNearest
-            ? t(BoatStopPointSearchTexts.results.nearestHeading)
-            : t(BoatStopPointSearchTexts.results.resultsHeading)}
+          {fromHarborName
+            ? t(HarborSearchTexts.results.arrivalHeading(fromHarborName))
+            : showingNearest
+            ? t(HarborSearchTexts.results.nearestHeading)
+            : t(HarborSearchTexts.results.resultsHeading)}
         </ThemeText>
       </View>
       <View>
@@ -40,15 +44,10 @@ export const HarborResult: React.FC<Props> = ({
               <TouchableOpacity
                 accessible={true}
                 accessibilityLabel={
-                  t(
-                    BoatStopPointSearchTexts.results.item.a11yLabel(
-                      harbor.name,
-                    ),
-                  ) + screenReaderPause
+                  t(HarborSearchTexts.results.item.a11yLabel(harbor.name)) +
+                  screenReaderPause
                 }
-                accessibilityHint={t(
-                  BoatStopPointSearchTexts.results.item.a11yHint,
-                )}
+                accessibilityHint={t(HarborSearchTexts.results.item.a11yHint)}
                 accessibilityRole="button"
                 hitSlop={insets.symmetric(8, 1)}
                 onPress={() => onSelect(harbor)}
@@ -75,7 +74,6 @@ export const HarborResult: React.FC<Props> = ({
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   subHeader: {
     padding: theme.spacings.medium,
-    margin: 0,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -83,7 +81,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
   },
   buttonContainer: {
-    padding: 12,
+    padding: theme.spacings.medium,
     flex: 1,
   },
   button: {
@@ -91,17 +89,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   nameContainer: {
-    marginLeft: 16,
-  },
-  nameText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  zoneText: {
-    fontSize: 14,
-    marginTop: 2,
-  },
-  locationIcon: {
-    backgroundColor: theme.text.colors.primary,
+    marginHorizontal: theme.spacings.medium,
   },
 }));
