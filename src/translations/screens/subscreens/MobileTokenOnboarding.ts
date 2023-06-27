@@ -183,8 +183,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     ticketSafetyInfo: {
       description: _(
-        'Billetten din er trygt lagret på **Min bruker**. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
-        "Your ticket is safely stored on **My user**. That way you won't lose your ticket even if you lose your travel card or switch phones.",
+        'Billetten din er trygt lagret på din konto i skyen. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
+        "Your ticket is safely stored on your account in the cloud. That way you won't lose your ticket even if you lose your travel card or switch phones.",
       ),
     },
     tCard: {
@@ -215,8 +215,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     error: {
       description: _(
-        'Vi får ikke knyttet et reisekort eller en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM kundeservice om problemet vedvarer.',
-        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM customer service.",
+        'Vi får ikke knyttet et reisekort eller en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
       ),
     },
     withoutTravelcard: {
@@ -228,8 +228,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       ticketSafetyInfo: {
         description: _(
-          'Billetten din er trygt lagret på **Min bruker**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
-          "Your ticket is safely stored on **My user**. That way you won't lose your ticket even if you lose or switch phones.",
+          'Billetten din er trygt lagret på din konto i skyen. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
+          "Your ticket is safely stored on your account in the cloud. That way you won't lose your ticket even if you lose or switch phones.",
         ),
       },
       phone: {
@@ -240,8 +240,8 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       },
       error: {
         description: _(
-          'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM kundeservice om problemet vedvarer.',
-          "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM customer service.",
+          'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+          "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
         ),
       },
     },

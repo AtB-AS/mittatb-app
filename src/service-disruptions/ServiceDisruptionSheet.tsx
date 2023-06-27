@@ -55,7 +55,7 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
                 </View>
               </Section>
               <Button
-                interactiveColor="interactive_3"
+                interactiveColor="interactive_2"
                 mode="secondary"
                 text={t(ServiceDisruptionsTexts.button.text)}
                 accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}

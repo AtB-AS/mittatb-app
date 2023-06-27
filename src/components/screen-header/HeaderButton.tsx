@@ -11,6 +11,7 @@ import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
+import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 
 export type ButtonModes =
   | 'back'
@@ -27,6 +28,11 @@ export type HeaderButtonProps = {
   text?: string;
   testID?: string;
   withIcon?: boolean;
+  /**
+   * The context for the analytics event that will be logged when the button is
+   * pressed. If no context provided, then no analytics event will be logged.
+   */
+  analyticsEventContext?: AnalyticsEventContext;
 } & AccessibilityProps;
 
 export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
@@ -34,17 +40,30 @@ export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
 };
 
 export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
+  const analytics = useAnalytics();
   const iconButton = useHeaderButton(buttonProps);
   if (!iconButton) {
     return null;
   }
 
-  return <BaseHeaderButton {...iconButton} />;
+  const onPress = () => {
+    if (buttonProps.analyticsEventContext) {
+      analytics.logEvent(
+        buttonProps.analyticsEventContext,
+        `Header button of type ${buttonProps.type} clicked`,
+      );
+    }
+    iconButton.onPress?.();
+  };
+
+  return <BaseHeaderButton {...iconButton} onPress={onPress} />;
 };
 
 export type HeaderButtonWithoutNavigationProps = {
   text: string;
   onPress: () => void;
+  type: ButtonModes;
+  analyticsEventContext?: HeaderButtonProps['analyticsEventContext'];
   color?: StaticColor | TextColor;
   testID?: string;
 } & AccessibilityProps;
@@ -52,11 +71,24 @@ export type HeaderButtonWithoutNavigationProps = {
 export const HeaderButtonWithoutNavigation = ({
   text,
   onPress,
+  type,
+  analyticsEventContext,
   color,
   ...accessibilityProps
 }: HeaderButtonWithoutNavigationProps) => {
+  const analytics = useAnalytics();
+  const onPressToUse = () => {
+    if (analyticsEventContext) {
+      analytics.logEvent(
+        analyticsEventContext,
+        `Header button of type ${type} clicked`,
+      );
+    }
+    onPress();
+  };
+
   return (
-    <BaseHeaderButton onPress={onPress} {...accessibilityProps}>
+    <BaseHeaderButton onPress={onPressToUse} {...accessibilityProps}>
       <ThemeText color={color}>{text}</ThemeText>
     </BaseHeaderButton>
   );

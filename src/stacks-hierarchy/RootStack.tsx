@@ -45,6 +45,7 @@ import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneI
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
 import {Root_PurchaseBoatStopPointSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseBoatStopPointSearchScreen/Root_PurchaseBoatStopPointSearchScreen';
+import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -369,6 +370,12 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_LoginRequiredForFareProductScreen"
                   component={Root_LoginRequiredForFareProductScreen}
+                />
+                <Stack.Screen
+                  name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
+                  component={
+                    Root_ActiveTokenOnPhoneRequiredForFareProductScreen
+                  }
                 />
               </Stack.Group>
             </Stack.Navigator>

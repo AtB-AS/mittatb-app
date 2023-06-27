@@ -1,17 +1,18 @@
 import React, {useRef} from 'react';
-import {UserCountState, UserProfileWithCount} from './use-user-count-state';
+import {UserCountState} from './use-user-count-state';
 import {
-  useTranslation,
-  TicketTravellerTexts,
-  PurchaseOverviewTexts,
-  TranslateFunction,
-  Language,
   getTextForLanguage,
+  Language,
+  PurchaseOverviewTexts,
+  TicketTravellerTexts,
+  TranslateFunction,
+  useTranslation,
 } from '@atb/translations';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {usePreferences} from '@atb/preferences';
 import {CounterSectionItem, Section} from '@atb/components/sections';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 
 export function MultipleTravellersSelection({
   userProfilesWithCount,

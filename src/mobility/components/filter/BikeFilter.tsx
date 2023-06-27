@@ -32,7 +32,7 @@ export const BikeFilter = ({
         {t(MobilityTexts.bicycle)}
       </ThemeText>
       <Section>
-        {bikeOperators.length > 1 && (
+        {bikeOperators.length !== 1 && (
           <ToggleSectionItem
             text={t(MobilityTexts.filter.selectAll)}
             value={showAll()}
