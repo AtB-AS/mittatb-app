@@ -1,3 +1,4 @@
+import {client} from '@atb/api';
 import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
 
 export type UserBenefitsType = {
@@ -6,20 +7,11 @@ export type UserBenefitsType = {
 };
 
 export const getBenefits = (): Promise<UserBenefitsType[]> => {
-  console.log('Calling GET /mobility/benefits');
-  return Promise.resolve([
-    {
-      operator: 'YTR:Operator:trondheimbysykkel',
-      benefits: ['free-use'],
-    },
-    {
-      operator: 'YVO:Operator:voi',
-      benefits: ['free-unlock'],
-    },
-  ]);
+  return client.get('/mobility/benefits').then((response) => response.data);
 };
 
-export const getValueCode = (operatorId: string) => {
-  console.log(`Calling POST /mobility/code/${operatorId}`);
-  return Promise.resolve('1fds4');
+export const getValueCode = (operatorId: string): Promise<string> => {
+  return client
+    .post(`/mobility/code/${operatorId}`)
+    .then((response) => response.data.code);
 };
