@@ -9,6 +9,10 @@ export const getBenefits = (): Promise<UserBenefitsType[]> => {
   console.log('Calling GET /mobility/benefits');
   return Promise.resolve([
     {
+      operator: 'YTR:Operator:trondheimbysykkel',
+      benefits: ['free-use'],
+    },
+    {
       operator: 'YVO:Operator:voi',
       benefits: ['free-unlock'],
     },
@@ -17,5 +21,5 @@ export const getBenefits = (): Promise<UserBenefitsType[]> => {
 
 export const getValueCode = (operatorId: string) => {
   console.log(`Calling POST /mobility/code/${operatorId}`);
-  return Promise.resolve('aseaa-aws3ef-asfaew-ff23r2-1fds4');
+  return Promise.resolve('1fds4');
 };

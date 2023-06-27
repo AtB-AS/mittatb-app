@@ -153,3 +153,8 @@ export const isUserEligibleForBenefit = (
   benefit: OperatorBenefitIdType,
   userBenefits: OperatorBenefitIdType[],
 ) => userBenefits.includes(benefit);
+
+export const insertValueCode = (url: string, valueCode: string | undefined) => {
+  if (!valueCode) return url;
+  return url.replace(/\{(.*?)}/g, valueCode);
+};

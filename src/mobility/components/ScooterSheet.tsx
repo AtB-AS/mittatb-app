@@ -1,5 +1,5 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {Language, ScreenHeaderTexts, useTranslation} from '@atb/translations';
@@ -14,18 +14,21 @@ import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {
   getBenefit,
   getRentalAppUri,
+  insertValueCode,
   isBenefitOffered,
   isUserEligibleForBenefit,
 } from '@atb/mobility/utils';
 import {useSystem} from '@atb/mobility/use-system';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
 import {useBenefits} from '@atb/mobility/use-benefits';
+import {Button} from '@atb/components/button';
+import {getValueCode} from '@atb/mobility/api/api';
+import {useOperatorApp} from '@atb/mobility/use-operator-app';
 
 type Props = {
   vehicleId: VehicleId;
@@ -34,13 +37,50 @@ type Props = {
 export const ScooterSheet = ({vehicleId: id, close}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
-  const {vehicle, isLoading, error} = useVehicle(id);
+  const {vehicle, isLoading: isLoadingVehicle, error} = useVehicle(id);
   const {appStoreUri, brandLogoUrl, operatorId, operatorName} = useSystem(
     vehicle,
     vehicle?.system.operator.name,
   );
-  const {userBenefits, operatorBenefits} = useBenefits(operatorId);
   const rentalAppUri = getRentalAppUri(vehicle);
+
+  const [valueCode, setValueCode] = useState<string>();
+  const [isLoadingValueCode, setIsLoadingValueCode] = useState(false);
+  const isLoading = isLoadingVehicle || isLoadingValueCode;
+  const {userBenefits, operatorBenefits, callToAction} =
+    useBenefits(operatorId);
+  // The data model handles multiple benefits per operator,
+  // but we currently know there is only one, and the UI has to change anyway
+  // to support an undetermined number of benefits.
+  const isUserEligibleForFreeUnlock = isUserEligibleForBenefit(
+    'free-unlock',
+    userBenefits,
+  );
+  const hasFreeUnlock =
+    isUserEligibleForFreeUnlock &&
+    isBenefitOffered('free-unlock', operatorBenefits);
+  const callToActionText = callToAction('free-unlock', operatorName).text;
+  const callToActionUrl = callToAction('free-unlock', operatorName).url;
+  const {openOperatorApp} = useOperatorApp({
+    operatorName,
+    appStoreUri,
+    rentalAppUri,
+  });
+
+  useEffect(() => {
+    if (operatorId && hasFreeUnlock) {
+      setIsLoadingValueCode(true);
+      getValueCode(operatorId).then((valueCode) => {
+        setValueCode(valueCode);
+        setIsLoadingValueCode(false);
+      });
+    }
+  }, [operatorId, hasFreeUnlock]);
+
+  const onCallToAction = () =>
+    callToActionUrl && isUserEligibleForFreeUnlock
+      ? Linking.openURL(insertValueCode(callToActionUrl, valueCode))
+      : openOperatorApp();
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -87,34 +127,21 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                     plan={vehicle.pricingPlan}
                     eligibleBenefits={
                       isBenefitOffered('free-unlock', operatorBenefits) &&
-                      isUserEligibleForBenefit('free-unlock', userBenefits)
+                      isUserEligibleForFreeUnlock
                         ? ['free-unlock']
                         : []
                     }
                   />
                 }
               />
-              {/* The data model handles multiple benefits per operator,*/}
-              {/* but we currently know there is only one, and the UI has to change anyway*/}
-              {/* to support an undetermined number of benefits.*/}
               <OperatorBenefit
                 benefit={getBenefit('free-unlock', operatorBenefits)}
-                isUserEligible={isUserEligibleForBenefit(
-                  'free-unlock',
-                  userBenefits,
-                )}
+                isUserEligible={isUserEligibleForFreeUnlock}
                 style={style.benefit}
               />
             </ScrollView>
             <View style={style.footer}>
-              <CallToActionButton
-                operatorName={operatorName}
-                operatorId={operatorId}
-                rentalAppUri={rentalAppUri}
-                appStoreUri={appStoreUri}
-                userBenefits={userBenefits}
-                operatorBenefits={operatorBenefits}
-              />
+              <Button text={callToActionText} onPress={onCallToAction} />
             </View>
           </>
         )}

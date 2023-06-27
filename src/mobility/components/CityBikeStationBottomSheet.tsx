@@ -1,6 +1,6 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
@@ -10,6 +10,8 @@ import {
   getAvailableVehicles,
   getBenefit,
   getRentalAppUri,
+  insertValueCode,
+  isBenefitOffered,
   isUserEligibleForBenefit,
 } from '@atb/mobility/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -18,7 +20,7 @@ import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
 import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, Alert, Linking, View} from 'react-native';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
@@ -27,7 +29,11 @@ import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {useBenefits} from '@atb/mobility/use-benefits';
-import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
+import {getValueCode} from '@atb/mobility/api/api';
+import {ThemeText} from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import Clipboard from '@react-native-clipboard/clipboard';
+import {useOperatorApp} from '@atb/mobility/use-operator-app';
 
 type Props = {
   stationId: string;
@@ -39,7 +45,11 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
-  const {station, isLoading, error} = useBikeStation(stationId);
+  const {
+    station,
+    isLoading: isLoadingStation,
+    error,
+  } = useBikeStation(stationId);
   const {appStoreUri, brandLogoUrl, operatorId, operatorName} =
     useSystem(station);
   const rentalAppUri = getRentalAppUri(station);
@@ -48,7 +58,52 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
-  const {userBenefits, operatorBenefits} = useBenefits(operatorId);
+  const {userBenefits, operatorBenefits, callToAction} =
+    useBenefits(operatorId);
+  const [valueCode, setValueCode] = useState<string>();
+  const [isLoadingValueCode, setIsLoadingValueCode] = useState(false);
+  const [isValueCodeCopied, setIsValueCodeCopied] = useState(false);
+  const isLoading = isLoadingStation || isLoadingValueCode;
+  // The data model handles multiple benefits per operator,
+  // but we currently know there is only one, and the UI has to change anyway
+  // to support an undetermined number of benefits.
+  const isUserEligibleForFreeUse = isUserEligibleForBenefit(
+    'free-use',
+    userBenefits,
+  );
+  const hasFreeUnlock =
+    isUserEligibleForFreeUse && isBenefitOffered('free-use', operatorBenefits);
+  const callToActionText = callToAction('free-use', operatorName).text;
+  const callToActionUrl = callToAction('free-use', operatorName).url;
+  const {openOperatorApp} = useOperatorApp({
+    operatorName,
+    appStoreUri,
+    rentalAppUri,
+  });
+
+  useEffect(() => {
+    if (operatorId && hasFreeUnlock) {
+      setIsLoadingValueCode(true);
+      getValueCode(operatorId).then((valueCode) => {
+        setValueCode(valueCode);
+        setIsLoadingValueCode(false);
+      });
+    }
+  }, [operatorId, hasFreeUnlock]);
+
+  const onCallToAction = () =>
+    callToActionUrl && isUserEligibleForFreeUse
+      ? Linking.openURL(insertValueCode(callToActionUrl, valueCode))
+      : openOperatorApp();
+
+  const copyValueCode = (valueCode: string) => {
+    Clipboard.setString(valueCode);
+    Alert.alert(
+      t(BicycleTexts.benefits.copyCodeAlert.title),
+      t(BicycleTexts.benefits.copyCodeAlert.message),
+    );
+    setIsValueCodeCopied(true);
+  };
 
   return (
     <BottomSheetContainer>
@@ -102,27 +157,43 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
                   />
                 }
               />
-              {/* The data model handles multiple benefits per operator,*/}
-              {/* but we currently know there is only one, and the UI has to change anyway*/}
-              {/* to support an undetermined number of benefits.*/}
+              {hasFreeUnlock && valueCode && (
+                <View style={style.valueCode}>
+                  <ThemeText type={'body__primary--big'}>{valueCode}</ThemeText>
+                </View>
+              )}
               <OperatorBenefit
-                benefit={getBenefit('free-unlock', operatorBenefits)}
-                isUserEligible={isUserEligibleForBenefit(
-                  'free-unlock',
-                  userBenefits,
-                )}
+                benefit={getBenefit('free-use', operatorBenefits)}
+                isUserEligible={isUserEligibleForFreeUse}
                 style={style.benefit}
               />
+              {hasFreeUnlock && valueCode && (
+                <Button
+                  onPress={() => copyValueCode(valueCode)}
+                  text={t(BicycleTexts.benefits.copyCodeButton)}
+                  mode={isValueCodeCopied ? 'secondary' : 'primary'}
+                  interactiveColor={
+                    isValueCodeCopied ? 'interactive_3' : 'interactive_0'
+                  }
+                  style={style.valueCodeButton}
+                />
+              )}
             </View>
-            {rentalAppUri && (
+            {(rentalAppUri || callToActionUrl) && (
               <View style={style.footer}>
-                <CallToActionButton
-                  appStoreUri={appStoreUri}
-                  operatorId={operatorId}
-                  operatorName={operatorName}
-                  rentalAppUri={rentalAppUri}
-                  userBenefits={userBenefits}
-                  operatorBenefits={operatorBenefits}
+                <Button
+                  text={callToActionText}
+                  onPress={onCallToAction}
+                  mode={
+                    hasFreeUnlock && !isValueCodeCopied
+                      ? 'secondary'
+                      : 'primary'
+                  }
+                  interactiveColor={
+                    hasFreeUnlock && !isValueCodeCopied
+                      ? 'interactive_3'
+                      : 'interactive_0'
+                  }
                 />
               </View>
             )}
@@ -167,6 +238,13 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
+    },
+    valueCode: {
+      alignItems: 'center',
+      marginBottom: theme.spacings.small,
+    },
+    valueCodeButton: {
+      marginBottom: theme.spacings.medium,
     },
     walkingDistance: {
       marginBottom: theme.spacings.medium,

@@ -80,6 +80,16 @@ export const BicycleTexts = {
     'Ops! Vi fant ikke denne sykkelstasjonen',
     "Ops! We couldn't find this bike station",
   ),
+  benefits: {
+    copyCodeAlert: {
+      title: _('Kopiert!', 'Copied!'),
+      message: _(
+        'Lim inn verdikoden i bysykkel-appen',
+        'Paste the value code in the city bike app',
+      ),
+    },
+    copyCodeButton: _('Koiper verdikode', 'Copy value code'),
+  },
 };
 
 export const CarSharingTexts = {

@@ -9,10 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/config-specs@^3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.3.1.tgz#11e7bf2baa8c01acee6d0ac1559acb99968039b9"
-  integrity sha512-M2ZQUqHLoePGa9eP+m435/AQgv3lUAHQ6+L5Ea3c1mJV2VttTEwp+37uUh9o359YLCT4804RwDTyCBa0TYSgow==
+"@atb-as/config-specs@^3.3.2":
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.3.2.tgz#79f8a998f12a1dd5f971116fab8256b8a6fed7e3"
+  integrity sha512-9/eJPr7a2J1UspUVRQOomUGz31bmKVYEOoF95gGhBEkpHooglB1+Z/l74SN37aqJz9XUrgvcxrX80uuNv0zyTQ==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
