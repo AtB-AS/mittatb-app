@@ -3,8 +3,8 @@ import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {BoatStopPoint, PreassignedFareProduct} from '@atb/reference-data/types';
-import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {StyleSheet} from '@atb/theme';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {StyleProp, ViewStyle} from 'react-native';
 
 export type HarborProps = {
   fromBoatStopPoint?: BoatStopPoint;
@@ -25,6 +25,7 @@ type SelectionProps = {
   toTariffZone?: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (t: HarborProps | ZoneProps) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 export function Selection({
@@ -34,8 +35,8 @@ export function Selection({
   fromBoatStopPoint,
   preassignedFareProduct,
   onSelect,
+  style,
 }: SelectionProps) {
-  const styles = useStyles();
   let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
   if (selectionMode === 'none') {
     return null;
@@ -48,7 +49,7 @@ export function Selection({
         fareProductTypeConfig={fareProductTypeConfig}
         preassignedFareProduct={preassignedFareProduct}
         onSelect={onSelect}
-        style={styles.selectionComponent}
+        style={style}
       />
     );
   }
@@ -71,13 +72,7 @@ export function Selection({
       preassignedFareProduct={preassignedFareProduct}
       selectionMode={selectionMode}
       onSelect={onSelect}
-      style={styles.selectionComponent}
+      style={style}
     />
   ) : null;
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  selectionComponent: {
-    marginVertical: theme.spacings.medium,
-  },
-}));
