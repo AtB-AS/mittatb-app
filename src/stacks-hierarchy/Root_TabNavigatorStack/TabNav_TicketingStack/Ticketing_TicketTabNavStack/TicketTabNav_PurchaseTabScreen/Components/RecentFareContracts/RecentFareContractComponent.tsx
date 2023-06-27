@@ -144,6 +144,7 @@ export const RecentFareContractComponent = ({
                   <>
                     {userProfilesWithCount.slice(0, 1).map((u) => (
                       <InfoChip
+                        key={u.id}
                         interactiveColor={interactiveColorName}
                         style={styles.infoChip}
                         text={`${u.count} ${getReferenceDataName(u, language)}`}
