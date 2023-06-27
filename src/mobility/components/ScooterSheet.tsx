@@ -140,9 +140,16 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                 style={style.benefit}
               />
             </ScrollView>
-            <View style={style.footer}>
-              <Button text={callToActionText} onPress={onCallToAction} />
-            </View>
+            {(rentalAppUri || callToActionUrl) && (
+              <View style={style.footer}>
+                <Button
+                  text={callToActionText}
+                  onPress={onCallToAction}
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
+                />
+              </View>
+            )}
           </>
         )}
         {!isLoading && (error || !vehicle) && (
