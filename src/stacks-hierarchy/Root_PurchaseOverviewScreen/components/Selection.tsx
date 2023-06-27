@@ -1,9 +1,8 @@
+import React from 'react';
 import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ZonesSelection';
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
-import React from 'react';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {BoatStopPoint, PreassignedFareProduct} from '@atb/reference-data/types';
-import {StyleProp, ViewStyle} from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {StyleSheet} from '@atb/theme';
 
@@ -26,7 +25,6 @@ type SelectionProps = {
   toTariffZone?: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (t: HarborProps | ZoneProps) => void;
-  style?: StyleProp<ViewStyle>;
 };
 
 export function Selection({
@@ -36,7 +34,6 @@ export function Selection({
   fromBoatStopPoint,
   preassignedFareProduct,
   onSelect,
-  style,
 }: SelectionProps) {
   const styles = useStyles();
   let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
