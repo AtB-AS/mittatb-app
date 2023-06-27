@@ -216,7 +216,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               option: 'now',
               date: new Date().toISOString(),
             }
-          : searchTime,
+          : {...searchTime},
     });
   };
 

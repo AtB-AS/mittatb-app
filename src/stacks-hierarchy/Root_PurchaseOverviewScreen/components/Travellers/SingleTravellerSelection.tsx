@@ -1,5 +1,5 @@
 import React from 'react';
-import {UserCountState, UserProfileWithCount} from './use-user-count-state';
+import {UserCountState} from './use-user-count-state';
 import {
   useTranslation,
   TicketTravellerTexts,
@@ -9,6 +9,7 @@ import {
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {usePreferences} from '@atb/preferences';
 import {RadioGroupSection, Section} from '@atb/components/sections';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -29,12 +30,24 @@ export function SingleTravellerSelection({
     addCount(u.userTypeString);
   };
 
-  function travellerInfoByFareProductType(fareProductType: string | undefined) {
-    return (u: UserProfileWithCount) =>
-      [
-        getTextForLanguage(u.alternativeDescriptions, language),
-        t(TicketTravellerTexts.information(u.userTypeString, fareProductType)),
-      ].join(' ');
+  function travellerInfoByFareProductType(
+    fareProductType: string | undefined,
+    u: UserProfileWithCount,
+  ) {
+    const genericUserProfileDescription = getTextForLanguage(
+      u.alternativeDescriptions,
+      language,
+    );
+
+    return [
+      t(
+        TicketTravellerTexts.userProfileDescriptionOverride(
+          u.userTypeString,
+          fareProductType,
+        ),
+      ) || genericUserProfileDescription,
+      t(TicketTravellerTexts.information(u.userTypeString, fareProductType)),
+    ].join(' ');
   }
 
   return (
@@ -44,7 +57,9 @@ export function SingleTravellerSelection({
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
         hideSubtext={hideTravellerDescriptions}
-        itemToSubtext={travellerInfoByFareProductType(fareProductType)}
+        itemToSubtext={(u) =>
+          travellerInfoByFareProductType(fareProductType, u)
+        }
         selected={selectedProfile}
         onSelect={select}
         color="interactive_2"

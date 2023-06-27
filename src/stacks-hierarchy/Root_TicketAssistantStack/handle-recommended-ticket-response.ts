@@ -1,6 +1,6 @@
-import {productIsSellableInApp} from '@atb/reference-data/utils';
-import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {isProductSellableInApp} from '@atb/reference-data/utils';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {TariffZone} from '@entur/sdk/lib/nsr/types';
 import {
@@ -9,6 +9,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {getLongestDurationTicket} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary/utils';
 import {FareProductTypeConfig} from '@atb-as/config-specs';
+import {CustomerProfile} from '@atb/ticketing';
 
 export function handleRecommendedTicketResponse(
   response: RecommendedTicketResponse,
@@ -16,9 +17,10 @@ export function handleRecommendedTicketResponse(
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
   fareProductTypeConfigs: FareProductTypeConfig[],
+  customerProfile?: CustomerProfile,
 ) {
-  const sellableProductsInApp = preassignedFareProducts.filter(
-    productIsSellableInApp,
+  const sellableProductsInApp = preassignedFareProducts.filter((product) =>
+    isProductSellableInApp(product, customerProfile),
   );
   // TariffZones
   const tariffZonesWithMetaData = response.zones.map(

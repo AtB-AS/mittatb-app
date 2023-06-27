@@ -1,6 +1,6 @@
 {
   "name": "atb",
-  "version": "1.38.0",
+  "version": "1.39.0",
   "private": true,
   "license": "EUPL-1.2",
   "scripts": {
@@ -25,11 +25,11 @@
     "unimported": "npx unimported"
   },
   "dependencies": {
-    "@atb-as/config-specs": "^3.1.0",
+    "@atb-as/config-specs": "^3.2.0",
     "@atb-as/theme": "^7.1.0",
     "@bugsnag/react-native": "^7.18.2",
     "@bugsnag/source-maps": "^2.3.1",
-    "@entur-private/abt-mobile-client-sdk": "1.1.13",
+    "@entur-private/abt-mobile-client-sdk": "1.1.14",
     "@entur/sdk": "^5.3.0",
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
@@ -103,14 +103,14 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^7.5.1",
+    "@atb-as/generate-assets": "^7.5.2",
     "@babel/core": "^7.20.12",
     "@babel/plugin-transform-template-literals": "^7.18.9",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-typescript": "^7.18.6",
     "@babel/runtime": "^7.20.7",
-    "@entur-private/abt-time-react-native-lib": "1.1.13",
-    "@entur-private/abt-token-state-react-native-lib": "1.1.13",
+    "@entur-private/abt-time-react-native-lib": "1.1.14",
+    "@entur-private/abt-token-state-react-native-lib": "1.1.14",
     "@svgr/cli": "^6.3.1",
     "@types/child-process-promise": "^2.2.2",
     "@types/geojson": "^7946.0.10",
