@@ -28,6 +28,7 @@ export const OperatorBenefit = ({isUserEligible, benefit, style}: Props) => {
           message={
             getTextForLanguage(benefit.descriptionWhenNotActive, language) ?? ''
           }
+          isMarkdown={true}
         />
       )}
     </View>
