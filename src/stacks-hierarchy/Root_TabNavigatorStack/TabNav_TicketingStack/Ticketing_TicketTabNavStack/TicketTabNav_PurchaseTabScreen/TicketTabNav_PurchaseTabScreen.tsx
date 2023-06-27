@@ -114,23 +114,39 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
   ) => {
+    const fromTariffZone = rfc.fromTariffZone;
+    const toTariffZone = rfc.toTariffZone;
     analytics.logEvent('Ticketing', 'Recently used fare product selected', {
       type: fareProductTypeConfig.type,
+      fromTariffZone,
+      toTariffZone,
     });
-    navigation.navigate('Root_PurchaseOverviewScreen', {
-      fareProductTypeConfig,
-      preassignedFareProduct: rfc.preassignedFareProduct,
-      userProfilesWithCount: rfc.userProfilesWithCount,
-      fromTariffZone: rfc.fromTariffZone && {
-        ...rfc.fromTariffZone,
-        resultType: 'zone',
-      },
-      toTariffZone: rfc.toTariffZone && {
-        ...rfc.toTariffZone,
-        resultType: 'zone',
-      },
-      mode: 'Ticket',
-    });
+    if (fromTariffZone && toTariffZone) {
+      navigation.navigate('Root_PurchaseConfirmationScreen', {
+        fareProductTypeConfig,
+        fromTariffZone,
+        toTariffZone: toTariffZone,
+        userProfilesWithCount: rfc.userProfilesWithCount,
+        preassignedFareProduct: rfc.preassignedFareProduct,
+        headerLeftButton: {type: 'back'},
+        mode: 'Ticket',
+      });
+    } else {
+      navigation.navigate('Root_PurchaseOverviewScreen', {
+        fareProductTypeConfig,
+        preassignedFareProduct: rfc.preassignedFareProduct,
+        userProfilesWithCount: rfc.userProfilesWithCount,
+        fromTariffZone: fromTariffZone && {
+          ...fromTariffZone,
+          resultType: 'zone',
+        },
+        toTariffZone: toTariffZone && {
+          ...toTariffZone,
+          resultType: 'zone',
+        },
+        mode: 'Ticket',
+      });
+    }
   };
 
   return isSignedInAsAbtCustomer ? (
