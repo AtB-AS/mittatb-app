@@ -32,7 +32,6 @@ export const getServiceJourneyVehicles = async (
 export const useLiveVehicleSubscription = ({
   serviceJourneyId,
   onClose,
-  onError,
   onMessage,
   onOpen,
 }: {serviceJourneyId?: string} & SubscriptionEventProps) => {
@@ -46,7 +45,6 @@ export const useLiveVehicleSubscription = ({
   return useSubscription({
     url: serviceJourneyId ? url : null,
     onMessage,
-    onError,
     onOpen,
     onClose,
   });
