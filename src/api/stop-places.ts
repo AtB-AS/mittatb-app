@@ -9,12 +9,12 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {StopPlaces} from '@atb/api/types/stopPlaces';
 
-export const getStopPlaces = async (
-  transportModes?: TransportMode[],
+export const getStopPlacesByMode = async (
+  transportModes: TransportMode[],
   transportSubmodes?: TransportSubmode[],
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaces | undefined> => {
-  const url = '/bff/v2/stop-places';
+  const url = '/bff/v2/stop-places/mode';
   const query = qs.stringify({
     authorities: AUTHORITY,
     transportModes,
@@ -28,12 +28,13 @@ export const getStopPlaces = async (
 };
 
 export const getStopPlaceConnections = async (
-  fromHarborId: string,
+  fromStopPlaceId: string,
   opts?: AxiosRequestConfig,
 ): Promise<StopPlaces | undefined> => {
   const url = '/bff/v2/stop-places/connections';
   const query = qs.stringify({
-    fromHarborId,
+    authorities: AUTHORITY,
+    fromStopPlaceId,
   });
   const result = await client.get<StopPlaces>(stringifyUrl(url, query), {
     ...opts,

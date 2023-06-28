@@ -29,7 +29,10 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {getStopPlaceConnections, getStopPlaces} from '@atb/api/stop-places';
+import {
+  getStopPlaceConnections,
+  getStopPlacesByMode,
+} from '@atb/api/stop-places';
 import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
 import sortBy from 'lodash.sortby';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
@@ -177,24 +180,28 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
 };
 // sort by distance or alphabetically
 function sortHarbors(harbors: StopPlaces, location?: GeoLocation): StopPlaces {
-  return location
-    ? harbors
-        ?.map((stopPlace) => {
-          return {
-            id: stopPlace.id,
-            name: stopPlace.name,
-            distance:
-              stopPlace?.latitude && stopPlace?.longitude
-                ? haversine(location.coordinates, [
-                    stopPlace.longitude,
-                    stopPlace.latitude,
-                  ])
-                : -1,
-          };
-        })
-        .filter((stopPlace) => stopPlace.distance != -1)
-        .sort((a, b) => a.distance - b.distance)
-    : sortBy(harbors, ['name']);
+  if (location) {
+    return harbors
+      ?.map((stopPlace) => {
+        return {
+          id: stopPlace.id,
+          name: stopPlace.name,
+          distance: getDistance(stopPlace, location),
+        };
+      })
+      .filter((stopPlace) => stopPlace.distance != -1)
+      .sort((a, b) => a.distance - b.distance);
+  }
+  return sortBy(harbors, ['name']);
+}
+
+function getDistance(
+  stopPlace: {latitude?: number; longitude?: number},
+  location: GeoLocation,
+) {
+  return stopPlace?.latitude && stopPlace?.longitude
+    ? haversine(location.coordinates, [stopPlace.longitude, stopPlace.latitude])
+    : -1;
 }
 
 function translateErrorType(
@@ -219,7 +226,7 @@ function useGetHarbors(fromHarborId?: string) {
     if (fromHarborId) {
       return getStopPlaceConnections(fromHarborId);
     } else {
-      return getStopPlaces(
+      return getStopPlacesByMode(
         [TransportMode.Water],
         [
           TransportSubmode.HighSpeedPassengerService,
