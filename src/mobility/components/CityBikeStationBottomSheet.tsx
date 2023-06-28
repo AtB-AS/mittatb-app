@@ -5,7 +5,10 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {useSystem} from '@atb/mobility/use-system';
-import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  BicycleTexts,
+  MobilityTexts,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   getAvailableVehicles,
   getBenefit,
@@ -73,7 +76,10 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   );
   const hasFreeUnlock =
     isUserEligibleForFreeUse && isBenefitOffered('free-use', operatorBenefits);
-  const callToActionText = callToAction('free-use', operatorName).text;
+  const callToActionText =
+    hasFreeUnlock && valueCode
+      ? callToAction('free-use', operatorName).text
+      : t(MobilityTexts.operatorAppSwitchButton(operatorName));
   const callToActionUrl = callToAction('free-use', operatorName).url;
   const {openOperatorApp} = useOperatorApp({
     operatorName,
@@ -92,7 +98,7 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
   }, [operatorId, hasFreeUnlock]);
 
   const onCallToAction = () =>
-    callToActionUrl && isUserEligibleForFreeUse
+    callToActionUrl && hasFreeUnlock
       ? Linking.openURL(insertValueCode(callToActionUrl, valueCode))
       : openOperatorApp();
 
@@ -162,11 +168,13 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
                   <ThemeText type={'body__primary--big'}>{valueCode}</ThemeText>
                 </View>
               )}
-              <OperatorBenefit
-                benefit={getBenefit('free-use', operatorBenefits)}
-                isUserEligible={isUserEligibleForFreeUse}
-                style={style.benefit}
-              />
+              {valueCode && (
+                <OperatorBenefit
+                  benefit={getBenefit('free-use', operatorBenefits)}
+                  isUserEligible={isUserEligibleForFreeUse}
+                  style={style.benefit}
+                />
+              )}
               {hasFreeUnlock && valueCode && (
                 <Button
                   onPress={() => copyValueCode(valueCode)}
@@ -185,12 +193,12 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
                   text={callToActionText}
                   onPress={onCallToAction}
                   mode={
-                    hasFreeUnlock && !isValueCodeCopied
+                    hasFreeUnlock && valueCode && !isValueCodeCopied
                       ? 'secondary'
                       : 'primary'
                   }
                   interactiveColor={
-                    hasFreeUnlock && !isValueCodeCopied
+                    hasFreeUnlock && valueCode && !isValueCodeCopied
                       ? 'interactive_3'
                       : 'interactive_0'
                   }
