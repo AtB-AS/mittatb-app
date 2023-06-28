@@ -13105,6 +13105,14 @@ react-native-permissions@^3.10.0:
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.10.0.tgz#946fa7e07908ed90620b3f07eb652f20f482196d"
   integrity sha512-6SB6JInfC0u54Wco8M1QsRoOGThnVjrhaks5IDWyYgwfi6JpXfTIi+F9fZZmRycyyPCgU8vGtht/5gF4VWEB/A==
 
+react-native-popover-view@^5.1.7:
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-popover-view/-/react-native-popover-view-5.1.7.tgz#12f1df9b7c142ab8fa1a3ded2919a4164823be45"
+  integrity sha512-Xa+zKYp9x62UNezT8o9SnqQaBQEHdGwGHZnFnA2bsXLneVRvvlBopNwMNj+p7N65qnPf3mmzWj+57ThtM1qFuw==
+  dependencies:
+    deprecated-react-native-prop-types "^2.3.0"
+    prop-types "^15.8.1"
+
 react-native-portalize@^1.0.7:
   version "1.0.7"
   resolved "https://registry.npmjs.org/react-native-portalize/-/react-native-portalize-1.0.7.tgz"
