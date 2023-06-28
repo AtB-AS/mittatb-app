@@ -1,4 +1,6 @@
+import {client} from '@atb/api';
 import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
+import {getAxiosErrorMetadata} from '@atb/api/utils';
 
 export type UserBenefitsType = {
   operator: string;
@@ -6,16 +8,19 @@ export type UserBenefitsType = {
 };
 
 export const getBenefits = (): Promise<UserBenefitsType[]> => {
-  console.log('Calling GET /mobility/benefits');
-  return Promise.resolve([
-    {
-      operator: 'YVO:Operator:voi',
-      benefits: ['free-unlock'],
-    },
-  ]);
+  return client
+    .get('/mobility/benefits', {authWithIdToken: true})
+    .then((response) => response.data);
 };
 
-export const getValueCode = (operatorId: string) => {
-  console.log(`Calling POST /mobility/code/${operatorId}`);
-  return Promise.resolve('aseaa-aws3ef-asfaew-ff23r2-1fds4');
+export const getValueCode = (
+  operatorId: string,
+): Promise<string | undefined> => {
+  return client
+    .post(`/mobility/code/${operatorId}`, {}, {authWithIdToken: true})
+    .then((response) => response.data.code)
+    .catch((error) => {
+      if (getAxiosErrorMetadata(error).responseStatus === 404) return undefined;
+      throw error;
+    });
 };
