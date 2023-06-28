@@ -68,7 +68,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
     vippsReducer,
     initialState,
   );
-  const {user} = useAuthState();
+  const {user, abtCustomerIdFull} = useAuthState();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {
@@ -95,7 +95,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
             retry: true,
           },
           scaExemption: false,
-          customerAccountId: user?.uid!,
+          customerAccountId: abtCustomerIdFull!,
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
         if (user) {
