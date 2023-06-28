@@ -61,7 +61,7 @@ export function Summary({
             {t(PurchaseOverviewTexts.summary.messageInZone)}
           </ThemeText>
         );
-      case 'stop-places-harbor':
+      case 'multiple-stop-harbor':
       case 'none':
         return (
           <ThemeText type="body__secondary" style={styles.message}>

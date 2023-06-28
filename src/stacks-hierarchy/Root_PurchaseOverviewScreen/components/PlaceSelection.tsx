@@ -30,7 +30,7 @@ type SelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function Selection({
+export function PlaceSelection({
   fromTariffZone,
   toTariffZone,
   fareProductTypeConfig,
@@ -45,7 +45,7 @@ export function Selection({
     return null;
   }
 
-  if (selectionMode === 'stop-places-harbor') {
+  if (selectionMode === 'multiple-stop-harbor') {
     return (
       <HarborSelection
         fromHarbor={fromHarbor}
