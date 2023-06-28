@@ -34,6 +34,7 @@ export type UserProfile = {
   alternativeDescriptions: LanguageAndTextType[];
   version: string;
   emoji?: string;
+  hideFromDefaultTravellerSelection?: boolean;
 };
 
 export type TariffZone = {
