@@ -5,7 +5,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Keyboard,
@@ -82,17 +82,15 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
 
   const debouncedText = useDebounce(text, 200);
 
-  const [boatStopPoints, setBoatStopPoints] = useState<StopPlaces | undefined>(
-    undefined,
-  );
+  const [harborResults, setHarborResults] = useState<StopPlaces | []>([]);
 
   useEffect(() => {
-    harbors && setBoatStopPoints(sortHarbors(harbors, currentLocation));
+    harbors && setHarborResults(sortHarbors(harbors, currentLocation));
   }, [harbors, location]);
 
   useEffect(() => {
     if (debouncedText.length > 1 && harbors) {
-      setBoatStopPoints(
+      setHarborResults(
         sortHarbors(harbors, currentLocation).filter((harbor) => {
           return harbor.name
             .toLowerCase()
@@ -102,15 +100,11 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
     } else {
       harbors &&
         location &&
-        setBoatStopPoints(sortHarbors(harbors, currentLocation));
+        setHarborResults(sortHarbors(harbors, currentLocation));
     }
   }, [debouncedText]);
 
-  const boatStopPointResults: StopPlaces = useMemo(() => {
-    return boatStopPoints ?? [];
-  }, [boatStopPoints]);
-
-  const showEmptyResultText = !boatStopPointResults.length && !!debouncedText;
+  const showEmptyResultText = !harborResults.length && !!debouncedText;
 
   return (
     <View style={styles.container}>
@@ -160,7 +154,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         )}
 
         <HarborResult
-          harbors={boatStopPointResults}
+          harbors={harborResults}
           onSelect={onSave}
           showingNearest={!!currentLocation && debouncedText.length < 2}
           fromHarborName={
