@@ -114,7 +114,7 @@ const BaseHeader = ({
   const css = useHeaderStyle();
   const {theme, themeName} = useTheme();
   const themeColor = color ?? 'background_accent_0';
-  //const focusRef = useFocusOnLoad(setFocusOnLoad);
+  const focusRef = useFocusOnLoad(setFocusOnLoad);
 
   const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
 
@@ -135,7 +135,7 @@ const BaseHeader = ({
           },
         ]}
         onLayout={setLayoutFor('container')}
-        //ref={focusRef}
+        ref={focusRef}
       >
         <View
           style={{

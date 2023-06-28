@@ -8,14 +8,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect, useRef} from 'react';
-import {
-  AccessibilityInfo,
-  AccessibilityProps,
-  findNodeHandle,
-  StyleProp,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -30,7 +23,7 @@ type ZonesSelectionProps = {
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
-  setA11yFocusToZonesSelection?: boolean;
+  a11yFocusOnZonesSelectionHelperTime?: number;
   onSelect: (t: {
     fromTariffZone: TariffZoneWithMetadata;
     toTariffZone: TariffZoneWithMetadata;
@@ -45,7 +38,7 @@ export function ZonesSelection({
   fromTariffZone,
   toTariffZone,
   preassignedFareProduct,
-  setA11yFocusToZonesSelection,
+  a11yFocusOnZonesSelectionHelperTime,
   onSelect,
   style,
 }: ZonesSelectionProps) {
@@ -54,9 +47,9 @@ export function ZonesSelection({
   const zonesInputSectionItemRef = useRef(null);
 
   useEffect(() => {
-    setA11yFocusToZonesSelection &&
+    !!a11yFocusOnZonesSelectionHelperTime &&
       setTimeout(() => giveFocus(zonesInputSectionItemRef), 300);
-  }, [setA11yFocusToZonesSelection]);
+  }, [a11yFocusOnZonesSelectionHelperTime]);
 
   const accessibility: AccessibilityProps = {
     accessible: true,

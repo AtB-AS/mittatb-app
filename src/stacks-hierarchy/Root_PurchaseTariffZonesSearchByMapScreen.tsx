@@ -57,7 +57,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         mode: 'Ticket',
         fareProductTypeConfig,
         fromTariffZone: selectedZones.from,
-        setA11yFocusToZonesSelection: true,
+        a11yFocusOnZonesSelectionHelperTime: new Date().getTime(),
         toTariffZone: isApplicableOnSingleZoneOnly
           ? selectedZones.from
           : selectedZones.to,
