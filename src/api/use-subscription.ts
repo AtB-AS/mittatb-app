@@ -12,15 +12,13 @@ export type SubscriptionStatus =
 
 export type SubscriptionEventProps = {
   onMessage?: (event: WebSocketMessageEvent) => void;
-  onError?: (event: WebSocketErrorEvent) => void;
   onOpen?: () => void;
-  onClose?: (event: WebSocketCloseEvent) => void;
+  onClose?: (event: WebSocketCloseEvent & {isError: boolean}) => void;
 };
 
 export function useSubscription({
   url,
   onMessage,
-  onError,
   onClose,
   onOpen,
 }: {url: string | null} & SubscriptionEventProps) {
@@ -42,23 +40,34 @@ export function useSubscription({
 
       webSocket.onerror = (event) => {
         setStatus(getSubscriptionStatus(webSocket.readyState));
-        Bugsnag.notify(`WebSocket error "${event.message}"`);
-        onError && onError(event);
+        if (event.message !== null) {
+          Bugsnag.notify(`WebSocket error "${event.message}"`);
+        }
       };
 
       webSocket.onclose = (event) => {
         setStatus(getSubscriptionStatus(webSocket.readyState));
-        Bugsnag.leaveBreadcrumb(`WebSocket closed with url: ${url}`);
+        let isError: boolean;
 
-        // Reconnect immediately if close event is end of stream, otherwise use
+        // Reconnect immediately if close event is expected, otherwise use
         // exponetial backoff to retry.
-        if (event.code === 1001) {
+        if (
+          event.code === 1000 ||
+          event.code === 1001 ||
+          event.code === undefined
+        ) {
+          Bugsnag.leaveBreadcrumb(`WebSocket closed with code ${event.code}`);
+          isError = false;
           connect();
         } else {
+          isError = true;
+          Bugsnag.notify(
+            `WebSocket closed with unexpected event ${event.code} "${event.message}" (${event.reason})`,
+          );
           retryTimeout = retryWithCappedBackoff(retryCount, connect);
         }
 
-        onClose && onClose(event);
+        onClose && onClose({...event, isError});
       };
 
       webSocket.onopen = () => {
@@ -78,7 +87,7 @@ export function useSubscription({
       setWebSocket((ws) => {
         if (ws) {
           ws.onclose = null;
-          onClose && onClose({code: 1000, reason: 'Cleanup'});
+          onClose && onClose({code: 1000, reason: 'Cleanup', isError: false});
           ws.close();
         }
         return null;
