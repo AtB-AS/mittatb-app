@@ -1,12 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  AccessibilityInfo,
-  AccessibilityProps,
-  StyleProp,
-  View,
-  ViewStyle,
-  findNodeHandle,
-} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
@@ -42,7 +35,8 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const travellersInputSectionRef = useRef<View>(null);
+  const travellersInputSectionItemRef = useRef(null);
+
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const [userProfilesState, setUserProfilesState] = useState<
@@ -104,28 +98,24 @@ export function TravellerSelection({
   };
 
   const travellerSelectionOnPress = () => {
-    openBottomSheet(() => (
-      <TravellerSelectionSheet
-        selectionMode={selectionMode}
-        fareProductType={fareProductType}
-        selectableUserProfilesWithCountInit={userProfilesState}
-        close={(
-          chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
-        ) => {
-          if (chosenSelectableUserProfilesWithCounts !== undefined) {
-            setUserProfilesState(chosenSelectableUserProfilesWithCounts);
-          }
-          closeBottomSheet();
-
-          if (travellersInputSectionRef.current) {
-            const reactTag = findNodeHandle(travellersInputSectionRef.current);
-            if (reactTag) {
-              AccessibilityInfo.setAccessibilityFocus(reactTag);
+    openBottomSheet(
+      () => (
+        <TravellerSelectionSheet
+          selectionMode={selectionMode}
+          fareProductType={fareProductType}
+          selectableUserProfilesWithCountInit={userProfilesState}
+          close={(
+            chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
+          ) => {
+            if (chosenSelectableUserProfilesWithCounts !== undefined) {
+              setUserProfilesState(chosenSelectableUserProfilesWithCounts);
             }
-          }
-        }}
-      />
-    ));
+            closeBottomSheet();
+          }}
+        />
+      ),
+      travellersInputSectionItemRef,
+    );
   };
 
   return (
@@ -137,8 +127,11 @@ export function TravellerSelection({
             : t(PurchaseOverviewTexts.travellerSelection.title_single)}
         </ThemeText>
       </View>
-      <Section {...accessibility} containerViewRef={travellersInputSectionRef}>
-        <GenericClickableSectionItem onPress={travellerSelectionOnPress}>
+      <Section {...accessibility}>
+        <GenericClickableSectionItem
+          onPress={travellerSelectionOnPress}
+          ref={travellersInputSectionItemRef}
+        >
           <View style={styles.sectionContentContainer}>
             <View style={{flex: 1}}>
               <ThemeText type="body__primary--bold">

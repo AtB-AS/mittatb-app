@@ -12,4 +12,5 @@ export type Root_PurchaseOverviewScreenParams = {
   toTariffZone?: TariffZoneWithMetadata;
   mode?: 'Ticket' | 'TravelSearch';
   travelDate?: string;
+  setA11yFocusToZonesSelection?: boolean;
 };

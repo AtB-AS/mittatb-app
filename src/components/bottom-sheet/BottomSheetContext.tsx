@@ -53,7 +53,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
 
   const animatedOffset = useMemo(() => new Animated.Value(0), []);
   const focusRef = useFocusOnLoad();
-  const [closeRef, setCloseRef] = useState<RefObject<any> | undefined>();
+  let closeReference: any = undefined;
 
   useEffect(
     () => () =>
@@ -69,8 +69,8 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
-    if (closeRef) {
-      setTimeout(() => giveFocus(closeRef), 200);
+    if (closeReference) {
+      setTimeout(() => giveFocus(closeReference), 200);
     }
   };
 
@@ -80,7 +80,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
     useBackdrop: boolean = true,
   ) => {
     setContentFunction(() => contentFunction);
-    setCloseRef(closeRef);
+    closeReference = closeRef;
     setBackdropEnabled(useBackdrop);
     setIsOpen(true);
   };

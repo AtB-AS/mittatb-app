@@ -7,8 +7,15 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import React from 'react';
-import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {
+  AccessibilityInfo,
+  AccessibilityProps,
+  findNodeHandle,
+  StyleProp,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -16,12 +23,14 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
+  setA11yFocusToZonesSelection?: boolean;
   onSelect: (t: {
     fromTariffZone: TariffZoneWithMetadata;
     toTariffZone: TariffZoneWithMetadata;
@@ -36,11 +45,18 @@ export function ZonesSelection({
   fromTariffZone,
   toTariffZone,
   preassignedFareProduct,
+  setA11yFocusToZonesSelection,
   onSelect,
   style,
 }: ZonesSelectionProps) {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const zonesInputSectionItemRef = useRef(null);
+
+  useEffect(() => {
+    setA11yFocusToZonesSelection &&
+      setTimeout(() => giveFocus(zonesInputSectionItemRef), 300);
+  }, [setA11yFocusToZonesSelection]);
 
   const accessibility: AccessibilityProps = {
     accessible: true,
@@ -86,15 +102,16 @@ export function ZonesSelection({
       </ThemeText>
       <Section {...accessibility}>
         <GenericClickableSectionItem
-          onPress={() =>
+          onPress={() => {
             onSelect({
               fromTariffZone,
               toTariffZone,
               fareProductTypeConfig,
               preassignedFareProduct,
-            })
-          }
+            });
+          }}
           testID="selectZonesButton"
+          ref={zonesInputSectionItemRef}
         >
           <View style={styles.sectionContentContainer}>
             <View>
