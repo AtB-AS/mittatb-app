@@ -20,7 +20,7 @@ import {GeoLocation} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useIsFocused} from '@react-navigation/native';
 import {useDebounce} from '@atb/utils/useDebounce';
-import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResult';
+import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
 import haversine from 'haversine-distance';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {ErrorType} from '@atb/api/utils';
