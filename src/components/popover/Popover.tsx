@@ -1,10 +1,12 @@
 import RnPopover from 'react-native-popover-view';
-import React, {ReactNode, RefObject, useState} from 'react';
+import React, {ReactNode, RefObject} from 'react';
 import {Dimensions, TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useIsFocused} from '@react-navigation/native';
 
 export type PopoverProps = {
   from: RefObject<View> | ReactNode;
@@ -21,19 +23,22 @@ export const Popover = ({
   text,
 }: PopoverProps) => {
   const style = useStyles();
-  const [isVisible, setIsVisible] = useState(isOpen);
+  const insets = useSafeAreaInsets();
+  const isFocused = useIsFocused();
 
   const onRequestClose = () => {
-    setIsVisible(false);
     if (onClose) onClose();
   };
+
+  if (!isFocused) return null;
 
   return (
     <RnPopover
       from={from}
-      isVisible={isVisible}
+      isVisible={isOpen}
       onRequestClose={onRequestClose}
       popoverStyle={style.popover}
+      displayAreaInsets={insets}
     >
       <View>
         <View style={style.heading}>
@@ -53,6 +58,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     maxWidth: Dimensions.get('window').width * 0.6,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.medium,
+    backgroundColor: theme.static.background.background_0.background,
   },
   closeIcon: {
     marginLeft: theme.spacings.small,
