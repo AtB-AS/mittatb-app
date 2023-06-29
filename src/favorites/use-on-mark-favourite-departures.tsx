@@ -99,14 +99,14 @@ export function useOnMarkFavouriteDepartures(
       );
     } else if (line.lineName && line.lineNumber) {
       openBottomSheet(
-        (close, focusRef) =>
+        (close, onOpenFocusRef) =>
           line.lineName && line.lineNumber ? (
             <FavoriteDialogSheet
               lineName={line.lineName}
               lineNumber={line.lineNumber}
               addFavorite={addFavorite}
               close={close}
-              ref={focusRef}
+              ref={onOpenFocusRef}
             />
           ) : (
             <></>

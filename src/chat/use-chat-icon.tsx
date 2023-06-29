@@ -20,8 +20,8 @@ export const useChatIcon = (
   const {t} = useTranslation();
 
   const openContactSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <ContactSheet close={close} ref={focusRef} />
+    openBottomSheet((close, onOpenFocusRef) => (
+      <ContactSheet close={close} ref={onOpenFocusRef} />
     ));
   };
 

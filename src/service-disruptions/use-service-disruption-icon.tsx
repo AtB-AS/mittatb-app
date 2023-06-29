@@ -24,8 +24,8 @@ export const useServiceDisruptionIcon = (
   );
 
   const openServiceDisruptionSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <ServiceDisruptionSheet close={close} ref={focusRef} />
+    openBottomSheet((close, onOpenFocusRef) => (
+      <ServiceDisruptionSheet close={close} ref={onOpenFocusRef} />
     ));
   };
 

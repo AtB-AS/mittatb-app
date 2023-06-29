@@ -66,10 +66,10 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
 
   const openBottomSheet = () => {
     open(
-      (close, focusRef) => (
+      (close, onOpenFocusRef) => (
         <TravelSearchFiltersBottomSheet
           close={close}
-          ref={focusRef}
+          ref={onOpenFocusRef}
           filtersSelection={filtersSelection}
           onSave={setFiltersSelection}
         />

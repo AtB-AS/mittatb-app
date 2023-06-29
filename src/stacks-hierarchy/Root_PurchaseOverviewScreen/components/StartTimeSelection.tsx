@@ -35,12 +35,12 @@ export function StartTimeSelection({
   const styles = useStyles();
 
   const openTravelDateSheet = () => {
-    openBottomSheet((close, focusRef) => (
+    openBottomSheet((close, onOpenFocusRef) => (
       <TravelDateSheet
         close={close}
         save={setTravelDate}
         travelDate={travelDate}
-        ref={focusRef}
+        ref={onOpenFocusRef}
       />
     ));
   };
