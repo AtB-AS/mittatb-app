@@ -351,7 +351,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                       : undefined,
                   }}
                   viewContainerStyle={style.filterButton}
-                  ref={filtersState.closeRef}
+                  ref={filtersState.onCloseFocusRef}
                 />
               )}
             </View>

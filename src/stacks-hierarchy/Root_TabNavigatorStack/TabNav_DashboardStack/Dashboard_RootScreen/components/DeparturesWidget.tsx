@@ -46,7 +46,7 @@ export const DeparturesWidget = ({
   useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
 
   const {open: openBottomSheet} = useBottomSheet();
-  const closeRef = useRef(null);
+  const onCloseFocusRef = useRef(null);
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet((close) => {
       return (
@@ -55,7 +55,7 @@ export const DeparturesWidget = ({
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
-    }, closeRef);
+    }, onCloseFocusRef);
   }
 
   const sortedStopPlaceGroups = location
@@ -129,7 +129,7 @@ export const DeparturesWidget = ({
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}
-          ref={closeRef}
+          ref={onCloseFocusRef}
           testID="selectFavoriteDepartures"
         />
       )}

@@ -17,7 +17,7 @@ type TravelSearchFiltersState =
       anyFiltersApplied: boolean;
       resetTransportModes: () => void;
       disableFlexibleTransport: () => void;
-      closeRef: React.Ref<any>;
+      onCloseFocusRef: React.Ref<any>;
     }
   | {enabled: false; filtersSelection?: undefined};
 
@@ -59,7 +59,7 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       transportModes: initialTransportModeSelection,
       flexibleTransport: initialFlexibleTransportFilterOption,
     });
-  const closeRef = useRef();
+  const onCloseFocusRef = useRef();
 
   if (!travelSearchFiltersEnabled) return {enabled: false};
   if (!travelSearchFilters?.transportModes) return {enabled: false};
@@ -74,7 +74,7 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
           onSave={setFiltersSelection}
         />
       ),
-      closeRef,
+      onCloseFocusRef,
     );
   };
 
@@ -105,6 +105,6 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       setFilters(filtersWithFlexibleTransportDisabled);
       setFiltersSelection(filtersWithFlexibleTransportDisabled);
     },
-    closeRef,
+    onCloseFocusRef,
   };
 };

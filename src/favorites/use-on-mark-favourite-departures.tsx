@@ -30,7 +30,7 @@ export function useOnMarkFavouriteDepartures(
     useFavorites();
   const {t} = useTranslation();
   const {open: openBottomSheet} = useBottomSheet();
-  const closeRef = useRef(null);
+  const onCloseFocusRef = useRef(null);
   if (!line.id || !line.lineName || !line.lineNumber) {
     return {onMarkFavourite: undefined, existingFavorite: undefined};
   }
@@ -111,7 +111,7 @@ export function useOnMarkFavouriteDepartures(
           ) : (
             <></>
           ),
-        closeRef,
+        onCloseFocusRef,
       );
     }
   };
