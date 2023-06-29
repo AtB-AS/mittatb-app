@@ -23,6 +23,7 @@ const HarborSearchTexts = {
   results: {
     resultsHeading: _('Søkeresultater', 'Search results'),
     nearestHeading: _('Nærmest deg', 'Nearest'),
+    departureHeading: _('Avreisekaier', 'Departure harbors'),
     arrivalHeading: (fromHarborName: string) =>
       _(
         `Ankomststeder fra ${fromHarborName}`,

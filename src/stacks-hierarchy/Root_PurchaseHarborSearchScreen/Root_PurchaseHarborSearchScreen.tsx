@@ -16,12 +16,9 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
-import {GeoLocation} from '@atb/favorites';
-import {useGeolocationState} from '@atb/GeolocationContext';
 import {useIsFocused} from '@react-navigation/native';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
-import haversine from 'haversine-distance';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {ErrorType} from '@atb/api/utils';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -34,7 +31,6 @@ import {
   getStopPlacesByMode,
 } from '@atb/api/stop-places';
 import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
-import sortBy from 'lodash.sortby';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
@@ -46,8 +42,6 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const {location} = useGeolocationState();
-  const currentLocation = location || undefined;
 
   const onSave = (selectedStopPlace: StopPlace) => {
     selectedStopPlace &&
@@ -81,28 +75,6 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   }, [error]);
 
   const debouncedText = useDebounce(text, 200);
-
-  const [harborResults, setHarborResults] = useState<StopPlaces | []>([]);
-
-  useEffect(() => {
-    harbors && setHarborResults(sortHarbors(harbors, currentLocation));
-  }, [harbors, currentLocation]);
-
-  useEffect(() => {
-    if (debouncedText.length > 1 && harbors) {
-      setHarborResults(
-        sortHarbors(harbors, currentLocation).filter((harbor) => {
-          return harbor.name
-            .toLowerCase()
-            .includes(debouncedText.toLowerCase());
-        }),
-      );
-    } else {
-      harbors && setHarborResults(sortHarbors(harbors, currentLocation));
-    }
-  }, [debouncedText]);
-
-  const showEmptyResultText = !harborResults.length && !!debouncedText;
 
   return (
     <View style={styles.container}>
@@ -152,47 +124,15 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         )}
 
         <HarborResults
-          harbors={harborResults}
+          harbors={harbors}
           onSelect={onSave}
           searchText={debouncedText}
           fromHarborName={fromHarbor?.name}
         />
-
-        {showEmptyResultText && (
-          <MessageBox
-            type="info"
-            message={t(HarborSearchTexts.messages.emptyResult)}
-          />
-        )}
       </ScrollView>
     </View>
   );
 };
-// sort by distance or alphabetically
-function sortHarbors(harbors: StopPlaces, location?: GeoLocation): StopPlaces {
-  if (location) {
-    return harbors
-      ?.map((stopPlace) => {
-        return {
-          id: stopPlace.id,
-          name: stopPlace.name,
-          distance: getDistance(stopPlace, location),
-        };
-      })
-      .filter((stopPlace) => stopPlace.distance != -1)
-      .sort((a, b) => a.distance - b.distance);
-  }
-  return sortBy(harbors, ['name']);
-}
-
-function getDistance(
-  stopPlace: {latitude?: number; longitude?: number},
-  location: GeoLocation,
-) {
-  return stopPlace?.latitude && stopPlace?.longitude
-    ? haversine(location.coordinates, [stopPlace.longitude, stopPlace.latitude])
-    : -1;
-}
 
 function translateErrorType(
   errorType: ErrorType,
@@ -210,7 +150,7 @@ function translateErrorType(
 function useGetHarbors(fromHarborId?: string) {
   const [error, setError] = useState<ErrorType | undefined>(undefined);
   const [isLoading, setIsLoading] = useIsLoading(true);
-  const [harbors, setHarbors] = useState<StopPlaces | undefined>(undefined);
+  const [harbors, setHarbors] = useState<StopPlaces | []>([]);
 
   const fetchHarbors = useCallback(() => {
     if (fromHarborId) {
@@ -230,7 +170,7 @@ function useGetHarbors(fromHarborId?: string) {
     setIsLoading(true);
     fetchHarbors()
       .then((harborsResult) => {
-        setHarbors(harborsResult);
+        setHarbors(harborsResult ?? []);
         setError(undefined);
       })
       .catch((e) => {
