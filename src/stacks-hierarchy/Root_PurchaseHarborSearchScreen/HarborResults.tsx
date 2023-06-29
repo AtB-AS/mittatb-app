@@ -13,14 +13,14 @@ import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch
 type Props = {
   harbors: StopPlaces;
   onSelect: (l: StopPlace) => void;
-  showingNearest?: boolean;
+  searchText?: string;
   fromHarborName?: string;
 };
 
-export const HarborResult: React.FC<Props> = ({
+export const HarborResults: React.FC<Props> = ({
   harbors,
   onSelect,
-  showingNearest = false,
+  searchText,
   fromHarborName,
 }) => {
   const styles = useThemeStyles();
@@ -32,7 +32,7 @@ export const HarborResult: React.FC<Props> = ({
         <ThemeText type="body__secondary" color="secondary">
           {fromHarborName
             ? t(HarborSearchTexts.results.arrivalHeading(fromHarborName))
-            : showingNearest
+            : searchText
             ? t(HarborSearchTexts.results.nearestHeading)
             : t(HarborSearchTexts.results.resultsHeading)}
         </ThemeText>

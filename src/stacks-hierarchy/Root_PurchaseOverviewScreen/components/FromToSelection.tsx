@@ -30,7 +30,7 @@ type SelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function PlaceSelection({
+export function FromToSelection({
   fromTariffZone,
   toTariffZone,
   fareProductTypeConfig,
