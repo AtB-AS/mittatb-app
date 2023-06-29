@@ -22,7 +22,7 @@ import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
-import {PlaceSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/PlaceSelection';
+import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -145,7 +145,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
           />
-          <PlaceSelection
+          <FromToSelection
             fareProductTypeConfig={params.fareProductTypeConfig}
             fromHarbor={params.fromHarbor}
             toHarbor={params.toHarbor}

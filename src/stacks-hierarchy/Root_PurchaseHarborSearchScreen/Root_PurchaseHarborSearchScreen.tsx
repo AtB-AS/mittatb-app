@@ -20,7 +20,7 @@ import {GeoLocation} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useIsFocused} from '@react-navigation/native';
 import {useDebounce} from '@atb/utils/useDebounce';
-import {HarborResult} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResult';
+import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
 import haversine from 'haversine-distance';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {ErrorType} from '@atb/api/utils';
@@ -49,15 +49,15 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const {location} = useGeolocationState();
   const currentLocation = location || undefined;
 
-  const onSave = (selectedZone: StopPlace) => {
-    selectedZone &&
+  const onSave = (selectedStopPlace: StopPlace) => {
+    selectedStopPlace &&
       navigation.navigate({
         name: 'Root_PurchaseOverviewScreen',
         params: {
           mode: 'Ticket',
           fareProductTypeConfig,
-          fromHarbor: fromHarbor ?? selectedZone,
-          toHarbor: fromHarbor ? selectedZone : undefined,
+          fromHarbor: fromHarbor ?? selectedStopPlace,
+          toHarbor: fromHarbor ? selectedStopPlace : undefined,
         },
         merge: true,
       });
@@ -86,7 +86,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
 
   useEffect(() => {
     harbors && setHarborResults(sortHarbors(harbors, currentLocation));
-  }, [harbors, location]);
+  }, [harbors, currentLocation]);
 
   useEffect(() => {
     if (debouncedText.length > 1 && harbors) {
@@ -98,9 +98,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         }),
       );
     } else {
-      harbors &&
-        location &&
-        setHarborResults(sortHarbors(harbors, currentLocation));
+      harbors && setHarborResults(sortHarbors(harbors, currentLocation));
     }
   }, [debouncedText]);
 
@@ -153,13 +151,11 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
           </View>
         )}
 
-        <HarborResult
+        <HarborResults
           harbors={harborResults}
           onSelect={onSave}
-          showingNearest={!!currentLocation && debouncedText.length < 2}
-          fromHarborName={
-            debouncedText.length < 2 ? fromHarbor?.name : undefined
-          }
+          searchText={debouncedText}
+          fromHarborName={fromHarbor?.name}
         />
 
         {showEmptyResultText && (
