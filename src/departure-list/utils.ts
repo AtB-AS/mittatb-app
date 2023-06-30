@@ -7,13 +7,9 @@ import {
 } from '@atb/api/departures/types';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
-import {
-  differenceInMinutesStrings,
-  isNumberOfMinutesInThePast,
-} from '@atb/utils/date';
+import {isNumberOfMinutesInThePast} from '@atb/utils/date';
 
 export const HIDE_AFTER_NUM_MINUTES = 1;
-const MAX_REALTIME_DELAY_MINUTES = 600;
 /***
  * Used to update all stops with new time from realtime mapping object returned
  * from the BFF. It also removes outdated departures which most likely have passed.
@@ -86,21 +82,10 @@ function updateDeparturesWithRealtime(
 
       const departureRealtime = realtime.departures[serviceJourneyId];
 
-      if (!departureRealtime) {
-        return departure;
-      }
-
-      // Check if the real-time expected departure time exceeds the maximum allowed delay
-      // (i.e. not scheduled for more than MAX_REALTIME_DELAY_MINUTES in the future),
-      // and return the original planned departure if this is the case.
-      // This is done to ensure that we don't update the next day's departure that has the
-      // same serviceJourneyId.
-      const realmtimeDifferenceInMinutes = differenceInMinutesStrings(
-        departureRealtime.timeData.expectedDepartureTime,
-        departure.aimedTime,
-      );
-
-      if (realmtimeDifferenceInMinutes > MAX_REALTIME_DELAY_MINUTES) {
+      if (
+        !departureRealtime ||
+        departure.aimedTime !== departureRealtime.timeData.aimedDepartureTime
+      ) {
         return departure;
       }
 
