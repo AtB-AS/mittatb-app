@@ -76,7 +76,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               }}
             />
           ),
-          undefined,
+          //undefined,
           false,
         );
       } else if (isBikeStation(selectedFeature)) {
@@ -88,7 +88,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               close={closeWithCallback}
             />
           ),
-          undefined,
+          //undefined,
           false,
         );
       } else if (isCarStation(selectedFeature)) {
@@ -100,7 +100,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               close={closeWithCallback}
             />
           ),
-          undefined,
+          //undefined,
           false,
         );
       } else if (isVehicle(selectedFeature)) {
@@ -113,7 +113,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               />
             );
           },
-          undefined,
+          //undefined,
           false,
         );
       } else {

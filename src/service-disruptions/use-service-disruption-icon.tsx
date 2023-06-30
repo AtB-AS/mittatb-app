@@ -16,7 +16,7 @@ export const useServiceDisruptionIcon = (
 ): IconButtonProps | undefined => {
   const {t} = useTranslation();
   const {findGlobalMessages} = useGlobalMessagesState();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const now = useNow(2500);
 
   const globalMessages = findGlobalMessages('all').filter((gm) =>
@@ -24,7 +24,7 @@ export const useServiceDisruptionIcon = (
   );
 
   const openServiceDisruptionSheet = () => {
-    openBottomSheet((close, onOpenFocusRef) => (
+    openBottomSheet((close) => (
       <ServiceDisruptionSheet close={close} ref={onOpenFocusRef} />
     ));
   };

@@ -15,7 +15,7 @@ import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {Coordinates} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -45,8 +45,8 @@ export const DeparturesWidget = ({
 
   useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
 
-  const {open: openBottomSheet} = useBottomSheet();
-  const onCloseFocusRef = useRef(null);
+  const {open: openBottomSheet, onCloseFocusRef} = useBottomSheet();
+
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet((close) => {
       return (
@@ -55,7 +55,7 @@ export const DeparturesWidget = ({
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
-    }, onCloseFocusRef);
+    });
   }
 
   const sortedStopPlaceGroups = location

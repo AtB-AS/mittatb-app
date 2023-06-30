@@ -66,9 +66,9 @@ export const DateSelection = ({
     setSearchTime(time);
   };
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const onLaterTimePress = () => {
-    openBottomSheet((close, onOpenFocusRef) => (
+    openBottomSheet((close) => (
       <DepartureTimeSheet
         ref={onOpenFocusRef}
         close={close}

@@ -31,11 +31,11 @@ export function StartTimeSelection({
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const styles = useStyles();
 
   const openTravelDateSheet = () => {
-    openBottomSheet((close, onOpenFocusRef) => (
+    openBottomSheet((close) => (
       <TravelDateSheet
         close={close}
         save={setTravelDate}

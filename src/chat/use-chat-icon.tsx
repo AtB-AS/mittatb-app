@@ -16,11 +16,11 @@ export const useChatIcon = (
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const {t} = useTranslation();
 
   const openContactSheet = () => {
-    openBottomSheet((close, onOpenFocusRef) => (
+    openBottomSheet((close) => (
       <ContactSheet close={close} ref={onOpenFocusRef} />
     ));
   };

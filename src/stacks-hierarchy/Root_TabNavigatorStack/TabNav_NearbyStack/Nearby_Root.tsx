@@ -138,9 +138,9 @@ const NearbyOverview: React.FC<Props> = ({
       initialLocation: fromLocation,
     });
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const onLaterTimePress = () => {
-    openBottomSheet((close, onOpenFocusRef) => (
+    openBottomSheet((close) => (
       <DepartureTimeSheet
         ref={onOpenFocusRef}
         close={close}
