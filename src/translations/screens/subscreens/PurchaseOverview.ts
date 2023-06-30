@@ -155,6 +155,18 @@ const PurchaseOverviewTexts = {
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,
     ),
+    messageInHarborPeriod: _(
+      `Gjelder for hurtigbåt i begge retninger på valgt strekning.`,
+      `Applies for boat between selected harbors`,
+    ),
+    messageInHarborSingle: _(
+      `Gjelder for hurtigbåt én vei på valgt strekning`,
+      `Applies for boat one way between selected harbors`,
+    ),
+    messageInHarborZones: _(
+      'Gjelder for buss/trikk i sonene du reiser til og fra',
+      'Applies for for bus/tram in departure and destination zones',
+    ),
     messageAppliesFor: (text: string) =>
       _(`Gjelder for ${text}`, `Applies for ${text}`),
     button: _('Til betaling', 'To payment'),

@@ -62,6 +62,29 @@ export function Summary({
           </ThemeText>
         );
       case 'multiple-stop-harbor':
+        const harbortext = (
+          <ThemeText type="body__secondary" style={styles.message}>
+            {t(PurchaseOverviewTexts.summary.messageInHarborZones)}
+          </ThemeText>
+        );
+        if (fareProductTypeConfig.type === 'boat-period')
+          return (
+            <>
+              <ThemeText type="body__secondary" style={styles.message}>
+                {t(PurchaseOverviewTexts.summary.messageInHarborPeriod)}
+              </ThemeText>
+              {harbortext}
+            </>
+          );
+        return (
+          <>
+            <ThemeText type="body__secondary" style={styles.message}>
+              {t(PurchaseOverviewTexts.summary.messageInHarborSingle)}
+            </ThemeText>
+            {harbortext}
+          </>
+        );
+
       case 'none':
         return (
           <ThemeText type="body__secondary" style={styles.message}>
