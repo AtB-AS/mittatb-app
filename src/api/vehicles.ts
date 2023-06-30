@@ -31,9 +31,8 @@ export const getServiceJourneyVehicles = async (
 
 export const useLiveVehicleSubscription = ({
   serviceJourneyId,
-  onClose,
+  onError,
   onMessage,
-  onOpen,
 }: {serviceJourneyId?: string} & SubscriptionEventProps) => {
   const query = qs.stringify({serviceJourneyId});
 
@@ -42,10 +41,9 @@ export const useLiveVehicleSubscription = ({
     query,
   );
 
-  return useSubscription({
+  useSubscription({
     url: serviceJourneyId ? url : null,
     onMessage,
-    onOpen,
-    onClose,
+    onError,
   });
 };
