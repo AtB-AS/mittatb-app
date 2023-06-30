@@ -1,2 +1,2 @@
-export {Popover} from './Popover';
-export {OnboardingPopover} from './OnboardingPopover';
+export {ToolTip} from './ToolTip';
+export {OneTimeToolTip} from './OneTimeToolTip';

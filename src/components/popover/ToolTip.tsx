@@ -1,4 +1,4 @@
-import RnPopover from 'react-native-popover-view';
+import Popover from 'react-native-popover-view';
 import React, {ReactNode, RefObject} from 'react';
 import {Dimensions, TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -8,20 +8,20 @@ import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useIsFocused} from '@react-navigation/native';
 
-export type PopoverProps = {
+export type ToolTipProps = {
   from: RefObject<View> | ReactNode;
   heading?: string;
   text: string;
   isOpen?: boolean;
   onClose?: () => void;
 };
-export const Popover = ({
+export const ToolTip = ({
   from,
   isOpen,
   onClose,
   heading,
   text,
-}: PopoverProps) => {
+}: ToolTipProps) => {
   const style = useStyles();
   const insets = useSafeAreaInsets();
   const isFocused = useIsFocused();
@@ -33,7 +33,7 @@ export const Popover = ({
   if (!isFocused) return null;
 
   return (
-    <RnPopover
+    <Popover
       from={from}
       isVisible={isOpen}
       onRequestClose={onRequestClose}
@@ -49,7 +49,7 @@ export const Popover = ({
         </View>
         <ThemeText>{text}</ThemeText>
       </View>
-    </RnPopover>
+    </Popover>
   );
 };
 

@@ -274,10 +274,8 @@ export const Profile_DebugInfoScreen = () => {
             }
           />
           <LinkSectionItem
-            text="Reset onboarding popovers"
-            onPress={() =>
-              storage.remove(StorageModelKeysEnum.OnboardingPopover)
-            }
+            text="Reset one time tool tips"
+            onPress={() => storage.remove(StorageModelKeysEnum.OneTimeToolTip)}
           />
         </Section>
         <Section withPadding withTopPadding>
