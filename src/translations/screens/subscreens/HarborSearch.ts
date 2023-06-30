@@ -19,7 +19,7 @@ const HarborSearchTexts = {
     arrivalHeading: (fromHarborName: string) =>
       _(
         `Ankomststeder fra ${fromHarborName}`,
-        `Arrival harbors from ${fromHarborName}`,
+        `Destination harbors from ${fromHarborName}`,
       ),
     item: {
       a11yLabel: (venueName: string) =>
