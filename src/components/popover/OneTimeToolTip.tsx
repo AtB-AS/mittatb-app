@@ -2,11 +2,12 @@ import {ToolTipProps, ToolTip} from './ToolTip';
 import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useEffect, useState} from 'react';
 
-type Props = Omit<ToolTipProps, 'isOpen'> & {oneTimeKey: string};
+type Props = ToolTipProps & {oneTimeKey: string};
 
 export const OneTimeToolTip = (props: Props) => {
   const [toolTips, setToolTips] = useState<string[]>();
-  const isVisible = toolTips && !toolTips.includes(props.oneTimeKey);
+  const isVisible =
+    props.isOpen && toolTips && !toolTips.includes(props.oneTimeKey);
 
   useEffect(() => {
     getSeenToolTips().then(setToolTips);
