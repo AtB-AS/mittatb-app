@@ -1,30 +1,21 @@
 import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
-import {
-  Language,
-  PurchaseOverviewTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StopPlace} from '@atb/api/types/stopPlaces';
-
-export type StopPlaceProps = {
-  fromHarbor?: StopPlace;
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
-};
+import {TFunc} from '@leile/lobo-t';
+import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 
 type StopPlaceSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   fromHarbor?: StopPlace;
   toHarbor?: StopPlace;
   preassignedFareProduct: PreassignedFareProduct;
-  onSelect: (t: StopPlaceProps) => void;
+  onSelect: (t: Root_PurchaseHarborSearchScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -37,17 +28,10 @@ export function HarborSelection({
   style,
 }: StopPlaceSelectionProps) {
   const styles = useStyles();
-  const {t, language} = useTranslation();
-
-  const accessibility: AccessibilityProps = {
-    accessible: true,
-    accessibilityRole: 'button',
-    accessibilityLabel: a11yLabel(language, t, fromHarbor, toHarbor),
-    accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
-  };
+  const {t} = useTranslation();
 
   return (
-    <View style={style}>
+    <View style={style} accessible={false}>
       <ThemeText
         type="body__secondary"
         color="secondary"
@@ -58,8 +42,18 @@ export function HarborSelection({
       >
         {t(PurchaseOverviewTexts.stopPlaces.harborSelection.select.text)}
       </ThemeText>
-      <Section {...accessibility}>
+      <Section accessible={false}>
         <GenericClickableSectionItem
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yLabel(
+              fromHarbor?.name,
+            ),
+          )}
+          accessibilityHint={t(
+            PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yHint,
+          )}
           onPress={() =>
             onSelect({
               fareProductTypeConfig,
@@ -75,13 +69,23 @@ export function HarborSelection({
                 type="body__secondary"
                 style={styles.toFromLabel}
               >
-                {t(PurchaseOverviewTexts.zones.label.from)}
+                {t(PurchaseOverviewTexts.fromToLabel.from)}
               </ThemeText>
-              <HarborLabel harbor={fromHarbor} />
+              <HarborLabel t={t} harbor={fromHarbor} />
             </View>
           </>
         </GenericClickableSectionItem>
         <GenericClickableSectionItem
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yLabel(
+              fromHarbor?.name,
+            ),
+          )}
+          accessibilityHint={t(
+            PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yHint,
+          )}
           onPress={() =>
             fromHarbor &&
             onSelect({
@@ -98,9 +102,9 @@ export function HarborSelection({
               type="body__secondary"
               style={styles.toFromLabel}
             >
-              {t(PurchaseOverviewTexts.zones.label.to)}
+              {t(PurchaseOverviewTexts.fromToLabel.to)}
             </ThemeText>
-            <HarborLabel harbor={toHarbor} disabled={!fromHarbor} />
+            <HarborLabel t={t} harbor={toHarbor} disabled={!fromHarbor} />
           </View>
         </GenericClickableSectionItem>
       </Section>
@@ -111,7 +115,9 @@ export function HarborSelection({
 const HarborLabel = ({
   harbor,
   disabled = false,
+  t,
 }: {
+  t: TFunc<any>;
   harbor?: StopPlace;
   disabled?: boolean;
 }) => {
@@ -124,35 +130,9 @@ const HarborLabel = ({
       style={{flexShrink: 1}}
       color={disabled ? 'disabled' : 'primary'}
     >
-      {'Ingen kai valgt'}
+      {t(PurchaseOverviewTexts.stopPlaces.harborSelection.noneSelected.text)}
     </ThemeText>
   );
-};
-
-const a11yLabel = (
-  language: Language,
-  t: TranslateFunction,
-  from?: StopPlace,
-  to?: StopPlace,
-): string => {
-  const getHarborText = (harbor?: StopPlace) => {
-    const venueName = harbor?.name ? `${harbor.name}, ` : '';
-    const zoneName = harbor?.name;
-    return (
-      venueName +
-      (zoneName ??
-        t(PurchaseOverviewTexts.stopPlaces.harborSelection.noneSelected.text))
-    );
-  };
-
-  const prefix = t(PurchaseOverviewTexts.zones.a11yLabelPrefixMultiple);
-  const fromLabel = `${t(
-    PurchaseOverviewTexts.zones.label.from,
-  )} ${getHarborText(from)}`;
-  const toLabel = `${t(PurchaseOverviewTexts.zones.label.to)} ${getHarborText(
-    to,
-  )}`;
-  return `${prefix} ${fromLabel}, ${toLabel}`;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

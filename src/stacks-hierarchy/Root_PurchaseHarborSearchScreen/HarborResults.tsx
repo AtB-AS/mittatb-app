@@ -84,9 +84,7 @@ export const HarborResults: React.FC<Props> = ({
                 style={styles.button}
                 testID={'harborResult' + index}
               >
-                <View style={{flexDirection: 'column'}}>
-                  <ThemeIcon svg={Boat} />
-                </View>
+                <ThemeIcon svg={Boat} />
                 <View style={styles.nameContainer}>
                   <ThemeText type={'body__primary--bold'}>
                     {harbor.name}

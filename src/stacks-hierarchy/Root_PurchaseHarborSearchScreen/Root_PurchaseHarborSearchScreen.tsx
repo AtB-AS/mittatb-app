@@ -36,7 +36,8 @@ import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
 export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
-  const {fromHarbor, fareProductTypeConfig} = route.params;
+  const {fromHarbor, fareProductTypeConfig, preassignedFareProduct} =
+    route.params;
 
   const {t} = useTranslation();
   const inputRef = useRef<InternalTextInput>(null);
@@ -50,6 +51,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         params: {
           mode: 'Ticket',
           fareProductTypeConfig,
+          preassignedFareProduct,
           fromHarbor: fromHarbor ?? selectedStopPlace,
           toHarbor: fromHarbor ? selectedStopPlace : undefined,
         },
@@ -57,7 +59,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
       });
   };
 
-  const styles = useMapStyles();
+  const styles = useStyles();
   // capturing focus on mount and on press
   const focusInput = () => setTimeout(() => inputRef.current?.focus(), 0);
   const isFocused = useIsFocused();
@@ -188,16 +190,13 @@ function useGetHarbors(fromHarborId?: string) {
   };
 }
 
-const useMapStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_2.background,
   },
   headerContainer: {
     backgroundColor: theme.static.background.background_accent_0.background,
-  },
-  selectorButtons: {
-    margin: theme.spacings.medium,
   },
   header: {
     backgroundColor: theme.static.background.background_accent_0.background,

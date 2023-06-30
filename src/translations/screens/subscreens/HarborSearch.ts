@@ -5,20 +5,12 @@ const HarborSearchTexts = {
     placeholder: _('Søk etter kai', 'Search for a harbor'),
   },
   header: {
-    titleFrom: _('Velg kai for avreise', 'Search for harbor'),
-    titleTo: _('Velg kai for ankomst', 'Search for harbor'),
+    titleFrom: _('Velg kai for avreise', 'Search for departure harbor'),
+    titleTo: _('Velg kai for ankomst', 'Search for destination harbor'),
   },
   stopPlaces: {
     from: _(`Fra`, `From`),
     to: _(`Til`, `To`),
-    item: {
-      a11yLabel: (zoneName: string) =>
-        _(`Kai ${zoneName}`, `Harbor ${zoneName}`),
-      a11yHint: _(
-        'Aktivér for å velge denne kaia.',
-        'Activate to select this harbor.',
-      ),
-    },
   },
   results: {
     resultsHeading: _('Søkeresultater', 'Search results'),

@@ -60,6 +60,10 @@ const PurchaseOverviewTexts = {
     '24-timersbilletten inkluderer ikke nattbuss.',
     'The 24 hour pass does not include night bus.',
   ),
+  fromToLabel: {
+    from: _('Fra', 'From'),
+    to: _('Til', 'To'),
+  },
   stopPlaces: {
     harborSelection: {
       select: {
@@ -67,8 +71,30 @@ const PurchaseOverviewTexts = {
         a11yLabel: _('Velg kaier', 'Select harbors'),
       },
       noneSelected: {
-        text: _('Ingen kaier valgt', 'No harbors selected'),
-        a11yLabel: _('Ingen kaier valgt', 'No harbors selected'),
+        text: _('Ingen kai valgt', 'No harbors selected'),
+        a11yLabel: _('Ingen kai valgt', 'No harbors selected'),
+      },
+      from: {
+        a11yLabel: (harbor?: string) =>
+          _(
+            `Valgt avreisekai: ${harbor ?? 'Ingen kai valgt'}`,
+            `Selected departure harbor: ${harbor ?? 'No harbor selected'}`,
+          ),
+        a11yHint: _(
+          'Aktivér for å velge avreisekai',
+          'Activate to select departure harbor',
+        ),
+      },
+      to: {
+        a11yLabel: (harbor?: string) =>
+          _(
+            `Valgt ankomstkai: ${harbor ?? 'Ingen kai valgt'}`,
+            `Selected destination harbor: ${harbor ?? 'Ingen kai valgt'}`,
+          ),
+        a11yHint: _(
+          'Aktivér for å velge ankomstkai',
+          'Activate to select destination harbor',
+        ),
       },
     },
   },
@@ -85,10 +111,6 @@ const PurchaseOverviewTexts = {
         text: _('Velg holdeplass/sone(r)', 'Select stop/zone(s)'),
         a11yLabel: _('Velg holdeplass eller soner', 'Select stop or zones'),
       },
-    },
-    label: {
-      from: _('Fra', 'From'),
-      to: _('Til', 'To'),
     },
     zoneName: (zoneName: string) => _(`Sone ${zoneName}`, `Zone ${zoneName}`),
     a11yLabelPrefixSingle: _('Valgt sone:', 'Selected zone:'),

@@ -16,6 +16,7 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -23,12 +24,7 @@ type ZonesSelectionProps = {
   toTariffZone: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
   selectionMode: 'single' | 'multiple';
-  onSelect: (t: {
-    fromTariffZone: TariffZoneWithMetadata;
-    toTariffZone: TariffZoneWithMetadata;
-    fareProductTypeConfig: FareProductTypeConfig;
-    preassignedFareProduct: PreassignedFareProduct;
-  }) => void;
+  onSelect: (t: Root_PurchaseTariffZonesSearchByMapScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -92,7 +88,7 @@ export function ZonesSelection({
                       type="body__secondary"
                       style={styles.toFromLabel}
                     >
-                      {t(PurchaseOverviewTexts.zones.label.from)}
+                      {t(PurchaseOverviewTexts.fromToLabel.from)}
                     </ThemeText>
                     <ZoneLabel tariffZone={fromTariffZone} />
                   </View>
@@ -102,7 +98,7 @@ export function ZonesSelection({
                       type="body__secondary"
                       style={styles.toFromLabel}
                     >
-                      {t(PurchaseOverviewTexts.zones.label.to)}
+                      {t(PurchaseOverviewTexts.fromToLabel.to)}
                     </ThemeText>
                     <ZoneLabel tariffZone={toTariffZone} />
                   </View>
@@ -154,9 +150,9 @@ const a11yLabel = (
   } else {
     const prefix = t(PurchaseOverviewTexts.zones.a11yLabelPrefixMultiple);
     const fromLabel = `${t(
-      PurchaseOverviewTexts.zones.label.from,
+      PurchaseOverviewTexts.fromToLabel.from,
     )} ${getZoneText(from)}`;
-    const toLabel = `${t(PurchaseOverviewTexts.zones.label.to)} ${getZoneText(
+    const toLabel = `${t(PurchaseOverviewTexts.fromToLabel.to)} ${getZoneText(
       to,
     )}`;
     return `${prefix} ${fromLabel}, ${toLabel}`;
