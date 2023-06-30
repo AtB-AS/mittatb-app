@@ -7,7 +7,6 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StopPlace} from '@atb/api/types/stopPlaces';
-import {TFunc} from '@leile/lobo-t';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 
 type StopPlaceSelectionProps = {
@@ -71,7 +70,7 @@ export function HarborSelection({
               >
                 {t(PurchaseOverviewTexts.fromToLabel.from)}
               </ThemeText>
-              <HarborLabel t={t} harbor={fromHarbor} />
+              <HarborLabel harbor={fromHarbor} />
             </View>
           </>
         </GenericClickableSectionItem>
@@ -104,7 +103,7 @@ export function HarborSelection({
             >
               {t(PurchaseOverviewTexts.fromToLabel.to)}
             </ThemeText>
-            <HarborLabel t={t} harbor={toHarbor} disabled={!fromHarbor} />
+            <HarborLabel harbor={toHarbor} disabled={!fromHarbor} />
           </View>
         </GenericClickableSectionItem>
       </Section>
@@ -115,14 +114,12 @@ export function HarborSelection({
 const HarborLabel = ({
   harbor,
   disabled = false,
-  t,
 }: {
-  t: TFunc<any>;
   harbor?: StopPlace;
   disabled?: boolean;
 }) => {
   const harborName = harbor?.name;
-
+  const {t} = useTranslation();
   return harborName ? (
     <ThemeText type="body__primary--bold">{harborName}</ThemeText>
   ) : (

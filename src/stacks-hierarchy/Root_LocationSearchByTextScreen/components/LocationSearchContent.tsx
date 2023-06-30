@@ -1,10 +1,6 @@
 import {useFavorites} from '@atb/favorites';
 import {useSearchHistory, JourneySearchHistoryEntry} from '@atb/search-history';
-import {
-  LocationSearchTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {filterCurrentLocation, filterPreviousLocations} from '../utils';
@@ -20,8 +16,8 @@ import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';
 import {LocationResults} from './LocationResults';
-import {ErrorType} from '@atb/api/utils';
 import {StyleSheet} from '@atb/theme';
+import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 
 type LocationSearchContentProps = {
   label: string;
@@ -193,19 +189,6 @@ export function LocationSearchContent({
       )}
     </>
   );
-}
-
-function translateErrorType(
-  errorType: ErrorType,
-  t: TranslateFunction,
-): string {
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return t(LocationSearchTexts.messages.networkError);
-    default:
-      return t(LocationSearchTexts.messages.defaultError);
-  }
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

@@ -1,5 +1,7 @@
 import {PaymentType} from '@atb/ticketing';
 import {format, parseISO} from 'date-fns';
+import {ErrorType} from '@atb/api/utils';
+import {LocationSearchTexts, TranslateFunction} from '@atb/translations';
 
 export function getPaymentTypeName(paymentType: PaymentType) {
   switch (paymentType) {
@@ -22,4 +24,17 @@ export function getExpireDate(iso: string): string {
   // Example: The card expires the moment the date is 02.2021, but the date on the card is 01.2021
   date.setDate(date.getDate() - 1);
   return format(date, 'MM/yy');
+}
+
+export function translateErrorType(
+  errorType: ErrorType,
+  t: TranslateFunction,
+): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return t(LocationSearchTexts.messages.networkError);
+    default:
+      return t(LocationSearchTexts.messages.defaultError);
+  }
 }

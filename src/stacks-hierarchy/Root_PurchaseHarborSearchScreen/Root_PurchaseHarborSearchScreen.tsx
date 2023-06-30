@@ -1,10 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {
-  LocationSearchTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
@@ -32,6 +28,7 @@ import {
 } from '@atb/api/stop-places';
 import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
+import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -135,19 +132,6 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
     </View>
   );
 };
-
-function translateErrorType(
-  errorType: ErrorType,
-  t: TranslateFunction,
-): string {
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return t(LocationSearchTexts.messages.networkError);
-    default:
-      return t(LocationSearchTexts.messages.defaultError);
-  }
-}
 
 function useGetHarbors(fromHarborId?: string) {
   const [error, setError] = useState<ErrorType | undefined>(undefined);

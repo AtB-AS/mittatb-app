@@ -20,9 +20,7 @@ export const getStopPlacesByMode = async (
     transportModes,
     transportSubmodes,
   });
-  const result = await client.get<StopPlaces>(stringifyUrl(url, query), {
-    ...opts,
-  });
+  const result = await client.get<StopPlaces>(stringifyUrl(url, query), opts);
 
   return result.data;
 };
@@ -36,9 +34,7 @@ export const getStopPlaceConnections = async (
     authorities: AUTHORITY,
     fromStopPlaceId,
   });
-  const result = await client.get<StopPlaces>(stringifyUrl(url, query), {
-    ...opts,
-  });
+  const result = await client.get<StopPlaces>(stringifyUrl(url, query), opts);
 
   return result.data;
 };
