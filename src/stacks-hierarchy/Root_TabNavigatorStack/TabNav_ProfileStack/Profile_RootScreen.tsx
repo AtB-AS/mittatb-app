@@ -125,12 +125,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   async function selectFavourites() {
-    openBottomSheet((close) => {
+    openBottomSheet(() => {
       return (
         <SelectFavouritesBottomSheet
-          close={close}
+          close={closeBottomSheet}
           onEditFavouriteDeparture={() =>
             navigation.navigate('Profile_FavoriteDeparturesScreen')
           }

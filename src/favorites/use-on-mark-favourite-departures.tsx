@@ -29,7 +29,11 @@ export function useOnMarkFavouriteDepartures(
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
     useFavorites();
   const {t} = useTranslation();
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onOpenFocusRef,
+  } = useBottomSheet();
   if (!line.id || !line.lineName || !line.lineNumber) {
     return {onMarkFavourite: undefined, existingFavorite: undefined};
   }
@@ -97,13 +101,13 @@ export function useOnMarkFavouriteDepartures(
         ],
       );
     } else if (line.lineName && line.lineNumber) {
-      openBottomSheet((close) =>
+      openBottomSheet(() =>
         line.lineName && line.lineNumber ? (
           <FavoriteDialogSheet
             lineName={line.lineName}
             lineNumber={line.lineNumber}
             addFavorite={addFavorite}
-            close={close}
+            close={closeBottomSheet}
             ref={onOpenFocusRef}
           />
         ) : (

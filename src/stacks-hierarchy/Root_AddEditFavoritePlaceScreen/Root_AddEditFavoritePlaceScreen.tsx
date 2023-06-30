@@ -100,10 +100,10 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     );
   };
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const openEmojiSheet = () => {
-    openBottomSheet((close) => (
+    openBottomSheet(() => (
       <EmojiSheet
         localizedCategories={[
           t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
@@ -124,7 +124,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             setEmoji(emoji);
           }
         }}
-        close={close}
+        close={closeBottomSheet}
       />
     ));
   };

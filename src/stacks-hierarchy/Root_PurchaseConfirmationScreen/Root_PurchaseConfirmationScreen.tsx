@@ -85,7 +85,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
   const [previousMethod, setPreviousMethod] = useState<
@@ -235,14 +235,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   async function selectPaymentMethod() {
-    openBottomSheet((close) => {
+    openBottomSheet(() => {
       return (
         <SelectPaymentMethod
           onSelect={(option: PaymentMethod) => {
             selectPaymentOption(option);
-            close();
+            closeBottomSheet();
           }}
-          close={close}
+          close={closeBottomSheet}
           previousPaymentMethod={previousPaymentMethod}
         />
       );

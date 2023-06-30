@@ -21,7 +21,7 @@ import {Backdrop} from './Backdrop';
 import {ClickableBackground} from './ClickableBackground';
 import {AnimatedBottomSheet} from './AnimatedBottomSheet';
 
-type BottomSheetContentFunction = (close: () => void) => ReactNode;
+type BottomSheetContentFunction = () => ReactNode;
 
 type BottomSheetState = {
   open: (
@@ -46,9 +46,9 @@ export const BottomSheetProvider: React.FC = ({children}) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isBackdropEnabled, setBackdropEnabled] = useState(true);
-  const [contentFunction, setContentFunction] = useState<
-    (close: () => void) => ReactNode
-  >(() => () => null);
+  const [contentFunction, setContentFunction] = useState<() => ReactNode>(
+    () => () => null,
+  );
 
   const animatedOffset = useMemo(() => new Animated.Value(0), []);
   const onOpenFocusRef = useFocusOnLoad();
@@ -68,13 +68,11 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
-    if (onCloseFocusRef) {
-      giveFocus(onCloseFocusRef);
-    }
+    onCloseFocusRef && giveFocus(onCloseFocusRef);
   };
 
   const open = (
-    contentFunction: (close: () => void) => ReactNode,
+    contentFunction: () => ReactNode,
     useBackdrop: boolean = true,
   ) => {
     setContentFunction(() => contentFunction);
@@ -118,7 +116,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
           animatedOffset={animatedOffset}
           onLayout={onLayout}
         >
-          {contentFunction(close)}
+          {contentFunction()}
         </AnimatedBottomSheet>
       </>
     ),

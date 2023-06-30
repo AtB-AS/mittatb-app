@@ -45,13 +45,17 @@ export const DeparturesWidget = ({
 
   useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
 
-  const {open: openBottomSheet, onCloseFocusRef} = useBottomSheet();
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onCloseFocusRef,
+  } = useBottomSheet();
 
   async function openFrontpageFavouritesBottomSheet() {
-    openBottomSheet((close) => {
+    openBottomSheet(() => {
       return (
         <SelectFavouritesBottomSheet
-          close={close}
+          close={closeBottomSheet}
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
