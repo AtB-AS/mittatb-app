@@ -1,6 +1,12 @@
 import Popover from 'react-native-popover-view';
 import React, {ReactNode, RefObject} from 'react';
-import {Dimensions, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Platform,
+  StatusBar,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -39,6 +45,9 @@ export const ToolTip = ({
       onRequestClose={onRequestClose}
       popoverStyle={style.popover}
       displayAreaInsets={insets}
+      verticalOffset={
+        Platform.OS === 'android' ? -(StatusBar.currentHeight ?? 0) : 0
+      }
     >
       <View>
         <View style={style.heading}>
