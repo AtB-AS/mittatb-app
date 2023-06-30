@@ -7,12 +7,14 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {useNavigation} from '@react-navigation/native';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -50,6 +52,27 @@ export function ZonesSelection({
     accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
   };
 
+  const zonesInputSectionItemRef = useRef(null);
+  const navigation = useNavigation();
+  const routeName = useRef('');
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('state', (e) => {
+      const routes = e.data.state.routes;
+      const newRouteName = routes[routes.length - 1]?.name;
+      if (
+        routeName.current === 'Root_PurchaseTariffZonesSearchByMapScreen' &&
+        newRouteName === 'Root_PurchaseOverviewScreen'
+      ) {
+        // as long as useFocusOnLoad is active and triggered after 200ms, this needs to wait a little bit longer
+        setTimeout(() => giveFocus(zonesInputSectionItemRef), 300);
+      }
+      routeName.current = newRouteName;
+    });
+
+    return unsubscribe;
+  }, []);
+
   let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
 
   if (selectionMode === 'none') {
@@ -86,6 +109,7 @@ export function ZonesSelection({
       </ThemeText>
       <Section {...accessibility}>
         <GenericClickableSectionItem
+          ref={zonesInputSectionItemRef}
           onPress={() =>
             onSelect({
               fromTariffZone,
