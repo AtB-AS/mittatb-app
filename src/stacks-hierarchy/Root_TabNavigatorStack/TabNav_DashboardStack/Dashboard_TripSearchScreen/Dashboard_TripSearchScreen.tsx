@@ -40,6 +40,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
+  Platform,
   RefreshControl,
   TouchableOpacity,
   View,
@@ -248,7 +249,11 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         }}
         refreshControl={
           <RefreshControl
-            refreshing={searchState === 'searching' && !tripPatterns.length}
+            refreshing={
+              Platform.OS === 'ios'
+                ? false
+                : searchState === 'searching' && !tripPatterns.length
+            }
             onRefresh={refresh}
           />
         }
