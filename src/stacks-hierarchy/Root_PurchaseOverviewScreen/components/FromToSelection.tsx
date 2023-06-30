@@ -17,7 +17,7 @@ type SelectionProps = {
   toTariffZone?: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (
-    t:
+    params:
       | Root_PurchaseHarborSearchScreenParams
       | Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;

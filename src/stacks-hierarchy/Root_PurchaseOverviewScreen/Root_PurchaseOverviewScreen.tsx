@@ -153,11 +153,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             toTariffZone={toTariffZone}
             preassignedFareProduct={preassignedFareProduct}
             style={styles.selectionComponent}
-            onSelect={(t) => {
-              if ('toTariffZone' in t) {
-                navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t);
+            onSelect={(params) => {
+              if ('toTariffZone' in params) {
+                navigation.push(
+                  'Root_PurchaseTariffZonesSearchByMapScreen',
+                  params,
+                );
               } else {
-                navigation.push('Root_PurchaseHarborSearchScreen', t);
+                navigation.push('Root_PurchaseHarborSearchScreen', params);
               }
             }}
           />

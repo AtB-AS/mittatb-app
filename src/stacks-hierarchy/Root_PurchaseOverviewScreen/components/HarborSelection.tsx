@@ -14,7 +14,7 @@ type StopPlaceSelectionProps = {
   fromHarbor?: StopPlace;
   toHarbor?: StopPlace;
   preassignedFareProduct: PreassignedFareProduct;
-  onSelect: (t: Root_PurchaseHarborSearchScreenParams) => void;
+  onSelect: (params: Root_PurchaseHarborSearchScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
 

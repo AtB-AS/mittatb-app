@@ -24,7 +24,7 @@ type ZonesSelectionProps = {
   toTariffZone: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
   selectionMode: 'single' | 'multiple';
-  onSelect: (t: Root_PurchaseTariffZonesSearchByMapScreenParams) => void;
+  onSelect: (params: Root_PurchaseTariffZonesSearchByMapScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
 
