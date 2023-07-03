@@ -11,7 +11,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
-import {InteractionManager, ScrollView, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
