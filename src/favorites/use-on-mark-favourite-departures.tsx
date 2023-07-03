@@ -3,7 +3,7 @@ import {AccessibilityInfo, Alert} from 'react-native';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
-import React, {useRef} from 'react';
+import React from 'react';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {
   TransportSubmode,
@@ -29,8 +29,11 @@ export function useOnMarkFavouriteDepartures(
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
     useFavorites();
   const {t} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
-  const closeRef = useRef(null);
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onOpenFocusRef,
+  } = useBottomSheet();
   if (!line.id || !line.lineName || !line.lineNumber) {
     return {onMarkFavourite: undefined, existingFavorite: undefined};
   }
@@ -98,20 +101,18 @@ export function useOnMarkFavouriteDepartures(
         ],
       );
     } else if (line.lineName && line.lineNumber) {
-      openBottomSheet(
-        (close, focusRef) =>
-          line.lineName && line.lineNumber ? (
-            <FavoriteDialogSheet
-              lineName={line.lineName}
-              lineNumber={line.lineNumber}
-              addFavorite={addFavorite}
-              close={close}
-              ref={focusRef}
-            />
-          ) : (
-            <></>
-          ),
-        closeRef,
+      openBottomSheet(() =>
+        line.lineName && line.lineNumber ? (
+          <FavoriteDialogSheet
+            lineName={line.lineName}
+            lineNumber={line.lineNumber}
+            addFavorite={addFavorite}
+            close={closeBottomSheet}
+            ref={onOpenFocusRef}
+          />
+        ) : (
+          <></>
+        ),
       );
     }
   };

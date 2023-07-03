@@ -35,7 +35,11 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onCloseFocusRef,
+  } = useBottomSheet();
 
   const [userProfilesState, setUserProfilesState] = useState<
     UserProfileWithCount[]
@@ -123,7 +127,10 @@ export function TravellerSelection({
         </ThemeText>
       </View>
       <Section {...accessibility}>
-        <GenericClickableSectionItem onPress={travellerSelectionOnPress}>
+        <GenericClickableSectionItem
+          onPress={travellerSelectionOnPress}
+          ref={onCloseFocusRef}
+        >
           <View style={styles.sectionContentContainer}>
             <View style={{flex: 1}}>
               <ThemeText type="body__primary--bold">
