@@ -10,7 +10,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
@@ -23,6 +23,7 @@ import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -87,6 +88,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
+  const zonesInputSectionItemRef = useRef(null);
+
+  useEffect(() => {
+    if (params.onFocusElement == 'zone-selection') {
+      setTimeout(() => giveFocus(zonesInputSectionItemRef), 50);
+    }
+  }, [params.onFocusElement]);
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -96,6 +105,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           onPress: closeModal,
         }}
         globalMessageContext="app-ticketing"
+        setFocusOnLoad={!params.onFocusElement}
       />
 
       <ScrollView testID="ticketingScrollView">
@@ -151,10 +161,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             toTariffZone={toTariffZone}
             fareProductTypeConfig={params.fareProductTypeConfig}
             preassignedFareProduct={preassignedFareProduct}
-            onSelect={(t) =>
-              navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t)
-            }
+            onSelect={(t) => {
+              navigation.setParams({onFocusElement: undefined});
+              navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t);
+            }}
             style={styles.selectionComponent}
+            ref={zonesInputSectionItemRef}
           />
 
           <StartTimeSelection
