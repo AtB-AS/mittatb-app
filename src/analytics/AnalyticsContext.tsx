@@ -3,41 +3,56 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import PostHog, {PostHogProvider} from 'posthog-react-native';
 import {POSTHOG_API_KEY, POSTHOG_HOST} from '@env';
-import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
 import {AnalyticsEventContext} from './types';
+import {useAuthState} from '@atb/auth';
+import Bugsnag from '@bugsnag/react-native';
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
 export const AnalyticsContextProvider: React.FC = ({children}) => {
   const [client, setClient] = useState<PostHog>();
-  const navigation = useNavigationSafe();
+  const {abtCustomerId, authenticationType} = useAuthState();
+  const appStatus = useAppStateStatus();
+
+  const authTypeRef = useRef(authenticationType);
+  useEffect(() => {
+    authTypeRef.current = authenticationType;
+  }, [authenticationType]);
 
   useEffect(() => {
-    if (POSTHOG_HOST && POSTHOG_API_KEY) {
+    if (POSTHOG_HOST && POSTHOG_API_KEY && !client) {
       PostHog.initAsync(POSTHOG_API_KEY, {
         host: POSTHOG_HOST,
       }).then(setClient);
     }
   }, []);
 
-  // PostHog's auto capture feature enables auto capture of navigation events,
-  // but for this to work, the PostHog provider must be set up within a React Navigation object.
-  // However, if no navigation is available (such as in the bottom sheet),
-  // attempting to use the PostHogProvider will result in an error.
-  // In such cases, the AnalyticsContext must be configured without the PostHogProvider.
-  // This means that only events that have been explicitly logged will be available in the bottom sheet,
-  // and similar contexts.
+  useEffect(() => {
+    if (abtCustomerId && client) {
+      client.identify(abtCustomerId, {
+        authenticationType: authTypeRef.current,
+      });
+      return () => {
+        client?.reset();
+      };
+    }
+  }, [abtCustomerId, client]);
+
+  useEffect(() => {
+    client?.capture(`App status: ${appStatus}`);
+  }, [appStatus]);
+
   return (
     <AnalyticsContext.Provider value={client}>
-      {navigation ? (
-        <PostHogProvider client={client}>{children}</PostHogProvider>
-      ) : (
-        <>{children}</>
-      )}
+      <PostHogProvider autocapture={false} client={client}>
+        {children}
+      </PostHogProvider>
     </AnalyticsContext.Provider>
   );
 };
@@ -51,7 +66,13 @@ export const useAnalytics = () => {
         event: string,
         properties?: {[key: string]: any},
       ) => {
-        postHog?.capture(`${context}: ${event}`, properties);
+        if (!postHog) {
+          Bugsnag.leaveBreadcrumb(
+            `Event '${event}' could not be logged in PostHog. PostHog is undefined.`,
+          );
+          return;
+        }
+        postHog.capture(`${context}: ${event}`, properties);
       },
     }),
     [postHog],
