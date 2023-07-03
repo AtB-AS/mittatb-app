@@ -17,12 +17,12 @@ type TravelSearchFiltersState =
       anyFiltersApplied: boolean;
       resetTransportModes: () => void;
       disableFlexibleTransport: () => void;
-      onCloseFocusRef: React.RefObject<any> | undefined;
+      onCloseFocusRef: React.RefObject<any>;
     }
   | {enabled: false; filtersSelection?: undefined};
 
 /**
- * THe travel search filters state, including whether it is enabled or not, the
+ * The travel search filters state, including whether it is enabled or not, the
  * selected filters, and a function for opening the bottom sheet.
  */
 export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {

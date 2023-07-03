@@ -32,9 +32,9 @@ type BottomSheetState = {
   close: () => void;
   height: number;
   /** Use onOpenFocusRef to give a component accessibility focus when BottomSheet open. The component must be accessible! */
-  onOpenFocusRef?: RefObject<any>;
+  onOpenFocusRef: RefObject<any>;
   /** Optional ref to component which should be focused on sheet close */
-  onCloseFocusRef?: RefObject<any>;
+  onCloseFocusRef: RefObject<any>;
 };
 
 const BottomSheetContext = createContext<BottomSheetState | undefined>(
@@ -68,7 +68,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
-    onCloseFocusRef && giveFocus(onCloseFocusRef);
+    giveFocus(onCloseFocusRef);
   };
 
   const open = (

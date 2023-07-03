@@ -76,7 +76,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               }}
             />
           ),
-          //undefined,
           false,
         );
       } else if (isBikeStation(selectedFeature)) {
@@ -88,7 +87,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               close={closeWithCallback}
             />
           ),
-          //undefined,
           false,
         );
       } else if (isCarStation(selectedFeature)) {
@@ -100,22 +98,17 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               close={closeWithCallback}
             />
           ),
-          //undefined,
           false,
         );
       } else if (isVehicle(selectedFeature)) {
-        openBottomSheet(
-          () => {
-            return (
-              <ScooterSheet
-                vehicleId={selectedFeature.properties.id}
-                close={closeWithCallback}
-              />
-            );
-          },
-          //undefined,
-          false,
-        );
+        openBottomSheet(() => {
+          return (
+            <ScooterSheet
+              vehicleId={selectedFeature.properties.id}
+              close={closeWithCallback}
+            />
+          );
+        }, false);
       } else {
         closeBottomSheet();
       }
