@@ -11,7 +11,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {useEffect, useRef, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import {InteractionManager, ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
@@ -91,8 +91,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const zonesInputSectionItemRef = useRef(null);
 
   useEffect(() => {
-    if (params.onFocusElement == 'zone-selection') {
-      setTimeout(() => giveFocus(zonesInputSectionItemRef), 200);
+    if (params.onFocusElement === 'zone-selection') {
+      giveFocus(zonesInputSectionItemRef);
     }
   }, [params.onFocusElement]);
 
