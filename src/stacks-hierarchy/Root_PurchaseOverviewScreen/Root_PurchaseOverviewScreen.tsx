@@ -92,7 +92,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   useEffect(() => {
     if (params.onFocusElement == 'zone-selection') {
-      setTimeout(() => giveFocus(zonesInputSectionItemRef), 50);
+      setTimeout(() => giveFocus(zonesInputSectionItemRef), 200);
     }
   }, [params.onFocusElement]);
 
