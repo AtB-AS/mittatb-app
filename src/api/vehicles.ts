@@ -4,7 +4,7 @@ import qs from 'query-string';
 import {AxiosRequestConfig} from 'axios';
 import {WS_API_BASE_URL} from '@env';
 import {GetServiceJourneyVehicles} from './types/vehicles';
-import {useSubscription, SubscriptionEventProps} from './use-subscription';
+import {useSubscription, SubscriptionProps} from './use-subscription';
 
 const WEBSOCKET_BASE_URL = WS_API_BASE_URL;
 
@@ -31,15 +31,10 @@ export const getServiceJourneyVehicles = async (
 
 export const useLiveVehicleSubscription = ({
   serviceJourneyId,
-  onClose,
   onError,
   onMessage,
-  onOpen,
   enabled,
-}: {
-  serviceJourneyId?: string;
-  enabled: boolean;
-} & SubscriptionEventProps) => {
+}: {serviceJourneyId?: string} & Omit<SubscriptionProps, 'url'>) => {
   const query = qs.stringify({serviceJourneyId});
 
   const url = stringifyUrl(
@@ -47,12 +42,10 @@ export const useLiveVehicleSubscription = ({
     query,
   );
 
-  return useSubscription({
+  useSubscription({
     url: serviceJourneyId ? url : null,
     onMessage,
     onError,
-    onOpen,
-    onClose,
     enabled,
   });
 };

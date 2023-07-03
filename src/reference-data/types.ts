@@ -2,7 +2,7 @@ import {Polygon} from 'geojson';
 import {LanguageAndTextType} from '@atb/translations';
 import {ZoneSelectionMode} from '@atb-as/config-specs';
 
-export type DistributionChannel = 'web' | 'app';
+export type DistributionChannel = 'web' | 'app' | 'debug-web' | 'debug-app';
 
 export type PreassignedFareProduct = {
   id: string;
@@ -34,6 +34,7 @@ export type UserProfile = {
   alternativeDescriptions: LanguageAndTextType[];
   version: string;
   emoji?: string;
+  hideFromDefaultTravellerSelection?: boolean;
 };
 
 export type TariffZone = {

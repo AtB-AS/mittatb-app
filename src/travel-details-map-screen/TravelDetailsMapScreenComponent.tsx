@@ -87,6 +87,7 @@ export const TravelDetailsMapScreenComponent = ({
   useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
+      if (isError) setIsError(false);
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
       setVehicle(vehicle);
     },
