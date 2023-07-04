@@ -157,6 +157,7 @@ const FareContractTexts = {
       ),
     a11yLabelMultipleTravelModes: (count: number) =>
       _(`Totalt ${count} reisemåter`, `In total ${count} travel modes`),
+    concatListWord: _('og', 'and'),
   },
   transportMode: (mode: TransportModeType) => {
     switch (mode) {
