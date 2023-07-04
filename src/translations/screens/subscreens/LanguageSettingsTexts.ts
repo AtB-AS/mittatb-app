@@ -6,12 +6,12 @@ const LanguageSettingsTexts = {
   usePhoneSettings: _(
     'Bruk telefoninnstillingene mine',
     'Use my phone settings',
-    '§',
+    'Bruk telefoninnstillingane mine',
   ),
   options: {
-    nb: _('Norsk bokmål', 'Norsk bokmål'),
-    en: _('English', 'English'),
-    nn: _('Nynorsk', 'Nynorsk'),
+    nb: _('Norsk bokmål', 'Norsk bokmål', '§'),
+    en: _('English', 'English', '§'),
+    nn: _('Nynorsk', 'Nynorsk', '§'),
   },
 };
 export default LanguageSettingsTexts;
