@@ -116,7 +116,7 @@ const BaseHeader = ({
   const themeColor = color ?? 'background_accent_0';
   const focusRef = useFocusOnLoad(setFocusOnLoad);
 
-  const {buttonsHeight, buttonsTopOffset, setLayoutFor} = useHeaderLayouts();
+  const {buttonsHeight, setLayoutFor} = useHeaderLayouts();
 
   const backgroundColor = getStaticColor(themeName, themeColor).background;
 
@@ -127,13 +127,7 @@ const BaseHeader = ({
         accessible={!!title && !!textOpacity}
         importantForAccessibility={!!title ? 'yes' : 'no-hide-descendants'}
         accessibilityRole="header"
-        style={[
-          css.headerTitle,
-          {
-            // Make space for absolute positioned buttons in case they are offset below title
-            marginBottom: theme.spacings.medium + buttonsTopOffset,
-          },
-        ]}
+        style={css.headerTitle}
         onLayout={setLayoutFor('container')}
         ref={focusRef}
       >
@@ -144,9 +138,9 @@ const BaseHeader = ({
         >
           <ThemeText
             accessible={false}
-            onLayout={setLayoutFor('title')}
             type="body__primary--bold"
             color={themeColor}
+            style={{textAlign: 'center'}}
           >
             {title && textOpacity > 0 ? title : '\u00a0'}
           </ThemeText>
@@ -157,13 +151,12 @@ const BaseHeader = ({
         style={[
           css.buttons,
           {
-            top: theme.spacings.large + buttonsTopOffset,
-            height: buttonsHeight,
+            height: buttonsHeight || theme.typography.body__primary.lineHeight,
           },
         ]}
       >
-        <View onLayout={setLayoutFor('leftButton')}>{leftIcon}</View>
-        <View onLayout={setLayoutFor('rightButton')}>{rightIcon}</View>
+        <View>{leftIcon}</View>
+        <View>{rightIcon}</View>
       </View>
       <GlobalMessage
         globalMessageContext={globalMessageContext}
@@ -180,13 +173,16 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.medium,
     borderTopLeftRadius: theme.border.radius.circle,
     borderTopRightRadius: theme.border.radius.circle,
+    marginBottom: theme.spacings.medium,
+    alignItems: 'center',
   },
-  headerTitle: {alignItems: 'center'},
+  headerTitle: {alignItems: 'center', width: '66%'},
   buttons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'absolute',
+    top: theme.spacings.large,
     left: theme.spacings.medium,
     width: '100%',
   },
@@ -197,15 +193,10 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
 
 type HeaderLayouts = {
   container?: LayoutRectangle;
-  title?: LayoutRectangle;
-  leftButton?: LayoutRectangle;
-  rightButton?: LayoutRectangle;
 };
 
 /**
- * Hook for deciding buttons top offset and height, based on the layout of the
- * header components. If one of the left or right button overlaps with the
- * header title, the buttons should be rendered below the header title.
+ * Hook for deciding the buttons height
  */
 const useHeaderLayouts = () => {
   const [headerLayouts, setHeaderLayouts] = useState<HeaderLayouts>({});
@@ -215,28 +206,15 @@ const useHeaderLayouts = () => {
       setHeaderLayouts((prev) => ({...prev, [element]: layout}));
     };
 
-  const buttonsOnOwnLine = useMemo(() => {
-    const {container, title, leftButton, rightButton} = headerLayouts;
-    if (!container || !title || !leftButton || !rightButton) {
-      return false;
+  const buttonsHeight = useMemo(() => {
+    const {container} = headerLayouts;
+    if (!container) {
+      return 0;
     }
-
-    const leftButtonVisibleWidth = leftButton.height ? leftButton.width : 0;
-    const rightButtonVisibleWidth = rightButton.height ? rightButton.width : 0;
-    const widestButtonWidth = Math.max(
-      leftButtonVisibleWidth,
-      rightButtonVisibleWidth,
-    );
-    const buttonsAndTitleWidth = title.width + widestButtonWidth * 2;
-    const containerWidth = container.width;
-    return buttonsAndTitleWidth > containerWidth - 10;
+    return headerLayouts.container?.height || 0;
   }, [headerLayouts]);
 
-  const buttonsHeight = headerLayouts.container?.height || 0;
-  const buttonsTopOffset = buttonsOnOwnLine ? buttonsHeight : 0;
-
   return {
-    buttonsTopOffset,
     buttonsHeight,
     setLayoutFor,
   };
