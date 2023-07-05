@@ -1,13 +1,6 @@
-import {TravelSearchTransportModes} from '@atb-as/config-specs';
 import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips';
-import {
-  Modes,
-  TransportMode,
-  TransportModes,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {Modes} from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/favorites';
@@ -19,8 +12,6 @@ import {
   SearchStateType,
   TripPatternWithKey,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
-import {flatMap} from '@atb/utils/array';
-import {enumFromString} from '@atb/utils/enum-from-string';
 import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
@@ -28,6 +19,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {useJourneyModes} from './hooks';
 import {useAnalytics} from '@atb/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -82,11 +74,7 @@ export function useTripsQuery(
       const targetNumberOfHits = cursor
         ? config_target_page_hits
         : config_target_initial_hits;
-
-      const sanitizedSearchTime =
-        searchTime.option === 'now'
-          ? {...searchTime, date: new Date().toISOString()}
-          : searchTime;
+      const sanitizedSearchTime = sanitizeSearchTime(searchTime);
 
       (async function () {
         if (fromLocation && toLocation) {
@@ -203,67 +191,25 @@ export function useTripsQuery(
   };
 }
 
-type TimeSearch = {
-  searchTime: SearchTime;
-  cursor?: never;
-};
-
-type CursorSearch = {
-  searchTime?: never;
-  cursor: string;
-};
-
-type SearchInput = TimeSearch | CursorSearch;
-
 async function doSearch(
   fromLocation: Location,
   toLocation: Location,
   arriveBy: boolean,
-  {searchTime, cursor}: SearchInput,
+  searchTime: SearchInput,
   cancelToken: CancelTokenSource,
   tripSearchPreferences: TripSearchPreferences | undefined,
   travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
   journeySearchModes: Modes,
 ) {
-  const from = {
-    ...fromLocation,
-    place:
-      fromLocation.resultType === 'search' && fromLocation.layer === 'venue'
-        ? fromLocation.id
-        : undefined,
-  };
-  const to = {
-    ...toLocation,
-    place:
-      toLocation.resultType === 'search' && toLocation.layer === 'venue'
-        ? toLocation.id
-        : undefined,
-  };
-
-  const query: TripsQueryVariables = {
-    from,
-    to,
-    cursor,
-    when: searchTime?.date,
+  const query = createQuery(
+    fromLocation,
+    toLocation,
+    searchTime,
     arriveBy,
-    transferPenalty: tripSearchPreferences?.transferPenalty,
-    waitReluctance: tripSearchPreferences?.waitReluctance,
-    walkReluctance: tripSearchPreferences?.walkReluctance,
-    walkSpeed: tripSearchPreferences?.walkSpeed,
-    modes: journeySearchModes,
-  };
-
-  if (travelSearchFiltersSelection?.transportModes) {
-    const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
-      (m) => m.selected,
-    );
-    query.modes = {
-      ...journeySearchModes,
-      transportModes: flatMap(selectedFilters, (tm) =>
-        transportModeToEnum(tm.modes),
-      ),
-    };
-  }
+    tripSearchPreferences,
+    travelSearchFiltersSelection,
+    journeySearchModes,
+  );
 
   Bugsnag.leaveBreadcrumb('searching', {
     fromLocation: query.from,
@@ -322,19 +268,6 @@ function filterDuplicateTripPatterns(
     }
     existing.set(tp.key, tp);
     return true;
-  });
-}
-
-function transportModeToEnum(
-  modes: TravelSearchTransportModes[],
-): TransportModes[] {
-  return modes.map((internal) => {
-    return {
-      transportMode: enumFromString(TransportMode, internal.transportMode),
-      transportSubModes: internal.transportSubModes
-        ?.map((submode) => enumFromString(TransportSubmode, submode))
-        .filter(Boolean) as TransportSubmode[],
-    };
   });
 }
 

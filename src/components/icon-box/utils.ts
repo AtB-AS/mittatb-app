@@ -10,7 +10,12 @@ import {
   Walk,
   Unknown,
 } from '@atb/assets/svg/mono-icons/transportation';
-import {Plane, Subway} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {
+  Bicycle,
+  Plane,
+  Scooter,
+  Subway,
+} from '@atb/assets/svg/mono-icons/transportation-entur';
 
 const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
   TransportSubmode.HighSpeedPassengerService,
@@ -41,6 +46,12 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
       return Walk;
     case 'metro':
       return Subway;
+    case 'bicycle':
+    case 'bike_rental':
+      return Bicycle;
+    case 'scooter':
+    case 'scooter_rental':
+      return Scooter;
     case 'unknown':
     default:
       return Unknown;

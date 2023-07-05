@@ -1,14 +1,14 @@
 import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
 import {TripPattern, TripsQuery} from '@atb/api/types/trips';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {
+  NonTransitTripsQuery,
+  NonTransitTripsQueryVariables,
+  TripsQueryVariables,
+} from '@atb/api/types/generated/TripsQuery';
 import Bugsnag from '@bugsnag/react-native';
 
-export async function tripsSearch(
-  query: TripsQueryVariables,
-  opts?: AxiosRequestConfig,
-): Promise<TripsQuery> {
-  const url = 'bff/v2/trips';
+function cleanQuery(query: TripsQueryVariables) {
   const cleanQuery: TripsQueryVariables = {
     to: {
       name: query.to.name,
@@ -29,11 +29,37 @@ export async function tripsSearch(
     walkSpeed: query.walkSpeed,
     modes: query.modes,
   };
+  return cleanQuery;
+}
 
-  const results = await post<TripsQuery>(url, cleanQuery, opts);
+export async function tripsSearch(
+  query: TripsQueryVariables,
+  opts?: AxiosRequestConfig,
+): Promise<TripsQuery> {
+  const url = 'bff/v2/trips';
+
+  const results = await post<TripsQuery>(url, cleanQuery(query), opts);
 
   Bugsnag.leaveBreadcrumb('results', {
     patterns: results.trip?.tripPatterns ?? 'none',
+  });
+
+  return results;
+}
+
+export async function nonTransitTripSearch(
+  query: NonTransitTripsQueryVariables,
+  opts?: AxiosRequestConfig,
+): Promise<NonTransitTripsQuery[]> {
+  const url = 'bff/v2/trips/non-transit';
+
+  const results = await post<NonTransitTripsQuery[]>(url, cleanQuery(query), {
+    ...opts,
+    baseURL: 'http://localhost:8080',
+  });
+
+  Bugsnag.leaveBreadcrumb('results', {
+    patterns: results.length ?? 'none',
   });
 
   return results;

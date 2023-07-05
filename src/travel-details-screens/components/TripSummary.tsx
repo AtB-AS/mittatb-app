@@ -9,6 +9,7 @@ import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
+import {useHumanizeDistance} from '@atb/utils/location';
 
 export const TripSummary: React.FC<TripPattern> = ({
   walkDistance,
@@ -17,7 +18,7 @@ export const TripSummary: React.FC<TripPattern> = ({
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
-  const readableDistance = walkDistance?.toFixed() ?? '0';
+  const readableDistance = useHumanizeDistance(walkDistance);
   return (
     <>
       <View style={styles.summaryDetail}>
@@ -38,24 +39,28 @@ export const TripSummary: React.FC<TripPattern> = ({
           {t(TripDetailsTexts.trip.summary.travelTime.label(time))}
         </ThemeText>
       </View>
-      <View style={styles.summaryDetail}>
-        <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={Walk} />
-        <ThemeText
-          color="secondary"
-          accessible={true}
-          style={styles.detailText}
-          accessibilityLabel={t(
-            TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
-              readableDistance,
-            ),
-          )}
-          testID="walkDistance"
-        >
-          {t(
-            TripDetailsTexts.trip.summary.walkDistance.label(readableDistance),
-          )}
-        </ThemeText>
-      </View>
+      {readableDistance && (
+        <View style={styles.summaryDetail}>
+          <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={Walk} />
+          <ThemeText
+            color="secondary"
+            accessible={true}
+            style={styles.detailText}
+            accessibilityLabel={t(
+              TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
+                readableDistance,
+              ),
+            )}
+            testID="walkDistance"
+          >
+            {t(
+              TripDetailsTexts.trip.summary.walkDistance.label(
+                readableDistance,
+              ),
+            )}
+          </ThemeText>
+        </View>
+      )}
     </>
   );
 };
