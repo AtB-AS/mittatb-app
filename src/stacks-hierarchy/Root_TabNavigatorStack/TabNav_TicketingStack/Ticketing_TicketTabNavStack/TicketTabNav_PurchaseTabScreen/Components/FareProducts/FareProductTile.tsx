@@ -13,25 +13,15 @@ import {
   getStaticColor,
   getTransportationColor,
   StaticColor,
-  TransportColor,
 } from '@atb/theme/colors';
 
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
-import {
-  TransportMode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
 
-// eslint-disable-next-line no-restricted-imports
-import {TransportModePair} from '@atb/components/transportation-modes/TransportModes';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {TransportModePair} from '@atb/components/transportation-modes';
 
-type TransportModesType = {
-  mode: TransportMode;
-  subMode?: TransportSubmode;
-};
-
-const modesDisplayLimit: number = 2;
+const modesDisplayLimit = 2;
 
 export const FareProductTile = ({
   accented = false,
@@ -53,9 +43,11 @@ export const FareProductTile = ({
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
 
-  const transportColor = getTransportColorFromModes(
-    transportModes as TransportModesType[],
+  const transportColor = useThemeColorForTransportMode(
+    transportModes[0]?.mode,
+    transportModes[0]?.subMode,
   );
+
   const transportThemePrimaryColor = getTransportationColor(
     themeName,
     transportColor,
@@ -70,7 +62,7 @@ export const FareProductTile = ({
   const title = useTextForLanguage(config.name);
   const description = useTextForLanguage(config.description);
 
-  const transportModesText: string = getFareProductTravelModesText(
+  const transportModesText = getFareProductTravelModesText(
     transportModes,
     t,
     modesDisplayLimit,
@@ -81,7 +73,13 @@ export const FareProductTile = ({
 
   return (
     <View
-      style={[styles.fareProduct, {backgroundColor: themeColor.background}]}
+      style={[
+        styles.fareProduct,
+        {
+          backgroundColor: themeColor.background,
+          borderBottomColor: transportThemePrimaryColor.background,
+        },
+      ]}
       testID={testID}
     >
       <TouchableOpacity
@@ -119,12 +117,6 @@ export const FareProductTile = ({
           height={28}
         />
       </TouchableOpacity>
-      <View
-        style={[
-          styles.coloredBottomLine,
-          {backgroundColor: transportThemePrimaryColor.background},
-        ]}
-      />
     </View>
   );
 };
@@ -136,8 +128,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'stretch',
     marginRight: theme.spacings.medium,
     padding: theme.spacings.xLarge,
+    paddingBottom: theme.spacings.xLarge - 2 * theme.border.width.medium,
+    borderBottomWidth: 2 * theme.border.width.medium,
     borderRadius: theme.border.radius.small,
-    overflow: 'hidden',
   },
   contentContainer: {
     flexShrink: 1,
@@ -159,66 +152,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   description: {marginBottom: theme.spacings.small},
-  coloredBottomLine: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 2 * theme.border.width.medium,
-  },
 }));
-
-const getTransportColorFromModes = (
-  transportModes: TransportModesType[],
-): TransportColor => {
-  if (transportModes.length < 1) {
-    return 'transport_other';
-  } else {
-    const {mode, subMode} = transportModes[0];
-
-    switch (mode) {
-      case 'air':
-        return 'transport_plane';
-      case 'water':
-        return 'transport_boat';
-      case 'coach':
-        return 'transport_region';
-
-      case 'bus':
-        if (subMode === 'localBus') {
-          return 'transport_city';
-        } else if (subMode === 'regionalBus') {
-          return 'transport_region';
-        } else if (subMode === 'expressBus') {
-          return 'transport_airport_express';
-        } else {
-          return 'transport_city';
-        }
-
-      case 'metro':
-      case 'monorail':
-      case 'rail':
-      case 'tram':
-      case 'trolleybus':
-        return 'transport_train';
-
-      case 'unknown':
-      case 'cableway':
-      case 'funicular':
-      case 'lift':
-        return 'transport_other';
-      default:
-        return 'transport_other';
-    }
-  }
-};
 
 const getFareProductTravelModesText = (
   modes: TransportModePair[],
   t: TranslateFunction,
-  modesDisplayLimit: number = 2,
+  modesDisplayLimit = 2,
 ): string => {
-  const modesCount: number = modes.length;
+  const modesCount = modes.length;
 
   if (!modes) return '';
   if (modesCount > modesDisplayLimit) {

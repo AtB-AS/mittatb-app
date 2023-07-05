@@ -170,11 +170,11 @@ const FareContractTexts = {
         return _('trikk', 'tram');
       case TransportMode.Water:
         if (subMode === 'highSpeedPassengerService') {
-          return _('hurtigbåt', 'speedboat');
+          return _('hurtigbåt', 'passenger boat');
         } else if (subMode === 'highSpeedVehicleService') {
           // https://enturas.atlassian.net/wiki/spaces/PUBLIC/pages/825393529/Norwegian+submodes+and+their+definitions
           // -> "A high-speed boat service with car carrying capacity. The ship type is usually a catamaran."
-          return _('hurtigbåt', 'speedboat');
+          return _('hurtigbåt', 'passenger boat');
         } else {
           return _('båt', 'boat');
         }

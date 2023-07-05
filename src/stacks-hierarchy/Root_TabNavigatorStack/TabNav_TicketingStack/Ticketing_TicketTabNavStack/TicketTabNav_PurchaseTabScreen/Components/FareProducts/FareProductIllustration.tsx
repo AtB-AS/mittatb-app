@@ -1,4 +1,3 @@
-import {useTheme} from '@atb/theme';
 import React from 'react';
 
 /* eslint-enable no-restricted-syntax, no-param-reassign */
@@ -14,7 +13,7 @@ import Ticket from '@atb/assets/svg/mono-icons/ticketing/Ticket';
 import Sun from '@atb/assets/svg/mono-icons/ticketing/Sun';
 import Youth from '@atb/assets/svg/mono-icons/ticketing/Youth';
 
-const themeIllustrationsLight = {
+const themeIllustrations = {
   Ticket,
   PeriodTicket: Date,
   H24,
@@ -24,9 +23,8 @@ const themeIllustrationsLight = {
   Carnet: Klippekort,
   Boat,
 };
-const themeIllustrationsDark = {...themeIllustrationsLight}; // currently no difference
 
-type FareProductIllustrationType = keyof typeof themeIllustrationsLight;
+type FareProductIllustrationType = keyof typeof themeIllustrations;
 
 type FareProductIllustrationsProps = {
   config: FareProductTypeConfig;
@@ -36,10 +34,7 @@ export const FareProductIllustration = ({
   config,
   ...props
 }: FareProductIllustrationsProps): JSX.Element => {
-  const {themeName} = useTheme();
   const illustrationName = getIllustrationFileName(config);
-  const themeIllustrations =
-    themeName === 'light' ? themeIllustrationsLight : themeIllustrationsDark;
   const Illustration = themeIllustrations[illustrationName];
   return <Illustration {...props} />;
 };
