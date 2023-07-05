@@ -1,4 +1,4 @@
-import {TransportModeType} from '@atb-as/config-specs';
+import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
@@ -159,7 +159,7 @@ const FareContractTexts = {
       _(`Totalt ${count} reisemåter`, `In total ${count} travel modes`),
     concatListWord: _('og', 'and'),
   },
-  transportMode: (mode: TransportModeType) => {
+  transportMode: (mode: TransportModeType, subMode?: TransportSubmodeType) => {
     switch (mode) {
       case TransportMode.Bus:
       case TransportMode.Coach:
@@ -169,7 +169,15 @@ const FareContractTexts = {
       case TransportMode.Tram:
         return _('trikk', 'tram');
       case TransportMode.Water:
-        return _('båt', 'boat');
+        if (subMode === 'highSpeedPassengerService') {
+          return _('hurtigbåt', 'speedboat');
+        } else if (subMode === 'highSpeedVehicleService') {
+          // https://enturas.atlassian.net/wiki/spaces/PUBLIC/pages/825393529/Norwegian+submodes+and+their+definitions
+          // -> "A high-speed boat service with car carrying capacity. The ship type is usually a catamaran."
+          return _('hurtigbåt', 'speedboat');
+        } else {
+          return _('båt', 'boat');
+        }
       case TransportMode.Air:
         return _('fly', 'plane');
       case TransportMode.Metro:

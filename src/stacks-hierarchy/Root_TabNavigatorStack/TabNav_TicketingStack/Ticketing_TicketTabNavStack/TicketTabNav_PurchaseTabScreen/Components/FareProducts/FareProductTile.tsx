@@ -56,21 +56,27 @@ export const FareProductTile = ({
   const transportColor = getTransportColorFromModes(
     transportModes as TransportModesType[],
   );
-  const transportThemeColor = getTransportationColor(themeName, transportColor);
+  const transportThemePrimaryColor = getTransportationColor(
+    themeName,
+    transportColor,
+    'primary',
+  );
+  const transportThemeSecondaryColor = getTransportationColor(
+    themeName,
+    transportColor,
+    'secondary',
+  );
 
   const title = useTextForLanguage(config.name);
   const description = useTextForLanguage(config.description);
-  const transportModesText = transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
-    .join('/');
-  const accessibilityLabel = [title, transportModesText, description].join(
-    '. ',
-  );
 
-  const transportModeText: string = getFareProductTravelModesText(
+  const transportModesText: string = getFareProductTravelModesText(
     transportModes,
     t,
     modesDisplayLimit,
+  );
+  const accessibilityLabel = [title, transportModesText, description].join(
+    '. ',
   );
 
   return (
@@ -95,7 +101,7 @@ export const FareProductTile = ({
             color={themeColor}
             testID={testID + 'Title'}
           >
-            {title + ', ' + transportModeText}
+            {title + ', ' + transportModesText}
           </ThemeText>
           <ThemeText
             type="body__tertiary"
@@ -108,7 +114,7 @@ export const FareProductTile = ({
         <FareProductIllustration
           style={styles.illustration}
           config={config}
-          fill={transportThemeColor.background}
+          fill={transportThemeSecondaryColor.background}
           width={28}
           height={28}
         />
@@ -116,7 +122,7 @@ export const FareProductTile = ({
       <View
         style={[
           styles.coloredBottomLine,
-          {backgroundColor: transportThemeColor.background},
+          {backgroundColor: transportThemePrimaryColor.background},
         ]}
       />
     </View>
@@ -130,7 +136,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'stretch',
     marginRight: theme.spacings.medium,
     padding: theme.spacings.xLarge,
-    borderRadius: theme.border.radius.regular,
+    borderRadius: theme.border.radius.small,
     overflow: 'hidden',
   },
   contentContainer: {
@@ -220,7 +226,7 @@ const getFareProductTravelModesText = (
   }
 
   const travelModes = modes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
     .filter((value, index, array) => array.indexOf(value) === index); // remove duplicates
 
   if (travelModes.length < 2) {

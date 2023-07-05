@@ -29,7 +29,7 @@ export const getTransportModeText = (
     return t(FareContractTexts.transportModes.multipleTravelModes);
   }
   return modes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
     .join('/');
 };
 export const TransportModes = ({
