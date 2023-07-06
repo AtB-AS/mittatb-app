@@ -57,7 +57,11 @@ export const TicketingTile = ({
   );
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      accessible={true}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={t(TicketingTexts.availableFareProducts.navigateToBuy)}
       style={[
         styles.fareProduct,
         {
@@ -65,17 +69,8 @@ export const TicketingTile = ({
           borderBottomColor: themePrimaryColor.background,
         },
       ]}
-      testID={testID}
     >
-      <TouchableOpacity
-        onPress={onPress}
-        accessible={true}
-        accessibilityLabel={accessibilityLabel}
-        accessibilityHint={t(
-          TicketingTexts.availableFareProducts.navigateToBuy,
-        )}
-        style={styles.spreadContent}
-      >
+      <View style={styles.spreadContent} testID={testID}>
         <View style={styles.contentContainer}>
           {showBetaTag && (
             <View style={styles.betaTagContainer}>
@@ -107,8 +102,8 @@ export const TicketingTile = ({
           width={theme.icon.size.large}
           height={theme.icon.size.large}
         />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
