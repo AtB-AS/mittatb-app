@@ -44,8 +44,8 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
   },
   tripMode: {
     marginRight: theme.spacings.small,
