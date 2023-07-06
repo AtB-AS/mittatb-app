@@ -53,10 +53,11 @@ export async function nonTransitTripSearch(
 ): Promise<NonTransitTripsQuery[]> {
   const url = 'bff/v2/trips/non-transit';
 
-  const results = await post<NonTransitTripsQuery[]>(url, cleanQuery(query), {
-    ...opts,
-    baseURL: 'http://localhost:8080',
-  });
+  const results = await post<NonTransitTripsQuery[]>(
+    url,
+    cleanQuery(query),
+    opts,
+  );
 
   Bugsnag.leaveBreadcrumb('results', {
     patterns: results.length ?? 'none',
