@@ -13,7 +13,7 @@ import Ticket from '@atb/assets/svg/mono-icons/ticketing/Ticket';
 import Sun from '@atb/assets/svg/mono-icons/ticketing/Sun';
 import Youth from '@atb/assets/svg/mono-icons/ticketing/Youth';
 
-const themeIllustrations = {
+const fareProductIllustrations = {
   Ticket,
   PeriodTicket: Date,
   H24,
@@ -24,7 +24,7 @@ const themeIllustrations = {
   Boat,
 };
 
-type FareProductIllustrationType = keyof typeof themeIllustrations;
+type FareProductIllustrationType = keyof typeof fareProductIllustrations;
 
 type FareProductIllustrationsProps = {
   config: FareProductTypeConfig;
@@ -35,7 +35,7 @@ export const FareProductIllustration = ({
   ...props
 }: FareProductIllustrationsProps): JSX.Element => {
   const illustrationName = getIllustrationFileName(config);
-  const Illustration = themeIllustrations[illustrationName];
+  const Illustration = fareProductIllustrations[illustrationName];
   return <Illustration {...props} />;
 };
 

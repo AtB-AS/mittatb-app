@@ -36,7 +36,7 @@ export const FareProductTile = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
+  const {theme, themeName} = useTheme();
 
   const transportModes = config.transportModes;
 
@@ -113,8 +113,8 @@ export const FareProductTile = ({
           style={styles.illustration}
           config={config}
           fill={transportThemeSecondaryColor.background}
-          width={28}
-          height={28}
+          width={theme.icon.size.large}
+          height={theme.icon.size.large}
         />
       </TouchableOpacity>
     </View>
