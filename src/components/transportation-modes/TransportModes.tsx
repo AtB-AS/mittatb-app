@@ -12,7 +12,7 @@ import {View, ViewStyle} from 'react-native';
 
 const modesDisplayLimit: number = 2;
 
-type TransportModePair = {
+export type TransportModePair = {
   mode: TransportModeType;
   subMode?: TransportSubmodeType;
 };
@@ -29,7 +29,7 @@ export const getTransportModeText = (
     return t(FareContractTexts.transportModes.multipleTravelModes);
   }
   return modes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
     .join('/');
 };
 export const TransportModes = ({

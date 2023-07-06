@@ -44,7 +44,7 @@ export function Summary({
   };
 
   const transportModesText = fareProductTypeConfig.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
     .filter(Boolean)
     .join('/');
 
