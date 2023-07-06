@@ -1,6 +1,6 @@
 import {TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import React, {Children, ReactNode, cloneElement} from 'react';
+import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 
 import {TicketingTexts, useTranslation} from '@atb/translations';
@@ -13,31 +13,30 @@ import {
 
 import {BetaTag} from '@atb/components/beta-tag';
 
-import {FareProductTypeConfig} from '@atb/configuration';
-import {FareProductIllustration} from './Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProductIllustration';
+import {TicketingTileIllustration} from './TicketingTileIllustration';
 
 export const TicketingTile = ({
   accented = false,
   onPress,
   testID,
-  config,
+  illustrationName,
+  isPeriodTicket = false,
   transportColor,
   title,
   description,
   accessibilityLabel,
   showBetaTag = false,
-  children,
 }: {
   accented?: boolean;
   onPress: () => void;
   testID: string;
-  config?: FareProductTypeConfig;
+  illustrationName: string;
+  isPeriodTicket?: boolean;
   transportColor: TransportColor;
   title?: string;
   description?: string;
   accessibilityLabel?: string;
   showBetaTag?: boolean;
-  children?: ReactNode;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -100,23 +99,14 @@ export const TicketingTile = ({
             {description}
           </ThemeText>
         </View>
-        {children ? (
-          Children.map(children, (child: any) =>
-            cloneElement(child, {
-              fill: themeSecondaryColor.background,
-              width: theme.icon.size.large,
-              height: theme.icon.size.large,
-            }),
-          )
-        ) : (
-          <FareProductIllustration
-            style={styles.illustration}
-            config={config}
-            fill={themeSecondaryColor.background}
-            width={theme.icon.size.large}
-            height={theme.icon.size.large}
-          />
-        )}
+        <TicketingTileIllustration
+          illustrationName={illustrationName}
+          isPeriodTicket={isPeriodTicket}
+          style={styles.illustration}
+          fill={themeSecondaryColor.background}
+          width={theme.icon.size.large}
+          height={theme.icon.size.large}
+        />
       </TouchableOpacity>
     </View>
   );

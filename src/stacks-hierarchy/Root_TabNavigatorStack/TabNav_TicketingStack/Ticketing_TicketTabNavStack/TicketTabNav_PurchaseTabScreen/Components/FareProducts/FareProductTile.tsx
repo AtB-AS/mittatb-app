@@ -50,7 +50,8 @@ export const FareProductTile = ({
       accented={accented}
       onPress={onPress}
       testID={testID}
-      config={config}
+      illustrationName={config.illustration || 'unknown'}
+      isPeriodTicket={config.configuration.productSelectionMode === 'duration'}
       transportColor={transportColor}
       title={title}
       description={description}

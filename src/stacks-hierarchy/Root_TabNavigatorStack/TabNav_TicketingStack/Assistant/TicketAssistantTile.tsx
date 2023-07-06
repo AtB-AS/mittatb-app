@@ -1,10 +1,10 @@
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 
 import {View} from 'react-native';
 import {screenReaderPause} from '@atb/components/text';
 import React from 'react';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {TicketMultiple} from '@atb/assets/svg/mono-icons/ticketing';
+
 import {FareProductTypeConfig} from '@atb-as/config-specs';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {isProductSellableInApp} from '@atb/reference-data/utils';
@@ -23,7 +23,6 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
 
   const title = t(TicketingTexts.ticketAssistantTile.title);
   const description = t(TicketingTexts.ticketAssistantTile.description);
@@ -48,26 +47,23 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
     (config) => config.configuration.requiresLogin,
   );
 
-  if (!requiresLoginConfig) {
-    return <View style={{height: theme.spacings.medium}} />;
-  } else {
-    return (
-      <View style={styles.tipsAndInformation}>
+  return (
+    <View style={styles.tipsAndInformation}>
+      {requiresLoginConfig && (
         <TicketingTile
           accented={accented}
           onPress={() => onPress(requiresLoginConfig)}
           testID={testID}
           transportColor="transport_other"
+          illustrationName="ticketMultiple"
           title={title}
           description={description}
           accessibilityLabel={accessibilityLabel}
           showBetaTag={true}
-        >
-          <TicketMultiple style={styles.illustration} />
-        </TicketingTile>
-      </View>
-    );
-  }
+        />
+      )}
+    </View>
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -76,8 +72,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'stretch',
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.large,
-  },
-  illustration: {
-    marginTop: theme.spacings.small,
   },
 }));

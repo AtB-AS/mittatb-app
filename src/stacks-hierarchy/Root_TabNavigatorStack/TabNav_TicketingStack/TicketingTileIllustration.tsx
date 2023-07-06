@@ -2,7 +2,6 @@ import React from 'react';
 
 /* eslint-enable no-restricted-syntax, no-param-reassign */
 import {SvgProps} from 'react-native-svg';
-import {FareProductTypeConfig} from '@atb/configuration';
 
 import {Boat} from '@atb/assets/svg/mono-icons/transportation/';
 import {Klippekort} from '@atb/assets/svg/color/icons/ticketing/';
@@ -14,9 +13,10 @@ import {
   Ticket,
   Sun,
   Youth,
+  TicketMultiple,
 } from '@atb/assets/svg/mono-icons/ticketing/';
 
-const fareProductIllustrations = {
+const ticketingTileIllustrations = {
   Ticket,
   PeriodTicket: Date,
   H24,
@@ -25,27 +25,34 @@ const fareProductIllustrations = {
   Youth,
   Carnet: Klippekort,
   Boat,
+  TicketMultiple,
 };
 
-type FareProductIllustrationType = keyof typeof fareProductIllustrations;
+type ticketingTileIllustrationType = keyof typeof ticketingTileIllustrations;
 
-type FareProductIllustrationsProps = {
-  config?: FareProductTypeConfig;
+type ticketingTileIllustrationsProps = {
+  illustrationName: string;
+  isPeriodTicket?: boolean;
 } & SvgProps;
 
-export const FareProductIllustration = ({
-  config,
+export const TicketingTileIllustration = ({
+  illustrationName,
+  isPeriodTicket = false,
   ...props
-}: FareProductIllustrationsProps): JSX.Element => {
-  const illustrationName = getIllustrationFileName(config);
-  const Illustration = fareProductIllustrations[illustrationName];
+}: ticketingTileIllustrationsProps): JSX.Element => {
+  const illustrationFileName = getIllustrationFileName(
+    illustrationName,
+    isPeriodTicket,
+  );
+  const Illustration = ticketingTileIllustrations[illustrationFileName];
   return <Illustration {...props} />;
 };
 
 const getIllustrationFileName = (
-  config?: FareProductTypeConfig,
-): FareProductIllustrationType => {
-  switch (config?.illustration) {
+  illustrationName?: string,
+  isPeriodTicket?: boolean,
+): ticketingTileIllustrationType => {
+  switch (illustrationName) {
     case 'single':
       return 'Ticket';
     case 'period':
@@ -61,11 +68,9 @@ const getIllustrationFileName = (
     case 'youth':
       return 'Youth';
     case 'boat':
-      if (config?.configuration.productSelectionMode === 'duration') {
-        return 'PeriodTicket';
-      } else {
-        return 'Ticket';
-      }
+      return isPeriodTicket ? 'PeriodTicket' : 'Ticket';
+    case 'ticketMultiple':
+      return 'TicketMultiple';
     default:
       return 'Ticket';
   }
