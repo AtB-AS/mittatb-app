@@ -4,14 +4,17 @@ import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {FareProductTypeConfig} from '@atb/configuration';
 
-import Boat from '@atb/assets/svg/mono-icons/transportation/Boat';
-import Klippekort from '@atb/assets/svg/color/icons/ticketing/Klippekort';
-import H24 from '@atb/assets/svg/mono-icons/ticketing/H24';
-import Moon from '@atb/assets/svg/mono-icons/ticketing/Moon';
-import Date from '@atb/assets/svg/mono-icons/time/Date';
-import Ticket from '@atb/assets/svg/mono-icons/ticketing/Ticket';
-import Sun from '@atb/assets/svg/mono-icons/ticketing/Sun';
-import Youth from '@atb/assets/svg/mono-icons/ticketing/Youth';
+import {Boat} from '@atb/assets/svg/mono-icons/transportation/';
+import {Klippekort} from '@atb/assets/svg/color/icons/ticketing/';
+import {Date} from '@atb/assets/svg/mono-icons/time/';
+
+import {
+  H24,
+  Moon,
+  Ticket,
+  Sun,
+  Youth,
+} from '@atb/assets/svg/mono-icons/ticketing/';
 
 const fareProductIllustrations = {
   Ticket,
