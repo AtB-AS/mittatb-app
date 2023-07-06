@@ -1,10 +1,13 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColor} from '@atb/theme/colors';
+import {
+  getStaticColor,
+  getTransportationColor,
+  StaticColor,
+} from '@atb/theme/colors';
 import {TouchableOpacity, View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import React from 'react';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {TicketMultiple} from '@atb/assets/svg/mono-icons/ticketing';
 import {FareProductTypeConfig} from '@atb-as/config-specs';
 import {useFirestoreConfiguration} from '@atb/configuration';
@@ -23,11 +26,22 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   testID,
 }) => {
   const styles = useStyles();
-  const {themeName} = useTheme();
-  const iconColor: StaticColor = 'background_accent_2';
+  const {theme, themeName} = useTheme();
   const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
   const themeColor = getStaticColor(themeName, color);
   const {t} = useTranslation();
+
+  const transportThemePrimaryColor = getTransportationColor(
+    themeName,
+    'transport_other',
+    'primary',
+  );
+
+  const transportThemeSecondaryColor = getTransportationColor(
+    themeName,
+    'transport_other',
+    'secondary',
+  );
 
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -55,7 +69,10 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
     <View
       style={[
         styles.tipsAndInformation,
-        {backgroundColor: themeColor.background},
+        {
+          backgroundColor: themeColor.background,
+          borderBottomColor: transportThemePrimaryColor.background,
+        },
       ]}
       testID={testID}
     >
@@ -69,21 +86,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
         >
           <View style={styles.contentContainer}>
             <View style={styles.titleContainer}>
-              <View style={styles.iconBox}>
-                <ThemeIcon
-                  size={'small'}
-                  svg={TicketMultiple}
-                  colorType={iconColor}
-                  testID={testID}
-                />
-              </View>
-              <ThemeText
-                type="label__uppercase"
-                accessible={false}
-                color={'secondary'}
-              >
-                {t(TicketingTexts.ticketAssistantTile.label)}
-              </ThemeText>
+              <BetaTag style={styles.betaTag} />
             </View>
             <View style={styles.titleContainer}>
               <ThemeText
@@ -94,13 +97,22 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
               >
                 {title}
               </ThemeText>
-              <BetaTag style={styles.betaTag} />
             </View>
 
-            <ThemeText type="body__tertiary" color={'secondary'}>
+            <ThemeText
+              type="body__tertiary"
+              color={'secondary'}
+              style={styles.description}
+            >
               {t(TicketingTexts.ticketAssistantTile.description)}
             </ThemeText>
           </View>
+          <TicketMultiple
+            style={styles.illustration}
+            fill={transportThemeSecondaryColor.background}
+            width={theme.icon.size.large}
+            height={theme.icon.size.large}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -112,13 +124,20 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexShrink: 1,
     alignSelf: 'stretch',
     padding: theme.spacings.xLarge,
-    borderRadius: theme.border.radius.regular,
+    paddingBottom: theme.spacings.xLarge - 2 * theme.border.width.medium,
+    borderBottomWidth: 2 * theme.border.width.medium,
+    borderRadius: theme.border.radius.small,
+
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.large,
   },
   betaTag: {
-    marginHorizontal: theme.spacings.small,
+    marginBottom: theme.spacings.xSmall,
   },
+  illustration: {
+    marginTop: theme.spacings.small,
+  },
+  description: {marginBottom: theme.spacings.small},
   iconBox: {
     backgroundColor: theme.static.status.info.background,
     display: 'flex',
@@ -129,7 +148,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   titleContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
     marginBottom: theme.spacings.small,
   },
 
