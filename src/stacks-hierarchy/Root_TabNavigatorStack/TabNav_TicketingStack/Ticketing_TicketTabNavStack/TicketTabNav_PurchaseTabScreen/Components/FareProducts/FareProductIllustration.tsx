@@ -30,7 +30,7 @@ const fareProductIllustrations = {
 type FareProductIllustrationType = keyof typeof fareProductIllustrations;
 
 type FareProductIllustrationsProps = {
-  config: FareProductTypeConfig;
+  config?: FareProductTypeConfig;
 } & SvgProps;
 
 export const FareProductIllustration = ({
@@ -43,9 +43,9 @@ export const FareProductIllustration = ({
 };
 
 const getIllustrationFileName = (
-  config: FareProductTypeConfig,
+  config?: FareProductTypeConfig,
 ): FareProductIllustrationType => {
-  switch (config.illustration) {
+  switch (config?.illustration) {
     case 'single':
       return 'Ticket';
     case 'period':
@@ -61,7 +61,7 @@ const getIllustrationFileName = (
     case 'youth':
       return 'Youth';
     case 'boat':
-      if (config.configuration.productSelectionMode === 'duration') {
+      if (config?.configuration.productSelectionMode === 'duration') {
         return 'PeriodTicket';
       } else {
         return 'Ticket';
