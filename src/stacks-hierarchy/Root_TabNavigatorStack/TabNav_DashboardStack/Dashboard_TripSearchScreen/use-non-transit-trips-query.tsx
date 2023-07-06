@@ -4,7 +4,6 @@ import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useEffect, useRef, useState} from 'react';
 import {SearchStateType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
-import {ErrorType} from '@atb/api/utils';
 import {CancelTokenSource} from 'axios';
 import {nonTransitTripSearch} from '@atb/api/trips';
 import {
@@ -29,7 +28,6 @@ export const useNonTransitTripsQuery = (
   const [nonTransitTrips, setNonTransitTrips] = useState<
     NonTransitTripsQuery[]
   >([]);
-  const [errorType, setErrorType] = useState<ErrorType>();
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
   const {
@@ -80,9 +78,13 @@ export const useNonTransitTripsQuery = (
           result?.length === 0 ? 'search-empty-result' : 'search-success',
         );
       })
-      .catch((e) => {
+      .catch(() => {
         cancelTokenRef.current = cancelTokenSource;
-        setErrorType(e);
+        // Purposely ignore errors from non transit trip searches.
+        // Non transit trip searches are not a critical feature,
+        // and failing silently will thus not affect the user experience severely.
+        // If travel search fails in general, the error handling in the normal
+        // travel search will display an error message to the user.
       });
 
     return () => {
@@ -99,6 +101,5 @@ export const useNonTransitTripsQuery = (
   return {
     nonTransitTrips,
     searchState: searchState,
-    error: errorType,
   };
 };
