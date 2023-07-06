@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 const TripSearchTexts = {
   header: {
@@ -267,6 +268,22 @@ const TripSearchTexts = {
         ),
       a11yLabelPrefix: _('Filter: ', 'Filter: '),
       a11yHint: _('Aktiver for å fjerne filter.', 'Activate to remove filter.'),
+    },
+  },
+  nonTransit: {
+    travelMode: (mode: StreetMode) => {
+      switch (mode) {
+        case StreetMode.Bicycle:
+          return _('Sykkel', 'Bike');
+        case StreetMode.BikeRental:
+          return _('Bysykkel', 'City bike');
+        case StreetMode.Foot:
+          return _('Gå', 'Walk');
+        case StreetMode.ScooterRental:
+          return _('Sparkesykkel', 'E-scooter');
+        default:
+          return _('', '');
+      }
     },
   },
 };
