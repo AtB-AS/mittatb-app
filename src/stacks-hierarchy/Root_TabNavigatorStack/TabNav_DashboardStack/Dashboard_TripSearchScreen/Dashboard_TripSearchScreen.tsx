@@ -391,6 +391,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   resetTransportModes={filtersState.resetTransportModes}
                 />
               )}
+              {nonTransitSearchState === 'search-success' && (
+                <NonTransitResults
+                  trips={nonTransitTrips}
+                  onDetailsPressed={onPressed}
+                />
+              )}
               {isFlexibleTransportEnabled &&
                 tripPatterns.length > 0 &&
                 !error && (
@@ -407,12 +413,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     }}
                   />
                 )}
-              {nonTransitSearchState === 'search-success' && (
-                <NonTransitResults
-                  trips={nonTransitTrips}
-                  onDetailsPressed={onPressed}
-                />
-              )}
               <Results
                 tripPatterns={tripPatterns}
                 isSearching={isSearching}
