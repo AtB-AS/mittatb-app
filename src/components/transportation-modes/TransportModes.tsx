@@ -1,5 +1,9 @@
 import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
-import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
+import {
+  CounterIconBox,
+  TransportationIconBox,
+  getTransportModeSvg,
+} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -30,6 +34,7 @@ export const getTransportModeText = (
   }
   return modes
     .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
+    .filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
     .join('/');
 };
 export const TransportModes = ({
@@ -47,7 +52,16 @@ export const TransportModes = ({
   const {t} = useTranslation();
 
   const modesCount: number = modes.length;
-  const modesToDisplay = modes.slice(0, modesDisplayLimit);
+  const modesToDisplay = modes
+    .slice(0, modesDisplayLimit)
+    .filter(
+      (value, index, array) =>
+        array
+          .map((m) => getTransportModeSvg(m.mode, m.subMode).name)
+          .indexOf(getTransportModeSvg(value.mode, value.subMode).name) ===
+        index,
+    ); // remove duplicate icons
+
   const transportModeText: string = getTransportModeText(
     modes,
     t,

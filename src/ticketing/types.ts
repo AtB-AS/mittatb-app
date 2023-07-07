@@ -23,6 +23,8 @@ export type TravelRight = {
     | 'PreActivatedPeriodTicket'
     | 'CarnetTicket'
     | 'NightTicket'
+    | 'SingleBoatTicket'
+    | 'PeriodBoatTicket'
     | 'UnknownTicket';
 };
 
