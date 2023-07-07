@@ -1,12 +1,14 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {useInterval} from './use-interval';
 import {useIsLoading} from './use-is-loading';
 import {usePrevious} from '@atb/utils/use-previous';
+import {useIsFocusedAndActive} from './use-is-focused-and-active';
 
 type PollableResourceOptions<T> = {
   initialValue: T;
   pollingTimeInSeconds?: number;
   disabled?: boolean;
+  reloadOnFocus?: boolean;
 };
 
 type LoadingState = 'NO_LOADING' | 'WITH_LOADING';
@@ -35,7 +37,9 @@ export const usePollableResource = <T, E extends Error = Error>(
   boolean,
   E?,
 ] => {
-  const {initialValue, pollingTimeInSeconds = 30} = opts;
+  const {initialValue, pollingTimeInSeconds = 30, reloadOnFocus = false} = opts;
+  const isFocused = useIsFocusedAndActive();
+  const firstLoadIsDone = useRef<boolean>(false);
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
@@ -49,7 +53,6 @@ export const usePollableResource = <T, E extends Error = Error>(
       loading: LoadingState = 'WITH_LOADING',
       abortController?: AbortController,
     ) {
-      // Only fetch if there is a location and the screen is in focus.
       if (loading === 'WITH_LOADING') {
         setIsLoading(true);
       }
@@ -57,6 +60,7 @@ export const usePollableResource = <T, E extends Error = Error>(
         .then((newState) => {
           setState(newState);
           setError(undefined);
+          firstLoadIsDone.current = true;
         })
         .catch((e) => {
           if (!abortController?.signal.aborted) setError(e);
@@ -77,11 +81,19 @@ export const usePollableResource = <T, E extends Error = Error>(
     return () => abortController.abort();
   }, [reload]);
 
+  useEffect(() => {
+    if (!reloadOnFocus || !firstLoadIsDone.current || !isFocused) return;
+    const abortController = new AbortController();
+    setAbortController(abortController);
+    reload('NO_LOADING', abortController);
+    return () => abortController.abort();
+  }, [isFocused]);
+
   useInterval(
     () => reload('NO_LOADING', abortController),
     pollTime,
     [reload],
-    opts.disabled,
+    opts.disabled || (reloadOnFocus && !isFocused),
   );
 
   return [state, reload, isLoading, error];

@@ -21,7 +21,7 @@ export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
   >(fetchVehicles, {
     initialValue: undefined,
     pollingTimeInSeconds: 20,
-    disabled: !isFocused,
+    reloadOnFocus: true,
   });
 
   useEffect(() => {
