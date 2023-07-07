@@ -58,6 +58,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalytics} from '@atb/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
+import {MapFilterType} from '@atb/components/map';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -186,16 +187,23 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
   );
 
+  type OnPressedOptions = {
+    analyticsMetadata?: {[key: string]: any};
+    mapFilter?: MapFilterType;
+  };
   const onPressed = useCallback(
-    (tripPattern: TripPattern, resultIndex) => {
-      analytics.logEvent('Trip search', 'Trip details opened', {
-        resultIndex,
-      });
+    (tripPattern: TripPattern, opts?: OnPressedOptions) => {
+      analytics.logEvent(
+        'Trip search',
+        'Trip details opened',
+        opts?.analyticsMetadata,
+      );
       navigation.navigate('Dashboard_TripDetailsScreen', {
         tripPattern,
+        mapFilter: opts?.mapFilter,
       });
     },
-    [navigation, from, to],
+    [analytics, navigation],
   );
 
   function swap() {
@@ -419,7 +427,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 showEmptyScreen={showEmptyScreen}
                 isEmptyResult={isEmptyResult}
                 resultReasons={noResultReasons}
-                onDetailsPressed={onPressed}
+                onDetailsPressed={(tripPattern, resultIndex) =>
+                  onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
+                }
                 errorType={error}
                 searchTime={searchTime}
                 anyFiltersApplied={

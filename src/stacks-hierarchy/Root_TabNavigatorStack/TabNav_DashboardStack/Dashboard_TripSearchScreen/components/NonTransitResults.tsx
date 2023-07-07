@@ -9,10 +9,16 @@ import {TripPattern} from '@atb/api/types/trips';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {isBlank} from '@atb/utils/presence';
 import arrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import {MapFilterType} from '@atb/components/map';
+
+type OnPressedOptions = {
+  analyticsMetadata?: {[key: string]: any};
+  mapFilter?: MapFilterType | undefined;
+};
 
 type Props = {
   trips: NonTransitTripsQuery[];
-  onDetailsPressed(tripPattern?: TripPattern, resultIndex?: number): void;
+  onDetailsPressed: (tripDetails: TripPattern, opts: OnPressedOptions) => void;
 };
 
 export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
@@ -23,13 +29,18 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
 
   return (
     <ScrollView horizontal={true} style={style.container}>
-      {trips.map((trip, i) => {
+      {trips.map((trip) => {
         // Non-transit trips will only have one trip pattern.
         const tripPattern = trip.trip?.tripPatterns[0];
         if (!tripPattern) return null;
         const mode = t(TripSearchTexts.nonTransit.travelMode(trip.mode));
         const duration = secondsToDurationShort(tripPattern.duration, language);
         const durationLong = secondsToDuration(tripPattern.duration, language);
+        const analyticsMetadata = {mode: trip.mode, duration};
+        const mapFilter =
+          trip.mode === 'bike_rental'
+            ? {stations: {cityBikeStations: {showAll: true, operators: []}}}
+            : undefined;
         return (
           <Button
             style={style.tripMode}
@@ -39,7 +50,9 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
             text={`${mode} ${duration}`}
             leftIcon={{svg: getTransportModeSvg(trip.mode)}}
             rightIcon={{svg: arrowRight}}
-            onPress={() => onDetailsPressed(tripPattern, i)}
+            onPress={() =>
+              onDetailsPressed(tripPattern, {analyticsMetadata, mapFilter})
+            }
             accessibilityLabel={`${mode} ${durationLong}`}
           />
         );

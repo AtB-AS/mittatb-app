@@ -26,7 +26,7 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: string[];
-  onDetailsPressed(tripPattern?: TripPattern, resultIndex?: number): void;
+  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
   errorType?: ErrorType;
   searchTime: SearchTime;
   anyFiltersApplied: boolean;

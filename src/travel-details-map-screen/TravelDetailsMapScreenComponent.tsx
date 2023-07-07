@@ -9,7 +9,9 @@ import {
   BackArrow,
   flyToLocation,
   MapCameraConfig,
+  MapFilterType,
   MapLeg,
+  MapRegion,
   MapViewConfig,
   PositionArrow,
   useControlPositionsStyle,
@@ -31,7 +33,12 @@ import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import {
+  MapState,
+  RegionPayload,
+} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import {useStations} from '@atb/mobility';
+import {Stations} from '@atb/components/map';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -40,6 +47,7 @@ export type TravelDetailsMapScreenParams = {
   toPlace?: Coordinates | Position;
   mode?: AnyMode;
   subMode?: AnySubMode;
+  mapFilter?: MapFilterType;
 };
 
 type Props = TravelDetailsMapScreenParams & {
@@ -58,6 +66,7 @@ export const TravelDetailsMapScreenComponent = ({
   onPressBack,
   mode,
   subMode,
+  mapFilter,
 }: Props) => {
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -79,6 +88,8 @@ export const TravelDetailsMapScreenComponent = ({
   const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
     vehicleWithPosition,
   );
+
+  const stations = useStations(mapFilter ?? null);
 
   const [isError, setIsError] = useState(false);
 
@@ -117,6 +128,31 @@ export const TravelDetailsMapScreenComponent = ({
           },
         };
 
+  const loadStations = (mapRegion: MapRegion) => {
+    stations?.updateRegion(mapRegion);
+  };
+
+  const onDidFinishLoadingMap = async () => {
+    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
+    const zoomLevel = await mapViewRef.current?.getZoom();
+    const center = await mapViewRef.current?.getCenter();
+    if (!visibleBounds || !zoomLevel || !center) return;
+    loadStations({
+      visibleBounds,
+      zoomLevel,
+      center,
+    });
+  };
+
+  const onMapIdle = (state: MapState) => {
+    setZoomLevel(state.properties.zoom);
+    loadStations({
+      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
+      zoomLevel: state.properties.zoom,
+      center: state.properties.center,
+    });
+  };
+
   useEffect(() => {
     const location = vehicle?.location;
     if (!location) return;
@@ -138,7 +174,8 @@ export const TravelDetailsMapScreenComponent = ({
         pitchEnabled={false}
         {...MapViewConfig}
         {...mapCameraTrackingMethod}
-        onMapIdle={(state) => setZoomLevel(state.properties.zoom)}
+        onMapIdle={onMapIdle}
+        onDidFinishLoadingMap={onDidFinishLoadingMap}
       >
         <MapboxGL.Camera
           ref={mapCameraRef}
@@ -175,6 +212,7 @@ export const TravelDetailsMapScreenComponent = ({
             isError={isError}
           />
         )}
+        {stations && <Stations stations={stations.stations} />}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow
