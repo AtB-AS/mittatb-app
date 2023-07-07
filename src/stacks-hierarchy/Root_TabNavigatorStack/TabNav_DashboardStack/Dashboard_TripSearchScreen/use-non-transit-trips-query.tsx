@@ -3,18 +3,15 @@ import {SearchTime} from '@atb/journey-date-picker';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useEffect, useRef, useState} from 'react';
-import {SearchStateType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {SearchStateType} from '../types';
 import {CancelTokenSource} from 'axios';
 import {nonTransitTripSearch} from '@atb/api/trips';
-import {
-  createQuery,
-  sanitizeSearchTime,
-  SearchInput,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/utils';
+import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 import {usePreferences} from '@atb/preferences';
 import {CancelToken} from '@atb/api';
 import {isValidTripLocations} from '@atb/utils/location';
 import {NonTransitTripsQuery} from '@atb/api/types/generated/TripsQuery';
+import {useNonTransitTripSearchEnabled} from './use-non-transit-trip-search-enabled';
 
 export const useNonTransitTripsQuery = (
   fromLocation: Location | undefined,
@@ -33,8 +30,11 @@ export const useNonTransitTripsQuery = (
   const {
     preferences: {tripSearchPreferences},
   } = usePreferences();
+  const isNonTransitTripSearchEnabled = useNonTransitTripSearchEnabled();
 
   useEffect(() => {
+    if (!isNonTransitTripSearchEnabled) return;
+
     setSearchState('searching');
 
     if (
@@ -91,6 +91,7 @@ export const useNonTransitTripsQuery = (
       cancelTokenSource.cancel('Unmounting use trips hook');
     };
   }, [
+    isNonTransitTripSearchEnabled,
     fromLocation,
     toLocation,
     searchTime,
