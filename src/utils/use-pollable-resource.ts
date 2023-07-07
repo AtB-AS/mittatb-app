@@ -41,11 +41,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   boolean,
   E?,
 ] => {
-  const {
-    initialValue,
-    pollingTimeInSeconds = 30,
-    pollOnFocus: reloadOnFocus = false,
-  } = opts;
+  const {initialValue, pollingTimeInSeconds = 30, pollOnFocus = false} = opts;
   const isFocused = useIsFocusedAndActive();
   const firstLoadIsDone = useRef<boolean>(false);
   const [isLoading, setIsLoading] = useIsLoading(false);
@@ -90,7 +86,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   }, [reload]);
 
   useEffect(() => {
-    if (!reloadOnFocus || !firstLoadIsDone.current || !isFocused) return;
+    if (!pollOnFocus || !firstLoadIsDone.current || !isFocused) return;
     const abortController = new AbortController();
     setAbortController(abortController);
     reload('NO_LOADING', abortController);
@@ -101,7 +97,7 @@ export const usePollableResource = <T, E extends Error = Error>(
     () => reload('NO_LOADING', abortController),
     pollTime,
     [reload],
-    opts.disabled || (reloadOnFocus && !isFocused),
+    opts.disabled || (pollOnFocus && !isFocused),
   );
 
   return [state, reload, isLoading, error];
