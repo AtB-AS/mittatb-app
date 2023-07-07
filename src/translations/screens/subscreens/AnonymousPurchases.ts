@@ -86,7 +86,7 @@ export default orgSpecificTranslations(AnonymousPurchases, {
         accept: {
           label: _(
             'Jeg vil forsette uten å logge inn',
-            'I accept the restrictions',
+            'I want to continue without signing in',
           ),
         },
       },
