@@ -4,21 +4,22 @@ import React from 'react';
 import {InfoChip} from '../info-chip';
 
 type Props = {
+  text: string;
   style?: StyleProp<ViewStyle>;
 };
-export const BetaTag = ({style}: Props) => {
+export const InfoTag = ({text, style}: Props) => {
   const styles = useStyles();
   return (
     <InfoChip
-      text="Beta"
+      text={text}
       interactiveColor="interactive_0"
-      style={[styles.betaLabel, style]}
+      style={[styles.infoLabel, style]}
     />
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  betaLabel: {
+  infoLabel: {
     backgroundColor: theme.static.status.info.background,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.circle,

@@ -11,7 +11,7 @@ import {
   TransportColor,
 } from '@atb/theme/colors';
 
-import {BetaTag} from '@atb/components/beta-tag';
+import {InfoTag} from '@atb/components/info-tag';
 
 import {TicketingTileIllustration} from './TicketingTileIllustration';
 
@@ -74,7 +74,7 @@ export const TicketingTile = ({
         <View style={styles.contentContainer}>
           {showBetaTag && (
             <View style={styles.betaTagContainer}>
-              <BetaTag style={styles.betaTag} />
+              <InfoTag text="Beta" style={styles.betaTag} />
             </View>
           )}
           <ThemeText
