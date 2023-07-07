@@ -1,12 +1,10 @@
 import {getServiceJourneyVehicles} from '@atb/api/vehicles';
-import {useCallback, useEffect} from 'react';
+import {useCallback} from 'react';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {AxiosError} from 'axios';
 import {GetServiceJourneyVehicles} from '@atb/api/types/vehicles';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
-  const isFocused = useIsFocusedAndActive();
   const fetchVehicles = useCallback(
     (signal?: AbortSignal) =>
       getServiceJourneyVehicles(serviceJourneyIds, {
@@ -15,7 +13,7 @@ export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
     [JSON.stringify(serviceJourneyIds)],
   );
 
-  const [updatedVehicles, reload, , error] = usePollableResource<
+  const [updatedVehicles, , , error] = usePollableResource<
     GetServiceJourneyVehicles | undefined,
     AxiosError
   >(fetchVehicles, {
@@ -23,13 +21,6 @@ export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
     pollingTimeInSeconds: 20,
     reloadOnFocus: true,
   });
-
-  useEffect(() => {
-    if (!isFocused) return;
-    const abortController = new AbortController();
-    reload('WITH_LOADING', abortController);
-    return () => abortController.abort();
-  }, [isFocused]);
 
   return {
     vehiclePositions: updatedVehicles ?? undefined,
