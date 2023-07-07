@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
 import {Button} from '@atb/components/button';
-import {secondsToDurationShort} from '@atb/utils/date';
+import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 import {NonTransitTripsQuery} from '@atb/api/types/generated/TripsQuery';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
@@ -29,6 +29,7 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
         if (!tripPattern) return null;
         const mode = t(TripSearchTexts.nonTransit.travelMode(trip.mode));
         const duration = secondsToDurationShort(tripPattern.duration, language);
+        const durationLong = secondsToDuration(tripPattern.duration, language);
         return (
           <Button
             style={style.tripMode}
@@ -39,6 +40,7 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
             leftIcon={{svg: getTransportModeSvg(trip.mode)}}
             rightIcon={{svg: arrowRight}}
             onPress={() => onDetailsPressed(tripPattern, i)}
+            accessibilityLabel={`${mode} ${durationLong}`}
           />
         );
       })}
