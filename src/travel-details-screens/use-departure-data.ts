@@ -88,7 +88,7 @@ export function useDepartureData(
     },
     pollingTimeInSeconds,
     disabled: !activeItem,
-    reloadOnFocus: true,
+    pollOnFocus: true,
   });
 
   return [data, isLoading];

@@ -8,7 +8,11 @@ type PollableResourceOptions<T> = {
   initialValue: T;
   pollingTimeInSeconds?: number;
   disabled?: boolean;
-  reloadOnFocus?: boolean;
+  /**
+   * Disables polling on loss of focus or active app state, and polls
+   * immediatelly when focus is regained.
+   */
+  pollOnFocus?: boolean;
 };
 
 type LoadingState = 'NO_LOADING' | 'WITH_LOADING';
@@ -37,7 +41,11 @@ export const usePollableResource = <T, E extends Error = Error>(
   boolean,
   E?,
 ] => {
-  const {initialValue, pollingTimeInSeconds = 30, reloadOnFocus = false} = opts;
+  const {
+    initialValue,
+    pollingTimeInSeconds = 30,
+    pollOnFocus: reloadOnFocus = false,
+  } = opts;
   const isFocused = useIsFocusedAndActive();
   const firstLoadIsDone = useRef<boolean>(false);
   const [isLoading, setIsLoading] = useIsLoading(false);
