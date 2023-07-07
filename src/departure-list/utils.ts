@@ -5,12 +5,11 @@ import {
   QuayGroup,
   StopPlaceGroup,
 } from '@atb/api/departures/types';
-import * as DepartureTypes from '@atb/api/types/departures';
+import {EstimatedCall} from '@atb/api/types/departures';
 import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
 import {isNumberOfMinutesInThePast} from '@atb/utils/date';
 
 export const HIDE_AFTER_NUM_MINUTES = 1;
-
 /***
  * Used to update all stops with new time from realtime mapping object returned
  * from the BFF. It also removes outdated departures which most likely have passed.
@@ -83,7 +82,10 @@ function updateDeparturesWithRealtime(
 
       const departureRealtime = realtime.departures[serviceJourneyId];
 
-      if (!departureRealtime) {
+      if (
+        !departureRealtime ||
+        departure.aimedTime !== departureRealtime.timeData.aimedDepartureTime
+      ) {
         return departure;
       }
 
@@ -102,9 +104,9 @@ function updateDeparturesWithRealtime(
 }
 
 export function updateDeparturesWithRealtimeV2(
-  estimatedCalls: DepartureTypes.EstimatedCall[] | null,
+  estimatedCalls: EstimatedCall[] | null,
   realtime?: DeparturesRealtimeData,
-): DepartureTypes.EstimatedCall[] | null {
+): EstimatedCall[] | null {
   if (!estimatedCalls) return null;
   if (!realtime) return estimatedCalls;
 

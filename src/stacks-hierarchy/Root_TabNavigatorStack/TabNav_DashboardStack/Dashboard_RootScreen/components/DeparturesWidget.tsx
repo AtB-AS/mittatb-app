@@ -15,12 +15,16 @@ import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {Coordinates} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
-import * as Sections from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -41,17 +45,21 @@ export const DeparturesWidget = ({
 
   useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
 
-  const {open: openBottomSheet} = useBottomSheet();
-  const closeRef = useRef(null);
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onCloseFocusRef,
+  } = useBottomSheet();
+
   async function openFrontpageFavouritesBottomSheet() {
-    openBottomSheet((close) => {
+    openBottomSheet(() => {
       return (
         <SelectFavouritesBottomSheet
-          close={close}
+          close={closeBottomSheet}
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
-    }, closeRef);
+    });
   }
 
   const sortedStopPlaceGroups = location
@@ -71,8 +79,8 @@ export const DeparturesWidget = ({
       </ThemeText>
 
       {!favoriteDepartures.length && (
-        <Sections.Section>
-          <Sections.GenericSectionItem>
+        <Section>
+          <GenericSectionItem>
             <View style={styles.noFavouritesView}>
               <ThemedNoFavouriteDepartureImage />
               <View style={styles.noFavouritesTextContainer}>
@@ -86,15 +94,15 @@ export const DeparturesWidget = ({
                 </ThemeText>
               </View>
             </View>
-          </Sections.GenericSectionItem>
-          <Sections.LinkSectionItem
+          </GenericSectionItem>
+          <LinkSectionItem
             textType="body__secondary"
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onAddFavouriteDeparture}
             icon={<ThemeIcon svg={Add} />}
             testID="addFavoriteDeparture"
           />
-        </Sections.Section>
+        </Section>
       )}
 
       {state.isLoading && (
@@ -125,7 +133,7 @@ export const DeparturesWidget = ({
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}
-          ref={closeRef}
+          ref={onCloseFocusRef}
           testID="selectFavoriteDepartures"
         />
       )}

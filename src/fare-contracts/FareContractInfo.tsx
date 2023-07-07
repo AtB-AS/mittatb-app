@@ -1,4 +1,4 @@
-import {ThemeText} from '@atb/components/text';
+import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {
   PreassignedFareProduct,
   TariffZone,
@@ -25,7 +25,6 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {UserProfileWithCount} from '../stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
 import {
   getNonInspectableTokenWarning,
   isValidFareContract,
@@ -34,16 +33,16 @@ import {
   userProfileCountAndName,
   getValidityStatus,
   tariffZonesSummary,
-} from '@atb/fare-contracts/utils';
-import {screenReaderPause} from '@atb/components/text';
+} from '../fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {FareContractDetail} from '@atb/fare-contracts/Component/FareContractDetail';
-import {WarningMessage} from '@atb/fare-contracts/Component/WarningMessage';
-import {Barcode} from '@atb/fare-contracts/Details/Barcode';
+import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
+import {WarningMessage} from '../fare-contracts/components/WarningMessage';
+import {Barcode} from '../fare-contracts/details/Barcode';
 import {SectionSeparator} from '@atb/components/sections';
-import {getLastUsedAccess} from './Carnet/CarnetDetails';
-import {InspectionSymbol} from '@atb/fare-contracts/Component/InspectionSymbol';
+import {getLastUsedAccess} from './carnet/CarnetDetails';
+import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
+import {UserProfileWithCount} from './types';
 
 export type FareContractInfoProps = {
   travelRights: PreActivatedTravelRight[];

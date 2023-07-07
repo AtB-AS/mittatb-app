@@ -40,18 +40,26 @@ const PurchaseOverviewTexts = {
   ),
   samarbeidsbillettenInfo: {
     single: _(
-      'Enkeltbilletter i sone A kan også brukes på tog i sone A. De kan imidlertid ikke brukes på nattbusser.',
-      'Single tickets in zone A can also be used on train in zone A. However they cannot be used on night buses.',
+      'Enkeltbilletter i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
+      'Single tickets in zone A can also be used on train in zone A, but not on night buses.',
     ),
     period: _(
       'Periodebilletter i sone A kan også brukes på tog i sone A.',
       'Periodic tickets in zone A can also be used on train in zone A.',
     ),
     hour24: _(
-      '24-timersbillett kan ikke brukes på tog eller nattbuss.',
-      '24 hour pass can not be used on trains nor night buses.',
+      '24-timersbillett i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
+      '24 hour pass in zone A can also be used on train in zone A, but not on night buses.',
     ),
   },
+  nfkNightBusPeriodNotice: _(
+    '3- og 7-dagers billett inkluderer ikke nattbuss.',
+    '3 and 7 day periodic tickets does not include night bus.',
+  ),
+  nfkNightBusHour24Notice: _(
+    '24-timersbilletten inkluderer ikke nattbuss.',
+    'The 24 hour pass does not include night bus.',
+  ),
   zones: {
     title: {
       single: {
@@ -80,20 +88,18 @@ const PurchaseOverviewTexts = {
     a11yTitle: _('Aktiver for å velge billett', 'Activate to select ticket'),
   },
   travellerSelection: {
-    title_single: _('Velg passasjerkategori', 'Select a traveller'),
-    title_multiple: _('Velg passasjerkategorier', 'Select travellers'),
+    title_single: _('Velg reisende', 'Select a traveller'),
+    title_multiple: _('Velg reisende', 'Select travellers'),
+    a11yLabelPrefixSingle: _('Valgt reisende:', 'Selected traveller:'),
+    a11yLabelPrefixMultiple: _('Valgte reisende:', 'Selected travellers:'),
     a11yHint: _('Aktiver for å velge reisende', 'Activate to select traveller'),
+    travellers_title: (numberOfTravellers: number) =>
+      _(`${numberOfTravellers} reisende`, `${numberOfTravellers} travellers`),
   },
-  infoToggle: {
-    label: _('Vis info', 'Show info'),
-    travellerA11yLabel: _(
-      'Vis informasjon om passasjerkategorier',
-      'Show information about traveller categories',
-    ),
-    productTicketA11yLabel: _(
-      'Vis informasjon om produkter',
-      'Show information about products',
-    ),
+  travellerSelectionSheet: {
+    title: _('Reisende', 'Travellers'),
+    close: _('Lukk', 'Close'),
+    confirm: _('Bekreft valg', 'Confirm choice'),
   },
   startTime: {
     title: _('Velg oppstartstidspunkt', 'Select start time'),

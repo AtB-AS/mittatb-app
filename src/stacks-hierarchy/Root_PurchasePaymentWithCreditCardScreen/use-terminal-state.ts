@@ -30,7 +30,7 @@ export function useTerminalState(
   const [reservation, setReservation] = useState<OfferReservation>();
   const [error, setError] = useState<PaymentError>();
 
-  const {user} = useAuthState();
+  const {user, abtCustomerIdFull} = useAuthState();
 
   const handleAxiosError = useCallback(function (
     err: AxiosError | unknown,
@@ -56,6 +56,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
+              customerAccountId: abtCustomerIdFull!,
             })
           : await reserveOffers({
               offers,
@@ -65,6 +66,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
+              customerAccountId: abtCustomerIdFull!,
             });
         setReservation(response);
       } catch (err) {

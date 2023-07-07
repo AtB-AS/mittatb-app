@@ -5,11 +5,14 @@ import {
   TariffZone,
   UserProfile,
 } from '@atb/reference-data/types';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {useMemo} from 'react';
-import {TariffZoneWithMetadata} from '../Root_PurchaseTariffZonesSearchByMapScreen';
-import {UserProfileWithCount} from './components/Travellers/use-user-count-state';
-import {useTariffZoneFromLocation} from '../utils';
+import {UserProfileWithCount} from '@atb/fare-contracts';
+import {
+  TariffZoneWithMetadata,
+  useTariffZoneFromLocation,
+} from '@atb/tariff-zones-selector';
+import {useTicketingState} from '@atb/ticketing';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -25,11 +28,12 @@ export function useOfferDefaults(
 ) {
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
+  const {customerProfile} = useTicketingState();
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
   const selectableProducts = preassignedFareProducts
-    .filter(productIsSellableInApp)
+    .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
   const defaultPreassignedFareProduct =
     preassignedFareProduct ?? selectableProducts[0];
@@ -88,34 +92,48 @@ const useTravellersWithPreselectedCounts = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
-) => {
-  return useMemo(
-    () =>
-      userProfiles
-        .filter((u) =>
-          preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-        )
-        .map((u) => ({
-          ...u,
-          count: getCountIfUserIsIncluded(u, defaultSelections),
-        })),
-    [userProfiles, preassignedFareProduct],
-  );
-};
+) =>
+  useMemo(() => {
+    let mappedUserProfiles = userProfiles
+      .filter((u) =>
+        preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+      )
+      .map((u) => ({
+        ...u,
+        count: getCountIfUserIsIncluded(u, defaultSelections),
+      }));
+
+    if (
+      !mappedUserProfiles.some(({count}) => count) &&
+      mappedUserProfiles.length > 0 // how to handle if length 0?
+    ) {
+      mappedUserProfiles[0].count = 1;
+    }
+    return mappedUserProfiles;
+  }, [userProfiles, preassignedFareProduct]);
 
 /**
- * Get the default tariff zone, either based on current location or else the
- * first tariff zone in the provided tariff zones list.
+ * Get the default tariff zone, either based on current location, default tariff
+ * zone set on tariff zone in reference data or else the first tariff zone in the
+ * provided tariff zones list.
  */
 const useDefaultTariffZone = (
   tariffZones: TariffZone[],
 ): TariffZoneWithMetadata => {
   const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
-  return useMemo<TariffZoneWithMetadata>(
-    () =>
-      tariffZoneFromLocation
-        ? {...tariffZoneFromLocation, resultType: 'geolocation'}
-        : {...tariffZones[0], resultType: 'zone'},
-    [tariffZones, tariffZoneFromLocation],
-  );
+  return useMemo<TariffZoneWithMetadata>(() => {
+    if (tariffZoneFromLocation) {
+      return {...tariffZoneFromLocation, resultType: 'geolocation'};
+    }
+
+    const defaultTariffZone = tariffZones.find(
+      (tariffZone) => tariffZone.isDefault,
+    );
+
+    if (defaultTariffZone) {
+      return {...defaultTariffZone, resultType: 'zone'};
+    }
+
+    return {...tariffZones[0], resultType: 'zone'};
+  }, [tariffZones, tariffZoneFromLocation]);
 };

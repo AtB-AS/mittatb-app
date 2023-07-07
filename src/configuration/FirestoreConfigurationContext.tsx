@@ -9,12 +9,14 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {
+  CityZone,
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
 import {
+  defaultCityZones,
   defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
@@ -30,24 +32,29 @@ import {FareProductTypeConfig} from './types';
 import {
   mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
+  mapToFlexibleTransportOption,
+  mapToMobilityOperators,
   mapToTransportModeFilterOptions,
 } from './converters';
-import type {TravelSearchFiltersType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {LanguageAndTextType} from '@atb/translations';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
+import {TravelSearchFiltersType} from '@atb-as/config-specs';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
 };
 
 type ConfigurableLinks = {
-  ticketingInfo: LanguageAndTextType[];
-  termsInfo: LanguageAndTextType[];
-  inspectionInfo: LanguageAndTextType[];
+  ticketingInfo?: LanguageAndTextType[];
+  termsInfo?: LanguageAndTextType[];
+  inspectionInfo?: LanguageAndTextType[];
+  refundInfo?: LanguageAndTextType[];
 };
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
   tariffZones: TariffZone[];
+  cityZones: CityZone[];
   userProfiles: UserProfile[];
   modesWeSellTicketsFor: string[];
   paymentTypes: PaymentType[];
@@ -56,11 +63,13 @@ type ConfigurationContextState = {
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinks | undefined;
+  mobilityOperators: MobilityOperatorType[] | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareProducts: defaultPreassignedFareProducts,
   tariffZones: defaultTariffZones,
+  cityZones: defaultCityZones,
   userProfiles: defaultUserProfiles,
   modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
   paymentTypes: defaultPaymentTypes,
@@ -69,6 +78,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   travelSearchFilters: undefined,
   appTexts: undefined,
   configurableLinks: undefined,
+  mobilityOperators: undefined,
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -80,6 +90,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     defaultPreassignedFareProducts,
   );
   const [tariffZones, setTariffZones] = useState(defaultTariffZones);
+  const [cityZones, setCityZones] = useState(defaultCityZones);
   const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
   const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
     defaultModesWeSellTicketsFor,
@@ -94,6 +105,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [appTexts, setAppTexts] = useState<AppTexts>();
   const [configurableLinks, setConfigurableLinks] =
     useState<ConfigurableLinks>();
+  const [mobilityOperators, setMobilityOperators] = useState<
+    MobilityOperatorType[]
+  >([]);
 
   useEffect(() => {
     firestore()
@@ -109,6 +123,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           const tariffZones = getTariffZonesFromSnapshot(snapshot);
           if (tariffZones) {
             setTariffZones(tariffZones);
+          }
+
+          const cityZones = getCityZonesFromSnapshot(snapshot);
+          if (cityZones) {
+            setCityZones(cityZones);
           }
 
           const userProfiles = getUserProfilesFromSnapshot(snapshot);
@@ -153,6 +172,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (configurableLinks) {
             setConfigurableLinks(configurableLinks);
           }
+
+          const mobilityOperators = getMobilityOperatorsFromSnapshot(snapshot);
+          if (mobilityOperators) {
+            setMobilityOperators(mobilityOperators);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -167,6 +191,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     return {
       preassignedFareProducts,
       tariffZones,
+      cityZones,
       userProfiles,
       modesWeSellTicketsFor,
       paymentTypes,
@@ -175,10 +200,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       travelSearchFilters,
       appTexts,
       configurableLinks,
+      mobilityOperators,
     };
   }, [
     preassignedFareProducts,
     tariffZones,
+    cityZones,
     userProfiles,
     modesWeSellTicketsFor,
     paymentTypes,
@@ -187,6 +214,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     travelSearchFilters,
     appTexts,
     configurableLinks,
+    mobilityOperators,
   ]);
 
   return (
@@ -239,6 +267,24 @@ function getTariffZonesFromSnapshot(
   } catch (error: any) {
     Bugsnag.notify(error);
   }
+  return undefined;
+}
+
+function getCityZonesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): CityZone[] | undefined {
+  const cityZonesFromFirestore = snapshot.docs
+    .find((doc) => doc.id == 'referenceData')
+    ?.get<string>('cityZones');
+
+  try {
+    if (cityZonesFromFirestore) {
+      return JSON.parse(cityZonesFromFirestore) as CityZone[];
+    }
+  } catch (error: any) {
+    Bugsnag.notify(error);
+  }
+
   return undefined;
 }
 
@@ -319,16 +365,23 @@ function getFareProductTypeConfigsFromSnapshot(
 function getTravelSearchFiltersFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): TravelSearchFiltersType | undefined {
-  const transportModeOptions = snapshot.docs
-    .find((doc) => doc.id == 'travelSearchFilters')
-    ?.get('transportModes');
+  const travelSearchFiltersDoc = snapshot.docs.find(
+    (doc) => doc.id == 'travelSearchFilters',
+  );
+
+  const transportModeOptions = travelSearchFiltersDoc?.get('transportModes');
+  const flexibleTransport = travelSearchFiltersDoc?.get('flexibleTransport');
 
   const mappedTransportModes =
     mapToTransportModeFilterOptions(transportModeOptions);
 
+  const mappedFlexibleTransport =
+    mapToFlexibleTransportOption(flexibleTransport);
+
   if (mappedTransportModes) {
     return {
       transportModes: mappedTransportModes,
+      flexibleTransport: mappedFlexibleTransport,
     };
   }
 
@@ -360,12 +413,19 @@ function getConfigurableLinksFromSnapshot(
   const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
   const inspectionInfo = mapLanguageAndTextType(urls?.get('inspectionInfo'));
   const termsInfo = mapLanguageAndTextType(urls?.get('termsInfo'));
-
-  if (!ticketingInfo || !inspectionInfo || !termsInfo) return undefined;
+  const refundInfo = mapLanguageAndTextType(urls?.get('refundInfo'));
 
   return {
     ticketingInfo,
     termsInfo,
     inspectionInfo,
+    refundInfo,
   };
+}
+
+function getMobilityOperatorsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): MobilityOperatorType[] | undefined {
+  const operators = snapshot.docs.find((doc) => doc.id == 'mobility');
+  return mapToMobilityOperators(operators?.get('operators'));
 }

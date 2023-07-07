@@ -1,5 +1,3 @@
-import {Chat} from '@atb/assets/svg/mono-icons/actions';
-import {ChatUnread} from '@atb/assets/svg/color/icons/actions';
 import {IconButtonProps} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
@@ -10,6 +8,7 @@ import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
 
 export const useChatIcon = (
   color?: StaticColor | TextColor,
@@ -17,23 +16,33 @@ export const useChatIcon = (
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onOpenFocusRef,
+  } = useBottomSheet();
   const {t} = useTranslation();
 
   const openContactSheet = () => {
-    openBottomSheet((close, focusRef) => (
-      <ContactSheet close={close} ref={focusRef} />
+    openBottomSheet(() => (
+      <ContactSheet close={closeBottomSheet} ref={onOpenFocusRef} />
     ));
   };
 
   return {
     children: (
       <View style={styles.chatContainer} testID={testID}>
-        {unreadCount ? (
-          <ThemeIcon colorType={color} svg={ChatUnread} />
-        ) : (
-          <ThemeIcon colorType={color} svg={Chat} />
-        )}
+        <ThemeIcon
+          colorType={color}
+          svg={Chat}
+          notification={
+            unreadCount
+              ? {
+                  color: 'valid',
+                }
+              : undefined
+          }
+        />
       </View>
     ),
     accessibilityHint: t(ScreenHeaderTexts.headerButton.chat.a11yHint),

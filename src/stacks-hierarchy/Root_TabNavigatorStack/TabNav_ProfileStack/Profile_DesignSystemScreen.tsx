@@ -6,7 +6,6 @@ import {Button, ButtonGroup} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {RadioSegments} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
@@ -17,6 +16,7 @@ import {
   StaticColorByType,
   textNames,
   TextNames,
+  TransportColor,
 } from '@atb/theme/colors';
 import React, {useState} from 'react';
 import {Alert, View} from 'react-native';
@@ -25,6 +25,19 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {InfoChip} from '@atb/components/info-chip';
+import {
+  ActionSectionItem,
+  ButtonSectionItem,
+  ExpandableSectionItem,
+  GenericSectionItem,
+  HeaderSectionItem,
+  LinkSectionItem,
+  LocationInputSectionItem,
+  MessageSectionItem,
+  Section,
+  TextInputSectionItem,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 
 export const Profile_DesignSystemScreen = () => {
   const style = useProfileHomeStyle();
@@ -70,11 +83,16 @@ export const Profile_DesignSystemScreen = () => {
     },
   );
 
-  const transportSwatches = Object.keys(theme.static.transport).map((color) => {
-    const staticColor =
-      theme.static.transport[color as StaticColorByType<'transport'>];
-    return <Swatch color={staticColor} name={color} key={color} />;
+  const transportSwatches = Object.keys(theme.transport).map((color) => {
+    const staticColor = theme.transport[color as TransportColor];
+    return <Swatch color={staticColor.primary} name={color} key={color} />;
   });
+  const secondaryTransportSwatches = Object.keys(theme.transport).map(
+    (color) => {
+      const staticColor = theme.transport[color as TransportColor];
+      return <Swatch color={staticColor.secondary} name={color} key={color} />;
+    },
+  );
 
   const statusSwatches = Object.keys(theme.static.status).map((color) => {
     const staticColor =
@@ -132,15 +150,15 @@ export const Profile_DesignSystemScreen = () => {
       />
 
       <ScrollView>
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderSectionItem
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem
             text={'Current font scale: ' + fontScale.toFixed(3)}
           />
-        </Sections.Section>
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderSectionItem text="Icons" />
+        </Section>
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem text="Icons" />
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <View style={style.icons}>
               <ThemeIcon svg={Check} />
               <ThemeIcon svg={Check} colorType="info" />
@@ -214,41 +232,41 @@ export const Profile_DesignSystemScreen = () => {
                 />
               ))}
             </View>
-          </Sections.GenericSectionItem>
-        </Sections.Section>
+          </GenericSectionItem>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderSectionItem text="Messages" />
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem text="Messages" />
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox type="info" message="This is a message" />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               type="info"
               message="This is a message with title"
               title="Title"
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               message="This is a warning"
               title="Title"
               type="warning"
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               message="This is a success message"
               title="Title"
               type="valid"
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               message="This is an error with retry link"
               title="Title"
@@ -258,27 +276,27 @@ export const Profile_DesignSystemScreen = () => {
                 text: t(dictionary.retry),
               }}
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               type="info"
               isMarkdown={true}
               title="Markdown"
               message={`This is a message with markdown,\nSupporting **bold** and *italics*\nand special characters like ', " + æøå`}
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               type="info"
               title="With dismiss"
               onDismiss={() => Alert.alert('Closed')}
               message={`This is a message with dismiss button`}
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               type="warning"
               title="With dismiss and action"
@@ -289,9 +307,9 @@ export const Profile_DesignSystemScreen = () => {
               }}
               message={`This is a message with dismiss and action`}
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               type="error"
               title="With dismiss and link"
@@ -302,9 +320,9 @@ export const Profile_DesignSystemScreen = () => {
               }}
               message={`This is a message with dismiss and link`}
             />
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <MessageBox
               type="valid"
               isMarkdown={true}
@@ -312,11 +330,11 @@ export const Profile_DesignSystemScreen = () => {
               noStatusIcon={true}
               message={`This is a message without status icon`}
             />
-          </Sections.GenericSectionItem>
-        </Sections.Section>
+          </GenericSectionItem>
+        </Section>
 
-        <Sections.Section style={style.section}>
-          <Sections.ExpandableSectionItem
+        <Section style={style.section}>
+          <ExpandableSectionItem
             text={'InfoChip'}
             showIconText={false}
             textType={'heading__title'}
@@ -363,10 +381,10 @@ export const Profile_DesignSystemScreen = () => {
               </View>
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section style={style.section}>
-          <Sections.ExpandableSectionItem
+        <Section style={style.section}>
+          <ExpandableSectionItem
             text={'Buttons'}
             showIconText={false}
             textType={'heading__title'}
@@ -1133,10 +1151,10 @@ export const Profile_DesignSystemScreen = () => {
               </View>
             }
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ActionSectionItem
+        <Section withPadding withTopPadding>
+          <ActionSectionItem
             text="Some very long text over here which goes over multiple lines"
             subtext="With a subtext"
             mode="check"
@@ -1144,12 +1162,12 @@ export const Profile_DesignSystemScreen = () => {
             leftIcon={Bus}
             checked
           />
-          <Sections.ToggleSectionItem
+          <ToggleSectionItem
             text="Some short text"
             leftIcon={Bus}
             onValueChange={() => {}}
           />
-          <Sections.ActionSectionItem
+          <ActionSectionItem
             text="Some short text"
             mode="check"
             checked
@@ -1157,58 +1175,58 @@ export const Profile_DesignSystemScreen = () => {
             leftIcon={Bus}
             onPress={() => {}}
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.LocationInputSectionItem
+        <Section withPadding withTopPadding>
+          <LocationInputSectionItem
             label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onPress={() => {}}
           />
-          <Sections.LocationInputSectionItem
+          <LocationInputSectionItem
             label="Label"
             placeholder="Short"
             onPress={() => {}}
             type="compact"
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.ButtonSectionItem
+        <Section withPadding withTopPadding>
+          <ButtonSectionItem
             label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onPress={() => {}}
             icon="arrow-left"
           />
 
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Some longer text"
             onPress={() => {}}
             disabled
             icon={<ThemeIcon svg={Edit} />}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Some longer text"
             onPress={() => {}}
             icon={<ThemeIcon svg={Edit} />}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Dangerous Link Item"
             subtitle="Subtitle text"
             onPress={() => {}}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             text="Disabled Dangerous Link Item text"
             subtitle="Disabled Subtitle text"
             disabled={true}
             onPress={() => {}}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.TextInputSectionItem
+        <Section withPadding withTopPadding>
+          <TextInputSectionItem
             label="Input"
             placeholder="My very long placeholder over here. Yes over multiple lines"
             onChangeText={() => {}}
@@ -1218,7 +1236,7 @@ export const Profile_DesignSystemScreen = () => {
             inlineLabel={false}
           />
 
-          <Sections.TextInputSectionItem
+          <TextInputSectionItem
             label="Input"
             placeholder="Short placeholder"
             onChangeText={() => {}}
@@ -1227,12 +1245,12 @@ export const Profile_DesignSystemScreen = () => {
             showClear={true}
             inlineLabel={false}
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderSectionItem text="Texts" />
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem text="Texts" />
 
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             {textNames.map(function (t: TextNames) {
               return (
                 <ThemeText type={t} key={t}>
@@ -1240,24 +1258,24 @@ export const Profile_DesignSystemScreen = () => {
                 </ThemeText>
               );
             })}
-          </Sections.GenericSectionItem>
-        </Sections.Section>
+          </GenericSectionItem>
+        </Section>
 
-        <Sections.Section withPadding withTopPadding>
-          <Sections.HeaderSectionItem text="Message section items" />
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem text="Message section items" />
 
-          <Sections.MessageSectionItem
+          <MessageSectionItem
             messageType="info"
             title="Information message!"
             message="An information message with title"
           />
 
-          <Sections.MessageSectionItem
+          <MessageSectionItem
             messageType="valid"
             message="A success message without title"
           />
 
-          <Sections.MessageSectionItem
+          <MessageSectionItem
             messageType="warning"
             title="Warning message!"
             message="A warning message with title link"
@@ -1267,7 +1285,7 @@ export const Profile_DesignSystemScreen = () => {
             }}
           />
 
-          <Sections.MessageSectionItem
+          <MessageSectionItem
             messageType="error"
             message="An error message without title and with action"
             onPressConfig={{
@@ -1275,7 +1293,7 @@ export const Profile_DesignSystemScreen = () => {
               text: t(dictionary.retry),
             }}
           />
-        </Sections.Section>
+        </Section>
 
         <View style={style.section}>
           <ButtonGroup>{buttons}</ButtonGroup>
@@ -1283,6 +1301,7 @@ export const Profile_DesignSystemScreen = () => {
 
         <View style={style.swatchGroup}>{backgroundSwatches}</View>
         <View style={style.swatchGroup}>{transportSwatches}</View>
+        <View style={style.swatchGroup}>{secondaryTransportSwatches}</View>
         <View style={style.swatchGroup}>{statusSwatches}</View>
         <View style={style.swatchGroup}>
           <ThemeText>Text colors:</ThemeText>
@@ -1313,6 +1332,7 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   icons: {
     flexDirection: 'row',
     marginBottom: theme.spacings.small,
+    flexWrap: 'wrap',
   },
   section: {
     margin: theme.spacings.medium,

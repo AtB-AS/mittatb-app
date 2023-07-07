@@ -4,9 +4,10 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {FareProductTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/configuration';
+import {useTicketingState} from '@atb/ticketing';
 
 export const FareProducts = ({
   onProductSelect,
@@ -17,9 +18,10 @@ export const FareProducts = ({
   const {preassignedFareProducts, fareProductTypeConfigs} =
     useFirestoreConfiguration();
   const {t} = useTranslation();
+  const {customerProfile} = useTicketingState();
 
-  const sellableProductsInApp = preassignedFareProducts.filter(
-    productIsSellableInApp,
+  const sellableProductsInApp = preassignedFareProducts.filter((product) =>
+    isProductSellableInApp(product, customerProfile),
   );
 
   const sellableFareProductTypeConfigs = fareProductTypeConfigs.filter(
@@ -38,7 +40,7 @@ export const FareProducts = ({
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View>
       <ThemeText type="body__secondary" style={styles.heading}>
         {t(TicketingTexts.availableFareProducts.allTickets)}
       </ThemeText>
@@ -67,13 +69,9 @@ export const FareProducts = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingBottom: theme.spacings.medium,
-  },
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.xLarge,
   },
   fareProductsContainer: {
     flex: 1,

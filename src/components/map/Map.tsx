@@ -1,7 +1,7 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import MapboxGL, {RegionPayload} from '@rnmapbox/maps';
-import {Feature, GeoJSON} from 'geojson';
+import MapboxGL from '@rnmapbox/maps';
+import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
 import {LocationBar} from './components/LocationBar';
@@ -11,13 +11,15 @@ import {isFeaturePoint} from './utils';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
 import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
-import {MapFilterType, MapProps} from './types';
+import {MapFilterType, MapProps, MapRegion} from './types';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {PositionArrow} from './components/PositionArrow';
 import {shadows} from './components/shadows';
-import * as Mobility from '@atb/components/map/components/mobility';
-import {MapFilter} from '@atb/components/map/components/filter/MapFilter';
+import {MapFilter} from './components/filter/MapFilter';
+import {Stations, Vehicles} from './components/mobility';
+import {useAnalytics} from '@atb/analytics';
+import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -26,6 +28,7 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+  const analytics = useAnalytics();
 
   const startingCoordinates = useMemo(
     () =>
@@ -43,18 +46,39 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
-  const onRegionChange = (
-    region: GeoJSON.Feature<GeoJSON.Point, RegionPayload>,
-  ) => {
+  const loadMobility = (mapRegion: MapRegion) => {
     if (props.vehicles) {
-      props.vehicles.fetchVehicles(region);
+      props.vehicles.updateRegion(mapRegion);
     }
     if (props.stations) {
-      props.stations.fetchStations(region);
+      props.stations.updateRegion(mapRegion);
     }
   };
 
+  const onDidFinishLoadingMap = async () => {
+    const visibleBounds = await mapViewRef.current?.getVisibleBounds();
+    const zoomLevel = await mapViewRef.current?.getZoom();
+    const center = await mapViewRef.current?.getCenter();
+
+    if (!visibleBounds || !zoomLevel || !center) return;
+
+    loadMobility({
+      visibleBounds,
+      zoomLevel,
+      center,
+    });
+  };
+
+  const onMapIdle = (state: MapState) => {
+    loadMobility({
+      visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
+      zoomLevel: state.properties.zoom,
+      center: state.properties.center,
+    });
+  };
+
   const onFilterChange = (filter: MapFilterType) => {
+    analytics.logEvent('Map', 'Filter changed', {filter});
     if (filter.vehicles) {
       props.vehicles?.onFilterChange(filter.vehicles);
     }
@@ -77,7 +101,9 @@ export const Map = (props: MapProps) => {
           style={{
             flex: 1,
           }}
-          onRegionDidChange={onRegionChange}
+          pitchEnabled={false}
+          onDidFinishLoadingMap={onDidFinishLoadingMap}
+          onMapIdle={onMapIdle}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({
@@ -114,24 +140,23 @@ export const Map = (props: MapProps) => {
             </MapboxGL.PointAnnotation>
           )}
           {props.vehicles && (
-            <Mobility.Vehicles
+            <Vehicles
               mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
-              onPress={props.vehicles.onPress}
+              onClusterClick={(feature) => {
+                onMapClick({
+                  source: 'cluster-click',
+                  feature,
+                });
+              }}
             />
           )}
-          {props.stations && (
-            <Mobility.Stations
-              mapCameraRef={mapCameraRef}
-              stations={props.stations.stations}
-              onPress={props.stations.onPress}
-            />
-          )}
+          {props.stations && <Stations stations={props.stations.stations} />}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
             <MapFilter
-              onFilterChange={onFilterChange}
+              onFilterChanged={onFilterChange}
               isLoading={
                 (props.vehicles?.isLoading || props.stations?.isLoading) ??
                 false

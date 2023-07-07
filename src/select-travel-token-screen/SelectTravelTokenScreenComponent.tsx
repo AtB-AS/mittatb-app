@@ -2,7 +2,6 @@ import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {RadioBox} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {
@@ -19,20 +18,35 @@ import {
   isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
-import {TravelTokenTexts, useTranslation} from '@atb/translations';
+import {
+  TravelTokenTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {RadioGroupSection, Section} from '@atb/components/sections';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {
+  findReferenceDataById,
+  isOfFareProductRef,
+} from '@atb/reference-data/utils';
 
 type Props = {onAfterSave: () => void};
 
 export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const styles = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const {fareContracts} = useTicketingState();
+  const {disable_travelcard} = useRemoteConfig();
+  const {fareProductTypeConfigs, preassignedFareProducts} =
+    useFirestoreConfiguration();
 
   const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
@@ -45,10 +59,36 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     inspectableToken,
   );
 
-  const hasActiveCarnetFareContract = flatMap(
+  const activeFareContracts = flatMap(
     filterActiveOrCanBeUsedFareContracts(fareContracts),
     (i) => i.travelRights,
-  ).some(isCarnetTravelRight);
+  );
+
+  const hasActiveCarnetFareContract =
+    activeFareContracts.some(isCarnetTravelRight);
+
+  // Filter for unique travel rights config types
+  const activeFareContractsTypes = activeFareContracts
+    .filter(onlyUniquesBasedOnField('type'))
+    .map((travelRight) => {
+      const preassignedFareProduct = findReferenceDataById(
+        preassignedFareProducts,
+        isOfFareProductRef(travelRight) ? travelRight.fareProductRef : '',
+      );
+
+      return (
+        preassignedFareProduct &&
+        fareProductTypeConfigs.find(
+          (c) => c.type === preassignedFareProduct.type,
+        )
+      );
+    });
+
+  const fareProductConfigWhichRequiresTokenOnMobile =
+    activeFareContractsTypes.find(
+      (fareProductTypeConfig) =>
+        fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
+    );
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -62,7 +102,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         return;
       }
       setSaveState({saving: true, error: false});
-      const success = await toggleToken(selectedToken.id);
+      const success = await toggleToken(selectedToken.id, false);
       if (success) {
         onAfterSave();
       } else {
@@ -74,10 +114,22 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const travelCardToken = remoteTokens?.find(isTravelCardToken);
   const mobileTokens = remoteTokens?.filter(isMobileToken);
 
+  // Shows an error message if switching to a t:card,
+  // but the current inspectable token is in the mobile AND
+  // requires mobile token
+  const requiresTokenOnMobile =
+    selectedType === 'travelCard' &&
+    isMobileToken(inspectableToken) &&
+    !!fareProductConfigWhichRequiresTokenOnMobile;
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={t(TravelTokenTexts.toggleToken.title)}
+        title={
+          disable_travelcard
+            ? t(TravelTokenTexts.toggleToken.titleWithoutTravelcard)
+            : t(TravelTokenTexts.toggleToken.title)
+        }
         leftButton={{type: 'back'}}
       />
       <ScrollView
@@ -85,25 +137,29 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         testID="selectTokenScrollView"
       >
         <View style={styles.radioArea}>
-          <RadioBox
-            title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}
-            description={t(
-              TravelTokenTexts.toggleToken.radioBox.tCard.description,
-            )}
-            a11yLabel={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yLabel)}
-            a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
-            disabled={false}
-            selected={selectedType === 'travelCard'}
-            icon={<ThemedTokenTravelCard />}
-            type="spacious"
-            onPress={() => {
-              animateNextChange();
-              setSelectedType('travelCard');
-              setSelectedToken(travelCardToken);
-            }}
-            style={styles.leftRadioBox}
-            testID="selectTravelcard"
-          />
+          {!disable_travelcard && (
+            <RadioBox
+              title={t(TravelTokenTexts.toggleToken.radioBox.tCard.title)}
+              description={t(
+                TravelTokenTexts.toggleToken.radioBox.tCard.description,
+              )}
+              a11yLabel={t(
+                TravelTokenTexts.toggleToken.radioBox.tCard.a11yLabel,
+              )}
+              a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
+              disabled={false}
+              selected={selectedType === 'travelCard'}
+              icon={<ThemedTokenTravelCard />}
+              type="spacious"
+              onPress={() => {
+                animateNextChange();
+                setSelectedType('travelCard');
+                setSelectedToken(travelCardToken);
+              }}
+              style={styles.leftRadioBox}
+              testID="selectTravelcard"
+            />
+          )}
           <RadioBox
             title={t(TravelTokenTexts.toggleToken.radioBox.phone.title)}
             description={t(
@@ -158,9 +214,27 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             />
           )}
 
-        {selectedType === 'mobile' && mobileTokens?.length && (
-          <Sections.Section type="spacious" style={styles.selectDeviceSection}>
-            <Sections.RadioGroupSection<RemoteToken>
+        {requiresTokenOnMobile && (
+          <MessageBox
+            type={'error'}
+            title={t(
+              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.title,
+            )}
+            message={t(
+              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.message(
+                getTextForLanguage(
+                  fareProductConfigWhichRequiresTokenOnMobile.name,
+                  language,
+                ) ?? '',
+              ),
+            )}
+            style={styles.errorMessageBox}
+            isMarkdown={false}
+          />
+        )}
+        {selectedType === 'mobile' && mobileTokens?.length ? (
+          <Section type="spacious" style={styles.selectDeviceSection}>
+            <RadioGroupSection<RemoteToken>
               items={mobileTokens}
               keyExtractor={(rt) => rt.id}
               itemToText={(rt) =>
@@ -179,8 +253,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
                 TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
               )}
             />
-          </Sections.Section>
-        )}
+          </Section>
+        ) : null}
 
         {saveState.error && (
           <MessageBox
@@ -193,13 +267,15 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {saveState.saving ? (
           <ActivityIndicator size="large" />
         ) : (
-          <Button
-            onPress={onSave}
-            text={t(TravelTokenTexts.toggleToken.saveButton)}
-            interactiveColor="interactive_0"
-            disabled={!selectedToken}
-            testID="confirmSelectionButton"
-          />
+          !requiresTokenOnMobile && (
+            <Button
+              onPress={onSave}
+              text={t(TravelTokenTexts.toggleToken.saveButton)}
+              interactiveColor="interactive_0"
+              disabled={!selectedToken}
+              testID="confirmSelectionButton"
+            />
+          )
         )}
       </ScrollView>
     </View>

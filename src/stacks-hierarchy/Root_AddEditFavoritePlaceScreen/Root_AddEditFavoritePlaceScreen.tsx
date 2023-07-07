@@ -7,7 +7,6 @@ import {MessageBox} from '@atb/components/message-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
@@ -18,6 +17,12 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
 import {EmojiSheet} from './EmojiSheet';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {
+  ButtonSectionItem,
+  LocationInputSectionItem,
+  Section,
+  TextInputSectionItem,
+} from '@atb/components/sections';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
 
@@ -95,10 +100,10 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     );
   };
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const openEmojiSheet = () => {
-    openBottomSheet((close) => (
+    openBottomSheet(() => (
       <EmojiSheet
         localizedCategories={[
           t(AddEditFavoriteTexts.emojiSheet.categories.smileys),
@@ -119,7 +124,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             setEmoji(emoji);
           }
         }}
-        close={close}
+        close={closeBottomSheet}
       />
     ));
   };
@@ -150,8 +155,8 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           />
         )}
 
-        <Sections.Section withPadding>
-          <Sections.LocationInputSectionItem
+        <Section withPadding>
+          <LocationInputSectionItem
             label={t(AddEditFavoriteTexts.fields.location.label)}
             location={location}
             onPress={() =>
@@ -165,10 +170,10 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             }
             testID="locationSearchButton"
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding>
-          <Sections.TextInputSectionItem
+        <Section withPadding>
+          <TextInputSectionItem
             label={t(AddEditFavoriteTexts.fields.name.label)}
             onChangeText={setName}
             value={name}
@@ -178,10 +183,10 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             placeholder={t(AddEditFavoriteTexts.fields.name.placeholder)}
             testID="nameInput"
           />
-        </Sections.Section>
+        </Section>
 
-        <Sections.Section withPadding>
-          <Sections.ButtonSectionItem
+        <Section withPadding>
+          <ButtonSectionItem
             onPress={openEmojiPopup}
             accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
             accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
@@ -197,7 +202,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             }
             testID="iconButton"
           />
-        </Sections.Section>
+        </Section>
       </ScrollView>
 
       <FullScreenFooter avoidKeyboard={true}>

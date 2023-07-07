@@ -3,7 +3,7 @@ import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {View} from 'react-native';
 import React from 'react';
-import {TravelSearchFiltersSelectionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {StyleSheet} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
 
@@ -56,6 +56,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
-    flexDirection: 'row',
   },
 }));

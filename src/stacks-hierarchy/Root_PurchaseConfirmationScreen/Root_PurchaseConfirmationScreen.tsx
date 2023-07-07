@@ -4,7 +4,6 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
@@ -42,7 +41,8 @@ import {SelectPaymentMethod} from './components/SelectPaymentMethodSheet';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import analytics from '@react-native-firebase/analytics';
+import {GenericSectionItem, Section} from '@atb/components/sections';
+import {useAnalytics} from '@atb/analytics';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -85,7 +85,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
   const [previousMethod, setPreviousMethod] = useState<
@@ -99,6 +99,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     isError: mobileTokenError,
   } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
+  const analytics = useAnalytics();
 
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
     tokensEnabled,
@@ -175,6 +176,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
+        analytics.logEvent('Ticketing', 'Pay with Vipps selected');
         navigation.push('Root_PurchasePaymentWithVippsScreen', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
@@ -188,6 +190,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
       } else {
+        analytics.logEvent('Ticketing', 'Pay with card selected', {
+          paymentMethod: option,
+        });
         navigation.push('Root_PurchasePaymentWithCreditCardScreen', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
@@ -230,14 +235,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   async function selectPaymentMethod() {
-    openBottomSheet((close) => {
+    openBottomSheet(() => {
       return (
         <SelectPaymentMethod
           onSelect={(option: PaymentMethod) => {
             selectPaymentOption(option);
-            close();
+            closeBottomSheet();
           }}
-          close={close}
+          close={closeBottomSheet}
           previousPaymentMethod={previousPaymentMethod}
         />
       );
@@ -265,8 +270,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               style={styles.errorMessage}
             />
           )}
-          <Sections.Section>
-            <Sections.GenericSectionItem>
+          <Section>
+            <GenericSectionItem>
               <View accessible={true}>
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
@@ -310,13 +315,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   {travelDateText}
                 </ThemeText>
               </View>
-            </Sections.GenericSectionItem>
-          </Sections.Section>
+            </GenericSectionItem>
+          </Section>
         </View>
 
-        <Sections.Section style={styles.paymentSummaryContainer}>
+        <Section style={styles.paymentSummaryContainer}>
           {travellerSelectionMode !== 'none' && (
-            <Sections.GenericSectionItem>
+            <GenericSectionItem>
               {userProfilesWithCountAndOffer.map((u, i) => (
                 <PricePerUserProfile
                   key={u.id}
@@ -324,9 +329,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   style={i != 0 ? styles.smallTopMargin : undefined}
                 />
               ))}
-            </Sections.GenericSectionItem>
+            </GenericSectionItem>
           )}
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <View style={styles.totalPaymentContainer} accessible={true}>
               <View style={styles.totalContainerHeadings}>
                 <ThemeText type="body__primary">
@@ -354,8 +359,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 />
               )}
             </View>
-          </Sections.GenericSectionItem>
-        </Sections.Section>
+          </GenericSectionItem>
+        </Section>
 
         <MessageBox
           type="info"
@@ -401,8 +406,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   }}
                   viewContainerStyle={styles.paymentButton}
                   onPress={() => {
-                    params.mode === 'TravelSearch' &&
-                      analytics().logEvent('purchase_from_travel_search');
+                    analytics.logEvent(
+                      'Ticketing',
+                      'Pay with previous payment method clicked',
+                      {
+                        paymentMethod: previousMethod?.paymentType,
+                        mode: params.mode,
+                      },
+                    );
                     selectPaymentOption(previousMethod);
                   }}
                 />
@@ -410,6 +421,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   style={styles.buttonTopSpacing}
                   disabled={!!error}
                   onPress={() => {
+                    analytics.logEvent(
+                      'Ticketing',
+                      'Change payment method clicked',
+                      {
+                        paymentMethod: previousMethod?.paymentType,
+                        mode: params.mode,
+                      },
+                    );
                     selectPaymentMethod();
                   }}
                   accessibilityHint={t(
@@ -432,8 +451,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   PurchaseConfirmationTexts.choosePaymentOption.a11yHint,
                 )}
                 onPress={() => {
-                  params.mode === 'TravelSearch' &&
-                    analytics().logEvent('purchase_from_travel_search');
+                  analytics.logEvent('Ticketing', 'Confirm purchase clicked', {
+                    mode: params.mode,
+                  });
                   selectPaymentMethod();
                 }}
                 viewContainerStyle={styles.paymentButton}

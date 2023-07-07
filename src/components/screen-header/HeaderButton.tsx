@@ -7,10 +7,11 @@ import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {StaticColor, TextColor} from '@atb/theme/colors';
-import ServiceDisruption from '@atb/assets/svg/mono-icons/status/ServiceDisruption';
 import {ArrowLeft} from '@atb/assets/svg/mono-icons/navigation';
 import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
+import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 
 export type ButtonModes =
   | 'back'
@@ -27,6 +28,11 @@ export type HeaderButtonProps = {
   text?: string;
   testID?: string;
   withIcon?: boolean;
+  /**
+   * The context for the analytics event that will be logged when the button is
+   * pressed. If no context provided, then no analytics event will be logged.
+   */
+  analyticsEventContext?: AnalyticsEventContext;
 } & AccessibilityProps;
 
 export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
@@ -34,17 +40,30 @@ export type IconButtonProps = Omit<HeaderButtonProps, 'type' | 'withIcon'> & {
 };
 
 export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
+  const analytics = useAnalytics();
   const iconButton = useHeaderButton(buttonProps);
   if (!iconButton) {
     return null;
   }
 
-  return <BaseHeaderButton {...iconButton} />;
+  const onPress = () => {
+    if (buttonProps.analyticsEventContext) {
+      analytics.logEvent(
+        buttonProps.analyticsEventContext,
+        `Header button of type ${buttonProps.type} clicked`,
+      );
+    }
+    iconButton.onPress?.();
+  };
+
+  return <BaseHeaderButton {...iconButton} onPress={onPress} />;
 };
 
 export type HeaderButtonWithoutNavigationProps = {
   text: string;
   onPress: () => void;
+  type: ButtonModes;
+  analyticsEventContext?: HeaderButtonProps['analyticsEventContext'];
   color?: StaticColor | TextColor;
   testID?: string;
 } & AccessibilityProps;
@@ -52,11 +71,24 @@ export type HeaderButtonWithoutNavigationProps = {
 export const HeaderButtonWithoutNavigation = ({
   text,
   onPress,
+  type,
+  analyticsEventContext,
   color,
   ...accessibilityProps
 }: HeaderButtonWithoutNavigationProps) => {
+  const analytics = useAnalytics();
+  const onPressToUse = () => {
+    if (analyticsEventContext) {
+      analytics.logEvent(
+        analyticsEventContext,
+        `Header button of type ${type} clicked`,
+      );
+    }
+    onPress();
+  };
+
   return (
-    <BaseHeaderButton onPress={onPress} {...accessibilityProps}>
+    <BaseHeaderButton onPress={onPressToUse} {...accessibilityProps}>
       <ThemeText color={color}>{text}</ThemeText>
     </BaseHeaderButton>
   );
@@ -110,6 +142,11 @@ const useHeaderButton = (
 ): IconButtonProps | undefined => {
   const navigation = useNavigation();
   const chatIcon = useChatIcon(buttonProps.color, buttonProps.testID);
+  const serviceDisruptionIcon = useServiceDisruptionIcon(
+    buttonProps.color,
+    buttonProps.testID,
+  );
+
   const {t} = useTranslation();
   switch (buttonProps.type) {
     case 'back':
@@ -133,14 +170,7 @@ const useHeaderButton = (
       };
     }
     case 'status-disruption': {
-      const {type, color, onPress, ...accessibilityProps} = buttonProps;
-      return {
-        children: <ThemeIcon colorType={color} svg={ServiceDisruption} />,
-        onPress: onPress,
-        testID: 'serviceDisruptionButton',
-        accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
-        ...accessibilityProps,
-      };
+      return serviceDisruptionIcon;
     }
     case 'chat':
       return chatIcon;

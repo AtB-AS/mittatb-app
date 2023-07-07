@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import {PreActivatedFareContractInfo} from './PreActivatedFareContractInfo';
 import {UnknownFareContract} from './UnknownFareContract';
-import {CarnetFareContractInfo} from './Carnet/CarnetFareContractInfo';
+import {CarnetFareContractInfo} from './carnet/CarnetFareContractInfo';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,

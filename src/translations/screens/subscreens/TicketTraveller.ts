@@ -23,6 +23,12 @@ const SpecificExtensions = orgSpecificTranslations(SpecificExtensionsInternal, {
     singleChild: _('', ''),
     periodAdult: _('Gyldig på nattbuss.', 'Valid for night bus.'),
   },
+  fram: {
+    singleChild: _('', ''),
+    periodChild: _('', ''),
+    periodStudent: _('', ''),
+    periodSenior: _('', ''),
+  },
 });
 
 function specificOverrides(
@@ -89,11 +95,35 @@ function generic(travellerType: string) {
   }
 }
 
+function userProfileDescriptionOverrides(
+  travellerType: string,
+  ticketType: string | undefined,
+) {
+  if (ticketType === undefined) return _('', '');
+  switch (ticketType) {
+    case 'travel-pass':
+      if (travellerType === TravellerType.adult) {
+        return _('Over 16 år', 'Age 16 or older');
+      } else if (travellerType === TravellerType.child) {
+        return _('Til og med 15 år', 'Age 15 or younger');
+      }
+      return _('', '');
+    default:
+      return _('', '');
+  }
+}
+
 const TicketTravellerTexts = {
   information: (travellerType: string, ticketType: string | undefined) => {
     return (
       specificOverrides(travellerType, ticketType) || generic(travellerType)
     );
+  },
+  userProfileDescriptionOverride: (
+    travellerType: string,
+    ticketType: string | undefined,
+  ) => {
+    return userProfileDescriptionOverrides(travellerType, ticketType);
   },
 };
 

@@ -1,20 +1,36 @@
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Feedback} from '@atb/components/feedback';
 import {StyleSheet} from '@atb/theme';
-import {secondsBetween} from '@atb/utils/date';
+import {
+  formatToVerboseFullDate,
+  isWithinSameDate,
+  secondsBetween,
+} from '@atb/utils/date';
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
 import {TripMessages} from './DetailsMessages';
 import {TripSection, getPlaceName, InterchangeDetails} from './TripSection';
-import {Summary} from './TripSummary';
+import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {isSignificantFootLegWalkOrWaitTime} from '@atb/travel-details-screens/utils';
-import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
-import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {
+  isLegFlexibleTransport,
+  isSignificantFootLegWalkOrWaitTime,
+} from '@atb/travel-details-screens/utils';
+import {
+  CompactTravelDetailsMap,
+  TravelDetailsMapScreenParams,
+} from '@atb/travel-details-map-screen';
+import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
+import {useRealtimeMapEnabled} from '@atb/components/map';
+import {AnyMode} from '@atb/components/icon-box';
+import {Divider} from '@atb/components/divider';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {ThemeText} from '@atb/components/text';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -34,6 +50,9 @@ export const Trip: React.FC<TripProps> = ({
   onPressQuay,
 }) => {
   const styles = useStyle();
+  const {t, language} = useTranslation();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
   );
@@ -51,8 +70,30 @@ export const Trip: React.FC<TripProps> = ({
     : undefined;
   const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
 
+  const tripPatternLegs = tripPattern?.legs.map((leg) => {
+    let mode: AnyMode = isLegFlexibleTransport(leg) ? 'flex' : leg.mode;
+    return {
+      ...leg,
+      mode,
+    };
+  });
+
+  const shouldShowDate =
+    !isWithinSameDate(new Date(), tripPattern.expectedStartTime) ||
+    isScreenReaderEnabled;
+
   return (
     <View style={styles.container}>
+      {shouldShowDate && (
+        <>
+          <View style={styles.date}>
+            <ThemeText type="body__secondary" color="secondary">
+              {formatToVerboseFullDate(tripPattern.expectedStartTime, language)}
+            </ThemeText>
+          </View>
+          <Divider style={styles.divider} />
+        </>
+      )}
       <TripMessages tripPattern={tripPattern} error={error} />
       <View style={styles.trip}>
         {tripPattern &&
@@ -61,6 +102,7 @@ export const Trip: React.FC<TripProps> = ({
               (vehicle) =>
                 vehicle.serviceJourney?.id === leg.serviceJourney?.id,
             );
+
             return (
               <TripSection
                 key={index}
@@ -76,12 +118,14 @@ export const Trip: React.FC<TripProps> = ({
                 testID={'legContainer' + index}
                 onPressShowLive={
                   legVehiclePosition
-                    ? () =>
+                    ? (mapData: ServiceJourneyMapInfoData_v3) =>
                         onPressDetailsMap({
-                          legs: [leg],
-                          fromPlace: leg.fromPlace,
-                          toPlace: leg.toPlace,
-                          initialVehiclePosition: legVehiclePosition,
+                          legs: mapData.mapLegs,
+                          fromPlace: mapData.start,
+                          toPlace: mapData.stop,
+                          vehicleWithPosition: legVehiclePosition,
+                          mode: leg.mode,
+                          subMode: leg.transportSubmode,
                         })
                     : undefined
                 }
@@ -91,7 +135,23 @@ export const Trip: React.FC<TripProps> = ({
             );
           })}
       </View>
-      <Summary {...tripPattern} />
+      <Divider style={styles.divider} />
+      {tripPatternLegs && (
+        <CompactTravelDetailsMap
+          mapLegs={tripPatternLegs}
+          fromPlace={tripPatternLegs[0]?.fromPlace}
+          toPlace={tripPatternLegs[tripPatternLegs.length - 1].toPlace}
+          buttonText={t(TripDetailsTexts.trip.summary.showTripInMap.label)}
+          onExpand={() => {
+            onPressDetailsMap({
+              legs: tripPatternLegs,
+              fromPlace: tripPatternLegs[0]?.fromPlace,
+              toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+            });
+          }}
+        />
+      )}
+      <TripSummary {...tripPattern} />
       <Feedback metadata={tripPattern} viewContext="assistant" />
     </View>
   );
@@ -113,11 +173,20 @@ function legWaitDetails(index: number, legs: Leg[]): WaitDetails | undefined {
 }
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  trip: {
-    paddingTop: theme.spacings.medium,
-  },
   container: {
-    paddingBottom: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
+  },
+  date: {
+    alignItems: 'center',
+    marginBottom: theme.spacings.medium,
+  },
+  divider: {
+    marginBottom: theme.spacings.medium,
+  },
+  trip: {
+    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.xSmall,
   },
 }));
 

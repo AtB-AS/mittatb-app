@@ -1,5 +1,4 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import * as Sections from '@atb/components/sections';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -8,113 +7,144 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import React from 'react';
-import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
+import React, {forwardRef} from 'react';
+import {
+  AccessibilityProps,
+  StyleProp,
+  View,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {getReferenceDataName} from '@atb/reference-data/utils';
+import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {PreassignedFareProduct} from '@atb/reference-data/types';
+
+import {Edit} from '@atb/assets/svg/mono-icons/actions';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
+  preassignedFareProduct: PreassignedFareProduct;
   onSelect: (t: {
     fromTariffZone: TariffZoneWithMetadata;
     toTariffZone: TariffZoneWithMetadata;
     fareProductTypeConfig: FareProductTypeConfig;
+    preassignedFareProduct: PreassignedFareProduct;
   }) => void;
   style?: StyleProp<ViewStyle>;
 };
 
-export function ZonesSelection({
-  fareProductTypeConfig,
-  fromTariffZone,
-  toTariffZone,
-  onSelect,
-  style,
-}: ZonesSelectionProps) {
-  const styles = useStyles();
-  const {t, language} = useTranslation();
+export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
+  (
+    {
+      fareProductTypeConfig,
+      fromTariffZone,
+      toTariffZone,
+      preassignedFareProduct,
+      onSelect,
+      style,
+    }: ZonesSelectionProps,
+    zonesInputSectionItemRef,
+  ) => {
+    const styles = useStyles();
+    const {t, language} = useTranslation();
 
-  const accessibility: AccessibilityProps = {
-    accessible: true,
-    accessibilityRole: 'button',
-    accessibilityLabel:
-      a11yLabel(fromTariffZone, toTariffZone, language, t) + screenReaderPause,
-    accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
-  };
+    const accessibility: AccessibilityProps = {
+      accessible: true,
+      accessibilityRole: 'button',
+      accessibilityLabel:
+        a11yLabel(fromTariffZone, toTariffZone, language, t) +
+        screenReaderPause,
+      accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
+    };
 
-  let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
+    let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
 
-  if (selectionMode === 'none') {
-    return null;
-  }
+    if (selectionMode === 'none') {
+      return null;
+    }
 
-  // Only support multiple/single zone in app for now. Stop place is built into selector.
-  if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
-    selectionMode = 'multiple';
-  }
-  if (selectionMode == 'single-stop' || selectionMode == 'single-zone') {
-    selectionMode = 'single';
-  }
+    // Only support multiple/single zone in app for now. Stop place is built into selector.
+    if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
+      selectionMode = 'multiple';
+    }
+    if (
+      preassignedFareProduct.zoneSelectionMode?.includes('single') ||
+      selectionMode == 'single-stop' ||
+      selectionMode == 'single-zone'
+    ) {
+      selectionMode = 'single';
+    }
 
-  const displayAsOneZone =
-    fromTariffZone.id === toTariffZone.id &&
-    fromTariffZone.venueName === toTariffZone.venueName;
+    const displayAsOneZone =
+      fromTariffZone.id === toTariffZone.id &&
+      fromTariffZone.venueName === toTariffZone.venueName;
 
-  return (
-    <View style={style}>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={styles.sectionText}
-        accessibilityLabel={t(
-          PurchaseOverviewTexts.zones.title[selectionMode].a11yLabel,
-        )}
-      >
-        {t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
-      </ThemeText>
-      <Sections.Section {...accessibility}>
-        <Sections.GenericClickableSectionItem
-          onPress={() =>
-            onSelect({
-              fromTariffZone,
-              toTariffZone,
-              fareProductTypeConfig,
-            })
-          }
-          testID="selectZonesButton"
-        >
-          {displayAsOneZone ? (
-            <ZoneLabel tariffZone={fromTariffZone} />
-          ) : (
-            <>
-              <View style={styles.fromZone}>
-                <ThemeText
-                  color="secondary"
-                  type="body__secondary"
-                  style={styles.toFromLabel}
-                >
-                  {t(PurchaseOverviewTexts.zones.label.from)}
-                </ThemeText>
-                <ZoneLabel tariffZone={fromTariffZone} />
-              </View>
-              <View style={styles.toZone}>
-                <ThemeText
-                  color="secondary"
-                  type="body__secondary"
-                  style={styles.toFromLabel}
-                >
-                  {t(PurchaseOverviewTexts.zones.label.to)}
-                </ThemeText>
-                <ZoneLabel tariffZone={toTariffZone} />
-              </View>
-            </>
+    return (
+      <View style={style}>
+        <ThemeText
+          type="body__secondary"
+          color="secondary"
+          style={styles.sectionText}
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.zones.title[selectionMode].a11yLabel,
           )}
-        </Sections.GenericClickableSectionItem>
-      </Sections.Section>
-    </View>
-  );
-}
+        >
+          {t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
+        </ThemeText>
+        <Section {...accessibility}>
+          <GenericClickableSectionItem
+            ref={zonesInputSectionItemRef}
+            onPress={() =>
+              onSelect({
+                fromTariffZone,
+                toTariffZone,
+                fareProductTypeConfig,
+                preassignedFareProduct,
+              })
+            }
+            testID="selectZonesButton"
+          >
+            <View style={styles.sectionContentContainer}>
+              <View>
+                {displayAsOneZone ? (
+                  <ZoneLabel tariffZone={fromTariffZone} />
+                ) : (
+                  <>
+                    <View style={styles.fromZone}>
+                      <ThemeText
+                        color="secondary"
+                        type="body__secondary"
+                        style={styles.toFromLabel}
+                      >
+                        {t(PurchaseOverviewTexts.zones.label.from)}
+                      </ThemeText>
+                      <ZoneLabel tariffZone={fromTariffZone} />
+                    </View>
+                    <View style={styles.toZone}>
+                      <ThemeText
+                        color="secondary"
+                        type="body__secondary"
+                        style={styles.toFromLabel}
+                      >
+                        {t(PurchaseOverviewTexts.zones.label.to)}
+                      </ThemeText>
+                      <ZoneLabel tariffZone={toTariffZone} />
+                    </View>
+                  </>
+                )}
+              </View>
+              <ThemeIcon svg={Edit} size="normal" />
+            </View>
+          </GenericClickableSectionItem>
+        </Section>
+      </View>
+    );
+  },
+);
 
 const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
   const {t, language} = useTranslation();
@@ -179,5 +209,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   toFromLabel: {
     minWidth: 40,
     marginRight: theme.spacings.small,
+  },
+  sectionContentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }));

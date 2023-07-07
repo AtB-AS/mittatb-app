@@ -1,29 +1,35 @@
 import {ThemeText} from '@atb/components/text';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {useRecentFareContracts} from '../../use-recent-fare-contracts';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {RecentFareContract} from '../../types';
+import {useTicketingState} from '@atb/ticketing';
 
 type Props = {
+  recentFareContracts: RecentFareContract[];
+  loading: boolean;
   onSelect: (
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
   ) => void;
 };
 
-export const RecentFareContracts = ({onSelect}: Props) => {
+export const RecentFareContracts = ({
+  recentFareContracts,
+  loading,
+  onSelect,
+}: Props) => {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-  const {recentFareContracts, loading} = useRecentFareContracts();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {customerProfile} = useTicketingState();
 
   const filterRecentFareContracts = (
     recentFareContracts: RecentFareContract[],
@@ -34,7 +40,9 @@ export const RecentFareContracts = ({onSelect}: Props) => {
           (c) => c.type === rfc.preassignedFareProduct.type,
         ),
       )
-      .filter((rfc) => productIsSellableInApp(rfc.preassignedFareProduct));
+      .filter((rfc) =>
+        isProductSellableInApp(rfc.preassignedFareProduct, customerProfile),
+      );
 
   const memoizedRecentFareContracts = useMemo(
     () => filterRecentFareContracts(recentFareContracts),
@@ -79,16 +87,9 @@ export const RecentFareContracts = ({onSelect}: Props) => {
             testID="recentTicketsScrollView"
           >
             {memoizedRecentFareContracts.map((rfc) => {
-              const componentKey =
-                rfc.preassignedFareProduct.id +
-                rfc.userProfilesWithCount
-                  .map((traveller) => {
-                    return traveller.count + traveller.userTypeString;
-                  })
-                  .join();
               return (
                 <RecentFareContractComponent
-                  key={componentKey}
+                  key={rfc.id}
                   recentFareContract={rfc}
                   onSelect={onSelect}
                   testID={'recent' + memoizedRecentFareContracts.indexOf(rfc)}

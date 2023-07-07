@@ -47,6 +47,7 @@ We love feedback and suggestions. The AtB app and service is continously improve
        ```
    1. Pod install: `cd ios/` and `pod install`
 1. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
+1. Run `yarn get_ios_certs` to install certificates. NOTE: In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 
@@ -120,18 +121,18 @@ We got it building on a Macbook pro M1 by doing a few extra steps:
 
 #### Set xcode to run with Rosetta
 
-open finder, navigate to Applications, right click xcode and select "get info", tick checkbox "Open using Rosetta"
+Open finder, navigate to Applications, right click xcode and select "get info", tick checkbox "Open using Rosetta".
 
 #### Set Terminal to run with Rosetta
 
-open finder, navigate to Applications/Utilities , right click Terminal and select "get info", tick checkbox "Open using Rosetta".
+Open finder, navigate to Applications/Utilities , right click Terminal and select "get info", tick checkbox "Open using Rosetta".
 Restart your terminals.
 
 #### Update LibFFI
 
-run `sudo gem install ffi -- --enable-system-libffi`
+Run `sudo gem install ffi -- --enable-system-libffi`
 
-running `yarn ios` should now build and start the app in the ios simulator
+Running `yarn ios` should now build and start the app in the ios simulator.
 
 ## Distributing new app versions (deploy)
 

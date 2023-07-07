@@ -1,7 +1,7 @@
 import {FareProductTypeConfig} from '@atb/configuration';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
-import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
+import {UserProfileWithCount} from '@atb/fare-contracts';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 
 export type Root_PurchaseOverviewScreenParams = {
   refreshOffer?: boolean;
@@ -12,4 +12,5 @@ export type Root_PurchaseOverviewScreenParams = {
   toTariffZone?: TariffZoneWithMetadata;
   mode?: 'Ticket' | 'TravelSearch';
   travelDate?: string;
+  onFocusElement?: string;
 };

@@ -42,6 +42,7 @@ export type TripsQuery = {
           name?: string;
           transportSubmode?: Types.TransportSubmode;
           publicCode?: string;
+          flexibleLineType?: string;
           notices: Array<{id: string; text?: string}>;
         };
         fromEstimatedCall?: {
@@ -133,6 +134,9 @@ export type TripsQuery = {
         authority?: {id: string};
         serviceJourneyEstimatedCalls: Array<{
           actualDepartureTime?: any;
+          realtime: boolean;
+          aimedDepartureTime: any;
+          expectedDepartureTime: any;
           predictionInaccurate: boolean;
           quay: {name: string};
         }>;

@@ -1,5 +1,6 @@
 import {RefObject} from 'react';
-import MapboxGL, {Expression} from '@rnmapbox/maps';
+import MapboxGL, {CameraAnimationMode} from '@rnmapbox/maps';
+import {Expression} from '@rnmapbox/maps/src/utils/MapboxStyles';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
@@ -10,8 +11,9 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {Cluster, MapSelectionActionType} from './types';
+import {Cluster, MapSelectionActionType, MapPadding} from './types';
 import distance from '@turf/distance';
+import {isVehicle} from '@atb/mobility/utils';
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -33,7 +35,7 @@ export function fitBounds(
   fromCoordinates: Coordinates,
   toCoordinates: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
-  padding: MapboxGL.Padding = [100, 100],
+  padding: MapPadding = [100, 100],
 ) {
   mapCameraRef.current?.fitBounds(
     [fromCoordinates.longitude, fromCoordinates.latitude],
@@ -43,7 +45,7 @@ export function fitBounds(
   );
 }
 
-export const findStopPlaceAtClick = async (
+export const findEntityAtClick = async (
   clickedFeature: Feature<Point>,
   mapViewRef: RefObject<MapboxGL.MapView>,
 ) => {
@@ -52,9 +54,7 @@ export const findStopPlaceAtClick = async (
     mapViewRef,
     ['==', ['geometry-type'], 'Point'],
   );
-  return renderedFeatures
-    ?.filter(isFeaturePoint)
-    .find((feature) => feature?.properties?.entityType === 'StopPlace');
+  return renderedFeatures?.filter(isFeaturePoint)[0];
 };
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
@@ -64,6 +64,9 @@ export const isClusterFeature = (
   feature: Feature,
 ): feature is Feature<Point, Cluster> =>
   isFeaturePoint(feature) && feature.properties?.cluster;
+
+export const isStopPlace = (f: Feature<Point>) =>
+  f.properties?.entityType === 'StopPlace';
 
 export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
   typeof obj === 'object' &&
@@ -110,18 +113,20 @@ type FlyToLocationArgs = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
   zoomLevel?: number;
   animationDuration?: number;
+  animationMode?: CameraAnimationMode;
 };
 export function flyToLocation({
   coordinates,
   mapCameraRef,
   zoomLevel,
   animationDuration,
+  animationMode = 'flyTo',
 }: FlyToLocationArgs) {
   coordinates &&
     mapCameraRef.current?.setCamera({
       centerCoordinate: [coordinates.longitude, coordinates.latitude],
       zoomLevel,
-      animationMode: 'flyTo',
+      animationMode,
       animationDuration: animationDuration ?? 750,
     });
 }
@@ -155,11 +160,6 @@ export const toFeatureCollection = <
   features,
 });
 
-export const toCoordinates = (position: Position): Coordinates => {
-  const [longitude, latitude] = position;
-  return {longitude, latitude};
-};
-
 /**
  * Calculates the distance in meters between the northern most point and the southern most point of the given bounds.
  * @param visibleBounds
@@ -168,3 +168,9 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
   const [[_, latNE], [lonSW, latSW]] = visibleBounds;
   return distance([lonSW, latSW], [lonSW, latNE], {units: 'meters'});
 };
+
+export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
+  !isVehicle(entityFeature);
+
+export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
+  !isVehicle(entityFeature);

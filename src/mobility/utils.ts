@@ -1,34 +1,60 @@
-import {
-  Feature,
-  GeoJsonProperties,
-  MultiPolygon,
-  Point,
-  Polygon,
-  Position,
-} from 'geojson';
+import {Feature, Point, Polygon, Position} from 'geojson';
 import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {getVisibleRange} from '@atb/components/map/utils';
+import {getVisibleRange, MapRegion, toFeaturePoint} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
-import {StationFragment} from '@atb/api/types/generated/fragments/stations';
 import {Platform} from 'react-native';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  StationBasicFragment,
+  VehicleTypeAvailabilityBasicFragment,
+} from '@atb/api/types/generated/fragments/stations';
 
 export const isVehicle = (
-  properties: GeoJsonProperties | undefined,
-): properties is VehicleFragment => properties?.__typename === 'Vehicle';
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, VehicleFragment> =>
+  'currentFuelPercent' in (feature?.properties ?? {});
 
 export const isStation = (
-  properties: GeoJsonProperties | undefined,
-): properties is StationFragment => properties?.__typename === 'Station';
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, StationBasicFragment> =>
+  feature?.properties?.__typename === 'Station';
+
+export const isBikeStation = (
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, StationBasicFragment> =>
+  (isStation(feature) &&
+    feature.properties?.vehicleTypesAvailable?.some(
+      (types) => types.vehicleType.formFactor === FormFactor.Bicycle,
+    )) ??
+  false;
+
+export const isCarStation = (
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, StationBasicFragment> =>
+  (isStation(feature) &&
+    feature.properties?.vehicleTypesAvailable?.some(
+      (types) => types.vehicleType.formFactor === FormFactor.Car,
+    )) ??
+  false;
+
+export const getAvailableVehicles = (
+  types: VehicleTypeAvailabilityBasicFragment[] | undefined,
+  formFactor: FormFactor,
+) =>
+  types
+    ?.filter((type) => type.vehicleType.formFactor === formFactor)
+    .map((type) => type.count)
+    .reduce((sum, count) => sum + count, 0) ?? 0;
 
 export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
-  t: T,
-) => (Platform.OS === 'ios' ? t.rentalUris?.ios : t.rentalUris?.android);
+  t: T | undefined,
+) => (Platform.OS === 'ios' ? t?.rentalUris?.ios : t?.rentalUris?.android);
 
 export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
   (plan.perKmPricing && plan.perMinPricing) ||
@@ -47,7 +73,7 @@ export const toBbox = (position: Position[]) => {
  */
 export const needsReload = (
   visibleBounds: Position[],
-  loadedArea: Feature<Polygon | MultiPolygon> | undefined,
+  loadedArea: Feature<Polygon> | undefined,
 ) => {
   if (!loadedArea) return true;
   // If the loaded area totally covers the current loaded bounds,
@@ -71,3 +97,40 @@ export const getRadius = (bbox: Position[], buffer: number) => {
 
 export const extend = (midpoint: Feature<Point>, range: number) =>
   buffer(midpoint, range, {units: 'meters'});
+
+export type AreaState = {
+  lat: number;
+  lon: number;
+  zoom: number;
+  range: number;
+  visibleBounds: Position[];
+  loadedArea: Feature<Polygon> | undefined;
+};
+
+export const updateAreaState = (
+  region: MapRegion,
+  bufferDistance: number,
+  minZoomLevel: number,
+) => {
+  return (previousState: AreaState | undefined) => {
+    if (region.zoomLevel < minZoomLevel) {
+      return undefined;
+    }
+
+    const visibleBounds = region.visibleBounds;
+    if (!needsReload(visibleBounds, previousState?.loadedArea)) {
+      return previousState;
+    }
+
+    const [lon, lat] = region.center;
+    const range = getRadius(visibleBounds, bufferDistance);
+    return {
+      lat,
+      lon,
+      zoom: region.zoomLevel,
+      range,
+      visibleBounds,
+      loadedArea: extend(toFeaturePoint({lat, lon}), range),
+    };
+  };
+};

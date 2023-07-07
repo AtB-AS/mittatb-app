@@ -1,11 +1,16 @@
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {Location as LocationMonoIcon} from '@atb/assets/svg/mono-icons/places';
-import * as TransportationIcons from '@atb/assets/svg/mono-icons/transportation';
-import * as EnturTransportationIcons from '@atb/assets/svg/mono-icons/transportation-entur';
 import {Location} from '@atb/favorites';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {getVenueIconTypes} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {getVenueIconTypes} from './utils';
+import {
+  Bus,
+  Ferry,
+  Train,
+  Tram,
+} from '@atb/assets/svg/mono-icons/transportation';
+import {Plane} from '@atb/assets/svg/mono-icons/transportation-entur';
 
 export const LocationIcon = ({
   location,
@@ -43,43 +48,27 @@ const mapTypeToIconComponent = (iconType: VenueIconType) => {
   switch (iconType) {
     case 'bus':
       return (
-        <ThemeIcon
-          svg={TransportationIcons.Bus}
-          accessibilityLabel="Bussholdeplass"
-          key="bus"
-        />
+        <ThemeIcon svg={Bus} accessibilityLabel="Bussholdeplass" key="bus" />
       );
     case 'tram':
       return (
         <ThemeIcon
-          svg={TransportationIcons.Tram}
+          svg={Tram}
           accessibilityLabel="Trikkeholdeplass"
           key="tram"
         />
       );
     case 'rail':
       return (
-        <ThemeIcon
-          svg={TransportationIcons.Train}
-          accessibilityLabel="Togstasjon"
-          key="rail"
-        />
+        <ThemeIcon svg={Train} accessibilityLabel="Togstasjon" key="rail" />
       );
     case 'airport':
       return (
-        <ThemeIcon
-          svg={EnturTransportationIcons.Plane}
-          accessibilityLabel="Flyplass"
-          key="airport"
-        />
+        <ThemeIcon svg={Plane} accessibilityLabel="Flyplass" key="airport" />
       );
     case 'boat':
       return (
-        <ThemeIcon
-          svg={TransportationIcons.Ferry}
-          accessibilityLabel="Fergeleie"
-          key="boat"
-        />
+        <ThemeIcon svg={Ferry} accessibilityLabel="Fergeleie" key="boat" />
       );
     case 'unknown':
     default:

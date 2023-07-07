@@ -122,6 +122,21 @@ export function hasShortWaitTime(legs: Leg[]) {
     .some((waitTime) => timeIsShort(waitTime));
 }
 
+export function hasShortWaitTimeAndNotGuaranteedCorrespondence(legs: Leg[]) {
+  return iterateWithNext(legs)
+    .map((pair) => {
+      if (pair.current.interchangeTo?.guaranteed) {
+        return 0;
+      }
+      return differenceInSeconds(
+        parseDateIfString(pair.next.expectedStartTime),
+        parseDateIfString(pair.current.expectedEndTime),
+      );
+    })
+    .filter((waitTime) => waitTime > 0)
+    .some((waitTime) => timeIsShort(waitTime));
+}
+
 function parseDateIfString(date: any): Date {
   if (typeof date === 'string') {
     return parseISO(date);
@@ -159,4 +174,8 @@ export function canSellCollabTicket(tripPattern: TripPattern) {
 
 function someLegsAreByTrain(tripPattern: TripPattern): boolean {
   return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
+}
+
+export function isLegFlexibleTransport(leg: Leg): boolean {
+  return !!leg.line?.flexibleLineType;
 }

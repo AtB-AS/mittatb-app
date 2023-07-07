@@ -1,8 +1,13 @@
-import {FareProductTypeConfig} from '@atb-as/config-specs';
-import {TransportModeFilterOptionType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {
+  FareProductTypeConfig,
+  FlexibleTransportOptionType,
+  TransportModeFilterOptionType,
+} from '@atb-as/config-specs';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
+import {isDefined} from '@atb/utils/presence';
+import {MobilityOperator} from '@atb-as/config-specs/lib/mobility-operators';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -32,6 +37,29 @@ function mapToFareProductTypeConfig(
   }
   return typeConfigPotential.data;
 }
+
+export const mapToFlexibleTransportOption = (
+  filter: any,
+): FlexibleTransportOptionType | undefined => {
+  const safeParseReturnObject =
+    filter && FlexibleTransportOptionType.safeParse(filter);
+
+  if (!safeParseReturnObject) {
+    return undefined;
+  }
+
+  if (!safeParseReturnObject.success) {
+    Bugsnag.notify('flexible transport filter mapping issue', function (event) {
+      event.addMetadata('decode_errors', {
+        issues: safeParseReturnObject.error.issues,
+      });
+    });
+
+    return undefined;
+  }
+
+  return safeParseReturnObject.data;
+};
 
 export const mapToTransportModeFilterOptions = (
   filters: any,
@@ -68,4 +96,23 @@ export function mapLanguageAndTextType(text?: any) {
     return;
 
   return text as LanguageAndTextType[];
+}
+
+export function mapToMobilityOperators(operators?: any) {
+  if (!operators) return;
+  if (!Array.isArray(operators)) return;
+  return operators
+    .map((operator) => {
+      const parseResult = MobilityOperator.safeParse(operator);
+      if (!parseResult.success) {
+        Bugsnag.notify('Mobility operator mapping issue', function (event) {
+          event.addMetadata('decode_errors', {
+            issues: parseResult.error.issues,
+          });
+        });
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
 }

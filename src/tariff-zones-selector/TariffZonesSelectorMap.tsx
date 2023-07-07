@@ -1,12 +1,9 @@
-import {
-  TariffZoneResultType,
-  TariffZoneSelection,
-} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
-import {TariffZoneResults} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/TariffZoneResults';
+import {TariffZoneResultType, TariffZoneSelection} from './types';
+import {TariffZoneResults} from './TariffZoneResults';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
-import MapboxGL, {OnPressEvent} from '@rnmapbox/maps';
+import MapboxGL from '@rnmapbox/maps';
 import {
   flyToLocation,
   MapCameraConfig,
@@ -25,6 +22,7 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
 
 type Props = {
   selectedZones: TariffZoneSelection;
@@ -182,7 +180,7 @@ const TariffZonesSelectorMap = ({
             </MapboxGL.ShapeSource>
             {featureCollection.features.map((f) => (
               <MapboxGL.ShapeSource
-                key={f.id}
+                key={String(f.id)}
                 id={`label-shape-${f.id}`}
                 shape={f.properties!.midPoint}
               >

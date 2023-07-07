@@ -1,6 +1,10 @@
 import React, {useEffect, useRef} from 'react';
-import {AccessibilityInfo, findNodeHandle} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {
+  AccessibilityInfo,
+  InteractionManager,
+  findNodeHandle,
+} from 'react-native';
+import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
 
 /**
  * Return a ref which can be set on a component to make it be focused by screen
@@ -16,44 +20,37 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   useEffect(() => {
     if (!setFocusOnLoad || !focusRef.current) return;
 
-    const timeoutId = setTimeout(() => giveFocus(focusRef), 200);
-    return () => clearTimeout(timeoutId);
+    giveFocus(focusRef);
   }, [focusRef.current, setFocusOnLoad]);
 
   const navigation = useNavigationSafe();
   useEffect(() => {
     if (!navigation || !focusRef.current || !setFocusOnLoad) return;
 
-    let timeoutId: NodeJS.Timeout | undefined = undefined;
-    const unsubscribe = navigation.addListener('focus', () => {
-      timeoutId = setTimeout(() => giveFocus(focusRef), 200);
-    });
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      unsubscribe();
-    };
+    const unsubscribe = navigation.addListener('focus', () =>
+      giveFocus(focusRef),
+    );
+    return () => unsubscribe();
   }, [navigation, focusRef.current, setFocusOnLoad]);
 
   return focusRef;
 }
 
-const useNavigationSafe = () => {
-  try {
-    return useNavigation();
-  } catch (ex) {
-    /*
-    Navigation is not available as the current context is not inside a screen in
-    a navigator
-     */
-    return undefined;
-  }
-};
-
-export const giveFocus = (focusRef: React.MutableRefObject<any>) => {
+export const giveFocus = (
+  focusRef: React.MutableRefObject<any>,
+  timeoutMilliseconds?: number,
+) => {
   if (focusRef.current) {
-    const reactTag = findNodeHandle(focusRef.current);
-    if (reactTag) {
-      AccessibilityInfo.setAccessibilityFocus(reactTag);
-    }
+    InteractionManager.runAfterInteractions(() => {
+      const setFocus = () => {
+        const reactTag = findNodeHandle(focusRef.current);
+        reactTag && AccessibilityInfo.setAccessibilityFocus(reactTag);
+      };
+      if (timeoutMilliseconds) {
+        setTimeout(setFocus, timeoutMilliseconds);
+      } else {
+        setFocus();
+      }
+    });
   }
 };

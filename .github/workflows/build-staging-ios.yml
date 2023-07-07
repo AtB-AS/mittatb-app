@@ -61,7 +61,7 @@ jobs:
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build
         env:
-          # A workaround for Github Actions which breaks for a timeout in some cases, 
+          # A workaround for Github Actions which breaks for a timeout in some cases,
           # so this sets a higher value for TIMEOUT and reduces the number of retries
           FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
           FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 1
@@ -70,7 +70,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Run fastlane cert match
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
-        run: bundle exec fastlane ios get_cert
+        run: bundle exec fastlane ios get_certs
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       - name: Replace ipa bundle
@@ -79,18 +79,14 @@ jobs:
         env:
           IPA_FILE_NAME: 'AtB.ipa'
           APP_NAME: 'AtB.app'
-
-      - name: Distribute to Firebase app distribution
-        if: |
-          matrix.org == 'nfk' ||
-          matrix.org == 'fram'
+      - name: Distribute to Firebase App Distribution
+        if: matrix.org != 'atb'
         run: |
           echo ${{ secrets.FIREBASE_DISTRIBUTION_CREDENTIALS}} | base64 --decode > google-services.json
           bundle exec fastlane ios firebase_distribution_staging
         env:
           GCP_CREDENTIALS_PATH: google-services.json
           FIREBASE_APP_ID_IOS: ${{ secrets.FIREBASE_APP_ID_IOS }}
-
       - name: Distribute to AppCenter
         if: matrix.org == 'atb'
         run: bundle exec fastlane ios appcenter_staging

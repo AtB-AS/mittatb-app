@@ -6,7 +6,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
 import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
-import {CameraFocusModeType} from '../types';
+import {CameraFocusModeType, MapPadding} from '../types';
 import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
 
 type BoundingBox = {
@@ -22,7 +22,7 @@ const DEFAULT_PADDING_DISPLACEMENT = 0.003;
 /**
  * Trigger camera move based on the camera focus mode. When the camera focus
  * mode is 'coordinates' the camera movement happens instantly, but when the
- * camera focus mode is 'stop-place' or 'map-lines' it will wait until the
+ * camera focus mode is 'entity' or 'map-lines' it will wait until the
  * bottom sheet is shown.
  */
 export const useTriggerCameraMoveEffect = (
@@ -47,13 +47,12 @@ export const useTriggerCameraMoveEffect = (
    */
   useEffect(() => {
     if (!bottomSheetHeight) return;
-
     if (cameraFocusMode?.mode === 'map-lines') {
       moveCameraToMapLines(cameraFocusMode.mapLines, padding, mapCameraRef);
-    } else if (cameraFocusMode?.mode === 'stop-place') {
-      moveCameraToStopPlace(
-        cameraFocusMode.stopPlaceFeature,
-        padding,
+    } else if (cameraFocusMode?.mode === 'entity') {
+      moveCameraToEntity(
+        cameraFocusMode.entityFeature,
+        cameraFocusMode.zoomTo ? padding : undefined,
         mapCameraRef,
       );
     }
@@ -62,7 +61,7 @@ export const useTriggerCameraMoveEffect = (
 
 const moveCameraToMapLines = (
   mapLines: MapLine[],
-  padding: MapboxGL.Padding,
+  padding: MapPadding,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
   const bbox = getMapLinesBoundingBox(mapLines);
@@ -104,15 +103,23 @@ const moveCameraToCoordinates = (
   flyToLocation({coordinates, mapCameraRef});
 };
 
-const moveCameraToStopPlace = (
-  stopPlaceFeature: Feature<Point>,
-  padding: MapboxGL.Padding,
+const moveCameraToEntity = (
+  entityFeature: Feature<Point>,
+  padding: MapPadding | undefined,
   mapCameraRef: RefObject<MapboxGL.Camera>,
 ) => {
-  const stopPlaceCoordinates = mapPositionToCoordinates(
-    stopPlaceFeature.geometry.coordinates,
+  const coordinates = mapPositionToCoordinates(
+    entityFeature.geometry.coordinates,
   );
-  fitCameraWithinLocation(stopPlaceCoordinates, mapCameraRef, padding, 0.001);
+  if (!padding) {
+    flyToLocation({
+      coordinates,
+      mapCameraRef,
+      animationMode: 'easeTo',
+    });
+  } else {
+    fitCameraWithinLocation(coordinates, mapCameraRef, padding, 0.001);
+  }
 };
 
 /**
@@ -126,7 +133,7 @@ const moveCameraToStopPlace = (
 export const fitCameraWithinLocation = (
   centerCoordinate: Coordinates,
   mapCameraRef: RefObject<MapboxGL.Camera>,
-  padding: MapboxGL.Padding = 0,
+  padding: MapPadding = 0,
   displacement: number = DEFAULT_PADDING_DISPLACEMENT,
 ) => {
   const northEast: Coordinates = {
@@ -140,7 +147,7 @@ export const fitCameraWithinLocation = (
   fitBounds(northEast, southWest, mapCameraRef, padding);
 };
 
-const useCalculatePaddings = (): MapboxGL.Padding => {
+const useCalculatePaddings = (): MapPadding => {
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {height: screenHeight} = Dimensions.get('screen');
@@ -156,7 +163,7 @@ const useCalculatePaddings = (): MapboxGL.Padding => {
       padding,
       padding + scaledBottomSheetPadding,
       padding,
-    ].map((p) => p / PixelRatio.getFontScale()) as MapboxGL.Padding;
+    ].map((p) => p / PixelRatio.getFontScale()) as MapPadding;
   }
 
   return [

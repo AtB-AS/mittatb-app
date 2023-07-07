@@ -10,7 +10,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
@@ -22,6 +22,8 @@ import {useOfferDefaults} from './use-offer-defaults';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useAnalytics} from '@atb/analytics';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -56,6 +58,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
+  const analytics = useAnalytics();
 
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
@@ -83,7 +86,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     }
   }, [params?.refreshOffer]);
 
-  const closeModal = () => navigation.goBack();
+  const closeModal = () => navigation.popToTop();
+
+  const zonesInputSectionItemRef = useRef(null);
+
+  useEffect(() => {
+    if (params.onFocusElement === 'zone-selection') {
+      giveFocus(zonesInputSectionItemRef);
+    }
+  }, [params.onFocusElement]);
 
   return (
     <View style={styles.container}>
@@ -94,6 +105,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           onPress: closeModal,
         }}
         globalMessageContext="app-ticketing"
+        setFocusOnLoad={!params.onFocusElement}
       />
 
       <ScrollView testID="ticketingScrollView">
@@ -148,10 +160,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             fareProductTypeConfig={params.fareProductTypeConfig}
-            onSelect={(t) =>
-              navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t)
-            }
+            preassignedFareProduct={preassignedFareProduct}
+            onSelect={(t) => {
+              navigation.setParams({onFocusElement: undefined});
+              navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t);
+            }}
             style={styles.selectionComponent}
+            ref={zonesInputSectionItemRef}
           />
 
           <StartTimeSelection
@@ -182,7 +197,21 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
             fareProductTypeConfig={params.fareProductTypeConfig}
-            onPressBuy={() =>
+            onPressBuy={() => {
+              analytics.logEvent('Ticketing', 'Purchase summary clicked', {
+                fareProduct: params.fareProductTypeConfig.name,
+                tariffZone: {from: fromTariffZone.id, to: toTariffZone.id},
+                userProfilesWithCount: travellerSelection.map((t) => ({
+                  userType: t.userTypeString,
+                  count: t.count,
+                })),
+                preassignedFareProduct: {
+                  id: preassignedFareProduct.id,
+                  name: preassignedFareProduct.name.value,
+                },
+                travelDate,
+                mode: params.mode,
+              });
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 fareProductTypeConfig: params.fareProductTypeConfig,
                 fromTariffZone,
@@ -192,8 +221,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 travelDate,
                 headerLeftButton: {type: 'back'},
                 mode: params.mode,
-              })
-            }
+              });
+            }}
             style={styles.summary}
           />
         </FullScreenFooter>

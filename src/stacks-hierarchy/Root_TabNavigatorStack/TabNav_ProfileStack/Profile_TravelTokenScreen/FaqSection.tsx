@@ -1,20 +1,24 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import * as Sections from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, Theme} from '@atb/theme';
+import {
+  ExpandableSectionItem,
+  HeaderSectionItem,
+  Section,
+} from '@atb/components/sections';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {disable_travelcard} = useRemoteConfig();
 
   return (
-    <Sections.Section style={styles.faqSection}>
-      <Sections.HeaderSectionItem
-        text={t(TravelTokenTexts.travelToken.faq.title)}
-      />
+    <Section style={styles.faqSection}>
+      <HeaderSectionItem text={t(TravelTokenTexts.travelToken.faq.title)} />
       {toggleMaxLimit ? (
-        <Sections.ExpandableSectionItem
+        <ExpandableSectionItem
           text={t(TravelTokenTexts.travelToken.tokenToggleFaq.question)}
           showIconText={false}
           expandContent={
@@ -28,16 +32,20 @@ const FaqSection = ({toggleMaxLimit}: {toggleMaxLimit?: number}) => {
           }
         />
       ) : null}
-      {/*eslint-disable-next-line rulesdir/translations-warning*/}
-      {TravelTokenTexts.travelToken.faqs.map(({question, answer}, index) => (
-        <Sections.ExpandableSectionItem
+      {(disable_travelcard
+        ? // eslint-disable-next-line rulesdir/translations-warning
+          TravelTokenTexts.travelToken.faqsWithoutTravelcard
+        : // eslint-disable-next-line rulesdir/translations-warning
+          TravelTokenTexts.travelToken.faqs
+      ).map(({question, answer}, index) => (
+        <ExpandableSectionItem
           key={index}
           text={t(question)}
           showIconText={false}
           expandContent={<ThemeText isMarkdown={true}>{t(answer)}</ThemeText>}
         />
       ))}
-    </Sections.Section>
+    </Section>
   );
 };
 

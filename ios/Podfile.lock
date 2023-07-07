@@ -596,9 +596,8 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - AbtTokenCoreSDK (1.0.0):
-    - Kronos
-    - SwiftProtobuf
+  - AbtProtobufTokenIosStubs (2.661.0):
+    - SwiftProtobuf (~> 1.20.3)
   - boost (1.76.0)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
@@ -872,12 +871,12 @@ PODS:
   - Libuv-gRPC/Implementation (0.0.10):
     - Libuv-gRPC/Interface (= 0.0.10)
   - Libuv-gRPC/Interface (0.0.10)
-  - MapboxCommon (23.2.3)
-  - MapboxCoreMaps (10.10.0):
-    - MapboxCommon (~> 23.2)
-  - MapboxMaps (10.10.2):
-    - MapboxCommon (= 23.2.3)
-    - MapboxCoreMaps (= 10.10.0)
+  - MapboxCommon (23.5.0)
+  - MapboxCoreMaps (10.13.1):
+    - MapboxCommon (~> 23.5)
+  - MapboxMaps (10.13.1):
+    - MapboxCommon (= 23.5.0)
+    - MapboxCoreMaps (= 10.13.1)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (~> 2.0)
   - MapboxMobileEvents (1.0.10)
@@ -1131,7 +1130,7 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.4.0):
+  - react-native-slider (4.4.2):
     - React-Core
   - react-native-webview (11.26.0):
     - React-Core
@@ -1237,14 +1236,14 @@ PODS:
     - React-Core
   - RNLocalize (2.2.4):
     - React-Core
-  - rnmapbox-maps (10.0.0-beta.66):
-    - MapboxMaps (~> 10.10.0)
+  - rnmapbox-maps (10.0.8-rc.1):
+    - MapboxMaps (~> 10.13.1)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.0.0-beta.66)
+    - rnmapbox-maps/DynamicLibrary (= 10.0.8-rc.1)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.0.0-beta.66):
-    - MapboxMaps (~> 10.10.0)
+  - rnmapbox-maps/DynamicLibrary (10.0.8-rc.1):
+    - MapboxMaps (~> 10.13.1)
     - React
     - React-Core
     - Turf
@@ -1284,16 +1283,23 @@ PODS:
     - React-Core
   - SocketRocket (0.6.0)
   - SwiftProtobuf (1.20.3)
-  - token-state-react-native-lib-ios (1.1.6):
-    - AbtTokenCoreSDK
+  - TimeReactNativeLib (1.1.15):
+    - Kronos
     - React-Core
+  - TokenCore (1.0.0):
+    - AbtProtobufTokenIosStubs
+    - Kronos
+    - SwiftProtobuf (~> 1.20.3)
+  - TokenStateReactNativeLib (1.0.0):
+    - React-Core
+    - TokenCore
   - Turf (2.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - AbtTokenCoreSDK (from `https://github.com/AtB-AS/temp-token-core-ios-lib.git`)
+  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.661.0`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
@@ -1384,7 +1390,9 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "token-state-react-native-lib-ios (from `../node_modules/@entur-private/abt-token-state-react-native-lib/ios`)"
+  - "TimeReactNativeLib (from `../node_modules/@entur-private/abt-time-react-native-lib`)"
+  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.1.15`)"
+  - "TokenStateReactNativeLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.1.15`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1434,8 +1442,9 @@ SPEC REPOS:
     - YogaKit
 
 EXTERNAL SOURCES:
-  AbtTokenCoreSDK:
-    :git: https://github.com/AtB-AS/temp-token-core-ios-lib.git
+  AbtProtobufTokenIosStubs:
+    :git: "git@github.com:entur/abt-protobuf-pods.git"
+    :tag: 2.661.0
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
@@ -1558,19 +1567,31 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  token-state-react-native-lib-ios:
-    :path: "../node_modules/@entur-private/abt-token-state-react-native-lib/ios"
+  TimeReactNativeLib:
+    :path: "../node_modules/@entur-private/abt-time-react-native-lib"
+  TokenCore:
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.15
+  TokenStateReactNativeLib:
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.15
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 CHECKOUT OPTIONS:
-  AbtTokenCoreSDK:
-    :commit: 3c573a20cd7273bbf6fec70ed51dcf376c33ebb5
-    :git: https://github.com/AtB-AS/temp-token-core-ios-lib.git
+  AbtProtobufTokenIosStubs:
+    :git: "git@github.com:entur/abt-protobuf-pods.git"
+    :tag: 2.661.0
+  TokenCore:
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.15
+  TokenStateReactNativeLib:
+    :git: "git@github.com:entur/abt-mobile-client-sdk.git"
+    :tag: release-1.1.15
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
-  AbtTokenCoreSDK: 37dfb8d3f22568be581a7dbd04e290cb4b46b83f
+  AbtProtobufTokenIosStubs: 03f542d284191d515304cb56e96f8ce3503eac7b
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   BugsnagReactNative: e3debe54be51169ae09c653b059f1c1b0e594e39
@@ -1610,9 +1631,9 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
-  MapboxCommon: e7948335faacbe6f8b9b115511fd0dd0354bf565
-  MapboxCoreMaps: 4075a9e415b9b3ab6229d09623fef5f791826a5b
-  MapboxMaps: d8cf7d214d94ec18790c338f3a3fe59dd4048e97
+  MapboxCommon: fdf7fd31c90b7b607cd9c63e37797f023c01d860
+  MapboxCoreMaps: 24270c7c6b8cb71819fc2f3c549db9620ee4d019
+  MapboxMaps: cb76511b98d3b95c74b0771ed105bc69f30ace6b
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -1638,7 +1659,7 @@ SPEC CHECKSUMS:
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
   react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
-  react-native-slider: d2938a12c4e439a227c70eec65d119136eb4aeb5
+  react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
@@ -1665,18 +1686,20 @@ SPEC CHECKSUMS:
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
-  rnmapbox-maps: ab65faa9675f833e74693f0ca949d3f1647508b6
+  rnmapbox-maps: 505547e44fe713b076b39fc24bacf382cf5e5b33
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNReanimated: 6668b0587bebd4b15dd849b99e5a9c70fc12ed95
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
-  token-state-react-native-lib-ios: 6548b638164e281d10fcf05e0832ed5d28b74caa
+  TimeReactNativeLib: c6c149f011ae36c0d4ba02e8516562328c52e065
+  TokenCore: 1579a2a2179a283048d9c0a007b4fd38861f4555
+  TokenStateReactNativeLib: cba98cbdb61af0255d2e636565a0feedb6cda069
   Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 9eea10f835a619085db1c8d1242d728e7fe557c6
+PODFILE CHECKSUM: 4615622a609be6d9ed8da4a3cc12bbe2253763d9
 
 COCOAPODS: 1.11.3

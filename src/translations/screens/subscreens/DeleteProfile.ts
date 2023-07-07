@@ -41,7 +41,7 @@ const DeleteProfileTexts = {
     title: _('Feil ved sletting', 'Error when deleting'),
     message: _(
       'Det oppstod en  feil når vi prøvde å slette Min profil. Prøv igjen senere, og hvis det ikke hjelper, vennligst kontakt kundeservice.',
-      'An error occured when we tried deleting My profile. Try again later and if it still does not work, please contact customer service.',
+      'An error occurred when we tried deleting My profile. Try again later and if it still does not work, please contact customer service.',
     ),
   },
 };
@@ -55,8 +55,8 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
   },
   fram: {
     unableToDeleteWithFareContracts: _(
-      'Kan ikke slette din bruker mens du har aktive billetter. Kontakt FRAM kundeservice for refusjon eller vent til billettene har utløpt.',
-      'Unable to delete your user while you have active tickets. Please contact FRAM customer support for refund or wait until tickets expire.',
+      'Kan ikke slette din bruker mens du har aktive billetter. Kontakt FRAM Kundesenter for refusjon eller vent til billettene har utløpt.',
+      'Unable to delete your user while you have active tickets. Please contact FRAM Customer Centre for refund or wait until tickets expire.',
     ),
     header: {
       title: _('Slett min bruker', 'Delete my user'),
@@ -89,7 +89,7 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
     deleteError: {
       message: _(
         'Det oppstod en feil når vi prøvde å slette din bruker. Prøv igjen senere, og hvis det ikke hjelper, vennligst kontakt kundeservice.',
-        'An error occured when we tried deleting your user. Try again later and if it still does not work, please contact customer service.',
+        'An error occurred when we tried deleting your user. Try again later and if it still does not work, please contact customer service.',
       ),
     },
   },

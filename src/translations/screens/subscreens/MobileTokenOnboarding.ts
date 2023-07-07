@@ -15,7 +15,7 @@ const MobileTokenOnboardingTexts = {
       'Choose between t:card or phone',
     ),
     description: _(
-      'Du kan bruke billetten din på et t:kort eller en mobil med appen AtB installert — men kun en av gangen.',
+      'Du kan bruke billetten din på et t:kort eller en mobil med appen AtB installert — men kun én av gangen.',
       'You can use your ticket on a t:card or a phone with the app AtB installed — but only one at a time.',
     ),
     or: _('eller', 'or'),
@@ -69,6 +69,34 @@ const MobileTokenOnboardingTexts = {
     'Aktiver for å gå til neste side',
     'Activate to go to next page',
   ),
+  withoutTravelcard: {
+    optionsInfo: {
+      heading: _('Bruk din mobil', 'Use your phone'),
+      description: _(
+        'Du kan bruke billetten din på en mobil med appen AtB installert — men kun én av gangen.',
+        'You can use your ticket on a phone with the app AtB installed — but only one at a time.',
+      ),
+    },
+    ticketSafetyInfo: {
+      description: _(
+        'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
+        "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose or switch phones.",
+      ),
+    },
+    phone: {
+      description: _(
+        'Du kan alltid bytte til en annen mobil ved logge inn og gå til **Min profil**.',
+        'You can always switch to a different phone by logging in, and heading over to **My profile**.',
+      ),
+      button: _('Bytt til en annen mobil', 'Switch to a different phone'),
+    },
+    error: {
+      description: _(
+        'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med AtB kundesenter.',
+        "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact AtB service center.",
+      ),
+    },
+  },
 };
 export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
   nfk: {
@@ -78,7 +106,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         'Choose between travel card or phone',
       ),
       description: _(
-        'Du kan bruke billetten din på et reisekort eller en mobil med Reis-appen installert — men kun en av gangen.',
+        'Du kan bruke billetten din på et reisekort eller en mobil med Reis-appen installert — men kun én av gangen.',
         'You can use your ticket on a travel card or a phone with the Reis app installed — but only one at a time.',
       ),
     },
@@ -115,6 +143,32 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         "We can't connect a travel card or phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Reis Nordland customer service.",
       ),
     },
+    withoutTravelcard: {
+      optionsInfo: {
+        description: _(
+          'Du kan bruke billetten din på en mobil med Reis-appen installert — men kun én av gangen.',
+          'You can use your ticket on a phone with the Reis app installed — but only one at a time.',
+        ),
+      },
+      ticketSafetyInfo: {
+        description: _(
+          'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
+          "Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you lose or switch phones.",
+        ),
+      },
+      phone: {
+        description: _(
+          'Du kan alltid bytte til en annen mobil ved logge inn og gå til **Min profil**.',
+          'You can always switch to a different phone by logging in, and heading over to **My profile**.',
+        ),
+      },
+      error: {
+        description: _(
+          'Vi får ikke knyttet en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Reis Nordland kundeservice om problemet vedvarer.',
+          "We can't connect a phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Reis Nordland customer service.",
+        ),
+      },
+    },
   },
   fram: {
     optionsInfo: {
@@ -123,14 +177,14 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         'Choose between travel card or phone',
       ),
       description: _(
-        'Du kan bruke billetten din på et reisekort eller en mobil med FRAM-appen installert — men kun en av gangen.',
+        'Du kan bruke billetten din på et reisekort eller en mobil med FRAM-appen installert — men kun én av gangen.',
         'You can use your ticket on a travel card or a phone with the FRAM app installed — but only one at a time.',
       ),
     },
     ticketSafetyInfo: {
       description: _(
-        'Billetten din er trygt lagret på **Min bruker**. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
-        "Your ticket is safely stored on **My user**. That way you won't lose your ticket even if you lose your travel card or switch phones.",
+        'Billetten din er trygt lagret på din konto i skyen. Dermed vil du aldri miste den — selv om du mister reisekortet eller bytter mobil.',
+        "Your ticket is safely stored on your account in the cloud. That way you won't lose your ticket even if you lose your travel card or switch phones.",
       ),
     },
     tCard: {
@@ -161,9 +215,35 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
     },
     error: {
       description: _(
-        'Vi får ikke knyttet et reisekort eller en mobil til bruker din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM kundeservice om problemet vedvarer.',
-        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM customer service.",
+        'Vi får ikke knyttet et reisekort eller en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+        "We can't connect a travel card or phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
       ),
+    },
+    withoutTravelcard: {
+      optionsInfo: {
+        description: _(
+          'Du kan bruke billetten din på en mobil med FRAM-appen installert — men kun én av gangen.',
+          'You can use your ticket on a phone with the FRAM app installed — but only one at a time.',
+        ),
+      },
+      ticketSafetyInfo: {
+        description: _(
+          'Billetten din er trygt lagret på din konto i skyen. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
+          "Your ticket is safely stored on your account in the cloud. That way you won't lose your ticket even if you lose or switch phones.",
+        ),
+      },
+      phone: {
+        description: _(
+          'Du kan alltid bytte til en annen mobil ved logge inn og gå til **Min bruker**.',
+          'You can always switch to a different phone by logging in, and heading over to **My user**.',
+        ),
+      },
+      error: {
+        description: _(
+          'Vi får ikke knyttet en mobil til brukeren din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med FRAM Kundesenter om problemet vedvarer.',
+          "We can't connect a phone to your user. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact FRAM Customer Centre.",
+        ),
+      },
     },
   },
 });

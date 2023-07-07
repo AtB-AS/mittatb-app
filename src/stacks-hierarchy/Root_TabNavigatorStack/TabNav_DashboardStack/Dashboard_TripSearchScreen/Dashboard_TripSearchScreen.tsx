@@ -3,7 +3,6 @@ import {ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -41,8 +40,8 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
+  Platform,
   RefreshControl,
-  ScrollView,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -52,6 +51,11 @@ import {Time} from '@atb/assets/svg/mono-icons/time';
 import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
+import {FullScreenView} from '@atb/components/screen-view';
+import {CityZoneMessage} from './components/CityZoneMessage';
+import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
+import {TripPattern} from '@atb/api/types/trips';
+import {useAnalytics} from '@atb/analytics';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -69,11 +73,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {theme} = useTheme();
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
+  const analytics = useAnalytics();
 
   const shouldShowTravelSearchFilterOnboarding =
     useShouldShowTravelSearchFilterOnboarding();
   useEffect(() => {
     if (shouldShowTravelSearchFilterOnboarding) {
+      analytics.logEvent('Trip search', 'Filter onboarding shown');
       navigation.navigate('Dashboard_TravelSearchFilterOnboardingScreen');
     }
   }, [shouldShowTravelSearchFilterOnboarding]);
@@ -90,7 +96,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
 
@@ -99,6 +106,9 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const isEmptyResult = !isSearching && !tripPatterns?.length;
   const noResultReasons = computeNoResultReasons(t, searchTime, from, to);
   const isValidLocations = isValidTripLocations(from, to);
+  const isFlexibleTransportEnabled =
+    isFlexibleTransportEnabledInRemoteConfig &&
+    filtersState?.filtersSelection?.flexibleTransport?.enabled;
 
   const [searchStateMessage, setSearchStateMessage] = useState<
     string | undefined
@@ -168,11 +178,14 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   );
 
   const onPressed = useCallback(
-    (tripPatterns, startIndex) =>
+    (tripPattern: TripPattern, resultIndex) => {
+      analytics.logEvent('Trip search', 'Trip details opened', {
+        resultIndex,
+      });
       navigation.navigate('Dashboard_TripDetailsScreen', {
-        tripPatterns,
-        startIndex,
-      }),
+        tripPattern,
+      });
+    },
     [navigation, from, to],
   );
 
@@ -181,6 +194,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       newFrom: translateLocation(to),
       newTo: translateLocation(from),
     });
+    analytics.logEvent('Trip search', 'Locations to/from swapped');
     navigation.setParams({
       fromLocation: to,
       toLocation: from,
@@ -203,7 +217,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               option: 'now',
               date: new Date().toISOString(),
             }
-          : searchTime,
+          : {...searchTime},
     });
   };
 
@@ -211,222 +225,245 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
 
   return (
     <View style={style.container}>
-      <FullScreenHeader
-        title={t(TripSearchTexts.header.title)}
-        rightButton={{type: 'chat'}}
-        leftButton={{
-          type: 'back',
-          onPress: () => {
-            if (callerRoute?.name) {
-              navigation.setParams({
-                callerRoute: undefined,
-              });
+      <FullScreenView
+        headerProps={{
+          title: t(TripSearchTexts.header.title),
+          rightButton: {type: 'chat'},
+          leftButton: {
+            type: 'back',
+            onPress: () => {
+              if (callerRoute?.name) {
+                navigation.setParams({
+                  callerRoute: undefined,
+                });
 
-              return navigation.navigate({
-                name: callerRoute?.name as any,
-                params: {},
-              });
-            }
+                return navigation.navigate({
+                  name: callerRoute?.name as any,
+                  params: {},
+                });
+              }
 
-            navigation.goBack();
+              navigation.goBack();
+            },
           },
         }}
-      />
-
-      <View style={style.searchHeader}>
-        <View style={style.paddedContainer}>
-          <Section>
-            <LocationInputSectionItem
-              accessibilityLabel={
-                t(TripSearchTexts.location.departurePicker.a11yLabel) +
-                screenReaderPause
-              }
-              accessibilityHint={
-                t(TripSearchTexts.location.departurePicker.a11yHint) +
-                screenReaderPause
-              }
-              updatingLocation={updatingLocation && !to}
-              location={from}
-              label={t(TripSearchTexts.location.departurePicker.label)}
-              onPress={() => openLocationSearch('fromLocation', from)}
-              icon={<ThemeIcon svg={LocationIcon} />}
-              onIconPress={setCurrentLocationOrRequest}
-              iconAccessibility={{
-                accessible: true,
-                accessibilityLabel:
-                  from?.resultType == 'geolocation'
-                    ? t(
-                        TripSearchTexts.location.locationButton.a11yLabel
-                          .update,
-                      )
-                    : t(TripSearchTexts.location.locationButton.a11yLabel.use),
-                accessibilityRole: 'button',
-              }}
-              testID="searchFromButton"
-            />
-
-            <LocationInputSectionItem
-              accessibilityLabel={t(
-                TripSearchTexts.location.destinationPicker.a11yLabel,
-              )}
-              label={t(TripSearchTexts.location.destinationPicker.label)}
-              location={to}
-              onPress={() => openLocationSearch('toLocation', to)}
-              icon={<ThemeIcon svg={Swap} />}
-              onIconPress={swap}
-              iconAccessibility={{
-                accessible: true,
-                accessibilityLabel:
-                  t(TripSearchTexts.location.swapButton.a11yLabel) +
-                  screenReaderPause,
-                accessibilityRole: 'button',
-              }}
-              testID="searchToButton"
-            />
-          </Section>
-        </View>
-        <View style={style.searchParametersButtons}>
-          <Button
-            text={getSearchTimeLabel(searchTime, timeOfLastSearch, t, language)}
-            accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
-            accessibilityLabel={getSearchTimeLabel(
-              searchTime,
-              timeOfLastSearch,
-              t,
-              language,
-            )}
-            interactiveColor="interactive_0"
-            mode="secondary"
-            compact={true}
-            onPress={onSearchTimePress}
-            testID="dashboardDateTimePicker"
-            rightIcon={{
-              svg: Time,
-              notification:
-                searchTime.option !== 'now'
-                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
-                  : undefined,
-            }}
-            viewContainerStyle={style.searchTimeButton}
-          />
-          {filtersState.enabled && (
-            <Button
-              text={t(TripSearchTexts.filterButton.text)}
-              accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-              interactiveColor="interactive_1"
-              mode="secondary"
-              type="inline"
-              compact={true}
-              onPress={filtersState.openBottomSheet}
-              testID="dashboardDateTimePicker"
-              rightIcon={{
-                svg: Filter,
-                notification: filtersState.anyFiltersApplied
-                  ? {color: 'valid', backgroundColor: 'background_accent_0'}
-                  : undefined,
-              }}
-              viewContainerStyle={style.filterButton}
-              ref={filtersState.closeRef}
-            />
-          )}
-        </View>
-      </View>
-
-      <ScrollView
-        contentContainerStyle={style.scrollView}
         refreshControl={
           <RefreshControl
-            refreshing={searchState === 'searching' && !tripPatterns.length}
+            refreshing={
+              Platform.OS === 'ios'
+                ? false
+                : searchState === 'searching' && !tripPatterns.length
+            }
             onRefresh={refresh}
-            tintColor={theme.text.colors.secondary}
           />
         }
-      >
-        <ScreenReaderAnnouncement message={searchStateMessage} />
-        {(!from || !to) && (
-          <ThemeText
-            color="secondary"
-            style={style.missingLocationText}
-            testID="missingLocation"
-          >
-            {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
-          </ThemeText>
-        )}
-        {from && to && (
-          <View>
-            {filtersState.enabled && (
-              <SelectedFiltersButtons
-                filtersSelection={filtersState.filtersSelection}
-                resetTransportModes={filtersState.resetTransportModes}
+        parallaxContent={() => (
+          <View style={style.searchHeader}>
+            <Section>
+              <LocationInputSectionItem
+                accessibilityLabel={
+                  t(TripSearchTexts.location.departurePicker.a11yLabel) +
+                  screenReaderPause
+                }
+                accessibilityHint={
+                  t(TripSearchTexts.location.departurePicker.a11yHint) +
+                  screenReaderPause
+                }
+                updatingLocation={updatingLocation && !to}
+                location={from}
+                label={t(TripSearchTexts.location.departurePicker.label)}
+                onPress={() => openLocationSearch('fromLocation', from)}
+                icon={<ThemeIcon svg={LocationIcon} />}
+                onIconPress={setCurrentLocationOrRequest}
+                iconAccessibility={{
+                  accessible: true,
+                  accessibilityLabel:
+                    from?.resultType == 'geolocation'
+                      ? t(
+                          TripSearchTexts.location.locationButton.a11yLabel
+                            .update,
+                        )
+                      : t(
+                          TripSearchTexts.location.locationButton.a11yLabel.use,
+                        ),
+                  accessibilityRole: 'button',
+                }}
+                testID="searchFromButton"
               />
-            )}
-            <Results
-              tripPatterns={tripPatterns}
-              isSearching={isSearching}
-              showEmptyScreen={showEmptyScreen}
-              isEmptyResult={isEmptyResult}
-              resultReasons={noResultReasons}
-              onDetailsPressed={onPressed}
-              errorType={error}
-              searchTime={searchTime}
-              anyFiltersApplied={
-                filtersState.enabled && filtersState.anyFiltersApplied
-              }
-            />
+
+              <LocationInputSectionItem
+                accessibilityLabel={t(
+                  TripSearchTexts.location.destinationPicker.a11yLabel,
+                )}
+                label={t(TripSearchTexts.location.destinationPicker.label)}
+                location={to}
+                onPress={() => openLocationSearch('toLocation', to)}
+                icon={<ThemeIcon svg={Swap} />}
+                onIconPress={swap}
+                iconAccessibility={{
+                  accessible: true,
+                  accessibilityLabel:
+                    t(TripSearchTexts.location.swapButton.a11yLabel) +
+                    screenReaderPause,
+                  accessibilityRole: 'button',
+                }}
+                testID="searchToButton"
+              />
+            </Section>
+            <View style={style.searchParametersButtons}>
+              <Button
+                text={getSearchTimeLabel(
+                  searchTime,
+                  timeOfLastSearch,
+                  t,
+                  language,
+                )}
+                accessibilityHint={t(TripSearchTexts.dateInput.a11yHint)}
+                accessibilityLabel={getSearchTimeLabel(
+                  searchTime,
+                  timeOfLastSearch,
+                  t,
+                  language,
+                )}
+                interactiveColor="interactive_0"
+                mode="secondary"
+                compact={true}
+                onPress={onSearchTimePress}
+                testID="dashboardDateTimePicker"
+                rightIcon={{
+                  svg: Time,
+                  notification:
+                    searchTime.option !== 'now'
+                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                      : undefined,
+                }}
+                viewContainerStyle={style.searchTimeButton}
+              />
+              {filtersState.enabled && (
+                <Button
+                  text={t(TripSearchTexts.filterButton.text)}
+                  accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
+                  interactiveColor="interactive_0"
+                  mode="secondary"
+                  type="inline"
+                  compact={true}
+                  onPress={filtersState.openBottomSheet}
+                  testID="dashboardDateTimePicker"
+                  rightIcon={{
+                    svg: Filter,
+                    notification: filtersState.anyFiltersApplied
+                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
+                      : undefined,
+                  }}
+                  viewContainerStyle={style.filterButton}
+                  ref={filtersState.onCloseFocusRef}
+                />
+              )}
+            </View>
           </View>
         )}
-        {!tripPatterns.length && <View style={style.emptyResultsSpacer}></View>}
-        {!error && isValidLocations && (
-          <TouchableOpacity
-            onPress={loadMore}
-            disabled={searchState === 'searching'}
-            style={style.loadMoreButton}
-            testID="loadMoreButton"
-          >
-            {searchState === 'searching' ? (
-              <View style={style.loadingIndicator}>
-                {tripPatterns.length ? (
-                  <>
-                    <ActivityIndicator
-                      color={theme.text.colors.secondary}
-                      style={{
-                        marginRight: theme.spacings.medium,
-                      }}
-                    />
-                    <ThemeText color="secondary" testID="searchingForResults">
-                      {t(TripSearchTexts.results.fetchingMore)}
-                    </ThemeText>
-                  </>
-                ) : (
-                  <ThemeText
-                    color="secondary"
-                    style={style.loadingText}
-                    testID="searchingForResults"
-                  >
-                    {t(TripSearchTexts.searchState.searching)}
-                  </ThemeText>
+      >
+        <View>
+          <ScreenReaderAnnouncement message={searchStateMessage} />
+          {(!from || !to) && (
+            <ThemeText
+              color="secondary"
+              style={style.missingLocationText}
+              testID="missingLocation"
+            >
+              {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
+            </ThemeText>
+          )}
+          {from && to && (
+            <View>
+              {filtersState.enabled && (
+                <SelectedFiltersButtons
+                  filtersSelection={filtersState.filtersSelection}
+                  resetTransportModes={filtersState.resetTransportModes}
+                />
+              )}
+              {isFlexibleTransportEnabled &&
+                tripPatterns.length > 0 &&
+                !error && (
+                  <CityZoneMessage
+                    from={from}
+                    to={to}
+                    onDismiss={() => {
+                      filtersState.enabled &&
+                        filtersState.disableFlexibleTransport();
+                      analytics.logEvent(
+                        'Flexible transport',
+                        'Message box dismissed',
+                      );
+                    }}
+                  />
                 )}
-              </View>
-            ) : (
-              <>
-                {loadMore ? (
-                  <>
-                    <ThemeIcon
-                      colorType="secondary"
-                      svg={ExpandMore}
-                      size={'normal'}
-                    />
-                    <ThemeText color="secondary" testID="resultsLoaded">
-                      {' '}
-                      {t(TripSearchTexts.results.fetchMore)}
+              <Results
+                tripPatterns={tripPatterns}
+                isSearching={isSearching}
+                showEmptyScreen={showEmptyScreen}
+                isEmptyResult={isEmptyResult}
+                resultReasons={noResultReasons}
+                onDetailsPressed={onPressed}
+                errorType={error}
+                searchTime={searchTime}
+                anyFiltersApplied={
+                  filtersState.enabled && filtersState.anyFiltersApplied
+                }
+              />
+            </View>
+          )}
+          {!tripPatterns.length && (
+            <View style={style.emptyResultsSpacer}></View>
+          )}
+          {!error && isValidLocations && (
+            <TouchableOpacity
+              onPress={loadMore}
+              disabled={searchState === 'searching'}
+              style={style.loadMoreButton}
+              testID="loadMoreButton"
+            >
+              {searchState === 'searching' ? (
+                <View style={style.loadingIndicator}>
+                  {tripPatterns.length ? (
+                    <>
+                      <ActivityIndicator
+                        color={theme.text.colors.secondary}
+                        style={{
+                          marginRight: theme.spacings.medium,
+                        }}
+                      />
+                      <ThemeText color="secondary" testID="searchingForResults">
+                        {t(TripSearchTexts.results.fetchingMore)}
+                      </ThemeText>
+                    </>
+                  ) : (
+                    <ThemeText color="secondary" testID="searchingForResults">
+                      {t(TripSearchTexts.searchState.searching)}
                     </ThemeText>
-                  </>
-                ) : null}
-              </>
-            )}
-          </TouchableOpacity>
-        )}
-      </ScrollView>
+                  )}
+                </View>
+              ) : (
+                <>
+                  {loadMore ? (
+                    <>
+                      <ThemeIcon
+                        colorType="secondary"
+                        svg={ExpandMore}
+                        size={'normal'}
+                      />
+                      <ThemeText color="secondary" testID="resultsLoaded">
+                        {' '}
+                        {t(TripSearchTexts.results.fetchMore)}
+                      </ThemeText>
+                    </>
+                  ) : null}
+                </>
+              )}
+            </TouchableOpacity>
+          )}
+        </View>
+      </FullScreenView>
     </View>
   );
 };
@@ -595,26 +632,18 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.medium,
     backgroundColor: theme.static.background[ResultsBackgroundColor].background,
   },
-  paddedContainer: {
-    marginHorizontal: theme.spacings.medium,
-  },
   searchParametersButtons: {
-    margin: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
     flexDirection: 'row',
   },
   searchTimeButton: {flex: 1},
   filterButton: {marginLeft: theme.spacings.medium},
   searchHeader: {
+    marginHorizontal: theme.spacings.medium,
     backgroundColor: theme.static.background[headerBackgroundColor].background,
-    elevation: 1,
   },
   loadingIndicator: {
-    // marginTop: theme.spacings.xLarge,
     flexDirection: 'row',
-  },
-
-  loadingText: {
-    // marginTop: theme.spacings.xLarge,
   },
   missingLocationText: {
     padding: theme.spacings.xLarge,

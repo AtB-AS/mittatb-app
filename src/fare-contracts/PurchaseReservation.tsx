@@ -7,7 +7,7 @@ import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
 import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
 import {ValidityLine} from './ValidityLine';
-import {FareContractStatusSymbol} from './Component/FareContractStatusSymbol';
+import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {useAuthState} from '@atb/auth';
@@ -19,7 +19,7 @@ type Props = {
 export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {user} = useAuthState();
+  const {abtCustomerIdFull} = useAuthState();
   const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
@@ -42,7 +42,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   };
 
   // Filter out reservations for subaccounts
-  if (user?.uid && reservation.customerAccountId !== user?.uid) return null;
+  if (reservation.customerAccountId !== abtCustomerIdFull) return null;
 
   const status = getStatus();
 

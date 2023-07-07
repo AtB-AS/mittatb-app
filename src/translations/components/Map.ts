@@ -4,9 +4,6 @@ const MapTexts = {
   exitButton: {
     a11yLabel: _('Gå tilbake', 'Go back'),
   },
-  expandButton: {
-    label: _('Utvid kart', 'Expand map'),
-  },
   startPoint: {
     label: _('Start', 'Start'),
   },
@@ -19,6 +16,11 @@ const MapTexts = {
       'Kart er ikke synlig når du bruker skjermleser.',
       'The map is not visible while using screen reader.',
     ),
+  },
+  filters: {
+    bottomSheet: {
+      heading: _('Filter', 'Filter'),
+    },
   },
 };
 export default MapTexts;

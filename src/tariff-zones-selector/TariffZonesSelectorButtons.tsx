@@ -9,29 +9,34 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
 import {getReferenceDataName} from '@atb/reference-data/utils';
-import {
-  TariffZoneSelection,
-  TariffZoneWithMetadata,
-} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
+import {TariffZoneSelection, TariffZoneWithMetadata} from './types';
+// eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+// eslint-disable-next-line no-restricted-imports
+import {TicketAssistant_ZonePickerScreenParams} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
+import {ViewStyle} from 'react-native';
 
 type Props = {
   selectedZones: TariffZoneSelection;
   isApplicableOnSingleZoneOnly: boolean;
   onVenueSearchClick: (
-    callerRouteParam: keyof Root_PurchaseTariffZonesSearchByMapScreenParams,
+    callerRouteParam:
+      | keyof Root_PurchaseTariffZonesSearchByMapScreenParams
+      | keyof TicketAssistant_ZonePickerScreenParams,
   ) => void;
+  style?: ViewStyle;
 };
 
 const TariffZonesSelectorButtons = ({
   selectedZones,
   onVenueSearchClick,
   isApplicableOnSingleZoneOnly,
+  style,
 }: Props) => {
   const {t, language} = useTranslation();
 
   return (
-    <Section withPadding>
+    <Section style={style}>
       <ButtonSectionItem
         label={
           isApplicableOnSingleZoneOnly
@@ -57,12 +62,7 @@ const TariffZonesSelectorButtons = ({
       {!isApplicableOnSingleZoneOnly && (
         <ButtonSectionItem
           label={t(TariffZonesTexts.location.zonePicker.labelTo)}
-          value={destinationPickerValue(
-            selectedZones.from,
-            selectedZones.to,
-            language,
-            t,
-          )}
+          value={destinationPickerValue(selectedZones.to, language, t)}
           accessibilityLabel={destinationPickerAccessibilityLabel(
             selectedZones.to,
             language,
@@ -147,7 +147,6 @@ const departurePickerValue = (
 };
 
 const destinationPickerValue = (
-  fromTariffZone: TariffZoneWithMetadata,
   toTariffZone: TariffZoneWithMetadata,
   language: Language,
   t: TranslateFunction,

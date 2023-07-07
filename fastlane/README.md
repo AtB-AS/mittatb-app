@@ -39,13 +39,21 @@ Generate new certificates
 
 Generate new certificates without nuking old ones
 
-### ios get_cert
+### ios get_certs
 
 ```sh
-[bundle exec] fastlane ios get_cert
+[bundle exec] fastlane ios get_certs
 ```
 
 Match certificates
+
+### ios setup_certificates
+
+```sh
+[bundle exec] fastlane ios setup_certificates
+```
+
+Setup certificates
 
 ### ios build
 
@@ -108,6 +116,14 @@ Upload the build to AppCenter for distribution to TestFlight
 
 Upload the build to AppCenter
 
+### android build_aab
+
+```sh
+[bundle exec] fastlane android build_aab
+```
+
+
+
 ### android firebase_distribution_staging
 
 ```sh
@@ -120,6 +136,14 @@ Upload the build to AppCenter
 
 ```sh
 [bundle exec] fastlane android playstore_internal
+```
+
+
+
+### android playstore_internal_aab
+
+```sh
+[bundle exec] fastlane android playstore_internal_aab
 ```
 
 

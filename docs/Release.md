@@ -11,7 +11,7 @@ Skip the first two steps of creating release-branch and bumping version number o
 ### Create release branch
 Branch out from master to a new branch with prefix `release/`, like `release/1.30`.
 
-### On master: Bump version number and register new version at Entur
+### On master: Bump version number and register new version at Entur registry
 
 Now that a release branch is created, the version-number on master should be increased. So if `release/1.30` is created, then master should be incremented to `1.31` as version number.
 

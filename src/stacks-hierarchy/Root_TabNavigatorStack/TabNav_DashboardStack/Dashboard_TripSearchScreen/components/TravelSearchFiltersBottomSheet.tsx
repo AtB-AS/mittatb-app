@@ -7,20 +7,27 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import * as Sections from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
-import type {
-  TransportModeFilterOptionWithSelectionType,
-  TravelSearchFiltersSelectionType,
-} from '../../types';
 import {useFilters} from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
+import {
+  GenericClickableSectionItem,
+  HeaderSectionItem,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
+import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
+import {
+  FlexibleTransportOptionTypeWithSelectionType,
+  TransportModeFilterOptionWithSelectionType,
+  TravelSearchFiltersSelectionType,
+} from '@atb/travel-search-filters';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -36,21 +43,33 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
 
-  const [selectedModes, setSelectedModes] = useState<
+  const isFlexibleTransportEnabledInRemoteConfig =
+    useFlexibleTransportEnabled();
+
+  const [selectedModeOptions, setSelectedModes] = useState<
     TransportModeFilterOptionWithSelectionType[] | undefined
   >(filtersSelection.transportModes);
 
+  const [selectedFlexibleTransportOption, setFlexibleTranportFilter] = useState<
+    FlexibleTransportOptionTypeWithSelectionType | undefined
+  >(filtersSelection.flexibleTransport);
+
   const save = () => {
-    onSave({
-      transportModes: selectedModes,
-    });
+    const selectedFilters = {
+      transportModes: selectedModeOptions,
+      flexibleTransport: selectedFlexibleTransportOption,
+    };
+    onSave(selectedFilters);
     if (saveFilters) {
-      setFilters(selectedModes);
+      setFilters(selectedFilters);
     }
     close();
   };
 
-  const allModesSelected = selectedModes?.every((m) => m.selected);
+  const allModesSelected = selectedModeOptions?.every((m) => m.selected);
+
+  const showFlexibleTransportFilterOption =
+    isFlexibleTransportEnabledInRemoteConfig && selectedFlexibleTransportOption;
 
   return (
     <BottomSheetContainer maxHeightValue={0.9}>
@@ -66,11 +85,11 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
         setFocusOnLoad={false}
       />
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
-        <Sections.Section>
-          <Sections.HeaderSectionItem
+        <Section>
+          <HeaderSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}
           />
-          <Sections.ToggleSectionItem
+          <ToggleSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modes.all)}
             value={allModesSelected}
             onValueChange={(checked) => {
@@ -89,7 +108,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               language,
             );
             return text ? (
-              <Sections.ToggleSectionItem
+              <ToggleSectionItem
                 key={option.id}
                 text={text}
                 leftIcon={getTransportModeSvg(
@@ -98,11 +117,12 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 )}
                 subtext={description}
                 value={
-                  selectedModes?.find(({id}) => id === option.id)?.selected
+                  selectedModeOptions?.find(({id}) => id === option.id)
+                    ?.selected
                 }
                 onValueChange={(checked) => {
                   setSelectedModes(
-                    selectedModes?.map((m) =>
+                    selectedModeOptions?.map((m) =>
                       m.id === option.id ? {...m, selected: checked} : m,
                     ),
                   );
@@ -110,9 +130,35 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               />
             ) : null;
           })}
-        </Sections.Section>
-        <Sections.Section style={styles.saveFiltersContainer}>
-          <Sections.GenericClickableSectionItem
+        </Section>
+
+        {showFlexibleTransportFilterOption && (
+          <Section style={styles.sectionContainer}>
+            <ToggleSectionItem
+              text={
+                getTextForLanguage(
+                  selectedFlexibleTransportOption.title,
+                  language,
+                ) ?? ''
+              }
+              subtext={getTextForLanguage(
+                selectedFlexibleTransportOption.description,
+                language,
+              )}
+              label={selectedFlexibleTransportOption.label}
+              value={selectedFlexibleTransportOption?.enabled}
+              onValueChange={(checked) => {
+                setFlexibleTranportFilter({
+                  ...selectedFlexibleTransportOption,
+                  enabled: checked,
+                });
+              }}
+            />
+          </Section>
+        )}
+
+        <Section style={styles.sectionContainer}>
+          <GenericClickableSectionItem
             onPress={() => {
               setSaveFilters(!saveFilters);
             }}
@@ -134,8 +180,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
               </ThemeText>
             </View>
-          </Sections.GenericClickableSectionItem>
-        </Sections.Section>
+          </GenericClickableSectionItem>
+        </Section>
       </ScrollView>
 
       <FullScreenFooter>
@@ -154,7 +200,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
-  saveFiltersContainer: {
+  sectionContainer: {
     marginTop: theme.spacings.medium,
   },
   saveOptionSection: {

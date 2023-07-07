@@ -1,7 +1,12 @@
 import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import * as Sections from '@atb/components/sections';
-import {SectionSeparator} from '@atb/components/sections';
+import {
+  GenericClickableSectionItem,
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+  SectionSeparator,
+} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
@@ -89,8 +94,8 @@ export function QuaySection({
 
   return (
     <View testID={testID}>
-      <Sections.Section style={styles.section}>
-        <Sections.GenericClickableSectionItem
+      <Section style={styles.section}>
+        <GenericClickableSectionItem
           onPress={() => {
             setIsMinimized(!isMinimized);
           }}
@@ -125,7 +130,7 @@ export function QuaySection({
             </View>
             <ThemeIcon svg={isMinimized ? ExpandMore : ExpandLess} />
           </View>
-        </Sections.GenericClickableSectionItem>
+        </GenericClickableSectionItem>
         {!isMinimized &&
           /*
            This is under its own 'isMinimized' as nesting section items in React
@@ -140,7 +145,7 @@ export function QuaySection({
               departuresToDisplay.slice(0, departuresPerQuay)
             }
             renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
-              <Sections.GenericSectionItem
+              <GenericSectionItem
                 radius={
                   index === departuresToDisplay.length - 1 &&
                   !shouldShowMoreItemsLink
@@ -161,7 +166,7 @@ export function QuaySection({
                   allowFavouriteSelection={allowFavouriteSelection}
                   mode={mode}
                 />
-              </Sections.GenericSectionItem>
+              </GenericSectionItem>
             )}
             keyExtractor={(item: EstimatedCall) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney
@@ -172,7 +177,7 @@ export function QuaySection({
             ListEmptyComponent={
               <>
                 {data && !isLoading && (
-                  <Sections.GenericSectionItem
+                  <GenericSectionItem
                     radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
                   >
                     <ThemeText
@@ -184,30 +189,30 @@ export function QuaySection({
                         ? t(DeparturesTexts.noDeparturesForFavorites)
                         : t(DeparturesTexts.noDepartures)}
                     </ThemeText>
-                  </Sections.GenericSectionItem>
+                  </GenericSectionItem>
                 )}
               </>
             }
           />
         )}
         {!isMinimized && didLoadingDataFail && !isLoading && (
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <View style={styles.messageBox}>
               <ThemeText type="body__secondary" color="secondary">
                 {t(DeparturesTexts.message.noData)}
               </ThemeText>
             </View>
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
         )}
         {isLoading && !isMinimized && (
-          <Sections.GenericSectionItem>
+          <GenericSectionItem>
             <View style={{width: '100%'}}>
-              <ActivityIndicator></ActivityIndicator>
+              <ActivityIndicator />
             </View>
-          </Sections.GenericSectionItem>
+          </GenericSectionItem>
         )}
         {shouldShowMoreItemsLink && (
-          <Sections.LinkSectionItem
+          <LinkSectionItem
             icon="arrow-right"
             text={t(DeparturesTexts.quaySection.moreDepartures)}
             textType="body__primary--bold"
@@ -216,9 +221,9 @@ export function QuaySection({
               accessibilityHint: t(DeparturesTexts.quaySection.a11yToQuayHint),
             }}
             testID={testID + 'More'}
-          ></Sections.LinkSectionItem>
+          />
         )}
-      </Sections.Section>
+      </Section>
     </View>
   );
 }

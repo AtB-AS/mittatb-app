@@ -1,5 +1,4 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {TariffZone} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {TariffZonesTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
@@ -11,19 +10,8 @@ import {
 import {
   TariffZonesSelectorButtons,
   TariffZonesSelectorMap,
+  TariffZoneSelection,
 } from '@atb/tariff-zones-selector';
-
-export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
-export type TariffZoneWithMetadata = TariffZone & {
-  resultType: TariffZoneResultType;
-  venueName?: string;
-};
-
-export type TariffZoneSelection = {
-  from: TariffZoneWithMetadata;
-  to: TariffZoneWithMetadata;
-  selectNext: 'from' | 'to';
-};
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByMapScreen'>;
 
@@ -31,9 +19,16 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
   navigation,
   route,
 }: Props) => {
-  const {fromTariffZone, toTariffZone, fareProductTypeConfig} = route.params;
+  const {
+    fromTariffZone,
+    toTariffZone,
+    fareProductTypeConfig,
+    preassignedFareProduct,
+  } = route.params;
   const selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
-  const isApplicableOnSingleZoneOnly = selectionMode === 'single';
+  const isApplicableOnSingleZoneOnly =
+    preassignedFareProduct.zoneSelectionMode?.includes('single') ||
+    selectionMode === 'single';
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
     to: toTariffZone,
@@ -62,6 +57,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
         mode: 'Ticket',
         fareProductTypeConfig,
         fromTariffZone: selectedZones.from,
+        onFocusElement: 'zone-selection',
         toTariffZone: isApplicableOnSingleZoneOnly
           ? selectedZones.from
           : selectedZones.to,
@@ -105,6 +101,7 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
           selectedZones={selectedZones}
           onVenueSearchClick={onVenueSearchClick}
           isApplicableOnSingleZoneOnly={isApplicableOnSingleZoneOnly}
+          style={styles.selectorButtons}
         />
       </View>
 
@@ -128,5 +125,8 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
   },
   saveButton: {
     marginHorizontal: theme.spacings.medium,
+  },
+  selectorButtons: {
+    margin: theme.spacings.medium,
   },
 }));

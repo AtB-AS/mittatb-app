@@ -9,6 +9,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from './utils';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
+import {getTransportationColor} from '@atb/theme/colors';
 
 export type TransportationIconBoxProps = {
   mode?: AnyMode;
@@ -30,11 +31,12 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   testID,
 }) => {
   const {t} = useTranslation();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const themeColor = useThemeColorForTransportMode(mode, subMode);
+  const transportationColor = getTransportationColor(themeName, themeColor);
   const backgroundColor = disabled
     ? theme.text.colors.disabled
-    : theme.static.transport[themeColor].background;
+    : transportationColor.background;
   const svg = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
 
@@ -45,7 +47,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   const lineNumberElement = lineNumber ? (
     <ThemeText
       type="body__primary--bold"
-      color={themeColor}
+      color={transportationColor}
       style={styles.lineNumberText}
       testID={testID}
     >
@@ -66,7 +68,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
       <ThemeIcon
         size={size}
         svg={svg}
-        colorType={themeColor}
+        fill={transportationColor.text}
         accessibilityLabel={t(getTranslatedModeName(mode))}
         testID={testID}
       />

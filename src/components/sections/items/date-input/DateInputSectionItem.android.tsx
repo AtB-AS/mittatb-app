@@ -5,7 +5,7 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import {parseISO} from 'date-fns';
 import React, {useState} from 'react';
 import {ButtonSectionItem} from '../ButtonSectionItem';
-import {DateInputSectionItemProps, dateToDateString} from './utils';
+import {DateInputSectionItemProps} from './utils';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
 export function DateInputSectionItem(props: DateInputSectionItemProps) {
@@ -32,7 +32,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
           minimumDate={new Date()}
           textColor={theme.text.colors.primary}
           onChange={(_: Event, date?: Date) => {
-            onChange(dateToDateString(date));
+            if (date) onChange(date.toISOString());
             setShow(false);
           }}
         />

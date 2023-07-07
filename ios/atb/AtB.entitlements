@@ -13,7 +13,7 @@
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.no.mittatb</string>
+		<string>$(APP_GROUP_NAME)</string>
 	</array>
 </dict>
 </plist>

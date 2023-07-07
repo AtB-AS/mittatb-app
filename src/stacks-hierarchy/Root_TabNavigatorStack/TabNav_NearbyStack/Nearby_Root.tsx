@@ -18,8 +18,7 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {usePreferences} from '@atb/preferences';
-import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -35,10 +34,9 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Loading} from '@atb/components/loading';
 import {DepartureTimeSheet} from '@atb/place-screen/components/DepartureTimeSheet';
-import {useDepartureData} from './use-departure-data';
-import {SearchTime} from './types';
 import {NearbyScreenProps} from './navigation-types';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {SearchTime, useDepartureData} from '@atb/quay-departures-screen';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -140,12 +138,16 @@ const NearbyOverview: React.FC<Props> = ({
       initialLocation: fromLocation,
     });
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onOpenFocusRef,
+  } = useBottomSheet();
   const onLaterTimePress = () => {
-    openBottomSheet((close, focusRef) => (
+    openBottomSheet(() => (
       <DepartureTimeSheet
-        ref={focusRef}
-        close={close}
+        ref={onOpenFocusRef}
+        close={closeBottomSheet}
         initialTime={searchTime}
         setSearchTime={setSearchTime}
         allowTimeInPast={false}
@@ -185,7 +187,6 @@ const NearbyOverview: React.FC<Props> = ({
       }
     }
   }
-  const {leftButton} = useServiceDisruptionSheet();
 
   useEffect(() => {
     if (updatingLocation)
@@ -216,7 +217,7 @@ const NearbyOverview: React.FC<Props> = ({
     <SimpleDisappearingHeader
       onRefresh={refresh}
       isRefreshing={isLoading}
-      leftButton={leftButton}
+      leftButton={{type: 'status-disruption'}}
       header={
         <Header
           fromLocation={fromLocation}

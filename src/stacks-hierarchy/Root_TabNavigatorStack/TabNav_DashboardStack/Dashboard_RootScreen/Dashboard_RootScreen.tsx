@@ -19,8 +19,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
-import {useServiceDisruptionSheet} from '@atb/service-disruptions';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -37,7 +36,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {DashboardScreenProps} from '../navigation-types';
-import {GlobalMessage} from '@atb/global-messages';
+import {useAnalytics} from '@atb/analytics';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -55,8 +54,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {enable_ticketing} = useRemoteConfig();
-  const {leftButton: serviceDisruptionButton} = useServiceDisruptionSheet();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
+  const analytics = useAnalytics();
 
   const {
     status,
@@ -178,7 +177,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       <FullScreenHeader
         title={t(DashboardTexts.header.title)}
         rightButton={{type: 'chat'}}
-        leftButton={serviceDisruptionButton}
+        leftButton={{type: 'status-disruption'}}
+        globalMessageContext="app-assistant"
       />
 
       <View style={style.backdrop}>
@@ -191,10 +191,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       >
         <View style={style.searchHeader}>
           <View style={style.paddedContainer}>
-            <GlobalMessage
-              style={style.dashboardGlobalmessages}
-              globalMessageContext="app-assistant"
-            />
             <Section>
               <LocationInputSectionItem
                 accessibilityLabel={
@@ -276,8 +272,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
               orderId: string,
             ) => {
               if (isCarnet) {
-                return navigation.navigate('FareContractModal', {
-                  screen: 'CarnetDetailsScreen',
+                return navigation.navigate({
+                  name: 'Root_CarnetDetailsScreen',
                   params: {
                     orderId,
                     isInspectable,
@@ -285,19 +281,20 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
                 });
               }
 
-              return navigation.navigate('FareContractModal', {
-                screen: 'FareContractDetails',
+              return navigation.navigate({
+                name: 'Root_FareContractDetailsScreen',
                 params: {orderId},
               });
             }}
-            onPressBuy={() =>
+            onPressBuy={() => {
+              analytics.logEvent('Dashboard', 'Purchase ticket button clicked');
               navigation.navigate('TabNav_TicketingStack', {
                 screen: 'Ticketing_RootScreen',
                 params: {
                   screen: 'TicketTabNav_PurchaseTabScreen',
                 },
-              })
-            }
+              });
+            }}
           />
         )}
         <DeparturesWidget

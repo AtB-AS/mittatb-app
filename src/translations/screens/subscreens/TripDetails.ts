@@ -1,3 +1,4 @@
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 import {translation as _} from '../../commons';
 
 const TripDetailsTexts = {
@@ -33,11 +34,6 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
-      contactFlexibleTransportTitle: (phone: string) =>
-        _(
-          `Ring ${phone} for å reserve transport`,
-          `Call ${phone} to make a transport reservation`,
-        ),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,
@@ -127,6 +123,9 @@ const TripDetailsTexts = {
       },
     },
     summary: {
+      showTripInMap: {
+        label: _('Vis reiserute i kart', 'Show trip in map'),
+      },
       travelTime: {
         label: (time: string) =>
           _(`Total reisetid: ${time}`, `Total trip time: ${time}`),
@@ -154,9 +153,10 @@ const TripDetailsTexts = {
 
   messages: {
     shortTime: _(
-      'Vær oppmerksom på kort byttetid',
-      'Please note short changeover time',
+      'Vær oppmerksom på kort byttetid.',
+      'Please note short changeover time.',
     ),
+    correspondenceNotGuaranteed: _('', ''),
     errorNetwork: _(
       'Hei, er du på nett? Vi kan ikke hente reiseforslag siden nettforbindelsen din mangler eller er ustabil.',
       `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
@@ -189,4 +189,13 @@ const TripDetailsTexts = {
       ),
   },
 };
-export default TripDetailsTexts;
+export default orgSpecificTranslations(TripDetailsTexts, {
+  fram: {
+    messages: {
+      correspondenceNotGuaranteed: _(
+        'Kan ikke garantere korrespondanse.',
+        'Cannot guarantee correspondence.',
+      ),
+    },
+  },
+});

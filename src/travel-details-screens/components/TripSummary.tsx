@@ -10,13 +10,16 @@ import React from 'react';
 import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
 
-export const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
+export const TripSummary: React.FC<TripPattern> = ({
+  walkDistance,
+  duration,
+}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
   const readableDistance = walkDistance?.toFixed() ?? '0';
   return (
-    <View style={styles.summary}>
+    <>
       <View style={styles.summaryDetail}>
         <ThemeIcon
           colorType="disabled"
@@ -26,6 +29,7 @@ export const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
         <ThemeText
           color="secondary"
           accessible={true}
+          style={styles.detailText}
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
           )}
@@ -39,6 +43,7 @@ export const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
         <ThemeText
           color="secondary"
           accessible={true}
+          style={styles.detailText}
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
               readableDistance,
@@ -51,14 +56,12 @@ export const Summary: React.FC<TripPattern> = ({walkDistance, duration}) => {
           )}
         </ThemeText>
       </View>
-    </View>
+    </>
   );
 };
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  summary: {
-    marginVertical: theme.spacings.medium,
-    borderTopWidth: theme.border.width.slim,
-    borderColor: theme.static.background.background_1.background,
+  detailText: {
+    flex: 1,
   },
   summaryDetail: {
     padding: theme.spacings.medium,

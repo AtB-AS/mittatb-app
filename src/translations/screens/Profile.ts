@@ -56,7 +56,10 @@ const ProfileTexts = {
             'Bruk billett på t:kort / mobil',
             'Use ticket on t:card / phone',
           ),
-          flag: _('Ny', 'New'),
+          labelWithoutTravelcard: _(
+            'Bruk billett på mobil',
+            'Use ticket on phone',
+          ),
         },
         appearance: {
           label: _('Utseende', 'Appearance'),
@@ -136,6 +139,9 @@ const ProfileTexts = {
         },
         inspection: {
           label: _('Billettkontroll', 'Ticket inspection'),
+        },
+        refund: {
+          label: _('Refusjon', 'Refund'),
         },
       },
     },

@@ -9,7 +9,6 @@ import android.text.TextUtils;
 
 import com.bugsnag.android.Bugsnag;
 import com.bugsnag.android.Configuration;
-import no.entur.abt.android.token.core.reactnative.TokenCorePackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -38,7 +37,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-          packages.add(new TokenCorePackage());
           return packages;
         }
 

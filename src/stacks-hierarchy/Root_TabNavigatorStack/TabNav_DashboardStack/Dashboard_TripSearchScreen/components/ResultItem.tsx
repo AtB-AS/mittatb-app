@@ -50,6 +50,7 @@ import {
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
+  isLegFlexibleTransport,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -188,6 +189,8 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
+      accessibilityRole={'button'}
+      style={styles.touchableOpacity}
       onPress={onDetailsPressed}
       accessible={true}
       testID={testID}
@@ -315,16 +318,20 @@ function ResultItemFooter() {
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
+  touchableOpacity: {
+    marginTop: theme.spacings.small,
+  },
   result: {
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.border.radius.regular,
-    marginTop: theme.spacings.medium,
   },
   resultInPast: {
     backgroundColor: theme.static.background.background_2.background,
   },
   detailsContainer: {
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
     flexDirection: 'row',
   },
   lineContainer: {
@@ -388,10 +395,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    padding: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
-    borderBottomColor: theme.border.primary,
-    borderBottomWidth: theme.border.width.slim,
+    paddingHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
   },
   row: {
     flexDirection: 'row',
@@ -425,7 +430,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
-    padding: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
+    paddingVertical: theme.spacings.small,
     alignItems: 'flex-end',
   },
   fromPlaceText: {
@@ -507,7 +513,7 @@ const TransportationLeg = ({
   return (
     <TransportationIconBox
       style={style}
-      mode={!!leg.bookingArrangements ? 'flex' : leg.mode}
+      mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
       testID="trLeg"
@@ -522,21 +528,22 @@ const tripSummary = (
   isInPast: boolean,
   listPosition: number,
 ) => {
-  let start = '';
+  const distance = Math.round(tripPattern.legs[0].distance);
+  let humanizedDistance;
+  if (distance >= 1000) {
+    humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
+  } else {
+    humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
+  }
+
+  let startText = '';
 
   if (tripPattern.legs[0]?.mode === 'foot' && tripPattern.legs[1]) {
-    const distance = Math.round(tripPattern.legs[0].distance);
-    let humanizedDistance;
-    if (distance >= 1000) {
-      humanizedDistance = `${distance / 1000} ${t(dictionary.distance.km)}`;
-    } else {
-      humanizedDistance = `${distance} ${t(dictionary.distance.m)}`;
-    }
     const quayName = getQuayName(tripPattern.legs[1]?.fromPlace.quay);
 
     {
       quayName
-        ? (start = t(
+        ? (startText = t(
             TripSearchTexts.results.resultItem.footLeg.walkToStopLabel(
               humanizedDistance,
               quayName,
@@ -547,7 +554,7 @@ const tripSummary = (
   } else {
     const quayName = getQuayName(tripPattern.legs[0]?.fromPlace.quay);
     if (quayName) {
-      start = t(
+      startText = t(
         TripSearchTexts.results.resultItem.header.title(
           t(getTranslatedModeName(tripPattern.legs[0].mode)),
           quayName,
@@ -557,90 +564,92 @@ const tripSummary = (
   }
 
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
-  const firstLeg = nonFootLegs[0];
+  const firstLeg = nonFootLegs.length > 0 ? nonFootLegs[0] : undefined;
 
-  return `
-    ${t(
-      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
-        listPosition,
-      ),
-    )}
-    ${isInPast ? t(TripSearchTexts.results.resultItem.passedTrip) : ''}
-    ${start}
-    
-        ${
-          firstLeg
-            ? t(getTranslatedModeName(firstLeg.mode)) +
-              (firstLeg.line?.publicCode
-                ? t(
-                    TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
-                      firstLeg.line.publicCode,
-                    ),
-                  )
-                : '') +
-              (isSignificantDifference(firstLeg)
-                ? t(
-                    TripSearchTexts.results.resultItem.journeySummary.realtime(
-                      firstLeg.fromPlace?.name ?? '',
-                      formatToClock(
-                        firstLeg.expectedStartTime,
-                        language,
-                        'floor',
-                      ),
-                      formatToClock(firstLeg.aimedStartTime, language, 'floor'),
-                    ),
-                  )
-                : t(
-                    TripSearchTexts.results.resultItem.journeySummary.noRealTime(
-                      firstLeg.fromPlace?.name ?? '',
-                      formatToClock(
-                        firstLeg.expectedStartTime,
-                        language,
-                        'floor',
-                      ),
-                    ),
-                  ))
-            : ''
-        }
+  const resultNumberText = t(
+    TripSearchTexts.results.resultItem.journeySummary.resultNumber(
+      listPosition,
+    ),
+  );
+  const passedTripText = isInPast
+    ? t(TripSearchTexts.results.resultItem.passedTrip)
+    : undefined;
 
-      ${
-        !nonFootLegs.length
-          ? t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription
-                .footLegsOnly,
-            )
-          : nonFootLegs.length === 1
-          ? t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription
-                .noSwitching,
-            )
-          : nonFootLegs.length === 2
-          ? t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription
-                .oneSwitch,
-            )
-          : t(
-              TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
-                nonFootLegs.length - 1,
-              ),
-            )
-      }
-      ${t(
-        TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
-          (tripPattern.walkDistance ?? 0).toFixed(),
+  const modeAndNumberText = firstLeg
+    ? t(getTranslatedModeName(firstLeg.mode)) +
+      (firstLeg.line?.publicCode
+        ? t(
+            TripSearchTexts.results.resultItem.journeySummary.prefixedLineNumber(
+              firstLeg.line.publicCode,
+            ),
+          )
+        : '')
+    : undefined;
+
+  const realTimeText = firstLeg
+    ? isSignificantDifference(firstLeg)
+      ? t(
+          TripSearchTexts.results.resultItem.journeySummary.realtime(
+            firstLeg.fromPlace?.name ?? '',
+            formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+            formatToClock(firstLeg.aimedStartTime, language, 'floor'),
+          ),
+        )
+      : t(
+          TripSearchTexts.results.resultItem.journeySummary.noRealTime(
+            firstLeg.fromPlace?.name ?? '',
+            formatToClock(firstLeg.expectedStartTime, language, 'floor'),
+          ),
+        )
+    : undefined;
+
+  const numberOfFootLegsText = !nonFootLegs.length
+    ? t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription
+          .footLegsOnly,
+      )
+    : nonFootLegs.length === 1
+    ? t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription
+          .noSwitching,
+      )
+    : nonFootLegs.length === 2
+    ? t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription
+          .oneSwitch,
+      )
+    : t(
+        TripSearchTexts.results.resultItem.journeySummary.legsDescription.someSwitches(
+          nonFootLegs.length - 1,
         ),
-      )}
-      
-      ${t(
-        TripSearchTexts.results.resultItem.journeySummary.travelTimes(
-          formatToClock(tripPattern.expectedStartTime, language, 'floor'),
-          formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
-          secondsToDuration(tripPattern.duration, language),
-        ),
-      )}
+      );
 
-        ${screenReaderPause}
-  `;
+  const walkDistanceText = t(
+    TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
+      (tripPattern.walkDistance ?? 0).toFixed(),
+    ),
+  );
+
+  const traveltimesText = t(
+    TripSearchTexts.results.resultItem.journeySummary.travelTimes(
+      formatToClock(tripPattern.expectedStartTime, language, 'floor'),
+      formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
+      secondsToDuration(tripPattern.duration, language),
+    ),
+  );
+
+  const texts = [
+    resultNumberText,
+    passedTripText,
+    startText,
+    modeAndNumberText,
+    realTimeText,
+    numberOfFootLegsText,
+    walkDistanceText,
+    traveltimesText,
+  ].filter((text) => text !== undefined);
+
+  return texts.join(screenReaderPause);
 };
 
 function isSignificantDifference(leg: Leg) {

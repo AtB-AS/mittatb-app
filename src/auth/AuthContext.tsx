@@ -24,6 +24,8 @@ type AuthReducerState = {
   isAuthConnectionInitialized: boolean;
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
   abtCustomerId: string | undefined;
+  /** Full abt customer id, including prefix like "ABT:CustomerAccount:" */
+  abtCustomerIdFull: string | undefined;
   customerNumber: number | undefined;
   user: FirebaseAuthTypes.User | null;
   userCreationFinished: boolean;
@@ -38,7 +40,11 @@ type AuthReducerAction =
       type: 'SET_USER';
       user: FirebaseAuthTypes.User | null;
     }
-  | {type: 'SET_ABT_CUSTOMER_ID'; abtCustomerId: string | undefined}
+  | {
+      type: 'SET_ABT_CUSTOMER_ID';
+      abtCustomerId: string | undefined;
+      abtCustomerIdFull: string | undefined;
+    }
   | {type: 'SET_USER_CREATION_FINISHED'; customer_number: number};
 
 type AuthReducer = (
@@ -69,6 +75,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       return {
         ...prevState,
         abtCustomerId: action.abtCustomerId,
+        abtCustomerIdFull: action.abtCustomerIdFull,
       };
     }
     case 'SET_USER_CREATION_FINISHED': {
@@ -85,6 +92,7 @@ const initialReducerState: AuthReducerState = {
   isAuthConnectionInitialized: false,
   confirmationHandler: undefined,
   abtCustomerId: undefined,
+  abtCustomerIdFull: undefined,
   customerNumber: undefined,
   user: null,
   userCreationFinished: false,
@@ -167,7 +175,12 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
       if (state.user) {
         const idToken = await state.user.getIdTokenResult();
         const abtCustomerId = idToken.claims['sub'];
-        dispatch({type: 'SET_ABT_CUSTOMER_ID', abtCustomerId});
+        const abtCustomerIdFull = idToken.claims['abt_id'];
+        dispatch({
+          type: 'SET_ABT_CUSTOMER_ID',
+          abtCustomerId,
+          abtCustomerIdFull,
+        });
       }
     })();
   }, [state.user?.uid]);

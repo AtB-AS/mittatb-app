@@ -5,6 +5,34 @@ before_all do
   # git_pull
 end
 
+def app_cert_info
+  # App provisioning profile
+  app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+  app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
+  app_prov_profile_name = (ENV["sigh_#{app_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+  app_signing_identity_name = (ENV["sigh_#{app_prefix}_certificate-name"]).gsub('\xC3\xB8', 'ø')
+
+  return app_signing_identity_name, app_prov_profile_name, app_prov_profile_path
+end
+
+def widget_cert_info
+  # Widget provisioning profile
+  widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+  widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
+  widget_prov_profile_name = (ENV["sigh_#{widget_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+
+  return widget_prov_profile_name, widget_prov_profile_path
+end
+
+def intent_cert_info
+  # Intent provisioning profile
+  intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
+  intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
+  intent_prov_profile_name = (ENV["sigh_#{intent_prefix}_profile-name"]).gsub('\xC3\xB8', 'ø')
+
+  return intent_prov_profile_name, intent_prov_profile_path
+end
+
 platform :ios do
   desc 'Update ad hoc devices'
   lane :update_devices do
@@ -39,7 +67,7 @@ platform :ios do
       skip_confirmation: true,
       username: ENV['FASTLANE_MATCH_USERNAME'],
     )
-    get_cert
+    get_certs
   end
 
   desc 'Generate new certificates without nuking old ones'
@@ -59,7 +87,7 @@ platform :ios do
   end
 
   desc 'Match certificates'
-  lane :get_cert do
+  lane :get_certs do
     ensure_env_vars(
       env_vars: ['MATCH_PASSWORD', 'FASTLANE_MATCH_GIT_SSH_URL', 'FASTLANE_MATCH_TYPE', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'IOS_DEVELOPMENT_TEAM_ID']
     )
@@ -96,35 +124,28 @@ platform :ios do
   end
   
   # iOS Lanes
-  desc 'Build the iOS application.'
-  lane :build do
+
+  desc 'Setup certificates'
+  lane :setup_certificates do
+    get_certs
+
     ensure_env_vars(
-      env_vars: ['BUILD_ID', 'EXPORT_METHOD']
+      env_vars: ['FASTLANE_MATCH_TYPE', 'BUILD_CONFIGURATION', 'ENABLE_WIDGET', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER']
     )
-    get_cert
-    increment_build_number(
-      build_number: ENV["BUILD_ID"],
-      xcodeproj: './ios/atb.xcodeproj/'
-    )
+
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
     )
-    # App provisioning profile
-    app_prefix = "#{ENV['IOS_BUNDLE_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
-    app_prov_profile_path = ENV["sigh_#{app_prefix}_profile-path"]
-    app_prov_profile_name = ENV["sigh_#{app_prefix}_profile-name"]
-    app_signing_identity_name = ENV["sigh_#{app_prefix}_certificate-name"]
+    
+    app_signing_identity_name, app_prov_profile_name, app_prov_profile_path = app_cert_info
 
-    # Widget provisioning profile
-    widget_prefix = "#{ENV['IOS_APP_WIDGET_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
-    widget_prov_profile_path = ENV["sigh_#{widget_prefix}_profile-path"]
-    widget_prov_profile_name = ENV["sigh_#{widget_prefix}_profile-name"]
+    widget_prov_profile_name, widget_prov_profile_path = widget_cert_info
 
-    # Intent provisioning profile
-    intent_prefix = "#{ENV['IOS_APP_INTENT_IDENTIFIER']}_#{ENV["FASTLANE_MATCH_TYPE"]}"
-    intent_prov_profile_path = ENV["sigh_#{intent_prefix}_profile-path"]
-    intent_prov_profile_name = ENV["sigh_#{intent_prefix}_profile-name"]
+    intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
+
+    puts "Identity name: #{app_signing_identity_name}"
+    puts "Certificate names: #{app_prov_profile_name}, #{widget_prov_profile_name}, #{intent_prov_profile_name}"
 
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
@@ -137,7 +158,7 @@ platform :ios do
       xcodeproj: "./ios/atb.xcodeproj",
       target_filter: "app",
       profile: app_prov_profile_path,
-      build_configuration: "Release",
+      build_configuration: ENV['BUILD_CONFIGURATION'],
       code_signing_identity: app_signing_identity_name
     )
     if widget_enabled
@@ -145,34 +166,41 @@ platform :ios do
         xcodeproj: "./ios/atb.xcodeproj",
         target_filter: "departureWidget",
         profile: widget_prov_profile_path,
-        build_configuration: "Release",
+        build_configuration: ENV['BUILD_CONFIGURATION'],
         code_signing_identity: app_signing_identity_name
       )
       update_project_provisioning(
         xcodeproj: "./ios/atb.xcodeproj",
         target_filter: "AtbAppIntent",
         profile: intent_prov_profile_path,
-        build_configuration: "Release",
+        build_configuration: ENV['BUILD_CONFIGURATION'],
         code_signing_identity: app_signing_identity_name
       )
-      update_app_group_identifiers(
-        entitlements_file: "./ios/departureWidget.entitlements",
-        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
-      )
-      update_app_group_identifiers(
-        entitlements_file: "./ios/AtbAppIntent/AtbAppIntentRelease.entitlements",
-        app_group_identifiers: [ENV["APP_GROUP_NAME"]]
-      )
     end
+  end
 
-    update_app_group_identifiers(
-      entitlements_file: "./ios/atb/AtB.entitlements",
-      app_group_identifiers: [ENV["APP_GROUP_NAME"]]
+  desc 'Build the iOS application.'
+  lane :build do
+    ensure_env_vars(
+      env_vars: ['BUILD_ID', 'EXPORT_METHOD', 'BUILD_CONFIGURATION']
     )
+    increment_build_number(
+      build_number: ENV["BUILD_ID"],
+      xcodeproj: './ios/atb.xcodeproj/'
+    )
+
+    setup_certificates
+
+    app_signing_identity_name, app_prov_profile_name, app_prov_profile_path = app_cert_info
+
+    widget_prov_profile_name, widget_prov_profile_path = widget_cert_info
+
+    intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
+
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
-      configuration: 'Release',
+      configuration: ENV['BUILD_CONFIGURATION'],
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
       export_options: {
@@ -194,12 +222,12 @@ platform :ios do
   desc 'Upload the build to Firebase App Distribution'
   lane :firebase_distribution_staging do
     ensure_env_vars(
-      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH']
+      env_vars: ['FIREBASE_APP_ID_IOS','GCP_CREDENTIALS_PATH', 'APP_DISTRIBUTION_GROUP_NAME']
     )
     firebase_app_distribution(
       app:ENV['FIREBASE_APP_ID_IOS'],
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
-      groups:"NFK"
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
     )
   end
 
@@ -276,6 +304,29 @@ platform :android do
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
+  lane :build_aab do
+    ensure_env_vars(
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
+    )
+    build_type = ENV['APP_ENVIRONMENT']
+    gradle(task: 'clean', project_dir: 'android/')
+    gradle(
+      task: 'bundle',
+      build_type: build_type,
+      project_dir: 'android/',
+      print_command: false, #don't print my passwords please
+      properties: {
+        "android.injected.signing.store.file" => File.expand_path(ENV["KEYSTORE_PATH"], Dir.pwd + "/../"),
+        "android.injected.signing.store.password" => ENV["KEYSTORE_PASS"],
+        "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASS"],
+      })
+    sh("cp", "../android/app/build/outputs/bundle/#{build_type}/app-#{build_type}.aab", "../")
+    sh("mkdir", "-p", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/react/#{build_type}/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
+  end
+
   lane :firebase_distribution_staging do
     ensure_env_vars(
       env_vars: ['FIREBASE_APP_ID','GCP_CREDENTIALS_PATH','APK_FILE_NAME']
@@ -285,7 +336,7 @@ platform :android do
       service_credentials_file:ENV['GCP_CREDENTIALS_PATH'],
       android_artifact_type:'APK',
       android_artifact_path:ENV['APK_FILE_NAME'],
-      groups:"NFK"
+      groups:ENV['APP_DISTRIBUTION_GROUP_NAME']
     )
   end
 
@@ -299,6 +350,20 @@ platform :android do
       json_key:ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
       apk: ENV['APK_FILE_NAME'],
       package_name: ENV['ANDROID_PACKAGE_NAME']
+    )
+  end
+
+  lane :playstore_internal_aab do
+    ensure_env_vars(
+      env_vars: ['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH','AAB_FILE_NAME','ANDROID_PACKAGE_NAME']
+    )
+
+    upload_to_play_store(
+      track: "internal",
+      json_key: ENV['GOOGLE_PLAY_SERVICE_ACCOUNT_PATH'],
+      aab: ENV['AAB_FILE_NAME'],
+      package_name: ENV['ANDROID_PACKAGE_NAME'],
+      release_status: "draft"
     )
   end
 

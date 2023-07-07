@@ -1,24 +1,27 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {MapFilterSheet} from '@atb/components/map/components/filter/MapFilterSheet';
-import {MapFilterType} from '@atb/components/map/types';
+import {MapFilterSheet} from './MapFilterSheet';
+import {MapFilterType} from '../../types';
 import {StyleSheet} from '@atb/theme';
-import {shadows} from '@atb/components/map';
+import {shadows} from '../shadows';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
+import {useAnalytics} from '@atb/analytics';
 
 type MapFilterProps = {
-  onFilterChange: (filter: MapFilterType) => void;
+  onFilterChanged: (filter: MapFilterType) => void;
   isLoading: boolean;
 };
-export const MapFilter = ({onFilterChange, isLoading}: MapFilterProps) => {
+export const MapFilter = ({onFilterChanged, isLoading}: MapFilterProps) => {
   const style = useStyle();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const analytics = useAnalytics();
 
   const onPress = () => {
+    analytics.logEvent('Map', 'Filter button clicked');
     openBottomSheet(() => (
       <MapFilterSheet
-        onFilterChange={onFilterChange}
+        onFilterChanged={onFilterChanged}
         close={closeBottomSheet}
       />
     ));

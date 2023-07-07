@@ -2,7 +2,7 @@ import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
@@ -15,6 +15,9 @@ import {useTipsAndInformationEnabled} from '@atb/stacks-hierarchy/Root_TipsAndIn
 import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
+import {useAnalytics} from '@atb/analytics';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -23,23 +26,52 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
-  const {recentFareContracts} = useRecentFareContracts();
+  const {recentFareContracts, loading} = useRecentFareContracts();
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
+  const styles = useStyles();
 
   const showTipsAndInformation = useTipsAndInformationEnabled();
   const showTicketAssistant = useTicketingAssistantEnabled();
+  const analytics = useAnalytics();
+
+  const {remoteTokens} = useMobileTokenContextState();
+  const inspectableToken = findInspectable(remoteTokens);
+  const hasInspectableMobileToken = isMobileToken(inspectableToken);
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
   const onProductSelect = (fareProductTypeConfig: FareProductTypeConfig) => {
-    if (
-      fareProductTypeConfig.configuration.requiresLogin &&
-      authenticationType !== 'phone'
-    ) {
-      navigation.navigate('LoginInApp', {
-        screen: 'LoginOnboardingInApp',
-        params: {
+    analytics.logEvent('Ticketing', 'Fare product selected', {
+      type: fareProductTypeConfig.type,
+    });
+
+    if (authenticationType !== 'phone') {
+      if (
+        fareProductTypeConfig.configuration.requiresLogin &&
+        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+        !hasInspectableMobileToken
+      ) {
+        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
+          fareProductTypeConfig,
+          afterLogin: {
+            screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
+            params: {
+              nextScreen: {
+                screen: 'Root_PurchaseOverviewScreen',
+                params: {
+                  fareProductTypeConfig,
+                  mode: 'Ticket',
+                },
+              },
+            },
+          },
+        });
+        return;
+      }
+
+      if (fareProductTypeConfig.configuration.requiresLogin) {
+        navigation.navigate('Root_LoginRequiredForFareProductScreen', {
           fareProductTypeConfig,
           afterLogin: {
             screen: 'Root_PurchaseOverviewScreen',
@@ -48,20 +80,43 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
               mode: 'Ticket',
             },
           },
-        },
-      });
+        });
+        return;
+      }
     } else {
-      navigation.navigate('Root_PurchaseOverviewScreen', {
-        fareProductTypeConfig: fareProductTypeConfig,
-        mode: 'Ticket',
-      });
+      if (
+        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+        !hasInspectableMobileToken
+      ) {
+        navigation.navigate(
+          'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
+          {
+            nextScreen: {
+              screen: 'Root_PurchaseOverviewScreen',
+              params: {
+                fareProductTypeConfig,
+                mode: 'Ticket',
+              },
+            },
+          },
+        );
+        return;
+      }
     }
+
+    navigation.navigate('Root_PurchaseOverviewScreen', {
+      fareProductTypeConfig: fareProductTypeConfig,
+      mode: 'Ticket',
+    });
   };
 
   const onFareContractSelect = (
     rfc: RecentFareContract,
     fareProductTypeConfig: FareProductTypeConfig,
   ) => {
+    analytics.logEvent('Ticketing', 'Recently used fare product selected', {
+      type: fareProductTypeConfig.type,
+    });
     navigation.navigate('Root_PurchaseOverviewScreen', {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,
@@ -80,15 +135,20 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
   return isSignedInAsAbtCustomer ? (
     <ScrollView>
-      {hasRecentFareContracts && (
-        <RecentFareContracts onSelect={onFareContractSelect} />
-      )}
+      <RecentFareContracts
+        recentFareContracts={recentFareContracts}
+        loading={loading}
+        onSelect={onFareContractSelect}
+      />
       <View
-        style={{
-          backgroundColor: hasRecentFareContracts
-            ? theme.static.background.background_2.background
-            : undefined,
-        }}
+        style={[
+          styles.container,
+          {
+            backgroundColor: hasRecentFareContracts
+              ? theme.static.background.background_2.background
+              : undefined,
+          },
+        ]}
       >
         {authenticationType !== 'phone' && (
           <AnonymousPurchaseWarning
@@ -110,6 +170,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         {showTicketAssistant && (
           <TicketAssistantTile
             onPress={() => {
+              analytics.logEvent('Ticketing', 'Ticket assistant opened');
               navigation.navigate('Root_TicketAssistantStack');
             }}
             testID="ticketAssistant"
@@ -119,3 +180,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     </ScrollView>
   ) : null;
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    marginTop: theme.spacings.medium,
+  },
+}));

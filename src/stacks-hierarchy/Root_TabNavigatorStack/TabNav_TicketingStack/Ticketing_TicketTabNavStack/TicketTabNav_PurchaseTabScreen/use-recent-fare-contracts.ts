@@ -10,10 +10,11 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from '../../../../Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {FareProductTypeConfig} from '@atb/configuration/types';
+import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 
 type State = {
   error: boolean;
@@ -115,15 +116,6 @@ const mapBackendRecentFareContracts = (
     return null;
   }
 
-  if (fareProductTypeConfig.configuration.zoneSelectionMode === 'none') {
-    return {
-      preassignedFareProduct,
-      fromTariffZone: undefined,
-      toTariffZone: undefined,
-      userProfilesWithCount,
-    };
-  }
-
   const fromTariffZone = findReferenceDataById(
     tariffZones,
     recentFareContract.zones[0],
@@ -133,47 +125,20 @@ const mapBackendRecentFareContracts = (
     recentFareContract.zones.slice(-1)[0],
   );
 
-  if (!fromTariffZone || !toTariffZone) {
-    return null;
-  }
+  const id =
+    preassignedFareProduct?.id +
+    fromTariffZone?.id +
+    toTariffZone?.id +
+    userProfilesWithCount.map((u) => u.id + u.count).join();
 
   return {
+    id,
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
   };
 };
-
-const isUsersEqual = (
-  users1: UserProfileWithCount[],
-  users2: UserProfileWithCount[],
-) => {
-  if (users1.length !== users2.length) return false;
-
-  return users1.reduce(
-    (isEqual, user1) =>
-      isEqual &&
-      users2.some(
-        (user2) => user1.id === user2.id && user1.count === user2.count,
-      ),
-    true,
-  );
-};
-
-const isRecentFareContractEqual = (
-  t1: RecentFareContract,
-  t2: RecentFareContract,
-) =>
-  t1.preassignedFareProduct.id === t2.preassignedFareProduct.id &&
-  t1.fromTariffZone?.id === t2.fromTariffZone?.id &&
-  t1.toTariffZone?.id === t2.toTariffZone?.id &&
-  isUsersEqual(t1.userProfilesWithCount, t2.userProfilesWithCount);
-
-const containsFareContract = (
-  existing: RecentFareContract[],
-  current: RecentFareContract,
-) => existing.some((e) => isRecentFareContractEqual(e, current));
 
 /**
  * This method:
@@ -184,7 +149,7 @@ const containsFareContract = (
  *   reference data
  * - Sort descending by created date
  * - Remove similar fare contracts, which means those which have same product,
- *   same zones and same travellers
+ *   same zones and same travellers (same id)
  * - Return only the first three fare contracts, which will be the three most
  *   recent fare contracts
  */
@@ -209,11 +174,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
         ? mappedFareContracts.concat(maybeFareContract)
         : mappedFareContracts;
     }, [])
-    .reduce<RecentFareContract[]>(
-      (uniques, fc) =>
-        containsFareContract(uniques, fc) ? uniques : uniques.concat(fc),
-      [],
-    )
+    .filter(onlyUniquesBasedOnField('id'))
     .slice(0, 3);
 };
 

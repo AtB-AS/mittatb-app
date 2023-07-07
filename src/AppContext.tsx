@@ -18,6 +18,7 @@ enum storeKey {
   previousBuildNumber = '@ATB_previous_build_number',
   ticketing = '@ATB_ticket_informational_accepted',
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
+  mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
 }
 type AppState = {
   isLoading: boolean;
@@ -25,6 +26,7 @@ type AppState = {
   ticketingAccepted: boolean;
   newBuildSincePreviousLaunch: boolean;
   mobileTokenOnboarded: boolean;
+  mobileTokenWithoutTravelcardOnboarded: boolean;
 };
 
 type AppReducerAction =
@@ -34,13 +36,16 @@ type AppReducerAction =
       ticketingAccepted: boolean;
       newBuildSincePreviousLaunch: boolean;
       mobileTokenOnboarded: boolean;
+      mobileTokenWithoutTravelcardOnboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
   | {type: 'ACCEPT_TICKETING'}
   | {type: 'RESET_TICKETING'}
   | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
-  | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'};
+  | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'}
+  | {type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
+  | {type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
@@ -49,6 +54,8 @@ type AppContextState = AppState & {
   resetTicketing: () => void;
   completeMobileTokenOnboarding: () => void;
   restartMobileTokenOnboarding: () => void;
+  completeMobileTokenWithoutTravelcardOnboarding: () => void;
+  restartMobileTokenWithoutTravelcardOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -67,6 +74,8 @@ const appReducer: AppReducer = (prevState, action) => {
         newBuildSincePreviousLaunch: action.newBuildSincePreviousLaunch,
         isLoading: false,
         mobileTokenOnboarded: action.mobileTokenOnboarded,
+        mobileTokenWithoutTravelcardOnboarded:
+          action.mobileTokenWithoutTravelcardOnboarded,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -98,6 +107,16 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         mobileTokenOnboarded: false,
       };
+    case 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING':
+      return {
+        ...prevState,
+        mobileTokenWithoutTravelcardOnboarded: true,
+      };
+    case 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING':
+      return {
+        ...prevState,
+        mobileTokenWithoutTravelcardOnboarded: false,
+      };
   }
 };
 
@@ -107,6 +126,7 @@ const defaultAppState: AppState = {
   ticketingAccepted: false,
   newBuildSincePreviousLaunch: false,
   mobileTokenOnboarded: false,
+  mobileTokenWithoutTravelcardOnboarded: false,
 };
 
 export const AppContextProvider: React.FC = ({children}) => {
@@ -122,12 +142,20 @@ export const AppContextProvider: React.FC = ({children}) => {
         ? false
         : JSON.parse(savedTicketingAccepted);
 
-      const savedmobileTokenOnboarded = await storage.get(
+      const savedMobileTokenOnboarded = await storage.get(
         storeKey.mobileTokenOnboarding,
       );
-      const mobileTokenOnboarded = !savedmobileTokenOnboarded
+      const mobileTokenOnboarded = !savedMobileTokenOnboarded
         ? false
-        : JSON.parse(savedmobileTokenOnboarded);
+        : JSON.parse(savedMobileTokenOnboarded);
+
+      const savedMobileTokenWithoutTravelcardOnboarded = await storage.get(
+        storeKey.mobileTokenWithoutTravelcardOnboarding,
+      );
+      const mobileTokenWithoutTravelcardOnboarded =
+        !savedMobileTokenWithoutTravelcardOnboarded
+          ? false
+          : JSON.parse(savedMobileTokenWithoutTravelcardOnboarded);
 
       const previousBuildNumber = await storage.get(
         storeKey.previousBuildNumber,
@@ -149,6 +177,7 @@ export const AppContextProvider: React.FC = ({children}) => {
         ticketingAccepted,
         newBuildSincePreviousLaunch,
         mobileTokenOnboarded,
+        mobileTokenWithoutTravelcardOnboarded,
       });
 
       RNBootSplash.hide({fade: true});
@@ -163,6 +192,8 @@ export const AppContextProvider: React.FC = ({children}) => {
     resetTicketing,
     completeMobileTokenOnboarding,
     restartMobileTokenOnboarding,
+    completeMobileTokenWithoutTravelcardOnboarding,
+    restartMobileTokenWithoutTravelcardOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -172,6 +203,7 @@ export const AppContextProvider: React.FC = ({children}) => {
         registerChatUser();
       },
       restartOnboarding: async () => {
+        await storage.set(storeKey.onboarding, JSON.stringify(false));
         dispatch({type: 'RESTART_ONBOARDING'});
       },
       acceptTicketing: async () => {
@@ -182,15 +214,29 @@ export const AppContextProvider: React.FC = ({children}) => {
         dispatch({type: 'RESET_TICKETING'});
       },
       completeMobileTokenOnboarding: async () => {
-        await storage.set(storeKey.mobileTokenOnboarding, JSON.stringify(true));
         dispatch({type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'});
+        await storage.set(storeKey.mobileTokenOnboarding, JSON.stringify(true));
       },
       restartMobileTokenOnboarding: async () => {
+        dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
         await storage.set(
           storeKey.mobileTokenOnboarding,
           JSON.stringify(false),
         );
-        dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
+      },
+      completeMobileTokenWithoutTravelcardOnboarding: async () => {
+        dispatch({type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
+        await storage.set(
+          storeKey.mobileTokenWithoutTravelcardOnboarding,
+          JSON.stringify(true),
+        );
+      },
+      restartMobileTokenWithoutTravelcardOnboarding: async () => {
+        dispatch({type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
+        await storage.set(
+          storeKey.mobileTokenWithoutTravelcardOnboarding,
+          JSON.stringify(false),
+        );
       },
     }),
     [],
@@ -206,6 +252,8 @@ export const AppContextProvider: React.FC = ({children}) => {
         resetTicketing,
         completeMobileTokenOnboarding,
         restartMobileTokenOnboarding,
+        completeMobileTokenWithoutTravelcardOnboarding,
+        restartMobileTokenWithoutTravelcardOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>

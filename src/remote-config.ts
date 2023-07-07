@@ -35,16 +35,24 @@ export type RemoteConfig = {
   enable_new_travel_search: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
+  vehicles_poll_interval: number;
   enable_city_bikes_in_map: boolean;
+  enable_car_sharing_in_map: boolean;
   enable_vehicle_operator_logo: boolean;
   default_map_filter: string;
   enable_realtime_map: boolean;
   enable_ticketing_assistant: boolean;
   enable_tips_and_information: boolean;
   enable_flexible_transport: boolean;
+  enable_nfk_nightbus_warning: boolean;
+  enable_nfk_hour24_warning: boolean;
   use_flexible_on_accessMode: boolean;
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
+  use_trygg_overgang_qr_code: boolean;
+  disable_travelcard: boolean;
+  live_vehicle_stale_threshold: number;
+  enable_extended_onboarding: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -81,7 +89,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_new_travel_search: false,
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
+  vehicles_poll_interval: 20000,
   enable_city_bikes_in_map: false,
+  enable_car_sharing_in_map: false,
   enable_vehicle_operator_logo: false,
   default_map_filter: JSON.stringify({
     vehicles: {
@@ -92,10 +102,18 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing_assistant: false,
   enable_tips_and_information: false,
   enable_flexible_transport: false,
+  enable_nfk_nightbus_warning: false,
+  enable_nfk_hour24_warning: false,
   use_flexible_on_accessMode: true,
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
+  use_trygg_overgang_qr_code: false,
+  live_vehicle_stale_threshold: 15,
+  enable_extended_onboarding: false,
+  disable_travelcard: false,
 };
+
+export type RemoteConfigKeys = keyof RemoteConfig;
 
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
@@ -194,9 +212,17 @@ export function getConfig(): RemoteConfig {
     values['enable_vehicles_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_vehicles_in_map;
 
+  const vehicles_poll_interval =
+    values['vehicles_poll_interval']?.asNumber() ??
+    defaultRemoteConfig.vehicles_poll_interval;
+
   const enable_city_bikes_in_map =
     values['enable_city_bikes_in_map']?.asBoolean() ??
     defaultRemoteConfig.enable_city_bikes_in_map;
+
+  const enable_car_sharing_in_map =
+    values['enable_car_sharing_in_map']?.asBoolean() ??
+    defaultRemoteConfig.enable_car_sharing_in_map;
 
   const enable_vehicle_operator_logo =
     values['enable_vehicle_operator_logo']?.asBoolean() ??
@@ -222,6 +248,14 @@ export function getConfig(): RemoteConfig {
     values['enable_flexible_transport']?.asBoolean() ??
     defaultRemoteConfig.enable_flexible_transport;
 
+  const enable_nfk_nightbus_warning =
+    values['enable_nfk_nightbus_warning']?.asBoolean() ??
+    defaultRemoteConfig.enable_nfk_nightbus_warning;
+
+  const enable_nfk_hour24_warning =
+    values['enable_nfk_hour24_warning']?.asBoolean() ??
+    defaultRemoteConfig.enable_nfk_hour24_warning;
+
   const use_flexible_on_accessMode =
     values['use_flexible_on_accessMode']?.asBoolean() ??
     defaultRemoteConfig.use_flexible_on_accessMode;
@@ -233,6 +267,22 @@ export function getConfig(): RemoteConfig {
   const use_flexible_on_egressMode =
     values['use_flexible_on_egressMode']?.asBoolean() ??
     defaultRemoteConfig.use_flexible_on_egressMode;
+
+  const use_trygg_overgang_qr_code =
+    values['use_trygg_overgang_qr_code']?.asBoolean() ??
+    defaultRemoteConfig.use_trygg_overgang_qr_code;
+
+  const disable_travelcard =
+    values['disable_travelcard']?.asBoolean() ??
+    defaultRemoteConfig.disable_travelcard;
+
+  const live_vehicle_stale_threshold =
+    values['live_vehicle_stale_threshold']?.asNumber() ??
+    defaultRemoteConfig.live_vehicle_stale_threshold;
+
+  const enable_extended_onboarding =
+    values['enable_extended_onboarding']?.asBoolean() ??
+    defaultRemoteConfig.enable_extended_onboarding;
 
   return {
     enable_network_logging,
@@ -268,16 +318,24 @@ export function getConfig(): RemoteConfig {
     enable_new_travel_search,
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map,
+    vehicles_poll_interval,
     enable_city_bikes_in_map,
+    enable_car_sharing_in_map,
     enable_vehicle_operator_logo,
     default_map_filter,
     enable_realtime_map,
     enable_ticketing_assistant,
     enable_tips_and_information,
     enable_flexible_transport,
+    enable_nfk_nightbus_warning,
+    enable_nfk_hour24_warning,
     use_flexible_on_accessMode,
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
+    use_trygg_overgang_qr_code,
+    disable_travelcard,
+    live_vehicle_stale_threshold,
+    enable_extended_onboarding,
   };
 }
 

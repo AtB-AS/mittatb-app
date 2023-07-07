@@ -1,6 +1,5 @@
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {SimpleDisappearingHeader} from '@atb/components/disappearing-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -8,14 +7,16 @@ import {FavoriteChips, Location} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
-import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
-import {View} from 'react-native';
+import {Platform, RefreshControl, View} from 'react-native';
 import {StopPlacesMode} from './types';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeaderProps} from '@atb/components/screen-header';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -23,6 +24,7 @@ export type NearbyStopPlacesScreenParams = {
 };
 
 type Props = NearbyStopPlacesScreenParams & {
+  headerProps: ScreenHeaderProps;
   onPressLocationSearch: (location?: Location) => void;
   onSelectStopPlace: (place: StopPlace) => void;
   onUpdateLocation: (location?: Location) => void;
@@ -32,6 +34,7 @@ type Props = NearbyStopPlacesScreenParams & {
 export const NearbyStopPlacesScreenComponent = ({
   location,
   mode,
+  headerProps,
   onPressLocationSearch,
   onSelectStopPlace,
   onUpdateLocation,
@@ -62,9 +65,7 @@ export const NearbyStopPlacesScreenComponent = ({
 
   const {state} = useNearestStopsData(location);
 
-  const {data, isLoading, error} = state;
-  const isInitialScreen = data == null && !isLoading && !error;
-  const activateScroll = !isInitialScreen || !!error;
+  const {data, isLoading} = state;
 
   const orderedStopPlaces = useMemo(
     () => sortAndFilterStopPlaces(data),
@@ -149,37 +150,38 @@ export const NearbyStopPlacesScreenComponent = ({
   }
 
   return (
-    <>
-      <SimpleDisappearingHeader
-        onRefresh={refresh}
-        isRefreshing={isLoading}
-        header={
-          <Header
-            fromLocation={location}
-            updatingLocation={updatingLocation}
-            openLocationSearch={openLocationSearch}
-            setCurrentLocationOrRequest={setCurrentLocationOrRequest}
-            setLocation={(location: Location) => {
-              location.resultType === 'search' && location.layer === 'venue'
-                ? onSelectStopPlace(location)
-                : onUpdateLocation(location);
-            }}
-            mode={mode}
-            onAddFavorite={onAddFavorite}
-          />
-        }
-        useScroll={activateScroll}
-        setFocusOnLoad={true}
-      >
-        <ScreenReaderAnnouncement message={loadAnnouncement} />
-        <StopPlaces
-          header={getListDescription()}
-          stopPlaces={orderedStopPlaces}
-          navigateToPlace={onSelectStopPlace}
-          testID={'nearbyStopsContainerView'}
+    <FullScreenView
+      refreshControl={
+        <RefreshControl
+          refreshing={Platform.OS === 'ios' ? false : isLoading}
+          onRefresh={refresh}
         />
-      </SimpleDisappearingHeader>
-    </>
+      }
+      headerProps={headerProps}
+      parallaxContent={() => (
+        <Header
+          fromLocation={location}
+          updatingLocation={updatingLocation}
+          openLocationSearch={openLocationSearch}
+          setCurrentLocationOrRequest={setCurrentLocationOrRequest}
+          setLocation={(location: Location) => {
+            location.resultType === 'search' && location.layer === 'venue'
+              ? onSelectStopPlace(location)
+              : onUpdateLocation(location);
+          }}
+          mode={mode}
+          onAddFavorite={onAddFavorite}
+        />
+      )}
+    >
+      <ScreenReaderAnnouncement message={loadAnnouncement} />
+      <StopPlaces
+        header={getListDescription()}
+        stopPlaces={orderedStopPlaces}
+        navigateToPlace={onSelectStopPlace}
+        testID={'nearbyStopsContainerView'}
+      />
+    </FullScreenView>
   );
 };
 
@@ -211,7 +213,7 @@ const Header = React.memo(function Header({
         backgroundColor: theme.static.background.background_accent_0.background,
       }}
     >
-      <Section withPadding>
+      <Section style={styles.locationInputSection}>
         <LocationInputSectionItem
           label={t(NearbyTexts.location.departurePicker.label)}
           updatingLocation={updatingLocation}
@@ -260,10 +262,10 @@ function sortAndFilterStopPlaces(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  locationInputSection: {marginHorizontal: theme.spacings.medium},
   favoriteChips: {
-    // @TODO Find solution for not hardcoding this. e.g. do proper math
+    paddingTop: theme.spacings.medium,
     paddingRight: theme.spacings.medium / 2,
     paddingLeft: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
   },
 }));

@@ -10,6 +10,7 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -22,6 +23,8 @@ export const MobileTokenOnboarding_TicketSafetyInfoScreen = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
+  const {disable_travelcard} = useRemoteConfig();
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.containerContent}>
@@ -44,7 +47,12 @@ export const MobileTokenOnboarding_TicketSafetyInfoScreen = ({
               style={styles.description}
               isMarkdown={true}
             >
-              {t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
+              {disable_travelcard
+                ? t(
+                    MobileTokenOnboardingTexts.withoutTravelcard
+                      .ticketSafetyInfo.description,
+                  )
+                : t(MobileTokenOnboardingTexts.ticketSafetyInfo.description)}
             </ThemeText>
           </View>
           <View style={styles.buttons}>

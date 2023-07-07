@@ -1,4 +1,3 @@
-import {getServiceJourneyMapLegs} from '@atb/api/serviceJourney';
 import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -6,34 +5,30 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {useRealtimeMapEnabled} from '@atb/components/map/hooks/use-realtime-map-enabled';
+import {useRealtimeMapEnabled} from '@atb/components/map';
 import {MessageBox} from '@atb/components/message-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
-import {usePreferences} from '@atb/preferences';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
-import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
+import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
-import {CompactTravelDetailsMap} from '@atb/travel-details-map-screen';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
 import {animateNextChange} from '@atb/utils/animation';
-import {formatToClock} from '@atb/utils/date';
+import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
@@ -43,6 +38,13 @@ import {
   useDepartureData,
   EstimatedCallWithMetadata,
 } from './use-departure-data';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
+import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
+import {Divider} from '@atb/components/divider';
+import {useMapData} from '@atb/travel-details-screens/use-map-data';
+import {useAnalytics} from '@atb/analytics';
+import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -62,21 +64,28 @@ export const DepartureDetailsScreenComponent = ({
 }: Props) => {
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
+  const analytics = useAnalytics();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
 
   const styles = useStopsStyle();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const isFocused = useIsFocused();
   const [
     {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
   ] = useDepartureData(activeItem, 20, !isFocused);
-  const mapData = useMapData(activeItem);
+
+  const mapData = useMapData(
+    activeItem.serviceJourneyId,
+    activeItem.fromQuayId,
+    activeItem.toQuayId,
+  );
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
+  const screenReaderEnabled = useIsScreenReaderEnabled();
 
   const shouldShowLive =
     !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
@@ -89,9 +98,11 @@ export const DepartureDetailsScreenComponent = ({
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
 
-  const lastPassedStop = estimatedCallsWithMetadata
-    .filter((a) => a.actualDepartureTime)
-    .pop();
+  const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
+
+  const isJourneyFinished =
+    vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
+    estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -102,14 +113,23 @@ export const DepartureDetailsScreenComponent = ({
     .map((s) => s.situationNumber)
     .filter((s): s is string => !!s);
 
+  const shouldShowMapButton =
+    mapData &&
+    !screenReaderEnabled &&
+    !isLoading &&
+    estimatedCallsWithMetadata.length > 0 &&
+    !isJourneyFinished;
+
   return (
     <View style={styles.container}>
       <FullScreenView
-        type="large"
-        leftButton={{type: 'back', withIcon: true}}
-        headerChildren={
-          <>
-            <View style={styles.headerTitle}>
+        headerProps={{
+          leftButton: {type: 'back', withIcon: true},
+          title: t(DepartureDetailsTexts.header.alternateTitle),
+        }}
+        parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+          <View style={styles.parallaxContent}>
+            <View style={styles.headerTitle} ref={focusRef} accessible={true}>
               {mode && (
                 <TransportationIconBox
                   mode={mode}
@@ -125,67 +145,78 @@ export const DepartureDetailsScreenComponent = ({
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
             </View>
-            {lastPassedStop || (vehiclePosition && mapData) ? (
+            {shouldShowMapButton || realtimeText ? (
               <View style={styles.headerSubSection}>
-                <LastPassedStop estimatedCall={lastPassedStop} />
-                {vehiclePosition && mapData ? (
+                {realtimeText && <LastPassedStop realtimeText={realtimeText} />}
+                {shouldShowMapButton ? (
                   <Button
                     type="pill"
                     leftIcon={{svg: Map}}
+                    style={realtimeText ? styles.liveButton : undefined}
                     text={t(
                       vehiclePosition
                         ? DepartureDetailsTexts.live
                         : DepartureDetailsTexts.map,
                     )}
                     interactiveColor="interactive_1"
-                    onPress={() =>
+                    onPress={() => {
+                      vehiclePosition &&
+                        analytics.logEvent(
+                          'Departure details',
+                          'See live bus clicked',
+                          {
+                            fromPlace: mapData.start,
+                            toPlace: mapData?.stop,
+                            mode: mode,
+                            subMode: subMode,
+                          },
+                        );
                       onPressDetailsMap({
                         legs: mapData.mapLegs,
                         fromPlace: mapData.start,
                         toPlace: mapData.stop,
-                        initialVehiclePosition: vehiclePosition,
-                      })
-                    }
+                        vehicleWithPosition: vehiclePosition,
+                        mode: mode,
+                        subMode: subMode,
+                      });
+                    }}
                   />
                 ) : null}
               </View>
             ) : null}
-          </>
-        }
-      >
-        {mapData && (
-          <CompactTravelDetailsMap
-            mapLegs={mapData.mapLegs}
-            fromPlace={mapData.start}
-            toPlace={mapData.stop}
-            onExpand={() =>
-              onPressDetailsMap({
-                legs: mapData.mapLegs,
-                fromPlace: mapData.start,
-                toPlace: mapData.stop,
-              })
-            }
-          />
+          </View>
         )}
+      >
         <View
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          {activeItem ? (
-            <PaginatedDetailsHeader
-              page={activeItemIndexState + 1}
-              totalPages={items.length}
-              onNavigate={onPaginationPress}
-              showPagination={hasMultipleItems}
-              currentDate={activeItem?.date}
-              isTripCancelled={activeItem?.isTripCancelled}
-            />
-          ) : (
-            <MessageBox
-              type="error"
-              message={t(DepartureDetailsTexts.messages.noActiveItem)}
-            />
-          )}
+          {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
+            activeItem ? (
+              <PaginatedDetailsHeader
+                page={activeItemIndexState + 1}
+                totalPages={items.length}
+                onNavigate={onPaginationPress}
+                showPagination={hasMultipleItems}
+                currentDate={activeItem?.date}
+                isTripCancelled={activeItem?.isTripCancelled}
+              />
+            ) : (
+              <MessageBox
+                type="error"
+                message={t(DepartureDetailsTexts.messages.noActiveItem)}
+              />
+            )
+          ) : !isWithinSameDate(new Date(), activeItem.date) ? (
+            <>
+              <View style={styles.date}>
+                <ThemeText type={'body__primary'} color={'secondary'}>
+                  {formatToVerboseFullDate(activeItem.date, language)}
+                </ThemeText>
+              </View>
+              <Divider style={styles.border} />
+            </>
+          ) : null}
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           {situations.map((situation) => (
             <SituationMessageBox
@@ -239,18 +270,9 @@ export const DepartureDetailsScreenComponent = ({
   );
 };
 
-function LastPassedStop({
-  estimatedCall,
-}: {
-  estimatedCall?: EstimatedCallWithMetadata;
-}) {
+function LastPassedStop({realtimeText}: {realtimeText: string}) {
   const styles = useStopsStyle();
-  const {t, language} = useTranslation();
-  const {
-    preferences: {debugShowSeconds},
-  } = usePreferences();
 
-  if (!estimatedCall?.quay?.name) return null;
   return (
     <View style={styles.passedSection}>
       <ThemeIcon
@@ -261,19 +283,9 @@ function LastPassedStop({
       <ThemeText
         type="body__secondary"
         color="background_accent_0"
-        style={{flexShrink: 1}}
+        style={styles.passedText}
       >
-        {t(
-          DepartureDetailsTexts.lastPassedStop(
-            estimatedCall.quay?.name,
-            formatToClock(
-              estimatedCall?.actualDepartureTime,
-              language,
-              'nearest',
-              debugShowSeconds,
-            ),
-          ),
-        )}
+        {realtimeText}
       </ThemeText>
     </View>
   );
@@ -417,7 +429,6 @@ function EstimatedCallRow({
               missingRealTime: !call.realtime && isStartOfServiceJourney,
             }}
             roundingMethod="floor"
-            showRealtimeIcon={false}
           />
         }
         alignChildren={
@@ -526,10 +537,14 @@ const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
 const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.static.background.background_1.background,
   },
   headerTitle: {
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  parallaxContent: {marginHorizontal: theme.spacings.medium},
+  date: {
     alignItems: 'center',
   },
   headerTitleIcon: {
@@ -542,17 +557,29 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  border: {
+    borderColor: theme.static.background.background_3.background,
+    marginVertical: theme.spacings.medium,
   },
   passedSection: {
-    flexShrink: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    minWidth: '50%',
+    flex: 1,
   },
   passedSectionRealtimeIcon: {
     marginRight: theme.spacings.xSmall,
   },
+  passedText: {
+    flexShrink: 1,
+  },
   startPlace: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacings.medium,
+  },
+  liveButton: {
+    marginLeft: theme.spacings.small,
   },
   place: {
     marginBottom: -theme.tripLegDetail.decorationLineWidth,
@@ -564,7 +591,7 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     minHeight: 60,
   },
   estimatedCallRows: {
-    backgroundColor: theme.static.background.background_0.background,
+    backgroundColor: theme.static.background.background_1.background,
     marginBottom: theme.spacings.xLarge,
   },
   spinner: {
@@ -585,26 +612,3 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     paddingBottom: theme.spacings.xLarge,
   },
 }));
-
-function useMapData(activeItem: ServiceJourneyDeparture) {
-  const [mapData, setMapData] = useState<ServiceJourneyMapInfoData_v3>();
-  useEffect(() => {
-    const getData = async () => {
-      if (!activeItem) {
-        return;
-      }
-
-      try {
-        const result = await getServiceJourneyMapLegs(
-          activeItem.serviceJourneyId,
-          activeItem.fromQuayId,
-          activeItem.toQuayId,
-        );
-        setMapData(result);
-      } catch (e) {}
-    };
-
-    getData();
-  }, [activeItem]);
-  return mapData;
-}

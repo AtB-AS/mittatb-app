@@ -13,10 +13,10 @@ import {
   HeaderButtonWithoutNavigation,
   HeaderButtonWithoutNavigationProps,
 } from './HeaderButton';
-import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {GlobalMessage, GlobalMessageContextType} from '@atb/global-messages';
+import {ThemeText} from '@atb/components/text';
 
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 
@@ -47,6 +47,7 @@ export type ScreenHeaderProps = {
   style?: ViewStyle;
   color?: StaticColor;
   setFocusOnLoad?: boolean;
+  textOpacity?: number;
 };
 
 export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
@@ -108,6 +109,7 @@ const BaseHeader = ({
   globalMessageContext,
   leftIcon,
   rightIcon,
+  textOpacity = 1,
 }: BaseHeaderProps) => {
   const css = useHeaderStyle();
   const {theme, themeName} = useTheme();
@@ -122,27 +124,33 @@ const BaseHeader = ({
     <View style={[css.container, style, {backgroundColor}]}>
       <View
         accessibilityLabel={titleA11yLabel}
-        accessible={!!title}
+        accessible={!!title && !!textOpacity}
         importantForAccessibility={!!title ? 'yes' : 'no-hide-descendants'}
         accessibilityRole="header"
         style={[
           css.headerTitle,
           {
             // Make space for absolute positioned buttons in case they are offset below title
-            marginBottom: buttonsTopOffset,
+            marginBottom: theme.spacings.medium + buttonsTopOffset,
           },
         ]}
         onLayout={setLayoutFor('container')}
         ref={focusRef}
       >
-        <ThemeText
-          accessible={false}
-          onLayout={setLayoutFor('title')}
-          type="body__primary--bold"
-          color={themeColor}
+        <View
+          style={{
+            opacity: textOpacity,
+          }}
         >
-          {title ?? '\u00a0'}
-        </ThemeText>
+          <ThemeText
+            accessible={false}
+            onLayout={setLayoutFor('title')}
+            type="body__primary--bold"
+            color={themeColor}
+          >
+            {title && textOpacity > 0 ? title : '\u00a0'}
+          </ThemeText>
+        </View>
       </View>
 
       <View
@@ -168,7 +176,8 @@ const BaseHeader = ({
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
-    paddingVertical: theme.spacings.large,
+    paddingTop: theme.spacings.large,
+    paddingBottom: theme.spacings.medium,
     borderTopLeftRadius: theme.border.radius.circle,
     borderTopRightRadius: theme.border.radius.circle,
   },

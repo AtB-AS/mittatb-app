@@ -23,26 +23,34 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_NearbyStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_NearbyStack';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {useMapPage} from '@atb/components/map';
 import {dictionary, useTranslation} from '@atb/translations';
+import {useAppState} from '@atb/AppContext';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
-export const Root_TabNavigatorStack = () => {
+type Props = RootStackScreenProps<'Root_TabNavigatorStack'>;
+export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   const departuresV2Enabled = useDeparturesV2Enabled();
+  const {onboarded} = useAppState();
 
   const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
+
+  useEffect(() => {
+    if (!onboarded) navigation.navigate('Root_OnboardingStack');
+  }, [onboarded]);
 
   return (
     <Tab.Navigator
@@ -53,6 +61,8 @@ export const Root_TabNavigatorStack = () => {
           theme.interactive.interactive_2.outline.background,
         tabBarInactiveTintColor: theme.text.colors.secondary,
         tabBarStyle: {
+          borderTopWidth: theme.border.width.slim,
+          borderTopColor: theme.border.primary,
           backgroundColor: theme.interactive.interactive_2.default.background,
           ...useBottomNavigationStyles(),
         },

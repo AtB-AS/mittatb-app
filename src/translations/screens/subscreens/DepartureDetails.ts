@@ -3,6 +3,7 @@ import {translation as _} from '../../commons';
 const DepartureDetailsTexts = {
   header: {
     title: (departureName: string) => _(departureName, departureName),
+    alternateTitle: _('Reisedetaljer', 'Trip details'),
     notFound: _('Detaljer', 'Details'),
   },
   collapse: {
@@ -14,6 +15,13 @@ const DepartureDetailsTexts = {
       `Passerte ${stopPlaceName} kl. ${time}`,
       `Passed ${stopPlaceName} at ${time}`,
     ),
+  noPassedStop: (stopPlaceName: string, time: string) =>
+    _(
+      `Kjører fra ${stopPlaceName} kl. ${time}`,
+      `Departs from ${stopPlaceName} at ${time}`,
+    ),
+  onTime: _(`I rute`, `On time`),
+  notOnTime: _(`Etter rutetid`, `Behind scheduled time`),
   live: _('Se live', 'See live'),
   map: _('Se i kart', 'Show in map'),
   messages: {

@@ -9,7 +9,8 @@ import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
 import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
-import {TariffZoneWithMetadata} from '../../Root_PurchaseTariffZonesSearchByMapScreen';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type PurchaseWarningsProps = {
   preassignedFareProductType: string;
@@ -43,6 +44,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     remoteTokens,
     deviceIsInspectable,
   );
+  const {enable_nfk_nightbus_warning} = useRemoteConfig();
 
   const shouldShowValidTrainTicketNotice =
     (preassignedFareProductType === 'single' ||
@@ -50,6 +52,12 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
       preassignedFareProductType === 'hour24') &&
     fromTariffZone.id === 'ATB:TariffZone:1' &&
     toTariffZone.id === 'ATB:TariffZone:1';
+
+  const shouldShowNFKNightBusPeriodNotice =
+    preassignedFareProductType === 'period' && enable_nfk_nightbus_warning;
+
+  const shouldShowNFKNightBus24hourNotice =
+    preassignedFareProductType === 'hour24' && enable_nfk_nightbus_warning;
 
   return (
     <>
@@ -74,6 +82,22 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         <MessageBox
           style={styles.warning}
           message={getValidOnTrainNoticeText(t, preassignedFareProductType)}
+          type="info"
+        />
+      )}
+
+      {shouldShowNFKNightBusPeriodNotice && (
+        <MessageBox
+          style={styles.warning}
+          message={t(PurchaseOverviewTexts.nfkNightBusPeriodNotice)}
+          type="info"
+        />
+      )}
+
+      {shouldShowNFKNightBus24hourNotice && (
+        <MessageBox
+          style={styles.warning}
+          message={t(PurchaseOverviewTexts.nfkNightBusHour24Notice)}
           type="info"
         />
       )}

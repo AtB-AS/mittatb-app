@@ -15,24 +15,20 @@ export const Onboarding_AnonymousPurchaseConsequencesScreen = ({
 
   return (
     <AnonymousPurchaseConsequencesScreenComponent
-      onPressLogin={() =>
-        navigation.navigate('LoginInApp', {
-          screen: enable_vipps_login ? 'LoginOptionsScreen' : 'PhoneInputInApp',
-          params: {
-            afterLogin: {
-              screen: 'Root_TabNavigatorStack',
-              params: {
-                screen: 'TabNav_DashboardStack',
-                params: {
-                  screen: 'Dashboard_RootScreen',
-                  params: {},
-                },
-              },
-            },
-          },
-        })
-      }
-      onPressContinueWithoutLogin={finishOnboarding}
+      onPressLogin={() => {
+        finishOnboarding();
+        navigation.popToTop();
+        navigation.navigate(
+          enable_vipps_login
+            ? 'Root_LoginOptionsScreen'
+            : 'Root_LoginPhoneInputScreen',
+          {},
+        );
+      }}
+      onPressContinueWithoutLogin={() => {
+        finishOnboarding();
+        navigation.popToTop();
+      }}
       showHeader={false}
     />
   );
