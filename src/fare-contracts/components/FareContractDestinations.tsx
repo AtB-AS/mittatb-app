@@ -5,139 +5,97 @@ import {StyleSheet, useTheme} from '@atb/theme';
 
 import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
 
-const DestinationIllustrationPart = ({
-  color = 'red',
-  isStart = false,
-  isEnd = false,
-}: {
-  color: string;
-  isStart?: boolean;
-  isEnd?: boolean;
-}) => {
-  const {theme} = useTheme();
-  const stopIndicatorPart = (
-    <View
-      style={{
-        width: theme.tripLegDetail.decorationLineEndWidth,
-        height: theme.tripLegDetail.decorationLineWidth,
-        backgroundColor: color,
-      }}
-    />
-  );
-  return (
-    <View
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        width: theme.tripLegDetail.decorationLineEndWidth,
-        marginHorizontal: theme.tripLegDetail.decorationLineWidth,
-      }}
-    >
-      {isStart && stopIndicatorPart}
-      <View
-        style={{
-          width: theme.tripLegDetail.decorationLineWidth,
-          height:
-            theme.tripLegDetail.decorationContainerWidth -
-            theme.tripLegDetail.decorationLineWidth,
-          backgroundColor: color,
-        }}
-      />
-      {isEnd && stopIndicatorPart}
-    </View>
-  );
-};
-
-/*
-
-TODO:
-
-what about large text sizes?
-screen reader / a11y?
-accept color argument?
-
-*/
-
 export function FareContractDestinations({
   startPlaceName,
   endPlaceName,
   showTwoWayIcon,
+  decorationColor,
 }: {
   startPlaceName?: string;
   endPlaceName?: string;
   showTwoWayIcon?: boolean;
+  decorationColor?: string;
 }) {
   const {theme} = useTheme();
   const styles = useStyles();
 
-  const color = theme.transport.transport_boat.primary.background;
+  const color =
+    decorationColor || theme.transport.transport_boat.primary.background;
 
-  const middlePartTop =
-    theme.tripLegDetail.decorationContainerWidth +
-    theme.tripLegDetail.decorationLineWidth * 2;
+  const decorationLineWidth = theme.tripLegDetail.decorationLineWidth;
+  const verticalLinePaddingLeft =
+    theme.tripLegDetail.decorationLineEndWidth - decorationLineWidth;
 
   return (
     <View style={styles.container}>
-      <View style={styles.lineContainer}>
-        <DestinationIllustrationPart color={color} isStart />
-        <ThemeText
-          type="body__secondary"
-          style={styles.stopPlaceName}
-          color={'primary'}
-        >
+      <View
+        style={{
+          ...styles.destinationEndLine,
+          marginBottom: -decorationLineWidth,
+          backgroundColor: color,
+        }}
+      />
+
+      <View
+        style={{
+          marginLeft: verticalLinePaddingLeft / 2,
+          paddingLeft: verticalLinePaddingLeft,
+          borderLeftColor: color,
+          borderLeftWidth: decorationLineWidth,
+        }}
+      >
+        <ThemeText type="body__secondary" color={'primary'}>
           {startPlaceName}
         </ThemeText>
-      </View>
 
-      {showTwoWayIcon && (
         <View
-          style={{height: theme.tripLegDetail.decorationContainerWidth / 2}}
-        />
-      )}
-
-      <View style={styles.lineContainer}>
-        <DestinationIllustrationPart color={color} isEnd />
-        <ThemeText
-          type="body__secondary"
-          style={styles.stopPlaceName}
-          color={'primary'}
+          style={{
+            paddingVertical: showTwoWayIcon ? 0 : decorationLineWidth,
+            marginLeft:
+              -verticalLinePaddingLeft -
+              decorationLineWidth / 2 -
+              theme.tripLegDetail.decorationContainerWidth / 2,
+          }}
         >
+          {showTwoWayIcon && (
+            <View
+              style={{
+                backgroundColor:
+                  theme.static.background.background_0.background,
+              }}
+            >
+              <ArrowUpDown
+                fill={color}
+                height={theme.tripLegDetail.decorationContainerWidth}
+                width={theme.tripLegDetail.decorationContainerWidth}
+              />
+            </View>
+          )}
+        </View>
+
+        <ThemeText type="body__secondary" color={'primary'}>
           {endPlaceName}
         </ThemeText>
       </View>
 
-      <View style={{position: 'absolute', top: middlePartTop}}>
-        <DestinationIllustrationPart color={color} />
-      </View>
-
-      {showTwoWayIcon && (
-        <View
-          style={{
-            position: 'absolute',
-            top: middlePartTop,
-            backgroundColor: theme.static.background.background_0.background,
-          }}
-        >
-          <ArrowUpDown
-            fill={color}
-            height={theme.tripLegDetail.decorationContainerWidth}
-            width={theme.tripLegDetail.decorationContainerWidth}
-          />
-        </View>
-      )}
+      <View
+        style={{
+          ...styles.destinationEndLine,
+          marginTop: -theme.tripLegDetail.decorationLineWidth,
+          backgroundColor: color,
+        }}
+      />
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginVertical: theme.spacings.xSmall,
+    marginTop: theme.spacings.large,
+    marginBottom: theme.spacings.medium,
   },
-  stopPlaceName: {
-    marginTop: theme.spacings.small,
-  },
-  lineContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+  destinationEndLine: {
+    width: theme.tripLegDetail.decorationLineEndWidth,
+    height: theme.tripLegDetail.decorationLineWidth,
   },
 }));
