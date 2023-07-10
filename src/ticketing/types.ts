@@ -37,6 +37,8 @@ export type NormalTravelRight = TravelRight & {
   usageValidityPeriodRef: string;
   userProfileRef: string;
   tariffZoneRefs: string[] | undefined;
+  startPointRef: string | undefined;
+  endPointRef: string | undefined;
 };
 
 export type PreActivatedTravelRight = NormalTravelRight;
