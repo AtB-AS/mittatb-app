@@ -12,8 +12,6 @@ describe('Departure', () => {
     await AppHelper.launchApp();
     await AppHelper.pause(10000, true);
     await OnboardingPage.skipOnboarding('departure');
-    await NavigationHelper.tapMenu('departures');
-    await DepartureSearchPage.confirmOnboarding();
   });
   beforeEach(async () => {
     await NavigationHelper.tapMenu('departures');
@@ -21,56 +19,10 @@ describe('Departure', () => {
   });
 
   /**
-   * Search for a place and choose a stop place
-   */
-  it('should search for a stop place nearby', async () => {
-    const placeSearch = 'Emilies ELD';
-    const stopPlace = 'Prinsens gate';
-
-    try {
-      await ElementHelper.waitForElement('id', 'searchFromButton');
-      await DepartureSearchPage.searchFrom.click();
-      await SearchPage.setSearchLocation(placeSearch);
-
-      // Nearby stop places
-      await DepartureSearchPage.chooseStopPlace(stopPlace);
-
-      // Stop place
-      await ElementHelper.expectText(stopPlace);
-      const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
-      const lineName = await DepartureOverviewPage.getLineName();
-      //Note: quaySelectionButton doesn't give the button text
-
-      // Hide / expand quay
-      expect(await DepartureOverviewPage.getDeparture()).toExist();
-      await DepartureOverviewPage.hideExpandDeps();
-      await AppHelper.screenshot('hide');
-      expect(await DepartureOverviewPage.getDeparture()).not.toExist();
-      await DepartureOverviewPage.hideExpandDeps();
-      expect(await DepartureOverviewPage.getDeparture()).toExist();
-
-      // Departure details
-      const departure = await DepartureOverviewPage.getDeparture();
-      await departure.click();
-      await ElementHelper.waitForElement('id', 'departureDetailsContentView');
-      await ElementHelper.expectText(`${linePublicCode} ${lineName}`);
-
-      // Back
-      await NavigationHelper.back();
-      await ElementHelper.expectText(stopPlace);
-    } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_departure_should_search_for_a_stop_place',
-      );
-      throw errMsg;
-    }
-  });
-
-  /**
    * Search for a stop place directly and show its details
    */
   it('should search for and choose a stop place directly', async () => {
-    const stopPlace = 'Kongens gate';
+    const stopPlace = 'Prinsens gate';
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
@@ -92,13 +44,15 @@ describe('Departure', () => {
   /**
    * Check the show more departures and quay tabs
    */
-  it('should show more departures for a single quay', async () => {
+  it('should show departures per quay', async () => {
+    const placeSearch = 'Emilies ELD';
     const stopPlace = 'Prinsens gate';
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await DepartureSearchPage.searchFrom.click();
-      await SearchPage.setSearchLocation(stopPlace);
+      await SearchPage.setSearchLocation(placeSearch);
+      await DepartureSearchPage.chooseStopPlace(stopPlace);
 
       // Stop place
       await ElementHelper.waitForElement('id', 'departuresContentView');
@@ -106,6 +60,14 @@ describe('Departure', () => {
       const noDepartures = await DepartureOverviewPage.getNumberOfDepartures(
         '0',
       );
+
+      // Hide / expand quay
+      expect(await DepartureOverviewPage.getDeparture()).toExist();
+      await DepartureOverviewPage.hideExpandDeps();
+      await AppHelper.screenshot('hide');
+      expect(await DepartureOverviewPage.getDeparture()).not.toExist();
+      await DepartureOverviewPage.hideExpandDeps();
+      expect(await DepartureOverviewPage.getDeparture()).toExist();
 
       // Show more departures (section link)
       await DepartureOverviewPage.showMoreDepartures();
@@ -133,12 +95,14 @@ describe('Departure', () => {
    */
   it('should show intermediate stops', async () => {
     //NB! If same stop place is chosen after tapping 'departuresTab', you don't go directly
-    const stopPlace = 'Kongens gate';
+    const placeSearch = 'Emilies ELD';
+    const stopPlace = 'Prinsens gate';
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await DepartureSearchPage.searchFrom.click();
-      await SearchPage.setSearchLocation(stopPlace);
+      await SearchPage.setSearchLocation(placeSearch);
+      await DepartureSearchPage.chooseStopPlace(stopPlace);
 
       // Stop place
       await ElementHelper.waitForElement('id', 'departuresContentView');

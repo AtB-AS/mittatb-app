@@ -11,22 +11,6 @@ class DepartureSearchPage extends Page {
   }
 
   /**
-   * Confirm the onboarding - if it exists
-   * @param timeoutValue: How long to search for the onboarding confirmation button
-   */
-  async confirmOnboarding(timeoutValue: number = 10) {
-    const id = `//*[@resource-id="departuresOnboardingConfirmButton"]`;
-    // Check for n sec
-    const exists = await ElementHelper.isElementExisting(
-      'departuresOnboardingConfirmButton',
-      timeoutValue,
-    );
-    if (exists) {
-      await $(id).click();
-    }
-  }
-
-  /**
    * Click the given stop place
    * @param stopPlace: name of the stop place
    */

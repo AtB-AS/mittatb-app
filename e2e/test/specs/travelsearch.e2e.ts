@@ -19,46 +19,16 @@ describe('Travel search', () => {
   });
 
   /**
-   * Do a simple travel search
-   */
-  it('should do a travel search', async () => {
-    const departure = 'Udduvoll bru vest';
-    const arrival = 'Anders Buens gate';
-
-    try {
-      await ElementHelper.waitForElement('id', 'searchFromButton');
-      await FrontPagePage.searchFrom.click();
-      await SearchPage.setSearchLocation(departure);
-
-      await ElementHelper.waitForElement('id', 'searchToButton');
-      await FrontPagePage.searchTo.click();
-      await SearchPage.setSearchLocation(arrival);
-
-      // Onboarding
-      await TravelsearchOverviewPage.confirmOnboarding();
-
-      // Test results
-      await TravelsearchOverviewPage.openFirstSearchResult();
-
-      // Scroll down
-      await AppHelper.scrollDownUntilId('walkDistance');
-
-      // Back
-      await NavigationHelper.back();
-    } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_travelsearch_should_do_a_travel_search',
-      );
-      throw errMsg;
-    }
-  });
-
-  /**
    * Compare departure and arrival times from overview to details
    */
-  it('should be correct travel times in the details', async () => {
+  it('should do a travel search and have correct travel times in the details', async () => {
     const departure = 'Prinsens gate';
     const arrival = 'Melhus skysstasjon';
+    /*
+    Candidates for a special route
+    const departure = 'Udduvoll bru vest';
+    const arrival = 'Anders Buens gate';
+     */
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
@@ -70,7 +40,7 @@ describe('Travel search', () => {
       await SearchPage.setSearchLocation(arrival);
 
       // Onboarding (Check just in case)
-      await TravelsearchOverviewPage.confirmOnboarding(5);
+      await TravelsearchOverviewPage.confirmOnboarding();
       await AppHelper.screenshot('travelsearch_overview');
 
       const startTime: string = await TravelsearchOverviewPage.getStartTime(0);
@@ -142,7 +112,7 @@ describe('Travel search', () => {
       await SearchPage.setSearchLocation(arrival);
 
       // Onboarding
-      await TravelsearchOverviewPage.confirmOnboarding();
+      await TravelsearchOverviewPage.confirmOnboarding(5);
 
       // Number of legs
       await ElementHelper.waitForElement('id', `tripSearchSearchResult0`);
