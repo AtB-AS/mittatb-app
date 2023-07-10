@@ -326,7 +326,7 @@ const LiveVehicleIcon = ({
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'text');
-  const svg = getTransportModeSvg(mode, subMode);
+  const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)
     return (
