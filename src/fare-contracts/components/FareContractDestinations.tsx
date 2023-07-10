@@ -93,6 +93,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginTop: theme.spacings.large,
     marginBottom: theme.spacings.medium,
+    marginLeft: theme.spacings.xSmall,
   },
   destinationEndLine: {
     width: theme.tripLegDetail.decorationLineEndWidth,
