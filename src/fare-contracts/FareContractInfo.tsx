@@ -43,6 +43,7 @@ import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
+import {FareContractDestinations} from './components/FareContractDestinations';
 
 export type FareContractInfoProps = {
   travelRights: PreActivatedTravelRight[];
@@ -77,11 +78,17 @@ export const FareContractInfo = ({
   fareContract,
   fareProductType,
 }: FareContractInfoProps) => {
-  const {tariffZones, userProfiles, preassignedFareProducts} =
+  const {tariffZones, userProfiles, preassignedFareProducts, boatStopPoints} =
     useFirestoreConfiguration();
 
   const firstTravelRight = travelRights[0];
-  const {fareProductRef: productRef, tariffZoneRefs} = firstTravelRight;
+  const {
+    fareProductRef: productRef,
+    tariffZoneRefs,
+    startPointRef,
+    endPointRef,
+  } = firstTravelRight;
+
   const firstZone = tariffZoneRefs?.[0];
   const lastZone = tariffZoneRefs?.slice(-1)?.[0];
 
@@ -101,6 +108,20 @@ export const FareContractInfo = ({
     userProfiles,
   );
 
+  //console.log('startPointRef', startPointRef); // NSR:StopPlace:40114 // NSR:ScheduledStopPoint:S40114
+  //console.log('endPointRef', endPointRef); // NSR:StopPlace:74006 // NSR:ScheduledStopPoint:S74006
+  // NSR:ScheduledStopPoint:S -> NSR:StopPlace:
+  //console.log('boatStopPoints', boatStopPoints);
+
+  const [startPlaceName, endPlaceName] = [startPointRef, endPointRef].map(
+    (pointRef) =>
+      boatStopPoints.find(
+        (
+          bSP, // todo: wait for firestore config update, remove this .replace
+        ) => bSP.id == pointRef?.replace('ScheduledStopPoint:S', 'StopPlace:'),
+      )?.name || '',
+  );
+
   return (
     <View style={{flex: 1}}>
       <FareContractInfoHeader
@@ -109,6 +130,8 @@ export const FareContractInfo = ({
         testID={testID}
         status={status}
         fareProductType={fareProductType}
+        startPlaceName={startPlaceName}
+        endPlaceName={endPlaceName}
       />
       <SectionSeparator />
       {fareContract && (
@@ -140,12 +163,16 @@ const FareContractInfoHeader = ({
   testID,
   status,
   fareProductType,
+  startPlaceName,
+  endPlaceName,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
   isInspectable?: boolean;
   testID?: string;
   status: FareContractInfoProps['status'];
   fareProductType?: string;
+  startPlaceName?: string;
+  endPlaceName?: string;
 }) => {
   const styles = useStyles();
   const {language} = useTranslation();
@@ -190,6 +217,13 @@ const FareContractInfoHeader = ({
           </ThemeText>
         )}
       </View>
+      {['boat-single', 'boat-period'].includes(fareProductType || '') && (
+        <FareContractDestinations
+          startPlaceName={startPlaceName}
+          endPlaceName={endPlaceName}
+          showTwoWayIcon={fareProductType === 'boat-period'}
+        />
+      )}
       {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
   );
