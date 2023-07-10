@@ -3,7 +3,7 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 
-import {ArrowUpLeft} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
 
 const DestinationIllustrationPart = ({
   color = 'red',
@@ -14,20 +14,35 @@ const DestinationIllustrationPart = ({
   isStart?: boolean;
   isEnd?: boolean;
 }) => {
+  const {theme} = useTheme();
   const stopIndicatorPart = (
-    <View style={{width: 12, height: 4, backgroundColor: color}} />
+    <View
+      style={{
+        width: theme.tripLegDetail.decorationLineEndWidth,
+        height: theme.tripLegDetail.decorationLineWidth,
+        backgroundColor: color,
+      }}
+    />
   );
   return (
     <View
       style={{
         display: 'flex',
         alignItems: 'center',
-        width: 12,
-        marginHorizontal: 4,
+        width: theme.tripLegDetail.decorationLineEndWidth,
+        marginHorizontal: theme.tripLegDetail.decorationLineWidth,
       }}
     >
       {isStart && stopIndicatorPart}
-      <View style={{width: 4, height: 16, backgroundColor: color}} />
+      <View
+        style={{
+          width: theme.tripLegDetail.decorationLineWidth,
+          height:
+            theme.tripLegDetail.decorationContainerWidth -
+            theme.tripLegDetail.decorationLineWidth,
+          backgroundColor: color,
+        }}
+      />
       {isEnd && stopIndicatorPart}
     </View>
   );
@@ -37,12 +52,9 @@ const DestinationIllustrationPart = ({
 
 TODO:
 
-ArrowUpLeft should be ArrowUpDown
-
 what about large text sizes?
 screen reader / a11y?
 accept color argument?
-ensure bg color from theme?
 
 */
 
@@ -60,6 +72,10 @@ export function FareContractDestinations({
 
   const color = theme.transport.transport_boat.primary.background;
 
+  const middlePartTop =
+    theme.tripLegDetail.decorationContainerWidth +
+    theme.tripLegDetail.decorationLineWidth * 2;
+
   return (
     <View style={styles.container}>
       <View style={styles.lineContainer}>
@@ -73,6 +89,12 @@ export function FareContractDestinations({
         </ThemeText>
       </View>
 
+      {showTwoWayIcon && (
+        <View
+          style={{height: theme.tripLegDetail.decorationContainerWidth / 2}}
+        />
+      )}
+
       <View style={styles.lineContainer}>
         <DestinationIllustrationPart color={color} isEnd />
         <ThemeText
@@ -84,7 +106,7 @@ export function FareContractDestinations({
         </ThemeText>
       </View>
 
-      <View style={{position: 'absolute', top: 23}}>
+      <View style={{position: 'absolute', top: middlePartTop}}>
         <DestinationIllustrationPart color={color} />
       </View>
 
@@ -92,11 +114,15 @@ export function FareContractDestinations({
         <View
           style={{
             position: 'absolute',
-            top: 23,
-            backgroundColor: 'white',
+            top: middlePartTop,
+            backgroundColor: theme.static.background.background_0.background,
           }}
         >
-          <ArrowUpLeft fill={color} height={20} width={20} />
+          <ArrowUpDown
+            fill={color}
+            height={theme.tripLegDetail.decorationContainerWidth}
+            width={theme.tripLegDetail.decorationContainerWidth}
+          />
         </View>
       )}
     </View>
