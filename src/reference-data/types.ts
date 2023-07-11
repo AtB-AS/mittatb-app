@@ -54,3 +54,8 @@ export type CityZone = {
   phoneNumber?: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
 };
+
+export type BoatStopPoint = {
+  id: string;
+  name: string;
+};
