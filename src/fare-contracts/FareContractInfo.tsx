@@ -67,6 +67,7 @@ export type FareContractInfoDetailsProps = {
   testID?: string;
   now?: number;
   validTo?: number;
+  fareProductType?: string;
 };
 
 export const FareContractInfo = ({
@@ -152,6 +153,7 @@ export const FareContractInfo = ({
         isInspectable={isInspectable}
         omitUserProfileCount={omitUserProfileCount}
         preassignedFareProduct={preassignedFareProduct}
+        fareProductType={fareProductType}
       />
     </View>
   );
@@ -236,6 +238,7 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     userProfilesWithCount,
     omitUserProfileCount,
     status,
+    fareProductType,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -244,6 +247,8 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     fromTariffZone && toTariffZone
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
+
+  const isBoat = ['boat-single', 'boat-period'].includes(fareProductType || '');
 
   return (
     <View style={styles.container} accessible={true}>
@@ -262,7 +267,9 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
             />
           )}
         </View>
-        {isValidFareContract(status) && <InspectionSymbol {...props} />}
+        {!isBoat && isValidFareContract(status) && (
+          <InspectionSymbol {...props} />
+        )}
       </View>
     </View>
   );
