@@ -21,6 +21,21 @@ export type TransportModePair = {
   subMode?: TransportSubmodeType;
 };
 
+const removeDuplicateStringsFilter = (
+  val: string,
+  i: number,
+  arr: string[],
+): boolean => arr.indexOf(val) === i;
+
+const removeDuplicatesByIconNameFilter = (
+  val: TransportModePair,
+  i: number,
+  arr: TransportModePair[],
+): boolean =>
+  arr
+    .map((m) => getTransportModeSvg(m.mode, m.subMode).name)
+    .indexOf(getTransportModeSvg(val.mode, val.subMode).name) === i;
+
 export const getTransportModeText = (
   modes: TransportModePair[],
   t: TranslateFunction,
@@ -34,9 +49,10 @@ export const getTransportModeText = (
   }
   return modes
     .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
-    .filter((value, index, array) => array.indexOf(value) === index) // remove duplicates
+    .filter(removeDuplicateStringsFilter)
     .join('/');
 };
+
 export const TransportModes = ({
   modes,
   iconSize,
@@ -54,13 +70,7 @@ export const TransportModes = ({
   const modesCount: number = modes.length;
   const modesToDisplay = modes
     .slice(0, modesDisplayLimit)
-    .filter(
-      (value, index, array) =>
-        array
-          .map((m) => getTransportModeSvg(m.mode, m.subMode).name)
-          .indexOf(getTransportModeSvg(value.mode, value.subMode).name) ===
-        index,
-    ); // remove duplicate icons
+    .filter(removeDuplicatesByIconNameFilter);
 
   const transportModeText: string = getTransportModeText(
     modes,
