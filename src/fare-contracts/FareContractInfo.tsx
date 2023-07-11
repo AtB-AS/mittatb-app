@@ -109,18 +109,8 @@ export const FareContractInfo = ({
     userProfiles,
   );
 
-  //console.log('startPointRef', startPointRef); // NSR:StopPlace:40114 // NSR:ScheduledStopPoint:S40114
-  //console.log('endPointRef', endPointRef); // NSR:StopPlace:74006 // NSR:ScheduledStopPoint:S74006
-  // NSR:ScheduledStopPoint:S -> NSR:StopPlace:
-  //console.log('boatStopPoints', boatStopPoints);
-
   const [startPlaceName, endPlaceName] = [startPointRef, endPointRef].map(
-    (pointRef) =>
-      boatStopPoints.find(
-        (
-          bSP, // todo: wait for firestore config update, remove this .replace
-        ) => bSP.id == pointRef?.replace('ScheduledStopPoint:S', 'StopPlace:'),
-      )?.name || '',
+    (pointRef) => boatStopPoints.find((bSP) => bSP.id == pointRef)?.name || '',
   );
 
   return (
