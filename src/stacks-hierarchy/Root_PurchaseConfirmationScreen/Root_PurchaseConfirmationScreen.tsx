@@ -19,7 +19,7 @@ import {
   PurchaseConfirmationTexts,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime} from '@atb/utils/date';
+import {formatToLongDateTime, secondsToDurationShort} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {addMinutes} from 'date-fns';
 import React, {useEffect, useState} from 'react';
@@ -43,6 +43,7 @@ import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
+import {Info} from '@atb/assets/svg/color/icons/status';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -147,6 +148,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       count,
       offer_id,
     }),
+  );
+
+  // todo: get correct data here.
+  // also: 24h -> show as 1d or 24h?
+  const startTimeSeconds = 0;
+  const endTimeSeconds = 30 * 24 * 60 * 60;
+
+  const validTime = secondsToDurationShort(
+    endTimeSeconds - startTimeSeconds,
+    language,
   );
 
   const vatAmount = totalPrice * (vatPercent / 100);
@@ -312,8 +323,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   type="body__secondary"
                   color="secondary"
                 >
-                  {travelDateText}
+                  {t(PurchaseConfirmationTexts.validityTexts.time(validTime))}
                 </ThemeText>
+
+                <View style={[styles.smallTopMargin, {flexDirection: 'row'}]}>
+                  <Info
+                    height={theme.icon.size.normal}
+                    width={theme.icon.size.normal}
+                    style={{marginRight: theme.spacings.small}}
+                  />
+                  <ThemeText type="body__secondary" color="secondary">
+                    {travelDateText}
+                  </ThemeText>
+                </View>
               </View>
             </GenericSectionItem>
           </Section>
