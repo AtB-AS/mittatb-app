@@ -32,6 +32,7 @@ import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -62,6 +63,7 @@ export const TravelDetailsMapScreenComponent = ({
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationState();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
@@ -90,6 +92,7 @@ export const TravelDetailsMapScreenComponent = ({
       setVehicle(vehicle);
     },
     onError: () => setIsError(true),
+    enabled: isFocusedAndActive,
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);

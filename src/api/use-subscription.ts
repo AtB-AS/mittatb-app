@@ -3,21 +3,24 @@ import {MutableRefObject, useEffect, useRef} from 'react';
 
 const RETRY_INTERVAL_CAP_IN_SECONDS = 10;
 
-export type SubscriptionEventProps = {
+export type SubscriptionProps = {
   onMessage?: (event: WebSocketMessageEvent) => void;
   onError?: (event: WebSocketCloseEvent) => void;
+  url: string | null;
+  enabled: boolean;
 };
 
 export function useSubscription({
   url,
   onMessage,
   onError,
-}: {url: string | null} & SubscriptionEventProps) {
+  enabled,
+}: SubscriptionProps) {
   const webSocket = useRef<WebSocket | null>(null);
   const retryCount = useRef<number>(0);
 
   useEffect(() => {
-    if (!url) return;
+    if (!url || !enabled) return;
 
     let retryTimeout: NodeJS.Timeout | null = null;
     const connect = () => {
@@ -64,7 +67,7 @@ export function useSubscription({
       }
       webSocket.current = null;
     };
-  }, [url]);
+  }, [url, enabled]);
 }
 
 /**
