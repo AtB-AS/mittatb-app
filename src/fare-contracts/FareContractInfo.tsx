@@ -110,7 +110,7 @@ export const FareContractInfo = ({
   );
 
   const [startPlaceName, endPlaceName] = [startPointRef, endPointRef].map(
-    (pointRef) => boatStopPoints.find((bSP) => bSP.id == pointRef)?.name || '',
+    (pointRef) => boatStopPoints.find((bsp) => bsp.id == pointRef)?.name || '',
   );
 
   return (
