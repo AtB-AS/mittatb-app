@@ -40,6 +40,16 @@ jobs:
       # E2E init
       - name: Install Appium
         run: npm install -g appium
+
+      # TEST
+      # ---
+      - name: List drivers 1
+        run: appium driver list --installed
+      - name: Install uiautomator2 driver
+        run: appium driver install uiautomator2
+      - name: List drivers 2
+        run: appium driver list --installed
+      # ---
       - name: Add Entur private registry credentials
         run: bash ./scripts/add-entur-private-registry.sh
         env:
@@ -54,6 +64,8 @@ jobs:
 
       # E2E run
       - name: Run tests on Android emulator
+        # TEST
+        if: contains(env.DEFAULT_BRANCH, 'true')
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           avd-name: emulator-api30
