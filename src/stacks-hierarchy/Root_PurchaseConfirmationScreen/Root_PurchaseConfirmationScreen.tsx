@@ -19,7 +19,7 @@ import {
   PurchaseConfirmationTexts,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime, secondsToDurationShort} from '@atb/utils/date';
+import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {addMinutes} from 'date-fns';
 import React, {useEffect, useState} from 'react';
@@ -150,15 +150,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }),
   );
 
-  // todo: get correct data here.
-  // also: 24h -> show as 1d or 24h?
-  const startTimeSeconds = 0;
-  const endTimeSeconds = 30 * 24 * 60 * 60;
+  let durationTimeSeconds = 0;
+  if (preassignedFareProduct.durationMinutes) {
+    durationTimeSeconds = preassignedFareProduct.durationMinutes * 60;
+  } else if (preassignedFareProduct.durationDays) {
+    durationTimeSeconds = preassignedFareProduct.durationDays * 24 * 60 * 60;
+  }
 
-  const validTime = secondsToDurationShort(
-    endTimeSeconds - startTimeSeconds,
-    language,
-  );
+  const validTime = secondsToDuration(durationTimeSeconds, language);
 
   const vatAmount = totalPrice * (vatPercent / 100);
 
@@ -318,13 +317,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     )}
                   </ThemeText>
                 )}
-                <ThemeText
-                  style={styles.smallTopMargin}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {t(PurchaseConfirmationTexts.validityTexts.time(validTime))}
-                </ThemeText>
+                {durationTimeSeconds !== 0 && (
+                  <ThemeText
+                    style={styles.smallTopMargin}
+                    type="body__secondary"
+                    color="secondary"
+                  >
+                    {t(PurchaseConfirmationTexts.validityTexts.time(validTime))}
+                  </ThemeText>
+                )}
 
                 <View style={[styles.smallTopMargin, {flexDirection: 'row'}]}>
                   <Info
