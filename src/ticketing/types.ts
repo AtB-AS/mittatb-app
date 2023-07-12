@@ -147,6 +147,8 @@ export type Offer = {
   traveller_id: string;
   prices: OfferPrice[];
   flex_discount_ladder?: FlexDiscountLadder;
+  valid_from: string;
+  valid_to: string;
 };
 
 export type OfferSearchResponse = Offer[];

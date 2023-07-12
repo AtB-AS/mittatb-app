@@ -128,6 +128,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     offerSearchTime,
     isSearchingOffer,
     error,
+    validDurationSeconds,
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
@@ -150,14 +151,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }),
   );
 
-  let durationTimeSeconds = 0;
-  if (preassignedFareProduct.durationMinutes) {
-    durationTimeSeconds = preassignedFareProduct.durationMinutes * 60;
-  } else if (preassignedFareProduct.durationDays) {
-    durationTimeSeconds = preassignedFareProduct.durationDays * 24 * 60 * 60;
-  }
-
-  const validTime = secondsToDuration(durationTimeSeconds, language);
+  const validDuration = secondsToDuration(validDurationSeconds || 0, language);
 
   const vatAmount = totalPrice * (vatPercent / 100);
 
@@ -317,13 +311,17 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     )}
                   </ThemeText>
                 )}
-                {durationTimeSeconds !== 0 && (
+                {!isSearchingOffer && validDurationSeconds && (
                   <ThemeText
                     style={styles.smallTopMargin}
                     type="body__secondary"
                     color="secondary"
                   >
-                    {t(PurchaseConfirmationTexts.validityTexts.time(validTime))}
+                    {t(
+                      PurchaseConfirmationTexts.validityTexts.time(
+                        validDuration,
+                      ),
+                    )}
                   </ThemeText>
                 )}
 
