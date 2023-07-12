@@ -13,8 +13,6 @@ export type PreassignedFareProduct = {
   type: string;
   productAlias?: LanguageAndTextType[];
   distributionChannel: DistributionChannel[];
-  durationDays?: number;
-  durationMinutes?: number;
   alternativeNames: LanguageAndTextType[];
   zoneSelectionMode?: ZoneSelectionMode;
   limitations: {
