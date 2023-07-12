@@ -8,8 +8,13 @@ class ElementHelper {
    * Waits for an element to be displayed given default timeout
    * @param type: test-id or text
    * @param id: name of the test-id or text to wait for
+   * @param timeout: optionally wait longer than default (ms)
    */
-  async waitForElement(type: 'id' | 'text', id: string) {
+  async waitForElement(
+    type: 'id' | 'text',
+    id: string,
+    timeout: number = 10000,
+  ) {
     let requestedEl = '';
     switch (type) {
       case 'id':
@@ -19,7 +24,7 @@ class ElementHelper {
         requestedEl = `//*[@text="${id}"]`;
         break;
     }
-    return $(requestedEl).waitForDisplayed({interval: 1000});
+    return $(requestedEl).waitForDisplayed({timeout: timeout, interval: 1000});
   }
 
   /**

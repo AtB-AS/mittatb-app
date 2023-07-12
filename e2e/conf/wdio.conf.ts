@@ -314,7 +314,7 @@ export const config: WebdriverIO.Config = {
      */
     onComplete: function (exitCode, config, capabilities, results) {
         const mergeResults = require('wdio-mochawesome-reporter/mergeResults')
-        mergeResults('./results', "results-mochawesome*", `results-mochawesome.json`)
+        mergeResults('./e2e/results', "results-mochawesome*", `results-mochawesome.json`)
     }
     /**
     * Gets executed when a refresh happens.

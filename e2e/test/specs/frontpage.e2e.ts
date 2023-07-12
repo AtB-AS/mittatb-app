@@ -32,7 +32,7 @@ describe('Frontpage', () => {
 
       // Choose stop place
       await FrontPagePage.addFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'searchFromButton');
+      await ElementHelper.waitForElement('id', 'nearbyStopsContainerView');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(stopPlace);
 
@@ -52,6 +52,7 @@ describe('Frontpage', () => {
       await FavoritePage.chooseFavoriteType('single');
       expect(await FavoritePage.getFavoriteIcon('semi', 0, 0)).toExist();
       expect(await FavoritePage.getFavoriteIcon('no', 0, 1)).toExist();
+      await AppHelper.pause(1000);
       await FavoritePage.confirm.click();
 
       // Verify
