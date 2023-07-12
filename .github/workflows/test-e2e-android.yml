@@ -64,8 +64,6 @@ jobs:
 
       # E2E run
       - name: Run tests on Android emulator
-        # TEST
-        if: contains(env.DEFAULT_BRANCH, 'true')
         uses: reactivecircus/android-emulator-runner@v2.27.0
         with:
           avd-name: emulator-api30
