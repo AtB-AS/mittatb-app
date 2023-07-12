@@ -49,8 +49,8 @@ jobs:
         run: yarn install
         # working-directory: e2e
       - name: tsc
-        run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
-        working-directory: e2e
+        run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false --project e2e
+        # working-directory: e2e
 
       # E2E run
       - name: Run tests on Android emulator
