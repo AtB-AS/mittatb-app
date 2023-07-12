@@ -2,6 +2,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 
 import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
 
@@ -18,6 +19,7 @@ export function FareContractDestinations({
 }) {
   const {theme} = useTheme();
   const styles = useStyles();
+  const {t} = useTranslation();
 
   const color =
     decorationColor || theme.transport.transport_boat.primary.background;
@@ -27,7 +29,16 @@ export function FareContractDestinations({
     theme.tripLegDetail.decorationLineEndWidth - decorationLineWidth;
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      accessibilityLabel={t(
+        PurchaseOverviewTexts.summary.destinations(
+          startPlaceName,
+          endPlaceName,
+        ),
+      )}
+      accessible={true}
+    >
       <View
         style={{
           ...styles.destinationEndLine,
