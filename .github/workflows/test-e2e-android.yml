@@ -97,6 +97,7 @@ jobs:
           pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v3
