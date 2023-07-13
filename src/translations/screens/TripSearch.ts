@@ -155,7 +155,7 @@ const TripSearchTexts = {
         'There are service messages affecting your journey. See details for more info ',
       ),
       footLeg: {
-        walkandWaitLabel: (walkTime: string, waitTime: string) =>
+        walkAndWaitLabel: (walkTime: string, waitTime: string) =>
           _(
             `Gå ${walkTime}. Vent ${waitTime}`,
             `Walk ${walkTime}. Wait ${waitTime}`,

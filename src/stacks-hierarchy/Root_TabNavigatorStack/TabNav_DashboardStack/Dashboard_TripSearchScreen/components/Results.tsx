@@ -9,8 +9,8 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {isSeveralDays} from '@atb/utils/date';
-import React, {Fragment, useEffect, useMemo, useState} from 'react';
+
+import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 import {TripPattern} from '@atb/api/types/trips';
@@ -62,11 +62,6 @@ export const Results: React.FC<Props> = ({
     }
   }, [errorType]);
 
-  const allSameDay = useMemo(
-    () => isSeveralDays(tripPatterns.map((i) => i.expectedStartTime)),
-    [tripPatterns],
-  );
-
   if (showEmptyScreen) {
     return null;
   }
@@ -101,7 +96,6 @@ export const Results: React.FC<Props> = ({
           <DayLabel
             departureTime={tripPattern.expectedStartTime}
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
-            allSameDay={allSameDay}
           />
           {newTravelSearchEnabled ? (
             <ResultItem
