@@ -64,13 +64,31 @@ jobs:
 
       # E2E run
       - name: Run tests on Android emulator
-        uses: reactivecircus/android-emulator-runner@v2.27.0
+        uses: reactivecircus/android-emulator-runner@v2.28.0
         with:
           avd-name: emulator-api30
           api-level: 30
           arch: x86_64
           profile: pixel_5
           emulator-build: 9536276
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          # working-directory: e2e
+          script: yarn test:android
+          # pre-emulator-launch-script: ./scripts/restart-adb.sh
+          pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
+        env:
+          APP_PATH: ${{ github.workspace }}
+      # E2E run
+      - name: Run tests on Android emulator 2
+        uses: reactivecircus/android-emulator-runner@v2.28.0
+        with:
+          avd-name: emulator-api30
+          api-level: 29
+          arch: x86_64
+          profile: pixel_5
+          emulator-build: 9536276
+          emulator-boot-timeout: 900
           disable-spellchecker: true
           # working-directory: e2e
           script: yarn test:android
