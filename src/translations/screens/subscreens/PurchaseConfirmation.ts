@@ -18,6 +18,11 @@ const PurchaseConfirmationTexts = {
           `Valid from zone ${zoneNameFrom} to zone ${zoneNameTo}`,
         ),
     },
+    time: (validTime: string) =>
+      _(
+        `Billettvarighet ${validTime} fra oppstart`,
+        `Ticket duration ${validTime} from start time`,
+      ),
   },
   totalCost: {
     title: _('Totalt', 'Total'),
