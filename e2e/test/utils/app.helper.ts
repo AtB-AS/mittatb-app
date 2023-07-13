@@ -14,6 +14,13 @@ class AppHelper {
     await this.pause(5000);
   }
 
+  /**
+   * Check if tests are run on CI
+   */
+  isCI() {
+    return `${process.env.IS_CI}` === 'true';
+  }
+
   /***
    * Pause in ms
    * @param ms: how long to pause in ms

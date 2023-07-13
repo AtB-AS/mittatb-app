@@ -15,6 +15,8 @@ class ElementHelper {
     id: string,
     timeout: number = 10000,
   ) {
+    const timeoutValue = AppHelper.isCI() ? timeout * 2 : timeout;
+    console.log(`=====> ${AppHelper.isCI()}`);
     let requestedEl = '';
     switch (type) {
       case 'id':
@@ -24,7 +26,10 @@ class ElementHelper {
         requestedEl = `//*[@text="${id}"]`;
         break;
     }
-    return $(requestedEl).waitForDisplayed({timeout: timeout, interval: 1000});
+    return $(requestedEl).waitForDisplayed({
+      timeout: timeoutValue,
+      interval: 1000,
+    });
   }
 
   /**

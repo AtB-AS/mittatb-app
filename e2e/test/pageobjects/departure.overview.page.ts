@@ -74,6 +74,7 @@ class DepartureOverviewPage extends Page {
    */
   async getNumberOfDepartures(quayIndex: string = '') {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
+    await ElementHelper.waitForElement('id', `quaySection${quayIndex}`);
     let count = 0;
     // check departure items with a max to avoid endless loop
     // considers only visible element

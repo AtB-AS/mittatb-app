@@ -79,6 +79,7 @@ jobs:
           pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
+          IS_CI: "true"
       # E2E run
       - name: Run tests on Android emulator 2
         uses: reactivecircus/android-emulator-runner@v2.28.0

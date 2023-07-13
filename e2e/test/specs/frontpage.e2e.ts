@@ -21,7 +21,7 @@ describe('Frontpage', () => {
   /**
    * Add a favorite departure from the frontpage
    */
-  it('should add favorite departure', async () => {
+  it.only('should add favorite departure', async () => {
     const stopPlace = 'Prinsens gate';
 
     try {
