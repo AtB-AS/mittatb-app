@@ -151,8 +151,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     }),
   );
 
-  const validDuration = secondsToDuration(validDurationSeconds || 0, language);
-
   const vatAmount = totalPrice * (vatPercent / 100);
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
@@ -319,7 +317,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   >
                     {t(
                       PurchaseConfirmationTexts.validityTexts.time(
-                        validDuration,
+                        secondsToDuration(validDurationSeconds, language),
                       ),
                     )}
                   </ThemeText>
