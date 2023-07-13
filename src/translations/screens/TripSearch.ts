@@ -143,6 +143,8 @@ const TripSearchTexts = {
       header: {
         title: (mode: string, placeName: string) =>
           _(`${mode} fra ${placeName}`, `${mode} from ${placeName}`),
+        flexTransportTitle: (publicCode: string) =>
+          _(`Henting med ${publicCode}`, `Pickup by ${publicCode}`),
         totalDuration: _('Reisetid', 'Trip duration'),
         time: (startTime: string, endTime: string) =>
           _(

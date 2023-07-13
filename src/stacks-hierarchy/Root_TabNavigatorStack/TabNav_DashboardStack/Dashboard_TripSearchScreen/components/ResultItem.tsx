@@ -76,6 +76,7 @@ const ResultItemHeader: React.FC<{
   } else if (tripPattern.legs[0].mode !== 'foot') {
     startName = getQuayName(start.fromPlace.quay);
   }
+  const publicCode = start.fromPlace.quay?.publicCode || start.line?.publicCode;
 
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const transportName = t(getTranslatedModeName(start.mode));
@@ -92,6 +93,12 @@ const ResultItemHeader: React.FC<{
               TripSearchTexts.results.resultItem.header.title(
                 transportName,
                 startName,
+              ),
+            )
+          : publicCode
+          ? t(
+              TripSearchTexts.results.resultItem.header.flexTransportTitle(
+                publicCode,
               ),
             )
           : transportName}
