@@ -182,6 +182,7 @@ const PurchaseOverviewTexts = {
       _(
         `Fra ${from || 'ukjent'}, til ${to || 'ukjent'}`,
         `From ${from || 'unknown'}, to ${to || 'unknown'}`,
+        `Frå ${from || 'ukjent'}, til ${to || 'ukjent'}`,
       ),
     price: (priceString: string) =>
       _(

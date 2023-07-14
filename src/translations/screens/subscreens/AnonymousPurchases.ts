@@ -102,19 +102,23 @@ export default orgSpecificTranslations(AnonymousPurchases, {
       title: _(
         'Når du kjøper uten å logge inn...',
         'When you buy without signing in...',
+        'Når du kjøper utan å logge inn...',
       ),
       messages: [
         _(
           'mister du tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon',
           'you lose access to previous tickets if you change phones',
+          'mister du tilgangen på tidlegare kjøpte billettar om du mistar eller får ny telefon',
         ),
         _(
           'har du tilgang på kvitteringer etter kjøp i en begrenset periode',
           'you only have access to receipts for a limited time',
+          'har du tilgang på kvitteringar etter kjøp i ei avgrensa periode',
         ),
         _(
           'har du selv ansvar for å ta vare på ordre-ID hvis du skulle ha behov for hjelp angående en billett du har kjøpt',
           'you must save the order ID if you need help regarding a ticket purchase',
+          'har du sjølv ansvar for å ta vare på ordre-ID viss du skulle trenge hjelp om ein billett du har kjøpt',
         ),
       ],
       button: {
@@ -122,6 +126,7 @@ export default orgSpecificTranslations(AnonymousPurchases, {
           label: _(
             'Jeg vil forsette uten å logge inn',
             'I want to continue without signing in',
+            'Eg vil halde fram utan å logge inn',
           ),
         },
       },

@@ -32,6 +32,7 @@ const PurchaseConfirmationTexts = {
       _(
         `Billettvarighet ${validTime} fra oppstart`,
         `Ticket duration ${validTime} from start time`,
+        `Billettvarigheit ${validTime} frå oppstart`,
       ),
   },
   totalCost: {
