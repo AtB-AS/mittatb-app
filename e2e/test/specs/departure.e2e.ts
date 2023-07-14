@@ -25,8 +25,6 @@ describe('Departure', () => {
    * Search for a stop place directly and show its details
    */
   it('should search for and choose a stop place directly', async () => {
-    //const stopPlace = 'Prinsens gate';
-
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await DepartureSearchPage.searchFrom.click();
@@ -48,11 +46,11 @@ describe('Departure', () => {
    * Check the show more departures and quay tabs
    */
   it('should show departures per quay', async () => {
-    //const placeSearch = 'Emilies ELD';
-    //const stopPlace = 'Prinsens gate';
-
     try {
       /*
+      // If searching for a place and choosing a bus stop
+      const placeSearch = 'Emilies ELD';
+      const stopPlace = 'Prinsens gate';
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await DepartureSearchPage.searchFrom.click();
       await SearchPage.setSearchLocation(placeSearch);
@@ -98,16 +96,7 @@ describe('Departure', () => {
    * Check intermediate stops on departure details
    */
   it('should show intermediate stops', async () => {
-    //NB! If same stop place is chosen after tapping 'departuresTab', you don't go directly
-    //const placeSearch = 'Emilies ELD';
-    //const stopPlace = 'Prinsens gate';
-
     try {
-      /*
-      await ElementHelper.waitForElement('id', 'searchFromButton');
-      await DepartureSearchPage.searchFrom.click();
-      await SearchPage.setSearchLocation(placeSearch);
-       */
       await DepartureSearchPage.chooseStopPlace(stopPlace);
 
       // Stop place

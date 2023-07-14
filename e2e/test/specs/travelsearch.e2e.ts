@@ -48,8 +48,7 @@ describe('Travel search', () => {
         0,
       );
       const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
-      //NB! Note the rounding gives wrong numbers here
-      //TODO Sometimes +1, sometimes not
+      //NB! Note the rounding gives wrong numbers here (https://github.com/AtB-AS/kundevendt/issues/74)
       //expect(TimeHelper.getTimeDurationInMin(startTime, endTime)).toEqual(travelTime + 1)
 
       // ** Details **

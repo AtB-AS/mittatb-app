@@ -10,6 +10,7 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
+  # Add schedule instead of push
   push:
     branches:
       - tor/e2e-appium
@@ -46,16 +47,8 @@ jobs:
       # E2E init
       - name: Install Appium
         run: npm install -g appium
-
-      # TEST
-      # ---
-      - name: List drivers 1
-        run: appium driver list --installed
       - name: Install uiautomator2 driver
         run: appium driver install uiautomator2
-      - name: List drivers 2
-        run: appium driver list --installed
-      # ---
       - name: Add Entur private registry credentials
         run: bash ./scripts/add-entur-private-registry.sh
         env:
@@ -63,25 +56,21 @@ jobs:
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install E2E tests
         run: yarn install
-        # working-directory: e2e
       - name: tsc
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false --project e2e
-        # working-directory: e2e
 
       # E2E run
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2.28.0
         with:
-          avd-name: emulator-api30
+          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
           profile: pixel_5
           emulator-build: 9536276
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          # working-directory: e2e
           script: yarn test:android
-          # pre-emulator-launch-script: ./scripts/restart-adb.sh
           pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
