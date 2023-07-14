@@ -17,6 +17,7 @@ export type FeedbackConfiguration = {
 type LanguageString = {
   nb: string;
   en: string;
+  nn: string;
 };
 
 export type QuestionType = {
