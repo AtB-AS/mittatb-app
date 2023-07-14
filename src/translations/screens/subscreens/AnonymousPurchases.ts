@@ -56,7 +56,7 @@ const AnonymousPurchases = {
         ),
       },
       login: {
-        label: _('jeg vil logge inn', 'I want to log in', 'Eg vil logge inn'),
+        label: _('Jeg vil logge inn', 'I want to log in', 'Eg vil logge inn'),
         a11yHint: _(
           'Aktiver for å logge inn',
           'Activate to log in',
