@@ -2,6 +2,10 @@ name: E2E tests on Android
 on:
   workflow_dispatch:
     inputs:
+      api_level:
+        description: 'Define API level'
+        required: true
+        default: 29
       branch:
         description: 'Define branch to test'
         required: true
@@ -20,8 +24,10 @@ jobs:
       - name: Set env variables
         env:
           DEFAULT_BRANCH: 'master'
+          DEFAULT_API_LEVEL: 29
         run: |
           echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
+          echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
           echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v3
@@ -67,25 +73,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2.28.0
         with:
           avd-name: emulator-api30
-          api-level: 30
-          arch: x86_64
-          profile: pixel_5
-          emulator-build: 9536276
-          emulator-boot-timeout: 900
-          disable-spellchecker: true
-          # working-directory: e2e
-          script: yarn test:android
-          # pre-emulator-launch-script: ./scripts/restart-adb.sh
-          pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
-        env:
-          APP_PATH: ${{ github.workspace }}
-          IS_CI: "true"
-      # E2E run
-      - name: Run tests on Android emulator 2
-        uses: reactivecircus/android-emulator-runner@v2.28.0
-        with:
-          avd-name: emulator-api30
-          api-level: 29
+          api-level: ${{ env.INPUT_API_LEVEL }}
           arch: x86_64
           profile: pixel_5
           emulator-build: 9536276

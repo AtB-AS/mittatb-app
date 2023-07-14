@@ -16,7 +16,6 @@ class ElementHelper {
     timeout: number = 10000,
   ) {
     const timeoutValue = AppHelper.isCI() ? timeout * 2 : timeout;
-    console.log(`=====> ${AppHelper.isCI()}`);
     let requestedEl = '';
     switch (type) {
       case 'id':
