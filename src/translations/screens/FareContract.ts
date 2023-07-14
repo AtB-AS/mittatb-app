@@ -244,7 +244,7 @@ const FareContractTexts = {
         `In total ${count} travel modes`,
         `Totalt ${count} reisemåtar`,
       ),
-      concatListWord: _('og', 'and', 'og'),
+    concatListWord: _('og', 'and', 'og'),
   },
   transportMode: (mode: TransportModeType, subMode?: TransportSubmodeType) => {
     switch (mode) {
