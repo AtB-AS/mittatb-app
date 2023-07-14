@@ -36,7 +36,7 @@ const NearbyTexts = {
       a11yLabel: _(
         'Velg avreisetidspunkt nå',
         'Choose departure time now',
-        'Velj avgangstidspunkt no',
+        'Vel avgangstidspunkt no',
       ),
       a11yHint: _(
         'Aktiver for å sette avreisetidspunkt til nå',
