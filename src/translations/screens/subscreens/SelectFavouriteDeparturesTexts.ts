@@ -38,7 +38,7 @@ const SelectFavouriteDeparturesText = {
     ),
   },
   confirm_button: {
-    text: _('Lagre valg', 'Save selection', 'Lagra val'),
+    text: _('Lagre valg', 'Save selection', 'Lagre val'),
     a11yhint: _(
       'Aktiver for å lagre valgte favorittavganger',
       'Activate to save the selected favourite departures',
