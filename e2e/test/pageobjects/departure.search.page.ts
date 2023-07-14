@@ -16,6 +16,7 @@ class DepartureSearchPage extends Page {
    */
   async chooseStopPlace(stopPlace: string) {
     await ElementHelper.waitForElement('id', 'nearbyStopsContainerView');
+    await ElementHelper.waitForElement('id', 'stopPlaceItem0');
     // Choose requested stop place
     for (let i = 0; i < 10; i++) {
       const stopId = `//*[@resource-id="stopPlaceItem${i}Name"]`;

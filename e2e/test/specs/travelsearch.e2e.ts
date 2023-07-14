@@ -41,7 +41,6 @@ describe('Travel search', () => {
 
       // Onboarding (Check just in case)
       await TravelsearchOverviewPage.confirmOnboarding();
-      await AppHelper.screenshot('travelsearch_overview');
 
       const startTime: string = await TravelsearchOverviewPage.getStartTime(0);
       const endTime: string = await TravelsearchOverviewPage.getEndTime(0);

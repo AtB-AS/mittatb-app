@@ -7,6 +7,9 @@ import DepartureSearchPage from '../pageobjects/departure.search.page';
 import DepartureOverviewPage from '../pageobjects/departure.overview.page';
 import DepartureDetailsPage from '../pageobjects/departure.details.page';
 
+// The same stop place is used if not overrun in test
+const stopPlace = 'Prinsens gate';
+
 describe('Departure', () => {
   before(async () => {
     await AppHelper.launchApp();
@@ -22,7 +25,7 @@ describe('Departure', () => {
    * Search for a stop place directly and show its details
    */
   it('should search for and choose a stop place directly', async () => {
-    const stopPlace = 'Prinsens gate';
+    //const stopPlace = 'Prinsens gate';
 
     try {
       await ElementHelper.waitForElement('id', 'searchFromButton');
@@ -45,13 +48,15 @@ describe('Departure', () => {
    * Check the show more departures and quay tabs
    */
   it('should show departures per quay', async () => {
-    const placeSearch = 'Emilies ELD';
-    const stopPlace = 'Prinsens gate';
+    //const placeSearch = 'Emilies ELD';
+    //const stopPlace = 'Prinsens gate';
 
     try {
+      /*
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await DepartureSearchPage.searchFrom.click();
       await SearchPage.setSearchLocation(placeSearch);
+       */
       await DepartureSearchPage.chooseStopPlace(stopPlace);
 
       // Stop place
@@ -64,7 +69,6 @@ describe('Departure', () => {
       // Hide / expand quay
       expect(await DepartureOverviewPage.getDeparture()).toExist();
       await DepartureOverviewPage.hideExpandDeps();
-      await AppHelper.screenshot('hide');
       expect(await DepartureOverviewPage.getDeparture()).not.toExist();
       await DepartureOverviewPage.hideExpandDeps();
       expect(await DepartureOverviewPage.getDeparture()).toExist();
@@ -95,13 +99,15 @@ describe('Departure', () => {
    */
   it('should show intermediate stops', async () => {
     //NB! If same stop place is chosen after tapping 'departuresTab', you don't go directly
-    const placeSearch = 'Emilies ELD';
-    const stopPlace = 'Prinsens gate';
+    //const placeSearch = 'Emilies ELD';
+    //const stopPlace = 'Prinsens gate';
 
     try {
+      /*
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await DepartureSearchPage.searchFrom.click();
       await SearchPage.setSearchLocation(placeSearch);
+       */
       await DepartureSearchPage.chooseStopPlace(stopPlace);
 
       // Stop place
