@@ -26,6 +26,6 @@ export function translation(
   return {
     [Language.Norwegian]: norwegian,
     [Language.English]: english,
-    [Language.Nynorsk]: nynorsk === '§' ? norwegian : nynorsk,
+    [Language.Nynorsk]: nynorsk,
   };
 }

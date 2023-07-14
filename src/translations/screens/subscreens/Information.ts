@@ -5,17 +5,20 @@ const bulletPoint = '\u2022';
 
 const InformationTexts = {
   ticketing: {
-    title: _('Billettkjøp', 'Ticketing'),
+    title: _('Billettkjøp', 'Ticketing', 'Billettkjøp'),
     texts: {
       part1Text: _(
         'I dag kan du kjøpe enkeltbillett til buss og trikk, men på sikt vil du finne alle billetter i appen.\n\n' +
           'Billettene gjelder kun på kollektivtransport som er en del av det offentlige kollektivtilbudet i Trøndelag fylke.',
         'Today you can purchase single tickets for bus and tram, and eventually you will find all tickets in the app.\n\n' +
           'The tickets only applies to public transport that is part of the public transport system in Trøndelag county.',
+        'I dag kan du kjøpe enkeltbillett til buss og trikk, men på sikt vil du finne alle billetter i appen.\n\n' +
+          'Billettane gjeld berre for kollektivtransport som er ein del av det offentlege kollektivtilbodet i Trøndelag fylke.',
       ),
       part2Heading: _(
         'Billetten må kjøpes før du går om bord.',
         'The ticket must be purchased before boarding',
+        'Billetten må kjøpast før du går om bord.',
       ),
       part2Text: _(
         'Du trenger ikke å vise frem billetten på grønne bybusser og trikk i Trondheimsområdet. På regionbuss og båt må du vise billetten til sjåfør eller billettør.\n\n' +
@@ -32,104 +35,137 @@ const InformationTexts = {
           'Travel in three zones: 3 hours and 30 minutes\n' +
           'Travel in four zones: 4 hours and 30 minutes\n\n' +
           'Please contact the driver if you need a transfer ticket.',
+        'Du treng ikkje å vise fram billetten på grøne bybussar og trikk i Trondheimsområdet. På regionbuss og båt må du vise billetten til sjåfør eller billettør.\n\n' +
+          'Billetten er gyldig for påstigning heilt til den utløper, altså så lenge nedteljinga varar og i sonen(e) du har kjøpt billett for.\n\n' +
+          'Reiser i éi sone: 1 time og 30 minutt\n' +
+          'Reiser i to soner: 2 timar og 30 minutt\n' +
+          'Reiser i tre soner: 3 timar og 30 minutt\n' +
+          'Reiser i fire soner: 4 timar og 30 minutt\n\n' +
+          'Ta kontakt med sjåføren om du har behov for ein overgangsbillett.',
       ),
       part3Heading: _(
         'Priser for enkeltbillett buss og trikk',
         'Prices for single ticket bus and tram',
+        'Prisar for einvegsbillett buss og trikk',
       ),
       part3Table: {
-        row1Label: _('Antall soner du reiser i', 'Number of zones traveled in'),
-        row1Value1: _('1', '1'),
-        row1Value2: _('2', '2'),
-        row1Value3: _('3', '3'),
-        row1Value4: _('4', '4'),
-        row2Label: _('Voksen', 'Adult'),
-        row2Value1: _('42', '42'),
-        row2Value2: _('84', '84'),
-        row2Value3: _('126', '126'),
-        row2Value4: _('168', '168'),
+        row1Label: _(
+          'Antall soner du reiser i',
+          'Number of zones traveled in',
+          'Tal soner du reiser i',
+        ),
+        row1Value1: _('1', '1', '1'),
+        row1Value2: _('2', '2', '2'),
+        row1Value3: _('3', '3', '3'),
+        row1Value4: _('4', '4', '4'),
+        row2Label: _('Voksen', 'Adult', 'Vaksen'),
+        row2Value1: _('42', '42', '42'),
+        row2Value2: _('84', '84', '84'),
+        row2Value3: _('126', '126', '126'),
+        row2Value4: _('168', '168', '168'),
         row3Label: _(
           'Barn / Honnør / Militær / Sykkel',
           'Child / Senior / Military / Bicycle',
+          'Barn / Honnør / Militær / Sykkel',
         ),
-        row3Value1: _('21', '21'),
-        row3Value2: _('42', '42'),
-        row3Value3: _('63', '63'),
-        row3Value4: _('84', '84'),
-        row4Label: _('Student', 'Student'),
-        row4Value1: _('42', '42'),
-        row4Value2: _('84', '84'),
-        row4Value3: _('84', '84'),
-        row4Value4: _('84', '84'),
+        row3Value1: _('21', '21', '21'),
+        row3Value2: _('42', '42', '42'),
+        row3Value3: _('63', '63', '63'),
+        row3Value4: _('84', '84', '84'),
+        row4Label: _('Student', 'Student', 'Student'),
+        row4Value1: _('42', '42', '42'),
+        row4Value2: _('84', '84', '84'),
+        row4Value3: _('84', '84', '84'),
+        row4Value4: _('84', '84', '84'),
       },
       part3Text_1: _(
         'Kjøper du billett for sone A etter kl. 18 på hverdager eller hele lørdag, søndag og helligdager er den gyldig i tre timer.',
         'If you buy a ticket for zone A after 18 on weekdays or all of Saturday, Sunday and public holidays, it is valid for three hours.',
+        'Kjøper du billett for sone A etter kl. 18 på kvardagar eller heile laurdag, sundag og heilagdagar, er billetten gyldig i tre timar.',
       ),
       part3Text_2: _(
         'For å reise med sykkel kjøper du en barnebillett.',
         'To bring a bike, buy a child ticket.',
+        'For å reise med sykkel, kjøper du ein barnebillett.',
       ),
       part3Text_3: _(
         'Ved avinstallering av appen vil også billettene fjernes. Vi advarer derfor mot avinstallering når du har kjøpt billetter. Da vil du ikke kunne framvise gyldig billett.',
         'If you uninstall the app, the tickets will be removed. We recommend that you do not uninstall once you have purchased tickets. If you uninstall, you will not be able to present a valid ticket.',
+        'Ved avinstallering av appen vil billettane dine óg fjernast. Vi advarer difor mot avinstallering etter kjøp av billettar. Du vil då ikkje kunne vise fram gyldig billett.',
       ),
-      part4Heading: _('Billettrefusjon', 'Ticket refund'),
+      part4Heading: _('Billettrefusjon', 'Ticket refund', 'Billettrefusjon'),
       part4Link: {
-        text: _('Se betingelser for refusjon', 'See terms for ticket refund'),
+        text: _(
+          'Se betingelser for refusjon',
+          'See terms for ticket refund',
+          'Sjå betingelsar for refusjon',
+        ),
         url: _(
           'https://www.atb.no/billettrefusjon/',
           'https://www.atb.no/en/ticket-refund/',
+          'https://www.atb.no/billettrefusjon/',
         ),
       },
     },
   },
   payment: {},
   terms: {
-    title: _('Betingelser', 'Terms'),
+    title: _('Betingelser', 'Terms', 'Vilkår'),
     texts: {
       part1Text: _(
         'Det er passasjerens ansvar',
         'As a passenger you are responsible to',
+        'Det er passasjerens ansvar',
       ),
       part1Bullet1: _(
         `${bulletPoint} å ha tilstrekkelig nettdekning under kjøpsprosessen slik at kjøpet gjennomføres i sin helhet. Datatrafikk må være påslått i en kontrollsituasjon, slik at billetten og kontrollkode kan fremvises på forespørsel.`,
         `${bulletPoint} have sufficient internet connection while buying tickets and travel passes to ensure that the transactions can be fully completed. Mobile data must be enabled in case of inspection, so that the ticket and the reference code can be presented upon request.`,
+        `${bulletPoint} ha tilstrekkeleg nettdekning under kjøpsprosessen slik at kjøpet blir gjort i sin heilhet. Datatrafikk må vere påslått i ein kontroll-situasjon, slik at billetten og kontrollkode kan visast ved forespørsel.`,
       ),
       part1Bullet2: _(
         `${bulletPoint} å ha gyldig billett for reisen ved ombordstigning.`,
         `${bulletPoint} have a valid ticket upon boarding.`,
+        `${bulletPoint} ha gyldig billett for reisa ved ombordstigning.`,
       ),
       part1Bullet3: _(
         `${bulletPoint} at mobiletelefonen fungerer normalt, skjermen er leselig og har nok batterikapasitet så lenge reisen varer slik at gyldig billett kan fremvises. Dersom du ikke kan fremvise billett, vil det anses som å reise uten gyldig billett.`,
         `${bulletPoint} make sure the phone works properly, the screen is readable and the battery has enough power to present a valid ticket during the whole trip. If you cannot provide a valid ticket upon inspection, you will be considered as travelling without a ticket.`,
+        `${bulletPoint} at mobiltelefonen fungerer normalt, skjermen er leselig og har nok batterikapasitet så lenge reisa varer slik at gyldig billett kan visast. Dersom du ikkje kan visast billett, vil det ansast som å reise utan gyldig billett.`,
       ),
       part2Heading: _(
         'Det vil komme flere betalingsmåter',
         'More methods of payment will be available',
+        'Det vil kome fleire betalingsmåtar',
       ),
       part2Text: _(
         'AtBs transportvedtekter og takstregler gjelder til enhver tid under hele reisen',
-        'AtB’s transport regulations and fare and discount guidelines apply at all times during your trip.',
+        'AtBs transport regulations and fare and discount guidelines apply at all times during your trip.',
+        'AtB si transportvedtektar og takstreglar gjeld til ein kvar tid under heile reisa.',
       ),
       part2Link1: {
-        text: _('Transportvedtekter', 'Transport regulations'),
+        text: _(
+          'Transportvedtekter',
+          'Transport regulations',
+          'Transportvedtekter',
+        ),
         url: _(
           'https://www.atb.no/transportvedtekter/',
           'https://www.atb.no/en/transport-regulations/',
+          'https://www.atb.no/transportvedtekter/',
         ),
       },
       part2Link2: {
-        text: _('Takstregler', 'Fare and discount guidelines'),
+        text: _('Takstregler', 'Fare and discount guidelines', 'Takstreglar'),
         url: _(
           'https://www.atb.no/takstregler/',
           'https://www.atb.no/en/fare-and-discount-guidelines/',
+          'https://www.atb.no/takstreglar/',
         ),
       },
     },
   },
   inspection: {
-    title: _('Billettkontroll', 'Ticket inspection'),
+    title: _('Billettkontroll', 'Ticket inspection', 'Billettkontroll'),
     texts: {
       part1Text1: _(
         'Ved billettkontroll, åpne appen din og velg hovedmenyen «Billetter» nederst i appen. Velg fanen «Aktive». Her finner du din gyldige billett. Velg «Vis detaljer/kontroll». Du får nå opp informasjon om billetten og en barkode. Vis denne barkoden til kontrollør som vil scanne denne med eget utstyr for å kontrollere om billetten er gyldig.\n\n' +
@@ -138,39 +174,53 @@ const InformationTexts = {
         'During ticket inspections, open your app and select the main menu "Tickets" at the bottom of the app. Select the "Active" tab. Here you will find your valid ticket. Select "Show details / inspection". You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n\n' +
           'When traveling with a discounted ticket, always remember to bring valid proof of you being eligible for the discount.\n\n' +
           'Without a valid ticket, you need to pay an additional fee as described below:',
+        'Ved billettkontroll, opne appen din og velg hovudmenyen «Billetter» nedst i appen. Velg fanen «Aktive». Her finn du din gyldige billett. Velg «Vis detaljer/kontroll». Du får no opp informasjon om billetten og en barkode. Vis denne barkoden til kontrolløren som vil skanne denne med eige utstyr for å kontrollera om billetten er gyldig.\n\n' +
+          'Hugs at når du reiser med rabattert billett, må du kunne vise gyldig bevis som stadfestar rimelege grunnar og rett til rabatt.\n\n' +
+          'Utan gyldig billett må du ved billettkontroll betale gebyr etter følgjande satsar:',
       ),
       part1Bullet1: _(
         `${bulletPoint} Voksne: 1150 kroner eller 950 kroner ved betaling på stedet.`,
         `${bulletPoint} Adult: NOK 1150 or NOK 950 for on-site payment`,
+        `${bulletPoint} Vaksne: 1150 kroner eller 950 kroner ved betaling på staden.`,
       ),
       part1Bullet2: _(
         `${bulletPoint} Mindreårige som er fylt 15 år: 900 kroner uansett oppgjørsform.`,
         `${bulletPoint} Minors over 15 years: NOK 900 regardless of payment method`,
+        `${bulletPoint} Mindreårige som er fylt 15 år: 900 kroner uavhengig av oppgjerform.`,
       ),
       part1Bullet3: _(
         `${bulletPoint} Misbruk eller forfalsking av billett: 2000 kroner, og billetten blir inndratt. Dersom du forfalsker en billett, vil du også bli politianmeldt.`,
         `${bulletPoint} Travelling with a false or counterfeit ticket: NOK 2000. Passengers traveling with false tickets will be reported to the police.`,
+        `${bulletPoint} Misbruk eller forfalsking av billett: 2000 kroner, og billetten blir inndratt. Om du forfalskar ein billett, vil du óg bli melden til politiet.`,
       ),
       part1Text2: _(
         'Manglende rabattbevis: Tilleggsavgift på grunn av manglende rabattbevis under billettkontroll kan reduseres til kr 150,- dersom gyldig rabattbevis, ID og gebyr fremvises innen sju (7) dager hos AtB kundesenter.',
         'A fine due to lack of proof of your entitlement to a discount during ticket inspection may be reduced to NOK 150, - if you present valid proof, ID and fee at AtB service center within seven (7) days.',
+        'Manglande rabattbevis: Tilleggsavgift på grunn av manglande rabattbevis under billettkontroll kan reduseres til kr 150,- dersom gyldig rabattbevis, ID og gebyr framvisast innen sju (7) dager hos AtB kundesenter.',
       ),
       part1Text3: _(
         'AtBs transportvedtekter og takstregler gjelder til enhver tid under hele reisen',
-        'AtB’s transport regulations and fare and discount guidelines apply at all times during your trip.',
+        'AtBs transport regulations and fare and discount guidelines apply at all times during your trip.',
+        'AtBs transportvedtekter og takstregler gjeld til eikvar tid under heile reisa',
       ),
       part1Link1: {
-        text: _('Transportvedtekter', 'Transport regulations'),
+        text: _(
+          'Transportvedtekter',
+          'Transport regulations',
+          'Transportvedtekter',
+        ),
         url: _(
           'https://www.atb.no/transportvedtekter/',
           'https://www.atb.no/en/transport-regulations/',
+          'https://www.atb.no/transportvedtekter/',
         ),
       },
       part1Link2: {
-        text: _('Takstregler', 'Fare and discount guidelines'),
+        text: _('Takstregler', 'Fare and discount guidelines', 'Takstreglar'),
         url: _(
           'https://www.atb.no/takstregler/',
           'https://www.atb.no/en/fare-and-discount-guidelines/',
+          'https://www.atb.no/takstregler/',
         ),
       },
     },
@@ -182,8 +232,20 @@ export default orgSpecificTranslations(InformationTexts, {
     payment: {
       texts: {
         part1Text: _(
-          'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen Reis eller hos Reis Nordland.',
+          'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen Reis eller hos Reis Nordland.',
           'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to log in to Vipps in the usual way. The Reis app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the Reis app or at Reis Nordland.',
+          'Alle transaksjoner utført med Vipps blir behandla av Vipps. Om du har valt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir deretter beden om å logge på Vipps på vanleg måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valde betalingsmetode, konto eller kort valt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysningar blir ikkje lagra i appen Reis eller hos Reis Nordland.',
+        ),
+      },
+    },
+  },
+  fram: {
+    payment: {
+      texts: {
+        part1Text: _(
+          'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen FRAM eller hos FRAM.',
+          'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to log in to Vipps in the usual way. The Reis app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the FRAM app or at FRAM.',
+          'Alle transaksjoner utført med Vipps blir behandla av Vipps. Om du har valt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir deretter beden om å logge på Vipps på vanleg måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valde betalingsmetode, konto eller kort valt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysningar blir ikkje lagra i appen FRAM eller hos FRAM.',
         ),
       },
     },

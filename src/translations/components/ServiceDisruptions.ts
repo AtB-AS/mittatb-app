@@ -3,17 +3,19 @@ import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const ServiceDisruptionsTexts = {
   header: {
-    title: _('Statusmeldinger', 'Status messages'),
+    title: _('Statusmeldinger', 'Status messages', 'Statusmeldingar'),
   },
   body: _(
     'Fullstendig oversikt over endringer, forsinkelser og avvik finner du på våre nettsider:',
     'You will find a complete overview of changes, delays, and deviations on our website.:',
+    'Fullstendig oversikt over endringar, forsinkelser og avvik finn du på våre nettsider:',
   ),
   button: {
-    text: _('atb.no/driftsavvik', 'atb.no/driftsavvik'),
+    text: _('atb.no/driftsavvik', 'atb.no/driftsavvik', 'atb.no/driftsavvik'),
     a11yHint: _(
       'Naviger til oversikt over driftsavvik i et nettleservindu',
       'Navigate to an overview of service disruptions in a browser window',
+      'Naviger til ei oversikt over driftsavvik i eit nettlesarvindauge',
     ),
   },
 };
@@ -23,18 +25,20 @@ export default orgSpecificTranslations(ServiceDisruptionsTexts, {
     body: _(
       'Oversikt over endringer, forsinkelser og avvik finner du på reisnordland.no:',
       'Get an overview of changes, delays and service disruptions at reisnordland.no (Norwegian only):',
+      'Oversyn over endringar, forsinkelser og avvik finn du på reisnordland.no:',
     ),
     button: {
-      text: _('Åpne i nettleser', 'Open in browser'),
+      text: _('Åpne i nettleser', 'Open in browser', 'Opne i nettlesar'),
     },
   },
   fram: {
     body: _(
       'Oversikt over endringer, forsinkelser og avvik finner du på frammr.no:',
       'Get an overview of changes, delays and service disruptions at en.frammr.no:',
+      'Oversyn over endringar, forsinkelser og avvik finn du på frammr.no:',
     ),
     button: {
-      text: _('Åpne i nettleser', 'Open in browser'),
+      text: _('Åpne i nettleser', 'Open in browser', 'Opne i nettlesar'),
     },
   },
 });

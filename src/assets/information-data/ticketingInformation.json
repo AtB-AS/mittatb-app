@@ -142,5 +142,77 @@
             "type": "link",
             "link": "https://www.atb.no/en/ticket-refund/"
         }
-    ]
+    ],
+    "nn": [
+        {
+            "text": "I dag kan du kjøpe enkelbilett til buss og trikk, men på sikt vil du finna alle bilettane i appen.\n",
+            "type": "text"
+        },
+        {
+            "text": "Biletten gjeld berre på kollektivtransport som er del av det offentlege kollektivtilbodet i Trøndelag fylke.",
+            "type": "text"
+        },
+        {
+            "text": "Biletten må kjøpast før du går om bord.",
+            "type": "heading"
+        },
+        {
+            "text": "Du treng ikkje vise biletten på grønne bybussar og trikk i Trondheimsområdet. På regionbuss og båt må du vise biletten til sjåfør eller billettør.\n",
+            "type": "text"
+        },
+        {
+            "text": "Biletten er gyldig for påstigning heilt til den utløper, altså så lenge nedtellinga varer og i sonane du har kjøpt bilett for.\n",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i ein sone: 1 time og 30 minutt",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i to soner: 2 timar og 30 minutt",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i tre soner: 3 timar og 30 minutt",
+            "type": "text"
+        },
+        {
+            "text": "Reiser i fire soner: 4 timar og 30 minutt\n",
+            "type": "text"
+        },
+        {
+            "text": "Ta kontakt med sjåføren om du har behov for ein overgangsbilett.",
+            "type": "text"
+        },
+        {
+            "text": "Prisar for enkelbilett buss og trikk",
+            "type": "heading"
+        },
+        {
+            "text": "Sjå prisar på atb.no\n",
+            "type": "link",
+            "link": "https://www.atb.no/priser/"
+        },
+        {
+            "text": "Kjøper du bilett for sone A etter kl. 18 på kvar dag eller heile laurdag, søndag og heilagdagar er den gyldig i tre timar.",
+            "type": "text"
+        },
+        {
+            "text": "\nFor å reise med sykkel kjøper du ein barnebilett.",
+            "type": "text"
+        },
+        {
+            "text": "\nVed avinstallering av appen vil billettane også fjernast. Vi åtvarar difor mot avinstallering når du har kjøpt bilettar. Då vil du ikkje kunne vise gyldig bilett.",
+            "type": "text"
+        },
+        {
+            "text": "Bilettrefusjon",
+            "type": "heading"
+        },
+        {
+            "text": "Sjå vilkår for refusjon",
+            "type": "link",
+            "link": "https://www.atb.no/billettrefusjon/"
+        }
+    ],
 }
