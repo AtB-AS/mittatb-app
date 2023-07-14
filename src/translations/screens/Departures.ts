@@ -30,7 +30,7 @@ const DeparturesTexts = {
     ),
   },
   dateNavigation: {
-    prevDay: _('Forrige dag', 'Previous day', 'Føregåande dag'),
+    prevDay: _('Forrige dag', 'Previous day', 'Førre dag'),
     nextDay: _('Neste dag', 'Next day', 'Neste dag'),
     a11yNextDayHint: _(
       'Aktiver for å gå til neste dag',
@@ -40,7 +40,7 @@ const DeparturesTexts = {
     a11yPreviousDayHint: _(
       'Aktiver for å gå til forrige dag',
       'Activate to go to previous day',
-      'Aktiver for å gå til føregåande dag',
+      'Aktiver for å gå til førre dag',
     ),
     today: _('I dag', 'Today', 'I dag'),
     a11yDisabled: _('Deaktivert', 'Disabled', 'Deaktivert'),
