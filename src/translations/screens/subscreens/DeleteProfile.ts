@@ -71,7 +71,7 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
       'Kan ikkje slette brukaren din mens du har aktive billettar. Kontakt FRAM Kundesenter for refusjon eller vent til billettane har utløpt.',
     ),
     header: {
-      title: _('Slett min bruker', 'Delete my user', 'Slett mi brukar'),
+      title: _('Slett min bruker', 'Delete my user', 'Slett min brukar'),
     },
     deleteInfo: _(
       'Når du sletter din bruker mister du tilgang på billett- og kjøpshistorikk, kvitteringer og dine innstillinger.',
@@ -99,7 +99,7 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
         }`,
       ),
     deleteConfirmation: {
-      title: _('Slett min bruker', 'Delete my user', 'Slett mi brukar'),
+      title: _('Slett min bruker', 'Delete my user', 'Slett min brukar'),
       message: _(
         'Dette vil slette brukeren din og alle dine lagrede data.',
         'This will erase you user and all your stored data.',
