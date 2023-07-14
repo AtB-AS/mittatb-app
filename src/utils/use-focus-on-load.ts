@@ -36,12 +36,20 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   return focusRef;
 }
 
-export const giveFocus = (focusRef: React.MutableRefObject<any>) => {
+export const giveFocus = (
+  focusRef: React.MutableRefObject<any>,
+  timeoutMilliseconds?: number,
+) => {
   if (focusRef.current) {
     InteractionManager.runAfterInteractions(() => {
-      const reactTag = findNodeHandle(focusRef.current);
-      if (reactTag) {
-        AccessibilityInfo.setAccessibilityFocus(reactTag);
+      const setFocus = () => {
+        const reactTag = findNodeHandle(focusRef.current);
+        reactTag && AccessibilityInfo.setAccessibilityFocus(reactTag);
+      };
+      if (timeoutMilliseconds) {
+        setTimeout(setFocus, timeoutMilliseconds);
+      } else {
+        setFocus();
       }
     });
   }

@@ -178,6 +178,11 @@ const PurchaseOverviewTexts = {
     ),
   },
   summary: {
+    destinations: (from?: string, to?: string) =>
+      _(
+        `Fra ${from || 'ukjent'}, til ${to || 'ukjent'}`,
+        `From ${from || 'unknown'}, to ${to || 'unknown'}`,
+      ),
     price: (priceString: string) =>
       _(
         `Totalt ${priceString} kr`,

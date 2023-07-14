@@ -38,7 +38,7 @@ const OnboardingTexts = {
   goodToKnow: {
     title: _('Greit å vite', 'Good to know', 'Greit å vite'),
     description: _(
-      'Når du gjør et reisesøk får du opp forslag til hvordan du kan reise. En korrespondanse som er garantert er merket med korrespondanse.',
+      'Når du gjør et reisesøk får du opp forslag til hvordan du kan reise. En korrespondanse som er garantert, er merket med korrespondanse.',
       'When you perform a travel search, you will receive suggestions on how to travel. A guaranteed connection is marked with correspondance.',
       'Når du gjer eit reisesøk får du opp forslag til korleis du kan reise. Ein korrespondanse som er garantert er merka med korrespondanse.',
     ),
@@ -47,7 +47,7 @@ const OnboardingTexts = {
   alsoGoodToKnow: {
     title: _('Også greit å vite', 'Also good to know', 'Også greit å vite'),
     description: _(
-      'Billetten du kjøper blir gyldig med en gang eller til avgangen du velger. Du kan kjøpe billett til mer enn 48 timer frem i tid. Husk at kjøpet av billetten ikke er en reservasjon på avgangen.',
+      'Billetten du kjøper blir gyldig med én gang eller til avgangen du velger. Du kan kjøpe billett til mer enn 48 timer frem i tid. Husk at kjøpet av billetten ikke er en reservasjon på avgangen.',
       'The ticket you purchase becomes valid immediately or for the departure time you choose. Therefore, you can buy a ticket for more than 48 hours in advance. Please note that purchasing the ticket does not reserve your spot on the departure.',
       'Billetten du kjøper blir gyldig med ein gong eller til avgangen du vel. Du kan kjøpe billett til meir enn 48 timer fram i tid. Husk at kjøpet av billetten ikkje er ein reservasjon på avgangen.',
     ),
@@ -107,7 +107,7 @@ export default orgSpecificTranslations(OnboardingTexts, {
       ),
       description: {
         part1: _(
-          'I appen kan du planlegge reisen, sjekke avganger og betale for billetten i en og samme app. Flere funksjoner blir lagt til jevnlig!',
+          'I appen kan du planlegge reisen, sjekke avganger og betale for billetten i én og samme app. Flere funksjoner blir lagt til jevnlig!',
           'In the app, you can plan your journey, check departures and pay for the ticket, all in the same app. More features are regularly added!',
           'I appen kan du planlegge reisa, sjekke avgangar og betale for billetten i ein og same app. Fleire funksjonar blir lagt til jamleg!',
         ),

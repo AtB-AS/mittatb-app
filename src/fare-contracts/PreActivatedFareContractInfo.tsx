@@ -67,6 +67,7 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           now={now}
           validFrom={validFrom}
           validTo={validTo}
+          fareProductType={preassignedFareProduct?.type}
         />
 
         <FareContractInfo

@@ -13,7 +13,7 @@ import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
-import {RefreshControl, View} from 'react-native';
+import {Platform, RefreshControl, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
@@ -152,7 +152,10 @@ export const NearbyStopPlacesScreenComponent = ({
   return (
     <FullScreenView
       refreshControl={
-        <RefreshControl refreshing={isLoading} onRefresh={refresh} />
+        <RefreshControl
+          refreshing={Platform.OS === 'ios' ? false : isLoading}
+          onRefresh={refresh}
+        />
       }
       headerProps={headerProps}
       parallaxContent={() => (

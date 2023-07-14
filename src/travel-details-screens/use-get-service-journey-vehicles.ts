@@ -19,6 +19,7 @@ export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
   >(fetchVehicles, {
     initialValue: undefined,
     pollingTimeInSeconds: 20,
+    pollOnFocus: true,
   });
 
   return {

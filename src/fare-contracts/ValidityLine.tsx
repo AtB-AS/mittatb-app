@@ -20,10 +20,14 @@ type Props =
   | {status: Exclude<ValidityStatus, 'valid'>};
 
 export const ValidityLine = (props: Props): ReactElement => {
+  const {status} = props;
+
   const {theme} = useTheme();
   const styles = useStyles();
 
-  switch (props.status) {
+  let lineColor = theme.static.background.background_accent_0.background;
+
+  switch (status) {
     case 'reserving':
     case 'approved':
       return (
@@ -31,16 +35,28 @@ export const ValidityLine = (props: Props): ReactElement => {
           backgroundColor={
             theme.static.background.background_accent_3.background
           }
+          lineColor={lineColor}
         />
       );
     case 'valid':
       const {now, validFrom, validTo, isInspectable, fareProductType} = props;
       const validityPercent = getValidityPercent(now, validFrom, validTo);
+
+      let backgroundColor = theme.static.status.valid.background;
+      if (
+        fareProductType == 'boat-single' ||
+        fareProductType == 'boat-period'
+      ) {
+        backgroundColor = theme.transport.transport_boat.primary.background;
+        lineColor = theme.static.background.background_2.background;
+      }
+
       // Carnet fare contracts are not inspectable, but we still want to show
       // the validity line
       return isInspectable || fareProductType === 'carnet' ? (
         <LineWithVerticalBars
-          backgroundColor={theme.static.status.valid.background}
+          backgroundColor={backgroundColor}
+          lineColor={lineColor}
           validityPercent={validityPercent}
         />
       ) : (
@@ -62,6 +78,7 @@ export const ValidityLine = (props: Props): ReactElement => {
       return (
         <LineWithVerticalBars
           backgroundColor={theme.static.background.background_0.background}
+          lineColor={lineColor}
         />
       );
   }
@@ -69,10 +86,12 @@ export const ValidityLine = (props: Props): ReactElement => {
 
 const LineWithVerticalBars = ({
   backgroundColor,
+  lineColor,
   validityPercent = 100,
   animate = true,
 }: {
   backgroundColor: string;
+  lineColor: string;
   validityPercent?: number;
   animate?: boolean;
 }) => {
@@ -92,7 +111,12 @@ const LineWithVerticalBars = ({
         ]}
       >
         {[...Array(numberOfVerticalLines)].map((e, i) => (
-          <VerticalLine key={i} offset={animatedVerticalLineOffset} index={i} />
+          <VerticalLine
+            key={i}
+            offset={animatedVerticalLineOffset}
+            index={i}
+            color={lineColor}
+          />
         ))}
       </View>
       <View
@@ -157,12 +181,12 @@ const getNumberOfVerticalLines = () =>
 const VerticalLine = ({
   offset,
   index,
+  color,
 }: {
   offset: Animated.Value;
   index: number;
+  color: string;
 }) => {
-  const {theme} = useTheme();
-
   return (
     <AnimatedLinearGradient
       style={[
@@ -182,12 +206,7 @@ const VerticalLine = ({
       useAngle={true}
       angle={120}
       locations={[0.25, 0.25, 0.75, 0.75]}
-      colors={[
-        'transparent',
-        theme.static.background.background_accent_0.background,
-        theme.static.background.background_accent_0.background,
-        'transparent',
-      ]}
+      colors={['transparent', color, color, 'transparent']}
       pointerEvents={'none'}
     />
   );

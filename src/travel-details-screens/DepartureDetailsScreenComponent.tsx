@@ -27,7 +27,6 @@ import {animateNextChange} from '@atb/utils/animation';
 import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {Time} from './components/Time';
@@ -72,11 +71,10 @@ export const DepartureDetailsScreenComponent = ({
   const styles = useStopsStyle();
   const {t, language} = useTranslation();
 
-  const isFocused = useIsFocused();
   const [
     {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
-  ] = useDepartureData(activeItem, 20, !isFocused);
+  ] = useDepartureData(activeItem, 20);
 
   const mapData = useMapData(
     activeItem.serviceJourneyId,

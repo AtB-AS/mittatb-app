@@ -1,3 +1,4 @@
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 import {translation as _} from '../../commons';
 
 const AnonymousPurchases = {
@@ -95,4 +96,35 @@ const AnonymousPurchases = {
   ),
 };
 
-export default AnonymousPurchases;
+export default orgSpecificTranslations(AnonymousPurchases, {
+  fram: {
+    consequences: {
+      title: _(
+        'Når du kjøper uten å logge inn...',
+        'When you buy without signing in...',
+      ),
+      messages: [
+        _(
+          'mister du tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon',
+          'you lose access to previous tickets if you change phones',
+        ),
+        _(
+          'har du tilgang på kvitteringer etter kjøp i en begrenset periode',
+          'you only have access to receipts for a limited time',
+        ),
+        _(
+          'har du selv ansvar for å ta vare på ordre-ID hvis du skulle ha behov for hjelp angående en billett du har kjøpt',
+          'you must save the order ID if you need help regarding a ticket purchase',
+        ),
+      ],
+      button: {
+        accept: {
+          label: _(
+            'Jeg vil forsette uten å logge inn',
+            'I want to continue without signing in',
+          ),
+        },
+      },
+    },
+  },
+});
