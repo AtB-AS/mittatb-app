@@ -54,7 +54,7 @@ const LocationSearchTexts = {
       ),
     },
     category: {
-      bus: _('Bussholdeplass', 'Bus stop', 'Bussholdeplass'),
+      bus: _('Bussholdeplass', 'Bus stop', 'Busshaldeplass'),
       tram: _('Trikkeholdeplass', 'Tram stop', 'Trikkehaldeplass'),
       rail: _('Togstasjon', 'Train station', 'Togstasjon'),
       airport: _('Flyplass', 'Airport', 'Flyplass'),
@@ -72,7 +72,7 @@ const LocationSearchTexts = {
     defaultError: _(
       'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
       'Oops - our search engine failed. Please try again 🤞',
-      `Oops - det oppstod ein feil med søket. Vennlegst prøv igjen 🤞`,
+      `Oops - det oppstod ein feil med søket. Ver venleg og prøv igjen 🤞`,
     ),
     emptyResult: _(
       'Fant ingen søkeresultat',

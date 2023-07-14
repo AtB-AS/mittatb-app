@@ -6,7 +6,7 @@ const MobileTokenOnboardingTexts = {
     heading: _(
       'En mer fleksibel reisehverdag',
       'More flexibility',
-      'En meir fleksibel reisekvardag',
+      'Ein meir fleksibel reisekvardag',
     ),
     description: _(
       'Du velger selv hvordan du vil bruke og vise frem billetten din.',
@@ -49,9 +49,9 @@ const MobileTokenOnboardingTexts = {
     description: _(
       'Du kan alltid bytte til en mobil ved å logge inn og gå til **Min profil**.',
       'You can always switch to a phone by logging in, and heading over to **My profile**.',
-      'Du kan alltid bytte til ein mobil ved å logge inn og gå til **Min profil**.',
+      'Du kan alltid byte til ein mobil ved å logge inn og gå til **Min profil**.',
     ),
-    button: _('Bytt til mobil', 'Switch to phone', 'Bytt til mobil'),
+    button: _('Bytt til mobil', 'Switch to phone', 'Byt til mobil'),
     reminder: _(
       'Ta med deg t:kortet når du er ute og reiser.',
       'Remember to bring your t:card while travelling.',
@@ -67,12 +67,12 @@ const MobileTokenOnboardingTexts = {
     description: _(
       'Du kan alltid bytte til t:kort eller en annen mobil ved logge inn og gå til **Min profil**.',
       'You can always switch to a t:card or a different phone by logging in, and heading over to **My profile**.',
-      'Du kan alltid bytte til t:kort eller ein annan mobil ved logge inn og gå til **Min profil**.',
+      'Du kan alltid byte til t:kort eller ein annan mobil ved logge inn og gå til **Min profil**.',
     ),
     button: _(
       'Bytt til t:kort eller annen mobil',
       'Switch to t:card or phone',
-      'Bytt til t:kort eller annan mobil',
+      'Byt til t:kort eller annan mobil',
     ),
     reminder: _(
       'Ta med deg mobilen når du er ute og reiser.',
@@ -125,7 +125,7 @@ const MobileTokenOnboardingTexts = {
       button: _(
         'Bytt til en annen mobil',
         'Switch to a different phone',
-        'Bytt til ein annan mobil',
+        'Byt til ein annan mobil',
       ),
     },
     error: {
@@ -187,7 +187,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       description: _(
         'Vi får ikke knyttet et reisekort eller en mobil til profilen din. Sjekk at du har tilgang på nett.\n\nHvis du ikke er på nett, vil appen prøve på nytt når du er koblet på igjen.\n\nTa kontakt med Reis Nordland kundeservice om problemet vedvarer.',
         "We can't connect a travel card or phone to your profile. Check your internet connection.\n\nIf you are not online, the app will try again when you are connected.\n\nIf the problem persists, please contact Reis Nordland customer service.",
-        'Vi får ikkje knytt til eit reisekort eller ein mobil til profilen din. Sjekk om du har tilgang til internett. Hvis du ikkje er på nett, vil appen prøve på nytt når du blir kobla opp igjen.\n\nKontakt kundeservice hjå Reis Nordland dersom problemet held fram.',
+        'Vi får ikkje knytt eit reisekort eller ein mobil til profilen din. Sjekk om du har tilgang til internett. Hvis du ikkje er på nett, vil appen prøve på nytt når du blir kobla opp igjen.\n\nKontakt kundeservice hjå Reis Nordland dersom problemet held fram.',
       ),
     },
     withoutTravelcard: {
@@ -269,7 +269,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
       button: _(
         'Bytt til reisekort eller annen mobil',
         'Switch to travel card or phone',
-        'Byt til reisekort eller anna mobil',
+        'Byt til reisekort eller annan mobil',
       ),
     },
     error: {
@@ -291,7 +291,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
         description: _(
           'Billetten din er trygt lagret på din konto i skyen. Dermed vil du aldri miste den — selv om du mister eller bytter mobil.',
           "Your ticket is safely stored on your account in the cloud. That way you won't lose your ticket even if you lose or switch phones.",
-          'Billetten din er trygt lagret på kontoen din i skya. Då vil du aldri miste den — sjølv om du mistar eller byter mobil.',
+          'Billetten din er trygt lagra på kontoen din i skya. Då vil du aldri miste den — sjølv om du mistar eller byter mobil.',
         ),
       },
       phone: {

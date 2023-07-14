@@ -110,7 +110,7 @@ const NearbyTexts = {
     networkError: _(
       'Hei, er du på nett? Vi kan ikke oppdatere avgangene siden nettforbindelsen din mangler eller er ustabil.',
       `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
-      'Hei, er du på nett? Vi kan ikkje oppdatera avgangene sidan tilkoplinga di til interett manglar eller er ustabil.',
+      'Hei, er du på nett? Vi kan ikkje oppdatere avgangene då tilkoplinga di til interett manglar eller er ustabil.',
     ),
     defaultFetchError: _(
       'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞',
@@ -279,7 +279,7 @@ const NearbyTexts = {
     ),
     description: (lineNumber: string, lineName: string) =>
       _(
-        `Vil du favorittmarkere kun '${lineNumber} ${lineName}' eller alle variasjonar av linje ${lineNumber}?`,
+        `Vil du favorittmarkere kun '${lineNumber} ${lineName}' eller alle variasjoner av linje ${lineNumber}?`,
         `Do you want to favourite mark only '${lineNumber} ${lineName}' or all variations of line ${lineNumber}?`,
         `Vil du kun merke '${lineNumber} ${lineName}' som favoritt eller alle variasjonane av linje ${lineNumber}?`,
       ),

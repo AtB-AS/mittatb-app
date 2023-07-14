@@ -40,7 +40,7 @@ const PurchaseOverviewTexts = {
     a11yHint: _(
       'Aktivér for å velge billettype',
       'Activate to select ticket type',
-      'Aktivér for å velje biletttype',
+      'Aktivér for å velje billettype',
     ),
   },
   warning: _(
@@ -57,23 +57,23 @@ const PurchaseOverviewTexts = {
     period: _(
       'Periodebilletter i sone A kan også brukes på tog i sone A.',
       'Periodic tickets in zone A can also be used on train in zone A.',
-      'Periodebilettar i sone A kan også brukast på tog i sone A.',
+      'Periodebillettar i sone A kan også brukast på tog i sone A.',
     ),
     hour24: _(
       '24-timersbillett i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
       '24 hour pass in zone A can also be used on train in zone A, but not on night buses.',
-      '24-timersbilett i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
+      '24-timersbillett i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
     ),
   },
   nfkNightBusPeriodNotice: _(
     '3- og 7-dagers billett inkluderer ikke nattbuss.',
     '3 and 7 day periodic tickets does not include night bus.',
-    '3- og 7-dagers bilett inkluderer ikkje nattbuss.',
+    '3- og 7-dagers billett inkluderer ikkje nattbuss.',
   ),
   nfkNightBusHour24Notice: _(
     '24-timersbilletten inkluderer ikke nattbuss.',
     'The 24 hour pass does not include night bus.',
-    '24-timersbiletten inkluderer ikkje nattbuss.',
+    '24-timersbilletten inkluderer ikkje nattbuss.',
   ),
   zones: {
     title: {
@@ -81,7 +81,7 @@ const PurchaseOverviewTexts = {
         text: _(
           'Velg holdeplass/sone (kun én)',
           'Select stop/zone (only one)',
-          'Vel haldeplass/sona (berre éin)',
+          'Vel haldeplass/sone (berre éin)',
         ),
         a11yLabel: _(
           'Velg holdeplass eller sone (kun én)',
@@ -121,11 +121,11 @@ const PurchaseOverviewTexts = {
     ),
   },
   productSelection: {
-    title: _('Velg billett', 'Select a ticket', 'Vel bilett'),
+    title: _('Velg billett', 'Select a ticket', 'Vel billett'),
     a11yTitle: _(
       'Aktiver for å velge billett',
       'Activate to select ticket',
-      'Aktivér for å velje bilett',
+      'Aktivér for å velje billett',
     ),
   },
   travellerSelection: {
@@ -209,7 +209,7 @@ const PurchaseOverviewTexts = {
     description: _(
       'Enkeltbillett voksen har rabatt i Sone A basert på antall kjøp de siste 14 dagene når du er med i pilot for Fleksibel billett.',
       "Adult single tickets get discounts in zone A based on the number of purchases in the last 14 days when you're participating in the Flexible ticket pilot.",
-      'Enkeltbillett voksen har rabatt i Sone A basert på talet på kjøp dei siste 14 dagane når du er med på prøveordninga for Fleksibel billett.',
+      'Enkeltbillett vaksen har rabatt i Sone A basert på talet på kjøp dei siste 14 dagane når du er med på prøveordninga for Fleksibel billett.',
     ),
     per: (userProfileName: string) =>
       _(

@@ -18,12 +18,12 @@ const SelectTravelTokenTexts = {
     changeTokenButton: _(
       'Bytt mellom t:kort / mobil',
       'Switch between t:card / phone',
-      'Bytt mellom t:kort / mobil',
+      'Byt mellom t:kort / mobil',
     ),
     changeTokenWithoutTravelcardButton: _(
       'Bytt mellom mobiler',
       'Switch between phones',
-      'Bytt mellom mobilar',
+      'Byt mellom mobilar',
     ),
     toggleCountLimitInfo: (
       remainingToggleCount: number,
@@ -99,7 +99,7 @@ const SelectTravelTokenTexts = {
         answer: _(
           `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
           `It is not possible to log into the app with e-mail as of today. You can continue to use your t:card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
-          `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsetje å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettene ikkje vil bli overført til den nye brukarprofilen. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil lage ein ny brukarprofil i appen.`,
+          `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsetje å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukarprofilen. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil lage ein ny brukarprofil i appen.`,
         ),
       },
       {
@@ -161,7 +161,7 @@ const SelectTravelTokenTexts = {
         answer: _(
           `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
           `It is not possible to log into the app with e-mail as of today. You can continue to use your t:card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
-          `Det er ikkje mogleg å logge inn i appen med e-post per i dag. Du kan halde fram med å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at bilettane ikkje vil verte overførte til den nye brukarprofilen din. Du kan kontakte kundesenteret vedrørande refusjon viss du likevel vil lage ein ny brukarprofil i appen.`,
+          `Det er ikkje mogleg å logge inn i appen med e-post per i dag. Du kan halde fram med å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukarprofilen din. Du kan kontakte kundesenteret vedrørande refusjon viss du likevel vil lage ein ny brukarprofil i appen.`,
         ),
       },
       {
@@ -187,7 +187,7 @@ const SelectTravelTokenTexts = {
         _(
           `Du kan bytte inntil ${toggleMaxLimit} ganger i måneden. Du får nye bytter den 1. hver måned. Merk at byttet må være fullført før du går om bord og du kan ikke bytte mens du reiser.`,
           `You can switch up to ${toggleMaxLimit} times a month. You get new switches on the 1st of every month. Note that the switch must be completed before boarding and you can not switch while travelling.`,
-          `Du kan bytte inntil ${toggleMaxLimit} ganger i månaden. Du får nye bytter den 1. kvar månad. Merk at bytet må vere fullført før du går om bord og du kan ikkje bytte mens du reiser.`,
+          `Du kan bytte inntil ${toggleMaxLimit} gongar i månaden. Du får nye bytter den 1. kvar månad. Merk at bytet må vere fullført før du går om bord og at du kan ikkje bytte mens du reiser.`,
         ),
     },
   },
@@ -195,12 +195,12 @@ const SelectTravelTokenTexts = {
     title: _(
       'Bytt mellom t:kort / mobil',
       'Switch between t:card / phone',
-      `Bytt mellom t:kort / mobil`,
+      `Byt mellom t:kort / mobil`,
     ),
     titleWithoutTravelcard: _(
       'Bytt mellom mobiler',
       'Switch between phones',
-      `Bytt mellom mobiltelefonar`,
+      `Byt mellom mobiltelefonar`,
     ),
     radioBox: {
       tCard: {
@@ -294,7 +294,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
       changeTokenButton: _(
         'Bytt mellom reisekort / mobil',
         'Switch between travel card / phone',
-        'Bytt mellom reisekort / mobil',
+        'Byt mellom reisekort / mobil',
       ),
       faqs: [
         {
@@ -416,7 +416,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
           answer: _(
             'Billetten din ligger trygt lagret i Min bruker. Velg å bruke billetten på en annen mobil eller reisekort.',
             'Your ticket is safely stored in My user. Switch to use the ticket on another mobile phone or travel card.',
-            'Billetten din ligg trygt lagret i Min brukar. Vel å bruke billetten på ein anna mobil eller eit anna reisekort.',
+            'Billetten din ligg trygt lagra i Min brukar. Vel å bruke billetten på ein annan mobil eller eit anna reisekort.',
           ),
         },
         {
@@ -514,7 +514,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
           answer: _(
             `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny bruker i appen.`,
             `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact customer service regarding a refund if you still want to create a new user in the app.`,
-            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ei ny brukarprofil med mobilnummer som innlogging. Merk at billettene ikkje vil verte overførte til den nye brukaren. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil opprette ein ny brukar i appen.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukaren. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil opprette ein ny brukar i appen.`,
           ),
         },
         {

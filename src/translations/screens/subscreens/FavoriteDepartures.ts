@@ -1,7 +1,7 @@
 import {translation as _} from '../../commons';
 const FavoriteDeparturesTexts = {
   header: {
-    title: _('Favorittavganger', 'Favourite departures', 'Favorittavgongar'),
+    title: _('Favorittavganger', 'Favourite departures', 'Favorittavgangar'),
   },
   favoriteItemDelete: {
     a11yHint: _(
@@ -27,7 +27,7 @@ const FavoriteDeparturesTexts = {
     confirmWarning: _(
       'Sikker på at du vil fjerne favorittavgang?',
       'Sure you want to delete this favourite?',
-      'Er du sikker på at du vil fjerne favorittavgong?',
+      'Sikker på at du vil fjerne favorittavgang?',
     ),
     cancel: _('Avbryt', 'Cancel', 'Avbryt'),
     delete: _('Slett', 'Delete', 'Slett'),

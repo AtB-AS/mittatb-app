@@ -169,7 +169,7 @@ const ProfileTexts = {
           label: _('Billettkjøp', 'Ticketing', 'Billettkjøp'),
         },
         terms: {
-          label: _('Betingelser', 'Terms', 'Betingelsar'),
+          label: _('Betingelser', 'Terms', 'Vilkår'),
         },
         inspection: {
           label: _('Billettkontroll', 'Ticket inspection', 'Billettkontroll'),

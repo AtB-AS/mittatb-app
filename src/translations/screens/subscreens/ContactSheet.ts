@@ -25,7 +25,7 @@ const ContactSheetTexts = {
     body: _(
       'Vil du foreslå forbedringer til appen?',
       'Do you have suggestions on how we can improve the app?',
-      'Ynskjer du å kome med forslag til forbetringar?',
+      'Vil du foreslå forbetringar til appen?',
     ),
     button: _(
       'Forbedre appen (åpnes i nettleser)',
@@ -35,20 +35,20 @@ const ContactSheetTexts = {
     a11yHint: _(
       'Aktivér for å foreslå forbedringer, åpner side i nettleser',
       'Activate to suggest improvements, opens page in browser',
-      'Trykk for å kome med forslag til forbetringar, åpner side i nettlesar',
+      'Trykk for å foreslå forbetringar, opnar side i nettlesar',
     ),
   },
   customer_feedback: {
     body: _(
       'Vil du foreslå forbedringer eller rapportere feil i appen?',
       'Would you like to suggest improvements or report errors in the app?',
-      'Ynskjer du å kome med forslag til forbetringar eller rapportere feil?',
+      'Vil du foreslå forbetringar eller rapportere feil i appen?',
     ),
     button: _('Forbedre appen', 'Improve the app', 'Forbetre appen'),
     a11yHint: _(
       'Aktivér for å foreslå forbedringer',
       'Activate to suggest improvements',
-      'Trykk for å kome med forslag til forbetringar',
+      'Aktivér for å foreslå forbetringar',
     ),
   },
 };
@@ -70,7 +70,7 @@ export default orgSpecificTranslations(ContactSheetTexts, {
       button: _(
         'Kontakt FRAM Kundesenter',
         'Contact FRAM Customer Centre',
-        'Kontakt FRAM kundesenter',
+        'Kontakt FRAM Kundesenter',
       ),
     },
   },

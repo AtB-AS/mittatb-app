@@ -47,7 +47,7 @@ const TripSearchTexts = {
       MissingLocation: _(
         'Fyll inn begge felter for å utføre et reisesøk',
         'Fill in both fields to perform a travel search',
-        'Fyll ut begge felt for å utføre eit reisesøk',
+        'Fyll ut begge felta for å utføre eit reisesøk',
       ),
     },
   },
@@ -140,7 +140,7 @@ const TripSearchTexts = {
     fetchingMore: _(
       'Søker etter flere reiseforslag',
       'Loading more results',
-      'Søker etter flere reiseforslag',
+      'Søker etter fleire reiseforslag',
     ),
     unableToFetchMore: _(
       'Finner ikke flere reiseforslag. Forsøk å endre dato og søketidspunkt',
@@ -156,7 +156,7 @@ const TripSearchTexts = {
       generic: _(
         'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
         'Woops – our search engine failed. Please try again 🤞',
-        'Oops - det skjedde ein feil med søket. Ver venleg å prøv igjen 🤞',
+        'Oops - det skjedde ein feil med søket. Ver venleg og prøv igjen 🤞',
       ),
     },
 
@@ -338,14 +338,14 @@ const TripSearchTexts = {
       part2: _(
         'Velg hvilke transportmiddel du ønsker å reise med.',
         'Select the means of transport you want to use for your trip.',
-        'Velg kva transportmiddel du ønskjer å reise med.',
+        'Vel kva transportmiddel du ønskjer å reise med.',
       ),
     },
     button: _('Den er grei!', 'Sounds good!', 'Den er grei!'),
     a11yLabel: _(
       'Filter i reisesøk! Nå kan du bruke filter i reisesøk og få reiseforslag tilpasset dine behov. Velg hvilke transportmiddel du ønsker å reise med.',
       'Filters in travel search! You can now use filters in travel searches and get travel suggestions adapted to your needs. Select the means of transport you want to use for your trip.',
-      'Filter i reisesøk! No kan du bruke filter i reisesøk og få reiseforslag tilpassa dine behov. Velg kva transportmiddel du ønskjer å reise med.',
+      'Filter i reisesøk! No kan du bruke filter i reisesøk og få reiseforslag tilpassa dine behov. Vel kva transportmiddel du ønskjer å reise med.',
     ),
   },
   filters: {

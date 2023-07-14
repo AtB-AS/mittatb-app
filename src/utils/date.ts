@@ -268,7 +268,12 @@ export function formatToVerboseDateTime(
   date: Date | string,
   language: Language,
 ) {
-  const at = language === Language.English ? 'at' : 'klokken';
+  const at =
+    language === Language.English
+      ? 'at'
+      : Language.Nynorsk
+      ? 'klokka'
+      : 'klokken';
 
   const dateString = format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),

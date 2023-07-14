@@ -58,8 +58,8 @@ const RecentFareContractsTexts = {
   },
   ticketTypes: {
     carnet: _('Klippekort', 'Carnet', 'Klippekort'),
-    period: _('Periodebillett', 'Period ticket', 'Periodbillet'),
-    single: _('Enkeltbilett', 'Single ticket', 'Enkeltbillett'),
+    period: _('Periodebillett', 'Period ticket', 'Periodebillet'),
+    single: _('Enkeltbillett', 'Single ticket', 'Enkeltbillett'),
   },
 };
 export default RecentFareContractsTexts;

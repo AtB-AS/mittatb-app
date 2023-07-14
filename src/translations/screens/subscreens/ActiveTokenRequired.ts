@@ -9,7 +9,7 @@ const ActiveTokenRequiredTexts = {
   switchToMobile: _(
     'Bytt til mobil for å gjennomføre kjøpet.',
     'Switch to mobile to complete the purchase.',
-    'Bytt til mobil for å gjennomføre kjøpet.',
+    'Byt til mobil for å gjennomføre kjøpet.',
   ),
   actionMessage: _(
     'Denne handlingen vil flytte alle dine aktive billetter fra t:kort til mobil.',

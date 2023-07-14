@@ -45,7 +45,7 @@ const AddEditFavoriteTexts = {
       a11yHint: _(
         'Aktivér for å velge ikon for favoritten',
         'Activate to select favourite icon',
-        'Aktiver for å velja ein ikon for favoritten',
+        'Aktiver for å velje eit ikon for favoritten',
       ),
     },
   },
@@ -58,12 +58,12 @@ const AddEditFavoriteTexts = {
     notSelectedFromError: _(
       'Du må velge ein stad du vil ha som favoritt',
       'Please select a location for your favourite',
-      'Du må velja ein stad for din favoritt',
+      'Du må velje ein stad for din favoritt',
     ),
     geopositionWithoutNameError: _(
       'Du må velge eit namn om du vil bruke din noverande posisjon som favoritt',
       'Please select a name if you want use your current location for your favourite',
-      'Du må velja eit namn dersom du vil bruke noverande posisjon som favoritt',
+      'Du må velje eit namn dersom du vil bruke noverande posisjon som favoritt',
     ),
   },
   delete: {
@@ -90,7 +90,7 @@ const AddEditFavoriteTexts = {
       animals: _('Dyr og natur', 'Animals and nature', 'Dyr og natur'),
       food: _('Mat og drikke', 'Food and drinks', 'Mat og drikke'),
       activities: _('Aktivitetar', 'Activities', 'Aktivitetar'),
-      travel: _('Reise og stader', 'Travel and places', 'Reise og stader'),
+      travel: _('Reise og stader', 'Travel and places', 'Reise og stadar'),
       objects: _('Objekt', 'Objects', 'Objekt'),
       symbols: _('Symbol', 'Symbols', 'Symbol'),
     },

@@ -5,12 +5,12 @@ const TicketAssistantTexts = {
     title: _(
       'Velkommen til billettveilederen',
       'Welcome to the ticket assistant',
-      'Velkomen til billettrettleiaren',
+      'Velkommen til billettrettleiaren',
     ),
     titleA11yLabel: _(
       'Velkommen til billettveilederen',
       'Welcome to the ticket assistant',
-      'Velkomen til billettrettleiaren',
+      'Velkommen til billettrettleiaren',
     ),
     description: _(
       'Få hjelp til å velge billetten som passer deg.',
@@ -27,7 +27,7 @@ const TicketAssistantTexts = {
     a11yStartHint: _(
       'Aktiver for å starte billettveilederen',
       'Activate to start the ticket assistant',
-      'Aktiver for å starte billettvegleiaren',
+      'Aktiver for å starte billettrettleiaren',
     ),
   },
   closeButton: _('Lukk', 'Close', 'Lukk'),
@@ -266,7 +266,7 @@ const TicketAssistantTexts = {
     a11yDurationNoticeLabel: _(
       'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
       'NB: this guide only works for travel by bus and tram, not boat.',
-      'NB: denne veileiaren fungerer berre for reise med buss og trikk, ikkje båt. ',
+      'NB: denne rettleiaren fungerer berre for reise med buss og trikk, ikkje båt. ',
     ),
     singleTicketNotice: _(
       'Siden du ikke reiser så ofte, anbefaler vi deg å kjøpe enkeltbilletter.',

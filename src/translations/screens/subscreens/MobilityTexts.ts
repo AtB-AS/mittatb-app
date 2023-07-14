@@ -101,7 +101,7 @@ export const BicycleTexts = {
   loadingFailed: _(
     'Ops! Vi fant ikke denne sykkelstasjonen',
     "Ops! We couldn't find this bike station",
-    'Ops! Vi fant ikke denne sykkelstasjonen',
+    'Ops! Vi fann ikkje denne sykkelstasjonen',
   ),
 };
 

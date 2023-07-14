@@ -24,10 +24,10 @@ const FareContractTexts = {
       _(
         `Utløpt for ${duration} siden`,
         `Expired since ${duration}`,
-        `Utløpt for ${duration} sidan`,
+        `Utgått for ${duration} sidan`,
       ),
     expired: (dateTime: string) =>
-      _(`Utløpt ${dateTime}`, `Expired ${dateTime}`, `Utløpt ${dateTime}`),
+      _(`Utløpt ${dateTime}`, `Expired ${dateTime}`, `Utgått ${dateTime}`),
     refunded: _(`Refundert`, 'Refunded', `Refundert`),
     upcoming: (duration: string) =>
       _(
@@ -44,7 +44,7 @@ const FareContractTexts = {
       `Ingen aktive klipp`,
     ),
     uninspectable: (duration: string) =>
-      _(`Utløper ${duration}`, `Expires ${duration}`, `Utløper ${duration}`),
+      _(`Utløper ${duration}`, `Expires ${duration}`, `Går ut ${duration}`),
     durationDelimiter: _(' og ', ' and ', ' og '),
   },
   usedAccessValidityIcon: {
@@ -99,7 +99,7 @@ const FareContractTexts = {
         unnamedDevice: _(
           'Enhet uten navn',
           'Unnamed device',
-          'Eining uten navn',
+          'Eining utan namn',
         ),
         tCard: _(
           'Du bruker billetten på ditt t:kort. Husk å ta det med deg når du reiser.\nDu kan alltid bytte til en mobil ved å gå til **Min profil**.',
@@ -211,20 +211,20 @@ const FareContractTexts = {
     carnetWarning: _(
       'Vennligst bytt til t:kort for å kunne bruke dette klippekortet.',
       'Please switch to t:card to be able to use this punch card.',
-      'Ver venleg og bytt til t:kort for å kunne bruke dette klippekortet.',
+      'Ver venleg og byt til t:kort for å kunne bruke dette klippekortet.',
     ),
     anotherPhoneIsInspectableWarning: (deviceName: string) =>
       _(
         `Merk at billetter du kjøper nå vil være tilknyttet ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.`,
         `This ticket will be connected to ${deviceName}. If you would rather use tickets on this phone, you can switch to this device from **My profile**.`,
-        `Merk at billettar du kjøper no vil være tilknyttet ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.`,
+        `Merk at billettar du kjøper no vil være tilknytt ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det frå **Min profil**.`,
       ),
     tcardIsInspectableWarning: _(
       'Merk at billetter du kjøper nå vil være tilknyttet ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
       'This ticket will be connected to your t:card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
-      'Merk at billettar du kjøper no vil være tilknyttet ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
+      'Merk at billettar du kjøper no vil vere tilknytt ditt t:kort. Om du heller vil bruke billett på denne mobilen kan du endre det frå **Min profil**.',
     ),
-    unnamedDevice: _('Enhet uten navn', 'Unnamed device', 'Ukjent enhet'),
+    unnamedDevice: _('Enhet uten navn', 'Unnamed device', 'Ukjent eining'),
   },
   transportModes: {
     multipleTravelModes: _(
@@ -317,7 +317,7 @@ export default orgSpecificTranslations(FareContractTexts, {
       carnetWarning: _(
         'Vennligst bytt til reisekort for å kunne bruke dette klippekortet.',
         'Please switch to travel card to be able to use this punch card.',
-        'Vennligst byt til reisekort for å kunne bruke dette klippekortet.',
+        'Ver venleg og byt til reisekort for å kunne bruke dette klippekortet.',
       ),
       tcardIsInspectableWarning: _(
         'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
@@ -368,7 +368,7 @@ export default orgSpecificTranslations(FareContractTexts, {
       tcardIsInspectableWarning: _(
         'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min bruker**.',
         'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **My user**.',
-        'Merk at billettar du kjøper no vil vere knytt til ditt reisekort. Om du heller vil bruke billettar på denne mobilen, kan du bytte til denne eininga frå **Min brukar**.',
+        'Merk at billettar du kjøper no vil vere tilknytt ditt reisekort. Om du heller vil bruke billettar på denne mobilen, kan du bytte til denne eininga frå **Min brukar**.',
       ),
     },
   },

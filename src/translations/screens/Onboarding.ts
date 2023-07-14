@@ -6,7 +6,7 @@ const OnboardingTexts = {
     title: _(
       'Velkommen til appen AtB',
       'Welcome to the AtB app',
-      'Velkomme til appen AtB',
+      'Velkommen til appen AtB',
     ),
     titleA11yLabel: _(
       'Velkommen til appen AtB',
@@ -15,9 +15,9 @@ const OnboardingTexts = {
     ),
     description: {
       part1: _(
-        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også kjøpe billetter, alt i samme app. Flere tjenester og billettyper er også på vei!',
+        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også kjøpe billetter, alt i samme app. Flere tjenester og billettyper er på vei!',
         'Plan trips and check departure times throughout Trøndelag. You can also buy tickets, all in the same app. More services and ticket types are also on the way!',
-        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også kjøpe billetter, alt i same app. Fleire tenester og billettypar er også på veg!',
+        'Her kan du planlegge reiser og sjekke avgangstider i hele Trøndelag. Du kan også kjøpe billetter, alt i same app. Fleire tenester og billettypar er på veg!',
       ),
     },
     mainButton: _('Neste', 'Next', 'Neste'),
@@ -26,7 +26,7 @@ const OnboardingTexts = {
     title: _(
       'Bidra til å gjøre appen bedre',
       'Help us make the app better',
-      'Bidra til å gjøre appen betre',
+      'Bidra til å gjere appen betre',
     ),
     description: _(
       'Vi ønsker dine tilbakemeldinger for å gjøre appen bedre. Dette gjør du enklest i chatten i høyre hjørne. Chatten er anonym.',
@@ -109,7 +109,7 @@ export default orgSpecificTranslations(OnboardingTexts, {
         part1: _(
           'I appen kan du planlegge reisen, sjekke avganger og betale for billetten i én og samme app. Flere funksjoner blir lagt til jevnlig!',
           'In the app, you can plan your journey, check departures and pay for the ticket, all in the same app. More features are regularly added!',
-          'I appen kan du planlegge reisa, sjekke avgangar og betale for billetten i ein og same app. Fleire funksjonar blir lagt til jamleg!',
+          'I appen kan du planlegge reisa, sjekke avgangar og betale for billetten i ein og same app. Fleire funksjonar vert lagt til jamleg!',
         ),
       },
     },

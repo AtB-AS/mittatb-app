@@ -7,12 +7,12 @@ const FeedbackTextsInternal = {
       checked: _(
         'Alternativet er valgt. Aktivér for å fjerne markeringen på dette alternativet.',
         'This alternative is already selected. Activate to uncheck this alternative.',
-        'Alternativet er veld. Aktivér for å fjerne markeringen på alternativet.',
+        'Alternativet er valt. Aktivér for å fjerne markeringa på alternativet.',
       ),
       unchecked: _(
         'Alternativet er ikke valgt. Aktivér for å velge dette alternativet.',
         'This alternative is not selected. Activate to check this alternative.',
-        'Dette alternativet er ikkje veld. Aktivér for å velge dette alternativet.',
+        'Dette alternativet er ikkje valt. Aktivér for å velje dette alternativet.',
       ),
     },
   },

@@ -79,7 +79,7 @@ const TicketingTexts = {
       durationDelimiter: _(` og `, 'and', 'og'),
     },
     expired: {
-      a11yLabel: _('Utløpt billett', 'Expired ticket', 'Utløpt billett'),
+      a11yLabel: _('Utløpt billett', 'Expired ticket', 'Utgått billett'),
       text: (dateTime: string) =>
         _(`Kjøpt ${dateTime}`, `Purchased ${dateTime}`, `Kjøpt ${dateTime}`),
     },
@@ -131,7 +131,7 @@ const TicketingTexts = {
     reserving: _(
       'Prosesseres... ikke gyldig enda',
       'Processing... not yet valid',
-      'Prosesseres... ikkje gyldig enda',
+      'Prosesserer... ikkje gyldig enda',
     ),
     approved: _(
       'Betaling godkjent. Henter billett...',
@@ -232,13 +232,13 @@ const TicketingTexts = {
       'Refunded ticket',
       'Tilbakebetalt billett',
     ),
-    expired: _('Utløpt billett', 'Expired ticket', 'Utløpt billett'),
+    expired: _('Utløpt billett', 'Expired ticket', 'Utgått billett'),
     rejected: _('Avvist billett', 'Rejected ticket', 'Avvist billett'),
     upcoming: _('Kommende billett', 'Upcoming ticket', 'Kommende billett'),
     approved: _('Godkjent billett', 'Approved ticket', 'Godkjent billett'),
   },
   ticketAssistantTile: {
-    title: _('Billettveileder', 'Ticket assistant', 'Billettveileder'),
+    title: _('Billettveileder', 'Ticket assistant', 'Billettrettleiar'),
     description: _(
       'Få hjelp til å velge billetten som passer deg best.',
       'Get help choosing the ticket that suits you the best.',
@@ -258,7 +258,7 @@ const TicketingTexts = {
       'Tips og informasjon',
     ),
     a11yHint: _(
-      'Aktiver for å få tips og informasjon om biletter',
+      'Aktiver for å få tips og informasjon om billetter',
       'Activate to get tips and information about tickets',
       'Aktiver for å få tips og informasjon om billettar',
     ),

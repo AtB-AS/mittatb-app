@@ -8,7 +8,7 @@ const DeleteProfileTexts = {
   deleteInfo: _(
     'Når du sletter Min profil mister du tilgang på billett- og kjøpshistorikk, kvitteringer og dine innstillinger.',
     'When deleting My profile you will lose access to recent tickets, receipts and settings',
-    'Dersom du sletter Min profil vil du miste tilgang til bilett- og kjøpshistorikk, kvitteringar og innstillingane dine.',
+    'Dersom du sletter Min profil vil du miste tilgang til billett- og kjøpshistorikk, kvitteringar og innstillingane dine.',
   ),
   buttonA11ytext: (customerNumber: string | undefined) =>
     _(
@@ -33,11 +33,11 @@ const DeleteProfileTexts = {
   unableToDeleteWithFareContracts: _(
     'Kan ikke slette Min profil mens du har aktive billetter. Kontakt AtB kundeservice for refusjon eller vent til billettene har utløpt.',
     'Unable to delete My profile while you have active tickets. Please contact customer support to refund or wait until tickets expire.',
-    'Det er ikkje mogleg å slette Min profil mens du har aktive bilettar. Kontakt AtB kundeservice for refusjon eller vent til bilettane har gått ut.',
+    'Det er ikkje mogleg å slette Min profil mens du har aktive billettar. Kontakt AtB kundeservice for refusjon eller vent til billettane har gått ut.',
   ),
   customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
   deleteConfirmation: {
-    title: _('Slett Min profil', 'Delete My profile', 'Slett mi profil'),
+    title: _('Slett Min profil', 'Delete My profile', 'Slett Min Profil'),
     message: _(
       'Dette vil slette brukerprofilen din og alle dine lagrede data.',
       'This will erase you user profile and all your stored data.',
@@ -61,14 +61,14 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
     unableToDeleteWithFareContracts: _(
       'Kan ikke slette Min profil mens du har aktive billetter. Kontakt Reis Nordland kundeservice for refusjon eller vent til billettene har utløpt.',
       'Unable to delete My profile while you have active tickets. Please contact Reis Nordland customer support for refund or wait until tickets expire.',
-      'Kan ikkje slette Min profil medan du har aktive billettar. Kontakt Reis Nordland kundeservice for refusjon eller vent til billettane har utløpt.',
+      'Kan ikkje slette Min profil medan du har aktive billettar. Kontakt Reis Nordland kundeservice for refusjon eller vent til billettane har gått ut.',
     ),
   },
   fram: {
     unableToDeleteWithFareContracts: _(
       'Kan ikke slette din bruker mens du har aktive billetter. Kontakt FRAM Kundesenter for refusjon eller vent til billettene har utløpt.',
       'Unable to delete your user while you have active tickets. Please contact FRAM Customer Centre for refund or wait until tickets expire.',
-      'Kan ikkje slette brukaren din mens du har aktive billettar. Kontakt FRAM Kundesenter for refusjon eller vent til billettane har utløpt.',
+      'Kan ikkje slette brukaren din mens du har aktive billettar. Kontakt FRAM Kundesenter for refusjon eller vent til billettane har gått ut.',
     ),
     header: {
       title: _('Slett min bruker', 'Delete my user', 'Slett min brukar'),

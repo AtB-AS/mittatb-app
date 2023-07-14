@@ -16,7 +16,7 @@ const TariffZoneSearchTexts = {
     ),
   },
   zones: {
-    heading: _('Soner', 'Zones', 'Sonar'),
+    heading: _('Soner', 'Zones', 'Soner'),
     item: {
       a11yLabel: (zoneName: string) =>
         _(`Sone ${zoneName}`, `Zone ${zoneName}`, `Sone ${zoneName}`),

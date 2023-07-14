@@ -36,7 +36,7 @@ const InformationTexts = {
           'Travel in four zones: 4 hours and 30 minutes\n\n' +
           'Please contact the driver if you need a transfer ticket.',
         'Du treng ikkje å vise fram billetten på grøne bybussar og trikk i Trondheimsområdet. På regionbuss og båt må du vise billetten til sjåfør eller billettør.\n\n' +
-          'Billetten er gyldig for påstigning heilt til den utløper, altså så lenge nedteljinga varar og i sonen(e) du har kjøpt billett for.\n\n' +
+          'Billetten er gyldig for påstigning heilt til den går ut, altså så lenge nedteljinga varar og i sonen(e) du har kjøpt billett for.\n\n' +
           'Reiser i éi sone: 1 time og 30 minutt\n' +
           'Reiser i to soner: 2 timar og 30 minutt\n' +
           'Reiser i tre soner: 3 timar og 30 minutt\n' +
@@ -46,7 +46,7 @@ const InformationTexts = {
       part3Heading: _(
         'Priser for enkeltbillett buss og trikk',
         'Prices for single ticket bus and tram',
-        'Prisar for einvegsbillett buss og trikk',
+        'Prisar for enkeltbillett buss og trikk',
       ),
       part3Table: {
         row1Label: _(
@@ -98,7 +98,7 @@ const InformationTexts = {
         text: _(
           'Se betingelser for refusjon',
           'See terms for ticket refund',
-          'Sjå betingelsar for refusjon',
+          'Sjå vilkår for refusjon',
         ),
         url: _(
           'https://www.atb.no/billettrefusjon/',
@@ -120,7 +120,7 @@ const InformationTexts = {
       part1Bullet1: _(
         `${bulletPoint} å ha tilstrekkelig nettdekning under kjøpsprosessen slik at kjøpet gjennomføres i sin helhet. Datatrafikk må være påslått i en kontrollsituasjon, slik at billetten og kontrollkode kan fremvises på forespørsel.`,
         `${bulletPoint} have sufficient internet connection while buying tickets and travel passes to ensure that the transactions can be fully completed. Mobile data must be enabled in case of inspection, so that the ticket and the reference code can be presented upon request.`,
-        `${bulletPoint} ha tilstrekkeleg nettdekning under kjøpsprosessen slik at kjøpet blir gjort i sin heilhet. Datatrafikk må vere påslått i ein kontroll-situasjon, slik at billetten og kontrollkode kan visast ved forespørsel.`,
+        `${bulletPoint} ha tilstrekkeleg nettdekning under kjøpsprosessen slik at kjøpet blir fullstendig gjennomført. Datatrafikk må vere påslått i ein kontroll-situasjon, slik at billetten og kontrollkode kan visast på førespurnad.`,
       ),
       part1Bullet2: _(
         `${bulletPoint} å ha gyldig billett for reisen ved ombordstigning.`,
@@ -130,7 +130,7 @@ const InformationTexts = {
       part1Bullet3: _(
         `${bulletPoint} at mobiletelefonen fungerer normalt, skjermen er leselig og har nok batterikapasitet så lenge reisen varer slik at gyldig billett kan fremvises. Dersom du ikke kan fremvise billett, vil det anses som å reise uten gyldig billett.`,
         `${bulletPoint} make sure the phone works properly, the screen is readable and the battery has enough power to present a valid ticket during the whole trip. If you cannot provide a valid ticket upon inspection, you will be considered as travelling without a ticket.`,
-        `${bulletPoint} at mobiltelefonen fungerer normalt, skjermen er leselig og har nok batterikapasitet så lenge reisa varer slik at gyldig billett kan visast. Dersom du ikkje kan visast billett, vil det ansast som å reise utan gyldig billett.`,
+        `${bulletPoint} at mobiltelefonen fungerer normalt, skjermen er leselig og har nok batterikapasitet så lenge reisa varer slik at gyldig billett kan visast. Dersom du ikkje kan visast billett, vil det bli rekna som å reise utan gyldig billett.`,
       ),
       part2Heading: _(
         'Det vil komme flere betalingsmåter',
@@ -140,7 +140,7 @@ const InformationTexts = {
       part2Text: _(
         'AtBs transportvedtekter og takstregler gjelder til enhver tid under hele reisen',
         'AtBs transport regulations and fare and discount guidelines apply at all times during your trip.',
-        'AtB si transportvedtektar og takstreglar gjeld til ein kvar tid under heile reisa.',
+        'AtB sine transportvedtekter og takstreglar gjeld til ein kvar tid under heile reisa.',
       ),
       part2Link1: {
         text: _(
@@ -174,8 +174,8 @@ const InformationTexts = {
         'During ticket inspections, open your app and select the main menu "Tickets" at the bottom of the app. Select the "Active" tab. Here you will find your valid ticket. Select "Show details / inspection". You will now receive information about the ticket and a barcode. Show this barcode to the ticket inspector who will scan it with his own equipment to check if the ticket is valid.\n\n' +
           'When traveling with a discounted ticket, always remember to bring valid proof of you being eligible for the discount.\n\n' +
           'Without a valid ticket, you need to pay an additional fee as described below:',
-        'Ved billettkontroll, opne appen din og velg hovudmenyen «Billetter» nedst i appen. Velg fanen «Aktive». Her finn du din gyldige billett. Velg «Vis detaljer/kontroll». Du får no opp informasjon om billetten og en barkode. Vis denne barkoden til kontrolløren som vil skanne denne med eige utstyr for å kontrollera om billetten er gyldig.\n\n' +
-          'Hugs at når du reiser med rabattert billett, må du kunne vise gyldig bevis som stadfestar rimelege grunnar og rett til rabatt.\n\n' +
+        'Ved billettkontroll, opne appen din og velg hovudmenyen «Billettar» nederst i appen. Vel fana «Aktive». Her finn du din gyldige billett. Velg «Vis detaljar/kontroll». Du får no opp informasjon om billetten og ein barkode. Vis denne barkoden til kontrolløren som vil skanne denne med eige utstyr for å kontrollere om billetten er gyldig.\n\n' +
+          'Hugs at når du reiser med rabattert billett, må du kunne vise gyldig bevis som stadfestar rett til rabatt.\n\n' +
           'Utan gyldig billett må du ved billettkontroll betale gebyr etter følgjande satsar:',
       ),
       part1Bullet1: _(
@@ -196,7 +196,7 @@ const InformationTexts = {
       part1Text2: _(
         'Manglende rabattbevis: Tilleggsavgift på grunn av manglende rabattbevis under billettkontroll kan reduseres til kr 150,- dersom gyldig rabattbevis, ID og gebyr fremvises innen sju (7) dager hos AtB kundesenter.',
         'A fine due to lack of proof of your entitlement to a discount during ticket inspection may be reduced to NOK 150, - if you present valid proof, ID and fee at AtB service center within seven (7) days.',
-        'Manglande rabattbevis: Tilleggsavgift på grunn av manglande rabattbevis under billettkontroll kan reduseres til kr 150,- dersom gyldig rabattbevis, ID og gebyr framvisast innen sju (7) dager hos AtB kundesenter.',
+        'Manglande rabattbevis: Tilleggsavgift på grunn av manglande rabattbevis under billettkontroll kan reduserast til kr 150,- dersom gyldig rabattbevis, ID og gebyr framvisast innen sju (7) dager hos AtB kundesenter.',
       ),
       part1Text3: _(
         'AtBs transportvedtekter og takstregler gjelder til enhver tid under hele reisen',
@@ -234,7 +234,7 @@ export default orgSpecificTranslations(InformationTexts, {
         part1Text: _(
           'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen Reis eller hos Reis Nordland.',
           'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to log in to Vipps in the usual way. The Reis app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the Reis app or at Reis Nordland.',
-          'Alle transaksjoner utført med Vipps blir behandla av Vipps. Om du har valt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir deretter beden om å logge på Vipps på vanleg måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valde betalingsmetode, konto eller kort valt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysningar blir ikkje lagra i appen Reis eller hos Reis Nordland.',
+          'Alle transaksjonar utført med Vipps blir behandla av Vipps. Om du har valt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir deretter beden om å logge på Vipps på vanleg måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valde betalingsmetode, konto eller kort valt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysningar blir ikkje lagra i appen Reis eller hos Reis Nordland.',
         ),
       },
     },
@@ -245,7 +245,7 @@ export default orgSpecificTranslations(InformationTexts, {
         part1Text: _(
           'Alle transaksjoner utført med Vipps blir behandlet av Vipps. Har du valgt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir så bedt om å logge på Vipps på vanlig måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valgte betalingsmetode, konto eller kort valgt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysninger blir ikke lagret i appen FRAM eller hos FRAM.',
           'All transactions performed with Vipps are processed by Vipps. If you have selected Vipps as your default payment method, the Vipps app will open when you pay. You are then asked to log in to Vipps in the usual way. The Reis app will request access to Vipps, which you must answer yes to. Vipps will use your chosen payment method, account or card selected in the Vipps app. Information about your account, your cards or other personal information is not stored in the FRAM app or at FRAM.',
-          'Alle transaksjoner utført med Vipps blir behandla av Vipps. Om du har valt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir deretter beden om å logge på Vipps på vanleg måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valde betalingsmetode, konto eller kort valt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysningar blir ikkje lagra i appen FRAM eller hos FRAM.',
+          'Alle transaksjonar utført med Vipps blir behandla av Vipps. Om du har valt Vipps som standard betalingsmåte, vil Vipps-appen åpne seg når du skal betale. Du blir deretter beden om å logge på Vipps på vanleg måte. Appen Reis vil be om tilgang til Vipps, dette må du svare ja på. Vipps vil benytte din valde betalingsmetode, konto eller kort valt i Vipps-appen. Informasjon om din konto, dine kort eller andre personopplysningar blir ikkje lagra i appen FRAM eller hos FRAM.',
         ),
       },
     },

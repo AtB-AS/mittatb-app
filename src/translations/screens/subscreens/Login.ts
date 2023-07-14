@@ -35,7 +35,7 @@ const LoginTexts = {
     body: _(
       'Billetten kan **ikke** overføres til din profil og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
       'This ticket can **not** be transferred to your profile, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',
-      'Billetten kan **ikkje** overførast til din profil og vil slettast ved innlogging. Dersom du treng billetten, vent til den er utløpt **før** du loggar inn.',
+      'Billetten kan **ikkje** overførast til din profil og vil slettast ved innlogging. Dersom du treng billetten, vent til den er gått ut **før** du loggar inn.',
     ),
     laterButton: _('Logg inn senere', 'Log in later', 'Logg inn seinare'),
     continueButton: _(
@@ -190,7 +190,7 @@ export default orgSpecificTranslations(LoginTexts, {
       body: _(
         'Billetten kan **ikke** overføres til din bruker og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
         'This ticket can **not** be transferred to your user, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',
-        'Billetten kan **ikkje** overførast til din brukar, og vil slettast ved innlogging. Om du treng billetten ber vi deg vente til den er utløpt **før** du loggar inn.',
+        'Billetten kan **ikkje** overførast til din brukar, og vil slettast ved innlogging. Om du treng billetten ber vi deg vente til den er gått ut **før** du loggar inn.',
       ),
     },
     skipLoginWarning: {

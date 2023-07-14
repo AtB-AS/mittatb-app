@@ -1,7 +1,7 @@
 import {translation as _} from '../../commons';
 const FavoriteListTexts = {
   header: {
-    title: _('Favorittsteder', 'Favourite locations', 'Favorittstader'),
+    title: _('Favorittsteder', 'Favourite locations', 'Favorittstadar'),
   },
   noFavorites: _(
     'Du har ingen favorittsteder. Du kan legg til et nå ved å trykke på knappen under.',
