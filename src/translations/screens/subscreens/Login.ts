@@ -7,7 +7,7 @@ const LoginTexts = {
     selectLoginMethod: _(
       'Velg innloggingsmetode',
       'Select login method',
-      'Velg innloggingsmetode',
+      'Vel innloggingsmetode',
     ),
     or: _('Eller logg inn med', 'Or log in with', 'Eller logg inn med'),
     options: {
@@ -30,18 +30,18 @@ const LoginTexts = {
     title: _(
       'Vent litt, du har en gyldig billett',
       'Wait a sec – you have a valid ticket',
-      'Vent litt, du har en gyldig billett',
+      'Vent litt, du har ein gyldig billett',
     ),
     body: _(
       'Billetten kan **ikke** overføres til din profil og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
       'This ticket can **not** be transferred to your profile, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',
-      'Billetten kan **ikke** overføres til din profil og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
+      'Billetten kan **ikkje** overførast til din profil og vil slettast ved innlogging. Dersom du treng billetten, vent til den er utløpt **før** du loggar inn.',
     ),
-    laterButton: _('Logg inn senere', 'Log in later', 'Logg inn senere'),
+    laterButton: _('Logg inn senere', 'Log in later', 'Logg inn seinare'),
     continueButton: _(
       'Jeg vil logge inn likevel',
       'I want to log in anyway',
-      'Jeg vil logge inn likevel',
+      'Eg vil logge inn likevel',
     ),
   },
   onboarding: {
@@ -53,7 +53,7 @@ const LoginTexts = {
     description: _(
       'Denne billetten krever at du er innlogget for å kunne kjøpe.',
       'This ticket requires that you are logged in to purchase.',
-      'Denne billetten krever at du er innlogget for å kunne kjøpe.',
+      'Denne billetten krev at du er innlogga for å kunne kjøpe.',
     ),
     button: _(
       'Ta meg til innlogging',
@@ -63,7 +63,7 @@ const LoginTexts = {
     laterButton: _(
       'Jeg vil logge inn senere',
       'I want to log in later',
-      'Jeg vil logge inn senere',
+      'Eg vil logge inn seinare',
     ),
     carrotTitle: _(
       'Det er lurt å logge inn',
@@ -73,7 +73,7 @@ const LoginTexts = {
     carrotBody: _(
       'Da kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
       '...to store payment cards for later use. Soon, login will store personal preferences to your profile so that you can carry them with you when swapping phones.',
-      'Da kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
+      'Då kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finn dei igjen – sjølv ved byte av mobil.',
     ),
   },
   vipps: {
@@ -160,7 +160,7 @@ const LoginTexts = {
       unknown_error: _(
         'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
         'Whoops - something went wrong. Please try again 🤞',
-        'Oops - noko gjekk galt. Supert om du prøver på nytt 🤞',
+        'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
       ),
     },
   },
