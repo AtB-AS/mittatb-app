@@ -9,12 +9,12 @@ const AnonymousPurchases = {
       'Anonyme billettkjøp',
     ),
     message: _(
-      `Du er ikkje innlogga og det er dermed visse avgrensingar ved billettkjøp.`,
+      `Du er ikke innlogget og billettkjøp har dermed noen begrensninger.`,
       `You are not logged in and ticket purchases thus have some limitations.`,
       `Du er ikkje logga inn og det er difor visse avgrensingar ved billettkjøp.`,
     ),
     checkHere: _(
-      'Klikk her for å sjå',
+      'Klikk her for å se',
       'Click here to see!',
       'Klikk her for å sjå',
     ),
@@ -27,17 +27,17 @@ const AnonymousPurchases = {
     ),
     messages: [
       _(
-        'mistar du tilgangen til tidlegare kjøpte billettar om du byter eller mistar telefonen din',
+        'mister du tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon',
         'you lose access to previous tickets if you change phones',
         'mistar du tilgangen til tidlegare kjøpte billettar om du byter eller mistar telefonen din',
       ),
       _(
-        'har du tilgang på kvitteringar i ei avgrensa periode',
+        'har du tilgang på kvitteringer etter kjøp i en begrenset periode',
         'you only have access to receipts for a limited time',
         'har du tilgang på kvitteringar i ein avgrensa periode',
       ),
       _(
-        'har du sjølv ansvaret for å ta vare på ordre-ID om du treng hjelp vedrørande eit billettkjøp',
+        'har du selv ansvar for å ta vare på ordre-ID hvis du skulle ha behov for hjelp vedrørende et billettkjøp',
         'you must save the order ID if you need help regarding a ticket purchase',
         'har du sjølv ansvaret for å ta vare på ordre-ID om du treng hjelp vedrørande eit billettkjøp',
       ),
@@ -45,18 +45,18 @@ const AnonymousPurchases = {
     button: {
       accept: {
         label: _(
-          'Eg godtar avgrensingane',
+          'Jeg godtar begrensningene',
           'I accept the restrictions',
           'Eg godtar avgrensingane',
         ),
         a11yHint: _(
-          'Aktiver for å godta avgrensingane',
+          'Aktiver for å godta begrensningene',
           'Activate to accept the restrictions',
           'Aktiver for å godta avgrensingane',
         ),
       },
       login: {
-        label: _('Eg vil logge inn', 'I want to log in', 'Eg vil logge inn'),
+        label: _('jeg vil logge inn', 'I want to log in', 'Eg vil logge inn'),
         a11yHint: _(
           'Aktiver for å logge inn',
           'Activate to log in',
@@ -72,9 +72,9 @@ const AnonymousPurchases = {
         ),
       },
       stayLoggedIn: {
-        label: _('Forbli innlogga', 'Stay logged in', 'Forbli innlogga'),
+        label: _('Forbli innlogget', 'Stay logged in', 'Forbli innlogga'),
         a11yHint: _(
-          'Aktiver for å halde deg innlogga',
+          'Aktiver for å forbli innlogget',
           'Activate to stay logged in',
           'Aktiver for å halde deg innlogga',
         ),
@@ -90,7 +90,7 @@ const AnonymousPurchases = {
     },
   },
   unknown_error: _(
-    'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
+    'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
     'Whoops - something went wrong. Please try again ��',
     'Oi - noko gjekk gale. Prøv igjen 🤞',
   ),
