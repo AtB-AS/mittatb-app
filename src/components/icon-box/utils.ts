@@ -2,7 +2,6 @@ import {AnyMode, AnySubMode} from './types';
 import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {
   Bus,
-  Flexible,
   Tram,
   Train,
   Boat,
@@ -23,7 +22,7 @@ const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
 export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   switch (mode) {
     case 'flex':
-      return {svg: Flexible, name: 'Flexible'};
+      return {svg: Bus, name: 'Flexible'};
     case 'bus':
     case 'coach':
       return {svg: Bus, name: 'Bus'};

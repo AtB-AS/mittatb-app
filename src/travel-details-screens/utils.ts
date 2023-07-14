@@ -179,3 +179,100 @@ function someLegsAreByTrain(tripPattern: TripPattern): boolean {
 export function isLegFlexibleTransport(leg: Leg): boolean {
   return !!leg.line?.flexibleLineType;
 }
+
+export type BookingRequirement = {
+  requiresBooking: boolean;
+  requiresBookingUrgently: boolean;
+  isTooEarly?: boolean;
+  isTooLate?: boolean;
+};
+
+// should import from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';?
+// or maybe export from here instead?
+type TripPatternWithKey = TripPattern & {key: string};
+
+export type AvailableTripPattern = TripPatternWithKey & {
+  bookingRequirement: BookingRequirement;
+};
+
+function setTimezoneFromDate(dateToEdit: Date, dateWithSourceTimezone: Date) {
+  const timezoneDifferenceInMinutes =
+    dateWithSourceTimezone.getTimezoneOffset() - dateToEdit.getTimezoneOffset();
+  dateToEdit.setMinutes(dateToEdit.getMinutes() + timezoneDifferenceInMinutes);
+}
+
+function setDateFromDate(dateToEdit: Date, dateWithSourceDate: Date) {
+  dateToEdit.setFullYear(
+    dateWithSourceDate.getFullYear(),
+    dateWithSourceDate.getMonth(),
+    dateWithSourceDate.getDate(),
+  );
+}
+
+function getLatestBookingDate(
+  latestBookingTime: string, // e.g. '15:16:00'
+  expectedStartTime: string, // e.g. '2023-07-14T17:56:32+02:00'
+): Date {
+  const expectedStartDate = new Date(expectedStartTime);
+  let latestBookingDate = new Date(`1970-01-01T${latestBookingTime}Z`);
+
+  setTimezoneFromDate(latestBookingDate, expectedStartDate);
+  setDateFromDate(latestBookingDate, expectedStartDate);
+
+  if (latestBookingDate.getTime() > expectedStartDate.getTime()) {
+    latestBookingDate.setDate(latestBookingDate.getDate() - 1);
+  }
+
+  return latestBookingDate;
+}
+
+export function getAvailableTripPatterns(
+  tripPatterns: TripPatternWithKey[],
+  now: number, // change to hook and use useNow() in here instead?
+): AvailableTripPattern[] {
+  // todo: consider what if there are several flexibleTransportLegs?
+  const tripPatternsWithBookingRequirements = tripPatterns.map(
+    (tripPattern) => {
+      const firstFlexibleTransportLeg = tripPattern?.legs.find((leg) =>
+        isLegFlexibleTransport(leg),
+      );
+      const requiresBooking = !!firstFlexibleTransportLeg;
+
+      let requiresBookingUrgently = false;
+      let isTooEarly = false;
+      let isTooLate = false;
+
+      if (requiresBooking) {
+        const latestBookingDate = getLatestBookingDate(
+          firstFlexibleTransportLeg.bookingArrangements?.latestBookingTime,
+          firstFlexibleTransportLeg.expectedStartTime,
+        );
+
+        const timeDiffMilliSeconds = latestBookingDate.getTime() - now;
+
+        if (timeDiffMilliSeconds < 0) {
+          isTooLate = true; // currently assuming bookWhen == 'advanceAndDayOfTravel'
+        } else if (timeDiffMilliSeconds < 1 * 60 * 60 * 1000) {
+          requiresBookingUrgently = true;
+        } else if (timeDiffMilliSeconds > 7 * 24 * 60 * 60 * 1000) {
+          isTooEarly = true;
+        }
+      }
+
+      const bookingRequirement = {
+        requiresBooking,
+        requiresBookingUrgently,
+        isTooEarly,
+        isTooLate,
+      };
+      return {
+        ...tripPattern,
+        ...{bookingRequirement},
+      };
+    },
+  );
+
+  return tripPatternsWithBookingRequirements.filter(
+    (tpwbr) => !tpwbr.bookingRequirement.isTooLate,
+  );
+}

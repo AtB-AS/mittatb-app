@@ -144,7 +144,7 @@ const TripSearchTexts = {
         title: (mode: string, placeName: string) =>
           _(`${mode} fra ${placeName}`, `${mode} from ${placeName}`),
         flexTransportTitle: (publicCode: string) =>
-          _(`Henting med ${publicCode}`, `Pickup by ${publicCode}`),
+          _(`Henting med ${publicCode}`, `Pickup with ${publicCode}`),
         totalDuration: _('Reisetid', 'Trip duration'),
         time: (startTime: string, endTime: string) =>
           _(
@@ -182,6 +182,7 @@ const TripSearchTexts = {
           'Aktivér for å vise flere reisedetaljer',
           'Activate to show more trip details',
         ),
+        requiresBooking: _('Krever reservasjon', 'Requires booking'), // 'Booking required'?
       },
       journeySummary: {
         resultNumber: (number: number) =>
