@@ -152,12 +152,11 @@ function useGetHarbors(fromHarborId?: string) {
     setIsLoading(true);
     fetchHarbors()
       .then((harborsResult) => {
-        harborsResult?.push({name: 'hbbubub', id: 'nfoasklf'});
         setHarbors(harborsResult ?? []);
         setError(undefined);
       })
       .catch((e) => {
-        setHarbors([{name: 'hbbubub', id: 'nfoasklf'}]);
+        setError(e);
       })
       .finally(() => {
         setIsLoading(false);
