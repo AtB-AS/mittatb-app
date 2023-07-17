@@ -6,13 +6,13 @@ import React, {forwardRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {StopPlace} from '@atb/api/types/stopPlaces';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type StopPlaceSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
-  fromHarbor?: StopPlace;
-  toHarbor?: StopPlace;
+  fromHarbor?: StopPlaceFragment;
+  toHarbor?: StopPlaceFragment;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (params: Root_PurchaseHarborSearchScreenParams) => void;
   style?: StyleProp<ViewStyle>;
@@ -124,7 +124,7 @@ const HarborLabel = ({
   harbor,
   disabled = false,
 }: {
-  harbor?: StopPlace;
+  harbor?: StopPlaceFragment;
   disabled?: boolean;
 }) => {
   const harborName = harbor?.name;

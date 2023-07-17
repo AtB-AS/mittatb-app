@@ -26,9 +26,9 @@ import {
   getStopPlaceConnections,
   getStopPlacesByMode,
 } from '@atb/api/stop-places';
-import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -40,7 +40,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
 
-  const onSave = (selectedStopPlace: StopPlace) => {
+  const onSave = (selectedStopPlace: StopPlaceFragment) => {
     selectedStopPlace &&
       navigation.navigate({
         name: 'Root_PurchaseOverviewScreen',
@@ -58,11 +58,10 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
 
   const styles = useStyles();
   // capturing focus on mount and on press
-  const focusInput = () => setTimeout(() => inputRef.current?.focus(), 0);
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFocused) focusInput();
+    if (isFocused) setTimeout(() => inputRef.current?.focus(), 0);
   }, [isFocused]);
 
   const {harbors, isLoading, error} = useGetHarbors(fromHarbor?.id);
@@ -132,7 +131,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
 function useGetHarbors(fromHarborId?: string) {
   const [error, setError] = useState<ErrorType | undefined>(undefined);
   const [isLoading, setIsLoading] = useIsLoading(true);
-  const [harbors, setHarbors] = useState<StopPlaces | []>([]);
+  const [harbors, setHarbors] = useState<StopPlaceFragment[] | []>([]);
 
   const fetchHarbors = useCallback(() => {
     if (fromHarborId) {

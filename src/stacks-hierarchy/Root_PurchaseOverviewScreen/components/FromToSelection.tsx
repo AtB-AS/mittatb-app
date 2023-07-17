@@ -5,14 +5,14 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
-import {StopPlace} from '@atb/api/types/stopPlaces';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
-  fromHarbor?: StopPlace;
-  toHarbor?: StopPlace;
+  fromHarbor?: StopPlaceFragment;
+  toHarbor?: StopPlaceFragment;
   fromTariffZone?: TariffZoneWithMetadata;
   toTariffZone?: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;

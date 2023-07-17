@@ -165,14 +165,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             style={styles.selectionComponent}
             onSelect={(params) => {
               navigation.setParams({onFocusElement: undefined});
-              if ('toTariffZone' in params) {
-                navigation.push(
-                  'Root_PurchaseTariffZonesSearchByMapScreen',
-                  params,
-                );
-              } else {
-                navigation.push('Root_PurchaseHarborSearchScreen', params);
-              }
+              navigation.push(
+                zoneSelectionMode === 'multiple-stop-harbor'
+                  ? 'Root_PurchaseHarborSearchScreen'
+                  : 'Root_PurchaseTariffZonesSearchByMapScreen',
+                params,
+              );
             }}
             ref={fromToInputSectionItemRef}
           />

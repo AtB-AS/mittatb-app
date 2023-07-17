@@ -7,7 +7,6 @@ import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat} from '@atb/assets/svg/mono-icons/transportation';
-import {StopPlace, StopPlaces} from '@atb/api/types/stopPlaces';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import sortBy from 'lodash.sortby';
 import {GeoLocation} from '@atb/favorites';
@@ -15,10 +14,11 @@ import haversine from 'haversine-distance';
 import {MessageBox} from '@atb/components/message-box';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {TFunc} from '@leile/lobo-t';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type Props = {
-  harbors: StopPlaces;
-  onSelect: (l: StopPlace) => void;
+  harbors: StopPlaceFragment[];
+  onSelect: (l: StopPlaceFragment) => void;
   searchText?: string;
   fromHarborName?: string;
 };
@@ -92,7 +92,10 @@ export const HarborResults: React.FC<Props> = ({
   );
 };
 // sort by distance or alphabetically
-function sortHarbors(harbors: StopPlaces, location?: GeoLocation): StopPlaces {
+function sortHarbors(
+  harbors: StopPlaceFragment[],
+  location?: GeoLocation,
+): StopPlaceFragment[] {
   if (location) {
     return harbors
       ?.map((stopPlace) => {

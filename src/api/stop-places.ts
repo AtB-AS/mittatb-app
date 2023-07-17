@@ -7,20 +7,23 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {StopPlaces} from '@atb/api/types/stopPlaces';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export const getStopPlacesByMode = async (
   transportModes: TransportMode[],
   transportSubmodes?: TransportSubmode[],
   opts?: AxiosRequestConfig,
-): Promise<StopPlaces | undefined> => {
+): Promise<StopPlaceFragment[] | undefined> => {
   const url = '/bff/v2/stop-places/mode';
   const query = qs.stringify({
     authorities: AUTHORITY,
     transportModes,
     transportSubmodes,
   });
-  const result = await client.get<StopPlaces>(stringifyUrl(url, query), opts);
+  const result = await client.get<StopPlaceFragment[]>(
+    stringifyUrl(url, query),
+    opts,
+  );
 
   return result.data;
 };
@@ -28,13 +31,16 @@ export const getStopPlacesByMode = async (
 export const getStopPlaceConnections = async (
   fromStopPlaceId: string,
   opts?: AxiosRequestConfig,
-): Promise<StopPlaces | undefined> => {
+): Promise<StopPlaceFragment[] | undefined> => {
   const url = '/bff/v2/stop-places/connections';
   const query = qs.stringify({
     authorities: AUTHORITY,
     fromStopPlaceId,
   });
-  const result = await client.get<StopPlaces>(stringifyUrl(url, query), opts);
+  const result = await client.get<StopPlaceFragment[]>(
+    stringifyUrl(url, query),
+    opts,
+  );
 
   return result.data;
 };

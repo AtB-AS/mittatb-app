@@ -1,9 +1,9 @@
 import {FareProductTypeConfig} from '@atb/configuration';
-import {StopPlace} from '@atb/api/types/stopPlaces';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export type Root_PurchaseHarborSearchScreenParams = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct: PreassignedFareProduct;
-  fromHarbor?: StopPlace;
+  fromHarbor?: StopPlaceFragment;
 };
