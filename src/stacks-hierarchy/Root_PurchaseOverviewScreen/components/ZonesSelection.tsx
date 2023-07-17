@@ -42,9 +42,9 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
       toTariffZone,
       preassignedFareProduct,
       selectionMode,
-  onSelect,
-  style,
-}: ZonesSelectionProps,
+      onSelect,
+      style,
+    }: ZonesSelectionProps,
     zonesInputSectionItemRef,
   ) => {
     const styles = useStyles();
@@ -60,8 +60,8 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
     };
 
     const displayAsOneZone =
-    fromTariffZone.id === toTariffZone.id &&
-    fromTariffZone.venueName === toTariffZone.venueName;
+      fromTariffZone.id === toTariffZone.id &&
+      fromTariffZone.venueName === toTariffZone.venueName;
 
     return (
       <View style={style}>

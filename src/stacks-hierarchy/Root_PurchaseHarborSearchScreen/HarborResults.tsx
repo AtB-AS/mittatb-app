@@ -3,7 +3,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat} from '@atb/assets/svg/mono-icons/transportation';
@@ -32,25 +32,18 @@ export const HarborResults: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  const [harborResults, setHarborResults] = useState<StopPlaces | []>([]);
+  //const [harborResults, setHarborResults] = useState<StopPlaces | []>([]);
   const {location} = useGeolocationState();
   const currentLocation = location || undefined;
 
-  useEffect(() => {
-    harbors && setHarborResults(sortHarbors(harbors, currentLocation));
-  }, [harbors, currentLocation]);
+  let harborResults = sortHarbors(harbors, currentLocation);
 
-  useEffect(() => {
-    if (searchText.length > 1 && harbors) {
-      setHarborResults(
-        sortHarbors(harbors, currentLocation).filter((harbor) => {
-          return harbor.name.toLowerCase().includes(searchText.toLowerCase());
-        }),
-      );
-    } else {
-      harbors && setHarborResults(sortHarbors(harbors, currentLocation));
-    }
-  }, [searchText]);
+  if (searchText.length > 1 && harbors) {
+    harborResults = harborResults.filter((harbor) =>
+      harbor.name.toLowerCase().includes(searchText.toLowerCase()),
+    );
+  }
+
   const showEmptyResultText = !harborResults.length && !!searchText;
 
   return (
@@ -63,7 +56,7 @@ export const HarborResults: React.FC<Props> = ({
           />
         ) : (
           <ThemeText type="body__secondary" color="secondary">
-            {getheading(t, searchText, fromHarborName, currentLocation)}
+            {getHeading(t, searchText, fromHarborName, currentLocation)}
           </ThemeText>
         )}
       </View>
@@ -109,13 +102,16 @@ function sortHarbors(harbors: StopPlaces, location?: GeoLocation): StopPlaces {
           distance: getDistance(stopPlace, location),
         };
       })
-      .filter((stopPlace) => stopPlace.distance != -1)
-      .sort((a, b) => a.distance - b.distance);
+      .sort((a, b) => {
+        //if (!a.distance) return 1;
+        //if (!b.distance) return -1;
+        return (a.distance || Infinity) - (b.distance || Infinity);
+      });
   }
   return sortBy(harbors, ['name']);
 }
 
-function getheading(
+function getHeading(
   t: TFunc<any>,
   searchText?: string,
   fromHarborName?: string,
@@ -139,7 +135,7 @@ function getDistance(
 ) {
   return stopPlace?.latitude && stopPlace?.longitude
     ? haversine(location.coordinates, [stopPlace.longitude, stopPlace.latitude])
-    : -1;
+    : undefined;
 }
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({

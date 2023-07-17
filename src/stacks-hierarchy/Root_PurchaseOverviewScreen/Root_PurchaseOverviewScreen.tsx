@@ -91,7 +91,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const zonesInputSectionItemRef = useRef(null);
 
   useEffect(() => {
-    if (params.onFocusElement === 'zone-selection') {
+    if (params.onFocusElement === 'from-to-selection') {
       giveFocus(zonesInputSectionItemRef);
     }
   }, [params.onFocusElement]);

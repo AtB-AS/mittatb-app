@@ -2,8 +2,8 @@ import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
+import React, {forwardRef} from 'react';
+import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {StopPlace} from '@atb/api/types/stopPlaces';
@@ -18,98 +18,107 @@ type StopPlaceSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function HarborSelection({
-  fareProductTypeConfig,
-  fromHarbor,
-  toHarbor,
-  preassignedFareProduct,
-  onSelect,
-  style,
-}: StopPlaceSelectionProps) {
-  const styles = useStyles();
-  const {t} = useTranslation();
+export const HarborSelection = forwardRef<
+  TouchableOpacity,
+  StopPlaceSelectionProps
+>(
+  (
+    {
+      fareProductTypeConfig,
+      fromHarbor,
+      toHarbor,
+      preassignedFareProduct,
+      onSelect,
+      style,
+    }: StopPlaceSelectionProps,
+    harborInputSectionItemRef,
+  ) => {
+    const styles = useStyles();
+    const {t} = useTranslation();
 
-  return (
-    <View style={style} accessible={false}>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={styles.sectionText}
-        accessibilityLabel={t(
-          PurchaseOverviewTexts.stopPlaces.harborSelection.select.a11yLabel,
-        )}
-      >
-        {t(PurchaseOverviewTexts.stopPlaces.harborSelection.select.text)}
-      </ThemeText>
-      <Section accessible={false}>
-        <GenericClickableSectionItem
-          accessible={true}
-          accessibilityRole="button"
+    return (
+      <View style={style} accessible={false}>
+        <ThemeText
+          type="body__secondary"
+          color="secondary"
+          style={styles.sectionText}
           accessibilityLabel={t(
-            PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yLabel(
-              fromHarbor?.name,
-            ),
+            PurchaseOverviewTexts.stopPlaces.harborSelection.select.a11yLabel,
           )}
-          accessibilityHint={t(
-            PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yHint,
-          )}
-          onPress={() =>
-            onSelect({
-              fareProductTypeConfig,
-              preassignedFareProduct,
-            })
-          }
-          testID="selectHarborsButton"
         >
-          <>
-            <View style={styles.fromHarbor}>
+          {t(PurchaseOverviewTexts.stopPlaces.harborSelection.select.text)}
+        </ThemeText>
+        <Section accessible={false}>
+          <GenericClickableSectionItem
+            ref={harborInputSectionItemRef}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={t(
+              PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yLabel(
+                fromHarbor?.name,
+              ),
+            )}
+            accessibilityHint={t(
+              PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yHint,
+            )}
+            onPress={() =>
+              onSelect({
+                fareProductTypeConfig,
+                preassignedFareProduct,
+              })
+            }
+            testID="selectHarborsButton"
+          >
+            <>
+              <View style={styles.fromHarbor}>
+                <ThemeText
+                  color="secondary"
+                  type="body__secondary"
+                  style={styles.toFromLabel}
+                >
+                  {t(PurchaseOverviewTexts.fromToLabel.from)}
+                </ThemeText>
+                <HarborLabel harbor={fromHarbor} />
+              </View>
+            </>
+          </GenericClickableSectionItem>
+          <GenericClickableSectionItem
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={t(
+              PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yLabel(
+                fromHarbor?.name,
+              ),
+            )}
+            accessibilityHint={t(
+              PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yHint,
+            )}
+            onPress={() =>
+              fromHarbor &&
+              onSelect({
+                fromHarbor,
+                fareProductTypeConfig,
+                preassignedFareProduct,
+              })
+            }
+            testID="selectHarborsButton"
+          >
+            <View style={styles.toHarbor}>
               <ThemeText
-                color="secondary"
+                color={!!fromHarbor ? 'secondary' : 'disabled'}
                 type="body__secondary"
                 style={styles.toFromLabel}
               >
-                {t(PurchaseOverviewTexts.fromToLabel.from)}
+                {t(PurchaseOverviewTexts.fromToLabel.to)}
               </ThemeText>
-              <HarborLabel harbor={fromHarbor} />
+              <HarborLabel harbor={toHarbor} disabled={!fromHarbor} />
             </View>
-          </>
-        </GenericClickableSectionItem>
-        <GenericClickableSectionItem
-          accessible={true}
-          accessibilityRole="button"
-          accessibilityLabel={t(
-            PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yLabel(
-              fromHarbor?.name,
-            ),
-          )}
-          accessibilityHint={t(
-            PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yHint,
-          )}
-          onPress={() =>
-            fromHarbor &&
-            onSelect({
-              fromHarbor,
-              fareProductTypeConfig,
-              preassignedFareProduct,
-            })
-          }
-          testID="selectHarborsButton"
-        >
-          <View style={styles.toHarbor}>
-            <ThemeText
-              color={!!fromHarbor ? 'secondary' : 'disabled'}
-              type="body__secondary"
-              style={styles.toFromLabel}
-            >
-              {t(PurchaseOverviewTexts.fromToLabel.to)}
-            </ThemeText>
-            <HarborLabel harbor={toHarbor} disabled={!fromHarbor} />
-          </View>
-        </GenericClickableSectionItem>
-      </Section>
-    </View>
-  );
-}
+          </GenericClickableSectionItem>
+        </Section>
+      </View>
+    );
+  },
+);
 
 const HarborLabel = ({
   harbor,

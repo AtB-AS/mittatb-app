@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {RefObject} from 'react';
 import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ZonesSelection';
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {StyleProp, ViewStyle} from 'react-native';
+import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
 import {StopPlace} from '@atb/api/types/stopPlaces';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
@@ -22,6 +22,7 @@ type SelectionProps = {
       | Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;
   style?: StyleProp<ViewStyle>;
+  ref?: RefObject<TouchableOpacity>;
 };
 
 export function FromToSelection({
@@ -33,6 +34,7 @@ export function FromToSelection({
   preassignedFareProduct,
   onSelect,
   style,
+  ref,
 }: SelectionProps) {
   let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
   if (selectionMode === 'none') {
@@ -48,6 +50,7 @@ export function FromToSelection({
         preassignedFareProduct={preassignedFareProduct}
         onSelect={onSelect}
         style={style}
+        ref={ref}
       />
     );
   }
@@ -71,6 +74,7 @@ export function FromToSelection({
       selectionMode={selectionMode}
       onSelect={onSelect}
       style={style}
+      ref={ref}
     />
   ) : null;
 }

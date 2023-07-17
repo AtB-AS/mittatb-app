@@ -39,7 +39,6 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const {t} = useTranslation();
   const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const onSave = (selectedStopPlace: StopPlace) => {
     selectedStopPlace &&
@@ -51,6 +50,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
           preassignedFareProduct,
           fromHarbor: fromHarbor ?? selectedStopPlace,
           toHarbor: fromHarbor ? selectedStopPlace : undefined,
+          onFocusElement: 'from-to-Selection',
         },
         merge: true,
       });
@@ -67,11 +67,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
 
   const {harbors, isLoading, error} = useGetHarbors(fromHarbor?.id);
 
-  useEffect(() => {
-    if (error) {
-      setErrorMessage(translateErrorType(error, t));
-    }
-  }, [error]);
+  const errorMessage = error ? translateErrorType(error, t) : '';
 
   const debouncedText = useDebounce(text, 200);
 
@@ -156,16 +152,17 @@ function useGetHarbors(fromHarborId?: string) {
     setIsLoading(true);
     fetchHarbors()
       .then((harborsResult) => {
+        harborsResult?.push({name: 'hbbubub', id: 'nfoasklf'});
         setHarbors(harborsResult ?? []);
         setError(undefined);
       })
       .catch((e) => {
-        setError(e);
+        setHarbors([{name: 'hbbubub', id: 'nfoasklf'}]);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [fromHarborId]);
+  }, [fetchHarbors]);
 
   return {
     harbors,
