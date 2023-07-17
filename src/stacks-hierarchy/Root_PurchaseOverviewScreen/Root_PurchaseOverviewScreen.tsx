@@ -88,11 +88,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
-  const zonesInputSectionItemRef = useRef(null);
+  const fromToInputSectionItemRef = useRef(null);
 
   useEffect(() => {
     if (params.onFocusElement === 'from-to-selection') {
-      giveFocus(zonesInputSectionItemRef);
+      giveFocus(fromToInputSectionItemRef);
     }
   }, [params.onFocusElement]);
 
@@ -174,7 +174,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 navigation.push('Root_PurchaseHarborSearchScreen', params);
               }
             }}
-            ref={zonesInputSectionItemRef}
+            ref={fromToInputSectionItemRef}
           />
 
           <StartTimeSelection
