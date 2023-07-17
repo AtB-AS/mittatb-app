@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -20,22 +21,20 @@ import {Backdrop} from './Backdrop';
 import {ClickableBackground} from './ClickableBackground';
 import {AnimatedBottomSheet} from './AnimatedBottomSheet';
 
-type BottomSheetContentFunction = (
-  close: () => void,
-  /** Use focusRef to give a component accessibility focus when BottomSheet open. The component must be accessible! */
-  focusRef: RefObject<any>,
-) => ReactNode;
+type BottomSheetContentFunction = () => ReactNode;
 
 type BottomSheetState = {
   open: (
     contentFunction: BottomSheetContentFunction,
-    /** Optional ref to component which should be focused on sheet close */
-    closeRef?: RefObject<any>,
     useBackdrop?: boolean,
   ) => void;
   isOpen: () => boolean;
   close: () => void;
   height: number;
+  /** Use onOpenFocusRef to give a component accessibility focus when BottomSheet open. The component must be accessible! */
+  onOpenFocusRef: RefObject<any>;
+  /** Optional ref to component which should be focused on sheet close */
+  onCloseFocusRef: RefObject<any>;
 };
 
 const BottomSheetContext = createContext<BottomSheetState | undefined>(
@@ -47,13 +46,13 @@ export const BottomSheetProvider: React.FC = ({children}) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isBackdropEnabled, setBackdropEnabled] = useState(true);
-  const [contentFunction, setContentFunction] = useState<
-    (close: () => void, focusRef: RefObject<any>) => ReactNode
-  >(() => () => null);
+  const [contentFunction, setContentFunction] = useState<() => ReactNode>(
+    () => () => null,
+  );
 
   const animatedOffset = useMemo(() => new Animated.Value(0), []);
-  const focusRef = useFocusOnLoad();
-  const [closeRef, setCloseRef] = useState<RefObject<any> | undefined>();
+  const onOpenFocusRef = useFocusOnLoad();
+  const onCloseFocusRef = useRef(null);
 
   useEffect(
     () => () =>
@@ -69,18 +68,14 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
-    if (closeRef) {
-      setTimeout(() => giveFocus(closeRef), 200);
-    }
+    giveFocus(onCloseFocusRef, 100); // iOS needs a timeout to ensure it reads out the updated state
   };
 
   const open = (
-    contentFunction: (close: () => void, focusRef: RefObject<any>) => ReactNode,
-    closeRef?: RefObject<any>,
+    contentFunction: () => ReactNode,
     useBackdrop: boolean = true,
   ) => {
     setContentFunction(() => contentFunction);
-    setCloseRef(closeRef);
     setBackdropEnabled(useBackdrop);
     setIsOpen(true);
   };
@@ -121,11 +116,11 @@ export const BottomSheetProvider: React.FC = ({children}) => {
           animatedOffset={animatedOffset}
           onLayout={onLayout}
         >
-          {contentFunction(close, focusRef)}
+          {contentFunction()}
         </AnimatedBottomSheet>
       </>
     ),
-    [isOpen, close, focusRef, animatedOffset, safeAreaBottom],
+    [isOpen, close, animatedOffset, safeAreaBottom],
   );
 
   const state = {
@@ -133,6 +128,8 @@ export const BottomSheetProvider: React.FC = ({children}) => {
     close,
     isOpen: () => isOpen,
     height,
+    onOpenFocusRef,
+    onCloseFocusRef,
   };
 
   return (

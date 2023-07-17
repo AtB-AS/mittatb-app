@@ -54,7 +54,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         return;
       }
       setSaveState({saving: true, error: false});
-      const success = await toggleToken(selectedToken.id);
+      const success = await toggleToken(selectedToken.id, true);
       if (success && nextScreen) {
         navigation.navigate(nextScreen.screen, nextScreen.params as any);
       } else {

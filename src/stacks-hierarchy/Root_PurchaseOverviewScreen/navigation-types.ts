@@ -15,4 +15,5 @@ export type Root_PurchaseOverviewScreenParams = {
   toHarbor?: StopPlace;
   mode?: 'Ticket' | 'TravelSearch';
   travelDate?: string;
+  onFocusElement?: string;
 };

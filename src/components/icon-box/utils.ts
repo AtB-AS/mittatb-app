@@ -23,26 +23,26 @@ const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
 export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   switch (mode) {
     case 'flex':
-      return Flexible;
+      return {svg: Flexible, name: 'Flexible'};
     case 'bus':
     case 'coach':
-      return Bus;
+      return {svg: Bus, name: 'Bus'};
     case 'tram':
-      return Tram;
+      return {svg: Tram, name: 'Tram'};
     case 'rail':
-      return Train;
+      return {svg: Train, name: 'Train'};
     case 'air':
-      return Plane;
+      return {svg: Plane, name: 'Plane'};
     case 'water':
       return subMode && TRANSPORT_SUB_MODES_BOAT.includes(subMode)
-        ? Boat
-        : Ferry;
+        ? {svg: Boat, name: 'Boat'}
+        : {svg: Ferry, name: 'Ferry'};
     case 'foot':
-      return Walk;
+      return {svg: Walk, name: 'Walk'};
     case 'metro':
-      return Subway;
+      return {svg: Subway, name: 'Subway'};
     case 'unknown':
     default:
-      return Unknown;
+      return {svg: Unknown, name: 'Unknown'};
   }
 }

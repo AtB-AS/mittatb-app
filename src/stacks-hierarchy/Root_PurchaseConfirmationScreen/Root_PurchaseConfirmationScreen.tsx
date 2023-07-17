@@ -19,7 +19,7 @@ import {
   PurchaseConfirmationTexts,
   useTranslation,
 } from '@atb/translations';
-import {formatToLongDateTime} from '@atb/utils/date';
+import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {addMinutes} from 'date-fns';
 import React, {useEffect, useState} from 'react';
@@ -43,6 +43,7 @@ import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
+import {Info} from '@atb/assets/svg/color/icons/status';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -85,7 +86,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {theme} = useTheme();
   const {t, language} = useTranslation();
-  const {open: openBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {user} = useAuthState();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
   const [previousMethod, setPreviousMethod] = useState<
@@ -127,6 +128,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     offerSearchTime,
     isSearchingOffer,
     error,
+    validDurationSeconds,
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
@@ -235,14 +237,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   }
 
   async function selectPaymentMethod() {
-    openBottomSheet((close) => {
+    openBottomSheet(() => {
       return (
         <SelectPaymentMethod
           onSelect={(option: PaymentMethod) => {
             selectPaymentOption(option);
-            close();
+            closeBottomSheet();
           }}
-          close={close}
+          close={closeBottomSheet}
           previousPaymentMethod={previousPaymentMethod}
         />
       );
@@ -307,13 +309,30 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     )}
                   </ThemeText>
                 )}
-                <ThemeText
-                  style={styles.smallTopMargin}
-                  type="body__secondary"
-                  color="secondary"
-                >
-                  {travelDateText}
-                </ThemeText>
+                {!isSearchingOffer && validDurationSeconds && (
+                  <ThemeText
+                    style={styles.smallTopMargin}
+                    type="body__secondary"
+                    color="secondary"
+                  >
+                    {t(
+                      PurchaseConfirmationTexts.validityTexts.time(
+                        secondsToDuration(validDurationSeconds, language),
+                      ),
+                    )}
+                  </ThemeText>
+                )}
+
+                <View style={[styles.smallTopMargin, {flexDirection: 'row'}]}>
+                  <Info
+                    height={theme.icon.size.normal}
+                    width={theme.icon.size.normal}
+                    style={{marginRight: theme.spacings.small}}
+                  />
+                  <ThemeText type="body__secondary" color="secondary">
+                    {travelDateText}
+                  </ThemeText>
+                </View>
               </View>
             </GenericSectionItem>
           </Section>

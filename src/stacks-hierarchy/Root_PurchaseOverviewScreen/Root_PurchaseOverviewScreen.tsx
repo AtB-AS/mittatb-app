@@ -10,7 +10,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
@@ -23,6 +23,7 @@ import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -87,6 +88,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
+  const zonesInputSectionItemRef = useRef(null);
+
+  useEffect(() => {
+    if (params.onFocusElement === 'zone-selection') {
+      giveFocus(zonesInputSectionItemRef);
+    }
+  }, [params.onFocusElement]);
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -96,6 +105,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           onPress: closeModal,
         }}
         globalMessageContext="app-ticketing"
+        setFocusOnLoad={!params.onFocusElement}
       />
 
       <ScrollView testID="ticketingScrollView">
@@ -154,6 +164,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             preassignedFareProduct={preassignedFareProduct}
             style={styles.selectionComponent}
             onSelect={(params) => {
+              navigation.setParams({onFocusElement: undefined});
               if ('toTariffZone' in params) {
                 navigation.push(
                   'Root_PurchaseTariffZonesSearchByMapScreen',
@@ -163,6 +174,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 navigation.push('Root_PurchaseHarborSearchScreen', params);
               }
             }}
+            ref={zonesInputSectionItemRef}
           />
 
           <StartTimeSelection

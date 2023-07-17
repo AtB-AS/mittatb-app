@@ -111,10 +111,12 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               <ToggleSectionItem
                 key={option.id}
                 text={text}
-                leftIcon={getTransportModeSvg(
-                  option.icon?.transportMode,
-                  option.icon?.transportSubMode,
-                )}
+                leftIcon={
+                  getTransportModeSvg(
+                    option.icon?.transportMode,
+                    option.icon?.transportSubMode,
+                  ).svg
+                }
                 subtext={description}
                 value={
                   selectedModeOptions?.find(({id}) => id === option.id)

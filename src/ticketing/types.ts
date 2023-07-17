@@ -23,6 +23,8 @@ export type TravelRight = {
     | 'PreActivatedPeriodTicket'
     | 'CarnetTicket'
     | 'NightTicket'
+    | 'SingleBoatTicket'
+    | 'PeriodBoatTicket'
     | 'UnknownTicket';
 };
 
@@ -35,6 +37,8 @@ export type NormalTravelRight = TravelRight & {
   usageValidityPeriodRef: string;
   userProfileRef: string;
   tariffZoneRefs: string[] | undefined;
+  startPointRef: string | undefined;
+  endPointRef: string | undefined;
 };
 
 export type PreActivatedTravelRight = NormalTravelRight;
@@ -143,6 +147,8 @@ export type Offer = {
   traveller_id: string;
   prices: OfferPrice[];
   flex_discount_ladder?: FlexDiscountLadder;
+  valid_from: string;
+  valid_to: string;
 };
 
 export type OfferSearchResponse = Offer[];

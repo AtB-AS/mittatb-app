@@ -39,7 +39,6 @@ import {Root_TipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInforma
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_CarnetDetailsScreen} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
-import {AnalyticsContextProvider} from '@atb/analytics';
 import {Root_LoginActiveFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginActiveFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
@@ -231,65 +230,64 @@ export const RootStack = () => {
             },
           }}
         >
-          <AnalyticsContextProvider>
-            <Stack.Navigator
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Group
               screenOptions={{
-                headerShown: false,
+                presentation: 'modal',
+                ...TransitionPresets.ModalSlideFromBottomIOS,
               }}
             >
-              <Stack.Group
-                screenOptions={{
-                  presentation: 'modal',
-                  ...TransitionPresets.ModalSlideFromBottomIOS,
+              <Stack.Screen
+                name="Root_TabNavigatorStack"
+                component={Root_TabNavigatorStack}
+              />
+              <Stack.Screen
+                name="Root_OnboardingStack"
+                component={Root_OnboardingStack}
+              />
+              <Stack.Screen
+                name="Root_LocationSearchByTextScreen"
+                component={Root_LocationSearchByTextScreen}
+              />
+              <Stack.Screen
+                name="Root_LocationSearchByMapScreen"
+                component={Root_LocationSearchByMapScreen}
+                options={{
+                  ...TransitionPresets.SlideFromRightIOS,
+                  headerShown: false,
                 }}
-              >
-                <Stack.Screen
-                  name="Root_TabNavigatorStack"
-                  component={Root_TabNavigatorStack}
-                />
-                <Stack.Screen
-                  name="Root_OnboardingStack"
-                  component={Root_OnboardingStack}
-                />
-                <Stack.Screen
-                  name="Root_LocationSearchByTextScreen"
-                  component={Root_LocationSearchByTextScreen}
-                />
-                <Stack.Screen
-                  name="Root_LocationSearchByMapScreen"
-                  component={Root_LocationSearchByMapScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseOverviewScreen"
-                  component={Root_PurchaseOverviewScreen}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseConfirmationScreen"
-                  component={Root_PurchaseConfirmationScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseTariffZonesSearchByMapScreen"
-                  component={Root_PurchaseTariffZonesSearchByMapScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseTariffZonesSearchByTextScreen"
-                  component={Root_PurchaseTariffZonesSearchByTextScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
-                />
-                <Stack.Screen
-                  name="Root_PurchaseHarborSearchScreen"
+              />
+              <Stack.Screen
+                name="Root_PurchaseOverviewScreen"
+                component={Root_PurchaseOverviewScreen}
+              />
+              <Stack.Screen
+                name="Root_PurchaseConfirmationScreen"
+                component={Root_PurchaseConfirmationScreen}
+                options={{
+                  ...TransitionPresets.SlideFromRightIOS,
+                }}
+              />
+              <Stack.Screen
+                name="Root_PurchaseTariffZonesSearchByMapScreen"
+                component={Root_PurchaseTariffZonesSearchByMapScreen}
+                options={{
+                  ...TransitionPresets.SlideFromRightIOS,
+                }}
+              />
+              <Stack.Screen
+                name="Root_PurchaseTariffZonesSearchByTextScreen"
+                component={Root_PurchaseTariffZonesSearchByTextScreen}
+                options={{
+                  ...TransitionPresets.SlideFromRightIOS,
+                }}
+              />
+              <Stack.Screen
+                name="Root_PurchaseHarborSearchScreen"
                   component={Root_PurchaseHarborSearchScreen}
                   options={{
                     ...TransitionPresets.SlideFromRightIOS,
@@ -379,7 +377,7 @@ export const RootStack = () => {
                 />
               </Stack.Group>
             </Stack.Navigator>
-          </AnalyticsContextProvider>
+
         </NavigationContainer>
       </Host>
     </>

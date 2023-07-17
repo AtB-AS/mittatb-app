@@ -1,5 +1,5 @@
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchFiltersBottomSheet';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useTravelSearchFiltersEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
@@ -17,16 +17,16 @@ type TravelSearchFiltersState =
       anyFiltersApplied: boolean;
       resetTransportModes: () => void;
       disableFlexibleTransport: () => void;
-      closeRef: React.Ref<any>;
+      onCloseFocusRef: React.RefObject<any>;
     }
   | {enabled: false; filtersSelection?: undefined};
 
 /**
- * THe travel search filters state, including whether it is enabled or not, the
+ * The travel search filters state, including whether it is enabled or not, the
  * selected filters, and a function for opening the bottom sheet.
  */
 export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
-  const {open} = useBottomSheet();
+  const {open, close, onOpenFocusRef, onCloseFocusRef} = useBottomSheet();
   const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const {filters, setFilters} = useFilters();
@@ -59,23 +59,19 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       transportModes: initialTransportModeSelection,
       flexibleTransport: initialFlexibleTransportFilterOption,
     });
-  const closeRef = useRef();
 
   if (!travelSearchFiltersEnabled) return {enabled: false};
   if (!travelSearchFilters?.transportModes) return {enabled: false};
 
   const openBottomSheet = () => {
-    open(
-      (close, focusRef) => (
-        <TravelSearchFiltersBottomSheet
-          close={close}
-          ref={focusRef}
-          filtersSelection={filtersSelection}
-          onSave={setFiltersSelection}
-        />
-      ),
-      closeRef,
-    );
+    open(() => (
+      <TravelSearchFiltersBottomSheet
+        close={close}
+        ref={onOpenFocusRef}
+        filtersSelection={filtersSelection}
+        onSave={setFiltersSelection}
+      />
+    ));
   };
 
   return {
@@ -105,6 +101,6 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       setFilters(filtersWithFlexibleTransportDisabled);
       setFiltersSelection(filtersWithFlexibleTransportDisabled);
     },
-    closeRef,
+    onCloseFocusRef,
   };
 };
