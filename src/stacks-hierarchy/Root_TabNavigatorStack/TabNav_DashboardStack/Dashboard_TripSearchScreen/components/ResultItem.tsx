@@ -559,7 +559,7 @@ const TransportationLeg = ({
 };
 
 const tripSummary = (
-  tripPattern: TripPattern,
+  tripPattern: AvailableTripPattern,
   t: TranslateFunction,
   language: Language,
   isInPast: boolean,
@@ -603,11 +603,12 @@ const tripSummary = (
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs.length > 0 ? nonFootLegs[0] : undefined;
 
-  const resultNumberText = t(
-    TripSearchTexts.results.resultItem.journeySummary.resultNumber(
-      listPosition,
-    ),
-  );
+  const resultNumberText =
+    t(
+      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
+        listPosition,
+      ),
+    ) + screenReaderPause;
   const passedTripText = isInPast
     ? t(TripSearchTexts.results.resultItem.passedTrip)
     : undefined;
@@ -675,8 +676,13 @@ const tripSummary = (
     ),
   );
 
+  const requiresBookingText = tripPattern.bookingRequirement?.requiresBooking
+    ? t(TripSearchTexts.results.resultItem.footer.requiresBooking)
+    : undefined;
+
   const texts = [
     resultNumberText,
+    requiresBookingText,
     passedTripText,
     startText,
     modeAndNumberText,
