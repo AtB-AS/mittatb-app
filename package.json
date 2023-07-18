@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@atb-as/config-specs": "^3.3.3",
-    "@atb-as/theme": "^7.1.0",
+    "@atb-as/theme": "^7.1.1",
     "@bugsnag/react-native": "^7.18.2",
     "@bugsnag/source-maps": "^2.3.1",
     "@entur-private/abt-mobile-client-sdk": "1.1.15",
@@ -103,7 +103,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@atb-as/generate-assets": "^7.6.0",
+    "@atb-as/generate-assets": "^7.6.1",
     "@babel/core": "^7.20.12",
     "@babel/plugin-transform-template-literals": "^7.18.9",
     "@babel/preset-env": "^7.20.2",
