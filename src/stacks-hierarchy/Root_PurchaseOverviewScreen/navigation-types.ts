@@ -9,10 +9,8 @@ export type Root_PurchaseOverviewScreenParams = {
   fareProductTypeConfig: FareProductTypeConfig;
   preassignedFareProduct?: PreassignedFareProduct;
   userProfilesWithCount?: UserProfileWithCount[];
-  fromTariffZone?: TariffZoneWithMetadata;
-  toTariffZone?: TariffZoneWithMetadata;
-  fromHarbor?: StopPlaceFragment;
-  toHarbor?: StopPlaceFragment;
+  fromPlace?: TariffZoneWithMetadata | StopPlaceFragment;
+  toPlace?: TariffZoneWithMetadata | StopPlaceFragment;
   mode?: 'Ticket' | 'TravelSearch';
   travelDate?: string;
   onFocusElement?: string;

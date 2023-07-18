@@ -43,8 +43,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     params.preassignedFareProduct,
     params.fareProductTypeConfig.type,
     params.userProfilesWithCount,
-    params.fromTariffZone,
-    params.toTariffZone,
+    params.fromPlace,
+    params.toPlace,
   );
 
   const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
@@ -157,10 +157,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
           <FromToSelection
             fareProductTypeConfig={params.fareProductTypeConfig}
-            fromHarbor={params.fromHarbor}
-            toHarbor={params.toHarbor}
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
+            fromPlace={fromTariffZone}
+            toPlace={toTariffZone}
             preassignedFareProduct={preassignedFareProduct}
             style={styles.selectionComponent}
             onSelect={(params) => {
@@ -220,8 +218,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               });
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 fareProductTypeConfig: params.fareProductTypeConfig,
-                fromTariffZone,
-                toTariffZone,
+                fromPlace: fromTariffZone,
+                toPlace: toTariffZone,
                 userProfilesWithCount: travellerSelection,
                 preassignedFareProduct,
                 travelDate,

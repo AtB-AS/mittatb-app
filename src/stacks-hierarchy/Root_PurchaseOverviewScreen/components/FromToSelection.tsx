@@ -11,10 +11,8 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
-  fromHarbor?: StopPlaceFragment;
-  toHarbor?: StopPlaceFragment;
-  fromTariffZone?: TariffZoneWithMetadata;
-  toTariffZone?: TariffZoneWithMetadata;
+  fromPlace: TariffZoneWithMetadata | StopPlaceFragment;
+  toPlace: TariffZoneWithMetadata | StopPlaceFragment;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (
     params:
@@ -28,11 +26,9 @@ type SelectionProps = {
 export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
   (
     {
-      fromTariffZone,
-      toTariffZone,
       fareProductTypeConfig,
-      fromHarbor,
-      toHarbor,
+      fromPlace,
+      toPlace,
       preassignedFareProduct,
       onSelect,
       style,
@@ -47,8 +43,8 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
     if (selectionMode === 'multiple-stop-harbor') {
       return (
         <HarborSelection
-          fromHarbor={fromHarbor}
-          toHarbor={toHarbor}
+          fromHarbor={isValidTariffZone(fromPlace) ? undefined : fromPlace}
+          toHarbor={isValidTariffZone(toPlace) ? undefined : toPlace}
           fareProductTypeConfig={fareProductTypeConfig}
           preassignedFareProduct={preassignedFareProduct}
           onSelect={onSelect}
@@ -68,10 +64,10 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
     ) {
       selectionMode = 'single';
     }
-    return fromTariffZone && toTariffZone ? (
+    return isValidTariffZone(fromPlace) && isValidTariffZone(toPlace) ? (
       <ZonesSelection
-        fromTariffZone={fromTariffZone}
-        toTariffZone={toTariffZone}
+        fromTariffZone={fromPlace}
+        toTariffZone={toPlace}
         fareProductTypeConfig={fareProductTypeConfig}
         preassignedFareProduct={preassignedFareProduct}
         selectionMode={selectionMode}
@@ -82,3 +78,9 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
     ) : null;
   },
 );
+
+export function isValidTariffZone(
+  place: TariffZoneWithMetadata | StopPlaceFragment,
+): place is TariffZoneWithMetadata {
+  return !!place && 'geometry' in place;
+}

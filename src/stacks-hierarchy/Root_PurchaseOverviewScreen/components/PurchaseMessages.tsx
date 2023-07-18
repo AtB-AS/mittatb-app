@@ -11,11 +11,12 @@ import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils'
 import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export type PurchaseWarningsProps = {
   preassignedFareProductType: string;
-  fromTariffZone: TariffZoneWithMetadata;
-  toTariffZone: TariffZoneWithMetadata;
+  fromTariffZone: TariffZoneWithMetadata | StopPlaceFragment;
+  toTariffZone: TariffZoneWithMetadata | StopPlaceFragment;
 };
 
 export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({

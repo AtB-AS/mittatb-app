@@ -13,6 +13,7 @@ import {
   useTariffZoneFromLocation,
 } from '@atb/tariff-zones-selector';
 import {useTicketingState} from '@atb/ticketing';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -23,8 +24,8 @@ export function useOfferDefaults(
   preassignedFareProduct?: PreassignedFareProduct,
   selectableProductType?: string,
   userProfilesWithCount?: UserProfileWithCount[],
-  fromTariffZone?: TariffZoneWithMetadata,
-  toTariffZone?: TariffZoneWithMetadata,
+  fromTariffZone?: TariffZoneWithMetadata | StopPlaceFragment,
+  toTariffZone?: TariffZoneWithMetadata | StopPlaceFragment,
 ) {
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
