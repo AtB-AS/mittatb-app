@@ -101,6 +101,10 @@ const PurchaseOverviewTexts = {
           'Vel haldeplassar eller soner',
         ),
       },
+      'multiple-stop-harbor': {
+        text: _('Velg kaier', 'Select harbors', 'Vel kaier'),
+        a11yLabel: _('Velg kaier', 'Select harbors', 'Vel kaier'),
+      },
     },
     label: {
       from: _('Fra', 'From', 'Frå'),

@@ -68,11 +68,7 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
     }
 
     // Only support multiple/single zone in app for now. Stop place is built into selector.
-    if (
-      selectionMode == 'multiple-stop' ||
-      selectionMode == 'multiple-zone' ||
-      selectionMode == 'multiple-stop-harbor'
-    ) {
+    if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
       selectionMode = 'multiple';
     }
     if (
