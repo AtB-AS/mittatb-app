@@ -32,17 +32,26 @@ export const useFindCityZoneInLocation = (
 
 export function useJourneyModes(
   defaultValue: StreetMode = StreetMode.Foot,
-): Modes {
-  const isFlexibleTransportEnabledInRemoteConfig =
-    useFlexibleTransportEnabled();
-  const flexibleTransportAccessModeEnabledInRemoteConfig =
-    useFlexibleTransportAccessModeEnabled();
-  const flexibleTransportDirectModeEnabledInRemoteConfig =
-    useFlexibleTransportDirectModeEnabled();
-  const flexibleTransportEgressModeEnabledInRemoteConfig =
-    useFlexibleTransportEgressModeEnabled();
+): [Modes, boolean] {
+  const [
+    isFlexibleTransportEnabledInRemoteConfig,
+    flexTransportDebugOverrideReady,
+  ] = useFlexibleTransportEnabled();
+  const [
+    flexibleTransportAccessModeEnabledInRemoteConfig,
+    flexAccessModeDebugOverrideReady,
+  ] = useFlexibleTransportAccessModeEnabled();
 
-  return {
+  const [
+    flexibleTransportDirectModeEnabledInRemoteConfig,
+    flexDirectModeDebugOverrideReady,
+  ] = useFlexibleTransportDirectModeEnabled();
+  const [
+    flexibleTransportEgressModeEnabledInRemoteConfig,
+    flexEgressModeDebugOverrideReady,
+  ] = useFlexibleTransportEgressModeEnabled();
+
+  const journeyModes = {
     accessMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportAccessModeEnabledInRemoteConfig
@@ -59,20 +68,28 @@ export function useJourneyModes(
         ? StreetMode.Flexible
         : defaultValue,
   };
+
+  const allDebugOverridesReady =
+    flexTransportDebugOverrideReady &&
+    flexAccessModeDebugOverrideReady &&
+    flexDirectModeDebugOverrideReady &&
+    flexEgressModeDebugOverrideReady;
+
+  return [journeyModes, allDebugOverridesReady];
 }
 
 export const useFlexibleTransportDebugOverrideOrRemote = (
   remoteConfigKey: RemoteConfigKeys,
   storageModelKey: StorageModelKeysEnum,
-) => {
-  const [debugOverride] = useDebugOverride(storageModelKey);
+): [string | number | boolean, boolean] => {
+  const [debugOverride, _, debugOverrideValueReady] =
+    useDebugOverride(storageModelKey);
   const remoteConfig = useRemoteConfig();
 
-  if (debugOverride !== undefined) {
-    return debugOverride;
-  }
-
-  return remoteConfig[remoteConfigKey];
+  return [
+    debugOverride === undefined ? remoteConfig[remoteConfigKey] : debugOverride,
+    debugOverrideValueReady,
+  ];
 };
 
 export const useFlexibleTransportAccessModeEnabled = () => {
