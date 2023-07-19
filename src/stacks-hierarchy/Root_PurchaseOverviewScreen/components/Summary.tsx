@@ -66,26 +66,28 @@ export function Summary({
         const harborText = summary(
           t(PurchaseOverviewTexts.summary.messageInHarborZones),
         );
-        if (fareProductTypeConfig.type === 'boat-period')
-          return (
-            <>
-              {summary(t(PurchaseOverviewTexts.summary.messageInHarborPeriod))}
-              {harborText}
-            </>
-          );
         return (
           <>
-            {summary(t(PurchaseOverviewTexts.summary.messageInHarborSingle))}
+            {summary(
+              t(
+                PurchaseOverviewTexts.summary[
+                  fareProductTypeConfig.type === 'boat-period'
+                    ? 'messageInHarborPeriod'
+                    : 'messageInHarborSingle'
+                ],
+              ),
+            )}
             {harborText}
           </>
         );
-
       case 'none':
         return summary(
           t(
             PurchaseOverviewTexts.summary.messageAppliesFor(transportModesText),
           ),
         );
+      default:
+        return null;
     }
   };
 
