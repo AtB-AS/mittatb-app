@@ -1,19 +1,13 @@
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {usePreferences} from '@atb/preferences';
-import {
-  PreassignedFareProduct,
-  TariffZone,
-  UserProfile,
-} from '@atb/reference-data/types';
+import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
 import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {useMemo} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {
-  TariffZoneWithMetadata,
-  useTariffZoneFromLocation,
-} from '@atb/tariff-zones-selector';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useTicketingState} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -24,8 +18,8 @@ export function useOfferDefaults(
   preassignedFareProduct?: PreassignedFareProduct,
   selectableProductType?: string,
   userProfilesWithCount?: UserProfileWithCount[],
-  fromTariffZone?: TariffZoneWithMetadata | StopPlaceFragment,
-  toTariffZone?: TariffZoneWithMetadata | StopPlaceFragment,
+  fromPlace?: TariffZoneWithMetadata | StopPlaceFragment,
+  toPlace?: TariffZoneWithMetadata | StopPlaceFragment,
 ) {
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -41,8 +35,8 @@ export function useOfferDefaults(
 
   // Get default TariffZones
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
-  const defaultFromTariffZone = fromTariffZone ?? defaultTariffZone;
-  const defaultToTariffZone = toTariffZone ?? defaultTariffZone;
+  const defaultFromPlace = fromPlace ?? defaultTariffZone;
+  const defaultToPlace = toPlace ?? defaultTariffZone;
 
   // Get default SelectableTravellers
   const {
@@ -66,8 +60,8 @@ export function useOfferDefaults(
   return {
     preassignedFareProduct: defaultPreassignedFareProduct,
     selectableTravellers: defaultSelectableTravellers,
-    fromTariffZone: defaultFromTariffZone,
-    toTariffZone: defaultToTariffZone,
+    fromPlace: defaultFromPlace,
+    toPlace: defaultToPlace,
   };
 }
 
@@ -112,29 +106,3 @@ const useTravellersWithPreselectedCounts = (
     }
     return mappedUserProfiles;
   }, [userProfiles, preassignedFareProduct]);
-
-/**
- * Get the default tariff zone, either based on current location, default tariff
- * zone set on tariff zone in reference data or else the first tariff zone in the
- * provided tariff zones list.
- */
-const useDefaultTariffZone = (
-  tariffZones: TariffZone[],
-): TariffZoneWithMetadata => {
-  const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
-  return useMemo<TariffZoneWithMetadata>(() => {
-    if (tariffZoneFromLocation) {
-      return {...tariffZoneFromLocation, resultType: 'geolocation'};
-    }
-
-    const defaultTariffZone = tariffZones.find(
-      (tariffZone) => tariffZone.isDefault,
-    );
-
-    if (defaultTariffZone) {
-      return {...defaultTariffZone, resultType: 'zone'};
-    }
-
-    return {...tariffZones[0], resultType: 'zone'};
-  }, [tariffZones, tariffZoneFromLocation]);
-};
