@@ -104,7 +104,7 @@ export function Summary({
           >
             {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
           </ThemeText>
-          {SummaryText}
+          <SummaryText />
         </>
       )}
 

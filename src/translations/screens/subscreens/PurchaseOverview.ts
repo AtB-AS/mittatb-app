@@ -143,10 +143,6 @@ const PurchaseOverviewTexts = {
           'Vel haldeplassar eller soner',
         ),
       },
-      'multiple-stop-harbor': {
-        text: _('Velg kaier', 'Select harbors', 'Vel kaier'),
-        a11yLabel: _('Velg kaier', 'Select harbors', 'Vel kaier'),
-      },
     },
     zoneName: (zoneName: string) =>
       _(`Sone ${zoneName}`, `Zone ${zoneName}`, `Sone ${zoneName}`),
