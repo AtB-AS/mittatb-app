@@ -195,29 +195,14 @@ export type AvailableTripPattern = TripPatternWithKey & {
   bookingRequirement: BookingRequirement;
 };
 
-function setTimezoneFromDate(dateToEdit: Date, dateWithSourceTimezone: Date) {
-  const timezoneDifferenceInMinutes =
-    dateWithSourceTimezone.getTimezoneOffset() - dateToEdit.getTimezoneOffset();
-  dateToEdit.setMinutes(dateToEdit.getMinutes() + timezoneDifferenceInMinutes);
-}
-
-function setDateFromDate(dateToEdit: Date, dateWithSourceDate: Date) {
-  dateToEdit.setFullYear(
-    dateWithSourceDate.getFullYear(),
-    dateWithSourceDate.getMonth(),
-    dateWithSourceDate.getDate(),
-  );
-}
-
 function getLatestBookingDate(
   latestBookingTime: string, // e.g. '15:16:00'
   expectedStartTime: string, // e.g. '2023-07-14T17:56:32+02:00'
 ): Date {
   const expectedStartDate = new Date(expectedStartTime);
-  let latestBookingDate = new Date(`1970-01-01T${latestBookingTime}Z`);
-
-  setTimezoneFromDate(latestBookingDate, expectedStartDate);
-  setDateFromDate(latestBookingDate, expectedStartDate);
+  const latestBookingDate = new Date(
+    `${expectedStartTime.split('T')[0]}T${latestBookingTime}`,
+  );
 
   if (latestBookingDate.getTime() > expectedStartDate.getTime()) {
     latestBookingDate.setDate(latestBookingDate.getDate() - 1);
@@ -249,12 +234,12 @@ export function getAvailableTripPatterns(
         );
 
         const timeDiffMilliSeconds = latestBookingDate.getTime() - now;
-
+        const oneHourMilliSeconds = 60 * 60 * 1000;
         if (timeDiffMilliSeconds < 0) {
           isTooLate = true; // currently assuming bookWhen == 'advanceAndDayOfTravel'
-        } else if (timeDiffMilliSeconds < 1 * 60 * 60 * 1000) {
+        } else if (timeDiffMilliSeconds < oneHourMilliSeconds) {
           requiresBookingUrgently = true;
-        } else if (timeDiffMilliSeconds > 7 * 24 * 60 * 60 * 1000) {
+        } else if (timeDiffMilliSeconds > 7 * 24 * oneHourMilliSeconds) {
           isTooEarly = true;
         }
       }
