@@ -32,7 +32,6 @@ export const HarborResults: React.FC<Props> = ({
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  //const [harborResults, setHarborResults] = useState<StopPlaces | []>([]);
   const {location} = useGeolocationState();
   const currentLocation = location || undefined;
 
@@ -105,11 +104,7 @@ function sortHarbors(
           distance: getDistance(stopPlace, location),
         };
       })
-      .sort((a, b) => {
-        //if (!a.distance) return 1;
-        //if (!b.distance) return -1;
-        return (a.distance || Infinity) - (b.distance || Infinity);
-      });
+      .sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
   }
   return sortBy(harbors, ['name']);
 }

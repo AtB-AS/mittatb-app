@@ -49,6 +49,11 @@ export function Summary({
     .join('/');
 
   const SummaryText = () => {
+    const summary = (text: string) => (
+      <ThemeText type="body__secondary" style={styles.message}>
+        {text}
+      </ThemeText>
+    );
     switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
       case 'multiple':
       case 'multiple-stop':
@@ -56,44 +61,30 @@ export function Summary({
       case 'single':
       case 'single-stop':
       case 'single-zone':
-        return (
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(PurchaseOverviewTexts.summary.messageInZone)}
-          </ThemeText>
-        );
+        return summary(t(PurchaseOverviewTexts.summary.messageInZone));
       case 'multiple-stop-harbor':
-        const harbortext = (
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(PurchaseOverviewTexts.summary.messageInHarborZones)}
-          </ThemeText>
+        const harborText = summary(
+          t(PurchaseOverviewTexts.summary.messageInHarborZones),
         );
         if (fareProductTypeConfig.type === 'boat-period')
           return (
             <>
-              <ThemeText type="body__secondary" style={styles.message}>
-                {t(PurchaseOverviewTexts.summary.messageInHarborPeriod)}
-              </ThemeText>
-              {harbortext}
+              {summary(t(PurchaseOverviewTexts.summary.messageInHarborPeriod))}
+              {harborText}
             </>
           );
         return (
           <>
-            <ThemeText type="body__secondary" style={styles.message}>
-              {t(PurchaseOverviewTexts.summary.messageInHarborSingle)}
-            </ThemeText>
-            {harbortext}
+            {summary(t(PurchaseOverviewTexts.summary.messageInHarborSingle))}
+            {harborText}
           </>
         );
 
       case 'none':
-        return (
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(
-              PurchaseOverviewTexts.summary.messageAppliesFor(
-                transportModesText,
-              ),
-            )}
-          </ThemeText>
+        return summary(
+          t(
+            PurchaseOverviewTexts.summary.messageAppliesFor(transportModesText),
+          ),
         );
     }
   };

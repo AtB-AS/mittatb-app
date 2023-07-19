@@ -49,7 +49,7 @@ const HarborSearchTexts = {
     defaultError: _(
       'Oops - vi feila med søket. Supert om du prøver igjen 🤞',
       'Whoops – our search failed. Please try again 🤞',
-      'Oops - noko gjekk galt. Supert om du prøver på nytt 🤞',
+      'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
     ),
     emptyResult: _(
       'Fant ingen søkeresultat',
