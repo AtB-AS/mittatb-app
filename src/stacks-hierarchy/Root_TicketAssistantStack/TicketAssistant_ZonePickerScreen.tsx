@@ -18,11 +18,11 @@ import {
   TariffZonesSelectorButtons,
   TariffZonesSelectorMap,
 } from '@atb/tariff-zones-selector';
-import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -30,22 +30,18 @@ export const TicketAssistant_ZonePickerScreen = ({
   route,
 }: Props) => {
   const styles = useThemeStyles();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {tariffZones} = useFirestoreConfiguration();
   const a11yContext = useAccessibilityContext();
   const focusRef = useFocusOnLoad();
 
-  const offerDefaults = useOfferDefaults(
-    undefined,
-    fareProductTypeConfigs[0].type,
-  );
+  const defaultTariffZone = useDefaultTariffZone(tariffZones);
+
   const {t} = useTranslation();
 
   const isApplicableOnSingleZoneOnly = false;
 
-  let {fromTariffZone, toTariffZone} = route.params ?? offerDefaults;
-  fromTariffZone = fromTariffZone || offerDefaults.fromTariffZone;
-  toTariffZone = toTariffZone || offerDefaults.toTariffZone;
-
+  const fromTariffZone = route.params?.fromTariffZone ?? defaultTariffZone;
+  const toTariffZone = route.params?.toTariffZone ?? defaultTariffZone;
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
     to: toTariffZone,
