@@ -52,11 +52,10 @@ import {
   significantWaitTime,
   significantWalkTime,
   isLegFlexibleTransport,
-  BookingRequirement,
-  AvailableTripPattern,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {AvailableTripPattern, BookingRequirement} from '../../types';
 
 type ResultItemProps = {
   tripPattern: AvailableTripPattern;

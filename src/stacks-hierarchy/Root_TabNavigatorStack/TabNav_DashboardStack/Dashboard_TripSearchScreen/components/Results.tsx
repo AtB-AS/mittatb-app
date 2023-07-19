@@ -10,8 +10,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 
-import {getAvailableTripPatterns} from '@atb/travel-details-screens/utils';
-
 import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
@@ -21,7 +19,7 @@ import {SearchTime} from '@atb/journey-date-picker';
 import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {ResultItemOld} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
 import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
-import {useNow} from '@atb/utils/use-now';
+import {useAvailableTripPatterns} from '../hooks';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -51,7 +49,7 @@ export const Results: React.FC<Props> = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
 
-  const now = useNow(2500);
+  const availableTripPatterns = useAvailableTripPatterns(tripPatterns);
 
   useEffect(() => {
     if (errorType) {
@@ -93,8 +91,6 @@ export const Results: React.FC<Props> = ({
       />
     );
   }
-
-  const availableTripPatterns = getAvailableTripPatterns(tripPatterns, now);
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
