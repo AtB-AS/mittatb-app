@@ -121,11 +121,11 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,
       userProfilesWithCount: rfc.userProfilesWithCount,
-      fromTariffZone: rfc.fromTariffZone && {
+      fromPlace: rfc.fromTariffZone && {
         ...rfc.fromTariffZone,
         resultType: 'zone',
       },
-      toTariffZone: rfc.toTariffZone && {
+      toPlace: rfc.toTariffZone && {
         ...rfc.toTariffZone,
         resultType: 'zone',
       },

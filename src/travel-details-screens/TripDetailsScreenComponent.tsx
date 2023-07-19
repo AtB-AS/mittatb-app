@@ -135,8 +135,8 @@ export const TripDetailsScreenComponent = ({
               analytics().logEvent('click_trip_purchase_button');
               onPressBuyTicket({
                 fareProductTypeConfig: singleTicketConfig,
-                fromTariffZone: tripTicketDetails.tariffZoneFrom,
-                toTariffZone: tripTicketDetails.tariffZoneTo,
+                fromPlace: tripTicketDetails.tariffZoneFrom,
+                toPlace: tripTicketDetails.tariffZoneTo,
                 travelDate: tripTicketDetails.ticketStartTime,
                 mode: 'TravelSearch',
               });

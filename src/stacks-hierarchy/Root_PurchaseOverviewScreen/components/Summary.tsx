@@ -49,6 +49,11 @@ export function Summary({
     .join('/');
 
   const SummaryText = () => {
+    const summary = (text: string) => (
+      <ThemeText type="body__secondary" style={styles.message}>
+        {text}
+      </ThemeText>
+    );
     switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
       case 'multiple':
       case 'multiple-stop':
@@ -56,21 +61,33 @@ export function Summary({
       case 'single':
       case 'single-stop':
       case 'single-zone':
-        return (
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(PurchaseOverviewTexts.summary.messageInZone)}
-          </ThemeText>
+        return summary(t(PurchaseOverviewTexts.summary.messageInZone));
+      case 'multiple-stop-harbor':
+        const harborText = summary(
+          t(PurchaseOverviewTexts.summary.messageInHarborZones),
         );
-      case 'none':
         return (
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(
-              PurchaseOverviewTexts.summary.messageAppliesFor(
-                transportModesText,
+          <>
+            {summary(
+              t(
+                PurchaseOverviewTexts.summary[
+                  fareProductTypeConfig.type === 'boat-period'
+                    ? 'messageInHarborPeriod'
+                    : 'messageInHarborSingle'
+                ],
               ),
             )}
-          </ThemeText>
+            {harborText}
+          </>
         );
+      case 'none':
+        return summary(
+          t(
+            PurchaseOverviewTexts.summary.messageAppliesFor(transportModesText),
+          ),
+        );
+      default:
+        return null;
     }
   };
 

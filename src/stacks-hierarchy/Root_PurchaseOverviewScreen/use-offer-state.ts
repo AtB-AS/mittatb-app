@@ -11,6 +11,7 @@ import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -127,8 +128,8 @@ const initialState: OfferState = {
 export function useOfferState(
   offerEndpoint: 'zones' | 'authority',
   preassignedFareProduct: PreassignedFareProduct,
-  fromTariffZone: TariffZone,
-  toTariffZone: TariffZone,
+  fromTariffZone: TariffZone | StopPlaceFragment,
+  toTariffZone: TariffZone | StopPlaceFragment,
   userProfilesWithCount: UserProfileWithCount[],
   travelDate?: string,
 ) {

@@ -208,7 +208,7 @@
       }
     ],
     "configuration": {
-      "zoneSelectionMode": "none",
+      "zoneSelectionMode": "multiple-stop-harbor",
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "none",
@@ -251,7 +251,7 @@
       }
     ],
     "configuration": {
-      "zoneSelectionMode": "none",
+      "zoneSelectionMode": "multiple-stop-harbor",
       "travellerSelectionMode": "single",
       "timeSelectionMode": "datetime",
       "productSelectionMode": "duration",

@@ -17,12 +17,12 @@ import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
-import {ZonesSelection} from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
+import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
@@ -34,18 +34,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
 
-  const {
-    preassignedFareProduct,
-    selectableTravellers,
-    fromTariffZone,
-    toTariffZone,
-  } = useOfferDefaults(
-    params.preassignedFareProduct,
-    params.fareProductTypeConfig.type,
-    params.userProfilesWithCount,
-    params.fromTariffZone,
-    params.toTariffZone,
-  );
+  const {preassignedFareProduct, selectableTravellers, fromPlace, toPlace} =
+    useOfferDefaults(
+      params.preassignedFareProduct,
+      params.fareProductTypeConfig.type,
+      params.userProfilesWithCount,
+      params.fromPlace,
+      params.toPlace,
+    );
 
   const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
     navigation.setParams({
@@ -72,8 +68,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   } = useOfferState(
     zoneSelectionMode === 'none' ? 'authority' : 'zones',
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromPlace,
+    toPlace,
     travellerSelection,
     travelDate,
   );
@@ -88,11 +84,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
-  const zonesInputSectionItemRef = useRef(null);
+  const fromToInputSectionItemRef = useRef(null);
 
   useEffect(() => {
-    if (params.onFocusElement === 'zone-selection') {
-      giveFocus(zonesInputSectionItemRef);
+    if (params.onFocusElement === 'from-to-selection') {
+      giveFocus(fromToInputSectionItemRef);
     }
   }, [params.onFocusElement]);
 
@@ -155,18 +151,22 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
           />
-
-          <ZonesSelection
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
+          <FromToSelection
             fareProductTypeConfig={params.fareProductTypeConfig}
+            fromPlace={fromPlace}
+            toPlace={toPlace}
             preassignedFareProduct={preassignedFareProduct}
-            onSelect={(t) => {
-              navigation.setParams({onFocusElement: undefined});
-              navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t);
-            }}
             style={styles.selectionComponent}
-            ref={zonesInputSectionItemRef}
+            onSelect={(params) => {
+              navigation.setParams({onFocusElement: undefined});
+              navigation.push(
+                zoneSelectionMode === 'multiple-stop-harbor'
+                  ? 'Root_PurchaseHarborSearchScreen'
+                  : 'Root_PurchaseTariffZonesSearchByMapScreen',
+                params,
+              );
+            }}
+            ref={fromToInputSectionItemRef}
           />
 
           <StartTimeSelection
@@ -186,8 +186,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
         <PurchaseMessages
           preassignedFareProductType={preassignedFareProduct.type}
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
+          fromTariffZone={fromPlace}
+          toTariffZone={toPlace}
         />
 
         <FullScreenFooter>
@@ -200,7 +200,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: params.fareProductTypeConfig.name,
-                tariffZone: {from: fromTariffZone.id, to: toTariffZone.id},
+                tariffZone: {from: fromPlace.id, to: toPlace.id},
                 userProfilesWithCount: travellerSelection.map((t) => ({
                   userType: t.userTypeString,
                   count: t.count,
@@ -214,8 +214,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               });
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 fareProductTypeConfig: params.fareProductTypeConfig,
-                fromTariffZone,
-                toTariffZone,
+                fromPlace: fromPlace,
+                toPlace: toPlace,
                 userProfilesWithCount: travellerSelection,
                 preassignedFareProduct,
                 travelDate,

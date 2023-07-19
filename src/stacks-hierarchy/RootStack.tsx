@@ -30,6 +30,7 @@ import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
+import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
 import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithCreditCardScreen';
 import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
@@ -281,6 +282,13 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_PurchaseTariffZonesSearchByTextScreen"
                 component={Root_PurchaseTariffZonesSearchByTextScreen}
+                options={{
+                  ...TransitionPresets.SlideFromRightIOS,
+                }}
+              />
+              <Stack.Screen
+                name="Root_PurchaseHarborSearchScreen"
+                component={Root_PurchaseHarborSearchScreen}
                 options={{
                   ...TransitionPresets.SlideFromRightIOS,
                 }}

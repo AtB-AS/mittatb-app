@@ -86,7 +86,7 @@ const LoginTexts = {
       unknown_error: _(
         'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
         'Whoops - something went wrong. Please try again 🤞',
-        'Oops - noko gjekk galt. Supert om du prøver på nytt 🤞',
+        'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
       ),
     },
   },
@@ -116,7 +116,7 @@ const LoginTexts = {
       unknown_error: _(
         'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
         'Whoops - something went wrong. Please try again 🤞',
-        'Oops - noko gjekk galt. Supert om du prøver på nytt 🤞',
+        'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
       ),
     },
   },

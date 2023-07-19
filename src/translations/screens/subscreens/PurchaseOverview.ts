@@ -75,6 +75,48 @@ const PurchaseOverviewTexts = {
     'The 24 hour pass does not include night bus.',
     '24-timersbilletten inkluderer ikkje nattbuss.',
   ),
+  fromToLabel: {
+    from: _('Fra', 'From', 'Frå'),
+    to: _('Til', 'To', 'Til'),
+  },
+  stopPlaces: {
+    harborSelection: {
+      select: {
+        text: _('Velg kaier', 'Select harbors', 'Vel kaier'),
+        a11yLabel: _('Velg kaier', 'Select harbors', 'Vel kaier'),
+      },
+      noneSelected: {
+        text: _('Ingen kai valgt', 'No harbors selected', 'Inga kai valt'),
+        a11yLabel: _('Ingen kai valgt', 'No harbors selected', 'Inga kai valt'),
+      },
+      from: {
+        a11yLabel: (harbor?: string) =>
+          _(
+            `Valgt avreisekai: ${harbor ?? 'Ingen kai valgt'}`,
+            `Selected departure harbor: ${harbor ?? 'No harbor selected'}`,
+            `Valt avreisekai: ${harbor ?? 'Inga kai valt'}`,
+          ),
+        a11yHint: _(
+          'Aktivér for å velge avreisekai',
+          'Activate to select departure harbor',
+          'Aktivér for å velje avreisekai',
+        ),
+      },
+      to: {
+        a11yLabel: (harbor?: string) =>
+          _(
+            `Valgt ankomstkai: ${harbor ?? 'Ingen kai valgt'}`,
+            `Selected destination harbor: ${harbor ?? 'Ingen kai valgt'}`,
+            `Valt ankomstkai: ${harbor ?? 'Inga kai valt'}`,
+          ),
+        a11yHint: _(
+          'Aktivér for å velge ankomstkai',
+          'Activate to select destination harbor',
+          'Aktivér for å velje ankomstkai',
+        ),
+      },
+    },
+  },
   zones: {
     title: {
       single: {
@@ -101,10 +143,6 @@ const PurchaseOverviewTexts = {
           'Vel haldeplassar eller soner',
         ),
       },
-    },
-    label: {
-      from: _('Fra', 'From', 'Frå'),
-      to: _('Til', 'To', 'Til'),
     },
     zoneName: (zoneName: string) =>
       _(`Sone ${zoneName}`, `Zone ${zoneName}`, `Sone ${zoneName}`),
@@ -194,6 +232,21 @@ const PurchaseOverviewTexts = {
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,
       `Gjeld for buss/trikk i valde soner`,
+    ),
+    messageInHarborPeriod: _(
+      `Gjelder for hurtigbåt i begge retninger på valgt strekning.`,
+      `Applies for boat between selected harbors`,
+      `Gjeld for hurtigbåt i begge retningar på vald strekning.`,
+    ),
+    messageInHarborSingle: _(
+      `Gjelder for hurtigbåt én vei på valgt strekning`,
+      `Applies for boat one way between selected harbors`,
+      `Gjeld for hurtigbåt éin veg på vald strekning`,
+    ),
+    messageInHarborZones: _(
+      'Gjelder for buss/trikk i sonene du reiser til og fra',
+      'Applies for for bus/tram in departure and destination zones',
+      'Gjeld for buss/trikk i sonene du reiser til og frå',
     ),
     messageAppliesFor: (text: string) =>
       _(`Gjelder for ${text}`, `Applies for ${text}`, `Gjeld for ${text}`),
