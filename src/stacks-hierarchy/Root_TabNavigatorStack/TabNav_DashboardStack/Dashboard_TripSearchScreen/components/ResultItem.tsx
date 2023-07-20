@@ -324,7 +324,7 @@ const ResultItemFooter: React.FC<{
   return (
     <View style={styles.resultFooter}>
       <View style={styles.footerNotice}>
-        {(requiresBooking || requiresBookingUrgently) && (
+        {requiresBooking && (
           <>
             <ThemeIcon
               svg={requiresBookingUrgently ? Warning : Info}
