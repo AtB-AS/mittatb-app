@@ -263,7 +263,7 @@ const TripSearchTexts = {
         requiresBooking: _(
           'Krever reservasjon',
           'Requires booking',
-          'Krever reservasjon',
+          'Krev reservasjon',
         ),
       },
       journeySummary: {
