@@ -327,7 +327,7 @@ const ResultItemFooter: React.FC<{
         {(requiresBooking || requiresBookingUrgently) && (
           <>
             <ThemeIcon
-              svg={requiresBookingUrgently ? Warning : Info} // always use Warning to avoid graphic duplicate when top right corner info is active?
+              svg={requiresBookingUrgently ? Warning : Info}
               style={styles.footerNoticeIcon}
             />
             <ThemeText type="body__secondary" color="secondary">
