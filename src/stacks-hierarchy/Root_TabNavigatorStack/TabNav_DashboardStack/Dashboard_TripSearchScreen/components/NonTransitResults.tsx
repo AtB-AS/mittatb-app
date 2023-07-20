@@ -34,9 +34,12 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
         const tripPattern = trip.trip?.tripPatterns[0];
         if (!tripPattern) return null;
         const mode = t(TripSearchTexts.nonTransit.travelMode(trip.mode));
-        const duration = secondsToDurationShort(tripPattern.duration, language);
-        const durationLong = secondsToDuration(tripPattern.duration, language);
-        const analyticsMetadata = {mode: trip.mode, duration};
+        const durationShort = secondsToDurationShort(
+          tripPattern.duration,
+          language,
+        );
+        const duration = secondsToDuration(tripPattern.duration, language);
+        const analyticsMetadata = {mode: trip.mode, duration: durationShort};
         const mapFilter =
           trip.mode === 'bike_rental'
             ? {stations: {cityBikeStations: {showAll: true, operators: []}}}
@@ -47,13 +50,13 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
             key={trip.mode}
             type={'pill'}
             interactiveColor={'interactive_2'}
-            text={`${mode} ${duration}`}
+            text={`${mode} ${durationShort}`}
             leftIcon={{svg: getTransportModeSvg(trip.mode)}}
             rightIcon={{svg: arrowRight}}
             onPress={() =>
               onDetailsPressed(tripPattern, {analyticsMetadata, mapFilter})
             }
-            accessibilityLabel={`${mode} ${durationLong}`}
+            accessibilityLabel={`${mode} ${duration}`}
           />
         );
       })}
