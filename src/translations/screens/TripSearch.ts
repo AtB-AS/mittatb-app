@@ -411,15 +411,15 @@ const TripSearchTexts = {
     travelMode: (mode: StreetMode) => {
       switch (mode) {
         case StreetMode.Bicycle:
-          return _('Sykkel', 'Bike');
+          return _('Sykkel', 'Bike', 'Sykkel');
         case StreetMode.BikeRental:
-          return _('Bysykkel', 'City bike');
+          return _('Bysykkel', 'City bike', 'Bysykkel');
         case StreetMode.Foot:
-          return _('Gå', 'Walk');
+          return _('Gå', 'Walk', 'Gå');
         case StreetMode.ScooterRental:
-          return _('Sparkesykkel', 'E-scooter');
+          return _('Sparkesykkel', 'E-scooter', 'Sparkesykkel');
         default:
-          return _('', '');
+          return _('', '', '');
       }
     },
   },

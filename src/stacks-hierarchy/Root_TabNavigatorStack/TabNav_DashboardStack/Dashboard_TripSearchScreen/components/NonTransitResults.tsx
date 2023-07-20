@@ -51,7 +51,7 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
             type={'pill'}
             interactiveColor={'interactive_2'}
             text={`${mode} ${durationShort}`}
-            leftIcon={{svg: getTransportModeSvg(trip.mode)}}
+            leftIcon={{svg: getTransportModeSvg(trip.mode).svg}}
             rightIcon={{svg: arrowRight}}
             onPress={() =>
               onDetailsPressed(tripPattern, {analyticsMetadata, mapFilter})
