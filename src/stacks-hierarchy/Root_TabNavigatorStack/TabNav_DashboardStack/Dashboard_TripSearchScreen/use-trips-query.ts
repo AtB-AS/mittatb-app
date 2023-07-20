@@ -70,7 +70,8 @@ export function useTripsQuery(
     setTripPatterns([]);
   }, [setTripPatterns]);
 
-  const journeySearchModes = useJourneyModes();
+  const [journeySearchModes, journeySearchModesAllDebugOverridesReady] =
+    useJourneyModes();
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
@@ -184,10 +185,18 @@ export function useTripsQuery(
         cancelTokenSource.cancel('Unmounting use trips hook');
       };
     },
-    [fromLocation, toLocation, searchTime, filtersSelection],
+    [
+      fromLocation,
+      toLocation,
+      searchTime,
+      filtersSelection,
+      journeySearchModesAllDebugOverridesReady,
+    ],
   );
 
-  useEffect(() => search(), [search]);
+  useEffect(() => {
+    journeySearchModesAllDebugOverridesReady && search();
+  }, [search, journeySearchModesAllDebugOverridesReady]);
 
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);

@@ -202,6 +202,12 @@ const TripSearchTexts = {
             `${mode} from ${placeName}`,
             `${mode} frå ${placeName}`,
           ),
+        flexTransportTitle: (publicCode: string) =>
+          _(
+            `Henting med ${publicCode}`,
+            `Pickup with ${publicCode}`,
+            `Henting med ${publicCode}`,
+          ),
         totalDuration: _('Reisetid', 'Trip duration', 'Reisetid'),
         time: (startTime: string, endTime: string) =>
           _(
@@ -216,7 +222,7 @@ const TripSearchTexts = {
         'Denne reisa har driftsmeldingar. Sjå detaljar for meir informasjon.',
       ),
       footLeg: {
-        walkandWaitLabel: (walkTime: string, waitTime: string) =>
+        walkAndWaitLabel: (walkTime: string, waitTime: string) =>
           _(
             `Gå ${walkTime}. Vent ${waitTime}`,
             `Walk ${walkTime}. Wait ${waitTime}`,
@@ -253,6 +259,11 @@ const TripSearchTexts = {
           'Aktivér for å vise flere reisedetaljer',
           'Activate to show more trip details',
           'Trykk for meir informasjon om reisa.',
+        ),
+        requiresBooking: _(
+          'Krever reservasjon',
+          'Requires booking',
+          'Krev reservasjon',
         ),
       },
       journeySummary: {
