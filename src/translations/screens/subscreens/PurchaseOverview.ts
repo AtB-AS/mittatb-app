@@ -228,6 +228,11 @@ const PurchaseOverviewTexts = {
         `Total ${priceString} kr`,
         `Totalt ${priceString} kr`,
       ),
+    messageRequiresMobile: _(
+      `Gjelder kun på mobil`,
+      `Only available on phone`,
+      `Gjeld kun på mobil`,
+    ),
     messageInZone: _(
       `Gjelder for buss/trikk i valgte soner`,
       `Applies for bus/tram in selected zones`,

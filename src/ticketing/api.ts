@@ -22,11 +22,27 @@ export async function listRecentFareContracts(): Promise<
   return response.data;
 }
 
-export type OfferSearchParams = {
-  zones: string[];
-  travellers: {id: string; user_type: string; count: number}[];
+export type OfferSearchParams = SearchParams &
+  (ZoneOfferSearchParams | StopPlaceOfferSearchParams);
+
+type SearchParams = {
+  travellers: Traveller[];
   products: string[];
   travel_date?: string;
+};
+
+type ZoneOfferSearchParams = {
+  zones: string[];
+};
+
+type StopPlaceOfferSearchParams = {
+  from: string;
+  to: string;
+};
+type Traveller = {
+  id: string;
+  user_type: string;
+  count: number;
 };
 
 export async function listRecurringPayments(): Promise<RecurringPayment[]> {

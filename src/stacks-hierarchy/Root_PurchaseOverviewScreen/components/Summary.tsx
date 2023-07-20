@@ -37,7 +37,7 @@ export function Summary({
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
 
-  const hasSelection = userProfilesWithCount.some((u) => u.count);
+  const hasSelection = userProfilesWithCount.some((u) => u.count) && !!price;
 
   const toPaymentFunction = () => {
     onPressBuy();
@@ -54,6 +54,11 @@ export function Summary({
         {text}
       </ThemeText>
     );
+    const requiredOnMobile = fareProductTypeConfig.configuration
+      .requiresTokenOnMobile
+      ? summary(t(PurchaseOverviewTexts.summary.messageRequiresMobile))
+      : null;
+
     switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
       case 'multiple':
       case 'multiple-stop':
@@ -78,6 +83,7 @@ export function Summary({
               ),
             )}
             {harborText}
+            {requiredOnMobile}
           </>
         );
       case 'none':

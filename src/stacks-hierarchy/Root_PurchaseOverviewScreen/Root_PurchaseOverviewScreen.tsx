@@ -59,6 +59,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
 
+  const offerEndpoint =
+    zoneSelectionMode === 'none'
+      ? 'authority'
+      : zoneSelectionMode === 'multiple-stop-harbor'
+      ? 'stop-places'
+      : 'zones';
+
   const {
     isSearchingOffer,
     error,
@@ -66,7 +73,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    zoneSelectionMode === 'none' ? 'authority' : 'zones',
+    offerEndpoint,
     preassignedFareProduct,
     fromPlace,
     toPlace,
