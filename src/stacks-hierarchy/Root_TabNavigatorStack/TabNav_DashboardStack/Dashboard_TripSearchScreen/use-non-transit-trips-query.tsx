@@ -30,10 +30,17 @@ export const useNonTransitTripsQuery = (
   const {
     preferences: {tripSearchPreferences},
   } = usePreferences();
-  const isNonTransitTripSearchEnabled = useNonTransitTripSearchEnabled();
+  const [
+    isNonTransitTripSearchEnabled,
+    nonTransitTripSearchDebugOverrideReady,
+  ] = useNonTransitTripSearchEnabled();
 
   useEffect(() => {
-    if (!isNonTransitTripSearchEnabled) return;
+    if (
+      !isNonTransitTripSearchEnabled ||
+      !nonTransitTripSearchDebugOverrideReady
+    )
+      return;
 
     setSearchState('searching');
 
@@ -92,6 +99,7 @@ export const useNonTransitTripsQuery = (
     };
   }, [
     isNonTransitTripSearchEnabled,
+    nonTransitTripSearchDebugOverrideReady,
     fromLocation,
     toLocation,
     searchTime,
