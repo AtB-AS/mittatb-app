@@ -7,6 +7,7 @@ import {
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
+import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -54,9 +55,10 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {AvailableTripPattern, BookingRequirement} from '../../types';
 
 type ResultItemProps = {
-  tripPattern: TripPattern;
+  tripPattern: AvailableTripPattern;
   onDetailsPressed(): void;
   searchTime: SearchTime;
   testID?: string;
@@ -76,6 +78,8 @@ const ResultItemHeader: React.FC<{
   } else if (tripPattern.legs[0].mode !== 'foot') {
     startName = getQuayName(start.fromPlace.quay);
   }
+  const startLegIsFlexibleTransport = isLegFlexibleTransport(start);
+  const publicCode = start.fromPlace.quay?.publicCode || start.line?.publicCode;
 
   const durationText = secondsToDurationShort(tripPattern.duration, language);
   const transportName = t(getTranslatedModeName(start.mode));
@@ -92,6 +96,12 @@ const ResultItemHeader: React.FC<{
               TripSearchTexts.results.resultItem.header.title(
                 transportName,
                 startName,
+              ),
+            )
+          : startLegIsFlexibleTransport && publicCode
+          ? t(
+              TripSearchTexts.results.resultItem.header.flexTransportTitle(
+                publicCode,
               ),
             )
           : transportName}
@@ -243,11 +253,12 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                           color="primary"
                           testID={'schTime' + i}
                         >
-                          {formatToClock(
-                            leg.expectedStartTime,
-                            language,
-                            'floor',
-                          )}
+                          {(isLegFlexibleTransport(leg) ? 'ca. ' : '') +
+                            formatToClock(
+                              leg.expectedStartTime,
+                              language,
+                              'floor',
+                            )}
                         </ThemeText>
                         {isSignificantDifference(leg) && (
                           <ThemeText
@@ -296,17 +307,35 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             </View>
           </View>
         </View>
-        <ResultItemFooter />
+        <ResultItemFooter bookingRequirement={tripPattern.bookingRequirement} />
       </Animated.View>
     </TouchableOpacity>
   );
 };
-function ResultItemFooter() {
+
+const ResultItemFooter: React.FC<{
+  bookingRequirement: BookingRequirement;
+}> = ({bookingRequirement}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
+  const {requiresBooking, requiresBookingUrgently} = bookingRequirement;
+
   return (
     <View style={styles.resultFooter}>
+      <View style={styles.footerNotice}>
+        {requiresBooking && (
+          <>
+            <ThemeIcon
+              svg={requiresBookingUrgently ? Warning : Info}
+              style={styles.footerNoticeIcon}
+            />
+            <ThemeText type="body__secondary" color="secondary">
+              {t(TripSearchTexts.results.resultItem.footer.requiresBooking)}
+            </ThemeText>
+          </>
+        )}
+      </View>
       <View style={styles.detailsTextWrapper}>
         <ThemeText type="body__secondary">
           {t(TripSearchTexts.results.resultItem.footer.detailsLabel)}
@@ -315,7 +344,7 @@ function ResultItemFooter() {
       </View>
     </View>
   );
-}
+};
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   touchableOpacity: {
@@ -427,12 +456,19 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginLeft: theme.spacings.xSmall,
   },
   resultFooter: {
-    flexDirection: 'column',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     borderTopColor: theme.border.primary,
     borderTopWidth: theme.border.width.slim,
     paddingHorizontal: theme.spacings.medium,
     paddingVertical: theme.spacings.small,
-    alignItems: 'flex-end',
+  },
+  footerNotice: {
+    flexDirection: 'row',
+  },
+  footerNoticeIcon: {
+    paddingRight: theme.spacings.small,
   },
   fromPlaceText: {
     flex: 3,
@@ -486,7 +522,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const a11yText =
     mustWalk && mustWait
       ? t(
-          TripSearchTexts.results.resultItem.footLeg.walkandWaitLabel(
+          TripSearchTexts.results.resultItem.footLeg.walkAndWaitLabel(
             walkDuration,
             waitDuration,
           ),
@@ -522,7 +558,7 @@ const TransportationLeg = ({
 };
 
 const tripSummary = (
-  tripPattern: TripPattern,
+  tripPattern: AvailableTripPattern,
   t: TranslateFunction,
   language: Language,
   isInPast: boolean,
@@ -566,11 +602,12 @@ const tripSummary = (
   const nonFootLegs = tripPattern.legs.filter((l) => l.mode !== 'foot') ?? [];
   const firstLeg = nonFootLegs.length > 0 ? nonFootLegs[0] : undefined;
 
-  const resultNumberText = t(
-    TripSearchTexts.results.resultItem.journeySummary.resultNumber(
-      listPosition,
-    ),
-  );
+  const resultNumberText =
+    t(
+      TripSearchTexts.results.resultItem.journeySummary.resultNumber(
+        listPosition,
+      ),
+    ) + screenReaderPause;
   const passedTripText = isInPast
     ? t(TripSearchTexts.results.resultItem.passedTrip)
     : undefined;
@@ -638,8 +675,13 @@ const tripSummary = (
     ),
   );
 
+  const requiresBookingText = tripPattern.bookingRequirement?.requiresBooking
+    ? t(TripSearchTexts.results.resultItem.footer.requiresBooking)
+    : undefined;
+
   const texts = [
     resultNumberText,
+    requiresBookingText,
     passedTripText,
     startText,
     modeAndNumberText,

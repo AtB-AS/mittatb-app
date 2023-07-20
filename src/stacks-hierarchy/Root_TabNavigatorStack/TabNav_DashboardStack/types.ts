@@ -20,3 +20,14 @@ export type TripSearchScreenParams = {
   searchTime?: SearchTime;
   callerRoute?: {name: string};
 };
+
+export type BookingRequirement = {
+  requiresBooking: boolean;
+  requiresBookingUrgently: boolean;
+  isTooEarly?: boolean;
+  isTooLate?: boolean;
+};
+
+export type AvailableTripPattern = TripPatternWithKey & {
+  bookingRequirement: BookingRequirement;
+};

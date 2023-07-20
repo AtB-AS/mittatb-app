@@ -102,7 +102,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         return;
       }
       setSaveState({saving: true, error: false});
-      const success = await toggleToken(selectedToken.id);
+      const success = await toggleToken(selectedToken.id, false);
       if (success) {
         onAfterSave();
       } else {

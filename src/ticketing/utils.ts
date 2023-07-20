@@ -25,7 +25,9 @@ export function isPreActivatedTravelRight(
   return (
     travelRight?.type === 'PreActivatedSingleTicket' ||
     travelRight?.type === 'PreActivatedPeriodTicket' ||
-    travelRight?.type === 'NightTicket'
+    travelRight?.type === 'NightTicket' ||
+    travelRight?.type === 'SingleBoatTicket' ||
+    travelRight?.type === 'PeriodBoatTicket'
   );
 }
 

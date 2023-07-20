@@ -99,7 +99,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-  const isFlexibleTransportEnabledInRemoteConfig =
+  const [isFlexibleTransportEnabledInRemoteConfig, _] =
     useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);

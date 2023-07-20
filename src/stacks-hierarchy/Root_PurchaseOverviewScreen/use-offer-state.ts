@@ -10,6 +10,8 @@ import {
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
+import {secondsBetween} from '@atb/utils/date';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -22,6 +24,7 @@ export type OfferError = {
 type OfferState = {
   offerSearchTime?: number;
   isSearchingOffer: boolean;
+  validDurationSeconds?: number;
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
@@ -41,6 +44,9 @@ type OfferReducer = (
 
 const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.amount_float ?? 0;
+
+const getValidDurationSeconds = (offer: Offer): number =>
+  secondsBetween(offer.valid_from, offer.valid_to);
 
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
@@ -90,6 +96,7 @@ const getOfferReducer =
           ...prevState,
           offerSearchTime: Date.now(),
           isSearchingOffer: false,
+          validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
           totalPrice: calculateTotalPrice(
             userProfilesWithCounts,
             action.offers,
@@ -121,8 +128,8 @@ const initialState: OfferState = {
 export function useOfferState(
   offerEndpoint: 'zones' | 'authority',
   preassignedFareProduct: PreassignedFareProduct,
-  fromTariffZone: TariffZone,
-  toTariffZone: TariffZone,
+  fromTariffZone: TariffZone | StopPlaceFragment,
+  toTariffZone: TariffZone | StopPlaceFragment,
   userProfilesWithCount: UserProfileWithCount[],
   travelDate?: string,
 ) {
