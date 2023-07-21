@@ -28,6 +28,30 @@ const PurchaseConfirmationTexts = {
           `Gyldig frå sone ${zoneNameFrom} til sone ${zoneNameTo}`,
         ),
     },
+    harbor: {
+      single: (harborNameFrom: string, harborNameTo: string) =>
+        _(
+          `Gyldig fra ${harborNameFrom} til ${harborNameTo}`,
+          `Valid from ${harborNameFrom} to ${harborNameTo}`,
+          `Gyldig frå ${harborNameFrom} til ${harborNameTo}`,
+        ),
+      period: (harborNameFrom: string, harborNameTo: string) =>
+        _(
+          `Gyldig i begge retninger mellom ${harborNameFrom} og ${harborNameTo}`,
+          `Valid in both directions from ${harborNameFrom} to ${harborNameTo}`,
+          `Gyldig i begge retningar mellom ${harborNameFrom} og ${harborNameTo}`,
+        ),
+      messageInHarborZones: _(
+        'Gjelder for buss/trikk i sonene du reiser til og fra',
+        'Applies for for bus/tram in departure and destination zones',
+        'Gjeld for buss/trikk i sonene du reiser til og frå',
+      ),
+      onlyOnPhone: _(
+        'Kun gyldig på mobil',
+        'Only valid on phone',
+        'Kun gyldig på mobil',
+      ),
+    },
     time: (validTime: string) =>
       _(
         `Billettvarighet ${validTime} fra oppstart`,
