@@ -8,10 +8,12 @@ import {ThemeText} from '@atb/components/text';
 type OptionalNextDayLabelProps = {
   departureTime: string;
   previousDepartureTime?: string;
+  excludePaddingTop: boolean;
 };
 export function DayLabel({
   departureTime,
   previousDepartureTime,
+  excludePaddingTop,
 }: OptionalNextDayLabelProps) {
   const style = useDayTextStyle();
   const isFirst = !previousDepartureTime;
@@ -37,6 +39,10 @@ export function DayLabel({
     dateLabel = t(
       TripSearchTexts.results.dayHeader.dayAfterTomorrow(dateString),
     );
+  }
+
+  if (excludePaddingTop) {
+    style.title.paddingTop = 0;
   }
 
   if (isFirst || !isSameDay(prevDate, departureDate)) {

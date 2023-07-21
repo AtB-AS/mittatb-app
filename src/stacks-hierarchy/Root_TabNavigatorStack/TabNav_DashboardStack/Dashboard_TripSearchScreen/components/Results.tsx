@@ -31,6 +31,7 @@ type Props = {
   errorType?: ErrorType;
   searchTime: SearchTime;
   anyFiltersApplied: boolean;
+  nonTransitTripsVisible: boolean;
 };
 
 export const Results: React.FC<Props> = ({
@@ -42,6 +43,7 @@ export const Results: React.FC<Props> = ({
   errorType,
   searchTime,
   anyFiltersApplied,
+  nonTransitTripsVisible,
 }) => {
   const styles = useThemeStyles();
   const newTravelSearchEnabled = useNewTravelSearchEnabled();
@@ -99,6 +101,7 @@ export const Results: React.FC<Props> = ({
           <DayLabel
             departureTime={tripPattern.expectedStartTime}
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
+            excludePaddingTop={i === 0 && nonTransitTripsVisible}
           />
           {newTravelSearchEnabled ? (
             <ResultItem
