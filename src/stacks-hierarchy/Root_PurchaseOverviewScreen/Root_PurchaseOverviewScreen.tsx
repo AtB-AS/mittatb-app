@@ -50,7 +50,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
-  const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
@@ -80,6 +79,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     travellerSelection,
     travelDate,
   );
+  const hasSelection =
+    travellerSelection.some((u) => u.count) &&
+    userProfilesWithCountAndOffer.some((u) => u.count);
 
   const isEmptyOffer = error?.type === 'empty-offers';
 
