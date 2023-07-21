@@ -54,7 +54,7 @@ export function Summary({
         {text}
       </ThemeText>
     );
-    const requiredOnMobile = fareProductTypeConfig.configuration
+    const requiredOnMobileText = fareProductTypeConfig.configuration
       .requiresTokenOnMobile
       ? summary(t(PurchaseOverviewTexts.summary.messageRequiresMobile))
       : null;
@@ -83,7 +83,7 @@ export function Summary({
               ),
             )}
             {harborText}
-            {requiredOnMobile}
+            {requiredOnMobileText}
           </>
         );
       case 'none':
