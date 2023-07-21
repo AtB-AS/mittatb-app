@@ -37,7 +37,7 @@ export function Summary({
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
 
-  const hasSelection = userProfilesWithCount.some((u) => u.count) && !!price;
+  const hasSelection = userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {
     onPressBuy();
