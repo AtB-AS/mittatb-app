@@ -262,20 +262,19 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       );
     });
   }
+  function summary(text?: string) {
+    return (
+      <ThemeText
+        style={styles.smallTopMargin}
+        type="body__secondary"
+        color="secondary"
+      >
+        {text}
+      </ThemeText>
+    );
+  }
 
   const SummaryText = () => {
-    function summary(text?: string) {
-      return (
-        <ThemeText
-          style={styles.smallTopMargin}
-          type="body__secondary"
-          color="secondary"
-        >
-          {text}
-        </ThemeText>
-      );
-    }
-
     switch (zoneSelectionMode) {
       case 'multiple-stop-harbor':
         return (
@@ -356,31 +355,22 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
                 <SummaryText />
-                {!isSearchingOffer && validDurationSeconds && (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {t(
+                {!isSearchingOffer &&
+                  validDurationSeconds &&
+                  summary(
+                    t(
                       PurchaseConfirmationTexts.validityTexts.time(
                         secondsToDuration(validDurationSeconds, language),
                       ),
-                    )}
-                  </ThemeText>
-                )}
-                {fareProductTypeConfig.configuration.requiresTokenOnMobile && (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {t(
+                    ),
+                  )}
+                {fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+                  summary(
+                    t(
                       PurchaseConfirmationTexts.validityTexts.harbor
                         .onlyOnPhone,
-                    )}
-                  </ThemeText>
-                )}
+                    ),
+                  )}
 
                 <View style={[styles.smallTopMargin, {flexDirection: 'row'}]}>
                   <Info
