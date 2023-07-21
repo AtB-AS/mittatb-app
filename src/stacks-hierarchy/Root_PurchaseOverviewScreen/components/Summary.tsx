@@ -54,6 +54,11 @@ export function Summary({
         {text}
       </ThemeText>
     );
+    const requiredOnMobileText = fareProductTypeConfig.configuration
+      .requiresTokenOnMobile
+      ? summary(t(PurchaseOverviewTexts.summary.messageRequiresMobile))
+      : null;
+
     switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
       case 'multiple':
       case 'multiple-stop':
@@ -78,6 +83,7 @@ export function Summary({
               ),
             )}
             {harborText}
+            {requiredOnMobileText}
           </>
         );
       case 'none':

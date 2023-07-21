@@ -50,7 +50,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
-  const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
@@ -59,6 +58,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
 
+  const offerEndpoint =
+    zoneSelectionMode === 'none'
+      ? 'authority'
+      : zoneSelectionMode === 'multiple-stop-harbor'
+      ? 'stop-places'
+      : 'zones';
+
   const {
     isSearchingOffer,
     error,
@@ -66,13 +72,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    zoneSelectionMode === 'none' ? 'authority' : 'zones',
+    offerEndpoint,
     preassignedFareProduct,
     fromPlace,
     toPlace,
     travellerSelection,
     travelDate,
   );
+  const hasSelection =
+    travellerSelection.some((u) => u.count) &&
+    userProfilesWithCountAndOffer.some((u) => u.count);
 
   const isEmptyOffer = error?.type === 'empty-offers';
 
