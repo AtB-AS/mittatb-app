@@ -3,7 +3,6 @@ import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips';
 import {
   Modes,
-  StreetMode,
   TransportMode,
   TransportModes,
   TransportSubmode,
@@ -26,7 +25,7 @@ import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useJourneyModes} from './hooks';
+import {defaultJourneyModes, useJourneyModes} from './hooks';
 import {useAnalytics} from '@atb/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 
@@ -269,17 +268,11 @@ async function doSearch(
     );
 
     const includeFlexibleTransport = selectedFilters.some(
-      (sf) => sf.id == 'bus', // filter flex transport on bus filter
+      (sf) => sf.id === TransportMode.Bus, // filter flex transport on bus filter
     );
 
     query.modes = {
-      ...(includeFlexibleTransport
-        ? journeySearchModes
-        : {
-            accessMode: StreetMode.Foot,
-            directMode: StreetMode.Foot,
-            egressMode: StreetMode.Foot,
-          }),
+      ...(includeFlexibleTransport ? journeySearchModes : defaultJourneyModes),
       transportModes: flatMap(selectedFilters, (tm) =>
         transportModeToEnum(tm.modes),
       ),
