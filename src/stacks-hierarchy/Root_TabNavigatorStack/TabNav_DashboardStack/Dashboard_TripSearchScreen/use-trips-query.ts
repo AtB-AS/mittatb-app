@@ -3,6 +3,7 @@ import {CancelToken, isCancel} from '@atb/api';
 import {tripsSearch} from '@atb/api/trips';
 import {
   Modes,
+  StreetMode,
   TransportMode,
   TransportModes,
   TransportSubmode,
@@ -270,8 +271,15 @@ async function doSearch(
     const includeFlexibleTransport = selectedFilters.some(
       (sf) => sf.id == 'bus', // filter flex transport on bus filter
     );
+
     query.modes = {
-      ...(includeFlexibleTransport ? journeySearchModes : {}),
+      ...(includeFlexibleTransport
+        ? journeySearchModes
+        : {
+            accessMode: StreetMode.Foot,
+            directMode: StreetMode.Foot,
+            egressMode: StreetMode.Foot,
+          }),
       transportModes: flatMap(selectedFilters, (tm) =>
         transportModeToEnum(tm.modes),
       ),
