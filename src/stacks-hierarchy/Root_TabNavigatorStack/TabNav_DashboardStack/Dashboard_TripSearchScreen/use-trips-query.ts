@@ -266,8 +266,12 @@ async function doSearch(
     const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
       (m) => m.selected,
     );
+
+    const includeFlexibleTransport = selectedFilters.some(
+      (sf) => sf.id == 'bus', // filter flex transport on bus filter
+    );
     query.modes = {
-      ...journeySearchModes,
+      ...(includeFlexibleTransport ? journeySearchModes : {}),
       transportModes: flatMap(selectedFilters, (tm) =>
         transportModeToEnum(tm.modes),
       ),
