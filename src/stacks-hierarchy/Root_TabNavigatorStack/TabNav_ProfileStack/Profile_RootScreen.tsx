@@ -51,7 +51,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
-import {BetaTag} from '@atb/components/beta-tag';
+import {InfoTag} from '@atb/components/info-tag';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -343,7 +343,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
-              <BetaTag style={style.betaTag} />
+              <InfoTag text="Beta" style={style.betaTag} />
             </View>
           </GenericSectionItem>
           <ToggleSectionItem

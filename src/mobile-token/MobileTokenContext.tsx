@@ -39,7 +39,10 @@ type MobileTokenContextState = {
   isLoading: boolean;
   isError: boolean;
   getSignedToken: () => Promise<string | undefined>;
-  toggleToken: (tokenId: string) => Promise<boolean>;
+  toggleToken: (
+    tokenId: string,
+    bypassRestrictions: boolean,
+  ) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
   fallbackEnabled: boolean;
@@ -269,15 +272,22 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     return isInspectable(matchingRemoteToken);
   }, [token, remoteTokens]);
 
-  const toggleToken = useCallback(async (tokenId: string) => {
-    try {
-      const updatedTokens = await tokenService.toggle(tokenId, uuid());
-      setRemoteTokens(updatedTokens);
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }, []);
+  const toggleToken = useCallback(
+    async (tokenId: string, bypassRestrictions: boolean) => {
+      try {
+        const updatedTokens = await tokenService.toggle(
+          tokenId,
+          uuid(),
+          bypassRestrictions,
+        );
+        setRemoteTokens(updatedTokens);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    },
+    [],
+  );
 
   const getTokenToggleDetails = useCallback(async () => {
     try {

@@ -14,6 +14,7 @@ export const useIsCityBikesEnabled = () => {
 export const useCityBikesInMapDebugOverride = (): [
   boolean | undefined,
   (v?: boolean) => void,
+  boolean,
 ] => {
   return useDebugOverride(
     StorageModelKeysEnum.EnableCityBikesInMapDebugOverride,

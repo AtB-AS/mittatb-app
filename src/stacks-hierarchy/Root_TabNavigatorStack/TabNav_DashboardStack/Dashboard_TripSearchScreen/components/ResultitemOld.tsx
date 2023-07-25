@@ -342,7 +342,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
   const a11yText =
     mustWalk && mustWait
       ? t(
-          TripSearchTexts.results.resultItem.footLeg.walkandWaitLabel(
+          TripSearchTexts.results.resultItem.footLeg.walkAndWaitLabel(
             walkDuration,
             waitDuration,
           ),

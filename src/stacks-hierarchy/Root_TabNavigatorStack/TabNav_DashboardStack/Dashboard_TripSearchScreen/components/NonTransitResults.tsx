@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native';
 import {Button} from '@atb/components/button';
 import {secondsToDuration, secondsToDurationShort} from '@atb/utils/date';
 import {NonTransitTripsQuery} from '@atb/api/types/generated/TripsQuery';
@@ -7,7 +7,6 @@ import {TripSearchTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {TripPattern} from '@atb/api/types/trips';
 import {getTransportModeSvg} from '@atb/components/icon-box';
-import {isBlank} from '@atb/utils/presence';
 import arrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {MapFilterType} from '@atb/components/map';
 
@@ -25,8 +24,6 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
   const {t, language} = useTranslation();
   const style = useStyle();
 
-  if (trips.map((t) => t.trip).every(isBlank)) return null;
-
   return (
     <ScrollView horizontal={true} style={style.container}>
       {trips.map((trip) => {
@@ -34,27 +31,33 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
         const tripPattern = trip.trip?.tripPatterns[0];
         if (!tripPattern) return null;
         const mode = t(TripSearchTexts.nonTransit.travelMode(trip.mode));
-        const duration = secondsToDurationShort(tripPattern.duration, language);
-        const durationLong = secondsToDuration(tripPattern.duration, language);
-        const analyticsMetadata = {mode: trip.mode, duration};
+        const durationShort = secondsToDurationShort(
+          tripPattern.duration,
+          language,
+        );
+        const duration = secondsToDuration(tripPattern.duration, language);
+        const analyticsMetadata = {mode: trip.mode, duration: durationShort};
         const mapFilter =
           trip.mode === 'bike_rental'
             ? {stations: {cityBikeStations: {showAll: true, operators: []}}}
             : undefined;
         return (
-          <Button
-            style={style.tripMode}
+          <TouchableOpacity
             key={trip.mode}
-            type={'pill'}
-            interactiveColor={'interactive_2'}
-            text={`${mode} ${duration}`}
-            leftIcon={{svg: getTransportModeSvg(trip.mode)}}
-            rightIcon={{svg: arrowRight}}
+            style={style.tripMode}
             onPress={() =>
               onDetailsPressed(tripPattern, {analyticsMetadata, mapFilter})
             }
-            accessibilityLabel={`${mode} ${durationLong}`}
-          />
+          >
+            <Button
+              type={'pill'}
+              interactiveColor={'interactive_2'}
+              text={`${mode} ${durationShort}`}
+              leftIcon={{svg: getTransportModeSvg(trip.mode).svg}}
+              rightIcon={{svg: arrowRight}}
+              accessibilityLabel={`${mode} ${duration}`}
+            />
+          </TouchableOpacity>
         );
       })}
     </ScrollView>
@@ -64,9 +67,10 @@ export const NonTransitResults = ({trips, onDetailsPressed}: Props) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
-    paddingTop: theme.spacings.medium,
+    paddingTop: theme.spacings.xSmall,
   },
   tripMode: {
     marginRight: theme.spacings.small,
+    paddingVertical: theme.spacings.small,
   },
 }));

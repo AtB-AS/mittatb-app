@@ -1,5 +1,9 @@
 import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
-import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
+import {
+  CounterIconBox,
+  TransportationIconBox,
+  getTransportModeSvg,
+} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -17,6 +21,21 @@ export type TransportModePair = {
   subMode?: TransportSubmodeType;
 };
 
+const removeDuplicateStringsFilter = (
+  val: string,
+  i: number,
+  arr: string[],
+): boolean => arr.indexOf(val) === i;
+
+const removeDuplicatesByIconNameFilter = (
+  val: TransportModePair,
+  i: number,
+  arr: TransportModePair[],
+): boolean =>
+  arr
+    .map((m) => getTransportModeSvg(m.mode, m.subMode).name)
+    .indexOf(getTransportModeSvg(val.mode, val.subMode).name) === i;
+
 export const getTransportModeText = (
   modes: TransportModePair[],
   t: TranslateFunction,
@@ -30,8 +49,10 @@ export const getTransportModeText = (
   }
   return modes
     .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
+    .filter(removeDuplicateStringsFilter)
     .join('/');
 };
+
 export const TransportModes = ({
   modes,
   iconSize,
@@ -47,7 +68,10 @@ export const TransportModes = ({
   const {t} = useTranslation();
 
   const modesCount: number = modes.length;
-  const modesToDisplay = modes.slice(0, modesDisplayLimit);
+  const modesToDisplay = modes
+    .slice(0, modesDisplayLimit)
+    .filter(removeDuplicatesByIconNameFilter);
+
   const transportModeText: string = getTransportModeText(
     modes,
     t,

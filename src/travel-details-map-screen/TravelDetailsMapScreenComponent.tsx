@@ -33,12 +33,13 @@ import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
+import {useStations} from '@atb/mobility';
+import {Stations} from '@atb/components/map';
 import {
   MapState,
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/components/MapView';
-import {useStations} from '@atb/mobility';
-import {Stations} from '@atb/components/map';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -71,6 +72,7 @@ export const TravelDetailsMapScreenComponent = ({
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationState();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
@@ -101,6 +103,7 @@ export const TravelDetailsMapScreenComponent = ({
       setVehicle(vehicle);
     },
     onError: () => setIsError(true),
+    enabled: isFocusedAndActive,
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
@@ -364,7 +367,7 @@ const LiveVehicleIcon = ({
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'text');
-  const svg = getTransportModeSvg(mode, subMode);
+  const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)
     return (

@@ -20,7 +20,7 @@ export const TripSummary: React.FC<TripPattern> = ({
   const time = secondsToDuration(duration, language);
   const readableDistance = useHumanizeDistance(walkDistance);
   return (
-    <>
+    <View style={styles.tripSummary}>
       <View style={styles.summaryDetail}>
         <ThemeIcon
           colorType="disabled"
@@ -61,10 +61,13 @@ export const TripSummary: React.FC<TripPattern> = ({
           </ThemeText>
         </View>
       )}
-    </>
+    </View>
   );
 };
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  tripSummary: {
+    paddingVertical: theme.spacings.medium,
+  },
   detailText: {
     flex: 1,
   },

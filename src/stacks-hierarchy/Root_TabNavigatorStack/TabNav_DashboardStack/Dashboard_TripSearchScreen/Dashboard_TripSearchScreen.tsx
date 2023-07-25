@@ -59,6 +59,7 @@ import {useAnalytics} from '@atb/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {MapFilterType} from '@atb/components/map';
+import {isBlank} from '@atb/utils/presence';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -99,7 +100,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   });
 
   const filtersState = useTravelSearchFiltersState();
-  const isFlexibleTransportEnabledInRemoteConfig =
+  const [isFlexibleTransportEnabledInRemoteConfig, _] =
     useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
@@ -237,6 +238,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           : {...searchTime},
     });
   };
+
+  const nonTransitTripsVisible =
+    nonTransitSearchState === 'search-success' &&
+    !nonTransitTrips.map((t) => t.trip).every(isBlank);
 
   useEffect(refresh, [from, to]);
 
@@ -397,9 +402,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 <SelectedFiltersButtons
                   filtersSelection={filtersState.filtersSelection}
                   resetTransportModes={filtersState.resetTransportModes}
+                  includeMarginBottom={nonTransitTripsVisible}
                 />
               )}
-              {nonTransitSearchState === 'search-success' && (
+              {nonTransitTripsVisible && (
                 <NonTransitResults
                   trips={nonTransitTrips}
                   onDetailsPressed={onPressed}
@@ -435,6 +441,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 anyFiltersApplied={
                   filtersState.enabled && filtersState.anyFiltersApplied
                 }
+                nonTransitTripsVisible={nonTransitTripsVisible}
               />
             </View>
           )}
