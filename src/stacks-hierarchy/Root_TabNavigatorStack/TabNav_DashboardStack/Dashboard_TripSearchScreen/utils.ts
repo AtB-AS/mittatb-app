@@ -12,6 +12,7 @@ import {flatMap} from '@atb/utils/array';
 import {TravelSearchTransportModes} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {SearchTime} from '@atb/journey-date-picker';
+import {defaultJourneyModes} from './hooks';
 
 export type TimeSearch = {
   searchTime: SearchTime;
@@ -66,8 +67,13 @@ export function createQuery(
     const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
       (m) => m.selected,
     );
+
+    const includeFlexibleTransport = selectedFilters.some(
+      (sf) => sf.id === TransportMode.Bus, // filter flex transport on bus filter
+    );
+
     query.modes = {
-      ...journeySearchModes,
+      ...(includeFlexibleTransport ? journeySearchModes : defaultJourneyModes),
       transportModes: flatMap(selectedFilters, (tm) =>
         transportModeToEnum(tm.modes),
       ),
