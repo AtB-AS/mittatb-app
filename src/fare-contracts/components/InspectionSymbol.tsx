@@ -113,8 +113,6 @@ const InspectableContent = ({
         styles.symbolContent,
         {
           backgroundColor: shouldFill ? themeColor.background : undefined,
-          borderColor: shouldFill ? themeColor.background : undefined,
-          borderRadius: shouldFill ? 1 : 0,
         },
       ]}
     >
