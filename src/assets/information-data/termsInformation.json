@@ -70,5 +70,41 @@
             "type": "link",
             "link": "https://www.atb.no/en/fare-and-discount-guidelines/"
         }
+    ],
+    "nn": [
+        {
+            "text": "Det er passasjerens ansvar",
+            "type": "text"
+        },
+        {
+            "text": "å ha tilstrekkeleg nettdekning under kjøpsprosessen slik at kjøpet vert gjennomført i sin heilskap. Datatrafikk må vere påslått i ein kontrollsituasjon, slik at billetten og kontrollkoden kan visast fram ved behov.",
+            "type": "bullet-point"
+        },
+        {
+            "text": "å ha gyldig billett for reisa ved ombordstigning",
+            "type": "bullet-point"
+        },
+        {
+            "text": "at mobiltelefonen fungerer normalt, skjermen er lesbar og har nok batterikapasitet så lenge reisen varer, slik at gyldig billett kan visast fram. Dersom du ikkje kan vise fram billetten, vil det verte rekna som å reise utan gyldig billett.",
+            "type": "bullet-point"
+        },
+        {
+            "text": "Det vil kome fleire betalingsmåtar",
+            "type": "heading"
+        },
+        {
+            "text": "AtBs transportvedtekter og takstreglar gjeld til ei kvar tid under heile reisa",
+            "type": "text"
+        },
+        {
+            "text": "Transportvedtekter",
+            "type": "link",
+            "link": "https://www.atb.no/transportvedtekter/"
+        },
+        {
+            "text": "Takstreglar",
+            "type": "link",
+            "link": "https://www.atb.no/takstregler/"
+        }
     ]
 }

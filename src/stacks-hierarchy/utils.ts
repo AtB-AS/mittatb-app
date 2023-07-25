@@ -1,34 +1,13 @@
-import {useEffect, useMemo, useRef} from 'react';
-import {TariffZone} from '@atb/reference-data/types';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {PaymentType} from '@atb/ticketing';
 import {format, parseISO} from 'date-fns';
-
-export function useDoOnceWhen(fn: () => void, condition: boolean) {
-  const firstTimeRef = useRef(true);
-  useEffect(() => {
-    if (firstTimeRef.current && condition) {
-      firstTimeRef.current = false;
-      fn();
-    }
-    return () => {
-      firstTimeRef.current = true;
-    };
-  }, [condition]);
-}
-
-export const useTariffZoneFromLocation = (tariffZones: TariffZone[]) => {
-  const {location} = useGeolocationState();
-  return useMemo(() => {
-    if (location) {
-      const {longitude, latitude} = location.coordinates;
-      return tariffZones.find((t) =>
-        turfBooleanPointInPolygon([longitude, latitude], t.geometry),
-      );
-    }
-  }, [tariffZones, location]);
-};
+import {ErrorType} from '@atb/api/utils';
+import {LocationSearchTexts, TranslateFunction} from '@atb/translations';
+import {TariffZone} from '@atb/reference-data/types';
+import {
+  TariffZoneWithMetadata,
+  useTariffZoneFromLocation,
+} from '@atb/tariff-zones-selector';
+import {useMemo} from 'react';
 
 export function getPaymentTypeName(paymentType: PaymentType) {
   switch (paymentType) {
@@ -52,3 +31,41 @@ export function getExpireDate(iso: string): string {
   date.setDate(date.getDate() - 1);
   return format(date, 'MM/yy');
 }
+
+export function translateErrorType(
+  errorType: ErrorType,
+  t: TranslateFunction,
+): string {
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return t(LocationSearchTexts.messages.networkError);
+    default:
+      return t(LocationSearchTexts.messages.defaultError);
+  }
+}
+/**
+ * Get the default tariff zone, either based on current location, default tariff
+ * zone set on tariff zone in reference data or else the first tariff zone in the
+ * provided tariff zones list.
+ */
+export const useDefaultTariffZone = (
+  tariffZones: TariffZone[],
+): TariffZoneWithMetadata => {
+  const tariffZoneFromLocation = useTariffZoneFromLocation(tariffZones);
+  return useMemo<TariffZoneWithMetadata>(() => {
+    if (tariffZoneFromLocation) {
+      return {...tariffZoneFromLocation, resultType: 'geolocation'};
+    }
+
+    const defaultTariffZone = tariffZones.find(
+      (tariffZone) => tariffZone.isDefault,
+    );
+
+    if (defaultTariffZone) {
+      return {...defaultTariffZone, resultType: 'zone'};
+    }
+
+    return {...tariffZones[0], resultType: 'zone'};
+  }, [tariffZones, tariffZoneFromLocation]);
+};

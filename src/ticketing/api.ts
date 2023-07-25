@@ -22,11 +22,27 @@ export async function listRecentFareContracts(): Promise<
   return response.data;
 }
 
-export type OfferSearchParams = {
-  zones: string[];
-  travellers: {id: string; user_type: string; count: number}[];
+export type OfferSearchParams = SearchParams &
+  (ZoneOfferSearchParams | StopPlaceOfferSearchParams);
+
+type SearchParams = {
+  travellers: Traveller[];
   products: string[];
   travel_date?: string;
+};
+
+type ZoneOfferSearchParams = {
+  zones: string[];
+};
+
+type StopPlaceOfferSearchParams = {
+  from: string;
+  to: string;
+};
+type Traveller = {
+  id: string;
+  user_type: string;
+  count: number;
 };
 
 export async function listRecurringPayments(): Promise<RecurringPayment[]> {
@@ -47,6 +63,7 @@ type ReserveOfferParams = {
   paymentType: PaymentType;
   opts?: AxiosRequestConfig;
   scaExemption: boolean;
+  customerAccountId: string;
 };
 
 export type ReserveOfferWithSavePaymentParams = ReserveOfferParams & {
@@ -95,12 +112,13 @@ export async function reserveOffers({
   paymentType,
   opts,
   scaExemption,
+  customerAccountId,
   ...rest
 }:
   | ReserveOfferWithSavePaymentParams
   | ReserveOfferWithRecurringParams): Promise<OfferReservation> {
   const url = 'ticket/v3/reserve';
-  let body: ReserveOfferRequestBody = {
+  const body: ReserveOfferRequestBody = {
     payment_redirect_url: `${APP_SCHEME}://ticketing?transaction_id={transaction_id}&payment_id={payment_id}`,
     offers,
     payment_type: paymentType,
@@ -109,6 +127,7 @@ export async function reserveOffers({
     recurring_payment_id:
       'recurringPaymentId' in rest ? rest.recurringPaymentId : undefined,
     sca_exemption: scaExemption,
+    customer_account_id: customerAccountId,
   };
   const response = await client.post<OfferReservation>(url, body, {
     ...opts,

@@ -32,11 +32,13 @@ export const ScooterFilter = ({
         {t(MobilityTexts.scooter)}
       </ThemeText>
       <Section style={style}>
-        <ToggleSectionItem
-          text={t(MobilityTexts.filter.selectAll)}
-          value={showAll()}
-          onValueChange={onAllToggle}
-        />
+        {scooterOperators.length !== 1 && (
+          <ToggleSectionItem
+            text={t(MobilityTexts.filter.selectAll)}
+            value={showAll()}
+            onValueChange={onAllToggle}
+          />
+        )}
         {scooterOperators.map((operator) => (
           <ToggleSectionItem
             key={operator.id}

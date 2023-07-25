@@ -37,7 +37,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   const backgroundColor = disabled
     ? theme.text.colors.disabled
     : transportationColor.background;
-  const svg = getTransportModeSvg(mode, subMode);
+  const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
 
   const iconStyle =

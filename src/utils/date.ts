@@ -69,7 +69,7 @@ export function secondsToDuration(
   language: Language,
   opts?: humanizeDuration.Options,
 ): string {
-  const currentLanguage = language === Language.Norwegian ? 'no' : 'en';
+  const currentLanguage = language === Language.English ? 'en' : 'no';
   return humanizeDuration(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
@@ -175,6 +175,8 @@ export function formatLocaleTime(date: Date | string, language: Language) {
       return format(parseIfNeeded(date), 'HH:mm');
     case Language.English:
       return format(parseIfNeeded(date), 'HH:mm');
+    case Language.Nynorsk:
+      return format(parseIfNeeded(date), 'HH:mm');
   }
 }
 export function isInThePast(isoDate: string | Date) {
@@ -266,7 +268,12 @@ export function formatToVerboseDateTime(
   date: Date | string,
   language: Language,
 ) {
-  const at = language === Language.Norwegian ? 'klokken' : 'at';
+  const at =
+    language === Language.English
+      ? 'at'
+      : Language.Nynorsk
+      ? 'klokka'
+      : 'klokken';
 
   const dateString = format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
@@ -356,6 +363,8 @@ const languageToLocale = (language: Language): Locale => {
       return nb;
     case Language.English:
       return en;
+    case Language.Nynorsk:
+      return nb;
   }
 };
 
@@ -365,7 +374,7 @@ function getShortHumanizer(
   options?: humanizeDuration.Options,
 ) {
   const opts = {
-    language: language === Language.Norwegian ? 'shortNo' : 'shortEn',
+    language: language === Language.English ? 'shortEn' : 'shortNo',
     languages: {
       shortNo: {
         y: () => 'år',
@@ -401,7 +410,7 @@ function getHumanizer(
   options?: humanizeDuration.Options,
 ) {
   const opts = {
-    language: language === Language.Norwegian ? 'no' : 'en',
+    language: language === Language.English ? 'en' : 'no',
     languages: {
       no: {
         y: () => 'år',

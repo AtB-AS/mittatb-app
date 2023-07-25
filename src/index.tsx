@@ -68,18 +68,18 @@ export const App = () => {
           <PreferencesContextProvider>
             <LocaleContextProvider>
               <AuthContextProvider>
-                <AccessibilityContextProvider>
-                  <ThemeContextProvider>
-                    <FavoritesContextProvider>
-                      <FiltersContextProvider>
-                        <SearchHistoryContextProvider>
-                          <RemoteConfigContextProvider>
-                            <FirestoreConfigurationContextProvider>
-                              <TicketingContextProvider>
-                                <MobileTokenContextProvider>
-                                  <AppLanguageProvider>
-                                    <GeolocationContextProvider>
-                                      <AnalyticsContextProvider>
+                <AnalyticsContextProvider>
+                  <AccessibilityContextProvider>
+                    <ThemeContextProvider>
+                      <FavoritesContextProvider>
+                        <FiltersContextProvider>
+                          <SearchHistoryContextProvider>
+                            <RemoteConfigContextProvider>
+                              <FirestoreConfigurationContextProvider>
+                                <TicketingContextProvider>
+                                  <MobileTokenContextProvider>
+                                    <AppLanguageProvider>
+                                      <GeolocationContextProvider>
                                         <GlobalMessagesContextProvider>
                                           <BottomSheetProvider>
                                             <FeedbackQuestionsProvider>
@@ -87,18 +87,18 @@ export const App = () => {
                                             </FeedbackQuestionsProvider>
                                           </BottomSheetProvider>
                                         </GlobalMessagesContextProvider>
-                                      </AnalyticsContextProvider>
-                                    </GeolocationContextProvider>
-                                  </AppLanguageProvider>
-                                </MobileTokenContextProvider>
-                              </TicketingContextProvider>
-                            </FirestoreConfigurationContextProvider>
-                          </RemoteConfigContextProvider>
-                        </SearchHistoryContextProvider>
-                      </FiltersContextProvider>
-                    </FavoritesContextProvider>
-                  </ThemeContextProvider>
-                </AccessibilityContextProvider>
+                                      </GeolocationContextProvider>
+                                    </AppLanguageProvider>
+                                  </MobileTokenContextProvider>
+                                </TicketingContextProvider>
+                              </FirestoreConfigurationContextProvider>
+                            </RemoteConfigContextProvider>
+                          </SearchHistoryContextProvider>
+                        </FiltersContextProvider>
+                      </FavoritesContextProvider>
+                    </ThemeContextProvider>
+                  </AccessibilityContextProvider>
+                </AnalyticsContextProvider>
               </AuthContextProvider>
             </LocaleContextProvider>
           </PreferencesContextProvider>

@@ -269,7 +269,7 @@ function DepartureTimeItem({
   }
   return (
     <Button
-      key={departure.serviceJourneyId}
+      key={departure.aimedTime + departure.serviceJourneyId}
       type="inline"
       compact={true}
       interactiveColor="interactive_2"

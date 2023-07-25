@@ -1,17 +1,19 @@
-import {TouchableOpacity, View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {FareProductIllustration} from './FareProductIllustration';
+
 import {
   FareContractTexts,
-  TicketingTexts,
   useTranslation,
+  TranslateFunction,
 } from '@atb/translations';
-import {getStaticColor, StaticColor} from '@atb/theme/colors';
-import {TransportModes} from '@atb/components/transportation-modes';
+
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
+
+import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {TransportModePair} from '@atb/components/transportation-modes';
+import {TicketingTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TicketingTile';
+
+const modesDisplayLimit = 2;
 
 export const FareProductTile = ({
   accented = false,
@@ -24,87 +26,63 @@ export const FareProductTile = ({
   testID: string;
   config: FareProductTypeConfig;
 }) => {
-  const styles = useStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
-  const color: StaticColor = accented ? 'background_accent_3' : 'background_0';
-  const themeColor = getStaticColor(themeName, color);
-  const title = useTextForLanguage(config.name);
-  const description = useTextForLanguage(config.description);
-  const transportModesText = config.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
-    .join('/');
-  const accessibilityLabel = [title, transportModesText, description].join(
-    '. ',
+
+  const transportModes = config.transportModes;
+
+  const transportColor = useThemeColorForTransportMode(
+    transportModes[0]?.mode,
+    transportModes[0]?.subMode,
   );
 
+  const transportModesText = getFareProductTravelModesText(
+    transportModes,
+    t,
+    modesDisplayLimit,
+  );
+
+  const title = useTextForLanguage(config.name) + ', ' + transportModesText;
+  const description = useTextForLanguage(config.description);
+  const accessibilityLabel = [title, description].join('. ');
+
   return (
-    <View
-      style={[styles.fareProduct, {backgroundColor: themeColor.background}]}
+    <TicketingTile
+      accented={accented}
+      onPress={onPress}
       testID={testID}
-    >
-      <TouchableOpacity
-        onPress={onPress}
-        accessible={true}
-        accessibilityLabel={accessibilityLabel}
-        accessibilityHint={t(
-          TicketingTexts.availableFareProducts.navigateToBuy,
-        )}
-        style={styles.spreadContent}
-      >
-        <View style={styles.contentContainer}>
-          <TransportModes modes={config.transportModes} iconSize={'small'} />
-          <ThemeText
-            type="body__secondary--bold"
-            style={styles.title}
-            accessibilityLabel={title}
-            color={themeColor}
-            testID={testID + 'Title'}
-          >
-            {title}
-          </ThemeText>
-          <ThemeText
-            type="body__tertiary"
-            style={styles.description}
-            color={'secondary'}
-          >
-            {description}
-          </ThemeText>
-        </View>
-        <FareProductIllustration style={styles.illustration} config={config} />
-      </TouchableOpacity>
-    </View>
+      illustrationName={config.illustration || 'unknown'}
+      isPeriodTicket={config.configuration.productSelectionMode === 'duration'}
+      transportColor={transportColor}
+      title={title}
+      description={description}
+      accessibilityLabel={accessibilityLabel}
+    />
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  fareProduct: {
-    width: '100%',
-    flexShrink: 1,
-    alignSelf: 'stretch',
-    marginRight: theme.spacings.medium,
-    padding: theme.spacings.xLarge,
-    borderRadius: theme.border.radius.regular,
-  },
-  contentContainer: {
-    flexShrink: 1,
-  },
-  iconContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  spreadContent: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  label: {marginLeft: theme.spacings.xSmall},
-  illustration: {
-    marginTop: theme.spacings.small,
-  },
-  title: {
-    marginBottom: theme.spacings.small,
-    marginTop: theme.spacings.medium,
-  },
-  description: {marginBottom: theme.spacings.small},
-}));
+const getFareProductTravelModesText = (
+  modes: TransportModePair[],
+  t: TranslateFunction,
+  modesDisplayLimit = 2,
+): string => {
+  const modesCount = modes.length;
+
+  if (!modes) return '';
+  if (modesCount > modesDisplayLimit) {
+    return t(FareContractTexts.transportModes.multipleTravelModes);
+  }
+
+  const travelModes = modes
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
+    .filter((value, index, array) => array.indexOf(value) === index); // remove duplicates
+
+  if (travelModes.length < 2) {
+    return travelModes[0] || '';
+  } else {
+    return (
+      travelModes.splice(0, travelModes.length - 1).join(', ') +
+      ` ${t(FareContractTexts.transportModes.concatListWord)} ` + // add " and " between the last two
+      travelModes
+    );
+  }
+};

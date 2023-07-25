@@ -1,4 +1,3 @@
-import {ErrorType} from '@atb/api/utils';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {AccessibleText} from '@atb/components/text';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -18,15 +17,10 @@ import {
   useGeolocationState,
 } from '@atb/GeolocationContext';
 import {usePreferences} from '@atb/preferences';
-import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {
-  Language,
-  NearbyTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {Language, NearbyTexts, useTranslation} from '@atb/translations';
 import {formatToShortDateTimeWithoutYear} from '@atb/utils/date';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused} from '@react-navigation/native';
@@ -34,10 +28,10 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {Loading} from '@atb/components/loading';
 import {DepartureTimeSheet} from '@atb/place-screen/components/DepartureTimeSheet';
-import {useDepartureData} from './use-departure-data';
-import {SearchTime} from './types';
 import {NearbyScreenProps} from './navigation-types';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
+import {SearchTime, useDepartureData} from '@atb/quay-departures-screen';
+import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -139,12 +133,16 @@ const NearbyOverview: React.FC<Props> = ({
       initialLocation: fromLocation,
     });
 
-  const {open: openBottomSheet} = useBottomSheet();
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onOpenFocusRef,
+  } = useBottomSheet();
   const onLaterTimePress = () => {
-    openBottomSheet((close, focusRef) => (
+    openBottomSheet(() => (
       <DepartureTimeSheet
-        ref={focusRef}
-        close={close}
+        ref={onOpenFocusRef}
+        close={closeBottomSheet}
         initialTime={searchTime}
         setSearchTime={setSearchTime}
         allowTimeInPast={false}
@@ -382,19 +380,6 @@ const useNearbyStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.small,
   },
 }));
-
-function translateErrorType(
-  errorType: ErrorType,
-  t: TranslateFunction,
-): string {
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return t(NearbyTexts.messages.networkError);
-    default:
-      return t(NearbyTexts.messages.defaultFetchError);
-  }
-}
 
 function getHeaderAlternativeTitle(
   locationName: string,

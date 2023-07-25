@@ -10,7 +10,7 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from '../../../../Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {FareProductTypeConfig} from '@atb/configuration/types';
@@ -129,10 +129,7 @@ const mapBackendRecentFareContracts = (
     preassignedFareProduct?.id +
     fromTariffZone?.id +
     toTariffZone?.id +
-    userProfilesWithCount
-      .sort((u1, u2) => (u1.id > u2.id ? 1 : -1))
-      .map((u) => u.id + u.count)
-      .join();
+    userProfilesWithCount.map((u) => u.id + u.count).join();
 
   return {
     id,

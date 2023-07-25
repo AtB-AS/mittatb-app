@@ -19,7 +19,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {useDoOnceWhen} from '@atb/stacks-hierarchy/utils';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {

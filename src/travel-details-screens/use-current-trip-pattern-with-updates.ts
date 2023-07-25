@@ -3,7 +3,6 @@ import {AxiosError} from 'axios';
 import {useCallback, useEffect, useState} from 'react';
 import {singleTripSearch} from '@atb/api/trips';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
-import {useIsFocused} from '@react-navigation/native';
 
 type TripPatternUpdate = {
   tp: TripPattern;
@@ -20,7 +19,6 @@ type TripPatternUpdate = {
 export const useCurrentTripPatternWithUpdates = (
   originalTripPattern: TripPattern,
 ): {updatedTripPattern: TripPattern; error?: AxiosError} => {
-  const isFocused = useIsFocused();
   const [tripPatternUpdates, setTripPatternUpdates] =
     useState<TripPatternUpdate>({tp: originalTripPattern});
 
@@ -38,7 +36,7 @@ export const useCurrentTripPatternWithUpdates = (
   >(fetchTripPattern, {
     initialValue: originalTripPattern,
     pollingTimeInSeconds: 20,
-    disabled: !isFocused,
+    pollOnFocus: true,
   });
 
   useEffect(() => {

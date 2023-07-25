@@ -13,11 +13,6 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
-import type {
-  FlexibleTransportOptionTypeWithSelectionType,
-  TransportModeFilterOptionWithSelectionType,
-  TravelSearchFiltersSelectionType,
-} from '../../types';
 import {useFilters} from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
@@ -28,6 +23,11 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
+import {
+  FlexibleTransportOptionTypeWithSelectionType,
+  TransportModeFilterOptionWithSelectionType,
+  TravelSearchFiltersSelectionType,
+} from '@atb/travel-search-filters';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -43,7 +43,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
 
-  const isFlexibleTransportEnabledInRemoteConfig =
+  const [isFlexibleTransportEnabledInRemoteConfig, _] =
     useFlexibleTransportEnabled();
 
   const [selectedModeOptions, setSelectedModes] = useState<
@@ -111,10 +111,12 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               <ToggleSectionItem
                 key={option.id}
                 text={text}
-                leftIcon={getTransportModeSvg(
-                  option.icon?.transportMode,
-                  option.icon?.transportSubMode,
-                )}
+                leftIcon={
+                  getTransportModeSvg(
+                    option.icon?.transportMode,
+                    option.icon?.transportSubMode,
+                  ).svg
+                }
                 subtext={description}
                 value={
                   selectedModeOptions?.find(({id}) => id === option.id)

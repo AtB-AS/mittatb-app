@@ -1,4 +1,3 @@
-import {SubscriptionStatus} from '@atb/api';
 import {VehicleWithPosition} from '@atb/api/types/vehicles';
 import {useLiveVehicleSubscription} from '@atb/api/vehicles';
 import {
@@ -33,6 +32,7 @@ import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
 import {RegionPayload} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
@@ -63,6 +63,7 @@ export const TravelDetailsMapScreenComponent = ({
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const {location: geolocation} = useGeolocationState();
+  const isFocusedAndActive = useIsFocusedAndActive();
 
   const features = useMemo(() => createMapLines(legs), [legs]);
   const bounds = !vehicleWithPosition ? getMapBounds(features) : undefined;
@@ -81,12 +82,17 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
-  const {status: subscriptionStatus} = useLiveVehicleSubscription({
+  const [isError, setIsError] = useState(false);
+
+  useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     onMessage: (event: WebSocketMessageEvent) => {
+      if (isError) setIsError(false);
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
       setVehicle(vehicle);
     },
+    onError: () => setIsError(true),
+    enabled: isFocusedAndActive,
   });
 
   const [shouldTrack, setShouldTrack] = useState<boolean>(true);
@@ -167,9 +173,9 @@ export const TravelDetailsMapScreenComponent = ({
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
-            subscriptionStatus={subscriptionStatus}
             zoomLevel={zoomLevel}
             heading={cameraHeading}
+            isError={isError}
           />
         )}
       </MapboxGL.MapView>
@@ -198,9 +204,9 @@ type VehicleIconProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
   setShouldTrack: React.Dispatch<React.SetStateAction<boolean>>;
-  subscriptionStatus: SubscriptionStatus;
   zoomLevel: number;
   heading: number;
+  isError: boolean;
 };
 
 const LiveVehicle = ({
@@ -208,18 +214,14 @@ const LiveVehicle = ({
   setShouldTrack,
   mode,
   subMode,
-  subscriptionStatus,
   zoomLevel,
   heading,
+  isError,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'background');
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
-  const isError =
-    subscriptionStatus === 'CLOSING' || subscriptionStatus === 'CLOSED';
-  const isLoading =
-    subscriptionStatus === 'CONNECTING' || subscriptionStatus === 'NOT_STARTED';
   const [isStale, setIsStale] = useState(false);
 
   useInterval(
@@ -246,7 +248,7 @@ const LiveVehicle = ({
     circleBorderColor =
       theme.interactive.interactive_destructive.default.background;
   }
-  if (isLoading || isStale) {
+  if (isStale) {
     circleBackgroundColor = theme.interactive.interactive_1.disabled.background;
     circleBorderColor = theme.interactive.interactive_1.default.background;
   }
@@ -290,7 +292,6 @@ const LiveVehicle = ({
           subMode={subMode}
           isError={isError}
           isStale={isStale}
-          isLoading={isLoading}
         />
 
         {!isError &&
@@ -315,7 +316,6 @@ const LiveVehicle = ({
 };
 
 type LiveVehicleIconProps = {
-  isLoading: boolean;
   isStale: boolean;
   isError: boolean;
   mode?: AnyMode;
@@ -324,13 +324,12 @@ type LiveVehicleIconProps = {
 const LiveVehicleIcon = ({
   mode,
   subMode,
-  isLoading,
   isStale,
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useTheme();
   const fillColor = useTransportationColor(mode, subMode, 'text');
-  const svg = getTransportModeSvg(mode, subMode);
+  const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)
     return (
@@ -340,7 +339,7 @@ const LiveVehicleIcon = ({
         allowFontScaling={false}
       />
     );
-  if (isLoading || isStale)
+  if (isStale)
     return (
       <ActivityIndicator
         color={theme.interactive.interactive_1.disabled.text}

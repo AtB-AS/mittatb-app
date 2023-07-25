@@ -52,7 +52,9 @@ export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
             accessibilityHint={t(
               ContactSheetTexts.customer_feedback_website.a11yHint,
             )}
-            icon={() => <ThemeIcon svg={ExternalLink} />}
+            icon={() => (
+              <ThemeIcon svg={ExternalLink} colorType="background_accent_3" />
+            )}
             onPress={() => {
               Linking.openURL(customer_feedback_url);
               close();

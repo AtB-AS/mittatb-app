@@ -4,7 +4,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {productIsSellableInApp} from '@atb/reference-data/utils';
+import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {ThemeText} from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
@@ -14,6 +14,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
+import {useTicketingState} from '@atb/ticketing';
 
 type Props = {
   color: InteractiveColor;
@@ -33,10 +34,11 @@ export function ProductSelectionByAlias({
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {preassignedFareProducts} = useFirestoreConfiguration();
+  const {customerProfile} = useTicketingState();
 
   const selectableProducts = preassignedFareProducts
-    .filter(productIsSellableInApp)
-    .filter((p) => p.type === selectedProduct.type);
+    .filter((product) => isProductSellableInApp(product, customerProfile))
+    .filter((product) => product.type === selectedProduct.type);
 
   const title = useTextForLanguage(
     fareProductTypeConfig.configuration.productSelectionTitle,

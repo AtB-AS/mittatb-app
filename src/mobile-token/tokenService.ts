@@ -33,7 +33,11 @@ const IsEmulatorHeaderName = 'Atb-Is-Emulator';
 export type TokenService = RemoteTokenServiceWithInitiate & {
   removeToken: (tokenId: string, traceId: string) => Promise<boolean>;
   listTokens: (traceId: string) => Promise<RemoteToken[]>;
-  toggle: (tokenId: string, traceId: string) => Promise<RemoteToken[]>;
+  toggle: (
+    tokenId: string,
+    traceId: string,
+    bypassRestrictions: boolean,
+  ) => Promise<RemoteToken[]>;
   validate: (
     token: ActivatedToken,
     secureContainer: string,
@@ -168,11 +172,15 @@ export const tokenService: TokenService = {
       })
       .then((res) => res.data.tokens)
       .catch(handleError),
-  toggle: async (tokenId: string, traceId: string) =>
+  toggle: async (
+    tokenId: string,
+    traceId: string,
+    bypassRestrictions: boolean,
+  ) =>
     client
       .post<ToggleResponse>(
         '/tokens/v4/toggle',
-        {tokenId},
+        {tokenId, bypassRestrictions},
         {
           headers: {
             [CorrelationIdHeaderName]: traceId,

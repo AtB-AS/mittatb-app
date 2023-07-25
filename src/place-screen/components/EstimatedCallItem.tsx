@@ -346,7 +346,7 @@ function LineChip({
   const styles = useStyles();
   const fontScale = useFontScale();
   const {theme} = useTheme();
-  const svg = getTransportModeSvg(transportMode, transportSubmode);
+  const {svg} = getTransportModeSvg(transportMode, transportSubmode);
   const transportColor = useTransportationColor(
     transportMode as Mode_v2 | undefined,
     transportSubmode,

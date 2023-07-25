@@ -17,7 +17,6 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {
   SearchStateType,
-  TravelSearchFiltersSelectionType,
   TripPatternWithKey,
 } from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {flatMap} from '@atb/utils/array';
@@ -26,8 +25,9 @@ import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useJourneyModes} from './hooks';
+import {defaultJourneyModes, useJourneyModes} from './hooks';
 import {useAnalytics} from '@atb/analytics';
+import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 
 export function useTripsQuery(
   fromLocation: Location | undefined,
@@ -70,7 +70,8 @@ export function useTripsQuery(
     setTripPatterns([]);
   }, [setTripPatterns]);
 
-  const journeySearchModes = useJourneyModes();
+  const [journeySearchModes, journeySearchModesAllDebugOverridesReady] =
+    useJourneyModes();
 
   const search = useCallback(
     (cursor?: string, existingTrips?: TripPatternWithKey[]) => {
@@ -184,10 +185,18 @@ export function useTripsQuery(
         cancelTokenSource.cancel('Unmounting use trips hook');
       };
     },
-    [fromLocation, toLocation, searchTime, filtersSelection],
+    [
+      fromLocation,
+      toLocation,
+      searchTime,
+      filtersSelection,
+      journeySearchModesAllDebugOverridesReady,
+    ],
   );
 
-  useEffect(() => search(), [search]);
+  useEffect(() => {
+    journeySearchModesAllDebugOverridesReady && search();
+  }, [search, journeySearchModesAllDebugOverridesReady]);
 
   const loadMore = useCallback(() => {
     return search(pageCursor, tripPatterns);
@@ -257,8 +266,13 @@ async function doSearch(
     const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
       (m) => m.selected,
     );
+
+    const includeFlexibleTransport = selectedFilters.some(
+      (sf) => sf.id === TransportMode.Bus, // filter flex transport on bus filter
+    );
+
     query.modes = {
-      ...journeySearchModes,
+      ...(includeFlexibleTransport ? journeySearchModes : defaultJourneyModes),
       transportModes: flatMap(selectedFilters, (tm) =>
         transportModeToEnum(tm.modes),
       ),

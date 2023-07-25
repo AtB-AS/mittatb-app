@@ -89,7 +89,7 @@ export const StopPlaceItem = ({
               key={mode}
               style={styles.stopPlaceIcon}
               size="large"
-              svg={getTransportModeSvg(mode)}
+              svg={getTransportModeSvg(mode).svg}
             />
           ))}
         </View>

@@ -1,8 +1,32 @@
 import {client} from '@atb/api';
-import {
-  RecommendedTicketResponse,
-  InputParams,
-} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
+
+export type Traveller = {
+  id: string;
+  userType: string;
+};
+
+export type InputParams = {
+  frequency?: number;
+  duration?: number;
+  traveller?: Traveller;
+  zones?: string[];
+};
+
+export type TicketResponseData = {
+  productId: string;
+  fareProduct: string;
+  duration: number;
+  quantity: number;
+  price: number;
+  userProfileId: string;
+};
+
+export type RecommendedTicketResponse = {
+  totalCost: number;
+  tickets: TicketResponseData[];
+  zones: string[];
+  singleTicketPrice: number;
+};
 
 export async function getRecommendedTicket(
   inputParams: InputParams,

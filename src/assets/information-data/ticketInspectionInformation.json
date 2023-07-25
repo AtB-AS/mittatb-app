@@ -86,5 +86,49 @@
             "type": "link",
             "link": "https://www.atb.no/en/fare-and-discount-guidelines/"
         }
+    ],
+    "nn": [
+        {
+            "text": "Ved billettkontroll, opne appen din og vel hovudmenyen «Billett» nedst i appen. Vel fana «Aktive». Her finn du din gyldige billett. Vel «Vis detaljar/kontroll». Du får no opp informasjon om billetten og ein barkode. Vis denne barkoden til kontrolløren som vil skanne denne med eige utstyr for å kontrollere om billetten er gyldig.\n",
+            "type": "text"
+        },
+        {
+            "text": "Hugs at når du reiser med rabattert billett må du kunne vise gyldig bevis som stadfestar din rett til rabatt.\n",
+            "type": "text"
+        },
+        {
+            "text": "Utan gyldig billett må du ved billettkontroll betale gebyr etter følgande satsar:",
+            "type": "text"
+        },
+        {
+            "text": "Vaksne: 1150 kroner eller 950 kroner ved betaling på staden.",
+            "type": "bullet-point"
+        },
+        {
+            "text": "Mindreårige som er fylt 15 år: 900 kroner uansett oppgjerform.",
+            "type": "bullet-point"
+        },
+        {
+            "text": "Misbruk eller falsk av billett: 2000 kroner, og billetten blir inndregen. Dersom du forfalskar ein billett, vil du også bli politianmeldt.\n",
+            "type": "bullet-point"
+        },
+        {
+            "text": "Manglande rabattbevis: Tilleggsavgift på grunn av manglande rabattbevis under billettkontroll kan reduserast til kr 150,- dersom gyldig rabattbevis, ID og gebyr vert vist innan sju (7) dagar hos AtB kundesenter.\n",
+            "type": "text"
+        },
+        {
+            "text": "AtBs transportvedtekter og takstreglar gjeld til ei kvar tid under heile reisa",
+            "type": "text"
+        },
+        {
+            "text": "Transportvedtekter",
+            "type": "link",
+            "link": "https://www.atb.no/transportvedtekter"
+        },
+        {
+            "text": "Takstreglar",
+            "type": "link",
+            "link": "https://www.atb.no/takstregler/"
+        }
     ]
 }

@@ -1,7 +1,10 @@
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {
+  findReferenceDataById,
+  isOfFareProductRef,
+} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -13,10 +16,6 @@ import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorSt
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
-
-function isOfFareProductRef(a: any): a is {fareProductRef: string} {
-  return 'fareProductRef' in a;
-}
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();

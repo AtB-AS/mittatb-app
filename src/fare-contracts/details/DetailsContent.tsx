@@ -77,6 +77,7 @@ export const DetailsContent: React.FC<Props> = ({
             validFrom={validFrom}
             validTo={validTo}
             isInspectable={isInspectable}
+            fareProductType={preassignedFareProduct?.type}
           />
           <FareContractInfo
             travelRights={fc.travelRights.filter(isPreActivatedTravelRight)}

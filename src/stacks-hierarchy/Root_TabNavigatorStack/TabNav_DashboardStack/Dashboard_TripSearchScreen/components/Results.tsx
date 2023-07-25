@@ -9,8 +9,8 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {isSeveralDays} from '@atb/utils/date';
-import React, {Fragment, useEffect, useMemo, useState} from 'react';
+
+import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 import {TripPattern} from '@atb/api/types/trips';
@@ -19,6 +19,7 @@ import {SearchTime} from '@atb/journey-date-picker';
 import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {ResultItemOld} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
 import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
+import {useAvailableTripPatterns} from '../hooks';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -48,6 +49,8 @@ export const Results: React.FC<Props> = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
 
+  const availableTripPatterns = useAvailableTripPatterns(tripPatterns);
+
   useEffect(() => {
     if (errorType) {
       switch (errorType) {
@@ -61,11 +64,6 @@ export const Results: React.FC<Props> = ({
       }
     }
   }, [errorType]);
-
-  const allSameDay = useMemo(
-    () => isSeveralDays(tripPatterns.map((i) => i.expectedStartTime)),
-    [tripPatterns],
-  );
 
   if (showEmptyScreen) {
     return null;
@@ -96,12 +94,11 @@ export const Results: React.FC<Props> = ({
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
-      {tripPatterns?.map((tripPattern, i) => (
+      {availableTripPatterns.map((tripPattern, i) => (
         <Fragment key={tripPattern.key}>
           <DayLabel
             departureTime={tripPattern.expectedStartTime}
             previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
-            allSameDay={allSameDay}
           />
           {newTravelSearchEnabled ? (
             <ResultItem
@@ -121,7 +118,7 @@ export const Results: React.FC<Props> = ({
               }}
               searchTime={searchTime}
               testID={'tripSearchSearchResult' + i}
-            ></ResultItemOld>
+            />
           )}
         </Fragment>
       ))}

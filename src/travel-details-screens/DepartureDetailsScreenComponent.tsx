@@ -18,7 +18,7 @@ import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
-import {useGetServiceJourneyVehicles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-get-service-journey-vehicles';
+import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
@@ -27,7 +27,6 @@ import {animateNextChange} from '@atb/utils/animation';
 import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import {Time} from './components/Time';
@@ -44,6 +43,7 @@ import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useAnalytics} from '@atb/analytics';
+import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -71,11 +71,10 @@ export const DepartureDetailsScreenComponent = ({
   const styles = useStopsStyle();
   const {t, language} = useTranslation();
 
-  const isFocused = useIsFocused();
   const [
     {estimatedCallsWithMetadata, title, mode, subMode, situations, notices},
     isLoading,
-  ] = useDepartureData(activeItem, 20, !isFocused);
+  ] = useDepartureData(activeItem, 20);
 
   const mapData = useMapData(
     activeItem.serviceJourneyId,
@@ -99,6 +98,10 @@ export const DepartureDetailsScreenComponent = ({
 
   const realtimeText = useRealtimeText(estimatedCallsWithMetadata);
 
+  const isJourneyFinished =
+    vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
+    estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
+
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
     setActiveItem(newPage - 1);
@@ -108,7 +111,12 @@ export const DepartureDetailsScreenComponent = ({
     .map((s) => s.situationNumber)
     .filter((s): s is string => !!s);
 
-  const shouldShowMapButton = mapData && !screenReaderEnabled;
+  const shouldShowMapButton =
+    mapData &&
+    !screenReaderEnabled &&
+    !isLoading &&
+    estimatedCallsWithMetadata.length > 0 &&
+    !isJourneyFinished;
 
   return (
     <View style={styles.container}>

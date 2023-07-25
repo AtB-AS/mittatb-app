@@ -1,5 +1,4 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {TariffZone} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {TariffZonesTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
@@ -11,19 +10,8 @@ import {
 import {
   TariffZonesSelectorButtons,
   TariffZonesSelectorMap,
+  TariffZoneSelection,
 } from '@atb/tariff-zones-selector';
-
-export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
-export type TariffZoneWithMetadata = TariffZone & {
-  resultType: TariffZoneResultType;
-  venueName?: string;
-};
-
-export type TariffZoneSelection = {
-  from: TariffZoneWithMetadata;
-  to: TariffZoneWithMetadata;
-  selectNext: 'from' | 'to';
-};
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByMapScreen'>;
 
@@ -68,8 +56,9 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
       params: {
         mode: 'Ticket',
         fareProductTypeConfig,
-        fromTariffZone: selectedZones.from,
-        toTariffZone: isApplicableOnSingleZoneOnly
+        fromPlace: selectedZones.from,
+        onFocusElement: 'from-to-selection',
+        toPlace: isApplicableOnSingleZoneOnly
           ? selectedZones.from
           : selectedZones.to,
       },

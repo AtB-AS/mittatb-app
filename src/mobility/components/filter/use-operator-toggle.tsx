@@ -1,6 +1,6 @@
 import {OperatorFilterType} from '@atb/components/map';
 import {useEffect, useState} from 'react';
-import {MobilityOperatorType} from '@atb/mobility';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
 
 export const useOperatorToggle = (
   allOperators: MobilityOperatorType[],

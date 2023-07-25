@@ -1,9 +1,9 @@
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {CompositeScreenProps, NavigationProp} from '@react-navigation/native';
+import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-import {TariffZoneWithMetadata} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 
 export type TicketAssistant_ZonePickerScreenParams = {
   fromTariffZone: TariffZoneWithMetadata;
@@ -12,15 +12,14 @@ export type TicketAssistant_ZonePickerScreenParams = {
   preassignedFareProduct: PreassignedFareProduct;
 };
 
-export type TicketAssistantStackProps =
-  NavigationProp<TicketAssistantStackParams>;
-
 export type TicketAssistantStackParams = {
   TicketAssistant_WelcomeScreen: undefined;
   TicketAssistant_CategoryPickerScreen: undefined;
   TicketAssistant_FrequencyScreen: undefined;
   TicketAssistant_DurationScreen: undefined;
-  TicketAssistant_ZonePickerScreen: undefined;
+  TicketAssistant_ZonePickerScreen:
+    | TicketAssistant_ZonePickerScreenParams
+    | undefined;
   TicketAssistant_SummaryScreen: undefined;
 };
 

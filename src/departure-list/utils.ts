@@ -10,7 +10,6 @@ import {DepartureRealtimeData, DeparturesRealtimeData} from '@atb/sdk';
 import {isNumberOfMinutesInThePast} from '@atb/utils/date';
 
 export const HIDE_AFTER_NUM_MINUTES = 1;
-
 /***
  * Used to update all stops with new time from realtime mapping object returned
  * from the BFF. It also removes outdated departures which most likely have passed.
@@ -83,7 +82,10 @@ function updateDeparturesWithRealtime(
 
       const departureRealtime = realtime.departures[serviceJourneyId];
 
-      if (!departureRealtime) {
+      if (
+        !departureRealtime ||
+        departure.aimedTime !== departureRealtime.timeData.aimedDepartureTime
+      ) {
         return departure;
       }
 

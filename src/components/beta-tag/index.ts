@@ -1,1 +1,0 @@
-export {BetaTag} from './BetaTag';

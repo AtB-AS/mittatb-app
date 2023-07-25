@@ -35,7 +35,6 @@ export type EstimatedCallWithMetadata = EstimatedCallWithQuayFragment & {
 export function useDepartureData(
   activeItem: ServiceJourneyDeparture,
   pollingTimeInSeconds: number = 0,
-  disabled?: boolean,
 ): [DepartureData, boolean] {
   const getService = useCallback(
     async function (): Promise<DepartureData> {
@@ -87,7 +86,8 @@ export function useDepartureData(
       notices: [],
     },
     pollingTimeInSeconds,
-    disabled: disabled || !activeItem,
+    disabled: !activeItem,
+    pollOnFocus: true,
   });
 
   return [data, isLoading];

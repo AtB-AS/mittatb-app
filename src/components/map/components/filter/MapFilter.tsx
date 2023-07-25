@@ -6,6 +6,7 @@ import {MapFilterType} from '../../types';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '../shadows';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
+import {useAnalytics} from '@atb/analytics';
 
 type MapFilterProps = {
   onFilterChanged: (filter: MapFilterType) => void;
@@ -14,8 +15,10 @@ type MapFilterProps = {
 export const MapFilter = ({onFilterChanged, isLoading}: MapFilterProps) => {
   const style = useStyle();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const analytics = useAnalytics();
 
   const onPress = () => {
+    analytics.logEvent('Map', 'Filter button clicked');
     openBottomSheet(() => (
       <MapFilterSheet
         onFilterChanged={onFilterChanged}

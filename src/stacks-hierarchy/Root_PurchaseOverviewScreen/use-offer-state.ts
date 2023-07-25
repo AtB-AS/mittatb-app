@@ -9,7 +9,9 @@ import {
 } from '@atb/ticketing';
 import {CancelToken} from 'axios';
 import {useCallback, useEffect, useMemo, useReducer} from 'react';
-import {UserProfileWithCount} from './components/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '@atb/fare-contracts';
+import {secondsBetween} from '@atb/utils/date';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -22,6 +24,7 @@ export type OfferError = {
 type OfferState = {
   offerSearchTime?: number;
   isSearchingOffer: boolean;
+  validDurationSeconds?: number;
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
@@ -41,6 +44,9 @@ type OfferReducer = (
 
 const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.amount_float ?? 0;
+
+const getValidDurationSeconds = (offer: Offer): number =>
+  secondsBetween(offer.valid_from, offer.valid_to);
 
 const calculateTotalPrice = (
   userProfileWithCounts: UserProfileWithCount[],
@@ -90,6 +96,7 @@ const getOfferReducer =
           ...prevState,
           offerSearchTime: Date.now(),
           isSearchingOffer: false,
+          validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
           totalPrice: calculateTotalPrice(
             userProfilesWithCounts,
             action.offers,
@@ -119,18 +126,18 @@ const initialState: OfferState = {
 };
 
 export function useOfferState(
-  offerEndpoint: 'zones' | 'authority',
+  offerEndpoint: 'zones' | 'authority' | 'stop-places',
   preassignedFareProduct: PreassignedFareProduct,
-  fromTariffZone: TariffZone,
-  toTariffZone: TariffZone,
+  fromPlace: TariffZone | StopPlaceFragment,
+  toPlace: TariffZone | StopPlaceFragment,
   userProfilesWithCount: UserProfileWithCount[],
   travelDate?: string,
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
   const zones = useMemo(
-    () => [...new Set([fromTariffZone.id, toTariffZone.id])],
-    [fromTariffZone, toTariffZone],
+    () => [...new Set([fromPlace.id, toPlace.id])],
+    [fromPlace, toPlace],
   );
 
   const updateOffer = useCallback(
@@ -147,17 +154,29 @@ export function useOfferState(
         dispatch({type: 'CLEAR_OFFER'});
       } else {
         try {
+          if (
+            offerEndpoint === 'stop-places' &&
+            (isTariffZone(fromPlace) || isTariffZone(toPlace))
+          ) {
+            dispatch({type: 'CLEAR_OFFER'});
+            return;
+          }
+          const placeParams =
+            offerEndpoint === 'stop-places'
+              ? {from: fromPlace.id, to: toPlace.id}
+              : {zones};
+          const params = {
+            ...placeParams,
+            travellers: offerTravellers,
+            products: [preassignedFareProduct.id],
+            travel_date: travelDate,
+          };
           dispatch({type: 'SEARCHING_OFFER'});
-          const response = await searchOffers(
-            offerEndpoint,
-            {
-              zones,
-              travellers: offerTravellers,
-              products: [preassignedFareProduct.id],
-              travel_date: travelDate,
-            },
-            {cancelToken, retry: true, authWithIdToken: true},
-          );
+          const response = await searchOffers(offerEndpoint, params, {
+            cancelToken,
+            retry: true,
+            authWithIdToken: true,
+          });
 
           cancelToken?.throwIfRequested();
 
@@ -219,4 +238,8 @@ export function useOfferState(
     ...state,
     refreshOffer,
   };
+}
+
+function isTariffZone(place: TariffZone | StopPlaceFragment) {
+  return 'geometry' in place;
 }

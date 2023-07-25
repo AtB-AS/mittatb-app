@@ -2,7 +2,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/Travellers/use-user-count-state';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 import {StyleSheet} from '@atb/theme';
 import {
   FareContractTexts,
@@ -44,11 +44,21 @@ export function Summary({
   };
 
   const transportModesText = fareProductTypeConfig.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode)))
+    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
     .filter(Boolean)
     .join('/');
 
   const SummaryText = () => {
+    const summary = (text: string) => (
+      <ThemeText type="body__secondary" style={styles.message}>
+        {text}
+      </ThemeText>
+    );
+    const requiredOnMobileText = fareProductTypeConfig.configuration
+      .requiresTokenOnMobile
+      ? summary(t(PurchaseOverviewTexts.summary.messageRequiresMobile))
+      : null;
+
     switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
       case 'multiple':
       case 'multiple-stop':
@@ -56,21 +66,34 @@ export function Summary({
       case 'single':
       case 'single-stop':
       case 'single-zone':
-        return (
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(PurchaseOverviewTexts.summary.messageInZone)}
-          </ThemeText>
+        return summary(t(PurchaseOverviewTexts.summary.messageInZone));
+      case 'multiple-stop-harbor':
+        const harborText = summary(
+          t(PurchaseOverviewTexts.summary.messageInHarborZones),
         );
-      case 'none':
         return (
-          <ThemeText type="body__secondary" style={styles.message}>
-            {t(
-              PurchaseOverviewTexts.summary.messageAppliesFor(
-                transportModesText,
+          <>
+            {summary(
+              t(
+                PurchaseOverviewTexts.summary[
+                  fareProductTypeConfig.type === 'boat-period'
+                    ? 'messageInHarborPeriod'
+                    : 'messageInHarborSingle'
+                ],
               ),
             )}
-          </ThemeText>
+            {harborText}
+            {requiredOnMobileText}
+          </>
         );
+      case 'none':
+        return summary(
+          t(
+            PurchaseOverviewTexts.summary.messageAppliesFor(transportModesText),
+          ),
+        );
+      default:
+        return null;
     }
   };
 

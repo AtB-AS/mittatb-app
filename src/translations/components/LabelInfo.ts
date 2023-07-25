@@ -2,7 +2,7 @@ import {translation as _} from '../commons';
 
 export const LabelInfoTexts = {
   labels: {
-    new: _('Ny', 'New'),
-    beta: _('Beta', 'Beta'),
+    new: _('Ny', 'New', 'Ny'),
+    beta: _('Beta', 'Beta', 'Beta'),
   },
 };
