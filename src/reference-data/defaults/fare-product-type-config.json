@@ -11,6 +11,7 @@
         "value": "Single ticket bus/tram"
       }
     ],
+    "illustration": "single",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -46,6 +47,7 @@
         "value": "Periodic ticket"
       }
     ],
+    "illustration": "period",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -81,6 +83,7 @@
         "value": "24 hour pass"
       }
     ],
+    "illustration": "hour24",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -151,6 +154,7 @@
         "value": "Punch card"
       }
     ],
+    "illustration": "carnet",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -229,7 +233,7 @@
         "value": "Periodic ticket, boat"
       }
     ],
-    "illustration": "boat",
+    "illustration": "boat-period",
     "transportModes": [
       {
         "mode": "water",
