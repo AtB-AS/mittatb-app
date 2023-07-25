@@ -16,7 +16,7 @@ import {useNow} from '@atb/utils/use-now';
 import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';
 import {
   AvailableTripPattern,
-  LegWithBookingRequirement,
+  BookingRequirement,
   TripPatternWithKey,
 } from '../types';
 
@@ -137,67 +137,62 @@ function getLatestBookingDate(
   return latestBookingDate;
 }
 
-function getLegWithBookingRequirement(
-  leg: Leg,
-  now: number,
-): LegWithBookingRequirement {
-  const requiresBooking = isLegFlexibleTransport(leg);
-
-  let requiresBookingUrgently = false;
-  let isTooEarly = false;
-  let isTooLate = false;
-  let latestBookingDate = new Date(Number.MAX_VALUE);
-  let timeDiffMilliSeconds = Infinity;
-
-  if (requiresBooking) {
-    latestBookingDate = getLatestBookingDate(
-      leg?.bookingArrangements?.latestBookingTime,
-      leg?.expectedStartTime,
-    );
-
-    timeDiffMilliSeconds = latestBookingDate.getTime() - now;
-    const oneHourMilliSeconds = 60 * 60 * 1000;
-    if (timeDiffMilliSeconds < 0) {
-      isTooLate = true; // currently assuming bookWhen == 'advanceAndDayOfTravel'
-    } else if (timeDiffMilliSeconds < oneHourMilliSeconds) {
-      requiresBookingUrgently = true;
-    } else if (timeDiffMilliSeconds > 7 * 24 * oneHourMilliSeconds) {
-      isTooEarly = true;
-    }
-  }
-
-  const bookingRequirement = {
-    requiresBooking,
-    requiresBookingUrgently,
-    isTooEarly,
-    isTooLate,
-    secondsRemainingToDeadline: timeDiffMilliSeconds / 1000,
-    latestBookingDate,
-  };
-  return {
-    ...leg,
-    ...{bookingRequirement},
-  };
-}
-
-export const useLegWithBookingRequirement = (
-  leg: Leg | undefined,
-): LegWithBookingRequirement | undefined => {
-  const now = useNow(2500);
-  if (leg == undefined) {
-    return undefined;
-  }
-  return getLegWithBookingRequirement(leg, now);
-};
-
-export const defaultBookingRequirement = {
+// move defaultBookingRequirement right next to type declaration?
+const defaultBookingRequirement: BookingRequirement = {
   requiresBooking: false,
   requiresBookingUrgently: false,
   isTooLate: false,
   isTooEarly: false,
-  secondsRemainingToDeadline: 0,
+  secondsRemainingToDeadline: Infinity,
   latestBookingDate: new Date(Number.MAX_VALUE),
 };
+
+export function getBookingRequirementForLeg(
+  leg: Leg | undefined,
+  now: number,
+): BookingRequirement {
+  if (leg === undefined) {
+    return defaultBookingRequirement;
+  }
+
+  let {
+    requiresBooking,
+    requiresBookingUrgently,
+    isTooEarly,
+    isTooLate,
+    secondsRemainingToDeadline,
+    latestBookingDate,
+  } = defaultBookingRequirement;
+
+  requiresBooking = isLegFlexibleTransport(leg);
+
+  if (requiresBooking) {
+    latestBookingDate = getLatestBookingDate(
+      leg.bookingArrangements?.latestBookingTime,
+      leg.expectedStartTime,
+    );
+
+    secondsRemainingToDeadline = (latestBookingDate.getTime() - now) / 1000;
+    const secondsInOneHour = 60 * 60;
+    const secondsInOneWeek = 7 * 24 * secondsInOneHour;
+    if (secondsRemainingToDeadline < 0) {
+      isTooLate = true;
+    } else if (secondsRemainingToDeadline < secondsInOneHour) {
+      requiresBookingUrgently = true;
+    } else if (secondsRemainingToDeadline > secondsInOneWeek) {
+      isTooEarly = true;
+    }
+  }
+
+  return {
+    requiresBooking,
+    requiresBookingUrgently,
+    isTooEarly,
+    isTooLate,
+    secondsRemainingToDeadline,
+    latestBookingDate,
+  };
+}
 
 export const useAvailableTripPatterns = (
   tripPatterns: TripPatternWithKey[],
@@ -211,9 +206,10 @@ export const useAvailableTripPatterns = (
         isLegFlexibleTransport(leg),
       );
 
-      const {bookingRequirement} = firstFlexibleTransportLeg
-        ? getLegWithBookingRequirement(firstFlexibleTransportLeg, now)
-        : {bookingRequirement: defaultBookingRequirement};
+      const bookingRequirement = getBookingRequirementForLeg(
+        firstFlexibleTransportLeg,
+        now,
+      );
 
       return {
         ...tripPattern,

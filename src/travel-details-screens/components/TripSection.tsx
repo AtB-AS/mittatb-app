@@ -53,10 +53,8 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
-import {
-  useLegWithBookingRequirement,
-  defaultBookingRequirement,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack'; // TODO: fix lint error
+import {getBookingRequirementForLeg} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack'; // TODO: fix lint error
+import {useNow} from '@atb/utils/use-now';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -118,9 +116,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const publicCode =
     leg.fromPlace.quay?.publicCode || leg.line?.publicCode || '';
 
-  const legWithBookingRequirement = useLegWithBookingRequirement(leg);
-  const bookingRequirement =
-    legWithBookingRequirement?.bookingRequirement || defaultBookingRequirement;
+  const now = useNow(2500);
+  const bookingRequirement = getBookingRequirementForLeg(leg, now);
   const requiresBooking = bookingRequirement.requiresBooking;
   const requiresBookingUrgently = bookingRequirement.requiresBookingUrgently;
 

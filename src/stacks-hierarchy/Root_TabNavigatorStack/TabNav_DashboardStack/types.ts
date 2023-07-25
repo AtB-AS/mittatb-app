@@ -1,4 +1,4 @@
-import {Leg, TripPattern} from '@atb/api/types/trips';
+import {TripPattern} from '@atb/api/types/trips';
 import {Location} from '@atb/favorites';
 import {SearchTime} from '@atb/journey-date-picker';
 
@@ -31,9 +31,5 @@ export type BookingRequirement = {
 };
 
 export type AvailableTripPattern = TripPatternWithKey & {
-  bookingRequirement: BookingRequirement;
-};
-
-export type LegWithBookingRequirement = Leg & {
   bookingRequirement: BookingRequirement;
 };
