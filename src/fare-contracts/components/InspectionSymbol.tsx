@@ -7,9 +7,11 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat, Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
-import {ContrastColor} from '@atb-as/theme';
 import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
+import {ContrastColor} from '@atb-as/theme';
+import {getTransportationColor} from '@atb/theme/colors';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
@@ -27,9 +29,20 @@ export const InspectionSymbol = ({
   isLoading,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
+
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
+
+  const transportColor = useThemeColorForTransportMode(
+    fareProductTypeConfig?.transportModes[0].mode,
+    fareProductTypeConfig?.transportModes[0].subMode,
+  );
+
   const themeColor = isInspectable
-    ? theme.static.status['valid']
+    ? getTransportationColor(themeName, transportColor)
     : theme.static.status['warning'];
 
   if (isLoading) {
@@ -72,13 +85,14 @@ const InspectableContent = ({
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );
+
   const shouldFill =
-    fareProductTypeConfig?.illustration === 'period' ||
+    fareProductTypeConfig?.illustration?.includes('period') ||
     fareProductTypeConfig?.illustration === 'hour24';
   const InspectionSvg =
     fareProductTypeConfig?.illustration === 'night'
       ? Moon
-      : fareProductTypeConfig?.illustration === 'boat'
+      : fareProductTypeConfig?.illustration?.includes('boat')
       ? Boat
       : Bus;
 
@@ -99,6 +113,8 @@ const InspectableContent = ({
         styles.symbolContent,
         {
           backgroundColor: shouldFill ? themeColor.background : undefined,
+          borderColor: shouldFill ? themeColor.background : undefined,
+          borderRadius: shouldFill ? 1 : 0,
         },
       ]}
     >
