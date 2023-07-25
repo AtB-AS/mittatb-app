@@ -9,7 +9,10 @@ import {
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {
+  BookingRequirement,
+  ServiceJourneyDeparture,
+} from '@atb/travel-details-screens/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -19,6 +22,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {
+  daysBetween,
   formatToClock,
   formatToShortDateTimeWithoutYear,
   secondsToDuration,
@@ -118,20 +122,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const now = useNow(2500);
   const bookingRequirement = getBookingRequirementForLeg(leg, now);
-  const requiresBooking = bookingRequirement.requiresBooking;
-  const requiresBookingUrgently = bookingRequirement.requiresBookingUrgently;
 
-  const timeForBooking = requiresBooking
-    ? requiresBookingUrgently
-      ? secondsToMinutesLong(
-          bookingRequirement.secondsRemainingToDeadline,
-          language,
-        )
-      : formatToShortDateTimeWithoutYear(
-          bookingRequirement.latestBookingDate,
-          language,
-        )
-    : '';
+  const formattedTimeForBooking = getFormattedTimeForBooking(
+    bookingRequirement,
+    now,
+    t,
+    language,
+  );
 
   const sectionOutput = (
     <>
@@ -162,7 +159,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time timeValues={startTimes} roundingMethod="floor" />}
+            rowLabel={
+              <Time
+                timeValues={startTimes}
+                roundingMethod="floor"
+                isCirca={isFlexible}
+              />
+            }
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
             testID="fromPlace"
           >
@@ -192,30 +195,45 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
           </TripRow>
         )}
-        {leg.situations.map((situation) => (
-          <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
+        {leg.situations.map((situation, i) => (
+          <TripRow
+            key={i}
+            rowLabel={<SituationOrNoticeIcon situation={situation} />}
+          >
             <SituationMessageBox noStatusIcon={true} situation={situation} />
           </TripRow>
         ))}
-        {notices.map((notice) => (
-          <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+        {notices.map((notice, i) => (
+          <TripRow key={i} rowLabel={<ThemeIcon svg={Info} />}>
             <MessageBox noStatusIcon={true} type="info" message={notice.text} />
           </TripRow>
         ))}
         {isFlexible && (
           <TripRow
             rowLabel={
-              <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
+              <ThemeIcon
+                svg={
+                  bookingRequirement.requiresBookingUrgently ? Warning : Info
+                }
+              />
             }
           >
             <MessageBox
-              type={requiresBookingUrgently ? 'warning' : 'info'}
+              type={
+                bookingRequirement.requiresBookingUrgently ? 'warning' : 'info'
+              }
               noStatusIcon={true}
               message={t(
-                TripDetailsTexts.trip.leg.needsBooking(
+                TripDetailsTexts.trip.leg?.[
+                  bookingRequirement.isTooEarly
+                    ? 'needsBookingButIsTooEarly'
+                    : 'needsBookingAndIsAvailable'
+                ](
                   publicCode,
-                  timeForBooking,
-                  requiresBookingUrgently,
+                  formattedTimeForBooking,
+                  bookingRequirement.isTooEarly
+                    ? bookingRequirement.bookingAvailableImminently
+                    : bookingRequirement.requiresBookingUrgently,
                 ),
               )}
               onPressConfig={{
@@ -282,7 +300,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
               language,
               t,
             )}
-            rowLabel={<Time timeValues={endTimes} roundingMethod="ceil" />}
+            rowLabel={
+              <Time
+                timeValues={endTimes}
+                roundingMethod="ceil"
+                isCirca={isFlexible}
+              />
+            }
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID="toPlace"
           >
@@ -499,3 +523,41 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
 }));
+
+function getFormattedTimeForBooking(
+  bookingRequirement: BookingRequirement,
+  now: number,
+  t: TranslateFunction,
+  language: Language,
+): string {
+  if (!bookingRequirement.requiresBooking) {
+    return '';
+  } else if (
+    bookingRequirement.requiresBookingUrgently ||
+    bookingRequirement.bookingAvailableImminently
+  ) {
+    return secondsToMinutesLong(
+      bookingRequirement.isTooEarly
+        ? bookingRequirement.secondsRemainingToAvailable
+        : bookingRequirement.secondsRemainingToDeadline,
+      language,
+    );
+  } else {
+    const nextBookingStateChangeDate = bookingRequirement.isTooEarly
+      ? bookingRequirement.earliestBookingDate
+      : bookingRequirement.latestBookingDate;
+
+    const daysDifference = daysBetween(
+      new Date(now),
+      nextBookingStateChangeDate,
+    );
+    const relativeDayName = t(
+      TripDetailsTexts.trip.leg.relativeDayNames(daysDifference),
+    );
+    return (
+      relativeDayName +
+      (relativeDayName === '' ? '' : ' ') +
+      formatToShortDateTimeWithoutYear(nextBookingStateChangeDate, language)
+    );
+  }
+}

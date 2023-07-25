@@ -1,6 +1,6 @@
 import {AccessibleText} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
-import {dictionary, useTranslation} from '@atb/translations';
+import {dictionary, useTranslation, TripDetailsTexts} from '@atb/translations';
 import {formatToClock, RoundingMethod} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
@@ -10,22 +10,24 @@ import {usePreferences} from '@atb/preferences';
 export const Time: React.FC<{
   timeValues: TimeValues;
   roundingMethod: RoundingMethod;
-}> = ({timeValues, roundingMethod}) => {
+  isCirca?: boolean;
+}> = ({timeValues, roundingMethod, isCirca}) => {
   const {
     preferences: {debugShowSeconds},
   } = usePreferences();
 
   const {t, language} = useTranslation();
+  const circaPrefix = isCirca ? t(TripDetailsTexts.trip.leg.circaLabel) : '';
+
   const {aimedTime, expectedTime} = timeValues;
   const representationType = getTimeRepresentationType(timeValues);
-  const scheduled = formatToClock(
-    aimedTime,
-    language,
-    roundingMethod,
-    debugShowSeconds,
-  );
+  const scheduled =
+    circaPrefix +
+    formatToClock(aimedTime, language, roundingMethod, debugShowSeconds);
+
   const expected = expectedTime
-    ? formatToClock(expectedTime, language, roundingMethod, debugShowSeconds)
+    ? circaPrefix +
+      formatToClock(expectedTime, language, roundingMethod, debugShowSeconds)
     : '';
 
   switch (representationType) {

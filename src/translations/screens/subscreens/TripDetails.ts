@@ -49,20 +49,52 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
-      needsBooking: (
+      relativeDayNames: (daysDifference: number) => {
+        switch (daysDifference) {
+          case -2:
+            return _('i forgårs', 'the day before yesterday', 'i forgårs');
+          case -1:
+            return _('i går', 'yesterday', 'i går');
+          case 0:
+            return _('i dag', 'today', 'i dag');
+          case 1:
+            return _('i morgen', 'tomorrow', 'i morgon');
+          case 2:
+            return _('i overmorgen', 'the day after tomorrow', 'i overmorgon');
+          default:
+            return _('', '', '');
+        }
+      },
+      needsBookingAndIsAvailable: (
         publicCode: string,
-        timeForBooking: string,
+        formattedTimeForBooking: string,
         isUrgent: boolean,
       ) =>
         _(
           `Frist for reservasjon av ${publicCode} på denne reisen går ut ${
-            (isUrgent ? 'om ' : '') + timeForBooking
+            (isUrgent ? 'om ' : '') + formattedTimeForBooking
           }.`,
           `Deadline for reservation of ${publicCode} on this trip expires ${
-            (isUrgent ? 'in ' : '') + timeForBooking
+            (isUrgent ? 'in ' : '') + formattedTimeForBooking
           }.`,
           `Frist for reservasjon av ${publicCode} på denne reisa går ut ${
-            (isUrgent ? 'om ' : '') + timeForBooking
+            (isUrgent ? 'om ' : '') + formattedTimeForBooking
+          }.`,
+        ),
+      needsBookingButIsTooEarly: (
+        publicCode: string,
+        formattedTimeForBooking: string,
+        isImminent: boolean,
+      ) =>
+        _(
+          `${publicCode} på denne reisen kan tidligst reserveres ${
+            (isImminent ? 'om ' : '') + formattedTimeForBooking
+          }.`,
+          `${publicCode} on this trip expires can be booked no sooner than ${
+            (isImminent ? 'in ' : '') + formattedTimeForBooking
+          }.`,
+          `${publicCode} på denne reisa kan tidlegast reserverast ${
+            (isImminent ? 'om ' : '') + formattedTimeForBooking
           }.`,
         ),
       needsBookingWhatIsThis: (publicCode: string) =>
@@ -71,6 +103,7 @@ const TripDetailsTexts = {
           `What is ${publicCode}?`,
           `Kva er ${publicCode}?`,
         ),
+      circaLabel: _(`ca. `, `ca. `, `ca. `),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,

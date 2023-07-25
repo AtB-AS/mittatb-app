@@ -201,10 +201,13 @@ function getLatestBookingDate(
 const defaultBookingRequirement: BookingRequirement = {
   requiresBooking: false,
   requiresBookingUrgently: false,
+  bookingAvailableImminently: false,
   isTooLate: false,
   isTooEarly: false,
   secondsRemainingToDeadline: Infinity,
   latestBookingDate: new Date(Number.MAX_VALUE),
+  secondsRemainingToAvailable: Infinity,
+  earliestBookingDate: new Date(Number.MAX_VALUE),
 };
 
 export function getBookingRequirementForLeg(
@@ -218,10 +221,13 @@ export function getBookingRequirementForLeg(
   let {
     requiresBooking,
     requiresBookingUrgently,
+    bookingAvailableImminently,
     isTooEarly,
     isTooLate,
     secondsRemainingToDeadline,
     latestBookingDate,
+    secondsRemainingToAvailable,
+    earliestBookingDate,
   } = defaultBookingRequirement;
 
   requiresBooking = isLegFlexibleTransport(leg);
@@ -233,8 +239,15 @@ export function getBookingRequirementForLeg(
     );
 
     secondsRemainingToDeadline = (latestBookingDate.getTime() - now) / 1000;
+
+    const maxDaysBeforeBooking = 7; // 1 week before
+    earliestBookingDate = new Date(latestBookingDate);
+    earliestBookingDate.setDate(
+      earliestBookingDate.getDate() - maxDaysBeforeBooking,
+    );
+
     const secondsInOneHour = 60 * 60;
-    const secondsInOneWeek = 7 * 24 * secondsInOneHour;
+    const secondsInOneWeek = maxDaysBeforeBooking * 24 * secondsInOneHour;
     if (secondsRemainingToDeadline < 0) {
       isTooLate = true;
     } else if (secondsRemainingToDeadline < secondsInOneHour) {
@@ -242,14 +255,25 @@ export function getBookingRequirementForLeg(
     } else if (secondsRemainingToDeadline > secondsInOneWeek) {
       isTooEarly = true;
     }
+
+    secondsRemainingToAvailable = (earliestBookingDate.getTime() - now) / 1000;
+    if (
+      secondsRemainingToAvailable > 0 &&
+      secondsRemainingToAvailable < secondsInOneHour
+    ) {
+      bookingAvailableImminently = true;
+    }
   }
 
   return {
     requiresBooking,
     requiresBookingUrgently,
+    bookingAvailableImminently,
     isTooEarly,
     isTooLate,
     secondsRemainingToDeadline,
     latestBookingDate,
+    secondsRemainingToAvailable,
+    earliestBookingDate,
   };
 }

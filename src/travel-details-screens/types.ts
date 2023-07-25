@@ -14,8 +14,11 @@ export type TripPatternWithKey = TripPattern & {key: string};
 export type BookingRequirement = {
   requiresBooking: boolean;
   requiresBookingUrgently: boolean;
+  bookingAvailableImminently: boolean;
   isTooEarly: boolean;
   isTooLate: boolean;
   secondsRemainingToDeadline: number;
   latestBookingDate: Date;
+  secondsRemainingToAvailable: number;
+  earliestBookingDate: Date;
 };
