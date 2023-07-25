@@ -5,7 +5,7 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Bus} from '@atb/assets/svg/mono-icons/transportation';
+import {Boat, Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
 import {ContrastColor} from '@atb-as/theme';
 import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
@@ -76,7 +76,11 @@ const InspectableContent = ({
     fareProductTypeConfig?.illustration === 'period' ||
     fareProductTypeConfig?.illustration === 'hour24';
   const InspectionSvg =
-    fareProductTypeConfig?.illustration === 'night' ? Moon : Bus;
+    fareProductTypeConfig?.illustration === 'night'
+      ? Moon
+      : fareProductTypeConfig?.illustration === 'boat'
+      ? Boat
+      : Bus;
 
   const fromTariffZoneName =
     fromTariffZone && getReferenceDataName(fromTariffZone, language);
