@@ -18,7 +18,12 @@ import {
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
-import {formatToClock, secondsToDuration} from '@atb/utils/date';
+import {
+  formatToClock,
+  formatToShortDateTimeWithoutYear,
+  secondsToDuration,
+  secondsToMinutesLong,
+} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
@@ -48,6 +53,10 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
+import {
+  useLegWithBookingRequirement,
+  defaultBookingRequirement,
+} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack'; // TODO: fix lint error
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -105,6 +114,27 @@ export const TripSection: React.FC<TripSectionProps> = ({
     leg.fromPlace.quay?.id,
     leg.toPlace.quay?.id,
   );
+
+  const publicCode =
+    leg.fromPlace.quay?.publicCode || leg.line?.publicCode || '';
+
+  const legWithBookingRequirement = useLegWithBookingRequirement(leg);
+  const bookingRequirement =
+    legWithBookingRequirement?.bookingRequirement || defaultBookingRequirement;
+  const requiresBooking = bookingRequirement.requiresBooking;
+  const requiresBookingUrgently = bookingRequirement.requiresBookingUrgently;
+
+  const timeForBooking = requiresBooking
+    ? requiresBookingUrgently
+      ? secondsToMinutesLong(
+          bookingRequirement.secondsRemainingToDeadline,
+          language,
+        )
+      : formatToShortDateTimeWithoutYear(
+          bookingRequirement.latestBookingDate,
+          language,
+        )
+    : '';
 
   const sectionOutput = (
     <>
@@ -175,6 +205,33 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <MessageBox noStatusIcon={true} type="info" message={notice.text} />
           </TripRow>
         ))}
+        {isFlexible && (
+          <TripRow
+            rowLabel={
+              <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
+            }
+          >
+            <MessageBox
+              type={requiresBookingUrgently ? 'warning' : 'info'}
+              noStatusIcon={true}
+              message={t(
+                TripDetailsTexts.trip.leg.needsBooking(
+                  publicCode,
+                  timeForBooking,
+                  requiresBookingUrgently,
+                ),
+              )}
+              onPressConfig={{
+                text: t(
+                  TripDetailsTexts.trip.leg.needsBookingWhatIsThis(publicCode),
+                ),
+                action: () => {
+                  //openContactFlexibleTransport(bookingDetails); // TODO: implement this
+                },
+              }}
+            />
+          </TripRow>
+        )}
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <MessageBox
@@ -250,9 +307,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
               noStatusIcon={true}
               type="info"
               message={t(
-                leg.line.publicCode
+                publicCode
                   ? TripDetailsTexts.messages.interchange(
-                      leg.line.publicCode,
+                      publicCode,
                       interchangeDetails.publicCode,
                       interchangeDetails.fromPlace,
                     )

@@ -1,4 +1,5 @@
 import {Location} from '@atb/favorites';
+import {Leg} from '@atb/api/types/trips';
 import {CityZone} from '@atb/reference-data/types';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {useMemo} from 'react';
@@ -13,7 +14,11 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RemoteConfigKeys} from '@atb/remote-config';
 import {useNow} from '@atb/utils/use-now';
 import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';
-import {AvailableTripPattern, TripPatternWithKey} from '../types';
+import {
+  AvailableTripPattern,
+  LegWithBookingRequirement,
+  TripPatternWithKey,
+} from '../types';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -132,45 +137,84 @@ function getLatestBookingDate(
   return latestBookingDate;
 }
 
+function getLegWithBookingRequirement(
+  leg: Leg,
+  now: number,
+): LegWithBookingRequirement {
+  const requiresBooking = isLegFlexibleTransport(leg);
+
+  let requiresBookingUrgently = false;
+  let isTooEarly = false;
+  let isTooLate = false;
+  let latestBookingDate = new Date(Number.MAX_VALUE);
+  let timeDiffMilliSeconds = Infinity;
+
+  if (requiresBooking) {
+    latestBookingDate = getLatestBookingDate(
+      leg?.bookingArrangements?.latestBookingTime,
+      leg?.expectedStartTime,
+    );
+
+    timeDiffMilliSeconds = latestBookingDate.getTime() - now;
+    const oneHourMilliSeconds = 60 * 60 * 1000;
+    if (timeDiffMilliSeconds < 0) {
+      isTooLate = true; // currently assuming bookWhen == 'advanceAndDayOfTravel'
+    } else if (timeDiffMilliSeconds < oneHourMilliSeconds) {
+      requiresBookingUrgently = true;
+    } else if (timeDiffMilliSeconds > 7 * 24 * oneHourMilliSeconds) {
+      isTooEarly = true;
+    }
+  }
+
+  const bookingRequirement = {
+    requiresBooking,
+    requiresBookingUrgently,
+    isTooEarly,
+    isTooLate,
+    secondsRemainingToDeadline: timeDiffMilliSeconds / 1000,
+    latestBookingDate,
+  };
+  return {
+    ...leg,
+    ...{bookingRequirement},
+  };
+}
+
+export const useLegWithBookingRequirement = (
+  leg: Leg | undefined,
+): LegWithBookingRequirement | undefined => {
+  const now = useNow(2500);
+  if (leg == undefined) {
+    return undefined;
+  }
+  return getLegWithBookingRequirement(leg, now);
+};
+
+export const defaultBookingRequirement = {
+  requiresBooking: false,
+  requiresBookingUrgently: false,
+  isTooLate: false,
+  isTooEarly: false,
+  secondsRemainingToDeadline: 0,
+  latestBookingDate: new Date(Number.MAX_VALUE),
+};
+
 export const useAvailableTripPatterns = (
   tripPatterns: TripPatternWithKey[],
 ): AvailableTripPattern[] => {
   const now = useNow(2500);
-  // todo: consider what if there are several flexibleTransportLegs?
+
   const tripPatternsWithBookingRequirements = tripPatterns.map(
     (tripPattern) => {
+      // if > 1 flexible transport leg, just use the first one
       const firstFlexibleTransportLeg = tripPattern?.legs.find((leg) =>
         isLegFlexibleTransport(leg),
       );
-      const requiresBooking = !!firstFlexibleTransportLeg;
 
-      let requiresBookingUrgently = false;
-      let isTooEarly = false;
-      let isTooLate = false;
+      const {bookingRequirement} = firstFlexibleTransportLeg
+        ? getLegWithBookingRequirement(firstFlexibleTransportLeg, now)
+        : {bookingRequirement: defaultBookingRequirement};
 
-      if (requiresBooking) {
-        const latestBookingDate = getLatestBookingDate(
-          firstFlexibleTransportLeg.bookingArrangements?.latestBookingTime,
-          firstFlexibleTransportLeg.expectedStartTime,
-        );
-
-        const timeDiffMilliSeconds = latestBookingDate.getTime() - now;
-        const oneHourMilliSeconds = 60 * 60 * 1000;
-        if (timeDiffMilliSeconds < 0) {
-          isTooLate = true; // currently assuming bookWhen == 'advanceAndDayOfTravel'
-        } else if (timeDiffMilliSeconds < oneHourMilliSeconds) {
-          requiresBookingUrgently = true;
-        } else if (timeDiffMilliSeconds > 7 * 24 * oneHourMilliSeconds) {
-          isTooEarly = true;
-        }
-      }
-
-      const bookingRequirement = {
-        requiresBooking,
-        requiresBookingUrgently,
-        isTooEarly,
-        isTooLate,
-      };
       return {
         ...tripPattern,
         ...{bookingRequirement},
@@ -179,6 +223,6 @@ export const useAvailableTripPatterns = (
   );
 
   return tripPatternsWithBookingRequirements.filter(
-    (tpwbr) => !tpwbr.bookingRequirement.isTooLate,
+    (tpwbr) => !tpwbr.bookingRequirement?.isTooLate,
   );
 };

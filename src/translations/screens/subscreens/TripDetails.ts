@@ -49,6 +49,28 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
+      needsBooking: (
+        publicCode: string,
+        timeForBooking: string,
+        isUrgent: boolean,
+      ) =>
+        _(
+          `Frist for reservasjon av ${publicCode} på denne reisen går ut ${
+            (isUrgent ? 'om ' : '') + timeForBooking
+          }.`,
+          `Deadline for reservation of ${publicCode} on this trip expires ${
+            (isUrgent ? 'in ' : '') + timeForBooking
+          }.`,
+          `Frist for reservasjon av ${publicCode} på denne reisa går ut ${
+            (isUrgent ? 'om ' : '') + timeForBooking
+          }.`,
+        ),
+      needsBookingWhatIsThis: (publicCode: string) =>
+        _(
+          `Hva er ${publicCode}?`,
+          `What is ${publicCode}?`,
+          `Kva er ${publicCode}?`,
+        ),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,
