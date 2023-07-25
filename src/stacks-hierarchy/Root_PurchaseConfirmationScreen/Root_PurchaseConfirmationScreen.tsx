@@ -127,6 +127,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {travellerSelectionMode, zoneSelectionMode} =
     fareProductTypeConfig.configuration;
 
+  const offerEndpoint =
+    zoneSelectionMode === 'none'
+      ? 'authority'
+      : zoneSelectionMode === 'multiple-stop-harbor'
+      ? 'stop-places'
+      : 'zones';
+
   const {
     offerSearchTime,
     isSearchingOffer,
@@ -136,7 +143,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    zoneSelectionMode === 'none' ? 'authority' : 'zones',
+    offerEndpoint,
     preassignedFareProduct,
     fromPlace,
     toPlace,
@@ -255,6 +262,70 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       );
     });
   }
+  function summary(text?: string) {
+    return (
+      <ThemeText
+        style={styles.smallTopMargin}
+        type="body__secondary"
+        color="secondary"
+      >
+        {text}
+      </ThemeText>
+    );
+  }
+
+  const SummaryText = () => {
+    switch (zoneSelectionMode) {
+      case 'multiple-stop-harbor':
+        return (
+          <>
+            {summary(
+              fareProductTypeConfig.type.includes('single')
+                ? t(
+                    PurchaseConfirmationTexts.validityTexts.harbor.single(
+                      fromPlaceName,
+                      toPlaceName,
+                    ),
+                  )
+                : t(
+                    PurchaseConfirmationTexts.validityTexts.harbor.period(
+                      fromPlaceName,
+                      toPlaceName,
+                    ),
+                  ),
+            )}
+            {summary(
+              t(
+                PurchaseConfirmationTexts.validityTexts.harbor
+                  .messageInHarborZones,
+              ),
+            )}
+          </>
+        );
+      case 'none':
+        return summary(
+          getTextForLanguage(
+            preassignedFareProduct.description ?? [],
+            language,
+          ),
+        );
+      default:
+        return summary(
+          fromPlace.id === toPlace.id
+            ? t(
+                PurchaseConfirmationTexts.validityTexts.zone.single(
+                  fromPlaceName,
+                ),
+              )
+            : t(
+                PurchaseConfirmationTexts.validityTexts.zone.multiple(
+                  fromPlaceName,
+                  toPlaceName,
+                ),
+              ),
+        );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -283,50 +354,23 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
-                {zoneSelectionMode !== 'none' ? (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {fromPlace.id === toPlace.id
-                      ? t(
-                          PurchaseConfirmationTexts.validityTexts.zone.single(
-                            fromPlaceName,
-                          ),
-                        )
-                      : t(
-                          PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                            fromPlaceName,
-                            toPlaceName,
-                          ),
-                        )}
-                  </ThemeText>
-                ) : (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {getTextForLanguage(
-                      preassignedFareProduct.description ?? [],
-                      language,
-                    )}
-                  </ThemeText>
-                )}
-                {!isSearchingOffer && validDurationSeconds && (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {t(
+                <SummaryText />
+                {!isSearchingOffer &&
+                  validDurationSeconds &&
+                  summary(
+                    t(
                       PurchaseConfirmationTexts.validityTexts.time(
                         secondsToDuration(validDurationSeconds, language),
                       ),
-                    )}
-                  </ThemeText>
-                )}
+                    ),
+                  )}
+                {fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+                  summary(
+                    t(
+                      PurchaseConfirmationTexts.validityTexts.harbor
+                        .onlyOnPhone,
+                    ),
+                  )}
 
                 <View style={[styles.smallTopMargin, {flexDirection: 'row'}]}>
                   <Info

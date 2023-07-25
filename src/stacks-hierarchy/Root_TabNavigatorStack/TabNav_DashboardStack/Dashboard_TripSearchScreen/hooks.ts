@@ -33,9 +33,13 @@ export const useFindCityZoneInLocation = (
   ]);
 };
 
-export function useJourneyModes(
-  defaultValue: StreetMode = StreetMode.Foot,
-): [Modes, boolean] {
+export const defaultJourneyModes = {
+  accessMode: StreetMode.Foot,
+  directMode: StreetMode.Foot,
+  egressMode: StreetMode.Foot,
+};
+
+export function useJourneyModes(): [Modes, boolean] {
   const [
     isFlexibleTransportEnabledInRemoteConfig,
     flexTransportDebugOverrideReady,
@@ -59,17 +63,17 @@ export function useJourneyModes(
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportAccessModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : defaultJourneyModes.accessMode,
     directMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportDirectModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : defaultJourneyModes.directMode,
     egressMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportEgressModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : defaultJourneyModes.egressMode,
   };
 
   const allDebugOverridesReady =
