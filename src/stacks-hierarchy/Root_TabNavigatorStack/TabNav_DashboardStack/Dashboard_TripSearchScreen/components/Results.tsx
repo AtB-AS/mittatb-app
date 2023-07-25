@@ -14,11 +14,11 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 import {TripPattern} from '@atb/api/types/trips';
-import {TripPatternWithKey} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {SearchTime} from '@atb/journey-date-picker';
 import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {ResultItemOld} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
 import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
+import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {useAvailableTripPatterns} from '../hooks';
 
 type Props = {

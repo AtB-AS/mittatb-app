@@ -1,6 +1,9 @@
-import {TripPattern} from '@atb/api/types/trips';
 import {Location} from '@atb/favorites';
 import {SearchTime} from '@atb/journey-date-picker';
+import {
+  TripPatternWithKey,
+  BookingRequirement,
+} from '@atb/travel-details-screens/types';
 
 export type SearchForLocations = {
   from?: Location;
@@ -13,21 +16,11 @@ export type SearchStateType =
   | 'search-success'
   | 'search-empty-result';
 
-export type TripPatternWithKey = TripPattern & {key: string};
 export type TripSearchScreenParams = {
   fromLocation?: Location;
   toLocation?: Location;
   searchTime?: SearchTime;
   callerRoute?: {name: string};
-};
-
-export type BookingRequirement = {
-  requiresBooking: boolean;
-  requiresBookingUrgently: boolean;
-  isTooEarly: boolean;
-  isTooLate: boolean;
-  secondsRemainingToDeadline: number;
-  latestBookingDate: Date;
 };
 
 export type AvailableTripPattern = TripPatternWithKey & {

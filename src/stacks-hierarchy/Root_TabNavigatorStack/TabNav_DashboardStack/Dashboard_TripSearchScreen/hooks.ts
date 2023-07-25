@@ -1,5 +1,4 @@
 import {Location} from '@atb/favorites';
-import {Leg} from '@atb/api/types/trips';
 import {CityZone} from '@atb/reference-data/types';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import {useMemo} from 'react';
@@ -12,13 +11,13 @@ import {StorageModelKeysEnum} from '@atb/storage';
 import {useDebugOverride} from '@atb/debug';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RemoteConfigKeys} from '@atb/remote-config';
-import {useNow} from '@atb/utils/use-now';
-import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';
+import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {
-  AvailableTripPattern,
-  BookingRequirement,
-  TripPatternWithKey,
-} from '../types';
+  isLegFlexibleTransport,
+  getBookingRequirementForLeg,
+} from '@atb/travel-details-screens/utils';
+import {useNow} from '@atb/utils/use-now';
+import {AvailableTripPattern} from '../types';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -120,79 +119,6 @@ export const useFlexibleTransportEgressModeEnabled = () => {
     StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
   );
 };
-
-function getLatestBookingDate(
-  latestBookingTime: string, // e.g. '15:16:00'
-  expectedStartTime: string, // e.g. '2023-07-14T17:56:32+02:00'
-): Date {
-  const expectedStartDate = new Date(expectedStartTime);
-  const latestBookingDate = new Date(
-    `${expectedStartTime.split('T')[0]}T${latestBookingTime}`,
-  );
-
-  if (latestBookingDate.getTime() > expectedStartDate.getTime()) {
-    latestBookingDate.setDate(latestBookingDate.getDate() - 1);
-  }
-
-  return latestBookingDate;
-}
-
-// move defaultBookingRequirement right next to type declaration?
-const defaultBookingRequirement: BookingRequirement = {
-  requiresBooking: false,
-  requiresBookingUrgently: false,
-  isTooLate: false,
-  isTooEarly: false,
-  secondsRemainingToDeadline: Infinity,
-  latestBookingDate: new Date(Number.MAX_VALUE),
-};
-
-export function getBookingRequirementForLeg(
-  leg: Leg | undefined,
-  now: number,
-): BookingRequirement {
-  if (leg === undefined) {
-    return defaultBookingRequirement;
-  }
-
-  let {
-    requiresBooking,
-    requiresBookingUrgently,
-    isTooEarly,
-    isTooLate,
-    secondsRemainingToDeadline,
-    latestBookingDate,
-  } = defaultBookingRequirement;
-
-  requiresBooking = isLegFlexibleTransport(leg);
-
-  if (requiresBooking) {
-    latestBookingDate = getLatestBookingDate(
-      leg.bookingArrangements?.latestBookingTime,
-      leg.expectedStartTime,
-    );
-
-    secondsRemainingToDeadline = (latestBookingDate.getTime() - now) / 1000;
-    const secondsInOneHour = 60 * 60;
-    const secondsInOneWeek = 7 * 24 * secondsInOneHour;
-    if (secondsRemainingToDeadline < 0) {
-      isTooLate = true;
-    } else if (secondsRemainingToDeadline < secondsInOneHour) {
-      requiresBookingUrgently = true;
-    } else if (secondsRemainingToDeadline > secondsInOneWeek) {
-      isTooEarly = true;
-    }
-  }
-
-  return {
-    requiresBooking,
-    requiresBookingUrgently,
-    isTooEarly,
-    isTooLate,
-    secondsRemainingToDeadline,
-    latestBookingDate,
-  };
-}
 
 export const useAvailableTripPatterns = (
   tripPatterns: TripPatternWithKey[],

@@ -1,3 +1,5 @@
+import {TripPattern} from '@atb/api/types/trips';
+
 export type ServiceJourneyDeparture = {
   serviceJourneyId: string;
   date: string;
@@ -5,4 +7,15 @@ export type ServiceJourneyDeparture = {
   fromQuayId?: string;
   toQuayId?: string;
   isTripCancelled?: boolean;
+};
+
+export type TripPatternWithKey = TripPattern & {key: string};
+
+export type BookingRequirement = {
+  requiresBooking: boolean;
+  requiresBookingUrgently: boolean;
+  isTooEarly: boolean;
+  isTooLate: boolean;
+  secondsRemainingToDeadline: number;
+  latestBookingDate: Date;
 };

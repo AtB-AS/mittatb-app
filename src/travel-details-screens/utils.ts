@@ -12,6 +12,8 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {APP_ORG} from '@env';
 
+import {BookingRequirement} from './types';
+
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
 export type TimeValues = {
@@ -178,4 +180,76 @@ function someLegsAreByTrain(tripPattern: TripPattern): boolean {
 
 export function isLegFlexibleTransport(leg: Leg): boolean {
   return !!leg.line?.flexibleLineType;
+}
+
+function getLatestBookingDate(
+  latestBookingTime: string, // e.g. '15:16:00'
+  expectedStartTime: string, // e.g. '2023-07-14T17:56:32+02:00'
+): Date {
+  const expectedStartDate = new Date(expectedStartTime);
+  const latestBookingDate = new Date(
+    `${expectedStartTime.split('T')[0]}T${latestBookingTime}`,
+  );
+
+  if (latestBookingDate.getTime() > expectedStartDate.getTime()) {
+    latestBookingDate.setDate(latestBookingDate.getDate() - 1);
+  }
+
+  return latestBookingDate;
+}
+
+const defaultBookingRequirement: BookingRequirement = {
+  requiresBooking: false,
+  requiresBookingUrgently: false,
+  isTooLate: false,
+  isTooEarly: false,
+  secondsRemainingToDeadline: Infinity,
+  latestBookingDate: new Date(Number.MAX_VALUE),
+};
+
+export function getBookingRequirementForLeg(
+  leg: Leg | undefined,
+  now: number,
+): BookingRequirement {
+  if (leg === undefined) {
+    return defaultBookingRequirement;
+  }
+
+  let {
+    requiresBooking,
+    requiresBookingUrgently,
+    isTooEarly,
+    isTooLate,
+    secondsRemainingToDeadline,
+    latestBookingDate,
+  } = defaultBookingRequirement;
+
+  requiresBooking = isLegFlexibleTransport(leg);
+
+  if (requiresBooking) {
+    latestBookingDate = getLatestBookingDate(
+      leg.bookingArrangements?.latestBookingTime,
+      leg.expectedStartTime,
+    );
+
+    secondsRemainingToDeadline = (latestBookingDate.getTime() - now) / 1000;
+    const secondsInOneHour = 60 * 60;
+    const secondsInOneWeek = 7 * 24 * secondsInOneHour;
+    if (secondsRemainingToDeadline < 0) {
+      isTooLate = true;
+    } else if (secondsRemainingToDeadline < secondsInOneHour) {
+      requiresBookingUrgently = true;
+    } else if (secondsRemainingToDeadline > secondsInOneWeek) {
+      isTooEarly = true;
+    }
+  }
+
+  return {
+    requiresBooking,
+    requiresBookingUrgently,
+    isTooEarly,
+    isTooLate,
+    secondsRemainingToDeadline,
+    latestBookingDate,
+  };
 }

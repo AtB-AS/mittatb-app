@@ -55,7 +55,8 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {AvailableTripPattern, BookingRequirement} from '../../types';
+import {BookingRequirement} from '@atb/travel-details-screens/types';
+import {AvailableTripPattern} from '../../types';
 
 type ResultItemProps = {
   tripPattern: AvailableTripPattern;

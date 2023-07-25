@@ -33,6 +33,7 @@ import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import React from 'react';
 import {View} from 'react-native';
 import {
+  getBookingRequirementForLeg,
   getLineName,
   getNoticesForLeg,
   getTimeRepresentationType,
@@ -53,7 +54,6 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
-import {getBookingRequirementForLeg} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack'; // TODO: fix lint error
 import {useNow} from '@atb/utils/use-now';
 
 type TripSectionProps = {
