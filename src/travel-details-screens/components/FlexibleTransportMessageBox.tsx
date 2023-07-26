@@ -1,4 +1,3 @@
-import {AUTHORITY} from '@env';
 import {BookingRequirement} from '@atb/travel-details-screens/types';
 import {
   Language,
@@ -6,7 +5,7 @@ import {
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageBox, OnPressConfig} from '@atb/components/message-box';
 import {
   secondsToMinutesLong,
   daysBetween,
@@ -17,11 +16,12 @@ type FlexibleTransportMessageProps = {
   bookingRequirement: BookingRequirement;
   publicCode: string;
   now: number;
+  onPressConfig?: OnPressConfig;
 };
 
 export const FlexibleTransportMessageBox: React.FC<
   FlexibleTransportMessageProps
-> = ({bookingRequirement, publicCode, now}) => {
+> = ({bookingRequirement, publicCode, now, onPressConfig}) => {
   const {t, language} = useTranslation();
 
   const formattedTimeForBooking = getFormattedTimeForBooking(
@@ -31,7 +31,6 @@ export const FlexibleTransportMessageBox: React.FC<
     language,
   );
 
-  const isAtB = AUTHORITY === 'ATB:Authority:2';
   return (
     <MessageBox
       type={bookingRequirement.requiresBookingUrgently ? 'warning' : 'info'}
@@ -49,18 +48,7 @@ export const FlexibleTransportMessageBox: React.FC<
             : bookingRequirement.requiresBookingUrgently,
         ),
       )}
-      onPressConfig={
-        isAtB
-          ? {
-              text: t(
-                TripDetailsTexts.trip.leg.needsBookingWhatIsThis(publicCode),
-              ),
-              action: () => {
-                //openContactFlexibleTransport(bookingDetails); // TODO: implement this
-              },
-            }
-          : undefined
-      }
+      onPressConfig={onPressConfig}
     />
   );
 };

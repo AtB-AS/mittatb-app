@@ -1,3 +1,4 @@
+import {AUTHORITY} from '@env';
 import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
@@ -115,6 +116,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const now = useNow(2500);
   const bookingRequirement = getBookingRequirementForLeg(leg, now);
 
+  const isAtB = AUTHORITY === 'ATB:Authority:2';
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -216,6 +219,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
               bookingRequirement={bookingRequirement}
               publicCode={publicCode}
               now={now}
+              onPressConfig={
+                isAtB
+                  ? {
+                      text: t(
+                        TripDetailsTexts.trip.leg.needsBookingWhatIsThis(
+                          publicCode,
+                        ),
+                      ),
+                      action: () => {
+                        //openContactFlexibleTransport(bookingDetails); // TODO: implement this
+                      },
+                    }
+                  : undefined
+              }
             />
           </TripRow>
         )}
