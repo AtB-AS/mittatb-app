@@ -18,11 +18,7 @@ import {
   isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
-import {
-  TravelTokenTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useState} from 'react';
@@ -35,14 +31,14 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {
   findReferenceDataById,
   isOfFareProductRef,
+  useFareProductTitle,
 } from '@atb/reference-data/utils';
-import {useFareProductTitle} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen';
 
 type Props = {onAfterSave: () => void};
 
 export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const styles = useStyles();
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
 
   const {fareContracts} = useTicketingState();
   const {disable_travelcard} = useRemoteConfig();

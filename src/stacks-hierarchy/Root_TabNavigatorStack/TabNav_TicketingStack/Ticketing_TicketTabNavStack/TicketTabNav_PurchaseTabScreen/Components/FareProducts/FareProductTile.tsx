@@ -3,7 +3,7 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {TicketingTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TicketingTile';
-import {useFareProductTitle} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen';
+import {useFareProductTitle} from '@atb/reference-data/utils';
 
 export const FareProductTile = ({
   accented = false,
