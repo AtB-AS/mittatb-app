@@ -1,12 +1,9 @@
 import React from 'react';
 
-import {FareContractTexts, TranslateFunction} from '@atb/translations';
-
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
-import {TransportModePair} from '@atb/components/transportation-modes';
 import {TicketingTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TicketingTile';
 
 export const FareProductTile = ({
