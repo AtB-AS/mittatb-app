@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  FareContractTexts,
-  useTranslation,
-  TranslateFunction,
-} from '@atb/translations';
+import {FareContractTexts, TranslateFunction} from '@atb/translations';
 
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
@@ -12,8 +8,6 @@ import {useTextForLanguage} from '@atb/translations/utils';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {TransportModePair} from '@atb/components/transportation-modes';
 import {TicketingTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TicketingTile';
-
-const modesDisplayLimit = 2;
 
 export const FareProductTile = ({
   accented = false,
@@ -26,22 +20,13 @@ export const FareProductTile = ({
   testID: string;
   config: FareProductTypeConfig;
 }) => {
-  const {t} = useTranslation();
-
   const transportModes = config.transportModes;
 
   const transportColor = useThemeColorForTransportMode(
     transportModes[0]?.mode,
     transportModes[0]?.subMode,
   );
-
-  const transportModesText = getFareProductTravelModesText(
-    transportModes,
-    t,
-    modesDisplayLimit,
-  );
-
-  const title = useTextForLanguage(config.name) + ', ' + transportModesText;
+  const title = useTextForLanguage(config.name);
   const description = useTextForLanguage(config.description);
   const accessibilityLabel = [title, description].join('. ');
 
