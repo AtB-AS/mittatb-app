@@ -84,8 +84,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
       );
     });
 
-  const fareProductsConfigWhichRequiresTokenOnMobile =
-    activeFareContractsTypes.filter(
+  const fareProductConfigWhichRequiresTokenOnMobile =
+    activeFareContractsTypes.find(
       (fareProductTypeConfig) =>
         fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
     );
@@ -120,7 +120,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const requiresTokenOnMobile =
     selectedType === 'travelCard' &&
     isMobileToken(inspectableToken) &&
-    fareProductsConfigWhichRequiresTokenOnMobile.length > 0;
+    !!fareProductConfigWhichRequiresTokenOnMobile;
 
   return (
     <View style={styles.container}>
@@ -222,9 +222,10 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             )}
             message={t(
               TravelTokenTexts.toggleToken.notAllowedToUseTravelCardError.message(
-                fareProductsConfigWhichRequiresTokenOnMobile
-                  .map((fp) => fp && getTextForLanguage(fp.name, language))
-                  .join(','),
+                getTextForLanguage(
+                  fareProductConfigWhichRequiresTokenOnMobile.name,
+                  language,
+                ) ?? '',
               ),
             )}
             style={styles.errorMessageBox}
