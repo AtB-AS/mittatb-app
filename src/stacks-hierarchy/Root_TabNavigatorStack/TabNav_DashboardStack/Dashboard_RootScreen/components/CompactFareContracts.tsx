@@ -13,7 +13,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {getFareContractInfoDetails} from '../../../../../fare-contracts/FareContractInfo';
+import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,

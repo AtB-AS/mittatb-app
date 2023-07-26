@@ -96,7 +96,12 @@ This makes GitHub Actions build the release and send it to TestFlight / Play Sto
 - Will be automatically rolled out after review
 
 ## Merge release branch into master
-After releasing to production the release branch should be merged into master. This should not be a "Squash and merge", but be a "Create a merge commit" to keep the history retained.
+
+After releasing to production, and the new version is available in stores, the release branch should be merged into master.
+
+1. Create a PR that merges the release branch `release/x` into `master`.
+2. Verify that there haven't been any conflicting changes on master.
+3. Merge using "Create a merge commit", instead of "Squash and merge", to keep the history retained.
 
 ## Finding build number
 

@@ -25,7 +25,7 @@ import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {useJourneyModes} from './hooks';
+import {defaultJourneyModes, useJourneyModes} from './hooks';
 import {useAnalytics} from '@atb/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 
@@ -266,8 +266,13 @@ async function doSearch(
     const selectedFilters = travelSearchFiltersSelection.transportModes.filter(
       (m) => m.selected,
     );
+
+    const includeFlexibleTransport = selectedFilters.some(
+      (sf) => sf.id === TransportMode.Bus, // filter flex transport on bus filter
+    );
+
     query.modes = {
-      ...journeySearchModes,
+      ...(includeFlexibleTransport ? journeySearchModes : defaultJourneyModes),
       transportModes: flatMap(selectedFilters, (tm) =>
         transportModeToEnum(tm.modes),
       ),
