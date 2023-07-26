@@ -6,6 +6,7 @@ import {View, Linking} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {TripRow} from './TripRow';
 import {Button} from '@atb/components/button';
+import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type FlexibleTransportBookingOptionsProps = {
   leg: Leg;
@@ -25,9 +26,10 @@ export const FlexibleTransportBookingOptions: React.FC<
   const bookingMethods = bookingArrangements?.bookingMethods;
 
   const showBookOnlineOption =
-    bookingUrl && bookingMethods?.some((bm) => bm === 'online');
+    bookingUrl && bookingMethods?.some((bm) => bm === BookingMethod.Online);
   const showBookByPhoneOption =
-    bookingPhone && bookingMethods?.some((bm) => bm === 'callOffice');
+    bookingPhone &&
+    bookingMethods?.some((bm) => bm === BookingMethod.CallOffice);
 
   if (showBookOnlineOption || showBookByPhoneOption) {
     return (

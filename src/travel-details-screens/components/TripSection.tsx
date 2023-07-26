@@ -220,6 +220,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               bookingRequirement={bookingRequirement}
               publicCode={publicCode}
               now={now}
+              showStatusIcon={false}
               onPressConfig={
                 legAuthorityIsAtB
                   ? {

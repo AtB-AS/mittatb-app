@@ -16,12 +16,13 @@ type FlexibleTransportMessageProps = {
   bookingRequirement: BookingRequirement;
   publicCode: string;
   now: number;
+  showStatusIcon: boolean;
   onPressConfig?: OnPressConfig;
 };
 
 export const FlexibleTransportMessageBox: React.FC<
   FlexibleTransportMessageProps
-> = ({bookingRequirement, publicCode, now, onPressConfig}) => {
+> = ({bookingRequirement, publicCode, now, showStatusIcon, onPressConfig}) => {
   const {t, language} = useTranslation();
 
   const formattedTimeForBooking = getFormattedTimeForBooking(
@@ -34,7 +35,7 @@ export const FlexibleTransportMessageBox: React.FC<
   return (
     <MessageBox
       type={bookingRequirement.requiresBookingUrgently ? 'warning' : 'info'}
-      noStatusIcon={true}
+      noStatusIcon={!showStatusIcon}
       message={t(
         TripDetailsTexts.trip.leg?.[
           bookingRequirement.isTooEarly
