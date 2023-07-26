@@ -13,6 +13,8 @@ import Bugsnag from '@bugsnag/react-native';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
+const ERROR_SESSION_EXPIRED = 'auth/session-expired';
+const ERROR_CODE_EXPIRED = 'auth/code-expired';
 
 function isAuthError(
   error: any,
@@ -108,7 +110,10 @@ const getAuthenticationType = (
   else return 'none';
 };
 
-export type ConfirmationErrorCode = 'invalid_code' | 'unknown_error';
+export type ConfirmationErrorCode =
+  | 'invalid_code'
+  | 'unknown_error'
+  | 'session_expired';
 export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
 export type VippsSignInErrorCode =
   | 'access_denied'
@@ -139,12 +144,14 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
       try {
         await state.confirmationHandler?.confirm(code);
       } catch (error) {
-        if (
-          isAuthError(error) &&
-          error.code === ERROR_INVALID_CONFIRMATION_CODE
-        ) {
-          return 'invalid_code';
-        }
+        if (isAuthError(error))
+          switch (error.code) {
+            case ERROR_INVALID_CONFIRMATION_CODE:
+              return 'invalid_code';
+            case ERROR_CODE_EXPIRED:
+            case ERROR_SESSION_EXPIRED:
+              return 'session_expired';
+          }
         Bugsnag.notify(error as any);
         return 'unknown_error';
       }
