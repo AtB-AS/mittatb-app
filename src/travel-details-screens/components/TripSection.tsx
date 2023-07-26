@@ -1,4 +1,3 @@
-import {AUTHORITY} from '@env';
 import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
@@ -10,10 +9,7 @@ import {
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {
-  BookingRequirement,
-  ServiceJourneyDeparture,
-} from '@atb/travel-details-screens/types';
+import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -22,13 +18,7 @@ import {
   TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
-import {
-  daysBetween,
-  formatToClock,
-  formatToShortDateTimeWithoutYear,
-  secondsToDuration,
-  secondsToMinutesLong,
-} from '@atb/utils/date';
+import {formatToClock, secondsToDuration} from '@atb/utils/date';
 import {
   getQuayName,
   getTranslatedModeName,
@@ -50,6 +40,7 @@ import {
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
 import {TripRow} from './TripRow';
+import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
 import {WaitSection, WaitDetails} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -123,15 +114,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const now = useNow(2500);
   const bookingRequirement = getBookingRequirementForLeg(leg, now);
-
-  const formattedTimeForBooking = getFormattedTimeForBooking(
-    bookingRequirement,
-    now,
-    t,
-    language,
-  );
-
-  const isAtB = AUTHORITY === 'ATB:Authority:2';
 
   const sectionOutput = (
     <>
@@ -230,38 +212,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
           >
-            <MessageBox
-              type={
-                bookingRequirement.requiresBookingUrgently ? 'warning' : 'info'
-              }
-              noStatusIcon={true}
-              message={t(
-                TripDetailsTexts.trip.leg?.[
-                  bookingRequirement.isTooEarly
-                    ? 'needsBookingButIsTooEarly'
-                    : 'needsBookingAndIsAvailable'
-                ](
-                  publicCode,
-                  formattedTimeForBooking,
-                  bookingRequirement.isTooEarly
-                    ? bookingRequirement.bookingAvailableImminently
-                    : bookingRequirement.requiresBookingUrgently,
-                ),
-              )}
-              onPressConfig={
-                isAtB
-                  ? {
-                      text: t(
-                        TripDetailsTexts.trip.leg.needsBookingWhatIsThis(
-                          publicCode,
-                        ),
-                      ),
-                      action: () => {
-                        //openContactFlexibleTransport(bookingDetails); // TODO: implement this
-                      },
-                    }
-                  : undefined
-              }
+            <FlexibleTransportMessageBox
+              bookingRequirement={bookingRequirement}
+              publicCode={publicCode}
+              now={now}
             />
           </TripRow>
         )}
@@ -544,41 +498,3 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
 }));
-
-function getFormattedTimeForBooking(
-  bookingRequirement: BookingRequirement,
-  now: number,
-  t: TranslateFunction,
-  language: Language,
-): string {
-  if (!bookingRequirement.requiresBooking) {
-    return '';
-  } else if (
-    bookingRequirement.requiresBookingUrgently ||
-    bookingRequirement.bookingAvailableImminently
-  ) {
-    return secondsToMinutesLong(
-      bookingRequirement.isTooEarly
-        ? bookingRequirement.secondsRemainingToAvailable
-        : bookingRequirement.secondsRemainingToDeadline,
-      language,
-    );
-  } else {
-    const nextBookingStateChangeDate = bookingRequirement.isTooEarly
-      ? bookingRequirement.earliestBookingDate
-      : bookingRequirement.latestBookingDate;
-
-    const daysDifference = daysBetween(
-      new Date(now),
-      nextBookingStateChangeDate,
-    );
-    const relativeDayName = t(
-      TripDetailsTexts.trip.leg.relativeDayNames(daysDifference),
-    );
-    return (
-      relativeDayName +
-      (relativeDayName === '' ? '' : ' ') +
-      formatToShortDateTimeWithoutYear(nextBookingStateChangeDate, language)
-    );
-  }
-}
