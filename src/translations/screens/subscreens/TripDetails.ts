@@ -49,6 +49,11 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
+      onDemandTransportLabel: _(
+        `Bestillingstransport`,
+        `On-demand transport`,
+        `Bestillingstransport`,
+      ),
       relativeDayNames: (daysDifference: number) => {
         switch (daysDifference) {
           case -2:

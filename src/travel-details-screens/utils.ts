@@ -1,4 +1,4 @@
-import {secondsBetween} from '@atb/utils/date';
+import {dateWithReplacedTime, secondsBetween} from '@atb/utils/date';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
@@ -187,8 +187,10 @@ function getLatestBookingDate(
   expectedStartTime: string, // e.g. '2023-07-14T17:56:32+02:00'
 ): Date {
   const expectedStartDate = new Date(expectedStartTime);
-  const latestBookingDate = new Date(
-    `${expectedStartTime.split('T')[0]}T${latestBookingTime}`,
+  const latestBookingDate = dateWithReplacedTime(
+    expectedStartDate,
+    latestBookingTime,
+    'HH:mm:ss',
   );
 
   if (latestBookingDate.getTime() > expectedStartDate.getTime()) {
@@ -205,8 +207,8 @@ const defaultBookingRequirement: BookingRequirement = {
   isTooLate: false,
   isTooEarly: false,
   secondsRemainingToDeadline: Infinity,
-  latestBookingDate: new Date(Number.MAX_VALUE),
   secondsRemainingToAvailable: Infinity,
+  latestBookingDate: new Date(Number.MAX_VALUE),
   earliestBookingDate: new Date(Number.MAX_VALUE),
 };
 
@@ -225,8 +227,8 @@ export function getBookingRequirementForLeg(
     isTooEarly,
     isTooLate,
     secondsRemainingToDeadline,
-    latestBookingDate,
     secondsRemainingToAvailable,
+    latestBookingDate,
     earliestBookingDate,
   } = defaultBookingRequirement;
 
@@ -238,16 +240,19 @@ export function getBookingRequirementForLeg(
       leg.expectedStartTime,
     );
 
-    secondsRemainingToDeadline = (latestBookingDate.getTime() - now) / 1000;
+    const maxDaysBeforeBooking = 7; // TODO: get this value from firestore. Even better would be to get earliestBookingTime as ISO string from Entur's API.
+    const secondsInOneHour = 60 * 60;
+    const secondsInOneWeek = maxDaysBeforeBooking * 24 * secondsInOneHour;
 
-    const maxDaysBeforeBooking = 7; // 1 week before
     earliestBookingDate = new Date(latestBookingDate);
     earliestBookingDate.setDate(
       earliestBookingDate.getDate() - maxDaysBeforeBooking,
     );
 
-    const secondsInOneHour = 60 * 60;
-    const secondsInOneWeek = maxDaysBeforeBooking * 24 * secondsInOneHour;
+    const nowDate = new Date(now);
+    secondsRemainingToDeadline = secondsBetween(nowDate, latestBookingDate);
+    secondsRemainingToAvailable = secondsBetween(nowDate, earliestBookingDate);
+
     if (secondsRemainingToDeadline < 0) {
       isTooLate = true;
     } else if (secondsRemainingToDeadline < secondsInOneHour) {
@@ -256,7 +261,6 @@ export function getBookingRequirementForLeg(
       isTooEarly = true;
     }
 
-    secondsRemainingToAvailable = (earliestBookingDate.getTime() - now) / 1000;
     if (
       secondsRemainingToAvailable > 0 &&
       secondsRemainingToAvailable < secondsInOneHour
@@ -272,8 +276,8 @@ export function getBookingRequirementForLeg(
     isTooEarly,
     isTooLate,
     secondsRemainingToDeadline,
-    latestBookingDate,
     secondsRemainingToAvailable,
+    latestBookingDate,
     earliestBookingDate,
   };
 }

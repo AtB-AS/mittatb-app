@@ -1,3 +1,4 @@
+import {AUTHORITY} from '@env';
 import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
@@ -130,6 +131,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
     language,
   );
 
+  const isAtB = AUTHORITY === 'ATB:Authority:2';
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -187,12 +190,21 @@ export const TripSection: React.FC<TripSectionProps> = ({
             )}
             rowLabel={
               <TransportationIconBox
-                mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
+                mode={isFlexible ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
             }
           >
             <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
+            {isFlexible && (
+              <ThemeText
+                color="secondary"
+                type="body__secondary"
+                style={style.onDemandTransportLabel}
+              >
+                {t(TripDetailsTexts.trip.leg.onDemandTransportLabel)}
+              </ThemeText>
+            )}
           </TripRow>
         )}
         {leg.situations.map((situation, i) => (
@@ -236,14 +248,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
                     : bookingRequirement.requiresBookingUrgently,
                 ),
               )}
-              onPressConfig={{
-                text: t(
-                  TripDetailsTexts.trip.leg.needsBookingWhatIsThis(publicCode),
-                ),
-                action: () => {
-                  //openContactFlexibleTransport(bookingDetails); // TODO: implement this
-                },
-              }}
+              onPressConfig={
+                isAtB
+                  ? {
+                      text: t(
+                        TripDetailsTexts.trip.leg.needsBookingWhatIsThis(
+                          publicCode,
+                        ),
+                      ),
+                      action: () => {
+                        //openContactFlexibleTransport(bookingDetails); // TODO: implement this
+                      },
+                    }
+                  : undefined
+              }
             />
           </TripRow>
         )}
@@ -511,6 +529,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legLineName: {
     fontWeight: 'bold',
+  },
+  onDemandTransportLabel: {
+    paddingTop: theme.spacings.xSmall,
   },
   realtime: {
     flexDirection: 'row',

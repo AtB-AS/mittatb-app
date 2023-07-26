@@ -18,7 +18,7 @@ export type BookingRequirement = {
   isTooEarly: boolean;
   isTooLate: boolean;
   secondsRemainingToDeadline: number;
-  latestBookingDate: Date;
   secondsRemainingToAvailable: number;
+  latestBookingDate: Date;
   earliestBookingDate: Date;
 };

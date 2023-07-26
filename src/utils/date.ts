@@ -17,6 +17,7 @@ import {
   parse,
   parseISO,
   set,
+  getSeconds,
 } from 'date-fns';
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
@@ -342,11 +343,16 @@ export function isSeveralDays(items: string[]) {
   return true;
 }
 
-export function dateWithReplacedTime(date: Date | string, time: string) {
-  const parsedTime = parse(time, 'HH:mm', new Date());
+export function dateWithReplacedTime(
+  date: Date | string,
+  time: string,
+  formatString?: string,
+) {
+  const parsedTime = parse(time, formatString || 'HH:mm', new Date());
   return set(parseIfNeeded(date), {
     hours: getHours(parsedTime),
     minutes: getMinutes(parsedTime),
+    seconds: getSeconds(parsedTime),
   });
 }
 
