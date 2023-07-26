@@ -118,7 +118,7 @@ export type RootStackParamList = {
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
   Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
-
+  Root_LoadingScreen: undefined;
   Root_LoginActiveFareContractWarningScreen: Root_LoginActiveFareContractWarningScreenParams;
   Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;

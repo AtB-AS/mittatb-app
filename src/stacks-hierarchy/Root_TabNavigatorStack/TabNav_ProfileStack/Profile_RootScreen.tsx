@@ -35,7 +35,7 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -66,13 +66,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t, language} = useTranslation();
-  const {
-    authenticationType,
-    signOut,
-    user,
-    customerNumber,
-    userCreationFinished,
-  } = useAuthState();
+  const {authenticationType, signOut, user, customerNumber} = useAuthState();
   const config = useLocalConfig();
   const {fareContracts, customerProfile} = useTicketingState();
   const activeFareContracts =
@@ -126,17 +120,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     if (config?.installId) setClipboard(config.installId);
   }
   const [isLoading, setIsLoading] = useIsLoading(false);
-  const [isUserCreated, setIsUserCreated] = useState(false);
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
-  useEffect(() => {
-    if (!userCreationFinished) {
-      setIsUserCreated(true);
-    } else {
-      setIsUserCreated(false);
-    }
-  }, [userCreationFinished]);
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   async function selectFavourites() {
@@ -607,7 +593,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             ))}
         </View>
       </ScrollView>
-      {(isLoading || isUserCreated) && <ActivityIndicatorOverlay />}
+      {isLoading && <ActivityIndicatorOverlay />}
     </View>
   );
 };

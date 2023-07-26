@@ -74,9 +74,6 @@ export const Root_LoginPhoneInputScreen = ({
     }
     const errorCode = await signInWithPhoneNumber(phoneValidation.phoneNumber);
     if (!errorCode) {
-      console.log(
-        'signInWithPhoneNumber success, navigate to Root_LoginConfirmCodeScreen',
-      );
       setError(undefined);
       navigation.navigate('Root_LoginConfirmCodeScreen', {
         afterLogin,

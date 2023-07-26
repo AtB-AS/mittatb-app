@@ -126,6 +126,7 @@ type AuthContextState = {
   signInWithCustomToken: (
     token: string,
   ) => Promise<{error?: VippsSignInErrorCode}>;
+  checkCustomClaims: () => Promise<boolean>;
 } & AuthReducerState;
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
@@ -202,34 +203,48 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   // This navigation to new screen should be in a toggle, so that we can turn it off in case we see that many users are stuck with the spinner.
 
   useEffect(() => {
-    let retryCount = 0;
+    // let retryCount = 0;
 
-    const checkCustomClaims = async () => {
-      const token = await state.user?.getIdTokenResult(true).catch((err) => {
-        console.log('this is an error: ' + err); // handle this error and do something when it fails. Test this by turning of network connection
-      });
-      const abt_id = token?.claims['abt_id'];
-      const customer_number = token?.claims['customer_number'];
-      const hasCustomClaims = !!abt_id && !!customer_number;
-
-      if (hasCustomClaims) {
-        dispatch({type: 'SET_USER_CREATION_FINISHED', customer_number});
-      } else {
-        // move polling to loading screen?
-        if (retryCount < 10) {
-          // This retries 10 times at start-up of app. Should we investigate how to stop that from happening when token=undefined?
-          console.log('retryCount: ' + retryCount);
-          // if retry count 9 --> log to bugsnag that there must have been an error and we need to investigate backend
-          retryCount++;
-          setTimeout(() => checkCustomClaims(), 1000);
-        }
-      }
-    };
+    // const checkCustomClaims = async () => {
+    //   const token = await state.user?.getIdTokenResult(true).catch((err) => {
+    //     console.log('this is an error: ' + err); // handle this error and do something when it fails. Test this by turning of network connection
+    //   });
+    //   const abt_id = token?.claims['abt_id'];
+    //   const customer_number = token?.claims['customer_number'];
+    //   const hasCustomClaims = !!abt_id && !!customer_number;
+    //
+    //   if (hasCustomClaims) {
+    //     dispatch({type: 'SET_USER_CREATION_FINISHED', customer_number});
+    //   } else {
+    //     // move polling to loading screen?
+    //     if (retryCount < 10) {
+    //       console.log('retryCount: ' + retryCount);
+    //       // if retry count 9 --> log to bugsnag that there must have been an error and then we need to investigate backend what happens or goes wrong
+    //       retryCount++;
+    // setTimeout(() => checkCustomClaims(), 10000);
+    //     }
+    //   }
+    // };
     if (state.user?.uid) {
       checkCustomClaims();
     }
   }, [state.user?.uid]);
 
+  const checkCustomClaims = async () => {
+    const token = await state.user?.getIdTokenResult(true).catch((err) => {
+      console.log('this is an error: ' + err); // handle this error and do something when it fails. Test this by turning of network connection
+    });
+    const abt_id = token?.claims['abt_id'];
+    const customer_number = token?.claims['customer_number'];
+    const hasCustomClaims = !!abt_id && !!customer_number;
+
+    if (hasCustomClaims) {
+      dispatch({type: 'SET_USER_CREATION_FINISHED', customer_number});
+    }
+    return hasCustomClaims;
+  };
+
+  // Doodling by Gøran
   // if (state.user?.uid) {
   //   let success = checkCustomClaims();
   //   while (!success && retryCount < 10) {
@@ -307,6 +322,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
     <AuthContext.Provider
       value={{
         ...state,
+        checkCustomClaims,
         signInWithPhoneNumber,
         confirmCode,
         signOut,

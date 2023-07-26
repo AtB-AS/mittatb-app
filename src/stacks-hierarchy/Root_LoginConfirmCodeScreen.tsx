@@ -23,7 +23,6 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -34,12 +33,8 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const {themeName} = useTheme();
-  const {
-    authenticationType,
-    confirmCode,
-    signInWithPhoneNumber,
-    userCreationFinished,
-  } = useAuthState();
+  const {authenticationType, confirmCode, signInWithPhoneNumber} =
+    useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<
     ConfirmationErrorCode | PhoneSignInErrorCode
@@ -70,20 +65,14 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   // User might be automatically logged in with Firebase auth, but only on Android
   // Check authentication from state and see if it is updated while we wait
   useEffect(() => {
-    console.log('authenticationType: ' + authenticationType);
-    console.log('userCreationFinished: ' + userCreationFinished);
-    if (authenticationType === 'phone' && userCreationFinished) {
-      console.log('pop.to.top!');
+    if (authenticationType === 'phone') {
       navigation.popToTop();
 
       if (afterLogin) {
         navigation.navigate(afterLogin.screen, afterLogin.params as any);
       }
-      // This change is not needed if we navigate from RootTabNavStack??
-      // else if (authenticationType === 'phone' && !userCreationFinished) {
-      // navigate to new screen, send in afterLogin and use that for further navigation.
     }
-  }, [authenticationType, userCreationFinished]);
+  }, [authenticationType]);
 
   return (
     <View style={styles.container}>
@@ -176,7 +165,6 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      {!userCreationFinished && <ActivityIndicatorOverlay />}
     </View>
   );
 };

@@ -60,9 +60,6 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 
 export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {abtCustomerId, userCreationFinished} = useAuthState();
-  console.log(
-    'MobileTokenContextProvider, userCreationFinished: ' + userCreationFinished,
-  );
 
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
