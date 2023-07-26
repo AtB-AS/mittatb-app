@@ -109,6 +109,13 @@ const TripDetailsTexts = {
           `Kva er ${publicCode}?`,
         ),
       circaLabel: _(`ca. `, `ca. `, `ca. `),
+      bookOnline: _(`Reserver på nett`, `Book online`, `Reserver på nett`),
+      bookByPhone: (phone: string) =>
+        _(
+          `Reserver på tlf. ${phone}`,
+          `Book by phone ${phone}`,
+          `Reserver på tlf. ${phone}`,
+        ),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,
