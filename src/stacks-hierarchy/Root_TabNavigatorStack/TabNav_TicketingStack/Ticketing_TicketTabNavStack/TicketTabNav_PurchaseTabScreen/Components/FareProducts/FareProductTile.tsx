@@ -51,7 +51,6 @@ export const FareProductTile = ({
       onPress={onPress}
       testID={testID}
       illustrationName={config.illustration || 'unknown'}
-      isPeriodTicket={config.configuration.productSelectionMode === 'duration'}
       transportColor={transportColor}
       title={title}
       description={description}
