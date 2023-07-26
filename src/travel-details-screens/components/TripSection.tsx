@@ -1,6 +1,5 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
 import {Info, Warning} from '@atb/assets/svg/color/icons/status';
-import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import {
   AccessibleText,
@@ -27,7 +26,7 @@ import {
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import React from 'react';
-import {View, Linking} from 'react-native';
+import {View} from 'react-native';
 import {
   getBookingRequirementForLeg,
   getLineName,
@@ -52,7 +51,7 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -119,17 +118,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const atbAuthorityId = 'ATB:Authority:2';
   const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;
-
-  const bookingArrangements = leg.bookingArrangements;
-
-  const bookingPhone = bookingArrangements?.bookingContact?.phone;
-  const bookingUrl = bookingArrangements?.bookingContact?.url;
-
-  const bookingMethods = bookingArrangements?.bookingMethods;
-  const showBookOnlineOption =
-    bookingUrl && bookingMethods?.some((bm) => bm === 'online');
-  const showBookByPhoneOption =
-    bookingPhone && bookingMethods?.some((bm) => bm === 'callOffice');
 
   const sectionOutput = (
     <>
@@ -249,38 +237,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {isFlexible && (showBookOnlineOption || showBookByPhoneOption) && (
-          <View style={style.flexBookingOptions}>
-            <TripRow>
-              {showBookOnlineOption && (
-                <View style={style.flexBookingOption}>
-                  <Button
-                    text={t(TripDetailsTexts.trip.leg.bookOnline)}
-                    onPress={() => Linking.openURL(bookingUrl)}
-                    mode="primary"
-                    type="pill"
-                    interactiveColor="interactive_0"
-                    leftIcon={{svg: ExternalLink}}
-                  />
-                </View>
-              )}
-              {showBookByPhoneOption && (
-                <View style={style.flexBookingOption}>
-                  <Button
-                    text={t(
-                      TripDetailsTexts.trip.leg.bookByPhone(bookingPhone),
-                    )}
-                    onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
-                    style={style.bookByPhoneButton}
-                    type="pill"
-                    interactiveColor="interactive_3"
-                    leftIcon={{svg: Phone}}
-                  />
-                </View>
-              )}
-            </TripRow>
-          </View>
-        )}
+        {isFlexible && <FlexibleTransportBookingOptions leg={leg} />}
 
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
@@ -549,15 +506,6 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   onDemandTransportLabel: {
     paddingTop: theme.spacings.xSmall,
-  },
-  flexBookingOptions: {
-    paddingVertical: theme.spacings.medium / 2,
-  },
-  flexBookingOption: {
-    paddingVertical: theme.spacings.medium / 2,
-  },
-  bookByPhoneButton: {
-    backgroundColor: theme.interactive.interactive_3.default.background,
   },
   realtime: {
     flexDirection: 'row',
