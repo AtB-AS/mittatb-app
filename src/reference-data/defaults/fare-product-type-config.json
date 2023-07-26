@@ -4,11 +4,11 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Enkeltbillett buss/trikk"
+        "value": "Enkeltbillett"
       },
       {
         "lang": "eng",
-        "value": "Single ticket bus/tram"
+        "value": "Single ticket"
       }
     ],
     "illustration": "single",
@@ -183,11 +183,11 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Enkeltbillett, hurtigbåt"
+        "value": "Enkeltbillett"
       },
       {
         "lang": "eng",
-        "value": "Single ticket, boat"
+        "value": "Single ticket"
       }
     ],
     "illustration": "boat",
@@ -226,11 +226,11 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Periodebillett, hurtigbåt"
+        "value": "Periodebillett"
       },
       {
         "lang": "eng",
-        "value": "Periodic ticket, boat"
+        "value": "Periodic ticket"
       }
     ],
     "illustration": "boat-period",

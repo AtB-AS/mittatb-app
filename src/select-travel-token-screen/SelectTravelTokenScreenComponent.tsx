@@ -36,6 +36,7 @@ import {
   findReferenceDataById,
   isOfFareProductRef,
 } from '@atb/reference-data/utils';
+import {useFareProductTitle} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen';
 
 type Props = {onAfterSave: () => void};
 
@@ -121,6 +122,10 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     selectedType === 'travelCard' &&
     isMobileToken(inspectableToken) &&
     !!fareProductConfigWhichRequiresTokenOnMobile;
+
+  const fareProductTitle = useFareProductTitle(
+    fareProductConfigWhichRequiresTokenOnMobile,
+  );
 
   return (
     <View style={styles.container}>
@@ -218,14 +223,11 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           <MessageBox
             type={'error'}
             title={t(
-              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.title,
+              TravelTokenTexts.toggleToken.notAllowedToUseTravelCardError.title,
             )}
             message={t(
-              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.message(
-                getTextForLanguage(
-                  fareProductConfigWhichRequiresTokenOnMobile.name,
-                  language,
-                ) ?? '',
+              TravelTokenTexts.toggleToken.notAllowedToUseTravelCardError.message(
+                fareProductTitle ?? '',
               ),
             )}
             style={styles.errorMessageBox}

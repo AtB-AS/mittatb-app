@@ -9,8 +9,12 @@ import {useTextForLanguage} from '@atb/translations/utils';
 
 const modesDisplayLimit = 2;
 
-export const useFareProductTitle = (config: FareProductTypeConfig) => {
+export const useFareProductTitle = (config?: FareProductTypeConfig) => {
   const {t} = useTranslation();
+
+  if (!config) {
+    return undefined;
+  }
 
   const transportModes = config.transportModes;
 
