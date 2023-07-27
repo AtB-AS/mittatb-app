@@ -26,7 +26,7 @@ export type RemoteConfig = {
   enable_token_fallback: boolean;
   enable_flex_tickets: boolean;
   flex_ticket_url: string;
-  flex_transport_about_url: string;
+  flex_transport_about_urls: string;
   flex_booking_number_of_days_available: number;
   enable_vipps_login: boolean;
   enable_map_page: boolean;
@@ -82,8 +82,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_token_fallback: true,
   enable_flex_tickets: false,
   flex_ticket_url: '',
-  flex_transport_about_url:
-    'https://www.atb.no/reiseinformasjon/bestill-transport/',
+  flex_transport_about_urls:
+    '[{"lang": "nor","value": "https://www.atb.no/reiseinformasjon/bestill-transport"},{"lang": "eng","value": "https://atb.no/en/bestill"}]',
   flex_booking_number_of_days_available: 7,
   enable_vipps_login: false,
   enable_map_page: false,
@@ -142,9 +142,9 @@ export function getConfig(): RemoteConfig {
   const flex_ticket_url =
     values['flex_ticket_url']?.asString() ??
     defaultRemoteConfig.flex_ticket_url;
-  const flex_transport_about_url =
-    values['flex_transport_about_url']?.asString() ??
-    defaultRemoteConfig.flex_transport_about_url;
+  const flex_transport_about_urls =
+    values['flex_transport_about_urls']?.asString() ??
+    defaultRemoteConfig.flex_transport_about_urls;
   const flex_booking_number_of_days_available =
     values['flex_booking_number_of_days_available']?.asNumber() ??
     defaultRemoteConfig.flex_booking_number_of_days_available;
@@ -320,7 +320,7 @@ export function getConfig(): RemoteConfig {
     enable_token_fallback,
     enable_flex_tickets,
     flex_ticket_url,
-    flex_transport_about_url,
+    flex_transport_about_urls,
     flex_booking_number_of_days_available,
     enable_vipps_login,
     enable_map_page: enable_map_tab,

@@ -1,6 +1,10 @@
 import {FlexibleTransport} from '@atb/assets/svg/color/images';
 import {CloseCircle} from '@atb/assets/svg/color/icons/actions';
-import {useTranslation, FlexibleTransportTexts} from '@atb/translations';
+import {
+  useTranslation,
+  FlexibleTransportTexts,
+  getTextForLanguage,
+} from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
 import {View, TouchableOpacity, Linking} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -16,6 +20,7 @@ import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {Dimensions} from 'react-native';
+
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
 
@@ -27,11 +32,11 @@ type FlexibleTransportBookingDetailsProps = {
 export const FlexibleTransportBookingDetails: React.FC<
   FlexibleTransportBookingDetailsProps
 > = ({leg, close}) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const style = useStyle();
   const {theme} = useTheme();
 
-  const {flex_transport_about_url, flex_booking_number_of_days_available} =
+  const {flex_transport_about_urls, flex_booking_number_of_days_available} =
     useRemoteConfig();
 
   const publicCode = getPublicCodeFromLeg(leg);
@@ -90,7 +95,11 @@ export const FlexibleTransportBookingDetails: React.FC<
 
           <TouchableOpacity
             style={style.readMoreAbout}
-            onPress={() => Linking.openURL(flex_transport_about_url)}
+            onPress={() =>
+              Linking.openURL(
+                getTextForLanguage(flex_transport_about_urls, language) || '',
+              )
+            }
           >
             <ThemeText
               color="secondary"
