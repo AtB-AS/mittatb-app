@@ -31,12 +31,17 @@ export const FlexibleTransportBookingDetails: React.FC<
   const style = useStyle();
   const {theme} = useTheme();
 
-  const {flex_transport_about_url} = useRemoteConfig();
+  const {flex_transport_about_url, flex_booking_number_of_days_available} =
+    useRemoteConfig();
 
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(2500);
-  const bookingRequirement = getBookingRequirementForLeg(leg, now);
+  const bookingRequirement = getBookingRequirementForLeg(
+    leg,
+    now,
+    flex_booking_number_of_days_available,
+  );
 
   return (
     <BottomSheetContainer>

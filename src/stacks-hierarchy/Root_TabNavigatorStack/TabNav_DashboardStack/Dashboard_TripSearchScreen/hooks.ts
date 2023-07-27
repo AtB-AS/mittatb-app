@@ -124,6 +124,7 @@ export const useAvailableTripPatterns = (
   tripPatterns: TripPatternWithKey[],
 ): AvailableTripPattern[] => {
   const now = useNow(2500);
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
 
   const tripPatternsWithBookingRequirements = tripPatterns.map(
     (tripPattern) => {
@@ -135,6 +136,7 @@ export const useAvailableTripPatterns = (
       const bookingRequirement = getBookingRequirementForLeg(
         firstFlexibleTransportLeg,
         now,
+        flex_booking_number_of_days_available,
       );
 
       return {

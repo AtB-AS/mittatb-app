@@ -54,6 +54,7 @@ import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
 import {FlexibleTransportBookingDetails} from './FlexibleTransportBookingDetails';
 
@@ -117,7 +118,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(2500);
-  const bookingRequirement = getBookingRequirementForLeg(leg, now);
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const bookingRequirement = getBookingRequirementForLeg(
+    leg,
+    now,
+    flex_booking_number_of_days_available,
+  );
 
   const atbAuthorityId = 'ATB:Authority:2';
   const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;

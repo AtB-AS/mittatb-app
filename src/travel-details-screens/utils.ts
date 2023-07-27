@@ -219,6 +219,7 @@ const defaultBookingRequirement: BookingRequirement = {
 export function getBookingRequirementForLeg(
   leg: Leg | undefined,
   now: number,
+  flex_booking_number_of_days_available: number, // would be better to get earliestBookingTime as ISO string from Entur's API.
 ): BookingRequirement {
   if (leg === undefined) {
     return defaultBookingRequirement;
@@ -244,13 +245,13 @@ export function getBookingRequirementForLeg(
       leg.expectedStartTime,
     );
 
-    const maxDaysBeforeBooking = 7; // TODO: get this value from firestore. Even better would be to get earliestBookingTime as ISO string from Entur's API.
     const secondsInOneHour = 60 * 60;
-    const secondsInOneWeek = maxDaysBeforeBooking * 24 * secondsInOneHour;
+    const secondsInOneWeek =
+      flex_booking_number_of_days_available * 24 * secondsInOneHour;
 
     earliestBookingDate = new Date(latestBookingDate);
     earliestBookingDate.setDate(
-      earliestBookingDate.getDate() - maxDaysBeforeBooking,
+      earliestBookingDate.getDate() - flex_booking_number_of_days_available,
     );
 
     const nowDate = new Date(now);

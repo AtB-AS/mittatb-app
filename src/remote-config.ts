@@ -27,6 +27,7 @@ export type RemoteConfig = {
   enable_flex_tickets: boolean;
   flex_ticket_url: string;
   flex_transport_about_url: string;
+  flex_booking_number_of_days_available: number;
   enable_vipps_login: boolean;
   enable_map_page: boolean;
   favourite_departures_poll_interval: number;
@@ -83,6 +84,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   flex_transport_about_url:
     'https://www.atb.no/reiseinformasjon/bestill-transport/',
+  flex_booking_number_of_days_available: 7,
   enable_vipps_login: false,
   enable_map_page: false,
   favourite_departures_poll_interval: 30000,
@@ -143,6 +145,9 @@ export function getConfig(): RemoteConfig {
   const flex_transport_about_url =
     values['flex_transport_about_url']?.asString() ??
     defaultRemoteConfig.flex_transport_about_url;
+  const flex_booking_number_of_days_available =
+    values['flex_booking_number_of_days_available']?.asNumber() ??
+    defaultRemoteConfig.flex_booking_number_of_days_available;
   const enable_login =
     values['enable_login']?.asBoolean() ?? defaultRemoteConfig.enable_login;
   const feedback_questions =
@@ -316,6 +321,7 @@ export function getConfig(): RemoteConfig {
     enable_flex_tickets,
     flex_ticket_url,
     flex_transport_about_url,
+    flex_booking_number_of_days_available,
     enable_vipps_login,
     enable_map_page: enable_map_tab,
     favourite_departures_poll_interval,
