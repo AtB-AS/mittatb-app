@@ -49,73 +49,7 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
-      onDemandTransportLabel: _(
-        `Bestillingstransport`,
-        `On-demand transport`,
-        `Bestillingstransport`,
-      ),
-      relativeDayNames: (daysDifference: number) => {
-        switch (daysDifference) {
-          case -2:
-            return _('i forgårs', 'the day before yesterday', 'i forgårs');
-          case -1:
-            return _('i går', 'yesterday', 'i går');
-          case 0:
-            return _('i dag', 'today', 'i dag');
-          case 1:
-            return _('i morgen', 'tomorrow', 'i morgon');
-          case 2:
-            return _('i overmorgen', 'the day after tomorrow', 'i overmorgon');
-          default:
-            return _('', '', '');
-        }
-      },
-      needsBookingAndIsAvailable: (
-        publicCode: string,
-        formattedTimeForBooking: string,
-        isUrgent: boolean,
-      ) =>
-        _(
-          `Frist for reservasjon av ${publicCode} på denne reisen går ut ${
-            (isUrgent ? 'om ' : '') + formattedTimeForBooking
-          }.`,
-          `Deadline for reservation of ${publicCode} on this trip expires ${
-            (isUrgent ? 'in ' : '') + formattedTimeForBooking
-          }.`,
-          `Frist for reservasjon av ${publicCode} på denne reisa går ut ${
-            (isUrgent ? 'om ' : '') + formattedTimeForBooking
-          }.`,
-        ),
-      needsBookingButIsTooEarly: (
-        publicCode: string,
-        formattedTimeForBooking: string,
-        isImminent: boolean,
-      ) =>
-        _(
-          `${publicCode} på denne reisen kan tidligst reserveres ${
-            (isImminent ? 'om ' : '') + formattedTimeForBooking
-          }.`,
-          `${publicCode} on this trip expires can be booked no sooner than ${
-            (isImminent ? 'in ' : '') + formattedTimeForBooking
-          }.`,
-          `${publicCode} på denne reisa kan tidlegast reserverast ${
-            (isImminent ? 'om ' : '') + formattedTimeForBooking
-          }.`,
-        ),
-      needsBookingWhatIsThis: (publicCode: string) =>
-        _(
-          `Hva er ${publicCode}?`,
-          `What is ${publicCode}?`,
-          `Kva er ${publicCode}?`,
-        ),
       circaLabel: _(`ca. `, `ca. `, `ca. `),
-      bookOnline: _(`Reserver på nett`, `Book online`, `Reserver på nett`),
-      bookByPhone: (phone: string) =>
-        _(
-          `Reserver på tlf. ${phone}`,
-          `Book by phone ${phone}`,
-          `Reserver på tlf. ${phone}`,
-        ),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,

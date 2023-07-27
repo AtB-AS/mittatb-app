@@ -22,7 +22,12 @@ import {
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
-import {DEFAULT_LANGUAGE, Language} from '@atb/translations';
+import {
+  DEFAULT_LANGUAGE,
+  Language,
+  TranslateFunction,
+  dictionary,
+} from '@atb/translations';
 
 const humanizer = humanizeDuration.humanizer({});
 
@@ -226,6 +231,41 @@ export function formatToShortDateTimeWithoutYear(
     return formatToClock(parsed, language, 'floor');
   }
   return format(parsed, 'dd. MMM HH:mm', {locale: languageToLocale(language)});
+}
+
+function formatToShortDateTimeWithoutYearWithAtTime(
+  isoDate: string | Date,
+  t: TranslateFunction,
+  language: Language,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  const hourTime =
+    t(dictionary.date.atTime) + ' ' + formatToClock(parsed, language, 'floor');
+  if (isSameDay(parsed, new Date())) {
+    return hourTime;
+  } else {
+    return (
+      format(parsed, 'dd. MMM', {locale: languageToLocale(language)}) +
+      ' ' +
+      hourTime
+    );
+  }
+}
+
+export function formatToShortDateTimeWithRelativeDayNames(
+  fromDate: string | Date,
+  toDate: string | Date,
+  t: TranslateFunction,
+  language: Language,
+) {
+  const daysDifference = daysBetween(fromDate, toDate);
+
+  const relativeDayName = t(dictionary.date.relativeDayNames(daysDifference));
+  return (
+    relativeDayName +
+    (relativeDayName === '' ? '' : ' ') +
+    formatToShortDateTimeWithoutYearWithAtTime(toDate, t, language)
+  );
 }
 
 export function fullDateTime(isoDate: string | Date, language: Language) {

@@ -13,6 +13,7 @@ import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  FlexibleTransportTexts,
   Language,
   TranslateFunction,
   TripDetailsTexts,
@@ -24,6 +25,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import React from 'react';
 import {View} from 'react-native';
@@ -31,6 +33,7 @@ import {
   getBookingRequirementForLeg,
   getLineName,
   getNoticesForLeg,
+  getPublicCodeFromLeg,
   getTimeRepresentationType,
   isLegFlexibleTransport,
   significantWaitTime,
@@ -52,6 +55,7 @@ import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
 import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
+import {FlexibleTransportBookingDetails} from './FlexibleTransportBookingDetails';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -110,14 +114,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
     leg.toPlace.quay?.id,
   );
 
-  const publicCode =
-    leg.fromPlace.quay?.publicCode || leg.line?.publicCode || '';
+  const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(2500);
   const bookingRequirement = getBookingRequirementForLeg(leg, now);
 
   const atbAuthorityId = 'ATB:Authority:2';
   const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;
+
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  function openBookingDetails() {
+    openBottomSheet(() => (
+      <FlexibleTransportBookingDetails leg={leg} close={closeBottomSheet} />
+    ));
+  }
 
   const sectionOutput = (
     <>
@@ -188,7 +198,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 type="body__secondary"
                 style={style.onDemandTransportLabel}
               >
-                {t(TripDetailsTexts.trip.leg.onDemandTransportLabel)}
+                {t(FlexibleTransportTexts.onDemandTransportLabel)}
               </ThemeText>
             )}
           </TripRow>
@@ -225,20 +235,24 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 legAuthorityIsAtB
                   ? {
                       text: t(
-                        TripDetailsTexts.trip.leg.needsBookingWhatIsThis(
+                        FlexibleTransportTexts.needsBookingWhatIsThis(
                           publicCode,
                         ),
                       ),
-                      action: () => {
-                        //openContactFlexibleTransport(bookingDetails); // TODO: implement this
-                      },
+                      action: openBookingDetails,
                     }
                   : undefined
               }
             />
           </TripRow>
         )}
-        {isFlexible && <FlexibleTransportBookingOptions leg={leg} />}
+        {isFlexible && (
+          <View style={style.flexBookingOptions}>
+            <TripRow>
+              <FlexibleTransportBookingOptions leg={leg} />
+            </TripRow>
+          </View>
+        )}
 
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
@@ -507,6 +521,9 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   onDemandTransportLabel: {
     paddingTop: theme.spacings.xSmall,
+  },
+  flexBookingOptions: {
+    paddingVertical: theme.spacings.medium / 2,
   },
   realtime: {
     flexDirection: 'row',

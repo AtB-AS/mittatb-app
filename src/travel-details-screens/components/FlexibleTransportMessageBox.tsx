@@ -1,15 +1,14 @@
 import {BookingRequirement} from '@atb/travel-details-screens/types';
 import {
+  FlexibleTransportTexts,
   Language,
   TranslateFunction,
-  TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
 import {MessageBox, OnPressConfig} from '@atb/components/message-box';
 import {
   secondsToMinutesLong,
-  daysBetween,
-  formatToShortDateTimeWithoutYear,
+  formatToShortDateTimeWithRelativeDayNames,
 } from '@atb/utils/date';
 
 type FlexibleTransportMessageProps = {
@@ -37,7 +36,7 @@ export const FlexibleTransportMessageBox: React.FC<
       type={bookingRequirement.requiresBookingUrgently ? 'warning' : 'info'}
       noStatusIcon={!showStatusIcon}
       message={t(
-        TripDetailsTexts.trip.leg?.[
+        FlexibleTransportTexts?.[
           bookingRequirement.isTooEarly
             ? 'needsBookingButIsTooEarly'
             : 'needsBookingAndIsAvailable'
@@ -76,18 +75,11 @@ function getFormattedTimeForBooking(
     const nextBookingStateChangeDate = bookingRequirement.isTooEarly
       ? bookingRequirement.earliestBookingDate
       : bookingRequirement.latestBookingDate;
-
-    const daysDifference = daysBetween(
+    return formatToShortDateTimeWithRelativeDayNames(
       new Date(now),
       nextBookingStateChangeDate,
-    );
-    const relativeDayName = t(
-      TripDetailsTexts.trip.leg.relativeDayNames(daysDifference),
-    );
-    return (
-      relativeDayName +
-      (relativeDayName === '' ? '' : ' ') +
-      formatToShortDateTimeWithoutYear(nextBookingStateChangeDate, language)
+      t,
+      language,
     );
   }
 }

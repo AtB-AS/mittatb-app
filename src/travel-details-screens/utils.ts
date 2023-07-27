@@ -182,6 +182,10 @@ export function isLegFlexibleTransport(leg: Leg): boolean {
   return !!leg.line?.flexibleLineType;
 }
 
+export function getPublicCodeFromLeg(leg: Leg): string {
+  return leg.fromPlace?.quay?.publicCode || leg.line?.publicCode || '';
+}
+
 function getLatestBookingDate(
   latestBookingTime: string, // e.g. '15:16:00'
   expectedStartTime: string, // e.g. '2023-07-14T17:56:32+02:00'
