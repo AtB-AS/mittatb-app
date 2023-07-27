@@ -13,6 +13,7 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {getBookingRequirementForLeg, getPublicCodeFromLeg} from '../utils';
 import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
 import {useNow} from '@atb/utils/use-now';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
@@ -29,6 +30,8 @@ export const FlexibleTransportBookingDetails: React.FC<
   const {t} = useTranslation();
   const style = useStyle();
   const {theme} = useTheme();
+
+  const {flex_transport_about_url} = useRemoteConfig();
 
   const publicCode = getPublicCodeFromLeg(leg);
 
@@ -80,13 +83,9 @@ export const FlexibleTransportBookingDetails: React.FC<
             }
           </View>
 
-          <TouchableOpacity // todo: clickable area goes too far right?
+          <TouchableOpacity
             style={style.readMoreAbout}
-            onPress={() =>
-              Linking.openURL(
-                'https://www.atb.no/reiseinformasjon/bestill-transport/',
-              )
-            } // todo: get link from firestore?
+            onPress={() => Linking.openURL(flex_transport_about_url)}
           >
             <ThemeText
               color="secondary"
@@ -139,7 +138,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   linkText: {
     marginTop: theme.spacings.medium,
-    //backgroundColor: 'red',
+    alignSelf: 'flex-start',
   },
   readMoreAbout: {
     paddingHorizontal: theme.spacings.small,
