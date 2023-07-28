@@ -6,14 +6,13 @@ import {
   getTextForLanguage,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
-import {View, TouchableOpacity, Linking} from 'react-native';
+import {View, TouchableOpacity, Linking, ScrollView} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 
 import {ThemeText} from '@atb/components/text';
 import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {getBookingRequirementForLeg, getPublicCodeFromLeg} from '../utils';
 import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
 import {useNow} from '@atb/utils/use-now';
@@ -61,71 +60,70 @@ export const FlexibleTransportBookingDetails: React.FC<
         <CloseCircle height={theme.icon.size.large} />
       </TouchableOpacity>
 
-      <FullScreenFooter>
-        <View style={style.contentContainer}>
-          <View style={style.messageBoxContainer}>
-            <FlexibleTransportMessageBox
-              bookingRequirement={bookingRequirement}
-              publicCode={publicCode}
-              now={now}
-              showStatusIcon={true}
-            />
+      <ScrollView style={style.contentContainer}>
+        <View style={style.messageBoxContainer}>
+          <FlexibleTransportMessageBox
+            bookingRequirement={bookingRequirement}
+            publicCode={publicCode}
+            now={now}
+            showStatusIcon={true}
+          />
+        </View>
+
+        {!isSmallScreen && (
+          <View style={style.imageContainer}>
+            <FlexibleTransport height={107} />
           </View>
+        )}
 
-          {!isSmallScreen && (
-            <View style={style.imageContainer}>
-              <FlexibleTransport height={107} />
-            </View>
-          )}
+        <ThemeText type="heading__title" style={style.title}>
+          {t(FlexibleTransportTexts.contentTitle(publicCode))}
+        </ThemeText>
+        <View style={style.steps} accessibilityRole="list">
+          {
+            // eslint-disable-next-line rulesdir/translations-warning
+            FlexibleTransportTexts.steps.map((step, i) => {
+              const stepNumberText = `${i + 1}. `;
+              const stepInstructionText = t(step);
+              return (
+                <View
+                  key={i}
+                  style={style.step}
+                  accessible={true}
+                  accessibilityLabel={stepNumberText + stepInstructionText}
+                  accessibilityRole="text"
+                >
+                  <ThemeText type="body__primary">{stepNumberText}</ThemeText>
+                  <ThemeText type="body__primary">
+                    {stepInstructionText}
+                  </ThemeText>
+                </View>
+              );
+            })
+          }
+        </View>
 
-          <ThemeText type="heading__title" style={style.title}>
-            {t(FlexibleTransportTexts.contentTitle(publicCode))}
-          </ThemeText>
-          <View style={style.steps} accessibilityRole="list">
-            {
-              // eslint-disable-next-line rulesdir/translations-warning
-              FlexibleTransportTexts.steps.map((step, i) => {
-                const stepNumberText = `${i + 1}. `;
-                const stepInstructionText = t(step);
-                return (
-                  <View
-                    key={i}
-                    style={style.step}
-                    accessible={true}
-                    accessibilityLabel={stepNumberText + stepInstructionText}
-                    accessibilityRole="text"
-                  >
-                    <ThemeText type="body__primary">{stepNumberText}</ThemeText>
-                    <ThemeText type="body__primary">
-                      {stepInstructionText}
-                    </ThemeText>
-                  </View>
-                );
-              })
-            }
-          </View>
-
-          <TouchableOpacity
-            style={style.readMoreAbout}
-            onPress={() =>
-              Linking.openURL(
-                getTextForLanguage(flex_transport_about_urls, language) || '',
-              )
-            }
-            accessibilityRole="link"
+        <TouchableOpacity
+          style={style.readMoreAbout}
+          onPress={() =>
+            Linking.openURL(
+              getTextForLanguage(flex_transport_about_urls, language) || '',
+            )
+          }
+          accessibilityRole="link"
+        >
+          <ThemeText
+            color="secondary"
+            style={style.linkText}
+            type="body__primary--underline"
           >
-            <ThemeText
-              color="secondary"
-              style={style.linkText}
-              type="body__primary--underline"
-            >
-              {t(FlexibleTransportTexts.readMoreAbout(publicCode))}
-            </ThemeText>
-          </TouchableOpacity>
-
+            {t(FlexibleTransportTexts.readMoreAbout(publicCode))}
+          </ThemeText>
+        </TouchableOpacity>
+        <View style={style.bookingOptionsContainer}>
           <FlexibleTransportBookingOptions leg={leg} />
         </View>
-      </FullScreenFooter>
+      </ScrollView>
     </BottomSheetContainer>
   );
 };
@@ -142,8 +140,14 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   contentContainer: {
     backgroundColor: theme.static.background.background_0.background,
-    padding: theme.spacings.xLarge,
     borderRadius: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
+    padding: theme.spacings.xLarge,
+    paddingBottom: 0,
+  },
+  bookingOptionsContainer: {
+    paddingBottom: theme.spacings.xLarge,
   },
   messageBoxContainer: {
     paddingBottom: theme.spacings.small,
