@@ -13,7 +13,6 @@ import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  FlexibleTransportTexts,
   Language,
   TranslateFunction,
   TripDetailsTexts,
@@ -195,7 +194,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               ) +
               (isFlexible
                 ? screenReaderPause +
-                  t(FlexibleTransportTexts.onDemandTransportLabel)
+                  t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
                 : '')
             }
             rowLabel={
@@ -212,7 +211,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 type="body__secondary"
                 style={style.onDemandTransportLabel}
               >
-                {t(FlexibleTransportTexts.onDemandTransportLabel)}
+                {t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)}
               </ThemeText>
             )}
           </TripRow>
@@ -249,7 +248,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 legAuthorityIsAtB
                   ? {
                       text: t(
-                        FlexibleTransportTexts.needsBookingWhatIsThis(
+                        TripDetailsTexts.flexibleTransport.needsBookingWhatIsThis(
                           publicCode,
                         ),
                       ),

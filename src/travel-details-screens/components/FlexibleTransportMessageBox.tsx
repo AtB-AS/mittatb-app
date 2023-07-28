@@ -1,6 +1,6 @@
 import {BookingRequirement} from '@atb/travel-details-screens/types';
 import {
-  FlexibleTransportTexts,
+  TripDetailsTexts,
   Language,
   TranslateFunction,
   useTranslation,
@@ -36,7 +36,7 @@ export const FlexibleTransportMessageBox: React.FC<
       type={bookingRequirement.requiresBookingUrgently ? 'warning' : 'info'}
       noStatusIcon={!showStatusIcon}
       message={t(
-        FlexibleTransportTexts?.[
+        TripDetailsTexts.flexibleTransport?.[
           bookingRequirement.isTooEarly
             ? 'needsBookingButIsTooEarly'
             : 'needsBookingAndIsAvailable'

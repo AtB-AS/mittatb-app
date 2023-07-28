@@ -1,6 +1,6 @@
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useTranslation, FlexibleTransportTexts} from '@atb/translations';
+import {useTranslation, TripDetailsTexts} from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
 import {View, Linking} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -40,7 +40,7 @@ export const FlexibleTransportBookingOptions: React.FC<
             accessibilityRole="link"
           >
             <Button
-              text={t(FlexibleTransportTexts.bookOnline)}
+              text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
               onPress={() => Linking.openURL(bookingUrl)}
               mode="primary"
               type="pill"
@@ -53,10 +53,14 @@ export const FlexibleTransportBookingOptions: React.FC<
           <View
             style={style.flexBookingOption}
             accessible={true}
-            accessibilityHint={t(FlexibleTransportTexts.bookByPhoneA11yHint)}
+            accessibilityHint={t(
+              TripDetailsTexts.flexibleTransport.bookByPhoneA11yHint,
+            )}
           >
             <Button
-              text={t(FlexibleTransportTexts.bookByPhone(bookingPhone))}
+              text={t(
+                TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
+              )}
               onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
               style={style.bookByPhoneButton}
               type="pill"

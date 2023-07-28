@@ -2,8 +2,8 @@ import {FlexibleTransport} from '@atb/assets/svg/color/images';
 import {CloseCircle} from '@atb/assets/svg/color/icons/actions';
 import {
   useTranslation,
-  FlexibleTransportTexts,
   getTextForLanguage,
+  TripDetailsTexts,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
 import {View, TouchableOpacity, Linking, ScrollView} from 'react-native';
@@ -51,7 +51,9 @@ export const FlexibleTransportBookingDetails: React.FC<
     <BottomSheetContainer>
       <ScreenHeaderWithoutNavigation
         title={t(
-          FlexibleTransportTexts.needsBookingWhatIsThisTitle(publicCode),
+          TripDetailsTexts.flexibleTransport.needsBookingWhatIsThisTitle(
+            publicCode,
+          ),
         )}
         color="background_1"
         setFocusOnLoad={false}
@@ -77,12 +79,12 @@ export const FlexibleTransportBookingDetails: React.FC<
         )}
 
         <ThemeText type="heading__title" style={style.title}>
-          {t(FlexibleTransportTexts.contentTitle(publicCode))}
+          {t(TripDetailsTexts.flexibleTransport.contentTitle(publicCode))}
         </ThemeText>
         <View style={style.steps} accessibilityRole="list">
           {
             // eslint-disable-next-line rulesdir/translations-warning
-            FlexibleTransportTexts.steps.map((step, i) => {
+            TripDetailsTexts.flexibleTransport.steps.map((step, i) => {
               const stepNumberText = `${i + 1}. `;
               const stepInstructionText = t(step);
               return (
@@ -117,7 +119,7 @@ export const FlexibleTransportBookingDetails: React.FC<
             style={style.linkText}
             type="body__primary--underline"
           >
-            {t(FlexibleTransportTexts.readMoreAbout(publicCode))}
+            {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
           </ThemeText>
         </TouchableOpacity>
         <View style={style.bookingOptionsContainer}>
