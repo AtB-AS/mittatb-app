@@ -122,11 +122,12 @@ export const FlexibleTransportBookingDetails: React.FC<
             {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
           </ThemeText>
         </TouchableOpacity>
-        <View style={style.bookingOptionsContainer}>
-          {bookingRequirement.bookingIsAvailable && (
-            <FlexibleTransportBookingOptions leg={leg} />
-          )}
-        </View>
+
+        {bookingRequirement.bookingIsAvailable && (
+          <FlexibleTransportBookingOptions leg={leg} />
+        )}
+
+        <View style={style.paddingBottomEnsurer} />
       </ScrollView>
     </BottomSheetContainer>
   );
@@ -150,8 +151,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.xLarge,
     paddingBottom: 0,
   },
-  bookingOptionsContainer: {
-    paddingBottom: theme.spacings.xLarge,
+  paddingBottomEnsurer: {
+    height: theme.spacings.xLarge,
+    //backgroundColor: 'red', // for reviewer: can use this to debug scroll padding issue
   },
   messageBoxContainer: {
     paddingBottom: theme.spacings.small,
