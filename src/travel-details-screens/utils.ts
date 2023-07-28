@@ -205,6 +205,7 @@ function getLatestBookingDate(
 }
 
 const defaultBookingRequirement: BookingRequirement = {
+  bookingIsAvailable: false,
   requiresBooking: false,
   requiresBookingUrgently: false,
   bookingAvailableImminently: false,
@@ -226,6 +227,7 @@ export function getBookingRequirementForLeg(
   }
 
   let {
+    bookingIsAvailable,
     requiresBooking,
     requiresBookingUrgently,
     bookingAvailableImminently,
@@ -273,8 +275,10 @@ export function getBookingRequirementForLeg(
       bookingAvailableImminently = true;
     }
   }
+  bookingIsAvailable = requiresBooking && !isTooEarly && !isTooLate;
 
   return {
+    bookingIsAvailable,
     requiresBooking,
     requiresBookingUrgently,
     bookingAvailableImminently,

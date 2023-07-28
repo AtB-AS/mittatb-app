@@ -41,7 +41,7 @@ export const FlexibleTransportBookingOptions: React.FC<
           >
             <Button
               text={t(FlexibleTransportTexts.bookOnline)}
-              onPress={() => Linking.openURL(bookingUrl)} // TODO: add url info for auto-completion?
+              onPress={() => Linking.openURL(bookingUrl)}
               mode="primary"
               type="pill"
               interactiveColor="interactive_0"

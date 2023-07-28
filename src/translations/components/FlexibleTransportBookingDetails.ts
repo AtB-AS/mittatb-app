@@ -78,7 +78,7 @@ const FlexibleTransportTexts = {
       `${publicCode} på denne reisen kan tidligst reserveres ${
         (isImminent ? 'om ' : '') + formattedTimeForBooking
       }.`,
-      `${publicCode} on this trip expires can be booked no sooner than ${
+      `${publicCode} on this trip can be booked no sooner than ${
         (isImminent ? 'in ' : '') + formattedTimeForBooking
       }.`,
       `${publicCode} på denne reisa kan tidlegast reserverast ${

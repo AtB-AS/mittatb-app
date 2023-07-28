@@ -121,7 +121,9 @@ export const FlexibleTransportBookingDetails: React.FC<
           </ThemeText>
         </TouchableOpacity>
         <View style={style.bookingOptionsContainer}>
-          <FlexibleTransportBookingOptions leg={leg} />
+          {bookingRequirement.bookingIsAvailable && (
+            <FlexibleTransportBookingOptions leg={leg} />
+          )}
         </View>
       </ScrollView>
     </BottomSheetContainer>

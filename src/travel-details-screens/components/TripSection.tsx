@@ -260,7 +260,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {isFlexible && (
+        {isFlexible && bookingRequirement.bookingIsAvailable && (
           <View style={style.flexBookingOptions}>
             <TripRow accessible={false}>
               <FlexibleTransportBookingOptions leg={leg} />

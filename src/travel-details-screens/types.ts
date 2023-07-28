@@ -12,6 +12,7 @@ export type ServiceJourneyDeparture = {
 export type TripPatternWithKey = TripPattern & {key: string};
 
 export type BookingRequirement = {
+  bookingIsAvailable: boolean;
   requiresBooking: boolean;
   requiresBookingUrgently: boolean;
   bookingAvailableImminently: boolean;
