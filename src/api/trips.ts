@@ -47,24 +47,15 @@ export async function tripsSearch(
   return results;
 }
 
-export async function nonTransitTripSearch(
+export const nonTransitTripSearch = (
   query: NonTransitTripsQueryVariables,
   opts?: AxiosRequestConfig,
-): Promise<TripPatternFragment[]> {
-  const url = 'bff/v2/trips/non-transit';
-
-  const results = await post<TripPatternFragment[]>(
-    url,
+) =>
+  post<TripPatternFragment[]>(
+    'bff/v2/trips/non-transit',
     cleanQuery(query),
     opts,
   );
-
-  Bugsnag.leaveBreadcrumb('results', {
-    patterns: results.length ?? 'none',
-  });
-
-  return results;
-}
 
 export async function singleTripSearch(
   queryString?: string,
