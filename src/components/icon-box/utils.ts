@@ -46,10 +46,8 @@ export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
     case 'metro':
       return {svg: Subway, name: 'Subway'};
     case 'bicycle':
-    case 'bike_rental':
       return {svg: Bicycle, name: 'Bicycle'};
     case 'scooter':
-    case 'scooter_rental':
       return {svg: Scooter, name: 'Scooter'};
     case 'unknown':
     default:

@@ -1,5 +1,4 @@
 import {translation as _} from '../commons';
-import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 const TripSearchTexts = {
   header: {
@@ -408,19 +407,10 @@ const TripSearchTexts = {
     },
   },
   nonTransit: {
-    travelMode: (mode: StreetMode) => {
-      switch (mode) {
-        case StreetMode.Bicycle:
-          return _('Sykkel', 'Bike', 'Sykkel');
-        case StreetMode.BikeRental:
-          return _('Bysykkel', 'City bike', 'Bysykkel');
-        case StreetMode.Foot:
-          return _('Gå', 'Walk', 'Gå');
-        case StreetMode.ScooterRental:
-          return _('Sparkesykkel', 'E-scooter', 'Sparkesykkel');
-        default:
-          return _('', '', '');
-      }
+    travelMode: {
+      foot: _('Gå', 'Walk', 'Gå'),
+      bicycle: _('Sykkel', 'Bike', 'Sykkel'),
+      unknown: _('Ukjent', 'Unknown', 'Ukjent'),
     },
   },
 };

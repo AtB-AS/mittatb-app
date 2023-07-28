@@ -49,7 +49,7 @@ type ButtonIconProps = {
 };
 
 export type ButtonProps = {
-  onPress?(): void;
+  onPress(): void;
   interactiveColor?: InteractiveColor;
   mode?: ButtonMode;
   viewContainerStyle?: StyleProp<ViewStyle>;
@@ -159,10 +159,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     };
 
     return (
-      <Animated.View
-        style={[{opacity: fadeAnim}, viewContainerStyle]}
-        pointerEvents={onPress === undefined ? 'none' : 'auto'}
-      >
+      <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
         <TouchableOpacity
           style={[styleContainer, style]}
           onPress={disabled ? undefined : onPress}

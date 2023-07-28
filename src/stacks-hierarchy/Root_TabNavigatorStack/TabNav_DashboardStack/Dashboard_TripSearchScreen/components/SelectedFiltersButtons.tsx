@@ -10,13 +10,11 @@ import {TripSearchTexts, useTranslation} from '@atb/translations';
 type Props = {
   filtersSelection: TravelSearchFiltersSelectionType;
   resetTransportModes: () => void;
-  includeMarginBottom: boolean;
 };
 
 export const SelectedFiltersButtons = ({
   filtersSelection,
   resetTransportModes,
-  includeMarginBottom,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -34,9 +32,7 @@ export const SelectedFiltersButtons = ({
       allModesCount,
     ),
   );
-  if (!includeMarginBottom) {
-    styles.container.marginBottom = 0;
-  }
+
   return (
     <View style={styles.container}>
       <Button
@@ -58,8 +54,7 @@ export const SelectedFiltersButtons = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xSmall,
+    marginBottom: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
 }));

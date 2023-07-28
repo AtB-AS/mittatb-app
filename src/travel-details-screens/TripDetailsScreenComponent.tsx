@@ -28,13 +28,11 @@ import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
-import {MapFilterType} from '@atb/components/map';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type TripDetailsScreenParams = {
   tripPattern: TripPattern;
-  mapFilter?: MapFilterType;
 };
 
 type Props = TripDetailsScreenParams & {
@@ -46,7 +44,6 @@ type Props = TripDetailsScreenParams & {
 
 export const TripDetailsScreenComponent = ({
   tripPattern,
-  mapFilter,
   onPressDetailsMap,
   onPressBuyTicket,
   onPressDeparture,
@@ -121,9 +118,7 @@ export const TripDetailsScreenComponent = ({
             <Trip
               tripPattern={updatedTripPattern}
               error={error}
-              onPressDetailsMap={(params) =>
-                onPressDetailsMap({...params, mapFilter})
-              }
+              onPressDetailsMap={onPressDetailsMap}
               onPressDeparture={onPressDeparture}
               onPressQuay={onPressQuay}
             />

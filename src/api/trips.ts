@@ -2,11 +2,11 @@ import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
 import {TripPattern, TripsQuery} from '@atb/api/types/trips';
 import {
-  NonTransitTripsQuery,
   NonTransitTripsQueryVariables,
   TripsQueryVariables,
 } from '@atb/api/types/generated/TripsQuery';
 import Bugsnag from '@bugsnag/react-native';
+import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 
 function cleanQuery(query: TripsQueryVariables) {
   const cleanQuery: TripsQueryVariables = {
@@ -50,10 +50,10 @@ export async function tripsSearch(
 export async function nonTransitTripSearch(
   query: NonTransitTripsQueryVariables,
   opts?: AxiosRequestConfig,
-): Promise<NonTransitTripsQuery[]> {
+): Promise<TripPatternFragment[]> {
   const url = 'bff/v2/trips/non-transit';
 
-  const results = await post<NonTransitTripsQuery[]>(
+  const results = await post<TripPatternFragment[]>(
     url,
     cleanQuery(query),
     opts,

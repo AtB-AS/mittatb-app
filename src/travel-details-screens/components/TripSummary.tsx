@@ -10,14 +10,15 @@ import React from 'react';
 import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
 import {useHumanizeDistance} from '@atb/utils/location';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
-export const TripSummary: React.FC<TripPattern> = ({
-  walkDistance,
-  duration,
-}) => {
+export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
+  const walkDistance = legs
+    .filter((l) => l.mode === Mode.Foot)
+    .reduce((tot, {distance}) => tot + distance, 0);
   const readableDistance = useHumanizeDistance(walkDistance);
   return (
     <View style={styles.tripSummary}>

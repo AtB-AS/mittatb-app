@@ -165,11 +165,14 @@ export type TripFragment = {
   }>;
 };
 
-export type NonTransitTripsQueryVariables = TripsQueryVariables & {
-  modes: StreetMode[];
-};
-
-export type NonTransitTripsQuery = {
-  mode: StreetMode;
-  trip: TripFragment | undefined;
+export type NonTransitTripsQueryVariables = Omit<
+  TripsQueryVariables,
+  | 'cursor'
+  | 'transferPenalty'
+  | 'waitReluctance'
+  | 'walkReluctance'
+  | 'numTripPatterns'
+  | 'modes'
+> & {
+  directModes: StreetMode[];
 };

@@ -58,8 +58,6 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalytics} from '@atb/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
-import {MapFilterType} from '@atb/components/map';
-import {isBlank} from '@atb/utils/presence';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -105,12 +103,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
   const {nonTransitTrips, searchState: nonTransitSearchState} =
-    useNonTransitTripsQuery(
-      from,
-      to,
-      searchTime,
-      filtersState.filtersSelection,
-    );
+    useNonTransitTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -188,12 +181,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
   );
 
-  type OnPressedOptions = {
-    analyticsMetadata?: {[key: string]: any};
-    mapFilter?: MapFilterType;
-  };
   const onPressed = useCallback(
-    (tripPattern: TripPattern, opts?: OnPressedOptions) => {
+    (
+      tripPattern: TripPattern,
+      opts?: {
+        analyticsMetadata?: {[key: string]: any};
+      },
+    ) => {
       analytics.logEvent(
         'Trip search',
         'Trip details opened',
@@ -201,7 +195,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       );
       navigation.navigate('Dashboard_TripDetailsScreen', {
         tripPattern,
-        mapFilter: opts?.mapFilter,
       });
     },
     [analytics, navigation],
@@ -240,8 +233,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   };
 
   const nonTransitTripsVisible =
-    nonTransitSearchState === 'search-success' &&
-    !nonTransitTrips.map((t) => t.trip).every(isBlank);
+    nonTransitSearchState === 'search-success' && nonTransitTrips.length > 0;
 
   useEffect(refresh, [from, to]);
 
@@ -385,7 +377,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           </View>
         )}
       >
-        <View>
+        <View style={style.content}>
           <ScreenReaderAnnouncement message={searchStateMessage} />
           {(!from || !to) && (
             <ThemeText
@@ -402,13 +394,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 <SelectedFiltersButtons
                   filtersSelection={filtersState.filtersSelection}
                   resetTransportModes={filtersState.resetTransportModes}
-                  includeMarginBottom={nonTransitTripsVisible}
-                />
-              )}
-              {nonTransitTripsVisible && (
-                <NonTransitResults
-                  trips={nonTransitTrips}
-                  onDetailsPressed={onPressed}
                 />
               )}
               {isFlexibleTransportEnabled &&
@@ -427,6 +412,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     }}
                   />
                 )}
+              {tripPatterns.length > 0 && nonTransitTripsVisible && (
+                <NonTransitResults
+                  tripPatterns={nonTransitTrips}
+                  onDetailsPressed={onPressed}
+                />
+              )}
               <Results
                 tripPatterns={tripPatterns}
                 isSearching={isSearching}
@@ -660,6 +651,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[ResultsBackgroundColor].background,
     flex: 1,
   },
+  content: {marginTop: theme.spacings.medium},
   scrollView: {
     paddingBottom: theme.spacings.medium,
     backgroundColor: theme.static.background[ResultsBackgroundColor].background,

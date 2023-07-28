@@ -158,6 +158,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   infoBoxText: theme.typography.body__primary,
   messageBoxContainer: {
-    margin: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
 }));
