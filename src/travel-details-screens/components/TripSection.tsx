@@ -159,7 +159,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
               <TransportationIconBox
                 mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
-                size="small"
               />
             }
           >
@@ -347,7 +346,6 @@ const WalkSection = (leg: Leg) => {
         <TransportationIconBox
           mode={leg.mode}
           subMode={leg.line?.transportSubmode}
-          size="small"
         />
       }
       testID="footLeg"
