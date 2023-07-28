@@ -71,7 +71,7 @@ const getModeText = (tp: TripPatternFragment, t: TranslateFunction): string => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginBottom: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
   tripMode: {

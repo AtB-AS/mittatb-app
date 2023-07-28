@@ -72,7 +72,6 @@ export const useNonTransitTripsQuery = (
     nonTransitTripSearch(
       {
         ...query,
-        // TODO: get modes from filter
         directModes: [StreetMode.Foot, StreetMode.Bicycle],
       },
       {cancelToken: cancelTokenSource.token},

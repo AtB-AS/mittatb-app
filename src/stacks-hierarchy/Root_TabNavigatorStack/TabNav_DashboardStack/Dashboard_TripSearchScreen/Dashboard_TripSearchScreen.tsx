@@ -102,8 +102,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
-  const {nonTransitTrips, searchState: nonTransitSearchState} =
-    useNonTransitTripsQuery(from, to, searchTime);
+  const {nonTransitTrips} = useNonTransitTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -233,7 +232,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   };
 
   const nonTransitTripsVisible =
-    nonTransitSearchState === 'search-success' && nonTransitTrips.length > 0;
+    (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
+    nonTransitTrips.length > 0;
 
   useEffect(refresh, [from, to]);
 
@@ -377,7 +377,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           </View>
         )}
       >
-        <View style={style.content}>
+        <View>
           <ScreenReaderAnnouncement message={searchStateMessage} />
           {(!from || !to) && (
             <ThemeText
@@ -397,7 +397,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 />
               )}
               {isFlexibleTransportEnabled &&
-                tripPatterns.length > 0 &&
+                (tripPatterns.length > 0 ||
+                  searchState === 'search-empty-result') &&
                 !error && (
                   <CityZoneMessage
                     from={from}
@@ -412,7 +413,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     }}
                   />
                 )}
-              {tripPatterns.length > 0 && nonTransitTripsVisible && (
+              {nonTransitTripsVisible && (
                 <NonTransitResults
                   tripPatterns={nonTransitTrips}
                   onDetailsPressed={onPressed}
@@ -432,7 +433,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 anyFiltersApplied={
                   filtersState.enabled && filtersState.anyFiltersApplied
                 }
-                nonTransitTripsVisible={nonTransitTripsVisible}
               />
             </View>
           )}
@@ -651,7 +651,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[ResultsBackgroundColor].background,
     flex: 1,
   },
-  content: {marginTop: theme.spacings.medium},
   scrollView: {
     paddingBottom: theme.spacings.medium,
     backgroundColor: theme.static.background[ResultsBackgroundColor].background,
