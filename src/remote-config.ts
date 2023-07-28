@@ -53,6 +53,7 @@ export type RemoteConfig = {
   disable_travelcard: boolean;
   live_vehicle_stale_threshold: number;
   enable_extended_onboarding: boolean;
+  enable_non_transit_trip_search: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -111,6 +112,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   live_vehicle_stale_threshold: 15,
   enable_extended_onboarding: false,
   disable_travelcard: false,
+  enable_non_transit_trip_search: true,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -284,6 +286,10 @@ export function getConfig(): RemoteConfig {
     values['enable_extended_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_extended_onboarding;
 
+  const enable_non_transit_trip_search =
+    values['enable_non_transit_trip_search']?.asBoolean() ??
+    defaultRemoteConfig.enable_non_transit_trip_search;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -336,6 +342,7 @@ export function getConfig(): RemoteConfig {
     disable_travelcard,
     live_vehicle_stale_threshold,
     enable_extended_onboarding,
+    enable_non_transit_trip_search,
   };
 }
 

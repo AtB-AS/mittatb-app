@@ -56,6 +56,8 @@ import {CityZoneMessage} from './components/CityZoneMessage';
 import {useFlexibleTransportEnabled} from './use-flexible-transport-enabled';
 import {TripPattern} from '@atb/api/types/trips';
 import {useAnalytics} from '@atb/analytics';
+import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
+import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -100,6 +102,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
+  const {nonTransitTrips} = useNonTransitTripsQuery(from, to, searchTime);
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -178,15 +181,22 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   );
 
   const onPressed = useCallback(
-    (tripPattern: TripPattern, resultIndex) => {
-      analytics.logEvent('Trip search', 'Trip details opened', {
-        resultIndex,
-      });
+    (
+      tripPattern: TripPattern,
+      opts?: {
+        analyticsMetadata?: {[key: string]: any};
+      },
+    ) => {
+      analytics.logEvent(
+        'Trip search',
+        'Trip details opened',
+        opts?.analyticsMetadata,
+      );
       navigation.navigate('Dashboard_TripDetailsScreen', {
         tripPattern,
       });
     },
-    [navigation, from, to],
+    [analytics, navigation],
   );
 
   function swap() {
@@ -220,6 +230,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           : {...searchTime},
     });
   };
+
+  const nonTransitTripsVisible =
+    (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
+    nonTransitTrips.length > 0;
 
   useEffect(refresh, [from, to]);
 
@@ -383,7 +397,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 />
               )}
               {isFlexibleTransportEnabled &&
-                tripPatterns.length > 0 &&
+                (tripPatterns.length > 0 ||
+                  searchState === 'search-empty-result') &&
                 !error && (
                   <CityZoneMessage
                     from={from}
@@ -398,13 +413,21 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     }}
                   />
                 )}
+              {nonTransitTripsVisible && (
+                <NonTransitResults
+                  tripPatterns={nonTransitTrips}
+                  onDetailsPressed={onPressed}
+                />
+              )}
               <Results
                 tripPatterns={tripPatterns}
                 isSearching={isSearching}
                 showEmptyScreen={showEmptyScreen}
                 isEmptyResult={isEmptyResult}
                 resultReasons={noResultReasons}
-                onDetailsPressed={onPressed}
+                onDetailsPressed={(tripPattern, resultIndex) =>
+                  onPressed(tripPattern, {analyticsMetadata: {resultIndex}})
+                }
                 errorType={error}
                 searchTime={searchTime}
                 anyFiltersApplied={

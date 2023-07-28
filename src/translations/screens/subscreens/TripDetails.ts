@@ -187,11 +187,11 @@ const TripDetailsTexts = {
           ),
       },
       walkDistance: {
-        label: (distanceInMetres: string) =>
+        label: (distance: string) =>
           _(
-            `Total gangavstand: ${distanceInMetres} meter`,
-            `Total walking distance: ${distanceInMetres} meters`,
-            `Total gangavstand: ${distanceInMetres} meter`,
+            `Total gangavstand: ${distance}`,
+            `Total walking distance: ${distance}`,
+            `Total gangavstand: ${distance}`,
           ),
         a11yLabel: (distanceInMetres: string) =>
           _(

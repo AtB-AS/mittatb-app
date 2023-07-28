@@ -1,14 +1,14 @@
 import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
 import {TripPattern, TripsQuery} from '@atb/api/types/trips';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {
+  NonTransitTripsQueryVariables,
+  TripsQueryVariables,
+} from '@atb/api/types/generated/TripsQuery';
 import Bugsnag from '@bugsnag/react-native';
+import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 
-export async function tripsSearch(
-  query: TripsQueryVariables,
-  opts?: AxiosRequestConfig,
-): Promise<TripsQuery> {
-  const url = 'bff/v2/trips';
+function cleanQuery(query: TripsQueryVariables) {
   const cleanQuery: TripsQueryVariables = {
     to: {
       name: query.to.name,
@@ -29,8 +29,16 @@ export async function tripsSearch(
     walkSpeed: query.walkSpeed,
     modes: query.modes,
   };
+  return cleanQuery;
+}
 
-  const results = await post<TripsQuery>(url, cleanQuery, opts);
+export async function tripsSearch(
+  query: TripsQueryVariables,
+  opts?: AxiosRequestConfig,
+): Promise<TripsQuery> {
+  const url = 'bff/v2/trips';
+
+  const results = await post<TripsQuery>(url, cleanQuery(query), opts);
 
   Bugsnag.leaveBreadcrumb('results', {
     patterns: results.trip?.tripPatterns ?? 'none',
@@ -38,6 +46,15 @@ export async function tripsSearch(
 
   return results;
 }
+
+export const nonTransitTripSearch = (
+  query: NonTransitTripsQueryVariables,
+  opts?: AxiosRequestConfig,
+) =>
+  post<TripPatternFragment[]>('bff/v2/trips/non-transit', cleanQuery(query), {
+    ...opts,
+    baseURL: 'http://Grans-MacBook-Pro.local:8080',
+  });
 
 export async function singleTripSearch(
   queryString?: string,
