@@ -51,10 +51,11 @@ export const nonTransitTripSearch = (
   query: NonTransitTripsQueryVariables,
   opts?: AxiosRequestConfig,
 ) =>
-  post<TripPatternFragment[]>('bff/v2/trips/non-transit', cleanQuery(query), {
-    ...opts,
-    baseURL: 'http://Grans-MacBook-Pro.local:8080',
-  });
+  post<TripPatternFragment[]>(
+    'bff/v2/trips/non-transit',
+    cleanQuery(query),
+    opts,
+  );
 
 export async function singleTripSearch(
   queryString?: string,
