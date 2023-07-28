@@ -81,15 +81,27 @@ export const FlexibleTransportBookingDetails: React.FC<
           <ThemeText type="heading__title" style={style.title}>
             {t(FlexibleTransportTexts.contentTitle(publicCode))}
           </ThemeText>
-          <View style={style.steps}>
+          <View style={style.steps} accessibilityRole="list">
             {
               // eslint-disable-next-line rulesdir/translations-warning
-              FlexibleTransportTexts.steps.map((step, i) => (
-                <View key={i} style={style.step}>
-                  <ThemeText type="body__primary">{`${i + 1}. `}</ThemeText>
-                  <ThemeText type="body__primary">{t(step)}</ThemeText>
-                </View>
-              ))
+              FlexibleTransportTexts.steps.map((step, i) => {
+                const stepNumberText = `${i + 1}. `;
+                const stepInstructionText = t(step);
+                return (
+                  <View
+                    key={i}
+                    style={style.step}
+                    accessible={true}
+                    accessibilityLabel={stepNumberText + stepInstructionText}
+                    accessibilityRole="text"
+                  >
+                    <ThemeText type="body__primary">{stepNumberText}</ThemeText>
+                    <ThemeText type="body__primary">
+                      {stepInstructionText}
+                    </ThemeText>
+                  </View>
+                );
+              })
             }
           </View>
 
@@ -100,6 +112,7 @@ export const FlexibleTransportBookingDetails: React.FC<
                 getTextForLanguage(flex_transport_about_urls, language) || '',
               )
             }
+            accessibilityRole="link"
           >
             <ThemeText
               color="secondary"

@@ -34,7 +34,11 @@ export const FlexibleTransportBookingOptions: React.FC<
     return (
       <>
         {showBookOnlineOption && (
-          <View style={style.flexBookingOption}>
+          <View
+            style={style.flexBookingOption}
+            accessible={true}
+            accessibilityRole="link"
+          >
             <Button
               text={t(FlexibleTransportTexts.bookOnline)}
               onPress={() => Linking.openURL(bookingUrl)} // TODO: add url info for auto-completion?
@@ -46,7 +50,11 @@ export const FlexibleTransportBookingOptions: React.FC<
           </View>
         )}
         {showBookByPhoneOption && (
-          <View style={style.flexBookingOption}>
+          <View
+            style={style.flexBookingOption}
+            accessible={true}
+            accessibilityHint={t(FlexibleTransportTexts.bookByPhoneA11yHint)}
+          >
             <Button
               text={t(FlexibleTransportTexts.bookByPhone(bookingPhone))}
               onPress={() => Linking.openURL(`tel:${bookingPhone}`)}

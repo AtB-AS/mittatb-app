@@ -11,13 +11,13 @@ const FlexibleTransportTexts = {
     _(
       `${publicCode} kjører på bestilling innenfor bestemte soner og tider.`,
       `${publicCode} runs on demand within specific zones and times.`,
-      `${publicCode} køyrer på bestilling annanfor bestemte sonar og tider.`,
+      `${publicCode} køyrer på bestilling innanfor bestemte sonar og tider.`,
     ),
   steps: [
     _(
-      `Reserver sete i taxi/minibus.`,
+      `Reserver sete i taxi/minibuss.`,
       `Book a seat in a taxi/minibus.`,
-      `Reserver sete i taxi/minibus.`,
+      `Reserver sete i taxi/minibuss.`,
     ),
     _(
       `Motta bekreftelse og hentetidspunkt på SMS.`,
@@ -43,6 +43,11 @@ const FlexibleTransportTexts = {
       `Book by phone ${phone}`,
       `Reserver på tlf. ${phone}`,
     ),
+  bookByPhoneA11yHint: _(
+    `Klikk for å ringe`,
+    `Tap to call`,
+    `Klikk for å ringe`,
+  ),
   onDemandTransportLabel: _(
     `Bestillingstransport`,
     `On-demand transport`,

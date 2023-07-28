@@ -94,6 +94,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === 'foot';
   const isFlexible = isLegFlexibleTransport(leg);
+  const timesAreApproximations = isFlexible;
   const legColor = useTransportationColor(
     isFlexible ? 'flex' : leg.mode,
     leg.line?.transportSubmode,
@@ -161,6 +162,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               'start',
               getPlaceName(leg.fromPlace),
               startTimes,
+              timesAreApproximations,
               language,
               t,
             )}
@@ -168,7 +170,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               <Time
                 timeValues={startTimes}
                 roundingMethod="floor"
-                isCirca={isFlexible}
+                timeIsApproximation={timesAreApproximations}
               />
             }
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
@@ -184,12 +186,18 @@ export const TripSection: React.FC<TripSectionProps> = ({
         ) : (
           <TripRow
             testID="transportationLeg"
-            accessibilityLabel={t(
-              TripDetailsTexts.trip.leg.transport.a11ylabel(
-                t(getTranslatedModeName(leg.mode)),
-                getLineName(leg),
-              ),
-            )}
+            accessibilityLabel={
+              t(
+                TripDetailsTexts.trip.leg.transport.a11ylabel(
+                  t(getTranslatedModeName(leg.mode)),
+                  getLineName(leg),
+                ),
+              ) +
+              (isFlexible
+                ? screenReaderPause +
+                  t(FlexibleTransportTexts.onDemandTransportLabel)
+                : '')
+            }
             rowLabel={
               <TransportationIconBox
                 mode={isFlexible ? 'flex' : leg.mode}
@@ -254,7 +262,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {isFlexible && (
           <View style={style.flexBookingOptions}>
-            <TripRow>
+            <TripRow accessible={false}>
               <FlexibleTransportBookingOptions leg={leg} />
             </TripRow>
           </View>
@@ -310,6 +318,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               'end',
               getPlaceName(leg.toPlace),
               endTimes,
+              timesAreApproximations,
               language,
               t,
             )}
@@ -317,7 +326,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               <Time
                 timeValues={endTimes}
                 roundingMethod="ceil"
-                isCirca={isFlexible}
+                timeIsApproximation={timesAreApproximations}
               />
             }
             onPress={() => handleQuayPress(leg.toPlace.quay)}
@@ -477,6 +486,7 @@ function getStopRowA11yTranslated(
   key: 'start' | 'end',
   placeName: string,
   values: TimeValues,
+  timesAreApproximations: boolean,
   language: Language,
   t: TranslateFunction,
 ): string {
@@ -494,6 +504,7 @@ function getStopRowA11yTranslated(
         TripDetailsTexts.trip.leg[key].a11yLabel.noRealTime(
           placeName,
           aimedTime,
+          timesAreApproximations,
         ),
       );
     case 'no-significant-difference':
@@ -506,6 +517,7 @@ function getStopRowA11yTranslated(
           placeName,
           time,
           aimedTime,
+          timesAreApproximations,
         ),
       );
   }

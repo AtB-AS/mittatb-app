@@ -64,11 +64,21 @@ const TripDetailsTexts = {
         ),
       start: {
         a11yLabel: {
-          noRealTime: (placeName: string, aimedTime: string) =>
+          noRealTime: (
+            placeName: string,
+            aimedTime: string,
+            timeIsApproximation: boolean,
+          ) =>
             _(
-              `Fra ${placeName}, klokken ${aimedTime}`,
-              `From ${placeName}, time ${aimedTime}`,
-              `Frå ${placeName}, klokka ${aimedTime}`,
+              `Fra ${placeName},${
+                timeIsApproximation ? ' cirka' : ''
+              } klokken ${aimedTime}`,
+              `From ${placeName},${
+                timeIsApproximation ? ' circa' : ''
+              } time ${aimedTime}`,
+              `Frå ${placeName},${
+                timeIsApproximation ? ' cirka' : ''
+              } klokka ${aimedTime}`,
             ),
           singularTime: (placeName: string, time: string) =>
             _(
@@ -80,11 +90,18 @@ const TripDetailsTexts = {
             placeName: string,
             realTime: string,
             aimedTime: string,
+            timeIsApproximation: boolean,
           ) =>
             _(
-              `Fra ${placeName}, sanntid klokken ${realTime}. Rutetid klokken ${aimedTime}.`,
-              `From ${placeName}, realtime ${realTime}. Route time ${aimedTime}.`,
-              `Frå ${placeName}, sanntid klokka ${realTime}. Rutetid klokka ${aimedTime}.`,
+              `Fra ${placeName}, sanntid klokken ${realTime}. Rutetid klokken${
+                timeIsApproximation ? ' cirka' : ''
+              } ${aimedTime}.`,
+              `From ${placeName}, realtime ${realTime}. Route time${
+                timeIsApproximation ? ' circa' : ''
+              } ${aimedTime}.`,
+              `Frå ${placeName}, sanntid klokka ${realTime}. Rutetid klokka${
+                timeIsApproximation ? ' cirka' : ''
+              } ${aimedTime}.`,
             ),
         },
       },

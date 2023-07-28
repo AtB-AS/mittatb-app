@@ -10,14 +10,16 @@ import {usePreferences} from '@atb/preferences';
 export const Time: React.FC<{
   timeValues: TimeValues;
   roundingMethod: RoundingMethod;
-  isCirca?: boolean;
-}> = ({timeValues, roundingMethod, isCirca}) => {
+  timeIsApproximation?: boolean;
+}> = ({timeValues, roundingMethod, timeIsApproximation}) => {
   const {
     preferences: {debugShowSeconds},
   } = usePreferences();
 
   const {t, language} = useTranslation();
-  const circaPrefix = isCirca ? t(TripDetailsTexts.trip.leg.circaLabel) : '';
+  const circaPrefix = timeIsApproximation
+    ? t(TripDetailsTexts.trip.leg.circaLabel)
+    : '';
 
   const {aimedTime, expectedTime} = timeValues;
   const representationType = getTimeRepresentationType(timeValues);
