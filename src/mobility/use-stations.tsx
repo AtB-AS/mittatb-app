@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import {AreaState, updateAreaState} from './utils';
 import {useIsCityBikesEnabled} from './use-city-bikes-enabled';
 import {
-  MapFilterType,
   MapRegion,
   StationsFilterType,
   StationsState,
@@ -19,11 +18,7 @@ import {getStations} from '@atb/api/mobility';
 
 const MIN_ZOOM_LEVEL = 12;
 const BUFFER_DISTANCE_IN_METERS = 500;
-export const useStations: (
-  // Setting initial filter to null means don't show any stations,
-  // while initialFilter === undefined means use user's stored filter preferences.
-  initialFilter?: MapFilterType | null,
-) => StationsState | undefined = (initialFilter) => {
+export const useStations: () => StationsState | undefined = () => {
   const [area, setArea] = useState<AreaState>();
   const isCityBikesEnabled = useIsCityBikesEnabled();
   const isCarSharingEnabled = useIsCarSharingEnabled();
@@ -37,15 +32,10 @@ export const useStations: (
   >(toFeatureCollection([]));
 
   useEffect(() => {
-    if (initialFilter || initialFilter == null) {
-      setFilter(initialFilter?.stations);
-    } else {
-      // Initial filter === undefined, use user's filter from store.
-      getMapFilter().then((userFilter) => {
-        setFilter(userFilter.stations);
-      });
-    }
-  }, [initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
+    getMapFilter().then((initialFilter) => {
+      setFilter(initialFilter.stations);
+    });
+  }, [isCityBikesEnabled, isCarSharingEnabled]);
 
   useEffect(() => {
     if (
