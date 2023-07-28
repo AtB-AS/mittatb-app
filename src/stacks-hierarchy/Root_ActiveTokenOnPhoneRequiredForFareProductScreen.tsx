@@ -145,7 +145,6 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           type={'body__secondary'}
           color={themeColor}
           style={[styles.text, styles.textSpacing]}
-          focusRef={selectedToken ? focusRef : undefined}
         >
           {t(ActiveTokenRequiredTexts.actionMessage)}
         </ThemeText>

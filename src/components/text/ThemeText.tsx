@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTheme} from '@atb/theme';
-import {Platform, Text, TextProps, TextStyle, View} from 'react-native';
+import {Platform, Text, TextProps, TextStyle} from 'react-native';
 import {renderMarkdown} from './markdown-renderer';
 import {MAX_FONT_SCALE} from './utils';
 import {
@@ -18,7 +18,6 @@ export type ThemeTextProps = TextProps & {
   type?: TextNames;
   color?: ColorType;
   isMarkdown?: boolean;
-  focusRef?: React.ForwardedRef<View>;
 };
 
 export const ThemeText: React.FC<ThemeTextProps> = ({
@@ -27,7 +26,6 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
   isMarkdown = false,
   style,
   children,
-  focusRef,
   ...props
 }) => {
   const {theme, useAndroidSystemFont} = useTheme();
@@ -69,7 +67,6 @@ export const ThemeText: React.FC<ThemeTextProps> = ({
     <Text
       style={[textStyle, style]}
       maxFontSizeMultiplier={MAX_FONT_SCALE}
-      ref={focusRef}
       {...props}
     >
       {content}
