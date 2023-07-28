@@ -407,11 +407,9 @@ const TripSearchTexts = {
     },
   },
   nonTransit: {
-    travelMode: {
-      foot: _('Gå', 'Walk', 'Gå'),
-      bicycle: _('Sykkel', 'Bike', 'Sykkel'),
-      unknown: _('Ukjent', 'Unknown', 'Ukjent'),
-    },
+    foot: _('Gå', 'Walk', 'Gå'),
+    bicycle: _('Sykkel', 'Bike', 'Sykkel'),
+    unknown: _('Ukjent', 'Unknown', 'Ukjent'),
   },
 };
 
