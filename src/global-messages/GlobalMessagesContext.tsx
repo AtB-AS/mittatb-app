@@ -13,7 +13,7 @@ import {
   setDismissedMessagesInStore,
 } from '@atb/global-messages/storage';
 import {
-  GlobalMessageContextType,
+  GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
   Rule,
@@ -23,7 +23,7 @@ import {
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
-    context: GlobalMessageContextType | 'all',
+    context: GlobalMessageContextEnum | 'all',
     ruleVariables?: RuleVariables,
   ) => GlobalMessageType[];
   dismissedGlobalMessages: GlobalMessageType[];
@@ -51,11 +51,11 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
       firestore()
         .collection<GlobalMessageRaw>('globalMessagesV2')
         .where('active', '==', true)
-        .where('context', 'array-contains-any', [
-          'app-ticketing',
-          'app-departures',
-          'app-assistant',
-        ])
+        .where(
+          'context',
+          'array-contains-any',
+          Object.values(GlobalMessageContextEnum),
+        )
         .onSnapshot(
           async (snapshot) => {
             const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
@@ -106,7 +106,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
 
   const findGlobalMessages = useCallback(
     (
-      context: GlobalMessageContextType | 'all',
+      context: GlobalMessageContextEnum | 'all',
       ruleVariables?: RuleVariables,
     ) => {
       if (context === 'all') {

@@ -47,6 +47,7 @@ import {useAnalytics} from '@atb/analytics';
 import {Info} from '@atb/assets/svg/color/icons/status';
 import {TariffZone} from '@atb/reference-data/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -332,7 +333,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       <FullScreenHeader
         title={getTextForLanguage(fareProductTypeConfig.name, language)}
         leftButton={headerLeftButton}
-        globalMessageContext="app-ticketing"
+        globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <ScrollView style={styles.infoSection}>
         <View>

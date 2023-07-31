@@ -5,12 +5,13 @@ import {AnyMode} from '@atb/components/icon-box';
 
 export type AppPlatformType = 'ios' | 'android';
 
-export type GlobalMessageContextType =
-  | 'app-assistant'
-  | 'app-departures'
-  | 'app-ticketing'
-  | 'web-ticketing'
-  | 'web-overview';
+export enum GlobalMessageContextEnum {
+  appAssistant = 'app-assistant',
+  appDepartures = 'app-departures',
+  appTicketing = 'app-ticketing',
+  webTicketing = 'web-ticketing',
+  webOverview = 'web-overview',
+}
 
 export type GlobalMessageRaw = {
   id: string;
@@ -18,7 +19,7 @@ export type GlobalMessageRaw = {
   title?: LanguageAndTextType[];
   body: LanguageAndTextType[];
   type: Statuses;
-  context: GlobalMessageContextType[];
+  context: GlobalMessageContextEnum[];
   isDismissable?: boolean;
   appPlatforms: AppPlatformType[];
   appVersionMin: string;

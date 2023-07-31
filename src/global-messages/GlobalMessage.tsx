@@ -4,7 +4,7 @@ import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext
 import {MessageBox} from '@atb/components/message-box';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
-  GlobalMessageContextType,
+  GlobalMessageContextEnum,
   GlobalMessageType,
   RuleVariables,
 } from '@atb/global-messages/types';
@@ -13,7 +13,7 @@ import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContextType | 'all';
+  globalMessageContext?: GlobalMessageContextEnum | 'all';
   style?: StyleProp<ViewStyle>;
   includeDismissed?: boolean;
   ruleVariables?: RuleVariables;

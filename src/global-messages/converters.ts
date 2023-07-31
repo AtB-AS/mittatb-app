@@ -5,7 +5,7 @@ import {Platform} from 'react-native';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {
   AppPlatformType,
-  GlobalMessageContextType,
+  GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
   Rule,
@@ -80,12 +80,12 @@ function mapToMillis(
   return timestamp.toMillis();
 }
 
-function mapToContexts(data: any): GlobalMessageContextType[] | undefined {
+function mapToContexts(data: any): GlobalMessageContextEnum[] | undefined {
   if (!isArray(data)) return;
 
   return data
     .map((context: any) => mapToContext(context))
-    .filter(Boolean) as GlobalMessageContextType[];
+    .filter(Boolean) as GlobalMessageContextEnum[];
 }
 
 function isAppPlatformValid(platforms: AppPlatformType[]) {
@@ -95,17 +95,9 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
   );
 }
 
-function mapToContext(data: any): GlobalMessageContextType | undefined {
-  const options = [
-    'app-assistant',
-    'app-departures',
-    'app-ticketing',
-    'web-ticketing',
-    'web-overview',
-  ];
-
-  if (!options.includes(data)) return;
-  return data;
+function mapToContext(data: any): GlobalMessageContextEnum | undefined {
+  if (!Object.values(GlobalMessageContextEnum).includes(data)) return;
+  return data as GlobalMessageContextEnum;
 }
 
 function mapToRules(data: any): Rule[] {
