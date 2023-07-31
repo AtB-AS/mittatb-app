@@ -8,6 +8,9 @@ import {
   GlobalMessageContextType,
   GlobalMessageRaw,
   GlobalMessageType,
+  Rule,
+  RuleOperator,
+  RuleVariableName,
 } from '@atb/global-messages/types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 export function mapToGlobalMessages(
@@ -36,6 +39,7 @@ function mapToGlobalMessage(
   const platforms = result.appPlatforms;
   const startDate = mapToMillis(result.startDate);
   const endDate = mapToMillis(result.endDate);
+  const rules = mapToRules(result.rules);
 
   if (!result.active) return;
   if (!isAppPlatformValid(platforms)) return;
@@ -56,6 +60,7 @@ function mapToGlobalMessage(
     isDismissable,
     startDate,
     endDate,
+    rules,
   };
 }
 
@@ -102,4 +107,28 @@ function mapToContext(data: any): GlobalMessageContextType | undefined {
 
   if (!options.includes(data)) return;
   return data;
+}
+
+function mapToRules(data: any): Rule[] {
+  if (!isArray(data)) return [];
+  return data.map((rule: any) => mapToRule(rule)).filter(Boolean) as Rule[];
+}
+
+function mapToRule(data: any): Rule | undefined {
+  if (!(typeof data === 'object')) return;
+
+  const {variable, operator, value} = data;
+
+  if (!(variable in RuleVariableName)) return;
+  if (!(operator in RuleOperator)) return;
+  if (
+    !(
+      typeof value === 'string' ||
+      typeof value === 'number' ||
+      typeof value === 'boolean'
+    )
+  )
+    return;
+
+  return {variable, operator, value};
 }

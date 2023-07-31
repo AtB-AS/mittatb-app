@@ -6,6 +6,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {
   GlobalMessageContextType,
   GlobalMessageType,
+  RuleVariables,
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
@@ -15,12 +16,14 @@ type Props = {
   globalMessageContext?: GlobalMessageContextType | 'all';
   style?: StyleProp<ViewStyle>;
   includeDismissed?: boolean;
+  ruleVariables?: RuleVariables;
 };
 
 const GlobalMessage = ({
   globalMessageContext,
   style,
   includeDismissed,
+  ruleVariables,
 }: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
@@ -32,7 +35,10 @@ const GlobalMessage = ({
 
   if (!globalMessageContext) return null;
 
-  const globalMessages = findGlobalMessages(globalMessageContext);
+  const globalMessages = findGlobalMessages(
+    globalMessageContext,
+    ruleVariables,
+  );
 
   const dismissGlobalMessage = (globalMessage: GlobalMessageType) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);

@@ -16,11 +16,15 @@ import {
   GlobalMessageContextType,
   GlobalMessageRaw,
   GlobalMessageType,
+  Rule,
+  RuleOperator,
+  RuleVariables,
 } from '@atb/global-messages/types';
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
     context: GlobalMessageContextType | 'all',
+    ruleVariables?: RuleVariables,
   ) => GlobalMessageType[];
   dismissedGlobalMessages: GlobalMessageType[];
   addDismissedGlobalMessages: (dismissedMessage: GlobalMessageType) => void;
@@ -101,16 +105,65 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   };
 
   const findGlobalMessages = useCallback(
-    (context: GlobalMessageContextType | 'all') => {
+    (
+      context: GlobalMessageContextType | 'all',
+      ruleVariables?: RuleVariables,
+    ) => {
       if (context === 'all') {
         return globalMessages;
       }
-      return globalMessages.filter((a) =>
-        a.context.find((cont) => cont === context),
-      );
+      return globalMessages.filter((gm) => {
+        const withSameContext = gm.context.find((c) => c === context);
+        if (!ruleVariables) return withSameContext;
+        const passRules = gm.rules?.every((rule) =>
+          matchRule(ruleVariables, rule),
+        );
+        return withSameContext && passRules;
+      });
     },
     [globalMessages],
   );
+
+  const matchRule = (
+    localVariables: RuleVariables,
+    externalRule: Rule,
+  ): boolean => {
+    const {operator, value: ruleValue, variable} = externalRule;
+    const localValue = localVariables[variable];
+    if (!localValue) return false;
+    switch (operator) {
+      case RuleOperator.equalTo:
+        if (['string', 'number', 'boolean'].includes(typeof localValue))
+          return localValue === ruleValue;
+        return false;
+      case RuleOperator.notEqualTo:
+        if (['string', 'number', 'boolean'].includes(typeof localValue))
+          return localValue !== ruleValue;
+        return false;
+      case RuleOperator.greaterThan:
+        if (['string', 'number'].includes(typeof localValue))
+          return localValue > ruleValue;
+        return false;
+      case RuleOperator.lessThan:
+        if (['string', 'number'].includes(typeof localValue))
+          return localValue < ruleValue;
+        return false;
+      case RuleOperator.greaterThanOrEqualTo:
+        if (['string', 'number'].includes(typeof localValue))
+          return localValue >= ruleValue;
+        return false;
+      case RuleOperator.lessThanOrEqualTo:
+        if (['string', 'number'].includes(typeof localValue))
+          return localValue <= ruleValue;
+        return false;
+      case RuleOperator.arrayContains:
+        if (Array.isArray(localValue))
+          return localValue.includes(ruleValue as any);
+        return false;
+      default:
+        return false;
+    }
+  };
 
   return (
     <GlobalMessagesContext.Provider
