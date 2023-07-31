@@ -49,24 +49,15 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
 
   const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
-  console.log('userCreationFinished in main method: ' + userCreationFinished);
 
   // This will navigate to the new loading screen and make it pop up from wherever as long as you have been in RootTabNavStack
   useEffect(() => {
-    console.log('userCreationFinished: ' + userCreationFinished);
-    if (!userCreationFinished) {
-      console.log('SHOW THE LOADING SCREEEEEN');
-      navigation.navigate('Root_LoadingScreen');
-    }
+    // if (!userCreationFinished) {
+    navigation.navigate('Root_LoadingScreen');
+    // }
   }, [userCreationFinished]);
 
   useEffect(() => {
-    console.log('onboarded: ' + onboarded);
-    console.log(
-      'userCreationFinished && !onboarded: ' +
-        (userCreationFinished && !onboarded),
-    );
-    // or userCreationFinished && !onboarded ?
     if (userCreationFinished && !onboarded)
       navigation.navigate('Root_OnboardingStack');
   }, [onboarded, userCreationFinished]);
