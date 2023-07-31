@@ -409,6 +409,7 @@ const TripSearchTexts = {
   nonTransit: {
     foot: _('Gå', 'Walk', 'Gå'),
     bicycle: _('Sykkel', 'Bike', 'Sykkel'),
+    bikeRental: _('Bysykkel', 'Bike', 'City bike'),
     unknown: _('Ukjent', 'Unknown', 'Ukjent'),
   },
 };

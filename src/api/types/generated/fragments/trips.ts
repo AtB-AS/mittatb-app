@@ -1,4 +1,5 @@
 import * as Types from '../journey_planner_v3_types';
+
 export type TripPatternFragment = {
   expectedStartTime: any;
   expectedEndTime: any;
@@ -14,6 +15,7 @@ export type TripPatternFragment = {
     expectedStartTime: any;
     realtime: boolean;
     transportSubmode?: Types.TransportSubmode;
+    rentedBike?: boolean;
     line?: {
       id: string;
       name?: string;

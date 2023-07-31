@@ -57,12 +57,15 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
 };
 
 const getModeText = (tp: TripPatternFragment, t: TranslateFunction): string => {
+  if (tp.legs.some((leg) => leg.rentedBike)) {
+    return t(TripSearchTexts.nonTransit.bikeRental);
+  }
+
   if (tp.legs[0].mode === Mode.Foot) {
     return t(TripSearchTexts.nonTransit.foot);
   }
 
   if (tp.legs[0].mode === Mode.Bicycle) {
-    // Add check for "rental bike" (leg.rentedBike)
     return t(TripSearchTexts.nonTransit.bicycle);
   }
 
