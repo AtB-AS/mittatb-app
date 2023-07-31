@@ -129,7 +129,8 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
     externalRule: Rule,
   ): boolean => {
     const {operator, value: ruleValue, variable} = externalRule;
-    const localValue = localVariables[variable];
+    if (!(variable in localVariables)) return false;
+    const localValue = localVariables[variable as keyof RuleVariables];
     if (!localValue) return false;
     switch (operator) {
       case RuleOperator.equalTo:

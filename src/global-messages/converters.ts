@@ -10,7 +10,6 @@ import {
   GlobalMessageType,
   Rule,
   RuleOperator,
-  RuleVariableName,
 } from '@atb/global-messages/types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 export function mapToGlobalMessages(
@@ -119,7 +118,7 @@ function mapToRule(data: any): Rule | undefined {
 
   const {variable, operator, value} = data;
 
-  if (!(variable in RuleVariableName)) return;
+  if (!(typeof variable === 'string')) return;
   if (!(operator in RuleOperator)) return;
   if (
     !(

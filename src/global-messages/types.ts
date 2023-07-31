@@ -33,12 +33,6 @@ export type GlobalMessageType = Omit<
   'appPlatforms' | 'appVersionMin' | 'appVersionMax' | 'startDate' | 'endDate'
 > & {startDate?: number; endDate?: number};
 
-export enum RuleVariableName {
-  transportModes = 'transportModes',
-  zones = 'zones',
-  platform = 'platform',
-  count = 'count',
-}
 export type RuleVariables = {
   transportModes?: AnyMode[];
   zones?: string[];
@@ -47,10 +41,11 @@ export type RuleVariables = {
 };
 
 export type Rule = {
-  variable: RuleVariableName;
+  variable: string; // key of RuleVariables
   operator: RuleOperator;
-  value: RuleValue;
+  value: string | number | boolean;
 };
+
 export enum RuleOperator {
   equalTo = 'equalTo',
   notEqualTo = 'notEqualTo',
@@ -60,5 +55,3 @@ export enum RuleOperator {
   lessThanOrEqualTo = 'lessThanOrEqualTo',
   arrayContains = 'arrayContains',
 }
-
-export type RuleValue = string | number | boolean;
