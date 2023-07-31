@@ -74,10 +74,7 @@ export const nonTransitTripSearch = (
   post<TripPatternFragment[]>(
     'bff/v2/trips/non-transit',
     cleanNonTransitQuery(query),
-    {
-      ...opts,
-      baseURL: 'http://localhost:8080',
-    },
+    opts,
   );
 
 export async function singleTripSearch(
