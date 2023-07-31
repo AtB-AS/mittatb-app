@@ -14,6 +14,7 @@ import {RemoteConfigKeys} from '@atb/remote-config';
 import {useNow} from '@atb/utils/use-now';
 import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';
 import {AvailableTripPattern, TripPatternWithKey} from '../types';
+import {useNonTransitTripSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -40,6 +41,7 @@ export const defaultJourneyModes = {
 };
 
 export function useJourneyModes(): [Modes, boolean] {
+  const [nonTransitTripSearchEnabled] = useNonTransitTripSearchEnabled();
   const [
     isFlexibleTransportEnabledInRemoteConfig,
     flexTransportDebugOverrideReady,
@@ -68,6 +70,8 @@ export function useJourneyModes(): [Modes, boolean] {
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportDirectModeEnabledInRemoteConfig
         ? StreetMode.Flexible
+        : nonTransitTripSearchEnabled
+        ? undefined
         : defaultJourneyModes.directMode,
     egressMode:
       isFlexibleTransportEnabledInRemoteConfig &&

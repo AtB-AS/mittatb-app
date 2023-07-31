@@ -9,17 +9,19 @@ import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
+import {useHumanizeDistance} from '@atb/utils/location';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
-export const TripSummary: React.FC<TripPattern> = ({
-  walkDistance,
-  duration,
-}) => {
+export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
-  const readableDistance = walkDistance?.toFixed() ?? '0';
+  const walkDistance = legs
+    .filter((l) => l.mode === Mode.Foot)
+    .reduce((tot, {distance}) => tot + distance, 0);
+  const readableDistance = useHumanizeDistance(walkDistance);
   return (
-    <>
+    <View style={styles.tripSummary}>
       <View style={styles.summaryDetail}>
         <ThemeIcon
           colorType="disabled"
@@ -38,28 +40,35 @@ export const TripSummary: React.FC<TripPattern> = ({
           {t(TripDetailsTexts.trip.summary.travelTime.label(time))}
         </ThemeText>
       </View>
-      <View style={styles.summaryDetail}>
-        <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={Walk} />
-        <ThemeText
-          color="secondary"
-          accessible={true}
-          style={styles.detailText}
-          accessibilityLabel={t(
-            TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
-              readableDistance,
-            ),
-          )}
-          testID="walkDistance"
-        >
-          {t(
-            TripDetailsTexts.trip.summary.walkDistance.label(readableDistance),
-          )}
-        </ThemeText>
-      </View>
-    </>
+      {readableDistance && (
+        <View style={styles.summaryDetail}>
+          <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={Walk} />
+          <ThemeText
+            color="secondary"
+            accessible={true}
+            style={styles.detailText}
+            accessibilityLabel={t(
+              TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
+                readableDistance,
+              ),
+            )}
+            testID="walkDistance"
+          >
+            {t(
+              TripDetailsTexts.trip.summary.walkDistance.label(
+                readableDistance,
+              ),
+            )}
+          </ThemeText>
+        </View>
+      )}
+    </View>
   );
 };
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  tripSummary: {
+    paddingVertical: theme.spacings.medium,
+  },
   detailText: {
     flex: 1,
   },

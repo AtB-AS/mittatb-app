@@ -20,7 +20,6 @@ export const TicketingTile = ({
   onPress,
   testID,
   illustrationName,
-  isPeriodTicket = false,
   transportColor,
   title,
   description,
@@ -31,7 +30,6 @@ export const TicketingTile = ({
   onPress: () => void;
   testID: string;
   illustrationName: string;
-  isPeriodTicket?: boolean;
   transportColor: TransportColor;
   title?: string;
   description?: string;
@@ -96,7 +94,6 @@ export const TicketingTile = ({
         </View>
         <TicketingTileIllustration
           illustrationName={illustrationName}
-          isPeriodTicket={isPeriodTicket}
           style={styles.illustration}
           fill={themeSecondaryColor.background}
           width={theme.icon.size.large}

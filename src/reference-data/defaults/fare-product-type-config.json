@@ -4,13 +4,14 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Enkeltbillett buss/trikk"
+        "value": "Enkeltbillett, buss og trikk"
       },
       {
         "lang": "eng",
-        "value": "Single ticket bus/tram"
+        "value": "Single ticket, bus and tram"
       }
     ],
+    "illustration": "single",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -39,13 +40,14 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Periodebillett"
+        "value": "Periodebillett, buss og trikk"
       },
       {
         "lang": "eng",
-        "value": "Periodic ticket"
+        "value": "Periodic ticket, bus and tram"
       }
     ],
+    "illustration": "period",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -74,13 +76,14 @@
     "name": [
       {
         "lang": "nob",
-        "value": "24-timersbillett"
+        "value": "24-timersbillett, buss og trikk"
       },
       {
         "lang": "eng",
-        "value": "24 hour pass"
+        "value": "24 hour pass, bus and tram"
       }
     ],
+    "illustration": "hour24",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -109,11 +112,11 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Nattbillett"
+        "value": "Nattbillett, buss og trikk"
       },
       {
         "lang": "eng",
-        "value": "Night ticket"
+        "value": "Night ticket, bus and tram"
       }
     ],
     "transportModes": [
@@ -144,13 +147,14 @@
     "name": [
       {
         "lang": "nob",
-        "value": "Klippekort"
+        "value": "Klippekort, buss og trikk"
       },
       {
         "lang": "eng",
-        "value": "Punch card"
+        "value": "Punch card, bus and tram"
       }
     ],
+    "illustration": "carnet",
     "transportModes": [
       {"mode": "bus", "subMode": "localBus"},
       {"mode": "tram"}
@@ -183,7 +187,7 @@
       },
       {
         "lang": "eng",
-        "value": "Single ticket, boat"
+        "value": "Single ticket, passenger boat"
       }
     ],
     "illustration": "boat",
@@ -226,10 +230,10 @@
       },
       {
         "lang": "eng",
-        "value": "Periodic ticket, boat"
+        "value": "Periodic ticket, passenger boat"
       }
     ],
-    "illustration": "boat",
+    "illustration": "boat-period",
     "transportModes": [
       {
         "mode": "water",

@@ -265,7 +265,7 @@ const SelectTravelTokenTexts = {
       `You have an active punch card. Currently punch cards cannot be activated using a phone. If you change to a phone now, you will not be able to use your punch card.`,
       `Du har eit klippekort. Førebels fungerer ikkje klippekort på mobil. Hvis du byter til mobil vil du ikkje kunne bruke klippekortet ditt.`,
     ),
-    notAllowedToUseCarnetError: {
+    notAllowedToUseTravelCardError: {
       title: _(
         'Kan ikke brukes på t:kort',
         'Cannot be used on t:cards',

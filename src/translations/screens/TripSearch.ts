@@ -406,6 +406,11 @@ const TripSearchTexts = {
       ),
     },
   },
+  nonTransit: {
+    foot: _('Gå', 'Walk', 'Gå'),
+    bicycle: _('Sykkel', 'Bike', 'Sykkel'),
+    unknown: _('Ukjent', 'Unknown', 'Ukjent'),
+  },
 };
 
 export default TripSearchTexts;

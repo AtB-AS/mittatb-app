@@ -32,25 +32,19 @@ type ticketingTileIllustrationType = keyof typeof ticketingTileIllustrations;
 
 type ticketingTileIllustrationsProps = {
   illustrationName: string;
-  isPeriodTicket?: boolean;
 } & SvgProps;
 
 export const TicketingTileIllustration = ({
   illustrationName,
-  isPeriodTicket = false,
   ...props
 }: ticketingTileIllustrationsProps): JSX.Element => {
-  const illustrationFileName = getIllustrationFileName(
-    illustrationName,
-    isPeriodTicket,
-  );
+  const illustrationFileName = getIllustrationFileName(illustrationName);
   const Illustration = ticketingTileIllustrations[illustrationFileName];
   return <Illustration {...props} />;
 };
 
 const getIllustrationFileName = (
   illustrationName?: string,
-  isPeriodTicket?: boolean,
 ): ticketingTileIllustrationType => {
   switch (illustrationName) {
     case 'single':
@@ -68,7 +62,9 @@ const getIllustrationFileName = (
     case 'youth':
       return 'Youth';
     case 'boat':
-      return isPeriodTicket ? 'PeriodTicket' : 'Ticket';
+      return 'Ticket';
+    case 'boat-period':
+      return 'PeriodTicket';
     case 'ticketMultiple':
       return 'TicketMultiple';
     default:

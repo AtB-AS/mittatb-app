@@ -177,11 +177,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           {text && (
             <View style={[textContainer, textContainerStyle]}>
               <ThemeText
-                type={
-                  mode === 'tertiary' || type === 'pill'
-                    ? 'body__primary'
-                    : 'body__primary--bold'
-                }
+                type={getTextType(mode, type)}
                 style={[styleText, textStyle]}
               >
                 {text}
@@ -227,3 +223,9 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     borderWidth: theme.border.width.medium,
   },
 }));
+
+function getTextType(mode: string, type: string) {
+  if (mode === 'tertiary') return 'body__primary';
+  if (type === 'pill') return 'body__secondary';
+  return 'body__primary--bold';
+}

@@ -27,7 +27,7 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: string[];
-  onDetailsPressed(tripPattern?: TripPattern, resultIndex?: number): void;
+  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
   errorType?: ErrorType;
   searchTime: SearchTime;
   anyFiltersApplied: boolean;
@@ -155,6 +155,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   infoBoxText: theme.typography.body__primary,
   messageBoxContainer: {
-    margin: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
   },
 }));
