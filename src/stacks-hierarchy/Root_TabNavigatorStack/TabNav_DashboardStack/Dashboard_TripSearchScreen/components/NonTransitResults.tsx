@@ -30,8 +30,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
   return (
     <ScrollView horizontal={true} style={style.container}>
       {tripPatterns.map((tripPattern, i) => {
-        const mode = getMode(tripPattern, t);
-        const modeText = mode.text;
+        const {mode, modeText} = getMode(tripPattern, t);
         const durationShort = secondsToDurationShort(
           tripPattern.duration,
           language,
@@ -46,7 +45,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
             type={'pill'}
             interactiveColor={'interactive_2'}
             text={`${modeText} ${durationShort}`}
-            leftIcon={{svg: getTransportModeSvg(mode.mode).svg}}
+            leftIcon={{svg: getTransportModeSvg(mode).svg}}
             rightIcon={{svg: arrowRight}}
             accessibilityLabel={`${modeText} ${duration}`}
           />
@@ -59,7 +58,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
 const getMode = (
   tp: TripPatternFragment,
   t: TranslateFunction,
-): {mode: Mode; text: string} => {
+): {mode: Mode; modeText: string} => {
   let mode = tp.legs[0].mode;
   let text = t(TripSearchTexts.nonTransit.unknown);
 
@@ -72,7 +71,7 @@ const getMode = (
     text = t(TripSearchTexts.nonTransit.bicycle);
   }
 
-  return {mode, text};
+  return {mode, modeText: text};
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
