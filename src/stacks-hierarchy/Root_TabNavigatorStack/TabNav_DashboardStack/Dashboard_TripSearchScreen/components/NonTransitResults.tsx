@@ -30,8 +30,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
   return (
     <ScrollView horizontal={true} style={style.container}>
       {tripPatterns.map((tripPattern) => {
-        const mode = tripPattern.legs[0].mode;
-        const modeText = getModeText(tripPattern, t);
+        const {mode, modeText} = getMode(tripPattern, t);
         const durationShort = secondsToDurationShort(
           tripPattern.duration,
           language,
@@ -56,20 +55,23 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
   );
 };
 
-const getModeText = (tp: TripPatternFragment, t: TranslateFunction): string => {
+const getMode = (
+  tp: TripPatternFragment,
+  t: TranslateFunction,
+): {mode: Mode; modeText: string} => {
+  let mode = tp.legs[0].mode;
+  let text = t(TripSearchTexts.nonTransit.unknown);
+
   if (tp.legs.some((leg) => leg.rentedBike)) {
-    return t(TripSearchTexts.nonTransit.bikeRental);
+    mode = Mode.Bicycle;
+    text = t(TripSearchTexts.nonTransit.bikeRental);
+  } else if (tp.legs[0].mode === Mode.Foot) {
+    text = t(TripSearchTexts.nonTransit.foot);
+  } else if (tp.legs[0].mode === Mode.Bicycle) {
+    text = t(TripSearchTexts.nonTransit.bicycle);
   }
 
-  if (tp.legs[0].mode === Mode.Foot) {
-    return t(TripSearchTexts.nonTransit.foot);
-  }
-
-  if (tp.legs[0].mode === Mode.Bicycle) {
-    return t(TripSearchTexts.nonTransit.bicycle);
-  }
-
-  return t(TripSearchTexts.nonTransit.unknown);
+  return {mode, modeText: text};
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
