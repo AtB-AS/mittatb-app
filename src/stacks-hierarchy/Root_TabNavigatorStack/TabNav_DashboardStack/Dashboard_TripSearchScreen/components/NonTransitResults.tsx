@@ -36,7 +36,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
           language,
         );
         const duration = secondsToDuration(tripPattern.duration, language);
-        const analyticsMetadata = {mode: modeText, duration: durationShort};
+        const analyticsMetadata = {mode, duration: durationShort};
         return (
           <Button
             onPress={() => onDetailsPressed(tripPattern, {analyticsMetadata})}
