@@ -107,31 +107,40 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const findGlobalMessages = useCallback(
     (
       context: GlobalMessageContextEnum | 'all',
-      ruleVariables?: RuleVariables,
+      ruleVariables: RuleVariables = {},
     ) => {
-      if (context === 'all') {
-        return globalMessages;
-      }
       return globalMessages.filter((gm) => {
-        const withSameContext = gm.context.find((c) => c === context);
-        if (!ruleVariables) return withSameContext;
-        const passRules = gm.rules?.every((rule) =>
-          matchRule(ruleVariables, rule),
+        const withSameContext = gm.context.find(
+          (c) => c === context || context === 'all',
         );
-        return withSameContext && passRules;
+        if (!withSameContext) return false;
+
+        if (gm.rules?.length) {
+          const passRules = gm.rules.every((rule) =>
+            checkRule(rule, ruleVariables),
+          );
+          if (!passRules) return false;
+        }
+
+        return true;
       });
     },
     [globalMessages],
   );
 
-  const matchRule = (
+  const checkRule = (
+    globalMessageRule: Rule,
     localVariables: RuleVariables,
-    externalRule: Rule,
   ): boolean => {
-    const {operator, value: ruleValue, variable} = externalRule;
-    if (!(variable in localVariables)) return false;
-    const localValue = localVariables[variable as keyof RuleVariables];
-    if (!localValue) return false;
+    const {
+      operator,
+      value: ruleValue,
+      variable: variableName,
+      passOnUndefined,
+    } = globalMessageRule;
+    if (!(variableName in localVariables)) return false;
+    const localValue = localVariables[variableName as keyof RuleVariables];
+    if (!localValue) return !!passOnUndefined;
     switch (operator) {
       case RuleOperator.equalTo:
         if (['string', 'number', 'boolean'].includes(typeof localValue))

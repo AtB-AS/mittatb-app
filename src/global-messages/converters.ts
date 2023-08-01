@@ -108,10 +108,12 @@ function mapToRules(data: any): Rule[] {
 function mapToRule(data: any): Rule | undefined {
   if (!(typeof data === 'object')) return;
 
-  const {variable, operator, value} = data;
+  const {variable, operator, value, passOnUndefined} = data;
 
   if (!(typeof variable === 'string')) return;
   if (!(operator in RuleOperator)) return;
+  if (!(typeof passOnUndefined === 'boolean') || passOnUndefined === undefined)
+    return;
   if (
     !(
       typeof value === 'string' ||
@@ -121,5 +123,5 @@ function mapToRule(data: any): Rule | undefined {
   )
     return;
 
-  return {variable, operator, value};
+  return {variable, operator, value, passOnUndefined};
 }

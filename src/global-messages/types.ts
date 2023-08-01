@@ -45,6 +45,7 @@ export type Rule = {
   variable: string; // key of RuleVariables
   operator: RuleOperator;
   value: string | number | boolean;
+  passOnUndefined?: boolean;
 };
 
 export enum RuleOperator {
