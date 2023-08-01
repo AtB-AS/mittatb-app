@@ -29,7 +29,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
 
   return (
     <ScrollView horizontal={true} style={style.container}>
-      {tripPatterns.map((tripPattern, i) => {
+      {tripPatterns.map((tripPattern) => {
         const {mode, modeText} = getMode(tripPattern, t);
         const durationShort = secondsToDurationShort(
           tripPattern.duration,
@@ -41,7 +41,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
           <Button
             onPress={() => onDetailsPressed(tripPattern, {analyticsMetadata})}
             style={style.tripMode}
-            key={modeText + i}
+            key={modeText}
             type={'pill'}
             interactiveColor={'interactive_2'}
             text={`${modeText} ${durationShort}`}
