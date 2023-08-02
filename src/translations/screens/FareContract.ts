@@ -121,6 +121,19 @@ const FareContractTexts = {
         retry: _('Prøv på nytt.', 'Try again.', 'Prøv på nytt.'),
       },
     },
+    harbors: {
+      directions: (from: string, to: string) =>
+        _(
+          `Fra ${from}, til ${to}`,
+          `From ${from}, to ${to}`,
+          `Frå ${from}, til ${to}`,
+        ),
+      error: _(
+        'Kunne ikke laste kaier.',
+        'Could not load harbors',
+        'Kunne ikkje laste kaier.',
+      ),
+    },
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
