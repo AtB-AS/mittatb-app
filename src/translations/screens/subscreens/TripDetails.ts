@@ -200,6 +200,20 @@ const TripDetailsTexts = {
             `Total gangavstand: ${distanceInMetres} meter`,
           ),
       },
+      bikeDistance: {
+        label: (distance: string) =>
+          _(
+            `Total sykkelavstand: ${distance}`,
+            `Total biking distance: ${distance}`,
+            `Total sykkelavstand: ${distance}`,
+          ),
+        a11yLabel: (distanceInMetres: string) =>
+          _(
+            `Total sykkelavstand: ${distanceInMetres} meter`,
+            `Total biking distance: ${distanceInMetres} meters`,
+            `Total sykkelavstand: ${distanceInMetres} meter`,
+          ),
+      },
     },
     buyTicket: {
       text: _('Kjøp billett', 'Buy ticket', 'Kjøp billett'),
