@@ -106,7 +106,7 @@ const PurchaseOverviewTexts = {
         a11yLabel: (harbor?: string) =>
           _(
             `Valgt ankomstkai: ${harbor ?? 'Ingen kai valgt'}`,
-            `Selected destination harbor: ${harbor ?? 'Ingen kai valgt'}`,
+            `Selected destination harbor: ${harbor ?? 'No harbor selected'}`,
             `Valt ankomstkai: ${harbor ?? 'Inga kai valt'}`,
           ),
         a11yHint: _(
