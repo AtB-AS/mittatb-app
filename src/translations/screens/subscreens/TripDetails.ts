@@ -121,6 +121,14 @@ const TripDetailsTexts = {
         label: (duration: string) =>
           _(`Gå i ${duration}`, `Walk for ${duration}`, `Gå i ${duration}`),
       },
+      bicycle: {
+        label: (duration: string) =>
+          _(
+            `Sykle i ${duration}`,
+            `Ride for ${duration}`,
+            `Sykle i ${duration}`,
+          ),
+      },
       shortWalk: _(
         `Gå i mindre enn ett minutt`,
         `Walk for less than a minute`,
