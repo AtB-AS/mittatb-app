@@ -33,6 +33,7 @@ const dictionary = {
       air: _('Fly', 'Plane', `Fly`),
       foot: _('Gange', 'Walk', `Gange`),
       metro: _('T-bane', 'Metro', `T-bane`),
+      bicycle: _('Sykkel', 'Bicycle', `Sykkel`),
       unknown: _(
         'Ukjent transportmiddel',
         'Unknown transport',
