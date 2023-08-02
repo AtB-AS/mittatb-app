@@ -87,12 +87,17 @@ export const HarborSelection = forwardRef<
             accessibilityRole="button"
             accessibilityLabel={t(
               PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yLabel(
-                fromHarbor?.name,
+                toHarbor?.name,
               ),
             )}
-            accessibilityHint={t(
-              PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yHint,
-            )}
+            accessibilityHint={
+              fromHarbor
+                ? t(
+                    PurchaseOverviewTexts.stopPlaces.harborSelection.to
+                      .a11yHint,
+                  )
+                : undefined
+            }
             onPress={() =>
               fromHarbor &&
               onSelect({
