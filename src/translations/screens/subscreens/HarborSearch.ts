@@ -16,6 +16,7 @@ const HarborSearchTexts = {
       'Vel kai for tilkomst',
     ),
   },
+  error: _('Noe gikk galt.', 'Something went wrong.', `Noko gjekk gale.`),
   stopPlaces: {
     from: _(`Fra`, `From`, `Frå`),
     to: _(`Til`, `To`, `Til`),
