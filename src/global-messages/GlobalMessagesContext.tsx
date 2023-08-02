@@ -143,32 +143,44 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
     if (!localValue) return !!passOnUndefined;
     switch (operator) {
       case RuleOperator.equalTo:
-        if (['string', 'number', 'boolean'].includes(typeof localValue))
+        if (
+          ['string', 'number', 'boolean', 'undefined'].includes(
+            typeof localValue,
+          )
+        )
           return localValue === ruleValue;
         return false;
       case RuleOperator.notEqualTo:
-        if (['string', 'number', 'boolean'].includes(typeof localValue))
+        if (
+          ['string', 'number', 'boolean', 'undefined'].includes(
+            typeof localValue,
+          )
+        )
           return localValue !== ruleValue;
         return false;
       case RuleOperator.greaterThan:
         if (['string', 'number'].includes(typeof localValue))
-          return localValue > ruleValue;
+          return (localValue as string | number) > ruleValue;
         return false;
       case RuleOperator.lessThan:
         if (['string', 'number'].includes(typeof localValue))
-          return localValue < ruleValue;
+          return (localValue as string | number) < ruleValue;
         return false;
       case RuleOperator.greaterThanOrEqualTo:
         if (['string', 'number'].includes(typeof localValue))
-          return localValue >= ruleValue;
+          return (localValue as string | number) >= ruleValue;
         return false;
       case RuleOperator.lessThanOrEqualTo:
         if (['string', 'number'].includes(typeof localValue))
-          return localValue <= ruleValue;
+          return (localValue as string | number) <= ruleValue;
         return false;
-      case RuleOperator.arrayContains:
+      case RuleOperator.contains:
         if (Array.isArray(localValue))
           return localValue.includes(ruleValue as any);
+        return false;
+      case RuleOperator.notContains:
+        if (Array.isArray(localValue))
+          return !localValue.includes(ruleValue as any);
         return false;
       default:
         return false;

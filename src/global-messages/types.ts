@@ -9,8 +9,8 @@ export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
   appDepartures = 'app-departures',
   appTicketing = 'app-ticketing',
-  webTicketing = 'web-ticketing',
-  webOverview = 'web-overview',
+  appCollabticket = 'app-collabticket',
+  appTrainOutsideZoneA = 'app-train-outside-zone-a',
 }
 
 export type GlobalMessageRaw = {
@@ -35,8 +35,9 @@ export type GlobalMessageType = Omit<
 > & {startDate?: number; endDate?: number};
 
 export type RuleVariables = {
-  transportModes?: AnyMode[];
-  zones?: string[];
+  modes?: AnyMode[];
+  fromZones?: string[];
+  toZones?: string[];
   platform?: string;
   count?: number;
 };
@@ -55,5 +56,6 @@ export enum RuleOperator {
   lessThan = 'lessThan',
   greaterThanOrEqualTo = 'greaterThanOrEqualTo',
   lessThanOrEqualTo = 'lessThanOrEqualTo',
-  arrayContains = 'arrayContains',
+  contains = 'contains',
+  notContains = 'notContains',
 }

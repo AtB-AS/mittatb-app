@@ -109,11 +109,9 @@ function mapToRule(data: any): Rule | undefined {
   if (!(typeof data === 'object')) return;
 
   const {variable, operator, value, passOnUndefined} = data;
-
   if (!(typeof variable === 'string')) return;
   if (!(operator in RuleOperator)) return;
-  if (!(typeof passOnUndefined === 'boolean') || passOnUndefined === undefined)
-    return;
+  if (!['undefined', 'boolean'].includes(typeof passOnUndefined)) return;
   if (
     !(
       typeof value === 'string' ||
