@@ -39,7 +39,7 @@ export function FareContractHarborStopPlaces({
     );
 
   const harbors = harborsQuery.data;
-  const fromName = harbors.find(({id}) => id === fromStopPlaceId)?.name;
+  const fromName = harbors.find((sp) => sp.id === fromStopPlaceId)?.name;
   const toName = harbors.find((sp) => sp.id === toStopPlaceId)?.name;
 
   if (!fromName || !toName) return null;

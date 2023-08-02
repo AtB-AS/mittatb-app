@@ -130,7 +130,7 @@ const FareContractTexts = {
         ),
       error: _(
         'Kunne ikke laste kaier.',
-        'Could not load harbors',
+        'Could not load harbors.',
         'Kunne ikkje laste kaier.',
       ),
     },
