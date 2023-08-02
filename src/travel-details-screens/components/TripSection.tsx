@@ -84,7 +84,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {themeName} = useTheme();
 
-  const isWalkSection = leg.mode === 'foot';
+  const isWalkSection = leg.mode === Mode.Foot;
+  const isBikeSection = leg.mode === Mode.Bicycle;
   const isFlexible = isLegFlexibleTransport(leg);
   const legColor = useTransportationColor(
     isFlexible ? 'flex' : leg.mode,
@@ -147,7 +148,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {isWalkSection ? (
           <WalkSection {...leg} />
-        ) : leg.mode === Mode.Bicycle ? (
+        ) : isBikeSection ? (
           <BikeSection {...leg} />
         ) : (
           <TripRow
