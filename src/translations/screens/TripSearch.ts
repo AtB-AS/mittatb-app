@@ -162,9 +162,9 @@ const TripSearchTexts = {
 
     info: {
       emptyResult: _(
-        'Vi fant dessverre ingen reiseruter som passer til ditt søk. ',
-        'We could not find any travel routes matching your search criteria.',
-        'Vi fann dessverre ingen reiseruter som passa til ditt søk.',
+        'Vi fant dessverre ingen kollektivreiser som passer til ditt søk. ',
+        'We could not find any public transport routes matching your search criteria.',
+        'Vi fann dessverre ingen kollektivreiser som passa til ditt søk.',
       ),
       reasonsTitle: _(
         'Mulige årsaker: ',
