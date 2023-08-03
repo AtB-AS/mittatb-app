@@ -9,7 +9,6 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {
-  BoatStopPoint,
   CityZone,
   PreassignedFareProduct,
   TariffZone,
@@ -61,7 +60,6 @@ type ConfigurationContextState = {
   paymentTypes: PaymentType[];
   vatPercent: number;
   fareProductTypeConfigs: FareProductTypeConfig[];
-  boatStopPoints: BoatStopPoint[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinks | undefined;
@@ -77,7 +75,6 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   paymentTypes: defaultPaymentTypes,
   vatPercent: defaultVatPercent,
   fareProductTypeConfigs: defaultFareProductTypeConfig,
-  boatStopPoints: [],
   travelSearchFilters: undefined,
   appTexts: undefined,
   configurableLinks: undefined,
@@ -103,7 +100,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
   >(defaultFareProductTypeConfig);
-  const [boatStopPoints, setBoatStopPoints] = useState<BoatStopPoint[]>([]);
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
@@ -161,11 +157,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setFareProductTypeConfigs(fareProductTypeConfigs);
           }
 
-          const boatStopPoints = getBoatStopPointsFromSnapshot(snapshot);
-          if (boatStopPoints) {
-            setBoatStopPoints(boatStopPoints);
-          }
-
           const travelSearchFilters =
             getTravelSearchFiltersFromSnapshot(snapshot);
           if (travelSearchFilters) {
@@ -206,7 +197,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       paymentTypes,
       vatPercent,
       fareProductTypeConfigs,
-      boatStopPoints,
       travelSearchFilters,
       appTexts,
       configurableLinks,
@@ -221,7 +211,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     paymentTypes,
     vatPercent,
     fareProductTypeConfigs,
-    boatStopPoints,
     travelSearchFilters,
     appTexts,
     configurableLinks,
@@ -370,23 +359,6 @@ function getFareProductTypeConfigsFromSnapshot(
     return mapToFareProductTypeConfigs(fareProductTypeConfigs);
   }
 
-  return undefined;
-}
-
-function getBoatStopPointsFromSnapshot(
-  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): BoatStopPoint[] | undefined {
-  const boatStopPointsFromFirestore = snapshot.docs
-    .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('boatStopPoints');
-
-  try {
-    if (boatStopPointsFromFirestore) {
-      return JSON.parse(boatStopPointsFromFirestore) as BoatStopPoint[];
-    }
-  } catch (error: any) {
-    Bugsnag.notify(error);
-  }
   return undefined;
 }
 
