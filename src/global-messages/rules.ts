@@ -1,5 +1,12 @@
 export type RuleVariables = {
-  [key: string]: string | number | boolean | string[] | number[] | boolean[];
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | null
+    | string[]
+    | number[]
+    | boolean[];
 };
 
 export type Rule = {
@@ -59,11 +66,17 @@ const checkRule = (
   const localValue = localVariables[variableName];
   switch (operator) {
     case RuleOperator.equalTo:
-      if (['string', 'number', 'boolean'].includes(typeof localValue))
+      if (
+        ['string', 'number', 'boolean'].includes(typeof localValue) ||
+        localValue === null
+      )
         return localValue === ruleValue;
       return false;
     case RuleOperator.notEqualTo:
-      if (['string', 'number', 'boolean'].includes(typeof localValue))
+      if (
+        ['string', 'number', 'boolean'].includes(typeof localValue) ||
+        localValue === null
+      )
         return localValue !== ruleValue;
       return false;
     case RuleOperator.greaterThan:

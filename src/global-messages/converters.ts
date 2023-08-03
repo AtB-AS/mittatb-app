@@ -111,14 +111,10 @@ function mapToRule(data: any): Rule | undefined {
   if (!(typeof variable === 'string')) return;
   if (!(operator in RuleOperator)) return;
   if (
-    !(
-      typeof value === 'string' ||
-      typeof value === 'number' ||
-      typeof value === 'boolean'
-    )
+    !(['string', 'number', 'boolean'].includes(typeof value) || value === null)
   )
     return;
-  if (!(typeof groupId === 'string')) return;
+  if (groupId && !(typeof groupId === 'string')) return;
 
   return {variable, operator, value, groupId};
 }
