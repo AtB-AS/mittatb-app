@@ -84,6 +84,7 @@ export const HarborSelection = forwardRef<
           </GenericClickableSectionItem>
           <GenericClickableSectionItem
             accessible={true}
+            accessibilityState={{disabled: !fromHarbor}}
             accessibilityRole="button"
             accessibilityLabel={t(
               PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yLabel(
