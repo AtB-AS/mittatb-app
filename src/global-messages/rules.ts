@@ -4,9 +4,7 @@ export type RuleVariables = {
     | number
     | boolean
     | null
-    | string[]
-    | number[]
-    | boolean[];
+    | (string | number | boolean | null)[];
 };
 
 export type Rule = {
@@ -96,12 +94,10 @@ const checkRule = (
         return (localValue as string | number) <= ruleValue;
       return false;
     case RuleOperator.contains:
-      if (Array.isArray(localValue))
-        return (localValue as any[]).includes(ruleValue);
+      if (Array.isArray(localValue)) return localValue.includes(ruleValue);
       return false;
     case RuleOperator.notContains:
-      if (Array.isArray(localValue))
-        return !(localValue as any[]).includes(ruleValue);
+      if (Array.isArray(localValue)) return !localValue.includes(ruleValue);
       return false;
     default:
       return false;

@@ -105,16 +105,16 @@ function mapToRules(data: any): Rule[] {
 }
 
 function mapToRule(data: any): Rule | undefined {
-  if (!(typeof data === 'object')) return;
+  if (typeof data !== 'object') return;
 
   const {variable, operator, value, groupId} = data;
-  if (!(typeof variable === 'string')) return;
+  if (typeof variable !== 'string') return;
   if (!(operator in RuleOperator)) return;
   if (
     !(['string', 'number', 'boolean'].includes(typeof value) || value === null)
   )
     return;
-  if (groupId && !(typeof groupId === 'string')) return;
+  if (groupId !== undefined && typeof groupId !== 'string') return;
 
   return {variable, operator, value, groupId};
 }
