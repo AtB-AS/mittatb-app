@@ -8,10 +8,9 @@ import {
   GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
-  Rule,
-  RuleOperator,
 } from '@atb/global-messages/types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
+import {Rule, RuleOperator} from './rules';
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
 ): GlobalMessageType[] {
@@ -108,10 +107,9 @@ function mapToRules(data: any): Rule[] {
 function mapToRule(data: any): Rule | undefined {
   if (!(typeof data === 'object')) return;
 
-  const {variable, operator, value, passOnUndefined} = data;
+  const {variable, operator, value, groupId} = data;
   if (!(typeof variable === 'string')) return;
   if (!(operator in RuleOperator)) return;
-  if (!['undefined', 'boolean'].includes(typeof passOnUndefined)) return;
   if (
     !(
       typeof value === 'string' ||
@@ -120,6 +118,7 @@ function mapToRule(data: any): Rule | undefined {
     )
   )
     return;
+  if (!(typeof groupId === 'string')) return;
 
-  return {variable, operator, value, passOnUndefined};
+  return {variable, operator, value, groupId};
 }

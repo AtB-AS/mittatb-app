@@ -6,11 +6,11 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {
   GlobalMessageContextEnum,
   GlobalMessageType,
-  RuleVariables,
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
+import {RuleVariables} from './rules';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum | 'all';
