@@ -1,16 +1,13 @@
+type RuleValue = string | number | boolean | null;
+
 export type RuleVariables = {
-  [key: string]:
-    | string
-    | number
-    | boolean
-    | null
-    | (string | number | boolean | null)[];
+  [key: string]: RuleValue | RuleValue[];
 };
 
 export type Rule = {
   variable: string; // key of RuleVariables
   operator: RuleOperator;
-  value: string | number | boolean;
+  value: RuleValue;
   groupId?: string;
 };
 
@@ -78,20 +75,36 @@ const checkRule = (
         return localValue !== ruleValue;
       return false;
     case RuleOperator.greaterThan:
-      if (['string', 'number'].includes(typeof localValue))
-        return (localValue as string | number) > ruleValue;
+      if (
+        ['string', 'number'].includes(typeof localValue) &&
+        ['string', 'number'].includes(typeof ruleValue)
+      )
+        return (localValue as string | number) > (ruleValue as string | number);
       return false;
     case RuleOperator.lessThan:
-      if (['string', 'number'].includes(typeof localValue))
-        return (localValue as string | number) < ruleValue;
+      if (
+        ['string', 'number'].includes(typeof localValue) &&
+        ['string', 'number'].includes(typeof ruleValue)
+      )
+        return (localValue as string | number) < (ruleValue as string | number);
       return false;
     case RuleOperator.greaterThanOrEqualTo:
-      if (['string', 'number'].includes(typeof localValue))
-        return (localValue as string | number) >= ruleValue;
+      if (
+        ['string', 'number'].includes(typeof localValue) &&
+        ['string', 'number'].includes(typeof ruleValue)
+      )
+        return (
+          (localValue as string | number) >= (ruleValue as string | number)
+        );
       return false;
     case RuleOperator.lessThanOrEqualTo:
-      if (['string', 'number'].includes(typeof localValue))
-        return (localValue as string | number) <= ruleValue;
+      if (
+        ['string', 'number'].includes(typeof localValue) &&
+        ['string', 'number'].includes(typeof ruleValue)
+      )
+        return (
+          (localValue as string | number) <= (ruleValue as string | number)
+        );
       return false;
     case RuleOperator.contains:
       if (Array.isArray(localValue)) return localValue.includes(ruleValue);
