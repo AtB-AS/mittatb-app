@@ -1,6 +1,7 @@
 import Popover from 'react-native-popover-view';
-import React, {ReactNode, RefObject} from 'react';
+import React, {ReactNode, RefObject, useEffect, useRef} from 'react';
 import {
+  AccessibilityInfo,
   Dimensions,
   Platform,
   StatusBar,
@@ -13,6 +14,10 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useIsFocused} from '@react-navigation/native';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 
 export type ToolTipProps = {
   from: RefObject<View> | ReactNode;
@@ -31,6 +36,17 @@ export const ToolTip = ({
   const style = useStyles();
   const insets = useSafeAreaInsets();
   const isFocused = useIsFocused();
+  const {t} = useTranslation();
+  const contentRef = useRef(null);
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const shouldShow = isOpen && !isScreenReaderEnabled;
+
+  useEffect(() => {
+    console.log('screen reader', isScreenReaderEnabled, 'isOpen', isOpen);
+    if (isOpen && isScreenReaderEnabled) {
+      AccessibilityInfo.announceForAccessibility(`${heading}. ${text}`);
+    }
+  }, [isOpen, isScreenReaderEnabled]);
 
   const onRequestClose = () => {
     if (onClose) onClose();
@@ -41,7 +57,7 @@ export const ToolTip = ({
   return (
     <Popover
       from={from}
-      isVisible={isOpen}
+      isVisible={shouldShow}
       onRequestClose={onRequestClose}
       popoverStyle={style.popover}
       displayAreaInsets={insets}
@@ -49,14 +65,25 @@ export const ToolTip = ({
         Platform.OS === 'android' ? -(StatusBar.currentHeight ?? 0) : 0
       }
     >
-      <View>
+      <View
+        accessible={true}
+        accessibilityLabel={`${heading}. ${text}`}
+        accessibilityRole={'button'}
+        onAccessibilityTap={onRequestClose}
+        ref={contentRef}
+      >
         <View style={style.heading}>
-          <ThemeText type={'body__primary--bold'}>{heading}</ThemeText>
-          <TouchableOpacity onPress={onRequestClose}>
+          <ThemeText accessibilityLabel={heading} type={'body__primary--bold'}>
+            {heading}
+          </ThemeText>
+          <TouchableOpacity
+            onPress={onRequestClose}
+            accessibilityLabel={t(ScreenHeaderTexts.headerButton.close.text)}
+          >
             <ThemeIcon style={style.closeIcon} svg={Close} />
           </TouchableOpacity>
         </View>
-        <ThemeText>{text}</ThemeText>
+        <ThemeText accessibilityLabel={text}>{text}</ThemeText>
       </View>
     </Popover>
   );

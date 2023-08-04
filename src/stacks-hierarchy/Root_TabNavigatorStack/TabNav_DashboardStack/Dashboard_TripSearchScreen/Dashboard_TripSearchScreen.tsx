@@ -53,6 +53,7 @@ import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {OneTimeToolTip} from '@atb/components/popover';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -345,23 +346,36 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 viewContainerStyle={style.searchTimeButton}
               />
               {filtersState.enabled && (
-                <Button
-                  text={t(TripSearchTexts.filterButton.text)}
-                  accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                  interactiveColor="interactive_0"
-                  mode="secondary"
-                  type="inline"
-                  compact={true}
-                  onPress={filtersState.openBottomSheet}
-                  testID="dashboardDateTimePicker"
-                  rightIcon={{
-                    svg: Filter,
-                    notification: filtersState.anyFiltersApplied
-                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
-                      : undefined,
-                  }}
-                  viewContainerStyle={style.filterButton}
-                  ref={filtersState.onCloseFocusRef}
+                <OneTimeToolTip
+                  from={
+                    <Button
+                      text={t(TripSearchTexts.filterButton.text)}
+                      accessibilityHint={t(
+                        TripSearchTexts.filterButton.a11yHint,
+                      )}
+                      interactiveColor="interactive_0"
+                      mode="secondary"
+                      type="inline"
+                      compact={true}
+                      onPress={filtersState.openBottomSheet}
+                      testID="dashboardDateTimePicker"
+                      rightIcon={{
+                        svg: Filter,
+                        notification: filtersState.anyFiltersApplied
+                          ? {
+                              color: 'valid',
+                              backgroundColor: 'background_accent_0',
+                            }
+                          : undefined,
+                      }}
+                      viewContainerStyle={style.filterButton}
+                      ref={filtersState.onCloseFocusRef}
+                    />
+                  }
+                  isOpen={filtersState.anyFiltersApplied}
+                  heading={'Tips!'}
+                  text={'Du kan aktivere på flere resiemåter i filter'}
+                  oneTimeKey={'travel-search-filter-asdf'}
                 />
               )}
             </View>
