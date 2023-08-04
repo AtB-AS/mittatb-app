@@ -35,7 +35,7 @@ const RecentFareContractsTexts = {
     travellers: _(
       'for følgende reisende: ',
       'for the following travellers: ',
-      'for følgande reisande: ',
+      'for følgjande reisande: ',
     ),
     and: _(' og ', ' and ', ' og '),
   },
@@ -58,7 +58,7 @@ const RecentFareContractsTexts = {
   },
   ticketTypes: {
     carnet: _('Klippekort', 'Carnet', 'Klippekort'),
-    period: _('Periodebillett', 'Period ticket', 'Periodebillet'),
+    period: _('Periodebillett', 'Period ticket', 'Periodebillett'),
     single: _('Enkeltbillett', 'Single ticket', 'Enkeltbillett'),
   },
 };

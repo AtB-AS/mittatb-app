@@ -13,7 +13,7 @@ const JourneyDatePickerTexts = {
   options: {
     now: _('Nå', 'Now', 'No'),
     departure: _('Avgang', 'Departure', 'Avgang'),
-    arrival: _('Ankomst', 'Arrival', 'Ankomst'),
+    arrival: _('Ankomst', 'Arrival', 'Framkomst'),
   },
   searchButton: {
     text: _('Søk etter reiser', 'Search', 'Søk etter reiser'),
@@ -28,7 +28,7 @@ const JourneyDatePickerTexts = {
     departure: (time: string) =>
       _(`Avreise ${time}`, `Departure ${time}`, `Avreise ${time}`),
     arrival: (time: string) =>
-      _(`Ankomst ${time}`, `Arrival ${time}`, `Ankomst ${time}`),
+      _(`Ankomst ${time}`, `Arrival ${time}`, `Framkomst ${time}`),
     a11yHint: _(
       'Aktivér for å endre reisetidspunkt',
       'Activate to change time of travel',

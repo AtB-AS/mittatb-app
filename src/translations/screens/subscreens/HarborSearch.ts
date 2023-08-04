@@ -13,7 +13,7 @@ const HarborSearchTexts = {
     titleTo: _(
       'Velg kai for ankomst',
       'Search for destination harbor',
-      'Vel kai for tilkomst',
+      'Vel kai for framkomst',
     ),
   },
   error: _('Noe gikk galt.', 'Something went wrong.', `Noko gjekk gale.`),
@@ -22,14 +22,14 @@ const HarborSearchTexts = {
     to: _(`Til`, `To`, `Til`),
   },
   results: {
-    resultsHeading: _('Søkeresultater', 'Search results', 'Søkjeresultat'),
+    resultsHeading: _('Søkeresultater', 'Search results', 'Søkeresultat'),
     nearestHeading: _('Nærmest deg', 'Nearest', 'Nærast deg'),
     departureHeading: _('Avreisekaier', 'Departure harbors', 'Avreisekaier'),
     arrivalHeading: (fromHarborName: string) =>
       _(
         `Ankomststeder fra ${fromHarborName}`,
         `Destination harbors from ${fromHarborName}`,
-        `Tilkomststader frå ${fromHarborName}`,
+        `Framkomststader frå ${fromHarborName}`,
       ),
     item: {
       a11yLabel: (venueName: string) =>
@@ -55,7 +55,7 @@ const HarborSearchTexts = {
     emptyResult: _(
       'Fant ingen søkeresultat',
       'No search results to display',
-      'Fann ingen søkjeresultat',
+      'Fann ingen søkeresultat',
     ),
   },
 };

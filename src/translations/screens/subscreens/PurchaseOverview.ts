@@ -107,12 +107,12 @@ const PurchaseOverviewTexts = {
           _(
             `Valgt ankomstkai: ${harbor ?? 'Ingen kai valgt'}`,
             `Selected destination harbor: ${harbor ?? 'No harbor selected'}`,
-            `Valt ankomstkai: ${harbor ?? 'Inga kai valt'}`,
+            `Valt framkomstkai: ${harbor ?? 'Inga kai valt'}`,
           ),
         a11yHint: _(
           'Aktivér for å velge ankomstkai',
           'Activate to select destination harbor',
-          'Aktivér for å velje ankomstkai',
+          'Aktivér for å velje framkomstkai',
         ),
       },
     },
