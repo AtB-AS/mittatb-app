@@ -41,8 +41,8 @@ export const checkRules = (
   rules.forEach((rule) => {
     if (rule.groupId) uniqueGroups.add(rule.groupId);
   });
-  for (const group of uniqueGroups) {
-    const groupRules = rules.filter((rule) => rule.groupId === group);
+  for (const groupId of uniqueGroups) {
+    const groupRules = rules.filter((rule) => rule.groupId === groupId);
     const oneOfRuleInGroup = groupRules.find((rule) =>
       checkRule(rule, localVariables),
     );
