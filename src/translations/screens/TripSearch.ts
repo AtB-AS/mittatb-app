@@ -37,7 +37,7 @@ const TripSearchTexts = {
       PastArrivalTime: _(
         'Ankomsttid har passert',
         'Arrival time has passed',
-        'Ankomsttid er passert',
+        'Framkomsttid er passert',
       ),
       PastDepartureTime: _(
         'Avreisetid har passert',
@@ -70,7 +70,7 @@ const TripSearchTexts = {
       a11yLabel: _(
         'Velg ankomststed',
         'Select place of arrival',
-        'Vel ankomststad',
+        'Vel framkomststad',
       ),
       a11yHint: _(
         'Aktivér for å søke etter adresse eller sted',
@@ -88,7 +88,7 @@ const TripSearchTexts = {
       a11yLabel: _(
         'Bytt avreisested og ankomststed',
         'Swap place of departure/arrival',
-        'Byt avreisestad og ankomststad',
+        'Byt avreisestad og framkomststad',
       ),
     },
     updatingLocation: _(
@@ -116,7 +116,7 @@ const TripSearchTexts = {
     departure: (time: string) =>
       _(`Avreise ${time}`, `Departure ${time}`, `Avreise ${time}`),
     arrival: (time: string) =>
-      _(`Ankomst ${time}`, `Arrival ${time}`, `Ankomst ${time}`),
+      _(`Ankomst ${time}`, `Arrival ${time}`, `Framkomst ${time}`),
     a11yHint: _(
       'Aktivér for å endre reisetidspunkt',
       'Activate to change time of travel',
@@ -162,12 +162,12 @@ const TripSearchTexts = {
 
     info: {
       emptyResult: _(
-        'Vi fant dessverre ingen kollektivreiser som passer til ditt søk. ',
+        'Vi fant dessverre ingen kollektivreiser som passer til ditt søk.',
         'We could not find any public transport routes matching your search criteria.',
         'Vi fann dessverre ingen kollektivreiser som passa til ditt søk.',
       ),
       reasonsTitle: _(
-        'Mulige årsaker: ',
+        'Mulige årsaker:',
         'Possible causes:',
         'Moglege årsaker:',
       ),
@@ -306,7 +306,7 @@ const TripSearchTexts = {
           _(
             `Start klokken ${startTime}, ankomst klokken ${endTime}. Total reisetid ${duration}.`,
             `Start time ${startTime}, arrival time ${endTime}. Total travel time ${duration}`,
-            `Start klokka ${startTime}, ankomst klokka ${endTime}. Total reisetid ${duration}.`,
+            `Start klokka ${startTime}, framkomst klokka ${endTime}. Total reisetid ${duration}.`,
           ),
         realtime: (
           fromPlace: string,

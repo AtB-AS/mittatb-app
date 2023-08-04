@@ -33,8 +33,8 @@ const DepartureDetailsTexts = {
   map: _('Se i kart', 'Show in map', 'Sjå i kart'),
   messages: {
     loading: _('Laster detaljer', 'Loading details', 'Lastar detaljar'),
-    noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstigning'),
-    noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstigning'),
+    noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),
+    noBoarding: _('Ingen påstigning', 'No boarding', 'Ingen påstiging'),
     noActiveItem: _(
       'Ojda! Noe gikk galt med lasting av detaljer for denne reisen.',
       'Oops! We had some issues loading the details for this journey.',

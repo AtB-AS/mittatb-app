@@ -167,7 +167,7 @@ const FareContractTexts = {
           `Di kvittering vart sendt til ${email} med referansen: ${reference}.`,
         ),
       invalidField: _(
-        'E-post adressen er ikke gyldig. fyll inn en gyldig e-postadresse og trykk "Send".',
+        'E-postadressen er ikke gyldig. fyll inn en gyldig e-postadresse og trykk "Send".',
         'The e-mail address is invalid. Enter a valid e-mail address and press "Send"',
         'E-postadressen er ikkje gyldig. Fyll inn ei gyldig e-postadresse og trykk «Send».',
       ),
