@@ -9,8 +9,7 @@ export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
   appDepartures = 'app-departures',
   appTicketing = 'app-ticketing',
-  appCollabticket = 'app-collabticket',
-  appTrainOutsideZoneA = 'app-train-outside-zone-a',
+  appDepartureDetails = 'app-departure-details',
 }
 
 export type GlobalMessageRaw = {
