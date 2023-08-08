@@ -37,6 +37,7 @@ import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStac
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-enabled';
+import {useShowValidTimeInfoDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -90,6 +91,7 @@ export const Profile_DebugInfoScreen = () => {
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
   const nonTransitTripSearchOverride = useNonTransitTripSearchDebugOverride();
+  const showValidTimeInfoDebugOverride = useShowValidTimeInfoDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -339,6 +341,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable non-transit trip search"
               override={nonTransitTripSearchOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Shows valid time info in ticket details"
+              override={showValidTimeInfoDebugOverride}
             />
           </GenericSectionItem>
         </Section>
