@@ -46,7 +46,7 @@ export const MobilityTexts = {
     body: _(
       'Se elsparkesykler og bysykler i Trondheim på ett sted. Skru på tjenesten i kartet.',
       'See electric scooters and city bikes in Trondheim in one app. Enable this feature through the map.',
-      'Sjå elsparkesykler og bysyklar i Trondheim på ett sted. Skru på tenesta i kartet.',
+      'Sjå elsparkesyklar og bysyklar i Trondheim på ett sted. Skru på tenesta i kartet.',
     ),
     button: _('Den er grei!', 'Sounds good!', 'Høres bra ut!'),
     a11yLabel: _(
@@ -93,7 +93,7 @@ export const BicycleTexts = {
     numBikesAvailable: _(
       'Tilgjengelige sykler',
       'Available bikes',
-      'Tilgjengelige sykler',
+      'Tilgjengelege syklar',
     ),
     numDocksAvailable: _('Ledige plasser', 'Available docks', 'Ledige plassar'),
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
@@ -138,7 +138,7 @@ export const CarSharingTexts = {
         return _(
           'Ukjent drivstofftype',
           'Unknown propultion type',
-          'Ukjent fremdriftstype',
+          'Ukjent drivstofftype',
         );
     }
   },

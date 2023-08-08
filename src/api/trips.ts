@@ -9,7 +9,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 
 function cleanQuery(query: TripsQueryVariables) {
-  const cleanQuery: TripsQueryVariables = {
+  const cleanQuery: TripsQueryVariables | NonTransitTripsQueryVariables = {
     to: {
       name: query.to.name,
       coordinates: query.to.coordinates,
@@ -28,6 +28,26 @@ function cleanQuery(query: TripsQueryVariables) {
     walkReluctance: query.walkReluctance,
     walkSpeed: query.walkSpeed,
     modes: query.modes,
+  };
+  return cleanQuery;
+}
+
+function cleanNonTransitQuery(query: NonTransitTripsQueryVariables) {
+  const cleanQuery: NonTransitTripsQueryVariables = {
+    to: {
+      name: query.to.name,
+      coordinates: query.to.coordinates,
+      place: query.to.place,
+    },
+    from: {
+      name: query.from.name,
+      coordinates: query.from.coordinates,
+      place: query.from.place,
+    },
+    when: query.when,
+    arriveBy: query.arriveBy,
+    walkSpeed: query.walkSpeed,
+    directModes: query.directModes,
   };
   return cleanQuery;
 }
@@ -53,7 +73,7 @@ export const nonTransitTripSearch = (
 ) =>
   post<TripPatternFragment[]>(
     'bff/v2/trips/non-transit',
-    cleanQuery(query),
+    cleanNonTransitQuery(query),
     opts,
   );
 

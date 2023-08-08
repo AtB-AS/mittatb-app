@@ -13,7 +13,7 @@ export const getStopPlacesByMode = async (
   transportModes: TransportMode[],
   transportSubmodes?: TransportSubmode[],
   opts?: AxiosRequestConfig,
-): Promise<StopPlaceFragment[] | undefined> => {
+): Promise<StopPlaceFragment[]> => {
   const url = '/bff/v2/stop-places/mode';
   const query = qs.stringify({
     authorities: AUTHORITY,
@@ -31,7 +31,7 @@ export const getStopPlacesByMode = async (
 export const getStopPlaceConnections = async (
   fromStopPlaceId: string,
   opts?: AxiosRequestConfig,
-): Promise<StopPlaceFragment[] | undefined> => {
+): Promise<StopPlaceFragment[]> => {
   const url = '/bff/v2/stop-places/connections';
   const query = qs.stringify({
     authorities: AUTHORITY,

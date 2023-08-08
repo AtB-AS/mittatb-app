@@ -2,15 +2,15 @@ import {translation as _} from '../commons';
 
 const Pagination = {
   previous: {
-    label: _('Forrige', 'Previous', 'Førehand'),
+    label: _('Forrige', 'Previous', 'Førre'),
     a11yHint: _(
       'Aktivér for å vise forrige side',
       'Activate to show previous page',
-      'Aktiver for å vise førehandsside',
+      'Aktiver for å vise førre side',
     ),
   },
   next: {
-    label: _('Neste', 'Next', 'Nest'),
+    label: _('Neste', 'Next', 'Neste'),
     a11yHint: _(
       'Aktivér for å vise neste side',
       'Activate to show next page',

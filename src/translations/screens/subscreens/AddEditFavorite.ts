@@ -2,35 +2,35 @@ import {translation as _} from '../../commons';
 const AddEditFavoriteTexts = {
   header: {
     title: _(
-      'Legg til favorittstad',
+      'Legg til favorittsted',
       'Add a favourite location',
       'Legg til ein favorittstad',
     ),
     titleEdit: _(
-      'Endre favorittstad',
+      'Endre favorittsted',
       'Edit favourite location',
       'Endre ein favorittstad',
     ),
   },
   fields: {
     location: {
-      label: _('Stad', 'Place', 'Stad'),
+      label: _('Sted', 'Place', 'Stad'),
       placeholder: _(
-        'Søk etter adresse eller stoppestad',
+        'Søk etter adresse eller stoppested',
         'Search for an address or location',
         'Søk etter ein adresse eller stoppestad',
       ),
       header: _(
-        'Søk etter adresse eller stoppestad',
+        'Søk etter adresse eller stoppested',
         'Search for an address or location',
         'Søk etter ein adresse eller ein stoppestad',
       ),
     },
     name: {
-      label: _('Namn', 'Name', 'Namn'),
-      placeholder: _('Legg til namn', 'Add name', 'Legg til eit namn'),
+      label: _('Navn', 'Name', 'Namn'),
+      placeholder: _('Legg til navn', 'Add name', 'Legg til eit namn'),
       a11yHint: _(
-        'Namn for favoritten',
+        'Navn for favoritten',
         'Favourite name',
         'Namn for favoritten',
       ),
@@ -51,29 +51,29 @@ const AddEditFavoriteTexts = {
   },
   save: {
     label: _(
-      'Lagre favorittstad',
+      'Lagre favorittsted',
       'Save location as favourite',
       'Lagre ein favorittstad',
     ),
     notSelectedFromError: _(
-      'Du må velge ein stad du vil ha som favoritt',
+      'Du må velge et sted du vil ha som favoritt',
       'Please select a location for your favourite',
       'Du må velje ein stad for din favoritt',
     ),
     geopositionWithoutNameError: _(
-      'Du må velge eit namn om du vil bruke din noverande posisjon som favoritt',
+      'Du må velge et navn om du vil bruke din nåværende posisjon som favoritt',
       'Please select a name if you want use your current location for your favourite',
       'Du må velje eit namn dersom du vil bruke noverande posisjon som favoritt',
     ),
   },
   delete: {
     label: _(
-      'Slett favorittstad',
+      'Slett favorittsted',
       'Delete favourite location',
       'Slett ein favorittstad',
     ),
     confirmWarning: _(
-      'Er du sikker på at du vil slette favorittstaden din?',
+      'Er du sikker på at du vil slette favorittstedet ditt?',
       'Sure you want to delete this favourite?',
       'Er du sikker på at du vil slette denne favorittstaden?',
     ),
@@ -86,11 +86,11 @@ const AddEditFavoriteTexts = {
     rightButton: _('Fjern emoji', 'Clear emoji', 'Fjern emoji'),
     categories: {
       smileys: _('Smilefjes', 'Smileys', 'Smilefjes'),
-      people: _('Personar', 'People', 'Personar'),
+      people: _('Personer', 'People', 'Personar'),
       animals: _('Dyr og natur', 'Animals and nature', 'Dyr og natur'),
       food: _('Mat og drikke', 'Food and drinks', 'Mat og drikke'),
-      activities: _('Aktivitetar', 'Activities', 'Aktivitetar'),
-      travel: _('Reise og stader', 'Travel and places', 'Reise og stadar'),
+      activities: _('Aktiviteter', 'Activities', 'Aktivitetar'),
+      travel: _('Reise og steder', 'Travel and places', 'Reise og stadar'),
       objects: _('Objekt', 'Objects', 'Objekt'),
       symbols: _('Symbol', 'Symbols', 'Symbol'),
     },

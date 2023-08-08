@@ -199,7 +199,7 @@ const NearbyTexts = {
       initial: _(
         'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
         'Search for departures from nearby stops or locations',
-        'Søk etter avgangar frå holdeplassar eller i nærleiken av stadar.',
+        'Søk etter avgangar frå haldeplassar eller i nærleiken av stadar.',
       ),
       emptyResultFavorites: _(
         'Fant ingen favorittavganger på valgt plass.',
@@ -221,7 +221,7 @@ const NearbyTexts = {
           _(
             `Avganger fra plattform på holdeplassen ${name}.`,
             `Departures from stop place platform ${name}.`,
-            `Avgangar frå plattform på holdeplassen ${name}.`,
+            `Avgangar frå plattform på haldeplassen ${name}.`,
           ),
         distance: {
           label: (distance: string) =>
@@ -235,7 +235,7 @@ const NearbyTexts = {
 
       showMoreToggler: {
         text: _(
-          'Vis fleire avganger',
+          'Vis flere avganger',
           'Show more departures',
           'Vis fleire avgangar',
         ),
@@ -263,9 +263,9 @@ const NearbyTexts = {
         ),
       nextAccessibilityLabel: (time: string) =>
         _(
-          `Neste avgangar: ${time} `,
+          `Neste avganger: ${time} `,
           `Next departures: ${time} `,
-          `Neste avgang: ${time}`,
+          `Neste avgangar: ${time}`,
         ),
       nextAccessibilityRealtime: (time: string) =>
         _(`sanntid ${time}`, `realtime: ${time}`, `Sanntid: ${time}`),

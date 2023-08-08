@@ -5,7 +5,7 @@ const DeparturesTexts = {
     title: _('Avganger', 'Departures', 'Avgangar'),
   },
   stopPlaceList: {
-    stopPlace: _('Holdeplass', 'Stop', 'Holdeplass'),
+    stopPlace: _('Holdeplass', 'Stop', 'Haldeplass'),
     listDescription: {
       geoLoc: _('I nærheten', 'Nearby', 'I nærleiken'),
       address: _(`Holdeplasser nær `, `Stops near `, `Haldeplassar nær `),
@@ -128,7 +128,7 @@ const DeparturesTexts = {
     resultNotFound: _(
       'Kunne ikke finne holdeplassen du leter etter.',
       'Could not find the stop place you are looking for.',
-      'Kunne ikkje finne holdeplassen du leitar etter.',
+      'Kunne ikkje finne haldeplassen du leitar etter.',
     ),
     noData: _('Ingen informasjon', 'No data', 'Ingen informasjon'),
   },

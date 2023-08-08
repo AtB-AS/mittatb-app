@@ -14,7 +14,7 @@ export function mapToLanguageAndTexts(
 
 function mapToLanguageAndText(data: any): LanguageAndTextType | undefined {
   if (!data) return;
-  if (data.lang != 'nob' && data.lang != 'eng') return;
+  if (data.lang != 'nob' && data.lang != 'eng' && data.lang != 'nno') return;
 
   return {
     lang: data.lang,

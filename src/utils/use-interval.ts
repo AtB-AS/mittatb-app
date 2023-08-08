@@ -16,13 +16,14 @@ export function useInterval(
 
   // Set up the interval.
   useEffect(() => {
+    if (disabled) return;
     function tick() {
       savedCallback.current();
     }
     if (triggerImmediately) {
       tick();
     }
-    if (delay !== null && !disabled) {
+    if (delay !== null) {
       let id = setInterval(tick, delay);
       return () => clearInterval(id);
     }

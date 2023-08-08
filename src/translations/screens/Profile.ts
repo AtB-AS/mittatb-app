@@ -50,8 +50,8 @@ const ProfileTexts = {
       ),
       assistant: _(
         'Prøv ny reisesøkmotor',
-        'Try the new travel searh engine',
-        'Prøv ny reisesøkeemotor',
+        'Try the new travel search engine',
+        'Prøv ny reisesøkemotor',
       ),
       map: _('Prøv ny kartside', 'Try the new map page', 'Prøv ny kartside'),
     },

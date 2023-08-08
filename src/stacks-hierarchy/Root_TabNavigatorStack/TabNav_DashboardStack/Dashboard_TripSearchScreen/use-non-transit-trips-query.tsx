@@ -67,15 +67,10 @@ export const useNonTransitTripsQuery = (
       searchInput,
       arriveBy,
       tripSearchPreferences,
+      [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
     );
 
-    nonTransitTripSearch(
-      {
-        ...query,
-        directModes: [StreetMode.Foot, StreetMode.Bicycle],
-      },
-      {cancelToken: cancelTokenSource.token},
-    )
+    nonTransitTripSearch(query, {cancelToken: cancelTokenSource.token})
       .then((result) => {
         setNonTransitTrips(result);
         setSearchState(
@@ -115,6 +110,7 @@ export function createNonTransitQuery(
   {searchTime}: SearchInput,
   arriveBy: boolean,
   tripSearchPreferences: TripSearchPreferences | undefined,
+  directModes: StreetMode[],
 ): NonTransitTripsQueryVariables {
   const from = {
     ...fromLocation,
@@ -137,6 +133,6 @@ export function createNonTransitQuery(
     when: searchTime?.date,
     arriveBy,
     walkSpeed: tripSearchPreferences?.walkSpeed,
-    directModes: [StreetMode.Foot, StreetMode.Bicycle],
+    directModes,
   };
 }

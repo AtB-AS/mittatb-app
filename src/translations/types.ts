@@ -1,6 +1,7 @@
 export enum LanguageAndTextLanguagesEnum {
   'nob' = 'nob',
   'nno' = 'nno',
+  'nn' = 'nn',
   'nor' = 'nor',
   'no' = 'no',
   'eng' = 'eng',

@@ -156,10 +156,12 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
   const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
   const {enable_ticketing} = useRemoteConfig();
 
-  const nonFootLegs = tripPattern.legs.filter((leg) => leg.mode !== Mode.Foot);
-  const fromTariffZones = nonFootLegs[0]?.fromPlace.quay?.tariffZones;
+  const nonHumanLegs = tripPattern.legs.filter(
+    (leg) => leg.mode !== Mode.Foot && leg.mode !== Mode.Bicycle,
+  );
+  const fromTariffZones = nonHumanLegs[0]?.fromPlace.quay?.tariffZones;
   const toTariffZones =
-    nonFootLegs[nonFootLegs.length - 1]?.toPlace.quay?.tariffZones;
+    nonHumanLegs[nonHumanLegs.length - 1]?.toPlace.quay?.tariffZones;
   const fromTariffZoneWeSellSingleTicketsFor =
     useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
   const toTariffZoneWeSellTicketFor =
@@ -180,12 +182,12 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
 
   const tariffZoneTo: TariffZoneWithMetadata = {
     resultType: 'zone',
-    venueName: nonFootLegs[nonFootLegs.length - 1]?.toPlace?.name,
+    venueName: nonHumanLegs[nonHumanLegs.length - 1]?.toPlace?.name,
     ...toTariffZoneWeSellTicketFor,
   };
   const tariffZoneFrom: TariffZoneWithMetadata = {
     resultType: 'zone',
-    venueName: nonFootLegs[0]?.fromPlace?.name,
+    venueName: nonHumanLegs[0]?.fromPlace?.name,
     ...fromTariffZoneWeSellSingleTicketsFor,
   };
 
@@ -203,7 +205,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     return;
 
   const tripStartWithBuffer = addMinutes(
-    parseISO(nonFootLegs[0]?.aimedStartTime),
+    parseISO(nonHumanLegs[0]?.aimedStartTime),
     -5,
   );
   const ticketStartTime =
