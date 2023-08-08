@@ -28,8 +28,7 @@ export const FormFactorFilter = ({
 }: Props) => {
   const {t} = useTranslation();
   const filterStyle = useFilterStyle();
-  const allOperators = useOperators();
-  const operators = allOperators(formFactor);
+  const operators = useOperators().byFormFactor(formFactor);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
     operators,
     initialFilter,

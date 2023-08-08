@@ -8,7 +8,6 @@ import {useSystem} from '@atb/mobility/use-system';
 import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   getAvailableVehicles,
-  getBenefit,
   getRentalAppUri,
   isUserEligibleForBenefit,
 } from '@atb/mobility/utils';
@@ -39,7 +38,11 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
-  const {station, isLoading, error} = useBikeStation(stationId);
+  const {
+    station,
+    isLoading: isLoadingStation,
+    error: stationError,
+  } = useBikeStation(stationId);
   const {appStoreUri, brandLogoUrl, operatorId, operatorName} =
     useSystem(station);
   const rentalAppUri = getRentalAppUri(station);
@@ -48,7 +51,14 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
-  const {userBenefits, operatorBenefits} = useBenefits(operatorId);
+  const {
+    userBenefits,
+    operatorBenefits,
+    loading: isLoadingBenefits,
+    error: benefitsError,
+  } = useBenefits(operatorId);
+  const isLoading = isLoadingStation || isLoadingBenefits;
+  const isError = !!stationError || !!benefitsError;
 
   return (
     <BottomSheetContainer>
@@ -68,7 +78,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
             <ActivityIndicator size="large" />
           </View>
         )}
-        {!isLoading && !error && station && (
+        {!isLoading && !isError && station && (
           <>
             <WalkingDistance
               style={style.walkingDistance}
@@ -105,14 +115,16 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
               {/* The data model handles multiple benefits per operator,*/}
               {/* but we currently know there is only one, and the UI has to change anyway*/}
               {/* to support an undetermined number of benefits.*/}
-              <OperatorBenefit
-                benefit={getBenefit('free-unlock', operatorBenefits)}
-                isUserEligible={isUserEligibleForBenefit(
-                  'free-unlock',
-                  userBenefits,
-                )}
-                style={style.benefit}
-              />
+              {operatorBenefits && operatorBenefits.length > 0 && (
+                <OperatorBenefit
+                  benefit={operatorBenefits[0]}
+                  isUserEligible={isUserEligibleForBenefit(
+                    operatorBenefits[0].id,
+                    userBenefits,
+                  )}
+                  style={style.benefit}
+                />
+              )}
             </View>
             {rentalAppUri && (
               <View style={style.footer}>
@@ -128,7 +140,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
             )}
           </>
         )}
-        {!isLoading && (error || !station) && (
+        {!isLoading && (isError || !station) && (
           <View style={style.errorMessage}>
             <MessageBox
               type="error"

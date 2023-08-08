@@ -10,9 +10,8 @@ import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {formatRange, getRentalAppUri} from '@atb/mobility/utils';
 import {
-  getBenefit,
+  formatRange,
   getRentalAppUri,
   isBenefitOffered,
   isUserEligibleForBenefit,
@@ -34,13 +33,24 @@ type Props = {
 export const ScooterSheet = ({vehicleId: id, close}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
-  const {vehicle, isLoading, error} = useVehicle(id);
+  const {
+    vehicle,
+    isLoading: isLoadingVehicle,
+    error: vehicleError,
+  } = useVehicle(id);
   const {appStoreUri, brandLogoUrl, operatorId, operatorName} = useSystem(
     vehicle,
     vehicle?.system.operator.name,
   );
-  const {userBenefits, operatorBenefits} = useBenefits(operatorId);
+  const {
+    userBenefits,
+    operatorBenefits,
+    loading: isLoadingBenefits,
+    error: benefitsError,
+  } = useBenefits(operatorId);
   const rentalAppUri = getRentalAppUri(vehicle);
+  const isLoading = isLoadingVehicle || isLoadingBenefits;
+  const isError = !!vehicleError || !!benefitsError;
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -59,7 +69,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
             <ActivityIndicator size="large" />
           </View>
         )}
-        {!isLoading && !error && vehicle && (
+        {!isLoading && !isError && vehicle && (
           <>
             <ScrollView style={style.container}>
               <Section>
@@ -97,14 +107,18 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
               {/* The data model handles multiple benefits per operator,*/}
               {/* but we currently know there is only one, and the UI has to change anyway*/}
               {/* to support an undetermined number of benefits.*/}
-              <OperatorBenefit
-                benefit={getBenefit('free-unlock', operatorBenefits)}
-                isUserEligible={isUserEligibleForBenefit(
-                  'free-unlock',
-                  userBenefits,
+              {!benefitsError &&
+                operatorBenefits &&
+                operatorBenefits.length > 0 && (
+                  <OperatorBenefit
+                    benefit={operatorBenefits[0]}
+                    isUserEligible={isUserEligibleForBenefit(
+                      operatorBenefits[0].id,
+                      userBenefits,
+                    )}
+                    style={style.benefit}
+                  />
                 )}
-                style={style.benefit}
-              />
             </ScrollView>
             <View style={style.footer}>
               <CallToActionButton
@@ -118,7 +132,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
             </View>
           </>
         )}
-        {!isLoading && (error || !vehicle) && (
+        {!isLoading && (isError || !vehicle) && (
           <View style={style.errorMessage}>
             <MessageBox
               type="error"
