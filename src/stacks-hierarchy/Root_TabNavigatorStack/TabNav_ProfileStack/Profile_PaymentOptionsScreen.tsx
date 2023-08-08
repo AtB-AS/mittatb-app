@@ -20,6 +20,9 @@ import {FlatList, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {ProfileScreenProps} from './navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {LinkSectionItem, Section} from '@atb/components/sections';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {Add} from '@atb/assets/svg/mono-icons/actions';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
@@ -27,7 +30,9 @@ type RecurringPaymentRenderItem = {
   item: RecurringPayment;
 };
 
-export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
+export const Profile_PaymentOptionsScreen = ({
+  navigation,
+}: PaymentOptionsProps) => {
   const style = useStyle();
   const {t} = useTranslation();
   const {user} = useAuthState();
@@ -75,6 +80,10 @@ export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
     }
   }
 
+  const onAddRecurringPayment = async () => {
+    navigation.push('Root_AddPaymentMethodScreen');
+  };
+
   return (
     <View style={style.container}>
       <View>
@@ -84,7 +93,7 @@ export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
           leftButton={{type: 'back'}}
         />
       </View>
-      <View style={style.contentContainer}>
+      <Section style={style.contentContainer}>
         <FlatList
           ListHeaderComponent={
             !isLoading && showError ? (
@@ -102,7 +111,14 @@ export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
             <Card card={item} removePaymentHandler={handleRemovePayment} />
           )}
         />
-      </View>
+      </Section>
+      <Section withPadding>
+        <LinkSectionItem
+          text={t(PaymentOptionsTexts.addPaymentMethod)}
+          onPress={onAddRecurringPayment}
+          icon={<ThemeIcon svg={Add} />}
+        />
+      </Section>
     </View>
   );
 };
@@ -209,7 +225,7 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   contentContainer: {
     padding: theme.spacings.medium,
     overflow: 'hidden',
-    height: '100%',
+    // height: '100%',
   },
   card: {
     marginVertical: theme.spacings.xSmall,

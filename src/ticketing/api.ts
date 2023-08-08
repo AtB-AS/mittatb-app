@@ -1,6 +1,6 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {ReserveOfferRequestBody} from '.';
+import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
 import {client} from '../api';
 import {
   Offer,
@@ -50,6 +50,16 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
   const response = await client.get<RecurringPayment[]>(url, {
     authWithIdToken: true,
   });
+  return response.data;
+}
+
+export async function addPaymentMethod(payment_redirect_url: string) {
+  const url = `ticket/v3/recurring-payments`;
+  const response = await client.post<AddPaymentMethodResponse>(
+    url,
+    {payment_redirect_url},
+    {authWithIdToken: true},
+  );
   return response.data;
 }
 
