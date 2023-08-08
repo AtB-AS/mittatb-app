@@ -73,7 +73,7 @@ export const ParkAndRideBottomSheet = ({
         color={'background_1'}
         setFocusOnLoad={false}
       />
-      <WalkingDistance style={style.walkingDistance} distance={distance} />
+      <WalkingDistance distance={distance} />
       <View style={style.buttonsContainer}>
         <View style={style.travelButton}>
           <Button
@@ -128,25 +128,23 @@ export const ParkAndRideBottomSheet = ({
 const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
-    walkingDistance: {
-      marginBottom: theme.spacings.medium,
-    },
     container: {
       paddingHorizontal: theme.spacings.medium,
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
     buttonsContainer: {
       padding: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
       flexDirection: 'row',
     },
     travelButton: {
       flex: 1,
     },
     travelFromButtonPadding: {
-      marginRight: theme.spacings.small,
+      marginRight: theme.spacings.medium / 2,
     },
     travelToButtonPadding: {
-      marginLeft: theme.spacings.small,
+      marginLeft: theme.spacings.medium / 2,
     },
   };
 });
