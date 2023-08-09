@@ -4,7 +4,6 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {GenericSectionItem, Section} from '@atb/components/sections';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
@@ -19,11 +18,11 @@ import {
   ParkingType,
   ParkingVehicleTypes,
 } from '@atb/components/map';
-import {ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {Feature, Point} from 'geojson';
 import {SearchLocation} from '@atb/favorites';
+import {MessageBox} from '@atb/components/message-box';
 
 type Props = {
   name: string | undefined;
@@ -46,8 +45,7 @@ export const ParkAndRideBottomSheet = ({
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
-  const title = !name ? '' : t(ParkAndRideTexts.title);
-  const heading = name && name.length > 0 ? name : t(ParkAndRideTexts.title);
+  const heading = `${t(ParkAndRideTexts.title)} ${name}`;
 
   const [longitude, latitude] = feature.geometry.coordinates;
   const searchLocation: SearchLocation = {
@@ -69,7 +67,7 @@ export const ParkAndRideBottomSheet = ({
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        title={title}
+        title={heading}
         color={'background_1'}
         setFocusOnLoad={false}
       />
@@ -93,13 +91,7 @@ export const ParkAndRideBottomSheet = ({
         </View>
       </View>
       <View style={style.container}>
-        <Section>
-          <GenericSectionItem>
-            <View style={{flex: 1, alignItems: 'center'}}>
-              <ThemeText type={'body__primary--big--bold'}>{heading}</ThemeText>
-            </View>
-          </GenericSectionItem>
-        </Section>
+        <MessageBox type="info" message={t(ParkAndRideTexts.disclaimer)} />
         <VehicleStats
           left={
             <VehicleStat
@@ -134,7 +126,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     buttonsContainer: {
       padding: theme.spacings.medium,
-      marginBottom: theme.spacings.medium,
       flexDirection: 'row',
     },
     travelButton: {

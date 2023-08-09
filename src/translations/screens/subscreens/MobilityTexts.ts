@@ -156,6 +156,11 @@ export const ParkAndRideTexts = {
         return _('Bilparkering', 'Car parking', 'Bilparkering');
     }
   },
+  disclaimer: _(
+    'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringen',
+    'Payment or other terms and conditions may apply to this parking',
+    '',
+  ),
   capacity: _('Plasser totalt', 'Parking spaces', 'Plassar totalt'),
   unknownCapacity: _(
     'Ukjent antall plasser',
