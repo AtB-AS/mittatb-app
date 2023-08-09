@@ -12,6 +12,7 @@ import {
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
+import {MessageBox} from '@atb/components/message-box';
 
 type Props = {
   price: number;
@@ -36,6 +37,7 @@ export function Summary({
   const {t, language} = useTranslation();
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
+  const isFree = price ? price === 0 : false;
 
   const hasSelection = userProfilesWithCount.some((u) => u.count);
 
@@ -113,11 +115,17 @@ export function Summary({
           <SummaryText />
         </>
       )}
-
+      {isFree && (
+        <MessageBox
+          type="valid"
+          message={t(PurchaseOverviewTexts.summary.free)}
+          style={styles.free}
+        />
+      )}
       <Button
         interactiveColor="interactive_0"
         text={t(PurchaseOverviewTexts.summary.button)}
-        disabled={isLoading || !hasSelection || isError}
+        disabled={isLoading || !hasSelection || isFree || isError}
         onPress={toPaymentFunction}
         rightIcon={{svg: ArrowRight}}
         testID="goToPaymentButton"
@@ -130,6 +138,9 @@ export function Summary({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   price: {
     textAlign: 'center',
+  },
+  free: {
+    marginTop: theme.spacings.medium,
   },
   message: {textAlign: 'center', marginTop: theme.spacings.medium},
   button: {marginTop: theme.spacings.xLarge},
