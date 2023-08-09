@@ -35,32 +35,8 @@ const nynorskHumanizerObj = {
   ms: () => 'millisekund',
 };
 
-const completeLanguageObject = {
-  en: {
-    y: () => 'years',
-    mo: () => 'months',
-    w: () => 'weeks',
-    d: () => 'days',
-    h: () => 'hours',
-    m: () => 'minutes',
-    s: () => 'seconds',
-    ms: () => 'milliseconds',
-  },
-  nn: nynorskHumanizerObj,
-  no: {
-    y: () => 'år',
-    mo: () => 'måneder',
-    w: () => 'uker',
-    d: () => 'dager',
-    h: () => 'timer',
-    m: () => 'minutter',
-    s: () => 'sekunder',
-    ms: () => 'millisekunder',
-  },
-};
-
 const humanizer = humanizeDuration.humanizer({
-  languages: completeLanguageObject,
+  languages: {nn: nynorskHumanizerObj},
 });
 
 function parseIfNeeded(a: string | Date): Date {
@@ -102,13 +78,25 @@ export function secondsToMinutesLong(
   });
 }
 
+type HumanizerLanguage = 'no' | 'nn' | 'en';
+
+const languageToHumanizerLanguage = (language: Language): HumanizerLanguage => {
+  switch (language) {
+    case Language.Norwegian:
+      return 'no';
+    case Language.English:
+      return 'en';
+    case Language.Nynorsk:
+      return 'nn';
+  }
+};
+
 export function secondsToDuration(
   seconds: number,
   language: Language,
   opts?: humanizeDuration.Options,
 ): string {
-  const currentLanguage =
-    language === Language.English ? 'en' : Language.Nynorsk ? 'nn' : 'no';
+  const currentLanguage = languageToHumanizerLanguage(language);
   return humanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
@@ -449,8 +437,8 @@ function getHumanizer(
   options?: humanizeDuration.Options,
 ) {
   const opts = {
-    language,
-    languages: completeLanguageObject,
+    language: languageToHumanizerLanguage(language),
+    languages: {nn: nynorskHumanizerObj},
     ...options,
   };
 
