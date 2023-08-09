@@ -1,4 +1,3 @@
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {client} from '@atb/api/index';
 import {
   GetVehicleQuery,
@@ -23,7 +22,7 @@ import {
 type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
 
 export const getVehicles = (
-  {lat, lon, range, operators}: GetVehiclesQueryVariables,
+  {lat, lon, range, operators, formFactors}: GetVehiclesQueryVariables,
   opts?: VehicleRequestOpts,
 ) => {
   const url = '/bff/v2/mobility/vehicles';
@@ -31,7 +30,7 @@ export const getVehicles = (
     lat,
     lon,
     range: Math.ceil(range),
-    formFactors: FormFactor.Scooter, //TODO: Read from variables
+    formFactors,
     operators,
   });
   return client

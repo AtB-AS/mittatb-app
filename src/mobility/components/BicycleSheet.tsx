@@ -4,9 +4,10 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
-import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
+import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Button} from '@atb/components/button';
 import {
+  BicycleTexts,
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
@@ -27,7 +28,7 @@ type Props = {
   vehicleId: VehicleId;
   close: () => void;
 };
-export const ScooterSheet = ({vehicleId: id, close}: Props) => {
+export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
   const {vehicle, isLoading, error} = useVehicle(id);
@@ -72,14 +73,24 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
               </Section>
               <VehicleStats
                 left={
-                  <VehicleStat
-                    svg={Battery}
-                    primaryStat={vehicle.currentFuelPercent + '%'}
-                    secondaryStat={formatRange(
-                      vehicle.currentRangeMeters,
-                      language,
-                    )}
-                  />
+                  (vehicle.vehicleType.propulsionType === 'ELECTRIC' ||
+                    vehicle.vehicleType.propulsionType === 'ELECTRIC_ASSIST') &&
+                  vehicle.currentFuelPercent ? (
+                    <VehicleStat
+                      svg={Battery}
+                      primaryStat={vehicle.currentFuelPercent + '%'}
+                      secondaryStat={formatRange(
+                        vehicle.currentRangeMeters,
+                        language,
+                      )}
+                    />
+                  ) : (
+                    <VehicleStat
+                      svg={Bicycle}
+                      primaryStat={''}
+                      secondaryStat={t(BicycleTexts.humanPoweredBike)}
+                    />
+                  )
                 }
                 right={
                   <PricingPlan

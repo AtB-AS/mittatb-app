@@ -13,9 +13,9 @@ import {
   PointsOnLink,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {AnyMode} from '@atb/components/icon-box';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -45,7 +45,7 @@ export type MapPadding =
   | [number, number, number, number];
 
 export type VehiclesState = {
-  vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
+  vehicles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
   updateRegion: (region: MapRegion) => void;
   isLoading: boolean;
   onFilterChange: (filter: VehiclesFilterType) => void;
@@ -151,6 +151,7 @@ export type OperatorFilterType = {
 
 export type VehiclesFilterType = {
   scooters?: OperatorFilterType;
+  bicycles?: OperatorFilterType;
 };
 
 export type StationsFilterType = {

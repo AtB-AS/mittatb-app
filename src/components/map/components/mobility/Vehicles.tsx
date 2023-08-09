@@ -1,120 +1,62 @@
-import React, {RefObject, useRef} from 'react';
+import React, {RefObject} from 'react';
 import {Feature, FeatureCollection, GeoJSON, Point} from 'geojson';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
-import MapboxGL from '@rnmapbox/maps';
-import {
-  flyToLocation,
-  isClusterFeature,
-  mapPositionToCoordinates,
-} from '../../utils';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {Cluster} from '../../types';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useAnalytics} from '@atb/analytics';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Scooters} from './Scooters';
+import {Bicycles} from './Bicycles';
+import {flyToLocation, isClusterFeature} from '@atb/components/map';
+import {mapPositionToCoordinates} from '../../utils';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
-  vehicles: FeatureCollection<GeoJSON.Point, VehicleFragment>;
+  vehicles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
   onClusterClick: (feature: Feature<Point, Cluster>) => void;
 };
 
 export const Vehicles = ({mapCameraRef, vehicles, onClusterClick}: Props) => {
-  const clustersSource = useRef<MapboxGL.ShapeSource>(null);
-  const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
-  const scooterColor = useTransportationColor(Mode.Scooter);
-  const analytics = useAnalytics();
+  const scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment> =
+    getFeaturesOfType(vehicles, FormFactor.Scooter);
+  const bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment> =
+    getFeaturesOfType(vehicles, FormFactor.Bicycle);
+
+  const handleClusterClick = async (
+    e: OnPressEvent,
+    clustersSource: RefObject<ShapeSource>,
+  ) => {
+    const [feature, ,] = e.features;
+    if (isClusterFeature(feature)) {
+      const clusterExpansionZoom =
+        (await clustersSource.current?.getClusterExpansionZoom(feature)) ?? 0;
+      const zoomLevel = Math.max(clusterExpansionZoom, 17.5);
+      flyToLocation({
+        coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
+        mapCameraRef,
+        zoomLevel,
+        animationDuration: 400,
+      });
+      onClusterClick(feature);
+    }
+  };
 
   return (
     <>
-      <MapboxGL.ShapeSource
-        id={'vehicleClusters'}
-        ref={clustersSource}
-        shape={vehicles}
-        tolerance={0}
-        cluster
-        maxZoomLevel={22}
-        clusterMaxZoomLevel={21}
-        onPress={async (e) => {
-          const [feature, ,] = e.features;
-          if (isClusterFeature(feature)) {
-            const clusterExpansionZoom =
-              (await clustersSource.current?.getClusterExpansionZoom(
-                feature,
-              )) ?? 0;
-            const zoomLevel = Math.max(clusterExpansionZoom, 17.5);
-            flyToLocation({
-              coordinates: mapPositionToCoordinates(
-                feature.geometry.coordinates,
-              ),
-              mapCameraRef,
-              zoomLevel,
-              animationDuration: 400,
-            });
-            analytics.logEvent('Map', 'Scooter cluster clicked', {zoomLevel});
-            onClusterClick(feature);
-          }
-        }}
-      >
-        <MapboxGL.SymbolLayer
-          id="clusterIcon"
-          filter={['has', 'point_count']}
-          minZoomLevel={13.5}
-          style={{
-            iconImage: 'ScooterCluster',
-            iconSize: 0.85,
-            iconAllowOverlap: true,
-          }}
-        />
-        <MapboxGL.SymbolLayer
-          id="clusterCountCircle"
-          filter={['has', 'point_count']}
-          minZoomLevel={13.5}
-          aboveLayerID="clusterIcon"
-          style={{
-            iconImage: 'ClusterCount',
-            iconAllowOverlap: true,
-            iconTranslate: [13, -13],
-          }}
-        />
-        <MapboxGL.SymbolLayer
-          id="clusterCount"
-          filter={['has', 'point_count']}
-          minZoomLevel={13.5}
-          aboveLayerID="clusterCountCircle"
-          style={{
-            textField: ['get', 'point_count'],
-            textColor: scooterColor,
-            textSize: 11,
-            textTranslate: [13, -13],
-            textAllowOverlap: true,
-          }}
-        />
-      </MapboxGL.ShapeSource>
-      <MapboxGL.ShapeSource
-        id={'vehicles'}
-        ref={vehiclesSource}
-        shape={vehicles}
-        tolerance={0}
-        cluster
-        maxZoomLevel={22}
-        clusterMaxZoomLevel={21}
-      >
-        <MapboxGL.SymbolLayer
-          id="icon"
-          filter={['!', ['has', 'point_count']]}
-          minZoomLevel={13.5}
-          style={{
-            textField: ['concat', ['get', 'currentFuelPercent'], '%'],
-            textAnchor: 'center',
-            textOffset: [0.7, -0.25],
-            textColor: scooterColor,
-            textSize: 11,
-            iconImage: 'ScooterChip',
-            iconSize: 0.85,
-            iconAllowOverlap: true,
-          }}
-        />
-      </MapboxGL.ShapeSource>
+      <Scooters scooters={scooters} onClusterClick={handleClusterClick} />
+      <Bicycles bicycles={bicycles} onClusterClick={handleClusterClick} />
     </>
   );
 };
+
+function getFeaturesOfType(
+  vehicles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>,
+  formFactor: FormFactor,
+) {
+  return {
+    ...vehicles,
+    features: vehicles.features.filter(
+      (f) => f.properties.vehicleType.formFactor === formFactor,
+    ),
+  };
+}

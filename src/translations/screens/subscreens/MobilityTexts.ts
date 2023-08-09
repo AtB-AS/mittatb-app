@@ -98,6 +98,7 @@ export const BicycleTexts = {
     numDocksAvailable: _('Ledige plasser', 'Available docks', 'Ledige plassar'),
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
   },
+  humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
   loadingFailed: _(
     'Ops! Vi fant ikke denne sykkelstasjonen',
     "Ops! We couldn't find this bike station",

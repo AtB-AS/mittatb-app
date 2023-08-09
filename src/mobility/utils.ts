@@ -1,5 +1,5 @@
 import {Feature, Point, Polygon, Position} from 'geojson';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
   RentalUrisFragment,
@@ -14,11 +14,19 @@ import {
   StationBasicFragment,
   VehicleTypeAvailabilityBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
+import {Language} from '@atb/translations';
+import {formatDecimalNumber} from '@atb/utils/numbers';
 
-export const isVehicle = (
+export const isScooter = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehicleFragment> =>
-  'currentFuelPercent' in (feature?.properties ?? {});
+): feature is Feature<Point, VehicleBasicFragment> =>
+  feature?.properties?.vehicleType?.formFactor === FormFactor.Scooter;
+
+export const isBicycle = (
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, VehicleBasicFragment> =>
+  feature?.properties?.vehicleType?.formFactor === FormFactor.Bicycle &&
+  !isStation(feature);
 
 export const isStation = (
   feature: Feature<Point> | undefined,
@@ -133,4 +141,12 @@ export const updateAreaState = (
       loadedArea: extend(toFeaturePoint({lat, lon}), range),
     };
   };
+};
+
+export const formatRange = (rangeInMeters: number, language: Language) => {
+  const rangeInKm =
+    rangeInMeters > 5000
+      ? (rangeInMeters / 1000).toFixed(0)
+      : formatDecimalNumber(rangeInMeters / 1000, language, 1);
+  return `ca. ${rangeInKm} km`;
 };

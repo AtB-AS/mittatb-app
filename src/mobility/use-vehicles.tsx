@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import {Point} from 'geojson';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   MapRegion,
   toFeatureCollection,
@@ -15,11 +15,22 @@ import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from '@atb/mobility/use-vehicles-poll-interval';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
 
-const emptyVehicles = toFeatureCollection<Point, VehicleFragment>([]);
+const emptyVehicles = toFeatureCollection<Point, VehicleBasicFragment>([]);
+
+function formFactorsFromFilter(
+  filter: VehiclesFilterType | undefined,
+): FormFactor[] {
+  if (!filter) return [FormFactor.Scooter, FormFactor.Bicycle];
+  const formFactors = [];
+  if (filter.scooters) formFactors.push(FormFactor.Scooter);
+  if (filter.bicycles) formFactors.push(FormFactor.Bicycle);
+  return formFactors;
+}
 
 export const useVehicles: () => VehiclesState | undefined = () => {
   const [area, setArea] = useState<AreaState>();
@@ -50,6 +61,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
           {
             ...area,
             operators: filter?.scooters?.operators,
+            formFactors: formFactorsFromFilter(filter),
           },
           {signal},
         )
