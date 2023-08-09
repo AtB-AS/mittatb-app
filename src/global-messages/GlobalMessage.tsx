@@ -13,7 +13,7 @@ import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 import {RuleVariables} from './rules';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContextEnum | 'all';
+  globalMessageContext?: GlobalMessageContextEnum;
   style?: StyleProp<ViewStyle>;
   includeDismissed?: boolean;
   ruleVariables?: RuleVariables;

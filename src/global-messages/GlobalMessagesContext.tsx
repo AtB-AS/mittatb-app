@@ -21,7 +21,7 @@ import {checkRules, RuleVariables} from './rules';
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
-    context: GlobalMessageContextEnum | 'all',
+    context: GlobalMessageContextEnum,
     ruleVariables?: RuleVariables,
   ) => GlobalMessageType[];
   dismissedGlobalMessages: GlobalMessageType[];
@@ -103,14 +103,9 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   };
 
   const findGlobalMessages = useCallback(
-    (
-      context: GlobalMessageContextEnum | 'all',
-      ruleVariables: RuleVariables = {},
-    ) => {
+    (context: GlobalMessageContextEnum, ruleVariables: RuleVariables = {}) => {
       return globalMessages.filter((gm) => {
-        const withSameContext = gm.context.find(
-          (c) => c === context || context === 'all',
-        );
+        const withSameContext = gm.context.find((c) => c === context);
         if (!withSameContext) return false;
         if (gm.rules?.length) {
           const passRules = checkRules(gm.rules, ruleVariables);
