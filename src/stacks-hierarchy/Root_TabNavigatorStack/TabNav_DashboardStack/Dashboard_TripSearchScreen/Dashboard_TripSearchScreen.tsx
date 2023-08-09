@@ -58,6 +58,7 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalytics} from '@atb/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -76,6 +77,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
+  const isFocused = useIsFocusedAndActive();
 
   const shouldShowTravelSearchFilterOnboarding =
     useShouldShowTravelSearchFilterOnboarding();
@@ -262,14 +264,16 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           },
         }}
         refreshControl={
-          <RefreshControl
-            refreshing={
-              Platform.OS === 'ios'
-                ? false
-                : searchState === 'searching' && !tripPatterns.length
-            }
-            onRefresh={refresh}
-          />
+          isFocused ? (
+            <RefreshControl
+              refreshing={
+                Platform.OS === 'ios'
+                  ? false
+                  : searchState === 'searching' && !tripPatterns.length
+              }
+              onRefresh={refresh}
+            />
+          ) : undefined
         }
         parallaxContent={() => (
           <View style={style.searchHeader}>
