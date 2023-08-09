@@ -11,19 +11,19 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   scooters: OperatorFilterType | undefined;
-  cityBikeStations: OperatorFilterType | undefined;
+  bikeStations: OperatorFilterType | undefined;
   carSharingStations: OperatorFilterType | undefined;
   onScootersChanged: (operatorFilter: OperatorFilterType) => void;
-  onCityBikeStationsChanged: (operatorFilter: OperatorFilterType) => void;
+  onBikeStationsChanged: (operatorFilter: OperatorFilterType) => void;
   onCarSharingStationsChanged: (operatorFilter: OperatorFilterType) => void;
 };
 
 export const MobilityFilters = ({
   scooters,
-  cityBikeStations,
+  bikeStations,
   carSharingStations,
   onScootersChanged,
-  onCityBikeStationsChanged,
+  onBikeStationsChanged,
   onCarSharingStationsChanged,
 }: Props) => {
   const style = useStyle();
@@ -42,8 +42,8 @@ export const MobilityFilters = ({
       {isCityBikesEnabled && (
         <BikeFilter
           style={style.filterGroup}
-          initialFilter={cityBikeStations}
-          onFilterChange={onCityBikeStationsChanged}
+          initialFilter={bikeStations}
+          onFilterChange={onBikeStationsChanged}
         />
       )}
       {isCarSharingEnabled && (

@@ -57,7 +57,7 @@ export const MapFilterSheet = ({
     setFilter(newFilter);
   };
 
-  const onCityBikeStationsChanged = (operatorFilter: OperatorFilterType) => {
+  const onBikeStationsChanged = (operatorFilter: OperatorFilterType) => {
     const newFilter = {
       ...filter,
       stations: {
@@ -93,10 +93,10 @@ export const MapFilterSheet = ({
       <ScrollView style={style.container}>
         <MobilityFilters
           scooters={initialFilter.vehicles?.scooters}
-          cityBikeStations={initialFilter.stations?.cityBikeStations}
+          bikeStations={initialFilter.stations?.cityBikeStations}
           carSharingStations={initialFilter.stations?.carSharingStations}
           onScootersChanged={onScootersChanged}
-          onCityBikeStationsChanged={onCityBikeStationsChanged}
+          onBikeStationsChanged={onBikeStationsChanged}
           onCarSharingStationsChanged={onCarSharingStationsChanged}
         />
       </ScrollView>

@@ -12,7 +12,7 @@ import {
   isCarStation,
   isScooter,
 } from '@atb/mobility/utils';
-import {CityBikeStationSheet} from '@atb/mobility/components/CityBikeStationBottomSheet';
+import {BikeStationSheet} from '@atb/mobility/components/BikeStationBottomSheet';
 import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
 import {CarSharingStationSheet} from '@atb/mobility/components/CarSharingStationBottomSheet';
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
@@ -87,7 +87,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       } else if (isBikeStation(selectedFeature)) {
         openBottomSheet(
           () => (
-            <CityBikeStationSheet
+            <BikeStationSheet
               stationId={selectedFeature.properties.id}
               distance={distance}
               close={closeWithCallback}

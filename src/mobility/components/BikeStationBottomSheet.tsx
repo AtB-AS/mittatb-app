@@ -32,7 +32,7 @@ type Props = {
   close: () => void;
 };
 
-export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
+export const BikeStationSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const {themeName} = useTheme();
   const style = useSheetStyle();
