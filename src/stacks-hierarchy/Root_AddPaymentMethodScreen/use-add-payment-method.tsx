@@ -18,7 +18,6 @@ export const useAddPaymentMethod = () => {
     const redirectUrl = `${APP_SCHEME}://profile`;
     addPaymentMethod(redirectUrl)
       .then(setAddPaymentMethodResponse)
-      .then(() => setIsLoading(false))
       .catch(setError);
   }, []);
 
@@ -31,6 +30,7 @@ export const useAddPaymentMethod = () => {
   };
 
   const onWebViewNavigationChange = (event: WebViewNavigation) => {
+    setIsLoading(event.loading);
     console.log('onWebViewNavigationChange:');
     console.log(JSON.stringify(event));
   };
