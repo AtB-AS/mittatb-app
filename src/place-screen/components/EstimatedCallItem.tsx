@@ -1,5 +1,5 @@
-import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import React, {memo} from 'react';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -28,10 +28,7 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 import {StyleSheet, useTheme} from '@atb/theme';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {isToday, parseISO} from 'date-fns';
-import {
-  FavouriteDepartureToggle,
-  useOnMarkFavouriteDepartures,
-} from '@atb/favorites';
+
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
@@ -46,6 +43,11 @@ import {
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {
+  FavouriteDepartureToggle,
+  useOnMarkFavouriteDepartures,
+} from '@atb/favorites';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -64,7 +66,7 @@ type EstimatedCallItemProps = {
   mode: StopPlacesMode;
 };
 
-export function EstimatedCallItem({
+export const EstimatedCallItem = memo(function ({
   departure,
   testID,
   quay,
@@ -85,7 +87,6 @@ export function EstimatedCallItem({
   const lineNumber = line?.publicCode;
 
   const notices = getNoticesForEstimatedCall(departure);
-
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
     useOnMarkFavouriteDepartures(
       {...line, lineNumber: lineNumber, lineName: lineName},
@@ -106,20 +107,22 @@ export function EstimatedCallItem({
           : undefined
       }
     >
-      <TouchableOpacity
+      <PressableOpacity
         style={styles.actionableItem}
         disabled={!navigateToDetails}
-        onPress={() => {
-          if (navigateToDetails && departure?.serviceJourney) {
-            navigateToDetails(
-              departure.serviceJourney?.id,
-              departure.date,
-              departure.aimedDepartureTime,
-              departure.quay?.id,
-              departure.cancellation,
-            );
-          }
-        }}
+        onPress={
+          navigateToDetails && departure?.serviceJourney
+            ? () => {
+                navigateToDetails(
+                  departure.serviceJourney?.id,
+                  departure.date,
+                  departure.aimedDepartureTime,
+                  departure.quay?.id,
+                  departure.cancellation,
+                );
+              }
+            : undefined
+        }
         accessible={!!navigateToDetails}
         importantForAccessibility={!!navigateToDetails ? 'yes' : 'no'}
         accessibilityHint={
@@ -179,10 +182,10 @@ export function EstimatedCallItem({
             />
           )}
         </View>
-      </TouchableOpacity>
+      </PressableOpacity>
     </TouchableOpacityOrView>
   );
-}
+});
 
 const DepartureTime = ({
   isTripCancelled,

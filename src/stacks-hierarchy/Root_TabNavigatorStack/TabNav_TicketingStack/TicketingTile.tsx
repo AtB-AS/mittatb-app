@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -55,7 +55,7 @@ export const TicketingTile = ({
   );
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       accessible={true}
       accessibilityLabel={accessibilityLabel}
@@ -100,7 +100,7 @@ export const TicketingTile = ({
           height={theme.icon.size.large}
         />
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

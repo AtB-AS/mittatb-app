@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  AccessibilityProps,
-  GestureResponderEvent,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {StoredFavoriteDeparture} from '@atb/favorites';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
@@ -14,6 +9,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;
@@ -42,7 +38,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
     : `${favorite.lineLineNumber} ${favorite.lineName}, ${favorite.quayName}`;
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessible
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
@@ -51,7 +47,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
       testID={props.testID}
     >
       <FavoriteItemContent {...props} />
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 

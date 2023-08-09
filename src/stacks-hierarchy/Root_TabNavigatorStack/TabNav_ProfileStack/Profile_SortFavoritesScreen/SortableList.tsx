@@ -11,7 +11,7 @@ import {FavoriteIcon, LocationFavorite, UserFavorites} from '@atb/favorites';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import React, {useCallback} from 'react';
-import {FlatList, TouchableOpacity, View} from 'react-native';
+import {FlatList, Pressable, View} from 'react-native';
 import {immutableMove} from './sort-utils';
 
 type SortableListFallbackProps = {
@@ -133,7 +133,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   }
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => onPress({item, direction, index, length})}
       accessibilityRole="button"
       accessible
@@ -144,6 +144,6 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
       testID={direction}
     >
       <ThemeIcon svg={Icon} />
-    </TouchableOpacity>
+    </Pressable>
   );
 }

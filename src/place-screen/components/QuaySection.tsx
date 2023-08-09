@@ -13,7 +13,7 @@ import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {EstimatedCallItem} from './EstimatedCallItem';
@@ -43,8 +43,25 @@ type QuaySectionProps = {
   mode: StopPlacesMode;
 };
 
+type EstimatedCallWithData = {
+  departure: EstimatedCall;
+  quay: Quay;
+  mode: StopPlacesMode;
+  allowFavouriteSelection: boolean;
+  stopPlace: StopPlace;
+  navigateToDetails?: (
+    serviceJourneyId: string,
+    serviceDate: string,
+    date?: string,
+    fromQuayId?: string,
+    isTripCancelled?: boolean,
+  ) => void;
+  departuresPerQuay?: number;
+  addedFavoritesVisibleOnDashboard?: boolean;
+};
+
 type EstimatedCallRenderItem = {
-  item: EstimatedCall;
+  item: EstimatedCallWithData;
   index: number;
 };
 
@@ -91,7 +108,40 @@ export function QuaySection({
     (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
 
   const situations = quay.situations.filter(isSituationValidAtDate(searchDate));
+  const estimatedCallsWithData = departuresToDisplay
+    .slice(0, departuresPerQuay)
+    .map((departure) => {
+      return {
+        departure,
+        navigateToDetails,
+        stopPlace,
+        quay,
+        departuresPerQuay,
+        addedFavoritesVisibleOnDashboard,
+        allowFavouriteSelection,
+        mode,
+      } as EstimatedCallWithData;
+    });
 
+  const renderItem = useCallback(
+    ({item, index}: EstimatedCallRenderItem) => (
+      <GenericSectionItem radius={'bottom'} testID={'departureItem' + index}>
+        <EstimatedCallItem
+          departure={item.departure}
+          quay={item.quay}
+          stopPlace={item.stopPlace}
+          addedFavoritesVisibleOnDashboard={
+            item.addedFavoritesVisibleOnDashboard
+          }
+          allowFavouriteSelection={item.allowFavouriteSelection}
+          navigateToDetails={item.navigateToDetails}
+          mode={item.mode}
+          testID={'departureItem' + index}
+        />
+      </GenericSectionItem>
+    ),
+    [],
+  );
   return (
     <View testID={testID}>
       <Section style={styles.section}>
@@ -140,39 +190,16 @@ export function QuaySection({
         {!isMinimized && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
-            data={
-              departuresToDisplay &&
-              departuresToDisplay.slice(0, departuresPerQuay)
-            }
-            renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
-              <GenericSectionItem
-                radius={
-                  index === departuresToDisplay.length - 1 &&
-                  !shouldShowMoreItemsLink
-                    ? 'bottom'
-                    : undefined
-                }
-                testID={'departureItem' + index}
-              >
-                <EstimatedCallItem
-                  departure={departure}
-                  testID={'departureItem' + index}
-                  quay={quay}
-                  stopPlace={stopPlace}
-                  navigateToDetails={navigateToDetails}
-                  addedFavoritesVisibleOnDashboard={
-                    addedFavoritesVisibleOnDashboard
-                  }
-                  allowFavouriteSelection={allowFavouriteSelection}
-                  mode={mode}
-                />
-              </GenericSectionItem>
-            )}
-            keyExtractor={(item: EstimatedCall) =>
+            data={estimatedCallsWithData}
+            renderItem={renderItem}
+            removeClippedSubviews={true}
+            windowSize={4}
+            keyExtractor={(item: EstimatedCallWithData) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney
               // passes by the same stop several times, (e.g. Ringen in Oslo)
               // which is why it is used in combination with aimedDepartureTime.
-              item.serviceJourney?.id + item.aimedDepartureTime
+              item.departure.serviceJourney?.id +
+              item.departure.aimedDepartureTime
             }
             ListEmptyComponent={
               <>
@@ -233,9 +260,7 @@ function getDeparturesForQuay(
   quay: Quay,
 ): EstimatedCall[] {
   if (!departures) return [];
-  return departures.filter(
-    (departure) => departure && departure.quay?.id === quay.id,
-  );
+  return departures.filter((departure) => departure?.quay?.id === quay.id);
 }
 
 function compareByLineNameAndDesc(

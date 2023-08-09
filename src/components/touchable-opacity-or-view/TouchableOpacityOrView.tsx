@@ -1,11 +1,6 @@
-import {
-  AccessibilityProps,
-  StyleProp,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {ReactNode} from 'react';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export const TouchableOpacityOrView = ({
   style,
@@ -18,9 +13,9 @@ export const TouchableOpacityOrView = ({
   onClick?: () => void;
 } & AccessibilityProps) => {
   return onClick ? (
-    <TouchableOpacity onPress={onClick} style={style} {...a11yProps}>
+    <PressableOpacity onPress={onClick} style={style} {...a11yProps}>
       {children}
-    </TouchableOpacity>
+    </PressableOpacity>
   ) : (
     <View style={style} {...a11yProps}>
       {children}

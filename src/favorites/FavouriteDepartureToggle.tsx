@@ -1,4 +1,3 @@
-import {TouchableOpacity} from 'react-native';
 import {insets} from '@atb/utils/insets';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import React from 'react';
@@ -8,6 +7,7 @@ import {StoredType} from './storage';
 import {FavoriteDeparture} from './types';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   onMarkFavourite?: () => void;
@@ -22,7 +22,7 @@ export const FavouriteDepartureToggle = ({
 }: Props) => {
   const style = useStyles();
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={onMarkFavourite}
       accessibilityRole="checkbox"
       accessibilityState={{checked: !!existingFavorite}}
@@ -37,7 +37,7 @@ export const FavouriteDepartureToggle = ({
       testID={getFavoriteIconTestID(existingFavorite)}
     >
       <ThemeIcon svg={getFavoriteIcon(existingFavorite)} />
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

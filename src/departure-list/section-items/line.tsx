@@ -33,7 +33,7 @@ import {
 import {insets} from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {Pressable, ScrollView, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
@@ -95,7 +95,7 @@ export function LineItem({
   return (
     <View style={[topContainer, {padding: 0}]} testID={testID}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
-        <TouchableOpacity
+        <Pressable
           style={[styles.lineHeader, contentContainer]}
           onPress={() => onPressDeparture(items, 0)}
           hitSlop={insets.symmetric(12, 0)}
@@ -120,7 +120,7 @@ export function LineItem({
           <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
             {title}
           </ThemeText>
-        </TouchableOpacity>
+        </Pressable>
         {mode === 'departures' && (
           <FavouriteDepartureToggle
             existingFavorite={existingFavorite}

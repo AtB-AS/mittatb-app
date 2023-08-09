@@ -12,7 +12,7 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {TouchableOpacity, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 
@@ -101,7 +101,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
 
         const tabColor = isFocused ? 'background_1' : 'background_accent_0';
         return (
-          <TouchableOpacity
+          <Pressable
             key={index}
             accessibilityRole="button"
             accessibilityState={isFocused ? {selected: true} : {}}
@@ -122,7 +122,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             >
               {label}
             </ThemeText>
-          </TouchableOpacity>
+          </Pressable>
         );
       })}
     </View>

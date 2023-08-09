@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  AccessibilityProps,
-  AccessibilityRole,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {AccessibilityProps, AccessibilityRole, View} from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
@@ -14,6 +9,7 @@ import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {InteractiveColor} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ActionModes = 'check';
 type Props = SectionItemProps<{
@@ -51,7 +47,7 @@ export function ActionSectionItem({
   const stateName = mode === 'check' ? 'selected' : 'expanded';
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={() => onPress(!checked)}
       style={[
         style.spaceBetween,
@@ -95,7 +91,7 @@ export function ActionSectionItem({
         checked={checked}
         color={interactiveColor ? color : undefined}
       />
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 

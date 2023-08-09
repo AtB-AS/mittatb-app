@@ -3,10 +3,10 @@ import {
   AccessibilityInfo,
   NativeSyntheticEvent,
   Platform,
+  Pressable,
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -125,7 +125,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         />
         {showClear ? (
           <View style={styles.inputClear}>
-            <TouchableOpacity
+            <Pressable
               accessible={true}
               accessibilityRole="button"
               accessibilityLabel={t(SectionTexts.textInput.clear)}
@@ -133,7 +133,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
               onPress={onClearEvent}
             >
               <ThemeIcon svg={Close} />
-            </TouchableOpacity>
+            </Pressable>
           </View>
         ) : null}
       </View>

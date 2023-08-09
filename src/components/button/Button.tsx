@@ -5,9 +5,9 @@ import React, {useRef} from 'react';
 import {
   Animated,
   Easing,
+  Pressable,
   StyleProp,
   TextStyle,
-  TouchableOpacity,
   TouchableOpacityProps,
   View,
   ViewStyle,
@@ -160,7 +160,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     return (
       <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
-        <TouchableOpacity
+        <Pressable
           style={[styleContainer, style]}
           onPress={disabled ? undefined : onPress}
           disabled={disabled}
@@ -189,7 +189,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
               <ThemeIcon fill={textColor} {...rightIcon} />
             </View>
           )}
-        </TouchableOpacity>
+        </Pressable>
       </Animated.View>
     );
   },
