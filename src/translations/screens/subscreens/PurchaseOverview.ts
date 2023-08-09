@@ -106,13 +106,13 @@ const PurchaseOverviewTexts = {
         a11yLabel: (harbor?: string) =>
           _(
             `Valgt ankomstkai: ${harbor ?? 'Ingen kai valgt'}`,
-            `Selected destination harbor: ${harbor ?? 'Ingen kai valgt'}`,
-            `Valt ankomstkai: ${harbor ?? 'Inga kai valt'}`,
+            `Selected destination harbor: ${harbor ?? 'No harbor selected'}`,
+            `Valt framkomstkai: ${harbor ?? 'Inga kai valt'}`,
           ),
         a11yHint: _(
           'Aktivér for å velge ankomstkai',
           'Activate to select destination harbor',
-          'Aktivér for å velje ankomstkai',
+          'Aktivér for å velje framkomstkai',
         ),
       },
     },

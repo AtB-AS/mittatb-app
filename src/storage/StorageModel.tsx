@@ -20,6 +20,7 @@ export enum StorageModelKeysEnum {
   EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',
   EnableTipsAndInformationOverride = '@ATB_enable_tips_and_information_override',
   EnableNonTransitTripSearch = '@ATB_enable_non_transit_trip_search',
+  ShowValidTimeInfoDebugOverride = '@ATB_show_valid_time_info_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

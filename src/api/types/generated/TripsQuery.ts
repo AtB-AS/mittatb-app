@@ -37,6 +37,7 @@ export type TripFragment = {
       expectedStartTime: any;
       realtime: boolean;
       transportSubmode?: Types.TransportSubmode;
+      rentedBike?: boolean;
       line?: {
         id: string;
         name?: string;

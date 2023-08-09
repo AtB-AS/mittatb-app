@@ -43,7 +43,7 @@ import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
-import {FareContractDestinations} from './components/FareContractDestinations';
+import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 
 export type FareContractInfoProps = {
   travelRights: PreActivatedTravelRight[];
@@ -79,15 +79,15 @@ export const FareContractInfo = ({
   fareContract,
   fareProductType,
 }: FareContractInfoProps) => {
-  const {tariffZones, userProfiles, preassignedFareProducts, boatStopPoints} =
+  const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
 
   const firstTravelRight = travelRights[0];
   const {
     fareProductRef: productRef,
     tariffZoneRefs,
-    startPointRef,
-    endPointRef,
+    startPointRef: fromStopPlaceId,
+    endPointRef: toStopPlaceId,
   } = firstTravelRight;
 
   const firstZone = tariffZoneRefs?.[0];
@@ -109,10 +109,6 @@ export const FareContractInfo = ({
     userProfiles,
   );
 
-  const [startPlaceName, endPlaceName] = [startPointRef, endPointRef].map(
-    (pointRef) => boatStopPoints.find((bsp) => bsp.id == pointRef)?.name || '',
-  );
-
   return (
     <View style={{flex: 1}}>
       <FareContractInfoHeader
@@ -121,8 +117,8 @@ export const FareContractInfo = ({
         testID={testID}
         status={status}
         fareProductType={fareProductType}
-        startPlaceName={startPlaceName}
-        endPlaceName={endPlaceName}
+        fromStopPlaceId={fromStopPlaceId}
+        toStopPlaceId={toStopPlaceId}
       />
       <SectionSeparator />
       {fareContract && (
@@ -155,16 +151,16 @@ const FareContractInfoHeader = ({
   testID,
   status,
   fareProductType,
-  startPlaceName,
-  endPlaceName,
+  fromStopPlaceId,
+  toStopPlaceId,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
   isInspectable?: boolean;
   testID?: string;
   status: FareContractInfoProps['status'];
   fareProductType?: string;
-  startPlaceName?: string;
-  endPlaceName?: string;
+  fromStopPlaceId?: string;
+  toStopPlaceId?: string;
 }) => {
   const styles = useStyles();
   const {language} = useTranslation();
@@ -210,9 +206,9 @@ const FareContractInfoHeader = ({
         )}
       </View>
       {['boat-single', 'boat-period'].includes(fareProductType || '') && (
-        <FareContractDestinations
-          startPlaceName={startPlaceName}
-          endPlaceName={endPlaceName}
+        <FareContractHarborStopPlaces
+          fromStopPlaceId={fromStopPlaceId}
+          toStopPlaceId={toStopPlaceId}
           showTwoWayIcon={fareProductType === 'boat-period'}
         />
       )}

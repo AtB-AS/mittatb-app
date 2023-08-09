@@ -30,6 +30,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {AnalyticsContextProvider} from '@atb/analytics';
+import {ReactQueryProvider} from '@atb/queries';
 
 configureAndStartBugsnag();
 
@@ -81,11 +82,13 @@ export const App = () => {
                                     <AppLanguageProvider>
                                       <GeolocationContextProvider>
                                         <GlobalMessagesContextProvider>
-                                          <BottomSheetProvider>
-                                            <FeedbackQuestionsProvider>
-                                              <RootStack />
-                                            </FeedbackQuestionsProvider>
-                                          </BottomSheetProvider>
+                                          <ReactQueryProvider>
+                                            <BottomSheetProvider>
+                                              <FeedbackQuestionsProvider>
+                                                <RootStack />
+                                              </FeedbackQuestionsProvider>
+                                            </BottomSheetProvider>
+                                          </ReactQueryProvider>
                                         </GlobalMessagesContextProvider>
                                       </GeolocationContextProvider>
                                     </AppLanguageProvider>

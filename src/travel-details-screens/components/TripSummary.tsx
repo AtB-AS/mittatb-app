@@ -1,8 +1,5 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {Walk} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
-
+import {Walk, Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
@@ -11,74 +8,73 @@ import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {SummaryDetail} from '@atb/travel-details-screens/components/SummaryDetail';
 
 export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
-  const walkDistance = legs
-    .filter((l) => l.mode === Mode.Foot)
-    .reduce((tot, {distance}) => tot + distance, 0);
-  const readableDistance = useHumanizeDistance(walkDistance);
+  const walkDistance = getDistance(legs, Mode.Foot);
+  const bikeDistance = getDistance(legs, Mode.Bicycle);
+  const readableWalkDistance = useHumanizeDistance(walkDistance);
+  const readableBikeDistance = useHumanizeDistance(bikeDistance);
+
   return (
     <View style={styles.tripSummary}>
-      <View style={styles.summaryDetail}>
-        <ThemeIcon
-          colorType="disabled"
-          style={styles.leftIcon}
-          svg={Duration}
-        />
-        <ThemeText
-          color="secondary"
-          accessible={true}
-          style={styles.detailText}
+      <SummaryDetail
+        icon={Duration}
+        accessibilityLabel={t(
+          TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
+        )}
+        label={t(TripDetailsTexts.trip.summary.travelTime.label(time))}
+        testID="travelTime"
+      />
+      {readableWalkDistance && (
+        <SummaryDetail
+          icon={Walk}
           accessibilityLabel={t(
-            TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
+            TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
+              readableWalkDistance,
+            ),
           )}
-          testID="travelTime"
-        >
-          {t(TripDetailsTexts.trip.summary.travelTime.label(time))}
-        </ThemeText>
-      </View>
-      {readableDistance && (
-        <View style={styles.summaryDetail}>
-          <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={Walk} />
-          <ThemeText
-            color="secondary"
-            accessible={true}
-            style={styles.detailText}
-            accessibilityLabel={t(
-              TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
-                readableDistance,
-              ),
-            )}
-            testID="walkDistance"
-          >
-            {t(
-              TripDetailsTexts.trip.summary.walkDistance.label(
-                readableDistance,
-              ),
-            )}
-          </ThemeText>
-        </View>
+          label={t(
+            TripDetailsTexts.trip.summary.walkDistance.label(
+              readableWalkDistance,
+            ),
+          )}
+          testID="walkDistance"
+        />
+      )}
+      {readableBikeDistance && (
+        <SummaryDetail
+          icon={Bicycle}
+          accessibilityLabel={t(
+            TripDetailsTexts.trip.summary.bikeDistance.a11yLabel(
+              readableBikeDistance,
+            ),
+          )}
+          label={t(
+            TripDetailsTexts.trip.summary.bikeDistance.label(
+              readableBikeDistance,
+            ),
+          )}
+        />
       )}
     </View>
   );
 };
+
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   tripSummary: {
     paddingVertical: theme.spacings.medium,
   },
-  detailText: {
-    flex: 1,
-  },
-  summaryDetail: {
-    padding: theme.spacings.medium,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  leftIcon: {
-    marginRight: theme.spacings.small,
-  },
 }));
+
+function getDistance<T extends {mode: Mode; distance: number}>(
+  legs: Array<T>,
+  mode: Mode,
+) {
+  return legs
+    .filter((l) => l.mode === mode)
+    .reduce((tot, {distance}) => tot + distance, 0);
+}

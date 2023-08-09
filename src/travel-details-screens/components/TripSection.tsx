@@ -39,7 +39,7 @@ import {
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
 import {TripRow} from './TripRow';
-import {WaitSection, WaitDetails} from './WaitSection';
+import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {TripProps} from '@atb/travel-details-screens/components/Trip';
@@ -48,6 +48,7 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -83,7 +84,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const style = useSectionStyles();
   const {themeName} = useTheme();
 
-  const isWalkSection = leg.mode === 'foot';
+  const isWalkSection = leg.mode === Mode.Foot;
+  const isBikeSection = leg.mode === Mode.Bicycle;
   const isFlexible = isLegFlexibleTransport(leg);
   const legColor = useTransportationColor(
     isFlexible ? 'flex' : leg.mode,
@@ -146,6 +148,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {isWalkSection ? (
           <WalkSection {...leg} />
+        ) : isBikeSection ? (
+          <BikeSection {...leg} />
         ) : (
           <TripRow
             testID="transportationLeg"
@@ -358,6 +362,29 @@ const WalkSection = (leg: Leg) => {
               ),
             )
           : t(TripDetailsTexts.trip.leg.shortWalk)}
+      </ThemeText>
+    </TripRow>
+  );
+};
+const BikeSection = (leg: Leg) => {
+  const {t, language} = useTranslation();
+
+  return (
+    <TripRow
+      rowLabel={
+        <TransportationIconBox
+          mode={leg.mode}
+          subMode={leg.line?.transportSubmode}
+        />
+      }
+      testID="bikeLeg"
+    >
+      <ThemeText type="body__secondary" color="secondary">
+        {t(
+          TripDetailsTexts.trip.leg.bicycle.label(
+            secondsToDuration(leg.duration ?? 0, language),
+          ),
+        )}
       </ThemeText>
     </TripRow>
   );

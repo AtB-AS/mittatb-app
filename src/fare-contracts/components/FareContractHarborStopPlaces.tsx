@@ -1,29 +1,50 @@
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 
 import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
+import {useHarborsQuery} from '@atb/queries';
+import {MessageBox} from '@atb/components/message-box';
 
-export function FareContractDestinations({
-  startPlaceName,
-  endPlaceName,
+export function FareContractHarborStopPlaces({
+  fromStopPlaceId,
+  toStopPlaceId,
   showTwoWayIcon,
-  decorationColor,
 }: {
-  startPlaceName?: string;
-  endPlaceName?: string;
-  showTwoWayIcon?: boolean;
-  decorationColor?: string;
+  fromStopPlaceId?: string;
+  toStopPlaceId?: string;
+  showTwoWayIcon: boolean;
 }) {
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
+  const harborsQuery = useHarborsQuery();
 
-  const color =
-    decorationColor || theme.transport.transport_boat.primary.background;
+  if (!fromStopPlaceId || !toStopPlaceId) return null;
+  if (harborsQuery.isLoading)
+    return <ActivityIndicator style={styles.loading} />;
+  if (harborsQuery.isError)
+    return (
+      <MessageBox
+        style={styles.errorMessage}
+        type="warning"
+        message={t(FareContractTexts.details.harbors.error)}
+        onPressConfig={{
+          text: t(dictionary.retry),
+          action: harborsQuery.refetch,
+        }}
+      />
+    );
 
+  const harbors = harborsQuery.data;
+  const fromName = harbors.find((sp) => sp.id === fromStopPlaceId)?.name;
+  const toName = harbors.find((sp) => sp.id === toStopPlaceId)?.name;
+
+  if (!fromName || !toName) return null;
+
+  const color = theme.transport.transport_boat.primary.background;
   const decorationLineWidth = theme.tripLegDetail.decorationLineWidth;
   const verticalLinePaddingLeft =
     theme.tripLegDetail.decorationLineEndWidth - decorationLineWidth;
@@ -32,10 +53,7 @@ export function FareContractDestinations({
     <View
       style={styles.container}
       accessibilityLabel={t(
-        PurchaseOverviewTexts.summary.destinations(
-          startPlaceName,
-          endPlaceName,
-        ),
+        FareContractTexts.details.harbors.directions(fromName, toName),
       )}
       accessible={true}
     >
@@ -56,7 +74,7 @@ export function FareContractDestinations({
         }}
       >
         <ThemeText type="body__secondary" color={'primary'}>
-          {startPlaceName}
+          {fromName}
         </ThemeText>
 
         <View
@@ -85,7 +103,7 @@ export function FareContractDestinations({
         </View>
 
         <ThemeText type="body__secondary" color={'primary'}>
-          {endPlaceName}
+          {toName}
         </ThemeText>
       </View>
 
@@ -106,6 +124,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
     marginLeft: theme.spacings.xSmall,
   },
+  loading: {alignItems: 'flex-start', marginTop: 12},
+  errorMessage: {marginTop: 12},
   destinationEndLine: {
     width: theme.tripLegDetail.decorationLineEndWidth,
     height: theme.tripLegDetail.decorationLineWidth,

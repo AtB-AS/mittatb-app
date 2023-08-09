@@ -24,7 +24,7 @@ const CityBoxMessageTexts = {
   a11yHintForPhone: _(
     'Aktiver for å ringe',
     'Activate to call',
-    'Aktiver for å ringee',
+    'Aktiver for å ringe',
   ),
 };
 

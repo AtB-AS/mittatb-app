@@ -10,7 +10,7 @@ import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
 import {TripMessages} from './DetailsMessages';
-import {TripSection, getPlaceName, InterchangeDetails} from './TripSection';
+import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
 import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
@@ -24,7 +24,7 @@ import {
   TravelDetailsMapScreenParams,
 } from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
-import {useRealtimeMapEnabled} from '@atb/components/map';
+import {MapFilterType, useRealtimeMapEnabled} from '@atb/components/map';
 import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
@@ -77,6 +77,15 @@ export const Trip: React.FC<TripProps> = ({
       mode,
     };
   });
+
+  const mapFilter: MapFilterType = {
+    stations: {
+      cityBikeStations: {
+        showAll: tripPatternLegs.some((leg) => leg.rentedBike),
+        operators: [],
+      },
+    },
+  };
 
   const shouldShowDate =
     !isWithinSameDate(new Date(), tripPattern.expectedStartTime) ||
@@ -147,6 +156,7 @@ export const Trip: React.FC<TripProps> = ({
               legs: tripPatternLegs,
               fromPlace: tripPatternLegs[0]?.fromPlace,
               toPlace: tripPatternLegs[tripPatternLegs.length - 1].toPlace,
+              mapFilter,
             });
           }}
         />
