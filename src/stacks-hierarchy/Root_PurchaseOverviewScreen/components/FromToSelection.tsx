@@ -41,10 +41,17 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
     }
 
     if (selectionMode === 'multiple-stop-harbor') {
+      const smth = isValidTariffZone(fromPlace) ? undefined : fromPlace;
+      console.log('fromPlace: ' + JSON.stringify(fromPlace));
+      console.log('toPlace: ' + JSON.stringify(toPlace));
+      console.log('selectionMode: ' + JSON.stringify(selectionMode));
+      console.log('fromHarbor validation: ' + smth);
+
       return (
         <HarborSelection
           fromHarbor={isValidTariffZone(fromPlace) ? undefined : fromPlace}
-          toHarbor={isValidTariffZone(toPlace) ? undefined : toPlace}
+          // fromHarbor={{id: 'NSR:StopPlace:74007', name: fromHarbor}}
+          toHarbor={isValidTariffZone(toPlace) ? undefined : toPlace} // change toPlace too
           fareProductTypeConfig={fareProductTypeConfig}
           preassignedFareProduct={preassignedFareProduct}
           onSelect={onSelect}

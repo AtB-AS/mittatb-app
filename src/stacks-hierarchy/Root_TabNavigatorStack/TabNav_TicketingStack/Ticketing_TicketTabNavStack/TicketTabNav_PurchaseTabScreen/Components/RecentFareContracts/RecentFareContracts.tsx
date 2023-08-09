@@ -48,6 +48,10 @@ export const RecentFareContracts = ({
     () => filterRecentFareContracts(recentFareContracts),
     [recentFareContracts],
   );
+  // console.log(
+  //   'memoizedRecentFareContracts: ' +
+  //     JSON.stringify(memoizedRecentFareContracts),
+  // );
 
   return (
     <View>

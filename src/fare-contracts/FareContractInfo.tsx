@@ -180,6 +180,9 @@ const FareContractInfoHeader = ({
     isInspectable,
     fareProductType,
   );
+  // replace
+  const fromStopPlace = useStopPlace(fromStopPlaceId);
+  const toStopPlace = useStopPlace(toStopPlaceId);
 
   return (
     <View style={styles.header}>
@@ -205,13 +208,15 @@ const FareContractInfoHeader = ({
           </ThemeText>
         )}
       </View>
-      {['boat-single', 'boat-period'].includes(fareProductType || '') && (
-        <FareContractHarborStopPlaces
-          fromStopPlaceId={fromStopPlaceId}
-          toStopPlaceId={toStopPlaceId}
-          showTwoWayIcon={fareProductType === 'boat-period'}
-        />
-      )}
+      {['boat-single', 'boat-period'].includes(fareProductType || '') &&
+        fromStopPlace.harbor &&
+        toStopPlace.harbor && (
+          <FareContractHarborStopPlaces
+            fromStopPlace={fromStopPlace.harbor}
+            toStopPlace={toStopPlace.harbor}
+            showTwoWayIcon={fareProductType === 'boat-period'}
+          />
+        )}
       {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
   );

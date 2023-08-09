@@ -27,6 +27,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
   const {recentFareContracts, loading} = useRecentFareContracts();
+  // console.log('recentFareContracts: ' + JSON.stringify(recentFareContracts));
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
   const styles = useStyles();
@@ -121,14 +122,16 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,
       userProfilesWithCount: rfc.userProfilesWithCount,
-      fromPlace: rfc.fromTariffZone && {
-        ...rfc.fromTariffZone,
-        resultType: 'zone',
-      },
-      toPlace: rfc.toTariffZone && {
-        ...rfc.toTariffZone,
-        resultType: 'zone',
-      },
+      // fromPlace: rfc.fromTariffZone && {
+      //   ...rfc.fromTariffZone,
+      //   resultType: 'zone',
+      // },
+      // toPlace: rfc.toTariffZone && {
+      //   ...rfc.toTariffZone,
+      //   resultType: 'zone',
+      // },
+      fromPlace: {id: 'NSR:StopPlace:74007', name: 'name from'},
+      toPlace: {id: 'NSR:StopPlace:74008', name: 'name to'},
       mode: 'Ticket',
     });
   };

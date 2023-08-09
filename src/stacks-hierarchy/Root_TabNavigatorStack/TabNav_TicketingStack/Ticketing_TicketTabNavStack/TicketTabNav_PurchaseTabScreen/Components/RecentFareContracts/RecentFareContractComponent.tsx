@@ -18,6 +18,7 @@ import {
   getTransportModeText,
   TransportModes,
 } from '@atb/components/transportation-modes';
+import {FareContractHarborStopPlaces} from '@atb/fare-contracts/components/FareContractHarborStopPlaces';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -53,6 +54,19 @@ export const RecentFareContractComponent = ({
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
+  const fromStopPlaceId = 'NSR:StopPlace:74007';
+  const toStopPlaceId = 'NSR:StopPlace:74008';
+  const showTwoWayIcon = false;
+
+  // console.log(
+  //   'preassignedFareProduct: ' + JSON.stringify(preassignedFareProduct),
+  // );
+  // console.log('fromTariffZone: ' + JSON.stringify(fromTariffZone));
+  // console.log('toTariffZone: ' + JSON.stringify(toTariffZone));
+  // console.log(
+  //   'userProfilesWithCount: ' + JSON.stringify(userProfilesWithCount),
+  // );
+  // console.log('recentFareContract: ' + JSON.stringify(recentFareContract));
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -120,6 +134,15 @@ export const RecentFareContractComponent = ({
             {getReferenceDataName(preassignedFareProduct, language)}
           </ThemeText>
         </View>
+
+        {(preassignedFareProduct.type === 'boat-single' ||
+          preassignedFareProduct.type === 'boat-period') && ( // swap with check on whether it has applicable data for to/from?
+          <FareContractHarborStopPlaces
+            showTwoWayIcon={showTwoWayIcon}
+            fromStopPlace={fromStopPlaceId}
+            toStopPlace={toStopPlaceId}
+          />
+        )}
 
         <View style={styles.horizontalFlex}>
           <View>
