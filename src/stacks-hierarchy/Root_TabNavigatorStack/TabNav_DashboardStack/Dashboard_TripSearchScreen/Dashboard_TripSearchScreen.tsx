@@ -263,6 +263,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         }}
         refreshControl={
           <RefreshControl
+            progressViewOffset={0}
             refreshing={
               Platform.OS === 'ios'
                 ? false
