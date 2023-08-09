@@ -20,10 +20,48 @@ import {
 } from 'date-fns';
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
+import nn from 'date-fns/locale/nn';
 import humanizeDuration from 'humanize-duration';
 import {DEFAULT_LANGUAGE, Language} from '@atb/translations';
 
-const humanizer = humanizeDuration.humanizer({});
+const nynorskHumanizerObj = {
+  y: () => 'år',
+  mo: (c?: number) => 'månad' + (c === 1 ? '' : 'er'),
+  w: (c?: number) => 'veke' + (c === 1 ? '' : 'r'),
+  d: (c?: number) => 'dag' + (c === 1 ? '' : 'ar'),
+  h: (c?: number) => 'tim' + (c === 1 ? 'e' : 'ar'),
+  m: () => 'minutt',
+  s: () => 'sekund',
+  ms: () => 'millisekund',
+};
+
+const completeLanguageObject = {
+  en: {
+    y: () => 'years',
+    mo: () => 'months',
+    w: () => 'weeks',
+    d: () => 'days',
+    h: () => 'hours',
+    m: () => 'minutes',
+    s: () => 'seconds',
+    ms: () => 'milliseconds',
+  },
+  nn: nynorskHumanizerObj,
+  no: {
+    y: () => 'år',
+    mo: () => 'måneder',
+    w: () => 'uker',
+    d: () => 'dager',
+    h: () => 'timer',
+    m: () => 'minutter',
+    s: () => 'sekunder',
+    ms: () => 'millisekunder',
+  },
+};
+
+const humanizer = humanizeDuration.humanizer({
+  languages: completeLanguageObject,
+});
 
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
@@ -69,8 +107,9 @@ export function secondsToDuration(
   language: Language,
   opts?: humanizeDuration.Options,
 ): string {
-  const currentLanguage = language === Language.English ? 'en' : 'no';
-  return humanizeDuration(seconds * 1000, {
+  const currentLanguage =
+    language === Language.English ? 'en' : Language.Nynorsk ? 'nn' : 'no';
+  return humanizer(seconds * 1000, {
     units: ['d', 'h', 'm'],
     round: true,
     language: currentLanguage,
@@ -364,7 +403,7 @@ const languageToLocale = (language: Language): Locale => {
     case Language.English:
       return en;
     case Language.Nynorsk:
-      return nb;
+      return nn;
   }
 };
 
@@ -410,30 +449,8 @@ function getHumanizer(
   options?: humanizeDuration.Options,
 ) {
   const opts = {
-    language: language === Language.English ? 'en' : 'no',
-    languages: {
-      no: {
-        y: () => 'år',
-        mo: () => 'måneder',
-        w: () => 'uker',
-        d: () => 'dager',
-        h: () => 'timer',
-        m: () => 'minutter',
-        s: () => 'sekunder',
-        ms: () => 'millisekunder',
-      },
-      en: {
-        y: () => 'years',
-        mo: () => 'months',
-        w: () => 'weeks',
-        d: () => 'days',
-        h: () => 'hours',
-        m: () => 'minutes',
-        s: () => 'seconds',
-        ms: () => 'milliseconds',
-      },
-    },
-
+    language,
+    languages: completeLanguageObject,
     ...options,
   };
 
