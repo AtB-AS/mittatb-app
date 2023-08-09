@@ -1,15 +1,17 @@
 import {Statuses} from '@atb/theme';
 import {LanguageAndTextType} from '@atb/translations';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {Rule} from './rules';
 
 export type AppPlatformType = 'ios' | 'android';
 
-export type GlobalMessageContextType =
-  | 'app-assistant'
-  | 'app-departures'
-  | 'app-ticketing'
-  | 'web-ticketing'
-  | 'web-overview';
+export enum GlobalMessageContextEnum {
+  appAssistant = 'app-assistant',
+  appDepartures = 'app-departures',
+  appTicketing = 'app-ticketing',
+  appDepartureDetails = 'app-departure-details',
+  appServiceDisruptions = 'app-service-disruptions',
+}
 
 export type GlobalMessageRaw = {
   id: string;
@@ -17,13 +19,14 @@ export type GlobalMessageRaw = {
   title?: LanguageAndTextType[];
   body: LanguageAndTextType[];
   type: Statuses;
-  context: GlobalMessageContextType[];
+  context: GlobalMessageContextEnum[];
   isDismissable?: boolean;
   appPlatforms: AppPlatformType[];
   appVersionMin: string;
   appVersionMax: string;
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
+  rules?: Rule[];
 };
 
 export type GlobalMessageType = Omit<

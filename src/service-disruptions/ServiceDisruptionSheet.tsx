@@ -10,7 +10,7 @@ import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Section} from '@atb/components/sections';
-import {GlobalMessage} from '@atb/global-messages';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {StyleSheet} from '@atb/theme';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -43,7 +43,9 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
         <FullScreenFooter>
           <GlobalMessage
             style={style.globalMessages}
-            globalMessageContext={'all'}
+            globalMessageContext={
+              GlobalMessageContextEnum.appServiceDisruptions
+            }
             includeDismissed={true}
           />
 
