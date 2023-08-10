@@ -28,6 +28,8 @@ export type {
   MapFilterType,
   MapRegion,
   OperatorFilterType,
+  ParkingType,
+  ParkingVehicleTypes,
 } from './types';
 export {
   useRealtimeMapEnabled,

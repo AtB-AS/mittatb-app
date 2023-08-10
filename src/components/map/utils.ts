@@ -11,7 +11,12 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {Cluster, MapSelectionActionType, MapPadding} from './types';
+import {
+  Cluster,
+  MapSelectionActionType,
+  MapPadding,
+  ParkingType,
+} from './types';
 import distance from '@turf/distance';
 import {isVehicle} from '@atb/mobility/utils';
 
@@ -67,6 +72,10 @@ export const isClusterFeature = (
 
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
+
+export const isParkAndRide = (
+  f: Feature<Point>,
+): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
 
 export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
   typeof obj === 'object' &&
