@@ -1,6 +1,7 @@
 import {useTheme} from '@atb/theme';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {TransportColor} from '@atb/theme/colors';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 export function useTransportationColor(
   mode?: AnyMode,
@@ -46,3 +47,27 @@ export const useThemeColorForTransportMode = (
       return 'transport_other';
   }
 };
+
+export function useTransportationLineColors(fareProductType?: string) {
+  const {theme} = useTheme();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === fareProductType,
+  );
+
+  const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
+
+  let lineColor =
+    mode === 'water'
+      ? theme.static.background.background_2.background
+      : theme.static.background.background_accent_0.background;
+  const backgroundColor = useTransportationColor(mode, subMode);
+
+  return {
+    lineColor,
+    backgroundColor: mode
+      ? backgroundColor
+      : theme.static.status.valid.background,
+  };
+}
