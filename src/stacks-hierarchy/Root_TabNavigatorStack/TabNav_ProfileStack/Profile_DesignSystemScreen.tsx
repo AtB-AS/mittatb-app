@@ -331,6 +331,38 @@ export const Profile_DesignSystemScreen = () => {
               message={`This is a message without status icon`}
             />
           </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="valid"
+              message={`This is a message without background`}
+              withBackground={false}
+              textColor={theme.static.background.background_0}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="info"
+              message={`This is a message without background`}
+              withBackground={false}
+              textColor={theme.static.background.background_0}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="warning"
+              message={`This is a message without background`}
+              withBackground={false}
+              textColor={theme.static.background.background_0}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="error"
+              message={`This is a message without background`}
+              withBackground={false}
+              textColor={theme.static.background.background_0}
+            />
+          </GenericSectionItem>
         </Section>
 
         <Section style={style.section}>

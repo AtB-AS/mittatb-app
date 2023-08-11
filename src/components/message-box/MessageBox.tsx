@@ -16,6 +16,7 @@ import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
+import {ContrastColor} from '@atb-as/theme';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -40,7 +41,16 @@ export type MessageBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
-};
+} & (
+  | {
+      withBackground?: true;
+      textColor?: undefined;
+    }
+  | {
+      withBackground: false;
+      textColor: ContrastColor;
+    }
+);
 
 export const MessageBox = ({
   noStatusIcon,
@@ -51,12 +61,14 @@ export const MessageBox = ({
   isMarkdown = false,
   onPressConfig,
   onDismiss,
+  withBackground = true,
+  textColor,
 }: MessageBoxProps) => {
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const textColor = theme.static.status[type].text;
-  const colorStyle = {
+  const color = textColor ? textColor : theme.static.status[type];
+  const backgroundColorStyle = {
     backgroundColor: theme.static.status[type].background,
   };
 
@@ -73,14 +85,19 @@ export const MessageBox = ({
   return (
     <TouchableOpacityOrView
       onClick={onPress}
-      style={[styles.container, colorStyle, style]}
+      style={[
+        styles.container,
+        withBackground && styles.withBackground,
+        withBackground && backgroundColorStyle,
+        style,
+      ]}
       accessible={false}
     >
       {!noStatusIcon && (
         <ThemeIcon
-          fill={textColor}
+          fill={color.text}
           style={styles.icon}
-          svg={messageTypeToIcon(type)}
+          svg={messageTypeToIcon(type, !withBackground)}
         />
       )}
       <View
@@ -98,18 +115,18 @@ export const MessageBox = ({
         {title && (
           <ThemeText
             type="body__primary--bold"
-            color={type}
+            color={color}
             style={styles.title}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={type} isMarkdown={isMarkdown}>
+        <ThemeText color={color} isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={type}
+            color={color}
             style={styles.linkText}
             type="body__primary--underline"
           >
@@ -126,7 +143,7 @@ export const MessageBox = ({
             accessibilityRole="button"
             hitSlop={insets.all(theme.spacings.medium)}
           >
-            <ThemeIcon fill={textColor} svg={Close} />
+            <ThemeIcon fill={color.text} svg={Close} />
           </TouchableOpacity>
         </View>
       )}
@@ -136,9 +153,11 @@ export const MessageBox = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
+    flexDirection: 'row',
+  },
+  withBackground: {
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
-    flexDirection: 'row',
   },
   icon: {
     marginRight: theme.spacings.medium,

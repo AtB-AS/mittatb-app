@@ -3,7 +3,7 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -26,6 +26,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const {theme} = useTheme();
 
   const {
     deviceIsInspectable,
@@ -66,7 +67,36 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         <MessageBox
           style={styles.warning}
           message={t(PurchaseOverviewTexts.warning)}
+          type="error"
+          withBackground={false}
+          textColor={theme.static.background.background_0}
+        />
+      )}
+      {showProfileTravelcardWarning && (
+        <MessageBox
+          style={styles.warning}
+          message={t(PurchaseOverviewTexts.warning)}
           type="warning"
+          withBackground={false}
+          textColor={theme.static.background.background_0}
+        />
+      )}
+      {showProfileTravelcardWarning && (
+        <MessageBox
+          style={styles.warning}
+          message={t(PurchaseOverviewTexts.warning)}
+          type="info"
+          withBackground={false}
+          textColor={theme.static.background.background_0}
+        />
+      )}
+      {showProfileTravelcardWarning && (
+        <MessageBox
+          style={styles.warning}
+          message={t(PurchaseOverviewTexts.warning)}
+          type="valid"
+          withBackground={false}
+          textColor={theme.static.background.background_0}
         />
       )}
 
