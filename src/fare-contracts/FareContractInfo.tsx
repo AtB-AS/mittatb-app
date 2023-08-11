@@ -187,8 +187,6 @@ const FareContractInfoHeader = ({
   const showTwoWayIcon =
     travelRights?.[0].direction === TravelRightDirection.Both;
 
-    console.log('>>> FareContractInfoHeader', travelRights?.[0].direction, showTwoWayIcon);
-
   return (
     <View style={styles.header}>
       <View style={styles.fareContractHeader}>
@@ -213,7 +211,7 @@ const FareContractInfoHeader = ({
           </ThemeText>
         )}
       </View>
-      {['boat-single', 'boat-period'].includes(fareProductType || '') && (
+      {fromStopPlaceId && toStopPlaceId && (
         <FareContractHarborStopPlaces
           fromStopPlaceId={fromStopPlaceId}
           toStopPlaceId={toStopPlaceId}
