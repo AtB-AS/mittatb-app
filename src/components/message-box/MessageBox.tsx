@@ -16,7 +16,8 @@ import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
-import {ContrastColor} from '@atb-as/theme';
+import {TextColor} from '@atb-as/theme';
+import {StaticColor} from '@atb/theme/colors';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -48,7 +49,7 @@ export type MessageBoxProps = {
     }
   | {
       withBackground: false;
-      textColor: ContrastColor;
+      textColor: StaticColor | TextColor;
     }
 );
 
@@ -67,7 +68,10 @@ export const MessageBox = ({
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const color = textColor ? textColor : theme.static.status[type];
+
+  const iconColorProps = textColor
+    ? {colorType: textColor}
+    : {fill: theme.static.status[type].text};
   const backgroundColorStyle = {
     backgroundColor: theme.static.status[type].background,
   };
@@ -95,9 +99,9 @@ export const MessageBox = ({
     >
       {!noStatusIcon && (
         <ThemeIcon
-          fill={color.text}
           style={styles.icon}
           svg={messageTypeToIcon(type, !withBackground)}
+          {...iconColorProps}
         />
       )}
       <View
@@ -115,18 +119,18 @@ export const MessageBox = ({
         {title && (
           <ThemeText
             type="body__primary--bold"
-            color={color}
+            color={textColor ?? type}
             style={styles.title}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={color} isMarkdown={isMarkdown}>
+        <ThemeText color={textColor ?? type} isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={color}
+            color={textColor ?? type}
             style={styles.linkText}
             type="body__primary--underline"
           >
@@ -143,7 +147,7 @@ export const MessageBox = ({
             accessibilityRole="button"
             hitSlop={insets.all(theme.spacings.medium)}
           >
-            <ThemeIcon fill={color.text} svg={Close} />
+            <ThemeIcon svg={Close} {...iconColorProps} />
           </TouchableOpacity>
         </View>
       )}

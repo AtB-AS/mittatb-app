@@ -334,33 +334,35 @@ export const Profile_DesignSystemScreen = () => {
           <GenericSectionItem>
             <MessageBox
               type="valid"
-              message={`This is a message without background`}
+              message="This is a valid message with no background"
               withBackground={false}
-              textColor={theme.static.background.background_0}
+              textColor="primary"
             />
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageBox
               type="info"
-              message={`This is a message without background`}
+              message="This is a dismissable info message with no background"
               withBackground={false}
-              textColor={theme.static.background.background_0}
+              onDismiss={() => Alert.alert('Dismissed')}
+              textColor="primary"
             />
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageBox
               type="warning"
-              message={`This is a message without background`}
+              message="This is a warning message with secondary text and no background"
               withBackground={false}
-              textColor={theme.static.background.background_0}
+              textColor="secondary"
             />
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageBox
               type="error"
-              message={`This is a message without background`}
+              message="This is a dismissable error message with secondary text and no background"
               withBackground={false}
-              textColor={theme.static.background.background_0}
+              onDismiss={() => Alert.alert('Dismissed')}
+              textColor="secondary"
             />
           </GenericSectionItem>
         </Section>
