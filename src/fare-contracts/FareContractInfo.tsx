@@ -17,6 +17,7 @@ import {
   isInspectableTravelRight,
   NormalTravelRight,
   PreActivatedTravelRight,
+  TravelRightDirection,
 } from '@atb/ticketing';
 import {
   FareContractTexts,
@@ -113,6 +114,7 @@ export const FareContractInfo = ({
     <View style={{flex: 1}}>
       <FareContractInfoHeader
         preassignedFareProduct={preassignedFareProduct}
+        travelRights={travelRights}
         isInspectable={isInspectable}
         testID={testID}
         status={status}
@@ -150,6 +152,7 @@ const FareContractInfoHeader = ({
   isInspectable,
   testID,
   status,
+  travelRights,
   fareProductType,
   fromStopPlaceId,
   toStopPlaceId,
@@ -158,6 +161,7 @@ const FareContractInfoHeader = ({
   isInspectable?: boolean;
   testID?: string;
   status: FareContractInfoProps['status'];
+  travelRights?: FareContractInfoProps['travelRights'];
   fareProductType?: string;
   fromStopPlaceId?: string;
   toStopPlaceId?: string;
@@ -180,6 +184,10 @@ const FareContractInfoHeader = ({
     isInspectable,
     fareProductType,
   );
+  const showTwoWayIcon =
+    travelRights?.[0].direction === TravelRightDirection.Both;
+
+    console.log('>>> FareContractInfoHeader', travelRights?.[0].direction, showTwoWayIcon);
 
   return (
     <View style={styles.header}>
@@ -209,7 +217,7 @@ const FareContractInfoHeader = ({
         <FareContractHarborStopPlaces
           fromStopPlaceId={fromStopPlaceId}
           toStopPlaceId={toStopPlaceId}
-          showTwoWayIcon={fareProductType === 'boat-period'}
+          showTwoWayIcon={showTwoWayIcon}
         />
       )}
       {status === 'valid' && warning && <WarningMessage message={warning} />}
