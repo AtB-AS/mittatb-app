@@ -4,7 +4,12 @@ import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {getVisibleRange, MapRegion, toFeaturePoint} from '@atb/components/map';
+import {
+  getVisibleRange,
+  MapRegion,
+  MobilityMapFilterType,
+  toFeaturePoint,
+} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
@@ -150,3 +155,13 @@ export const formatRange = (rangeInMeters: number, language: Language) => {
       : formatDecimalNumber(rangeInMeters / 1000, language, 1);
   return `ca. ${rangeInKm} km`;
 };
+
+export const getOperators = (
+  filter: MobilityMapFilterType,
+  formFactor: FormFactor,
+) => filter[formFactor]?.operators ?? [];
+
+export const isShowAll = (
+  filter: MobilityMapFilterType,
+  formFactor: FormFactor,
+) => !!filter[formFactor]?.showAll;

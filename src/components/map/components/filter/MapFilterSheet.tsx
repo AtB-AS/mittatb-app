@@ -8,7 +8,7 @@ import {
 } from '@atb/translations';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {MapFilterType, OperatorFilterType} from '../../types';
+import {MapFilterType, MobilityMapFilterType} from '../../types';
 import {useUserMapFilters} from '@atb/components/map';
 import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -46,37 +46,11 @@ export const MapFilterSheet = ({
     );
   }
 
-  const onScootersChanged = (operatorFilter: OperatorFilterType) => {
-    const newFilter = {
-      ...filter,
-      vehicles: {
-        ...filter?.vehicles,
-        scooters: operatorFilter,
-      },
-    };
-    setFilter(newFilter);
-  };
-
-  const onBikeStationsChanged = (operatorFilter: OperatorFilterType) => {
-    const newFilter = {
-      ...filter,
-      stations: {
-        ...filter?.stations,
-        cityBikeStations: operatorFilter,
-      },
-    };
-    setFilter(newFilter);
-  };
-
-  const onCarSharingStationsChanged = (operatorFilter: OperatorFilterType) => {
-    const newFilter = {
-      ...filter,
-      stations: {
-        ...filter?.stations,
-        carSharingStations: operatorFilter,
-      },
-    };
-    setFilter(newFilter);
+  const onMobilityFilterChanged = (mobility: MobilityMapFilterType) => {
+    setFilter((currentFilter) => ({
+      ...currentFilter,
+      mobility,
+    }));
   };
 
   return (
@@ -92,12 +66,8 @@ export const MapFilterSheet = ({
       />
       <ScrollView style={style.container}>
         <MobilityFilters
-          scooters={initialFilter.vehicles?.scooters}
-          bikeStations={initialFilter.stations?.cityBikeStations}
-          carSharingStations={initialFilter.stations?.carSharingStations}
-          onScootersChanged={onScootersChanged}
-          onBikeStationsChanged={onBikeStationsChanged}
-          onCarSharingStationsChanged={onCarSharingStationsChanged}
+          filter={initialFilter.mobility}
+          onFilterChanged={onMobilityFilterChanged}
         />
       </ScrollView>
       <FullScreenFooter>

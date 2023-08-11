@@ -17,17 +17,18 @@ export {
   toFeaturePoints,
 } from './utils';
 export type {
+  FormFactorFilterType,
   NavigateToTripSearchCallback,
   MapLeg,
   MapLine,
   MapSelectionActionType,
-  VehiclesFilterType,
+  MobilityMapFilterType,
   VehiclesState,
-  StationsFilterType,
+  VehicleFeatures,
+  StationFeatures,
   StationsState,
   MapFilterType,
   MapRegion,
-  OperatorFilterType,
 } from './types';
 export {
   useRealtimeMapEnabled,

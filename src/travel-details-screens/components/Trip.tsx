@@ -31,6 +31,7 @@ import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -79,8 +80,8 @@ export const Trip: React.FC<TripProps> = ({
   });
 
   const mapFilter: MapFilterType = {
-    stations: {
-      cityBikeStations: {
+    mobility: {
+      [FormFactor.Bicycle]: {
         showAll: tripPatternLegs.some((leg) => leg.rentedBike),
         operators: [],
       },

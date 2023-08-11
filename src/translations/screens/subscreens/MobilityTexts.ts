@@ -1,11 +1,23 @@
 import {translation as _} from '../../commons';
 import {Platform} from 'react-native';
-import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
 
 export const MobilityTexts = {
-  scooter: _('Sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel'),
-  bicycle: _('Sykkel', 'Bicycle', 'Sykkel'),
-  car: _('Bildeling', 'Car sharing', 'Bildeling'),
+  formFactor: (formFactor: FormFactor) => {
+    switch (formFactor) {
+      case FormFactor.Scooter:
+        return _('Sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel');
+      case FormFactor.Bicycle:
+        return _('Sykkel', 'Bicycle', 'Sykkel');
+      case FormFactor.Car:
+        return _('Bildeling', 'Car sharing', 'Bildeling');
+      default:
+        return _('Annet', 'Other', 'Annet');
+    }
+  },
   unknownOperator: _('Ukjent operatør', 'Unknown operator', 'Ukjent operatør'),
   operatorAppSwitchButton: (operator: string) =>
     _(`Åpne ${operator}`, `Open ${operator}`, `Åpne ${operator}`),

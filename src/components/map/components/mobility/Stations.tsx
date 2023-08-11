@@ -5,9 +5,10 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {BikeStations} from './BikeStations';
 import {getAvailableVehicles} from '@atb/mobility/utils';
 import {CarStations} from './CarStations';
+import {StationFeatures} from '@atb/components/map';
 
 type Props = {
-  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
+  stations: StationFeatures;
 };
 
 export type StationsWithCount = FeatureCollection<
@@ -16,8 +17,8 @@ export type StationsWithCount = FeatureCollection<
 >;
 
 export const Stations = ({stations}: Props) => {
-  const bikeStations = stationsWithCount(stations, FormFactor.Bicycle);
-  const carStations = stationsWithCount(stations, FormFactor.Car);
+  const bikeStations = stationsWithCount(stations.bicycles, FormFactor.Bicycle);
+  const carStations = stationsWithCount(stations.cars, FormFactor.Car);
 
   return (
     <>
@@ -28,35 +29,17 @@ export const Stations = ({stations}: Props) => {
 };
 
 /**
- * Filters the collection of stations to return only those with the given form factor
+ * Adds a 'count' property with the number of available vehicles for each station.
  * @param stations
  * @param formFactor
  */
-const getFeaturesOfType = (
+const stationsWithCount = (
   stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>,
   formFactor: FormFactor,
-): FeatureCollection<GeoJSON.Point, StationBasicFragment> => ({
-  ...stations,
-  features: stations.features.filter((station) =>
-    station.properties.vehicleTypesAvailable?.some(
-      (type) => type.vehicleType.formFactor === formFactor,
-    ),
-  ),
-});
-
-/**
- * Adds a 'count' property with the number of available vehicles for each station.
- * @param allStations
- * @param formFactor
- */
-const stationsWithCount = (
-  allStations: FeatureCollection<GeoJSON.Point, StationBasicFragment>,
-  formFactor: FormFactor,
 ): StationsWithCount => {
-  const stationWithFormFactor = getFeaturesOfType(allStations, formFactor);
   return {
-    ...stationWithFormFactor,
-    features: stationWithFormFactor.features.map((feature) => ({
+    ...stations,
+    features: stations.features.map((feature) => ({
       ...feature,
       properties: {
         ...feature.properties,

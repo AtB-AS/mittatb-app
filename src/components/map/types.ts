@@ -16,6 +16,8 @@ import {
 import {AnyMode} from '@atb/components/icon-box';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {z} from 'zod';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -44,18 +46,28 @@ export type MapPadding =
   | [number, number]
   | [number, number, number, number];
 
+export type VehicleFeatures = {
+  bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+  scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+};
+
 export type VehiclesState = {
-  vehicles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+  vehicles: VehicleFeatures;
   updateRegion: (region: MapRegion) => void;
   isLoading: boolean;
-  onFilterChange: (filter: VehiclesFilterType) => void;
+  onFilterChange: (filter: MobilityMapFilterType) => void;
+};
+
+export type StationFeatures = {
+  bicycles: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
+  cars: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
 };
 
 export type StationsState = {
-  stations: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
+  stations: StationFeatures;
   updateRegion: (region: MapRegion) => void;
   isLoading: boolean;
-  onFilterChange: (filter: StationsFilterType) => void;
+  onFilterChange: (filter: MobilityMapFilterType) => void;
 };
 
 export type NavigateToTripSearchCallback = (
@@ -144,22 +156,16 @@ export interface MapLine extends Feature<LineString> {
   faded?: boolean;
 }
 
-export type OperatorFilterType = {
-  showAll: boolean;
-  operators: string[];
-};
+const FormFactorFilter = z.object({
+  showAll: z.boolean().default(false),
+  operators: z.array(z.string()).default([]),
+});
+export type FormFactorFilterType = z.infer<typeof FormFactorFilter>;
 
-export type VehiclesFilterType = {
-  scooters?: OperatorFilterType;
-  bicycles?: OperatorFilterType;
-};
+const MobilityMapFilter = z.record(z.nativeEnum(FormFactor), FormFactorFilter);
+export type MobilityMapFilterType = z.infer<typeof MobilityMapFilter>;
 
-export type StationsFilterType = {
-  cityBikeStations?: OperatorFilterType;
-  carSharingStations?: OperatorFilterType;
-};
-
-export type MapFilterType = {
-  vehicles?: VehiclesFilterType;
-  stations?: StationsFilterType;
-};
+export const MapFilter = z.object({
+  mobility: MobilityMapFilter,
+});
+export type MapFilterType = z.infer<typeof MapFilter>;
