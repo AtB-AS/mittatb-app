@@ -29,6 +29,8 @@ export type {
   StationsState,
   MapFilterType,
   MapRegion,
+  ParkingType,
+  ParkingVehicleTypes,
 } from './types';
 export {
   useRealtimeMapEnabled,

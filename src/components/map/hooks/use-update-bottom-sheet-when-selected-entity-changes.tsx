@@ -5,16 +5,17 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
 import {Feature, Point} from 'geojson';
-import {findEntityAtClick, isStopPlace} from '../utils';
+import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
 import {
+  BikeStationSheet,
+  CarSharingStationSheet,
   isBicycle,
   isBikeStation,
   isCarStation,
   isScooter,
-} from '@atb/mobility/utils';
-import {BikeStationSheet} from '@atb/mobility/components/BikeStationBottomSheet';
-import {ScooterSheet} from '@atb/mobility/components/ScooterSheet';
-import {CarSharingStationSheet} from '@atb/mobility/components/CarSharingStationBottomSheet';
+  ParkAndRideBottomSheet,
+  ScooterSheet,
+} from '@atb/mobility';
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 
@@ -121,6 +122,23 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             <BicycleSheet
               vehicleId={selectedFeature.properties.id}
               close={closeWithCallback}
+            />
+          );
+        }, false);
+      } else if (isParkAndRide(selectedFeature)) {
+        openBottomSheet(() => {
+          return (
+            <ParkAndRideBottomSheet
+              name={selectedFeature.properties.name}
+              capacity={selectedFeature.properties.totalCapacity}
+              parkingFor={selectedFeature.properties.parkingVehicleTypes}
+              feature={selectedFeature}
+              distance={distance}
+              close={closeWithCallback}
+              navigateToTripSearch={(...params) => {
+                closeBottomSheet();
+                mapProps.navigateToTripSearch(...params);
+              }}
             />
           );
         }, false);

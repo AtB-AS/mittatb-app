@@ -169,3 +169,13 @@ export const MapFilter = z.object({
   mobility: MobilityMapFilter,
 });
 export type MapFilterType = z.infer<typeof MapFilter>;
+
+export type ParkingVehicleTypes = 'car' | 'pedalCycle';
+
+export type ParkingType = {
+  id: string;
+  name: string;
+  entityType: 'Parking';
+  parkingVehicleTypes: ParkingVehicleTypes;
+  totalCapacity: number;
+};

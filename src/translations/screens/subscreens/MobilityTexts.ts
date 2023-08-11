@@ -4,6 +4,7 @@ import {
   FormFactor,
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
+import {ParkingVehicleTypes} from '@atb/components/map';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor) => {
@@ -155,4 +156,28 @@ export const CarSharingTexts = {
         );
     }
   },
+};
+
+export const ParkAndRideTexts = {
+  title: _('Innfartsparkering', "Park'n Ride", 'Innfartsparkering'),
+  parkingFor: (type: ParkingVehicleTypes) => {
+    switch (type) {
+      case 'pedalCycle':
+        return _('Sykkelparkering', 'Bike parking', 'Sykkelparkering');
+      case 'car':
+      default:
+        return _('Bilparkering', 'Car parking', 'Bilparkering');
+    }
+  },
+  disclaimer: _(
+    'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringen',
+    'Payment or other terms and conditions may apply to this parking',
+    '',
+  ),
+  capacity: _('Plasser totalt', 'Parking spaces', 'Plassar totalt'),
+  unknownCapacity: _(
+    'Ukjent antall plasser',
+    'Unknown number of spaces',
+    'Ukjend antal plassar',
+  ),
 };
