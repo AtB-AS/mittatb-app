@@ -4,7 +4,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {SectionSeparator} from '@atb/components/sections';
-import {useTransportationLineColors} from '@atb/utils/use-transportation-color';
+import {useValidityLineColors} from './use-validity-line-colors';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -25,7 +25,7 @@ export const ValidityLine = (props: Props): ReactElement => {
 
   const {theme} = useTheme();
   const styles = useStyles();
-  let {lineColor, backgroundColor} = useTransportationLineColors(
+  let {lineColor, backgroundColor} = useValidityLineColors(
     status === 'valid' ? props.fareProductType : undefined,
   );
 

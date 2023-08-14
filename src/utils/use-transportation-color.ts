@@ -47,24 +47,3 @@ export const useThemeColorForTransportMode = (
       return 'transport_other';
   }
 };
-
-export function useTransportationLineColors(fareProductType?: string) {
-  const {theme} = useTheme();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === fareProductType,
-  );
-
-  const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
-
-  let lineColor = theme.static.background.background_accent_0.background;
-  const backgroundColor = useTransportationColor(mode, subMode);
-
-  return {
-    lineColor,
-    backgroundColor: mode
-      ? backgroundColor
-      : theme.static.status.valid.background,
-  };
-}
