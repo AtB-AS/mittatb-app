@@ -1,7 +1,6 @@
 import {useTheme} from '@atb/theme';
 import {AnyMode, AnySubMode} from '@atb/components/icon-box';
 import {TransportColor} from '@atb/theme/colors';
-import {useFirestoreConfiguration} from '@atb/configuration';
 
 export function useTransportationColor(
   mode?: AnyMode,
