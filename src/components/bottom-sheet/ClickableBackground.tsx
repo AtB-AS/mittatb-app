@@ -1,4 +1,4 @@
-import {TouchableWithoutFeedback, View} from 'react-native';
+import {Pressable} from 'react-native';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
@@ -17,19 +17,16 @@ export function ClickableBackground({
   if (!isOpen) return null;
 
   return (
-    <TouchableWithoutFeedback
+    <Pressable
       onPress={close}
       accessibilityLabel={t(BottomSheetTexts.background.a11yLabel)}
       accessibilityHint={t(BottomSheetTexts.background.a11yHint)}
-    >
-      <View
-        style={{
-          ...styles.clickableBackground,
-          bottom: height,
-        }}
-        pointerEvents={'box-only'}
-      />
-    </TouchableWithoutFeedback>
+      pointerEvents={'box-only'}
+      style={{
+        ...styles.clickableBackground,
+        bottom: height,
+      }}
+    />
   );
 }
 

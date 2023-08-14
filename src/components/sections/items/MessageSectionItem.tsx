@@ -9,7 +9,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {MessageBoxProps} from '@atb/components/message-box';
-import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
 type Props = SectionItemProps<{
   messageType: Statuses;
@@ -44,16 +44,13 @@ export function MessageSectionItem({
       : () => Linking.openURL(onPressConfig.url));
 
   return (
-    <TouchableOpacityOrView
+    <PressableOpacityOrView
       onClick={onPress}
       accessible={true}
       accessibilityRole={onPress && 'button'}
       accessibilityLabel={a11yLabel}
-      style={[
-        topContainer,
-        {backgroundColor: themeColor.background},
-        styles.container,
-      ]}
+      containerStyle={[topContainer, {backgroundColor: themeColor.background}]}
+      style={styles.container}
     >
       <ThemeIcon
         style={styles.icon}
@@ -81,7 +78,7 @@ export function MessageSectionItem({
           </ThemeText>
         )}
       </View>
-    </TouchableOpacityOrView>
+    </PressableOpacityOrView>
   );
 }
 

@@ -8,7 +8,8 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
-import {AccessibilityProps, View, TouchableOpacity} from 'react-native';
+import {AccessibilityProps} from 'react-native';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type MoreItemProps = SectionItemProps<{
   text: string;
@@ -25,16 +26,16 @@ export function MoreItem({
   const sectionStyle = useSectionStyle();
   const styles = useItemStyles();
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={onPress}
       {...accessibility}
       accessibilityRole={'button'}
+      containerStyle={topContainer}
+      style={sectionStyle.spaceBetween}
     >
-      <View style={[topContainer, sectionStyle.spaceBetween]}>
-        <ThemeText style={[styles.center, contentContainer]}>{text}</ThemeText>
-        <ThemeIcon svg={ExpandMore} />
-      </View>
-    </TouchableOpacity>
+      <ThemeText style={[styles.center, contentContainer]}>{text}</ThemeText>
+      <ThemeIcon svg={ExpandMore} />
+    </PressableOpacity>
   );
 }
 const useItemStyles = StyleSheet.createThemeHook(() => ({

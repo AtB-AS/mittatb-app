@@ -33,7 +33,7 @@ import {
 import {insets} from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
@@ -44,6 +44,7 @@ import {
   useOnMarkFavouriteDepartures,
 } from '@atb/favorites';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
@@ -95,8 +96,9 @@ export function LineItem({
   return (
     <View style={[topContainer, {padding: 0}]} testID={testID}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
-        <TouchableOpacity
-          style={[styles.lineHeader, contentContainer]}
+        <PressableOpacity
+          containerStyle={contentContainer}
+          style={styles.lineHeader}
           onPress={() => onPressDeparture(items, 0)}
           hitSlop={insets.symmetric(12, 0)}
           accessibilityRole="button"
@@ -120,7 +122,7 @@ export function LineItem({
           <ThemeText style={{flex: 1}} testID={testID + 'Title'}>
             {title}
           </ThemeText>
-        </TouchableOpacity>
+        </PressableOpacity>
         {mode === 'departures' && (
           <FavouriteDepartureToggle
             existingFavorite={existingFavorite}

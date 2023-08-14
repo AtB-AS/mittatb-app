@@ -7,7 +7,6 @@ import {
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -26,6 +25,7 @@ import {Section} from '../Section';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {loginPhoneInputId} from '@atb/test-ids';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -151,7 +151,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
           )}
           <View style={prefix ? styles.containerInline : null}>
             {prefix && (
-              <TouchableOpacity
+              <PressableOpacity
                 style={styles.prefix}
                 onPress={onOpenPrefixSelection}
                 accessibilityRole="button"
@@ -165,7 +165,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                   svg={isSelectingPrefix ? ExpandLess : ExpandMore}
                   size="normal"
                 />
-              </TouchableOpacity>
+              </PressableOpacity>
             )}
             <InternalTextInput
               ref={combinedRef}
@@ -179,7 +179,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             />
             {showClear ? (
               <View style={styles.inputClear}>
-                <TouchableOpacity
+                <PressableOpacity
                   accessible={true}
                   accessibilityRole="button"
                   accessibilityLabel={t(SectionTexts.textInput.clear)}
@@ -187,7 +187,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                   onPress={onClearEvent}
                 >
                   <ThemeIcon svg={Close} />
-                </TouchableOpacity>
+                </PressableOpacity>
               </View>
             ) : null}
           </View>

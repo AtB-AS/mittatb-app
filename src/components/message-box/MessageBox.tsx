@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Linking,
-  StyleProp,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -13,9 +7,10 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -39,6 +34,7 @@ export type MessageBoxProps = {
   onDismiss?: () => void;
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
 };
 
@@ -46,6 +42,7 @@ export const MessageBox = ({
   noStatusIcon,
   type,
   style,
+  containerStyle,
   message,
   title,
   isMarkdown = false,
@@ -71,9 +68,10 @@ export const MessageBox = ({
     .join(screenReaderPause);
 
   return (
-    <TouchableOpacityOrView
+    <PressableOpacityOrView
       onClick={onPress}
-      style={[styles.container, colorStyle, style]}
+      style={[styles.contentContainer, style]}
+      containerStyle={[styles.container, colorStyle, containerStyle]}
       accessible={false}
     >
       {!noStatusIcon && (
@@ -119,7 +117,7 @@ export const MessageBox = ({
       </View>
       {onDismiss && (
         <View>
-          <TouchableOpacity
+          <PressableOpacity
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -127,10 +125,10 @@ export const MessageBox = ({
             hitSlop={insets.all(theme.spacings.medium)}
           >
             <ThemeIcon fill={textColor} svg={Close} />
-          </TouchableOpacity>
+          </PressableOpacity>
         </View>
       )}
-    </TouchableOpacityOrView>
+    </PressableOpacityOrView>
   );
 };
 
@@ -138,6 +136,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
+    flexDirection: 'row',
+  },
+  contentContainer: {
     flexDirection: 'row',
   },
   icon: {

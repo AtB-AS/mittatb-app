@@ -38,7 +38,6 @@ import {
   Animated,
   StyleProp,
   Text,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -57,6 +56,7 @@ import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {AvailableTripPattern, BookingRequirement} from '../../types';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ResultItemProps = {
   tripPattern: AvailableTripPattern;
@@ -189,7 +189,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessibilityLabel={tripSummary(
         tripPattern,
         t,
@@ -201,7 +201,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
       accessibilityRole={'button'}
-      style={styles.touchableOpacity}
+      containerStyle={styles.pressableOpacity}
       onPress={onDetailsPressed}
       accessible={true}
       testID={testID}
@@ -310,7 +310,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         </View>
         <ResultItemFooter bookingRequirement={tripPattern.bookingRequirement} />
       </Animated.View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 
@@ -348,7 +348,7 @@ const ResultItemFooter: React.FC<{
 };
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
-  touchableOpacity: {
+  pressableOpacity: {
     marginTop: theme.spacings.small,
   },
   result: {

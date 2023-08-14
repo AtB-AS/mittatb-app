@@ -12,7 +12,7 @@ import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import React, {forwardRef} from 'react';
-import {Linking, TouchableOpacity, View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {InfoLinkFragment} from '@atb/api/types/generated/fragments/shared';
 import {StyleSheet} from '@atb/theme';
 import {SituationType} from './types';
@@ -22,6 +22,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   situation: SituationType;
@@ -172,7 +173,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
   const styles = useStyles();
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={() => Linking.openURL(infoLink.uri)}
       accessibilityRole="link"
       style={styles.infoLink}
@@ -180,7 +181,7 @@ const InfoLink = ({infoLink}: {infoLink: InfoLinkFragment}) => {
       <ThemeText type="body__primary--underline" color="secondary">
         {infoLink.label || t(dictionary.readMore)}
       </ThemeText>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

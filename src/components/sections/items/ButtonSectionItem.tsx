@@ -7,15 +7,11 @@ import {
 import {StyleSheet} from '@atb/theme';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
-import {
-  AccessibilityProps,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {AccessibilityProps, View, ViewStyle} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type ButtonSectionItemProps = SectionItemProps<{
   label: string;
@@ -68,14 +64,14 @@ export function ButtonSectionItem({
 
   const handlerWithPress =
     hasIcon && onIconPress ? (
-      <TouchableOpacity
+      <PressableOpacity
         hitSlop={insets.all(12)}
         onPress={onIconPress}
-        style={[styles.iconContainer, padding]}
+        containerStyle={[styles.iconContainer, padding]}
         {...iconAccessibility}
       >
         <View>{iconEl}</View>
-      </TouchableOpacity>
+      </PressableOpacity>
     ) : undefined;
 
   const valueEl =
@@ -95,7 +91,7 @@ export function ButtonSectionItem({
 
   return (
     <View style={wrapperStyle}>
-      <TouchableOpacity
+      <PressableOpacity
         onPress={onPress}
         style={[topContainer, styles.container, containerPadding]}
         {...props}
@@ -110,7 +106,7 @@ export function ButtonSectionItem({
         </View>
         {!inlineValue && <View style={styles.inlineValueStyle}>{valueEl}</View>}
         {handlerWithoutPress}
-      </TouchableOpacity>
+      </PressableOpacity>
       {handlerWithPress}
     </View>
   );

@@ -6,7 +6,6 @@ import {
   TextInput as InternalTextInput,
   TextInputFocusEventData,
   TextInputProps as InternalTextInputProps,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -18,6 +17,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -125,7 +125,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         />
         {showClear ? (
           <View style={styles.inputClear}>
-            <TouchableOpacity
+            <PressableOpacity
               accessible={true}
               accessibilityRole="button"
               accessibilityLabel={t(SectionTexts.textInput.clear)}
@@ -133,7 +133,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
               onPress={onClearEvent}
             >
               <ThemeIcon svg={Close} />
-            </TouchableOpacity>
+            </PressableOpacity>
           </View>
         ) : null}
       </View>

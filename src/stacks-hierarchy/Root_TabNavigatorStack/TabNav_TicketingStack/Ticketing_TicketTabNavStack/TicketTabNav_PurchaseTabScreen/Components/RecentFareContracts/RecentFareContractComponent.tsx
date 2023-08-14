@@ -4,7 +4,7 @@ import {useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../../types';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Dimensions, TouchableOpacity, View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -18,6 +18,7 @@ import {
   getTransportModeText,
   TransportModes,
 } from '@atb/components/transportation-modes';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -95,8 +96,8 @@ export const RecentFareContractComponent = ({
   const interactiveColor = theme.interactive[interactiveColorName];
 
   return (
-    <TouchableOpacity
-      style={styles.container}
+    <PressableOpacity
+      containerStyle={styles.container}
       accessible={true}
       onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
       accessibilityLabel={currentAccessibilityLabel}
@@ -206,7 +207,7 @@ export const RecentFareContractComponent = ({
         </ThemeText>
         <ThemeIcon svg={ArrowRight} fill={interactiveColor.outline.text} />
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

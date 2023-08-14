@@ -1,8 +1,9 @@
 import React from 'react';
 import {InteractiveColor} from '@atb/theme/colors';
-import {View, ViewStyle, StyleProp, TouchableOpacity} from 'react-native';
+import {View, ViewStyle, StyleProp} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
+import {PressableOpacity} from '../pressable-opacity';
 
 export type SegmentOptions = {
   onPress: () => void;
@@ -53,7 +54,7 @@ export function RadioSegments({
         const borderWidth = selected && enabled ? theme.border.width.medium : 0;
 
         return (
-          <TouchableOpacity
+          <PressableOpacity
             key={i}
             onPress={option.onPress}
             disabled={!enabled}
@@ -62,7 +63,7 @@ export function RadioSegments({
             accessibilityState={{selected}}
             accessibilityLabel={getAccessibilityLabel(option)}
             accessibilityHint={option.accessibilityHint}
-            style={[
+            containerStyle={[
               styles.optionBox,
               {
                 backgroundColor: enabled ? currentColor.background : undefined,
@@ -88,7 +89,7 @@ export function RadioSegments({
                 {option.subtext}
               </ThemeText>
             )}
-          </TouchableOpacity>
+          </PressableOpacity>
         );
       })}
     </View>

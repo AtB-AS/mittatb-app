@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
@@ -11,6 +11,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {InteractiveColor} from '@atb/theme/colors';
 import {useFontScale} from '@atb/utils/use-font-scale';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = SectionItemProps<{
   text: string;
@@ -68,7 +69,7 @@ export function CounterSectionItem({
         )}
       </View>
       <View style={counterStyles.countActions}>
-        <TouchableOpacity
+        <PressableOpacity
           disabled={removeButtonDisabled}
           onPress={() => removeCount()}
           accessibilityRole="button"
@@ -98,7 +99,7 @@ export function CounterSectionItem({
                 : theme.text.colors.primary
             }
           />
-        </TouchableOpacity>
+        </PressableOpacity>
         <View
           style={[
             counterStyles.countTextContainer,
@@ -118,7 +119,7 @@ export function CounterSectionItem({
             {count}
           </ThemeText>
         </View>
-        <TouchableOpacity
+        <PressableOpacity
           onPress={() => addCount()}
           accessibilityRole="button"
           accessibilityLabel={t(
@@ -132,7 +133,7 @@ export function CounterSectionItem({
           testID={testID + '_add'}
         >
           <ThemeIcon svg={Add} />
-        </TouchableOpacity>
+        </PressableOpacity>
       </View>
     </View>
   );

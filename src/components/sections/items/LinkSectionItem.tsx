@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  AccessibilityProps,
-  GestureResponderEvent,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {
   NavigationIcon,
@@ -18,6 +13,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelInfo} from '@atb/components/label-info';
 import {LabelType} from '@atb-as/config-specs';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = SectionItemProps<{
   text: string;
@@ -60,7 +56,7 @@ export function LinkSectionItem({
     ? {...accessibility, accessibilityHint: undefined}
     : accessibility;
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessible
       accessibilityRole="link"
       onPress={disabled ? undefined : onPress}
@@ -87,7 +83,7 @@ export function LinkSectionItem({
           </ThemeText>
         </View>
       )}
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 

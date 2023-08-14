@@ -1,11 +1,12 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColor} from '@atb/theme/colors';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Unknown} from '@atb/assets/svg/mono-icons/status';
 import {TicketingTexts, useTranslation} from '@atb/translations';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type TicketAssistantProps = {
   accented?: boolean;
@@ -31,7 +32,7 @@ export const TipsAndInformationTile: React.FC<TicketAssistantProps> = ({
       ]}
       testID={testID}
     >
-      <TouchableOpacity
+      <PressableOpacity
         onPress={onPress}
         accessible={true}
         style={styles.spreadContent}
@@ -50,7 +51,7 @@ export const TipsAndInformationTile: React.FC<TicketAssistantProps> = ({
             {t(TicketingTexts.tipsAndInformationTile.title)}
           </ThemeText>
         </View>
-      </TouchableOpacity>
+      </PressableOpacity>
     </View>
   );
 };

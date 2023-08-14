@@ -2,9 +2,10 @@ import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import vippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const VIPPS_BACKGROUND_COLOR = '#FF5B24';
 export const VippsLoginButton = ({
@@ -18,7 +19,7 @@ export const VippsLoginButton = ({
   const style = useStyle();
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessibilityLabel={t(LoginTexts.logInOptions.options.vipps.a11yLabel)}
       onPress={onPress}
     >
@@ -28,7 +29,7 @@ export const VippsLoginButton = ({
         </ThemeText>
         <ThemeIcon svg={vippsLogo} size="large" style={style.icon} />
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

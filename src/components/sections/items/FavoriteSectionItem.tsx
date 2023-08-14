@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  AccessibilityProps,
-  GestureResponderEvent,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {FavoriteIcon} from '@atb/favorites';
 import {StoredLocationFavorite} from '@atb/favorites';
@@ -15,6 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type BaseProps = {
   favorite: StoredLocationFavorite;
@@ -37,7 +33,7 @@ export function FavoriteSectionItem(props: Props) {
       ? `${favorite.name}, ${favorite.location.name}`
       : favorite.location.name;
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessible
       accessibilityLabel={a11yLabel + screenReaderPause}
       accessibilityRole="button"
@@ -46,7 +42,7 @@ export function FavoriteSectionItem(props: Props) {
       {...props.accessibility}
     >
       <FavoriteItemContent {...props} />
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 

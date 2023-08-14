@@ -1,8 +1,8 @@
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {TouchableOpacity} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   color: InteractiveColor;
@@ -23,8 +23,8 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
   const borderOffset = selected ? theme.border.width.medium : 0;
 
   return (
-    <TouchableOpacity
-      style={[
+    <PressableOpacity
+      containerStyle={[
         styles.container,
         {
           backgroundColor: currentColor.background,
@@ -34,6 +34,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
           paddingHorizontal: theme.spacings.xLarge - borderOffset,
         },
       ]}
+      style={styles.content}
       onPress={onPress}
       accessible={true}
       accessibilityRole="radio"
@@ -47,14 +48,16 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
       >
         {text}
       </ThemeText>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    justifyContent: 'center',
     borderRadius: theme.border.radius.circle * 2,
     marginRight: theme.spacings.small,
+  },
+  content: {
+    justifyContent: 'center',
   },
 }));

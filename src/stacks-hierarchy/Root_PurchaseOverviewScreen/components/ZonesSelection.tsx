@@ -8,13 +8,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React, {forwardRef} from 'react';
-import {
-  AccessibilityProps,
-  StyleProp,
-  View,
-  ViewStyle,
-  TouchableOpacity,
-} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -34,7 +28,7 @@ type ZonesSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
+export const ZonesSelection = forwardRef<any, ZonesSelectionProps>(
   (
     {
       fareProductTypeConfig,

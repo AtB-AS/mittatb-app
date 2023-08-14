@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {getVenueIconTypes, LocationIcon} from '@atb/components/location-icon';
 import {insets} from '@atb/utils/insets';
@@ -13,6 +13,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {SearchLocation} from '@atb/favorites';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   title?: string;
@@ -41,7 +42,7 @@ export const LocationResults: React.FC<Props> = ({
         {locations.map(mapToVisibleSearchResult).map((searchResult, idx) => (
           <View style={styles.rowContainer} key={searchResult.key}>
             <View style={styles.locationButtonContainer}>
-              <TouchableOpacity
+              <PressableOpacity
                 accessible={true}
                 accessibilityLabel={
                   getLocationIconAccessibilityLabel(searchResult.location, t) +
@@ -79,7 +80,7 @@ export const LocationResults: React.FC<Props> = ({
                     {searchResult.subtext}
                   </ThemeText>
                 </View>
-              </TouchableOpacity>
+              </PressableOpacity>
             </View>
           </View>
         ))}

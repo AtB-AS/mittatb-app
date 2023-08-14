@@ -3,7 +3,7 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
-import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
@@ -18,10 +18,7 @@ type StopPlaceSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const HarborSelection = forwardRef<
-  TouchableOpacity,
-  StopPlaceSelectionProps
->(
+export const HarborSelection = forwardRef<any, StopPlaceSelectionProps>(
   (
     {
       fareProductTypeConfig,

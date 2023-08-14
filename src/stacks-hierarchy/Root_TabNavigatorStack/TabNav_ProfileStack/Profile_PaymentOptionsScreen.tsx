@@ -16,9 +16,10 @@ import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOpt
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, TouchableOpacity, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {destructiveAlert} from './utils';
 import {ProfileScreenProps} from './navigation-types';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
@@ -132,14 +133,14 @@ const Card = (props: {
 
         <View style={style.cardIcons}>
           <PaymentBrand icon={card.payment_type} />
-          <TouchableOpacity
+          <PressableOpacity
             accessibilityLabel={t(
               PaymentOptionsTexts.a11y.deleteCardIcon(
                 paymentName,
                 card.masked_pan,
               ),
             )}
-            style={{marginLeft: theme.spacings.medium}}
+            containerStyle={{marginLeft: theme.spacings.medium}}
             onPress={() => {
               destructiveAlert({
                 alertTitleString: t(PaymentOptionsTexts.deleteModal.title),
@@ -161,7 +162,7 @@ const Card = (props: {
                 theme.interactive.interactive_destructive.default.background
               }
             />
-          </TouchableOpacity>
+          </PressableOpacity>
         </View>
       </View>
 

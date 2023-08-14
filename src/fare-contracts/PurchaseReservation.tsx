@@ -5,12 +5,13 @@ import {Reservation, PaymentType} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
-import {ActivityIndicator, Linking, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Linking, View} from 'react-native';
 import {ValidityLine} from './ValidityLine';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
 import {useAuthState} from '@atb/auth';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   reservation: Reservation;
@@ -48,7 +49,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
 
   const paymentType = PaymentType[reservation.paymentType];
   return (
-    <TouchableOpacity accessible={false} importantForAccessibility="no">
+    <PressableOpacity accessible={false} importantForAccessibility="no">
       <View style={styles.container} testID="purchaseReservation">
         <View style={styles.validityContainer}>
           <View style={styles.validityHeader}>
@@ -98,7 +99,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             )}
         </View>
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

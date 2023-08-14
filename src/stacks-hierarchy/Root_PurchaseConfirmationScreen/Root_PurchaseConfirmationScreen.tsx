@@ -29,7 +29,6 @@ import {
   ScrollView,
   StyleProp,
   Text,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -48,6 +47,7 @@ import {Info} from '@atb/assets/svg/color/icons/status';
 import {TariffZone} from '@atb/reference-data/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -488,8 +488,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     selectPaymentOption(previousMethod);
                   }}
                 />
-                <TouchableOpacity
-                  style={styles.buttonTopSpacing}
+                <PressableOpacity
+                  containerStyle={styles.buttonTopSpacing}
                   disabled={!!error}
                   onPress={() => {
                     analytics.logEvent(
@@ -511,7 +511,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       {t(PurchaseConfirmationTexts.changePaymentOption.text)}
                     </ThemeText>
                   </View>
-                </TouchableOpacity>
+                </PressableOpacity>
               </View>
             ) : (
               <Button

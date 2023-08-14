@@ -153,7 +153,7 @@ export function TicketingMessages({
 
   const CollabTicketMessage = (
     <MessageBox
-      style={styles.messageBox}
+      containerStyle={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.collabTicketInfo)}
     />
@@ -161,7 +161,7 @@ export function TicketingMessages({
 
   const TrainOutsideZoneAMessage = (
     <MessageBox
-      style={styles.messageBox}
+      containerStyle={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.trainOutsideZoneA)}
     />
@@ -169,7 +169,7 @@ export function TicketingMessages({
 
   const TicketsWeDontSellMessage = (
     <MessageBox
-      style={styles.messageBox}
+      containerStyle={styles.messageBox}
       type="info"
       message={t(DetailsMessages.messages.ticketsWeDontSell)}
     />

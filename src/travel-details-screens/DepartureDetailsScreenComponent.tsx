@@ -28,7 +28,7 @@ import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React, {useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
@@ -44,6 +44,7 @@ import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useAnalytics} from '@atb/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -220,6 +221,7 @@ export const DepartureDetailsScreenComponent = ({
             <SituationMessageBox
               situation={situation}
               style={styles.messageBox}
+              containerStyle={styles.messageBoxContainer}
             />
           ))}
           {notices.map(
@@ -228,6 +230,7 @@ export const DepartureDetailsScreenComponent = ({
                 <MessageBox
                   type="info"
                   message={notice.text}
+                  containerStyle={styles.messageBoxContainer}
                   style={styles.messageBox}
                 />
               ),
@@ -464,7 +467,11 @@ function EstimatedCallRow({
           rowLabel={<SituationOrNoticeIcon situation={situation} />}
           style={styles.situationTripRow}
         >
-          <SituationMessageBox noStatusIcon={true} situation={situation} />
+          <SituationMessageBox
+            noStatusIcon={true}
+            situation={situation}
+            style={styles.messageBox}
+          />
         </TripRow>
       ))}
 
@@ -510,13 +517,14 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
       testID={testID}
+      style={styles.container}
     >
-      <View style={styles.container}>{child}</View>
-    </TouchableOpacity>
+      {child}
+    </PressableOpacity>
   );
 }
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({
@@ -595,8 +603,11 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   spinner: {
     paddingTop: theme.spacings.medium,
   },
-  messageBox: {
+  messageBoxContainer: {
     marginBottom: theme.spacings.medium,
+  },
+  messageBox: {
+    flex: 1,
   },
   scrollView__content: {
     padding: theme.spacings.medium,

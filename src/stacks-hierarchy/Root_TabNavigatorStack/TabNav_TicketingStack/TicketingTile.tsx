@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -14,6 +14,7 @@ import {
 import {InfoTag} from '@atb/components/info-tag';
 
 import {TicketingTileIllustration} from './TicketingTileIllustration';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export const TicketingTile = ({
   accented = false,
@@ -55,12 +56,12 @@ export const TicketingTile = ({
   );
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={onPress}
       accessible={true}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={t(TicketingTexts.availableFareProducts.navigateToBuy)}
-      style={[
+      containerStyle={[
         styles.fareProduct,
         {
           backgroundColor: themeColor.background,
@@ -100,7 +101,7 @@ export const TicketingTile = ({
           height={theme.icon.size.large}
         />
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

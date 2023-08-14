@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -33,7 +33,7 @@ import {
   useOnMarkFavouriteDepartures,
 } from '@atb/favorites';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {SvgProps} from 'react-native-svg';
 import {
   getSituationOrNoticeA11yLabel,
@@ -46,6 +46,7 @@ import {
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -94,9 +95,9 @@ export function EstimatedCallItem({
       addedFavoritesVisibleOnDashboard,
     );
   return (
-    <TouchableOpacityOrView
+    <PressableOpacityOrView
       onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
-      style={styles.container}
+      containerStyle={styles.container}
       accessibilityLabel={
         mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
       }
@@ -106,8 +107,8 @@ export function EstimatedCallItem({
           : undefined
       }
     >
-      <TouchableOpacity
-        style={styles.actionableItem}
+      <PressableOpacity
+        containerStyle={styles.actionableItem}
         disabled={!navigateToDetails}
         onPress={() => {
           if (navigateToDetails && departure?.serviceJourney) {
@@ -179,8 +180,8 @@ export function EstimatedCallItem({
             />
           )}
         </View>
-      </TouchableOpacity>
-    </TouchableOpacityOrView>
+      </PressableOpacity>
+    </PressableOpacityOrView>
   );
 }
 

@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -23,6 +22,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -145,8 +145,8 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   style={styles.submitButton}
                   testID="submitButton"
                 />
-                <TouchableOpacity
-                  style={styles.resendButton}
+                <PressableOpacity
+                  containerStyle={styles.resendButton}
                   onPress={onResendCode}
                   accessibilityRole="button"
                   testID="resendCodeButton"
@@ -158,7 +158,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   >
                     {t(LoginTexts.confirmCode.resendButton)}
                   </ThemeText>
-                </TouchableOpacity>
+                </PressableOpacity>
               </>
             )}
           </View>

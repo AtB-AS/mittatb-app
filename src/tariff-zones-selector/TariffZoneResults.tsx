@@ -9,8 +9,9 @@ import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {useTariffZoneFromLocation} from '@atb/tariff-zones-selector/use-tariff-zone-from-location';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   tariffZones: TariffZone[];
@@ -32,7 +33,7 @@ export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
         {tariffZones.map((tariffZone) => (
           <View style={styles.rowContainer} key={tariffZone.id}>
             <View style={styles.tariffZoneButtonContainer}>
-              <TouchableOpacity
+              <PressableOpacity
                 accessible={true}
                 accessibilityLabel={
                   t(
@@ -61,7 +62,7 @@ export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                     <ThemeIcon svg={Location} />
                   </View>
                 ) : null}
-              </TouchableOpacity>
+              </PressableOpacity>
             </View>
           </View>
         ))}

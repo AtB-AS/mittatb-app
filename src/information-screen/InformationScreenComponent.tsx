@@ -3,7 +3,8 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import React from 'react';
-import {Linking, ScrollView, TouchableOpacity, View} from 'react-native';
+import {Linking, ScrollView, View} from 'react-native';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type InformationTable = {
   type: 'table';
@@ -142,13 +143,13 @@ const Link = ({link}: {link: InformationLink}) => {
   const styles = useStyles();
 
   return (
-    <TouchableOpacity
-      style={styles.link}
+    <PressableOpacity
+      containerStyle={styles.link}
       onPress={() => Linking.openURL(link.link ?? '')}
       accessibilityRole="button"
     >
       <ThemeText type="body__primary--underline">{link.text}</ThemeText>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 const Cell = ({

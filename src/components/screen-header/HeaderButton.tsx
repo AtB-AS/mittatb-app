@@ -3,7 +3,7 @@ import {useChatIcon} from '@atb/chat/use-chat-icon';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import {useNavigation} from '@react-navigation/native';
-import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {StaticColor, TextColor} from '@atb/theme/colors';
@@ -12,6 +12,7 @@ import {useTheme} from '@atb/theme';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
 import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type ButtonModes =
   | 'back'
@@ -99,14 +100,14 @@ const BaseHeaderButton = ({
   children,
   ...accessibilityProps
 }: IconButtonProps) => (
-  <TouchableOpacity
+  <PressableOpacity
     onPress={onPress}
     hitSlop={insets.all(12)}
     accessibilityRole="button"
     {...accessibilityProps}
   >
     {children}
-  </TouchableOpacity>
+  </PressableOpacity>
 );
 
 export type LargeHeaderButtonProps = Omit<HeaderButtonProps, 'type' | 'text'>;
@@ -117,12 +118,12 @@ export const LargeHeaderButton = (buttonProps: LargeHeaderButtonProps) => {
   const {color, onPress, ...props} = buttonProps;
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={onPress || navigation.goBack}
       accessibilityHint={t(ScreenHeaderTexts.headerButton.back.a11yHint)}
       hitSlop={insets.all(12)}
       accessibilityRole="button"
-      style={{flexDirection: 'row'}}
+      containerStyle={{flexDirection: 'row'}}
       {...props}
     >
       <ThemeIcon
@@ -133,7 +134,7 @@ export const LargeHeaderButton = (buttonProps: LargeHeaderButtonProps) => {
       <ThemeText color={color}>
         {t(ScreenHeaderTexts.headerButton.back.text)}
       </ThemeText>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

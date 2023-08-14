@@ -4,9 +4,9 @@ import {QuestionType, AlternativeType} from './FeedbackContext';
 import {useTranslation, FeedbackTexts} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {View} from 'react-native';
-import {TouchableOpacity} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSectionItem} from '@atb/components/sections';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export interface RenderQuestionProps {
   selectedOpinion: Opinions;
@@ -77,7 +77,7 @@ function AlternativeItem({
   const isChecked = selectedAlternativeIds.includes(alternative.alternativeId);
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={() => handleAnswerPress(alternative.alternativeId)}
       accessibilityRole="checkbox"
       accessibilityState={{checked: isChecked}}
@@ -98,7 +98,7 @@ function AlternativeItem({
           {alternative.alternativeText[language]}
         </ThemeText>
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 

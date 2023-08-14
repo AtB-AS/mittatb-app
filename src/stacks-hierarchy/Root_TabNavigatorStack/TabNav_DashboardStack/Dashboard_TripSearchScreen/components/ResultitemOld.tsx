@@ -28,12 +28,7 @@ import {
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  AccessibilityProps,
-  Animated,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {AccessibilityProps, Animated, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
@@ -45,6 +40,7 @@ import {
   significantWaitTime,
   significantWalkTime,
 } from '@atb/travel-details-screens/utils';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -179,7 +175,7 @@ export const ResultItemOld: React.FC<ResultItemProps & AccessibilityProps> = ({
     searchTime?.option !== 'now';
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessibilityLabel={tripSummary(tripPattern, t, language, isInPast)}
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
@@ -226,7 +222,7 @@ export const ResultItemOld: React.FC<ResultItemProps & AccessibilityProps> = ({
         </ScrollView>
         <ResultItemFooter legs={tripPattern.legs} />
       </Animated.View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 function ResultItemFooter({legs}: {legs: Leg[]}) {

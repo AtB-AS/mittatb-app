@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {
@@ -25,6 +20,7 @@ import {PaymentBrand} from './PaymentBrand';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {getExpireDate, getPaymentTypeName} from '../../utils';
 import {Checkbox} from '@atb/components/checkbox';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
@@ -343,7 +339,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
 
   return (
     <View style={styles.card}>
-      <TouchableOpacity
+      <PressableOpacity
         style={[styles.paymentOption, styles.centerRow]}
         onPress={select}
         accessibilityLabel={paymentTexts.label}
@@ -377,12 +373,12 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             </View>
           ) : null}
         </View>
-      </TouchableOpacity>
+      </PressableOpacity>
       {selected &&
       user?.phoneNumber &&
       option.savedType === 'normal' &&
       option.paymentType !== PaymentType.Vipps ? (
-        <TouchableOpacity
+        <PressableOpacity
           onPress={() => {
             setSave(!save);
           }}
@@ -404,7 +400,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
             />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
-        </TouchableOpacity>
+        </PressableOpacity>
       ) : null}
     </View>
   );

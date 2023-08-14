@@ -1,6 +1,6 @@
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {Linking, TouchableOpacity, View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {FlexibleTransport} from '@atb/assets/svg/color/illustrations';
 import {Location} from '@atb/favorites';
 import {useFindCityZoneInLocation} from '../hooks';
@@ -19,6 +19,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {CityZone} from '@atb/reference-data/types';
 import {useAnalytics} from '@atb/analytics';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ActionButton = {
   id: string;
@@ -121,7 +122,7 @@ const CityZoneBox = ({
       </View>
       {onDismiss && (
         <View>
-          <TouchableOpacity
+          <PressableOpacity
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -129,7 +130,7 @@ const CityZoneBox = ({
             hitSlop={insets.all(theme.spacings.medium)}
           >
             <ThemeIcon fill={textColor} svg={Close} />
-          </TouchableOpacity>
+          </PressableOpacity>
         </View>
       )}
     </View>

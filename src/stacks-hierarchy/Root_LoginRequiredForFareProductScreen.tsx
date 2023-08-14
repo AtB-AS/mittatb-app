@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -17,6 +17,7 @@ import {
 import {useTextForLanguage} from '@atb/translations/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -88,8 +89,8 @@ export const Root_LoginRequiredForFareProductScreen = ({
             testID="loginButton"
           />
         </View>
-        <TouchableOpacity
-          style={styles.laterButton}
+        <PressableOpacity
+          containerStyle={styles.laterButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
           testID="loginLaterButton"
@@ -101,7 +102,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
           >
             {t(LoginTexts.onboarding.laterButton)}
           </ThemeText>
-        </TouchableOpacity>
+        </PressableOpacity>
         <View style={styles.carrotInfo}>
           <Psst></Psst>
           <ThemeText

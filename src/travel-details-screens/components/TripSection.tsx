@@ -171,7 +171,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
         {leg.situations.map((situation) => (
           <TripRow rowLabel={<SituationOrNoticeIcon situation={situation} />}>
-            <SituationMessageBox noStatusIcon={true} situation={situation} />
+            <SituationMessageBox
+              noStatusIcon={true}
+              situation={situation}
+              style={{flex: 1}}
+            />
           </TripRow>
         ))}
         {notices.map((notice) => (
