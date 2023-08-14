@@ -10,7 +10,7 @@ import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
 import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {
@@ -60,7 +60,7 @@ export const ParkAndRideBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.5}>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
@@ -71,48 +71,52 @@ export const ParkAndRideBottomSheet = ({
         color={'background_1'}
         setFocusOnLoad={false}
       />
-      <WalkingDistance distance={distance} />
-      <View style={style.buttonsContainer}>
-        <View style={style.travelButton}>
-          <Button
-            text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-            onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
-            mode="primary"
-            style={style.travelFromButtonPadding}
-          />
-        </View>
-        <View style={style.travelButton}>
-          <Button
-            text={t(DeparturesDialogSheetTexts.travelTo.title)}
-            onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
-            mode="primary"
-            style={style.travelToButtonPadding}
-          />
-        </View>
-      </View>
-      <View style={style.container}>
-        <MessageBox type="info" message={t(ParkAndRideTexts.disclaimer)} />
-        <VehicleStats
-          left={
-            <VehicleStat
-              svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
-              primaryStat={''}
-              secondaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
-            />
-          }
-          right={
-            <VehicleStat
-              svg={themeName === 'dark' ? ParkingDark : ParkingLight}
-              primaryStat={capacity ?? ''}
-              secondaryStat={
-                capacity
-                  ? t(ParkAndRideTexts.capacity)
-                  : t(ParkAndRideTexts.unknownCapacity)
+      <ScrollView>
+        <WalkingDistance distance={distance} />
+        <View style={style.buttonsContainer}>
+          <View style={style.travelButton}>
+            <Button
+              text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+              onPress={() =>
+                navigateToTripSearch(searchLocation, 'fromLocation')
               }
+              mode="primary"
+              style={style.travelFromButtonPadding}
             />
-          }
-        />
-      </View>
+          </View>
+          <View style={style.travelButton}>
+            <Button
+              text={t(DeparturesDialogSheetTexts.travelTo.title)}
+              onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
+              mode="primary"
+              style={style.travelToButtonPadding}
+            />
+          </View>
+        </View>
+        <View style={style.container}>
+          <MessageBox type="info" message={t(ParkAndRideTexts.disclaimer)} />
+          <VehicleStats
+            left={
+              <VehicleStat
+                svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
+                primaryStat={''}
+                secondaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+              />
+            }
+            right={
+              <VehicleStat
+                svg={themeName === 'dark' ? ParkingDark : ParkingLight}
+                primaryStat={capacity ?? ''}
+                secondaryStat={
+                  capacity
+                    ? t(ParkAndRideTexts.capacity)
+                    : t(ParkAndRideTexts.unknownCapacity)
+                }
+              />
+            }
+          />
+        </View>
+      </ScrollView>
     </BottomSheetContainer>
   );
 };
