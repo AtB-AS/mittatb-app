@@ -6,7 +6,7 @@ export {
 } from './use-vehicles-enabled';
 export {useIsCityBikesEnabled} from './use-city-bikes-enabled';
 export {CarSharingStationSheet} from './components/CarSharingStationBottomSheet';
-export {CityBikeStationSheet} from './components/CityBikeStationBottomSheet';
+export {BikeStationSheet} from './components/BikeStationBottomSheet';
 export {ParkAndRideBottomSheet} from './components/ParkAndRideBottomSheet';
 export {ScooterSheet} from './components/ScooterSheet';
-export {isBikeStation, isCarStation, isVehicle} from './utils';
+export {isBikeStation, isCarStation, isBicycle, isScooter} from './utils';

@@ -79,12 +79,8 @@ export const Map = (props: MapProps) => {
 
   const onFilterChange = (filter: MapFilterType) => {
     analytics.logEvent('Map', 'Filter changed', {filter});
-    if (filter.vehicles) {
-      props.vehicles?.onFilterChange(filter.vehicles);
-    }
-    if (filter.stations) {
-      props.stations?.onFilterChange(filter.stations);
-    }
+    props.vehicles?.onFilterChange(filter.mobility);
+    props.stations?.onFilterChange(filter.mobility);
   };
 
   return (

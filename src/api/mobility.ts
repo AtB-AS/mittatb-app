@@ -1,4 +1,3 @@
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {client} from '@atb/api/index';
 import {
   GetVehicleQuery,
@@ -23,22 +22,32 @@ import {
 type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
 
 export const getVehicles = (
-  {lat, lon, range, operators}: GetVehiclesQueryVariables,
+  {
+    lat,
+    lon,
+    range,
+    includeBicycles,
+    bicycleOperators,
+    includeScooters,
+    scooterOperators,
+  }: GetVehiclesQueryVariables,
   opts?: VehicleRequestOpts,
 ) => {
-  const url = '/bff/v2/mobility/vehicles';
+  const url = '/bff/v2/mobility/vehicles_v2';
   const query = qs.stringify({
     lat,
     lon,
     range: Math.ceil(range),
-    formFactors: FormFactor.Scooter, //TODO: Read from variables
-    operators,
+    includeBicycles,
+    bicycleOperators,
+    includeScooters,
+    scooterOperators,
   });
   return client
     .get<GetVehiclesQuery>(stringifyUrl(url, query), {
       ...opts,
     })
-    .then((res) => res.data.vehicles ?? []);
+    .then((res) => res.data ?? []);
 };
 
 export const getVehicle = (
@@ -53,20 +62,30 @@ export const getVehicle = (
 };
 
 export const getStations = (
-  {lat, lon, range, availableFormFactors, operators}: GetStationsQueryVariables,
+  {
+    lat,
+    lon,
+    range,
+    includeBicycles,
+    includeCars,
+    bicycleOperators,
+    carOperators,
+  }: GetStationsQueryVariables,
   opts?: AxiosRequestConfig,
 ) => {
-  const url = '/bff/v2/mobility/stations';
+  const url = '/bff/v2/mobility/stations_v2';
   const query = qs.stringify({
     lat,
     lon,
     range: Math.ceil(range),
-    availableFormFactors,
-    operators,
+    includeBicycles,
+    includeCars,
+    bicycleOperators,
+    carOperators,
   });
   return client
     .get<GetStationsQuery>(stringifyUrl(url, query), opts)
-    .then((res) => res.data.stations ?? []);
+    .then((res) => res.data ?? []);
 };
 
 export const getBikeStation = (

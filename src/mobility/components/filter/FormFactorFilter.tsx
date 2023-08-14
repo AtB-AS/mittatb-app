@@ -1,27 +1,37 @@
-import {MapFilterProps} from '@atb/mobility/components/filter/types';
-import {useTranslation} from '@atb/translations';
-import {useOperatorToggle} from '@atb/mobility/components/filter/use-operator-toggle';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import React from 'react';
+import {useTranslation} from '@atb/translations';
+import {useOperatorToggle} from './use-operator-toggle';
+import {useOperators} from '../../use-operators';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {useOperators} from '@atb/mobility/use-operators';
 import {ThemeText} from '@atb/components/text';
 import {useFilterStyle} from '@atb/mobility/components/filter/use-filter-style';
-import {View} from 'react-native';
+import {View, ViewStyle} from 'react-native';
+import {SvgProps} from 'react-native-svg';
+import {FormFactorFilterType} from '@atb/components/map';
 
-export const CarFilter = ({
+type Props = {
+  formFactor: FormFactor;
+  icon: (props: SvgProps) => JSX.Element;
+  initialFilter: FormFactorFilterType | undefined;
+  onFilterChange: (filter: FormFactorFilterType) => void;
+  style?: ViewStyle;
+};
+
+export const FormFactorFilter = ({
+  icon,
+  formFactor,
   initialFilter,
   onFilterChange,
   style,
-}: MapFilterProps) => {
+}: Props) => {
   const {t} = useTranslation();
   const filterStyle = useFilterStyle();
-  const operators = useOperators();
-  const carOperators = operators(FormFactor.Car);
+  const allOperators = useOperators();
+  const operators = allOperators(formFactor);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
-    carOperators,
+    operators,
     initialFilter,
     onFilterChange,
   );
@@ -29,21 +39,21 @@ export const CarFilter = ({
   return (
     <View style={style}>
       <ThemeText style={filterStyle.sectionHeader} type={'body__secondary'}>
-        {t(MobilityTexts.car)}
+        {t(MobilityTexts.formFactor(formFactor))}
       </ThemeText>
-      <Section>
-        {carOperators.length !== 1 && (
+      <Section style={style}>
+        {operators.length !== 1 && (
           <ToggleSectionItem
             text={t(MobilityTexts.filter.selectAll)}
             value={showAll()}
             onValueChange={onAllToggle}
           />
         )}
-        {carOperators.map((operator) => (
+        {operators.map((operator) => (
           <ToggleSectionItem
             key={operator.id}
             text={operator.name}
-            leftIcon={Car}
+            leftIcon={icon}
             value={isChecked(operator.id)}
             onValueChange={onOperatorToggle(operator.id)}
           />

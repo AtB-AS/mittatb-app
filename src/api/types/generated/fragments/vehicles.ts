@@ -2,7 +2,7 @@ import {
   PricingPlanFragment,
   RentalUrisFragment,
   SystemFragment,
-  VehicleRangeFragment,
+  VehicleTypeBasicFragment,
   VehicleTypeFragment,
 } from './mobility-shared';
 
@@ -12,18 +12,17 @@ export type VehicleBasicFragment = {
   lon: number;
   currentFuelPercent?: number;
   currentRangeMeters: number;
-  vehicleType: VehicleRangeFragment;
+  vehicleType: VehicleTypeBasicFragment;
 };
 
 export type VehicleExtendedFragment = {
   isReserved: boolean;
   isDisabled: boolean;
   availableUntil?: string;
-  vehicleType: VehicleTypeFragment;
   pricingPlan: PricingPlanFragment;
   system: SystemFragment;
   rentalUris?: RentalUrisFragment;
+  vehicleType: VehicleTypeFragment;
 } & VehicleBasicFragment;
 
 export type VehicleId = string;
-export type VehicleFragment = Pick<VehicleBasicFragment, 'id' | 'lat' | 'lon'>;
