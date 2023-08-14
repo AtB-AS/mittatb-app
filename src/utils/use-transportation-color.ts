@@ -58,10 +58,7 @@ export function useTransportationLineColors(fareProductType?: string) {
 
   const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
 
-  let lineColor =
-    mode === 'water'
-      ? theme.static.background.background_2.background
-      : theme.static.background.background_accent_0.background;
+  let lineColor = theme.static.background.background_accent_0.background;
   const backgroundColor = useTransportationColor(mode, subMode);
 
   return {
