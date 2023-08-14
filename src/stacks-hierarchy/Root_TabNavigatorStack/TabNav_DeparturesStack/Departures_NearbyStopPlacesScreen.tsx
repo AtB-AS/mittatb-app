@@ -5,6 +5,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import React from 'react';
 import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 type Props = DeparturesStackProps<'Departures_NearbyStopPlacesScreen'>;
 
@@ -23,7 +24,7 @@ export const Departures_NearbyStopPlacesScreen = ({
         title: t(DeparturesTexts.header.title),
         rightButton: {type: 'chat'},
         leftButton: {type: 'status-disruption'},
-        globalMessageContext: 'app-departures',
+        globalMessageContext: GlobalMessageContextEnum.appDepartures,
       }}
       onPressLocationSearch={(location) =>
         navigation.navigate('Root_LocationSearchByTextScreen', {

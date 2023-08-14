@@ -162,3 +162,13 @@ export type MapFilterType = {
   vehicles?: VehiclesFilterType;
   stations?: StationsFilterType;
 };
+
+export type ParkingVehicleTypes = 'car' | 'pedalCycle';
+
+export type ParkingType = {
+  id: string;
+  name: string;
+  entityType: 'Parking';
+  parkingVehicleTypes: ParkingVehicleTypes;
+  totalCapacity: number;
+};

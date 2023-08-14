@@ -4,23 +4,26 @@ import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext
 import {MessageBox} from '@atb/components/message-box';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
-  GlobalMessageContextType,
+  GlobalMessageContextEnum,
   GlobalMessageType,
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
+import {RuleVariables} from './rules';
 
 type Props = {
-  globalMessageContext?: GlobalMessageContextType | 'all';
+  globalMessageContext?: GlobalMessageContextEnum;
   style?: StyleProp<ViewStyle>;
   includeDismissed?: boolean;
+  ruleVariables?: RuleVariables;
 };
 
 const GlobalMessage = ({
   globalMessageContext,
   style,
   includeDismissed,
+  ruleVariables,
 }: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
@@ -32,7 +35,10 @@ const GlobalMessage = ({
 
   if (!globalMessageContext) return null;
 
-  const globalMessages = findGlobalMessages(globalMessageContext);
+  const globalMessages = findGlobalMessages(
+    globalMessageContext,
+    ruleVariables,
+  );
 
   const dismissGlobalMessage = (globalMessage: GlobalMessageType) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);

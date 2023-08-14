@@ -32,6 +32,7 @@ import {NearbyScreenProps} from './navigation-types';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {SearchTime, useDepartureData} from '@atb/quay-departures-screen';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -242,7 +243,7 @@ const NearbyOverview: React.FC<Props> = ({
         </AccessibleText>
       }
       onEndReached={onScrollViewEndReached}
-      globalMessageContext="app-departures"
+      globalMessageContext={GlobalMessageContextEnum.appDepartures}
       setFocusOnLoad={true}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
