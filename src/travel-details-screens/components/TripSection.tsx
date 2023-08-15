@@ -29,12 +29,13 @@ import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import React from 'react';
 import {View} from 'react-native';
 import {
-  getBookingRequirementForLeg,
   getLineName,
   getNoticesForLeg,
   getPublicCodeFromLeg,
   getTimeRepresentationType,
   isLegFlexibleTransport,
+  getLegBookingIsAvailable,
+  getLegRequiresBookingUrgently,
   significantWaitTime,
   significantWalkTime,
   TimeValues,
@@ -119,12 +120,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const now = useNow(2500);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const {requiresBookingUrgently, bookingIsAvailable} =
-    getBookingRequirementForLeg(
-      leg,
-      now,
-      flex_booking_number_of_days_available,
-    );
+  const bookingIsAvailable = getLegBookingIsAvailable(
+    leg,
+    now,
+    flex_booking_number_of_days_available,
+  );
+  const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
 
   const atbAuthorityId = 'ATB:Authority:2';
   const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;

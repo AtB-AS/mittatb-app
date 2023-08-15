@@ -1,9 +1,5 @@
 import {Location} from '@atb/favorites';
 import {SearchTime} from '@atb/journey-date-picker';
-import {
-  TripPatternWithKey,
-  BookingRequirement,
-} from '@atb/travel-details-screens/types';
 
 export type SearchForLocations = {
   from?: Location;
@@ -21,8 +17,4 @@ export type TripSearchScreenParams = {
   toLocation?: Location;
   searchTime?: SearchTime;
   callerRoute?: {name: string};
-};
-
-export type AvailableTripPattern = TripPatternWithKey & {
-  bookingRequirement: BookingRequirement;
 };

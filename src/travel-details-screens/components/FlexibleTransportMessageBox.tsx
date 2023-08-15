@@ -11,7 +11,16 @@ import {
 } from '@atb/utils/date';
 
 import {Leg} from '@atb/api/types/trips';
-import {getBookingRequirementForLeg} from '../utils';
+import {
+  getEarliestBookingDateFromLeg,
+  getLegRequiresBooking,
+  getLegRequiresBookingUrgently,
+  getIsTooEarlyToBookLeg,
+  getLegBookingIsAvailableImminently,
+  getSecondsRemainingToLegBookingAvailable,
+  getSecondsRemainingToLegBookingDeadline,
+  getLatestBookingDateFromLeg,
+} from '../utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type FlexibleTransportMessageProps = {
@@ -28,12 +37,17 @@ export const FlexibleTransportMessageBox: React.FC<
   const {t, language} = useTranslation();
 
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const {requiresBookingUrgently, bookingAvailableImminently, isTooEarly} =
-    getBookingRequirementForLeg(
-      leg,
-      now,
-      flex_booking_number_of_days_available,
-    );
+  const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
+  const bookingIsAvailableImminently = getLegBookingIsAvailableImminently(
+    leg,
+    now,
+    flex_booking_number_of_days_available,
+  );
+  const isTooEarly = getIsTooEarlyToBookLeg(
+    leg,
+    now,
+    flex_booking_number_of_days_available,
+  );
 
   const formattedTimeForLegBooking = getFormattedTimeForLegBooking(
     leg,
@@ -55,7 +69,7 @@ export const FlexibleTransportMessageBox: React.FC<
         ](
           publicCode,
           formattedTimeForLegBooking,
-          isTooEarly ? bookingAvailableImminently : requiresBookingUrgently,
+          isTooEarly ? bookingIsAvailableImminently : requiresBookingUrgently,
         ),
       )}
       onPressConfig={onPressConfig}
@@ -70,37 +84,52 @@ function getFormattedTimeForLegBooking(
   t: TranslateFunction,
   language: Language,
 ): string {
-  const {
-    requiresBooking,
-    requiresBookingUrgently,
-    bookingAvailableImminently,
-    isTooEarly,
-    secondsRemainingToAvailable,
-    secondsRemainingToDeadline,
-    earliestBookingDate,
-    latestBookingDate,
-  } = getBookingRequirementForLeg(
-    leg,
-    now,
-    flex_booking_number_of_days_available,
-  );
-
+  const requiresBooking = getLegRequiresBooking(leg);
   if (!requiresBooking) {
     return '';
-  } else if (requiresBookingUrgently || bookingAvailableImminently) {
-    return secondsToMinutesLong(
-      isTooEarly ? secondsRemainingToAvailable : secondsRemainingToDeadline,
-      language,
-    );
   } else {
-    const nextBookingStateChangeDate = isTooEarly
-      ? earliestBookingDate
-      : latestBookingDate;
-    return formatToShortDateTimeWithRelativeDayNames(
-      new Date(now),
-      nextBookingStateChangeDate,
-      t,
-      language,
+    const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
+    const bookingIsAvailableImminently = getLegBookingIsAvailableImminently(
+      leg,
+      now,
+      flex_booking_number_of_days_available,
     );
+    const isTooEarly = getIsTooEarlyToBookLeg(
+      leg,
+      now,
+      flex_booking_number_of_days_available,
+    );
+
+    if (requiresBookingUrgently || bookingIsAvailableImminently) {
+      const secondsRemainingToAvailable =
+        getSecondsRemainingToLegBookingAvailable(
+          leg,
+          now,
+          flex_booking_number_of_days_available,
+        );
+      const secondsRemainingToDeadline =
+        getSecondsRemainingToLegBookingDeadline(leg, now);
+
+      return secondsToMinutesLong(
+        isTooEarly ? secondsRemainingToAvailable : secondsRemainingToDeadline,
+        language,
+      );
+    } else {
+      const earliestBookingDate = getEarliestBookingDateFromLeg(
+        leg,
+        flex_booking_number_of_days_available,
+      );
+      const latestBookingDate = getLatestBookingDateFromLeg(leg);
+      const nextBookingStateChangeDate = isTooEarly
+        ? earliestBookingDate
+        : latestBookingDate;
+
+      return formatToShortDateTimeWithRelativeDayNames(
+        new Date(now),
+        nextBookingStateChangeDate,
+        t,
+        language,
+      );
+    }
   }
 }

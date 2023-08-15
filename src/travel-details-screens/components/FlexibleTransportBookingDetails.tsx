@@ -13,7 +13,7 @@ import {ThemeText} from '@atb/components/text';
 import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {getBookingRequirementForLeg, getPublicCodeFromLeg} from '../utils';
+import {getPublicCodeFromLeg, getLegBookingIsAvailable} from '../utils';
 import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -41,7 +41,7 @@ export const FlexibleTransportBookingDetails: React.FC<
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(2500);
-  const {bookingIsAvailable} = getBookingRequirementForLeg(
+  const bookingIsAvailable = getLegBookingIsAvailable(
     leg,
     now,
     flex_booking_number_of_days_available,

@@ -52,12 +52,12 @@ import {
   significantWaitTime,
   significantWalkTime,
   isLegFlexibleTransport,
-  getBookingRequirementForTripPattern,
+  getTripPatternRequiresBooking,
+  getTripPatternRequiresBookingUrgently,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useNow} from '@atb/utils/use-now';
 
 type ResultItemProps = {
@@ -154,9 +154,6 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   );
   const fadeInValue = useRef(new Animated.Value(0)).current;
 
-  const now = useNow(2500);
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
-
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
     if (legIconsParentWidth && legIconsContentWidth) {
@@ -201,8 +198,6 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         language,
         isInPast,
         resultNumber,
-        now,
-        flex_booking_number_of_days_available,
       )}
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
@@ -328,14 +323,12 @@ const ResultItemFooter: React.FC<{
   const {t} = useTranslation();
 
   const now = useNow(2500);
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
 
-  const {requiresBooking, requiresBookingUrgently} =
-    getBookingRequirementForTripPattern(
-      tripPattern,
-      now,
-      flex_booking_number_of_days_available,
-    );
+  const requiresBookingUrgently = getTripPatternRequiresBookingUrgently(
+    tripPattern,
+    now,
+  );
+  const requiresBooking = getTripPatternRequiresBooking(tripPattern);
 
   return (
     <View style={styles.resultFooter}>
@@ -579,8 +572,6 @@ const tripSummary = (
   language: Language,
   isInPast: boolean,
   listPosition: number,
-  now: number,
-  flex_booking_number_of_days_available: number,
 ) => {
   const distance = Math.round(tripPattern.legs[0].distance);
   let humanizedDistance;
@@ -693,11 +684,7 @@ const tripSummary = (
     ),
   );
 
-  const {requiresBooking} = getBookingRequirementForTripPattern(
-    tripPattern,
-    now,
-    flex_booking_number_of_days_available,
-  );
+  const requiresBooking = getTripPatternRequiresBooking(tripPattern);
   const requiresBookingText = requiresBooking
     ? t(TripSearchTexts.results.resultItem.footer.requiresBooking)
     : undefined;
