@@ -11,13 +11,6 @@ import {StorageModelKeysEnum} from '@atb/storage';
 import {useDebugOverride} from '@atb/debug';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RemoteConfigKeys} from '@atb/remote-config';
-import {TripPatternWithKey} from '@atb/travel-details-screens/types';
-import {
-  isLegFlexibleTransport,
-  getBookingRequirementForLeg,
-} from '@atb/travel-details-screens/utils';
-import {useNow} from '@atb/utils/use-now';
-import {AvailableTripPattern} from '../types';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -117,36 +110,5 @@ export const useFlexibleTransportEgressModeEnabled = () => {
   return useFlexibleTransportDebugOverrideOrRemote(
     'use_flexible_on_egressMode',
     StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
-  );
-};
-
-export const useAvailableTripPatterns = (
-  tripPatterns: TripPatternWithKey[],
-): AvailableTripPattern[] => {
-  const now = useNow(2500);
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
-
-  const tripPatternsWithBookingRequirements = tripPatterns.map(
-    (tripPattern) => {
-      // if > 1 flexible transport leg, just use the first one
-      const firstFlexibleTransportLeg = tripPattern?.legs.find((leg) =>
-        isLegFlexibleTransport(leg),
-      );
-
-      const bookingRequirement = getBookingRequirementForLeg(
-        firstFlexibleTransportLeg,
-        now,
-        flex_booking_number_of_days_available,
-      );
-
-      return {
-        ...tripPattern,
-        ...{bookingRequirement},
-      };
-    },
-  );
-
-  return tripPatternsWithBookingRequirements.filter(
-    (tpwbr) => !tpwbr.bookingRequirement?.isTooLate,
   );
 };

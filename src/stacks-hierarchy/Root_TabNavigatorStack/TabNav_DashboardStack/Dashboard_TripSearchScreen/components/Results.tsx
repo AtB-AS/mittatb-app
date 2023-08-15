@@ -13,13 +13,15 @@ import {
 import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
-import {TripPattern} from '@atb/api/types/trips';
 import {SearchTime} from '@atb/journey-date-picker';
 import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {ResultItemOld} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
 import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
+import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/travel-details-screens/types';
-import {useAvailableTripPatterns} from '../hooks';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {tripPatternIsTooLateToBook} from '@atb/travel-details-screens/utils';
+import {useNow} from '@atb/utils/use-now';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -49,7 +51,8 @@ export const Results: React.FC<Props> = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
 
-  const availableTripPatterns = useAvailableTripPatterns(tripPatterns);
+  const now = useNow(2500);
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
 
   useEffect(() => {
     if (errorType) {
@@ -94,34 +97,43 @@ export const Results: React.FC<Props> = ({
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
-      {availableTripPatterns.map((tripPattern, i) => (
-        <Fragment key={tripPattern.key}>
-          <DayLabel
-            departureTime={tripPattern.expectedStartTime}
-            previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
-          />
-          {newTravelSearchEnabled ? (
-            <ResultItem
-              tripPattern={tripPattern}
-              onDetailsPressed={() => {
-                onDetailsPressed(tripPattern, i);
-              }}
-              searchTime={searchTime}
-              testID={'tripSearchSearchResult' + i}
-              resultNumber={i + 1}
+      {tripPatterns
+        .filter(
+          (tp) =>
+            !tripPatternIsTooLateToBook(
+              tp,
+              now,
+              flex_booking_number_of_days_available,
+            ),
+        )
+        .map((tripPattern, i) => (
+          <Fragment key={tripPattern.key}>
+            <DayLabel
+              departureTime={tripPattern.expectedStartTime}
+              previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
-          ) : (
-            <ResultItemOld
-              tripPattern={tripPattern}
-              onDetailsPressed={() => {
-                onDetailsPressed(tripPattern, i);
-              }}
-              searchTime={searchTime}
-              testID={'tripSearchSearchResult' + i}
-            />
-          )}
-        </Fragment>
-      ))}
+            {newTravelSearchEnabled ? (
+              <ResultItem
+                tripPattern={tripPattern}
+                onDetailsPressed={() => {
+                  onDetailsPressed(tripPattern, i);
+                }}
+                searchTime={searchTime}
+                testID={'tripSearchSearchResult' + i}
+                resultNumber={i + 1}
+              />
+            ) : (
+              <ResultItemOld
+                tripPattern={tripPattern}
+                onDetailsPressed={() => {
+                  onDetailsPressed(tripPattern, i);
+                }}
+                searchTime={searchTime}
+                testID={'tripSearchSearchResult' + i}
+              />
+            )}
+          </Fragment>
+        ))}
     </View>
   );
 };

@@ -220,7 +220,7 @@ const defaultBookingRequirement: BookingRequirement = {
 export function getBookingRequirementForLeg(
   leg: Leg | undefined,
   now: number,
-  flex_booking_number_of_days_available: number, // would be better to get earliestBookingTime as ISO string from Entur's API.
+  flex_booking_number_of_days_available: number,
 ): BookingRequirement {
   if (leg === undefined) {
     return defaultBookingRequirement;
@@ -289,4 +289,62 @@ export function getBookingRequirementForLeg(
     latestBookingDate,
     earliestBookingDate,
   };
+}
+
+export function getBookingRequirementForTripPattern(
+  tripPattern: TripPattern,
+  now: number,
+  flex_booking_number_of_days_available: number,
+): BookingRequirement {
+  // if > 1 flexible transport leg, just use the first one
+  const firstFlexibleTransportLeg = tripPattern?.legs.find((leg) =>
+    isLegFlexibleTransport(leg),
+  );
+
+  const bookingRequirement = getBookingRequirementForLeg(
+    firstFlexibleTransportLeg,
+    now,
+    flex_booking_number_of_days_available,
+  );
+  return bookingRequirement;
+}
+
+export function tripPatternRequiresBooking(
+  tripPattern: TripPattern,
+  now: number,
+  flex_booking_number_of_days_available: number,
+) {
+  const bookingRequirement = getBookingRequirementForTripPattern(
+    tripPattern,
+    now,
+    flex_booking_number_of_days_available,
+  );
+  return bookingRequirement.requiresBooking;
+}
+
+export function tripPatternRequiresBookingUrgently(
+  tripPattern: TripPattern,
+  now: number,
+  flex_booking_number_of_days_available: number,
+) {
+  const bookingRequirement = getBookingRequirementForTripPattern(
+    tripPattern,
+    now,
+    flex_booking_number_of_days_available,
+  );
+  return bookingRequirement.requiresBookingUrgently;
+}
+
+export function tripPatternIsTooLateToBook(
+  tripPattern: TripPattern,
+  now: number,
+  flex_booking_number_of_days_available: number,
+) {
+  const bookingRequirement = getBookingRequirementForTripPattern(
+    tripPattern,
+    now,
+    flex_booking_number_of_days_available,
+  );
+
+  return bookingRequirement.isTooLate;
 }
