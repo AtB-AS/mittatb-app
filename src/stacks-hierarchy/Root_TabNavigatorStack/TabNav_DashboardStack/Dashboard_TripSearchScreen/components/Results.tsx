@@ -20,7 +20,7 @@ import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigator
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {tripPatternIsTooLateToBook} from '@atb/travel-details-screens/utils';
+import {getBookingRequirementForTripPattern} from '@atb/travel-details-screens/utils';
 import {useNow} from '@atb/utils/use-now';
 
 type Props = {
@@ -100,11 +100,11 @@ export const Results: React.FC<Props> = ({
       {tripPatterns
         .filter(
           (tp) =>
-            !tripPatternIsTooLateToBook(
+            !getBookingRequirementForTripPattern(
               tp,
               now,
               flex_booking_number_of_days_available,
-            ),
+            ).isTooLate,
         )
         .map((tripPattern, i) => (
           <Fragment key={tripPattern.key}>

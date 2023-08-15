@@ -301,50 +301,9 @@ export function getBookingRequirementForTripPattern(
     isLegFlexibleTransport(leg),
   );
 
-  const bookingRequirement = getBookingRequirementForLeg(
+  return getBookingRequirementForLeg(
     firstFlexibleTransportLeg,
     now,
     flex_booking_number_of_days_available,
   );
-  return bookingRequirement;
-}
-
-export function tripPatternRequiresBooking(
-  tripPattern: TripPattern,
-  now: number,
-  flex_booking_number_of_days_available: number,
-) {
-  const bookingRequirement = getBookingRequirementForTripPattern(
-    tripPattern,
-    now,
-    flex_booking_number_of_days_available,
-  );
-  return bookingRequirement.requiresBooking;
-}
-
-export function tripPatternRequiresBookingUrgently(
-  tripPattern: TripPattern,
-  now: number,
-  flex_booking_number_of_days_available: number,
-) {
-  const bookingRequirement = getBookingRequirementForTripPattern(
-    tripPattern,
-    now,
-    flex_booking_number_of_days_available,
-  );
-  return bookingRequirement.requiresBookingUrgently;
-}
-
-export function tripPatternIsTooLateToBook(
-  tripPattern: TripPattern,
-  now: number,
-  flex_booking_number_of_days_available: number,
-) {
-  const bookingRequirement = getBookingRequirementForTripPattern(
-    tripPattern,
-    now,
-    flex_booking_number_of_days_available,
-  );
-
-  return bookingRequirement.isTooLate;
 }

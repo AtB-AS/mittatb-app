@@ -1,4 +1,3 @@
-import {BookingRequirement} from '@atb/travel-details-screens/types';
 import {
   TripDetailsTexts,
   Language,
@@ -11,8 +10,12 @@ import {
   formatToShortDateTimeWithRelativeDayNames,
 } from '@atb/utils/date';
 
+import {Leg} from '@atb/api/types/trips';
+import {getBookingRequirementForLeg} from '../utils';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+
 type FlexibleTransportMessageProps = {
-  bookingRequirement: BookingRequirement;
+  leg: Leg;
   publicCode: string;
   now: number;
   showStatusIcon: boolean;
@@ -21,31 +24,38 @@ type FlexibleTransportMessageProps = {
 
 export const FlexibleTransportMessageBox: React.FC<
   FlexibleTransportMessageProps
-> = ({bookingRequirement, publicCode, now, showStatusIcon, onPressConfig}) => {
+> = ({leg, publicCode, now, showStatusIcon, onPressConfig}) => {
   const {t, language} = useTranslation();
 
-  const formattedTimeForBooking = getFormattedTimeForBooking(
-    bookingRequirement,
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const {requiresBookingUrgently, bookingAvailableImminently, isTooEarly} =
+    getBookingRequirementForLeg(
+      leg,
+      now,
+      flex_booking_number_of_days_available,
+    );
+
+  const formattedTimeForLegBooking = getFormattedTimeForLegBooking(
+    leg,
     now,
+    flex_booking_number_of_days_available,
     t,
     language,
   );
 
   return (
     <MessageBox
-      type={bookingRequirement.requiresBookingUrgently ? 'warning' : 'info'}
+      type={requiresBookingUrgently ? 'warning' : 'info'}
       noStatusIcon={!showStatusIcon}
       message={t(
         TripDetailsTexts.flexibleTransport?.[
-          bookingRequirement.isTooEarly
+          isTooEarly
             ? 'needsBookingButIsTooEarly'
             : 'needsBookingAndIsAvailable'
         ](
           publicCode,
-          formattedTimeForBooking,
-          bookingRequirement.isTooEarly
-            ? bookingRequirement.bookingAvailableImminently
-            : bookingRequirement.requiresBookingUrgently,
+          formattedTimeForLegBooking,
+          isTooEarly ? bookingAvailableImminently : requiresBookingUrgently,
         ),
       )}
       onPressConfig={onPressConfig}
@@ -53,28 +63,39 @@ export const FlexibleTransportMessageBox: React.FC<
   );
 };
 
-function getFormattedTimeForBooking(
-  bookingRequirement: BookingRequirement,
+function getFormattedTimeForLegBooking(
+  leg: Leg,
   now: number,
+  flex_booking_number_of_days_available: number,
   t: TranslateFunction,
   language: Language,
 ): string {
-  if (!bookingRequirement.requiresBooking) {
+  const {
+    requiresBooking,
+    requiresBookingUrgently,
+    bookingAvailableImminently,
+    isTooEarly,
+    secondsRemainingToAvailable,
+    secondsRemainingToDeadline,
+    earliestBookingDate,
+    latestBookingDate,
+  } = getBookingRequirementForLeg(
+    leg,
+    now,
+    flex_booking_number_of_days_available,
+  );
+
+  if (!requiresBooking) {
     return '';
-  } else if (
-    bookingRequirement.requiresBookingUrgently ||
-    bookingRequirement.bookingAvailableImminently
-  ) {
+  } else if (requiresBookingUrgently || bookingAvailableImminently) {
     return secondsToMinutesLong(
-      bookingRequirement.isTooEarly
-        ? bookingRequirement.secondsRemainingToAvailable
-        : bookingRequirement.secondsRemainingToDeadline,
+      isTooEarly ? secondsRemainingToAvailable : secondsRemainingToDeadline,
       language,
     );
   } else {
-    const nextBookingStateChangeDate = bookingRequirement.isTooEarly
-      ? bookingRequirement.earliestBookingDate
-      : bookingRequirement.latestBookingDate;
+    const nextBookingStateChangeDate = isTooEarly
+      ? earliestBookingDate
+      : latestBookingDate;
     return formatToShortDateTimeWithRelativeDayNames(
       new Date(now),
       nextBookingStateChangeDate,

@@ -119,11 +119,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const now = useNow(2500);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const bookingRequirement = getBookingRequirementForLeg(
-    leg,
-    now,
-    flex_booking_number_of_days_available,
-  );
+  const {requiresBookingUrgently, bookingIsAvailable} =
+    getBookingRequirementForLeg(
+      leg,
+      now,
+      flex_booking_number_of_days_available,
+    );
 
   const atbAuthorityId = 'ATB:Authority:2';
   const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;
@@ -232,15 +233,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
         {isFlexible && (
           <TripRow
             rowLabel={
-              <ThemeIcon
-                svg={
-                  bookingRequirement.requiresBookingUrgently ? Warning : Info
-                }
-              />
+              <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
             }
           >
             <FlexibleTransportMessageBox
-              bookingRequirement={bookingRequirement}
+              leg={leg}
               publicCode={publicCode}
               now={now}
               showStatusIcon={false}
@@ -259,7 +256,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {isFlexible && bookingRequirement.bookingIsAvailable && (
+        {isFlexible && bookingIsAvailable && (
           <View style={style.flexBookingOptions}>
             <TripRow accessible={false}>
               <FlexibleTransportBookingOptions leg={leg} />

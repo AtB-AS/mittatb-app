@@ -52,8 +52,7 @@ import {
   significantWaitTime,
   significantWalkTime,
   isLegFlexibleTransport,
-  tripPatternRequiresBooking,
-  tripPatternRequiresBookingUrgently,
+  getBookingRequirementForTripPattern,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
@@ -330,16 +329,13 @@ const ResultItemFooter: React.FC<{
 
   const now = useNow(2500);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const requiresBooking = tripPatternRequiresBooking(
-    tripPattern,
-    now,
-    flex_booking_number_of_days_available,
-  );
-  const requiresBookingUrgently = tripPatternRequiresBookingUrgently(
-    tripPattern,
-    now,
-    flex_booking_number_of_days_available,
-  );
+
+  const {requiresBooking, requiresBookingUrgently} =
+    getBookingRequirementForTripPattern(
+      tripPattern,
+      now,
+      flex_booking_number_of_days_available,
+    );
 
   return (
     <View style={styles.resultFooter}>
@@ -697,11 +693,12 @@ const tripSummary = (
     ),
   );
 
-  const requiresBookingText = tripPatternRequiresBooking(
+  const {requiresBooking} = getBookingRequirementForTripPattern(
     tripPattern,
     now,
     flex_booking_number_of_days_available,
-  )
+  );
+  const requiresBookingText = requiresBooking
     ? t(TripSearchTexts.results.resultItem.footer.requiresBooking)
     : undefined;
 

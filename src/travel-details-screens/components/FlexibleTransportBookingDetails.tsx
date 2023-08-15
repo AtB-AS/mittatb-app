@@ -41,7 +41,7 @@ export const FlexibleTransportBookingDetails: React.FC<
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(2500);
-  const bookingRequirement = getBookingRequirementForLeg(
+  const {bookingIsAvailable} = getBookingRequirementForLeg(
     leg,
     now,
     flex_booking_number_of_days_available,
@@ -65,7 +65,7 @@ export const FlexibleTransportBookingDetails: React.FC<
       <ScrollView style={style.contentContainer}>
         <View style={style.messageBoxContainer}>
           <FlexibleTransportMessageBox
-            bookingRequirement={bookingRequirement}
+            leg={leg}
             publicCode={publicCode}
             now={now}
             showStatusIcon={true}
@@ -123,9 +123,7 @@ export const FlexibleTransportBookingDetails: React.FC<
           </ThemeText>
         </TouchableOpacity>
 
-        {bookingRequirement.bookingIsAvailable && (
-          <FlexibleTransportBookingOptions leg={leg} />
-        )}
+        {bookingIsAvailable && <FlexibleTransportBookingOptions leg={leg} />}
 
         <View style={style.paddingBottomEnsurer} />
       </ScrollView>
