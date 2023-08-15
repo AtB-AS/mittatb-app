@@ -150,8 +150,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (vatPercent) {
             setVatPercent(vatPercent);
           }
-          // TODO: place this back
 
+          const fareProductTypeConfigs =
+            getFareProductTypeConfigsFromSnapshot(snapshot);
+          if (fareProductTypeConfigs) {
+            setFareProductTypeConfigs(fareProductTypeConfigs);
+          }
           const travelSearchFilters =
             getTravelSearchFiltersFromSnapshot(snapshot);
           if (travelSearchFilters) {

@@ -18,6 +18,7 @@ import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/
 import {useAnalytics} from '@atb/analytics';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
+import {useHarborsQuery} from '@atb/queries';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -27,7 +28,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
   const {recentFareContracts, loading} = useRecentFareContracts();
-  // console.log('recentFareContracts: ' + JSON.stringify(recentFareContracts));
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
   const styles = useStyles();
@@ -39,6 +39,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {remoteTokens} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
   const hasInspectableMobileToken = isMobileToken(inspectableToken);
+  const harborsQuery = useHarborsQuery();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -118,20 +119,38 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     analytics.logEvent('Ticketing', 'Recently used fare product selected', {
       type: fareProductTypeConfig.type,
     });
+    const getFromPlace = () => {
+      if (rfc.pointToPointValidity?.fromPlace) {
+        const fromName = harborsQuery.data?.find(
+          (sp) => sp.id === rfc.pointToPointValidity?.fromPlace,
+        )?.name;
+        return {
+          id: rfc.pointToPointValidity?.fromPlace,
+          name: fromName,
+        };
+      } else if (rfc.fromTariffZone) {
+        return {...rfc.fromTariffZone, resultType: 'zone'};
+      }
+    };
+    const getToPlace = () => {
+      if (rfc.pointToPointValidity?.toPlace) {
+        const toName = harborsQuery.data?.find(
+          (sp) => sp.id === rfc.pointToPointValidity?.toPlace,
+        )?.name;
+        return {
+          id: rfc.pointToPointValidity?.toPlace,
+          name: toName,
+        };
+      } else if (rfc.toTariffZone) {
+        return {...rfc.toTariffZone, resultType: 'zone'};
+      }
+    };
     navigation.navigate('Root_PurchaseOverviewScreen', {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,
       userProfilesWithCount: rfc.userProfilesWithCount,
-      // fromPlace: rfc.fromTariffZone && {
-      //   ...rfc.fromTariffZone,
-      //   resultType: 'zone',
-      // },
-      // toPlace: rfc.toTariffZone && {
-      //   ...rfc.toTariffZone,
-      //   resultType: 'zone',
-      // },
-      fromPlace: {id: 'NSR:StopPlace:74007', name: 'name from'},
-      toPlace: {id: 'NSR:StopPlace:74008', name: 'name to'},
+      fromPlace: getFromPlace(), // fix type error
+      toPlace: getToPlace(),
       mode: 'Ticket',
     });
   };

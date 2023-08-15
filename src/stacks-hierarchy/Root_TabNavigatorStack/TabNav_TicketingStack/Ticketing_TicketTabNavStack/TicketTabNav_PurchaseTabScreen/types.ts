@@ -1,4 +1,8 @@
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {
+  PointToPointValidity,
+  PreassignedFareProduct,
+  TariffZone,
+} from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 
 export type RecentFareContract = {
@@ -10,5 +14,6 @@ export type RecentFareContract = {
   preassignedFareProduct: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
+  pointToPointValidity?: PointToPointValidity;
   userProfilesWithCount: UserProfileWithCount[];
 };

@@ -218,7 +218,7 @@
       "productSelectionMode": "none",
       "offerEndpoint": "stop-places",
       "requiresLogin": true,
-      "requiresTokenOnMobile": false
+      "requiresTokenOnMobile": true
     }
   },
   {
@@ -271,7 +271,7 @@
       ],
       "offerEndpoint": "stop-places",
       "requiresLogin": true,
-      "requiresTokenOnMobile": false
+      "requiresTokenOnMobile": true
     }
   }
 ]

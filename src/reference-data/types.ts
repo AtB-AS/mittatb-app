@@ -45,6 +45,11 @@ export type TariffZone = {
   isDefault?: boolean;
 };
 
+export type PointToPointValidity = {
+  fromPlace: string;
+  toPlace: string;
+};
+
 export type CityZone = {
   id: string;
   name: string;

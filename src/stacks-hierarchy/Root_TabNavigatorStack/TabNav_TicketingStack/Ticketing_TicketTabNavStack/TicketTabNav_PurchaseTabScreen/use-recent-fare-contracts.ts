@@ -124,6 +124,7 @@ const mapBackendRecentFareContracts = (
     tariffZones,
     recentFareContract.zones.slice(-1)[0],
   );
+  const pointToPointValidity = recentFareContract.point_to_point_validity;
 
   const id =
     preassignedFareProduct?.id +
@@ -136,6 +137,7 @@ const mapBackendRecentFareContracts = (
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
+    pointToPointValidity,
     userProfilesWithCount,
   };
 };

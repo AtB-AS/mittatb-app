@@ -18,7 +18,8 @@ import {
   getTransportModeText,
   TransportModes,
 } from '@atb/components/transportation-modes';
-import {FareContractHarborStopPlaces} from '@atb/fare-contracts/components/FareContractHarborStopPlaces';
+import {FareContractHarborStopPlaces} from '@atb/fare-contracts/components/FareContractHarborStopPlaces'; // Is this import ok?
+import {useHarborsQuery} from '@atb/queries';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -41,6 +42,7 @@ export const RecentFareContractComponent = ({
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
+    pointToPointValidity,
   } = recentFareContract;
   const {language} = useTranslation();
   const styles = useStyles();
@@ -50,23 +52,12 @@ export const RecentFareContractComponent = ({
   const toZoneName = toTariffZone?.name.value;
   const {width} = Dimensions.get('window');
 
+  const harborsQuery = useHarborsQuery();
+
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
-  const fromStopPlaceId = 'NSR:StopPlace:74007';
-  const toStopPlaceId = 'NSR:StopPlace:74008';
-  const showTwoWayIcon = false;
-
-  // console.log(
-  //   'preassignedFareProduct: ' + JSON.stringify(preassignedFareProduct),
-  // );
-  // console.log('fromTariffZone: ' + JSON.stringify(fromTariffZone));
-  // console.log('toTariffZone: ' + JSON.stringify(toTariffZone));
-  // console.log(
-  //   'userProfilesWithCount: ' + JSON.stringify(userProfilesWithCount),
-  // );
-  // console.log('recentFareContract: ' + JSON.stringify(recentFareContract));
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -88,20 +79,44 @@ export const RecentFareContractComponent = ({
         RecentFareContractsTexts.repeatPurchase.label,
       )} ${modeInfo} ${travellerInfo}`;
     }
-
-    const zoneInfo = `${
-      fromZoneName === toZoneName
-        ? `${t(
-            RecentFareContractsTexts.a11yPreLabels.zones.oneZone,
-          )} ${fromZoneName}`
-        : `${t(
-            RecentFareContractsTexts.a11yPreLabels.zones.multipleZones,
-          )} ${fromZoneName}, ${toZoneName}`
-    }`;
-
+    const zoneOrHarborInfo = () => {
+      if (fromTariffZone !== undefined) {
+        return fromZoneName === toZoneName
+          ? `${t(
+              RecentFareContractsTexts.a11yPreLabels.zones.oneZone,
+            )} ${fromZoneName}`
+          : `${t(
+              RecentFareContractsTexts.a11yPreLabels.zones.multipleZones,
+            )} ${fromZoneName}, ${toZoneName}`;
+      }
+      if (pointToPointValidity?.fromPlace && pointToPointValidity?.toPlace) {
+        const fromName =
+          harborsQuery.data?.find(
+            (sp) => sp.id === pointToPointValidity.fromPlace,
+          )?.name ?? '';
+        const toName =
+          harborsQuery.data?.find(
+            (sp) => sp.id === pointToPointValidity.toPlace,
+          )?.name ?? '';
+        return preassignedFareProduct.type === 'boat-period'
+          ? t(
+              RecentFareContractsTexts.a11yPreLabels.harbors.returnTrip(
+                fromName,
+                toName,
+              ),
+            )
+          : t(
+              RecentFareContractsTexts.a11yPreLabels.harbors.oneWayTrip(
+                fromName,
+                toName,
+              ),
+            );
+      }
+      return '';
+    };
     return `${t(
       RecentFareContractsTexts.repeatPurchase.label,
-    )} ${modeInfo} ${travellerInfo} ${zoneInfo}`;
+    )} ${modeInfo} ${travellerInfo} ${zoneOrHarborInfo()}`;
   };
 
   const currentAccessibilityLabel = returnAccessibilityLabel();
@@ -136,13 +151,15 @@ export const RecentFareContractComponent = ({
         </View>
 
         {(preassignedFareProduct.type === 'boat-single' ||
-          preassignedFareProduct.type === 'boat-period') && ( // swap with check on whether it has applicable data for to/from?
-          <FareContractHarborStopPlaces
-            showTwoWayIcon={showTwoWayIcon}
-            fromStopPlace={fromStopPlaceId}
-            toStopPlace={toStopPlaceId}
-          />
-        )}
+          preassignedFareProduct.type === 'boat-period') &&
+          pointToPointValidity && (
+            <FareContractHarborStopPlaces
+              showTwoWayIcon={preassignedFareProduct.type === 'boat-period'}
+              fromStopPlaceId={pointToPointValidity?.fromPlace}
+              toStopPlaceId={pointToPointValidity?.toPlace}
+              accessible={false}
+            />
+          )}
 
         <View style={styles.horizontalFlex}>
           <View>

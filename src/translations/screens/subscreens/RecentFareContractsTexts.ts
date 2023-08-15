@@ -37,7 +37,21 @@ const RecentFareContractsTexts = {
       'for the following travellers: ',
       'for følgjande reisande: ',
     ),
-    and: _(' og ', ' and ', ' og '),
+    harbors: {
+      oneWayTrip: (from: string, to: string) =>
+        _(
+          `En vei, fra ${from}, til ${to}`,
+          `One way, from ${from}, to ${to}`,
+          `Ein veg, frå ${from}, til ${to}`,
+        ),
+      returnTrip: (from: string, to: string) =>
+        _(
+          `Tur/retur, fra ${from}, til ${to}`,
+          `Round trip, from ${from}, to ${to}`,
+          `Tur/retur, frå ${from}, til ${to}`,
+        ),
+      and: _(' og ', ' and ', ' og '),
+    },
   },
   options: {
     now: _('Nå', 'Now', 'No'),

@@ -180,9 +180,6 @@ const FareContractInfoHeader = ({
     isInspectable,
     fareProductType,
   );
-  // replace
-  const fromStopPlace = useStopPlace(fromStopPlaceId);
-  const toStopPlace = useStopPlace(toStopPlaceId);
 
   return (
     <View style={styles.header}>
@@ -208,15 +205,15 @@ const FareContractInfoHeader = ({
           </ThemeText>
         )}
       </View>
-      {['boat-single', 'boat-period'].includes(fareProductType || '') &&
-        fromStopPlace.harbor &&
-        toStopPlace.harbor && (
+      {['boat-single', 'boat-period'].includes(fareProductType || '') && (
+        <View style={styles.harborStopPlaces}>
           <FareContractHarborStopPlaces
-            fromStopPlace={fromStopPlace.harbor}
-            toStopPlace={toStopPlace.harbor}
+            fromStopPlaceId={fromStopPlaceId}
+            toStopPlaceId={toStopPlaceId}
             showTwoWayIcon={fareProductType === 'boat-period'}
           />
-        )}
+        </View>
+      )}
       {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
   );
@@ -364,5 +361,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginTop: theme.spacings.xSmall,
+  },
+  harborStopPlaces: {
+    marginTop: theme.spacings.large,
   },
 }));
