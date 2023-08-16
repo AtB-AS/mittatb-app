@@ -6,7 +6,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {useAppState} from './AppContext';
 import {FeedbackConfiguration} from '@atb/components/feedback';
 import {useInterval} from '@atb/utils/use-interval';
-import {LanguageAndTextType} from './translations';
 
 /**
  * The retry interval values for retrying Remote Config data fetch with
@@ -18,7 +17,6 @@ const RETRY_INTERVAL_MS_MAX = 30000;
 export type RemoteConfigContextState = RemoteConfig & {
   refresh: () => void;
   feedback_questions: FeedbackConfiguration[];
-  flex_transport_about_urls: LanguageAndTextType[];
 };
 
 const RemoteConfigContext = createContext<RemoteConfigContextState | undefined>(
@@ -134,10 +132,6 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
       value={{
         ...config,
         feedback_questions: parseJson(config.feedback_questions, []),
-        flex_transport_about_urls: parseJson(
-          config.flex_transport_about_urls,
-          [],
-        ),
         refresh,
       }}
     >

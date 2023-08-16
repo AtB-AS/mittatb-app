@@ -50,6 +50,7 @@ type ConfigurableLinks = {
   termsInfo?: LanguageAndTextType[];
   inspectionInfo?: LanguageAndTextType[];
   refundInfo?: LanguageAndTextType[];
+  flexTransportInfo?: LanguageAndTextType[];
 };
 
 type ConfigurationContextState = {
@@ -442,12 +443,16 @@ function getConfigurableLinksFromSnapshot(
   const inspectionInfo = mapLanguageAndTextType(urls?.get('inspectionInfo'));
   const termsInfo = mapLanguageAndTextType(urls?.get('termsInfo'));
   const refundInfo = mapLanguageAndTextType(urls?.get('refundInfo'));
+  const flexTransportInfo = mapLanguageAndTextType(
+    urls?.get('flexTransportInfo'),
+  );
 
   return {
     ticketingInfo,
     termsInfo,
     inspectionInfo,
     refundInfo,
+    flexTransportInfo,
   };
 }
 

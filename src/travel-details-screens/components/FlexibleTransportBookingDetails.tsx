@@ -19,6 +19,7 @@ import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {Dimensions} from 'react-native';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
@@ -35,8 +36,8 @@ export const FlexibleTransportBookingDetails: React.FC<
   const style = useStyle();
   const {theme} = useTheme();
 
-  const {flex_transport_about_urls, flex_booking_number_of_days_available} =
-    useRemoteConfig();
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const {configurableLinks} = useFirestoreConfiguration();
 
   const publicCode = getPublicCodeFromLeg(leg);
 
@@ -107,11 +108,14 @@ export const FlexibleTransportBookingDetails: React.FC<
 
         <TouchableOpacity
           style={style.readMoreAbout}
-          onPress={() =>
-            Linking.openURL(
-              getTextForLanguage(flex_transport_about_urls, language) || '',
-            )
-          }
+          onPress={() => {
+            const flexTransportInfoUrl =
+              getTextForLanguage(
+                configurableLinks?.flexTransportInfo,
+                language,
+              ) || '';
+            flexTransportInfoUrl && Linking.openURL(flexTransportInfoUrl);
+          }}
           accessibilityRole="link"
         >
           <ThemeText
