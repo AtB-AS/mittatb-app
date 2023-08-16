@@ -39,18 +39,13 @@ import {
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
-import {TravelSearchFiltersType} from '@atb-as/config-specs';
+import {
+  TravelSearchFiltersType,
+  ConfigurableLinksType,
+} from '@atb-as/config-specs';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
-};
-
-type ConfigurableLinks = {
-  ticketingInfo?: LanguageAndTextType[];
-  termsInfo?: LanguageAndTextType[];
-  inspectionInfo?: LanguageAndTextType[];
-  refundInfo?: LanguageAndTextType[];
-  flexTransportInfo?: LanguageAndTextType[];
 };
 
 type ConfigurationContextState = {
@@ -65,7 +60,7 @@ type ConfigurationContextState = {
   boatStopPoints: BoatStopPoint[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
-  configurableLinks: ConfigurableLinks | undefined;
+  configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
 };
 
@@ -109,7 +104,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
   const [configurableLinks, setConfigurableLinks] =
-    useState<ConfigurableLinks>();
+    useState<ConfigurableLinksType>();
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
   >([]);
@@ -436,7 +431,7 @@ function getAppTextsFromSnapshot(
 
 function getConfigurableLinksFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): ConfigurableLinks | undefined {
+): ConfigurableLinksType | undefined {
   const urls = snapshot.docs.find((doc) => doc.id == 'urls');
 
   const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
