@@ -50,8 +50,8 @@ const handleError = (err: any) => {
   throw parseRemoteError(err.response?.data) || err;
 };
 
-const isRemoteTokenStateError = (err: Error) =>
-  err instanceof RemoteTokenStateError;
+const isRemoteTokenStateError = (err: any) =>
+  parseRemoteError(err.response?.data) instanceof RemoteTokenStateError;
 
 export const tokenService: TokenService = {
   initiateNewMobileToken: async (traceId, isEmulator) => {
