@@ -65,6 +65,7 @@
     "haversine-distance": "^1.2.1",
     "hex-to-rgba": "^2.0.1",
     "humanize-duration": "^3.28.0",
+    "iso8601-duration": "^2.1.1",
     "libphonenumber-js": "^1.10.18",
     "lodash.groupby": "^4.6.0",
     "lodash.mapvalues": "^4.6.0",

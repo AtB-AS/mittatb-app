@@ -1,4 +1,8 @@
-import {dateWithReplacedTime, secondsBetween} from '@atb/utils/date';
+import {
+  dateWithReplacedTime,
+  iso8601DurationToSeconds,
+  secondsBetween,
+} from '@atb/utils/date';
 import {Leg, TripPattern} from '@atb/api/types/trips';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
@@ -189,14 +193,40 @@ export function getLatestBookingDateFromLeg(leg: Leg): Date {
   const expectedStartTime = leg.expectedStartTime; // e.g. '2023-07-14T17:56:32+02:00'
 
   const expectedStartDate = new Date(expectedStartTime);
-  const latestBookingDate = dateWithReplacedTime(
-    expectedStartDate,
-    latestBookingTime,
-    'HH:mm:ss',
-  );
+  let latestBookingDate = new Date(expectedStartTime);
 
-  if (latestBookingDate.getTime() > expectedStartDate.getTime()) {
-    latestBookingDate.setDate(latestBookingDate.getDate() - 1);
+  const bookWhen = leg.bookingArrangements?.bookWhen;
+  if (bookWhen === 'timeOfTravelOnly') {
+    return latestBookingDate; // note: 'timeOfTravelOnly' is deprecated
+  } else if (
+    bookWhen === 'dayOfTravelOnly' ||
+    bookWhen === 'untilPreviousDay' ||
+    bookWhen === 'advanceAndDayOfTravel'
+  ) {
+    if (expectedStartDate && latestBookingTime) {
+      latestBookingDate = dateWithReplacedTime(
+        expectedStartDate,
+        latestBookingTime,
+        'HH:mm:ss',
+      );
+    }
+
+    if (bookWhen !== 'dayOfTravelOnly') {
+      if (
+        latestBookingDate.getTime() > expectedStartDate.getTime() ||
+        bookWhen === 'untilPreviousDay'
+      ) {
+        latestBookingDate.setDate(latestBookingDate.getDate() - 1);
+      }
+    }
+  } else if (bookWhen === undefined || bookWhen === null) {
+    const minimumBookingPeriod = leg.bookingArrangements?.minimumBookingPeriod;
+    if (minimumBookingPeriod) {
+      latestBookingDate.setSeconds(
+        latestBookingDate.getSeconds() -
+          iso8601DurationToSeconds(minimumBookingPeriod),
+      );
+    }
   }
 
   return latestBookingDate;
@@ -207,10 +237,12 @@ export function getEarliestBookingDateFromLeg(
   flex_booking_number_of_days_available: number,
 ): Date {
   const latestBookingDate = getLatestBookingDateFromLeg(leg);
-  const earliestBookingDate = new Date(latestBookingDate);
+
+  let earliestBookingDate = new Date(latestBookingDate);
   earliestBookingDate.setDate(
     earliestBookingDate.getDate() - flex_booking_number_of_days_available,
   );
+
   return earliestBookingDate;
 }
 

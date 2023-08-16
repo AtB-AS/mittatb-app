@@ -22,6 +22,12 @@ import {
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
+
+import {
+  parse as parseIso8601Duration,
+  toSeconds as toSecondsIso8601Duration,
+} from 'iso8601-duration';
+
 import {
   DEFAULT_LANGUAGE,
   Language,
@@ -33,6 +39,10 @@ const humanizer = humanizeDuration.humanizer({});
 
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
+}
+
+export function iso8601DurationToSeconds(iso8601Duration: string) {
+  return toSecondsIso8601Duration(parseIso8601Duration(iso8601Duration));
 }
 
 export function secondsToDurationShort(
