@@ -17,7 +17,6 @@ import {
 import Bugsnag from '@bugsnag/react-native';
 import {
   defaultCityZones,
-  defaultFareProductGroups,
   defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
@@ -106,7 +105,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   >(defaultFareProductTypeConfig);
   const [fareProductGroups, setFareProductGroups] = useState<
     FareProductGroupType[]
-  >(defaultFareProductGroups);
+  >([]);
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();

@@ -3,19 +3,22 @@ import {
   ProductTypeTransportModes,
 } from '@atb-as/config-specs';
 import {View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {FareProductTile} from './FareProductTile';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
+import {TransportModes} from '@atb/components/transportation-modes';
+import {ThemeText} from '@atb/components/text';
 
 type Props = {
+  heading?: string;
   transportModes: ProductTypeTransportModes[];
   fareProducts: FareProductTypeConfig[];
   onProductSelect: (config: FareProductTypeConfig) => void;
 };
 
 export const FareProductGroup = ({
+  heading,
   transportModes,
   fareProducts,
   onProductSelect,
@@ -36,17 +39,25 @@ export const FareProductGroup = ({
 
   return (
     <View>
-      <ThemeText type="body__secondary" style={styles.heading}>
-        {transportModes
-          .map((mode) =>
-            t(FareContractTexts.transportMode(mode.mode, mode.subMode)),
-          )
-          .join(', ')}
-      </ThemeText>
-
-      {groupedConfigs.map(([firstConfig, secondConfig]) => (
+      {heading ? (
+        <ThemeText style={styles.heading}>{heading}</ThemeText>
+      ) : (
+        <TransportModes
+          modes={transportModes}
+          iconSize={'small'}
+          style={styles.heading}
+          textType={'body__secondary'}
+          textColor={'primary'}
+          unknownModeText={t(FareContractTexts.otherFareContracts)}
+          useUnknownIcon={false}
+        />
+      )}
+      {groupedConfigs.map(([firstConfig, secondConfig], i) => (
         <View
-          style={styles.fareProductsContainer}
+          style={[
+            styles.fareProductsContainer,
+            i > 0 ? styles.fareProductsContainer__row : undefined,
+          ]}
           key={firstConfig.type + secondConfig?.type}
         >
           <FareProductTile
@@ -71,13 +82,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
-    textTransform: 'capitalize',
   },
   fareProductsContainer: {
     flex: 1,
     flexDirection: 'row',
     paddingLeft: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
     alignItems: 'stretch',
+  },
+  fareProductsContainer__row: {
+    paddingTop: theme.spacings.medium,
   },
 }));

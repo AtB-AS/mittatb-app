@@ -12,7 +12,7 @@ import {
 } from '@atb/theme/colors';
 import {ContrastColor} from '@atb-as/theme';
 
-type ColorType = TextColor | StaticColor | ContrastColor;
+export type ColorType = TextColor | StaticColor | ContrastColor;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
