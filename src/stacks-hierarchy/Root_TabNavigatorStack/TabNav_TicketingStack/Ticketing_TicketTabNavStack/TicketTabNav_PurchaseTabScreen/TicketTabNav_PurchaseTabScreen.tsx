@@ -19,6 +19,8 @@ import {useAnalytics} from '@atb/analytics';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
 import {useHarborsQuery} from '@atb/queries';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -119,28 +121,39 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     analytics.logEvent('Ticketing', 'Recently used fare product selected', {
       type: fareProductTypeConfig.type,
     });
-    const getFromPlace = () => {
+    // See if reusable function might work. getFromPlace getToPlace
+    const getFromPlace = ():
+      | TariffZoneWithMetadata
+      | StopPlaceFragment
+      | undefined => {
       if (rfc.pointToPointValidity?.fromPlace) {
         const fromName = harborsQuery.data?.find(
           (sp) => sp.id === rfc.pointToPointValidity?.fromPlace,
         )?.name;
-        return {
-          id: rfc.pointToPointValidity?.fromPlace,
-          name: fromName,
-        };
+        return fromName
+          ? {
+              id: rfc.pointToPointValidity?.fromPlace,
+              name: fromName,
+            }
+          : undefined;
       } else if (rfc.fromTariffZone) {
         return {...rfc.fromTariffZone, resultType: 'zone'};
       }
     };
-    const getToPlace = () => {
+    const getToPlace = ():
+      | TariffZoneWithMetadata
+      | StopPlaceFragment
+      | undefined => {
       if (rfc.pointToPointValidity?.toPlace) {
         const toName = harborsQuery.data?.find(
           (sp) => sp.id === rfc.pointToPointValidity?.toPlace,
         )?.name;
-        return {
-          id: rfc.pointToPointValidity?.toPlace,
-          name: toName,
-        };
+        return toName
+          ? {
+              id: rfc.pointToPointValidity?.toPlace,
+              name: toName,
+            }
+          : undefined;
       } else if (rfc.toTariffZone) {
         return {...rfc.toTariffZone, resultType: 'zone'};
       }
@@ -149,7 +162,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,
       userProfilesWithCount: rfc.userProfilesWithCount,
-      fromPlace: getFromPlace(), // fix type error
+      fromPlace: getFromPlace(),
       toPlace: getToPlace(),
       mode: 'Ticket',
     });

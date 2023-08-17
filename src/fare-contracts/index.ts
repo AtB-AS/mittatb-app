@@ -1,4 +1,5 @@
 export {FareContractAndReservationsList} from './FareContractAndReservationsList';
+export {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 export {SimpleFareContract} from './SimpleFareContract';
 export {CarnetDetailedView} from './carnet/CarnetDetailedView';
 export {DetailsContent} from './details/DetailsContent';

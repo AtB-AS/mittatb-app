@@ -18,7 +18,7 @@ import {
   getTransportModeText,
   TransportModes,
 } from '@atb/components/transportation-modes';
-import {FareContractHarborStopPlaces} from '@atb/fare-contracts/components/FareContractHarborStopPlaces'; // Is this import ok?
+import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
 
 type RecentFareContractProps = {
@@ -80,6 +80,7 @@ export const RecentFareContractComponent = ({
       )} ${modeInfo} ${travellerInfo}`;
     }
     const zoneOrHarborInfo = () => {
+      // split it into two components
       if (fromTariffZone !== undefined) {
         return fromZoneName === toZoneName
           ? `${t(
@@ -98,7 +99,7 @@ export const RecentFareContractComponent = ({
           harborsQuery.data?.find(
             (sp) => sp.id === pointToPointValidity.toPlace,
           )?.name ?? '';
-        return preassignedFareProduct.type === 'boat-period'
+        return preassignedFareProduct.type === 'boat-period' // should use a field for direction, one-way or return trip.
           ? t(
               RecentFareContractsTexts.a11yPreLabels.harbors.returnTrip(
                 fromName,
