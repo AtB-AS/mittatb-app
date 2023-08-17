@@ -305,7 +305,8 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary" testID="endTime">
-                {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
+                {(isLegFlexibleTransport(legs[legs.length - 1]) ? 'ca. ' : '') +
+                  formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
               </ThemeText>
             </View>
           </View>
@@ -415,6 +416,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
+    alignItems: 'center',
   },
   walkContainer: {
     backgroundColor: theme.static.background.background_2.background,
