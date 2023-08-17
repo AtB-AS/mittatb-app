@@ -160,7 +160,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   useEffect(() => {
     if (legIconsParentWidth && legIconsContentWidth) {
       if (legIconsContentWidth >= legIconsParentWidth) {
-        setNumberOfExpandedLegs((val) => val - 1);
+        setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
       } else {
         fadeIn.start();
       }
@@ -309,7 +309,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary" testID="endTime">
-                {(isLegFlexibleTransport(legs[legs.length - 1])
+                {(legs.length && isLegFlexibleTransport(legs[legs.length - 1])
                   ? t(TripDetailsTexts.trip.leg.circaLabel)
                   : '') +
                   formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
