@@ -2,7 +2,7 @@ import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useTranslation, TripDetailsTexts} from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
-import {View, Linking, Platform} from 'react-native';
+import {View, Linking} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
