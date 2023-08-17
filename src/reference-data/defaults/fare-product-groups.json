@@ -1,0 +1,21 @@
+[
+  {
+    "transportModes": [
+      {"mode": "bus"},
+      {"mode": "tram"}
+    ],
+    "types": ["single", "period", "hour24", "night_v2"]
+  }, {
+    "transportModes": [
+      {
+        "mode": "water",
+        "subMode": "highSpeedPassengerService"
+      },
+      {
+        "mode": "water",
+        "subMode": "highSpeedVehicleService"
+      }
+    ],
+    "types": ["boat-single", "boat-period"]
+  }
+]

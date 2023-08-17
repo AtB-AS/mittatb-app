@@ -8,6 +8,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
 import {isDefined} from '@atb/utils/presence';
 import {MobilityOperator} from '@atb-as/config-specs/lib/mobility-operators';
+import {FareProductGroup, FareProductGroupType} from '@atb/configuration/types';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -36,6 +37,33 @@ function mapToFareProductTypeConfig(
     return;
   }
   return typeConfigPotential.data;
+}
+
+export function mapToFareProductGroups(
+  config: any,
+): FareProductGroupType[] | undefined {
+  if (!isArray(config)) {
+    Bugsnag.notify(`fare product groups should be of type "array"`);
+    return;
+  }
+
+  return config
+    .map((val) => mapToFareProductGroup(val))
+    .filter(Boolean) as FareProductGroupType[];
+}
+
+function mapToFareProductGroup(config: any): FareProductGroupType | undefined {
+  const parseResult = FareProductGroup.safeParse(config);
+
+  if (!parseResult.success) {
+    Bugsnag.notify('fare product group issue', function (event) {
+      event.addMetadata('decode_errors', {
+        issues: parseResult.error.issues,
+      });
+    });
+    return;
+  }
+  return parseResult.data;
 }
 
 export const mapToFlexibleTransportOption = (
