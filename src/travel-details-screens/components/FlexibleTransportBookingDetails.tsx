@@ -20,6 +20,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {Dimensions} from 'react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
@@ -48,8 +49,10 @@ export const FlexibleTransportBookingDetails: React.FC<
     flex_booking_number_of_days_available,
   );
 
+  const {bottom: safeAreaBottom} = useSafeAreaInsets();
+
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.83}>
       <ScreenHeaderWithoutNavigation
         title={t(
           TripDetailsTexts.flexibleTransport.needsBookingWhatIsThisTitle(
@@ -63,7 +66,14 @@ export const FlexibleTransportBookingDetails: React.FC<
         <CloseCircle height={theme.icon.size.large} />
       </TouchableOpacity>
 
-      <ScrollView style={style.contentContainer}>
+      <ScrollView
+        style={[
+          style.contentContainer,
+          {
+            marginBottom: Math.max(safeAreaBottom, theme.spacings.medium),
+          },
+        ]}
+      >
         <View style={style.messageBoxContainer}>
           <FlexibleTransportMessageBox
             leg={leg}
@@ -129,7 +139,9 @@ export const FlexibleTransportBookingDetails: React.FC<
 
         {bookingIsAvailable && <FlexibleTransportBookingOptions leg={leg} />}
 
-        <View style={style.paddingBottomEnsurer} />
+        <View // 200% zoom bugfix
+          style={{height: Math.max(safeAreaBottom, theme.spacings.medium)}}
+        />
       </ScrollView>
     </BottomSheetContainer>
   );
@@ -149,13 +161,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.large,
     padding: theme.spacings.xLarge,
-    paddingBottom: 0,
-  },
-  paddingBottomEnsurer: {
-    height: theme.spacings.xLarge,
-    //backgroundColor: 'red', // for reviewer: can use this to debug scroll padding issue
   },
   messageBoxContainer: {
     paddingBottom: theme.spacings.small,
