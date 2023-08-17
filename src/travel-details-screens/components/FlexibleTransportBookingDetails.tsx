@@ -6,7 +6,13 @@ import {
   TripDetailsTexts,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
-import {View, TouchableOpacity, Linking, ScrollView} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Linking,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 
 import {ThemeText} from '@atb/components/text';
@@ -139,9 +145,11 @@ export const FlexibleTransportBookingDetails: React.FC<
 
         {bookingIsAvailable && <FlexibleTransportBookingOptions leg={leg} />}
 
-        <View // 200% zoom bugfix
-          style={{height: Math.max(safeAreaBottom, theme.spacings.medium)}}
-        />
+        {Platform.OS === 'android' && (
+          <View // scroll bugfix
+            style={{height: theme.spacings.xLarge}}
+          />
+        )}
       </ScrollView>
     </BottomSheetContainer>
   );
