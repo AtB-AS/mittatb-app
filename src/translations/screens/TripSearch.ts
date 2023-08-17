@@ -260,11 +260,21 @@ const TripSearchTexts = {
           'Activate to show more trip details',
           'Trykk for meir informasjon om reisa.',
         ),
-        requiresBooking: _(
-          'Krever reservasjon',
-          'Requires booking',
-          'Krev reservasjon',
-        ),
+        requiresBooking: (numberOfBookingsRequired: number) => {
+          if (numberOfBookingsRequired > 1) {
+            return _(
+              `Krever ${numberOfBookingsRequired} reservasjoner`,
+              `Requires ${numberOfBookingsRequired} bookings`,
+              `Krev ${numberOfBookingsRequired} reservasjonar`,
+            );
+          } else {
+            return _(
+              `Krever reservasjon`,
+              `Requires booking`,
+              `Krev reservasjon`,
+            );
+          }
+        },
       },
       journeySummary: {
         resultNumber: (number: number) =>

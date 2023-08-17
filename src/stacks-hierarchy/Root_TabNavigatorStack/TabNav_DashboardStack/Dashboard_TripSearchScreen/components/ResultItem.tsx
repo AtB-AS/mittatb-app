@@ -53,7 +53,7 @@ import {
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
-  getTripPatternRequiresBooking,
+  getTripPatternBookingsRequiredCount,
   getTripPatternRequiresBookingUrgently,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
@@ -335,7 +335,9 @@ const ResultItemFooter: React.FC<{
     tripPattern,
     now,
   );
-  const requiresBooking = getTripPatternRequiresBooking(tripPattern);
+  const bookingsRequiredCount =
+    getTripPatternBookingsRequiredCount(tripPattern);
+  const requiresBooking = bookingsRequiredCount > 0;
 
   return (
     <View style={styles.resultFooter}>
@@ -347,7 +349,11 @@ const ResultItemFooter: React.FC<{
               style={styles.footerNoticeIcon}
             />
             <ThemeText type="body__secondary" color="secondary">
-              {t(TripSearchTexts.results.resultItem.footer.requiresBooking)}
+              {t(
+                TripSearchTexts.results.resultItem.footer.requiresBooking(
+                  bookingsRequiredCount,
+                ),
+              )}
             </ThemeText>
           </>
         )}
@@ -695,10 +701,16 @@ const tripSummary = (
     ),
   );
 
-  const requiresBooking = getTripPatternRequiresBooking(tripPattern);
-  const requiresBookingText = requiresBooking
-    ? t(TripSearchTexts.results.resultItem.footer.requiresBooking)
-    : undefined;
+  const bookingsRequiredCount =
+    getTripPatternBookingsRequiredCount(tripPattern);
+  const requiresBookingText =
+    bookingsRequiredCount > 0
+      ? t(
+          TripSearchTexts.results.resultItem.footer.requiresBooking(
+            bookingsRequiredCount,
+          ),
+        )
+      : undefined;
 
   const texts = [
     resultNumberText,

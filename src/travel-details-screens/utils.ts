@@ -369,41 +369,24 @@ export function getLegBookingIsAvailable(
   return requiresBooking && !isTooEarly && !isTooLate;
 }
 
-function getFirstFlexibleLegForTripPattern(
+export function getTripPatternBookingsRequiredCount(
   tripPattern: TripPattern,
-): Leg | undefined {
-  // if > 1 flexible transport leg, just use the first one
-  return tripPattern?.legs.find((leg) => isLegFlexibleTransport(leg));
-}
-
-export function getTripPatternRequiresBooking(
-  tripPattern: TripPattern,
-): boolean {
-  const firstFlexibleTransportLeg =
-    getFirstFlexibleLegForTripPattern(tripPattern);
-  return firstFlexibleTransportLeg
-    ? getLegRequiresBooking(firstFlexibleTransportLeg)
-    : false;
+): number {
+  return tripPattern?.legs?.filter((leg) => getLegRequiresBooking(leg)).length;
 }
 
 export function getTripPatternRequiresBookingUrgently(
   tripPattern: TripPattern,
   now: number,
 ): boolean {
-  const firstFlexibleTransportLeg =
-    getFirstFlexibleLegForTripPattern(tripPattern);
-  return firstFlexibleTransportLeg
-    ? getLegRequiresBookingUrgently(firstFlexibleTransportLeg, now)
-    : false;
+  return tripPattern?.legs?.some((leg) =>
+    getLegRequiresBookingUrgently(leg, now),
+  );
 }
 
 export function getIsTooLateToBookTripPattern(
   tripPattern: TripPattern,
   now: number,
 ): boolean {
-  const firstFlexibleTransportLeg =
-    getFirstFlexibleLegForTripPattern(tripPattern);
-  return firstFlexibleTransportLeg
-    ? getIsTooLateToBookLeg(firstFlexibleTransportLeg, now)
-    : false;
+  return tripPattern?.legs?.some((leg) => getIsTooLateToBookLeg(leg, now));
 }
