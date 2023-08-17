@@ -14,7 +14,7 @@ const LoginTexts = {
       phoneAndCode: _(
         'Mobilnummer og engangskode',
         'Mobile number and one-time code',
-        'Mobilnummer og engangskode',
+        'Mobilnummer og eingongskode',
       ),
       vipps: {
         label: _('Logg inn med ', 'Log in with ', 'Logg inn med '),
@@ -71,9 +71,9 @@ const LoginTexts = {
       'Det er lurt å logge inn',
     ),
     carrotBody: _(
-      'Da kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
+      'Da kan du også lagre betalingskort og etter hvert andre smarte reiseting slik at du enkelt finner dem igjen – selv ved bytte av mobil.',
       '...to store payment cards for later use. Soon, login will store personal preferences to your profile so that you can carry them with you when swapping phones.',
-      'Då kan du også lagre betalingskort og etterhvert andre smarte reiseting slik at du enkelt finn dei igjen – sjølv ved byte av mobil.',
+      'Då kan du også lagre betalingskort og etter kvart andre smarte reiseting slik at du enkelt finn dei igjen – sjølv ved byte av mobil.',
     ),
   },
   vipps: {
@@ -95,7 +95,7 @@ const LoginTexts = {
     description: _(
       'Logg inn med engangskode sendt til din mobil',
       'Log in with a one-time code sent to your phone',
-      'Logg inn med engangskode sendt til din mobil',
+      'Logg inn med eingongskode sendt til din mobil',
     ),
     input: {
       heading: _('Mobilnummer', 'Phone number', 'Mobilnummer'),
@@ -106,7 +106,11 @@ const LoginTexts = {
         'Skriv inn ditt telefonnummer',
       ),
     },
-    mainButton: _('Send engangskode', 'Send one-time code', 'Send engangskode'),
+    mainButton: _(
+      'Send engangskode',
+      'Send one-time code',
+      'Send eingongskode',
+    ),
     errors: {
       invalid_phone: _(
         'Er du sikker på at telefonnummeret er korrekt?',
@@ -121,30 +125,26 @@ const LoginTexts = {
     },
   },
   confirmCode: {
-    title: _(
-      'Skriv inn engangskoden',
-      'Enter your one-time code',
-      'Skriv inn engangskoden',
-    ),
+    title: _('Engangskode', 'One-time code', 'Eingongskode'),
     description: (phoneNumber: string) =>
       _(
-        `Vi har sendt en engangskode til ${phoneNumber}`,
-        `We just sent a one-time code to ${phoneNumber}`,
-        `Vi har sendt ein engangskode til ${phoneNumber}`,
+        `Skriv inn engangskoden vi sendte til ${phoneNumber}`,
+        `Enter the one-time code we sent to ${phoneNumber}`,
+        `Skriv inn eingongskoden vi sendte til ${phoneNumber}`,
       ),
     input: {
-      label: _('Engangskode', 'One-time code', 'Engangskode'),
+      label: _('Engangskode', 'One-time code', 'Eingongskode'),
       placeholder: _(
         'Skriv inn engangskoden',
         'Enter your one-time code',
-        'Skriv inn engangskoden',
+        'Skriv inn eingongskoden',
       ),
     },
     mainButton: _('Logg inn', 'Log in', 'Logg inn'),
     resendButton: _(
       'Send engangskode på nytt',
       'Request new one-time code',
-      'Send engangskode på nytt',
+      'Send eingongskode på nytt',
     ),
     errors: {
       invalid_phone: _(
@@ -153,9 +153,14 @@ const LoginTexts = {
         'Er du sikker på at telefonnummeret er korrekt?',
       ),
       invalid_code: _(
-        'Er du sikker på at engangskoden er korrekt?',
-        'Are you certain the one time code is correct?',
-        'Er du sikker på at engangskoden er korrekt?',
+        'Engangskoden er ugyldig. Sjekk at den er riktig, eller be om en ny.',
+        'The one-time code is invalid. Ensure that it is correct, or request a new one.',
+        'Eingongskoden er ugyldig. Sjekk at den er riktig, eller be om ein ny.',
+      ),
+      session_expired: _(
+        'Engangskoden har utløpt. Vennligst be om en ny.',
+        'The one-time code has expired. Please request a new one.',
+        'Eingongskoden har gått ut. Ver venleg og be om ein ny.',
       ),
       unknown_error: _(
         'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',

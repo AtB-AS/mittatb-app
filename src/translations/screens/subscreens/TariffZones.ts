@@ -73,13 +73,13 @@ const TariffZonesTexts = {
           _(
             `Valgt ankomstsone er ${zoneName}`,
             `Selected zone of arrival is ${zoneName}`,
-            `Valt ankomstsone er ${zoneName}`,
+            `Valt framkomstsone er ${zoneName}`,
           ),
         withVenue: (zoneName: string, venueName: string) =>
           _(
             `Valgt stoppested er ${venueName} basert på ankomstsone ${zoneName}`,
             `Selected stop place of arrival is ${venueName} based on zone ${zoneName}`,
-            `Valt stoppestad er ${venueName} basert på ankomstsone ${zoneName}`,
+            `Valt stoppestad er ${venueName} basert på framkomstsone ${zoneName}`,
           ),
       },
       a11yHintFrom: _(
@@ -90,7 +90,7 @@ const TariffZonesTexts = {
       a11yHintTo: _(
         'Aktivér for å søke etter ankomstsone',
         'Activate to search for zone of arrival',
-        'Aktivér for å søke etter ankomstsone',
+        'Aktivér for å søke etter framkomstsone',
       ),
     },
   },

@@ -12,6 +12,8 @@ import {useDebugOverride} from '@atb/debug';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RemoteConfigKeys} from '@atb/remote-config';
 
+import {useNonTransitTripSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
+
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
   cityZones?: CityZone[],
@@ -30,9 +32,14 @@ export const useFindCityZoneInLocation = (
   ]);
 };
 
-export function useJourneyModes(
-  defaultValue: StreetMode = StreetMode.Foot,
-): [Modes, boolean] {
+export const defaultJourneyModes = {
+  accessMode: StreetMode.Foot,
+  directMode: StreetMode.Foot,
+  egressMode: StreetMode.Foot,
+};
+
+export function useJourneyModes(): [Modes, boolean] {
+  const [nonTransitTripSearchEnabled] = useNonTransitTripSearchEnabled();
   const [
     isFlexibleTransportEnabledInRemoteConfig,
     flexTransportDebugOverrideReady,
@@ -56,17 +63,19 @@ export function useJourneyModes(
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportAccessModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : defaultJourneyModes.accessMode,
     directMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportDirectModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : nonTransitTripSearchEnabled
+        ? undefined
+        : defaultJourneyModes.directMode,
     egressMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportEgressModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : defaultJourneyModes.egressMode,
   };
 
   const allDebugOverridesReady =

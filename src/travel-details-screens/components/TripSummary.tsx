@@ -1,75 +1,80 @@
 import {TripPattern} from '@atb/api/types/trips';
-import {Walk} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
-
+import {Walk, Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {StyleSheet} from '@atb/theme';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {secondsToDuration} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
 import {Duration} from '@atb/assets/svg/mono-icons/time';
+import {useHumanizeDistance} from '@atb/utils/location';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {SummaryDetail} from '@atb/travel-details-screens/components/SummaryDetail';
 
-export const TripSummary: React.FC<TripPattern> = ({
-  walkDistance,
-  duration,
-}) => {
+export const TripSummary: React.FC<TripPattern> = ({legs, duration}) => {
   const styles = useStyle();
   const {t, language} = useTranslation();
   const time = secondsToDuration(duration, language);
-  const readableDistance = walkDistance?.toFixed() ?? '0';
+  const walkDistance = getDistance(legs, Mode.Foot);
+  const bikeDistance = getDistance(legs, Mode.Bicycle);
+  const readableWalkDistance = useHumanizeDistance(walkDistance);
+  const readableBikeDistance = useHumanizeDistance(bikeDistance);
+
   return (
-    <>
-      <View style={styles.summaryDetail}>
-        <ThemeIcon
-          colorType="disabled"
-          style={styles.leftIcon}
-          svg={Duration}
-        />
-        <ThemeText
-          color="secondary"
-          accessible={true}
-          style={styles.detailText}
-          accessibilityLabel={t(
-            TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
-          )}
-          testID="travelTime"
-        >
-          {t(TripDetailsTexts.trip.summary.travelTime.label(time))}
-        </ThemeText>
-      </View>
-      <View style={styles.summaryDetail}>
-        <ThemeIcon colorType="secondary" style={styles.leftIcon} svg={Walk} />
-        <ThemeText
-          color="secondary"
-          accessible={true}
-          style={styles.detailText}
+    <View style={styles.tripSummary}>
+      <SummaryDetail
+        icon={Duration}
+        accessibilityLabel={t(
+          TripDetailsTexts.trip.summary.travelTime.a11yLabel(time),
+        )}
+        label={t(TripDetailsTexts.trip.summary.travelTime.label(time))}
+        testID="travelTime"
+      />
+      {readableWalkDistance && (
+        <SummaryDetail
+          icon={Walk}
           accessibilityLabel={t(
             TripDetailsTexts.trip.summary.walkDistance.a11yLabel(
-              readableDistance,
+              readableWalkDistance,
+            ),
+          )}
+          label={t(
+            TripDetailsTexts.trip.summary.walkDistance.label(
+              readableWalkDistance,
             ),
           )}
           testID="walkDistance"
-        >
-          {t(
-            TripDetailsTexts.trip.summary.walkDistance.label(readableDistance),
+        />
+      )}
+      {readableBikeDistance && (
+        <SummaryDetail
+          icon={Bicycle}
+          accessibilityLabel={t(
+            TripDetailsTexts.trip.summary.bikeDistance.a11yLabel(
+              readableBikeDistance,
+            ),
           )}
-        </ThemeText>
-      </View>
-    </>
+          label={t(
+            TripDetailsTexts.trip.summary.bikeDistance.label(
+              readableBikeDistance,
+            ),
+          )}
+        />
+      )}
+    </View>
   );
 };
+
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  detailText: {
-    flex: 1,
-  },
-  summaryDetail: {
-    padding: theme.spacings.medium,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  leftIcon: {
-    marginRight: theme.spacings.small,
+  tripSummary: {
+    paddingVertical: theme.spacings.medium,
   },
 }));
+
+function getDistance<T extends {mode: Mode; distance: number}>(
+  legs: Array<T>,
+  mode: Mode,
+) {
+  return legs
+    .filter((l) => l.mode === mode)
+    .reduce((tot, {distance}) => tot + distance, 0);
+}

@@ -1,10 +1,15 @@
 import {Feature, Point, Polygon, Position} from 'geojson';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
   RentalUrisFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
-import {getVisibleRange, MapRegion, toFeaturePoint} from '@atb/components/map';
+import {
+  getVisibleRange,
+  MapRegion,
+  MobilityMapFilterType,
+  toFeaturePoint,
+} from '@atb/components/map';
 import buffer from '@turf/buffer';
 import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
@@ -14,11 +19,19 @@ import {
   StationBasicFragment,
   VehicleTypeAvailabilityBasicFragment,
 } from '@atb/api/types/generated/fragments/stations';
+import {Language} from '@atb/translations';
+import {formatDecimalNumber} from '@atb/utils/numbers';
 
-export const isVehicle = (
+export const isScooter = (
   feature: Feature<Point> | undefined,
-): feature is Feature<Point, VehicleFragment> =>
-  'currentFuelPercent' in (feature?.properties ?? {});
+): feature is Feature<Point, VehicleBasicFragment> =>
+  feature?.properties?.vehicleType?.formFactor === FormFactor.Scooter;
+
+export const isBicycle = (
+  feature: Feature<Point> | undefined,
+): feature is Feature<Point, VehicleBasicFragment> =>
+  feature?.properties?.vehicleType?.formFactor === FormFactor.Bicycle &&
+  !isStation(feature);
 
 export const isStation = (
   feature: Feature<Point> | undefined,
@@ -134,3 +147,21 @@ export const updateAreaState = (
     };
   };
 };
+
+export const formatRange = (rangeInMeters: number, language: Language) => {
+  const rangeInKm =
+    rangeInMeters > 5000
+      ? (rangeInMeters / 1000).toFixed(0)
+      : formatDecimalNumber(rangeInMeters / 1000, language, 1);
+  return `ca. ${rangeInKm} km`;
+};
+
+export const getOperators = (
+  filter: MobilityMapFilterType,
+  formFactor: FormFactor,
+) => filter[formFactor]?.operators ?? [];
+
+export const isShowAll = (
+  filter: MobilityMapFilterType,
+  formFactor: FormFactor,
+) => !!filter[formFactor]?.showAll;

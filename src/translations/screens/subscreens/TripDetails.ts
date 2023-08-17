@@ -139,6 +139,14 @@ const TripDetailsTexts = {
         label: (duration: string) =>
           _(`Gå i ${duration}`, `Walk for ${duration}`, `Gå i ${duration}`),
       },
+      bicycle: {
+        label: (duration: string) =>
+          _(
+            `Sykle i ${duration}`,
+            `Ride for ${duration}`,
+            `Sykle i ${duration}`,
+          ),
+      },
       shortWalk: _(
         `Gå i mindre enn ett minutt`,
         `Walk for less than a minute`,
@@ -205,17 +213,31 @@ const TripDetailsTexts = {
           ),
       },
       walkDistance: {
-        label: (distanceInMetres: string) =>
+        label: (distance: string) =>
           _(
-            `Total gangavstand: ${distanceInMetres} meter`,
-            `Total walking distance: ${distanceInMetres} meters`,
-            `Total gangavstand: ${distanceInMetres} meter`,
+            `Total gangavstand: ${distance}`,
+            `Total walking distance: ${distance}`,
+            `Total gangavstand: ${distance}`,
           ),
         a11yLabel: (distanceInMetres: string) =>
           _(
-            `Total gangavstand: ${distanceInMetres} meter`,
-            `Total walking distance: ${distanceInMetres} meters`,
-            `Total gangavstand: ${distanceInMetres} meter`,
+            `Total gangavstand: ${distanceInMetres}`,
+            `Total walking distance: ${distanceInMetres}`,
+            `Total gangavstand: ${distanceInMetres}`,
+          ),
+      },
+      bikeDistance: {
+        label: (distance: string) =>
+          _(
+            `Total sykkelavstand: ${distance}`,
+            `Total biking distance: ${distance}`,
+            `Total sykkelavstand: ${distance}`,
+          ),
+        a11yLabel: (distanceInMetres: string) =>
+          _(
+            `Total sykkelavstand: ${distanceInMetres}`,
+            `Total biking distance: ${distanceInMetres}`,
+            `Total sykkelavstand: ${distanceInMetres}`,
           ),
       },
     },

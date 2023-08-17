@@ -18,7 +18,8 @@ export const useOperators = () => {
           o.formFactors.some(
             (f) => types?.length === 0 || formFactors.includes(f),
           ),
-        ) ?? []
+        )
+        .sort((a, b) => a.name.localeCompare(b.name)) ?? []
     );
   };
 };

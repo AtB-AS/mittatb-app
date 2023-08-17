@@ -1,11 +1,24 @@
 import {translation as _} from '../../commons';
 import {Platform} from 'react-native';
-import {PropulsionType} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  PropulsionType,
+} from '@atb/api/types/generated/mobility-types_v2';
+import {ParkingVehicleTypes} from '@atb/components/map';
 
 export const MobilityTexts = {
-  scooter: _('Sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel'),
-  bicycle: _('Sykkel', 'Bicycle', 'Sykkel'),
-  car: _('Bildeling', 'Car sharing', 'Bildeling'),
+  formFactor: (formFactor: FormFactor) => {
+    switch (formFactor) {
+      case FormFactor.Scooter:
+        return _('Sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel');
+      case FormFactor.Bicycle:
+        return _('Sykkel', 'Bicycle', 'Sykkel');
+      case FormFactor.Car:
+        return _('Bildeling', 'Car sharing', 'Bildeling');
+      default:
+        return _('Annet', 'Other', 'Annet');
+    }
+  },
   unknownOperator: _('Ukjent operatør', 'Unknown operator', 'Ukjent operatør'),
   operatorAppSwitchButton: (operator: string) =>
     _(`Åpne ${operator}`, `Open ${operator}`, `Åpne ${operator}`),
@@ -46,7 +59,7 @@ export const MobilityTexts = {
     body: _(
       'Se elsparkesykler og bysykler i Trondheim på ett sted. Skru på tjenesten i kartet.',
       'See electric scooters and city bikes in Trondheim in one app. Enable this feature through the map.',
-      'Sjå elsparkesykler og bysyklar i Trondheim på ett sted. Skru på tenesta i kartet.',
+      'Sjå elsparkesyklar og bysyklar i Trondheim på ett sted. Skru på tenesta i kartet.',
     ),
     button: _('Den er grei!', 'Sounds good!', 'Høres bra ut!'),
     a11yLabel: _(
@@ -93,11 +106,12 @@ export const BicycleTexts = {
     numBikesAvailable: _(
       'Tilgjengelige sykler',
       'Available bikes',
-      'Tilgjengelige sykler',
+      'Tilgjengelege syklar',
     ),
     numDocksAvailable: _('Ledige plasser', 'Available docks', 'Ledige plassar'),
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
   },
+  humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
   loadingFailed: _(
     'Ops! Vi fant ikke denne sykkelstasjonen',
     "Ops! We couldn't find this bike station",
@@ -138,8 +152,32 @@ export const CarSharingTexts = {
         return _(
           'Ukjent drivstofftype',
           'Unknown propultion type',
-          'Ukjent fremdriftstype',
+          'Ukjent drivstofftype',
         );
     }
   },
+};
+
+export const ParkAndRideTexts = {
+  title: _('Innfartsparkering', "Park'n Ride", 'Innfartsparkering'),
+  parkingFor: (type: ParkingVehicleTypes) => {
+    switch (type) {
+      case 'pedalCycle':
+        return _('Sykkelparkering', 'Bike parking', 'Sykkelparkering');
+      case 'car':
+      default:
+        return _('Bilparkering', 'Car parking', 'Bilparkering');
+    }
+  },
+  disclaimer: _(
+    'Betaling eller andre vilkår kan gjelde på denne innfartsparkeringen',
+    'Payment or other terms and conditions may apply to this parking',
+    '',
+  ),
+  capacity: _('Plasser totalt', 'Parking spaces', 'Plassar totalt'),
+  unknownCapacity: _(
+    'Ukjent antall plasser',
+    'Unknown number of spaces',
+    'Ukjend antal plassar',
+  ),
 };

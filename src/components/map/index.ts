@@ -17,20 +17,24 @@ export {
   toFeaturePoints,
 } from './utils';
 export type {
+  FormFactorFilterType,
   NavigateToTripSearchCallback,
   MapLeg,
   MapLine,
   MapSelectionActionType,
-  VehiclesFilterType,
+  MobilityMapFilterType,
   VehiclesState,
-  StationsFilterType,
+  VehicleFeatures,
+  StationFeatures,
   StationsState,
   MapFilterType,
   MapRegion,
-  OperatorFilterType,
+  ParkingType,
+  ParkingVehicleTypes,
 } from './types';
 export {
   useRealtimeMapEnabled,
   useRealtimeMapDebugOverride,
 } from './hooks/use-realtime-map-enabled';
 export {useUserMapFilters} from './hooks/use-map-filter';
+export {Stations} from './components/mobility';

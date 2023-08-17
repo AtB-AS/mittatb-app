@@ -1,64 +1,56 @@
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {GenericSectionItem, Section} from '@atb/components/sections';
-import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {useSystem} from '@atb/mobility/use-system';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {StyleSheet} from '@atb/theme';
+import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Button} from '@atb/components/button';
 import {
   BicycleTexts,
   MobilityTexts,
+  ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {getAvailableVehicles, getRentalAppUri} from '@atb/mobility/utils';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
-import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
-import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
-import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
+import {GenericSectionItem, Section} from '@atb/components/sections';
+import {PricingPlan} from '@atb/mobility/components/PricingPlan';
+import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
+import {formatRange, getRentalAppUri} from '@atb/mobility/utils';
+import {useSystem} from '@atb/mobility/use-system';
+import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
-import {ActivityIndicator, View} from 'react-native';
-import {useTextForLanguage} from '@atb/translations/utils';
-import {useBikeStation} from '@atb/mobility/use-bike-station';
+import {useVehicle} from '@atb/mobility/use-vehicle';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
-  stationId: string;
-  distance: number | undefined;
+  vehicleId: VehicleId;
   close: () => void;
 };
-
-export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
-  const {t} = useTranslation();
-  const {themeName} = useTheme();
+export const BicycleSheet = ({vehicleId: id, close}: Props) => {
+  const {t, language} = useTranslation();
   const style = useSheetStyle();
-  const {station, isLoading, error} = useBikeStation(stationId);
-  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
-  const rentalAppUri = getRentalAppUri(station);
+  const {vehicle, isLoading, error} = useVehicle(id);
+  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(
+    vehicle,
+    vehicle?.system.operator.name,
+  );
+  const rentalAppUri = getRentalAppUri(vehicle);
   const {openOperatorApp} = useOperatorApp({
     operatorName,
     appStoreUri,
     rentalAppUri,
   });
-  const stationName = useTextForLanguage(station?.name.translation);
-  const availableBikes = getAvailableVehicles(
-    station?.vehicleTypesAvailable,
-    FormFactor.Bicycle,
-  );
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.5}>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        title={stationName ?? ''}
         color={'background_1'}
         setFocusOnLoad={false}
       />
@@ -68,13 +60,9 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
             <ActivityIndicator size="large" />
           </View>
         )}
-        {!isLoading && !error && station && (
+        {!isLoading && !error && vehicle && (
           <>
-            <WalkingDistance
-              style={style.walkingDistance}
-              distance={distance}
-            />
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -85,24 +73,33 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
               </Section>
               <VehicleStats
                 left={
-                  <VehicleStat
-                    svg={Bicycle}
-                    primaryStat={availableBikes}
-                    secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
-                  />
+                  (vehicle.vehicleType.propulsionType === 'ELECTRIC' ||
+                    vehicle.vehicleType.propulsionType === 'ELECTRIC_ASSIST') &&
+                  vehicle.currentFuelPercent ? (
+                    <VehicleStat
+                      svg={Battery}
+                      primaryStat={vehicle.currentFuelPercent + '%'}
+                      secondaryStat={formatRange(
+                        vehicle.currentRangeMeters,
+                        language,
+                      )}
+                    />
+                  ) : (
+                    <VehicleStat
+                      svg={Bicycle}
+                      primaryStat={''}
+                      secondaryStat={t(BicycleTexts.humanPoweredBike)}
+                    />
+                  )
                 }
                 right={
-                  <VehicleStat
-                    svg={themeName === 'dark' ? ParkingDark : ParkingLight}
-                    primaryStat={
-                      station.numDocksAvailable ??
-                      t(BicycleTexts.stations.unknownDocksAvailable)
-                    }
-                    secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
+                  <PricingPlan
+                    operator={operatorName}
+                    plan={vehicle.pricingPlan}
                   />
                 }
               />
-            </View>
+            </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
                 <Button
@@ -115,11 +112,11 @@ export const CityBikeStationSheet = ({stationId, distance, close}: Props) => {
             )}
           </>
         )}
-        {!isLoading && (error || !station) && (
+        {!isLoading && (error || !vehicle) && (
           <View style={style.errorMessage}>
             <MessageBox
               type="error"
-              message={t(BicycleTexts.loadingFailed)}
+              message={t(ScooterTexts.loadingFailed)}
               onPressConfig={{
                 action: close,
                 text: t(ScreenHeaderTexts.headerButton.close.text),
@@ -141,19 +138,12 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacings.medium,
     },
-    stationName: {
-      flex: 1,
-      alignItems: 'center',
-    },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
-    },
-    walkingDistance: {
-      marginBottom: theme.spacings.medium,
     },
   };
 });

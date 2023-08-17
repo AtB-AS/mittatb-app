@@ -1,37 +1,52 @@
 import {useCallback, useEffect, useState} from 'react';
 import {Point} from 'geojson';
-import {VehicleFragment} from '@atb/api/types/generated/fragments/vehicles';
+import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   MapRegion,
+  MobilityMapFilterType,
   toFeatureCollection,
   toFeaturePoints,
   useUserMapFilters,
-  VehiclesFilterType,
+  VehicleFeatures,
   VehiclesState,
 } from '@atb/components/map';
 import {useIsVehiclesEnabled} from '@atb/mobility/use-vehicles-enabled';
-import {AreaState, updateAreaState} from '@atb/mobility/utils';
+import {
+  AreaState,
+  getOperators,
+  isShowAll,
+  updateAreaState,
+} from '@atb/mobility/utils';
 import {getVehicles} from '@atb/api/mobility';
 import {usePollableResource} from '@atb/utils/use-pollable-resource';
 import {useIsFocused} from '@react-navigation/native';
 import {useVehiclesPollInterval} from '@atb/mobility/use-vehicles-poll-interval';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 const MIN_ZOOM_LEVEL = 13.5;
 const BUFFER_DISTANCE_IN_METERS = 500;
 
-const emptyVehicles = toFeatureCollection<Point, VehicleFragment>([]);
+const emptyCollection = toFeatureCollection<Point, VehicleBasicFragment>([]);
+const emptyVehicles: VehicleFeatures = {
+  bicycles: emptyCollection,
+  scooters: emptyCollection,
+};
 
-export const useVehicles: () => VehiclesState | undefined = () => {
+export const useVehicles: (
+  initialFilter?: MobilityMapFilterType,
+) => VehiclesState | undefined = (initialFilter) => {
   const [area, setArea] = useState<AreaState>();
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const {getMapFilter} = useUserMapFilters();
-  const [filter, setFilter] = useState<VehiclesFilterType>();
+  const [filter, setFilter] = useState<MobilityMapFilterType>(
+    initialFilter ?? {},
+  );
   const isFocused = useIsFocused();
   const pollInterval = useVehiclesPollInterval();
 
   useEffect(() => {
-    getMapFilter().then((initialFilter) => {
-      setFilter(initialFilter.vehicles);
+    getMapFilter().then((userFilter) => {
+      setFilter(userFilter.mobility);
     });
   }, [isVehiclesEnabled]);
 
@@ -45,16 +60,37 @@ export const useVehicles: () => VehiclesState | undefined = () => {
 
   const loadVehicles = useCallback(
     async (signal) => {
-      if (isVehiclesEnabled && area && shouldShowVehicles(filter)) {
-        return await getVehicles(
-          {
-            ...area,
-            operators: filter?.scooters?.operators,
-          },
-          {signal},
-        )
-          .then(toFeaturePoints)
-          .then(toFeatureCollection);
+      if (isVehiclesEnabled && area) {
+        const scooterOperators = getOperators(filter, FormFactor.Scooter);
+        const includeScooters =
+          isShowAll(filter, FormFactor.Scooter) || scooterOperators.length > 0;
+        const bicycleOperators = getOperators(filter, FormFactor.Bicycle);
+        const includeBicycles =
+          isShowAll(filter, FormFactor.Bicycle) || bicycleOperators.length > 0;
+        if (
+          includeBicycles ||
+          includeScooters ||
+          bicycleOperators.length > 0 ||
+          scooterOperators.length > 0
+        ) {
+          return await getVehicles(
+            {
+              ...area,
+              scooterOperators,
+              includeScooters,
+              bicycleOperators,
+              includeBicycles,
+            },
+            {signal},
+          ).then((vehicles) => ({
+            bicycles: vehicles.bicycles
+              ? toFeatureCollection(toFeaturePoints(vehicles.bicycles))
+              : emptyCollection,
+            scooters: vehicles.scooters
+              ? toFeatureCollection(toFeaturePoints(vehicles.scooters))
+              : emptyCollection,
+          }));
+        }
       }
       return emptyVehicles;
     },
@@ -71,7 +107,7 @@ export const useVehicles: () => VehiclesState | undefined = () => {
     setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
   };
 
-  const onFilterChange = (filter: VehiclesFilterType) => {
+  const onFilterChange = (filter: MobilityMapFilterType) => {
     setFilter(filter);
   };
 
@@ -84,6 +120,3 @@ export const useVehicles: () => VehiclesState | undefined = () => {
       }
     : undefined;
 };
-
-const shouldShowVehicles = (filter: VehiclesFilterType | undefined) =>
-  filter?.scooters?.showAll || filter?.scooters?.operators.length;

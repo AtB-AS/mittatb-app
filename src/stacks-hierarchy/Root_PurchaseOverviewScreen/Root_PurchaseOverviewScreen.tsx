@@ -24,6 +24,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -109,7 +110,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           type: 'cancel',
           onPress: closeModal,
         }}
-        globalMessageContext="app-ticketing"
+        globalMessageContext={GlobalMessageContextEnum.appTicketing}
         setFocusOnLoad={!params.onFocusElement}
       />
 

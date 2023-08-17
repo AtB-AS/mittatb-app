@@ -12,7 +12,7 @@ export function hasLegsWeCantSellTicketsFor(
   validModes: string[],
 ) {
   return tripPattern.legs.some(function (leg) {
-    if (leg.mode == Mode.Foot) {
+    if (leg.mode == Mode.Foot || leg.mode == Mode.Bicycle) {
       return false;
     }
     if (leg.authority?.id !== currentAppAuthorityId) {

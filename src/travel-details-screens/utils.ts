@@ -180,6 +180,24 @@ function someLegsAreByTrain(tripPattern: TripPattern): boolean {
   return tripPattern.legs.some((leg) => leg.mode === Mode.Rail);
 }
 
+export function withinZoneIds(legs: Leg[]): string[] {
+  const allZoneIds = new Set<string>();
+  legs.forEach((leg) => {
+    leg.fromPlace.quay?.tariffZones?.forEach((zone) => allZoneIds.add(zone.id));
+    leg.toPlace.quay?.tariffZones?.forEach((zone) => allZoneIds.add(zone.id));
+  });
+  const containingZones = Array.from(allZoneIds).filter((zoneId) =>
+    legs
+      .filter((a) => a.mode !== Mode.Foot)
+      .every(
+        (leg) =>
+          leg.fromPlace.quay?.tariffZones?.some((zone) => zone.id === zoneId) &&
+          leg.toPlace.quay?.tariffZones?.some((zone) => zone.id === zoneId),
+      ),
+  );
+  return containingZones;
+}
+
 export function isLegFlexibleTransport(leg: Leg): boolean {
   return !!leg.line?.flexibleLineType;
 }

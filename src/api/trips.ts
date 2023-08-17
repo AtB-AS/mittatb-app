@@ -1,15 +1,15 @@
 import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
 import {TripPattern, TripsQuery} from '@atb/api/types/trips';
-import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {
+  NonTransitTripsQueryVariables,
+  TripsQueryVariables,
+} from '@atb/api/types/generated/TripsQuery';
 import Bugsnag from '@bugsnag/react-native';
+import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 
-export async function tripsSearch(
-  query: TripsQueryVariables,
-  opts?: AxiosRequestConfig,
-): Promise<TripsQuery> {
-  const url = 'bff/v2/trips';
-  const cleanQuery: TripsQueryVariables = {
+function cleanQuery(query: TripsQueryVariables) {
+  const cleanQuery: TripsQueryVariables | NonTransitTripsQueryVariables = {
     to: {
       name: query.to.name,
       coordinates: query.to.coordinates,
@@ -29,8 +29,36 @@ export async function tripsSearch(
     walkSpeed: query.walkSpeed,
     modes: query.modes,
   };
+  return cleanQuery;
+}
 
-  const results = await post<TripsQuery>(url, cleanQuery, opts);
+function cleanNonTransitQuery(query: NonTransitTripsQueryVariables) {
+  const cleanQuery: NonTransitTripsQueryVariables = {
+    to: {
+      name: query.to.name,
+      coordinates: query.to.coordinates,
+      place: query.to.place,
+    },
+    from: {
+      name: query.from.name,
+      coordinates: query.from.coordinates,
+      place: query.from.place,
+    },
+    when: query.when,
+    arriveBy: query.arriveBy,
+    walkSpeed: query.walkSpeed,
+    directModes: query.directModes,
+  };
+  return cleanQuery;
+}
+
+export async function tripsSearch(
+  query: TripsQueryVariables,
+  opts?: AxiosRequestConfig,
+): Promise<TripsQuery> {
+  const url = 'bff/v2/trips';
+
+  const results = await post<TripsQuery>(url, cleanQuery(query), opts);
 
   Bugsnag.leaveBreadcrumb('results', {
     patterns: results.trip?.tripPatterns ?? 'none',
@@ -38,6 +66,16 @@ export async function tripsSearch(
 
   return results;
 }
+
+export const nonTransitTripSearch = (
+  query: NonTransitTripsQueryVariables,
+  opts?: AxiosRequestConfig,
+) =>
+  post<TripPatternFragment[]>(
+    'bff/v2/trips/non-transit',
+    cleanNonTransitQuery(query),
+    opts,
+  );
 
 export async function singleTripSearch(
   queryString?: string,

@@ -47,6 +47,8 @@ import {useAnalytics} from '@atb/analytics';
 import {Info} from '@atb/assets/svg/color/icons/status';
 import {TariffZone} from '@atb/reference-data/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -103,6 +105,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     isError: mobileTokenError,
   } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
+  const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
@@ -332,7 +335,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       <FullScreenHeader
         title={getTextForLanguage(fareProductTypeConfig.name, language)}
         leftButton={headerLeftButton}
-        globalMessageContext="app-ticketing"
+        globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <ScrollView style={styles.infoSection}>
         <View>
@@ -357,6 +360,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <SummaryText />
                 {!isSearchingOffer &&
                   validDurationSeconds &&
+                  isShowValidTimeInfoEnabled &&
                   summary(
                     t(
                       PurchaseConfirmationTexts.validityTexts.time(

@@ -37,6 +37,7 @@ import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStac
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-enabled';
+import {useShowValidTimeInfoDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 import {
   ExpandableSectionItem,
   GenericSectionItem,
@@ -48,6 +49,7 @@ import {
 import {useDebugOverride} from '@atb/debug';
 import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
+import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -88,6 +90,8 @@ export const Profile_DebugInfoScreen = () => {
   const mapDebugOverride = useMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
+  const nonTransitTripSearchOverride = useNonTransitTripSearchDebugOverride();
+  const showValidTimeInfoDebugOverride = useShowValidTimeInfoDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -331,6 +335,18 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable tips and information for tickets"
               override={tipsAndInformationOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable non-transit trip search"
+              override={nonTransitTripSearchOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Shows valid time info in ticket details"
+              override={showValidTimeInfoDebugOverride}
             />
           </GenericSectionItem>
         </Section>

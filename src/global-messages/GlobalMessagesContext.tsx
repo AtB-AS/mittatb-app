@@ -13,14 +13,16 @@ import {
   setDismissedMessagesInStore,
 } from '@atb/global-messages/storage';
 import {
-  GlobalMessageContextType,
+  GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
+import {checkRules, RuleVariables} from './rules';
 
 type GlobalMessageContextState = {
   findGlobalMessages: (
-    context: GlobalMessageContextType | 'all',
+    context: GlobalMessageContextEnum,
+    ruleVariables?: RuleVariables,
   ) => GlobalMessageType[];
   dismissedGlobalMessages: GlobalMessageType[];
   addDismissedGlobalMessages: (dismissedMessage: GlobalMessageType) => void;
@@ -47,11 +49,11 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
       firestore()
         .collection<GlobalMessageRaw>('globalMessagesV2')
         .where('active', '==', true)
-        .where('context', 'array-contains-any', [
-          'app-ticketing',
-          'app-departures',
-          'app-assistant',
-        ])
+        .where(
+          'context',
+          'array-contains-any',
+          Object.values(GlobalMessageContextEnum),
+        )
         .onSnapshot(
           async (snapshot) => {
             const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
@@ -101,13 +103,17 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   };
 
   const findGlobalMessages = useCallback(
-    (context: GlobalMessageContextType | 'all') => {
-      if (context === 'all') {
-        return globalMessages;
-      }
-      return globalMessages.filter((a) =>
-        a.context.find((cont) => cont === context),
-      );
+    (context: GlobalMessageContextEnum, ruleVariables: RuleVariables = {}) => {
+      return globalMessages.filter((gm) => {
+        const withSameContext = gm.context.find((c) => c === context);
+        if (!withSameContext) return false;
+        if (gm.rules?.length) {
+          const passRules = checkRules(gm.rules, ruleVariables);
+          if (!passRules) return false;
+        }
+
+        return true;
+      });
     },
     [globalMessages],
   );

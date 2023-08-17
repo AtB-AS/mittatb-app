@@ -1,7 +1,7 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {dictionary, useTranslation} from '@atb/translations';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Keyboard,
@@ -15,20 +15,10 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useIsFocused} from '@react-navigation/native';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
-import {useIsLoading} from '@atb/utils/use-is-loading';
-import {ErrorType} from '@atb/api/utils';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {
-  TransportMode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
-import {
-  getStopPlaceConnections,
-  getStopPlacesByMode,
-} from '@atb/api/stop-places';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
-import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {useHarborsQuery} from '@atb/queries/use-harbors-query';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -64,9 +54,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
     if (isFocused) setTimeout(() => inputRef.current?.focus(), 0);
   }, [isFocused]);
 
-  const {harbors, isLoading, error} = useGetHarbors(fromHarbor?.id);
-
-  const errorMessage = error ? translateErrorType(error, t) : '';
+  const harborsQuery = useHarborsQuery(fromHarbor?.id);
 
   const debouncedText = useDebounce(text, 200);
 
@@ -109,65 +97,32 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
       >
-        {isLoading && <ActivityIndicator />}
-        {error && (
-          <View style={styles.errorMessage}>
-            <ScreenReaderAnnouncement message={errorMessage} />
-            <MessageBox type="warning" message={errorMessage} />
-          </View>
+        {harborsQuery.isLoading && <ActivityIndicator />}
+        {harborsQuery.isError && (
+          <>
+            <ScreenReaderAnnouncement message={t(HarborSearchTexts.error)} />
+            <MessageBox
+              type="error"
+              message={t(HarborSearchTexts.error)}
+              onPressConfig={{
+                text: t(dictionary.retry),
+                action: harborsQuery.refetch,
+              }}
+            />
+          </>
         )}
-
-        <HarborResults
-          harbors={harbors}
-          onSelect={onSave}
-          searchText={debouncedText}
-          fromHarborName={fromHarbor?.name}
-        />
+        {harborsQuery.isSuccess && (
+          <HarborResults
+            harbors={harborsQuery.data}
+            onSelect={onSave}
+            searchText={debouncedText}
+            fromHarborName={fromHarbor?.name}
+          />
+        )}
       </ScrollView>
     </View>
   );
 };
-
-function useGetHarbors(fromHarborId?: string) {
-  const [error, setError] = useState<ErrorType | undefined>(undefined);
-  const [isLoading, setIsLoading] = useIsLoading(true);
-  const [harbors, setHarbors] = useState<StopPlaceFragment[] | []>([]);
-
-  const fetchHarbors = useCallback(() => {
-    if (fromHarborId) {
-      return getStopPlaceConnections(fromHarborId);
-    } else {
-      return getStopPlacesByMode(
-        [TransportMode.Water],
-        [
-          TransportSubmode.HighSpeedPassengerService,
-          TransportSubmode.HighSpeedVehicleService,
-        ],
-      );
-    }
-  }, [fromHarborId]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetchHarbors()
-      .then((harborsResult) => {
-        setHarbors(harborsResult ?? []);
-        setError(undefined);
-      })
-      .catch((e) => {
-        setError(e);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [fetchHarbors]);
-
-  return {
-    harbors,
-    isLoading,
-    error,
-  };
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
@@ -184,10 +139,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     margin: theme.spacings.medium,
   },
   contentBlock: {
-    margin: theme.spacings.medium,
-  },
-  errorMessage: {
-    paddingVertical: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
   scroll: {
     flex: 1,

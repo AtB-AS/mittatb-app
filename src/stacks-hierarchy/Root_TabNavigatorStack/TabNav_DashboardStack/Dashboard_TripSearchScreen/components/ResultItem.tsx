@@ -48,10 +48,10 @@ import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getNoticesForLeg,
   getTimeRepresentationType,
+  isLegFlexibleTransport,
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
-  isLegFlexibleTransport,
   getTripPatternRequiresBooking,
   getTripPatternRequiresBookingUrgently,
 } from '@atb/travel-details-screens/utils';
@@ -59,6 +59,7 @@ import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 import {useNow} from '@atb/utils/use-now';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -672,9 +673,12 @@ const tripSummary = (
         ),
       );
 
+  const walkDistance = tripPattern.legs
+    .filter((l) => l.mode === Mode.Foot)
+    .reduce((tot, {distance}) => tot + distance, 0);
   const walkDistanceText = t(
     TripSearchTexts.results.resultItem.journeySummary.totalWalkDistance(
-      (tripPattern.walkDistance ?? 0).toFixed(),
+      walkDistance.toFixed(),
     ),
   );
 
