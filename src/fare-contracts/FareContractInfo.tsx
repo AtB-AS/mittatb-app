@@ -185,6 +185,7 @@ const FareContractInfoHeader = ({
     isInspectable,
     fareProductType,
   );
+  // This is what we want
   const showTwoWayIcon =
     travelRights?.[0].direction === TravelRightDirection.Both;
 

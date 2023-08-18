@@ -79,17 +79,16 @@ export const RecentFareContractComponent = ({
         RecentFareContractsTexts.repeatPurchase.label,
       )} ${modeInfo} ${travellerInfo}`;
     }
-    const zoneOrHarborInfo = () => {
-      // split it into two components
-      if (fromTariffZone !== undefined) {
-        return fromZoneName === toZoneName
-          ? `${t(
-              RecentFareContractsTexts.a11yPreLabels.zones.oneZone,
-            )} ${fromZoneName}`
-          : `${t(
-              RecentFareContractsTexts.a11yPreLabels.zones.multipleZones,
-            )} ${fromZoneName}, ${toZoneName}`;
-      }
+    const zoneInfo =
+      fromZoneName === toZoneName
+        ? `${t(
+            RecentFareContractsTexts.a11yPreLabels.zones.oneZone,
+          )} ${fromZoneName}`
+        : `${t(
+            RecentFareContractsTexts.a11yPreLabels.zones.multipleZones,
+          )} ${fromZoneName}, ${toZoneName}`;
+
+    const harborInfo = () => {
       if (pointToPointValidity?.fromPlace && pointToPointValidity?.toPlace) {
         const fromName =
           harborsQuery.data?.find(
@@ -115,14 +114,19 @@ export const RecentFareContractComponent = ({
       }
       return '';
     };
+    const zoneOrHarborInfo =
+      fromTariffZone !== undefined ? zoneInfo : harborInfo();
+
     return `${t(
       RecentFareContractsTexts.repeatPurchase.label,
-    )} ${modeInfo} ${travellerInfo} ${zoneOrHarborInfo()}`;
+    )} ${modeInfo} ${travellerInfo} ${zoneOrHarborInfo}`;
   };
 
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
   const interactiveColor = theme.interactive[interactiveColorName];
+  // const showTwoWayIcon = ;
+  // travelRights?.[0].direction === TravelRightDirection.Both;
 
   return (
     <TouchableOpacity
@@ -155,7 +159,8 @@ export const RecentFareContractComponent = ({
           preassignedFareProduct.type === 'boat-period') &&
           pointToPointValidity && (
             <FareContractHarborStopPlaces
-              showTwoWayIcon={preassignedFareProduct.type === 'boat-period'}
+              //showTwoWayIcon={showTwoWayIcon}
+              showTwoWayIcon={true}
               fromStopPlaceId={pointToPointValidity?.fromPlace}
               toStopPlaceId={pointToPointValidity?.toPlace}
               accessible={false}

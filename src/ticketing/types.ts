@@ -174,6 +174,7 @@ export type RecentFareContractBackend = {
     fromPlace: string;
     toPlace: string;
   };
+  // get either travelRights or FareContractId (then we can get the travel rights from useTicketingState()-> findFareContractByOrderId
 };
 
 export type ReserveOffer = {

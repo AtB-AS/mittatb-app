@@ -19,6 +19,7 @@ export async function listRecentFareContracts(): Promise<
   const response = await client.get<RecentFareContractBackend[]>(url, {
     authWithIdToken: true,
   });
+  console.log('BE: ' + JSON.stringify(response.data));
   return response.data;
 }
 
