@@ -1,47 +1,28 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
-import {
-  CityZone,
-  PreassignedFareProduct,
-  TariffZone,
-  UserProfile,
-} from '@atb/reference-data/types';
-import Bugsnag from '@bugsnag/react-native';
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
+import { CityZone, PreassignedFareProduct, TariffZone, UserProfile } from "@atb/reference-data/types";
+import Bugsnag from "@bugsnag/react-native";
 import {
   defaultCityZones,
   defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
-  defaultUserProfiles,
-} from '@atb/reference-data/defaults';
-import {
-  defaultModesWeSellTicketsFor,
-  defaultPaymentTypes,
-  defaultVatPercent,
-} from '@atb/configuration/defaults';
-import {PaymentType} from '@atb/ticketing';
-import {FareProductTypeConfig} from './types';
+  defaultUserProfiles
+} from "@atb/reference-data/defaults";
+import { defaultModesWeSellTicketsFor, defaultPaymentTypes, defaultVatPercent } from "@atb/configuration/defaults";
+import { PaymentType } from "@atb/ticketing";
+import { FareProductTypeConfig } from "./types";
 import {
   mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
   mapToFlexibleTransportOption,
+  mapToHarborConnectionOverride,
   mapToMobilityOperators,
-  mapToTransportModeFilterOptions,
-} from './converters';
-import {LanguageAndTextType} from '@atb/translations';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
-import {
-  TravelSearchFiltersType,
-  ConfigurableLinksType,
-} from '@atb-as/config-specs';
+  mapToTransportModeFilterOptions
+} from "./converters";
+import { LanguageAndTextType } from "@atb/translations";
+import { MobilityOperatorType } from "@atb-as/config-specs/lib/mobility-operators";
+import { ConfigurableLinksType, HarborConnectionOverrideType, TravelSearchFiltersType } from "@atb-as/config-specs";
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
@@ -60,6 +41,7 @@ type ConfigurationContextState = {
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
+  harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -75,6 +57,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   appTexts: undefined,
   configurableLinks: undefined,
   mobilityOperators: undefined,
+  harborConnectionOverrides: [],
 };
 
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
@@ -103,6 +86,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     useState<ConfigurableLinksType>();
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
+  >([]);
+  const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
+    HarborConnectionOverrideType[]
   >([]);
 
   useEffect(() => {
@@ -173,6 +159,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (mobilityOperators) {
             setMobilityOperators(mobilityOperators);
           }
+
+          const harborConnectionOverrides =
+            getHarborConnectionOverridesFromSnapshot(snapshot);
+          if (harborConnectionOverrides) {
+            setHarborConnectionOverrides(harborConnectionOverrides);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -197,6 +189,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       appTexts,
       configurableLinks,
       mobilityOperators,
+      harborConnectionOverrides,
     };
   }, [
     preassignedFareProducts,
@@ -211,6 +204,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     appTexts,
     configurableLinks,
     mobilityOperators,
+    harborConnectionOverrides,
   ]);
 
   return (
@@ -428,4 +422,13 @@ function getMobilityOperatorsFromSnapshot(
 ): MobilityOperatorType[] | undefined {
   const operators = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToMobilityOperators(operators?.get('operators'));
+}
+
+function getHarborConnectionOverridesFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): HarborConnectionOverrideType[] | undefined {
+  const overrides = snapshot.docs.find(
+    (doc) => doc.id == 'harborConnectionOverrides',
+  );
+  return mapToHarborConnectionOverride(overrides);
 }
