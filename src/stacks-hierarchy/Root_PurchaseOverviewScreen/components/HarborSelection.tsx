@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import React, {ForwardedRef, forwardRef, useRef} from 'react';
+import React, {forwardRef, useRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -17,6 +17,9 @@ type StopPlaceSelectionProps = {
   onSelect: (params: Root_PurchaseHarborSearchScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
+
+const FROM = 'from';
+const TO = 'to';
 
 export const HarborSelection = forwardRef<
   TouchableOpacity,
@@ -53,12 +56,12 @@ export const HarborSelection = forwardRef<
         </ThemeText>
 
         <Section accessible={false}>
-          {(['from', 'to'] as ('from' | 'to')[]).map((fromOrTo) => {
-            const harbor = fromOrTo === 'from' ? fromHarbor : toHarbor;
+          {([FROM, TO] as (typeof FROM | typeof TO)[]).map((fromOrTo) => {
+            const harbor = fromOrTo === FROM ? fromHarbor : toHarbor;
             const harborStyle =
-              fromOrTo === 'from' ? styles.fromHarbor : styles.toHarbor;
-            const disabled = fromOrTo === 'to' && !fromHarbor;
-            const ref = fromOrTo == 'from' ? fromRef : toRef;
+              fromOrTo === FROM ? styles.fromHarbor : styles.toHarbor;
+            const disabled = fromOrTo === TO && !fromHarbor;
+            const ref = fromOrTo == FROM ? fromRef : toRef;
             return (
               <GenericClickableSectionItem
                 key={fromOrTo}
@@ -82,7 +85,7 @@ export const HarborSelection = forwardRef<
                 }
                 onPress={() => {
                   onSelect({
-                    ...(fromOrTo === 'to' && fromHarbor ? {fromHarbor} : {}),
+                    ...(fromOrTo === TO && fromHarbor ? {fromHarbor} : {}),
                     fareProductTypeConfig,
                     preassignedFareProduct,
                   });
