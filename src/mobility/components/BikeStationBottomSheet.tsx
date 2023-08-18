@@ -1,55 +1,64 @@
-import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
-import React from 'react';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {StyleSheet} from '@atb/theme';
-import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
+import React from 'react';
+import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {GenericSectionItem, Section} from '@atb/components/sections';
+import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
+import {useSystem} from '@atb/mobility/use-system';
 import {Button} from '@atb/components/button';
 import {
+  BicycleTexts,
   MobilityTexts,
-  ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
-import {GenericSectionItem, Section} from '@atb/components/sections';
-import {PricingPlan} from '@atb/mobility/components/PricingPlan';
-import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {formatRange, getRentalAppUri} from '@atb/mobility/utils';
-import {useSystem} from '@atb/mobility/use-system';
+import {getAvailableVehicles, getRentalAppUri} from '@atb/mobility/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
+import {VehicleStat} from '@atb/mobility/components/VehicleStat';
+import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
+import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
+import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
-import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
+import {useTextForLanguage} from '@atb/translations/utils';
+import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
-  vehicleId: VehicleId;
+  stationId: string;
+  distance: number | undefined;
   close: () => void;
 };
-export const ScooterSheet = ({vehicleId: id, close}: Props) => {
-  const {t, language} = useTranslation();
+
+export const BikeStationSheet = ({stationId, distance, close}: Props) => {
+  const {t} = useTranslation();
+  const {themeName} = useTheme();
   const style = useSheetStyle();
-  const {vehicle, isLoading, error} = useVehicle(id);
-  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(
-    vehicle,
-    vehicle?.system.operator.name,
-  );
-  const rentalAppUri = getRentalAppUri(vehicle);
+  const {station, isLoading, error} = useBikeStation(stationId);
+  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
+  const rentalAppUri = getRentalAppUri(station);
   const {openOperatorApp} = useOperatorApp({
     operatorName,
     appStoreUri,
     rentalAppUri,
   });
+  const stationName = useTextForLanguage(station?.name.translation);
+  const availableBikes = getAvailableVehicles(
+    station?.vehicleTypesAvailable,
+    FormFactor.Bicycle,
+  );
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
+    <BottomSheetContainer>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
+        title={stationName ?? ''}
         color={'background_1'}
         setFocusOnLoad={false}
       />
@@ -59,9 +68,13 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
             <ActivityIndicator size="large" />
           </View>
         )}
-        {!isLoading && !error && vehicle && (
+        {!isLoading && !error && station && (
           <>
-            <ScrollView style={style.container}>
+            <WalkingDistance
+              style={style.walkingDistance}
+              distance={distance}
+            />
+            <View style={style.container}>
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -73,22 +86,23 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
               <VehicleStats
                 left={
                   <VehicleStat
-                    svg={Battery}
-                    primaryStat={vehicle.currentFuelPercent + '%'}
-                    secondaryStat={formatRange(
-                      vehicle.currentRangeMeters,
-                      language,
-                    )}
+                    svg={Bicycle}
+                    primaryStat={availableBikes}
+                    secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
                   />
                 }
                 right={
-                  <PricingPlan
-                    operator={operatorName}
-                    plan={vehicle.pricingPlan}
+                  <VehicleStat
+                    svg={themeName === 'dark' ? ParkingDark : ParkingLight}
+                    primaryStat={
+                      station.numDocksAvailable ??
+                      t(BicycleTexts.stations.unknownDocksAvailable)
+                    }
+                    secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
                   />
                 }
               />
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={style.footer}>
                 <Button
@@ -101,11 +115,11 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
             )}
           </>
         )}
-        {!isLoading && (error || !vehicle) && (
+        {!isLoading && (error || !station) && (
           <View style={style.errorMessage}>
             <MessageBox
               type="error"
-              message={t(ScooterTexts.loadingFailed)}
+              message={t(BicycleTexts.loadingFailed)}
               onPressConfig={{
                 action: close,
                 text: t(ScreenHeaderTexts.headerButton.close.text),
@@ -127,12 +141,19 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     container: {
       paddingHorizontal: theme.spacings.medium,
     },
+    stationName: {
+      flex: 1,
+      alignItems: 'center',
+    },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
+    },
+    walkingDistance: {
+      marginBottom: theme.spacings.medium,
     },
   };
 });

@@ -17,6 +17,7 @@ import {Platform, RefreshControl, View} from 'react-native';
 import {StopPlacesMode} from './types';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -149,13 +150,17 @@ export const NearbyStopPlacesScreenComponent = ({
     );
   }
 
+  const isFocused = useIsFocusedAndActive();
+
   return (
     <FullScreenView
       refreshControl={
-        <RefreshControl
-          refreshing={Platform.OS === 'ios' ? false : isLoading}
-          onRefresh={refresh}
-        />
+        isFocused ? (
+          <RefreshControl
+            refreshing={Platform.OS === 'ios' ? false : isLoading}
+            onRefresh={refresh}
+          />
+        ) : undefined
       }
       headerProps={headerProps}
       parallaxContent={() => (

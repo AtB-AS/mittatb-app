@@ -9,15 +9,17 @@ import {
 import {AxiosError} from 'axios';
 import React from 'react';
 import {View} from 'react-native';
-import {TripMessages} from './DetailsMessages';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
 import {TripSummary} from './TripSummary';
 import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
+  hasShortWaitTime,
+  hasShortWaitTimeAndNotGuaranteedCorrespondence,
   isLegFlexibleTransport,
   isSignificantFootLegWalkOrWaitTime,
+  withinZoneIds,
 } from '@atb/travel-details-screens/utils';
 import {
   CompactTravelDetailsMap,
@@ -27,10 +29,22 @@ import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-
 import {MapFilterType, useRealtimeMapEnabled} from '@atb/components/map';
 import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';
-import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {
+  TranslateFunction,
+  TripDetailsTexts,
+  useTranslation,
+} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {MessageBox} from '@atb/components/message-box';
+import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
+import {getAxiosErrorType} from '@atb/api/utils';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -52,6 +66,8 @@ export const Trip: React.FC<TripProps> = ({
   const styles = useStyle();
   const {t, language} = useTranslation();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const {enable_ticketing} = useRemoteConfig();
+  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
 
   const legs = tripPattern.legs.filter((leg, i) =>
     isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
@@ -79,8 +95,8 @@ export const Trip: React.FC<TripProps> = ({
   });
 
   const mapFilter: MapFilterType = {
-    stations: {
-      cityBikeStations: {
+    mobility: {
+      [FormFactor.Bicycle]: {
         showAll: tripPatternLegs.some((leg) => leg.rentedBike),
         operators: [],
       },
@@ -90,6 +106,15 @@ export const Trip: React.FC<TripProps> = ({
   const shouldShowDate =
     !isWithinSameDate(new Date(), tripPattern.expectedStartTime) ||
     isScreenReaderEnabled;
+
+  const containingZones = withinZoneIds(tripPattern.legs);
+  const shortWaitTimeAndNotGuaranteedCorrespondence =
+    hasShortWaitTimeAndNotGuaranteedCorrespondence(tripPattern.legs);
+  const shortWaitTime = hasShortWaitTime(tripPattern.legs);
+  const tripHasLegsWeCantSellTicketsFor = hasLegsWeCantSellTicketsFor(
+    tripPattern,
+    modesWeSellTicketsFor,
+  );
 
   return (
     <View style={styles.container}>
@@ -103,7 +128,38 @@ export const Trip: React.FC<TripProps> = ({
           <Divider style={styles.divider} />
         </>
       )}
-      <TripMessages tripPattern={tripPattern} error={error} />
+      {shortWaitTime && (
+        <MessageBox
+          style={styles.messageBox}
+          type="info"
+          message={[
+            t(TripDetailsTexts.messages.shortTime),
+            shortWaitTimeAndNotGuaranteedCorrespondence
+              ? t(TripDetailsTexts.messages.correspondenceNotGuaranteed)
+              : '',
+          ].join(' ')}
+        />
+      )}
+      <GlobalMessage
+        globalMessageContext={GlobalMessageContextEnum.appTripDetails}
+        style={styles.messageBox}
+        ruleVariables={{
+          ticketingEnabled: enable_ticketing,
+          hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,
+          modes: tripPattern.legs.map((l) => l.mode),
+          withinZoneIds: containingZones,
+        }}
+      />
+      {error && (
+        <>
+          <ScreenReaderAnnouncement message={translatedError(error, t)} />
+          <MessageBox
+            style={styles.messageBox}
+            type="warning"
+            message={translatedError(error, t)}
+          />
+        </>
+      )}
       <View style={styles.trip}>
         {tripPattern &&
           legs.map((leg, index) => {
@@ -194,6 +250,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   divider: {
     marginBottom: theme.spacings.medium,
   },
+  messageBox: {
+    marginBottom: theme.spacings.medium,
+  },
   trip: {
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.xSmall,
@@ -216,4 +275,14 @@ function getInterchangeDetails(
     };
   }
   return undefined;
+}
+function translatedError(error: AxiosError, t: TranslateFunction): string {
+  const errorType = getAxiosErrorType(error);
+  switch (errorType) {
+    case 'network-error':
+    case 'timeout':
+      return t(TripDetailsTexts.messages.errorNetwork);
+    default:
+      return t(TripDetailsTexts.messages.errorDefault);
+  }
 }

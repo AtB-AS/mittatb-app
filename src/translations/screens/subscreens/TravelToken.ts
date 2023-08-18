@@ -512,9 +512,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Eg får ikkje logga inn i FRAM-appen med e-post`,
           ),
           answer: _(
-            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny bruker i appen.`,
-            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact customer service regarding a refund if you still want to create a new user in the app.`,
-            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukaren. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil opprette ein ny brukar i appen.`,
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte FRAM Kundesenter for refusjon dersom du likevel vil lage en ny bruker i appen.`,
+            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact FRAM Customer Centre for a refund if you still want to create a new user in the app.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukaren. Du kan kontakte FRAM Kundesenter for refusjon dersom du likevel vil opprette ein ny brukar i appen.`,
           ),
         },
         {
