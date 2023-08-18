@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import React, {forwardRef} from 'react';
+import React, {ForwardedRef, forwardRef, useRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -36,6 +36,9 @@ export const HarborSelection = forwardRef<
     const styles = useStyles();
     const {t} = useTranslation();
 
+    const fromRef = useRef<TouchableOpacity>(null);
+    const toRef = useRef<TouchableOpacity>(null);
+
     return (
       <View style={style} accessible={false}>
         <ThemeText
@@ -55,10 +58,11 @@ export const HarborSelection = forwardRef<
             const harborStyle =
               fromOrTo === 'from' ? styles.fromHarbor : styles.toHarbor;
             const disabled = fromOrTo === 'to' && !fromHarbor;
+            const ref = fromOrTo == 'from' ? fromRef : toRef;
             return (
               <GenericClickableSectionItem
                 key={fromOrTo}
-                ref={harborInputSectionItemRef}
+                ref={ref}
                 accessibilityState={{disabled}}
                 accessible={true}
                 accessibilityRole="button"
@@ -76,13 +80,19 @@ export const HarborSelection = forwardRef<
                         ].a11yHint,
                       )
                 }
-                onPress={() =>
+                onPress={() => {
                   onSelect({
-                    ...(fromOrTo !== 'from' && fromHarbor ? {fromHarbor} : {}),
+                    ...(fromOrTo === 'to' && fromHarbor ? {fromHarbor} : {}),
                     fareProductTypeConfig,
                     preassignedFareProduct,
-                  })
-                }
+                  });
+                  if (
+                    harborInputSectionItemRef &&
+                    typeof harborInputSectionItemRef !== 'function'
+                  ) {
+                    harborInputSectionItemRef.current = ref.current;
+                  }
+                }}
                 testID="selectHarborsButton"
               >
                 <>
