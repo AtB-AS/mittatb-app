@@ -59,6 +59,7 @@ export type ButtonProps = {
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
+  style?: StyleProp<ViewStyle>;
 } & ButtonTypeAwareProps &
   PressableProps;
 
@@ -161,9 +162,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
     return (
       <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
         <PressableOpacity
-          style={(state) =>
-            typeof style === 'function' ? style(state) : [styleContainer, style]
-          }
+          style={[styleContainer, style]}
           onPress={disabled ? undefined : onPress}
           disabled={disabled}
           accessibilityRole="button"

@@ -9,23 +9,28 @@ import React, {forwardRef} from 'react';
 
 type PressableOpacityProps = {
   containerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
 } & PressableProps;
 
 export const PressableOpacity = forwardRef<any, PressableOpacityProps>(
-  ({containerStyle, ...pressableProps}: PressableOpacityProps, focusRef) => {
+  (
+    {containerStyle, style, ...pressableProps}: PressableOpacityProps,
+    focusRef,
+  ) => {
     const {fadeIn, fadeOut, opacityValue} = useAnimation();
 
     return (
-      <Animated.View style={[{opacity: opacityValue}, containerStyle]}>
-        <Pressable
-          onPressIn={fadeIn}
-          onPressOut={fadeOut}
-          ref={focusRef}
-          {...pressableProps}
-        >
+      <Pressable
+        onPressIn={fadeIn}
+        onPressOut={fadeOut}
+        ref={focusRef}
+        {...pressableProps}
+        style={containerStyle}
+      >
+        <Animated.View style={[{opacity: opacityValue}, style]}>
           {pressableProps?.children}
-        </Pressable>
-      </Animated.View>
+        </Animated.View>
+      </Pressable>
     );
   },
 );

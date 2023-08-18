@@ -57,7 +57,7 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
 
   return (
     <View style={styles.container}>
-      <PressableOpacity style={{flex: 1}} onPress={onPress}>
+      <PressableOpacity containerStyle={{flex: 1}} onPress={onPress}>
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
             <Icon
