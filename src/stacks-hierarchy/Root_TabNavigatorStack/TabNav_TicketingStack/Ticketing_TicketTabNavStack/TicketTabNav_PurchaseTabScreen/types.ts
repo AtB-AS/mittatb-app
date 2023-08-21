@@ -4,6 +4,7 @@ import {
   TariffZone,
 } from '@atb/reference-data/types';
 import {UserProfileWithCount} from '@atb/fare-contracts';
+import {TravelRightDirection} from '@atb/ticketing';
 
 export type RecentFareContract = {
   /**
@@ -14,6 +15,7 @@ export type RecentFareContract = {
   preassignedFareProduct: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
+  direction?: TravelRightDirection;
   pointToPointValidity?: PointToPointValidity;
   userProfilesWithCount: UserProfileWithCount[];
 };

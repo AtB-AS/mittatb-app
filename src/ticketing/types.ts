@@ -162,6 +162,7 @@ export type Offer = {
 export type OfferSearchResponse = Offer[];
 
 export type RecentFareContractBackend = {
+  order_id: string;
   products: string[];
   zones: string[];
   users: {
@@ -174,7 +175,6 @@ export type RecentFareContractBackend = {
     fromPlace: string;
     toPlace: string;
   };
-  // get either travelRights or FareContractId (then we can get the travel rights from useTicketingState()-> findFareContractByOrderId
 };
 
 export type ReserveOffer = {

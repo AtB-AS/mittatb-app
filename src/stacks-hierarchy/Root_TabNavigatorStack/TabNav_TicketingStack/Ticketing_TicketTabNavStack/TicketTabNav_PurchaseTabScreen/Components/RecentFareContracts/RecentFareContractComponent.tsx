@@ -9,8 +9,8 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
-  useFirestoreConfiguration,
   FareProductTypeConfig,
+  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {InfoChip} from '@atb/components/info-chip';
 import {InteractiveColor} from '@atb/theme/colors';
@@ -20,6 +20,7 @@ import {
 } from '@atb/components/transportation-modes';
 import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
+import {TravelRightDirection} from '@atb/ticketing';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -43,6 +44,7 @@ export const RecentFareContractComponent = ({
     toTariffZone,
     userProfilesWithCount,
     pointToPointValidity,
+    direction,
   } = recentFareContract;
   const {language} = useTranslation();
   const styles = useStyles();
@@ -98,7 +100,7 @@ export const RecentFareContractComponent = ({
           harborsQuery.data?.find(
             (sp) => sp.id === pointToPointValidity.toPlace,
           )?.name ?? '';
-        return preassignedFareProduct.type === 'boat-period' // should use a field for direction, one-way or return trip.
+        return direction === TravelRightDirection.Both
           ? t(
               RecentFareContractsTexts.a11yPreLabels.harbors.returnTrip(
                 fromName,
@@ -125,8 +127,7 @@ export const RecentFareContractComponent = ({
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
   const interactiveColor = theme.interactive[interactiveColorName];
-  // const showTwoWayIcon = ;
-  // travelRights?.[0].direction === TravelRightDirection.Both;
+  const showTwoWayIcon = direction === TravelRightDirection.Both;
 
   return (
     <TouchableOpacity
@@ -155,17 +156,14 @@ export const RecentFareContractComponent = ({
           </ThemeText>
         </View>
 
-        {(preassignedFareProduct.type === 'boat-single' ||
-          preassignedFareProduct.type === 'boat-period') &&
-          pointToPointValidity && (
-            <FareContractHarborStopPlaces
-              //showTwoWayIcon={showTwoWayIcon}
-              showTwoWayIcon={true}
-              fromStopPlaceId={pointToPointValidity?.fromPlace}
-              toStopPlaceId={pointToPointValidity?.toPlace}
-              accessible={false}
-            />
-          )}
+        {direction !== undefined && pointToPointValidity && (
+          <FareContractHarborStopPlaces
+            showTwoWayIcon={showTwoWayIcon}
+            fromStopPlaceId={pointToPointValidity?.fromPlace}
+            toStopPlaceId={pointToPointValidity?.toPlace}
+            accessible={false}
+          />
+        )}
 
         <View style={styles.horizontalFlex}>
           <View>

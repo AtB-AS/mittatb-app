@@ -5,6 +5,7 @@ import {
 } from '@atb/reference-data/types';
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {
+  FareContract,
   listRecentFareContracts,
   RecentFareContractBackend,
   useTicketingState,
@@ -89,6 +90,7 @@ const mapBackendRecentFareContracts = (
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
+  findFareContractByOrderId: (id: string) => FareContract | undefined,
 ): RecentFareContract | null => {
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
@@ -127,14 +129,28 @@ const mapBackendRecentFareContracts = (
 
   const pointToPointValidity = recentFareContract.point_to_point_validity;
 
+  const direction = findFareContractByOrderId(recentFareContract.order_id)
+    ?.travelRights?.[0].direction;
+
+  const fromId =
+    pointToPointValidity?.fromPlace !== undefined
+      ? pointToPointValidity.fromPlace
+      : fromTariffZone?.id;
+
+  const toId =
+    pointToPointValidity?.toPlace !== undefined
+      ? pointToPointValidity.toPlace
+      : toTariffZone?.id;
+
   const id =
     preassignedFareProduct?.id +
-    fromTariffZone?.id +
-    toTariffZone?.id +
+    fromId +
+    toId +
     userProfilesWithCount.map((u) => u.id + u.count).join();
 
   return {
     id,
+    direction,
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
@@ -162,6 +178,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
+  findFareContractByOrderId: (id: string) => FareContract | undefined,
 ): RecentFareContract[] => {
   return recentFareContracts
     .sort((fc1, fc2) => fc2.created_at.localeCompare(fc1.created_at))
@@ -172,6 +189,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
         fareProductTypeConfigs,
         tariffZones,
         userProfiles,
+        findFareContractByOrderId,
       );
       return maybeFareContract
         ? mappedFareContracts.concat(maybeFareContract)
@@ -183,7 +201,7 @@ const mapToLastThreeUniqueRecentFareContracts = (
 
 export const useRecentFareContracts = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const {fareContracts} = useTicketingState();
+  const {fareContracts, findFareContractByOrderId} = useTicketingState();
   const {
     preassignedFareProducts,
     fareProductTypeConfigs,
@@ -218,6 +236,7 @@ export const useRecentFareContracts = () => {
         fareProductTypeConfigs,
         tariffZones,
         userProfiles,
+        findFareContractByOrderId,
       ),
     [
       state.recentFareContracts,
