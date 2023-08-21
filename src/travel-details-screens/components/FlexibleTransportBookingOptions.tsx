@@ -30,50 +30,46 @@ export const FlexibleTransportBookingOptions: React.FC<
     bookingPhone &&
     bookingMethods?.some((bm) => bm === BookingMethod.CallOffice);
 
-  if (showBookOnlineOption || showBookByPhoneOption) {
-    return (
-      <>
-        {showBookOnlineOption && (
-          <View
-            style={style.flexBookingOption}
-            accessible={true}
-            accessibilityRole="link"
-          >
-            <Button
-              text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
-              onPress={() => Linking.openURL(bookingUrl)}
-              mode="primary"
-              type="pill"
-              interactiveColor="interactive_0"
-              leftIcon={{svg: ExternalLink}}
-            />
-          </View>
-        )}
-        {showBookByPhoneOption && (
-          <View
-            style={style.flexBookingOption}
-            accessible={true}
-            accessibilityHint={t(
-              TripDetailsTexts.flexibleTransport.bookByPhoneA11yHint,
+  return (
+    <>
+      {showBookOnlineOption && (
+        <View
+          style={style.flexBookingOption}
+          accessible={true}
+          accessibilityRole="link"
+        >
+          <Button
+            text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
+            onPress={() => Linking.openURL(bookingUrl)}
+            mode="primary"
+            type="pill"
+            interactiveColor="interactive_0"
+            leftIcon={{svg: ExternalLink}}
+          />
+        </View>
+      )}
+      {showBookByPhoneOption && (
+        <View
+          style={style.flexBookingOption}
+          accessible={true}
+          accessibilityHint={t(
+            TripDetailsTexts.flexibleTransport.bookByPhoneA11yHint,
+          )}
+        >
+          <Button
+            text={t(
+              TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
             )}
-          >
-            <Button
-              text={t(
-                TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
-              )}
-              onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
-              style={style.bookByPhoneButton}
-              type="pill"
-              interactiveColor="interactive_3"
-              leftIcon={{svg: Phone}}
-            />
-          </View>
-        )}
-      </>
-    );
-  } else {
-    return null;
-  }
+            onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
+            style={style.bookByPhoneButton}
+            type="pill"
+            interactiveColor="interactive_3"
+            leftIcon={{svg: Phone}}
+          />
+        </View>
+      )}
+    </>
+  );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
