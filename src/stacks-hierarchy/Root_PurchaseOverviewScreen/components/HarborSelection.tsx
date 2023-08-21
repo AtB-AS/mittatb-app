@@ -18,9 +18,6 @@ type StopPlaceSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const FROM = 'from';
-const TO = 'to';
-
 export const HarborSelection = forwardRef<
   TouchableOpacity,
   StopPlaceSelectionProps
@@ -54,7 +51,7 @@ export const HarborSelection = forwardRef<
 
         <Section accessible={false}>
           <HarborSelectionItem
-            fromOrTo={FROM}
+            fromOrTo="from"
             harbor={fromHarbor}
             disabled={false}
             onPress={() =>
@@ -66,7 +63,7 @@ export const HarborSelection = forwardRef<
             ref={harborInputSectionItemRef}
           />
           <HarborSelectionItem
-            fromOrTo={TO}
+            fromOrTo="to"
             harbor={toHarbor}
             disabled={!fromHarbor}
             onPress={() =>
@@ -88,7 +85,7 @@ type HarborSelectionItemProps = {
   harbor?: StopPlaceFragment;
   disabled: boolean;
   onPress: () => void;
-  fromOrTo: typeof FROM | typeof TO;
+  fromOrTo: 'from' | 'to';
 };
 
 const HarborSelectionItem = forwardRef<
@@ -135,7 +132,7 @@ const HarborSelectionItem = forwardRef<
         }}
         testID="selectHarborsButton"
       >
-        <View style={fromOrTo === FROM ? styles.fromHarbor : styles.toHarbor}>
+        <View style={fromOrTo === 'from' ? styles.fromHarbor : styles.toHarbor}>
           <ThemeText
             color={disabled ? 'disabled' : 'secondary'}
             type="body__secondary"
