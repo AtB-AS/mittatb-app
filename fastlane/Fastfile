@@ -34,7 +34,7 @@ def intent_cert_info
 end
 
 platform :ios do
-  desc 'Update ad hoc devices'
+  desc 'Update new devices and provisioning profiles'
   lane :update_devices do
     ensure_env_vars(
       env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
@@ -43,12 +43,14 @@ platform :ios do
       devices_file: ENV['IOS_DEVICES_FILE'],
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    puts "Updating provisioning profiles for #{identifiers} using match type #{ENV['FASTLANE_MATCH_TYPE']}"
     match(
-      type: "adhoc",
+      type: ENV['FASTLANE_MATCH_TYPE'],
       force_for_new_devices: true,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
+      username: ENV['FASTLANE_MATCH_USERNAME']
     )
   end
 

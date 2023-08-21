@@ -1,26 +1,25 @@
-name: Renew certificates
+name: Update new devices and provisioning profiles
 on:
   workflow_dispatch:
     inputs:
       org:
-        description: 'Org'
+        description: 'App organization to update provisioning profiles for'
         required: true
         type: choice
         options:
           - atb
           - fram
           - nfk
-      environment: 
-        description: 'App environment'
+      match-type:
+        description: 'Update provisioning profiles for which environment?'
         required: true
         type: choice
         options:
-          - staging
-          - store
           - development
+          - adhoc
 jobs:
-  renew-certificates:
-    name: Renew certificates
+  update-devices:
+    name: Renew provisioning profiles
     environment: ${{ inputs.org }}
     timeout-minutes: 180
     runs-on: macOS-12
@@ -31,11 +30,12 @@ jobs:
         uses: ./.github/actions/ios-build-setup
         with:
           use-build-cache: 'true'
-          app-environment: ${{ inputs.environment }}
           app-org: ${{ inputs.org }}
+          app-environment: 'development' # This is not used we only need ios-devices.txt, but required by the action
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: Run fastlane generate certificates
-        run: bundle exec fastlane ios generate_new_certificates
+      - name: Run fastlane generate provisioning profiles
+        run: bundle exec fastlane ios update_devices
         env:
+          FASTLANE_MATCH_TYPE: ${{ inputs.match-type }}
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
