@@ -29,13 +29,24 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
-      - name: Setup build dependencies, environment and assets
-        uses: ./.github/actions/ios-build-setup
+      # - name: Setup build dependencies, environment and assets
+      #   uses: ./.github/actions/ios-build-setup
+      #   with:
+      #     use-build-cache: 'true'
+      #     app-org: "atb"
+      #     app-environment: 'development' # This is not used we only need ios-devices.txt, but required by the action
+      #     git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+      - name: Set environment
+        shell: bash
+        run: sh ./scripts/override-environment.sh dev atb
+      - name: Export workflow env variables based on environment
+        shell: bash
+        run: sh ./scripts/export-workflow-env-variables.sh
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
         with:
-          use-build-cache: 'true'
-          app-org: "atb"
-          app-environment: 'development' # This is not used we only need ios-devices.txt, but required by the action
-          git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
+          ruby-version: "2.7.6"
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Run fastlane generate provisioning profiles
         run: bundle exec fastlane ios update_devices
         env:
