@@ -45,7 +45,7 @@ platform :ios do
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     puts "Updating provisioning profiles for #{identifiers} using match type #{ENV['FASTLANE_MATCH_TYPE']}"
     match(
-      type: ENV['FASTLANE_MATCH_TYPE'],
+      type: 'development', #ENV['FASTLANE_MATCH_TYPE'],
       force_for_new_devices: true,
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       app_identifier: identifiers,

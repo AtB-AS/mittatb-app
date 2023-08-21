@@ -1,5 +1,8 @@
 name: Update new devices and provisioning profiles
 on:
+  push:
+    branches:
+      - 'jorelosorio/update-new-devices'
   workflow_dispatch:
     inputs:
       org:
