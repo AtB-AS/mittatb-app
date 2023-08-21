@@ -49,7 +49,6 @@ const TripDetailsTexts = {
   },
   trip: {
     leg: {
-      circaLabel: _(`ca. `, `ca. `, `ca. `),
       a11yHelper: (stepNumber: number, travelMode: string) =>
         _(
           `Steg ${stepNumber}, ${travelMode}`,

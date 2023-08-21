@@ -14,7 +14,6 @@ import {
   dictionary,
   Language,
   TranslateFunction,
-  TripDetailsTexts,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
@@ -259,7 +258,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                           testID={'schTime' + i}
                         >
                           {(isLegFlexibleTransport(leg)
-                            ? t(TripDetailsTexts.trip.leg.circaLabel)
+                            ? t(dictionary.missingRealTimePrefix)
                             : '') +
                             formatToClock(
                               leg.expectedStartTime,
@@ -310,7 +309,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary" testID="endTime">
                 {(legs.length && isLegFlexibleTransport(legs[legs.length - 1])
-                  ? t(TripDetailsTexts.trip.leg.circaLabel)
+                  ? t(dictionary.missingRealTimePrefix)
                   : '') +
                   formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
               </ThemeText>

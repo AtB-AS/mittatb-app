@@ -1,6 +1,6 @@
 import {AccessibleText} from '@atb/components/text';
 import {ThemeText} from '@atb/components/text';
-import {dictionary, useTranslation, TripDetailsTexts} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {formatToClock, RoundingMethod} from '@atb/utils/date';
 import React from 'react';
 import {View} from 'react-native';
@@ -18,7 +18,7 @@ export const Time: React.FC<{
 
   const {t, language} = useTranslation();
   const circaPrefix = timeIsApproximation
-    ? t(TripDetailsTexts.trip.leg.circaLabel)
+    ? t(dictionary.missingRealTimePrefix)
     : '';
 
   const {aimedTime, expectedTime} = timeValues;
