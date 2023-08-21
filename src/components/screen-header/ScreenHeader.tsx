@@ -168,6 +168,7 @@ const BaseHeader = ({
       <GlobalMessage
         globalMessageContext={globalMessageContext}
         style={css.globalMessageBox}
+        textColor={themeColor}
       />
     </View>
   );

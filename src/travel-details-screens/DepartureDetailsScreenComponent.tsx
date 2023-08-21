@@ -274,6 +274,7 @@ export const DepartureDetailsScreenComponent = ({
               toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
             }}
             style={styles.messageBox}
+            textColor="background_0"
           />
 
           <EstimatedCallRows

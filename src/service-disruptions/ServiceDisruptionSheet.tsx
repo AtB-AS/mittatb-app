@@ -47,6 +47,7 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
               GlobalMessageContextEnum.appServiceDisruptions
             }
             includeDismissed={true}
+            textColor="background_1"
           />
 
           {hasValidServiceDisruptionUrl && (
