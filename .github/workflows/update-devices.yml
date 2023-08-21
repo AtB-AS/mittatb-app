@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
+      - name: Set global env vars
+        run: echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
       - name: Decrypt env files
         run: sh ./scripts/git-crypt-unlock.sh
         env:
