@@ -125,11 +125,10 @@ export const FlexibleTransportBookingDetails: React.FC<
         <TouchableOpacity
           style={style.readMoreAbout}
           onPress={() => {
-            const flexTransportInfoUrl =
-              getTextForLanguage(
-                configurableLinks?.flexTransportInfo,
-                language,
-              ) || '';
+            const flexTransportInfoUrl = getTextForLanguage(
+              configurableLinks?.flexTransportInfo,
+              language,
+            );
             flexTransportInfoUrl && Linking.openURL(flexTransportInfoUrl);
           }}
           accessibilityRole="link"
@@ -150,6 +149,9 @@ export const FlexibleTransportBookingDetails: React.FC<
             style={{height: theme.spacings.xLarge}}
           />
         )}
+        <View // 200% text size bugfix
+          style={{height: Math.max(safeAreaBottom, theme.spacings.medium)}}
+        />
       </ScrollView>
     </BottomSheetContainer>
   );

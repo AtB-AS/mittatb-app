@@ -3,10 +3,9 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useTranslation, TripDetailsTexts} from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
 import {View, Linking} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type FlexibleTransportBookingOptionsProps = {
   leg: Leg;
@@ -17,9 +16,6 @@ export const FlexibleTransportBookingOptions: React.FC<
 > = ({leg}) => {
   const {t} = useTranslation();
   const style = useStyle();
-
-  const {theme} = useTheme();
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
 
   const bookingArrangements = leg.bookingArrangements;
 
@@ -73,9 +69,6 @@ export const FlexibleTransportBookingOptions: React.FC<
             />
           </View>
         )}
-        <View // 200% zoom bugfix for FlexibleTransportBookingDetails
-          style={{height: Math.max(safeAreaBottom, theme.spacings.medium)}}
-        />
       </>
     );
   } else {
