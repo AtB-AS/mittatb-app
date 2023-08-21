@@ -22,7 +22,7 @@ on:
           - adhoc
 jobs:
   update-devices:
-    name: Renew provisioning profiles
+    name: Update new devices and provisioning profiles
     environment: ${{ inputs.org }}
     timeout-minutes: 180
     runs-on: macOS-12
@@ -33,7 +33,7 @@ jobs:
         uses: ./.github/actions/ios-build-setup
         with:
           use-build-cache: 'true'
-          app-org: ${{ inputs.org }}
+          app-org: "atb"
           app-environment: 'development' # This is not used we only need ios-devices.txt, but required by the action
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Run fastlane generate provisioning profiles
