@@ -6,13 +6,7 @@ import {
   TripDetailsTexts,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
-import {
-  View,
-  TouchableOpacity,
-  Linking,
-  ScrollView,
-  Platform,
-} from 'react-native';
+import {View, TouchableOpacity, Linking, ScrollView} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 
 import {ThemeText} from '@atb/components/text';
@@ -56,9 +50,11 @@ export const FlexibleTransportBookingDetails: React.FC<
   );
 
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
+  const marginBottom =
+    safeAreaBottom > 0 ? safeAreaBottom : theme.spacings.medium;
 
   return (
-    <BottomSheetContainer maxHeightValue={0.83}>
+    <BottomSheetContainer fullHeight={true} maxHeightValue={0.83}>
       <ScreenHeaderWithoutNavigation
         title={t(
           TripDetailsTexts.flexibleTransport.needsBookingWhatIsThisTitle(
@@ -72,87 +68,73 @@ export const FlexibleTransportBookingDetails: React.FC<
         <CloseCircle height={theme.icon.size.large} />
       </TouchableOpacity>
 
-      <ScrollView
-        style={[
-          style.contentContainer,
-          {
-            marginBottom: Math.max(safeAreaBottom, theme.spacings.medium),
-          },
-        ]}
-      >
-        <View style={style.messageBoxContainer}>
-          <FlexibleTransportMessageBox
-            leg={leg}
-            publicCode={publicCode}
-            now={now}
-            showStatusIcon={true}
-          />
-        </View>
-
-        {!isSmallScreen && (
-          <View style={style.imageContainer}>
-            <FlexibleTransport height={107} />
+      <View style={[style.scrollViewContainer, {marginBottom}]}>
+        <ScrollView contentContainerStyle={{padding: theme.spacings.xLarge}}>
+          <View style={style.messageBoxContainer}>
+            <FlexibleTransportMessageBox
+              leg={leg}
+              publicCode={publicCode}
+              now={now}
+              showStatusIcon={true}
+            />
           </View>
-        )}
 
-        <ThemeText type="heading__title" style={style.title}>
-          {t(TripDetailsTexts.flexibleTransport.contentTitle(publicCode))}
-        </ThemeText>
-        <View style={style.steps} accessibilityRole="list">
-          {
-            // eslint-disable-next-line rulesdir/translations-warning
-            TripDetailsTexts.flexibleTransport.steps.map((step, i) => {
-              const stepNumberText = `${i + 1}. `;
-              const stepInstructionText = t(step);
-              return (
-                <View
-                  key={i}
-                  style={style.step}
-                  accessible={true}
-                  accessibilityLabel={stepNumberText + stepInstructionText}
-                  accessibilityRole="text"
-                >
-                  <ThemeText type="body__primary">{stepNumberText}</ThemeText>
-                  <ThemeText type="body__primary">
-                    {stepInstructionText}
-                  </ThemeText>
-                </View>
-              );
-            })
-          }
-        </View>
+          {!isSmallScreen && (
+            <View style={style.imageContainer}>
+              <FlexibleTransport height={107} />
+            </View>
+          )}
 
-        <TouchableOpacity
-          style={style.readMoreAbout}
-          onPress={() => {
-            const flexTransportInfoUrl = getTextForLanguage(
-              configurableLinks?.flexTransportInfo,
-              language,
-            );
-            flexTransportInfoUrl && Linking.openURL(flexTransportInfoUrl);
-          }}
-          accessibilityRole="link"
-        >
-          <ThemeText
-            color="secondary"
-            style={style.linkText}
-            type="body__primary--underline"
-          >
-            {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
+          <ThemeText type="heading__title" style={style.title}>
+            {t(TripDetailsTexts.flexibleTransport.contentTitle(publicCode))}
           </ThemeText>
-        </TouchableOpacity>
+          <View style={style.steps} accessibilityRole="list">
+            {
+              // eslint-disable-next-line rulesdir/translations-warning
+              TripDetailsTexts.flexibleTransport.steps.map((step, i) => {
+                const stepNumberText = `${i + 1}. `;
+                const stepInstructionText = t(step);
+                return (
+                  <View
+                    key={i}
+                    style={style.step}
+                    accessible={true}
+                    accessibilityLabel={stepNumberText + stepInstructionText}
+                    accessibilityRole="text"
+                  >
+                    <ThemeText type="body__primary">{stepNumberText}</ThemeText>
+                    <ThemeText type="body__primary">
+                      {stepInstructionText}
+                    </ThemeText>
+                  </View>
+                );
+              })
+            }
+          </View>
 
-        {bookingIsAvailable && <FlexibleTransportBookingOptions leg={leg} />}
+          <TouchableOpacity
+            style={style.readMoreAbout}
+            onPress={() => {
+              const flexTransportInfoUrl = getTextForLanguage(
+                configurableLinks?.flexTransportInfo,
+                language,
+              );
+              flexTransportInfoUrl && Linking.openURL(flexTransportInfoUrl);
+            }}
+            accessibilityRole="link"
+          >
+            <ThemeText
+              color="secondary"
+              style={style.linkText}
+              type="body__primary--underline"
+            >
+              {t(TripDetailsTexts.flexibleTransport.readMoreAbout(publicCode))}
+            </ThemeText>
+          </TouchableOpacity>
 
-        {Platform.OS === 'android' && (
-          <View // scroll bugfix
-            style={{height: theme.spacings.xLarge}}
-          />
-        )}
-        <View // 200% text size bugfix
-          style={{height: Math.max(safeAreaBottom, theme.spacings.medium)}}
-        />
-      </ScrollView>
+          {bookingIsAvailable && <FlexibleTransportBookingOptions leg={leg} />}
+        </ScrollView>
+      </View>
     </BottomSheetContainer>
   );
 };
@@ -167,11 +149,11 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     top: theme.spacings.large / 2 + theme.spacings.small,
     right: theme.spacings.medium,
   },
-  contentContainer: {
+  scrollViewContainer: {
     backgroundColor: theme.static.background.background_0.background,
     borderRadius: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
-    padding: theme.spacings.xLarge,
+    flex: 1,
   },
   messageBoxContainer: {
     paddingBottom: theme.spacings.small,

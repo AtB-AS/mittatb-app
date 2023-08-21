@@ -308,7 +308,8 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary" testID="endTime">
-                {(legs.length && isLegFlexibleTransport(legs[legs.length - 1])
+                {(legs.length > 0 &&
+                isLegFlexibleTransport(legs[legs.length - 1])
                   ? t(dictionary.missingRealTimePrefix)
                   : '') +
                   formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
