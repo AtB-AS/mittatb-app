@@ -45,7 +45,7 @@ jobs:
       - name: Run fastlane generate provisioning profiles
         run: bundle exec fastlane ios update_devices
         env:
-          IOS_DEVICES_FILE: 'atb/ios-devices.txt'
-          FASTLANE_MATCH_TYPE: ${{ inputs.match-type }}
+          IOS_DEVICES_FILE: 'env/atb/ios-devices.txt'
+          FASTLANE_MATCH_TYPE: "development"
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
