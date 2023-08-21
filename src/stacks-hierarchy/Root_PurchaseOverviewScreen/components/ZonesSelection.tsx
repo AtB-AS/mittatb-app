@@ -7,7 +7,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
@@ -23,6 +23,7 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+import {FromToRefType} from '../Root_PurchaseOverviewScreen';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -34,7 +35,7 @@ type ZonesSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
+export const ZonesSelection = forwardRef<FromToRefType, ZonesSelectionProps>(
   (
     {
       fareProductTypeConfig,
@@ -45,10 +46,15 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
       onSelect,
       style,
     }: ZonesSelectionProps,
-    zonesInputSectionItemRef,
+    ref,
   ) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
+
+    const fromToRef = useRef<TouchableOpacity>(null);
+    useImperativeHandle(ref, () => ({
+      fromToRef,
+    }));
 
     const accessibility: AccessibilityProps = {
       accessible: true,
@@ -77,7 +83,7 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
         </ThemeText>
         <Section {...accessibility}>
           <GenericClickableSectionItem
-            ref={zonesInputSectionItemRef}
+            ref={fromToRef}
             onPress={() =>
               onSelect({
                 fromTariffZone,

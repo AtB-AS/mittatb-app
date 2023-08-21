@@ -8,6 +8,7 @@ import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {FromToRefType} from '../Root_PurchaseOverviewScreen';
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -20,10 +21,9 @@ type SelectionProps = {
       | Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;
   style?: StyleProp<ViewStyle>;
-  focusRef?: RefObject<TouchableOpacity>;
 };
 
-export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
+export const FromToSelection = forwardRef<FromToRefType, SelectionProps>(
   (
     {
       fareProductTypeConfig,
@@ -33,7 +33,7 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
       onSelect,
       style,
     }: SelectionProps,
-    focusRef,
+    ref,
   ) => {
     let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
     if (selectionMode === 'none') {
@@ -49,7 +49,7 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
           preassignedFareProduct={preassignedFareProduct}
           onSelect={onSelect}
           style={style}
-          ref={focusRef}
+          ref={ref}
         />
       );
     }
@@ -73,7 +73,7 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
         selectionMode={selectionMode}
         onSelect={onSelect}
         style={style}
-        ref={focusRef}
+        ref={ref}
       />
     ) : null;
   },

@@ -40,7 +40,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
           preassignedFareProduct,
           fromPlace: fromHarbor ?? selectedStopPlace,
           toPlace: fromHarbor ? selectedStopPlace : undefined,
-          onFocusElement: 'from-to-selection',
+          onFocusElement: fromHarbor ? 'to-selection' : 'from-selection',
         },
         merge: true,
       });

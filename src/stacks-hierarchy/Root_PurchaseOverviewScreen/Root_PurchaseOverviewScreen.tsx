@@ -10,8 +10,8 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useRef, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import React, {RefObject, useEffect, useRef, useState} from 'react';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
@@ -27,6 +27,12 @@ import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
+
+export type FromToRefType = {
+  fromToRef?: RefObject<TouchableOpacity>;
+  fromRef?: RefObject<TouchableOpacity>;
+  toRef?: RefObject<TouchableOpacity>;
+};
 
 export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   navigation,
@@ -94,11 +100,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
-  const fromToInputSectionItemRef = useRef(null);
+  const fromToInputSectionItemRef = useRef<FromToRefType>(null);
 
   useEffect(() => {
     if (params.onFocusElement === 'from-to-selection') {
-      giveFocus(fromToInputSectionItemRef);
+      giveFocus(fromToInputSectionItemRef.current?.fromToRef);
+    } else if (params.onFocusElement === 'from-selection') {
+      giveFocus(fromToInputSectionItemRef.current?.fromRef);
+    } else if (params.onFocusElement === 'to-selection') {
+      giveFocus(fromToInputSectionItemRef.current?.toRef);
     }
   }, [params.onFocusElement]);
 
