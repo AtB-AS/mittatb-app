@@ -61,7 +61,7 @@ export const MessageBox = ({
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-
+  const color = subtle ? textColor : type;
   const iconColorProps = subtle
     ? {colorType: textColor}
     : {fill: theme.static.status[type].text};
@@ -93,7 +93,7 @@ export const MessageBox = ({
       {!noStatusIcon && (
         <ThemeIcon
           style={styles.icon}
-          svg={messageTypeToIcon(type, subtle)}
+          svg={messageTypeToIcon(type, !!subtle)}
           {...iconColorProps}
         />
       )}
@@ -112,14 +112,14 @@ export const MessageBox = ({
         {title && (
           <ThemeText
             type={subtle ? 'body__secondary--bold' : 'body__primary--bold'}
-            color={subtle ? textColor : type}
+            color={color}
             style={styles.title}
           >
             {title}
           </ThemeText>
         )}
         <ThemeText
-          color={subtle ? textColor : type}
+          color={color}
           type={subtle ? 'body__secondary' : 'body__primary'}
           isMarkdown={isMarkdown}
         >
@@ -127,7 +127,7 @@ export const MessageBox = ({
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={subtle ? textColor : type}
+            color={color}
             style={styles.linkText}
             type="body__primary--underline"
           >

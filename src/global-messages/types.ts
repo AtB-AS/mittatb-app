@@ -19,7 +19,6 @@ export type GlobalMessageRaw = {
   title?: LanguageAndTextType[];
   body: LanguageAndTextType[];
   type: Statuses;
-  subtle?: boolean;
   context: GlobalMessageContextEnum[];
   isDismissable?: boolean;
   appPlatforms: AppPlatformType[];
