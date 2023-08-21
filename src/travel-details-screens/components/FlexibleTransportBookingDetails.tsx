@@ -1,9 +1,9 @@
 import {FlexibleTransport} from '@atb/assets/svg/color/images';
-import {CloseCircle} from '@atb/assets/svg/color/icons/actions';
 import {
   useTranslation,
   getTextForLanguage,
   TripDetailsTexts,
+  ScreenHeaderTexts,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
 import {View, TouchableOpacity, Linking, ScrollView} from 'react-native';
@@ -63,10 +63,12 @@ export const FlexibleTransportBookingDetails: React.FC<
         )}
         color="background_1"
         setFocusOnLoad={false}
+        leftButton={{
+          type: 'close',
+          onPress: close,
+          text: t(ScreenHeaderTexts.headerButton.close.text),
+        }}
       />
-      <TouchableOpacity style={style.closeIconContainer} onPress={close}>
-        <CloseCircle height={theme.icon.size.large} />
-      </TouchableOpacity>
 
       <View style={[style.scrollViewContainer, {marginBottom}]}>
         <ScrollView contentContainerStyle={{padding: theme.spacings.xLarge}}>
@@ -143,11 +145,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   title: {
     paddingHorizontal: theme.spacings.small,
     paddingTop: theme.spacings.small,
-  },
-  closeIconContainer: {
-    position: 'absolute',
-    top: theme.spacings.large / 2 + theme.spacings.small,
-    right: theme.spacings.medium,
   },
   scrollViewContainer: {
     backgroundColor: theme.static.background.background_0.background,
