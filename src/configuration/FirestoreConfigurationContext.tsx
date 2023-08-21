@@ -430,5 +430,5 @@ function getHarborConnectionOverridesFromSnapshot(
   const overrides = snapshot.docs.find(
     (doc) => doc.id == 'harborConnectionOverrides',
   );
-  return mapToHarborConnectionOverride(overrides);
+  return mapToHarborConnectionOverride(overrides?.get('overrides'));
 }
