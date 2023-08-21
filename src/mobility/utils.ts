@@ -175,11 +175,6 @@ export const isBenefitOffered = (
   operatorBenefits: OperatorBenefitType[] | undefined,
 ) => operatorBenefits && operatorBenefits.map((b) => b.id).includes(benefit);
 
-export const getBenefit = (
-  benefit: OperatorBenefitIdType,
-  operatorBenefits: OperatorBenefitType[],
-) => operatorBenefits.find((b) => b.id === benefit);
-
 export const isUserEligibleForBenefit = (
   benefit: OperatorBenefitIdType,
   userBenefits: OperatorBenefitIdType[],

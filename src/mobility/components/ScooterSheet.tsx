@@ -5,7 +5,10 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
-import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  MobilityTexts,
+  ScooterTexts,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
@@ -23,8 +26,9 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
 import {useBenefits} from '@atb/mobility/use-benefits';
+import {Button} from '@atb/components/button';
+import {useOperatorApp} from '@atb/mobility/use-operator-app';
 
 type Props = {
   vehicleId: VehicleId;
@@ -45,12 +49,26 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
   const {
     userBenefits,
     operatorBenefits,
+    doBenefitAction,
     loading: isLoadingBenefits,
     error: benefitsError,
   } = useBenefits(operatorId);
   const rentalAppUri = getRentalAppUri(vehicle);
   const isLoading = isLoadingVehicle || isLoadingBenefits;
   const isError = !!vehicleError || !!benefitsError;
+  const {openOperatorApp} = useOperatorApp({
+    operatorName,
+    appStoreUri,
+    rentalAppUri,
+  });
+
+  // The data model handles multiple benefits per operator,
+  // but we currently know there is only one,
+  // and the UI has to change anyway to support an undetermined number of benefits.
+  const operatorBenefit =
+    operatorBenefits && operatorBenefits.length > 0
+      ? operatorBenefits[0]
+      : undefined;
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -104,32 +122,33 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                   />
                 }
               />
-              {/* The data model handles multiple benefits per operator,*/}
-              {/* but we currently know there is only one, and the UI has to change anyway*/}
-              {/* to support an undetermined number of benefits.*/}
-              {!benefitsError &&
-                operatorBenefits &&
-                operatorBenefits.length > 0 && (
-                  <OperatorBenefit
-                    benefit={operatorBenefits[0]}
-                    isUserEligible={isUserEligibleForBenefit(
-                      operatorBenefits[0].id,
-                      userBenefits,
-                    )}
-                    style={style.benefit}
-                  />
-                )}
+
+              {operatorBenefit && (
+                <OperatorBenefit
+                  benefit={operatorBenefit}
+                  isUserEligible={isUserEligibleForBenefit(
+                    operatorBenefit.id,
+                    userBenefits,
+                  )}
+                  style={style.benefit}
+                />
+              )}
             </ScrollView>
-            <View style={style.footer}>
-              <CallToActionButton
-                operatorName={operatorName}
-                operatorId={operatorId}
-                rentalAppUri={rentalAppUri}
-                appStoreUri={appStoreUri}
-                userBenefits={userBenefits}
-                operatorBenefits={operatorBenefits}
-              />
-            </View>
+            {rentalAppUri && (
+              <View style={style.footer}>
+                <Button
+                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
+                  onPress={() =>
+                    operatorBenefit &&
+                    isUserEligibleForBenefit(operatorBenefit.id, userBenefits)
+                      ? doBenefitAction(operatorBenefit)
+                      : openOperatorApp()
+                  }
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
+                />
+              </View>
+            )}
           </>
         )}
         {!isLoading && (isError || !vehicle) && (

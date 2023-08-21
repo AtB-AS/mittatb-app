@@ -5,7 +5,10 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {useSystem} from '@atb/mobility/use-system';
-import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  BicycleTexts,
+  MobilityTexts,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {
   getAvailableVehicles,
   getRentalAppUri,
@@ -17,7 +20,7 @@ import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
 import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {VehicleStats} from '@atb/mobility/components/VehicleStats';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
@@ -25,8 +28,9 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
+import {Button} from '@atb/components/button';
+import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {useBenefits} from '@atb/mobility/use-benefits';
-import {CallToActionButton} from '@atb/mobility/components/CallToActionButton';
 
 type Props = {
   stationId: string;
@@ -51,14 +55,29 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
     station?.vehicleTypesAvailable,
     FormFactor.Bicycle,
   );
+  const {openOperatorApp} = useOperatorApp({
+    operatorName,
+    appStoreUri,
+    rentalAppUri,
+  });
   const {
     userBenefits,
     operatorBenefits,
+    doBenefitAction,
     loading: isLoadingBenefits,
     error: benefitsError,
   } = useBenefits(operatorId);
+
   const isLoading = isLoadingStation || isLoadingBenefits;
   const isError = !!stationError || !!benefitsError;
+
+  // The data model handles multiple benefits per operator,
+  // but we currently know there is only one,
+  // and the UI has to change anyway to support an undetermined number of benefits.
+  const operatorBenefit =
+    operatorBenefits && operatorBenefits.length > 0
+      ? operatorBenefits[0]
+      : undefined;
 
   return (
     <BottomSheetContainer>
@@ -84,7 +103,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
               style={style.walkingDistance}
               distance={distance}
             />
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -112,29 +131,30 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                   />
                 }
               />
-              {/* The data model handles multiple benefits per operator,*/}
-              {/* but we currently know there is only one, and the UI has to change anyway*/}
-              {/* to support an undetermined number of benefits.*/}
-              {operatorBenefits && operatorBenefits.length > 0 && (
+
+              {operatorBenefit && (
                 <OperatorBenefit
-                  benefit={operatorBenefits[0]}
+                  benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit(
-                    operatorBenefits[0].id,
+                    operatorBenefit.id,
                     userBenefits,
                   )}
                   style={style.benefit}
                 />
               )}
-            </View>
+            </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
-                <CallToActionButton
-                  appStoreUri={appStoreUri}
-                  operatorId={operatorId}
-                  operatorName={operatorName}
-                  rentalAppUri={rentalAppUri}
-                  userBenefits={userBenefits}
-                  operatorBenefits={operatorBenefits}
+                <Button
+                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
+                  onPress={() =>
+                    operatorBenefit &&
+                    isUserEligibleForBenefit(operatorBenefit.id, userBenefits)
+                      ? doBenefitAction(operatorBenefit)
+                      : openOperatorApp()
+                  }
+                  mode="primary"
+                  interactiveColor={'interactive_0'}
                 />
               </View>
             )}
