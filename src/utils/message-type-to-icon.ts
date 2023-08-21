@@ -7,11 +7,8 @@ import {
 } from '../assets/svg/color/icons/status';
 import {Statuses} from '@atb/theme';
 
-export const messageTypeToIcon = (
-  messageType: Statuses,
-  withColor: boolean,
-) => {
-  if (withColor) {
+export const messageTypeToIcon = (messageType: Statuses, colored: boolean) => {
+  if (colored) {
     switch (messageType) {
       case 'warning':
         return ColorWarning;
