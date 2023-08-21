@@ -1,4 +1,4 @@
-name: Update new devices and provisioning profiles
+name: Update devices
 on:
   push:
     branches:
@@ -23,29 +23,27 @@ on:
 jobs:
   update-devices:
     name: Update new devices and provisioning profiles
-    environment: "atb"
+    environment: 'atb'
     timeout-minutes: 180
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Decrypt env files
-        shell: bash
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Copy env files
-        shell: bash
         run: cp env/atb/dev/.env fastlane/.env.default
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.7.6"
+          ruby-version: '2.7.6'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Run fastlane generate provisioning profiles
         run: bundle exec fastlane ios update_devices
         env:
-          IOS_DEVICES_FILE: "atb/ios-devices.txt"
+          IOS_DEVICES_FILE: 'atb/ios-devices.txt'
           FASTLANE_MATCH_TYPE: ${{ inputs.match-type }}
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
