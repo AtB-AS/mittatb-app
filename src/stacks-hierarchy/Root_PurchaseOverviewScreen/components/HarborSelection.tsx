@@ -19,9 +19,6 @@ type StopPlaceSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const FROM = 'from';
-const TO = 'to';
-
 export const HarborSelection = forwardRef<
   FromToRefType,
   StopPlaceSelectionProps
