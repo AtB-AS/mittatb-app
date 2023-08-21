@@ -334,35 +334,39 @@ export const Profile_DesignSystemScreen = () => {
           <GenericSectionItem>
             <MessageBox
               type="valid"
-              message="This is a valid message with no background"
-              withBackground={false}
-              textColor="primary"
+              isMarkdown={true}
+              message="This is a valid **markdown** message with no background"
+              subtle={true}
+              textColor="background_0"
             />
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageBox
               type="info"
               message="This is a dismissable info message with no background"
-              withBackground={false}
+              subtle={true}
               onDismiss={() => Alert.alert('Dismissed')}
-              textColor="primary"
+              textColor="background_0"
             />
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageBox
               type="warning"
-              message="This is a warning message with secondary text and no background"
-              withBackground={false}
-              textColor="secondary"
+              title="Warning"
+              message="This is a warning message with no background"
+              subtle={true}
+              textColor="background_0"
             />
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageBox
               type="error"
-              message="This is a dismissable error message with secondary text and no background"
-              withBackground={false}
+              title="Error with link"
+              message="This is a dismissable error message with no background"
+              subtle={true}
               onDismiss={() => Alert.alert('Dismissed')}
-              textColor="secondary"
+              onPressConfig={{url: 'https://atb.no', text: 'Go to atb.no'}}
+              textColor="background_0"
             />
           </GenericSectionItem>
         </Section>

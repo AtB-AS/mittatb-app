@@ -16,7 +16,6 @@ import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
-import {TextColor} from '@atb-as/theme';
 import {StaticColor} from '@atb/theme/colors';
 
 /**
@@ -42,16 +41,10 @@ export type MessageBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
-} & (
-  | {
-      withBackground?: true;
-      textColor?: undefined;
-    }
-  | {
-      withBackground: false;
-      textColor: StaticColor | TextColor;
-    }
-);
+  subtle?: boolean;
+  /** Text color to use when `subtle` is true. */
+  textColor?: StaticColor;
+};
 
 export const MessageBox = ({
   noStatusIcon,
@@ -62,14 +55,14 @@ export const MessageBox = ({
   isMarkdown = false,
   onPressConfig,
   onDismiss,
-  withBackground = true,
+  subtle,
   textColor,
 }: MessageBoxProps) => {
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const iconColorProps = textColor
+  const iconColorProps = subtle
     ? {colorType: textColor}
     : {fill: theme.static.status[type].text};
   const backgroundColorStyle = {
@@ -91,8 +84,8 @@ export const MessageBox = ({
       onClick={onPress}
       style={[
         styles.container,
-        withBackground && styles.withBackground,
-        withBackground && backgroundColorStyle,
+        !subtle && styles.withBackground,
+        !subtle && backgroundColorStyle,
         style,
       ]}
       accessible={false}
@@ -100,7 +93,7 @@ export const MessageBox = ({
       {!noStatusIcon && (
         <ThemeIcon
           style={styles.icon}
-          svg={messageTypeToIcon(type, !withBackground)}
+          svg={messageTypeToIcon(type, subtle)}
           {...iconColorProps}
         />
       )}
@@ -118,19 +111,23 @@ export const MessageBox = ({
       >
         {title && (
           <ThemeText
-            type="body__primary--bold"
-            color={textColor ?? type}
+            type={subtle ? 'body__secondary--bold' : 'body__primary--bold'}
+            color={subtle ? textColor : type}
             style={styles.title}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={textColor ?? type} isMarkdown={isMarkdown}>
+        <ThemeText
+          color={subtle ? textColor : type}
+          type={subtle ? 'body__secondary' : 'body__primary'}
+          isMarkdown={isMarkdown}
+        >
           {message}
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={textColor ?? type}
+            color={subtle ? textColor : type}
             style={styles.linkText}
             type="body__primary--underline"
           >
