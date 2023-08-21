@@ -20,7 +20,7 @@ import {
 } from '@atb/components/transportation-modes';
 import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
-import {TravelRightDirection} from '@atb/ticketing';
+import {TravelRightDirection, useTicketingState} from '@atb/ticketing';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -44,7 +44,7 @@ export const RecentFareContractComponent = ({
     toTariffZone,
     userProfilesWithCount,
     pointToPointValidity,
-    direction,
+    orderId,
   } = recentFareContract;
   const {language} = useTranslation();
   const styles = useStyles();
@@ -55,11 +55,15 @@ export const RecentFareContractComponent = ({
   const {width} = Dimensions.get('window');
 
   const harborsQuery = useHarborsQuery();
+  const {findFareContractByOrderId} = useTicketingState();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
+  const direction = orderId
+    ? findFareContractByOrderId(orderId)?.travelRights?.[0].direction
+    : undefined;
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -127,6 +131,7 @@ export const RecentFareContractComponent = ({
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
   const interactiveColor = theme.interactive[interactiveColorName];
+
   const showTwoWayIcon = direction === TravelRightDirection.Both;
 
   return (
