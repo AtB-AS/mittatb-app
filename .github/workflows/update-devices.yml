@@ -25,7 +25,7 @@ jobs:
     name: Update new devices and provisioning profiles
     environment: "atb"
     timeout-minutes: 180
-    runs-on: macOS-12
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout project
         uses: actions/checkout@v1
@@ -36,7 +36,7 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - name: Copy env files
         shell: bash
-        run: cp atb/.env fastlane/.env.default
+        run: cp atb/dev/.env fastlane/.env.default
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
