@@ -270,12 +270,16 @@ export function formatToShortDateTimeWithRelativeDayNames(
 ) {
   const daysDifference = daysBetween(fromDate, toDate);
 
-  const relativeDayName = t(dictionary.date.relativeDayNames(daysDifference));
-  return (
-    relativeDayName +
-    (relativeDayName === '' ? '' : ' ') +
-    formatToShortDateTimeWithoutYearWithAtTime(toDate, t, language)
+  let formattedTime = formatToShortDateTimeWithoutYearWithAtTime(
+    toDate,
+    t,
+    language,
   );
+  if (Math.abs(daysDifference) < 3) {
+    formattedTime =
+      t(dictionary.date.relativeDayNames(daysDifference)) + ' ' + formattedTime;
+  }
+  return formattedTime;
 }
 
 export function fullDateTime(isoDate: string | Date, language: Language) {

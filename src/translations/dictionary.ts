@@ -87,7 +87,19 @@ const dictionary = {
         case 2:
           return _('i overmorgen', 'the day after tomorrow', 'i overmorgon');
         default:
-          return _('', '', '');
+          if (daysDifference < 0) {
+            return _(
+              `for ${daysDifference} dager siden`,
+              `${daysDifference} days ago`,
+              `for ${daysDifference} dagar sidan`,
+            );
+          } else {
+            return _(
+              `om ${daysDifference} dager`,
+              `in ${daysDifference} days`,
+              `om ${daysDifference} dagar`,
+            );
+          }
       }
     },
     atTime: _(`kl.`, `at`, `kl.`),
