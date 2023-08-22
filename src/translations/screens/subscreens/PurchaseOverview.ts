@@ -321,6 +321,7 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
         `Applies for bus in selected zones`,
         `Gjeld for buss i valde soner`,
       ),
+      messageInHarborZones: _('', '', ''),
     },
   },
 });
