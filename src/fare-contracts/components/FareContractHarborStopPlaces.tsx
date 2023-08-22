@@ -12,12 +12,10 @@ export function FareContractHarborStopPlaces({
   fromStopPlaceId,
   toStopPlaceId,
   showTwoWayIcon,
-  accessible = true,
 }: {
   fromStopPlaceId?: string;
   toStopPlaceId?: string;
   showTwoWayIcon: boolean;
-  accessible?: boolean;
 }) {
   const {theme} = useTheme();
   const styles = useStyles();
@@ -57,7 +55,7 @@ export function FareContractHarborStopPlaces({
       accessibilityLabel={t(
         FareContractTexts.details.harbors.directions(fromName, toName),
       )}
-      accessible={accessible}
+      accessible={true}
     >
       <View
         style={{

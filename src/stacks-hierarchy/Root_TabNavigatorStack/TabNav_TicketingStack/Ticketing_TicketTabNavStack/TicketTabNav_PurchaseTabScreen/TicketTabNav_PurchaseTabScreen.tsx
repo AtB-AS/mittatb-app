@@ -123,16 +123,16 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       type: fareProductTypeConfig.type,
     });
     const getPlace = (
-      harbor: string | undefined,
+      pointToPointValidityPlace: string | undefined,
       zone: TariffZone | undefined,
     ): TariffZoneWithMetadata | StopPlaceFragment | undefined => {
-      if (harbor !== undefined) {
+      if (pointToPointValidityPlace !== undefined) {
         const fromName = harborsQuery.data?.find(
-          (sp) => sp.id === harbor,
+          (sp) => sp.id === pointToPointValidityPlace,
         )?.name;
         return fromName
           ? {
-              id: harbor,
+              id: pointToPointValidityPlace,
               name: fromName,
             }
           : undefined;

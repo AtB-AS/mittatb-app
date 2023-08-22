@@ -129,15 +129,9 @@ const mapBackendRecentFareContracts = (
 
   const orderId = recentFareContract.order_id;
 
-  const fromId =
-    pointToPointValidity?.fromPlace !== undefined
-      ? pointToPointValidity.fromPlace
-      : fromTariffZone?.id;
+  const fromId = pointToPointValidity?.fromPlace || fromTariffZone?.id;
 
-  const toId =
-    pointToPointValidity?.toPlace !== undefined
-      ? pointToPointValidity.toPlace
-      : toTariffZone?.id;
+  const toId = pointToPointValidity?.toPlace || toTariffZone?.id;
 
   const id =
     preassignedFareProduct?.id +

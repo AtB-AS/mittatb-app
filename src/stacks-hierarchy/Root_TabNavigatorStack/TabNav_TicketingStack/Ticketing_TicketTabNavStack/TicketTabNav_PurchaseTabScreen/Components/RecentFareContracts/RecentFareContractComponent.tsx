@@ -61,9 +61,8 @@ export const RecentFareContractComponent = ({
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
-  const direction = orderId
-    ? findFareContractByOrderId(orderId)?.travelRights?.[0].direction
-    : undefined;
+  const direction: TravelRightDirection | undefined =
+    findFareContractByOrderId(orderId)?.travelRights?.[0].direction;
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -143,7 +142,10 @@ export const RecentFareContractComponent = ({
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
       testID={testID}
     >
-      <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
+      <View
+        style={[styles.upperPart, {minWidth: width * 0.6}]}
+        importantForAccessibility={'no-hide-descendants'}
+      >
         <View style={styles.travelModeWrapper}>
           <TransportModes
             iconSize={'small'}
@@ -166,7 +168,6 @@ export const RecentFareContractComponent = ({
             showTwoWayIcon={showTwoWayIcon}
             fromStopPlaceId={pointToPointValidity?.fromPlace}
             toStopPlaceId={pointToPointValidity?.toPlace}
-            accessible={false}
           />
         )}
 
