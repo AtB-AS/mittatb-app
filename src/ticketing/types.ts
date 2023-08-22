@@ -15,6 +15,13 @@ enum TravelRightStatus {
   REFUNDED = 21,
 }
 
+export enum TravelRightDirection {
+  Unspecified = '0',
+  Both = '1',
+  Forwards = '2',
+  Backwards = '3',
+}
+
 export type TravelRight = {
   id: string;
   status: TravelRightStatus;
@@ -26,6 +33,7 @@ export type TravelRight = {
     | 'SingleBoatTicket'
     | 'PeriodBoatTicket'
     | 'UnknownTicket';
+  direction: TravelRightDirection;
 };
 
 export type Timestamp = FirebaseFirestoreTypes.Timestamp;
@@ -154,6 +162,7 @@ export type Offer = {
 export type OfferSearchResponse = Offer[];
 
 export type RecentFareContractBackend = {
+  order_id: string;
   products: string[];
   zones: string[];
   users: {
@@ -162,6 +171,10 @@ export type RecentFareContractBackend = {
   payment_method: string;
   total_amount: string;
   created_at: string;
+  point_to_point_validity: {
+    fromPlace: string;
+    toPlace: string;
+  };
 };
 
 export type ReserveOffer = {

@@ -10,22 +10,26 @@ import {usePreferences} from '@atb/preferences';
 export const Time: React.FC<{
   timeValues: TimeValues;
   roundingMethod: RoundingMethod;
-}> = ({timeValues, roundingMethod}) => {
+  timeIsApproximation?: boolean;
+}> = ({timeValues, roundingMethod, timeIsApproximation}) => {
   const {
     preferences: {debugShowSeconds},
   } = usePreferences();
 
   const {t, language} = useTranslation();
+  const circaPrefix = timeIsApproximation
+    ? t(dictionary.missingRealTimePrefix)
+    : '';
+
   const {aimedTime, expectedTime} = timeValues;
   const representationType = getTimeRepresentationType(timeValues);
-  const scheduled = formatToClock(
-    aimedTime,
-    language,
-    roundingMethod,
-    debugShowSeconds,
-  );
+  const scheduled =
+    circaPrefix +
+    formatToClock(aimedTime, language, roundingMethod, debugShowSeconds);
+
   const expected = expectedTime
-    ? formatToClock(expectedTime, language, roundingMethod, debugShowSeconds)
+    ? circaPrefix +
+      formatToClock(expectedTime, language, roundingMethod, debugShowSeconds)
     : '';
 
   switch (representationType) {

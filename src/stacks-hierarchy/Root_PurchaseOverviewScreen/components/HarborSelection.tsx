@@ -2,7 +2,7 @@ import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
@@ -17,6 +17,9 @@ type StopPlaceSelectionProps = {
   onSelect: (params: Root_PurchaseHarborSearchScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
+
+const FROM = 'from';
+const TO = 'to';
 
 export const HarborSelection = forwardRef<
   TouchableOpacity,
@@ -48,80 +51,101 @@ export const HarborSelection = forwardRef<
         >
           {t(PurchaseOverviewTexts.stopPlaces.harborSelection.select.text)}
         </ThemeText>
+
         <Section accessible={false}>
-          <GenericClickableSectionItem
-            ref={harborInputSectionItemRef}
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel={t(
-              PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yLabel(
-                fromHarbor?.name,
-              ),
-            )}
-            accessibilityHint={t(
-              PurchaseOverviewTexts.stopPlaces.harborSelection.from.a11yHint,
-            )}
+          <HarborSelectionItem
+            fromOrTo={FROM}
+            harbor={fromHarbor}
+            disabled={false}
             onPress={() =>
               onSelect({
                 fareProductTypeConfig,
                 preassignedFareProduct,
               })
             }
-            testID="selectHarborsButton"
-          >
-            <>
-              <View style={styles.fromHarbor}>
-                <ThemeText
-                  color="secondary"
-                  type="body__secondary"
-                  style={styles.toFromLabel}
-                >
-                  {t(PurchaseOverviewTexts.fromToLabel.from)}
-                </ThemeText>
-                <HarborLabel harbor={fromHarbor} />
-              </View>
-            </>
-          </GenericClickableSectionItem>
-          <GenericClickableSectionItem
-            accessible={true}
-            accessibilityState={{disabled: !fromHarbor}}
-            accessibilityRole="button"
-            accessibilityLabel={t(
-              PurchaseOverviewTexts.stopPlaces.harborSelection.to.a11yLabel(
-                toHarbor?.name,
-              ),
-            )}
-            accessibilityHint={
-              fromHarbor
-                ? t(
-                    PurchaseOverviewTexts.stopPlaces.harborSelection.to
-                      .a11yHint,
-                  )
-                : undefined
-            }
+            ref={harborInputSectionItemRef}
+          />
+          <HarborSelectionItem
+            fromOrTo={TO}
+            harbor={toHarbor}
+            disabled={!fromHarbor}
             onPress={() =>
-              fromHarbor &&
               onSelect({
                 fromHarbor,
                 fareProductTypeConfig,
                 preassignedFareProduct,
               })
             }
-            testID="selectHarborsButton"
-          >
-            <View style={styles.toHarbor}>
-              <ThemeText
-                color={!!fromHarbor ? 'secondary' : 'disabled'}
-                type="body__secondary"
-                style={styles.toFromLabel}
-              >
-                {t(PurchaseOverviewTexts.fromToLabel.to)}
-              </ThemeText>
-              <HarborLabel harbor={toHarbor} disabled={!fromHarbor} />
-            </View>
-          </GenericClickableSectionItem>
+            ref={harborInputSectionItemRef}
+          />
         </Section>
       </View>
+    );
+  },
+);
+
+type HarborSelectionItemProps = {
+  harbor?: StopPlaceFragment;
+  disabled: boolean;
+  onPress: () => void;
+  fromOrTo: typeof FROM | typeof TO;
+};
+
+const HarborSelectionItem = forwardRef<
+  TouchableOpacity,
+  HarborSelectionItemProps
+>(
+  (
+    {harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps,
+    harborInputSectionItemRef,
+  ) => {
+    const itemRef = useRef<TouchableOpacity>(null);
+    const {t} = useTranslation();
+    const styles = useStyles();
+
+    return (
+      <GenericClickableSectionItem
+        ref={itemRef}
+        accessibilityState={{disabled}}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel={t(
+          PurchaseOverviewTexts.stopPlaces.harborSelection[fromOrTo].a11yLabel(
+            harbor?.name,
+          ),
+        )}
+        accessibilityHint={
+          disabled
+            ? undefined
+            : t(
+                PurchaseOverviewTexts.stopPlaces.harborSelection[fromOrTo]
+                  .a11yHint,
+              )
+        }
+        onPress={() => {
+          if (!disabled) {
+            onPress();
+            if (
+              harborInputSectionItemRef &&
+              typeof harborInputSectionItemRef !== 'function'
+            ) {
+              harborInputSectionItemRef.current = itemRef.current;
+            }
+          }
+        }}
+        testID="selectHarborsButton"
+      >
+        <View style={fromOrTo === FROM ? styles.fromHarbor : styles.toHarbor}>
+          <ThemeText
+            color={disabled ? 'disabled' : 'secondary'}
+            type="body__secondary"
+            style={styles.toFromLabel}
+          >
+            {t(PurchaseOverviewTexts.fromToLabel[fromOrTo])}
+          </ThemeText>
+          <HarborLabel harbor={harbor} disabled={disabled} />
+        </View>
+      </GenericClickableSectionItem>
     );
   },
 );

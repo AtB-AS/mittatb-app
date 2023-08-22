@@ -38,6 +38,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
+#import <FlipperPerformancePlugin.h>
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
   SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
@@ -45,6 +46,7 @@ static void InitializeFlipper(UIApplication *application) {
   [client addPlugin:[[FKUserDefaultsPlugin alloc] initWithSuiteName:nil]];
   [client addPlugin:[FlipperKitReactPlugin new]];
   [client addPlugin:[[FlipperKitNetworkPlugin alloc] initWithNetworkAdapter:[SKIOSNetworkAdapter new]]];
+  [client addPlugin:[FlipperPerformancePlugin new]];
   [client start];
 }
 #endif
@@ -60,7 +62,7 @@ static void InitializeFlipper(UIApplication *application) {
   NSDictionary *intercomDict = [[NSDictionary alloc] initWithContentsOfFile:intercomPath];
   NSString* intercomApiKey = [intercomDict objectForKey:@"IntercomApiKey"];
   NSString* intercomAppId = [intercomDict objectForKey:@"IntercomAppId"];
-  
+
   if ([intercomApiKey length] != 0 && [intercomAppId length] != 0) {
     [Intercom setApiKey:intercomApiKey forAppId:intercomAppId];
   }
@@ -100,7 +102,7 @@ static void InitializeFlipper(UIApplication *application) {
   [rootView setBackgroundByTrait];
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
-  
+
   return YES;
 }
 
@@ -179,4 +181,4 @@ static void InitializeFlipper(UIApplication *application) {
 
 
 @end
- 
+

@@ -8,10 +8,8 @@ import {DateString, SearchTime} from '@atb/journey-date-picker';
 import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
-import {
-  SearchStateType,
-  TripPatternWithKey,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+import {SearchStateType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
+
 import {isValidTripLocations} from '@atb/utils/location';
 import Bugsnag from '@bugsnag/react-native';
 import {CancelTokenSource} from 'axios';
@@ -19,6 +17,7 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 import {useJourneyModes} from './hooks';
 import {useAnalytics} from '@atb/analytics';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 
 export function useTripsQuery(
