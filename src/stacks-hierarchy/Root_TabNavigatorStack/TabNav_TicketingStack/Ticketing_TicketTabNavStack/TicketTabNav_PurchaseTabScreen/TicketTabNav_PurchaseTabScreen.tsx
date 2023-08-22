@@ -18,6 +18,10 @@ import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/
 import {useAnalytics} from '@atb/analytics';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
+import {useHarborsQuery} from '@atb/queries';
+import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {TariffZone} from '@atb/reference-data/types';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -38,6 +42,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {remoteTokens} = useMobileTokenContextState();
   const inspectableToken = findInspectable(remoteTokens);
   const hasInspectableMobileToken = isMobileToken(inspectableToken);
+  const harborsQuery = useHarborsQuery();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -117,18 +122,33 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     analytics.logEvent('Ticketing', 'Recently used fare product selected', {
       type: fareProductTypeConfig.type,
     });
+    const getPlace = (
+      pointToPointValidityPlace: string | undefined,
+      zone: TariffZone | undefined,
+    ): TariffZoneWithMetadata | StopPlaceFragment | undefined => {
+      if (pointToPointValidityPlace !== undefined) {
+        const fromName = harborsQuery.data?.find(
+          (sp) => sp.id === pointToPointValidityPlace,
+        )?.name;
+        return fromName
+          ? {
+              id: pointToPointValidityPlace,
+              name: fromName,
+            }
+          : undefined;
+      } else if (zone !== undefined) {
+        return {...zone, resultType: 'zone'};
+      }
+    };
     navigation.navigate('Root_PurchaseOverviewScreen', {
       fareProductTypeConfig,
       preassignedFareProduct: rfc.preassignedFareProduct,
       userProfilesWithCount: rfc.userProfilesWithCount,
-      fromPlace: rfc.fromTariffZone && {
-        ...rfc.fromTariffZone,
-        resultType: 'zone',
-      },
-      toPlace: rfc.toTariffZone && {
-        ...rfc.toTariffZone,
-        resultType: 'zone',
-      },
+      fromPlace: getPlace(
+        rfc.pointToPointValidity?.fromPlace,
+        rfc.fromTariffZone,
+      ),
+      toPlace: getPlace(rfc.pointToPointValidity?.toPlace, rfc.toTariffZone),
       mode: 'Ticket',
     });
   };
