@@ -52,14 +52,17 @@ import {
   isSignificantFootLegWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
+  getTripPatternBookingsRequiredCount,
+  getTripPatternRequiresBookingUrgently,
 } from '@atb/travel-details-screens/utils';
 import {Destination} from '@atb/assets/svg/mono-icons/places';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {AvailableTripPattern, BookingRequirement} from '../../types';
+
+import {useNow} from '@atb/utils/use-now';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type ResultItemProps = {
-  tripPattern: AvailableTripPattern;
+  tripPattern: TripPattern;
   onDetailsPressed(): void;
   searchTime: SearchTime;
   testID?: string;
@@ -156,7 +159,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   useEffect(() => {
     if (legIconsParentWidth && legIconsContentWidth) {
       if (legIconsContentWidth >= legIconsParentWidth) {
-        setNumberOfExpandedLegs((val) => val - 1);
+        setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
       } else {
         fadeIn.start();
       }
@@ -254,7 +257,9 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                           color="primary"
                           testID={'schTime' + i}
                         >
-                          {(isLegFlexibleTransport(leg) ? 'ca. ' : '') +
+                          {(isLegFlexibleTransport(leg)
+                            ? t(dictionary.missingRealTimePrefix)
+                            : '') +
                             formatToClock(
                               leg.expectedStartTime,
                               language,
@@ -303,24 +308,36 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary" testID="endTime">
-                {formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
+                {(legs.length > 0 &&
+                isLegFlexibleTransport(legs[legs.length - 1])
+                  ? t(dictionary.missingRealTimePrefix)
+                  : '') +
+                  formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
               </ThemeText>
             </View>
           </View>
         </View>
-        <ResultItemFooter bookingRequirement={tripPattern.bookingRequirement} />
+        <ResultItemFooter tripPattern={tripPattern} />
       </Animated.View>
     </TouchableOpacity>
   );
 };
 
 const ResultItemFooter: React.FC<{
-  bookingRequirement: BookingRequirement;
-}> = ({bookingRequirement}) => {
+  tripPattern: TripPattern;
+}> = ({tripPattern}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  const {requiresBooking, requiresBookingUrgently} = bookingRequirement;
+  const now = useNow(2500);
+
+  const requiresBookingUrgently = getTripPatternRequiresBookingUrgently(
+    tripPattern,
+    now,
+  );
+  const bookingsRequiredCount =
+    getTripPatternBookingsRequiredCount(tripPattern);
+  const requiresBooking = bookingsRequiredCount > 0;
 
   return (
     <View style={styles.resultFooter}>
@@ -332,7 +349,11 @@ const ResultItemFooter: React.FC<{
               style={styles.footerNoticeIcon}
             />
             <ThemeText type="body__secondary" color="secondary">
-              {t(TripSearchTexts.results.resultItem.footer.requiresBooking)}
+              {t(
+                TripSearchTexts.results.resultItem.footer.requiresBooking(
+                  bookingsRequiredCount,
+                ),
+              )}
             </ThemeText>
           </>
         )}
@@ -407,6 +428,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.small,
     paddingHorizontal: theme.spacings.small,
     borderRadius: theme.border.radius.small,
+    alignItems: 'center',
   },
   walkContainer: {
     backgroundColor: theme.static.background.background_2.background,
@@ -559,7 +581,7 @@ const TransportationLeg = ({
 };
 
 const tripSummary = (
-  tripPattern: AvailableTripPattern,
+  tripPattern: TripPattern,
   t: TranslateFunction,
   language: Language,
   isInPast: boolean,
@@ -679,9 +701,16 @@ const tripSummary = (
     ),
   );
 
-  const requiresBookingText = tripPattern.bookingRequirement?.requiresBooking
-    ? t(TripSearchTexts.results.resultItem.footer.requiresBooking)
-    : undefined;
+  const bookingsRequiredCount =
+    getTripPatternBookingsRequiredCount(tripPattern);
+  const requiresBookingText =
+    bookingsRequiredCount > 0
+      ? t(
+          TripSearchTexts.results.resultItem.footer.requiresBooking(
+            bookingsRequiredCount,
+          ),
+        )
+      : undefined;
 
   const texts = [
     resultNumberText,

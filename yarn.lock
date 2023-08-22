@@ -9,10 +9,10 @@
   dependencies:
     "@jridgewell/trace-mapping" "^0.3.0"
 
-"@atb-as/config-specs@^3.3.3":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.3.3.tgz#d0e4285581874ff3b0d4eb218ee32b40903c25e5"
-  integrity sha512-5qLM6RgZZH0nDhHjJQ82c6LYzcTsxOKZdVRbACDVSJ1ueoFMkjlQHuyLAHKxM6n/yi4dzJd+EmjKxRjU3g3sHA==
+"@atb-as/config-specs@^3.4.3":
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.4.3.tgz#853f4293bf99150c61152179ddd08dea0aeb652f"
+  integrity sha512-W1xb68TyPG5mzJLjC0epHIcm8c5A9xbZZhaGZHB+yDOyUasl1Jl+AKSnHsSzZn8mVBUicBkl45yKDdXO09db1w==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -22,10 +22,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^7.6.1":
-  version "7.6.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-7.6.1.tgz#2cf85003b9e43f19ae966b72f5f72bf0de8bc29d"
-  integrity sha512-TZo+ajOYqiqpQKhb27Es4EIOmgXPJPkUhrBhSSmEn75yN/kGACca/udLeC5EKjkXQKX8I0O3C3601oaAWE8y1g==
+"@atb-as/generate-assets@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-8.0.0.tgz#6c853131dd45dc360296390324f4abd3bca0364b"
+  integrity sha512-zt7P8nXI5gO11dJEE9LjyeEAiBRlFpUW+VxqBItQVL/cqqjMwjUYpvg52w6JLtlrIpwwBsbmn/7XaCFl69/BSg==
   dependencies:
     "@atb-as/theme" "^7.1.1"
     commander "^9.4.0"
@@ -6583,9 +6583,9 @@ fast-diff@^1.1.2:
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
 
 fast-glob@^3.2.11:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.0.tgz#7c40cb491e1e2ed5664749e87bfb516dbe8727c0"
-  integrity sha512-ChDuvbOypPuNjO8yIDf36x7BlZX1smcUMTTcyoIjycexOxd6DFsKsg21qVBzEmr3G7fUKIRy2/psii+CIUt7FA==
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-3.3.1.tgz#784b4e897340f3dbbef17413b3f11acf03c874c4"
+  integrity sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==
   dependencies:
     "@nodelib/fs.stat" "^2.0.2"
     "@nodelib/fs.walk" "^1.2.3"
@@ -7847,6 +7847,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+iso8601-duration@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/iso8601-duration/-/iso8601-duration-2.1.1.tgz#88d9e481525b50e57840bc93fb8a1727a7d849d2"
+  integrity sha512-VGGpW30/R57FpG1J7RqqKBAaK7lIiudlZkQ5tRoO9hNlKYQNnhs60DQpXlPFBmp6I+kJ61PHkI3f/T7cR4wfbw==
 
 isobject@^2.0.0:
   version "2.1.0"
