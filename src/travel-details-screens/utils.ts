@@ -111,7 +111,11 @@ export function getLineName(leg: Leg) {
     leg.fromEstimatedCall?.destinationDisplay?.frontText ??
     leg.line?.name ??
     '';
-  return leg.line?.publicCode ? `${leg.line.publicCode} ${name}` : name;
+  return leg.line?.publicCode
+    ? isLegFlexibleTransport(leg)
+      ? leg.line.publicCode
+      : `${leg.line.publicCode} ${name}`
+    : name;
 }
 
 export function hasShortWaitTime(legs: Leg[]) {
