@@ -50,4 +50,3 @@ jobs:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
           FASTLANE_MATCH_TYPE: "development"
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
