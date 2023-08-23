@@ -10,7 +10,7 @@ export const PressableOpacity = forwardRef<any, PressableOpacityProps>(
     return (
       <Pressable
         ref={focusRef}
-        style={({pressed}) => [{opacity: pressed ? 0.1 : 1}, style]}
+        style={({pressed}) => [{opacity: pressed ? 0.2 : 1}, style]}
         {...pressableProps}
       >
         {pressableProps?.children}
