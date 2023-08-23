@@ -63,6 +63,7 @@ platform :ios do
       force_for_new_devices: true,
       force: true,
       git_user_email: ENV['FASTLANE_MATCH_USERNAME'],
+      git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
     )
   end
 
