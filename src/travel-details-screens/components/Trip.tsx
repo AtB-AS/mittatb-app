@@ -44,6 +44,7 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {MessageBox} from '@atb/components/message-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -94,8 +95,8 @@ export const Trip: React.FC<TripProps> = ({
   });
 
   const mapFilter: MapFilterType = {
-    stations: {
-      cityBikeStations: {
+    mobility: {
+      [FormFactor.Bicycle]: {
         showAll: tripPatternLegs.some((leg) => leg.rentedBike),
         operators: [],
       },

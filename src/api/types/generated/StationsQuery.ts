@@ -9,17 +9,22 @@ export type GetStationsQueryVariables = Types.Exact<{
   lat: Types.Scalars['Float'];
   lon: Types.Scalars['Float'];
   range: Types.Scalars['Int'];
-  availableFormFactors?: Types.InputMaybe<
-    | Array<Types.InputMaybe<Types.FormFactor>>
-    | Types.InputMaybe<Types.FormFactor>
+  includeBicycles: Types.Scalars['Boolean'];
+  bicycleOperators?: Types.InputMaybe<
+    | Array<Types.InputMaybe<Types.Scalars['String']>>
+    | Types.InputMaybe<Types.Scalars['String']>
   >;
-  operators?: Types.InputMaybe<
+  includeCars: Types.Scalars['Boolean'];
+  carOperators?: Types.InputMaybe<
     | Array<Types.InputMaybe<Types.Scalars['String']>>
     | Types.InputMaybe<Types.Scalars['String']>
   >;
 }>;
 
-export type GetStationsQuery = {stations?: Array<StationBasicFragment>};
+export type GetStationsQuery = {
+  bicycles?: Array<StationBasicFragment>;
+  cars?: Array<StationBasicFragment>;
+};
 
 export type GetCarStationQueryVariables = Types.Exact<{
   ids?: Types.InputMaybe<

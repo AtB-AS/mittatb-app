@@ -18,7 +18,7 @@ import {
   ParkingType,
 } from './types';
 import distance from '@turf/distance';
-import {isVehicle} from '@atb/mobility/utils';
+import {isBicycle, isScooter} from '@atb/mobility/utils';
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -179,7 +179,7 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
 };
 
 export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  !isVehicle(entityFeature);
+  !isScooter(entityFeature) && !isBicycle(entityFeature);
 
 export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  !isVehicle(entityFeature);
+  !isScooter(entityFeature) && !isBicycle(entityFeature);

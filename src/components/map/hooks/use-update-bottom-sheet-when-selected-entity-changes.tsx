@@ -7,15 +7,17 @@ import MapboxGL from '@rnmapbox/maps';
 import {Feature, Point} from 'geojson';
 import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
 import {
+  BikeStationSheet,
   CarSharingStationSheet,
-  CityBikeStationSheet,
+  isBicycle,
   isBikeStation,
   isCarStation,
-  isVehicle,
+  isScooter,
   ParkAndRideBottomSheet,
   ScooterSheet,
 } from '@atb/mobility';
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
+import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -86,7 +88,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       } else if (isBikeStation(selectedFeature)) {
         openBottomSheet(
           () => (
-            <CityBikeStationSheet
+            <BikeStationSheet
               stationId={selectedFeature.properties.id}
               distance={distance}
               close={closeWithCallback}
@@ -105,10 +107,19 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           ),
           false,
         );
-      } else if (isVehicle(selectedFeature)) {
+      } else if (isScooter(selectedFeature)) {
         openBottomSheet(() => {
           return (
             <ScooterSheet
+              vehicleId={selectedFeature.properties.id}
+              close={closeWithCallback}
+            />
+          );
+        }, false);
+      } else if (isBicycle(selectedFeature)) {
+        openBottomSheet(() => {
+          return (
+            <BicycleSheet
               vehicleId={selectedFeature.properties.id}
               close={closeWithCallback}
             />

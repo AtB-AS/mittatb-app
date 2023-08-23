@@ -43,10 +43,13 @@ export type SystemFragment = {
   rentalApps?: RentalAppsFragment;
 };
 
-export type VehicleRangeFragment = {maxRangeMeters?: number};
+export type VehicleTypeBasicFragment = {
+  maxRangeMeters?: number;
+  formFactor: Types.FormFactor;
+};
 
 export type VehicleTypeFragment = {
   id: string;
-  formFactor: Types.FormFactor;
+  propulsionType: Types.PropulsionType;
   name?: TranslatedStringFragment;
-} & VehicleRangeFragment;
+} & VehicleTypeBasicFragment;

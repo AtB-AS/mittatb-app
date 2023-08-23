@@ -266,6 +266,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     });
   }
   function summary(text?: string) {
+    // Don't render the text if the text is undefined or empty.
+    if (!text) return null;
+
     return (
       <ThemeText
         style={styles.smallTopMargin}

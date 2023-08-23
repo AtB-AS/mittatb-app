@@ -22,7 +22,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
  * "Read more at atb.no" and "Show details" as they all work well with the
  * prefix.
  */
-type OnPressConfig = {
+export type OnPressConfig = {
   text: string;
 } & ({action: () => void} | {url: string});
 

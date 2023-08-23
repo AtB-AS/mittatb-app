@@ -91,7 +91,7 @@ export const TravelDetailsMapScreenComponent = ({
     vehicleWithPosition,
   );
 
-  const stations = useStations(mapFilter ?? null);
+  const stations = useStations(mapFilter?.mobility ?? {});
 
   const [isError, setIsError] = useState(false);
 
