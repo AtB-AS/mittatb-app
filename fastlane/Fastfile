@@ -64,6 +64,7 @@ platform :ios do
       force: true,
       git_user_email: ENV['FASTLANE_MATCH_USERNAME'],
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
+      git_private_key: ENV['GH_ACCESS_TOKEN'],
     )
   end
 
