@@ -61,7 +61,7 @@ platform :ios do
       storage_mode: 'git',
       app_identifier: identifiers,
       force_for_new_devices: true,
-      username: ENV['FASTLANE_MATCH_USERNAME'],
+      force: true,
     )
   end
 
