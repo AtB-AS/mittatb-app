@@ -144,7 +144,7 @@ const Link = ({link}: {link: InformationLink}) => {
 
   return (
     <PressableOpacity
-      containerStyle={styles.link}
+      style={styles.link}
       onPress={() => Linking.openURL(link.link ?? '')}
       accessibilityRole="button"
     >

@@ -61,7 +61,7 @@ export const TicketingTile = ({
       accessible={true}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={t(TicketingTexts.availableFareProducts.navigateToBuy)}
-      containerStyle={[
+      style={[
         styles.fareProduct,
         {
           backgroundColor: themeColor.background,

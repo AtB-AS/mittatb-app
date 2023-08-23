@@ -9,14 +9,12 @@ export type Props = {
   situation: SituationType;
   noStatusIcon?: MessageBoxProps['noStatusIcon'];
   style?: MessageBoxProps['style'];
-  containerStyle?: MessageBoxProps['style'];
 };
 
 export const SituationMessageBox = ({
   situation,
   noStatusIcon,
   style,
-  containerStyle,
 }: Props) => {
   const {language} = useTranslation();
 
@@ -32,7 +30,6 @@ export const SituationMessageBox = ({
       type={messageType}
       noStatusIcon={noStatusIcon}
       style={style}
-      containerStyle={containerStyle}
       message={text}
       onPressConfig={{
         text: t(dictionary.readMore),

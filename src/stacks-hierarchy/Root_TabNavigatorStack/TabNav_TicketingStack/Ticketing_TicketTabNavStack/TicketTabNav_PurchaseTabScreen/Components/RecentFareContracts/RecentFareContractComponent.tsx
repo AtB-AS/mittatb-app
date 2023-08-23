@@ -97,7 +97,7 @@ export const RecentFareContractComponent = ({
 
   return (
     <PressableOpacity
-      containerStyle={styles.container}
+      style={styles.container}
       accessible={true}
       onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
       accessibilityLabel={currentAccessibilityLabel}

@@ -123,7 +123,7 @@ export const LargeHeaderButton = (buttonProps: LargeHeaderButtonProps) => {
       accessibilityHint={t(ScreenHeaderTexts.headerButton.back.a11yHint)}
       hitSlop={insets.all(12)}
       accessibilityRole="button"
-      containerStyle={{flexDirection: 'row'}}
+      style={{flexDirection: 'row'}}
       {...props}
     >
       <ThemeIcon

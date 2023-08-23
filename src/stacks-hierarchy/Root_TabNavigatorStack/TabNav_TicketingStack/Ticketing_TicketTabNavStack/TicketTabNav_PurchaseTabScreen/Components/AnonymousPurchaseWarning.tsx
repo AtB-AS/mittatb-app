@@ -17,7 +17,6 @@ export const AnonymousPurchaseWarning = ({onPress}: {onPress: () => void}) => {
           action: onPress,
           text: t(AnonymousPurchases.warning.checkHere),
         }}
-        style={styles.flex}
         type={'warning'}
         isMarkdown={true}
       />
@@ -29,8 +28,5 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   warning: {
     marginTop: theme.spacings.xLarge,
     paddingHorizontal: theme.spacings.medium,
-  },
-  flex: {
-    flex: 1,
   },
 }));

@@ -30,8 +30,7 @@ export function MoreItem({
       onPress={onPress}
       {...accessibility}
       accessibilityRole={'button'}
-      containerStyle={topContainer}
-      style={sectionStyle.spaceBetween}
+      style={[topContainer, sectionStyle.spaceBetween]}
     >
       <ThemeText style={[styles.center, contentContainer]}>{text}</ThemeText>
       <ThemeIcon svg={ExpandMore} />

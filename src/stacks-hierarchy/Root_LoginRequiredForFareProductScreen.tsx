@@ -90,7 +90,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
           />
         </View>
         <PressableOpacity
-          containerStyle={styles.laterButton}
+          style={styles.laterButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
           testID="loginLaterButton"

@@ -140,7 +140,7 @@ const Card = (props: {
                 card.masked_pan,
               ),
             )}
-            containerStyle={{marginLeft: theme.spacings.medium}}
+            style={{marginLeft: theme.spacings.medium}}
             onPress={() => {
               destructiveAlert({
                 alertTitleString: t(PaymentOptionsTexts.deleteModal.title),

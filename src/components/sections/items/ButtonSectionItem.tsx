@@ -67,7 +67,7 @@ export function ButtonSectionItem({
       <PressableOpacity
         hitSlop={insets.all(12)}
         onPress={onIconPress}
-        containerStyle={[styles.iconContainer, padding]}
+        style={[styles.iconContainer, padding]}
         {...iconAccessibility}
       >
         <View>{iconEl}</View>

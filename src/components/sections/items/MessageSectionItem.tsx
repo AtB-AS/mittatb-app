@@ -49,8 +49,11 @@ export function MessageSectionItem({
       accessible={true}
       accessibilityRole={onPress && 'button'}
       accessibilityLabel={a11yLabel}
-      containerStyle={[topContainer, {backgroundColor: themeColor.background}]}
-      style={styles.container}
+      style={[
+        topContainer,
+        {backgroundColor: themeColor.background},
+        styles.container,
+      ]}
     >
       <ThemeIcon
         style={styles.icon}

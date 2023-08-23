@@ -63,7 +63,7 @@ export function RadioSegments({
             accessibilityState={{selected}}
             accessibilityLabel={getAccessibilityLabel(option)}
             accessibilityHint={option.accessibilityHint}
-            containerStyle={[
+            style={[
               styles.optionBox,
               {
                 backgroundColor: enabled ? currentColor.background : undefined,

@@ -146,7 +146,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   testID="submitButton"
                 />
                 <PressableOpacity
-                  containerStyle={styles.resendButton}
+                  style={styles.resendButton}
                   onPress={onResendCode}
                   accessibilityRole="button"
                   testID="resendCodeButton"

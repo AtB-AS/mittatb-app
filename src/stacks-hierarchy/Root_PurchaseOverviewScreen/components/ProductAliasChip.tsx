@@ -24,7 +24,7 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
 
   return (
     <PressableOpacity
-      containerStyle={[
+      style={[
         styles.container,
         {
           backgroundColor: currentColor.background,
@@ -34,7 +34,6 @@ export const ProductAliasChip = ({color, text, selected, onPress}: Props) => {
           paddingHorizontal: theme.spacings.xLarge - borderOffset,
         },
       ]}
-      style={styles.content}
       onPress={onPress}
       accessible={true}
       accessibilityRole="radio"
@@ -56,8 +55,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     borderRadius: theme.border.radius.circle * 2,
     marginRight: theme.spacings.small,
-  },
-  content: {
     justifyContent: 'center',
   },
 }));

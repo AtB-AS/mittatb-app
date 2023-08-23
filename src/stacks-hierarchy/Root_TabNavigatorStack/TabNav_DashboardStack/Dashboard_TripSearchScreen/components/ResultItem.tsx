@@ -201,7 +201,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
       accessibilityRole={'button'}
-      containerStyle={styles.pressableOpacity}
+      style={styles.pressableOpacity}
       onPress={onDetailsPressed}
       accessible={true}
       testID={testID}

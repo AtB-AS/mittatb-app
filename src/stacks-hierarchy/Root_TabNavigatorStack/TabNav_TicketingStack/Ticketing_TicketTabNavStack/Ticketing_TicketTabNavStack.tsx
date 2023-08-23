@@ -109,7 +109,7 @@ const TabBar: React.FC<MaterialTopTabBarProps> = ({
             accessibilityLabel={options.tabBarAccessibilityLabel}
             onPress={onPress}
             onLongPress={onLongPress}
-            containerStyle={[
+            style={[
               styles.button,
               {
                 backgroundColor: theme.static.background[tabColor].background,

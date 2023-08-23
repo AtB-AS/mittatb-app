@@ -97,8 +97,7 @@ export function LineItem({
     <View style={[topContainer, {padding: 0}]} testID={testID}>
       <View style={[topContainer, sectionStyle.spaceBetween]}>
         <PressableOpacity
-          containerStyle={contentContainer}
-          style={styles.lineHeader}
+          style={[contentContainer, styles.lineHeader]}
           onPress={() => onPressDeparture(items, 0)}
           hitSlop={insets.symmetric(12, 0)}
           accessibilityRole="button"

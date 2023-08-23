@@ -34,7 +34,6 @@ export type MessageBoxProps = {
   onDismiss?: () => void;
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
-  containerStyle?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
 };
 
@@ -42,7 +41,6 @@ export const MessageBox = ({
   noStatusIcon,
   type,
   style,
-  containerStyle,
   message,
   title,
   isMarkdown = false,
@@ -70,8 +68,7 @@ export const MessageBox = ({
   return (
     <PressableOpacityOrView
       onClick={onPress}
-      style={[styles.contentContainer, style]}
-      containerStyle={[styles.container, colorStyle, containerStyle]}
+      style={[styles.container, colorStyle, style]}
       accessible={false}
     >
       {!noStatusIcon && (

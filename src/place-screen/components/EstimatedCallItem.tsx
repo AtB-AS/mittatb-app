@@ -97,7 +97,7 @@ export function EstimatedCallItem({
   return (
     <PressableOpacityOrView
       onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
-      containerStyle={styles.container}
+      style={styles.container}
       accessibilityLabel={
         mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
       }
@@ -108,7 +108,7 @@ export function EstimatedCallItem({
       }
     >
       <PressableOpacity
-        containerStyle={styles.actionableItem}
+        style={styles.actionableItem}
         disabled={!navigateToDetails}
         onPress={() => {
           if (navigateToDetails && departure?.serviceJourney) {

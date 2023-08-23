@@ -237,7 +237,6 @@ export const DepartureDetailsScreenComponent = ({
             <SituationMessageBox
               situation={situation}
               style={styles.messageBox}
-              containerStyle={styles.messageBoxContainer}
             />
           ))}
           {notices.map(
@@ -246,7 +245,6 @@ export const DepartureDetailsScreenComponent = ({
                 <MessageBox
                   type="info"
                   message={notice.text}
-                  containerStyle={styles.messageBoxContainer}
                   style={styles.messageBox}
                 />
               ),
@@ -489,11 +487,7 @@ function EstimatedCallRow({
           rowLabel={<SituationOrNoticeIcon situation={situation} />}
           style={styles.situationTripRow}
         >
-          <SituationMessageBox
-            noStatusIcon={true}
-            situation={situation}
-            style={styles.messageBox}
-          />
+          <SituationMessageBox noStatusIcon={true} situation={situation} />
         </TripRow>
       ))}
 
@@ -625,11 +619,8 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
   spinner: {
     paddingTop: theme.spacings.medium,
   },
-  messageBoxContainer: {
-    marginBottom: theme.spacings.medium,
-  },
   messageBox: {
-    flex: 1,
+    marginBottom: theme.spacings.medium,
   },
   scrollView__content: {
     padding: theme.spacings.medium,

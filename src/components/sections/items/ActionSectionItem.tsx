@@ -119,14 +119,6 @@ function ActionModeIcon({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
-  headerExpandIconGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerExpandIconGroup__text: {
-    marginRight: theme.spacings.xSmall,
-  },
   leftIcon: {
     marginRight: theme.spacings.small,
   },
