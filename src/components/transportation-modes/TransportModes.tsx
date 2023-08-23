@@ -1,8 +1,8 @@
 import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
 import {
   CounterIconBox,
-  getTransportModeSvg,
   TransportationIconBox,
+  getTransportModeSvg,
 } from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -13,9 +13,8 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {TextNames} from '@atb/theme/colors';
+import {TextColor, TextNames} from '@atb-as/theme';
 import _ from 'lodash';
-import {TextColor} from '@atb-as/theme';
 
 const modesDisplayLimit: number = 2;
 
@@ -43,16 +42,12 @@ export const getTransportModeText = (
   modes: TransportModePair[],
   t: TranslateFunction,
   modesDisplayLimit: number = 2,
-  unknownModeText?: string,
 ): string => {
   const modesCount: number = modes.length;
 
   if (!modes) return '';
   if (modesCount > modesDisplayLimit) {
     return t(FareContractTexts.transportModes.multipleTravelModes);
-  }
-  if (unknownModeText && modes.map((m) => m.mode).includes('unknown')) {
-    return unknownModeText;
   }
   return _.capitalize(
     modes
@@ -68,8 +63,6 @@ export const TransportModes = ({
   disabled,
   textType,
   textColor,
-  unknownModeText,
-  useUnknownIcon = true,
   style,
 }: {
   modes: TransportModePair[];
@@ -77,8 +70,6 @@ export const TransportModes = ({
   disabled?: boolean;
   textType?: TextNames;
   textColor?: TextColor;
-  unknownModeText?: string;
-  useUnknownIcon?: boolean;
   style?: ViewStyle;
 }) => {
   const styles = useStyles();
@@ -87,14 +78,12 @@ export const TransportModes = ({
   const modesCount: number = modes.length;
   const modesToDisplay = modes
     .slice(0, modesDisplayLimit)
-    .filter(removeDuplicatesByIconNameFilter)
-    .filter((m) => useUnknownIcon || (!useUnknownIcon && m.mode !== 'unknown'));
+    .filter(removeDuplicatesByIconNameFilter);
 
   const transportModeText: string = getTransportModeText(
     modes,
     t,
     modesDisplayLimit,
-    unknownModeText,
   );
 
   return (
