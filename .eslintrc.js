@@ -19,6 +19,7 @@ module.exports = {
   extends: [
     'plugin:prettier/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
+    '@react-native',
   ],
   parser: '@typescript-eslint/parser',
   plugins: [
