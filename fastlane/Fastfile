@@ -44,36 +44,23 @@ platform :ios do
         'IOS_BUNDLE_IDENTIFIER',
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
-        'FASTLANE_MATCH_GIT_URL',
         'FASTLANE_MATCH_TYPE',
-        'MATCH_PASSWORD',
         'APPCONNECT_API_KEY_PATH',
       ]
     )
     register_devices(
-      devices_file: ENV['IOS_DEVICES_FILE'],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      devices_file: ENV['IOS_DEVICES_FILE'],
       api_key_path: ENV['APPCONNECT_API_KEY_PATH']
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
-    puts "Updating provisioning profiles for #{identifiers} using match type #{ENV['FASTLANE_MATCH_TYPE']}"
-    create_keychain(
-      name: "CI",
-      password: ENV['MATCH_PASSWORD'],
-      default_keychain: true,
-      unlock: true,
-      timeout: 10800,
-      lock_when_sleeps: false
-    )
     match(
       type: ENV["FASTLANE_MATCH_TYPE"],
-      app_identifier: identifiers,
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      git_url: ENV['FASTLANE_MATCH_GIT_URL'],
       storage_mode: 'git',
-      git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+      app_identifier: identifiers,
       force_for_new_devices: true,
-      keychain_name: "CI",
-      keychain_password: ENV["MATCH_PASSWORD"],
-      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID']
     )
   end
 
