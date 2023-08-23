@@ -38,6 +38,8 @@ platform :ios do
   lane :update_devices do
     ensure_env_vars(
       env_vars: [
+        'FASTLANE_MATCH_FULL_NAME',
+        'FASTLANE_MATCH_EMAIL',
         'FASTLANE_MATCH_GIT_SSH_URL',
         'IOS_DEVICES_FILE',
         'IOS_DEVELOPMENT_TEAM_ID',
@@ -62,9 +64,8 @@ platform :ios do
       app_identifier: identifiers,
       force_for_new_devices: true,
       force: true,
-      git_user_email: ENV['FASTLANE_MATCH_USERNAME'],
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
-      git_private_key: ENV['GH_ACCESS_TOKEN'],
+      git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
     )
   end
 
@@ -81,7 +82,6 @@ platform :ios do
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       skip_confirmation: true,
-      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
     get_certs
   end
