@@ -8,7 +8,6 @@ on:
         type: choice
         options:
           - atb
-          - fram
           - nfk
       environment: 
         description: 'App environment'
