@@ -51,7 +51,7 @@ platform :ios do
     register_devices(
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       devices_file: ENV['IOS_DEVICES_FILE'],
-      api_key_path: ENV['APPCONNECT_API_KEY_PATH']
+      api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     match(
@@ -61,6 +61,7 @@ platform :ios do
       storage_mode: 'git',
       app_identifier: identifiers,
       force_for_new_devices: true,
+      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
   end
 
