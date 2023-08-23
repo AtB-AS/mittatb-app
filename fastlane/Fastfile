@@ -62,6 +62,7 @@ platform :ios do
       app_identifier: identifiers,
       force_for_new_devices: true,
       force: true,
+      git_private_key: ENV['GH_ACCESS_TOKEN'],
     )
   end
 
