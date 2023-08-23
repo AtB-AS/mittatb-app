@@ -36,10 +36,10 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - name: install node v16
+      - name: install node v18
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - name: Get potential cached node_modules
         uses: actions/cache@v2
         id: modules-cache
