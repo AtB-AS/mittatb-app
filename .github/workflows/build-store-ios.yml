@@ -41,6 +41,9 @@ jobs:
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
+      - name: Enable apple pass suppression
+        if: matrix.org == 'fram'
+        run: bundle exec ios enable_pass_presentation_suppression_entitlement
       - name: Run fastlane build
         run: bundle exec fastlane ios build
         env:
