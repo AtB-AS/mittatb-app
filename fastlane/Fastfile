@@ -38,7 +38,7 @@ platform :ios do
   lane :update_devices do
     ensure_env_vars(
       env_vars: [
-        'FASTLANE_MATCH_GIT_URL',
+        'FASTLANE_MATCH_GIT_SSH_URL',
         'IOS_DEVICES_FILE',
         'IOS_DEVELOPMENT_TEAM_ID',
         'IOS_BUNDLE_IDENTIFIER',
@@ -57,7 +57,7 @@ platform :ios do
     match(
       type: ENV["FASTLANE_MATCH_TYPE"],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      git_url: ENV['FASTLANE_MATCH_GIT_URL'],
+      git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
       storage_mode: 'git',
       app_identifier: identifiers,
       force_for_new_devices: true,
