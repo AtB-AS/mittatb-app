@@ -38,7 +38,6 @@ platform :ios do
   lane :update_devices do
     ensure_env_vars(
       env_vars: [
-        'FASTLANE_MATCH_USERNAME',
         'FASTLANE_MATCH_GIT_URL',
         'IOS_DEVICES_FILE',
         'IOS_DEVELOPMENT_TEAM_ID',
@@ -52,7 +51,6 @@ platform :ios do
     register_devices(
       devices_file: ENV['IOS_DEVICES_FILE'],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
-      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
     puts "Updating provisioning profiles for #{identifiers} using match type #{ENV['FASTLANE_MATCH_TYPE']}"
@@ -62,7 +60,6 @@ platform :ios do
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       app_identifier: identifiers,
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
-      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
   end
 
