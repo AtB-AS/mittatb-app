@@ -1373,35 +1373,6 @@ PODS:
     - Turf
   - RNPermissions (3.6.1):
     - React-Core
-  - RNReanimated (3.4.2):
-    - DoubleConversion
-    - FBLazyVector
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React-callinvoker
-    - React-Core
-    - React-Core/DevSupport
-    - React-Core/RCTWebSocket
-    - React-CoreModules
-    - React-cxxreact
-    - React-hermes
-    - React-jsi
-    - React-jsiexecutor
-    - React-jsinspector
-    - React-RCTActionSheet
-    - React-RCTAnimation
-    - React-RCTAppDelegate
-    - React-RCTBlob
-    - React-RCTImage
-    - React-RCTLinking
-    - React-RCTNetwork
-    - React-RCTSettings
-    - React-RCTText
-    - ReactCommon/turbomodule/core
-    - Yoga
   - RNScreens (3.19.0):
     - React-Core
     - React-RCTImage
@@ -1519,7 +1490,6 @@ DEPENDENCIES:
   - RNLocalize (from `../node_modules/react-native-localize`)
   - "rnmapbox-maps (from `../node_modules/@rnmapbox/maps`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
-  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - "TimeReactNativeLib (from `../node_modules/@entur-private/abt-time-react-native-lib`)"
@@ -1707,8 +1677,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@rnmapbox/maps"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
-  RNReanimated:
-    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -1840,7 +1808,6 @@ SPEC CHECKSUMS:
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
   rnmapbox-maps: 505547e44fe713b076b39fc24bacf382cf5e5b33
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
-  RNReanimated: 726395a2fa2f04cea340274ba57a4e659bc0d9c1
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
