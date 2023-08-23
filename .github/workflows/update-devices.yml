@@ -42,9 +42,12 @@ jobs:
         with:
           ruby-version: '2.7.6'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Run fastlane generate provisioning profiles
-        run: bundle exec fastlane ios update_devices
+      - name: Update devices and provisioning profiles
+        run: |
+          echo ${{ secrets.APP_STORE_CONNECT_API_KEY}} | base64 --decode > app-store-connect-api-key.json
+          bundle exec fastlane ios update_devices
         env:
+          APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
           FASTLANE_MATCH_TYPE: "development"
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
