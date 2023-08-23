@@ -11,7 +11,7 @@ import {TransportModes} from '@atb/components/transportation-modes';
 import {ThemeText} from '@atb/components/text';
 
 type Props = {
-  heading?: string;
+  heading?: string | undefined;
   transportModes: ProductTypeTransportModes[];
   fareProducts: FareProductTypeConfig[];
   onProductSelect: (config: FareProductTypeConfig) => void;
@@ -41,6 +41,10 @@ export const FareProductGroup = ({
     <View>
       {heading ? (
         <ThemeText style={styles.heading}>{heading}</ThemeText>
+      ) : transportModes.length === 0 ? (
+        <ThemeText style={styles.heading}>
+          {t(FareContractTexts.otherFareContracts)}
+        </ThemeText>
       ) : (
         <TransportModes
           modes={transportModes}
@@ -48,8 +52,6 @@ export const FareProductGroup = ({
           style={styles.heading}
           textType={'body__secondary'}
           textColor={'primary'}
-          unknownModeText={t(FareContractTexts.otherFareContracts)}
-          useUnknownIcon={false}
         />
       )}
       {groupedConfigs.map(([firstConfig, secondConfig], i) => (

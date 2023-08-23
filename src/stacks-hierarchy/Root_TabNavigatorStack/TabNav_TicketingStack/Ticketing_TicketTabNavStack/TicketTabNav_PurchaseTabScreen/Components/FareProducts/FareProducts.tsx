@@ -49,7 +49,7 @@ export const FareProducts = ({
     groupedFareProducts = [
       ...groupedFareProducts,
       {
-        transportModes: [{mode: 'unknown'}],
+        transportModes: [],
         fareProducts: otherProducts,
       },
     ];
@@ -60,7 +60,7 @@ export const FareProducts = ({
       {groupedFareProducts.map((group) => (
         <FareProductGroup
           heading={
-            fareProductGroups.length === 0
+            groupedFareProducts.length === 1
               ? t(TicketingTexts.availableFareProducts.allTickets)
               : undefined
           }
