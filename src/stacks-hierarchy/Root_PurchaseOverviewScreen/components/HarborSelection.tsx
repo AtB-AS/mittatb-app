@@ -88,15 +88,12 @@ type HarborSelectionItemProps = {
   fromOrTo: typeof FROM | typeof TO;
 };
 
-const HarborSelectionItem = forwardRef<
-  TouchableOpacity,
-  HarborSelectionItemProps
->(
+const HarborSelectionItem = forwardRef<any, HarborSelectionItemProps>(
   (
     {harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps,
     harborInputSectionItemRef,
   ) => {
-    const itemRef = useRef<TouchableOpacity>(null);
+    const itemRef = useRef<any>(null);
     const {t} = useTranslation();
     const styles = useStyles();
 
