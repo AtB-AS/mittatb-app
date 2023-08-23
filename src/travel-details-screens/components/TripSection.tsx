@@ -228,11 +228,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             key={situation.id}
             rowLabel={<SituationOrNoticeIcon situation={situation} />}
           >
-            <SituationMessageBox
-              noStatusIcon={true}
-              situation={situation}
-              style={{flex: 1}}
-            />
+            <SituationMessageBox noStatusIcon={true} situation={situation} />
           </TripRow>
         ))}
         {notices.map((notice, i) => (
