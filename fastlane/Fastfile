@@ -62,7 +62,7 @@ platform :ios do
       app_identifier: identifiers,
       force_for_new_devices: true,
       force: true,
-      git_private_key: ENV['GIT_PRIVATE_KEY'],
+      git_user_email: ENV['FASTLANE_MATCH_USERNAME'],
     )
   end
 
