@@ -4,7 +4,7 @@ import {
   getTransportModeSvg,
   TransportationIconBox,
 } from '@atb/components/icon-box';
-import {ColorType, ThemeText} from '@atb/components/text';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   FareContractTexts,
@@ -15,6 +15,7 @@ import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {TextNames} from '@atb/theme/colors';
 import _ from 'lodash';
+import {TextColor} from '@atb-as/theme';
 
 const modesDisplayLimit: number = 2;
 
@@ -75,7 +76,7 @@ export const TransportModes = ({
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
   textType?: TextNames;
-  textColor?: ColorType;
+  textColor?: TextColor;
   unknownModeText?: string;
   useUnknownIcon?: boolean;
   style?: ViewStyle;
