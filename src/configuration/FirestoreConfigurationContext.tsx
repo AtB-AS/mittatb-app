@@ -1,28 +1,49 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore";
-import { CityZone, PreassignedFareProduct, TariffZone, UserProfile } from "@atb/reference-data/types";
-import Bugsnag from "@bugsnag/react-native";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import {
+  CityZone,
+  PreassignedFareProduct,
+  TariffZone,
+  UserProfile,
+} from '@atb/reference-data/types';
+import Bugsnag from '@bugsnag/react-native';
 import {
   defaultCityZones,
   defaultFareProductTypeConfig,
   defaultPreassignedFareProducts,
   defaultTariffZones,
-  defaultUserProfiles
-} from "@atb/reference-data/defaults";
-import { defaultModesWeSellTicketsFor, defaultPaymentTypes, defaultVatPercent } from "@atb/configuration/defaults";
-import { PaymentType } from "@atb/ticketing";
-import { FareProductTypeConfig } from "./types";
+  defaultUserProfiles,
+} from '@atb/reference-data/defaults';
+import {
+  defaultModesWeSellTicketsFor,
+  defaultPaymentTypes,
+  defaultVatPercent,
+} from '@atb/configuration/defaults';
+import {PaymentType} from '@atb/ticketing';
+import {FareProductTypeConfig} from './types';
 import {
   mapLanguageAndTextType,
   mapToFareProductTypeConfigs,
   mapToFlexibleTransportOption,
   mapToHarborConnectionOverride,
   mapToMobilityOperators,
-  mapToTransportModeFilterOptions
-} from "./converters";
-import { LanguageAndTextType } from "@atb/translations";
-import { MobilityOperatorType } from "@atb-as/config-specs/lib/mobility-operators";
-import { ConfigurableLinksType, HarborConnectionOverrideType, TravelSearchFiltersType } from "@atb-as/config-specs";
+  mapToTransportModeFilterOptions,
+} from './converters';
+import {LanguageAndTextType} from '@atb/translations';
+import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
+import {
+  ConfigurableLinksType,
+  HarborConnectionOverrideType,
+  TravelSearchFiltersType,
+} from '@atb-as/config-specs';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
