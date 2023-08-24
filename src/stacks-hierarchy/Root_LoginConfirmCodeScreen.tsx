@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import {useAuthState} from '@atb/auth';
-import {
-  ConfirmationErrorCode,
-  PhoneSignInErrorCode,
-} from '@atb/auth/AuthContext';
+import {ConfirmationErrorCode, PhoneSignInErrorCode} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,

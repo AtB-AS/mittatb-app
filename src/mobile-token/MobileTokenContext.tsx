@@ -59,7 +59,7 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 );
 
 export const MobileTokenContextProvider: React.FC = ({children}) => {
-  const {abtCustomerId, userCreationFinished} = useAuthState();
+  const {abtCustomerId, authStatus} = useAuthState();
 
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
@@ -81,7 +81,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [isError, setIsError] = useState(false);
 
   const enabled =
-    hasEnabledMobileToken && abtCustomerId && userCreationFinished;
+    hasEnabledMobileToken && abtCustomerId && authStatus === 'authed';
 
   /**
    * Load/create native token and handle the situations that can arise.
