@@ -9,12 +9,12 @@ import {StyleSheet} from '@atb/theme';
 import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
 import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {RCTPassPresentation} from '@atb/suppress-pass-presentation';
+import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -27,12 +27,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
 
-  useEffect(() => {
-    RCTPassPresentation.requestAutomaticPassPresentationSuppression();
-    return () => {
-      RCTPassPresentation.endAutomaticPassPresentationSuppression();
-    };
-  }, []);
+  useApplePassPresentationSuppression();
 
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const preassignedFareProduct = findReferenceDataById(

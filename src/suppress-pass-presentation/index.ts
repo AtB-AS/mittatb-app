@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {NativeModules} from 'react-native';
 
 // Found in ./ios/Modules/PassPresentationBridge.m
@@ -10,3 +11,12 @@ interface RCTPassPresentationInterface {
 
 export const RCTPassPresentation =
   PassPresentation as RCTPassPresentationInterface;
+
+export function useApplePassPresentationSuppression() {
+  useEffect(() => {
+    RCTPassPresentation.requestAutomaticPassPresentationSuppression();
+    return () => {
+      RCTPassPresentation.endAutomaticPassPresentationSuppression();
+    };
+  }, []);
+}
