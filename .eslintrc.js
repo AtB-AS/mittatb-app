@@ -16,11 +16,7 @@ module.exports = {
     sourceType: 'module',
   },
   root: true,
-  extends: [
-    'plugin:prettier/recommended',
-    'plugin:@tanstack/eslint-plugin-query/recommended',
-    '@react-native',
-  ],
+  extends: ['prettier', 'plugin:@tanstack/eslint-plugin-query/recommended'],
   parser: '@typescript-eslint/parser',
   plugins: [
     '@typescript-eslint',
