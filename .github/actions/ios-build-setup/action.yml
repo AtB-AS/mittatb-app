@@ -3,7 +3,7 @@ description: 'Sets up the necessarry dependencies, environment and assets for bu
 inputs:
   # Dev dependencies
   node-version:
-    default: "16"
+    default: "18"
     required: false
   ruby-version:
     default: "2.7.6"
@@ -31,6 +31,7 @@ runs:
       - name: Set global env vars
         shell: bash
         run: |
+          echo "NO_FLIPPER=1" >> $GITHUB_ENV
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
       - name: Decrypt env files
