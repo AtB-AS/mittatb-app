@@ -4,8 +4,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
-#import <React/RCTAppSetupUtils.h>
-
 #import <Bugsnag/Bugsnag.h>
 #import <Firebase.h>
 @import Intercom;
@@ -62,11 +60,15 @@ static void InitializeFlipper(UIApplication *application) {
   }
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-
-  NSDictionary *initProps = [self prepareInitialProps];
+  
+  self.moduleName = @"no.mittatb";
+  // You can add your custom initial props in the dictionary below.
+  // They will be passed down to the ViewController used by React Native.
+  self.initialProps = @{};
+  
   AtBRootView *rootView = [[AtBRootView alloc] initWithBridge:bridge
                                                    moduleName:@"atb"
-                                            initialProperties:initProps];
+                                            initialProperties:self.initialProps];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
