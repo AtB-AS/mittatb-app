@@ -7,18 +7,17 @@ apply plugin: "com.facebook.react"
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
 
-// @TODO Maybe remove
-// project.ext.react = [
-//         entryFile           : "index.js",
-//         enableHermes        : true,  // clean and rebuild if changing
-//         devDisabledInStore  : true,
-//         bundleInStore       : true,
-//         devDisabledInStaging: true,
-//         bundleInStaging     : true,
-//         deleteDebugFilesForVariant: {
-//           def variant -> variant.name.toLowerCase().contains("release") || variant.name.toLowerCase().contains("staging") || variant.name.toLowerCase().contains("store")
-//         }
-// ]
+project.ext.react = [
+        entryFile           : "index.js",
+        enableHermes        : true,  // clean and rebuild if changing
+        devDisabledInStore  : true,
+        bundleInStore       : true,
+        devDisabledInStaging: true,
+        bundleInStaging     : true,
+        deleteDebugFilesForVariant: {
+          def variant -> variant.name.toLowerCase().contains("release") || variant.name.toLowerCase().contains("staging") || variant.name.toLowerCase().contains("store")
+        }
+]
 
 react {
     /* Folders */
