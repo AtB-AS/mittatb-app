@@ -56,11 +56,6 @@ function mapToFareProductGroup(config: any): FareProductGroupType | undefined {
   const parseResult = FareProductGroup.safeParse(config);
 
   if (!parseResult.success) {
-    Bugsnag.notify('fare product group issue', function (event) {
-      event.addMetadata('decode_errors', {
-        issues: parseResult.error.issues,
-      });
-    });
     return;
   }
   return parseResult.data;
