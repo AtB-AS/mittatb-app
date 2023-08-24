@@ -47,6 +47,7 @@ runs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ inputs.ruby-version }}
+          cache-version: 1
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Get potential cached dependencies
         uses: actions/cache@v3
