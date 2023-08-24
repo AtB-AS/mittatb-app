@@ -6,16 +6,6 @@ import {HarborConnectionOverrideType} from '@atb-as/config-specs';
 import {isDefined} from '@atb/utils/presence';
 import _ from 'lodash';
 
-function mapOverridesToStopPlaceFragment(
-  overrides: HarborConnectionOverrideType[],
-  harbors: StopPlaceFragment[] | undefined,
-) {
-  if (!harbors) return [];
-  return overrides
-    .map((override) => harbors.find((h) => h.id === override.to))
-    .filter(isDefined);
-}
-
 export const useHarbors = (fromHarborId?: string) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -77,3 +67,13 @@ export const useHarbors = (fromHarborId?: string) => {
     refetch,
   };
 };
+
+function mapOverridesToStopPlaceFragment(
+  overrides: HarborConnectionOverrideType[],
+  harbors: StopPlaceFragment[] | undefined,
+) {
+  if (!harbors) return [];
+  return overrides
+    .map((override) => harbors.find((h) => h.id === override.to))
+    .filter(isDefined);
+}
