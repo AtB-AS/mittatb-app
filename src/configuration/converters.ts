@@ -125,14 +125,6 @@ export function mapToHarborConnectionOverride(overrides?: any) {
     .map((override) => {
       const parseResult = HarborConnectionOverride.safeParse(override);
       if (!parseResult.success) {
-        Bugsnag.notify(
-          'Harbor connection override mapping issue',
-          function (event) {
-            event.addMetadata('decode_errors', {
-              issues: parseResult.error.issues,
-            });
-          },
-        );
         return;
       }
       return parseResult.data;
