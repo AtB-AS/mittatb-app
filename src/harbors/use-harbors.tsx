@@ -39,10 +39,7 @@ export const useHarbors = (fromHarborId?: string) => {
       return;
     }
 
-    if (overrides.length === 0) {
-      setData(connections.data ?? []);
-    }
-    // There is overrides for this harbor. Map these into complete StopPlaceFragments
+    //Map overrides (if there are any) into complete StopPlaceFragments
     const overrideHarbors = mapOverridesToStopPlaceFragment(
       overrides,
       harbors.data,
