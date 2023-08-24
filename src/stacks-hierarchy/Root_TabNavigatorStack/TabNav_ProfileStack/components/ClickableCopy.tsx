@@ -1,6 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, {PropsWithChildren, useState} from 'react';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native';
 
 type ClickableCopyProps = PropsWithChildren<{
   duration?: number;
