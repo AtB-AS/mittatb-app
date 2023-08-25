@@ -10,7 +10,6 @@ export enum StorageModelKeysEnum {
   UseFlexibleTransportAccessModeDebugOverride = '@ATB_use_flexible_on_accessMode',
   UseFlexibleTransportDirectModeDebugOverride = '@ATB_use_flexible_on_directMode',
   UseFlexibleTransportEgressModeDebugOverride = '@ATB_use_flexible_on_egressMode',
-  EnableNewTravelSearchDebugOverride = '@ATB_enable_new_travel_search_debug_override',
   EnableFromTravelSearchToTicketDebugOverride = '@ATB_enable_from_travel_search_to_ticket_debug_override',
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
   EnableCityBikesInMapDebugOverride = 'ATB_enable_city_bikes_in_map_debug_override',

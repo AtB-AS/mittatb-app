@@ -28,7 +28,6 @@ import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
-import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {
   useMapDebugOverride,
   useRealtimeMapDebugOverride,
@@ -81,7 +80,6 @@ export const Profile_DebugInfoScreen = () => {
   const flexibleTransportEgressModeDebugOverride = useDebugOverride(
     StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
   );
-  const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
@@ -282,12 +280,6 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable travel search filter."
               override={travelSearchDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable new travel search."
-              override={newTravelSearchDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
