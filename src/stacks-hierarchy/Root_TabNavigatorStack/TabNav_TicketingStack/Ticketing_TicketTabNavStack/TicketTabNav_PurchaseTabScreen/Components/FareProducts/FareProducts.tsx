@@ -1,23 +1,26 @@
-import {View} from 'react-native';
-import {TicketingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {StyleSheet} from '@atb/theme';
-import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {isProductSellableInApp} from '@atb/reference-data/utils';
-import {FareProductTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProductTile';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTicketingState} from '@atb/ticketing';
+import {FareProductGroup} from './FareProductGroup';
+import {ProductTypeTransportModes} from '@atb-as/config-specs';
+import {flatMap} from '@atb/utils/array';
+import {TicketingTexts, useTranslation} from '@atb/translations';
+
+type GroupedFareProducts = {
+  transportModes: ProductTypeTransportModes[];
+  fareProducts: FareProductTypeConfig[];
+};
 
 export const FareProducts = ({
   onProductSelect,
 }: {
   onProductSelect: (config: FareProductTypeConfig) => void;
 }) => {
-  const styles = useStyles();
-  const {preassignedFareProducts, fareProductTypeConfigs} =
-    useFirestoreConfiguration();
   const {t} = useTranslation();
+  const {preassignedFareProducts, fareProductTypeConfigs, fareProductGroups} =
+    useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
   const sellableProductsInApp = preassignedFareProducts.filter((product) =>
@@ -28,56 +31,45 @@ export const FareProducts = ({
     (config) => sellableProductsInApp.some((p) => p.type === config.type),
   );
 
-  /*
-  Group by two and two, as two fare products are shown side by side on each row
-  in the purchase tab.
-   */
-  const groupedConfigs = sellableFareProductTypeConfigs.reduce<
-    [FareProductTypeConfig, FareProductTypeConfig | undefined][]
-  >((grouped, current, index, arr) => {
-    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
-    return grouped;
-  }, []);
+  let groupedFareProducts: GroupedFareProducts[] = fareProductGroups.map(
+    (group) => ({
+      transportModes: group.transportModes,
+      fareProducts:
+        sellableFareProductTypeConfigs.filter((fareProduct) =>
+          group.types.includes(fareProduct.type),
+        ) ?? [],
+    }),
+  );
+
+  const otherProducts = sellableFareProductTypeConfigs.filter(
+    (p) => !flatMap(groupedFareProducts, (g) => g.fareProducts).includes(p),
+  );
+
+  if (otherProducts.length > 0) {
+    groupedFareProducts = [
+      ...groupedFareProducts,
+      {
+        transportModes: [],
+        fareProducts: otherProducts,
+      },
+    ];
+  }
 
   return (
-    <View>
-      <ThemeText type="body__secondary" style={styles.heading}>
-        {t(TicketingTexts.availableFareProducts.allTickets)}
-      </ThemeText>
-
-      {groupedConfigs.map(([firstConfig, secondConfig]) => (
-        <View
-          style={styles.fareProductsContainer}
-          key={firstConfig.type + secondConfig?.type}
-        >
-          <FareProductTile
-            onPress={() => onProductSelect(firstConfig)}
-            testID={`${firstConfig.type}FareProduct`}
-            config={firstConfig}
-          />
-          {secondConfig && (
-            <FareProductTile
-              onPress={() => onProductSelect(secondConfig)}
-              testID={`${secondConfig.type}FareProduct`}
-              config={secondConfig}
-            />
-          )}
-        </View>
+    <>
+      {groupedFareProducts.map((group) => (
+        <FareProductGroup
+          heading={
+            groupedFareProducts.length === 1
+              ? t(TicketingTexts.availableFareProducts.allTickets)
+              : undefined
+          }
+          key={group.transportModes.map((m) => m.mode).join('-')}
+          transportModes={group.transportModes}
+          fareProducts={group.fareProducts}
+          onProductSelect={onProductSelect}
+        />
       ))}
-    </View>
+    </>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  heading: {
-    margin: theme.spacings.medium,
-    marginLeft: theme.spacings.xLarge,
-  },
-  fareProductsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingLeft: theme.spacings.medium,
-    paddingBottom: theme.spacings.medium,
-    alignItems: 'stretch',
-  },
-}));

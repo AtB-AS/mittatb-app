@@ -1,9 +1,10 @@
-import {TouchableOpacity, View, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ContainerSizingType = 'compact' | 'standard' | 'spacious';
 
@@ -42,7 +43,7 @@ export function RadioBox({
     : 'background_0';
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       style={[
         styles.container,
         {
@@ -84,7 +85,7 @@ export function RadioBox({
       >
         <RadioIcon checked={selected} color={themeColor} />
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 }
 

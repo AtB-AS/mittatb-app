@@ -162,6 +162,7 @@ export type Offer = {
 export type OfferSearchResponse = Offer[];
 
 export type RecentFareContractBackend = {
+  order_id: string;
   products: string[];
   zones: string[];
   users: {
@@ -170,6 +171,10 @@ export type RecentFareContractBackend = {
   payment_method: string;
   total_amount: string;
   created_at: string;
+  point_to_point_validity: {
+    fromPlace: string;
+    toPlace: string;
+  };
 };
 
 export type ReserveOffer = {

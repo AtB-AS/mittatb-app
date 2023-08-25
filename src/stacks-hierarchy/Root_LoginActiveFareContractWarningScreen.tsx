@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -15,6 +15,7 @@ import {
 import {SimpleFareContract} from '@atb/fare-contracts';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -88,7 +89,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           text={t(LoginTexts.activeFareContractPrompt.laterButton)}
           rightIcon={{svg: ArrowRight}}
         />
-        <TouchableOpacity
+        <PressableOpacity
           style={styles.laterButton}
           onPress={onNext}
           accessibilityRole="button"
@@ -100,7 +101,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           >
             {t(LoginTexts.activeFareContractPrompt.continueButton)}
           </ThemeText>
-        </TouchableOpacity>
+        </PressableOpacity>
       </ScrollView>
     </View>
   );

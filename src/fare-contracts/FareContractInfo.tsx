@@ -213,11 +213,13 @@ const FareContractInfoHeader = ({
         )}
       </View>
       {fromStopPlaceId && toStopPlaceId && (
-        <FareContractHarborStopPlaces
-          fromStopPlaceId={fromStopPlaceId}
-          toStopPlaceId={toStopPlaceId}
-          showTwoWayIcon={showTwoWayIcon}
-        />
+        <View style={styles.harborStopPlaces}>
+          <FareContractHarborStopPlaces
+            fromStopPlaceId={fromStopPlaceId}
+            toStopPlaceId={toStopPlaceId}
+            showTwoWayIcon={showTwoWayIcon}
+          />
+        </View>
       )}
       {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
@@ -364,5 +366,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginTop: theme.spacings.xSmall,
+  },
+  harborStopPlaces: {
+    marginTop: theme.spacings.large,
   },
 }));
