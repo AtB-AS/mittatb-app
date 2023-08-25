@@ -4,7 +4,7 @@ import {getAxiosErrorMetadata} from '@atb/api/utils';
 
 export type UserBenefitsType = {
   operator: string;
-  benefits: OperatorBenefitIdType[];
+  benefitIds: OperatorBenefitIdType[];
 };
 
 export const getBenefits = (): Promise<UserBenefitsType[]> => {
@@ -18,7 +18,7 @@ export const getValueCode = (
 ): Promise<string | undefined> => {
   return client
     .post(`/mobility/code/${operatorId}`, {}, {authWithIdToken: true})
-    .then((response) => response.data.code)
+    .then((response) => String(response.data.code))
     .catch((error) => {
       if (getAxiosErrorMetadata(error).responseStatus === 404) return undefined;
       throw error;

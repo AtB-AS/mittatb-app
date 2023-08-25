@@ -19,8 +19,12 @@ export const useBenefits = (operatorId: string | undefined) => {
       setLoading(true);
       Promise.all([
         getBenefits()
-          .then((benefits) => benefits.find((b) => b.operator === operatorId))
-          .then((benefits) => setUserBenefits(benefits?.benefits ?? [])),
+          .then((userBenefits) =>
+            userBenefits.find((b) => b.operator === operatorId),
+          )
+          .then((userBenefitsForOperator) =>
+            setUserBenefits(userBenefitsForOperator?.benefitIds ?? []),
+          ),
         getValueCode(operatorId).then(setValueCode),
       ])
         .catch(setError)
