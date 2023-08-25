@@ -65,10 +65,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
   // The data model handles multiple benefits per operator,
   // but we currently know there is only one,
   // and the UI has to change anyway to support an undetermined number of benefits.
-  const operatorBenefit =
-    operatorBenefits && operatorBenefits.length > 0
-      ? operatorBenefits[0]
-      : undefined;
+  const operatorBenefit = operatorBenefits?.[0];
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
