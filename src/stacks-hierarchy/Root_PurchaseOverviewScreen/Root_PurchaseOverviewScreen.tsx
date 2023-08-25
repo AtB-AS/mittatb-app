@@ -30,8 +30,8 @@ type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
 export type FromToRefType = {
   zonesRef?: RefObject<TouchableOpacity>;
-  fromRef?: RefObject<TouchableOpacity>;
-  toRef?: RefObject<TouchableOpacity>;
+  fromHarborRef?: RefObject<TouchableOpacity>;
+  toHarborRef?: RefObject<TouchableOpacity>;
 };
 
 export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
@@ -106,9 +106,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     if (params.onFocusElement === 'from-to-selection') {
       giveFocus(fromToInputSectionItemRef.current?.zonesRef);
     } else if (params.onFocusElement === 'from-selection') {
-      giveFocus(fromToInputSectionItemRef.current?.fromRef);
+      giveFocus(fromToInputSectionItemRef.current?.fromHarborRef);
     } else if (params.onFocusElement === 'to-selection') {
-      giveFocus(fromToInputSectionItemRef.current?.toRef);
+      giveFocus(fromToInputSectionItemRef.current?.toHarborRef);
     }
   }, [params.onFocusElement]);
 

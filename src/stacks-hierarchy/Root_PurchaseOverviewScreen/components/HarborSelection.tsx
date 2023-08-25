@@ -37,9 +37,9 @@ export const HarborSelection = forwardRef<
     const styles = useStyles();
     const {t} = useTranslation();
 
-    const fromRef = useRef<TouchableOpacity>(null);
-    const toRef = useRef<TouchableOpacity>(null);
-    useImperativeHandle(ref, () => ({fromRef, toRef}));
+    const fromHarborRef = useRef<TouchableOpacity>(null);
+    const toHarborRef = useRef<TouchableOpacity>(null);
+    useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
 
     return (
       <View style={style} accessible={false}>
@@ -65,7 +65,7 @@ export const HarborSelection = forwardRef<
                 preassignedFareProduct,
               })
             }
-            ref={fromRef}
+            ref={fromHarborRef}
           />
           <HarborSelectionItem
             fromOrTo="to"
@@ -78,7 +78,7 @@ export const HarborSelection = forwardRef<
                 preassignedFareProduct,
               })
             }
-            ref={toRef}
+            ref={toHarborRef}
           />
         </Section>
       </View>
