@@ -8,7 +8,7 @@ import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {FromToRefType} from '../Root_PurchaseOverviewScreen';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
 
 type StopPlaceSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -20,7 +20,7 @@ type StopPlaceSelectionProps = {
 };
 
 export const HarborSelection = forwardRef<
-  FromToRefType,
+  FocusRefsType,
   StopPlaceSelectionProps
 >(
   (

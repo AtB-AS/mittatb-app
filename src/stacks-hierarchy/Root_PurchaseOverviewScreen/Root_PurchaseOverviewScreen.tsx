@@ -10,7 +10,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {RefObject, useEffect, useRef, useState} from 'react';
+import React, {RefObject, useEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
@@ -23,8 +23,8 @@ import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
-import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {useFocusRefs} from '@atb/utils/use-focus-refs';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -100,17 +100,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
-  const fromToInputSectionItemRef = useRef<FromToRefType>(null);
-
-  useEffect(() => {
-    if (params.onFocusElement === 'from-to-selection') {
-      giveFocus(fromToInputSectionItemRef.current?.zonesRef);
-    } else if (params.onFocusElement === 'from-selection') {
-      giveFocus(fromToInputSectionItemRef.current?.fromHarborRef);
-    } else if (params.onFocusElement === 'to-selection') {
-      giveFocus(fromToInputSectionItemRef.current?.toHarborRef);
-    }
-  }, [params.onFocusElement]);
+  const focusRefs = useFocusRefs(params.onFocusElement);
 
   return (
     <View style={styles.container}>
@@ -186,7 +176,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 params,
               );
             }}
-            ref={fromToInputSectionItemRef}
+            ref={focusRefs}
           />
 
           <StartTimeSelection

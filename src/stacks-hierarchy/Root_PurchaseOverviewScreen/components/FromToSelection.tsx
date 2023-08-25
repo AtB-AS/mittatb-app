@@ -8,7 +8,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {FromToRefType} from '../Root_PurchaseOverviewScreen';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -23,7 +23,7 @@ type SelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const FromToSelection = forwardRef<FromToRefType, SelectionProps>(
+export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
   (
     {
       fareProductTypeConfig,
