@@ -28,13 +28,12 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
 export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
-  const {must_upgrade_ticketing, enable_recent_tickets} = useRemoteConfig();
+  const {must_upgrade_ticketing} = useRemoteConfig();
   const {abtCustomerId, authenticationType} = useAuthState();
   const isSignedInAsAbtCustomer = !!abtCustomerId;
   const {theme} = useTheme();
   const {recentFareContracts, loading} = useRecentFareContracts();
-  const hasRecentFareContracts =
-    enable_recent_tickets && !!recentFareContracts.length;
+  const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
   const {t} = useTranslation();
 
