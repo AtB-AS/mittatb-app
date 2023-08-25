@@ -22,6 +22,8 @@ import {useHarborsQuery} from '@atb/queries';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/reference-data/types';
+import {ThemeText} from '@atb/components/text';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -34,6 +36,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const hasRecentFareContracts =
     enable_recent_tickets && !!recentFareContracts.length;
   const styles = useStyles();
+  const {t} = useTranslation();
 
   const showTipsAndInformation = useTipsAndInformationEnabled();
   const showTicketAssistant = useTicketingAssistantEnabled();
@@ -188,13 +191,18 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         )}
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
-          <TicketAssistantTile
-            onPress={() => {
-              analytics.logEvent('Ticketing', 'Ticket assistant opened');
-              navigation.navigate('Root_TicketAssistantStack');
-            }}
-            testID="ticketAssistant"
-          />
+          <>
+            <ThemeText style={styles.heading} type={'body__secondary'}>
+              {t(TicketingTexts.ticketAssistantTile.title)}
+            </ThemeText>
+            <TicketAssistantTile
+              onPress={() => {
+                analytics.logEvent('Ticketing', 'Ticket assistant opened');
+                navigation.navigate('Root_TicketAssistantStack');
+              }}
+              testID="ticketAssistant"
+            />
+          </>
         )}
       </View>
     </ScrollView>
@@ -204,5 +212,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginTop: theme.spacings.medium,
+  },
+  heading: {
+    margin: theme.spacings.medium,
+    marginLeft: theme.spacings.xLarge,
   },
 }));

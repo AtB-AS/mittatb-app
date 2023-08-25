@@ -290,6 +290,7 @@ const FareContractTexts = {
         );
     }
   },
+  otherFareContracts: _('Andre billetter', 'Other tickets', 'Andre billettar'),
 };
 
 export default orgSpecificTranslations(FareContractTexts, {

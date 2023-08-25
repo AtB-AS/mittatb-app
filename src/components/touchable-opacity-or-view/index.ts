@@ -1,1 +1,1 @@
-export {TouchableOpacityOrView} from './TouchableOpacityOrView';
+export {PressableOpacityOrView} from './PressableOpacityOrView';

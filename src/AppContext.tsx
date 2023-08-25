@@ -7,15 +7,11 @@ import React, {
   useReducer,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import {getBuildNumber} from 'react-native-device-info';
 import {register as registerChatUser} from './chat/user';
 import {storage} from '@atb/storage';
 
-const buildNumber = getBuildNumber();
-
 enum storeKey {
   onboarding = '@ATB_onboarded',
-  previousBuildNumber = '@ATB_previous_build_number',
   ticketing = '@ATB_ticket_informational_accepted',
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
@@ -24,7 +20,6 @@ type AppState = {
   isLoading: boolean;
   onboarded: boolean;
   ticketingAccepted: boolean;
-  newBuildSincePreviousLaunch: boolean;
   mobileTokenOnboarded: boolean;
   mobileTokenWithoutTravelcardOnboarded: boolean;
 };
@@ -34,7 +29,6 @@ type AppReducerAction =
       type: 'LOAD_APP_SETTINGS';
       onboarded: boolean;
       ticketingAccepted: boolean;
-      newBuildSincePreviousLaunch: boolean;
       mobileTokenOnboarded: boolean;
       mobileTokenWithoutTravelcardOnboarded: boolean;
     }
@@ -71,7 +65,6 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         onboarded: action.onboarded,
         ticketingAccepted: action.ticketingAccepted,
-        newBuildSincePreviousLaunch: action.newBuildSincePreviousLaunch,
         isLoading: false,
         mobileTokenOnboarded: action.mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded:
@@ -124,7 +117,6 @@ const defaultAppState: AppState = {
   isLoading: true,
   onboarded: false,
   ticketingAccepted: false,
-  newBuildSincePreviousLaunch: false,
   mobileTokenOnboarded: false,
   mobileTokenWithoutTravelcardOnboarded: false,
 };
@@ -157,16 +149,6 @@ export const AppContextProvider: React.FC = ({children}) => {
           ? false
           : JSON.parse(savedMobileTokenWithoutTravelcardOnboarded);
 
-      const previousBuildNumber = await storage.get(
-        storeKey.previousBuildNumber,
-      );
-      const newBuildSincePreviousLaunch =
-        previousBuildNumber !== null && buildNumber !== previousBuildNumber;
-
-      if (previousBuildNumber == null || newBuildSincePreviousLaunch) {
-        await storage.set(storeKey.previousBuildNumber, buildNumber);
-      }
-
       if (onboarded) {
         registerChatUser();
       }
@@ -175,7 +157,6 @@ export const AppContextProvider: React.FC = ({children}) => {
         type: 'LOAD_APP_SETTINGS',
         onboarded,
         ticketingAccepted,
-        newBuildSincePreviousLaunch,
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
       });

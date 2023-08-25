@@ -33,6 +33,7 @@ export type UserPreferences = {
   showTestIds?: boolean;
   tripSearchPreferences?: TripSearchPreferences;
   hideTravellerDescriptions?: boolean;
+  hideProductDescriptions?: boolean;
   debugShowSeconds?: boolean;
 };
 

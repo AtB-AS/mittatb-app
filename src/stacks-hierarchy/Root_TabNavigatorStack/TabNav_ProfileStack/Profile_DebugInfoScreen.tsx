@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
-import {Alert, TouchableOpacity, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
@@ -50,6 +50,7 @@ import {useDebugOverride} from '@atb/debug';
 import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
 import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -508,7 +509,7 @@ export const Profile_DebugInfoScreen = () => {
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
-                    <TouchableOpacity
+                    <PressableOpacity
                       key={key}
                       onPress={() => setPreference({[key]: undefined})}
                     >
@@ -516,7 +517,7 @@ export const Profile_DebugInfoScreen = () => {
                         title={key}
                         value={preferences[key as keyof UserPreferences]}
                       />
-                    </TouchableOpacity>
+                    </PressableOpacity>
                   ))}
                 </View>
               )
@@ -655,7 +656,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
   if (!!value && typeof value === 'object') {
     return (
       <View key={title} style={styles.objectEntry}>
-        <TouchableOpacity
+        <PressableOpacity
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
@@ -663,7 +664,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-        </TouchableOpacity>
+        </PressableOpacity>
         {isExpanded && <MapValue value={value} />}
       </View>
     );
@@ -675,13 +676,13 @@ function MapEntry({title, value}: {title: string; value: any}) {
         testID={title === 'user_id' ? 'userId' : ''}
       >
         {isLongString ? (
-          <TouchableOpacity
+          <PressableOpacity
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
             <ThemeText type="body__primary--bold">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-          </TouchableOpacity>
+          </PressableOpacity>
         ) : (
           <ThemeText type="body__primary--bold">{title}: </ThemeText>
         )}

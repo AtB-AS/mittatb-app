@@ -28,8 +28,7 @@ export const FormFactorFilter = ({
 }: Props) => {
   const {t} = useTranslation();
   const filterStyle = useFilterStyle();
-  const allOperators = useOperators();
-  const operators = allOperators(formFactor);
+  const operators = useOperators().byFormFactor(formFactor);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
     operators,
     initialFilter,
@@ -41,7 +40,7 @@ export const FormFactorFilter = ({
       <ThemeText style={filterStyle.sectionHeader} type={'body__secondary'}>
         {t(MobilityTexts.formFactor(formFactor))}
       </ThemeText>
-      <Section style={style}>
+      <Section>
         {operators.length !== 1 && (
           <ToggleSectionItem
             text={t(MobilityTexts.filter.selectAll)}

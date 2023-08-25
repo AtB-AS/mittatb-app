@@ -28,9 +28,10 @@ import {
   defaultVatPercent,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
-import {FareProductTypeConfig} from './types';
+import {FareProductGroupType, FareProductTypeConfig} from './types';
 import {
   mapLanguageAndTextType,
+  mapToFareProductGroups,
   mapToFareProductTypeConfigs,
   mapToFlexibleTransportOption,
   mapToHarborConnectionOverride,
@@ -51,6 +52,7 @@ export type AppTexts = {
 
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
+  fareProductGroups: FareProductGroupType[];
   tariffZones: TariffZone[];
   cityZones: CityZone[];
   userProfiles: UserProfile[];
@@ -67,6 +69,7 @@ type ConfigurationContextState = {
 
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareProducts: defaultPreassignedFareProducts,
+  fareProductGroups: [],
   tariffZones: defaultTariffZones,
   cityZones: defaultCityZones,
   userProfiles: defaultUserProfiles,
@@ -100,6 +103,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
   >(defaultFareProductTypeConfig);
+  const [fareProductGroups, setFareProductGroups] = useState<
+    FareProductGroupType[]
+  >([]);
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
@@ -160,6 +166,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setFareProductTypeConfigs(fareProductTypeConfigs);
           }
 
+          const fareProductGroups = getFareProductGroupsFromSnapshot(snapshot);
+          if (fareProductGroups) {
+            setFareProductGroups(fareProductGroups);
+          }
+
           const travelSearchFilters =
             getTravelSearchFiltersFromSnapshot(snapshot);
           if (travelSearchFilters) {
@@ -199,6 +210,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const memoizedState = useMemo(() => {
     return {
       preassignedFareProducts,
+      fareProductGroups,
       tariffZones,
       cityZones,
       userProfiles,
@@ -214,6 +226,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     };
   }, [
     preassignedFareProducts,
+    fareProductGroups,
     tariffZones,
     cityZones,
     userProfiles,
@@ -368,6 +381,19 @@ function getFareProductTypeConfigsFromSnapshot(
     ?.get('fareProductTypeConfigs');
   if (fareProductTypeConfigs !== undefined) {
     return mapToFareProductTypeConfigs(fareProductTypeConfigs);
+  }
+
+  return undefined;
+}
+
+function getFareProductGroupsFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): FareProductGroupType[] | undefined {
+  const fareProductGroups = snapshot.docs
+    .find((doc) => doc.id == 'fareProductTypeConfigs')
+    ?.get('fareProductGroups');
+  if (fareProductGroups !== undefined) {
+    return mapToFareProductGroups(fareProductGroups);
   }
 
   return undefined;
