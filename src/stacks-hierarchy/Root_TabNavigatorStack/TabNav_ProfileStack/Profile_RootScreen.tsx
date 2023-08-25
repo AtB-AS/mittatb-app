@@ -59,7 +59,7 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
+  const {privacy_policy_url, enable_ticketing, enable_login} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
@@ -310,15 +310,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             }
             testID="startScreenButton"
           />
-          {enable_i18n && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.language.label,
-              )}
-              onPress={() => navigation.navigate('Profile_LanguageScreen')}
-              testID="languageButton"
-            />
-          )}
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.language.label,
+            )}
+            onPress={() => navigation.navigate('Profile_LanguageScreen')}
+            testID="languageButton"
+          />
         </Section>
         <Section withPadding>
           <GenericSectionItem>

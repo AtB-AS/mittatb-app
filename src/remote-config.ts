@@ -5,7 +5,6 @@ export type RemoteConfig = {
   enable_network_logging: boolean;
   enable_ticketing: boolean;
   enable_intercom: boolean;
-  enable_i18n: boolean;
   enable_creditcard: boolean;
   enable_recent_tickets: boolean;
   enable_period_tickets: boolean;
@@ -62,7 +61,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_network_logging: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
-  enable_i18n: false,
   enable_creditcard: false,
   enable_recent_tickets: false,
   enable_period_tickets: false,
@@ -127,7 +125,6 @@ export function getConfig(): RemoteConfig {
     values['enable_network_logging']?.asBoolean() ?? true;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
   const enable_intercom = values['enable_intercom']?.asBoolean() ?? true;
-  const enable_i18n = values['enable_i18n']?.asBoolean() ?? false;
   const enable_creditcard =
     values['enable_creditcard']?.asBoolean() ??
     defaultRemoteConfig.enable_creditcard;
@@ -305,7 +302,6 @@ export function getConfig(): RemoteConfig {
     enable_network_logging,
     enable_ticketing,
     enable_intercom,
-    enable_i18n,
     enable_creditcard,
     enable_recent_tickets,
     enable_period_tickets,
