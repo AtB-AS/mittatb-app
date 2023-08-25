@@ -29,7 +29,7 @@ import {GlobalMessageContextEnum} from '@atb/global-messages';
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
 export type FromToRefType = {
-  fromToRef?: RefObject<TouchableOpacity>;
+  zonesRef?: RefObject<TouchableOpacity>;
   fromRef?: RefObject<TouchableOpacity>;
   toRef?: RefObject<TouchableOpacity>;
 };
@@ -104,7 +104,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   useEffect(() => {
     if (params.onFocusElement === 'from-to-selection') {
-      giveFocus(fromToInputSectionItemRef.current?.fromToRef);
+      giveFocus(fromToInputSectionItemRef.current?.zonesRef);
     } else if (params.onFocusElement === 'from-selection') {
       giveFocus(fromToInputSectionItemRef.current?.fromRef);
     } else if (params.onFocusElement === 'to-selection') {

@@ -51,9 +51,9 @@ export const ZonesSelection = forwardRef<FromToRefType, ZonesSelectionProps>(
     const styles = useStyles();
     const {t, language} = useTranslation();
 
-    const fromToRef = useRef<TouchableOpacity>(null);
+    const zonesRef = useRef<TouchableOpacity>(null);
     useImperativeHandle(ref, () => ({
-      fromToRef,
+      zonesRef,
     }));
 
     const accessibility: AccessibilityProps = {
@@ -83,7 +83,7 @@ export const ZonesSelection = forwardRef<FromToRefType, ZonesSelectionProps>(
         </ThemeText>
         <Section {...accessibility}>
           <GenericClickableSectionItem
-            ref={fromToRef}
+            ref={zonesRef}
             onPress={() =>
               onSelect({
                 fromTariffZone,
