@@ -6,7 +6,7 @@ import React, {
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useSubscribeToAuthUserChange} from '@atb/auth/use-subscribe-to-auth-user-change';
+import {useSubscribeToAuthUserChange} from './use-subscribe-to-auth-user-change';
 import {
   AuthenticationType,
   ConfirmationErrorCode,
@@ -15,16 +15,16 @@ import {
   VippsSignInErrorCode,
   AuthReducerAction,
 } from '@atb/auth/types';
-import {getAuthenticationType} from '@atb/auth/utils';
-import {useFetchCustomerDataAfterUserChanged} from '@atb/auth/use-fetch-customer-data-after-user-changed';
+import {getAuthenticationType} from './utils';
+import {useFetchCustomerDataAfterUserChanged} from './use-fetch-customer-data-after-user-changed';
 import {
   authConfirmCode,
   authSignInWithCustomToken,
   authSignInWithPhoneNumber,
   startAccountCreationFinishedCheck,
 } from './auth-utils';
-import {useUpdateAuthLanguageOnChange} from '@atb/auth/use-update-auth-language-on-change';
-import {useCheckIfAccountCreationFinished} from '@atb/auth/use-check-if-account-creation-finished';
+import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
+import {useCheckIfAccountCreationFinished} from './use-check-if-account-creation-finished';
 
 type AuthReducerState = {
   user: FirebaseAuthTypes.User | null;

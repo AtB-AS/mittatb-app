@@ -1,5 +1,5 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {AuthenticationType} from '@atb/auth/types';
+import {AuthenticationType} from './types';
 
 export const getAuthenticationType = (
   user: FirebaseAuthTypes.User | null,

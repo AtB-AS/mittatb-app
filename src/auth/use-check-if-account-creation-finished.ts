@@ -1,7 +1,7 @@
 import {Dispatch, useEffect} from 'react';
-import {startAccountCreationFinishedCheck} from '@atb/auth/auth-utils';
+import {startAccountCreationFinishedCheck} from './auth-utils';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {AuthReducerAction, AuthStatus} from '@atb/auth/types';
+import {AuthReducerAction, AuthStatus} from './types';
 
 export const useCheckIfAccountCreationFinished = (
   user: FirebaseAuthTypes.User | null,
