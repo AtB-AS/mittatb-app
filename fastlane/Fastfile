@@ -300,7 +300,7 @@ platform :android do
       })
     sh("cp", "../android/app/build/outputs/apk/#{build_type}/app-#{build_type}.apk", "../")
     sh("mkdir", "-p", "../bundle")
-    sh("cp", "../android/app/build/generated/assets/createBundle{build_type}JsAndAssets/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/createBundle#{build_type}JsAndAssets/index.android.bundle", "../bundle")
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
@@ -323,7 +323,7 @@ platform :android do
       })
     sh("cp", "../android/app/build/outputs/bundle/#{build_type}/app-#{build_type}.aab", "../")
     sh("mkdir", "-p", "../bundle")
-    sh("cp", "../android/app/build/generated/assets/createBundle{build_type}JsAndAssets/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/createBundle#{build_type}JsAndAssets/index.android.bundle", "../bundle")
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
