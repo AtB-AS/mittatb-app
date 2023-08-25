@@ -82,21 +82,27 @@ export function EstimatedCallItem({
 
   const isTripCancelled = departure.cancellation;
 
-  const lineName = departure.destinationDisplay?.frontText;
-  const lineNumber = line?.publicCode;
+  const favouriteDepartureLine = {
+    ...line,
+    lineNumber: line?.publicCode,
+    lineName: departure.destinationDisplay?.frontText,
+  };
 
   const notices = getNoticesForEstimatedCall(departure);
 
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
     useOnMarkFavouriteDepartures(
-      {...line, lineNumber: lineNumber, lineName: lineName},
       quay,
       stopPlace,
       addedFavoritesVisibleOnDashboard,
     );
   return (
     <PressableOpacityOrView
-      onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
+      onClick={
+        mode === 'Favourite'
+          ? () => onMarkFavourite(favouriteDepartureLine)
+          : undefined
+      }
       style={styles.container}
       accessibilityLabel={
         mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
@@ -168,13 +174,15 @@ export function EstimatedCallItem({
           ) : null}
           {allowFavouriteSelection && (
             <FavouriteDepartureToggle
-              existingFavorite={existingFavorite}
+              existingFavorite={existingFavorite(favouriteDepartureLine)}
               onMarkFavourite={
-                mode === 'Departure' ? onMarkFavourite : undefined
+                mode === 'Departure'
+                  ? () => onMarkFavourite(favouriteDepartureLine)
+                  : undefined
               }
               toggleFavouriteAccessibilityLabel={
                 mode === 'Departure'
-                  ? toggleFavouriteAccessibilityLabel
+                  ? toggleFavouriteAccessibilityLabel(favouriteDepartureLine)
                   : undefined
               }
             />

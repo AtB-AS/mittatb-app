@@ -136,7 +136,9 @@ export function QuaySection({
            This is under its own 'isMinimized' as nesting section items in React
            fragment breaks the section separator.
            */
-          situations.map((s) => <SituationSectionItem situation={s} />)}
+          situations.map((s) => (
+            <SituationSectionItem key={s.id} situation={s} />
+          ))}
         {!isMinimized && (
           <FlatList
             ItemSeparatorComponent={SectionSeparator}
@@ -172,7 +174,7 @@ export function QuaySection({
               // ServiceJourney ID is not a unique key if a ServiceJourney
               // passes by the same stop several times, (e.g. Ringen in Oslo)
               // which is why it is used in combination with aimedDepartureTime.
-              item.serviceJourney?.id + item.aimedDepartureTime
+              item.serviceJourney.id + item.aimedDepartureTime
             }
             ListEmptyComponent={
               <>

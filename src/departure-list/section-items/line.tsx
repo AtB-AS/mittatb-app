@@ -70,15 +70,15 @@ export function LineItem({
   const {t, language} = useTranslation();
 
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
-    useOnMarkFavouriteDepartures(
-      {...group.lineInfo, id: group.lineInfo?.lineId},
-      quay,
-      stop,
-    );
+    useOnMarkFavouriteDepartures(quay, stop);
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
   }
+  const favouriteDepartureLine = {
+    ...group.lineInfo,
+    id: group.lineInfo?.lineId ?? '',
+  };
 
   const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
 
@@ -124,11 +124,11 @@ export function LineItem({
         </PressableOpacity>
         {mode === 'departures' && (
           <FavouriteDepartureToggle
-            existingFavorite={existingFavorite}
-            onMarkFavourite={onMarkFavourite}
-            toggleFavouriteAccessibilityLabel={
-              toggleFavouriteAccessibilityLabel
-            }
+            existingFavorite={existingFavorite(favouriteDepartureLine)}
+            onMarkFavourite={() => onMarkFavourite(favouriteDepartureLine)}
+            toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel(
+              favouriteDepartureLine,
+            )}
           />
         )}
       </View>
