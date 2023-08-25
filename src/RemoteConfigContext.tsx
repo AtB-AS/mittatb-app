@@ -1,9 +1,14 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import remoteConfig from '@react-native-firebase/remote-config';
 import {defaultRemoteConfig, getConfig, RemoteConfig} from './remote-config';
 import Bugsnag from '@bugsnag/react-native';
 
-import {useAppState} from './AppContext';
 import {FeedbackConfiguration} from '@atb/components/feedback';
 import {useInterval} from '@atb/utils/use-interval';
 
@@ -54,11 +59,9 @@ const useRetryIntervalWithBackoff = (): [number, () => void] => {
 export const RemoteConfigContextProvider: React.FC = ({children}) => {
   const [config, setConfig] = useState<RemoteConfig>(defaultRemoteConfig);
   const [fetchError, setFetchError] = useState(false);
-  const {isLoading: isLoadingAppState, newBuildSincePreviousLaunch} =
-    useAppState();
   const [retryInterval, incrementRetryInterval] = useRetryIntervalWithBackoff();
 
-  async function fetchConfig() {
+  const fetchConfig = useCallback(async () => {
     try {
       await remoteConfig().fetchAndActivate();
       const currentConfig = await getConfig();
@@ -70,7 +73,7 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
         const {userInfo} = e;
 
         if (userInfo.code === 'failure' || userInfo.fatal) {
-          if (config.enable_network_logging) {
+          if (defaultRemoteConfig.enable_network_logging) {
             Bugsnag.notify(e, function (event) {
               event.addMetadata('metadata', {userInfo});
               event.severity = 'info';
@@ -83,26 +86,16 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
         Bugsnag.notify(e as any);
       }
     }
-  }
+  }, []);
 
   useEffect(() => {
-    async function setupRemoteConfig() {
+    (async function setupRemoteConfig() {
       const configApi = remoteConfig();
-      await configApi.setConfigSettings({
-        minimumFetchIntervalMillis: 21600000, // 6 hours
-      });
+      await configApi.setConfigSettings({minimumFetchIntervalMillis: 21600000}); // 6 hours
       await configApi.setDefaults(defaultRemoteConfig);
-      if (newBuildSincePreviousLaunch) {
-        await refresh();
-      } else {
-        await fetchConfig();
-      }
-    }
-
-    if (!isLoadingAppState) {
-      setupRemoteConfig();
-    }
-  }, [isLoadingAppState, newBuildSincePreviousLaunch]);
+      await fetchConfig();
+    })();
+  }, [fetchConfig]);
 
   useInterval(
     () => {
@@ -110,22 +103,18 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
       incrementRetryInterval();
     },
     retryInterval,
-    undefined,
+    [fetchConfig],
     !fetchError,
   );
 
-  async function refresh() {
+  const refresh = useCallback(async () => {
     const configApi = remoteConfig();
     const {minimumFetchIntervalMillis} = configApi.settings;
-    await configApi.setConfigSettings({
-      minimumFetchIntervalMillis: 0,
-    });
+    await configApi.setConfigSettings({minimumFetchIntervalMillis: 0});
     await fetchConfig();
-    await configApi.setConfigSettings({
-      minimumFetchIntervalMillis,
-    });
+    await configApi.setConfigSettings({minimumFetchIntervalMillis});
     console.warn('Force-refreshed Remote Config');
-  }
+  }, [fetchConfig]);
 
   return (
     <RemoteConfigContext.Provider
