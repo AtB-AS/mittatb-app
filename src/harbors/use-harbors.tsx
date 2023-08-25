@@ -15,6 +15,7 @@ export const useHarbors = (fromHarborId?: string) => {
   const isError = harbors.isError || connections.isError;
   const error = fromHarborId ? connections.error : harbors.error;
   const isSuccess = fromHarborId ? connections.isSuccess : harbors.isSuccess;
+  const refetch = fromHarborId ? harbors.refetch : connections.refetch;
 
   const data = useMemo(() => {
     if (!fromHarborId) {
@@ -29,8 +30,6 @@ export const useHarbors = (fromHarborId?: string) => {
     // Add the extra stop places (override harbors) to the list of existing connections.
     return _.unionBy(connections.data ?? [], overrideHarbors, 'id');
   }, [fromHarborId, harbors.data, connections.data, overrides]);
-
-  const refetch = fromHarborId ? harbors.refetch : connections.refetch;
 
   return {
     isLoading,
