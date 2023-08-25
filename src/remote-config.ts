@@ -28,7 +28,6 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   flex_booking_number_of_days_available: number;
   enable_vipps_login: boolean;
-  enable_map_page: boolean;
   favourite_departures_poll_interval: number;
   new_favourites_info_url: string;
   enable_departures_v2_as_default: boolean;
@@ -85,7 +84,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   flex_booking_number_of_days_available: 7,
   enable_vipps_login: false,
-  enable_map_page: false,
   favourite_departures_poll_interval: 30000,
   new_favourites_info_url: '',
   enable_departures_v2_as_default: false,
@@ -188,10 +186,6 @@ export function getConfig(): RemoteConfig {
   const enable_vipps_login =
     values['enable_vipps_login']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_login;
-
-  const enable_map_tab =
-    values['enable_map_tab']?.asBoolean() ??
-    defaultRemoteConfig.enable_map_page;
 
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
@@ -328,7 +322,6 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     flex_booking_number_of_days_available,
     enable_vipps_login,
-    enable_map_page: enable_map_tab,
     favourite_departures_poll_interval,
     new_favourites_info_url,
     enable_departures_v2_as_default,

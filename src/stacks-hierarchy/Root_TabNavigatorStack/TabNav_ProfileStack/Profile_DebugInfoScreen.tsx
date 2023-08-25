@@ -30,7 +30,6 @@ import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {
-  useMapDebugOverride,
   useRealtimeMapDebugOverride,
 } from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
@@ -88,7 +87,6 @@ export const Profile_DebugInfoScreen = () => {
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
-  const mapDebugOverride = useMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
   const nonTransitTripSearchOverride = useNonTransitTripSearchDebugOverride();
@@ -318,12 +316,6 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable realtime positions in map."
               override={realtimeMapDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable map"
-              override={mapDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
