@@ -123,6 +123,16 @@ platform :ios do
     end
   end
 
+  desc 'Enable Apple pass presentation suppression entitlement'
+  lane :enable_pass_presentation_suppression_entitlement do
+    update_plist(
+      plist_path: "./ios/atb/AtB.entitlements",
+      block: proc do |plist|
+        plist['com.apple.developer.passkit.pass-presentation-suppression'] = true
+      end
+    )
+  end
+  
   # iOS Lanes
 
   desc 'Setup certificates'
