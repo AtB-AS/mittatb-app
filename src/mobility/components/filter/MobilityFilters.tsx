@@ -78,7 +78,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacings.medium,
     },
     filterGroup: {
-      marginBottom: theme.spacings.small,
+      marginBottom: theme.spacings.large,
     },
   };
 });
