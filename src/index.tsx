@@ -27,7 +27,7 @@ import {MobileTokenContextProvider} from '@atb/mobile-token';
 import {FeedbackQuestionsProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {Platform, UIManager} from 'react-native';
+import {LogBox, Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
@@ -37,6 +37,8 @@ configureAndStartBugsnag();
 MapboxGL.setAccessToken(MAPBOX_API_TOKEN);
 
 trackAppState();
+
+LogBox.ignoreLogs(['new NativeEventEmitter']);
 
 if (Platform.OS === 'android') {
   // Default seems to be True in later React Native versions,

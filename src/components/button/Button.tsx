@@ -5,14 +5,14 @@ import React, {useRef} from 'react';
 import {
   Animated,
   Easing,
+  PressableProps,
   StyleProp,
   TextStyle,
-  TouchableOpacity,
-  TouchableOpacityProps,
   View,
   ViewStyle,
 } from 'react-native';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -59,8 +59,9 @@ export type ButtonProps = {
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
+  style?: StyleProp<ViewStyle>;
 } & ButtonTypeAwareProps &
-  TouchableOpacityProps;
+  PressableProps;
 
 const DISABLED_OPACITY = 0.2;
 
@@ -160,7 +161,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     return (
       <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
-        <TouchableOpacity
+        <PressableOpacity
           style={[styleContainer, style]}
           onPress={disabled ? undefined : onPress}
           disabled={disabled}
@@ -189,7 +190,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
               <ThemeIcon fill={textColor} {...rightIcon} />
             </View>
           )}
-        </TouchableOpacity>
+        </PressableOpacity>
       </Animated.View>
     );
   },

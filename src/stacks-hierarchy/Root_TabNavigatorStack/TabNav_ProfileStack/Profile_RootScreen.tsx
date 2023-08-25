@@ -30,7 +30,6 @@ import {
 } from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
-import {useCopyWithOpacityFade} from '@atb/utils/use-copy-with-countdown';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, IS_QA_ENV} from '@env';
@@ -52,6 +51,7 @@ import {
 } from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
+import {ClickableCopy} from './components/ClickableCopy';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -74,28 +74,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
-  const {
-    setClipboard,
-    isAnimating: fadeIsAnimating,
-    FadeContainer: ClipboardFadeContainer,
-  } = useCopyWithOpacityFade(1500);
-
   const {setPreference} = usePreferences();
   const isDeparturesV2Enabled = useDeparturesV2Enabled();
 
   const {configurableLinks} = useFirestoreConfiguration();
-  const ticketingInfo = configurableLinks?.ticketingInfo
-    ? configurableLinks?.ticketingInfo
-    : undefined;
-  const termsInfo = configurableLinks?.termsInfo
-    ? configurableLinks?.termsInfo
-    : undefined;
-  const inspectionInfo = configurableLinks?.inspectionInfo
-    ? configurableLinks?.inspectionInfo
-    : undefined;
-  const refundInfo = configurableLinks?.refundInfo
-    ? configurableLinks?.refundInfo
-    : undefined;
+  const ticketingInfo = configurableLinks?.ticketingInfo;
+  const termsInfo = configurableLinks?.termsInfo;
+  const inspectionInfo = configurableLinks?.inspectionInfo;
+  const refundInfo = configurableLinks?.refundInfo;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
@@ -117,9 +103,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     }
   };
 
-  function copyInstallId() {
-    if (config?.installId) setClipboard(config.installId);
-  }
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
@@ -574,24 +557,25 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           <ThemeText>
             v{version} ({buildNumber})
           </ThemeText>
-          {config?.installId &&
-            (fadeIsAnimating ? (
-              <ClipboardFadeContainer>
-                <ScreenReaderAnnouncement
-                  message={t(ProfileTexts.installId.wasCopiedAlert)}
-                />
-                <ThemeText>
-                  ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
-                </ThemeText>
-              </ClipboardFadeContainer>
-            ) : (
-              <ThemeText
-                accessibilityHint={t(ProfileTexts.installId.a11yHint)}
-                onPress={copyInstallId}
-              >
+          {config?.installId && (
+            <ClickableCopy
+              successElement={
+                <>
+                  <ScreenReaderAnnouncement
+                    message={t(ProfileTexts.installId.wasCopiedAlert)}
+                  />
+                  <ThemeText>
+                    ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
+                  </ThemeText>
+                </>
+              }
+              copyContent={config.installId}
+            >
+              <ThemeText accessibilityHint={t(ProfileTexts.installId.a11yHint)}>
                 {t(ProfileTexts.installId.label)}: {config.installId}
               </ThemeText>
-            ))}
+            </ClickableCopy>
+          )}
         </View>
       </ScrollView>
       {isLoading && <ActivityIndicatorOverlay />}

@@ -24,14 +24,18 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
 import React from 'react';
 import {View} from 'react-native';
 import {
   getLineName,
   getNoticesForLeg,
+  getPublicCodeFromLeg,
   getTimeRepresentationType,
   isLegFlexibleTransport,
+  getLegBookingIsAvailable,
+  getLegRequiresBookingUrgently,
   significantWaitTime,
   significantWalkTime,
   TimeValues,
@@ -39,6 +43,8 @@ import {
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
 import {TripRow} from './TripRow';
+import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
+
 import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
@@ -48,6 +54,10 @@ import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ServiceJourneyMapInfoData_v3} from '@atb/api/types/serviceJourney';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
+import {useNow} from '@atb/utils/use-now';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
+import {FlexibleTransportBookingDetails} from './FlexibleTransportBookingDetails';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type TripSectionProps = {
@@ -87,6 +97,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
   const isFlexible = isLegFlexibleTransport(leg);
+  const timesAreApproximations = isFlexible;
   const legColor = useTransportationColor(
     isFlexible ? 'flex' : leg.mode,
     leg.line?.transportSubmode,
@@ -107,6 +118,27 @@ export const TripSection: React.FC<TripSectionProps> = ({
     leg.fromPlace.quay?.id,
     leg.toPlace.quay?.id,
   );
+
+  const publicCode = getPublicCodeFromLeg(leg);
+
+  const now = useNow(2500);
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const bookingIsAvailable = getLegBookingIsAvailable(
+    leg,
+    now,
+    flex_booking_number_of_days_available,
+  );
+  const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
+
+  const atbAuthorityId = 'ATB:Authority:2';
+  const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;
+
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  function openBookingDetails() {
+    openBottomSheet(() => (
+      <FlexibleTransportBookingDetails leg={leg} close={closeBottomSheet} />
+    ));
+  }
 
   const sectionOutput = (
     <>
@@ -134,10 +166,17 @@ export const TripSection: React.FC<TripSectionProps> = ({
               'start',
               getPlaceName(leg.fromPlace),
               startTimes,
+              timesAreApproximations,
               language,
               t,
             )}
-            rowLabel={<Time timeValues={startTimes} roundingMethod="floor" />}
+            rowLabel={
+              <Time
+                timeValues={startTimes}
+                roundingMethod="floor"
+                timeIsApproximation={timesAreApproximations}
+              />
+            }
             onPress={() => handleQuayPress(leg.fromPlace.quay)}
             testID="fromPlace"
           >
@@ -153,20 +192,35 @@ export const TripSection: React.FC<TripSectionProps> = ({
         ) : (
           <TripRow
             testID="transportationLeg"
-            accessibilityLabel={t(
-              TripDetailsTexts.trip.leg.transport.a11ylabel(
-                t(getTranslatedModeName(leg.mode)),
-                getLineName(leg),
-              ),
-            )}
+            accessibilityLabel={
+              t(
+                TripDetailsTexts.trip.leg.transport.a11ylabel(
+                  t(getTranslatedModeName(leg.mode)),
+                  getLineName(leg),
+                ),
+              ) +
+              (isFlexible
+                ? screenReaderPause +
+                  t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)
+                : '')
+            }
             rowLabel={
               <TransportationIconBox
-                mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
+                mode={isFlexible ? 'flex' : leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
             }
           >
             <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
+            {isFlexible && (
+              <ThemeText
+                color="secondary"
+                type="body__secondary"
+                style={style.onDemandTransportLabel}
+              >
+                {t(TripDetailsTexts.flexibleTransport.onDemandTransportLabel)}
+              </ThemeText>
+            )}
           </TripRow>
         )}
         {leg.situations.map((situation) => (
@@ -177,11 +231,45 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <SituationMessageBox noStatusIcon={true} situation={situation} />
           </TripRow>
         ))}
-        {notices.map((notice) => (
-          <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+        {notices.map((notice, i) => (
+          <TripRow key={i} rowLabel={<ThemeIcon svg={Info} />}>
             <MessageBox noStatusIcon={true} type="info" message={notice.text} />
           </TripRow>
         ))}
+        {isFlexible && (
+          <TripRow
+            rowLabel={
+              <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
+            }
+          >
+            <FlexibleTransportMessageBox
+              leg={leg}
+              publicCode={publicCode}
+              now={now}
+              showStatusIcon={false}
+              onPressConfig={
+                legAuthorityIsAtB
+                  ? {
+                      text: t(
+                        TripDetailsTexts.flexibleTransport.needsBookingWhatIsThis(
+                          publicCode,
+                        ),
+                      ),
+                      action: openBookingDetails,
+                    }
+                  : undefined
+              }
+            />
+          </TripRow>
+        )}
+        {isFlexible && bookingIsAvailable && (
+          <View style={style.flexBookingOptions}>
+            <TripRow accessible={false}>
+              <FlexibleTransportBookingOptions leg={leg} />
+            </TripRow>
+          </View>
+        )}
+
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
             <MessageBox
@@ -211,7 +299,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
                 svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
                 size="small"
                 style={style.realtimeIcon}
-              ></ThemeIcon>
+              />
               <ThemeText
                 style={style.realtimeText}
                 type="body__secondary"
@@ -232,10 +320,17 @@ export const TripSection: React.FC<TripSectionProps> = ({
               'end',
               getPlaceName(leg.toPlace),
               endTimes,
+              timesAreApproximations,
               language,
               t,
             )}
-            rowLabel={<Time timeValues={endTimes} roundingMethod="ceil" />}
+            rowLabel={
+              <Time
+                timeValues={endTimes}
+                roundingMethod="ceil"
+                timeIsApproximation={timesAreApproximations}
+              />
+            }
             onPress={() => handleQuayPress(leg.toPlace.quay)}
             testID="toPlace"
           >
@@ -257,9 +352,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
               noStatusIcon={true}
               type="info"
               message={t(
-                leg.line.publicCode
+                publicCode
                   ? TripDetailsTexts.messages.interchange(
-                      leg.line.publicCode,
+                      publicCode,
                       interchangeDetails.publicCode,
                       interchangeDetails.fromPlace,
                     )
@@ -416,6 +511,7 @@ function getStopRowA11yTranslated(
   key: 'start' | 'end',
   placeName: string,
   values: TimeValues,
+  timesAreApproximations: boolean,
   language: Language,
   t: TranslateFunction,
 ): string {
@@ -433,6 +529,7 @@ function getStopRowA11yTranslated(
         TripDetailsTexts.trip.leg[key].a11yLabel.noRealTime(
           placeName,
           aimedTime,
+          timesAreApproximations,
         ),
       );
     case 'no-significant-difference':
@@ -445,6 +542,7 @@ function getStopRowA11yTranslated(
           placeName,
           time,
           aimedTime,
+          timesAreApproximations,
         ),
       );
   }
@@ -463,6 +561,12 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   legLineName: {
     fontWeight: 'bold',
+  },
+  onDemandTransportLabel: {
+    paddingTop: theme.spacings.xSmall,
+  },
+  flexBookingOptions: {
+    paddingVertical: theme.spacings.medium / 2,
   },
   realtime: {
     flexDirection: 'row',

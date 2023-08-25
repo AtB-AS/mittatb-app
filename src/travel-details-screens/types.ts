@@ -1,3 +1,5 @@
+import {TripPattern} from '@atb/api/types/trips';
+
 export type ServiceJourneyDeparture = {
   serviceJourneyId: string;
   date: string;
@@ -6,3 +8,5 @@ export type ServiceJourneyDeparture = {
   toQuayId?: string;
   isTripCancelled?: boolean;
 };
+
+export type TripPatternWithKey = TripPattern & {key: string};

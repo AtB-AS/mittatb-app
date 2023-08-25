@@ -39,16 +39,17 @@ jobs:
         env:
           ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
-      - name: install node v16
+      - name: install node v18
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - name: Install node_modules
         run: yarn install --frozen-lockfile
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7.6
+          cache-version: 1
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Get Github-release data
         if: matrix.org == 'atb'

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Linking,
-  StyleProp,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -13,9 +7,10 @@ import MessageBoxTexts from '@atb/translations/components/MessageBox';
 import {useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {TouchableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 /**
  * Configuration for how the onPress on the message box should work. The
@@ -27,7 +22,7 @@ import {screenReaderPause} from '@atb/components/text';
  * "Read more at atb.no" and "Show details" as they all work well with the
  * prefix.
  */
-type OnPressConfig = {
+export type OnPressConfig = {
   text: string;
 } & ({action: () => void} | {url: string});
 
@@ -71,7 +66,7 @@ export const MessageBox = ({
     .join(screenReaderPause);
 
   return (
-    <TouchableOpacityOrView
+    <PressableOpacityOrView
       onClick={onPress}
       style={[styles.container, colorStyle, style]}
       accessible={false}
@@ -119,7 +114,7 @@ export const MessageBox = ({
       </View>
       {onDismiss && (
         <View>
-          <TouchableOpacity
+          <PressableOpacity
             onPress={onDismiss}
             accessible={true}
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
@@ -127,10 +122,10 @@ export const MessageBox = ({
             hitSlop={insets.all(theme.spacings.medium)}
           >
             <ThemeIcon fill={textColor} svg={Close} />
-          </TouchableOpacity>
+          </PressableOpacity>
         </View>
       )}
-    </TouchableOpacityOrView>
+    </PressableOpacityOrView>
   );
 };
 
@@ -138,6 +133,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
+    flexDirection: 'row',
+  },
+  contentContainer: {
     flexDirection: 'row',
   },
   icon: {

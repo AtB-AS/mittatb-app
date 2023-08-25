@@ -5,7 +5,7 @@ import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import React, {useMemo} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {ErrorType} from '@atb/api/utils';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -18,6 +18,7 @@ import {useReverseGeocoder} from '@atb/geocoder';
 import {coordinatesDistanceInMetres} from '@atb/utils/location';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {Coordinates} from '@atb/utils/coordinates';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   coordinates?: Coordinates;
@@ -56,7 +57,7 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{flex: 1}} onPress={onPress}>
+      <PressableOpacity style={{flex: 1}} onPress={onPress}>
         <View style={styles.innerContainer}>
           <View style={styles.locationContainer}>
             <Icon
@@ -74,7 +75,7 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
             </View>
           )}
         </View>
-      </TouchableOpacity>
+      </PressableOpacity>
     </View>
   );
 };

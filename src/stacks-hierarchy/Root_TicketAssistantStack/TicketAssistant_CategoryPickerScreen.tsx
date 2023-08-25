@@ -1,4 +1,4 @@
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 
 import {
@@ -20,6 +20,7 @@ import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -146,7 +147,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
               );
               return (
                 <View key={index} style={styles.a11yCategoryCards}>
-                  <TouchableOpacity
+                  <PressableOpacity
                     onPress={() => {
                       setCurrentlyOpen(index);
                       navigation.navigate('TicketAssistant_FrequencyScreen');
@@ -175,7 +176,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                         {description}
                       </ThemeText>
                     </View>
-                  </TouchableOpacity>
+                  </PressableOpacity>
                 </View>
               );
             })}
