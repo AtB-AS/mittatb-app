@@ -9,16 +9,25 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavorites} from '@atb/favorites';
+import {useFavorites, useOnMarkFavouriteDepartures} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import {EstimatedCallItem} from './EstimatedCallItem';
+import {
+  EstimatedCallItem,
+  getA11yDeparturesLabel,
+  getLineA11yLabel,
+} from './EstimatedCallItem';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
+import {
+  getSvgForMostCriticalSituationOrNotice,
+  isSituationValidAtDate,
+  SituationSectionItem,
+} from '@atb/situations';
+import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -37,7 +46,7 @@ type QuaySectionProps = {
   ) => void;
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
-  allowFavouriteSelection: boolean;
+  showFavorites: boolean;
   searchDate?: string | Date;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
@@ -59,7 +68,7 @@ export function QuaySection({
   navigateToDetails,
   stopPlace,
   showOnlyFavorites,
-  allowFavouriteSelection,
+  showFavorites,
   addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
@@ -68,7 +77,7 @@ export function QuaySection({
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
 
   const departuresToDisplay =
     mode === 'Favourite'
@@ -81,6 +90,13 @@ export function QuaySection({
         !favoriteDepartures.find((favorite) => quay.id === favorite.quayId),
     );
   }, [showOnlyFavorites]);
+
+  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
+    useOnMarkFavouriteDepartures(
+      quay,
+      stopPlace,
+      addedFavoritesVisibleOnDashboard,
+    );
 
   const hasMoreItemsThanDisplayLimit =
     departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
@@ -157,16 +173,80 @@ export function QuaySection({
                 testID={'departureItem' + index}
               >
                 <EstimatedCallItem
-                  departure={departure}
-                  testID={'departureItem' + index}
-                  quay={quay}
-                  stopPlace={stopPlace}
-                  navigateToDetails={navigateToDetails}
-                  addedFavoritesVisibleOnDashboard={
-                    addedFavoritesVisibleOnDashboard
+                  isTripCancelled={departure.cancellation}
+                  text={departure.destinationDisplay?.frontText ?? ''}
+                  isRealtime={departure.realtime}
+                  onPress={() => {
+                    if (mode === 'Favourite') {
+                      onMarkFavourite({
+                        ...departure.serviceJourney.line,
+                        lineNumber: departure.serviceJourney.line.publicCode,
+                        lineName: departure.destinationDisplay?.frontText,
+                      });
+                    } else if (navigateToDetails) {
+                      navigateToDetails(
+                        departure.serviceJourney.id,
+                        departure.date,
+                        departure.aimedDepartureTime,
+                        departure.quay.id,
+                        departure.cancellation,
+                      );
+                    }
+                  }}
+                  accessibilityHint={
+                    mode === 'Favourite'
+                      ? t(DeparturesTexts.a11yMarkFavouriteHint)
+                      : t(DeparturesTexts.a11yViewDepartureDetailsHint)
                   }
-                  allowFavouriteSelection={allowFavouriteSelection}
-                  mode={mode}
+                  linePublicCode={departure.serviceJourney.line.publicCode}
+                  transportMode={departure.serviceJourney.line.transportMode}
+                  transportSubmode={
+                    departure.serviceJourney.line.transportSubmode
+                  }
+                  testID={'departureItem' + index}
+                  accessibilityLabel={
+                    mode === 'Favourite'
+                      ? getLineA11yLabel(departure, t)
+                      : getA11yDeparturesLabel(
+                          departure,
+                          departure.notices,
+                          t,
+                          language,
+                        )
+                  }
+                  existingFavorite={existingFavorite({
+                    ...departure.serviceJourney.line,
+                    lineNumber: departure.serviceJourney.line.publicCode,
+                    lineName: departure.destinationDisplay?.frontText,
+                  })}
+                  aimedTime={departure.aimedDepartureTime}
+                  expectedTime={departure.expectedDepartureTime}
+                  showFavorite={showFavorites}
+                  onPressFavorite={() =>
+                    mode === 'Departure'
+                      ? onMarkFavourite({
+                          ...departure.serviceJourney.line,
+                          lineNumber: departure.serviceJourney.line.publicCode,
+                          lineName: departure.destinationDisplay?.frontText,
+                        })
+                      : undefined
+                  }
+                  favoriteAccessibilityLabel={
+                    mode === 'Departure'
+                      ? toggleFavouriteAccessibilityLabel(
+                          departure.serviceJourney.line,
+                        )
+                      : undefined
+                  }
+                  noticeSvg={
+                    mode !== 'Favourite'
+                      ? getSvgForMostCriticalSituationOrNotice(
+                          departure.situations,
+                          getNoticesForEstimatedCall(departure),
+                          departure.cancellation,
+                        )
+                      : undefined
+                  }
                 />
               </GenericSectionItem>
             )}

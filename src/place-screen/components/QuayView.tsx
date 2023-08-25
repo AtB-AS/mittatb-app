@@ -136,7 +136,7 @@ export function QuayView({
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
-          allowFavouriteSelection={true}
+          showFavorites={true}
           searchDate={searchStartTime}
           mode={mode}
         />

@@ -1,195 +1,122 @@
-import React from 'react';
-import {View} from 'react-native';
+import {EstimatedCall} from '@atb/api/types/departures';
+import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
+import {
+  AnyMode,
+  AnySubMode,
+  getTransportModeSvg,
+} from '@atb/components/icon-box';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeText} from '@atb/components/text';
-import {getTransportModeSvg} from '@atb/components/icon-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {FavoriteDeparture, FavouriteDepartureToggle} from '@atb/favorites';
+import {StoredType} from '@atb/favorites/storage';
+import {getSituationOrNoticeA11yLabel} from '@atb/situations';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   CancelledDepartureTexts,
   dictionary,
-  FavoriteDeparturesTexts,
   Language,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {getTimeRepresentationType} from '@atb/travel-details-screens/utils';
 import {
   formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
   formatToClockOrRelativeMinutes,
   formatToSimpleDate,
 } from '@atb/utils/date';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {
-  TransportMode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
-import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {StyleSheet, useTheme} from '@atb/theme';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {isToday, parseISO} from 'date-fns';
-import {
-  FavouriteDepartureToggle,
-  useOnMarkFavouriteDepartures,
-} from '@atb/favorites';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
+import React from 'react';
+import {View} from 'react-native';
 import {SvgProps} from 'react-native-svg';
-import {
-  getSituationOrNoticeA11yLabel,
-  getSvgForMostCriticalSituationOrNotice,
-} from '@atb/situations';
-import {
-  getNoticesForEstimatedCall,
-  getTimeRepresentationType,
-} from '@atb/travel-details-screens/utils';
-import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
-import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type EstimatedCallItemProps = {
-  departure: EstimatedCall;
+  text: string;
+  accessibilityLabel: string;
+  accessibilityHint: string;
+  onPress: () => void;
   testID: string;
-  quay: Quay;
-  stopPlace: StopPlace;
-  navigateToDetails?: (
-    serviceJourneyId: string,
-    serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
-    isTripCancelled?: boolean,
-  ) => void;
-  allowFavouriteSelection: boolean;
-  addedFavoritesVisibleOnDashboard?: boolean;
-  mode: StopPlacesMode;
+  linePublicCode?: string;
+  transportMode?: AnyMode;
+  transportSubmode?: AnySubMode;
+  noticeSvg?(props: SvgProps): JSX.Element;
+  isRealtime?: boolean;
+  expectedTime?: string;
+  aimedTime?: string;
+  isTripCancelled: boolean;
+  showFavorite: boolean;
+  existingFavorite: StoredType<FavoriteDeparture> | undefined;
+  favoriteAccessibilityLabel?: string;
+  onPressFavorite?: () => void;
 };
 
 export function EstimatedCallItem({
-  departure,
+  text,
+  accessibilityLabel,
+  accessibilityHint,
+  onPress,
   testID,
-  quay,
-  stopPlace,
-  navigateToDetails,
-  allowFavouriteSelection,
-  addedFavoritesVisibleOnDashboard,
-  mode,
+  linePublicCode,
+  transportMode,
+  transportSubmode,
+  noticeSvg,
+  isRealtime,
+  expectedTime,
+  aimedTime,
+  isTripCancelled,
+  showFavorite,
+  existingFavorite,
+  favoriteAccessibilityLabel,
+  onPressFavorite,
 }: EstimatedCallItemProps): JSX.Element {
-  const {t, language} = useTranslation();
   const styles = useStyles();
 
-  const line = departure.serviceJourney?.line;
-
-  const isTripCancelled = departure.cancellation;
-
-  const favouriteDepartureLine = {
-    ...line,
-    lineNumber: line?.publicCode,
-    lineName: departure.destinationDisplay?.frontText,
-  };
-
-  const notices = getNoticesForEstimatedCall(departure);
-
-  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
-    useOnMarkFavouriteDepartures(
-      quay,
-      stopPlace,
-      addedFavoritesVisibleOnDashboard,
-    );
   return (
-    <PressableOpacityOrView
-      onClick={
-        mode === 'Favourite'
-          ? () => onMarkFavourite(favouriteDepartureLine)
-          : undefined
-      }
+    <PressableOpacity
+      onPress={onPress}
       style={styles.container}
-      accessibilityLabel={
-        mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
-      }
-      accessibilityHint={
-        mode === 'Favourite'
-          ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
-          : undefined
-      }
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
     >
-      <PressableOpacity
-        style={styles.actionableItem}
-        disabled={!navigateToDetails}
-        onPress={() => {
-          if (navigateToDetails && departure?.serviceJourney) {
-            navigateToDetails(
-              departure.serviceJourney?.id,
-              departure.date,
-              departure.aimedDepartureTime,
-              departure.quay?.id,
-              departure.cancellation,
-            );
-          }
-        }}
-        accessible={!!navigateToDetails}
-        importantForAccessibility={!!navigateToDetails ? 'yes' : 'no'}
-        accessibilityHint={
-          navigateToDetails
-            ? t(DeparturesTexts.a11yViewDepartureDetailsHint)
-            : undefined
-        }
-        accessibilityLabel={
-          navigateToDetails
-            ? getA11yDeparturesLabel(departure, notices, t, language)
-            : undefined
-        }
-      >
-        <View style={styles.estimatedCallItem} testID={testID}>
-          <View style={styles.transportInfo}>
-            {line && (
-              <LineChip
-                publicCode={line.publicCode}
-                transportMode={line.transportMode}
-                transportSubmode={line.transportSubmode}
-                icon={
-                  mode !== 'Favourite'
-                    ? getSvgForMostCriticalSituationOrNotice(
-                        departure.situations,
-                        notices,
-                        departure.cancellation,
-                      )
-                    : undefined
-                }
-                testID={testID}
-              />
-            )}
-            <ThemeText style={styles.lineName} testID={testID + 'Name'}>
-              {departure.destinationDisplay?.frontText}
-            </ThemeText>
-          </View>
-          {mode === 'Departure' || mode === 'Map' ? (
-            <DepartureTime
-              isRealtime={departure.realtime}
-              isTripCancelled={isTripCancelled}
-              expectedTime={departure.expectedDepartureTime}
-              aimedTime={departure.aimedDepartureTime}
+      <View style={styles.estimatedCallItem} testID={testID}>
+        <View style={styles.transportInfo}>
+          {(linePublicCode || transportMode) && (
+            <LineChip
+              publicCode={linePublicCode}
+              transportMode={transportMode}
+              transportSubmode={transportSubmode}
+              icon={noticeSvg}
               testID={testID}
             />
-          ) : null}
-          {allowFavouriteSelection && (
-            <FavouriteDepartureToggle
-              existingFavorite={existingFavorite(favouriteDepartureLine)}
-              onMarkFavourite={
-                mode === 'Departure'
-                  ? () => onMarkFavourite(favouriteDepartureLine)
-                  : undefined
-              }
-              toggleFavouriteAccessibilityLabel={
-                mode === 'Departure'
-                  ? toggleFavouriteAccessibilityLabel(favouriteDepartureLine)
-                  : undefined
-              }
-            />
           )}
+          <ThemeText style={styles.lineName} testID={testID + 'Name'}>
+            {text}
+          </ThemeText>
         </View>
-      </PressableOpacity>
-    </PressableOpacityOrView>
+        {aimedTime && expectedTime && isRealtime !== undefined ? (
+          <DepartureTime
+            isRealtime={isRealtime}
+            isTripCancelled={isTripCancelled}
+            expectedTime={expectedTime}
+            aimedTime={aimedTime}
+            testID={testID}
+          />
+        ) : null}
+        {showFavorite && (
+          <FavouriteDepartureToggle
+            existingFavorite={existingFavorite}
+            onMarkFavourite={onPressFavorite}
+            toggleFavouriteAccessibilityLabel={favoriteAccessibilityLabel}
+          />
+        )}
+      </View>
+    </PressableOpacity>
   );
 }
 
@@ -264,7 +191,7 @@ const DepartureTime = ({
   }
 };
 
-function getA11yDeparturesLabel(
+export function getA11yDeparturesLabel(
   departure: EstimatedCall,
   notices: NoticeFragment[],
   t: TranslateFunction,
@@ -326,7 +253,10 @@ function getA11yDeparturesLabel(
   } ${a11yDateInfo}`;
 }
 
-function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
+export function getLineA11yLabel(
+  departure: EstimatedCall,
+  t: TranslateFunction,
+) {
   const line = departure.serviceJourney?.line;
   const a11yLine = line?.publicCode
     ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
@@ -339,8 +269,8 @@ function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
 
 type LineChipProps = {
   publicCode?: string;
-  transportMode?: TransportMode;
-  transportSubmode?: TransportSubmode;
+  transportMode?: AnyMode;
+  transportSubmode?: AnySubMode;
   icon?: (props: SvgProps) => JSX.Element;
   testID?: string;
 };
@@ -357,11 +287,11 @@ function LineChip({
   const {theme} = useTheme();
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
   const transportColor = useTransportationColor(
-    transportMode as Mode_v2 | undefined,
+    transportMode,
     transportSubmode,
   );
   const transportTextColor = useTransportationColor(
-    transportMode as Mode_v2 | undefined,
+    transportMode,
     transportSubmode,
     'text',
   );
@@ -393,9 +323,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
-  actionableItem: {
     flex: 1,
   },
   estimatedCallItem: {
