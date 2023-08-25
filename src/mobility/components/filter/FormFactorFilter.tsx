@@ -40,7 +40,7 @@ export const FormFactorFilter = ({
       <ThemeText style={filterStyle.sectionHeader} type={'body__secondary'}>
         {t(MobilityTexts.formFactor(formFactor))}
       </ThemeText>
-      <Section style={style}>
+      <Section>
         {operators.length !== 1 && (
           <ToggleSectionItem
             text={t(MobilityTexts.filter.selectAll)}

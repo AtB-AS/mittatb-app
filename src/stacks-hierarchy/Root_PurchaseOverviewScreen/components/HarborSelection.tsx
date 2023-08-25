@@ -3,7 +3,7 @@ import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useRef} from 'react';
-import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
@@ -21,10 +21,7 @@ type StopPlaceSelectionProps = {
 const FROM = 'from';
 const TO = 'to';
 
-export const HarborSelection = forwardRef<
-  TouchableOpacity,
-  StopPlaceSelectionProps
->(
+export const HarborSelection = forwardRef<any, StopPlaceSelectionProps>(
   (
     {
       fareProductTypeConfig,
@@ -91,15 +88,12 @@ type HarborSelectionItemProps = {
   fromOrTo: typeof FROM | typeof TO;
 };
 
-const HarborSelectionItem = forwardRef<
-  TouchableOpacity,
-  HarborSelectionItemProps
->(
+const HarborSelectionItem = forwardRef<any, HarborSelectionItemProps>(
   (
     {harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps,
     harborInputSectionItemRef,
   ) => {
-    const itemRef = useRef<TouchableOpacity>(null);
+    const itemRef = useRef<any>(null);
     const {t} = useTranslation();
     const styles = useStyles();
 

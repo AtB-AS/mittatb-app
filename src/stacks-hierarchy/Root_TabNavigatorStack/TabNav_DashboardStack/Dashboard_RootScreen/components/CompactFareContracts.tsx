@@ -38,11 +38,10 @@ export const CompactFareContracts: React.FC<Props> = ({
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 1000);
 
-  const {fareContracts} = useTicketingState();
+  const {fareContracts, customerProfile} = useTicketingState();
   const validFareContracts = filterValidRightNowFareContract(fareContracts);
 
   const {t} = useTranslation();
-  const {customerProfile} = useTicketingState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {
     deviceIsInspectable,
