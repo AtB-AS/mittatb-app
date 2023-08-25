@@ -1,6 +1,5 @@
 import React from 'react';
 import {lobot} from './';
-import {useRemoteConfig} from '../RemoteConfigContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
 export const AppLanguageProvider: React.FC = ({children}) => {
