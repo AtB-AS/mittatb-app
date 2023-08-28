@@ -31,7 +31,6 @@ export type RemoteConfig = {
   favourite_departures_poll_interval: number;
   new_favourites_info_url: string;
   enable_departures_v2_as_default: boolean;
-  enable_travel_search_filters: boolean;
   enable_new_travel_search: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
@@ -87,7 +86,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   favourite_departures_poll_interval: 30000,
   new_favourites_info_url: '',
   enable_departures_v2_as_default: false,
-  enable_travel_search_filters: false,
   enable_new_travel_search: false,
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
@@ -198,10 +196,6 @@ export function getConfig(): RemoteConfig {
   const enable_departures_v2_as_default =
     values['enable_departures_v2_as_default']?.asBoolean() ??
     defaultRemoteConfig.enable_departures_v2_as_default;
-
-  const enable_travel_search_filters =
-    values['enable_travel_search_filters']?.asBoolean() ??
-    defaultRemoteConfig.enable_travel_search_filters;
 
   const enable_new_travel_search =
     values['enable_new_travel_search']?.asBoolean() ??
@@ -325,7 +319,6 @@ export function getConfig(): RemoteConfig {
     favourite_departures_poll_interval,
     new_favourites_info_url,
     enable_departures_v2_as_default,
-    enable_travel_search_filters,
     enable_new_travel_search,
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map,

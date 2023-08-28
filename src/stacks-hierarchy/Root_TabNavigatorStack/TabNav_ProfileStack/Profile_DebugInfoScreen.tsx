@@ -25,7 +25,6 @@ import {useGlobalMessagesState} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
@@ -69,7 +68,6 @@ export const Profile_DebugInfoScreen = () => {
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
 
-  const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
   const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
   const flexibleTransportAccessModeDebugOverride = useDebugOverride(
     StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
@@ -274,12 +272,6 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Use Flexible on EgressMode"
               override={flexibleTransportEgressModeDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable travel search filter."
-              override={travelSearchDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
