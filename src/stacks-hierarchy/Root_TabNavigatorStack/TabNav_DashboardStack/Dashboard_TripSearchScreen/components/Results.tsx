@@ -14,7 +14,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 import {SearchTime} from '@atb/journey-date-picker';
-import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
+import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {getIsTooLateToBookTripPattern} from '@atb/travel-details-screens/utils';
@@ -100,11 +100,9 @@ export const Results: React.FC<Props> = ({
               departureTime={tripPattern.expectedStartTime}
               previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
-            <ResultItem
+            <MemoizedResultItem
               tripPattern={tripPattern}
-              onDetailsPressed={() => {
-                onDetailsPressed(tripPattern, i);
-              }}
+              onDetailsPressed={() => onDetailsPressed(tripPattern, i)}
               searchTime={searchTime}
               testID={'tripSearchSearchResult' + i}
               resultNumber={i + 1}

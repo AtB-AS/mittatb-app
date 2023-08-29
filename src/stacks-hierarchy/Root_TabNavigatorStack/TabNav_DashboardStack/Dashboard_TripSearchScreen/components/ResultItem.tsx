@@ -135,7 +135,7 @@ const ResultItemHeader: React.FC<{
   );
 };
 
-export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
+const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
   testID,
@@ -322,6 +322,8 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     </PressableOpacity>
   );
 };
+
+export const MemoizedResultItem = React.memo(ResultItem);
 
 const ResultItemFooter: React.FC<{
   tripPattern: TripPattern;

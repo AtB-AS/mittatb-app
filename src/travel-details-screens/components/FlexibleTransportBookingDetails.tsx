@@ -98,7 +98,7 @@ export const FlexibleTransportBookingDetails: React.FC<
                 const stepInstructionText = t(step);
                 return (
                   <View
-                    key={i}
+                    key={stepInstructionText}
                     style={style.step}
                     accessible={true}
                     accessibilityLabel={stepNumberText + stepInstructionText}
