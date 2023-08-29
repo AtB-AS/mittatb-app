@@ -11,9 +11,14 @@ import {
   Point,
   Position,
 } from 'geojson';
-import {Cluster, MapSelectionActionType, MapPadding} from './types';
+import {
+  Cluster,
+  MapSelectionActionType,
+  MapPadding,
+  ParkingType,
+} from './types';
 import distance from '@turf/distance';
-import {isVehicle} from '@atb/mobility/utils';
+import {isBicycle, isScooter} from '@atb/mobility/utils';
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -67,6 +72,10 @@ export const isClusterFeature = (
 
 export const isStopPlace = (f: Feature<Point>) =>
   f.properties?.entityType === 'StopPlace';
+
+export const isParkAndRide = (
+  f: Feature<Point>,
+): f is Feature<Point, ParkingType> => f.properties?.entityType === 'Parking';
 
 export const isFeatureCollection = (obj: unknown): obj is FeatureCollection =>
   typeof obj === 'object' &&
@@ -170,7 +179,7 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
 };
 
 export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  !isVehicle(entityFeature);
+  !isScooter(entityFeature) && !isBicycle(entityFeature);
 
 export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  !isVehicle(entityFeature);
+  !isScooter(entityFeature) && !isBicycle(entityFeature);

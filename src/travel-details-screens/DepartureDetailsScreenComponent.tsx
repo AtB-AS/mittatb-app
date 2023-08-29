@@ -27,7 +27,7 @@ import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React, {useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
@@ -47,6 +47,7 @@ import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -533,13 +534,14 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
       testID={testID}
+      style={styles.container}
     >
-      <View style={styles.container}>{child}</View>
-    </TouchableOpacity>
+      {child}
+    </PressableOpacity>
   );
 }
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({

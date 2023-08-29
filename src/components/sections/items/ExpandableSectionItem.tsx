@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {AccessibilityProps, TouchableOpacity, View} from 'react-native';
+import {AccessibilityProps, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
@@ -10,6 +10,7 @@ import {useSectionStyle} from '../use-section-style';
 
 import {animateNextChange} from '@atb/utils/animation';
 import {TextNames} from '@atb/theme/colors';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = SectionItemProps<
   {
@@ -83,7 +84,7 @@ export function ExpandableSectionItem({
         expanded: expanded,
       }}
     >
-      <TouchableOpacity
+      <PressableOpacity
         onPress={onPress}
         style={sectionStyle.spaceBetween}
         testID={testID}
@@ -93,7 +94,7 @@ export function ExpandableSectionItem({
           {text}
         </ThemeText>
         <ExpandIcon expanded={expanded} showText={showIconText} />
-      </TouchableOpacity>
+      </PressableOpacity>
       {expanded && 'expandContent' in props && (
         <View style={styles.expandContent}>{props.expandContent}</View>
       )}

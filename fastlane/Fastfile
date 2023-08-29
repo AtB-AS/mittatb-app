@@ -122,6 +122,16 @@ platform :ios do
       )
     end
   end
+
+  desc 'Enable Apple pass presentation suppression entitlement'
+  lane :enable_pass_presentation_suppression_entitlement do
+    update_plist(
+      plist_path: "./ios/atb/AtB.entitlements",
+      block: proc do |plist|
+        plist['com.apple.developer.passkit.pass-presentation-suppression'] = true
+      end
+    )
+  end
   
   # iOS Lanes
 
@@ -137,7 +147,7 @@ platform :ios do
       use_automatic_signing: false,
       path: "./ios/atb.xcodeproj"
     )
-    
+
     app_signing_identity_name, app_prov_profile_name, app_prov_profile_path = app_cert_info
 
     widget_prov_profile_name, widget_prov_profile_path = widget_cert_info
@@ -300,7 +310,7 @@ platform :android do
       })
     sh("cp", "../android/app/build/outputs/apk/#{build_type}/app-#{build_type}.apk", "../")
     sh("mkdir", "-p", "../bundle")
-    sh("cp", "../android/app/build/generated/assets/react/#{build_type}/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/createBundle#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 
@@ -323,7 +333,7 @@ platform :android do
       })
     sh("cp", "../android/app/build/outputs/bundle/#{build_type}/app-#{build_type}.aab", "../")
     sh("mkdir", "-p", "../bundle")
-    sh("cp", "../android/app/build/generated/assets/react/#{build_type}/index.android.bundle", "../bundle")
+    sh("cp", "../android/app/build/generated/assets/createBundle#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{build_type}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
   end
 

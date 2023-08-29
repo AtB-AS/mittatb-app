@@ -8,7 +8,8 @@ import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type LocationAndTariffZone = {
   location: SearchLocation;
@@ -37,7 +38,7 @@ export const VenueResults: React.FC<Props> = ({
         {locationsAndTariffZones.map(({location, tariffZone}, index) => (
           <View style={styles.rowContainer} key={location.id}>
             <View style={styles.tariffZoneButtonContainer}>
-              <TouchableOpacity
+              <PressableOpacity
                 accessible={true}
                 accessibilityLabel={
                   t(
@@ -75,7 +76,7 @@ export const VenueResults: React.FC<Props> = ({
                     )}
                   </ThemeText>
                 </View>
-              </TouchableOpacity>
+              </PressableOpacity>
             </View>
           </View>
         ))}

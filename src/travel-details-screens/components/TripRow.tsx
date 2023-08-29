@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, ViewProps, TouchableOpacity} from 'react-native';
+import {View, ViewProps} from 'react-native';
 import {StyleSheet} from '@atb/theme';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type TripRowProps = {
   rowLabel?: React.ReactNode;
@@ -28,9 +29,9 @@ export const TripRow: React.FC<TripRowProps> = ({
   );
   if (isClickable) {
     return (
-      <TouchableOpacity onPress={onPress} accessibilityRole="button" {...props}>
+      <PressableOpacity onPress={onPress} accessibilityRole="button" {...props}>
         <View style={rowStyles}>{rowContent}</View>
-      </TouchableOpacity>
+      </PressableOpacity>
     );
   }
   return (

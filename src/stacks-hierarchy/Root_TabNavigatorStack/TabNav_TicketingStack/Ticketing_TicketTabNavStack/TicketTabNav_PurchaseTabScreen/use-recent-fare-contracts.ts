@@ -125,17 +125,27 @@ const mapBackendRecentFareContracts = (
     recentFareContract.zones.slice(-1)[0],
   );
 
+  const pointToPointValidity = recentFareContract.point_to_point_validity;
+
+  const orderId = recentFareContract.order_id;
+
+  const fromId = pointToPointValidity?.fromPlace || fromTariffZone?.id;
+
+  const toId = pointToPointValidity?.toPlace || toTariffZone?.id;
+
   const id =
     preassignedFareProduct?.id +
-    fromTariffZone?.id +
-    toTariffZone?.id +
+    fromId +
+    toId +
     userProfilesWithCount.map((u) => u.id + u.count).join();
 
   return {
     id,
+    orderId,
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
+    pointToPointValidity,
     userProfilesWithCount,
   };
 };

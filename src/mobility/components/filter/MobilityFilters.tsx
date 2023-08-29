@@ -1,59 +1,69 @@
-import {ScooterFilter} from '@atb/mobility/components/filter/ScooterFilter';
-import {BikeFilter} from '@atb/mobility/components/filter/BikeFilter';
-import {CarFilter} from '@atb/mobility/components/filter/CarFilter';
-import {Section} from '@atb/components/sections';
-import React from 'react';
+import {FormFactorFilter} from '@atb/mobility/components/filter/FormFactorFilter';
+import React, {useState} from 'react';
 import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
 import {useIsCarSharingEnabled} from '@atb/mobility/use-car-sharing-enabled';
-import {OperatorFilterType} from '@atb/components/map';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  Bicycle,
+  Car,
+  Scooter,
+} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {FormFactorFilterType, MobilityMapFilterType} from '@atb/components/map';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type Props = {
-  scooters: OperatorFilterType | undefined;
-  cityBikeStations: OperatorFilterType | undefined;
-  carSharingStations: OperatorFilterType | undefined;
-  onScootersChanged: (operatorFilter: OperatorFilterType) => void;
-  onCityBikeStationsChanged: (operatorFilter: OperatorFilterType) => void;
-  onCarSharingStationsChanged: (operatorFilter: OperatorFilterType) => void;
+  filter: MobilityMapFilterType;
+  onFilterChanged: (filter: MobilityMapFilterType) => void;
 };
 
-export const MobilityFilters = ({
-  scooters,
-  cityBikeStations,
-  carSharingStations,
-  onScootersChanged,
-  onCityBikeStationsChanged,
-  onCarSharingStationsChanged,
-}: Props) => {
+export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
   const style = useStyle();
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const isCityBikesEnabled = useIsCityBikesEnabled();
   const isCarSharingEnabled = useIsCarSharingEnabled();
+  const [mobilityFilter, setMobilityFilter] =
+    useState<MobilityMapFilterType>(filter);
+
+  const onFormFactorFilterChanged =
+    (formFactor: FormFactor) => (filter: FormFactorFilterType) => {
+      const newFilter = {
+        ...mobilityFilter,
+        [formFactor]: filter,
+      };
+      setMobilityFilter(newFilter);
+      onFilterChanged(newFilter);
+    };
 
   return (
-    <Section>
+    <>
       {isVehiclesEnabled && (
-        <ScooterFilter
-          initialFilter={scooters}
-          onFilterChange={onScootersChanged}
+        <FormFactorFilter
+          style={style.filterGroup}
+          formFactor={FormFactor.Scooter}
+          icon={Scooter}
+          initialFilter={filter[FormFactor.Scooter]}
+          onFilterChange={onFormFactorFilterChanged(FormFactor.Scooter)}
         />
       )}
       {isCityBikesEnabled && (
-        <BikeFilter
+        <FormFactorFilter
           style={style.filterGroup}
-          initialFilter={cityBikeStations}
-          onFilterChange={onCityBikeStationsChanged}
+          formFactor={FormFactor.Bicycle}
+          icon={Bicycle}
+          initialFilter={filter[FormFactor.Bicycle]}
+          onFilterChange={onFormFactorFilterChanged(FormFactor.Bicycle)}
         />
       )}
       {isCarSharingEnabled && (
-        <CarFilter
-          style={style.filterGroup}
-          initialFilter={carSharingStations}
-          onFilterChange={onCarSharingStationsChanged}
+        <FormFactorFilter
+          formFactor={FormFactor.Car}
+          icon={Car}
+          initialFilter={filter[FormFactor.Car]}
+          onFilterChange={onFormFactorFilterChanged(FormFactor.Car)}
         />
       )}
-    </Section>
+    </>
   );
 };
 
@@ -68,7 +78,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacings.medium,
     },
     filterGroup: {
-      marginTop: theme.spacings.large,
+      marginBottom: theme.spacings.large,
     },
   };
 });

@@ -1,10 +1,11 @@
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Opinions} from './Feedback';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {StaticColorByType} from '@atb/theme/colors';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type GoodOrBadButtonProps = {
   opinion: Opinions;
@@ -24,7 +25,7 @@ export const GoodOrBadButton = ({
 
   return (
     <View style={styles.outerGoodOrBad}>
-      <TouchableOpacity
+      <PressableOpacity
         onPress={() =>
           setSelectedOpinion(checked ? Opinions.NotClickedYet : opinion)
         }
@@ -62,7 +63,7 @@ export const GoodOrBadButton = ({
             )}
           </View>
         </View>
-      </TouchableOpacity>
+      </PressableOpacity>
     </View>
   );
 };
