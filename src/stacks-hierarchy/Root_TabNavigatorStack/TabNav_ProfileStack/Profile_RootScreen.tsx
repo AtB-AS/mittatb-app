@@ -59,7 +59,7 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
+  const {privacy_policy_url, enable_ticketing} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
@@ -133,134 +133,127 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
         contentContainerStyle={style.scrollView}
         testID="profileHomeScrollView"
       >
-        {enable_login ? (
-          <Section withPadding>
-            <HeaderSectionItem
-              text={t(ProfileTexts.sections.account.heading)}
-            />
-            {authenticationType === 'phone' && (
-              <GenericSectionItem>
-                <ThemeText style={style.customerNumberHeading}>
-                  {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
-                </ThemeText>
-                <ThemeText type="body__secondary" color="secondary">
-                  {phoneNumber?.formatInternational()}
-                </ThemeText>
-              </GenericSectionItem>
-            )}
-            {customerNumber && (
-              <GenericSectionItem>
-                <ThemeText style={style.customerNumberHeading}>
-                  {t(ProfileTexts.sections.account.infoItems.customerNumber)}
-                </ThemeText>
-                <ThemeText
-                  type="body__secondary"
-                  color="secondary"
-                  accessibilityLabel={numberToAccessibilityString(
-                    customerNumber,
-                  )}
-                >
-                  {customerNumber}
-                </ThemeText>
-              </GenericSectionItem>
-            )}
+        <Section withPadding>
+          <HeaderSectionItem text={t(ProfileTexts.sections.account.heading)} />
+          {authenticationType === 'phone' && (
+            <GenericSectionItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {phoneNumber?.formatInternational()}
+              </ThemeText>
+            </GenericSectionItem>
+          )}
+          {customerNumber && (
+            <GenericSectionItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+              </ThemeText>
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                accessibilityLabel={numberToAccessibilityString(customerNumber)}
+              >
+                {customerNumber}
+              </ThemeText>
+            </GenericSectionItem>
+          )}
 
-            {authenticationType == 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.paymentOptions
-                    .label,
-                )}
-                onPress={() =>
-                  navigation.navigate('Profile_PaymentOptionsScreen')
-                }
-              />
-            )}
-
+          {authenticationType == 'phone' && (
             <LinkSectionItem
               text={t(
-                ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                ProfileTexts.sections.account.linkSectionItems.paymentOptions
                   .label,
               )}
-              onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
-              testID="ticketHistoryButton"
+              onPress={() =>
+                navigation.navigate('Profile_PaymentOptionsScreen')
+              }
             />
-            {authenticationType !== 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.login.label,
-                )}
-                onPress={() => {
-                  let screen: keyof RootStackParamList =
-                    'Root_LoginPhoneInputScreen';
-                  if (hasActiveFareContracts) {
-                    screen = 'Root_LoginActiveFareContractWarningScreen';
-                  } else if (enable_vipps_login) {
-                    screen = 'Root_LoginOptionsScreen';
-                  }
+          )}
 
-                  return navigation.navigate(screen, {});
-                }}
-                icon={<ThemeIcon svg={LogIn} />}
-                testID="loginButton"
-              />
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                .label,
             )}
-            {authenticationType === 'phone' && (
-              <LinkSectionItem
-                text={t(DeleteProfileTexts.header.title)}
-                onPress={() =>
-                  navigation.navigate('Profile_DeleteProfileScreen')
+            onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
+            testID="ticketHistoryButton"
+          />
+          {authenticationType !== 'phone' && (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.login.label,
+              )}
+              onPress={() => {
+                let screen: keyof RootStackParamList =
+                  'Root_LoginPhoneInputScreen';
+                if (hasActiveFareContracts) {
+                  screen = 'Root_LoginActiveFareContractWarningScreen';
+                } else if (enable_vipps_login) {
+                  screen = 'Root_LoginOptionsScreen';
                 }
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.logout.label,
-                )}
-                icon={<ThemeIcon svg={LogOut} />}
-                onPress={() =>
-                  destructiveAlert({
-                    alertTitleString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .confirmTitle,
-                    ),
-                    alertMessageString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .confirmMessage,
-                    ),
-                    cancelAlertString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .alert.cancel,
-                    ),
-                    confirmAlertString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .alert.confirm,
-                    ),
-                    destructiveArrowFunction: async () => {
-                      setIsLoading(true);
-                      try {
-                        // On logout we delete the user's token
-                        await wipeToken();
-                      } catch (err: any) {
-                        Bugsnag.notify(err);
-                      }
 
-                      try {
-                        await signOut();
-                      } catch (err: any) {
-                        Bugsnag.notify(err);
-                      } finally {
-                        setIsLoading(false);
-                      }
-                    },
-                  })
-                }
-                testID="logoutButton"
-              />
-            )}
-          </Section>
-        ) : null}
+                return navigation.navigate(screen, {});
+              }}
+              icon={<ThemeIcon svg={LogIn} />}
+              testID="loginButton"
+            />
+          )}
+          {authenticationType === 'phone' && (
+            <LinkSectionItem
+              text={t(DeleteProfileTexts.header.title)}
+              onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}
+            />
+          )}
+          {authenticationType === 'phone' && (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.logout.label,
+              )}
+              icon={<ThemeIcon svg={LogOut} />}
+              onPress={() =>
+                destructiveAlert({
+                  alertTitleString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout
+                      .confirmTitle,
+                  ),
+                  alertMessageString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout
+                      .confirmMessage,
+                  ),
+                  cancelAlertString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout.alert
+                      .cancel,
+                  ),
+                  confirmAlertString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout.alert
+                      .confirm,
+                  ),
+                  destructiveArrowFunction: async () => {
+                    setIsLoading(true);
+                    try {
+                      // On logout we delete the user's token
+                      await wipeToken();
+                    } catch (err: any) {
+                      Bugsnag.notify(err);
+                    }
+
+                    try {
+                      await signOut();
+                    } catch (err: any) {
+                      Bugsnag.notify(err);
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  },
+                })
+              }
+              testID="logoutButton"
+            />
+          )}
+        </Section>
+
         <Section withPadding>
           <HeaderSectionItem text={t(ProfileTexts.sections.settings.heading)} />
           {enable_ticketing ? (
@@ -310,15 +303,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             }
             testID="startScreenButton"
           />
-          {enable_i18n && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.language.label,
-              )}
-              onPress={() => navigation.navigate('Profile_LanguageScreen')}
-              testID="languageButton"
-            />
-          )}
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.language.label,
+            )}
+            onPress={() => navigation.navigate('Profile_LanguageScreen')}
+            testID="languageButton"
+          />
         </Section>
         <Section withPadding>
           <GenericSectionItem>

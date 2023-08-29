@@ -5,17 +5,9 @@ export type RemoteConfig = {
   enable_network_logging: boolean;
   enable_ticketing: boolean;
   enable_intercom: boolean;
-  enable_i18n: boolean;
-  enable_creditcard: boolean;
-  enable_recent_tickets: boolean;
   enable_period_tickets: boolean;
-  enable_login: boolean;
   feedback_questions: string;
   must_upgrade_ticketing: boolean;
-  news_enabled: boolean;
-  news_text: string;
-  news_link_text: string;
-  news_link_url: string;
   customer_service_url: string;
   customer_feedback_url: string;
   tripsSearch_target_number_of_initial_hits: number;
@@ -28,12 +20,9 @@ export type RemoteConfig = {
   flex_ticket_url: string;
   flex_booking_number_of_days_available: number;
   enable_vipps_login: boolean;
-  enable_map_page: boolean;
   favourite_departures_poll_interval: number;
   new_favourites_info_url: string;
   enable_departures_v2_as_default: boolean;
-  enable_travel_search_filters: boolean;
-  enable_new_travel_search: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
   vehicles_poll_interval: number;
@@ -62,17 +51,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_network_logging: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
-  enable_i18n: false,
-  enable_creditcard: false,
-  enable_recent_tickets: false,
   enable_period_tickets: false,
-  enable_login: true,
   feedback_questions: '',
   must_upgrade_ticketing: false,
-  news_enabled: false,
-  news_text: '',
-  news_link_text: 'Les mer',
-  news_link_url: '',
   customer_service_url: 'https://www.atb.no/kontakt/',
   customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
@@ -85,12 +66,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_ticket_url: '',
   flex_booking_number_of_days_available: 7,
   enable_vipps_login: false,
-  enable_map_page: false,
   favourite_departures_poll_interval: 30000,
   new_favourites_info_url: '',
   enable_departures_v2_as_default: false,
-  enable_travel_search_filters: false,
-  enable_new_travel_search: false,
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
   vehicles_poll_interval: 20000,
@@ -127,13 +105,6 @@ export function getConfig(): RemoteConfig {
     values['enable_network_logging']?.asBoolean() ?? true;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
   const enable_intercom = values['enable_intercom']?.asBoolean() ?? true;
-  const enable_i18n = values['enable_i18n']?.asBoolean() ?? false;
-  const enable_creditcard =
-    values['enable_creditcard']?.asBoolean() ??
-    defaultRemoteConfig.enable_creditcard;
-  const enable_recent_tickets =
-    values['enable_recent_tickets']?.asBoolean() ??
-    defaultRemoteConfig.enable_recent_tickets;
   const enable_period_tickets =
     values['enable_period_tickets']?.asBoolean() ??
     defaultRemoteConfig.enable_period_tickets;
@@ -146,17 +117,11 @@ export function getConfig(): RemoteConfig {
   const flex_booking_number_of_days_available =
     values['flex_booking_number_of_days_available']?.asNumber() ??
     defaultRemoteConfig.flex_booking_number_of_days_available;
-  const enable_login =
-    values['enable_login']?.asBoolean() ?? defaultRemoteConfig.enable_login;
   const feedback_questions =
     values['feedback_questions']?.asString() ??
     defaultRemoteConfig.feedback_questions;
   const must_upgrade_ticketing =
     values['must_upgrade_ticketing']?.asBoolean() ?? false;
-  const news_enabled = values['news_enabled']?.asBoolean() ?? false;
-  const news_text = values['news_text']?.asString() ?? '';
-  const news_link_text = values['news_link_text']?.asString() ?? 'Les mer';
-  const news_link_url = values['news_link_url']?.asString() ?? '';
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -189,10 +154,6 @@ export function getConfig(): RemoteConfig {
     values['enable_vipps_login']?.asBoolean() ??
     defaultRemoteConfig.enable_vipps_login;
 
-  const enable_map_tab =
-    values['enable_map_tab']?.asBoolean() ??
-    defaultRemoteConfig.enable_map_page;
-
   const favourite_departures_poll_interval =
     values['favourite_departures_poll_interval']?.asNumber() ??
     defaultRemoteConfig.favourite_departures_poll_interval;
@@ -204,14 +165,6 @@ export function getConfig(): RemoteConfig {
   const enable_departures_v2_as_default =
     values['enable_departures_v2_as_default']?.asBoolean() ??
     defaultRemoteConfig.enable_departures_v2_as_default;
-
-  const enable_travel_search_filters =
-    values['enable_travel_search_filters']?.asBoolean() ??
-    defaultRemoteConfig.enable_travel_search_filters;
-
-  const enable_new_travel_search =
-    values['enable_new_travel_search']?.asBoolean() ??
-    defaultRemoteConfig.enable_new_travel_search;
 
   const enable_from_travel_search_to_ticket =
     values['enable_from_travel_search_to_ticket']?.asBoolean() ??
@@ -305,17 +258,9 @@ export function getConfig(): RemoteConfig {
     enable_network_logging,
     enable_ticketing,
     enable_intercom,
-    enable_i18n,
-    enable_creditcard,
-    enable_recent_tickets,
     enable_period_tickets,
-    enable_login,
     feedback_questions,
     must_upgrade_ticketing,
-    news_enabled,
-    news_text,
-    news_link_url,
-    news_link_text,
     customer_service_url,
     customer_feedback_url,
     tripsSearch_target_number_of_initial_hits,
@@ -328,12 +273,9 @@ export function getConfig(): RemoteConfig {
     flex_ticket_url,
     flex_booking_number_of_days_available,
     enable_vipps_login,
-    enable_map_page: enable_map_tab,
     favourite_departures_poll_interval,
     new_favourites_info_url,
     enable_departures_v2_as_default,
-    enable_travel_search_filters,
-    enable_new_travel_search,
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map,
     vehicles_poll_interval,

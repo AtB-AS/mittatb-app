@@ -47,6 +47,14 @@ Generate new certificates without nuking old ones
 
 Match certificates
 
+### ios enable_pass_presentation_suppression_entitlement
+
+```sh
+[bundle exec] fastlane ios enable_pass_presentation_suppression_entitlement
+```
+
+Enable Apple pass presentation suppression entitlement
+
 ### ios setup_certificates
 
 ```sh

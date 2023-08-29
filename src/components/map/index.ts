@@ -3,7 +3,6 @@ export {PositionArrow} from './components/PositionArrow';
 export {shadows} from './components/shadows';
 export {MapViewConfig, MapCameraConfig} from './MapConfig';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
-export {useMapPage, useMapDebugOverride} from './hooks/use-map-page';
 export {Map} from './Map';
 export {
   flyToLocation,

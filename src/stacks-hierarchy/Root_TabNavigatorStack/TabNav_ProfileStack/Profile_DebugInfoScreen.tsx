@@ -25,12 +25,9 @@ import {useGlobalMessagesState} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
-import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {
-  useMapDebugOverride,
   useRealtimeMapDebugOverride,
 } from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
@@ -70,7 +67,6 @@ export const Profile_DebugInfoScreen = () => {
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
 
-  const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
   const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
   const flexibleTransportAccessModeDebugOverride = useDebugOverride(
     StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
@@ -81,14 +77,12 @@ export const Profile_DebugInfoScreen = () => {
   const flexibleTransportEgressModeDebugOverride = useDebugOverride(
     StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
   );
-  const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
-  const mapDebugOverride = useMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
   const nonTransitTripSearchOverride = useNonTransitTripSearchDebugOverride();
@@ -280,18 +274,6 @@ export const Profile_DebugInfoScreen = () => {
           </GenericSectionItem>
           <GenericSectionItem>
             <DebugOverride
-              description="Enable travel search filter."
-              override={travelSearchDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable new travel search."
-              override={newTravelSearchDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
               description="Enable from travel search to ticket purchase."
               override={fromTravelSearchToTicketDebugOverride}
             />
@@ -318,12 +300,6 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable realtime positions in map."
               override={realtimeMapDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable map"
-              override={mapDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
