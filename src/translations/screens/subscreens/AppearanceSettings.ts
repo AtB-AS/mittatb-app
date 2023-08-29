@@ -5,7 +5,7 @@ const AppearanceSettingsTexts = {
   },
   actions: {
     usePhoneTheme: _(
-      'Bruk fargetema frå telefonen',
+      'Bruk fargetema fra telefonen',
       "Use my phone's colour theme",
       'Nytt fargetema frå mobilen min',
     ),

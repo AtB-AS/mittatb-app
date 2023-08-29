@@ -4,7 +4,7 @@ import {
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
 import {useAuthState} from '@atb/auth';
-import {VippsSignInErrorCode} from '@atb/auth/AuthContext';
+import {VippsSignInErrorCode} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
@@ -61,14 +61,14 @@ export const Root_LoginOptionsScreen = ({
   );
 
   const signInUsingCustomToken = async (token: string) => {
-    const response = await signInWithCustomToken(token);
-    if (!response.error) {
+    const errorCode = await signInWithCustomToken(token);
+    if (!errorCode) {
       navigation.popToTop();
       if (afterLogin) {
         navigation.navigate(afterLogin.screen, afterLogin.params as any);
       }
     } else {
-      setError(response.error);
+      setError(errorCode);
       setIsLoading(false);
     }
   };

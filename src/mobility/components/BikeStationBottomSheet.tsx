@@ -80,7 +80,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
       : undefined;
 
   return (
-    <BottomSheetContainer>
+    <BottomSheetContainer maxHeightValue={0.5}>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
