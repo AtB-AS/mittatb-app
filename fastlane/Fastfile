@@ -47,6 +47,7 @@ platform :ios do
         'IOS_APP_WIDGET_IDENTIFIER',
         'IOS_APP_INTENT_IDENTIFIER',
         'FASTLANE_MATCH_TYPE',
+        'MATCH_DEPLOY_KEY',
         'APPCONNECT_API_KEY_PATH',
       ]
     )
@@ -66,7 +67,7 @@ platform :ios do
       force: true,
       git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
       git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
-      git_private_key: ENV['GH_PRIVATE_KEY'],
+      git_private_key: ENV['MATCH_DEPLOY_KEY'],
     )
   end
 
