@@ -13,16 +13,13 @@ on:
           - atb
           - fram
           - nfk
-      match-type:
-        description: 'Update provisioning profiles for which environment?'
-        required: true
-        type: choice
-        options:
-          - development
-          - adhoc
 jobs:
   update-devices:
     name: Update new devices and provisioning profiles
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [development, adhoc]
     environment: 'atb'
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -48,5 +45,5 @@ jobs:
           bundle exec fastlane ios update_devices
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
-          FASTLANE_MATCH_TYPE: "development"
+          FASTLANE_MATCH_TYPE: ${{ matrix.env }}
           MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
