@@ -35,10 +35,6 @@ jobs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      # - name: Setup SSH
-      #   uses: webfactory/ssh-agent@v0.4.1
-      #   with:
-      #     ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Copy env files
         run: cp env/atb/dev/.env fastlane/.env.default
       - name: Setup ruby and bundle install
@@ -53,4 +49,4 @@ jobs:
         env:
           APPCONNECT_API_KEY_PATH: app-store-connect-api-key.json
           FASTLANE_MATCH_TYPE: "development"
-          GH_PRIVATE_KEY: ${{ secrets.TEST  }}
+          MATCH_DEPLOY_KEY: ${{ secrets.MATCH_DEPLOY_KEY }}
