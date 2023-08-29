@@ -81,7 +81,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [isError, setIsError] = useState(false);
 
   const enabled =
-    hasEnabledMobileToken && abtCustomerId && authStatus === 'authed';
+    hasEnabledMobileToken && abtCustomerId && authStatus === 'authenticated';
 
   /**
    * Load/create native token and handle the situations that can arise.

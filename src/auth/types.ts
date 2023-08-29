@@ -2,7 +2,7 @@ import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 export type AuthenticationType = 'none' | 'anonymous' | 'phone';
 
-export type AuthStatus = 'loading' | 'creating-account' | 'authed' | 'error';
+export type AuthStatus = 'loading' | 'creating-account' | 'authenticated' | 'error';
 
 export type AuthReducerAction =
   | {

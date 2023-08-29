@@ -18,7 +18,7 @@ export const useFetchCustomerDataAfterUserChanged = (
          If no customerNumber, this means the user was newly created in Firestore,
          but the asynchronous creation of the Entur account is not finished yet.
          */
-        const authStatus = customerNumber ? 'authed' : 'creating-account';
+        const authStatus = customerNumber ? 'authenticated' : 'creating-account';
 
         dispatch({
           type: 'SET_CUSTOMER_DATA',
