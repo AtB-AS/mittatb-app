@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        env: [development, adhoc]
+        env: [development]
     environment: 'atb'
     timeout-minutes: 180
     runs-on: ubuntu-latest
