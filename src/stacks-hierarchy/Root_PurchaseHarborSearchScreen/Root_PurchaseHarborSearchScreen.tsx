@@ -113,7 +113,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         )}
         {harborsQuery.isSuccess && (
           <HarborResults
-            harbors={harborsQuery.data}
+            harbors={harborsQuery.data ?? []}
             onSelect={onSave}
             searchText={debouncedText}
             fromHarborName={fromHarbor?.name}

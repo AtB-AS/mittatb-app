@@ -4,32 +4,30 @@ import {useHarborConnectionOverrides} from '@atb/harbors/use-harbor-connection-o
 import {useHarborsQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
 import _ from 'lodash';
-import {useMemo} from 'react';
 
 export const useHarbors = (fromHarborId?: string) => {
-  const harbors = useHarborsQuery();
-  const connections = useHarborsQuery(fromHarborId);
+  const harborsQuery = useHarborsQuery();
+  const connectionsQuery = useHarborsQuery(fromHarborId);
   const overrides = useHarborConnectionOverrides(fromHarborId);
 
-  const isLoading = harbors.isLoading || connections.isLoading;
-  const isError = harbors.isError || connections.isError;
-  const error = fromHarborId ? connections.error : harbors.error;
-  const isSuccess = fromHarborId ? connections.isSuccess : harbors.isSuccess;
-  const refetch = fromHarborId ? harbors.refetch : connections.refetch;
+  const isLoading = harborsQuery.isLoading || connectionsQuery.isLoading;
+  const isError = harborsQuery.isError || connectionsQuery.isError;
+  const error = fromHarborId ? connectionsQuery.error : harborsQuery.error;
+  const isSuccess = fromHarborId
+    ? connectionsQuery.isSuccess
+    : harborsQuery.isSuccess;
+  const refetch = fromHarborId
+    ? harborsQuery.refetch
+    : () =>
+        connectionsQuery
+          .refetch()
+          .then((res) =>
+            applyOverrides(harborsQuery.data, res.data, overrides),
+          );
 
-  const data = useMemo(() => {
-    if (!fromHarborId) {
-      return harbors.data ?? [];
-    }
-
-    //Map overrides (if there are any) into complete StopPlaceFragments
-    const overrideHarbors = mapOverridesToStopPlaceFragment(
-      overrides,
-      harbors.data,
-    );
-    // Add the extra stop places (override harbors) to the list of existing connections.
-    return _.unionBy(connections.data ?? [], overrideHarbors, 'id');
-  }, [fromHarborId, harbors.data, connections.data, overrides]);
+  const data = fromHarborId
+    ? harborsQuery.data ?? []
+    : applyOverrides(harborsQuery.data, connectionsQuery.data, overrides);
 
   return {
     isLoading,
@@ -40,6 +38,20 @@ export const useHarbors = (fromHarborId?: string) => {
     refetch,
   };
 };
+
+function applyOverrides(
+  allHarbors: StopPlaceFragment[] | undefined,
+  connections: StopPlaceFragment[] | undefined,
+  overrides: HarborConnectionOverrideType[],
+) {
+  //Map overrides (if there are any) into complete StopPlaceFragments
+  const overrideHarbors = mapOverridesToStopPlaceFragment(
+    overrides,
+    allHarbors,
+  );
+  // Add the extra stop places (override harbors) to the list of existing connections.
+  return _.unionBy(connections ?? [], overrideHarbors, 'id');
+}
 
 function mapOverridesToStopPlaceFragment(
   overrides: HarborConnectionOverrideType[],
