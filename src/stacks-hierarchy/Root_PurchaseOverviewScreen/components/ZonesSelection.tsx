@@ -23,7 +23,7 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
-import {FromToRefType} from '../Root_PurchaseOverviewScreen';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -35,7 +35,7 @@ type ZonesSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const ZonesSelection = forwardRef<FromToRefType, ZonesSelectionProps>(
+export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
   (
     {
       fareProductTypeConfig,

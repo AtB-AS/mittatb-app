@@ -10,8 +10,8 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {RefObject, useEffect, useState} from 'react';
-import {ScrollView, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
@@ -27,12 +27,6 @@ import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
-
-export type FromToRefType = {
-  zonesRef?: RefObject<TouchableOpacity>;
-  fromHarborRef?: RefObject<TouchableOpacity>;
-  toHarborRef?: RefObject<TouchableOpacity>;
-};
 
 export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   navigation,
