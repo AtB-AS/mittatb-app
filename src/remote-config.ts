@@ -10,10 +10,6 @@ export type RemoteConfig = {
   enable_period_tickets: boolean;
   feedback_questions: string;
   must_upgrade_ticketing: boolean;
-  news_enabled: boolean;
-  news_text: string;
-  news_link_text: string;
-  news_link_url: string;
   customer_service_url: string;
   customer_feedback_url: string;
   tripsSearch_target_number_of_initial_hits: number;
@@ -63,10 +59,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_period_tickets: false,
   feedback_questions: '',
   must_upgrade_ticketing: false,
-  news_enabled: false,
-  news_text: '',
-  news_link_text: 'Les mer',
-  news_link_url: '',
   customer_service_url: 'https://www.atb.no/kontakt/',
   customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
@@ -140,10 +132,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.feedback_questions;
   const must_upgrade_ticketing =
     values['must_upgrade_ticketing']?.asBoolean() ?? false;
-  const news_enabled = values['news_enabled']?.asBoolean() ?? false;
-  const news_text = values['news_text']?.asString() ?? '';
-  const news_link_text = values['news_link_text']?.asString() ?? 'Les mer';
-  const news_link_url = values['news_link_url']?.asString() ?? '';
   const customer_service_url =
     values['customer_service_url']?.asString() ??
     defaultRemoteConfig.customer_service_url;
@@ -289,10 +277,6 @@ export function getConfig(): RemoteConfig {
     enable_period_tickets,
     feedback_questions,
     must_upgrade_ticketing,
-    news_enabled,
-    news_text,
-    news_link_url,
-    news_link_text,
     customer_service_url,
     customer_feedback_url,
     tripsSearch_target_number_of_initial_hits,
