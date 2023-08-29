@@ -77,7 +77,9 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
           If no customerNumber, this means the user was newly created in Firestore,
           but the asynchronous creation of the Entur account is not finished yet.
         */
-        authStatus: action.customerNumber ? 'authenticated' : 'creating-account',
+        authStatus: action.customerNumber
+          ? 'authenticated'
+          : 'creating-account',
       };
     }
     case 'SET_ACCOUNT_CREATION_FINISHED': {
