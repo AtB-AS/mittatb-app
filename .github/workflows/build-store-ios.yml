@@ -43,7 +43,7 @@ jobs:
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
       - name: Enable apple pass suppression
         if: ${{ env.ENABLE_APPLE_PASS_SUPPRESSION == 'true' }}
-        run: bundle exec ios enable_pass_presentation_suppression_entitlement
+        run: bundle exec fastlane ios enable_pass_presentation_suppression_entitlement
       - name: Run fastlane build
         run: bundle exec fastlane ios build
         env:
