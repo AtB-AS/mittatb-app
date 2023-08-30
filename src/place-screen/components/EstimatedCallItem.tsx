@@ -32,7 +32,7 @@ import {
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {isToday, parseISO} from 'date-fns';
-import React from 'react';
+import React, {memo} from 'react';
 import {View} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 
@@ -56,69 +56,71 @@ type EstimatedCallItemProps = {
   onPressFavorite?: () => void;
 };
 
-export function EstimatedCallItem({
-  text,
-  accessibilityLabel,
-  accessibilityHint,
-  onPress,
-  testID,
-  linePublicCode,
-  transportMode,
-  transportSubmode,
-  noticeSvg,
-  isRealtime,
-  expectedTime,
-  aimedTime,
-  isTripCancelled,
-  showFavorite,
-  existingFavorite,
-  favoriteAccessibilityLabel,
-  onPressFavorite,
-}: EstimatedCallItemProps): JSX.Element {
-  const styles = useStyles();
+export const EstimatedCallItem = memo(
+  ({
+    text,
+    accessibilityLabel,
+    accessibilityHint,
+    onPress,
+    testID,
+    linePublicCode,
+    transportMode,
+    transportSubmode,
+    noticeSvg,
+    isRealtime,
+    expectedTime,
+    aimedTime,
+    isTripCancelled,
+    showFavorite,
+    existingFavorite,
+    favoriteAccessibilityLabel,
+    onPressFavorite,
+  }: EstimatedCallItemProps): JSX.Element => {
+    const styles = useStyles();
 
-  return (
-    <PressableOpacity
-      onPress={onPress}
-      style={styles.container}
-      accessibilityLabel={accessibilityLabel}
-      accessibilityHint={accessibilityHint}
-    >
-      <View style={styles.estimatedCallItem} testID={testID}>
-        <View style={styles.transportInfo}>
-          {(linePublicCode || transportMode) && (
-            <LineChip
-              publicCode={linePublicCode}
-              transportMode={transportMode}
-              transportSubmode={transportSubmode}
-              icon={noticeSvg}
+    return (
+      <PressableOpacity
+        onPress={onPress}
+        style={styles.container}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint={accessibilityHint}
+      >
+        <View style={styles.estimatedCallItem} testID={testID}>
+          <View style={styles.transportInfo}>
+            {(linePublicCode || transportMode) && (
+              <LineChip
+                publicCode={linePublicCode}
+                transportMode={transportMode}
+                transportSubmode={transportSubmode}
+                icon={noticeSvg}
+                testID={testID}
+              />
+            )}
+            <ThemeText style={styles.lineName} testID={testID + 'Name'}>
+              {text}
+            </ThemeText>
+          </View>
+          {aimedTime && expectedTime && isRealtime !== undefined ? (
+            <DepartureTime
+              isRealtime={isRealtime}
+              isTripCancelled={isTripCancelled}
+              expectedTime={expectedTime}
+              aimedTime={aimedTime}
               testID={testID}
             />
+          ) : null}
+          {showFavorite && (
+            <FavouriteDepartureToggle
+              existingFavorite={existingFavorite}
+              onMarkFavourite={onPressFavorite}
+              toggleFavouriteAccessibilityLabel={favoriteAccessibilityLabel}
+            />
           )}
-          <ThemeText style={styles.lineName} testID={testID + 'Name'}>
-            {text}
-          </ThemeText>
         </View>
-        {aimedTime && expectedTime && isRealtime !== undefined ? (
-          <DepartureTime
-            isRealtime={isRealtime}
-            isTripCancelled={isTripCancelled}
-            expectedTime={expectedTime}
-            aimedTime={aimedTime}
-            testID={testID}
-          />
-        ) : null}
-        {showFavorite && (
-          <FavouriteDepartureToggle
-            existingFavorite={existingFavorite}
-            onMarkFavourite={onPressFavorite}
-            toggleFavouriteAccessibilityLabel={favoriteAccessibilityLabel}
-          />
-        )}
-      </View>
-    </PressableOpacity>
-  );
-}
+      </PressableOpacity>
+    );
+  },
+);
 
 const DepartureTime = ({
   isTripCancelled,

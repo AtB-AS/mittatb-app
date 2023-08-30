@@ -13,7 +13,7 @@ import {useFavorites, useOnMarkFavouriteDepartures} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {
@@ -108,6 +108,36 @@ export function QuaySection({
 
   const situations = quay.situations.filter(isSituationValidAtDate(searchDate));
 
+  const onPressFavorite = useCallback(
+    (departure: EstimatedCall) =>
+      mode === 'Departure'
+        ? onMarkFavourite({
+            ...departure.serviceJourney.line,
+            lineNumber: departure.serviceJourney.line.publicCode,
+            lineName: departure.destinationDisplay?.frontText,
+          })
+        : undefined,
+    [],
+  );
+
+  const onPress = useCallback((departure: EstimatedCall) => {
+    if (mode === 'Favourite') {
+      onMarkFavourite({
+        ...departure.serviceJourney.line,
+        lineNumber: departure.serviceJourney.line.publicCode,
+        lineName: departure.destinationDisplay?.frontText,
+      });
+    } else if (navigateToDetails) {
+      navigateToDetails(
+        departure.serviceJourney.id,
+        departure.date,
+        departure.aimedDepartureTime,
+        departure.quay.id,
+        departure.cancellation,
+      );
+    }
+  }, []);
+
   return (
     <View testID={testID}>
       <Section style={styles.section}>
@@ -176,23 +206,7 @@ export function QuaySection({
                   isTripCancelled={departure.cancellation}
                   text={departure.destinationDisplay?.frontText ?? ''}
                   isRealtime={departure.realtime}
-                  onPress={() => {
-                    if (mode === 'Favourite') {
-                      onMarkFavourite({
-                        ...departure.serviceJourney.line,
-                        lineNumber: departure.serviceJourney.line.publicCode,
-                        lineName: departure.destinationDisplay?.frontText,
-                      });
-                    } else if (navigateToDetails) {
-                      navigateToDetails(
-                        departure.serviceJourney.id,
-                        departure.date,
-                        departure.aimedDepartureTime,
-                        departure.quay.id,
-                        departure.cancellation,
-                      );
-                    }
-                  }}
+                  onPress={() => onPress(departure)} // TODO
                   accessibilityHint={
                     mode === 'Favourite'
                       ? t(DeparturesTexts.a11yMarkFavouriteHint)
@@ -222,15 +236,7 @@ export function QuaySection({
                   aimedTime={departure.aimedDepartureTime}
                   expectedTime={departure.expectedDepartureTime}
                   showFavorite={showFavorites}
-                  onPressFavorite={() =>
-                    mode === 'Departure'
-                      ? onMarkFavourite({
-                          ...departure.serviceJourney.line,
-                          lineNumber: departure.serviceJourney.line.publicCode,
-                          lineName: departure.destinationDisplay?.frontText,
-                        })
-                      : undefined
-                  }
+                  onPressFavorite={() => onPressFavorite(departure)} // TODO
                   favoriteAccessibilityLabel={
                     mode === 'Departure'
                       ? toggleFavouriteAccessibilityLabel(
