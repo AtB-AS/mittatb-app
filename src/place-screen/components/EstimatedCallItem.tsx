@@ -154,7 +154,6 @@ export const EstimatedCallItem = memo(
     if (prev.accessibilityLabel !== next.accessibilityLabel) return false;
     if (prev.accessibilityHint !== next.accessibilityHint) return false;
     if (prev.onPress !== next.onPress) return false;
-    if (prev.testID !== next.testID) return false;
     if (prev.showFavorite !== next.showFavorite) return false;
     if (prev.existingFavorite?.id !== next.existingFavorite?.id) return false;
     if (prev.favoriteAccessibilityLabel !== next.favoriteAccessibilityLabel)
