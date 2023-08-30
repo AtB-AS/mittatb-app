@@ -8,7 +8,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused} from '@react-navigation/native';
@@ -211,7 +211,7 @@ const Header = React.memo(function Header({
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+
   return (
     <View style={styles.locationInputSection}>
       <Section>

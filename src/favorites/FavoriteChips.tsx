@@ -143,7 +143,7 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   staticChipsContainer: {
     flexDirection: 'row',
   },

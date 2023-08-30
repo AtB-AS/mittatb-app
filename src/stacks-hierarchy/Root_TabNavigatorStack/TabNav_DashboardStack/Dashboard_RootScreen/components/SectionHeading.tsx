@@ -1,7 +1,6 @@
 import React, {PropsWithChildren} from 'react';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {StyleProp, TextStyle} from 'react-native';
 
 type Props = PropsWithChildren<{
   accessibilityLabel?: string | undefined;
