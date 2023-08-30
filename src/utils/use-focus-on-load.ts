@@ -37,9 +37,12 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true) {
 }
 
 export const giveFocus = (
-  focusRef: React.MutableRefObject<any>,
+  focusRef: React.RefObject<any> | null | undefined,
   timeoutMilliseconds?: number,
 ) => {
+  if (focusRef === null || focusRef === undefined) {
+    return;
+  }
   if (focusRef.current) {
     InteractionManager.runAfterInteractions(() => {
       const setFocus = () => {

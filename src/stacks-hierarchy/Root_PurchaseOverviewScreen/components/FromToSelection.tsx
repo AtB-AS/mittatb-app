@@ -1,4 +1,4 @@
-import React, {RefObject, forwardRef} from 'react';
+import React, {forwardRef} from 'react';
 import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ZonesSelection';
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
 import {FareProductTypeConfig} from '@atb/configuration';
@@ -8,6 +8,7 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -20,10 +21,9 @@ type SelectionProps = {
       | Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;
   style?: StyleProp<ViewStyle>;
-  focusRef?: RefObject<any>;
 };
 
-export const FromToSelection = forwardRef<any, SelectionProps>(
+export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
   (
     {
       fareProductTypeConfig,
@@ -33,7 +33,7 @@ export const FromToSelection = forwardRef<any, SelectionProps>(
       onSelect,
       style,
     }: SelectionProps,
-    focusRef,
+    ref,
   ) => {
     let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
     if (selectionMode === 'none') {
@@ -49,7 +49,7 @@ export const FromToSelection = forwardRef<any, SelectionProps>(
           preassignedFareProduct={preassignedFareProduct}
           onSelect={onSelect}
           style={style}
-          ref={focusRef}
+          ref={ref}
         />
       );
     }
@@ -73,7 +73,7 @@ export const FromToSelection = forwardRef<any, SelectionProps>(
         selectionMode={selectionMode}
         onSelect={onSelect}
         style={style}
-        ref={focusRef}
+        ref={ref}
       />
     ) : null;
   },
