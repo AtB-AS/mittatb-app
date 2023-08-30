@@ -9,7 +9,11 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFavorites, useOnMarkFavouriteDepartures} from '@atb/favorites';
+import {
+  StoredFavoriteDeparture,
+  useFavorites,
+  useOnMarkFavouriteDepartures,
+} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
@@ -22,12 +26,7 @@ import {
   getLineA11yLabel,
 } from './EstimatedCallItem';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {
-  getSvgForMostCriticalSituationOrNotice,
-  isSituationValidAtDate,
-  SituationSectionItem,
-} from '@atb/situations';
-import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
+import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
 
 type QuaySectionProps = {
   quay: Quay;
@@ -109,34 +108,41 @@ export function QuaySection({
   const situations = quay.situations.filter(isSituationValidAtDate(searchDate));
 
   const onPressFavorite = useCallback(
-    (departure: EstimatedCall) =>
-      mode === 'Departure'
-        ? onMarkFavourite({
-            ...departure.serviceJourney.line,
-            lineNumber: departure.serviceJourney.line.publicCode,
-            lineName: departure.destinationDisplay?.frontText,
-          })
-        : undefined,
+    (departure: EstimatedCall, existingFavorite?: StoredFavoriteDeparture) =>
+      onMarkFavourite(
+        {
+          ...departure.serviceJourney.line,
+          lineNumber: departure.serviceJourney.line.publicCode,
+          lineName: departure.destinationDisplay?.frontText,
+        },
+        existingFavorite,
+      ),
     [],
   );
 
-  const onPress = useCallback((departure: EstimatedCall) => {
-    if (mode === 'Favourite') {
-      onMarkFavourite({
-        ...departure.serviceJourney.line,
-        lineNumber: departure.serviceJourney.line.publicCode,
-        lineName: departure.destinationDisplay?.frontText,
-      });
-    } else if (navigateToDetails) {
-      navigateToDetails(
-        departure.serviceJourney.id,
-        departure.date,
-        departure.aimedDepartureTime,
-        departure.quay.id,
-        departure.cancellation,
-      );
-    }
-  }, []);
+  const onPress = useCallback(
+    (departure: EstimatedCall, existingFavorite?: StoredFavoriteDeparture) => {
+      if (mode === 'Favourite') {
+        onMarkFavourite(
+          {
+            ...departure.serviceJourney.line,
+            lineNumber: departure.serviceJourney.line.publicCode,
+            lineName: departure.destinationDisplay?.frontText,
+          },
+          existingFavorite,
+        );
+      } else if (navigateToDetails) {
+        navigateToDetails(
+          departure.serviceJourney.id,
+          departure.date,
+          departure.aimedDepartureTime,
+          departure.quay.id,
+          departure.cancellation,
+        );
+      }
+    },
+    [],
+  );
 
   return (
     <View testID={testID}>
@@ -203,19 +209,12 @@ export function QuaySection({
                 testID={'departureItem' + index}
               >
                 <EstimatedCallItem
-                  isTripCancelled={departure.cancellation}
-                  text={departure.destinationDisplay?.frontText ?? ''}
-                  isRealtime={departure.realtime}
-                  onPress={() => onPress(departure)} // TODO
+                  departure={departure}
+                  onPress={onPress}
                   accessibilityHint={
                     mode === 'Favourite'
                       ? t(DeparturesTexts.a11yMarkFavouriteHint)
                       : t(DeparturesTexts.a11yViewDepartureDetailsHint)
-                  }
-                  linePublicCode={departure.serviceJourney.line.publicCode}
-                  transportMode={departure.serviceJourney.line.transportMode}
-                  transportSubmode={
-                    departure.serviceJourney.line.transportSubmode
                   }
                   testID={'departureItem' + index}
                   accessibilityLabel={
@@ -233,10 +232,8 @@ export function QuaySection({
                     lineNumber: departure.serviceJourney.line.publicCode,
                     lineName: departure.destinationDisplay?.frontText,
                   })}
-                  aimedTime={departure.aimedDepartureTime}
-                  expectedTime={departure.expectedDepartureTime}
                   showFavorite={showFavorites}
-                  onPressFavorite={() => onPressFavorite(departure)} // TODO
+                  onPressFavorite={onPressFavorite}
                   favoriteAccessibilityLabel={
                     mode === 'Departure'
                       ? toggleFavouriteAccessibilityLabel(
@@ -244,15 +241,7 @@ export function QuaySection({
                         )
                       : undefined
                   }
-                  noticeSvg={
-                    mode !== 'Favourite'
-                      ? getSvgForMostCriticalSituationOrNotice(
-                          departure.situations,
-                          getNoticesForEstimatedCall(departure),
-                          departure.cancellation,
-                        )
-                      : undefined
-                  }
+                  showNotices={mode !== 'Favourite'}
                 />
               </GenericSectionItem>
             )}

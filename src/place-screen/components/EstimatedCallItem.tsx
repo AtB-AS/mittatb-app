@@ -10,9 +10,16 @@ import {
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {FavoriteDeparture, FavouriteDepartureToggle} from '@atb/favorites';
+import {
+  FavoriteDeparture,
+  FavouriteDepartureToggle,
+  StoredFavoriteDeparture,
+} from '@atb/favorites';
 import {StoredType} from '@atb/favorites/storage';
-import {getSituationOrNoticeA11yLabel} from '@atb/situations';
+import {
+  getSituationOrNoticeA11yLabel,
+  getSvgForMostCriticalSituationOrNotice,
+} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   CancelledDepartureTexts,
@@ -22,7 +29,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import {getTimeRepresentationType} from '@atb/travel-details-screens/utils';
+import {
+  getNoticesForEstimatedCall,
+  getTimeRepresentationType,
+} from '@atb/travel-details-screens/utils';
 import {
   formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
@@ -37,50 +47,49 @@ import {View} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 
 type EstimatedCallItemProps = {
-  text: string;
+  departure: EstimatedCall;
   accessibilityLabel: string;
   accessibilityHint: string;
-  onPress: () => void;
+  onPress: (
+    departure: EstimatedCall,
+    existingFavorite?: StoredFavoriteDeparture,
+  ) => void;
   testID: string;
-  linePublicCode?: string;
-  transportMode?: AnyMode;
-  transportSubmode?: AnySubMode;
-  noticeSvg?(props: SvgProps): JSX.Element;
-  isRealtime?: boolean;
-  expectedTime?: string;
-  aimedTime?: string;
-  isTripCancelled: boolean;
   showFavorite: boolean;
   existingFavorite: StoredType<FavoriteDeparture> | undefined;
   favoriteAccessibilityLabel?: string;
-  onPressFavorite?: () => void;
+  onPressFavorite?: (
+    departure: EstimatedCall,
+    existing?: StoredFavoriteDeparture,
+  ) => void;
+  showNotices?: boolean;
 };
 
 export const EstimatedCallItem = memo(
   ({
-    text,
+    departure,
     accessibilityLabel,
     accessibilityHint,
     onPress,
     testID,
-    linePublicCode,
-    transportMode,
-    transportSubmode,
-    noticeSvg,
-    isRealtime,
-    expectedTime,
-    aimedTime,
-    isTripCancelled,
     showFavorite,
     existingFavorite,
     favoriteAccessibilityLabel,
     onPressFavorite,
+    showNotices,
   }: EstimatedCallItemProps): JSX.Element => {
     const styles = useStyles();
 
+    const linePublicCode = departure.serviceJourney.line.publicCode;
+    const transportMode = departure.serviceJourney.line.transportMode;
+    const transportSubmode = departure.serviceJourney.line.transportSubmode;
+    const aimedTime = departure.aimedDepartureTime;
+    const expectedTime = departure.expectedDepartureTime;
+    const isRealtime = departure.realtime;
+
     return (
       <PressableOpacity
-        onPress={onPress}
+        onPress={() => onPress(departure, existingFavorite)}
         style={styles.container}
         accessibilityLabel={accessibilityLabel}
         accessibilityHint={accessibilityHint}
@@ -92,18 +101,26 @@ export const EstimatedCallItem = memo(
                 publicCode={linePublicCode}
                 transportMode={transportMode}
                 transportSubmode={transportSubmode}
-                icon={noticeSvg}
+                icon={
+                  showNotices
+                    ? getSvgForMostCriticalSituationOrNotice(
+                        departure.situations,
+                        getNoticesForEstimatedCall(departure),
+                        departure.cancellation,
+                      )
+                    : undefined
+                }
                 testID={testID}
               />
             )}
             <ThemeText style={styles.lineName} testID={testID + 'Name'}>
-              {text}
+              {departure.destinationDisplay?.frontText ?? ''}
             </ThemeText>
           </View>
           {aimedTime && expectedTime && isRealtime !== undefined ? (
             <DepartureTime
               isRealtime={isRealtime}
-              isTripCancelled={isTripCancelled}
+              isTripCancelled={departure.cancellation}
               expectedTime={expectedTime}
               aimedTime={aimedTime}
               testID={testID}
@@ -112,13 +129,39 @@ export const EstimatedCallItem = memo(
           {showFavorite && (
             <FavouriteDepartureToggle
               existingFavorite={existingFavorite}
-              onMarkFavourite={onPressFavorite}
+              onMarkFavourite={
+                onPressFavorite
+                  ? () => onPressFavorite(departure, existingFavorite)
+                  : undefined
+              }
               toggleFavouriteAccessibilityLabel={favoriteAccessibilityLabel}
             />
           )}
         </View>
       </PressableOpacity>
     );
+  },
+  (prev, next) => {
+    if (prev.departure.serviceJourney.id !== next.departure.serviceJourney.id)
+      return false;
+    if (
+      prev.departure.expectedDepartureTime !==
+      next.departure.expectedDepartureTime
+    )
+      return false;
+    if (prev.departure.aimedDepartureTime !== next.departure.aimedDepartureTime)
+      return false;
+    if (prev.accessibilityLabel !== next.accessibilityLabel) return false;
+    if (prev.accessibilityHint !== next.accessibilityHint) return false;
+    if (prev.onPress !== next.onPress) return false;
+    if (prev.testID !== next.testID) return false;
+    if (prev.showFavorite !== next.showFavorite) return false;
+    if (prev.existingFavorite?.id !== next.existingFavorite?.id) return false;
+    if (prev.favoriteAccessibilityLabel !== next.favoriteAccessibilityLabel)
+      return false;
+    if (prev.onPressFavorite !== next.onPressFavorite) return false;
+    if (prev.showNotices !== next.showNotices) return false;
+    return true;
   },
 );
 

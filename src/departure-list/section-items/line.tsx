@@ -92,6 +92,7 @@ export function LineItem({
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
+  const existing = existingFavorite(favouriteDepartureLine);
 
   return (
     <View style={[topContainer, {padding: 0}]} testID={testID}>
@@ -124,8 +125,10 @@ export function LineItem({
         </PressableOpacity>
         {mode === 'departures' && (
           <FavouriteDepartureToggle
-            existingFavorite={existingFavorite(favouriteDepartureLine)}
-            onMarkFavourite={() => onMarkFavourite(favouriteDepartureLine)}
+            existingFavorite={existing}
+            onMarkFavourite={() =>
+              onMarkFavourite(favouriteDepartureLine, existing)
+            }
             toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel(
               favouriteDepartureLine,
             )}

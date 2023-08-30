@@ -1,4 +1,4 @@
-import {useFavorites} from '@atb/favorites';
+import {useFavorites, StoredFavoriteDeparture} from '@atb/favorites';
 import {AccessibilityInfo, Alert} from 'react-native';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
@@ -79,8 +79,10 @@ export function useOnMarkFavouriteDepartures(
         );
   };
 
-  const onMarkFavourite = (line: FavouriteDepartureLine) => {
-    const existing = existingFavorite(line);
+  const onMarkFavourite = (
+    line: FavouriteDepartureLine,
+    existing: StoredFavoriteDeparture | undefined,
+  ) => {
     if (existing) {
       Alert.alert(
         t(NearbyTexts.results.lines.favorite.delete.label),
