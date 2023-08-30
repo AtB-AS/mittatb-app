@@ -21,7 +21,7 @@ import {
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
   DashboardTexts,
@@ -52,7 +52,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   route,
 }) => {
   const style = useStyle();
-  const {theme} = useTheme();
   const {t} = useTranslation();
   const {enable_ticketing} = useRemoteConfig();
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
