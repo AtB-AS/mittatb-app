@@ -1,16 +1,24 @@
 import {client} from '@atb/api';
-import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility-operators';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
+import {z} from 'zod';
 
-export type UserBenefitsType = {
-  operator: string;
-  benefitIds: OperatorBenefitIdType[];
-};
+const UserBenefits = z
+  .object({
+    operator: z.string(),
+    benefits: OperatorBenefitId.array(),
+  })
+  .transform((it) => ({
+    operator: it.operator,
+    benefitIds: it.benefits,
+  }));
+
+export type UserBenefitsType = z.infer<typeof UserBenefits>;
 
 export const getBenefits = (): Promise<UserBenefitsType[]> => {
   return client
     .get('/mobility/benefits', {authWithIdToken: true})
-    .then((response) => response.data);
+    .then((response) => UserBenefits.array().parse(response.data ?? []));
 };
 
 export const getValueCode = (
