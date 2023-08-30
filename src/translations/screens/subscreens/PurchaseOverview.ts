@@ -160,6 +160,14 @@ const PurchaseOverviewTexts = {
   },
   productSelection: {
     title: _('Velg billett', 'Select a ticket', 'Vel billett'),
+    descriptionToggle: {
+      label: _('Vis info', 'Show info', 'Vis info'),
+      a11yLabel: _(
+        'Vis informasjon om produkter',
+        'Show information about products',
+        'Vis informasjon om produkt',
+      ),
+    },
     a11yTitle: _(
       'Aktiver for å velge billett',
       'Activate to select ticket',
@@ -326,6 +334,7 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
         `Applies for bus in selected zones`,
         `Gjeld for buss i valde soner`,
       ),
+      messageInHarborZones: _('', '', ''),
     },
   },
 });

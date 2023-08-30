@@ -2,7 +2,6 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import React, {useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchFiltersBottomSheet';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useTravelSearchFiltersEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import {useFilters} from '@atb/travel-search-filters';
 import {
   FlexibleTransportOptionTypeWithSelectionType,
@@ -27,7 +26,6 @@ type TravelSearchFiltersState =
  */
 export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const {open, close, onOpenFocusRef, onCloseFocusRef} = useBottomSheet();
-  const travelSearchFiltersEnabled = useTravelSearchFiltersEnabled();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const {filters, setFilters} = useFilters();
 
@@ -60,7 +58,6 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       flexibleTransport: initialFlexibleTransportFilterOption,
     });
 
-  if (!travelSearchFiltersEnabled) return {enabled: false};
   if (!travelSearchFilters?.transportModes) return {enabled: false};
 
   const openBottomSheet = () => {

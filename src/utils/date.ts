@@ -17,16 +17,32 @@ import {
   parse,
   parseISO,
   set,
+  getSeconds,
 } from 'date-fns';
 import en from 'date-fns/locale/en-GB';
 import nb from 'date-fns/locale/nb';
 import humanizeDuration from 'humanize-duration';
-import {DEFAULT_LANGUAGE, Language} from '@atb/translations';
+
+import {
+  parse as parseIso8601Duration,
+  toSeconds as toSecondsIso8601Duration,
+} from 'iso8601-duration';
+
+import {
+  DEFAULT_LANGUAGE,
+  Language,
+  TranslateFunction,
+  dictionary,
+} from '@atb/translations';
 
 const humanizer = humanizeDuration.humanizer({});
 
 function parseIfNeeded(a: string | Date): Date {
   return a instanceof Date ? a : parseISO(a);
+}
+
+export function iso8601DurationToSeconds(iso8601Duration: string) {
+  return toSecondsIso8601Duration(parseIso8601Duration(iso8601Duration));
 }
 
 export function secondsToDurationShort(
@@ -227,6 +243,45 @@ export function formatToShortDateTimeWithoutYear(
   return format(parsed, 'dd. MMM HH:mm', {locale: languageToLocale(language)});
 }
 
+function formatToShortDateTimeWithoutYearWithAtTime(
+  isoDate: string | Date,
+  t: TranslateFunction,
+  language: Language,
+) {
+  const parsed = parseIfNeeded(isoDate);
+  const hourTime =
+    t(dictionary.date.atTime) + ' ' + formatToClock(parsed, language, 'floor');
+  if (isSameDay(parsed, new Date())) {
+    return hourTime;
+  } else {
+    return (
+      format(parsed, 'dd. MMM', {locale: languageToLocale(language)}) +
+      ' ' +
+      hourTime
+    );
+  }
+}
+
+export function formatToShortDateTimeWithRelativeDayNames(
+  fromDate: string | Date,
+  toDate: string | Date,
+  t: TranslateFunction,
+  language: Language,
+) {
+  const daysDifference = daysBetween(fromDate, toDate);
+
+  let formattedTime = formatToShortDateTimeWithoutYearWithAtTime(
+    toDate,
+    t,
+    language,
+  );
+  if (Math.abs(daysDifference) < 3) {
+    formattedTime =
+      t(dictionary.date.relativeDayNames(daysDifference)) + ' ' + formattedTime;
+  }
+  return formattedTime;
+}
+
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
   return format(parsed, 'PP, p', {locale: languageToLocale(language)});
@@ -342,11 +397,16 @@ export function isSeveralDays(items: string[]) {
   return true;
 }
 
-export function dateWithReplacedTime(date: Date | string, time: string) {
-  const parsedTime = parse(time, 'HH:mm', new Date());
+export function dateWithReplacedTime(
+  date: Date | string,
+  time: string,
+  formatString?: string,
+) {
+  const parsedTime = parse(time, formatString || 'HH:mm', new Date());
   return set(parseIfNeeded(date), {
     hours: getHours(parsedTime),
     minutes: getMinutes(parsedTime),
+    seconds: getSeconds(parsedTime),
   });
 }
 

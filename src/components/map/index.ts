@@ -3,7 +3,6 @@ export {PositionArrow} from './components/PositionArrow';
 export {shadows} from './components/shadows';
 export {MapViewConfig, MapCameraConfig} from './MapConfig';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
-export {useMapPage, useMapDebugOverride} from './hooks/use-map-page';
 export {Map} from './Map';
 export {
   flyToLocation,
@@ -17,17 +16,20 @@ export {
   toFeaturePoints,
 } from './utils';
 export type {
+  FormFactorFilterType,
   NavigateToTripSearchCallback,
   MapLeg,
   MapLine,
   MapSelectionActionType,
-  VehiclesFilterType,
+  MobilityMapFilterType,
   VehiclesState,
-  StationsFilterType,
+  VehicleFeatures,
+  StationFeatures,
   StationsState,
   MapFilterType,
   MapRegion,
-  OperatorFilterType,
+  ParkingType,
+  ParkingVehicleTypes,
 } from './types';
 export {
   useRealtimeMapEnabled,

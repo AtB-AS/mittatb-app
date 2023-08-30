@@ -38,13 +38,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  ActivityIndicator,
-  Platform,
-  RefreshControl,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, Platform, RefreshControl, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {SearchForLocations} from '../types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
@@ -58,6 +52,8 @@ import {TripPattern} from '@atb/api/types/trips';
 import {useAnalytics} from '@atb/analytics';
 import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trips-query';
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -76,6 +72,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
+  const isFocused = useIsFocusedAndActive();
 
   const shouldShowTravelSearchFilterOnboarding =
     useShouldShowTravelSearchFilterOnboarding();
@@ -262,14 +259,16 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           },
         }}
         refreshControl={
-          <RefreshControl
-            refreshing={
-              Platform.OS === 'ios'
-                ? false
-                : searchState === 'searching' && !tripPatterns.length
-            }
-            onRefresh={refresh}
-          />
+          isFocused ? (
+            <RefreshControl
+              refreshing={
+                Platform.OS === 'ios'
+                  ? false
+                  : searchState === 'searching' && !tripPatterns.length
+              }
+              onRefresh={refresh}
+            />
+          ) : undefined
         }
         parallaxContent={() => (
           <View style={style.searchHeader}>
@@ -440,7 +439,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             <View style={style.emptyResultsSpacer}></View>
           )}
           {!error && isValidLocations && (
-            <TouchableOpacity
+            <PressableOpacity
               onPress={loadMore}
               disabled={searchState === 'searching'}
               style={style.loadMoreButton}
@@ -483,7 +482,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   ) : null}
                 </>
               )}
-            </TouchableOpacity>
+            </PressableOpacity>
           )}
         </View>
       </FullScreenView>

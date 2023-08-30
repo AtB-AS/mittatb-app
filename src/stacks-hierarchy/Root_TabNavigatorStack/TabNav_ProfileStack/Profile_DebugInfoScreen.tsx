@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
-import {Alert, TouchableOpacity, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
@@ -25,12 +25,9 @@ import {useGlobalMessagesState} from '@atb/global-messages';
 import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
-import {useTravelSearchFiltersDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-enabled';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
-import {useNewTravelSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
 import {
-  useMapDebugOverride,
   useRealtimeMapDebugOverride,
 } from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
@@ -50,6 +47,7 @@ import {useDebugOverride} from '@atb/debug';
 import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
 import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -69,7 +67,6 @@ export const Profile_DebugInfoScreen = () => {
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
 
-  const travelSearchDebugOverride = useTravelSearchFiltersDebugOverride();
   const flexibleTransportDebugOverride = useFlexibleTransportDebugOverride();
   const flexibleTransportAccessModeDebugOverride = useDebugOverride(
     StorageModelKeysEnum.UseFlexibleTransportAccessModeDebugOverride,
@@ -80,14 +77,12 @@ export const Profile_DebugInfoScreen = () => {
   const flexibleTransportEgressModeDebugOverride = useDebugOverride(
     StorageModelKeysEnum.UseFlexibleTransportEgressModeDebugOverride,
   );
-  const newTravelSearchDebugOverride = useNewTravelSearchDebugOverride();
   const fromTravelSearchToTicketDebugOverride =
     useFromTravelSearchToTicketDebugOverride();
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
-  const mapDebugOverride = useMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
   const nonTransitTripSearchOverride = useNonTransitTripSearchDebugOverride();
@@ -279,18 +274,6 @@ export const Profile_DebugInfoScreen = () => {
           </GenericSectionItem>
           <GenericSectionItem>
             <DebugOverride
-              description="Enable travel search filter."
-              override={travelSearchDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable new travel search."
-              override={newTravelSearchDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
               description="Enable from travel search to ticket purchase."
               override={fromTravelSearchToTicketDebugOverride}
             />
@@ -317,12 +300,6 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable realtime positions in map."
               override={realtimeMapDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable map"
-              override={mapDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -508,7 +485,7 @@ export const Profile_DebugInfoScreen = () => {
                     Press a line to reset to undefined {'\n'}
                   </ThemeText>
                   {Object.keys(preferences).map((key) => (
-                    <TouchableOpacity
+                    <PressableOpacity
                       key={key}
                       onPress={() => setPreference({[key]: undefined})}
                     >
@@ -516,7 +493,7 @@ export const Profile_DebugInfoScreen = () => {
                         title={key}
                         value={preferences[key as keyof UserPreferences]}
                       />
-                    </TouchableOpacity>
+                    </PressableOpacity>
                   ))}
                 </View>
               )
@@ -655,7 +632,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
   if (!!value && typeof value === 'object') {
     return (
       <View key={title} style={styles.objectEntry}>
-        <TouchableOpacity
+        <PressableOpacity
           style={{flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}
         >
@@ -663,7 +640,7 @@ function MapEntry({title, value}: {title: string; value: any}) {
             {title}
           </ThemeText>
           <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-        </TouchableOpacity>
+        </PressableOpacity>
         {isExpanded && <MapValue value={value} />}
       </View>
     );
@@ -675,13 +652,13 @@ function MapEntry({title, value}: {title: string; value: any}) {
         testID={title === 'user_id' ? 'userId' : ''}
       >
         {isLongString ? (
-          <TouchableOpacity
+          <PressableOpacity
             style={{flexDirection: 'row'}}
             onPress={() => setIsExpanded(!isExpanded)}
           >
             <ThemeText type="body__primary--bold">{title}: </ThemeText>
             <ThemeIcon svg={isExpanded ? ExpandLess : ExpandMore} />
-          </TouchableOpacity>
+          </PressableOpacity>
         ) : (
           <ThemeText type="body__primary--bold">{title}: </ThemeText>
         )}

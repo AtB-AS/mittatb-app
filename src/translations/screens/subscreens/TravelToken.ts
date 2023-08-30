@@ -97,9 +97,9 @@ const SelectTravelTokenTexts = {
           `Eg får ikkje logga inn i appen AtB med e-post`,
         ),
         answer: _(
-          `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+          `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
           `It is not possible to log into the app with e-mail as of today. You can continue to use your t:card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
-          `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsetje å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukarprofilen. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil lage ein ny brukarprofil i appen.`,
+          `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsetje å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukarprofilen. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage ein ny brukarprofil i appen.`,
         ),
       },
       {
@@ -159,9 +159,9 @@ const SelectTravelTokenTexts = {
           `Eg får ikkje logga inn i appen AtB med e-post`,
         ),
         answer: _(
-          `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+          `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke t:kort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
           `It is not possible to log into the app with e-mail as of today. You can continue to use your t:card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
-          `Det er ikkje mogleg å logge inn i appen med e-post per i dag. Du kan halde fram med å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukarprofilen din. Du kan kontakte kundesenteret vedrørande refusjon viss du likevel vil lage ein ny brukarprofil i appen.`,
+          `Det er ikkje mogleg å logge inn i appen med e-post per i dag. Du kan halde fram med å bruke t:kort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukarprofilen din. Du kan kontakte kundesenteret for refusjon viss du likevel vil lage ein ny brukarprofil i appen.`,
         ),
       },
       {
@@ -340,9 +340,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Eg får ikkje logga inn i Reis-appen med e-post`,
           ),
           answer: _(
-            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
             `It is not possible to log into the app with e-mail as of today. You can continue to use your travel card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
-            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overførte til den nye brukarprofilen. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil lage ein ny brukarprofil i appen.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overførte til den nye brukarprofilen. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage ein ny brukarprofil i appen.`,
           ),
         },
         {
@@ -450,9 +450,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Eg får ikkje logga inn i FRAM-appen med e-post`,
           ),
           answer: _(
-            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny bruker i appen.`,
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny bruker i appen.`,
             `It is not possible to log into the app with e-mail as of today. You can continue to use your travel card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact customer service regarding a refund if you still want to create a new user in the app.`,
-            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukaren. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil laga ein ny brukar i appen.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukaren. Du kan kontakte kundesenteret for refusjon dersom du likevel vil laga ein ny brukar i appen.`,
           ),
         },
         {
@@ -462,9 +462,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Har du fleire spørsmål om billettkjøp?`,
           ),
           answer: _(
-            `Se flere måter å kontakte oss på frammr.no/kontakt-oss`,
-            `See how to contact us at en.frammr.no/contact-us`,
-            `Sjå fleire måtar å kontakte oss på frammr.no/kontakt-oss`,
+            `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
+            `Contact FRAM Customer Service at en.frammr.no/contact-us or call 71 28 01 00`,
+            `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
           ),
         },
       ],
@@ -512,9 +512,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Eg får ikkje logga inn i FRAM-appen med e-post`,
           ),
           answer: _(
-            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte kundesenteret vedrørende refusjon dersom du likevel vil lage en ny bruker i appen.`,
-            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact customer service regarding a refund if you still want to create a new user in the app.`,
-            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukaren. Du kan kontakte kundesenteret vedrørande refusjon dersom du likevel vil opprette ein ny brukar i appen.`,
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye bruker. Du kan kontakte FRAM Kundesenter for refusjon dersom du likevel vil lage en ny bruker i appen.`,
+            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user. You can contact FRAM Customer Centre for a refund if you still want to create a new user in the app.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukaren. Du kan kontakte FRAM Kundesenter for refusjon dersom du likevel vil opprette ein ny brukar i appen.`,
           ),
         },
         {
@@ -524,9 +524,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Har du fleire spørsmål om billettkjøp?`,
           ),
           answer: _(
-            `Se flere måter å kontakte oss på frammr.no/kontakt-oss`,
-            `See how to contact us at en.frammr.no/contact-us`,
-            `Sjå fleire måtar å kontakte oss på frammr.no/kontakt-oss`,
+            `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
+            `Contact FRAM Customer Service at en.frammr.no/contact-us or call 71 28 01 00`,
+            `Kontakt FRAM Kundesenter på frammr.no/kontakt-oss eller ring 71 28 01 00.`,
           ),
         },
       ],

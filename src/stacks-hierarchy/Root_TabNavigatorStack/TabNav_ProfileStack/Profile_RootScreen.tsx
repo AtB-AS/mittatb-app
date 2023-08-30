@@ -30,7 +30,6 @@ import {
 } from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
-import {useCopyWithOpacityFade} from '@atb/utils/use-copy-with-countdown';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {APP_ORG, IS_QA_ENV} from '@env';
@@ -52,6 +51,7 @@ import {
 } from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
+import {ClickableCopy} from './components/ClickableCopy';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -59,7 +59,7 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {enable_i18n, privacy_policy_url, enable_ticketing, enable_login} =
+  const {privacy_policy_url, enable_ticketing} =
     useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
@@ -74,28 +74,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
-  const {
-    setClipboard,
-    isAnimating: fadeIsAnimating,
-    FadeContainer: ClipboardFadeContainer,
-  } = useCopyWithOpacityFade(1500);
-
   const {setPreference} = usePreferences();
   const isDeparturesV2Enabled = useDeparturesV2Enabled();
 
   const {configurableLinks} = useFirestoreConfiguration();
-  const ticketingInfo = configurableLinks?.ticketingInfo
-    ? configurableLinks?.ticketingInfo
-    : undefined;
-  const termsInfo = configurableLinks?.termsInfo
-    ? configurableLinks?.termsInfo
-    : undefined;
-  const inspectionInfo = configurableLinks?.inspectionInfo
-    ? configurableLinks?.inspectionInfo
-    : undefined;
-  const refundInfo = configurableLinks?.refundInfo
-    ? configurableLinks?.refundInfo
-    : undefined;
+  const ticketingInfo = configurableLinks?.ticketingInfo;
+  const termsInfo = configurableLinks?.termsInfo;
+  const inspectionInfo = configurableLinks?.inspectionInfo;
+  const refundInfo = configurableLinks?.refundInfo;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
@@ -117,9 +103,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     }
   };
 
-  function copyInstallId() {
-    if (config?.installId) setClipboard(config.installId);
-  }
   const [isLoading, setIsLoading] = useIsLoading(false);
 
   const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
@@ -150,134 +133,127 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
         contentContainerStyle={style.scrollView}
         testID="profileHomeScrollView"
       >
-        {enable_login ? (
-          <Section withPadding>
-            <HeaderSectionItem
-              text={t(ProfileTexts.sections.account.heading)}
-            />
-            {authenticationType === 'phone' && (
-              <GenericSectionItem>
-                <ThemeText style={style.customerNumberHeading}>
-                  {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
-                </ThemeText>
-                <ThemeText type="body__secondary" color="secondary">
-                  {phoneNumber?.formatInternational()}
-                </ThemeText>
-              </GenericSectionItem>
-            )}
-            {customerNumber && (
-              <GenericSectionItem>
-                <ThemeText style={style.customerNumberHeading}>
-                  {t(ProfileTexts.sections.account.infoItems.customerNumber)}
-                </ThemeText>
-                <ThemeText
-                  type="body__secondary"
-                  color="secondary"
-                  accessibilityLabel={numberToAccessibilityString(
-                    customerNumber,
-                  )}
-                >
-                  {customerNumber}
-                </ThemeText>
-              </GenericSectionItem>
-            )}
+        <Section withPadding>
+          <HeaderSectionItem text={t(ProfileTexts.sections.account.heading)} />
+          {authenticationType === 'phone' && (
+            <GenericSectionItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+              </ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {phoneNumber?.formatInternational()}
+              </ThemeText>
+            </GenericSectionItem>
+          )}
+          {customerNumber && (
+            <GenericSectionItem>
+              <ThemeText style={style.customerNumberHeading}>
+                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+              </ThemeText>
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                accessibilityLabel={numberToAccessibilityString(customerNumber)}
+              >
+                {customerNumber}
+              </ThemeText>
+            </GenericSectionItem>
+          )}
 
-            {authenticationType == 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.paymentOptions
-                    .label,
-                )}
-                onPress={() =>
-                  navigation.navigate('Profile_PaymentOptionsScreen')
-                }
-              />
-            )}
-
+          {authenticationType == 'phone' && (
             <LinkSectionItem
               text={t(
-                ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                ProfileTexts.sections.account.linkSectionItems.paymentOptions
                   .label,
               )}
-              onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
-              testID="ticketHistoryButton"
+              onPress={() =>
+                navigation.navigate('Profile_PaymentOptionsScreen')
+              }
             />
-            {authenticationType !== 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.login.label,
-                )}
-                onPress={() => {
-                  let screen: keyof RootStackParamList =
-                    'Root_LoginPhoneInputScreen';
-                  if (hasActiveFareContracts) {
-                    screen = 'Root_LoginActiveFareContractWarningScreen';
-                  } else if (enable_vipps_login) {
-                    screen = 'Root_LoginOptionsScreen';
-                  }
+          )}
 
-                  return navigation.navigate(screen, {});
-                }}
-                icon={<ThemeIcon svg={LogIn} />}
-                testID="loginButton"
-              />
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                .label,
             )}
-            {authenticationType === 'phone' && (
-              <LinkSectionItem
-                text={t(DeleteProfileTexts.header.title)}
-                onPress={() =>
-                  navigation.navigate('Profile_DeleteProfileScreen')
+            onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
+            testID="ticketHistoryButton"
+          />
+          {authenticationType !== 'phone' && (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.login.label,
+              )}
+              onPress={() => {
+                let screen: keyof RootStackParamList =
+                  'Root_LoginPhoneInputScreen';
+                if (hasActiveFareContracts) {
+                  screen = 'Root_LoginActiveFareContractWarningScreen';
+                } else if (enable_vipps_login) {
+                  screen = 'Root_LoginOptionsScreen';
                 }
-              />
-            )}
-            {authenticationType === 'phone' && (
-              <LinkSectionItem
-                text={t(
-                  ProfileTexts.sections.account.linkSectionItems.logout.label,
-                )}
-                icon={<ThemeIcon svg={LogOut} />}
-                onPress={() =>
-                  destructiveAlert({
-                    alertTitleString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .confirmTitle,
-                    ),
-                    alertMessageString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .confirmMessage,
-                    ),
-                    cancelAlertString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .alert.cancel,
-                    ),
-                    confirmAlertString: t(
-                      ProfileTexts.sections.account.linkSectionItems.logout
-                        .alert.confirm,
-                    ),
-                    destructiveArrowFunction: async () => {
-                      setIsLoading(true);
-                      try {
-                        // On logout we delete the user's token
-                        await wipeToken();
-                      } catch (err: any) {
-                        Bugsnag.notify(err);
-                      }
 
-                      try {
-                        await signOut();
-                      } catch (err: any) {
-                        Bugsnag.notify(err);
-                      } finally {
-                        setIsLoading(false);
-                      }
-                    },
-                  })
-                }
-                testID="logoutButton"
-              />
-            )}
-          </Section>
-        ) : null}
+                return navigation.navigate(screen, {});
+              }}
+              icon={<ThemeIcon svg={LogIn} />}
+              testID="loginButton"
+            />
+          )}
+          {authenticationType === 'phone' && (
+            <LinkSectionItem
+              text={t(DeleteProfileTexts.header.title)}
+              onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}
+            />
+          )}
+          {authenticationType === 'phone' && (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.logout.label,
+              )}
+              icon={<ThemeIcon svg={LogOut} />}
+              onPress={() =>
+                destructiveAlert({
+                  alertTitleString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout
+                      .confirmTitle,
+                  ),
+                  alertMessageString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout
+                      .confirmMessage,
+                  ),
+                  cancelAlertString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout.alert
+                      .cancel,
+                  ),
+                  confirmAlertString: t(
+                    ProfileTexts.sections.account.linkSectionItems.logout.alert
+                      .confirm,
+                  ),
+                  destructiveArrowFunction: async () => {
+                    setIsLoading(true);
+                    try {
+                      // On logout we delete the user's token
+                      await wipeToken();
+                    } catch (err: any) {
+                      Bugsnag.notify(err);
+                    }
+
+                    try {
+                      await signOut();
+                    } catch (err: any) {
+                      Bugsnag.notify(err);
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  },
+                })
+              }
+              testID="logoutButton"
+            />
+          )}
+        </Section>
+
         <Section withPadding>
           <HeaderSectionItem text={t(ProfileTexts.sections.settings.heading)} />
           {enable_ticketing ? (
@@ -327,15 +303,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             }
             testID="startScreenButton"
           />
-          {enable_i18n && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.language.label,
-              )}
-              onPress={() => navigation.navigate('Profile_LanguageScreen')}
-              testID="languageButton"
-            />
-          )}
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.language.label,
+            )}
+            onPress={() => navigation.navigate('Profile_LanguageScreen')}
+            testID="languageButton"
+          />
         </Section>
         <Section withPadding>
           <GenericSectionItem>
@@ -574,24 +548,25 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           <ThemeText>
             v{version} ({buildNumber})
           </ThemeText>
-          {config?.installId &&
-            (fadeIsAnimating ? (
-              <ClipboardFadeContainer>
-                <ScreenReaderAnnouncement
-                  message={t(ProfileTexts.installId.wasCopiedAlert)}
-                />
-                <ThemeText>
-                  ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
-                </ThemeText>
-              </ClipboardFadeContainer>
-            ) : (
-              <ThemeText
-                accessibilityHint={t(ProfileTexts.installId.a11yHint)}
-                onPress={copyInstallId}
-              >
+          {config?.installId && (
+            <ClickableCopy
+              successElement={
+                <>
+                  <ScreenReaderAnnouncement
+                    message={t(ProfileTexts.installId.wasCopiedAlert)}
+                  />
+                  <ThemeText>
+                    ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
+                  </ThemeText>
+                </>
+              }
+              copyContent={config.installId}
+            >
+              <ThemeText accessibilityHint={t(ProfileTexts.installId.a11yHint)}>
                 {t(ProfileTexts.installId.label)}: {config.installId}
               </ThemeText>
-            ))}
+            </ClickableCopy>
+          )}
         </View>
       </ScrollView>
       {isLoading && <ActivityIndicatorOverlay />}

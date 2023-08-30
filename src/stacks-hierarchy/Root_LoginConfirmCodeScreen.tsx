@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import {useAuthState} from '@atb/auth';
-import {
-  ConfirmationErrorCode,
-  PhoneSignInErrorCode,
-} from '@atb/auth/AuthContext';
+import {ConfirmationErrorCode, PhoneSignInErrorCode} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -23,6 +19,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -145,7 +142,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   style={styles.submitButton}
                   testID="submitButton"
                 />
-                <TouchableOpacity
+                <PressableOpacity
                   style={styles.resendButton}
                   onPress={onResendCode}
                   accessibilityRole="button"
@@ -158,7 +155,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
                   >
                     {t(LoginTexts.confirmCode.resendButton)}
                   </ThemeText>
-                </TouchableOpacity>
+                </PressableOpacity>
               </>
             )}
           </View>

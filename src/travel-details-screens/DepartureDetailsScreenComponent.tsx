@@ -22,13 +22,12 @@ import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-
 import {StyleSheet, useTheme} from '@atb/theme';
 import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
-import {TicketingMessages} from '@atb/travel-details-screens/components/DetailsMessages';
 import {animateNextChange} from '@atb/utils/animation';
 import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
 import {getQuayName} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React, {useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {Time} from './components/Time';
 import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
@@ -44,6 +43,11 @@ import {Divider} from '@atb/components/divider';
 import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useAnalytics} from '@atb/analytics';
 import {VehicleStatusEnumeration} from '@atb/api/types/generated/vehicles-types_v1';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {canSellTicketsForSubMode} from '@atb/operator-config';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -64,6 +68,8 @@ export const DepartureDetailsScreenComponent = ({
   const [activeItemIndexState, setActiveItem] = useState(activeItemIndex);
   const {theme} = useTheme();
   const analytics = useAnalytics();
+  const {enable_ticketing} = useRemoteConfig();
+  const {modesWeSellTicketsFor} = useFirestoreConfiguration();
 
   const activeItem = items[activeItemIndexState];
   const hasMultipleItems = items.length > 1;
@@ -101,6 +107,17 @@ export const DepartureDetailsScreenComponent = ({
   const isJourneyFinished =
     vehiclePosition?.vehicleStatus === VehicleStatusEnumeration.Completed ||
     estimatedCallsWithMetadata.every((e) => e.actualArrivalTime);
+
+  const toQuay = estimatedCallsWithMetadata.find(
+    (estimatedCall) => estimatedCall.quay?.id === activeItem.toQuayId,
+  );
+  const fromQuay = estimatedCallsWithMetadata.find(
+    (estimatedCall) => estimatedCall.quay?.id === activeItem.fromQuayId,
+  );
+  const canSellTicketsForDeparture = canSellTicketsForSubMode(
+    subMode,
+    modesWeSellTicketsFor,
+  );
 
   const onPaginationPress = (newPage: number) => {
     animateNextChange();
@@ -247,11 +264,18 @@ export const DepartureDetailsScreenComponent = ({
             </View>
           )}
 
-          <TicketingMessages
-            item={items[0]}
-            trip={estimatedCallsWithMetadata}
-            mode={mode}
-            subMode={subMode}
+          <GlobalMessage
+            globalMessageContext={GlobalMessageContextEnum.appDepartureDetails}
+            ruleVariables={{
+              ticketingEnabled: enable_ticketing,
+              canSellTicketsForDeparture: canSellTicketsForDeparture,
+              mode: mode || null,
+              fromZones:
+                fromQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
+              toZones: toQuay?.quay?.tariffZones.map((zone) => zone.id) || null,
+            }}
+            style={styles.messageBox}
+            textColor="background_0"
           />
 
           <EstimatedCallRows
@@ -510,13 +534,14 @@ function CollapseButtonRow({
     </>
   );
   return (
-    <TouchableOpacity
+    <PressableOpacity
       accessibilityRole="button"
       onPress={() => setCollapsed(!collapsed)}
       testID={testID}
+      style={styles.container}
     >
-      <View style={styles.container}>{child}</View>
-    </TouchableOpacity>
+      {child}
+    </PressableOpacity>
   );
 }
 const useCollapseButtonStyle = StyleSheet.createThemeHook((theme) => ({

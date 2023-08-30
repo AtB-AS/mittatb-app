@@ -13,6 +13,8 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
+import {TextColor, TextNames} from '@atb-as/theme';
+import _ from 'lodash';
 
 const modesDisplayLimit: number = 2;
 
@@ -47,21 +49,27 @@ export const getTransportModeText = (
   if (modesCount > modesDisplayLimit) {
     return t(FareContractTexts.transportModes.multipleTravelModes);
   }
-  return modes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
-    .filter(removeDuplicateStringsFilter)
-    .join('/');
+  return _.capitalize(
+    modes
+      .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
+      .filter(removeDuplicateStringsFilter)
+      .join('/'),
+  );
 };
 
 export const TransportModes = ({
   modes,
   iconSize,
   disabled,
+  textType,
+  textColor,
   style,
 }: {
   modes: TransportModePair[];
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
+  textType?: TextNames;
+  textColor?: TextColor;
   style?: ViewStyle;
 }) => {
   const styles = useStyles();
@@ -102,8 +110,8 @@ export const TransportModes = ({
         />
       )}
       <ThemeText
-        type="label__uppercase"
-        color={'secondary'}
+        type={textType ?? 'label__uppercase'}
+        color={textColor ?? 'secondary'}
         accessibilityLabel={t(
           FareContractTexts.transportModes.a11yLabel(transportModeText),
         )}

@@ -5,11 +5,12 @@ import {Platform} from 'react-native';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {
   AppPlatformType,
-  GlobalMessageContextType,
+  GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
+import {Rule, RuleOperator} from './rules';
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
 ): GlobalMessageType[] {
@@ -30,12 +31,14 @@ function mapToGlobalMessage(
   const title = mapToLanguageAndTexts(result.title);
   const context = mapToContexts(result.context);
   const type = mapToMessageType(result.type);
+  const subtle = result.subtle;
   const isDismissable = result.isDismissable;
   const appVersionMin = result.appVersionMin;
   const appVersionMax = result.appVersionMax;
   const platforms = result.appPlatforms;
   const startDate = mapToMillis(result.startDate);
   const endDate = mapToMillis(result.endDate);
+  const rules = mapToRules(result.rules);
 
   if (!result.active) return;
   if (!isAppPlatformValid(platforms)) return;
@@ -49,6 +52,7 @@ function mapToGlobalMessage(
   return {
     id,
     type,
+    subtle,
     active: result.active,
     context,
     body,
@@ -56,6 +60,7 @@ function mapToGlobalMessage(
     isDismissable,
     startDate,
     endDate,
+    rules,
   };
 }
 
@@ -76,12 +81,12 @@ function mapToMillis(
   return timestamp.toMillis();
 }
 
-function mapToContexts(data: any): GlobalMessageContextType[] | undefined {
+function mapToContexts(data: any): GlobalMessageContextEnum[] | undefined {
   if (!isArray(data)) return;
 
   return data
     .map((context: any) => mapToContext(context))
-    .filter(Boolean) as GlobalMessageContextType[];
+    .filter(Boolean) as GlobalMessageContextEnum[];
 }
 
 function isAppPlatformValid(platforms: AppPlatformType[]) {
@@ -91,15 +96,27 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
   );
 }
 
-function mapToContext(data: any): GlobalMessageContextType | undefined {
-  const options = [
-    'app-assistant',
-    'app-departures',
-    'app-ticketing',
-    'web-ticketing',
-    'web-overview',
-  ];
+function mapToContext(data: any): GlobalMessageContextEnum | undefined {
+  if (!Object.values(GlobalMessageContextEnum).includes(data)) return;
+  return data as GlobalMessageContextEnum;
+}
 
-  if (!options.includes(data)) return;
-  return data;
+function mapToRules(data: any): Rule[] {
+  if (!isArray(data)) return [];
+  return data.map((rule: any) => mapToRule(rule)).filter(Boolean) as Rule[];
+}
+
+function mapToRule(data: any): Rule | undefined {
+  if (typeof data !== 'object') return;
+
+  const {variable, operator, value, groupId} = data;
+  if (typeof variable !== 'string') return;
+  if (!(operator in RuleOperator)) return;
+  if (
+    !(['string', 'number', 'boolean'].includes(typeof value) || value === null)
+  )
+    return;
+  if (groupId !== undefined && typeof groupId !== 'string') return;
+
+  return {variable, operator, value, groupId};
 }

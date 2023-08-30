@@ -274,10 +274,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   travelFromButtonPadding: {
-    marginRight: theme.spacings.small,
+    marginRight: theme.spacings.medium / 2,
   },
   travelToButtonPadding: {
-    marginLeft: theme.spacings.small,
+    marginLeft: theme.spacings.medium / 2,
   },
   loadingIndicator: {
     padding: theme.spacings.medium,

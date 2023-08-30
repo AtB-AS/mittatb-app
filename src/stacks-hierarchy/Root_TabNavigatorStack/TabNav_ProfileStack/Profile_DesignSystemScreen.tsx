@@ -331,6 +331,44 @@ export const Profile_DesignSystemScreen = () => {
               message={`This is a message without status icon`}
             />
           </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="valid"
+              isMarkdown={true}
+              message="This is a valid **markdown** message with no background"
+              subtle={true}
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="info"
+              message="This is a dismissable info message with no background"
+              subtle={true}
+              onDismiss={() => Alert.alert('Dismissed')}
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="warning"
+              title="Warning"
+              message="This is a warning message with no background"
+              subtle={true}
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageBox
+              type="error"
+              title="Error with link"
+              message="This is a dismissable error message with no background"
+              subtle={true}
+              onDismiss={() => Alert.alert('Dismissed')}
+              onPressConfig={{url: 'https://atb.no', text: 'Go to atb.no'}}
+              textColor="background_0"
+            />
+          </GenericSectionItem>
         </Section>
 
         <Section style={style.section}>

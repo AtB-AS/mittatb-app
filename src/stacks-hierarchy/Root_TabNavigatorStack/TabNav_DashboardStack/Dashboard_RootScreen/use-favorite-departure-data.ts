@@ -1,5 +1,5 @@
 import {useIsFocused} from '@react-navigation/native';
-import {useCallback, useEffect} from 'react';
+import {MutableRefObject, useCallback, useEffect, useRef} from 'react';
 import useReducerWithSideEffects, {
   NoUpdate,
   ReducerWithSideEffects,
@@ -19,12 +19,11 @@ import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites';
 import {DeparturesRealtimeData} from '@atb/sdk';
-import {differenceInMinutes} from 'date-fns';
+import {differenceInMinutes, differenceInSeconds} from 'date-fns';
 import {useInterval} from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
-import {useRefreshOnFocus} from '@atb/utils/use-refresh-on-focus';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -66,10 +65,13 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       favoriteDepartures?: UserFavoriteDepartures;
+      lastHardRefreshTime: MutableRefObject<Date>;
+      lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
   | {
       type: 'LOAD_REALTIME_DATA';
       favoriteDepartureIds: string[];
+      lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
   | {
       type: 'STOP_LOADER';
@@ -128,6 +130,8 @@ const reducer: ReducerWithSideEffects<
               action.favoriteDepartures || [],
               queryInput,
             );
+            action.lastHardRefreshTime.current = new Date();
+            action.lastRealtimeRefreshTime.current = new Date();
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
@@ -163,6 +167,7 @@ const reducer: ReducerWithSideEffects<
                 lineIds: action.favoriteDepartureIds,
               },
             );
+            action.lastRealtimeRefreshTime.current = new Date();
             dispatch({
               type: 'UPDATE_REALTIME',
               realtimeData,
@@ -245,6 +250,8 @@ export function useFavoriteDepartureData(
   tickRateInSeconds: number = 10,
 ) {
   const searchDate = new Date().toISOString();
+  const lastHardRefreshTime = useRef<Date>(new Date());
+  const lastRealtimeRefreshTime = useRef<Date>(new Date());
 
   const [state, dispatch] = useReducerWithSideEffects(reducer, {
     ...initialState,
@@ -268,6 +275,8 @@ export function useFavoriteDepartureData(
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
         favoriteDepartures: dashboardFavorites,
+        lastHardRefreshTime,
+        lastRealtimeRefreshTime,
       }),
     [JSON.stringify(dashboardFavoriteIds)],
   );
@@ -277,6 +286,7 @@ export function useFavoriteDepartureData(
       dispatch({
         type: 'LOAD_REALTIME_DATA',
         favoriteDepartureIds: dashboardFavoriteLineIds,
+        lastRealtimeRefreshTime,
       }),
     [JSON.stringify(dashboardFavoriteLineIds)],
   );
@@ -285,31 +295,30 @@ export function useFavoriteDepartureData(
     if (!state.tick) {
       return;
     }
-    const diff = differenceInMinutes(state.tick, state.lastRefreshTime);
+    const timeSinceLastHardRefresh = differenceInMinutes(
+      state.tick,
+      lastHardRefreshTime.current,
+    );
+    const timeSinceLastRealtimeRefresh = differenceInSeconds(
+      state.tick,
+      lastRealtimeRefreshTime.current,
+      // Rounding up makes ticks 10, 20 and 30s instead of 9, 19, and 29
+      {roundingMethod: 'ceil'},
+    );
 
-    if (diff >= HARD_REFRESH_LIMIT_IN_MINUTES) {
+    if (timeSinceLastHardRefresh >= HARD_REFRESH_LIMIT_IN_MINUTES) {
       loadInitialDepartures();
+    } else if (timeSinceLastRealtimeRefresh >= updateFrequencyInSeconds) {
+      loadRealTimeData();
     }
-  }, [state.tick, state.lastRefreshTime]);
-  useRefreshOnFocus(
-    isFocused,
-    state.tick,
-    HARD_REFRESH_LIMIT_IN_MINUTES * 60,
-    loadInitialDepartures,
-    loadRealTimeData,
-  );
-
-  useInterval(
-    loadRealTimeData,
-    updateFrequencyInSeconds * 1000,
-    [],
-    !isFocused,
-  );
+  }, [state.tick]);
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
-    [],
+    [isFocused],
     !isFocused,
+    // Trigger immediately on focus only if the view is already initialized
+    !!state.tick,
   );
 
   return {

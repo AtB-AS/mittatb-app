@@ -37,6 +37,7 @@ import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {DashboardScreenProps} from '../navigation-types';
 import {useAnalytics} from '@atb/analytics';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -178,7 +179,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         title={t(DashboardTexts.header.title)}
         rightButton={{type: 'chat'}}
         leftButton={{type: 'status-disruption'}}
-        globalMessageContext="app-assistant"
+        globalMessageContext={GlobalMessageContextEnum.appAssistant}
       />
 
       <View style={style.backdrop}>

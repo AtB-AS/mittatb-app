@@ -1,35 +1,14 @@
 #import "AppDelegate.h"
 #import "AtBRootView.h"
 
-#import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
-
-#import <React/RCTAppSetupUtils.h>
 
 #import <Bugsnag/Bugsnag.h>
 #import <Firebase.h>
 @import Intercom;
 
 #import "RNBootSplash.h"
-
-#if RCT_NEW_ARCH_ENABLED
-#import <React/CoreModulesPlugins.h>
-#import <React/RCTCxxBridgeDelegate.h>
-#import <React/RCTFabricSurfaceHostingProxyRootView.h>
-#import <React/RCTSurfacePresenter.h>
-#import <React/RCTSurfacePresenterBridgeAdapter.h>
-#import <ReactCommon/RCTTurboModuleManager.h>
-#import <react/config/ReactNativeConfig.h>
-static NSString *const kRNConcurrentRoot = @"concurrentRoot";
-@interface AppDelegate () <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate> {
-  RCTTurboModuleManager *_turboModuleManager;
-  RCTSurfacePresenterBridgeAdapter *_bridgeAdapter;
-  std::shared_ptr<const facebook::react::ReactNativeConfig> _reactNativeConfig;
-  facebook::react::ContextContainer::Shared _contextContainer;
-}
-@end
-#endif
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -38,6 +17,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 #import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
+#import <FlipperPerformancePlugin.h>
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
   SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
@@ -45,6 +25,7 @@ static void InitializeFlipper(UIApplication *application) {
   [client addPlugin:[[FKUserDefaultsPlugin alloc] initWithSuiteName:nil]];
   [client addPlugin:[FlipperKitReactPlugin new]];
   [client addPlugin:[[FlipperKitNetworkPlugin alloc] initWithNetworkAdapter:[SKIOSNetworkAdapter new]]];
+  [client addPlugin:[FlipperPerformancePlugin new]];
   [client start];
 }
 #endif
@@ -60,7 +41,7 @@ static void InitializeFlipper(UIApplication *application) {
   NSDictionary *intercomDict = [[NSDictionary alloc] initWithContentsOfFile:intercomPath];
   NSString* intercomApiKey = [intercomDict objectForKey:@"IntercomApiKey"];
   NSString* intercomAppId = [intercomDict objectForKey:@"IntercomAppId"];
-  
+
   if ([intercomApiKey length] != 0 && [intercomAppId length] != 0) {
     [Intercom setApiKey:intercomApiKey forAppId:intercomAppId];
   }
@@ -79,19 +60,15 @@ static void InitializeFlipper(UIApplication *application) {
   }
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
-
-#if RCT_NEW_ARCH_ENABLED
-  _contextContainer = std::make_shared<facebook::react::ContextContainer const>();
-  _reactNativeConfig = std::make_shared<facebook::react::EmptyReactNativeConfig const>();
-  _contextContainer->insert("ReactNativeConfig", _reactNativeConfig);
-  _bridgeAdapter = [[RCTSurfacePresenterBridgeAdapter alloc] initWithBridge:bridge contextContainer:_contextContainer];
-  bridge.surfacePresenter = _bridgeAdapter.surfacePresenter;
-#endif
-
-  NSDictionary *initProps = [self prepareInitialProps];
+  
+  self.moduleName = @"no.mittatb";
+  // You can add your custom initial props in the dictionary below.
+  // They will be passed down to the ViewController used by React Native.
+  self.initialProps = @{};
+  
   AtBRootView *rootView = [[AtBRootView alloc] initWithBridge:bridge
                                                    moduleName:@"atb"
-                                            initialProperties:initProps];
+                                            initialProperties:self.initialProps];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
@@ -100,30 +77,9 @@ static void InitializeFlipper(UIApplication *application) {
   [rootView setBackgroundByTrait];
   [self.window makeKeyAndVisible];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
-  
+
   return YES;
 }
-
-/// This method controls whether the `concurrentRoot`feature of React18 is turned on or off.
-///
-/// @see: https://reactjs.org/blog/2022/03/29/react-v18.html
-/// @note: This requires to be rendering on Fabric (i.e. on the New Architecture).
-/// @return: `true` if the `concurrentRoot` feture is enabled. Otherwise, it returns `false`.
-- (BOOL)concurrentRootEnabled
-{
-  // Switch this bool to turn on and off the concurrent root
-  return true;
-}
-
-- (NSDictionary *)prepareInitialProps
-{
-  NSMutableDictionary *initProps = [NSMutableDictionary new];
-#ifdef RCT_NEW_ARCH_ENABLED
-  initProps[kRNConcurrentRoot] = @([self concurrentRootEnabled]);
-#endif
-  return initProps;
-}
-
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
@@ -141,42 +97,5 @@ static void InitializeFlipper(UIApplication *application) {
   return [RCTLinkingManager application:application openURL:url options:options];
 }
 
-#if RCT_NEW_ARCH_ENABLED
-
-#pragma mark - RCTCxxBridgeDelegate
-- (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:(RCTBridge *)bridge
-{
-  _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
-                                                             delegate:self
-                                                            jsInvoker:bridge.jsCallInvoker];
-  return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager);
-}
-
-#pragma mark RCTTurboModuleManagerDelegate
-- (Class)getModuleClassFromName:(const char *)name
-{
-  return RCTCoreModulesClassProvider(name);
-}
-
-- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const std::string &)name
-                                                      jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
-{
-  return nullptr;
-}
-
-- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const std::string &)name
-                                                     initParams:
-                                                         (const facebook::react::ObjCTurboModule::InitParams &)params
-{
-  return nullptr;
-}
-
-- (id<RCTTurboModule>)getModuleInstanceFromClass:(Class)moduleClass
-{
-  return RCTAppSetupDefaultModuleFromClass(moduleClass);
-}
-#endif
-
-
 @end
- 
+

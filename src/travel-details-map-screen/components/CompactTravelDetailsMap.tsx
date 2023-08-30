@@ -6,7 +6,7 @@ import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import MapboxGL from '@rnmapbox/maps';
 import {Position} from 'geojson';
 import React, {useEffect, useMemo, useRef} from 'react';
-import {Platform, TouchableOpacity, View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {MapLabel} from './MapLabel';
 import {MapRoute} from './MapRoute';
 import {createMapLines, getMapBounds, pointOf} from '../utils';
@@ -14,6 +14,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type MapProps = {
   mapLegs: MapLeg[];
@@ -97,12 +98,12 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
           )}
         </MapboxGL.MapView>
       </View>
-      <TouchableOpacity style={styles.button} onPress={onExpand}>
+      <PressableOpacity style={styles.button} onPress={onExpand}>
         <ThemeText type="body__secondary--bold" color="primary">
           {buttonText}
         </ThemeText>
         <ThemeIcon svg={ArrowRight} />
-      </TouchableOpacity>
+      </PressableOpacity>
     </>
   );
 };
