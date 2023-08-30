@@ -48,7 +48,7 @@ import {
   getNoticesForLeg,
   getTimeRepresentationType,
   isLegFlexibleTransport,
-  isSignificantFootLegWalkOrWaitTime,
+  getFilteredLegsByWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
   getTripPatternBookingsRequiredCount,
@@ -150,8 +150,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const [legIconsParentWidth, setLegIconsParentWidth] = useState(0);
   const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
 
+  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
+
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
-    tripPattern.legs.length,
+    filteredLegs.length,
   );
   const fadeInValue = useRef(new Animated.Value(0)).current;
 
@@ -172,15 +174,15 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     useNativeDriver: true,
   });
 
-  if (!tripPattern?.legs?.length) return null;
+  if (filteredLegs.length < 1) return null;
 
-  const expandedLegs = tripPattern.legs.slice(0, numberOfExpandedLegs);
-  const collapsedLegs = tripPattern.legs.slice(
-    numberOfExpandedLegs,
-    tripPattern.legs.length,
+  const lastLegIsFlexible = isLegFlexibleTransport(
+    filteredLegs[filteredLegs.length - 1],
   );
-  const legs = expandedLegs.filter((leg, i) =>
-    isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
+  const expandedLegs = filteredLegs.slice(0, numberOfExpandedLegs);
+  const collapsedLegs = filteredLegs.slice(
+    numberOfExpandedLegs,
+    filteredLegs.length,
   );
 
   const isInPast =
@@ -233,14 +235,14 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
               }}
             >
               <View style={styles.legOutput}>
-                {legs.map((leg, i) => (
+                {expandedLegs.map((leg, i) => (
                   <View
                     key={tripPattern.compressedQuery + leg.aimedStartTime}
                     style={styles.legAndDash}
                   >
                     <View testID="tripLeg">
                       {leg.mode === 'foot' ? (
-                        <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                        <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
                       ) : (
                         <TransportationLeg
                           leg={leg}
@@ -282,7 +284,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         )}
                       </View>
                     </View>
-                    {i < legs.length - 1 ? (
+                    {i < expandedLegs.length - 1 ? (
                       <View style={[styles.dashContainer, iconHeight]}>
                         <LegDash />
                       </View>
@@ -308,8 +310,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary" testID="endTime">
-                {(legs.length > 0 &&
-                isLegFlexibleTransport(legs[legs.length - 1])
+                {(lastLegIsFlexible
                   ? t(dictionary.missingRealTimePrefix)
                   : '') +
                   formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
