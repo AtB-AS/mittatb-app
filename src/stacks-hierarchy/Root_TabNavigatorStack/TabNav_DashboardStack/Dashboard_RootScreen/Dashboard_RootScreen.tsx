@@ -1,43 +1,43 @@
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAnalytics} from '@atb/analytics';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
-import {screenReaderPause} from '@atb/components/text';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {LocationInputSectionItem, Section} from '@atb/components/sections';
+import {screenReaderPause} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
   FavoriteChips,
   GeoLocation,
   Location,
-  useFavorites,
   UserFavorites,
+  useFavorites,
 } from '@atb/favorites';
-import {useGeolocationState} from '@atb/GeolocationContext';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {
   SelectableLocationType,
   useLocationSearchValue,
 } from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SearchForLocations} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
   DashboardTexts,
-  dictionary,
   TripSearchTexts,
+  dictionary,
   useTranslation,
 } from '@atb/translations';
+import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import Bugsnag from '@bugsnag/react-native';
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {DashboardScreenProps} from '../navigation-types';
 import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
-import {DashboardScreenProps} from '../navigation-types';
-import {useAnalytics} from '@atb/analytics';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -190,71 +190,62 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
       >
-        <View style={style.searchHeader}>
-          <View style={style.paddedContainer}>
-            <Section>
-              <LocationInputSectionItem
-                accessibilityLabel={
-                  t(TripSearchTexts.location.departurePicker.a11yLabel) +
-                  screenReaderPause
-                }
-                accessibilityHint={
-                  t(TripSearchTexts.location.departurePicker.a11yHint) +
-                  screenReaderPause
-                }
-                updatingLocation={updatingLocation && !to}
-                location={from}
-                label={t(TripSearchTexts.location.departurePicker.label)}
-                onPress={() => openLocationSearch('fromLocation', from)}
-                icon={<ThemeIcon svg={LocationIcon} />}
-                onIconPress={setCurrentLocationOrRequest}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    from?.resultType == 'geolocation'
-                      ? t(
-                          TripSearchTexts.location.locationButton.a11yLabel
-                            .update,
-                        )
-                      : t(
-                          TripSearchTexts.location.locationButton.a11yLabel.use,
-                        ),
-                  accessibilityRole: 'button',
-                }}
-                testID="searchFromButton"
-              />
+        <View style={[style.contentSection, style.searchHeader]}>
+          <Section>
+            <LocationInputSectionItem
+              accessibilityLabel={
+                t(TripSearchTexts.location.departurePicker.a11yLabel) +
+                screenReaderPause
+              }
+              accessibilityHint={
+                t(TripSearchTexts.location.departurePicker.a11yHint) +
+                screenReaderPause
+              }
+              updatingLocation={updatingLocation && !to}
+              location={from}
+              label={t(TripSearchTexts.location.departurePicker.label)}
+              onPress={() => openLocationSearch('fromLocation', from)}
+              icon={<ThemeIcon svg={LocationIcon} />}
+              onIconPress={setCurrentLocationOrRequest}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  from?.resultType == 'geolocation'
+                    ? t(
+                        TripSearchTexts.location.locationButton.a11yLabel
+                          .update,
+                      )
+                    : t(TripSearchTexts.location.locationButton.a11yLabel.use),
+                accessibilityRole: 'button',
+              }}
+              testID="searchFromButton"
+            />
 
-              <LocationInputSectionItem
-                accessibilityLabel={t(
-                  TripSearchTexts.location.destinationPicker.a11yLabel,
-                )}
-                label={t(TripSearchTexts.location.destinationPicker.label)}
-                location={to}
-                onPress={() => openLocationSearch('toLocation', to)}
-                icon={<ThemeIcon svg={Swap} />}
-                onIconPress={swap}
-                iconAccessibility={{
-                  accessible: true,
-                  accessibilityLabel:
-                    t(TripSearchTexts.location.swapButton.a11yLabel) +
-                    screenReaderPause,
-                  accessibilityRole: 'button',
-                }}
-                testID="searchToButton"
-              />
-            </Section>
-          </View>
+            <LocationInputSectionItem
+              accessibilityLabel={t(
+                TripSearchTexts.location.destinationPicker.a11yLabel,
+              )}
+              label={t(TripSearchTexts.location.destinationPicker.label)}
+              location={to}
+              onPress={() => openLocationSearch('toLocation', to)}
+              icon={<ThemeIcon svg={Swap} />}
+              onIconPress={swap}
+              iconAccessibility={{
+                accessible: true,
+                accessibilityLabel:
+                  t(TripSearchTexts.location.swapButton.a11yLabel) +
+                  screenReaderPause,
+                accessibilityRole: 'button',
+              }}
+              testID="searchToButton"
+            />
+          </Section>
 
           <FavoriteChips
             key="favoriteChips"
+            style={style.favoriteChips}
             chipTypes={['favorites', 'add-favorite']}
             onSelectLocation={fillNextAvailableLocation}
-            containerStyle={style.fadeChild}
-            contentContainerStyle={{
-              // @TODO Find solution for not hardcoding this. e.g. do proper math
-              paddingLeft: theme.spacings.medium,
-              paddingRight: theme.spacings.medium / 2,
-            }}
             chipActionHint={
               t(TripSearchTexts.favorites.favoriteChip.a11yHint) +
               t(!!from ? dictionary.toPlace : dictionary.fromPlace) +
@@ -265,8 +256,10 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }
           />
         </View>
+
         {enable_ticketing && (
           <CompactFareContracts
+            style={style.contentSection}
             onPressDetails={(
               isCarnet: boolean,
               isInspectable: boolean,
@@ -299,6 +292,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
           />
         )}
         <DeparturesWidget
+          style={style.contentSection}
           onEditFavouriteDeparture={() =>
             navigation.navigate('Dashboard_FavoriteDeparturesScreen')
           }
@@ -436,13 +430,15 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     padding: 0,
     margin: 0,
   },
-  paddedContainer: {
+  contentSection: {
+    marginTop: theme.spacings.large,
     marginHorizontal: theme.spacings.medium,
   },
-  fadeChild: {
-    marginVertical: theme.spacings.medium,
+  favoriteChips: {
+    marginTop: theme.spacings.medium,
   },
   searchHeader: {
+    marginTop: 0,
     backgroundColor: theme.static.background[themeBackgroundColor].background,
   },
   dashboardGlobalmessages: {

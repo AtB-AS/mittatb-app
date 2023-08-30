@@ -1,5 +1,5 @@
 import React, {PropsWithChildren} from 'react';
-import {AccessibilityProps, View, ViewStyle} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ContainerSizingType} from './types';
 import {BaseSectionItemProps} from './use-section-item';
@@ -10,7 +10,7 @@ export type SectionProps = PropsWithChildren<{
   withTopPadding?: boolean;
   withBottomPadding?: boolean;
   type?: ContainerSizingType;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }> &
   AccessibilityProps;
@@ -31,7 +31,7 @@ export function Section({
   const firstIndex = validChildren.indexOf(true);
   const lastIndex = validChildren.lastIndexOf(true);
 
-  const containerStyle: Array<ViewStyle | undefined> = [
+  const containerStyle: Array<StyleProp<ViewStyle> | undefined> = [
     style,
     withPadding ? styles.container__padded : undefined,
     withFullPadding ? styles.container__fullPadded : undefined,

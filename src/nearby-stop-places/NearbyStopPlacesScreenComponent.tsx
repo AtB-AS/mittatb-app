@@ -213,12 +213,8 @@ const Header = React.memo(function Header({
   const styles = useStyles();
   const {theme} = useTheme();
   return (
-    <View
-      style={{
-        backgroundColor: theme.static.background.background_accent_0.background,
-      }}
-    >
-      <Section style={styles.locationInputSection}>
+    <View style={styles.locationInputSection}>
+      <Section>
         <LocationInputSectionItem
           label={t(NearbyTexts.location.departurePicker.label)}
           updatingLocation={updatingLocation}
@@ -242,7 +238,7 @@ const Header = React.memo(function Header({
             setLocation(location);
           }}
           chipTypes={['favorites', 'add-favorite']}
-          contentContainerStyle={styles.favoriteChips}
+          style={styles.favoriteChips}
           onAddFavorite={onAddFavorite}
         />
       )}
@@ -267,10 +263,11 @@ function sortAndFilterStopPlaces(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  locationInputSection: {marginHorizontal: theme.spacings.medium},
+  locationInputSection: {
+    backgroundColor: theme.static.background.background_accent_0.background,
+    marginHorizontal: theme.spacings.medium,
+  },
   favoriteChips: {
-    paddingTop: theme.spacings.medium,
-    paddingRight: theme.spacings.medium / 2,
-    paddingLeft: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
   },
 }));
