@@ -1,10 +1,12 @@
 import {client} from '@atb/api/index';
 import {stringifyUrl} from '@atb/api/utils';
-import qs from 'query-string';
-import {AxiosRequestConfig} from 'axios';
+import {useIsLoading} from '@atb/utils/use-is-loading';
 import {WS_API_BASE_URL} from '@env';
-import {GetServiceJourneyVehicles} from './types/vehicles';
-import {useSubscription, SubscriptionProps} from './use-subscription';
+import {AxiosRequestConfig} from 'axios';
+import qs from 'query-string';
+import {useCallback, useState} from 'react';
+import {GetServiceJourneyVehicles, VehicleWithPosition} from './types/vehicles';
+import {useSubscription} from './use-subscription';
 
 const WEBSOCKET_BASE_URL = WS_API_BASE_URL;
 
@@ -31,10 +33,25 @@ export const getServiceJourneyVehicles = async (
 
 export const useLiveVehicleSubscription = ({
   serviceJourneyId,
-  onError,
-  onMessage,
+  vehicleWithPosition,
   enabled,
-}: {serviceJourneyId?: string} & Omit<SubscriptionProps, 'url'>) => {
+  // No need to show disconnect indicator if able to reconnect within 3 seconds
+  connectionIndicatorDebounceTimeInMs = 3_000,
+}: {
+  serviceJourneyId?: string;
+  vehicleWithPosition: VehicleWithPosition | undefined;
+  enabled: boolean;
+
+  connectionIndicatorDebounceTimeInMs?: number;
+}) => {
+  const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
+    vehicleWithPosition,
+  );
+  const [isConnected, setIsConnected] = useIsLoading(
+    false,
+    connectionIndicatorDebounceTimeInMs,
+  );
+
   const query = qs.stringify({serviceJourneyId});
 
   const url = stringifyUrl(
@@ -42,10 +59,29 @@ export const useLiveVehicleSubscription = ({
     query,
   );
 
+  // Create listener handles that is "stable" but updated
+  // when any state function setters updates
+  const onMessageHandler = useCallback(
+    (event: WebSocketMessageEvent) => {
+      // set as false every time, React will not update if the value is the same.
+      setIsConnected(false);
+      const vehicle = JSON.parse(event.data) as VehicleWithPosition;
+      setVehicle(vehicle);
+    },
+    [setVehicle, setIsConnected],
+  );
+
+  const onErrorHandler = useCallback(
+    () => setIsConnected(true),
+    [setIsConnected],
+  );
+
   useSubscription({
     url: serviceJourneyId ? url : null,
-    onMessage,
-    onError,
+    onMessage: onMessageHandler,
+    onError: onErrorHandler,
     enabled,
   });
+
+  return [vehicle, isConnected] as const;
 };
