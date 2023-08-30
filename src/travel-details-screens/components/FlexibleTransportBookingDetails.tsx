@@ -62,7 +62,7 @@ export const FlexibleTransportBookingDetails: React.FC<
           ),
         )}
         color="background_1"
-        setFocusOnLoad={false}
+        setFocusOnLoad={true}
         leftButton={{
           type: 'close',
           onPress: close,

@@ -255,6 +255,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
                           publicCode,
                         ),
                       ),
+                      a11yLabelAppendText: t(
+                        TripDetailsTexts.flexibleTransport.isButtonHint,
+                      ),
                       action: openBookingDetails,
                     }
                   : undefined

@@ -333,6 +333,11 @@ const TripDetailsTexts = {
         `Meir om ${publicCode}`,
       ),
     bookOnline: _(`Reserver på nett`, `Book online`, `Reserver på nett`),
+    bookOnlineA11yHint: _(
+      `Reserver på nett på ekstern side`,
+      `Book online (external content)`,
+      `Reserver på nett på ekstern side`,
+    ),
     bookByPhone: (phone: string) =>
       _(
         `Reserver på tlf. ${phone}`,
@@ -387,6 +392,7 @@ const TripDetailsTexts = {
         `What is ${publicCode}?`,
         `Kva er ${publicCode}?`,
       ),
+    isButtonHint: _(`Knapp`, `Button`, `Knapp`),
   },
 };
 export default orgSpecificTranslations(TripDetailsTexts, {
