@@ -44,9 +44,9 @@ export const useLiveVehicleSubscription = ({
 
   connectionIndicatorDebounceTimeInMs?: number;
 }) => {
-  const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
-    vehicleWithPosition,
-  );
+  const [liveVehicle, setLiveVehicle] = useState<
+    VehicleWithPosition | undefined
+  >(vehicleWithPosition);
   const [isConnected, setIsConnected] = useIsLoading(
     false,
     connectionIndicatorDebounceTimeInMs,
@@ -66,9 +66,9 @@ export const useLiveVehicleSubscription = ({
       // set as false every time, React will not update if the value is the same.
       setIsConnected(false);
       const vehicle = JSON.parse(event.data) as VehicleWithPosition;
-      setVehicle(vehicle);
+      setLiveVehicle(vehicle);
     },
-    [setVehicle, setIsConnected],
+    [setLiveVehicle, setIsConnected],
   );
 
   const onErrorHandler = useCallback(
@@ -83,5 +83,5 @@ export const useLiveVehicleSubscription = ({
     enabled,
   });
 
-  return [vehicle, isConnected] as const;
+  return [liveVehicle, isConnected] as const;
 };

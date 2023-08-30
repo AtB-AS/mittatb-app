@@ -89,7 +89,7 @@ export const TravelDetailsMapScreenComponent = ({
 
   const stations = useStations(mapFilter?.mobility ?? {});
 
-  const [realtimeVehicle, isRealtimeError] = useLiveVehicleSubscription({
+  const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
     vehicleWithPosition,
     enabled: isFocusedAndActive,
@@ -146,7 +146,7 @@ export const TravelDetailsMapScreenComponent = ({
   };
 
   useEffect(() => {
-    const location = realtimeVehicle?.location;
+    const location = liveVehicle?.location;
     if (!location) return;
     if (shouldTrack) {
       flyToLocation({
@@ -156,7 +156,7 @@ export const TravelDetailsMapScreenComponent = ({
         animationMode: 'easeTo',
       });
     }
-  }, [realtimeVehicle, shouldTrack]);
+  }, [liveVehicle, shouldTrack]);
 
   return (
     <View style={styles.mapView}>
@@ -193,15 +193,15 @@ export const TravelDetailsMapScreenComponent = ({
             text={t(MapTexts.startPoint.label)}
           />
         )}
-        {realtimeVehicle && (
-          <LiveVehicle
-            vehicle={realtimeVehicle}
+        {liveVehicle && (
+          <LiveVehicleMarker
+            vehicle={liveVehicle}
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
             zoomLevel={zoomLevel}
             heading={cameraHeading}
-            isError={isRealtimeError}
+            isError={isLiveConnected}
           />
         )}
         {stations && <Stations stations={stations.stations} />}
@@ -236,7 +236,7 @@ type VehicleIconProps = {
   isError: boolean;
 };
 
-const LiveVehicle = ({
+const LiveVehicleMarker = ({
   vehicle,
   setShouldTrack,
   mode,
