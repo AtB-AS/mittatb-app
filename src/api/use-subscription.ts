@@ -27,7 +27,7 @@ export function useSubscription({
       const ws = new WebSocket(url);
 
       ws.onmessage = (event) => {
-        onMessage && onMessage(event);
+        onMessage?.(event);
       };
 
       ws.onclose = (event) => {
@@ -41,11 +41,21 @@ export function useSubscription({
           Bugsnag.leaveBreadcrumb(`WebSocket closed with code ${event.code}`);
           connect();
         } else {
-          Bugsnag.notify(
-            `WebSocket closed with unexpected code ${event.code} "${event.message}" (${event.reason})`,
-          );
+          if (event.code === 1006 && retryCount.current <= 3) {
+            // Might be caused by Android WS implementation closing connection.
+            // Should retry immediately, but this might also be an real issue
+            // where auto-reconnect can cause infinite loop. So instead try to leave
+            // breadcrumb if it happens under 3 times, but treat as normal retry flow.
+            Bugsnag.leaveBreadcrumb(
+              `WebSocket closed with code ${event.code} (retry: ${retryCount})`,
+            );
+          } else {
+            Bugsnag.notify(
+              `WebSocket closed with unexpected code ${event.code} "${event.message}" (${event.reason})`,
+            );
+          }
           retryTimeout = retryWithCappedBackoff(retryCount, connect);
-          onError && onError(event);
+          onError?.(event);
         }
       };
 
@@ -67,7 +77,7 @@ export function useSubscription({
       }
       webSocket.current = null;
     };
-  }, [url, enabled]);
+  }, [url, enabled, onMessage, onError]);
 }
 
 /**
