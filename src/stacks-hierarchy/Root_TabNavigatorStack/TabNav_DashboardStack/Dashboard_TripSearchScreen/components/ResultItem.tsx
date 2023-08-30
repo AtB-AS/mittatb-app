@@ -658,7 +658,10 @@ const tripSummary = (
             formatToClock(firstLeg.aimedStartTime, language, 'floor'),
           ),
         )
-      : t(
+      : (isLegFlexibleTransport(firstLeg)
+          ? t(dictionary.missingRealTimePrefix)
+          : '') +
+        t(
           TripSearchTexts.results.resultItem.journeySummary.noRealTime(
             firstLeg.fromPlace?.name ?? '',
             formatToClock(firstLeg.expectedStartTime, language, 'floor'),
@@ -696,11 +699,20 @@ const tripSummary = (
     ),
   );
 
+  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
+  const startTimeIsApproximation =
+    filteredLegs.length > 0 && isLegFlexibleTransport(filteredLegs[0]);
+  const endTimeIsApproximation =
+    filteredLegs.length > 0 &&
+    isLegFlexibleTransport(filteredLegs[filteredLegs.length - 1]);
+
   const traveltimesText = t(
     TripSearchTexts.results.resultItem.journeySummary.travelTimes(
       formatToClock(tripPattern.expectedStartTime, language, 'floor'),
       formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
       secondsToDuration(tripPattern.duration, language),
+      startTimeIsApproximation,
+      endTimeIsApproximation,
     ),
   );
 
