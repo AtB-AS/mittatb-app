@@ -56,34 +56,6 @@ export const authSignInWithCustomToken = async (token: string) => {
   }
 };
 
-/*
- * Check whether the user creation is finished up to 10 times with an interval
- * of 1 second.
- */
-export const startAccountCreationFinishedCheck = (
-  user: FirebaseAuthTypes.User | null,
-  dispatch: Dispatch<AuthReducerAction>,
-) => {
-  let retryCount = 0;
-  const intervalId = setInterval(async () => {
-    const idToken = await user?.getIdTokenResult(true);
-    const customerNumber = idToken?.claims['customer_number'];
-    if (customerNumber) {
-      dispatch({
-        type: 'SET_ACCOUNT_CREATION_FINISHED',
-        customerNumber,
-      });
-      clearInterval(intervalId);
-    } else if (retryCount >= 10) {
-      dispatch({type: 'SET_AUTH_ERROR'});
-      clearInterval(intervalId);
-    } else {
-      retryCount += 1;
-    }
-  }, 1000);
-  return intervalId;
-};
-
 export const isAuthError = (
   error: any,
 ): error is FirebaseAuthTypes.NativeFirebaseAuthError => 'code' in error;
