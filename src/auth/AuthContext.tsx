@@ -21,7 +21,6 @@ import {
   authConfirmCode,
   authSignInWithCustomToken,
   authSignInWithPhoneNumber,
-  startAccountCreationFinishedCheck,
 } from './auth-utils';
 import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
 import {useCheckIfAccountCreationFinished} from './use-check-if-account-creation-finished';
@@ -82,17 +81,11 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
           : 'creating-account',
       };
     }
-    case 'SET_ACCOUNT_CREATION_FINISHED': {
+    case 'SET_AUTH_STATUS': {
       return {
         ...prevState,
-        authStatus: 'authenticated',
+        authStatus: action.authStatus,
         customerNumber: action.customerNumber,
-      };
-    }
-    case 'SET_AUTH_ERROR': {
-      return {
-        ...prevState,
-        authStatus: 'error',
       };
     }
   }
@@ -118,7 +111,7 @@ type AuthContextState = {
   signInWithCustomToken: (
     token: string,
   ) => Promise<VippsSignInErrorCode | undefined>;
-  retryUserCreationFinishedCheck: () => void;
+  retryAuth: () => void;
 } & Omit<AuthReducerState, 'confirmationHandler'>;
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
@@ -154,8 +147,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         }, []),
         authenticationType: getAuthenticationType(state.user),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
-        retryUserCreationFinishedCheck: useCallback(
-          () => startAccountCreationFinishedCheck(state.user, dispatch),
+        retryAuth: useCallback(
+          () =>
+            // As of now the only known error state is when account creation fails
+            dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'}),
           [state.user?.uid],
         ),
       }}

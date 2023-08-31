@@ -25,11 +25,9 @@ export type AuthReducerAction =
       authStatus: AuthStatus;
     }
   | {
-      type: 'SET_ACCOUNT_CREATION_FINISHED';
-      customerNumber: number;
-    }
-  | {
-      type: 'SET_AUTH_ERROR';
+      type: 'SET_AUTH_STATUS';
+      authStatus: AuthStatus;
+      customerNumber?: number;
     };
 
 export type ConfirmationErrorCode =
