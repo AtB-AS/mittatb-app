@@ -151,6 +151,55 @@ export function QuaySection({
     [],
   );
 
+  const renderEstimatedCallSection = useCallback(
+    ({item: departure, index}: EstimatedCallRenderItem) => (
+      <GenericSectionItem
+        radius={
+          index === departuresToDisplay.length - 1 && !shouldShowMoreItemsLink
+            ? 'bottom'
+            : undefined
+        }
+        testID={'departureItem' + index}
+      >
+        <EstimatedCallItem
+          departure={departure}
+          onPress={onPress}
+          accessibilityHint={
+            mode === 'Favourite'
+              ? t(DeparturesTexts.a11yMarkFavouriteHint)
+              : t(DeparturesTexts.a11yViewDepartureDetailsHint)
+          }
+          testID={'departureItem' + index}
+          accessibilityLabel={
+            mode === 'Favourite'
+              ? getLineA11yLabel(departure, t)
+              : getA11yDeparturesLabel(
+                  departure,
+                  departure.notices,
+                  t,
+                  language,
+                )
+          }
+          existingFavorite={existingFavorite({
+            ...departure.serviceJourney.line,
+            lineNumber: departure.serviceJourney.line.publicCode,
+            lineName: departure.destinationDisplay?.frontText,
+          })}
+          showFavorite={showFavorites}
+          onPressFavorite={onPressFavorite}
+          favoriteAccessibilityLabel={
+            mode === 'Departure'
+              ? toggleFavouriteAccessibilityLabel(departure.serviceJourney.line)
+              : undefined
+          }
+          showNotices={mode !== 'Favourite'}
+          now={now}
+        />
+      </GenericSectionItem>
+    ),
+    [],
+  );
+
   return (
     <View testID={testID}>
       <Section style={styles.section}>
@@ -205,54 +254,7 @@ export function QuaySection({
               departuresToDisplay &&
               departuresToDisplay.slice(0, departuresPerQuay)
             }
-            renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
-              <GenericSectionItem
-                radius={
-                  index === departuresToDisplay.length - 1 &&
-                  !shouldShowMoreItemsLink
-                    ? 'bottom'
-                    : undefined
-                }
-                testID={'departureItem' + index}
-              >
-                <EstimatedCallItem
-                  departure={departure}
-                  onPress={onPress}
-                  accessibilityHint={
-                    mode === 'Favourite'
-                      ? t(DeparturesTexts.a11yMarkFavouriteHint)
-                      : t(DeparturesTexts.a11yViewDepartureDetailsHint)
-                  }
-                  testID={'departureItem' + index}
-                  accessibilityLabel={
-                    mode === 'Favourite'
-                      ? getLineA11yLabel(departure, t)
-                      : getA11yDeparturesLabel(
-                          departure,
-                          departure.notices,
-                          t,
-                          language,
-                        )
-                  }
-                  existingFavorite={existingFavorite({
-                    ...departure.serviceJourney.line,
-                    lineNumber: departure.serviceJourney.line.publicCode,
-                    lineName: departure.destinationDisplay?.frontText,
-                  })}
-                  showFavorite={showFavorites}
-                  onPressFavorite={onPressFavorite}
-                  favoriteAccessibilityLabel={
-                    mode === 'Departure'
-                      ? toggleFavouriteAccessibilityLabel(
-                          departure.serviceJourney.line,
-                        )
-                      : undefined
-                  }
-                  showNotices={mode !== 'Favourite'}
-                  now={now}
-                />
-              </GenericSectionItem>
-            )}
+            renderItem={renderEstimatedCallSection}
             keyExtractor={(item: EstimatedCall) =>
               // ServiceJourney ID is not a unique key if a ServiceJourney
               // passes by the same stop several times, (e.g. Ringen in Oslo)
