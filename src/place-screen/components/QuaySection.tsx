@@ -197,7 +197,19 @@ export function QuaySection({
         />
       </GenericSectionItem>
     ),
-    [],
+    [
+      departuresToDisplay.length,
+      shouldShowMoreItemsLink,
+      mode,
+      now,
+      language,
+      t,
+      onPress,
+      onPressFavorite,
+      showFavorites,
+      toggleFavouriteAccessibilityLabel,
+      existingFavorite,
+    ],
   );
 
   return (
