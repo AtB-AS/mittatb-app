@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useRef, useEffect} from 'react';
 
 export function useInterval(
   callback: Function,
@@ -8,7 +8,6 @@ export function useInterval(
   triggerImmediately: boolean = false,
 ) {
   const savedCallback = useRef<Function>(() => {});
-  const requestId = useRef<number | null>(null);
 
   // Remember the latest callback.
   useEffect(() => {
@@ -18,24 +17,15 @@ export function useInterval(
   // Set up the interval.
   useEffect(() => {
     if (disabled) return;
-    let lastTime = Date.now();
     function tick() {
-      const now = Date.now();
-      const deltaTime = now - lastTime;
-      if (deltaTime > delay) {
-        savedCallback.current();
-        lastTime = now - (deltaTime % delay);
-      }
-      requestId.current = requestAnimationFrame(tick);
-    }
-    if (triggerImmediately) {
       savedCallback.current();
     }
+    if (triggerImmediately) {
+      tick();
+    }
     if (delay !== null) {
-      requestId.current = requestAnimationFrame(tick);
-      return () => {
-        requestId.current && cancelAnimationFrame(requestId.current);
-      };
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
     }
   }, [delay, disabled].concat(deps));
 }
