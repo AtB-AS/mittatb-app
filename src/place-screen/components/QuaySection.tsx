@@ -49,6 +49,7 @@ type QuaySectionProps = {
   searchDate?: string | Date;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
+  tick: Date | undefined;
 };
 
 type EstimatedCallRenderItem = {
@@ -71,12 +72,18 @@ export function QuaySection({
   addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
+  tick,
 }: QuaySectionProps): JSX.Element {
   const {favoriteDepartures} = useFavorites();
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
   const {t, language} = useTranslation();
+
+  const [now, setNow] = useState(tick ?? new Date());
+  useEffect(() => {
+    if (tick) setNow(tick);
+  }, [tick]);
 
   const departuresToDisplay =
     mode === 'Favourite'
@@ -242,6 +249,7 @@ export function QuaySection({
                       : undefined
                   }
                   showNotices={mode !== 'Favourite'}
+                  now={now}
                 />
               </GenericSectionItem>
             )}

@@ -139,6 +139,7 @@ export function QuayView({
           showFavorites={true}
           searchDate={searchStartTime}
           mode={mode}
+          tick={state.tick}
         />
       )}
     />

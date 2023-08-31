@@ -63,6 +63,7 @@ type EstimatedCallItemProps = {
     existing?: StoredFavoriteDeparture,
   ) => void;
   showNotices?: boolean;
+  now: Date;
 };
 
 export const EstimatedCallItem = memo(
@@ -77,6 +78,7 @@ export const EstimatedCallItem = memo(
     favoriteAccessibilityLabel,
     onPressFavorite,
     showNotices,
+    now,
   }: EstimatedCallItemProps): JSX.Element => {
     const styles = useStyles();
 
@@ -124,6 +126,7 @@ export const EstimatedCallItem = memo(
               expectedTime={expectedTime}
               aimedTime={aimedTime}
               testID={testID}
+              now={now}
             />
           ) : null}
           {showFavorite && (
@@ -142,16 +145,11 @@ export const EstimatedCallItem = memo(
     );
   },
   (prev, next) => {
+    if (prev.now.valueOf() !== next.now.valueOf()) return false;
     if (prev.departure.serviceJourney.id !== next.departure.serviceJourney.id)
-      return false;
-    if (
-      prev.departure.expectedDepartureTime !==
-      next.departure.expectedDepartureTime
-    )
       return false;
     if (prev.departure.aimedDepartureTime !== next.departure.aimedDepartureTime)
       return false;
-    if (prev.accessibilityLabel !== next.accessibilityLabel) return false;
     if (prev.accessibilityHint !== next.accessibilityHint) return false;
     if (prev.onPress !== next.onPress) return false;
     if (prev.showFavorite !== next.showFavorite) return false;
@@ -170,12 +168,14 @@ const DepartureTime = ({
   aimedTime,
   testID,
   isRealtime,
+  now,
 }: {
   isTripCancelled: boolean;
   expectedTime: string;
   aimedTime: string;
   testID: string;
   isRealtime: boolean;
+  now: Date;
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -190,6 +190,7 @@ const DepartureTime = ({
     expectedTime,
     language,
     t(dictionary.date.units.now),
+    now,
   );
   const readableAimedTime = formatLocaleTime(aimedTime, language);
   const ExpectedText = (

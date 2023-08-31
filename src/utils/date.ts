@@ -130,18 +130,19 @@ export function formatToClock(
 export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   language: Language,
-  now: string,
+  nowText: string,
+  now?: Date,
   minuteThreshold: number = 9,
 ) {
   const parsed = parseIfNeeded(isoDate);
-  const diff = secondsBetween(new Date(), parsed);
+  const diff = secondsBetween(now ?? new Date(), parsed);
 
   if (diff / 60 >= minuteThreshold) {
     return formatLocaleTime(parsed, language);
   }
 
   if (diff / 60 <= 1) {
-    return now;
+    return nowText;
   }
 
   return secondsToMinutesShort(diff, language);

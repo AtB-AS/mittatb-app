@@ -214,6 +214,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
             addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             searchDate={searchStartTime}
             mode={mode}
+            tick={state.tick}
           />
           {mode === 'Departure' && index === lastIndex && (
             <Feedback
