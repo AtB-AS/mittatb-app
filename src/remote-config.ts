@@ -45,6 +45,7 @@ export type RemoteConfig = {
   enable_extended_onboarding: boolean;
   enable_non_transit_trip_search: boolean;
   enable_show_valid_time_info: boolean;
+  enable_loading_screen: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -95,6 +96,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   disable_travelcard: false,
   enable_non_transit_trip_search: true,
   enable_show_valid_time_info: true,
+  enable_loading_screen: true,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -254,6 +256,10 @@ export function getConfig(): RemoteConfig {
     values['enable_show_valid_time_info']?.asBoolean() ??
     defaultRemoteConfig.enable_show_valid_time_info;
 
+  const enable_loading_screen =
+    values['enable_loading_screen']?.asBoolean() ??
+    defaultRemoteConfig.enable_loading_screen;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -298,6 +304,7 @@ export function getConfig(): RemoteConfig {
     enable_extended_onboarding,
     enable_non_transit_trip_search,
     enable_show_valid_time_info,
+    enable_loading_screen,
   };
 }
 
