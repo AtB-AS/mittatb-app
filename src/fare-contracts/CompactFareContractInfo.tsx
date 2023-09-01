@@ -3,7 +3,7 @@ import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {AccessibilityProps, View} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getNonInspectableTokenWarning,
   isValidFareContract,
@@ -18,6 +18,7 @@ import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol'
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 
 type CompactFareContractInfoProps = FareContractInfoDetailsProps & {
+  style?: StyleProp<ViewStyle>;
   onPressDetails?: () => void;
 };
 
@@ -54,7 +55,7 @@ export const CompactFareContractInfo = (
   };
 
   return (
-    <Section withPadding {...accessibility}>
+    <Section style={props.style} {...accessibility}>
       <GenericClickableSectionItem onPress={props.onPressDetails}>
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
