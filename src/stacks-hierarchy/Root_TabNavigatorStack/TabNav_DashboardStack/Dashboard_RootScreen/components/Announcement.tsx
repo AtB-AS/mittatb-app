@@ -23,7 +23,7 @@ export const Announcement = ({announcement}: Props) => {
           />
         </View>
       )}
-      <View>
+      <View style={style.textContainer}>
         <ThemeText type="body__primary--bold">
           {getTextForLanguage(
             announcement.summaryTitle ?? announcement.fullTitle,
@@ -48,5 +48,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     borderRadius: theme.border.radius.regular,
     padding: -theme.border.radius.regular,
     overflow: 'hidden',
+  },
+  textContainer: {
+    flex: 1,
   },
 }));
