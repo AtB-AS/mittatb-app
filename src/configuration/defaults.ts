@@ -7,6 +7,8 @@ export const defaultModesWeSellTicketsFor: string[] = [
   'localTram',
   'regionalBus',
   'shuttleBus',
+  'highSpeedPassengerService',
+  'highSpeedVehicleService',
 ];
 export const defaultPaymentTypes: PaymentType[] = [
   PaymentType.Vipps,

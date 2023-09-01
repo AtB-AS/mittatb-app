@@ -10,15 +10,15 @@ export enum StorageModelKeysEnum {
   UseFlexibleTransportAccessModeDebugOverride = '@ATB_use_flexible_on_accessMode',
   UseFlexibleTransportDirectModeDebugOverride = '@ATB_use_flexible_on_directMode',
   UseFlexibleTransportEgressModeDebugOverride = '@ATB_use_flexible_on_egressMode',
-  EnableNewTravelSearchDebugOverride = '@ATB_enable_new_travel_search_debug_override',
   EnableFromTravelSearchToTicketDebugOverride = '@ATB_enable_from_travel_search_to_ticket_debug_override',
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
   EnableCityBikesInMapDebugOverride = 'ATB_enable_city_bikes_in_map_debug_override',
   EnableCarSharingInMapDebugOverride = 'ATB_enable_car_sharing_in_map_debug_override',
   EnableRealtimeMapDebugOverride = '@ATB_enable_realtime_map_debug_override',
-  EnableMapDebugOverride = '@ATB_enable_map_debug_override',
   EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',
   EnableTipsAndInformationOverride = '@ATB_enable_tips_and_information_override',
+  EnableNonTransitTripSearch = '@ATB_enable_non_transit_trip_search',
+  ShowValidTimeInfoDebugOverride = '@ATB_show_valid_time_info_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

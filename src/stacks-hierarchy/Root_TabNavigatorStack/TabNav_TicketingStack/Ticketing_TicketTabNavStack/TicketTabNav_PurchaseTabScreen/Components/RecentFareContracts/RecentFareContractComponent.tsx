@@ -4,13 +4,13 @@ import {useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import {RecentFareContract} from '../../types';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Dimensions, TouchableOpacity, View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
-  useFirestoreConfiguration,
   FareProductTypeConfig,
+  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {InfoChip} from '@atb/components/info-chip';
 import {InteractiveColor} from '@atb/theme/colors';
@@ -18,6 +18,10 @@ import {
   getTransportModeText,
   TransportModes,
 } from '@atb/components/transportation-modes';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
+import {useHarborsQuery} from '@atb/queries';
+import {TravelRightDirection, useTicketingState} from '@atb/ticketing';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -40,6 +44,8 @@ export const RecentFareContractComponent = ({
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
+    pointToPointValidity,
+    orderId,
   } = recentFareContract;
   const {language} = useTranslation();
   const styles = useStyles();
@@ -49,10 +55,15 @@ export const RecentFareContractComponent = ({
   const toZoneName = toTariffZone?.name.value;
   const {width} = Dimensions.get('window');
 
+  const harborsQuery = useHarborsQuery();
+  const {findFareContractByOrderId} = useTicketingState();
+
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
+  const direction: TravelRightDirection | undefined =
+    findFareContractByOrderId(orderId)?.travelRights?.[0].direction;
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -74,28 +85,57 @@ export const RecentFareContractComponent = ({
         RecentFareContractsTexts.repeatPurchase.label,
       )} ${modeInfo} ${travellerInfo}`;
     }
-
-    const zoneInfo = `${
+    const zoneInfo =
       fromZoneName === toZoneName
         ? `${t(
             RecentFareContractsTexts.a11yPreLabels.zones.oneZone,
           )} ${fromZoneName}`
         : `${t(
             RecentFareContractsTexts.a11yPreLabels.zones.multipleZones,
-          )} ${fromZoneName}, ${toZoneName}`
-    }`;
+          )} ${fromZoneName}, ${toZoneName}`;
+
+    const harborInfo = () => {
+      if (pointToPointValidity?.fromPlace && pointToPointValidity?.toPlace) {
+        const fromName =
+          harborsQuery.data?.find(
+            (sp) => sp.id === pointToPointValidity.fromPlace,
+          )?.name ?? '';
+        const toName =
+          harborsQuery.data?.find(
+            (sp) => sp.id === pointToPointValidity.toPlace,
+          )?.name ?? '';
+        return direction === TravelRightDirection.Both
+          ? t(
+              RecentFareContractsTexts.a11yPreLabels.harbors.returnTrip(
+                fromName,
+                toName,
+              ),
+            )
+          : t(
+              RecentFareContractsTexts.a11yPreLabels.harbors.oneWayTrip(
+                fromName,
+                toName,
+              ),
+            );
+      }
+      return '';
+    };
+    const zoneOrHarborInfo =
+      fromTariffZone !== undefined ? zoneInfo : harborInfo();
 
     return `${t(
       RecentFareContractsTexts.repeatPurchase.label,
-    )} ${modeInfo} ${travellerInfo} ${zoneInfo}`;
+    )} ${modeInfo} ${travellerInfo} ${zoneOrHarborInfo}`;
   };
 
   const currentAccessibilityLabel = returnAccessibilityLabel();
 
   const interactiveColor = theme.interactive[interactiveColorName];
 
+  const showTwoWayIcon = direction === TravelRightDirection.Both;
+
   return (
-    <TouchableOpacity
+    <PressableOpacity
       style={styles.container}
       accessible={true}
       onPress={() => onSelect(recentFareContract, fareProductTypeConfig)}
@@ -103,7 +143,10 @@ export const RecentFareContractComponent = ({
       accessibilityHint={t(RecentFareContractsTexts.repeatPurchase.a11yHint)}
       testID={testID}
     >
-      <View style={[styles.upperPart, {minWidth: width * 0.6}]}>
+      <View
+        style={[styles.upperPart, {minWidth: width * 0.6}]}
+        importantForAccessibility={'no-hide-descendants'}
+      >
         <View style={styles.travelModeWrapper}>
           <TransportModes
             iconSize={'small'}
@@ -120,6 +163,14 @@ export const RecentFareContractComponent = ({
             {getReferenceDataName(preassignedFareProduct, language)}
           </ThemeText>
         </View>
+
+        {direction !== undefined && pointToPointValidity && (
+          <FareContractHarborStopPlaces
+            showTwoWayIcon={showTwoWayIcon}
+            fromStopPlaceId={pointToPointValidity?.fromPlace}
+            toStopPlaceId={pointToPointValidity?.toPlace}
+          />
+        )}
 
         <View style={styles.horizontalFlex}>
           <View>
@@ -206,7 +257,7 @@ export const RecentFareContractComponent = ({
         </ThemeText>
         <ThemeIcon svg={ArrowRight} fill={interactiveColor.outline.text} />
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

@@ -10,20 +10,21 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
 import {StartTimeSelection} from './components/StartTimeSelection';
 import {Summary} from './components/Summary';
 import {TravellerSelection} from './components/TravellerSelection';
-import {ZonesSelection} from './components/ZonesSelection';
 import {useOfferDefaults} from './use-offer-defaults';
 import {useOfferState} from './use-offer-state';
 import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
-import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {useFocusRefs} from '@atb/utils/use-focus-refs';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -34,18 +35,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const styles = useStyles();
   const {t, language} = useTranslation();
 
-  const {
-    preassignedFareProduct,
-    selectableTravellers,
-    fromTariffZone,
-    toTariffZone,
-  } = useOfferDefaults(
-    params.preassignedFareProduct,
-    params.fareProductTypeConfig.type,
-    params.userProfilesWithCount,
-    params.fromTariffZone,
-    params.toTariffZone,
-  );
+  const {preassignedFareProduct, selectableTravellers, fromPlace, toPlace} =
+    useOfferDefaults(
+      params.preassignedFareProduct,
+      params.fareProductTypeConfig.type,
+      params.userProfilesWithCount,
+      params.fromPlace,
+      params.toPlace,
+    );
 
   const onSelectPreassignedFareProduct = (fp: PreassignedFareProduct) => {
     navigation.setParams({
@@ -54,7 +51,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
-  const hasSelection = travellerSelection.some((u) => u.count);
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
@@ -63,6 +59,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
     params.fareProductTypeConfig.configuration;
 
+  const offerEndpoint =
+    zoneSelectionMode === 'none'
+      ? 'authority'
+      : zoneSelectionMode === 'multiple-stop-harbor'
+      ? 'stop-places'
+      : 'zones';
+
   const {
     isSearchingOffer,
     error,
@@ -70,13 +73,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    zoneSelectionMode === 'none' ? 'authority' : 'zones',
+    offerEndpoint,
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromPlace,
+    toPlace,
     travellerSelection,
     travelDate,
   );
+  const hasSelection =
+    travellerSelection.some((u) => u.count) &&
+    userProfilesWithCountAndOffer.some((u) => u.count);
 
   const isEmptyOffer = error?.type === 'empty-offers';
 
@@ -88,13 +94,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
-  const zonesInputSectionItemRef = useRef(null);
-
-  useEffect(() => {
-    if (params.onFocusElement === 'zone-selection') {
-      giveFocus(zonesInputSectionItemRef);
-    }
-  }, [params.onFocusElement]);
+  const focusRefs = useFocusRefs(params.onFocusElement);
 
   return (
     <View style={styles.container}>
@@ -104,7 +104,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           type: 'cancel',
           onPress: closeModal,
         }}
-        globalMessageContext="app-ticketing"
+        globalMessageContext={GlobalMessageContextEnum.appTicketing}
         setFocusOnLoad={!params.onFocusElement}
       />
 
@@ -155,18 +155,22 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
           />
-
-          <ZonesSelection
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
+          <FromToSelection
             fareProductTypeConfig={params.fareProductTypeConfig}
+            fromPlace={fromPlace}
+            toPlace={toPlace}
             preassignedFareProduct={preassignedFareProduct}
-            onSelect={(t) => {
-              navigation.setParams({onFocusElement: undefined});
-              navigation.push('Root_PurchaseTariffZonesSearchByMapScreen', t);
-            }}
             style={styles.selectionComponent}
-            ref={zonesInputSectionItemRef}
+            onSelect={(params) => {
+              navigation.setParams({onFocusElement: undefined});
+              navigation.push(
+                zoneSelectionMode === 'multiple-stop-harbor'
+                  ? 'Root_PurchaseHarborSearchScreen'
+                  : 'Root_PurchaseTariffZonesSearchByMapScreen',
+                params,
+              );
+            }}
+            ref={focusRefs}
           />
 
           <StartTimeSelection
@@ -186,8 +190,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
         <PurchaseMessages
           preassignedFareProductType={preassignedFareProduct.type}
-          fromTariffZone={fromTariffZone}
-          toTariffZone={toTariffZone}
+          fromTariffZone={fromPlace}
+          toTariffZone={toPlace}
         />
 
         <FullScreenFooter>
@@ -200,7 +204,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: params.fareProductTypeConfig.name,
-                tariffZone: {from: fromTariffZone.id, to: toTariffZone.id},
+                tariffZone: {from: fromPlace.id, to: toPlace.id},
                 userProfilesWithCount: travellerSelection.map((t) => ({
                   userType: t.userTypeString,
                   count: t.count,
@@ -214,8 +218,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               });
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 fareProductTypeConfig: params.fareProductTypeConfig,
-                fromTariffZone,
-                toTariffZone,
+                fromPlace: fromPlace,
+                toPlace: toPlace,
                 userProfilesWithCount: travellerSelection,
                 preassignedFareProduct,
                 travelDate,

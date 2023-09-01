@@ -7,7 +7,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {
   AccessibilityProps,
   StyleProp,
@@ -22,35 +22,39 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   fromTariffZone: TariffZoneWithMetadata;
   toTariffZone: TariffZoneWithMetadata;
   preassignedFareProduct: PreassignedFareProduct;
-  onSelect: (t: {
-    fromTariffZone: TariffZoneWithMetadata;
-    toTariffZone: TariffZoneWithMetadata;
-    fareProductTypeConfig: FareProductTypeConfig;
-    preassignedFareProduct: PreassignedFareProduct;
-  }) => void;
+  selectionMode: 'single' | 'multiple';
+  onSelect: (params: Root_PurchaseTariffZonesSearchByMapScreenParams) => void;
   style?: StyleProp<ViewStyle>;
 };
 
-export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
+export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
   (
     {
       fareProductTypeConfig,
       fromTariffZone,
       toTariffZone,
       preassignedFareProduct,
+      selectionMode,
       onSelect,
       style,
     }: ZonesSelectionProps,
-    zonesInputSectionItemRef,
+    ref,
   ) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
+
+    const zonesRef = useRef<TouchableOpacity>(null);
+    useImperativeHandle(ref, () => ({
+      zonesRef,
+    }));
 
     const accessibility: AccessibilityProps = {
       accessible: true,
@@ -60,24 +64,6 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
         screenReaderPause,
       accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
     };
-
-    let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
-
-    if (selectionMode === 'none') {
-      return null;
-    }
-
-    // Only support multiple/single zone in app for now. Stop place is built into selector.
-    if (selectionMode == 'multiple-stop' || selectionMode == 'multiple-zone') {
-      selectionMode = 'multiple';
-    }
-    if (
-      preassignedFareProduct.zoneSelectionMode?.includes('single') ||
-      selectionMode == 'single-stop' ||
-      selectionMode == 'single-zone'
-    ) {
-      selectionMode = 'single';
-    }
 
     const displayAsOneZone =
       fromTariffZone.id === toTariffZone.id &&
@@ -97,7 +83,7 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
         </ThemeText>
         <Section {...accessibility}>
           <GenericClickableSectionItem
-            ref={zonesInputSectionItemRef}
+            ref={zonesRef}
             onPress={() =>
               onSelect({
                 fromTariffZone,
@@ -120,7 +106,7 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
                         type="body__secondary"
                         style={styles.toFromLabel}
                       >
-                        {t(PurchaseOverviewTexts.zones.label.from)}
+                        {t(PurchaseOverviewTexts.fromToLabel.from)}
                       </ThemeText>
                       <ZoneLabel tariffZone={fromTariffZone} />
                     </View>
@@ -130,7 +116,7 @@ export const ZonesSelection = forwardRef<TouchableOpacity, ZonesSelectionProps>(
                         type="body__secondary"
                         style={styles.toFromLabel}
                       >
-                        {t(PurchaseOverviewTexts.zones.label.to)}
+                        {t(PurchaseOverviewTexts.fromToLabel.to)}
                       </ThemeText>
                       <ZoneLabel tariffZone={toTariffZone} />
                     </View>
@@ -183,9 +169,9 @@ const a11yLabel = (
   } else {
     const prefix = t(PurchaseOverviewTexts.zones.a11yLabelPrefixMultiple);
     const fromLabel = `${t(
-      PurchaseOverviewTexts.zones.label.from,
+      PurchaseOverviewTexts.fromToLabel.from,
     )} ${getZoneText(from)}`;
-    const toLabel = `${t(PurchaseOverviewTexts.zones.label.to)} ${getZoneText(
+    const toLabel = `${t(PurchaseOverviewTexts.fromToLabel.to)} ${getZoneText(
       to,
     )}`;
     return `${prefix} ${fromLabel}, ${toLabel}`;

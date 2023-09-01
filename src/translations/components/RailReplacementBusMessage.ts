@@ -4,6 +4,7 @@ const RailReplacementBusTexts = {
   tripIncludesRailReplacementBus: _(
     'Reisen inkluderer buss for tog.',
     'This trip includes rail replacement bus.',
+    'Reisa inkluderer buss for tog.',
   ),
 };
 

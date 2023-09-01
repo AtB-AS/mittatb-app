@@ -16,6 +16,7 @@ import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
   dictionary,
   getTextForLanguage,
+  Language,
   PurchaseConfirmationTexts,
   useTranslation,
 } from '@atb/translations';
@@ -28,7 +29,6 @@ import {
   ScrollView,
   StyleProp,
   Text,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -44,6 +44,11 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
 import {Info} from '@atb/assets/svg/color/icons/status';
+import {TariffZone} from '@atb/reference-data/types';
+import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -100,6 +105,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     isError: mobileTokenError,
   } = useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
+  const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
@@ -113,8 +119,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const {
     fareProductTypeConfig,
-    fromTariffZone,
-    toTariffZone,
+    fromPlace,
+    toPlace,
     preassignedFareProduct,
     userProfilesWithCount,
     travelDate,
@@ -123,6 +129,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
 
   const {travellerSelectionMode, zoneSelectionMode} =
     fareProductTypeConfig.configuration;
+
+  const offerEndpoint =
+    zoneSelectionMode === 'none'
+      ? 'authority'
+      : zoneSelectionMode === 'multiple-stop-harbor'
+      ? 'stop-places'
+      : 'zones';
 
   const {
     offerSearchTime,
@@ -133,10 +146,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     refreshOffer,
     userProfilesWithCountAndOffer,
   } = useOfferState(
-    zoneSelectionMode === 'none' ? 'authority' : 'zones',
+    offerEndpoint,
     preassignedFareProduct,
-    fromTariffZone,
-    toTariffZone,
+    fromPlace,
+    toPlace,
     userProfilesWithCount,
     travelDate,
   );
@@ -150,7 +163,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       offer_id,
     }),
   );
+  const fromPlaceName = getPlaceName(fromPlace, language);
 
+  const toPlaceName = getPlaceName(toPlace, language);
   const vatAmount = totalPrice * (vatPercent / 100);
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
@@ -250,13 +265,80 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       );
     });
   }
+  function summary(text?: string) {
+    // Don't render the text if the text is undefined or empty.
+    if (!text) return null;
+
+    return (
+      <ThemeText
+        style={styles.smallTopMargin}
+        type="body__secondary"
+        color="secondary"
+      >
+        {text}
+      </ThemeText>
+    );
+  }
+
+  const SummaryText = () => {
+    switch (zoneSelectionMode) {
+      case 'multiple-stop-harbor':
+        return (
+          <>
+            {summary(
+              fareProductTypeConfig.type.includes('single')
+                ? t(
+                    PurchaseConfirmationTexts.validityTexts.harbor.single(
+                      fromPlaceName,
+                      toPlaceName,
+                    ),
+                  )
+                : t(
+                    PurchaseConfirmationTexts.validityTexts.harbor.period(
+                      fromPlaceName,
+                      toPlaceName,
+                    ),
+                  ),
+            )}
+            {summary(
+              t(
+                PurchaseConfirmationTexts.validityTexts.harbor
+                  .messageInHarborZones,
+              ),
+            )}
+          </>
+        );
+      case 'none':
+        return summary(
+          getTextForLanguage(
+            preassignedFareProduct.description ?? [],
+            language,
+          ),
+        );
+      default:
+        return summary(
+          fromPlace.id === toPlace.id
+            ? t(
+                PurchaseConfirmationTexts.validityTexts.zone.single(
+                  fromPlaceName,
+                ),
+              )
+            : t(
+                PurchaseConfirmationTexts.validityTexts.zone.multiple(
+                  fromPlaceName,
+                  toPlaceName,
+                ),
+              ),
+        );
+    }
+  };
 
   return (
     <View style={styles.container}>
       <FullScreenHeader
         title={getTextForLanguage(fareProductTypeConfig.name, language)}
         leftButton={headerLeftButton}
-        globalMessageContext="app-ticketing"
+        globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
       <ScrollView style={styles.infoSection}>
         <View>
@@ -278,50 +360,24 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
-                {zoneSelectionMode !== 'none' ? (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {fromTariffZone.id === toTariffZone.id
-                      ? t(
-                          PurchaseConfirmationTexts.validityTexts.zone.single(
-                            getReferenceDataName(fromTariffZone, language),
-                          ),
-                        )
-                      : t(
-                          PurchaseConfirmationTexts.validityTexts.zone.multiple(
-                            getReferenceDataName(fromTariffZone, language),
-                            getReferenceDataName(toTariffZone, language),
-                          ),
-                        )}
-                  </ThemeText>
-                ) : (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {getTextForLanguage(
-                      preassignedFareProduct.description ?? [],
-                      language,
-                    )}
-                  </ThemeText>
-                )}
-                {!isSearchingOffer && validDurationSeconds && (
-                  <ThemeText
-                    style={styles.smallTopMargin}
-                    type="body__secondary"
-                    color="secondary"
-                  >
-                    {t(
+                <SummaryText />
+                {!isSearchingOffer &&
+                  validDurationSeconds &&
+                  isShowValidTimeInfoEnabled &&
+                  summary(
+                    t(
                       PurchaseConfirmationTexts.validityTexts.time(
                         secondsToDuration(validDurationSeconds, language),
                       ),
-                    )}
-                  </ThemeText>
-                )}
+                    ),
+                  )}
+                {fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+                  summary(
+                    t(
+                      PurchaseConfirmationTexts.validityTexts.harbor
+                        .onlyOnPhone,
+                    ),
+                  )}
 
                 <View style={[styles.smallTopMargin, {flexDirection: 'row'}]}>
                   <Info
@@ -436,7 +492,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     selectPaymentOption(previousMethod);
                   }}
                 />
-                <TouchableOpacity
+                <PressableOpacity
                   style={styles.buttonTopSpacing}
                   disabled={!!error}
                   onPress={() => {
@@ -459,7 +515,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                       {t(PurchaseConfirmationTexts.changePaymentOption.text)}
                     </ThemeText>
                   </View>
-                </TouchableOpacity>
+                </PressableOpacity>
               </View>
             ) : (
               <Button
@@ -554,6 +610,15 @@ const PricePerUserProfile = ({
     </View>
   );
 };
+
+function getPlaceName(
+  place: TariffZone | StopPlaceFragment,
+  language: Language,
+) {
+  return 'geometry' in place
+    ? getReferenceDataName(place, language)
+    : place.name;
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

@@ -8,7 +8,6 @@ import {ThemeText} from '@atb/components/text';
 type OptionalNextDayLabelProps = {
   departureTime: string;
   previousDepartureTime?: string;
-  allSameDay: boolean;
 };
 export function DayLabel({
   departureTime,

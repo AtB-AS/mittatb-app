@@ -5,8 +5,9 @@ import {initLobot, Translatable} from '@leile/lobo-t';
 export enum Language {
   Norwegian = 'nb',
   English = 'en',
+  Nynorsk = 'nn',
 }
-export const appLanguages = ['nb', 'en'] as const;
+export const appLanguages = ['nb', 'en', 'nn'] as const;
 
 export const DEFAULT_LANGUAGE = Language.Norwegian;
 export const FALLBACK_LANGUAGE = Language.English;
@@ -20,9 +21,11 @@ export type TranslateFunction = TFunc<typeof Language>;
 export function translation(
   norwegian: string,
   english: string,
+  nynorsk: string,
 ): TranslatedString {
   return {
     [Language.Norwegian]: norwegian,
     [Language.English]: english,
+    [Language.Nynorsk]: nynorsk,
   };
 }

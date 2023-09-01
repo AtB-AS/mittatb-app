@@ -14,6 +14,7 @@ export const useIsCarSharingEnabled = () => {
 export const useCarSharingInMapDebugOverride = (): [
   boolean | undefined,
   (v?: boolean) => void,
+  boolean,
 ] => {
   return useDebugOverride(
     StorageModelKeysEnum.EnableCarSharingInMapDebugOverride,

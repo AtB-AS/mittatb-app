@@ -12,6 +12,8 @@ import {useDebugOverride} from '@atb/debug';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RemoteConfigKeys} from '@atb/remote-config';
 
+import {useNonTransitTripSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
+
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
   cityZones?: CityZone[],
@@ -30,49 +32,73 @@ export const useFindCityZoneInLocation = (
   ]);
 };
 
-export function useJourneyModes(
-  defaultValue: StreetMode = StreetMode.Foot,
-): Modes {
-  const isFlexibleTransportEnabledInRemoteConfig =
-    useFlexibleTransportEnabled();
-  const flexibleTransportAccessModeEnabledInRemoteConfig =
-    useFlexibleTransportAccessModeEnabled();
-  const flexibleTransportDirectModeEnabledInRemoteConfig =
-    useFlexibleTransportDirectModeEnabled();
-  const flexibleTransportEgressModeEnabledInRemoteConfig =
-    useFlexibleTransportEgressModeEnabled();
+export const defaultJourneyModes = {
+  accessMode: StreetMode.Foot,
+  directMode: StreetMode.Foot,
+  egressMode: StreetMode.Foot,
+};
 
-  return {
+export function useJourneyModes(): [Modes, boolean] {
+  const [nonTransitTripSearchEnabled] = useNonTransitTripSearchEnabled();
+  const [
+    isFlexibleTransportEnabledInRemoteConfig,
+    flexTransportDebugOverrideReady,
+  ] = useFlexibleTransportEnabled();
+  const [
+    flexibleTransportAccessModeEnabledInRemoteConfig,
+    flexAccessModeDebugOverrideReady,
+  ] = useFlexibleTransportAccessModeEnabled();
+
+  const [
+    flexibleTransportDirectModeEnabledInRemoteConfig,
+    flexDirectModeDebugOverrideReady,
+  ] = useFlexibleTransportDirectModeEnabled();
+  const [
+    flexibleTransportEgressModeEnabledInRemoteConfig,
+    flexEgressModeDebugOverrideReady,
+  ] = useFlexibleTransportEgressModeEnabled();
+
+  const journeyModes = {
     accessMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportAccessModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : defaultJourneyModes.accessMode,
     directMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportDirectModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : nonTransitTripSearchEnabled
+        ? undefined
+        : defaultJourneyModes.directMode,
     egressMode:
       isFlexibleTransportEnabledInRemoteConfig &&
       flexibleTransportEgressModeEnabledInRemoteConfig
         ? StreetMode.Flexible
-        : defaultValue,
+        : defaultJourneyModes.egressMode,
   };
+
+  const allDebugOverridesReady =
+    flexTransportDebugOverrideReady &&
+    flexAccessModeDebugOverrideReady &&
+    flexDirectModeDebugOverrideReady &&
+    flexEgressModeDebugOverrideReady;
+
+  return [journeyModes, allDebugOverridesReady];
 }
 
 export const useFlexibleTransportDebugOverrideOrRemote = (
   remoteConfigKey: RemoteConfigKeys,
   storageModelKey: StorageModelKeysEnum,
-) => {
-  const [debugOverride] = useDebugOverride(storageModelKey);
+): [string | number | boolean, boolean] => {
+  const [debugOverride, _, debugOverrideValueReady] =
+    useDebugOverride(storageModelKey);
   const remoteConfig = useRemoteConfig();
 
-  if (debugOverride !== undefined) {
-    return debugOverride;
-  }
-
-  return remoteConfig[remoteConfigKey];
+  return [
+    debugOverride === undefined ? remoteConfig[remoteConfigKey] : debugOverride,
+    debugOverrideValueReady,
+  ];
 };
 
 export const useFlexibleTransportAccessModeEnabled = () => {

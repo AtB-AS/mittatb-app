@@ -1,4 +1,3 @@
-import {TripPattern} from '@atb/api/types/trips';
 import {Location} from '@atb/favorites';
 import {SearchTime} from '@atb/journey-date-picker';
 
@@ -13,7 +12,6 @@ export type SearchStateType =
   | 'search-success'
   | 'search-empty-result';
 
-export type TripPatternWithKey = TripPattern & {key: string};
 export type TripSearchScreenParams = {
   fromLocation?: Location;
   toLocation?: Location;

@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -14,13 +14,13 @@ import {
 import {InfoTag} from '@atb/components/info-tag';
 
 import {TicketingTileIllustration} from './TicketingTileIllustration';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export const TicketingTile = ({
   accented = false,
   onPress,
   testID,
   illustrationName,
-  isPeriodTicket = false,
   transportColor,
   title,
   description,
@@ -31,7 +31,6 @@ export const TicketingTile = ({
   onPress: () => void;
   testID: string;
   illustrationName: string;
-  isPeriodTicket?: boolean;
   transportColor: TransportColor;
   title?: string;
   description?: string;
@@ -57,7 +56,7 @@ export const TicketingTile = ({
   );
 
   return (
-    <TouchableOpacity
+    <PressableOpacity
       onPress={onPress}
       accessible={true}
       accessibilityLabel={accessibilityLabel}
@@ -96,14 +95,13 @@ export const TicketingTile = ({
         </View>
         <TicketingTileIllustration
           illustrationName={illustrationName}
-          isPeriodTicket={isPeriodTicket}
           style={styles.illustration}
           fill={themeSecondaryColor.background}
           width={theme.icon.size.large}
           height={theme.icon.size.large}
         />
       </View>
-    </TouchableOpacity>
+    </PressableOpacity>
   );
 };
 

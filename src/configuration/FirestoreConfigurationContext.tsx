@@ -9,7 +9,6 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import {
-  BoatStopPoint,
   CityZone,
   PreassignedFareProduct,
   TariffZone,
@@ -29,9 +28,10 @@ import {
   defaultVatPercent,
 } from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
-import {FareProductTypeConfig} from './types';
+import {FareProductGroupType, FareProductTypeConfig} from './types';
 import {
   mapLanguageAndTextType,
+  mapToFareProductGroups,
   mapToFareProductTypeConfigs,
   mapToFlexibleTransportOption,
   mapToMobilityOperators,
@@ -39,21 +39,18 @@ import {
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
-import {TravelSearchFiltersType} from '@atb-as/config-specs';
+import {
+  TravelSearchFiltersType,
+  ConfigurableLinksType,
+} from '@atb-as/config-specs';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
 };
 
-type ConfigurableLinks = {
-  ticketingInfo?: LanguageAndTextType[];
-  termsInfo?: LanguageAndTextType[];
-  inspectionInfo?: LanguageAndTextType[];
-  refundInfo?: LanguageAndTextType[];
-};
-
 type ConfigurationContextState = {
   preassignedFareProducts: PreassignedFareProduct[];
+  fareProductGroups: FareProductGroupType[];
   tariffZones: TariffZone[];
   cityZones: CityZone[];
   userProfiles: UserProfile[];
@@ -61,15 +58,15 @@ type ConfigurationContextState = {
   paymentTypes: PaymentType[];
   vatPercent: number;
   fareProductTypeConfigs: FareProductTypeConfig[];
-  boatStopPoints: BoatStopPoint[];
   travelSearchFilters: TravelSearchFiltersType | undefined;
   appTexts: AppTexts | undefined;
-  configurableLinks: ConfigurableLinks | undefined;
+  configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
   preassignedFareProducts: defaultPreassignedFareProducts,
+  fareProductGroups: [],
   tariffZones: defaultTariffZones,
   cityZones: defaultCityZones,
   userProfiles: defaultUserProfiles,
@@ -77,7 +74,6 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   paymentTypes: defaultPaymentTypes,
   vatPercent: defaultVatPercent,
   fareProductTypeConfigs: defaultFareProductTypeConfig,
-  boatStopPoints: [],
   travelSearchFilters: undefined,
   appTexts: undefined,
   configurableLinks: undefined,
@@ -103,12 +99,14 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
   >(defaultFareProductTypeConfig);
-  const [boatStopPoints, setBoatStopPoints] = useState<BoatStopPoint[]>([]);
+  const [fareProductGroups, setFareProductGroups] = useState<
+    FareProductGroupType[]
+  >([]);
   const [travelSearchFilters, setTravelSearchFilters] =
     useState<TravelSearchFiltersType>();
   const [appTexts, setAppTexts] = useState<AppTexts>();
   const [configurableLinks, setConfigurableLinks] =
-    useState<ConfigurableLinks>();
+    useState<ConfigurableLinksType>();
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
   >([]);
@@ -161,9 +159,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setFareProductTypeConfigs(fareProductTypeConfigs);
           }
 
-          const boatStopPoints = getBoatStopPointsFromSnapshot(snapshot);
-          if (boatStopPoints) {
-            setBoatStopPoints(boatStopPoints);
+          const fareProductGroups = getFareProductGroupsFromSnapshot(snapshot);
+          if (fareProductGroups) {
+            setFareProductGroups(fareProductGroups);
           }
 
           const travelSearchFilters =
@@ -199,6 +197,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const memoizedState = useMemo(() => {
     return {
       preassignedFareProducts,
+      fareProductGroups,
       tariffZones,
       cityZones,
       userProfiles,
@@ -206,7 +205,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       paymentTypes,
       vatPercent,
       fareProductTypeConfigs,
-      boatStopPoints,
       travelSearchFilters,
       appTexts,
       configurableLinks,
@@ -214,6 +212,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     };
   }, [
     preassignedFareProducts,
+    fareProductGroups,
     tariffZones,
     cityZones,
     userProfiles,
@@ -221,7 +220,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     paymentTypes,
     vatPercent,
     fareProductTypeConfigs,
-    boatStopPoints,
     travelSearchFilters,
     appTexts,
     configurableLinks,
@@ -373,20 +371,16 @@ function getFareProductTypeConfigsFromSnapshot(
   return undefined;
 }
 
-function getBoatStopPointsFromSnapshot(
+function getFareProductGroupsFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): BoatStopPoint[] | undefined {
-  const boatStopPointsFromFirestore = snapshot.docs
-    .find((doc) => doc.id == 'referenceData')
-    ?.get<string>('boatStopPoints');
-
-  try {
-    if (boatStopPointsFromFirestore) {
-      return JSON.parse(boatStopPointsFromFirestore) as BoatStopPoint[];
-    }
-  } catch (error: any) {
-    Bugsnag.notify(error);
+): FareProductGroupType[] | undefined {
+  const fareProductGroups = snapshot.docs
+    .find((doc) => doc.id == 'fareProductTypeConfigs')
+    ?.get('fareProductGroups');
+  if (fareProductGroups !== undefined) {
+    return mapToFareProductGroups(fareProductGroups);
   }
+
   return undefined;
 }
 
@@ -435,19 +429,23 @@ function getAppTextsFromSnapshot(
 
 function getConfigurableLinksFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
-): ConfigurableLinks | undefined {
+): ConfigurableLinksType | undefined {
   const urls = snapshot.docs.find((doc) => doc.id == 'urls');
 
   const ticketingInfo = mapLanguageAndTextType(urls?.get('ticketingInfo'));
   const inspectionInfo = mapLanguageAndTextType(urls?.get('inspectionInfo'));
   const termsInfo = mapLanguageAndTextType(urls?.get('termsInfo'));
   const refundInfo = mapLanguageAndTextType(urls?.get('refundInfo'));
+  const flexTransportInfo = mapLanguageAndTextType(
+    urls?.get('flexTransportInfo'),
+  );
 
   return {
     ticketingInfo,
     termsInfo,
     inspectionInfo,
     refundInfo,
+    flexTransportInfo,
   };
 }
 

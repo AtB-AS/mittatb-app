@@ -323,9 +323,7 @@ export function useDeparturesData(
     }
   }, [state.tick]);
   useInterval(
-    () => {
-      if (isFocused) dispatch({type: 'TICK_TICK'});
-    },
+    () => dispatch({type: 'TICK_TICK'}),
     tickRateInSeconds * 1000,
     [isFocused],
     !isFocused || mode === 'Favourite',

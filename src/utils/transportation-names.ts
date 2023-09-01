@@ -48,6 +48,8 @@ export function getTranslatedModeName(mode?: AnyMode): TranslatedString {
       return legModeNames.foot;
     case 'metro':
       return legModeNames.metro;
+    case 'bicycle':
+      return legModeNames.bicycle;
     default:
       return legModeNames.unknown;
   }

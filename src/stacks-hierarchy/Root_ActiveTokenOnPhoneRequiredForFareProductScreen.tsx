@@ -71,7 +71,11 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         color={themeColor}
       />
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
-        <View accessible={true} accessibilityRole="header" ref={focusRef}>
+        <View
+          accessible={true}
+          accessibilityRole="header"
+          ref={!selectedToken ? focusRef : undefined}
+        >
           <View style={styles.textSpacing}>
             <ThemeText
               type={'body__primary--big'}
@@ -137,6 +141,14 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           />
         )}
 
+        <ThemeText
+          type={'body__secondary'}
+          color={themeColor}
+          style={[styles.text, styles.textSpacing]}
+        >
+          {t(ActiveTokenRequiredTexts.actionMessage)}
+        </ThemeText>
+
         {saveState.saving ? (
           <ActivityIndicator size="large" />
         ) : (
@@ -148,13 +160,6 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
             testID="confirmSelectionButton"
           />
         )}
-        <ThemeText
-          type={'body__secondary'}
-          color={themeColor}
-          style={[styles.text, styles.textSpacing]}
-        >
-          {t(ActiveTokenRequiredTexts.actionMessage)}
-        </ThemeText>
       </ScrollView>
     </View>
   );

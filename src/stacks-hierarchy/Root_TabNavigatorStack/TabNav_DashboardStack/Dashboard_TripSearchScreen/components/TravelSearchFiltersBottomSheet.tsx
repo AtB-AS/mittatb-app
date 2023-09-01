@@ -43,7 +43,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
 
-  const isFlexibleTransportEnabledInRemoteConfig =
+  const [isFlexibleTransportEnabledInRemoteConfig, _] =
     useFlexibleTransportEnabled();
 
   const [selectedModeOptions, setSelectedModes] = useState<

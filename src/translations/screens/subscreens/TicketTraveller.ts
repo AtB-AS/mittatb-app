@@ -11,23 +11,39 @@ enum TravellerType {
 }
 
 const SpecificExtensionsInternal = {
-  singleChild: _('Sykkel.', 'Bike.'),
-  periodAdult: _('', ''),
-  periodChild: _('Gyldig på nattbuss.', 'Valid for night bus.'),
-  periodStudent: _('Gyldig på nattbuss.', 'Valid for night bus. '),
-  periodSenior: _('Gyldig på nattbuss.', 'Valid for night bus.'),
+  singleChild: _('Sykkel.', 'Bike.', 'Sykkel.'),
+  periodAdult: _('', '', ''),
+  periodChild: _(
+    'Gyldig på nattbuss.',
+    'Valid for night bus.',
+    'Gyldig på nattbuss.',
+  ),
+  periodStudent: _(
+    'Gyldig på nattbuss.',
+    'Valid for night bus. ',
+    'Gyldig på nattbuss.',
+  ),
+  periodSenior: _(
+    'Gyldig på nattbuss.',
+    'Valid for night bus.',
+    'Gyldig på nattbuss.',
+  ),
 };
 
 const SpecificExtensions = orgSpecificTranslations(SpecificExtensionsInternal, {
   nfk: {
-    singleChild: _('', ''),
-    periodAdult: _('Gyldig på nattbuss.', 'Valid for night bus.'),
+    singleChild: _('', '', ''),
+    periodAdult: _(
+      'Gyldig på nattbuss.',
+      'Valid for night bus.',
+      'Gyldig på nattbuss.',
+    ),
   },
   fram: {
-    singleChild: _('', ''),
-    periodChild: _('', ''),
-    periodStudent: _('', ''),
-    periodSenior: _('', ''),
+    singleChild: _('', '', ''),
+    periodChild: _('', '', ''),
+    periodStudent: _('', '', ''),
+    periodSenior: _('', '', ''),
   },
 });
 
@@ -43,7 +59,7 @@ function specificOverrides(
         case TravellerType.child:
           return SpecificExtensions.singleChild;
         default:
-          return _('', '');
+          return _('', '', '');
       }
     case 'period':
       switch (travellerType) {
@@ -56,42 +72,50 @@ function specificOverrides(
         case TravellerType.senior:
           return SpecificExtensions.periodSenior;
         default:
-          return _('', '');
+          return _('', '', '');
       }
     default:
-      return _('', '');
+      return _('', '', '');
   }
 }
 
 function generic(travellerType: string) {
   switch (travellerType) {
     case TravellerType.child:
-      return _('6 til og med 19 år.', '6 to 19 years.');
+      return _('6 til og med 19 år.', '6 to 19 years.', '6 til og med 19 år.');
     case TravellerType.adult:
-      return _('20 til og med 66 år.', '20 to 66 years.');
+      return _(
+        '20 til og med 66 år.',
+        '20 to 66 years.',
+        '20 til og med 66 år.',
+      );
     case TravellerType.student:
       if (APP_ORG === 'atb')
         return _(
           'Fulltidsstudenter og elever under 35 år.',
           'Fulltime students under 35.',
+          'Fulltidsstudentar og elevar under 35 år.',
         );
       else
         return _(
           'Fulltidsstudenter og elever under 30 år.',
           'Fulltime students under 30.',
+          'Fulltidsstudentar og elevar under 30 år.',
         );
     case TravellerType.senior:
       return _(
         'Over 67 eller med gyldig honnørbevis.',
         'Over 67 or with concessionary card.',
+        'Over 67 eller med gyldig honnørbevis.',
       );
     case TravellerType.military:
       return _(
         'Vernepliktig i førstegangstjeneste.',
         'Soldiers in mandatory service.',
+        'Vernepliktig i førstegangsteneste.',
       );
     default:
-      return _('', '');
+      return _('', '', '');
   }
 }
 
@@ -99,17 +123,17 @@ function userProfileDescriptionOverrides(
   travellerType: string,
   ticketType: string | undefined,
 ) {
-  if (ticketType === undefined) return _('', '');
+  if (ticketType === undefined) return _('', '', '');
   switch (ticketType) {
     case 'travel-pass':
       if (travellerType === TravellerType.adult) {
-        return _('Over 16 år', 'Age 16 or older');
+        return _('Over 16 år', 'Age 16 or older', 'Over 16 år');
       } else if (travellerType === TravellerType.child) {
-        return _('Til og med 15 år', 'Age 15 or younger');
+        return _('Til og med 15 år', 'Age 15 or younger', 'Til og med 15 år');
       }
-      return _('', '');
+      return _('', '', '');
     default:
-      return _('', '');
+      return _('', '', '');
   }
 }
 

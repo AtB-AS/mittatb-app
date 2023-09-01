@@ -9,6 +9,7 @@ import {
   NavigationContainer,
   PartialRoute,
   Route,
+  useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
@@ -30,6 +31,7 @@ import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
 import {Root_PurchaseConfirmationScreen} from './Root_PurchaseConfirmationScreen';
 import {Root_PurchaseTariffZonesSearchByMapScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByMapScreen';
 import {Root_PurchaseTariffZonesSearchByTextScreen} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen';
+import {Root_PurchaseHarborSearchScreen} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/Root_PurchaseHarborSearchScreen';
 import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithCreditCardScreen';
 import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
@@ -44,6 +46,7 @@ import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneI
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
+import {useFlipper} from '@react-navigation/devtools';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -55,6 +58,8 @@ export const RootStack = () => {
   const {isLoading, onboarded} = useAppState();
   const {theme} = useTheme();
   const departuresV2Enabled = useDeparturesV2Enabled();
+  const navRef = useNavigationContainerRef<RootStackParamList>();
+  useFlipper(navRef);
 
   useTestIds();
 
@@ -169,6 +174,7 @@ export const RootStack = () => {
       <Host>
         <NavigationContainer<RootStackParamList>
           onStateChange={trackNavigation}
+          ref={navRef}
           theme={ReactNavigationTheme}
           linking={{
             prefixes: [`${APP_SCHEME}://`],
@@ -281,6 +287,13 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_PurchaseTariffZonesSearchByTextScreen"
                 component={Root_PurchaseTariffZonesSearchByTextScreen}
+                options={{
+                  ...TransitionPresets.SlideFromRightIOS,
+                }}
+              />
+              <Stack.Screen
+                name="Root_PurchaseHarborSearchScreen"
+                component={Root_PurchaseHarborSearchScreen}
                 options={{
                   ...TransitionPresets.SlideFromRightIOS,
                 }}

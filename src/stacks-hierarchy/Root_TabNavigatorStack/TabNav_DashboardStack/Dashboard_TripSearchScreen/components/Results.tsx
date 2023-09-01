@@ -9,16 +9,16 @@ import {
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {isSeveralDays} from '@atb/utils/date';
-import React, {Fragment, useEffect, useMemo, useState} from 'react';
+
+import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
-import {TripPattern} from '@atb/api/types/trips';
-import {TripPatternWithKey} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {SearchTime} from '@atb/journey-date-picker';
 import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
-import {ResultItemOld} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
-import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
+import {TripPattern} from '@atb/api/types/trips';
+import {TripPatternWithKey} from '@atb/travel-details-screens/types';
+import {getIsTooLateToBookTripPattern} from '@atb/travel-details-screens/utils';
+import {useNow} from '@atb/utils/use-now';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -26,7 +26,7 @@ type Props = {
   isEmptyResult: boolean;
   isSearching: boolean;
   resultReasons: string[];
-  onDetailsPressed(tripPattern?: TripPattern, resultIndex?: number): void;
+  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
   errorType?: ErrorType;
   searchTime: SearchTime;
   anyFiltersApplied: boolean;
@@ -43,10 +43,11 @@ export const Results: React.FC<Props> = ({
   anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
-  const newTravelSearchEnabled = useNewTravelSearchEnabled();
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
+
+  const now = useNow(2500);
 
   useEffect(() => {
     if (errorType) {
@@ -61,11 +62,6 @@ export const Results: React.FC<Props> = ({
       }
     }
   }, [errorType]);
-
-  const allSameDay = useMemo(
-    () => isSeveralDays(tripPatterns.map((i) => i.expectedStartTime)),
-    [tripPatterns],
-  );
 
   if (showEmptyScreen) {
     return null;
@@ -96,14 +92,14 @@ export const Results: React.FC<Props> = ({
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
-      {tripPatterns?.map((tripPattern, i) => (
-        <Fragment key={tripPattern.key}>
-          <DayLabel
-            departureTime={tripPattern.expectedStartTime}
-            previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
-            allSameDay={allSameDay}
-          />
-          {newTravelSearchEnabled ? (
+      {tripPatterns
+        .filter((tp) => !getIsTooLateToBookTripPattern(tp, now))
+        .map((tripPattern, i) => (
+          <Fragment key={tripPattern.key}>
+            <DayLabel
+              departureTime={tripPattern.expectedStartTime}
+              previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
+            />
             <ResultItem
               tripPattern={tripPattern}
               onDetailsPressed={() => {
@@ -113,18 +109,8 @@ export const Results: React.FC<Props> = ({
               testID={'tripSearchSearchResult' + i}
               resultNumber={i + 1}
             />
-          ) : (
-            <ResultItemOld
-              tripPattern={tripPattern}
-              onDetailsPressed={() => {
-                onDetailsPressed(tripPattern, i);
-              }}
-              searchTime={searchTime}
-              testID={'tripSearchSearchResult' + i}
-            ></ResultItemOld>
-          )}
-        </Fragment>
-      ))}
+          </Fragment>
+        ))}
     </View>
   );
 };
@@ -158,6 +144,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   infoBoxText: theme.typography.body__primary,
   messageBoxContainer: {
-    margin: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
   },
 }));

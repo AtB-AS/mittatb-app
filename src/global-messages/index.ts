@@ -4,7 +4,5 @@ export {
 } from './GlobalMessagesContext';
 
 export {GlobalMessage} from '@atb/global-messages/GlobalMessage';
-export type {
-  GlobalMessageContextType,
-  GlobalMessageType,
-} from '@atb/global-messages/types';
+export type {GlobalMessageType} from '@atb/global-messages/types';
+export {GlobalMessageContextEnum} from '@atb/global-messages/types';

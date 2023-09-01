@@ -218,10 +218,10 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           <MessageBox
             type={'error'}
             title={t(
-              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.title,
+              TravelTokenTexts.toggleToken.notAllowedToUseTravelCardError.title,
             )}
             message={t(
-              TravelTokenTexts.toggleToken.notAllowedToUseCarnetError.message(
+              TravelTokenTexts.toggleToken.notAllowedToUseTravelCardError.message(
                 getTextForLanguage(
                   fareProductConfigWhichRequiresTokenOnMobile.name,
                   language,

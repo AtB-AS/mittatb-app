@@ -14,6 +14,7 @@ export const useIsVehiclesEnabled = () => {
 export const useVehiclesInMapDebugOverride = (): [
   boolean | undefined,
   (v?: boolean) => void,
+  boolean,
 ] => {
   return useDebugOverride(
     StorageModelKeysEnum.EnableVehiclesInMapDebugOverride,

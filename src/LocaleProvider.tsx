@@ -79,7 +79,11 @@ function useLocale(): Locale {
 // Fetch the preferred supported system locale or fallback
 function getPreferredSystemLocale(): Locale {
   const systemLocale = RNLocalize.getLocales().find((locale) => {
-    return locale.languageCode === Language.Norwegian || Language.English;
+    return (
+      locale.languageCode === Language.Norwegian ||
+      Language.English ||
+      Language.Nynorsk
+    );
   });
   if (systemLocale) {
     return {
@@ -97,6 +101,9 @@ function mapLanguageStringToEnum(language: string | undefined): Language {
   }
   if (language == Language.Norwegian) {
     return Language.Norwegian;
+  }
+  if (language == Language.Nynorsk) {
+    return Language.Nynorsk;
   }
   return FALLBACK_LANGUAGE;
 }

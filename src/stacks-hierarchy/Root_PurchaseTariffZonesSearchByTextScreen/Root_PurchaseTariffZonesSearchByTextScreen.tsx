@@ -1,4 +1,3 @@
-import {ErrorType} from '@atb/api/utils';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
@@ -8,11 +7,7 @@ import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {TariffZone} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
-import {
-  TariffZoneSearchTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
@@ -26,6 +21,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {TariffZoneResults} from '@atb/tariff-zones-selector/TariffZoneResults';
 import {VenueResults, LocationAndTariffZone} from './VenueResults';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {translateErrorType} from '@atb/stacks-hierarchy/utils';
 
 type Props = RootStackScreenProps<'Root_PurchaseTariffZonesSearchByTextScreen'>;
 
@@ -183,19 +179,6 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
     </View>
   );
 };
-
-function translateErrorType(
-  errorType: ErrorType,
-  t: TranslateFunction,
-): string {
-  switch (errorType) {
-    case 'network-error':
-    case 'timeout':
-      return t(TariffZoneSearchTexts.messages.networkError);
-    default:
-      return t(TariffZoneSearchTexts.messages.defaultError);
-  }
-}
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

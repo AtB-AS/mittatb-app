@@ -13,7 +13,12 @@ export const IconText = ({svg, text}: Props) => {
   const style = useStyles();
   return (
     <View style={{flexDirection: 'row'}}>
-      {svg && <ThemeIcon style={style.icon} svg={svg} />}
+      {svg && (
+        <ThemeIcon
+          style={(text ?? '').length > 0 ? style.icon : undefined}
+          svg={svg}
+        />
+      )}
       <ThemeText type="body__primary--bold">{text}</ThemeText>
     </View>
   );

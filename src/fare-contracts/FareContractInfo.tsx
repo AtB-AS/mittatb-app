@@ -17,6 +17,7 @@ import {
   isInspectableTravelRight,
   NormalTravelRight,
   PreActivatedTravelRight,
+  TravelRightDirection,
 } from '@atb/ticketing';
 import {
   FareContractTexts,
@@ -43,7 +44,7 @@ import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
-import {FareContractDestinations} from './components/FareContractDestinations';
+import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 
 export type FareContractInfoProps = {
   travelRights: PreActivatedTravelRight[];
@@ -68,6 +69,7 @@ export type FareContractInfoDetailsProps = {
   now?: number;
   validTo?: number;
   fareProductType?: string;
+  showInspectionSymbol?: boolean;
 };
 
 export const FareContractInfo = ({
@@ -79,15 +81,15 @@ export const FareContractInfo = ({
   fareContract,
   fareProductType,
 }: FareContractInfoProps) => {
-  const {tariffZones, userProfiles, preassignedFareProducts, boatStopPoints} =
+  const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
 
   const firstTravelRight = travelRights[0];
   const {
     fareProductRef: productRef,
     tariffZoneRefs,
-    startPointRef,
-    endPointRef,
+    startPointRef: fromStopPlaceId,
+    endPointRef: toStopPlaceId,
   } = firstTravelRight;
 
   const firstZone = tariffZoneRefs?.[0];
@@ -109,20 +111,17 @@ export const FareContractInfo = ({
     userProfiles,
   );
 
-  const [startPlaceName, endPlaceName] = [startPointRef, endPointRef].map(
-    (pointRef) => boatStopPoints.find((bsp) => bsp.id == pointRef)?.name || '',
-  );
-
   return (
     <View style={{flex: 1}}>
       <FareContractInfoHeader
         preassignedFareProduct={preassignedFareProduct}
+        travelRights={travelRights}
         isInspectable={isInspectable}
         testID={testID}
         status={status}
         fareProductType={fareProductType}
-        startPlaceName={startPlaceName}
-        endPlaceName={endPlaceName}
+        fromStopPlaceId={fromStopPlaceId}
+        toStopPlaceId={toStopPlaceId}
       />
       <SectionSeparator />
       {fareContract && (
@@ -143,7 +142,7 @@ export const FareContractInfo = ({
         isInspectable={isInspectable}
         omitUserProfileCount={omitUserProfileCount}
         preassignedFareProduct={preassignedFareProduct}
-        fareProductType={fareProductType}
+        showInspectionSymbol={fromStopPlaceId && toStopPlaceId ? false : true}
       />
     </View>
   );
@@ -154,17 +153,19 @@ const FareContractInfoHeader = ({
   isInspectable,
   testID,
   status,
+  travelRights,
   fareProductType,
-  startPlaceName,
-  endPlaceName,
+  fromStopPlaceId,
+  toStopPlaceId,
 }: {
   preassignedFareProduct?: PreassignedFareProduct;
   isInspectable?: boolean;
   testID?: string;
   status: FareContractInfoProps['status'];
+  travelRights?: FareContractInfoProps['travelRights'];
   fareProductType?: string;
-  startPlaceName?: string;
-  endPlaceName?: string;
+  fromStopPlaceId?: string;
+  toStopPlaceId?: string;
 }) => {
   const styles = useStyles();
   const {language} = useTranslation();
@@ -184,6 +185,8 @@ const FareContractInfoHeader = ({
     isInspectable,
     fareProductType,
   );
+  const showTwoWayIcon =
+    travelRights?.[0].direction === TravelRightDirection.Both;
 
   return (
     <View style={styles.header}>
@@ -209,12 +212,14 @@ const FareContractInfoHeader = ({
           </ThemeText>
         )}
       </View>
-      {['boat-single', 'boat-period'].includes(fareProductType || '') && (
-        <FareContractDestinations
-          startPlaceName={startPlaceName}
-          endPlaceName={endPlaceName}
-          showTwoWayIcon={fareProductType === 'boat-period'}
-        />
+      {fromStopPlaceId && toStopPlaceId && (
+        <View style={styles.harborStopPlaces}>
+          <FareContractHarborStopPlaces
+            fromStopPlaceId={fromStopPlaceId}
+            toStopPlaceId={toStopPlaceId}
+            showTwoWayIcon={showTwoWayIcon}
+          />
+        </View>
       )}
       {status === 'valid' && warning && <WarningMessage message={warning} />}
     </View>
@@ -228,7 +233,7 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     userProfilesWithCount,
     omitUserProfileCount,
     status,
-    fareProductType,
+    showInspectionSymbol = true,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -237,8 +242,6 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     fromTariffZone && toTariffZone
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
-
-  const isBoat = ['boat-single', 'boat-period'].includes(fareProductType || '');
 
   return (
     <View style={styles.container} accessible={true}>
@@ -257,7 +260,7 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
             />
           )}
         </View>
-        {!isBoat && isValidFareContract(status) && (
+        {showInspectionSymbol && isValidFareContract(status) && (
           <InspectionSymbol {...props} />
         )}
       </View>
@@ -363,5 +366,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginTop: theme.spacings.xSmall,
+  },
+  harborStopPlaces: {
+    marginTop: theme.spacings.large,
   },
 }));

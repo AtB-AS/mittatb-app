@@ -45,6 +45,11 @@ export type TariffZone = {
   isDefault?: boolean;
 };
 
+export type PointToPointValidity = {
+  fromPlace: string;
+  toPlace: string;
+};
+
 export type CityZone = {
   id: string;
   name: string;
@@ -53,9 +58,4 @@ export type CityZone = {
   orderUrl?: LanguageAndTextType[];
   phoneNumber?: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
-};
-
-export type BoatStopPoint = {
-  id: string;
-  name: string;
 };
