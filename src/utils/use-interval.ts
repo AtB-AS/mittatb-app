@@ -27,7 +27,7 @@ export function useInterval(
         await savedCallback.current();
 
         if (!disabled) {
-          tick();
+          id = tick();
         }
       }, actualDelay);
     }
