@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# You may use http://rbenv.org/ or https://rvm.io/ to install and use this version
+# # install correct ruby version with rbenv, which can be installed with brew install rbenv
 ruby '2.7.6'
 
 gem "fastlane"
