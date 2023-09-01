@@ -1,13 +1,14 @@
 import {useRef, useEffect} from 'react';
 
+type IntervalCallback = () => Promise<void> | void;
 export function useInterval(
-  callback: Function,
+  callback: IntervalCallback,
   delay: number,
   deps: React.DependencyList = [],
   disabled: boolean = false,
   triggerImmediately: boolean = false,
 ) {
-  const savedCallback = useRef<Function>(() => {});
+  const savedCallback = useRef<IntervalCallback>(async () => {});
 
   // Remember the latest callback.
   useEffect(() => {
@@ -17,15 +18,32 @@ export function useInterval(
   // Set up the interval.
   useEffect(() => {
     if (disabled) return;
+    const actualDelay = Math.max(delay ?? 0, 100);
+
+    let id: NodeJS.Timeout | number = 0;
+
     function tick() {
-      savedCallback.current();
+      return setTimeout(async function innerCallback() {
+        await savedCallback.current();
+
+        if (!disabled) {
+          tick();
+        }
+      }, actualDelay);
     }
-    if (triggerImmediately) {
-      tick();
+
+    async function invoke() {
+      if (triggerImmediately) {
+        await savedCallback.current();
+      }
+      id = tick();
     }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
+
+    invoke();
+    return () => {
+      if (id) {
+        clearTimeout(id as number);
+      }
+    };
   }, [delay, disabled].concat(deps));
 }
