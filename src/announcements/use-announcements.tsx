@@ -13,7 +13,7 @@ export const useAnnouncements = () => {
       .collection<AnnouncementRaw>('announcements')
       .onSnapshot(
         async (snapshot) => {
-          setAnnouncements(await mapToAnnouncements(snapshot.docs));
+          setAnnouncements(mapToAnnouncements(snapshot.docs));
           setIsLoading(false);
         },
         (err) => {

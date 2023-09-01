@@ -16,10 +16,8 @@ export type AnnouncementRaw = {
 
 export type AnnouncementType = Omit<
   AnnouncementRaw,
-  'startDate' | 'endDate' | 'summaryImage' | 'mainImage'
+  'startDate' | 'endDate'
 > & {
   startDate?: number;
   endDate?: number;
-  summaryImageUrl?: string;
-  mainImageUrl?: string;
 };
