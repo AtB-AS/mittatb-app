@@ -17,17 +17,17 @@ export const useHarbors = (fromHarborId?: string) => {
     ? connectionsQuery.isSuccess
     : harborsQuery.isSuccess;
   const refetch = fromHarborId
-    ? harborsQuery.refetch
-    : () =>
-        connectionsQuery
-          .refetch()
-          .then((res) =>
-            applyOverrides(harborsQuery.data, res.data, overrides),
-          );
+    ? () =>
+        Promise.all([connectionsQuery.refetch(), harborsQuery.refetch()]).then(
+          ([connectionsQuery, harborsQuery]) => {
+            applyOverrides(harborsQuery.data, connectionsQuery.data, overrides);
+          },
+        )
+    : harborsQuery.refetch();
 
   const data = fromHarborId
-    ? harborsQuery.data ?? []
-    : applyOverrides(harborsQuery.data, connectionsQuery.data, overrides);
+    ? applyOverrides(harborsQuery.data, connectionsQuery.data, overrides)
+    : harborsQuery.data ?? [];
 
   return {
     isLoading,
