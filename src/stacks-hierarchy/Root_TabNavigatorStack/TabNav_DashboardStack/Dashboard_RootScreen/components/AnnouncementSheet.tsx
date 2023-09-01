@@ -8,7 +8,7 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {Image} from 'react-native';
+import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -22,7 +22,7 @@ export const AnnouncementSheet = ({announcement, close}: Props) => {
   const style = useStyle();
 
   return (
-    <BottomSheetContainer maxHeightValue={0.8}>
+    <BottomSheetContainer>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
@@ -33,9 +33,15 @@ export const AnnouncementSheet = ({announcement, close}: Props) => {
         color={'background_1'}
         setFocusOnLoad={false}
       />
+
       <ScrollView style={style.container}>
         {announcement.mainImage && (
-          <Image source={{uri: announcement.mainImage}} />
+          <View style={style.imageContainer}>
+            <Image
+              style={{height: '100%', width: '100%'}}
+              source={{uri: announcement.mainImage}}
+            />
+          </View>
         )}
         <ThemeText isMarkdown={true}>
           {getTextForLanguage(announcement.body, language)}
@@ -49,9 +55,15 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
     container: {
-      padding: theme.spacings.medium,
+      paddingHorizontal: theme.spacings.medium,
       marginBottom: Math.max(bottom, theme.spacings.medium),
-      minHeight: '50%',
+      minHeight: 350,
+    },
+    imageContainer: {
+      width: '100%',
+      marginBottom: theme.spacings.medium,
+      borderRadius: theme.border.radius.regular,
+      overflow: 'hidden',
     },
   };
 });
