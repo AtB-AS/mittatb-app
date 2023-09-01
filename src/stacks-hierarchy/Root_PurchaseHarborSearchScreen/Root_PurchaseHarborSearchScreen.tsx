@@ -18,7 +18,7 @@ import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScre
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {useHarborsQuery} from '@atb/queries/use-harbors-query';
+import {useHarbors} from '@atb/harbors';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -54,7 +54,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
     if (isFocused) setTimeout(() => inputRef.current?.focus(), 0);
   }, [isFocused]);
 
-  const harborsQuery = useHarborsQuery(fromHarbor?.id);
+  const harborsQuery = useHarbors(fromHarbor?.id);
 
   const debouncedText = useDebounce(text, 200);
 
@@ -113,7 +113,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         )}
         {harborsQuery.isSuccess && (
           <HarborResults
-            harbors={harborsQuery.data}
+            harbors={harborsQuery.data ?? []}
             onSelect={onSave}
             searchText={debouncedText}
             fromHarborName={fromHarbor?.name}
