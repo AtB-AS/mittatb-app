@@ -1,3 +1,4 @@
+import React from 'react';
 import {AnnouncementType} from '@atb/announcements/types';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
@@ -38,7 +39,7 @@ export const AnnouncementSheet = ({announcement, close}: Props) => {
         {announcement.mainImage && (
           <View style={style.imageContainer}>
             <Image
-              style={{height: '100%', width: '100%'}}
+              style={{height: '100%', width: '100%', resizeMode: 'cover'}}
               source={{uri: announcement.mainImage}}
             />
           </View>
@@ -61,6 +62,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
     },
     imageContainer: {
       width: '100%',
+      maxHeight: 150,
       marginBottom: theme.spacings.medium,
       borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
