@@ -19,11 +19,10 @@ export const useHarbors = (fromHarborId?: string) => {
   const refetch = fromHarborId
     ? () =>
         Promise.all([connectionsQuery.refetch(), harborsQuery.refetch()]).then(
-          ([connectionsQuery, harborsQuery]) => {
-            applyOverrides(harborsQuery.data, connectionsQuery.data, overrides);
-          },
+          ([connectionsQuery, harborsQuery]) =>
+            applyOverrides(harborsQuery.data, connectionsQuery.data, overrides),
         )
-    : harborsQuery.refetch();
+    : harborsQuery.refetch;
 
   const data = fromHarborId
     ? applyOverrides(harborsQuery.data, connectionsQuery.data, overrides)
