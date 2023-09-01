@@ -2716,6 +2716,11 @@
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-1.1.15.tgz#83937591ec2907655384bc0e3faf8fed5b94a2cd"
   integrity sha512-szqHFnoUC1sOYt2XNt3L5MjLL+uQB+PVnCEfd1EyALra1KX+Etw3JAmLFLZvTTLXXemEzFnQktZZXYj+/ELaWA==
 
+"@entur-private/abt-time-javascript-lib@1.2.1":
+  version "1.2.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-1.2.1.tgz#16e42d29e1eae3e2f83ca1c222a93f3566f26766"
+  integrity sha512-WvrOn6n3F7XBPQz4cKr+b8nnSDuoB0KUqiQxa2+/AGLObmO/k2yiSO7VboSr0SCOKOXqj2MQWulFNDJfm3LgYQ==
+
 "@entur-private/abt-time-react-native-lib@1.1.15":
   version "1.1.15"
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-react-native-lib/-/@entur-private/abt-time-react-native-lib-1.1.15.tgz#cbea2b6aa7263a930ca96e0c031376df224f29c1"
@@ -2723,15 +2728,32 @@
   dependencies:
     "@entur-private/abt-time-javascript-lib" "1.1.15"
 
+"@entur-private/abt-time-react-native-lib@1.2.1":
+  version "1.2.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-react-native-lib/-/@entur-private/abt-time-react-native-lib-1.2.1.tgz#3510ae97b0dd6f6c3941e0ed6e164e210ba6bba0"
+  integrity sha512-tVk7UMDrylCNS2PMaS4ZpZNLQUonmYYZAiX5Mhtf65UwDIJ7lp46QqnR6ypWr1hVxDhA6XEhW9ph7EZoxEieIA==
+  dependencies:
+    "@entur-private/abt-time-javascript-lib" "1.2.1"
+
 "@entur-private/abt-token-core-javascript-lib@1.1.15":
   version "1.1.15"
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-1.1.15.tgz#1fe3c21022922fdfcff033257508965f142e7a78"
   integrity sha512-YN6c0JmwXu5UGNbhZWv6ye/wKOW76uIXRkueUcnXHqpxyM45IPxHzQFTChzxuDtXafK4IlKWhvlSDf6an72V9A==
 
+"@entur-private/abt-token-core-javascript-lib@1.2.1":
+  version "1.2.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-1.2.1.tgz#43ea67e0dd7e1b3777f4ffaa589dd8c19e988b23"
+  integrity sha512-vvv81sN1W4lp3NFGjgeGaH1L77r+/VtcRnJ6hvgjUlYQlDtWBBAzsRLfqQYjxor3tBOQwAUc5Vc2HLrcOSwJCA==
+
 "@entur-private/abt-token-server-javascript-interface@1.1.15":
   version "1.1.15"
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-1.1.15.tgz#e4894d86c9caf7f4d3b4561ecfc850b21e8c21c2"
   integrity sha512-+JjisVJVoGSlglq5KXoEfaieMVy2vYkrVWuyNZiznkOBZrLLGXpBqtqyokir96TvBnBzSFzed6CFsVp1drQIuQ==
+
+"@entur-private/abt-token-server-javascript-interface@1.2.1":
+  version "1.2.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-1.2.1.tgz#487a3a758a3556bfb81b78d46de59e2a677fd024"
+  integrity sha512-WkLyKnPSwLunBaCimgTpHTlgdmulDphg+UDuP8h7ObWdkCzf+cNfS2iU5buOwY7zCI4L/ydLOe8RtlGra7HowA==
 
 "@entur-private/abt-token-state-react-native-lib@1.1.15":
   version "1.1.15"
@@ -2742,6 +2764,15 @@
     "@entur-private/abt-token-core-javascript-lib" "1.1.15"
     "@entur-private/abt-token-server-javascript-interface" "1.1.15"
     async-lock "^1.3.1"
+
+"@entur-private/abt-token-state-react-native-lib@1.2.1":
+  version "1.2.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-state-react-native-lib/-/@entur-private/abt-token-state-react-native-lib-1.2.1.tgz#29a065de72bfb623549d40147fbb162fdc8279b8"
+  integrity sha512-GHwksjiOOrh1d8k5+nBMO2Sa1mQ8MXrolEUUwAEPtFsi2aCmkIyKvZfHyyHKg/hbM00TrQir13sCEfnhdBQUdw==
+  dependencies:
+    "@entur-private/abt-time-javascript-lib" "1.2.1"
+    "@entur-private/abt-token-core-javascript-lib" "1.2.1"
+    "@entur-private/abt-token-server-javascript-interface" "1.2.1"
 
 "@entur/sdk@^5.3.0":
   version "5.3.0"
