@@ -132,6 +132,7 @@ export function useOfferState(
   toPlace: TariffZone | StopPlaceFragment,
   userProfilesWithCount: UserProfileWithCount[],
   travelDate?: string,
+  skip: boolean = false,
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
@@ -142,6 +143,11 @@ export function useOfferState(
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
+      if (skip) {
+        dispatch({type: 'CLEAR_OFFER'});
+        return;
+      }
+
       const offerTravellers = userProfilesWithCount
         .filter((t) => t.count)
         .map((t) => ({

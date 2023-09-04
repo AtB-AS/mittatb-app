@@ -48,8 +48,9 @@ function applyOverrides(
     overrides,
     allHarbors,
   );
+
   // Add the extra stop places (override harbors) to the list of existing connections.
-  return _.unionBy(connections ?? [], overrideHarbors, 'id');
+  return _.unionBy(overrideHarbors, connections ?? [], 'id');
 }
 
 function mapOverridesToStopPlaceFragment(
@@ -58,6 +59,13 @@ function mapOverridesToStopPlaceFragment(
 ) {
   if (!harbors) return [];
   return overrides
-    .map((override) => harbors.find((h) => h.id === override.to))
+    .map((override) => {
+      const harbor = harbors.find((h) => h.id === override.to);
+      if (!harbor) return undefined;
+      return {
+        ...harbor,
+        ...override,
+      };
+    })
     .filter(isDefined);
 }

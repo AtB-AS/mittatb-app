@@ -16,6 +16,7 @@ import {MessageBox} from '@atb/components/message-box';
 
 type Props = {
   price: number;
+  isFree: boolean;
   isLoading: boolean;
   isError: boolean;
   userProfilesWithCount: UserProfileWithCount[];
@@ -26,6 +27,7 @@ type Props = {
 
 export function Summary({
   price,
+  isFree,
   isLoading,
   isError,
   userProfilesWithCount,
@@ -37,8 +39,6 @@ export function Summary({
   const {t, language} = useTranslation();
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
-  const isFree = price ? price === 0 : false;
-
   const hasSelection = userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {

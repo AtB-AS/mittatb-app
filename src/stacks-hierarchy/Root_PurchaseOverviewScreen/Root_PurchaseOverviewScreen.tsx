@@ -25,6 +25,7 @@ import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
+import {useHarbors} from '@atb/harbors';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -34,6 +35,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const harborConnections = useHarbors(params.fromPlace?.id);
+
+  const toPlaceConnection = harborConnections.data.find(
+    (harbor) => harbor.id === params.toPlace?.id,
+  );
+  const isFree = !!toPlaceConnection?.isFree;
 
   const {preassignedFareProduct, selectableTravellers, fromPlace, toPlace} =
     useOfferDefaults(
@@ -79,6 +86,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     toPlace,
     travellerSelection,
     travelDate,
+    isFree,
   );
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
@@ -197,6 +205,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <FullScreenFooter>
           <Summary
             isLoading={isSearchingOffer}
+            isFree={isFree}
             isError={!!error || !hasSelection}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
