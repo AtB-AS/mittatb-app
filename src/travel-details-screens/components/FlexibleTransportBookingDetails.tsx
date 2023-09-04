@@ -124,6 +124,11 @@ export const FlexibleTransportBookingDetails: React.FC<
               flexTransportInfoUrl && Linking.openURL(flexTransportInfoUrl);
             }}
             accessibilityRole="link"
+            accessibilityHint={t(
+              TripDetailsTexts.flexibleTransport.readMoreAboutA11yHint(
+                publicCode,
+              ),
+            )}
           >
             <ThemeText
               color="secondary"

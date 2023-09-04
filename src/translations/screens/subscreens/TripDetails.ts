@@ -332,6 +332,12 @@ const TripDetailsTexts = {
         `More about ${publicCode}`,
         `Meir om ${publicCode}`,
       ),
+    readMoreAboutA11yHint: (publicCode: string) =>
+      _(
+        `Mer om ${publicCode} på ekstern lenke`,
+        `More about ${publicCode} (external content)`,
+        `Meir om ${publicCode} på ekstern lenke`,
+      ),
     bookOnline: _(`Reserver på nett`, `Book online`, `Reserver på nett`),
     bookOnlineA11yHint: _(
       `Reserver på nett på ekstern side`,
