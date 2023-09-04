@@ -63,10 +63,10 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  onDetailsPressed(): void;
+  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
+  resultIndex: number;
   searchTime: SearchTime;
   testID?: string;
-  resultNumber: number;
 };
 
 const ResultItemHeader: React.FC<{
@@ -138,9 +138,9 @@ const ResultItemHeader: React.FC<{
 const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
+  resultIndex,
   testID,
   searchTime,
-  resultNumber,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -151,6 +151,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
+  const resultNumber = resultIndex + 1;
 
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
     filteredLegs.length,
@@ -207,7 +208,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       )}
       accessibilityRole={'button'}
       style={styles.pressableOpacity}
-      onPress={onDetailsPressed}
+      onPress={() => onDetailsPressed(tripPattern, resultIndex)}
       accessible={true}
       testID={testID}
     >

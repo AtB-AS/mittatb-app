@@ -102,10 +102,10 @@ export const Results: React.FC<Props> = ({
             />
             <MemoizedResultItem
               tripPattern={tripPattern}
-              onDetailsPressed={() => onDetailsPressed(tripPattern, i)}
+              onDetailsPressed={onDetailsPressed}
+              resultIndex={i}
               searchTime={searchTime}
               testID={'tripSearchSearchResult' + i}
-              resultNumber={i + 1}
             />
           </Fragment>
         ))}
