@@ -237,8 +237,8 @@ const PurchaseOverviewTexts = {
         `Totalt ${priceString} kr`,
       ),
     free: _(
-      'Denne reisen er gratris og krever ingen billet.',
-      'This trip is free and requires no ticket.',
+      'Denne reisen er gratis og krever ingen billett.',
+      'This trip is free and does not require a ticket.',
       'Denne reisa er gratis og krev ingen billett.',
     ),
     messageRequiresMobile: _(
