@@ -392,7 +392,6 @@ const TripDetailsTexts = {
         `What is ${publicCode}?`,
         `Kva er ${publicCode}?`,
       ),
-    isButtonHint: _(`Knapp`, `Button`, `Knapp`),
   },
 };
 export default orgSpecificTranslations(TripDetailsTexts, {

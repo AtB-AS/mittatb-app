@@ -25,7 +25,6 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
  */
 export type OnPressConfig = {
   text: string;
-  a11yLabelAppendText?: string;
 } & ({action: () => void} | {url: string});
 
 export type MessageBoxProps = {
@@ -71,12 +70,7 @@ export const MessageBox = ({
       ? onPressConfig.action
       : () => Linking.openURL(onPressConfig.url));
 
-  const a11yLabel = [
-    title,
-    message,
-    onPressConfig?.text,
-    onPressConfig?.a11yLabelAppendText,
-  ]
+  const a11yLabel = [title, message, onPressConfig?.text]
     .filter((s): s is string => !!s)
     .join(screenReaderPause);
 

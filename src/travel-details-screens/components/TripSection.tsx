@@ -241,6 +241,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             rowLabel={
               <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
             }
+            accessible={false}
           >
             <FlexibleTransportMessageBox
               leg={leg}
@@ -254,9 +255,6 @@ export const TripSection: React.FC<TripSectionProps> = ({
                         TripDetailsTexts.flexibleTransport.needsBookingWhatIsThis(
                           publicCode,
                         ),
-                      ),
-                      a11yLabelAppendText: t(
-                        TripDetailsTexts.flexibleTransport.isButtonHint,
                       ),
                       action: openBookingDetails,
                     }
