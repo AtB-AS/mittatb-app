@@ -1,6 +1,7 @@
 import {
   ActivatedToken,
   handleRemoteTokenStateError,
+  isEmulator,
   RemoteTokenServiceWithInitiate,
 } from '@entur-private/abt-mobile-client-sdk';
 
@@ -54,7 +55,7 @@ const isRemoteTokenStateError = (err: any) =>
   parseRemoteError(err.response?.data) instanceof RemoteTokenStateError;
 
 export const tokenService: TokenService = {
-  initiateNewMobileToken: async (traceId, isEmulator) => {
+  initiateNewMobileToken: async (traceId) => {
     const deviceName = await getDeviceName();
     const data: InitRequest = {
       name: deviceName,
@@ -63,7 +64,7 @@ export const tokenService: TokenService = {
       .post<InitiateTokenResponse>('/tokens/v4/init', data, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
-          [IsEmulatorHeaderName]: String(isEmulator),
+          [IsEmulatorHeaderName]: String(await isEmulator()),
         },
         authWithIdToken: true,
         skipErrorLogging: isRemoteTokenStateError,
