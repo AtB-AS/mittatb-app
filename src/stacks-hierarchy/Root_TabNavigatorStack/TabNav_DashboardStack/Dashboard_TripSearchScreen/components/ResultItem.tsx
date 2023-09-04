@@ -333,7 +333,7 @@ const ResultItemFooter: React.FC<{
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  const now = useNow(2500);
+  const now = useNow(30000);
 
   const requiresBookingUrgently = getTripPatternRequiresBookingUrgently(
     tripPattern,

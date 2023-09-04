@@ -121,7 +121,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const publicCode = getPublicCodeFromLeg(leg);
 
-  const now = useNow(2500);
+  const now = useNow(30000);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
   const bookingIsAvailable = getLegBookingIsAvailable(
     leg,

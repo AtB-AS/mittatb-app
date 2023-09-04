@@ -47,7 +47,7 @@ export const Results: React.FC<Props> = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
 
-  const now = useNow(2500);
+  const now = useNow(30000);
 
   useEffect(() => {
     if (errorType) {

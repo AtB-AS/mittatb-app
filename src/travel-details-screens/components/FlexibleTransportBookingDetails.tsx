@@ -42,7 +42,7 @@ export const FlexibleTransportBookingDetails: React.FC<
 
   const publicCode = getPublicCodeFromLeg(leg);
 
-  const now = useNow(2500);
+  const now = useNow(30000);
   const bookingIsAvailable = getLegBookingIsAvailable(
     leg,
     now,
