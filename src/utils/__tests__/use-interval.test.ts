@@ -19,18 +19,23 @@ describe('useInterval', () => {
   });
 
   it('should invoke with specified delay', () => {
-    const {result} = renderHook(() => useInterval(callback, 300));
+    const delay = 300;
+    const {result} = renderHook(() => useInterval(callback, delay));
+    expect(callback).toHaveBeenCalledTimes(0);
 
+    jest.advanceTimersByTime(delay);
     expect(result.current).toBeUndefined();
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it.only('should invoke with specified delay and immediate if set', () => {
+  it('should invoke with specified delay and immediate if set', () => {
+    const delay = 300;
     const {result} = renderHook(
       // () => useInterval(callback, 300),
-      () => useInterval(callback, 300, [], false, true),
+      () => useInterval(callback, delay, [], false, true),
     );
-    jest.runOnlyPendingTimers();
+
+    jest.advanceTimersByTime(delay);
 
     expect(result.current).toBeUndefined();
     expect(callback).toHaveBeenCalledTimes(2);
