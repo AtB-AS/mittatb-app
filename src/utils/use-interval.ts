@@ -1,13 +1,21 @@
 import {useRef, useEffect} from 'react';
 
+type IntervalCallback = () => Promise<void> | void;
+/***
+ * Periodically execute a callback every N milliseconds.
+ * Does not guarantee precision in interval if execution time of the callback is higher than delay.
+ * Should not be used for animations or timers where precision is needed.
+ *
+ * If callback returns a promise execution for each interval awaits fulfilled promise.
+ */
 export function useInterval(
-  callback: Function,
+  callback: IntervalCallback,
   delay: number,
   deps: React.DependencyList = [],
   disabled: boolean = false,
   triggerImmediately: boolean = false,
 ) {
-  const savedCallback = useRef<Function>(() => {});
+  const savedCallback = useRef<IntervalCallback>(async () => {});
 
   // Remember the latest callback.
   useEffect(() => {
@@ -17,15 +25,36 @@ export function useInterval(
   // Set up the interval.
   useEffect(() => {
     if (disabled) return;
+    const actualDelay = Math.max(delay ?? 0, 100);
+
+    let id: NodeJS.Timeout | number = 0;
+
     function tick() {
-      savedCallback.current();
+      // Uses recursive setTimout loop instead of setInterval to prevent filling the message queue with
+      // executions when execution of callback takes longer than the interval specified.
+      // This means that we won't guarantee any specific execution time, but this is in liue with the intention of this function in any case.
+      // See example https://developer.mozilla.org/en-US/docs/Web/API/setInterval#ensure_that_execution_duration_is_shorter_than_interval_frequency
+      return setTimeout(async function innerCallback() {
+        await savedCallback.current();
+
+        if (!disabled) {
+          id = tick();
+        }
+      }, actualDelay);
     }
-    if (triggerImmediately) {
-      tick();
+
+    async function invoke() {
+      if (triggerImmediately) {
+        await savedCallback.current();
+      }
+      id = tick();
     }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
+
+    invoke();
+    return () => {
+      if (id) {
+        clearTimeout(id as number);
+      }
+    };
   }, [delay, disabled].concat(deps));
 }
