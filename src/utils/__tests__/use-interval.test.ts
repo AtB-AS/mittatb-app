@@ -65,6 +65,44 @@ describe('useInterval', () => {
     await runPendingTimers();
     expect(callback).toBeCalledTimes(2);
   });
+
+  it('should be able to disable useInterval', async () => {
+    const hook = renderHook(
+      ({disabled}) => useInterval(callback, 200, [], disabled),
+      {
+        initialProps: {
+          disabled: false,
+        },
+      },
+    );
+
+    // Start with it enabled, should call callback
+    await nextTimerTick();
+    expect(callback).toBeCalledTimes(1);
+
+    hook.rerender({disabled: true});
+
+    // Should not call callback any time as it is disabled
+    // even over multiple timer ticks
+    await nextTimerTick();
+    expect(callback).toBeCalledTimes(1);
+
+    await nextTimerTick();
+    expect(callback).toBeCalledTimes(1);
+
+    await nextTimerTick();
+    expect(callback).toBeCalledTimes(1);
+
+    // Re-enable interval,
+    hook.rerender({disabled: false});
+
+    // Callback called on each timer tick.
+    await nextTimerTick();
+    expect(callback).toBeCalledTimes(2);
+
+    await nextTimerTick();
+    expect(callback).toBeCalledTimes(3);
+  });
 });
 
 async function advanceByTimer(time: number) {
