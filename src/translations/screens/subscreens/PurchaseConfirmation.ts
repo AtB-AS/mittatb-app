@@ -1,4 +1,5 @@
 import {translation as _} from '../../commons';
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 
 const PurchaseConfirmationTexts = {
   errorMessageBox: {
@@ -194,4 +195,12 @@ const PurchaseConfirmationTexts = {
     `Ordinær pris`,
   ),
 };
-export default PurchaseConfirmationTexts;
+export default orgSpecificTranslations(PurchaseConfirmationTexts, {
+  fram: {
+    validityTexts: {
+      harbor: {
+        messageInHarborZones: _('', '', ''),
+      },
+    },
+  },
+});
