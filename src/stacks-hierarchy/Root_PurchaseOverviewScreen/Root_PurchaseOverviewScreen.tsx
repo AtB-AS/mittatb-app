@@ -25,7 +25,6 @@ import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
-import {useIsFree} from '@atb/harbors';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -35,7 +34,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const isFree = useIsFree(params.fromPlace?.id, params.toPlace?.id);
+  const isFree = params.toPlace
+    ? 'isFree' in params.toPlace && !!params.toPlace.isFree
+    : false;
 
   const {preassignedFareProduct, selectableTravellers, fromPlace, toPlace} =
     useOfferDefaults(
@@ -81,7 +82,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     toPlace,
     travellerSelection,
     travelDate,
-    isFree,
   );
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
