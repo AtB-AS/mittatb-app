@@ -22,10 +22,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^3.5.2":
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.5.2.tgz#6f7a069d2118e782980de2534a1bd06f856aba0e"
-  integrity sha512-USKRGfwzSx15FBEdsnJgyBN6XV0aaZXVjSGMdG0UWJ3aUfqHJo+5qDMUXH8yPiFB/Zbmw4VNnnPUrp1Iv6jSyw==
+"@atb-as/config-specs@^3.5.3":
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.5.3.tgz#354a7d96ddb8d2361bbde1fd2c378970e3180416"
+  integrity sha512-yzdWOIySkdEZ+MHpasJxsrRPxjENpD1+7DfPSUBHmznQ8EEbyCS6mvG5oEO1vb+5f6SQH+HIyxbI0NQW0p2Uow==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -2310,6 +2310,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.12.5":
+  version "7.22.11"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.11.tgz#7a9ba3bbe406ad6f9e8dd4da2ece453eb23a77a4"
+  integrity sha512-ee7jVNlWN09+KftVOu9n7S8gQzD/Z6hN/I8VBRXW4P1+Xe7kJGXMwu8vds4aGIMHZnNbdpSWCfZZtinytpcAvA==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/runtime@^7.22.10":
   version "7.22.10"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.10.tgz#ae3e9631fd947cb7e3610d3e9d8fef5f76696682"
@@ -2695,53 +2702,51 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@entur-private/abt-mobile-barcode-javascript-lib@1.1.15":
-  version "1.1.15"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-barcode-javascript-lib/-/@entur-private/abt-mobile-barcode-javascript-lib-1.1.15.tgz#54b9001617b7ce6618d42c935304defc2b4cf1bc"
-  integrity sha512-aSDook+rfWkLlFBo92qQZgDe9mA/Wkwf5deE3lV6DV7htWv7L8MsnHs+aaZwQjDI/m74pkLgXvjHwdIyNY8qMQ==
+"@entur-private/abt-mobile-barcode-javascript-lib@^1.3.0":
+  version "1.3.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-barcode-javascript-lib/-/@entur-private/abt-mobile-barcode-javascript-lib-1.3.0.tgz#4a6d37341da3b5aa79cca3c4a86b7e8c73456826"
+  integrity sha512-kjXbiycAp1CIW5/iOzIfK8FE7W7qPaLHWhoOKboWmNuvnM90VFUtJ59yklTNGSIHSIo0Cxs0ExW00aeBUvtYrQ==
 
-"@entur-private/abt-mobile-client-sdk@1.1.15":
-  version "1.1.15"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-client-sdk/-/@entur-private/abt-mobile-client-sdk-1.1.15.tgz#8971205b989235ef2ecf4cb8e5e2768c315537cb"
-  integrity sha512-N0AeMdstTlSM4PkljhYoq0LZsoOJFUg4qWOldXjb+zNVxhaSzpK5DUC3J18wT6yptfAnUKeVMuwDjGCTZZGOKA==
+"@entur-private/abt-mobile-client-sdk@1.3.0":
+  version "1.3.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-client-sdk/-/@entur-private/abt-mobile-client-sdk-1.3.0.tgz#21b892c2fc643a685462f55de4ab60ce750ff411"
+  integrity sha512-DctU+JIR9jZS1B/RoZ1dwQHed2m5ogcivW2xj1ma/KpwUMNcND5lCYBM9I3y0nXfsmyM37dEsBmYUURfQCv4Hg==
   dependencies:
-    "@entur-private/abt-mobile-barcode-javascript-lib" "1.1.15"
-    "@entur-private/abt-time-react-native-lib" "1.1.15"
-    "@entur-private/abt-token-core-javascript-lib" "1.1.15"
-    "@entur-private/abt-token-server-javascript-interface" "1.1.15"
-    "@entur-private/abt-token-state-react-native-lib" "1.1.15"
+    "@entur-private/abt-time-react-native-lib" "1.3.0"
+    "@entur-private/abt-token-core-javascript-lib" "1.3.0"
+    "@entur-private/abt-token-server-javascript-interface" "1.3.0"
+    "@entur-private/abt-token-state-react-native-lib" "1.3.0"
 
-"@entur-private/abt-time-javascript-lib@1.1.15":
-  version "1.1.15"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-1.1.15.tgz#83937591ec2907655384bc0e3faf8fed5b94a2cd"
-  integrity sha512-szqHFnoUC1sOYt2XNt3L5MjLL+uQB+PVnCEfd1EyALra1KX+Etw3JAmLFLZvTTLXXemEzFnQktZZXYj+/ELaWA==
+"@entur-private/abt-time-javascript-lib@1.3.0":
+  version "1.3.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-1.3.0.tgz#f69345ea8ae60ee3f3083d0a97b73ffbf2c7bb09"
+  integrity sha512-wBtNlGfKrgljhchAFDQDGuOT6vH5Sr0QtSuiRKlelaecj9ZKvSh5y695lH+nLfMKh2EzhIrZQvRAIv+z24RT6Q==
 
-"@entur-private/abt-time-react-native-lib@1.1.15":
-  version "1.1.15"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-react-native-lib/-/@entur-private/abt-time-react-native-lib-1.1.15.tgz#cbea2b6aa7263a930ca96e0c031376df224f29c1"
-  integrity sha512-Zd5/slx8LjD3Tc9ZLRFvuwkWUOJjPbMRj3/eLBUx81asZx4vwnqoh+xt5CznXgEFz03s+SA94QQH0Rz0XjyrtQ==
+"@entur-private/abt-time-react-native-lib@1.3.0":
+  version "1.3.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-react-native-lib/-/@entur-private/abt-time-react-native-lib-1.3.0.tgz#a74dbef904451d5338a6e50952916b05d1c4e77f"
+  integrity sha512-5CWsxN8KmABgHQIybDJ5wvYV2KcFyCmu9/rIoMW+xhPY8RVVhBz9D0Zn84AzBrwzvy8YrNeW+O+i+JimKTR/Ug==
   dependencies:
-    "@entur-private/abt-time-javascript-lib" "1.1.15"
+    "@entur-private/abt-time-javascript-lib" "1.3.0"
 
-"@entur-private/abt-token-core-javascript-lib@1.1.15":
-  version "1.1.15"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-1.1.15.tgz#1fe3c21022922fdfcff033257508965f142e7a78"
-  integrity sha512-YN6c0JmwXu5UGNbhZWv6ye/wKOW76uIXRkueUcnXHqpxyM45IPxHzQFTChzxuDtXafK4IlKWhvlSDf6an72V9A==
+"@entur-private/abt-token-core-javascript-lib@1.3.0":
+  version "1.3.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-1.3.0.tgz#ca3806713c08a621058abe2bdaedc29c9fb30b64"
+  integrity sha512-1wrgOIzVlF8Cl/0LPKXYM6gezzXslFfsD6LjRDK228LLS6OQOZ58fexku/5L+bd6ickLOnV0oCCUnszvON7Hxw==
 
-"@entur-private/abt-token-server-javascript-interface@1.1.15":
-  version "1.1.15"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-1.1.15.tgz#e4894d86c9caf7f4d3b4561ecfc850b21e8c21c2"
-  integrity sha512-+JjisVJVoGSlglq5KXoEfaieMVy2vYkrVWuyNZiznkOBZrLLGXpBqtqyokir96TvBnBzSFzed6CFsVp1drQIuQ==
+"@entur-private/abt-token-server-javascript-interface@1.3.0":
+  version "1.3.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-1.3.0.tgz#8c8d2fb186c2c4e487610249a1cff1c4b7454f0d"
+  integrity sha512-2yYH5ze6Dbqnxhwgn1uaZY34SaqqYVeCtTaYrJDuQTRSpxsK4H1BpfiEOexLkG0GpuG3iK1JhVsZcLOVMxRjQQ==
 
-"@entur-private/abt-token-state-react-native-lib@1.1.15":
-  version "1.1.15"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-state-react-native-lib/-/@entur-private/abt-token-state-react-native-lib-1.1.15.tgz#67d6719070d3c0be5f6d672a998ad5cc7dc654bb"
-  integrity sha512-KHcIIfED4+hgYp4n62B5/VnWr+k+TR6ZEtAc+LF5OIfoHuWpOGsqKnjCa9vhe50iCwgW+aWkJIQpEV6XtsTxqg==
+"@entur-private/abt-token-state-react-native-lib@1.3.0":
+  version "1.3.0"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-state-react-native-lib/-/@entur-private/abt-token-state-react-native-lib-1.3.0.tgz#01c8ca3eee47e841bccf1e6b6f895d472bd68641"
+  integrity sha512-bgNWRyhH1C/bdnriAFSB3BTp5iwHxFs5NXzpe3TnaQrkzpSURVUa8juo7BKtDBeaDMvVlOdCuVNUf5A+Ytf8JQ==
   dependencies:
-    "@entur-private/abt-time-javascript-lib" "1.1.15"
-    "@entur-private/abt-token-core-javascript-lib" "1.1.15"
-    "@entur-private/abt-token-server-javascript-interface" "1.1.15"
-    async-lock "^1.3.1"
+    "@entur-private/abt-time-javascript-lib" "1.3.0"
+    "@entur-private/abt-token-core-javascript-lib" "1.3.0"
+    "@entur-private/abt-token-server-javascript-interface" "1.3.0"
 
 "@entur/sdk@^5.3.0":
   version "5.3.0"
@@ -4122,6 +4127,14 @@
     "@tanstack/query-core" "4.32.0"
     use-sync-external-store "^1.2.0"
 
+"@testing-library/react-hooks@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-8.0.1.tgz#0924bbd5b55e0c0c0502d1754657ada66947ca12"
+  integrity sha512-Aqhl2IVmLt8IovEVarNDFuJDVWVvhnr9/GCU6UUnrYXwgDFF9h2L2o2P9KBni1AST5sT6riAyoukFLyjQUgD/g==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    react-error-boundary "^3.1.0"
+
 "@trysound/sax@0.2.0":
   version "0.2.0"
   resolved "https://registry.npmjs.org/@trysound/sax/-/sax-0.2.0.tgz"
@@ -5081,11 +5094,6 @@ async-limiter@~1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/async-limiter/-/async-limiter-1.0.1.tgz"
   integrity sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
-
-async-lock@^1.3.1:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/async-lock/-/async-lock-1.3.2.tgz#56668613f91c1c55432b4db73e65c9ced664e789"
-  integrity sha512-phnXdS3RP7PPcmP6NWWzWMU0sLTeyvtZCxBPpZdkYE3seGLKSQZs9FrmVO/qwypq98FUtWWUEYxziLkdGk5nnA==
 
 async@^3.2.2:
   version "3.2.4"
@@ -9293,10 +9301,10 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lru-cache@^9.0.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-9.1.0.tgz#19efafa9d08d1c08eb8efd78876075f0b8b1b07b"
-  integrity sha512-qFXQEwchrZcMVen2uIDceR8Tii6kCJak5rzDStfEM0qA3YLMswaxIEZO0DhIbJ3aqaJiDjt+3crlplOb0tDtKQ==
+"lru-cache@^9.1.1 || ^10.0.0":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.1.tgz#0a3be479df549cca0e5d693ac402ff19537a6b7a"
+  integrity sha512-IJ4uwUTi2qCccrioU6g9g/5rvvVl13bsdczUUcqbciD9iLr095yj8DQKdObriEvuNSx325N1rV1O0sJFszx75g==
 
 make-dir@^2.0.0, make-dir@^2.1.0:
   version "2.1.0"
@@ -10113,10 +10121,10 @@ minipass@^4.2.4:
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-4.2.8.tgz#f0010f64393ecfc1d1ccb5f582bcaf45f48e1a3a"
   integrity sha512-fNzuVyifolSLFL4NzpF+wEF4qrgqaaKX0haXPQEdQ7NKAN+WecoKMHV09YcuL/DHxrUsYQOK3MiuDf7Ip2OXfQ==
 
-minipass@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/minipass/-/minipass-5.0.0.tgz#3e9788ffb90b694a5d0ec94479a45b5d8738133d"
-  integrity sha512-3FnjYuehv9k6ovOEbyOswadCDPX1piCfhV8ncmYtHOjuPwylVWsghTLo7rabjC3Rx5xD4HDx8Wm1xnMF7S5qFQ==
+"minipass@^5.0.0 || ^6.0.2 || ^7.0.0":
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/minipass/-/minipass-7.0.3.tgz#05ea638da44e475037ed94d1c7efcc76a25e1974"
+  integrity sha512-LhbbwCfz3vsb12j/WkWQPZfKTsgqIe1Nf/ti1pKjYESGLHIVjWU96G9/ljLH4F9mWNVhlQOm0VySdAWzf05dpg==
 
 mixin-object@^2.0.1:
   version "2.0.1"
@@ -10734,12 +10742,12 @@ path-parse@^1.0.6, path-parse@^1.0.7:
   integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-scurry@^1.6.1:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/path-scurry/-/path-scurry-1.7.0.tgz#99c741a2cfbce782294a39994d63748b5a24f6db"
-  integrity sha512-UkZUeDjczjYRE495+9thsgcVgsaCPkaw80slmfVFgllxY+IO8ubTsOpFVjDPROBqJdHfVPUFRHPBV/WciOVfWg==
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/path-scurry/-/path-scurry-1.10.1.tgz#9ba6bf5aa8500fe9fd67df4f0d9483b2b0bfc698"
+  integrity sha512-MkhCqzzBEpPvxxQ71Md0b1Kk51W01lrYvlMzSUaIzNsODdd7mqhiimSZlr+VegAz5Z6Vzt9Xg2ttE//XBhH3EQ==
   dependencies:
-    lru-cache "^9.0.0"
-    minipass "^5.0.0"
+    lru-cache "^9.1.1 || ^10.0.0"
+    minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
 
 path-type@^1.0.0:
   version "1.1.0"
@@ -11099,6 +11107,13 @@ react-devtools-core@^4.27.2:
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"
+
+react-error-boundary@^3.1.0:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
+  integrity sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
 
 react-freeze@^1.0.0:
   version "1.0.3"
@@ -13315,23 +13330,10 @@ yargs@^17.3.1:
     y18n "^5.0.5"
     yargs-parser "^21.0.0"
 
-yargs@^17.6.2:
+yargs@^17.6.2, yargs@^17.7.1:
   version "17.7.2"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.7.2.tgz#991df39aca675a192b816e1e0363f9d75d2aa269"
   integrity sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==
-  dependencies:
-    cliui "^8.0.1"
-    escalade "^3.1.1"
-    get-caller-file "^2.0.5"
-    require-directory "^2.1.1"
-    string-width "^4.2.3"
-    y18n "^5.0.5"
-    yargs-parser "^21.1.1"
-
-yargs@^17.7.1:
-  version "17.7.1"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.7.1.tgz#34a77645201d1a8fc5213ace787c220eabbd0967"
-  integrity sha512-cwiTb08Xuv5fqF4AovYacTFNxk62th7LKJ6BL9IGUpTJrWoU7/7WdQGTP2SjKf1dUNBGzDd28p/Yfs/GI6JrLw==
   dependencies:
     cliui "^8.0.1"
     escalade "^3.1.1"
@@ -13347,11 +13349,11 @@ yocto-queue@^0.1.0:
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
 zod-to-json-schema@^3.20.4:
-  version "3.20.4"
-  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.20.4.tgz#155f687c5a059fdc0f1bb3ff32d6e9200036b6f4"
-  integrity sha512-Un9+kInJ2Zt63n6Z7mLqBifzzPcOyX+b+Exuzf7L1+xqck9Q2EPByyTRduV3kmSPaXaRer1JCsucubpgL1fipg==
+  version "3.21.4"
+  resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.21.4.tgz#de97c5b6d4a25e9d444618486cb55c0c7fb949fd"
+  integrity sha512-fjUZh4nQ1s6HMccgIeE0VP4QG/YRGPmyjO9sAh890aQKPEk3nqbfUXhMFaC+Dr5KvYBm8BCyvfpZf2jY9aGSsw==
 
 zod@^3.21.4:
-  version "3.21.4"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.21.4.tgz#10882231d992519f0a10b5dd58a38c9dabbb64db"
-  integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
+  version "3.22.2"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.2.tgz#3add8c682b7077c05ac6f979fea6998b573e157b"
+  integrity sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==

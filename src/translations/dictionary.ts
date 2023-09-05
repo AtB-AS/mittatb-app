@@ -117,6 +117,7 @@ const dictionary = {
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   seeMore: _('Vis mer', 'See more', `Vis meir`),
   readMore: _('Les mer', 'Read more', `Les meir`),
+  loading: _('Laster…', 'Loading…', `Lastar…`),
 };
 
 export default orgSpecificTranslations(dictionary, {

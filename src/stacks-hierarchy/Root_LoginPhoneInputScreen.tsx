@@ -3,7 +3,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {LoginTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
-import {PhoneSignInErrorCode} from '@atb/auth/AuthContext';
+import {PhoneSignInErrorCode} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import phone from 'phone';
 import {

@@ -3,51 +3,37 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {useTranslation} from '../translations';
-import {updateMetadata} from '@atb/chat/metadata';
-import Bugsnag from '@bugsnag/react-native';
-
-const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
-const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
-const ERROR_SESSION_EXPIRED = 'auth/session-expired';
-const ERROR_CODE_EXPIRED = 'auth/code-expired';
-
-function isAuthError(
-  error: any,
-): error is FirebaseAuthTypes.NativeFirebaseAuthError {
-  return 'code' in error;
-}
+import {useSubscribeToAuthUserChange} from './use-subscribe-to-auth-user-change';
+import {
+  AuthenticationType,
+  ConfirmationErrorCode,
+  PhoneSignInErrorCode,
+  AuthStatus,
+  VippsSignInErrorCode,
+  AuthReducerAction,
+} from '@atb/auth/types';
+import {getAuthenticationType} from './utils';
+import {useFetchCustomerDataAfterUserChanged} from './use-fetch-customer-data-after-user-changed';
+import {
+  authConfirmCode,
+  authSignInWithCustomToken,
+  authSignInWithPhoneNumber,
+} from './auth-utils';
+import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
+import {useCheckIfAccountCreationFinished} from './use-check-if-account-creation-finished';
 
 type AuthReducerState = {
-  isAuthConnectionInitialized: boolean;
+  user: FirebaseAuthTypes.User | null;
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
   abtCustomerId: string | undefined;
   /** Full abt customer id, including prefix like "ABT:CustomerAccount:" */
   abtCustomerIdFull: string | undefined;
   customerNumber: number | undefined;
-  user: FirebaseAuthTypes.User | null;
-  userCreationFinished: boolean;
+  authStatus: AuthStatus;
 };
-
-type AuthReducerAction =
-  | {
-      type: 'SIGN_IN_INITIATED';
-      confirmationHandler: FirebaseAuthTypes.ConfirmationResult;
-    }
-  | {
-      type: 'SET_USER';
-      user: FirebaseAuthTypes.User | null;
-    }
-  | {
-      type: 'SET_ABT_CUSTOMER_ID';
-      abtCustomerId: string | undefined;
-      abtCustomerIdFull: string | undefined;
-    }
-  | {type: 'SET_USER_CREATION_FINISHED'; customer_number: number};
 
 type AuthReducer = (
   prevState: AuthReducerState,
@@ -63,62 +49,56 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       };
     }
     case 'SET_USER': {
-      return {
-        ...prevState,
-        isAuthConnectionInitialized: true,
-        user: action.user,
-        userCreationFinished:
-          action.user?.uid === prevState.user?.uid
-            ? prevState.userCreationFinished
-            : false,
-      };
+      const sameUser = prevState.user?.uid === action.user?.uid;
+      if (sameUser) {
+        return {
+          ...prevState,
+          user: action.user,
+        };
+      } else {
+        return {
+          confirmationHandler: undefined,
+          abtCustomerId: undefined,
+          abtCustomerIdFull: undefined,
+          customerNumber: undefined,
+          user: action.user,
+          authStatus: 'loading',
+        };
+      }
     }
-    case 'SET_ABT_CUSTOMER_ID': {
+    case 'SET_CUSTOMER_DATA': {
       return {
         ...prevState,
         abtCustomerId: action.abtCustomerId,
         abtCustomerIdFull: action.abtCustomerIdFull,
+        customerNumber: action.customerNumber,
+        /*
+          If no customerNumber, this means the user was newly created in Firestore,
+          but the asynchronous creation of the Entur account is not finished yet.
+        */
+        authStatus: action.customerNumber
+          ? 'authenticated'
+          : 'creating-account',
       };
     }
-    case 'SET_USER_CREATION_FINISHED': {
+    case 'SET_AUTH_STATUS': {
       return {
         ...prevState,
-        userCreationFinished: true,
-        customerNumber: action.customer_number,
+        authStatus: action.authStatus,
+        customerNumber: action.customerNumber,
       };
     }
   }
 };
 
 const initialReducerState: AuthReducerState = {
-  isAuthConnectionInitialized: false,
   confirmationHandler: undefined,
   abtCustomerId: undefined,
   abtCustomerIdFull: undefined,
   customerNumber: undefined,
   user: null,
-  userCreationFinished: false,
+  authStatus: 'loading',
 };
-
-type AuthenticationType = 'none' | 'anonymous' | 'phone';
-
-const getAuthenticationType = (
-  user: FirebaseAuthTypes.User | null,
-): AuthenticationType => {
-  if (user?.phoneNumber) return 'phone';
-  else if (user?.isAnonymous) return 'anonymous';
-  else return 'none';
-};
-
-export type ConfirmationErrorCode =
-  | 'invalid_code'
-  | 'unknown_error'
-  | 'session_expired';
-export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
-export type VippsSignInErrorCode =
-  | 'access_denied'
-  | 'outdated_app_version'
-  | 'unknown_error';
 
 type AuthContextState = {
   signInWithPhoneNumber: (
@@ -130,158 +110,49 @@ type AuthContextState = {
   authenticationType: AuthenticationType;
   signInWithCustomToken: (
     token: string,
-  ) => Promise<{error?: VippsSignInErrorCode}>;
-} & AuthReducerState;
+  ) => Promise<VippsSignInErrorCode | undefined>;
+  retryAuth: () => void;
+} & Omit<AuthReducerState, 'confirmationHandler'>;
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
 
 export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
-  const {language} = useTranslation();
 
-  const confirmCode = useCallback(
-    async function confirmCode(code: string) {
-      try {
-        await state.confirmationHandler?.confirm(code);
-      } catch (error) {
-        if (isAuthError(error))
-          switch (error.code) {
-            case ERROR_INVALID_CONFIRMATION_CODE:
-              return 'invalid_code';
-            case ERROR_CODE_EXPIRED:
-            case ERROR_SESSION_EXPIRED:
-              return 'session_expired';
-          }
-        Bugsnag.notify(error as any);
-        return 'unknown_error';
-      }
-    },
-    [state.confirmationHandler],
-  );
+  useSubscribeToAuthUserChange(dispatch);
+  useFetchCustomerDataAfterUserChanged(state.user, dispatch);
+  useCheckIfAccountCreationFinished(state.user, state.authStatus, dispatch);
 
-  useEffect(() => {
-    if (language) auth().setLanguageCode(language);
-  }, [language]);
-
-  const onUserChanged = useCallback(
-    async function (user: FirebaseAuthTypes.User | null) {
-      if (user) {
-        updateMetadata({
-          'AtB-Firebase-Auth-Id': user.uid,
-          'AtB-Auth-Type': getAuthenticationType(user),
-        });
-      }
-      dispatch({type: 'SET_USER', user});
-    },
-    [dispatch],
-  );
-
-  // Refresh abt customer id from id token after logged in user changes
-  useEffect(() => {
-    (async function () {
-      if (state.user) {
-        const idToken = await state.user.getIdTokenResult();
-        const abtCustomerId = idToken.claims['sub'];
-        const abtCustomerIdFull = idToken.claims['abt_id'];
-        dispatch({
-          type: 'SET_ABT_CUSTOMER_ID',
-          abtCustomerId,
-          abtCustomerIdFull,
-        });
-      }
-    })();
-  }, [state.user?.uid]);
-
-  /*
-   * Check whether the user creation is finished. After the first login the user
-   * is created immediately at Firebase, but created asynchronously at Entur.
-   * When receiving the user created callback from Entur then additional custom
-   * claims get added to the user's id token. This method force refreshes the id
-   * token and checks whether these custom claims have been set.
-   *
-   * Will retry up to 10 times with an interval of 1 second.
-   */
-  useEffect(() => {
-    let retryCount = 0;
-    const checkCustomClaims = async () => {
-      const token = await state.user?.getIdTokenResult(true);
-      const abt_id = token?.claims['abt_id'];
-      const customer_number = token?.claims['customer_number'];
-      const hasCustomClaims = !!abt_id && !!customer_number;
-      if (hasCustomClaims) {
-        dispatch({type: 'SET_USER_CREATION_FINISHED', customer_number});
-      } else {
-        if (retryCount < 10) {
-          retryCount++;
-          setTimeout(() => checkCustomClaims(), 1000);
-        }
-      }
-    };
-
-    checkCustomClaims();
-  }, [state.user?.uid]);
-
-  // Subscribe to user changes. Will fire a onChangeEvent immediately on subscription.
-  useEffect(() => {
-    return auth().onUserChanged(onUserChanged);
-  }, [onUserChanged]);
-
-  const signInWithPhoneNumber = useCallback(
-    async function signInWithPhoneNumber(
-      phoneNumberWithPrefix: string,
-      forceResend: boolean = false,
-    ) {
-      try {
-        const confirmationHandler = await auth().signInWithPhoneNumber(
-          phoneNumberWithPrefix,
-          forceResend,
-        );
-        dispatch({type: 'SIGN_IN_INITIATED', confirmationHandler});
-      } catch (error) {
-        if (isAuthError(error) && error.code === ERROR_INVALID_PHONE_NUMBER) {
-          return 'invalid_phone';
-        }
-        Bugsnag.notify(error as any);
-        return 'unknown_error';
-      }
-    },
-    [],
-  );
-
-  const signInAnonymously = useCallback(async function () {
-    await auth().signInAnonymously();
-  }, []);
-
-  const signOut = useCallback(async function () {
-    await auth().signInAnonymously();
-  }, []);
-
-  // Sign in if the onChangeEvent fired immediately on subscription did not include user data. (in other words, user was not previously signed in)
-  useEffect(() => {
-    if (state.isAuthConnectionInitialized && !state.user) {
-      signInAnonymously();
-    }
-  }, [state.isAuthConnectionInitialized, state.user?.uid]);
-
-  const signInWithCustomToken = async (token: string) => {
-    try {
-      await auth().signInWithCustomToken(token);
-      return {};
-    } catch (err) {
-      console.warn(err);
-      return {error: 'unknown_error' as VippsSignInErrorCode};
-    }
-  };
+  useUpdateAuthLanguageOnChange();
 
   return (
     <AuthContext.Provider
       value={{
         ...state,
-        signInWithPhoneNumber,
-        confirmCode,
-        signOut,
+        signInWithPhoneNumber: useCallback(
+          async (phoneNumberWithPrefix: string, forceResend?: boolean) =>
+            authSignInWithPhoneNumber(
+              phoneNumberWithPrefix,
+              forceResend,
+              dispatch,
+            ),
+          [],
+        ),
+        confirmCode: useCallback(
+          (code: string) => authConfirmCode(state.confirmationHandler, code),
+          [state.confirmationHandler],
+        ),
+        signOut: useCallback(async () => {
+          await auth().signInAnonymously();
+        }, []),
         authenticationType: getAuthenticationType(state.user),
-        signInWithCustomToken,
+        signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
+        retryAuth: useCallback(
+          () =>
+            // As of now the only known error state is when account creation fails
+            dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'}),
+          [state.user?.uid],
+        ),
       }}
     >
       {children}

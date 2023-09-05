@@ -7,8 +7,14 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import React, {forwardRef} from 'react';
-import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
+import React, {forwardRef, useImperativeHandle, useRef} from 'react';
+import {
+  AccessibilityProps,
+  StyleProp,
+  View,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -17,6 +23,7 @@ import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -28,7 +35,7 @@ type ZonesSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const ZonesSelection = forwardRef<any, ZonesSelectionProps>(
+export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
   (
     {
       fareProductTypeConfig,
@@ -39,10 +46,15 @@ export const ZonesSelection = forwardRef<any, ZonesSelectionProps>(
       onSelect,
       style,
     }: ZonesSelectionProps,
-    zonesInputSectionItemRef,
+    ref,
   ) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
+
+    const zonesRef = useRef<TouchableOpacity>(null);
+    useImperativeHandle(ref, () => ({
+      zonesRef,
+    }));
 
     const accessibility: AccessibilityProps = {
       accessible: true,
@@ -71,7 +83,7 @@ export const ZonesSelection = forwardRef<any, ZonesSelectionProps>(
         </ThemeText>
         <Section {...accessibility}>
           <GenericClickableSectionItem
-            ref={zonesInputSectionItemRef}
+            ref={zonesRef}
             onPress={() =>
               onSelect({
                 fromTariffZone,

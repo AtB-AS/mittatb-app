@@ -153,7 +153,7 @@ function parseDateIfString(date: any): Date {
   }
 }
 
-export function isSignificantFootLegWalkOrWaitTime(leg: Leg, nextLeg?: Leg) {
+function isSignificantFootLegWalkOrWaitTime(leg: Leg, nextLeg?: Leg) {
   if (leg.mode !== 'foot') return true;
 
   const showWaitTime = !!nextLeg;
@@ -164,6 +164,16 @@ export function isSignificantFootLegWalkOrWaitTime(leg: Leg, nextLeg?: Leg) {
   const mustWait = showWaitTime && significantWaitTime(waitTimeInSeconds);
 
   return mustWait || mustWalk;
+}
+
+export function getFilteredLegsByWalkOrWaitTime(tripPattern: TripPattern) {
+  if (!!tripPattern?.legs?.length) {
+    return tripPattern.legs.filter((leg, i) =>
+      isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
+    );
+  } else {
+    return [];
+  }
 }
 
 export function canSellCollabTicket(tripPattern: TripPattern) {

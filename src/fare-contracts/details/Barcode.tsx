@@ -16,10 +16,10 @@ import {
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
 import {FareContract} from '@atb/ticketing';
-import {renderAztec} from '@entur-private/abt-mobile-client-sdk';
 import {GenericSectionItem} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import QRCode from 'qrcode';
+import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 
 type Props = {
   validityStatus: ValidityStatus;

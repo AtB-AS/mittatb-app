@@ -8,7 +8,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import {useIsFocused} from '@react-navigation/native';
@@ -211,14 +211,10 @@ const Header = React.memo(function Header({
 }: HeaderProps) {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {theme} = useTheme();
+
   return (
-    <View
-      style={{
-        backgroundColor: theme.static.background.background_accent_0.background,
-      }}
-    >
-      <Section style={styles.locationInputSection}>
+    <View style={styles.locationInputSection}>
+      <Section>
         <LocationInputSectionItem
           label={t(NearbyTexts.location.departurePicker.label)}
           updatingLocation={updatingLocation}
@@ -242,7 +238,7 @@ const Header = React.memo(function Header({
             setLocation(location);
           }}
           chipTypes={['favorites', 'add-favorite']}
-          contentContainerStyle={styles.favoriteChips}
+          style={styles.favoriteChips}
           onAddFavorite={onAddFavorite}
         />
       )}
@@ -267,10 +263,11 @@ function sortAndFilterStopPlaces(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  locationInputSection: {marginHorizontal: theme.spacings.medium},
+  locationInputSection: {
+    backgroundColor: theme.static.background.background_accent_0.background,
+    marginHorizontal: theme.spacings.medium,
+  },
   favoriteChips: {
-    paddingTop: theme.spacings.medium,
-    paddingRight: theme.spacings.medium / 2,
-    paddingLeft: theme.spacings.medium,
+    marginTop: theme.spacings.medium,
   },
 }));

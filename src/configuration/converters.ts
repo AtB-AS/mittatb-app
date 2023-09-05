@@ -1,6 +1,7 @@
 import {
   FareProductTypeConfig,
   FlexibleTransportOptionType,
+  HarborConnectionOverride,
   TransportModeFilterOptionType,
 } from '@atb-as/config-specs';
 import {LanguageAndTextType} from '@atb/translations/types';
@@ -29,11 +30,9 @@ function mapToFareProductTypeConfig(
   const typeConfigPotential = FareProductTypeConfig.safeParse(config);
 
   if (!typeConfigPotential.success) {
-    Bugsnag.notify('fare product mapping issue', function (event) {
-      event.addMetadata('decode_errors', {
-        issues: typeConfigPotential.error.issues,
-      });
-    });
+    // Reject configuration that does not match the current Zod schema.
+    // Can happen when products are added later which the current version
+    // of the app doesn't know how to handle. This is normal and expected.
     return;
   }
   return typeConfigPotential.data;
@@ -72,12 +71,6 @@ export const mapToFlexibleTransportOption = (
   }
 
   if (!safeParseReturnObject.success) {
-    Bugsnag.notify('flexible transport filter mapping issue', function (event) {
-      event.addMetadata('decode_errors', {
-        issues: safeParseReturnObject.error.issues,
-      });
-    });
-
     return undefined;
   }
 
@@ -103,11 +96,6 @@ const mapToTransportModeFilterOption = (
   const typeConfigPotential = TransportModeFilterOptionType.safeParse(filter);
 
   if (!typeConfigPotential.success) {
-    Bugsnag.notify('transport mode filter mapping issue', function (event) {
-      event.addMetadata('decode_errors', {
-        issues: typeConfigPotential.error.issues,
-      });
-    });
     return;
   }
   return typeConfigPotential.data;
@@ -128,11 +116,20 @@ export function mapToMobilityOperators(operators?: any) {
     .map((operator) => {
       const parseResult = MobilityOperator.safeParse(operator);
       if (!parseResult.success) {
-        Bugsnag.notify('Mobility operator mapping issue', function (event) {
-          event.addMetadata('decode_errors', {
-            issues: parseResult.error.issues,
-          });
-        });
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
+export function mapToHarborConnectionOverride(overrides?: any) {
+  if (!overrides) return;
+  if (!Array.isArray(overrides)) return;
+  return overrides
+    .map((override) => {
+      const parseResult = HarborConnectionOverride.safeParse(override);
+      if (!parseResult.success) {
         return;
       }
       return parseResult.data;
