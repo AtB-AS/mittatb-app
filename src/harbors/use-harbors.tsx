@@ -4,6 +4,7 @@ import {useHarborConnectionOverrides} from '@atb/harbors/use-harbor-connection-o
 import {useHarborsQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
 import _ from 'lodash';
+import {StopPlaceFragmentWithIsFree} from './types';
 
 export const useHarbors = (fromHarborId?: string) => {
   const harborsQuery = useHarborsQuery();
@@ -24,7 +25,7 @@ export const useHarbors = (fromHarborId?: string) => {
         )
     : harborsQuery.refetch;
 
-  const data = fromHarborId
+  const data: StopPlaceFragmentWithIsFree[] = fromHarborId
     ? applyOverrides(harborsQuery.data, connectionsQuery.data, overrides)
     : harborsQuery.data ?? [];
 
@@ -48,8 +49,9 @@ function applyOverrides(
     overrides,
     allHarbors,
   );
+
   // Add the extra stop places (override harbors) to the list of existing connections.
-  return _.unionBy(connections ?? [], overrideHarbors, 'id');
+  return _.unionBy(overrideHarbors, connections ?? [], 'id');
 }
 
 function mapOverridesToStopPlaceFragment(
@@ -58,6 +60,13 @@ function mapOverridesToStopPlaceFragment(
 ) {
   if (!harbors) return [];
   return overrides
-    .map((override) => harbors.find((h) => h.id === override.to))
+    .map((override) => {
+      const harbor = harbors.find((h) => h.id === override.to);
+      if (!harbor) return undefined;
+      return {
+        ...harbor,
+        ...override,
+      };
+    })
     .filter(isDefined);
 }

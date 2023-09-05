@@ -16,6 +16,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 
 type Props = {
   harbors: StopPlaceFragment[];
@@ -95,13 +96,12 @@ export const HarborResults: React.FC<Props> = ({
 function sortHarbors(
   harbors: StopPlaceFragment[],
   location?: GeoLocation,
-): StopPlaceFragment[] {
+): StopPlaceFragmentWithIsFree[] {
   if (location) {
     return harbors
       ?.map((stopPlace) => {
         return {
-          id: stopPlace.id,
-          name: stopPlace.name,
+          ...stopPlace,
           distance: getDistance(stopPlace, location),
         };
       })

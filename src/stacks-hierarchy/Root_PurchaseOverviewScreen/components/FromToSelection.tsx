@@ -7,13 +7,13 @@ import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StyleProp, ViewStyle} from 'react-native';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
+import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
-  fromPlace: TariffZoneWithMetadata | StopPlaceFragment;
-  toPlace: TariffZoneWithMetadata | StopPlaceFragment;
+  fromPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
+  toPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (
     params:
@@ -80,7 +80,7 @@ export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
 );
 
 export function isValidTariffZone(
-  place: TariffZoneWithMetadata | StopPlaceFragment,
+  place: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree,
 ): place is TariffZoneWithMetadata {
   return !!place && 'geometry' in place;
 }

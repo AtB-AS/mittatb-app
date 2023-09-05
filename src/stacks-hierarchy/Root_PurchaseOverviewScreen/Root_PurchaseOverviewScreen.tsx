@@ -34,6 +34,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const isFree = params.toPlace
+    ? 'isFree' in params.toPlace && !!params.toPlace.isFree
+    : false;
 
   const {preassignedFareProduct, selectableTravellers, fromPlace, toPlace} =
     useOfferDefaults(
@@ -197,6 +200,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <FullScreenFooter>
           <Summary
             isLoading={isSearchingOffer}
+            isFree={isFree}
             isError={!!error || !hasSelection}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
