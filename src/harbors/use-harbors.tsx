@@ -4,6 +4,7 @@ import {useHarborConnectionOverrides} from '@atb/harbors/use-harbor-connection-o
 import {useHarborsQuery} from '@atb/queries';
 import {isDefined} from '@atb/utils/presence';
 import _ from 'lodash';
+import {StopPlaceFragmentWithIsFree} from './types';
 
 export const useHarbors = (fromHarborId?: string) => {
   const harborsQuery = useHarborsQuery();
@@ -24,7 +25,7 @@ export const useHarbors = (fromHarborId?: string) => {
         )
     : harborsQuery.refetch;
 
-  const data = fromHarborId
+  const data: StopPlaceFragmentWithIsFree[] = fromHarborId
     ? applyOverrides(harborsQuery.data, connectionsQuery.data, overrides)
     : harborsQuery.data ?? [];
 

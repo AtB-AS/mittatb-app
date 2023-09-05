@@ -3,5 +3,4 @@ export type StopPlaceFragment = {
   name: string;
   latitude?: number;
   longitude?: number;
-  isFree?: boolean;
 };
