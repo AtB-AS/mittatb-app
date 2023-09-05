@@ -33,12 +33,13 @@ export const FlexibleTransportBookingOptions: React.FC<
   return (
     <>
       {showBookOnlineOption && (
-        <View
-          style={style.flexBookingOption}
-          accessible={true}
-          accessibilityRole="link"
-        >
+        <View style={style.flexBookingOption} accessible={false}>
           <Button
+            accessible={true}
+            accessibilityRole="link"
+            accessibilityHint={t(
+              TripDetailsTexts.flexibleTransport.bookOnlineA11yHint,
+            )}
             text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
             onPress={() => Linking.openURL(bookingUrl)}
             mode="primary"
@@ -49,14 +50,12 @@ export const FlexibleTransportBookingOptions: React.FC<
         </View>
       )}
       {showBookByPhoneOption && (
-        <View
-          style={style.flexBookingOption}
-          accessible={true}
-          accessibilityHint={t(
-            TripDetailsTexts.flexibleTransport.bookByPhoneA11yHint,
-          )}
-        >
+        <View style={style.flexBookingOption} accessible={false}>
           <Button
+            accessible={true}
+            accessibilityHint={t(
+              TripDetailsTexts.flexibleTransport.bookByPhoneA11yHint,
+            )}
             text={t(
               TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
             )}

@@ -42,7 +42,7 @@ export const FlexibleTransportBookingDetails: React.FC<
 
   const publicCode = getPublicCodeFromLeg(leg);
 
-  const now = useNow(2500);
+  const now = useNow(30000);
   const bookingIsAvailable = getLegBookingIsAvailable(
     leg,
     now,
@@ -62,7 +62,7 @@ export const FlexibleTransportBookingDetails: React.FC<
           ),
         )}
         color="background_1"
-        setFocusOnLoad={false}
+        setFocusOnLoad={true}
         leftButton={{
           type: 'close',
           onPress: close,
@@ -98,7 +98,7 @@ export const FlexibleTransportBookingDetails: React.FC<
                 const stepInstructionText = t(step);
                 return (
                   <View
-                    key={i}
+                    key={stepInstructionText}
                     style={style.step}
                     accessible={true}
                     accessibilityLabel={stepNumberText + stepInstructionText}
@@ -124,6 +124,11 @@ export const FlexibleTransportBookingDetails: React.FC<
               flexTransportInfoUrl && Linking.openURL(flexTransportInfoUrl);
             }}
             accessibilityRole="link"
+            accessibilityHint={t(
+              TripDetailsTexts.flexibleTransport.readMoreAboutA11yHint(
+                publicCode,
+              ),
+            )}
           >
             <ThemeText
               color="secondary"

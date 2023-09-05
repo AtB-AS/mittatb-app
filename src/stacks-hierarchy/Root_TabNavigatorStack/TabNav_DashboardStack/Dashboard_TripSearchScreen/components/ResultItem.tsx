@@ -48,7 +48,7 @@ import {
   getNoticesForLeg,
   getTimeRepresentationType,
   isLegFlexibleTransport,
-  isSignificantFootLegWalkOrWaitTime,
+  getFilteredLegsByWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
   getTripPatternBookingsRequiredCount,
@@ -63,10 +63,10 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
-  onDetailsPressed(): void;
+  onDetailsPressed(tripPattern: TripPattern, resultIndex?: number): void;
+  resultIndex: number;
   searchTime: SearchTime;
   testID?: string;
-  resultNumber: number;
 };
 
 const ResultItemHeader: React.FC<{
@@ -135,12 +135,12 @@ const ResultItemHeader: React.FC<{
   );
 };
 
-export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
+const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   tripPattern,
   onDetailsPressed,
+  resultIndex,
   testID,
   searchTime,
-  resultNumber,
   ...props
 }) => {
   const styles = useThemeStyles();
@@ -150,8 +150,11 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const [legIconsParentWidth, setLegIconsParentWidth] = useState(0);
   const [legIconsContentWidth, setLegIconsContentWidth] = useState(0);
 
+  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
+  const resultNumber = resultIndex + 1;
+
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
-    tripPattern.legs.length,
+    filteredLegs.length,
   );
   const fadeInValue = useRef(new Animated.Value(0)).current;
 
@@ -172,15 +175,15 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     useNativeDriver: true,
   });
 
-  if (!tripPattern?.legs?.length) return null;
+  if (filteredLegs.length < 1) return null;
 
-  const expandedLegs = tripPattern.legs.slice(0, numberOfExpandedLegs);
-  const collapsedLegs = tripPattern.legs.slice(
-    numberOfExpandedLegs,
-    tripPattern.legs.length,
+  const lastLegIsFlexible = isLegFlexibleTransport(
+    filteredLegs[filteredLegs.length - 1],
   );
-  const legs = expandedLegs.filter((leg, i) =>
-    isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
+  const expandedLegs = filteredLegs.slice(0, numberOfExpandedLegs);
+  const collapsedLegs = filteredLegs.slice(
+    numberOfExpandedLegs,
+    filteredLegs.length,
   );
 
   const isInPast =
@@ -205,7 +208,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       )}
       accessibilityRole={'button'}
       style={styles.pressableOpacity}
-      onPress={onDetailsPressed}
+      onPress={() => onDetailsPressed(tripPattern, resultIndex)}
       accessible={true}
       testID={testID}
     >
@@ -233,14 +236,14 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
               }}
             >
               <View style={styles.legOutput}>
-                {legs.map((leg, i) => (
+                {expandedLegs.map((leg, i) => (
                   <View
                     key={tripPattern.compressedQuery + leg.aimedStartTime}
                     style={styles.legAndDash}
                   >
                     <View testID="tripLeg">
                       {leg.mode === 'foot' ? (
-                        <FootLeg leg={leg} nextLeg={tripPattern.legs[i + 1]} />
+                        <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
                       ) : (
                         <TransportationLeg
                           leg={leg}
@@ -282,7 +285,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         )}
                       </View>
                     </View>
-                    {i < legs.length - 1 ? (
+                    {i < expandedLegs.length - 1 ? (
                       <View style={[styles.dashContainer, iconHeight]}>
                         <LegDash />
                       </View>
@@ -308,8 +311,7 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
             <DestinationIcon style={styles.iconContainer} />
             <View style={styles.departureTimes}>
               <ThemeText type="body__tertiary" color="primary" testID="endTime">
-                {(legs.length > 0 &&
-                isLegFlexibleTransport(legs[legs.length - 1])
+                {(lastLegIsFlexible
                   ? t(dictionary.missingRealTimePrefix)
                   : '') +
                   formatToClock(tripPattern.expectedEndTime, language, 'ceil')}
@@ -323,13 +325,15 @@ export const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   );
 };
 
+export const MemoizedResultItem = React.memo(ResultItem);
+
 const ResultItemFooter: React.FC<{
   tripPattern: TripPattern;
 }> = ({tripPattern}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
 
-  const now = useNow(2500);
+  const now = useNow(30000);
 
   const requiresBookingUrgently = getTripPatternRequiresBookingUrgently(
     tripPattern,
@@ -655,7 +659,10 @@ const tripSummary = (
             formatToClock(firstLeg.aimedStartTime, language, 'floor'),
           ),
         )
-      : t(
+      : (isLegFlexibleTransport(firstLeg)
+          ? t(dictionary.missingRealTimePrefix)
+          : '') +
+        t(
           TripSearchTexts.results.resultItem.journeySummary.noRealTime(
             firstLeg.fromPlace?.name ?? '',
             formatToClock(firstLeg.expectedStartTime, language, 'floor'),
@@ -693,11 +700,20 @@ const tripSummary = (
     ),
   );
 
+  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
+  const startTimeIsApproximation =
+    filteredLegs.length > 0 && isLegFlexibleTransport(filteredLegs[0]);
+  const endTimeIsApproximation =
+    filteredLegs.length > 0 &&
+    isLegFlexibleTransport(filteredLegs[filteredLegs.length - 1]);
+
   const traveltimesText = t(
     TripSearchTexts.results.resultItem.journeySummary.travelTimes(
       formatToClock(tripPattern.expectedStartTime, language, 'floor'),
       formatToClock(tripPattern.expectedEndTime, language, 'ceil'),
       secondsToDuration(tripPattern.duration, language),
+      startTimeIsApproximation,
+      endTimeIsApproximation,
     ),
   );
 

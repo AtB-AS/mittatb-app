@@ -312,12 +312,34 @@ const TripSearchTexts = {
             `Total of ${meters} meters to walk`,
             `Totalt ${meters} meter å gå`,
           ),
-        travelTimes: (startTime: string, endTime: string, duration: string) =>
-          _(
-            `Start klokken ${startTime}, ankomst klokken ${endTime}. Total reisetid ${duration}.`,
-            `Start time ${startTime}, arrival time ${endTime}. Total travel time ${duration}`,
-            `Start klokka ${startTime}, framkomst klokka ${endTime}. Total reisetid ${duration}.`,
-          ),
+        travelTimes: (
+          startTime: string,
+          endTime: string,
+          duration: string,
+          startTimeIsApproximation: boolean,
+          endTimeIsApproximation: boolean,
+        ) => {
+          const circaPrefix = 'ca. ';
+          const startTimeCircaPrefix = startTimeIsApproximation
+            ? circaPrefix
+            : '';
+          const endTimeCircaPrefix = endTimeIsApproximation ? circaPrefix : '';
+          const totalTimeCircaPrefix =
+            startTimeIsApproximation || endTimeIsApproximation
+              ? circaPrefix
+              : '';
+          return _(
+            `Start ${startTimeCircaPrefix}klokken ${startTime}, ankomst ${endTimeCircaPrefix}klokken ${endTime}. Total reisetid ${
+              totalTimeCircaPrefix + duration
+            }.`,
+            `Start time ${startTimeCircaPrefix + startTime}, arrival time ${
+              endTimeCircaPrefix + endTime
+            }. Total travel time ${totalTimeCircaPrefix + duration}`,
+            `Start ${startTimeCircaPrefix}klokka ${startTime}, framkomst ${endTimeCircaPrefix}klokka ${endTime}. Total reisetid ${
+              totalTimeCircaPrefix + duration
+            }.`,
+          );
+        },
         realtime: (
           fromPlace: string,
           realtimeDepartureTime: string,
