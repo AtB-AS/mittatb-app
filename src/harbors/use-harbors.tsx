@@ -38,6 +38,16 @@ export const useHarbors = (fromHarborId?: string) => {
   };
 };
 
+export const useIsFree = (fromHarborId?: string, toHarborId?: string) => {
+  const harborConnections = useHarbors(fromHarborId);
+
+  const toPlaceConnection = harborConnections.data.find(
+    (harbor) => harbor.id === toHarborId,
+  );
+
+  return !!toPlaceConnection?.isFree;
+};
+
 function applyOverrides(
   allHarbors: StopPlaceFragment[] | undefined,
   connections: StopPlaceFragment[] | undefined,
