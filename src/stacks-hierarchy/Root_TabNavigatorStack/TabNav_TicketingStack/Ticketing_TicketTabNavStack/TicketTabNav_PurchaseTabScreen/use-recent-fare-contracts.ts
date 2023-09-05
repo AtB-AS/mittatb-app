@@ -127,7 +127,7 @@ const mapBackendRecentFareContracts = (
 
   const pointToPointValidity = recentFareContract.point_to_point_validity;
 
-  const orderId = recentFareContract.order_id;
+  const direction = recentFareContract.direction;
 
   const fromId = pointToPointValidity?.fromPlace || fromTariffZone?.id;
 
@@ -141,7 +141,7 @@ const mapBackendRecentFareContracts = (
 
   return {
     id,
-    orderId,
+    direction,
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,

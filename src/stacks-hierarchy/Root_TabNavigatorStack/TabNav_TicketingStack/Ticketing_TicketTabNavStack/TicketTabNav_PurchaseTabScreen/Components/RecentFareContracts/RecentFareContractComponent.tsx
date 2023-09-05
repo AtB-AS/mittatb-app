@@ -21,7 +21,7 @@ import {
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
-import {TravelRightDirection, useTicketingState} from '@atb/ticketing';
+import {TravelRightDirection} from '@atb/ticketing';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -45,7 +45,7 @@ export const RecentFareContractComponent = ({
     toTariffZone,
     userProfilesWithCount,
     pointToPointValidity,
-    orderId,
+    direction,
   } = recentFareContract;
   const {language} = useTranslation();
   const styles = useStyles();
@@ -56,14 +56,11 @@ export const RecentFareContractComponent = ({
   const {width} = Dimensions.get('window');
 
   const harborsQuery = useHarborsQuery();
-  const {findFareContractByOrderId} = useTicketingState();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
-  const direction: TravelRightDirection | undefined =
-    findFareContractByOrderId(orderId)?.travelRights?.[0].direction;
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
