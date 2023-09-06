@@ -59,8 +59,10 @@ jobs:
 
       # E2E init
       - name: Install Flashlight
-        run: bash ./scripts/install-flashlight.sh
+        run: sh ./scripts/install-flashlight.sh
         working-directory: e2e
+      #- name: Source Flashlight
+      #  run: source /Users/runner/.profile
       - name: Test Flashlight
         run: flashlight -v
       - name: Install Appium
