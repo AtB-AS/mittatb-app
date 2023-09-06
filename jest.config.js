@@ -1,7 +1,5 @@
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-
 module.exports = {
-  preset: 'ts-jest',
+  preset: 'react-native',
   testEnvironment: 'node',
   moduleNameMapper: {
     '^@atb/(.*)$': '<rootDir>/src/$1',
