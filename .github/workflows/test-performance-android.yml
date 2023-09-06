@@ -1,4 +1,4 @@
-name: E2E tests on Android
+name: Performance measures for Android
 on:
   workflow_dispatch:
     inputs:
@@ -59,7 +59,8 @@ jobs:
 
       # E2E init
       - name: Install Flashlight
-        run: curl https://get.flashlight.dev | bash
+        run: bash ./scripts/install-flashlight.sh
+        working-directory: e2e
       - name: Test Flashlight
         run: flashlight -v
       - name: Install Appium
