@@ -60,7 +60,6 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
       <View style={styles.header}>
         <View style={styles.withMargin}>
           <TextInputSectionItem
-            //ref={inputRef}
             radius="top-bottom"
             label={
               fromHarbor
