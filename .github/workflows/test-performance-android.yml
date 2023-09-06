@@ -58,8 +58,8 @@ jobs:
           APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
 
       # E2E init
-      #- name: Install Flashlight
-      #  run: sh ./scripts/install-flashlight.sh
+      - name: Install Flashlight
+        run: sh ./scripts/install-flashlight.sh
       #  working-directory: e2e
       #- name: Source Flashlight
       #  run: source /Users/runner/.profile

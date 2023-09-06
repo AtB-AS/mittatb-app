@@ -28,8 +28,8 @@ describe('Flashlight performance measure', () => {
   before(async () => {
     await AppHelper.launchApp();
     await AppHelper.pause(10000, true);
-    await OnboardingPage.skipOnboarding('flashlight');
-    await AppHelper.pause(waitingTime)
+    //await OnboardingPage.skipOnboarding('flashlight');
+    //await AppHelper.pause(waitingTime)
   });
 
   /**
@@ -162,7 +162,7 @@ describe('Flashlight performance measure', () => {
   /**
    * Background: put the app in background and awake it
    */
-  it.only('should awake from background', async () => {
+  it('should awake from background', async () => {
     try {
       await NavigationHelper.tapMenu('assistant');
       await NavigationHelper.tapMenu('assistant');
