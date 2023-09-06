@@ -6,5 +6,12 @@
     "paths": {
       "@atb/*": ["src/*/index", "src/*"]
     }
-  }
+  },
+  "types": [
+    "node",
+    "@wdio/globals/types",
+    "expect-webdriverio",
+    "@wdio/mocha-framework",
+    "@wdio/appium-service"
+  ]
 }
