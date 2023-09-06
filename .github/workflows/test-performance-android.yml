@@ -90,7 +90,7 @@ jobs:
           emulator-build: 9536276
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec e2e/test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performance_measures --iterationCount ${{ env.INPUT_TEST_ITERATIONS }} --maxRetries ${{ env.INPUT_MAX_RETRIES }}
+          script: /Users/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec e2e/test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performance_measures --iterationCount ${{ env.INPUT_TEST_ITERATIONS }} --maxRetries ${{ env.INPUT_MAX_RETRIES }}
           pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
         env:
           APP_PATH: ${{ github.workspace }}
