@@ -11,9 +11,7 @@ export type UseDebugOverride = [
 export const useDebugOverride = (
   key: StorageModelKeysEnum,
 ): UseDebugOverride => {
-  const [debugOverride, setDebugOverride] = useState<boolean | undefined>(
-    false,
-  );
+  const [debugOverride, setDebugOverride] = useState<boolean | undefined>();
   const [debugOverrideReady, setDebugOverrideReady] = useState(false);
 
   useEffect(() => {
