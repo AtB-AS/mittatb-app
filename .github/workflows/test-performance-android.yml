@@ -64,7 +64,7 @@ jobs:
       #- name: Source Flashlight
       #  run: source /Users/runner/.profile
       - name: Test Flashlight
-        run: flashlight -v
+        run: set && flashlight -v
       - name: Install Appium
         run: npm install -g appium
       - name: Install uiautomator2 driver
