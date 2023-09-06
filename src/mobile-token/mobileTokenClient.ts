@@ -24,7 +24,8 @@ export const mobileTokenClient = {
   create: (traceId: string) => abtClient.createToken(CONTEXT_ID, traceId),
   encode: (token: Token, tokenActions?: TokenAction[]) =>
     encodeAsSecureContainer(
-      token,
+      CONTEXT_ID,
+      token.tokenId,
       [],
       tokenActions ?? [TokenAction.TOKEN_ACTION_TICKET_INSPECTION],
       false,

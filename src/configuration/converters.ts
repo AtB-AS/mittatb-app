@@ -1,6 +1,7 @@
 import {
   FareProductTypeConfig,
   FlexibleTransportOptionType,
+  HarborConnectionOverride,
   TransportModeFilterOptionType,
 } from '@atb-as/config-specs';
 import {LanguageAndTextType} from '@atb/translations/types';
@@ -114,6 +115,20 @@ export function mapToMobilityOperators(operators?: any) {
   return operators
     .map((operator) => {
       const parseResult = MobilityOperator.safeParse(operator);
+      if (!parseResult.success) {
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
+export function mapToHarborConnectionOverride(overrides?: any) {
+  if (!overrides) return;
+  if (!Array.isArray(overrides)) return;
+  return overrides
+    .map((override) => {
+      const parseResult = HarborConnectionOverride.safeParse(override);
       if (!parseResult.success) {
         return;
       }

@@ -12,6 +12,7 @@ import {useCallback, useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {secondsBetween} from '@atb/utils/date';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 
 export type UserProfileWithCountAndOffer = UserProfileWithCount & {
   offer: Offer;
@@ -128,8 +129,8 @@ const initialState: OfferState = {
 export function useOfferState(
   offerEndpoint: 'zones' | 'authority' | 'stop-places',
   preassignedFareProduct: PreassignedFareProduct,
-  fromPlace: TariffZone | StopPlaceFragment,
-  toPlace: TariffZone | StopPlaceFragment,
+  fromPlace: TariffZone | StopPlaceFragmentWithIsFree,
+  toPlace: TariffZone | StopPlaceFragmentWithIsFree,
   userProfilesWithCount: UserProfileWithCount[],
   travelDate?: string,
 ) {
@@ -142,6 +143,11 @@ export function useOfferState(
 
   const updateOffer = useCallback(
     async function (cancelToken?: CancelToken) {
+      if ('isFree' in toPlace && toPlace.isFree) {
+        dispatch({type: 'CLEAR_OFFER'});
+        return;
+      }
+
       const offerTravellers = userProfilesWithCount
         .filter((t) => t.count)
         .map((t) => ({

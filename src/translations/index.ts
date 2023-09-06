@@ -61,3 +61,4 @@ export {default as AnonymousPurchasesTexts} from './screens/subscreens/Anonymous
 export {default as SituationsTexts} from './components/SituationsTexts';
 export {default as TicketAssistantTexts} from './screens/TicketAssistant';
 export {default as ActiveTokenRequiredTexts} from './screens/subscreens/ActiveTokenRequired';
+export {default as LoadingScreenTexts} from './screens/LoadingScreen';

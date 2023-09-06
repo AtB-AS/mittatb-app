@@ -47,6 +47,7 @@ import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfi
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
+import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -55,7 +56,7 @@ type ResultState = PartialState<NavigationState> & {
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const RootStack = () => {
-  const {isLoading, onboarded} = useAppState();
+  const {isLoading} = useAppState();
   const {theme} = useTheme();
   const departuresV2Enabled = useDeparturesV2Enabled();
   const navRef = useNavigationContainerRef<RootStackParamList>();
@@ -67,9 +68,7 @@ export const RootStack = () => {
     return null;
   }
 
-  const statusBarColor = onboarded
-    ? theme.static.background.background_accent_0.background
-    : theme.static.background.background_accent_3.background;
+  const statusBarColor = theme.static.background.background_accent_0.background;
 
   const ReactNavigationTheme = {
     ...DefaultTheme,
@@ -176,6 +175,7 @@ export const RootStack = () => {
           onStateChange={trackNavigation}
           ref={navRef}
           theme={ReactNavigationTheme}
+          fallback={<LoadingScreen />}
           linking={{
             prefixes: [`${APP_SCHEME}://`],
             config: {
@@ -235,151 +235,155 @@ export const RootStack = () => {
             },
           }}
         >
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Group
+          <LoadingScreenBoundary>
+            <Stack.Navigator
               screenOptions={{
-                presentation: 'modal',
-                ...TransitionPresets.ModalSlideFromBottomIOS,
+                headerShown: false,
               }}
             >
-              <Stack.Screen
-                name="Root_TabNavigatorStack"
-                component={Root_TabNavigatorStack}
-              />
-              <Stack.Screen
-                name="Root_OnboardingStack"
-                component={Root_OnboardingStack}
-              />
-              <Stack.Screen
-                name="Root_LocationSearchByTextScreen"
-                component={Root_LocationSearchByTextScreen}
-              />
-              <Stack.Screen
-                name="Root_LocationSearchByMapScreen"
-                component={Root_LocationSearchByMapScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                  headerShown: false,
+              <Stack.Group
+                screenOptions={{
+                  presentation: 'modal',
+                  ...TransitionPresets.ModalSlideFromBottomIOS,
                 }}
-              />
-              <Stack.Screen
-                name="Root_PurchaseOverviewScreen"
-                component={Root_PurchaseOverviewScreen}
-              />
-              <Stack.Screen
-                name="Root_PurchaseConfirmationScreen"
-                component={Root_PurchaseConfirmationScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_PurchaseTariffZonesSearchByMapScreen"
-                component={Root_PurchaseTariffZonesSearchByMapScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_PurchaseTariffZonesSearchByTextScreen"
-                component={Root_PurchaseTariffZonesSearchByTextScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_PurchaseHarborSearchScreen"
-                component={Root_PurchaseHarborSearchScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_PurchasePaymentWithCreditCardScreen"
-                component={Root_PurchasePaymentWithCreditCardScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_PurchasePaymentWithVippsScreen"
-                component={Root_PurchasePaymentWithVippsScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_PurchaseAsAnonymousConsequencesScreen"
-                component={Root_PurchaseAsAnonymousConsequencesScreen}
-              />
-              <Stack.Screen
-                name="Root_FareContractDetailsScreen"
-                component={Root_FareContractDetailsScreen}
-              />
-              <Stack.Screen
-                name="Root_CarnetDetailsScreen"
-                component={Root_CarnetDetailsScreen}
-              />
-              <Stack.Screen
-                name="Root_ReceiptScreen"
-                component={Root_ReceiptScreen}
-              />
-              <Stack.Screen
-                name="Root_MobileTokenOnboardingStack"
-                component={Root_MobileTokenOnboardingStack}
-              />
-              <Stack.Screen
-                name="Root_AddEditFavoritePlaceScreen"
-                component={Root_AddEditFavoritePlaceScreen}
-              />
-              <Stack.Screen
-                name="Root_SearchStopPlaceScreen"
-                component={Root_SearchStopPlaceScreen}
-              />
-              <Stack.Screen
-                name="Root_TicketAssistantStack"
-                component={Root_TicketAssistantStack}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_TipsAndInformation"
-                component={Root_TipsAndInformation}
-              />
-              <Stack.Screen
-                name="Root_LoginActiveFareContractWarningScreen"
-                component={Root_LoginActiveFareContractWarningScreen}
-              />
-              <Stack.Screen
-                name="Root_LoginOptionsScreen"
-                component={Root_LoginOptionsScreen}
-              />
-              <Stack.Screen
-                name="Root_LoginPhoneInputScreen"
-                component={Root_LoginPhoneInputScreen}
-              />
-              <Stack.Screen
-                name="Root_LoginConfirmCodeScreen"
-                component={Root_LoginConfirmCodeScreen}
-                options={{
-                  ...TransitionPresets.SlideFromRightIOS,
-                }}
-              />
-              <Stack.Screen
-                name="Root_LoginRequiredForFareProductScreen"
-                component={Root_LoginRequiredForFareProductScreen}
-              />
-              <Stack.Screen
-                name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
-                component={Root_ActiveTokenOnPhoneRequiredForFareProductScreen}
-              />
-            </Stack.Group>
-          </Stack.Navigator>
+              >
+                <Stack.Screen
+                  name="Root_TabNavigatorStack"
+                  component={Root_TabNavigatorStack}
+                />
+                <Stack.Screen
+                  name="Root_OnboardingStack"
+                  component={Root_OnboardingStack}
+                />
+                <Stack.Screen
+                  name="Root_LocationSearchByTextScreen"
+                  component={Root_LocationSearchByTextScreen}
+                />
+                <Stack.Screen
+                  name="Root_LocationSearchByMapScreen"
+                  component={Root_LocationSearchByMapScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseOverviewScreen"
+                  component={Root_PurchaseOverviewScreen}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseConfirmationScreen"
+                  component={Root_PurchaseConfirmationScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseTariffZonesSearchByMapScreen"
+                  component={Root_PurchaseTariffZonesSearchByMapScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseTariffZonesSearchByTextScreen"
+                  component={Root_PurchaseTariffZonesSearchByTextScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseHarborSearchScreen"
+                  component={Root_PurchaseHarborSearchScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchasePaymentWithCreditCardScreen"
+                  component={Root_PurchasePaymentWithCreditCardScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchasePaymentWithVippsScreen"
+                  component={Root_PurchasePaymentWithVippsScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_PurchaseAsAnonymousConsequencesScreen"
+                  component={Root_PurchaseAsAnonymousConsequencesScreen}
+                />
+                <Stack.Screen
+                  name="Root_FareContractDetailsScreen"
+                  component={Root_FareContractDetailsScreen}
+                />
+                <Stack.Screen
+                  name="Root_CarnetDetailsScreen"
+                  component={Root_CarnetDetailsScreen}
+                />
+                <Stack.Screen
+                  name="Root_ReceiptScreen"
+                  component={Root_ReceiptScreen}
+                />
+                <Stack.Screen
+                  name="Root_MobileTokenOnboardingStack"
+                  component={Root_MobileTokenOnboardingStack}
+                />
+                <Stack.Screen
+                  name="Root_AddEditFavoritePlaceScreen"
+                  component={Root_AddEditFavoritePlaceScreen}
+                />
+                <Stack.Screen
+                  name="Root_SearchStopPlaceScreen"
+                  component={Root_SearchStopPlaceScreen}
+                />
+                <Stack.Screen
+                  name="Root_TicketAssistantStack"
+                  component={Root_TicketAssistantStack}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_TipsAndInformation"
+                  component={Root_TipsAndInformation}
+                />
+                <Stack.Screen
+                  name="Root_LoginActiveFareContractWarningScreen"
+                  component={Root_LoginActiveFareContractWarningScreen}
+                />
+                <Stack.Screen
+                  name="Root_LoginOptionsScreen"
+                  component={Root_LoginOptionsScreen}
+                />
+                <Stack.Screen
+                  name="Root_LoginPhoneInputScreen"
+                  component={Root_LoginPhoneInputScreen}
+                />
+                <Stack.Screen
+                  name="Root_LoginConfirmCodeScreen"
+                  component={Root_LoginConfirmCodeScreen}
+                  options={{
+                    ...TransitionPresets.SlideFromRightIOS,
+                  }}
+                />
+                <Stack.Screen
+                  name="Root_LoginRequiredForFareProductScreen"
+                  component={Root_LoginRequiredForFareProductScreen}
+                />
+                <Stack.Screen
+                  name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
+                  component={
+                    Root_ActiveTokenOnPhoneRequiredForFareProductScreen
+                  }
+                />
+              </Stack.Group>
+            </Stack.Navigator>
+          </LoadingScreenBoundary>
         </NavigationContainer>
       </Host>
     </>

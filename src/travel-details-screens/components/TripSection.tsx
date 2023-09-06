@@ -121,7 +121,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const publicCode = getPublicCodeFromLeg(leg);
 
-  const now = useNow(2500);
+  const now = useNow(30000);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
   const bookingIsAvailable = getLegBookingIsAvailable(
     leg,
@@ -231,8 +231,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <SituationMessageBox noStatusIcon={true} situation={situation} />
           </TripRow>
         ))}
-        {notices.map((notice, i) => (
-          <TripRow key={i} rowLabel={<ThemeIcon svg={Info} />}>
+        {notices.map((notice) => (
+          <TripRow key={notice.id} rowLabel={<ThemeIcon svg={Info} />}>
             <MessageBox noStatusIcon={true} type="info" message={notice.text} />
           </TripRow>
         ))}
@@ -241,6 +241,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             rowLabel={
               <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
             }
+            accessible={false}
           >
             <FlexibleTransportMessageBox
               leg={leg}

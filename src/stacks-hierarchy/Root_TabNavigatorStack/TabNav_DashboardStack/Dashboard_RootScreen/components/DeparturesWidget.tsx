@@ -16,7 +16,7 @@ import DeparturesTexts from '@atb/translations/screens/Departures';
 import {Coordinates} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import React, {useEffect} from 'react';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {useFavoriteDepartureData} from '../use-favorite-departure-data';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemedNoFavouriteDepartureImage} from '@atb/theme/ThemedAssets';
@@ -25,17 +25,20 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
+import {SectionHeading} from './SectionHeading';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
   onAddFavouriteDeparture: () => void;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
+  style?: StyleProp<ViewStyle>;
 };
 
 export const DeparturesWidget = ({
   onEditFavouriteDeparture,
   onAddFavouriteDeparture,
   onPressDeparture,
+  style,
 }: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -69,14 +72,8 @@ export const DeparturesWidget = ({
     : state.data;
 
   return (
-    <View style={styles.container}>
-      <ThemeText
-        type="body__secondary"
-        color="background_accent_0"
-        style={styles.heading}
-      >
-        {t(DeparturesTexts.widget.heading)}
-      </ThemeText>
+    <View style={style}>
+      <SectionHeading>{t(DeparturesTexts.widget.heading)}</SectionHeading>
 
       {!favoriteDepartures.length && (
         <Section>
@@ -162,13 +159,6 @@ function compareStopsByDistance(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    paddingHorizontal: theme.spacings.medium,
-  },
-  heading: {
-    marginTop: theme.spacings.large,
-    marginBottom: theme.spacings.medium,
-  },
   noFavouritesView: {
     flexDirection: 'row',
     alignItems: 'center',

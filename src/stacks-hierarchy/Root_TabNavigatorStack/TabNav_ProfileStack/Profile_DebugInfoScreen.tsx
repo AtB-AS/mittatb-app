@@ -48,6 +48,7 @@ import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-ena
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
 import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -87,6 +88,8 @@ export const Profile_DebugInfoScreen = () => {
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
   const nonTransitTripSearchOverride = useNonTransitTripSearchDebugOverride();
   const showValidTimeInfoDebugOverride = useShowValidTimeInfoDebugOverride();
+  const loadingScreenEnabledDebugOverride =
+    useLoadingScreenEnabledDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -324,6 +327,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Shows valid time info in ticket details"
               override={showValidTimeInfoDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable loading screen on app startup and user change"
+              override={loadingScreenEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
