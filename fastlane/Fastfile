@@ -57,6 +57,7 @@ platform :ios do
       api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    puts "Provisioning profiles for #{identifiers}"
     match(
       type: ENV["FASTLANE_MATCH_TYPE"],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
