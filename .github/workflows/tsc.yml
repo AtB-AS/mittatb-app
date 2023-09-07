@@ -1,4 +1,4 @@
-name: TypeScript Check
+name: TypeScript Check & Test
 on:
   workflow_dispatch:
   push:
@@ -13,7 +13,7 @@ jobs:
     name: tsc
     strategy:
       matrix:
-        org: [atb, nfk]
+        org: [atb, nfk, fram]
     environment: ${{ matrix.org }}
     runs-on: ubuntu-latest
     steps:
@@ -37,3 +37,5 @@ jobs:
         run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: tsc
         uses: icrawl/action-tsc@v1
+      - name: Run tests
+        run: yarn test

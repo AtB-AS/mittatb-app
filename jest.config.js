@@ -1,9 +1,9 @@
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-
 module.exports = {
-  preset: 'ts-jest',
+  preset: 'react-native',
   testEnvironment: 'node',
+  testRegex: '\\.test\\.tsx?$',
   moduleNameMapper: {
     '^@atb/(.*)$': '<rootDir>/src/$1',
   },
+  globalSetup: './__tests__/test-setup.js',
 };
