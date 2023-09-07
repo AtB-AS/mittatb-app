@@ -28,7 +28,6 @@ import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_NearbyStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_NearbyStack';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
-import {useMapPage} from '@atb/components/map';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -45,7 +44,6 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const departuresV2Enabled = useDeparturesV2Enabled();
   const {onboarded} = useAppState();
 
-  const showMapPage = useMapPage();
   useGoToMobileTokenOnboardingWhenNecessary();
 
   useEffect(() => {
@@ -80,19 +78,17 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
           'assistantTab',
         )}
       />
-      {showMapPage && (
-        <Tab.Screen
-          name="TabNav_MapStack"
-          component={TabNav_MapStack}
-          options={tabSettings(
-            t(dictionary.navigation.map),
-            t(dictionary.navigation.map),
-            MapPin,
-            lineHeight,
-            'mapTab',
-          )}
-        />
-      )}
+      <Tab.Screen
+        name="TabNav_MapStack"
+        component={TabNav_MapStack}
+        options={tabSettings(
+          t(dictionary.navigation.map),
+          t(dictionary.navigation.map),
+          MapPin,
+          lineHeight,
+          'mapTab',
+        )}
+      />
       <Tab.Screen
         name="TabNav_NearestStack"
         component={

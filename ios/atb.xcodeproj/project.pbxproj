@@ -40,8 +40,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		503D2E5A29674028002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
-		503D2E5C2967436E002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		503D2E5A29674028002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		503D2E5C2967436E002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -50,7 +50,10 @@
 		50AAE58329897C4A00BA7611 /* WidgetConfiguration.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 50AAE58529897C4A00BA7611 /* WidgetConfiguration.intentdefinition */; };
 		50AAE58829897F2E00BA7611 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		50F2C8F929895B27003A40B7 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
-		86ADA222293F651800F1E080 /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86ADA221293F651800F1E080 /* hermes.xcframework */; };
+		6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAA1D092A77D3EC00CC8016 /* PassKit.framework */; };
+		6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */; };
+		6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */; };
+		86ADA222293F651800F1E080 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
 		FE09922928FFF47300E5046D /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
@@ -144,7 +147,10 @@
 		50AAE58429897C4A00BA7611 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/WidgetConfiguration.intentdefinition; sourceTree = "<group>"; };
 		50AAE58729897C4C00BA7611 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/WidgetConfiguration.strings; sourceTree = "<group>"; };
 		63B81D4D1BE848A39569DB2B /* Pods-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app.release.xcconfig"; path = "Target Support Files/Pods-app/Pods-app.release.xcconfig"; sourceTree = "<group>"; };
-		86ADA221293F651800F1E080 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
+		6DAA1D092A77D3EC00CC8016 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
+		6DB88AD82A7A33EE0060CC31 /* PassPresentationBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassPresentationBridge.h; sourceTree = "<group>"; };
+		6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PassPresentationBridge.m; sourceTree = "<group>"; };
+		6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPresentation.swift; sourceTree = "<group>"; };
 		B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -182,7 +188,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86ADA222293F651800F1E080 /* hermes.xcframework in Frameworks */,
+				86ADA222293F651800F1E080 /* BuildFile in Frameworks */,
+				6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */,
 				FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */,
 				FEBDDCD3293107D500C3755B /* WidgetKit.framework in Frameworks */,
 				2B1414B72357D7554DECE78C /* libPods-app.a in Frameworks */,
@@ -247,12 +254,12 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6DAA1D092A77D3EC00CC8016 /* PassKit.framework */,
 				FE9A677B29426E57008921BD /* CoreLocation.framework */,
 				FED22488286F06AC0049ECE3 /* CoreNFC.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				FE55264A28EC45ED0091F697 /* SwiftUI.framework */,
 				FE55264828EC45ED0091F697 /* WidgetKit.framework */,
-				86ADA221293F651800F1E080 /* hermes.xcframework */,
 				1338AAD1AA0412FBA40A6ED7 /* libPods-app.a */,
 				500752DB29855BD100AC5A7F /* Intents.framework */,
 			);
@@ -364,6 +371,7 @@
 			children = (
 				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
 				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
+				6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -375,6 +383,8 @@
 				FEBDDCD929310DFE00C3755B /* WidgetUpdaterBridge.h */,
 				FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */,
 				FEBDDCDA29310DFE00C3755B /* WidgetUpdaterBridge.m */,
+				6DB88AD82A7A33EE0060CC31 /* PassPresentationBridge.h */,
+				6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */,
 			);
 			path = BridgeModules;
 			sourceTree = "<group>";
@@ -648,12 +658,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
+				6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */,
 				FEBDDCDE2934D49700C3755B /* ChangeNativeBridge.m in Sources */,
 				FEBDDCD12931065D00C3755B /* WidgetUpdater.swift in Sources */,
 				385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */,
 				FEBDDCCD2931038400C3755B /* LocationChangeManager.swift in Sources */,
 				FEBDDCDB29310DFE00C3755B /* WidgetUpdaterBridge.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -696,8 +708,8 @@
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				500752EC29855E4D00AC5A7F /* IntentHandler.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
-				503D2E5C2967436E002E0A6A /* (null) in Sources */,
-				503D2E5A29674028002E0A6A /* (null) in Sources */,
+				503D2E5C2967436E002E0A6A /* BuildFile in Sources */,
+				503D2E5A29674028002E0A6A /* BuildFile in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -980,6 +992,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1046,6 +1059,8 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;

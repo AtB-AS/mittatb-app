@@ -11,12 +11,12 @@ import {
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
-import {StyleSheet} from '@atb/theme';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useTicketingState} from '@atb/ticketing';
+import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
+import {usePreferenceItems} from '@atb/preferences';
 
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
@@ -33,8 +33,8 @@ export function ProductSelectionByProducts({
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
   const {preassignedFareProducts} = useFirestoreConfiguration();
-  const styles = useStyles();
   const {customerProfile} = useTicketingState();
+  const {hideProductDescriptions} = usePreferenceItems();
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
@@ -47,15 +47,15 @@ export function ProductSelectionByProducts({
 
   return (
     <View style={style}>
-      <ThemeText type="body__secondary" color="secondary" style={styles.title}>
-        {title || t(PurchaseOverviewTexts.productSelection.title)}
-      </ThemeText>
+      <ProductDescriptionToggle
+        title={title || t(PurchaseOverviewTexts.productSelection.title)}
+      />
       <Section>
         <RadioGroupSection<PreassignedFareProduct>
           items={selectableProducts}
           keyExtractor={(u) => u.id}
           itemToText={(fp) => getReferenceDataName(fp, language)}
-          hideSubtext={false}
+          hideSubtext={hideProductDescriptions}
           itemToSubtext={(fp) => {
             const descriptionMessage = getTextForLanguage(
               fp.description ?? [],
@@ -85,9 +85,3 @@ export function ProductSelectionByProducts({
     </View>
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  title: {
-    marginBottom: theme.spacings.medium,
-  },
-}));

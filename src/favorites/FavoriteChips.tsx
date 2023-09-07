@@ -24,8 +24,7 @@ const themeColor: InteractiveColor = 'interactive_0';
 type Props = {
   onSelectLocation: (location: Location) => void;
   onMapSelection?: () => void;
-  containerStyle?: StyleProp<ViewStyle>;
-  contentContainerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   chipTypes?: ChipTypeGroup[];
   chipActionHint?: string;
   onAddFavorite: () => void;
@@ -33,8 +32,7 @@ type Props = {
 
 export const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
-  containerStyle,
-  contentContainerStyle,
+  style,
   onMapSelection = () => {},
   chipTypes = ['favorites', 'location', 'map'],
   chipActionHint,
@@ -48,9 +46,9 @@ export const FavoriteChips: React.FC<Props> = ({
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
   return (
-    <View style={containerStyle}>
+    <>
       {(activeType('location') || activeType('map')) && (
-        <View style={[styles.staticChipsContainer, contentContainerStyle]}>
+        <View style={[style, styles.staticChipsContainer]}>
           {activeType('location') && (
             <FavoriteChip
               interactiveColor={themeColor}
@@ -80,7 +78,12 @@ export const FavoriteChips: React.FC<Props> = ({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={contentContainerStyle}
+        contentContainerStyle={
+          (activeType('favorites') && favorites.length > 0) ||
+          activeType('add-favorite')
+            ? style
+            : undefined
+        }
       >
         {activeType('favorites') &&
           favorites.map((fav, i) => (
@@ -122,7 +125,7 @@ export const FavoriteChips: React.FC<Props> = ({
           />
         )}
       </ScrollView>
-    </View>
+    </>
   );
 };
 
@@ -140,10 +143,9 @@ const FavoriteChip: React.FC<ButtonProps> = (props) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   staticChipsContainer: {
     flexDirection: 'row',
-    marginBottom: theme.spacings.medium,
   },
 }));
 

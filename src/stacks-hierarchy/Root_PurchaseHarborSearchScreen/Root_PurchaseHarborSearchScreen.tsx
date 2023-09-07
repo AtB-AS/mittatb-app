@@ -13,12 +13,13 @@ import {TextInputSectionItem} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useIsFocused} from '@react-navigation/native';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {useHarborsQuery} from '@atb/queries/use-harbors-query';
+import {useHarbors} from '@atb/harbors';
 
 type Props = RootStackScreenProps<'Root_PurchaseHarborSearchScreen'>;
 
@@ -40,7 +41,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
           preassignedFareProduct,
           fromPlace: fromHarbor ?? selectedStopPlace,
           toPlace: fromHarbor ? selectedStopPlace : undefined,
-          onFocusElement: 'from-to-selection',
+          onFocusElement: fromHarbor ? 'toHarbor' : 'fromHarbor',
         },
         merge: true,
       });
@@ -51,10 +52,10 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFocused) setTimeout(() => inputRef.current?.focus(), 0);
+    isFocused && giveFocus(inputRef);
   }, [isFocused]);
 
-  const harborsQuery = useHarborsQuery(fromHarbor?.id);
+  const harborsQuery = useHarbors(fromHarbor?.id);
 
   const debouncedText = useDebounce(text, 200);
 
@@ -113,7 +114,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         )}
         {harborsQuery.isSuccess && (
           <HarborResults
-            harbors={harborsQuery.data}
+            harbors={harborsQuery.data ?? []}
             onSelect={onSave}
             searchText={debouncedText}
             fromHarborName={fromHarbor?.name}

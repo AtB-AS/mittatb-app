@@ -11,12 +11,14 @@ import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
 import {RuleVariables} from './rules';
+import {StaticColor} from '@atb/theme/colors';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum;
   style?: StyleProp<ViewStyle>;
   includeDismissed?: boolean;
   ruleVariables?: RuleVariables;
+  textColor: StaticColor;
 };
 
 const GlobalMessage = ({
@@ -24,6 +26,7 @@ const GlobalMessage = ({
   style,
   includeDismissed,
   ruleVariables,
+  textColor,
 }: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
@@ -70,6 +73,8 @@ const GlobalMessage = ({
                   ? () => dismissGlobalMessage(globalMessage)
                   : undefined
               }
+              subtle={globalMessage.subtle}
+              textColor={textColor}
             />
           );
         })}

@@ -3,9 +3,10 @@ import {Section} from '@atb/components/sections';
 import {JourneySearchHistoryEntry} from '@atb/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {useFilteredJourneySearch} from '../utils';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type JourneyHistoryProps = {
   searchText?: string;
@@ -37,7 +38,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
           .slice(0, DEFAULT_HISTORY_LIMIT)
           .map(mapToVisibleSearchResult)
           .map((searchResult, idx) => (
-            <TouchableOpacity
+            <PressableOpacity
               accessible={true}
               key={searchResult.key}
               accessibilityLabel={
@@ -60,7 +61,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
                   {searchResult.text}
                 </ThemeText>
               </GenericSectionItem>
-            </TouchableOpacity>
+            </PressableOpacity>
           ))}
       </View>
     </Section>

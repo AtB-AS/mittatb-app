@@ -87,22 +87,11 @@ export const TravelDetailsMapScreenComponent = ({
   const controlStyles = useControlPositionsStyle();
   const styles = useStyles();
 
-  const [vehicle, setVehicle] = useState<VehicleWithPosition | undefined>(
-    vehicleWithPosition,
-  );
-
   const stations = useStations(mapFilter?.mobility ?? {});
 
-  const [isError, setIsError] = useState(false);
-
-  useLiveVehicleSubscription({
+  const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
-    onMessage: (event: WebSocketMessageEvent) => {
-      if (isError) setIsError(false);
-      const vehicle = JSON.parse(event.data) as VehicleWithPosition;
-      setVehicle(vehicle);
-    },
-    onError: () => setIsError(true),
+    vehicleWithPosition,
     enabled: isFocusedAndActive,
   });
 
@@ -157,7 +146,7 @@ export const TravelDetailsMapScreenComponent = ({
   };
 
   useEffect(() => {
-    const location = vehicle?.location;
+    const location = liveVehicle?.location;
     if (!location) return;
     if (shouldTrack) {
       flyToLocation({
@@ -167,7 +156,7 @@ export const TravelDetailsMapScreenComponent = ({
         animationMode: 'easeTo',
       });
     }
-  }, [vehicle, shouldTrack]);
+  }, [liveVehicle, shouldTrack]);
 
   return (
     <View style={styles.mapView}>
@@ -204,15 +193,15 @@ export const TravelDetailsMapScreenComponent = ({
             text={t(MapTexts.startPoint.label)}
           />
         )}
-        {vehicle && (
-          <LiveVehicle
-            vehicle={vehicle}
+        {liveVehicle && (
+          <LiveVehicleMarker
+            vehicle={liveVehicle}
             setShouldTrack={setShouldTrack}
             mode={mode}
             subMode={subMode}
             zoomLevel={zoomLevel}
             heading={cameraHeading}
-            isError={isError}
+            isError={isLiveConnected}
           />
         )}
         {stations && <Stations stations={stations.stations} />}
@@ -247,7 +236,7 @@ type VehicleIconProps = {
   isError: boolean;
 };
 
-const LiveVehicle = ({
+const LiveVehicleMarker = ({
   vehicle,
   setShouldTrack,
   mode,

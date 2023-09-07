@@ -139,6 +139,7 @@ export const SimpleDisappearingHeader: React.FC<Props> = ({
             <GlobalMessage
               globalMessageContext={globalMessageContext}
               style={styles.globalMessageBox}
+              textColor={themeColor}
             />
           </View>
         </View>

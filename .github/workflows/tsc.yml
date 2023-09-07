@@ -1,4 +1,4 @@
-name: TypeScript Check
+name: TypeScript Check & Test
 on:
   workflow_dispatch:
   push:
@@ -13,15 +13,15 @@ jobs:
     name: tsc
     strategy:
       matrix:
-        org: [atb, nfk]
+        org: [atb, nfk, fram]
     environment: ${{ matrix.org }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: install node v16
+      - name: install node v18
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - name: Add Entur private registry credentials
         run: sh ./scripts/add-entur-private-registry.sh
         env:
@@ -37,3 +37,5 @@ jobs:
         run: sh ./scripts/generate-assets.sh ${{ matrix.org }}
       - name: tsc
         uses: icrawl/action-tsc@v1
+      - name: Run tests
+        run: yarn test

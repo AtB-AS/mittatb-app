@@ -74,6 +74,35 @@ const dictionary = {
       },
       long: {},
     },
+    relativeDayNames: (daysDifference: number) => {
+      switch (daysDifference) {
+        case -2:
+          return _('i forgårs', 'the day before yesterday', 'i forgårs');
+        case -1:
+          return _('i går', 'yesterday', 'i går');
+        case 0:
+          return _('i dag', 'today', 'i dag');
+        case 1:
+          return _('i morgen', 'tomorrow', 'i morgon');
+        case 2:
+          return _('i overmorgen', 'the day after tomorrow', 'i overmorgon');
+        default:
+          if (daysDifference < 0) {
+            return _(
+              `for ${daysDifference} dager siden`,
+              `${daysDifference} days ago`,
+              `for ${daysDifference} dagar sidan`,
+            );
+          } else {
+            return _(
+              `om ${daysDifference} dager`,
+              `in ${daysDifference} days`,
+              `om ${daysDifference} dagar`,
+            );
+          }
+      }
+    },
+    atTime: _(`kl.`, `at`, `kl.`),
   },
   distance: {
     km: _('km', 'km', `km`),
@@ -88,6 +117,7 @@ const dictionary = {
   retry: _('Prøv på nytt', 'Try again', `Prøv på nytt`),
   seeMore: _('Vis mer', 'See more', `Vis meir`),
   readMore: _('Les mer', 'Read more', `Les meir`),
+  loading: _('Laster…', 'Loading…', `Lastar…`),
 };
 
 export default orgSpecificTranslations(dictionary, {

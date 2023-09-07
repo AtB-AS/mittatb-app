@@ -4,7 +4,7 @@ import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat} from '@atb/assets/svg/mono-icons/transportation';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';
@@ -15,6 +15,8 @@ import {MessageBox} from '@atb/components/message-box';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 
 type Props = {
   harbors: StopPlaceFragment[];
@@ -63,7 +65,7 @@ export const HarborResults: React.FC<Props> = ({
         {harborResults.map((harbor, index) => (
           <View style={styles.rowContainer} key={harbor.id}>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
+              <PressableOpacity
                 accessible={true}
                 accessibilityLabel={
                   t(HarborSearchTexts.results.item.a11yLabel(harbor.name)) +
@@ -82,7 +84,7 @@ export const HarborResults: React.FC<Props> = ({
                     {harbor.name}
                   </ThemeText>
                 </View>
-              </TouchableOpacity>
+              </PressableOpacity>
             </View>
           </View>
         ))}
@@ -94,13 +96,12 @@ export const HarborResults: React.FC<Props> = ({
 function sortHarbors(
   harbors: StopPlaceFragment[],
   location?: GeoLocation,
-): StopPlaceFragment[] {
+): StopPlaceFragmentWithIsFree[] {
   if (location) {
     return harbors
       ?.map((stopPlace) => {
         return {
-          id: stopPlace.id,
-          name: stopPlace.name,
+          ...stopPlace,
           distance: getDistance(stopPlace, location),
         };
       })

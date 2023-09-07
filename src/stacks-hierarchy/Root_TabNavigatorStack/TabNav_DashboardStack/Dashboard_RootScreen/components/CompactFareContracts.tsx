@@ -1,24 +1,25 @@
-import React, {useState} from 'react';
-import {StyleSheet} from '@atb/theme';
-import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
-import {useInterval} from '@atb/utils/use-interval';
-import {
-  filterValidRightNowFareContract,
-  useTicketingState,
-} from '@atb/ticketing';
-import {ThemeText} from '@atb/components/text';
-import {
-  TicketingTexts,
-  DashboardTexts,
-  useTranslation,
-} from '@atb/translations';
 import {Button} from '@atb/components/button';
+import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {StyleSheet} from '@atb/theme';
+import {
+  filterValidRightNowFareContract,
+  useTicketingState,
+} from '@atb/ticketing';
+import {
+  DashboardTexts,
+  TicketingTexts,
+  useTranslation,
+} from '@atb/translations';
+import {useInterval} from '@atb/utils/use-interval';
+import React, {useState} from 'react';
+import {View, ViewStyle} from 'react-native';
+import {SectionHeading} from './SectionHeading';
 
 type Props = {
   onPressDetails?: (
@@ -27,22 +28,23 @@ type Props = {
     orderId: string,
   ) => void;
   onPressBuy(): void;
+  style?: ViewStyle;
 };
 
 export const CompactFareContracts: React.FC<Props> = ({
   onPressDetails,
   onPressBuy,
+  style,
 }) => {
   const itemStyle = useStyles();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 1000);
 
-  const {fareContracts} = useTicketingState();
+  const {fareContracts, customerProfile} = useTicketingState();
   const validFareContracts = filterValidRightNowFareContract(fareContracts);
 
   const {t} = useTranslation();
-  const {customerProfile} = useTicketingState();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {
     deviceIsInspectable,
@@ -53,18 +55,12 @@ export const CompactFareContracts: React.FC<Props> = ({
     useFirestoreConfiguration();
 
   return (
-    <>
-      <ThemeText
-        type="body__secondary"
-        color="background_accent_0"
-        style={itemStyle.sectionText}
-        accessibilityLabel={t(TicketingTexts.header.title)}
-      >
+    <View style={style}>
+      <SectionHeading accessibilityLabel={t(TicketingTexts.header.title)}>
         {t(TicketingTexts.header.title)}
-      </ThemeText>
+      </SectionHeading>
       {validFareContracts.length == 0 ? (
         <Button
-          style={itemStyle.buttonSection}
           text={t(DashboardTexts.buyButton)}
           onPress={onPressBuy}
           testID="buyTicketsButton"
@@ -85,6 +81,12 @@ export const CompactFareContracts: React.FC<Props> = ({
           );
           return (
             <CompactFareContractInfo
+              style={{
+                ...itemStyle.fareContract,
+                ...(index === validFareContracts.length - 1
+                  ? itemStyle.fareContract__last
+                  : {}),
+              }}
               key={fareContract.id}
               {...fareContractInfoDetailsProps}
               now={now}
@@ -100,17 +102,15 @@ export const CompactFareContracts: React.FC<Props> = ({
           );
         })
       )}
-    </>
+    </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  sectionText: {
-    marginLeft: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
+  fareContract: {
+    marginBottom: theme.spacings.small,
   },
-  buttonSection: {
-    marginLeft: theme.spacings.medium,
-    marginRight: theme.spacings.medium,
+  fareContract__last: {
+    marginBottom: 0,
   },
 }));

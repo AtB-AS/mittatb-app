@@ -14,6 +14,7 @@ import {ScrollView, View} from 'react-native';
 import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
 import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
+import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -25,6 +26,8 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
+
+  useApplePassPresentationSuppression();
 
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const preassignedFareProduct = findReferenceDataById(

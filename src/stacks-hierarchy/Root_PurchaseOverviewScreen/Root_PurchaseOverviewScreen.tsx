@@ -10,7 +10,7 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {ProductSelection} from './components/ProductSelection';
 import {PurchaseMessages} from './components/PurchaseMessages';
@@ -23,8 +23,8 @@ import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
-import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {useFocusRefs} from '@atb/utils/use-focus-refs';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -34,6 +34,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const isFree = params.toPlace
+    ? 'isFree' in params.toPlace && !!params.toPlace.isFree
+    : false;
 
   const {preassignedFareProduct, selectableTravellers, fromPlace, toPlace} =
     useOfferDefaults(
@@ -94,13 +97,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const closeModal = () => navigation.popToTop();
 
-  const fromToInputSectionItemRef = useRef(null);
-
-  useEffect(() => {
-    if (params.onFocusElement === 'from-to-selection') {
-      giveFocus(fromToInputSectionItemRef);
-    }
-  }, [params.onFocusElement]);
+  const focusRefs = useFocusRefs(params.onFocusElement);
 
   return (
     <View style={styles.container}>
@@ -176,7 +173,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 params,
               );
             }}
-            ref={fromToInputSectionItemRef}
+            ref={focusRefs}
           />
 
           <StartTimeSelection
@@ -203,6 +200,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <FullScreenFooter>
           <Summary
             isLoading={isSearchingOffer}
+            isFree={isFree}
             isError={!!error || !hasSelection}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}

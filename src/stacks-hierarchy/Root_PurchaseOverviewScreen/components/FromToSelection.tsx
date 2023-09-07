@@ -1,18 +1,19 @@
-import React, {RefObject, forwardRef} from 'react';
+import React, {forwardRef} from 'react';
 import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ZonesSelection';
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native';
+import {StyleProp, ViewStyle} from 'react-native';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
+import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';
 
 type SelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
-  fromPlace: TariffZoneWithMetadata | StopPlaceFragment;
-  toPlace: TariffZoneWithMetadata | StopPlaceFragment;
+  fromPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
+  toPlace: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
   preassignedFareProduct: PreassignedFareProduct;
   onSelect: (
     params:
@@ -20,10 +21,9 @@ type SelectionProps = {
       | Root_PurchaseTariffZonesSearchByMapScreenParams,
   ) => void;
   style?: StyleProp<ViewStyle>;
-  focusRef?: RefObject<TouchableOpacity>;
 };
 
-export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
+export const FromToSelection = forwardRef<FocusRefsType, SelectionProps>(
   (
     {
       fareProductTypeConfig,
@@ -33,7 +33,7 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
       onSelect,
       style,
     }: SelectionProps,
-    focusRef,
+    ref,
   ) => {
     let selectionMode = fareProductTypeConfig.configuration.zoneSelectionMode;
     if (selectionMode === 'none') {
@@ -49,7 +49,7 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
           preassignedFareProduct={preassignedFareProduct}
           onSelect={onSelect}
           style={style}
-          ref={focusRef}
+          ref={ref}
         />
       );
     }
@@ -73,14 +73,14 @@ export const FromToSelection = forwardRef<TouchableOpacity, SelectionProps>(
         selectionMode={selectionMode}
         onSelect={onSelect}
         style={style}
-        ref={focusRef}
+        ref={ref}
       />
     ) : null;
   },
 );
 
 export function isValidTariffZone(
-  place: TariffZoneWithMetadata | StopPlaceFragment,
+  place: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree,
 ): place is TariffZoneWithMetadata {
   return !!place && 'geometry' in place;
 }

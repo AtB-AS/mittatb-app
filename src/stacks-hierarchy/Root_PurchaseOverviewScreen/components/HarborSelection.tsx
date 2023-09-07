@@ -2,12 +2,13 @@ import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import React, {forwardRef, useRef} from 'react';
+import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {FocusRefsType} from '@atb/utils/use-focus-refs';
 
 type StopPlaceSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -18,11 +19,8 @@ type StopPlaceSelectionProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const FROM = 'from';
-const TO = 'to';
-
 export const HarborSelection = forwardRef<
-  TouchableOpacity,
+  FocusRefsType,
   StopPlaceSelectionProps
 >(
   (
@@ -34,10 +32,14 @@ export const HarborSelection = forwardRef<
       onSelect,
       style,
     }: StopPlaceSelectionProps,
-    harborInputSectionItemRef,
+    ref,
   ) => {
     const styles = useStyles();
     const {t} = useTranslation();
+
+    const fromHarborRef = useRef<TouchableOpacity>(null);
+    const toHarborRef = useRef<TouchableOpacity>(null);
+    useImperativeHandle(ref, () => ({fromHarborRef, toHarborRef}));
 
     return (
       <View style={style} accessible={false}>
@@ -54,7 +56,7 @@ export const HarborSelection = forwardRef<
 
         <Section accessible={false}>
           <HarborSelectionItem
-            fromOrTo={FROM}
+            fromOrTo="from"
             harbor={fromHarbor}
             disabled={false}
             onPress={() =>
@@ -63,10 +65,10 @@ export const HarborSelection = forwardRef<
                 preassignedFareProduct,
               })
             }
-            ref={harborInputSectionItemRef}
+            ref={fromHarborRef}
           />
           <HarborSelectionItem
-            fromOrTo={TO}
+            fromOrTo="to"
             harbor={toHarbor}
             disabled={!fromHarbor}
             onPress={() =>
@@ -76,7 +78,7 @@ export const HarborSelection = forwardRef<
                 preassignedFareProduct,
               })
             }
-            ref={harborInputSectionItemRef}
+            ref={toHarborRef}
           />
         </Section>
       </View>
@@ -88,67 +90,52 @@ type HarborSelectionItemProps = {
   harbor?: StopPlaceFragment;
   disabled: boolean;
   onPress: () => void;
-  fromOrTo: typeof FROM | typeof TO;
+  fromOrTo: 'from' | 'to';
 };
 
 const HarborSelectionItem = forwardRef<
   TouchableOpacity,
   HarborSelectionItemProps
->(
-  (
-    {harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps,
-    harborInputSectionItemRef,
-  ) => {
-    const itemRef = useRef<TouchableOpacity>(null);
-    const {t} = useTranslation();
-    const styles = useStyles();
+>(({harbor, onPress, disabled, fromOrTo}: HarborSelectionItemProps, ref) => {
+  const {t} = useTranslation();
+  const styles = useStyles();
 
-    return (
-      <GenericClickableSectionItem
-        ref={itemRef}
-        accessibilityState={{disabled}}
-        accessible={true}
-        accessibilityRole="button"
-        accessibilityLabel={t(
-          PurchaseOverviewTexts.stopPlaces.harborSelection[fromOrTo].a11yLabel(
-            harbor?.name,
-          ),
-        )}
-        accessibilityHint={
-          disabled
-            ? undefined
-            : t(
-                PurchaseOverviewTexts.stopPlaces.harborSelection[fromOrTo]
-                  .a11yHint,
-              )
-        }
-        onPress={() => {
-          if (!disabled) {
-            onPress();
-            if (
-              harborInputSectionItemRef &&
-              typeof harborInputSectionItemRef !== 'function'
-            ) {
-              harborInputSectionItemRef.current = itemRef.current;
-            }
-          }
-        }}
-        testID="selectHarborsButton"
-      >
-        <View style={fromOrTo === FROM ? styles.fromHarbor : styles.toHarbor}>
-          <ThemeText
-            color={disabled ? 'disabled' : 'secondary'}
-            type="body__secondary"
-            style={styles.toFromLabel}
-          >
-            {t(PurchaseOverviewTexts.fromToLabel[fromOrTo])}
-          </ThemeText>
-          <HarborLabel harbor={harbor} disabled={disabled} />
-        </View>
-      </GenericClickableSectionItem>
-    );
-  },
-);
+  return (
+    <GenericClickableSectionItem
+      ref={ref}
+      accessibilityState={{disabled}}
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={t(
+        PurchaseOverviewTexts.stopPlaces.harborSelection[fromOrTo].a11yLabel(
+          harbor?.name,
+        ),
+      )}
+      accessibilityHint={
+        disabled
+          ? undefined
+          : t(
+              PurchaseOverviewTexts.stopPlaces.harborSelection[fromOrTo]
+                .a11yHint,
+            )
+      }
+      radius={fromOrTo === 'from' ? 'top' : 'bottom'}
+      onPress={() => !disabled && onPress()}
+      testID="selectHarborsButton"
+    >
+      <View style={fromOrTo === 'from' ? styles.fromHarbor : styles.toHarbor}>
+        <ThemeText
+          color={disabled ? 'disabled' : 'secondary'}
+          type="body__secondary"
+          style={styles.toFromLabel}
+        >
+          {t(PurchaseOverviewTexts.fromToLabel[fromOrTo])}
+        </ThemeText>
+        <HarborLabel harbor={harbor} disabled={disabled} />
+      </View>
+    </GenericClickableSectionItem>
+  );
+});
 
 const HarborLabel = ({
   harbor,

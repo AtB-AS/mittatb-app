@@ -5,8 +5,8 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 
 import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
-import {useHarborsQuery} from '@atb/queries';
 import {MessageBox} from '@atb/components/message-box';
+import {useHarbors} from '@atb/harbors';
 
 export function FareContractHarborStopPlaces({
   fromStopPlaceId,
@@ -20,7 +20,7 @@ export function FareContractHarborStopPlaces({
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const harborsQuery = useHarborsQuery();
+  const harborsQuery = useHarbors();
 
   if (!fromStopPlaceId || !toStopPlaceId) return null;
   if (harborsQuery.isLoading)
@@ -120,7 +120,6 @@ export function FareContractHarborStopPlaces({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginTop: theme.spacings.large,
     marginBottom: theme.spacings.medium,
     marginLeft: theme.spacings.xSmall,
   },

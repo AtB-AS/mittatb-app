@@ -13,13 +13,12 @@ import {
 import React, {Fragment, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
-import {TripPattern} from '@atb/api/types/trips';
-import {TripPatternWithKey} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {SearchTime} from '@atb/journey-date-picker';
-import {ResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
-import {ResultItemOld} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultitemOld';
-import {useNewTravelSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use_new_travel_search_enabled';
-import {useAvailableTripPatterns} from '../hooks';
+import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
+import {TripPattern} from '@atb/api/types/trips';
+import {TripPatternWithKey} from '@atb/travel-details-screens/types';
+import {getIsTooLateToBookTripPattern} from '@atb/travel-details-screens/utils';
+import {useNow} from '@atb/utils/use-now';
 
 type Props = {
   tripPatterns: TripPatternWithKey[];
@@ -44,12 +43,11 @@ export const Results: React.FC<Props> = ({
   anyFiltersApplied,
 }) => {
   const styles = useThemeStyles();
-  const newTravelSearchEnabled = useNewTravelSearchEnabled();
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const {t} = useTranslation();
 
-  const availableTripPatterns = useAvailableTripPatterns(tripPatterns);
+  const now = useNow(30000);
 
   useEffect(() => {
     if (errorType) {
@@ -94,34 +92,23 @@ export const Results: React.FC<Props> = ({
 
   return (
     <View style={styles.container} testID="tripSearchContentView">
-      {availableTripPatterns.map((tripPattern, i) => (
-        <Fragment key={tripPattern.key}>
-          <DayLabel
-            departureTime={tripPattern.expectedStartTime}
-            previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
-          />
-          {newTravelSearchEnabled ? (
-            <ResultItem
-              tripPattern={tripPattern}
-              onDetailsPressed={() => {
-                onDetailsPressed(tripPattern, i);
-              }}
-              searchTime={searchTime}
-              testID={'tripSearchSearchResult' + i}
-              resultNumber={i + 1}
+      {tripPatterns
+        .filter((tp) => !getIsTooLateToBookTripPattern(tp, now))
+        .map((tripPattern, i) => (
+          <Fragment key={tripPattern.key}>
+            <DayLabel
+              departureTime={tripPattern.expectedStartTime}
+              previousDepartureTime={tripPatterns[i - 1]?.expectedStartTime}
             />
-          ) : (
-            <ResultItemOld
+            <MemoizedResultItem
               tripPattern={tripPattern}
-              onDetailsPressed={() => {
-                onDetailsPressed(tripPattern, i);
-              }}
+              onDetailsPressed={onDetailsPressed}
+              resultIndex={i}
               searchTime={searchTime}
               testID={'tripSearchSearchResult' + i}
             />
-          )}
-        </Fragment>
-      ))}
+          </Fragment>
+        ))}
     </View>
   );
 };

@@ -15,10 +15,10 @@ import {WaitDetails} from './WaitSection';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
+  getFilteredLegsByWalkOrWaitTime,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
   isLegFlexibleTransport,
-  isSignificantFootLegWalkOrWaitTime,
   withinZoneIds,
 } from '@atb/travel-details-screens/utils';
 import {
@@ -69,9 +69,7 @@ export const Trip: React.FC<TripProps> = ({
   const {enable_ticketing} = useRemoteConfig();
   const {modesWeSellTicketsFor} = useFirestoreConfiguration();
 
-  const legs = tripPattern.legs.filter((leg, i) =>
-    isSignificantFootLegWalkOrWaitTime(leg, tripPattern.legs[i + 1]),
-  );
+  const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
   // avoid typescript errors on id
@@ -143,6 +141,7 @@ export const Trip: React.FC<TripProps> = ({
       <GlobalMessage
         globalMessageContext={GlobalMessageContextEnum.appTripDetails}
         style={styles.messageBox}
+        textColor="background_0"
         ruleVariables={{
           ticketingEnabled: enable_ticketing,
           hasLegsWeCantSellTicketsFor: tripHasLegsWeCantSellTicketsFor,
@@ -162,7 +161,7 @@ export const Trip: React.FC<TripProps> = ({
       )}
       <View style={styles.trip}>
         {tripPattern &&
-          legs.map((leg, index) => {
+          filteredLegs.map((leg, index) => {
             const legVehiclePosition = vehiclePositions?.find(
               (vehicle) =>
                 vehicle.serviceJourney?.id === leg.serviceJourney?.id,
@@ -172,11 +171,11 @@ export const Trip: React.FC<TripProps> = ({
               <TripSection
                 key={index}
                 isFirst={index == 0}
-                wait={legWaitDetails(index, legs)}
-                isLast={index == legs.length - 1}
+                wait={legWaitDetails(index, filteredLegs)}
+                isLast={index == filteredLegs.length - 1}
                 step={index + 1}
                 interchangeDetails={getInterchangeDetails(
-                  legs,
+                  filteredLegs,
                   leg.interchangeTo?.toServiceJourney?.id,
                 )}
                 leg={leg}
