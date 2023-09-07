@@ -1,12 +1,19 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
-import React, {useState} from 'react';
-import {ActivityIndicator, Keyboard, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  Keyboard,
+  TextInput as InternalTextInput,
+  View,
+} from 'react-native';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useIsFocused} from '@react-navigation/native';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -21,6 +28,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
     route.params;
 
   const {t} = useTranslation();
+  const inputRef = useRef<InternalTextInput>(null);
   const [text, setText] = useState('');
 
   const onSave = (selectedStopPlace: StopPlaceFragment) => {
@@ -40,6 +48,12 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   };
 
   const styles = useStyles();
+  // capturing focus on mount and on press
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    isFocused && giveFocus(inputRef);
+  }, [isFocused]);
 
   const harborsQuery = useHarbors(fromHarbor?.id);
 
@@ -60,6 +74,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
       <View style={styles.header}>
         <View style={styles.withMargin}>
           <TextInputSectionItem
+            ref={inputRef}
             radius="top-bottom"
             label={
               fromHarbor
