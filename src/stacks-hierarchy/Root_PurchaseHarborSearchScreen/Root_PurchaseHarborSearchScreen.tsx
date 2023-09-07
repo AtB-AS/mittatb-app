@@ -13,6 +13,7 @@ import {TextInputSectionItem} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useIsFocused} from '@react-navigation/native';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {useDebounce} from '@atb/utils/useDebounce';
 import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -51,7 +52,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFocused) setTimeout(() => inputRef.current?.focus(), 0);
+    isFocused && giveFocus(inputRef);
   }, [isFocused]);
 
   const harborsQuery = useHarbors(fromHarbor?.id);
