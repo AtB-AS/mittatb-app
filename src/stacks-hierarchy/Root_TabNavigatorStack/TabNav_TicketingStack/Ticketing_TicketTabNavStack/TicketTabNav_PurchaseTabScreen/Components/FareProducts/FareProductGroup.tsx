@@ -8,7 +8,6 @@ import {FareProductTile} from './FareProductTile';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {TransportModes} from '@atb/components/transportation-modes';
-import {ThemeText} from '@atb/components/text';
 
 type Props = {
   heading?: string | undefined;
