@@ -26,7 +26,7 @@ on:
 
 jobs:
   run_tests:
-    name: E2E test Android
+    name: Performance measures for Android
     runs-on: macos-latest
     environment: atb
     timeout-minutes: 90
@@ -61,10 +61,6 @@ jobs:
       - name: Install Flashlight
         run: sh ./scripts/install-flashlight.sh
         working-directory: e2e
-      #- name: Source Flashlight
-      #  run: source /Users/runner/.profile
-      #- name: Test Flashlight
-      #  run: set && flashlight -v
       - name: Install Appium
         run: npm install -g appium
       - name: Install uiautomator2 driver
@@ -96,13 +92,8 @@ jobs:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
 
-      # TEST
-      - name: ls root
-        run: ls -la
-      - name: ls e2e
-        run: ls -la
-        working-directory: e2e
-      - name: Upload test reports performance
+      # Results
+      - name: Upload performance reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
@@ -110,21 +101,10 @@ jobs:
           path: |
             ./performance_measures_*.json
           retention-days: 1
-
-      # Results
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: test-screenshots
           path: ./e2e/screenshots/*.png
-          retention-days: 1
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: |
-            ./e2e/results/*.xml
-            ./e2e/results/results-mochawesome.json
           retention-days: 1

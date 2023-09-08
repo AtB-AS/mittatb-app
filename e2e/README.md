@@ -4,14 +4,17 @@ The e2e-tests are run on an Android emulator with the test automation protocol [
 as the underlying protocol for mobile automation with [Appium](http://appium.io/). The WebdriverIO interaction is
 through APIs defined in [WebdriverIO API](https://webdriver.io/docs/api).
 
+In order to measure the app's performance, there is also added a script for this that relies on [Flashlight](https://docs.flashlight.dev/). 
+Flashlight is a stand-alone command line tool that will measure FPS, CPU, CPU per thread and memory usage while the app
+is used. It supports either manual start and stop while the app is used, or it can be started with a testscript like
+WebdriverIO/Appium. Read more about it [here](#flashlight-performance-measure). Flashlight kan also be used as a plugin to 
+Flipper as the `android-performance-profiler` plugin (same organization as is behind the `RN Perf Monitor` Flipper plugin).
+
 ## Install
 
 ```bash
 ## install WebdriverIO and dependencies
 $ yarn install
-
-## install WebdriverIO and dependencies (from root)
-$ yarn --cwd e2e install
 ```
 
 ## Test on GH action
@@ -41,14 +44,14 @@ $ yarn test:android:local:appcenter
 ## remove error messages in the app
 $ ./e2e/scripts/removeLogsFromDevApp.sh
 
-## Set dev mode
+## set dev mode
 $ yarn setup dev atb
-
-## Start app locally
-$ yarn android
 
 ## start emulator (name of the AVD is here 'Pixel_5_API_30')
 $ emulator -netdelay none -netspeed full -no-snapshot-load -avd Pixel_5_API_30
+
+## start app locally
+$ yarn android
 
 ## run tests
 yarn test:android:local:dev
@@ -60,9 +63,42 @@ The test results are stored as JUnit XML-files and as a Mochawesome JSON-file in
 happens, a screenshot is taken of the app at the time of failure. This is stored as PNG-files with the name of the test in
 `e2e/screenshots/`.
 
+## Flashlight performance measure
+
+Created a test script that can be run along with Flashlight (`./test/flashlight/performanceMeasures.e2e.ts`):
+- do a simple travel search and open the first result
+- open the map
+- open departures and open the first departure
+- open the ticket overview
+- open my profile
+- put the app in the background for x seconds and activate it again
+
+### Commands
+
+Note that by default `iterationCount` and `maxRetries` is set to 1, i.e. only 1 iteration is run and if there is any errors
+in the test script, the test is run with 1 retry.
+
+```bash
+## Install Flashlight
+$ curl https://get.flashlight.dev | bash
+
+## Start local server with manual start/stop
+$ flashlight measure
+
+## Start measurements with test script
+$ flashlight test --bundleId no.mittatb.debug --testCommand "yarn test:android:local:dev --spec e2e/test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1
+
+## Start measurements with yarn
+$ yarn test:android:local:perfMeasure
+
+## Generate HTML-report after test
+$ flashlight report <path-to-file>/<test-results>.json
+```
+
 ## Resources
 
 * [WebdriverIO](https://webdriver.io)
 * [WebdriverIO API](https://webdriver.io/docs/api)
 * [Appium](http://appium.io/)
+* [Flashlight](https://docs.flashlight.dev)
 

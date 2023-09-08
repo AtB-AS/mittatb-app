@@ -1,15 +1,14 @@
-import AppHelper from "../utils/app.helper";
-import OnboardingPage from "../pageobjects/onboarding.page";
-import NavigationHelper from "../utils/navigation.helper";
-import ElementHelper from "../utils/element.helper";
-import FrontPagePage from "../pageobjects/frontpage.page";
-import SearchPage from "../pageobjects/search.page";
-import TravelsearchOverviewPage from "../pageobjects/travelsearch.overview.page";
-import DepartureSearchPage from "../pageobjects/departure.search.page";
-import DepartureOverviewPage from "../pageobjects/departure.overview.page";
-import TicketPage from "../pageobjects/ticket.page";
-import MapPage from "../pageobjects/map.page";
-
+import AppHelper from '../utils/app.helper';
+import OnboardingPage from '../pageobjects/onboarding.page';
+import NavigationHelper from '../utils/navigation.helper';
+import ElementHelper from '../utils/element.helper';
+import FrontPagePage from '../pageobjects/frontpage.page';
+import SearchPage from '../pageobjects/search.page';
+import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page';
+import DepartureSearchPage from '../pageobjects/departure.search.page';
+import DepartureOverviewPage from '../pageobjects/departure.overview.page';
+import TicketPage from '../pageobjects/ticket.page';
+import MapPage from '../pageobjects/map.page';
 
 /**
  * Runs through some simple use cases in the app. Used together with '$ flashlight measure' to get performance metrics
@@ -18,18 +17,25 @@ import MapPage from "../pageobjects/map.page";
  * - Find departures
  * - Open the ticket page
  * - Open my profile
- * - Put the app in background and activate it again
+ * - Put the app in background and activate it again TODO REMOVE
  */
 describe('Flashlight performance measure', () => {
-
   // Waiting time between actions in ms
-  const waitingTime = 10000
+  const waitingTime = 5000;
 
   before(async () => {
-    await AppHelper.launchApp();
-    await AppHelper.pause(10000, true);
+    //await AppHelper.launchApp();
+    await AppHelper.waitOnLoadingScreen();
+    await AppHelper.pause(5000, true);
+    ////https://github.com/AtB-AS/kundevendt/issues/4157#issuecomment-1707973260
     //await OnboardingPage.skipOnboarding('flashlight');
     //await AppHelper.pause(waitingTime)
+  });
+  // Put the app in the background between each test - easier to distinguish the separate tests in graphs
+  // (i.e. the JS-thread CPU is 0)
+  beforeEach(async () => {
+    await driver.background(10);
+    await AppHelper.pause(2000);
   });
 
   /**
@@ -53,18 +59,16 @@ describe('Flashlight performance measure', () => {
 
       // Onboarding (Check just in case)
       await TravelsearchOverviewPage.confirmOnboarding();
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
 
       // ** Details **
       await TravelsearchOverviewPage.openFirstSearchResult();
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
     } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_should_do_a_travel_search',
-      );
+      await AppHelper.screenshot('error_should_do_a_travel_search');
       throw errMsg;
     }
-  })
+  });
 
   /**
    * Map: open the map
@@ -76,14 +80,12 @@ describe('Flashlight performance measure', () => {
 
       // Onboarding (Check just in case)
       await MapPage.confirmOnboarding();
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
     } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_should_show_the_map',
-      );
+      await AppHelper.screenshot('error_should_show_the_map');
       throw errMsg;
     }
-  })
+  });
 
   /**
    * Departures: search for a stop place directly and show its departures
@@ -103,15 +105,13 @@ describe('Flashlight performance measure', () => {
       await ElementHelper.waitForElement('id', 'departuresContentView');
       await ElementHelper.expectText(stopPlace);
       expect(await DepartureOverviewPage.getDeparture()).toExist();
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
 
       // Show more departures
       await DepartureOverviewPage.showMoreDepartures();
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
     } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_should_show_departures',
-      );
+      await AppHelper.screenshot('error_should_show_departures');
       throw errMsg;
     }
   });
@@ -125,18 +125,16 @@ describe('Flashlight performance measure', () => {
       await NavigationHelper.tapMenu('tickets');
 
       await ElementHelper.waitForElement('id', 'purchaseTab');
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
 
       // Choose a fare product
-      await TicketPage.chooseFareProduct('single')
+      await TicketPage.chooseFareProduct('single');
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
 
       await NavigationHelper.back();
     } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_should_show_tickets',
-      );
+      await AppHelper.screenshot('error_should_show_tickets');
       throw errMsg;
     }
   });
@@ -150,11 +148,9 @@ describe('Flashlight performance measure', () => {
       await NavigationHelper.tapMenu('profile');
 
       await ElementHelper.waitForElement('id', 'profileHomeScrollView');
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
     } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_should_show_my_profile',
-      );
+      await AppHelper.screenshot('error_should_show_my_profile');
       throw errMsg;
     }
   });
@@ -162,23 +158,23 @@ describe('Flashlight performance measure', () => {
   /**
    * Background: put the app in background and awake it
    */
+  /*
+  TODO: Remove as background() is used between each test
   it('should awake from background', async () => {
     try {
       await NavigationHelper.tapMenu('assistant');
       await NavigationHelper.tapMenu('assistant');
       await ElementHelper.waitForElement('id', 'searchFromButton');
 
-      await AppHelper.pause(waitingTime)
-      await driver.background(10)
-      await AppHelper.pause(2000)
+      await AppHelper.pause(waitingTime);
+      await driver.background(10);
+      await AppHelper.pause(2000);
       await NavigationHelper.tapMenu('departures');
-      await AppHelper.pause(waitingTime)
+      await AppHelper.pause(waitingTime);
     } catch (errMsg) {
-      await AppHelper.screenshot(
-        'error_should_awake_from_background',
-      );
+      await AppHelper.screenshot('error_should_awake_from_background');
       throw errMsg;
     }
-  })
-
-})
+  });
+   */
+});

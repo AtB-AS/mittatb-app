@@ -44,6 +44,34 @@ class AppHelper {
   }
 
   /**
+   * Wait until the loading screen is finished
+   * @param numberOfRetries: used internally to count retries, max = 2
+   */
+  async waitOnLoadingScreen(numberOfRetries: number = 0) {
+    const retryAuthId = `//*[@resource-id="retryAuthButton"]`;
+
+    // Wait until loading screen is done
+    while (await ElementHelper.isElementExisting('loadingScreen', 2)) {
+      await this.pause(1000);
+    }
+
+    // Check if loading failed and retry is available
+    const exists = await ElementHelper.isElementExisting('retryAuthButton', 2);
+    // max 2 retries
+    if (exists) {
+      if (numberOfRetries < 2) {
+        await $(retryAuthId).click();
+        // new loading screen with increased retry count
+        await this.waitOnLoadingScreen(numberOfRetries + 1);
+      } else {
+        throw new Error(
+          '[ERROR] Could not load the app from the loading screen!',
+        );
+      }
+    }
+  }
+
+  /**
    * Scroll down with default scroll parameters
    */
   async scrollDown() {

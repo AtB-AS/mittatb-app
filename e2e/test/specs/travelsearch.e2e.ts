@@ -9,9 +9,11 @@ import NavigationHelper from '../utils/navigation.helper';
 
 describe('Travel search', () => {
   before(async () => {
-    await AppHelper.launchApp();
-    await AppHelper.pause(10000, true);
-    await OnboardingPage.skipOnboarding('travelsearch');
+    //await AppHelper.launchApp();
+    await AppHelper.waitOnLoadingScreen()
+    await AppHelper.pause(5000, true);
+    //https://github.com/AtB-AS/kundevendt/issues/4157#issuecomment-1707973260
+    //await OnboardingPage.skipOnboarding('travelsearch');
   });
   beforeEach(async () => {
     await NavigationHelper.tapMenu('assistant');
