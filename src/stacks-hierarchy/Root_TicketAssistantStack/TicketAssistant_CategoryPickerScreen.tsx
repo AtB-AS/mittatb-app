@@ -3,7 +3,8 @@ import {StyleSheet} from '@atb/theme';
 
 import {
   getTextForLanguage,
-  TicketAssistantTexts, translation as _,
+  TicketAssistantTexts,
+  translation as _,
   useTranslation,
 } from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
@@ -64,54 +65,50 @@ export const TicketAssistant_CategoryPickerScreen = ({
     return unsubscribe;
   }, [navigation]);
 
-  function getAdditionalTitleText(userTypeString : string) {
+  function getAdditionalTitleText(userTypeString: string) {
     switch (userTypeString) {
-      case "CHILD":
+      case 'CHILD':
         return t(_('/ungdom', '/youth', '/ungdom'));
       default:
         return '';
     }
   }
-  function AdditionalDescription(userTypeString : string ) {
+  function AdditionalDescription(userTypeString: string) {
     const preLinkText = {
       nb: 'Ungdomsbillett fra 16 til og med 19 år er ikke med i billettveilederen.',
       en: 'Youth ticket from 16 up to 19 years is not included in the ticket guide.',
-      nn: 'Ungdomsbillett frå 16 til og med 19 år er ikkje med i billettveilederen.'
+      nn: 'Ungdomsbillett frå 16 til og med 19 år er ikkje med i billettveilederen.',
     };
 
     const linkText = {
       nb: 'Les mer om ungdomsbillett.',
       en: 'Read more about the youth ticket.',
-      nn: 'Les meir om ungdomsbillett.'
+      nn: 'Les meir om ungdomsbillett.',
     };
 
     const handleLinkPress = () => {
       Linking.openURL('https://atb.no/ungdomsbillett/');
     };
 
-    if (userTypeString === "CHILD") {
+    if (userTypeString === 'CHILD') {
       return (
-          <>
-            <ThemeText
-                type={'body__secondary'}
-                style={styles.expandedContent}
-            >
-              {`\n\n${preLinkText[language]} `}
-            </ThemeText>
-            <ThemeText
-                type={'body__secondary'}
-                style={{ textDecorationLine: 'underline' }}
-                onPress={handleLinkPress}
-            >
-              {linkText[language]}
-            </ThemeText>
-          </>
+        <>
+          <ThemeText type={'body__secondary'} style={styles.expandedContent}>
+            {`\n\n${preLinkText[language]} `}
+          </ThemeText>
+          <ThemeText
+            type={'body__secondary'}
+            style={[styles.expandedContent, {textDecorationLine: 'underline'}]}
+            onPress={handleLinkPress}
+          >
+            {linkText[language]}
+          </ThemeText>
+        </>
       );
     }
 
     return null;
   }
-
 
   return (
     <View style={styles.container}>
@@ -143,7 +140,8 @@ export const TicketAssistant_CategoryPickerScreen = ({
                   textType={'body__primary--bold'}
                   text={
                     (u.emoji ? u.emoji + ' ' : '') +
-                    getReferenceDataName(u, language) + getAdditionalTitleText(u.userTypeString)
+                    getReferenceDataName(u, language) +
+                    getAdditionalTitleText(u.userTypeString)
                   }
                   onPress={() => {
                     setCurrentlyOpen(index);
