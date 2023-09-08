@@ -119,6 +119,7 @@ const HarborSelectionItem = forwardRef<
                 .a11yHint,
             )
       }
+      radius={fromOrTo === 'from' ? 'top' : 'bottom'}
       onPress={() => !disabled && onPress()}
       testID="selectHarborsButton"
     >
