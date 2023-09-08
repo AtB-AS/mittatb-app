@@ -14,7 +14,7 @@ const TicketAssistantTexts = {
     ),
     description: _(
       'Få hjelp til å velge billetten som passer for deg som reiser med buss og trikk.',
-      'Get help choosing the ticket that\'s right for you when traveling by bus and tram.',
+      "Get help choosing the ticket that's right for you when traveling by bus and tram.",
       'Få hjelp til å velje billetten som passar for deg som reiser med buss og trikk.',
     ),
     mainButton: _('Start', 'Start', 'Start'),
@@ -193,13 +193,17 @@ const TicketAssistantTexts = {
     },
   },
   summary: {
-    title: _('Anbefalt for', 'Recommended for', 'Anbefalt for'),
-    titleA11yLabel: _('Anbefalt for', 'Recommended for', 'Anbefalt for'),
+    title: _('Anbefalt billett', 'Recommended ticket', 'Anbefalt billett'),
+    titleA11yLabel: _(
+      'Anbefalt billett',
+      'Recommended ticket',
+      'Anbefalt billett',
+    ),
     description: (data: {frequency: number; date: string}) =>
       _(
-        `${data.frequency} turer i uka fram til ${data.date}`,
-        `${data.frequency} trips per week until ${data.date}`,
-        `${data.frequency} turar i veka fram til ${data.date}`,
+        `For ${data.frequency} turer i uka fram til ${data.date}`,
+        `For ${data.frequency} trips per week until ${data.date}`,
+        `For ${data.frequency} turar i veka fram til ${data.date}`,
       ),
     savings: (data: {
       totalSavings: string;
@@ -224,7 +228,11 @@ const TicketAssistantTexts = {
     traveller: _('Reisende', 'Traveller', 'Reisande'),
     zones: _('Soner', 'Zones', 'Soner'),
     price: _('Pris', 'Price', 'Pris'),
-    pricePerTrip: _('Prisen per tur blir:', 'The price per trip is:', 'Prisen per tur blir:'),
+    pricePerTrip: _(
+      'Prisen per tur blir:',
+      'The price per trip is:',
+      'Prisen per tur blir:',
+    ),
     resultMoreThan180Days: _(
       'Du skal reise i mer enn et halvt år.',
       'You will travel for more than half a year.',
@@ -253,11 +261,18 @@ const TicketAssistantTexts = {
         `You have selected ${data.ticket}. \n Traveller: ${data.traveller}. \n Zones: ${data.tariffZones}. \n Price: ${data.price} kr. \n Price per trip: ${data.pricePerTrip} kr.`,
         `Du har valt ${data.ticket}. \n Reisande: ${data.traveller}. \n Sonar: ${data.tariffZones}. \n Pris: ${data.price} kr. \n Pris per tur: ${data.pricePerTrip} kr.`,
       ),
-    durationNotice: _(
-      'Merk deg: Denne billetten dekker ikke hele den valgte perioden. Ta veilederen på nytt når denne billetten utløper.',
-      'Please note: This ticket does not cover the entire selected period. Take the assistant again when this ticket expires.',
-      'Ver merksam: Denne billetten dekker ikkje heile perioden du har valgt. Bruk rettleiaren på nytt når billetten går ut.',
-    ),
+    durationNotice: {
+      title: _(
+        'Anbefalt billett gjelder kun for deler av reiseperioden du har valgt.',
+        'Recommended ticket only applies to part of the travel period you have chosen.',
+        'Tilrådd billett gjeld berre for deler av reiseperioden du har valgt.',
+      ),
+      description: _(
+        'Ta veilederen på nytt når denne billetten utløper.',
+        'Take the assistant again when this ticket expires.',
+        'Bruk rettleiaren på nytt når billetten går ut.',
+      ),
+    },
     a11yDurationNoticeLabel: _(
       'NB: denne veilederen fungerer kun for reise med buss og trikk, ikke båt. ',
       'NB: this guide only works for travel by bus and tram, not boat.',

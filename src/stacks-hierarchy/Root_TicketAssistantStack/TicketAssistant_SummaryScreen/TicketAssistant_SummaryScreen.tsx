@@ -9,15 +9,11 @@ import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalytics} from '@atb/analytics';
-import {GlobalMessage} from "@atb/global-messages";
-import {colors} from "@atb-as/theme/lib/themes/atb-theme/theme";
-import {MessageBox} from "@atb/components/message-box";
+import {MessageBox} from '@atb/components/message-box';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -147,8 +143,14 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 
             <TicketSummary />
             {doesTicketCoverEntirePeriod && (
-                <MessageBox style={styles.infoBox} type={"info"} title={"Anbefalt billett gjelder kun for deler av reiseperioden du har valgt."} message={"Ta veilederen på nytt når denne billetten utløper."}></MessageBox>
-
+              <MessageBox
+                style={styles.infoBox}
+                type={'info'}
+                title={t(TicketAssistantTexts.summary.durationNotice.title)}
+                message={t(
+                  TicketAssistantTexts.summary.durationNotice.description,
+                )}
+              ></MessageBox>
             )}
             <Button
               interactiveColor="interactive_0"
@@ -159,7 +161,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 TicketAssistantTexts.summary.a11yBuyButtonHint,
               )}
             />
-
           </View>
         )}
         {(error || !loading) && (
@@ -187,7 +188,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   infoBox: {
-    marginBottom: theme.spacings.large
+    marginBottom: theme.spacings.large,
   },
   container: {
     flex: 1,

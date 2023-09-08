@@ -64,11 +64,9 @@ export const TicketSummary = () => {
     ? ticket.price / numberOfTravels
     : ticket.price;
 
-  const perTripPriceString = t(TicketAssistantTexts.summary.pricePerTrip) + ` ${formatDecimalNumber(
-    perTripPrice,
-    language,
-    2,
-  )} kr`;
+  const perTripPriceString =
+    t(TicketAssistantTexts.summary.pricePerTrip) +
+    ` ${formatDecimalNumber(perTripPrice, language, 2)} kr`;
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
 
@@ -143,7 +141,6 @@ export const TicketSummary = () => {
                 text={zonesString}
               />
             </View>
-
           </View>
         </View>
         <View style={styles.ticketFooter}>
@@ -165,7 +162,7 @@ export const TicketSummary = () => {
         accessibilityLabel={savingsText}
       >
         {perTripPriceString}
-        {"\n"}
+        {'\n'}
         {savingsText}
       </ThemeText>
     </>
@@ -201,7 +198,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    gap: theme.spacings.large
+    gap: theme.spacings.large,
   },
   infoChip: {
     marginVertical: theme.spacings.xSmall,

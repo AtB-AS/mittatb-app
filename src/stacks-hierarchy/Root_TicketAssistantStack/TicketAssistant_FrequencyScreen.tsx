@@ -68,7 +68,7 @@ export const TicketAssistant_FrequencyScreen = ({
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
-          <View ref={focusRef} accessible={true}>
+          <View style={styles.textBox} ref={focusRef} accessible={true}>
             <ThemeText
               type={'heading--big'}
               style={styles.header}
@@ -82,7 +82,7 @@ export const TicketAssistant_FrequencyScreen = ({
             </ThemeText>
             <ThemeText
               color={themeColor}
-              type={'body__secondary'}
+              type={'body__primary'}
               style={styles.description}
               accessibilityLabel={t(TicketAssistantTexts.frequency.description)}
             >
@@ -185,6 +185,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mainView: {
     flex: 1,
+    gap: theme.spacings.xLarge,
     paddingHorizontal: theme.spacings.large,
     paddingBottom: theme.spacings.xLarge,
     width: '100%',
@@ -195,17 +196,18 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     paddingVertical: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
-    marginVertical: theme.spacings.medium,
   },
   slider: {
     width: '100%',
     alignSelf: 'center',
     marginVertical: theme.spacings.medium,
   },
+  textBox: {
+    gap: theme.spacings.medium,
+  },
   description: {
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.xLarge,
   },
   header: {
     textAlign: 'center',
