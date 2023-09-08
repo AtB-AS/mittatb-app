@@ -54,7 +54,11 @@ export const LoadingErrorScreen = React.memo(() => {
           )}
         </View>
         <View>
-          <Button text={t(dictionary.retry)} onPress={retryAuth} />
+          <Button
+            text={t(dictionary.retry)}
+            onPress={retryAuth}
+            testID="retryAuthButton"
+          />
           <Button
             style={styles.customerServiceButton}
             onPress={() => Linking.openURL(customer_service_url)}
