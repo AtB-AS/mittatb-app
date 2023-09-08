@@ -13,7 +13,6 @@ import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import Slider from '@react-native-community/slider';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
@@ -49,6 +48,7 @@ import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-scre
 import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
+import {Slider} from "@atb/components/slider";
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -711,7 +711,7 @@ function LabeledSlider({
         {label}: {pref?.toFixed(1)}
       </ThemeText>
       <Slider
-        style={{width: '100%'}}
+        containerStyle={{width: '100%'}}
         minimumValue={min}
         maximumValue={max}
         step={step}

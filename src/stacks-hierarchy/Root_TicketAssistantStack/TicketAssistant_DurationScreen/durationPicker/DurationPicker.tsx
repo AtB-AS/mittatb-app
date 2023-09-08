@@ -35,7 +35,7 @@ export const DurationPicker = ({
 
   const {inputParams} = useTicketAssistantState();
   const [date, setDate] = useState(
-    addDays(currentDate, inputParams.duration ?? 0),
+    addDays(currentDate, inputParams.duration ?? duration),
   );
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
@@ -170,16 +170,15 @@ export const DurationPicker = ({
             </View>
 
             <Slider
-              style={styles.slider}
-              value={sliderIndex}
-              interactiveColor={'interactive_0'}
-              maximumValue={DURATIONS_IN_DAYS.length - 1}
-              minimumValue={0}
-              step={1}
-              tapToSeek={true}
-              onValueChange={(value) => {
-                updateDurationFromSlider(value);
-              }}
+                containerStyle={styles.slider}
+                maximumValue={DURATIONS_IN_DAYS.length - 1}
+                minimumValue={0}
+                step={1}
+                value={sliderIndex}
+                onValueChange={ (value) => {
+                  setSliderIndex(value)
+                  updateDurationFromSlider(value);
+                }}
             />
           </View>
         </>
