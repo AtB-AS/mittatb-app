@@ -69,7 +69,7 @@ export function LineItem({
   const styles = useItemStyles();
   const {t, language} = useTranslation();
 
-  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
+  const {onMarkFavourite, getExistingFavorite, toggleFavouriteAccessibilityLabel} =
     useOnMarkFavouriteDepartures(quay, stop);
 
   if (hasNoDeparturesOnGroup(group)) {
@@ -92,7 +92,7 @@ export function LineItem({
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
-  const existing = existingFavorite(favouriteDepartureLine);
+  const existing = getExistingFavorite(favouriteDepartureLine);
 
   return (
     <View style={[topContainer, {padding: 0}]} testID={testID}>

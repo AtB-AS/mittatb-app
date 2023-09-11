@@ -17,10 +17,6 @@ import {useIsFocused} from '@react-navigation/native';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
 
-export type QuayViewParams = {
-  quay: Quay;
-};
-
 export type QuayViewProps = {
   quay: Quay;
   navigateToDetails?: (
@@ -136,10 +132,8 @@ export function QuayView({
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
-          showFavorites={true}
           searchDate={searchStartTime}
           mode={mode}
-          tick={state.tick}
         />
       )}
     />

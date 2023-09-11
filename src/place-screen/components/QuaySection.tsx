@@ -5,30 +5,20 @@ import {
   GenericSectionItem,
   LinkSectionItem,
   Section,
-  SectionSeparator,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {
-  StoredFavoriteDeparture,
-  useFavorites,
-  useOnMarkFavouriteDepartures,
-} from '@atb/favorites';
+import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import DeparturesTexts from '@atb/translations/screens/Departures';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
-import {
-  EstimatedCallItem,
-  getA11yDeparturesLabel,
-  getLineA11yLabel,
-} from './EstimatedCallItem';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
+import {EstimatedCallList} from '@atb/place-screen/components/EstimatedCallList';
 
-type QuaySectionProps = {
+export type QuaySectionProps = {
   quay: Quay;
   departuresPerQuay?: number;
   data: EstimatedCall[] | null;
@@ -41,20 +31,12 @@ type QuaySectionProps = {
     serviceDate: string,
     date?: string,
     fromQuayId?: string,
-    isTripCancelled?: boolean,
   ) => void;
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
-  showFavorites: boolean;
   searchDate?: string | Date;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
-  tick: Date | undefined;
-};
-
-type EstimatedCallRenderItem = {
-  item: EstimatedCall;
-  index: number;
 };
 
 export function QuaySection({
@@ -68,22 +50,15 @@ export function QuaySection({
   navigateToDetails,
   stopPlace,
   showOnlyFavorites,
-  showFavorites,
   addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
-  tick,
 }: QuaySectionProps): JSX.Element {
   const {favoriteDepartures} = useFavorites();
   const [isMinimized, setIsMinimized] = useState(false);
   const styles = useStyles();
   const departures = getDeparturesForQuay(data, quay);
-  const {t, language} = useTranslation();
-
-  const [now, setNow] = useState(tick ?? new Date());
-  useEffect(() => {
-    if (tick) setNow(tick);
-  }, [tick]);
+  const {t} = useTranslation();
 
   const departuresToDisplay =
     mode === 'Favourite'
@@ -97,120 +72,15 @@ export function QuaySection({
     );
   }, [showOnlyFavorites]);
 
-  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
-    useOnMarkFavouriteDepartures(
-      quay,
-      stopPlace,
-      addedFavoritesVisibleOnDashboard,
-    );
-
   const hasMoreItemsThanDisplayLimit =
-    departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
+    !!departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
 
   const shouldShowMoreItemsLink =
-    navigateToQuay &&
+    !!navigateToQuay &&
     !isMinimized &&
     (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
 
   const situations = quay.situations.filter(isSituationValidAtDate(searchDate));
-
-  const onPressFavorite = useCallback(
-    (departure: EstimatedCall, existingFavorite?: StoredFavoriteDeparture) =>
-      onMarkFavourite(
-        {
-          ...departure.serviceJourney.line,
-          lineNumber: departure.serviceJourney.line.publicCode,
-          lineName: departure.destinationDisplay?.frontText,
-        },
-        existingFavorite,
-      ),
-    [],
-  );
-
-  const onPress = useCallback(
-    (departure: EstimatedCall, existingFavorite?: StoredFavoriteDeparture) => {
-      if (mode === 'Favourite') {
-        onMarkFavourite(
-          {
-            ...departure.serviceJourney.line,
-            lineNumber: departure.serviceJourney.line.publicCode,
-            lineName: departure.destinationDisplay?.frontText,
-          },
-          existingFavorite,
-        );
-      } else if (navigateToDetails) {
-        navigateToDetails(
-          departure.serviceJourney.id,
-          departure.date,
-          departure.aimedDepartureTime,
-          departure.quay.id,
-          departure.cancellation,
-        );
-      }
-    },
-    [],
-  );
-
-  const renderEstimatedCallSection = useCallback(
-    ({item: departure, index}: EstimatedCallRenderItem) => (
-      <GenericSectionItem
-        radius={
-          index === departuresToDisplay.length - 1 && !shouldShowMoreItemsLink
-            ? 'bottom'
-            : undefined
-        }
-        testID={'departureItem' + index}
-      >
-        <EstimatedCallItem
-          departure={departure}
-          onPress={onPress}
-          accessibilityHint={
-            mode === 'Favourite'
-              ? t(DeparturesTexts.a11yMarkFavouriteHint)
-              : t(DeparturesTexts.a11yViewDepartureDetailsHint)
-          }
-          testID={'departureItem' + index}
-          accessibilityLabel={
-            mode === 'Favourite'
-              ? getLineA11yLabel(departure, t)
-              : getA11yDeparturesLabel(
-                  departure,
-                  departure.notices,
-                  t,
-                  language,
-                )
-          }
-          existingFavorite={existingFavorite({
-            ...departure.serviceJourney.line,
-            lineNumber: departure.serviceJourney.line.publicCode,
-            lineName: departure.destinationDisplay?.frontText,
-          })}
-          showFavorite={showFavorites}
-          onPressFavorite={onPressFavorite}
-          favoriteAccessibilityLabel={
-            mode === 'Departure'
-              ? toggleFavouriteAccessibilityLabel(departure.serviceJourney.line)
-              : undefined
-          }
-          showNotices={mode !== 'Favourite'}
-          now={now}
-        />
-      </GenericSectionItem>
-    ),
-    [
-      departuresToDisplay.length,
-      shouldShowMoreItemsLink,
-      mode,
-      now,
-      language,
-      t,
-      onPress,
-      onPressFavorite,
-      showFavorites,
-      toggleFavouriteAccessibilityLabel,
-      existingFavorite,
-    ],
-  );
 
   return (
     <View testID={testID}>
@@ -260,38 +130,16 @@ export function QuaySection({
             <SituationSectionItem key={s.id} situation={s} />
           ))}
         {!isMinimized && (
-          <FlatList
-            ItemSeparatorComponent={SectionSeparator}
-            data={
-              departuresToDisplay &&
-              departuresToDisplay.slice(0, departuresPerQuay)
-            }
-            renderItem={renderEstimatedCallSection}
-            keyExtractor={(item: EstimatedCall) =>
-              // ServiceJourney ID is not a unique key if a ServiceJourney
-              // passes by the same stop several times, (e.g. Ringen in Oslo)
-              // which is why it is used in combination with aimedDepartureTime.
-              item.serviceJourney.id + item.aimedDepartureTime
-            }
-            ListEmptyComponent={
-              <>
-                {data && !isLoading && (
-                  <GenericSectionItem
-                    radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
-                  >
-                    <ThemeText
-                      color="secondary"
-                      type="body__secondary"
-                      style={{textAlign: 'center', width: '100%'}}
-                    >
-                      {showOnlyFavorites
-                        ? t(DeparturesTexts.noDeparturesForFavorites)
-                        : t(DeparturesTexts.noDepartures)}
-                    </ThemeText>
-                  </GenericSectionItem>
-                )}
-              </>
-            }
+          <EstimatedCallList
+            quay={quay}
+            stopPlace={stopPlace}
+            departures={departuresToDisplay.slice(0, departuresPerQuay)}
+            mode={mode}
+            addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
+            shouldShowMoreItemsLink={shouldShowMoreItemsLink}
+            navigateToDetails={navigateToDetails}
+            showOnlyFavorites={showOnlyFavorites}
+            noDeparturesToShow={!!data && !isLoading}
           />
         )}
         {!isMinimized && didLoadingDataFail && !isLoading && (

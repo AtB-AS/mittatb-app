@@ -101,7 +101,6 @@ export const DeparturesDialogSheet = ({
             showOnlyFavorites={false}
             setShowOnlyFavorites={(_) => {}}
             testID="departuresContentView"
-            showFavorites={false}
             mode={'Map'}
             distance={distance}
             setTravelTarget={(target) => {

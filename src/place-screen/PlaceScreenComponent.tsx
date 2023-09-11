@@ -156,7 +156,6 @@ export const PlaceScreenComponent = ({
             addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             setShowOnlyFavorites={setShowOnlyFavorites}
             testID="departuresContentView"
-            showFavorites={true}
             mode={mode}
           />
         )}

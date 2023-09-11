@@ -31,7 +31,6 @@ type StopPlaceViewProps = {
     date?: string,
     fromQuayId?: string,
   ) => void;
-  showFavorites: boolean;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
   showOnlyFavorites: boolean;
@@ -60,7 +59,6 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     showTimeNavigation = true,
     navigateToQuay,
     navigateToDetails,
-    showFavorites,
     searchTime,
     setSearchTime,
     showOnlyFavorites,
@@ -175,7 +173,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
                   : styles.headerWithoutNavigation
               }
             >
-              {showFavorites && placeHasFavorites && (
+              {placeHasFavorites && (
                 <FavoriteToggle
                   enabled={showOnlyFavorites}
                   setEnabled={setShowOnlyFavorites}
@@ -210,11 +208,9 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
             testID={'quaySection' + index}
             stopPlace={stopPlace}
             showOnlyFavorites={showOnlyFavorites}
-            showFavorites={showFavorites}
             addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             searchDate={searchStartTime}
             mode={mode}
-            tick={state.tick}
           />
           {mode === 'Departure' && index === lastIndex && (
             <Feedback

@@ -54,7 +54,7 @@ export function useOnMarkFavouriteDepartures(
     );
   };
 
-  const existingFavorite = (line: FavouriteDepartureLine) =>
+  const getExistingFavorite = (line: FavouriteDepartureLine) =>
     getFavoriteDeparture({
       lineName: line.lineName,
       lineId: line.id,
@@ -63,7 +63,7 @@ export function useOnMarkFavouriteDepartures(
     });
 
   const toggleFavouriteAccessibilityLabel = (line: FavouriteDepartureLine) => {
-    const existing = existingFavorite(line);
+    const existing: any = undefined;
     return existing
       ? t(
           NearbyTexts.results.lines.favorite.removeFavorite(
@@ -124,5 +124,5 @@ export function useOnMarkFavouriteDepartures(
     }
   };
 
-  return {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel};
+  return {onMarkFavourite, getExistingFavorite, toggleFavouriteAccessibilityLabel};
 }

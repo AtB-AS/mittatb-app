@@ -104,7 +104,7 @@ export function secondsBetween(
 ): number {
   const parsedStart = parseIfNeeded(start);
   const parsedEnd = parseIfNeeded(end);
-  return differenceInSeconds(parsedEnd, parsedStart);
+  return Math.abs(differenceInSeconds(parsedEnd, parsedStart));
 }
 
 export function formatToClock(
@@ -127,15 +127,15 @@ export function formatToClock(
  * @param isoDate date to format as clock or relative time
  * @param minuteLimit threshold in minutes for when to show relative time
  */
+
 export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   language: Language,
   nowText: string,
-  now?: Date,
   minuteThreshold: number = 9,
 ) {
   const parsed = parseIfNeeded(isoDate);
-  const diff = secondsBetween(now ?? new Date(), parsed);
+  const diff = secondsBetween(new Date(), parsed);
 
   if (diff / 60 >= minuteThreshold) {
     return formatLocaleTime(parsed, language);
