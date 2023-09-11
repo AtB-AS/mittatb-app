@@ -31,6 +31,7 @@ import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {InteractionManager} from 'react-native';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -47,7 +48,11 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   useGoToMobileTokenOnboardingWhenNecessary();
 
   useEffect(() => {
-    if (!onboarded) navigation.navigate('Root_OnboardingStack');
+    if (!onboarded) {
+      InteractionManager.runAfterInteractions(() =>
+        navigation.navigate('Root_OnboardingStack'),
+      );
+    }
   }, [onboarded]);
 
   return (
