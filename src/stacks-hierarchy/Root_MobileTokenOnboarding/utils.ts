@@ -6,6 +6,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {InteractionManager} from 'react-native';
 
 export const useGoToMobileTokenOnboardingWhenNecessary = () => {
   const hasEnabledMobileToken = useHasEnabledMobileToken();
@@ -26,7 +27,9 @@ export const useGoToMobileTokenOnboardingWhenNecessary = () => {
   const isFocused = useIsFocused();
   useEffect(() => {
     if (shouldOnboard && isFocused) {
-      navigation.navigate('Root_MobileTokenOnboardingStack');
+      InteractionManager.runAfterInteractions(() =>
+        navigation.navigate('Root_MobileTokenOnboardingStack'),
+      );
     }
   }, [shouldOnboard, isFocused]);
 };
