@@ -196,7 +196,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               t(
                 TripDetailsTexts.trip.leg.transport.a11ylabel(
                   t(getTranslatedModeName(leg.mode)),
-                  getLineName(leg),
+                  getLineName(t, leg),
                 ),
               ) +
               (isFlexible
@@ -211,7 +211,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
               />
             }
           >
-            <ThemeText style={style.legLineName}>{getLineName(leg)}</ThemeText>
+            <ThemeText style={style.legLineName}>
+              {getLineName(t, leg)}
+            </ThemeText>
             {isFlexible && (
               <ThemeText
                 color="secondary"

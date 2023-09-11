@@ -47,6 +47,7 @@ import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark'
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {getDestinationLineName} from '@atb/travel-details-screens/utils';
 
 type EstimatedCallItemProps = {
   departure: EstimatedCall;
@@ -82,7 +83,7 @@ export function EstimatedCallItem({
 
   const isTripCancelled = departure.cancellation;
 
-  const lineName = departure.destinationDisplay?.frontText;
+  const lineName = getDestinationLineName(t, departure.destinationDisplay);
   const lineNumber = line?.publicCode;
 
   const notices = getNoticesForEstimatedCall(departure);
@@ -154,7 +155,7 @@ export function EstimatedCallItem({
               />
             )}
             <ThemeText style={styles.lineName} testID={testID + 'Name'}>
-              {departure.destinationDisplay?.frontText}
+              {lineName}
             </ThemeText>
           </View>
           {mode === 'Departure' || mode === 'Map' ? (
@@ -323,10 +324,9 @@ function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
   const a11yLine = line?.publicCode
     ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
     : '';
-  const a11yFrontText = departure.destinationDisplay?.frontText
-    ? `${departure.destinationDisplay?.frontText}.`
-    : '';
-  return `${a11yLine} ${a11yFrontText}`;
+  const lineName = getDestinationLineName(t, departure.destinationDisplay);
+  const a11yLineName = lineName ? `${lineName}.` : '';
+  return `${a11yLine} ${a11yLineName}`;
 }
 
 type LineChipProps = {

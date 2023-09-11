@@ -9,7 +9,11 @@ import {ServiceJourneyDeparture} from './types';
 import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/estimated-calls';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
-import {getNoticesForServiceJourney} from '@atb/travel-details-screens/utils';
+import {
+  getDestinationLineName,
+  getNoticesForServiceJourney,
+} from '@atb/travel-details-screens/utils';
+import {useTranslation} from '@atb/translations';
 
 export type DepartureData = {
   estimatedCallsWithMetadata: EstimatedCallWithMetadata[];
@@ -36,6 +40,7 @@ export function useDepartureData(
   activeItem: ServiceJourneyDeparture,
   pollingTimeInSeconds: number = 0,
 ): [DepartureData, boolean] {
+  const {t} = useTranslation();
   const getService = useCallback(
     async function (): Promise<DepartureData> {
       const serviceJourney = await getServiceJourneyWithEstimatedCalls(
@@ -54,9 +59,10 @@ export function useDepartureData(
 
       const publicCode =
         serviceJourney.publicCode || serviceJourney.line?.publicCode;
-      const title = `${publicCode} ${
-        focusedEstimatedCall.destinationDisplay?.frontText || ''
-      }`;
+      const title = `${publicCode} ${getDestinationLineName(
+        t,
+        focusedEstimatedCall.destinationDisplay,
+      )}`;
 
       const notices = getNoticesForServiceJourney(
         serviceJourney,
