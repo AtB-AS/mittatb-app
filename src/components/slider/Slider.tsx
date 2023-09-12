@@ -46,7 +46,7 @@ export function Slider({
   const maxColor = theme.interactive[maximumTrackTintColor].active.background;
   const thumbColor = theme.interactive[thumbTintColor].default.background;
 
-  const touchSize = 40;
+  const touchSize = 45;
   const thumbSize = 20;
 
   return (
