@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       org:
-        description: 'App organization to update provisioning profiles for'
+        description: 'App organization to update provisioning profiles'
         required: true
         type: choice
         options:
@@ -29,8 +29,12 @@ jobs:
         run: sh ./scripts/git-crypt-unlock.sh
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-      - name: Copy env files
-        run: cp env/atb/dev/.env fastlane/.env.default
+      - name: Copy Development files
+        if: ${{ matrix.type=='development'}}
+        run: cp env/${{ inputs.org }}/dev/.env fastlane/.env.default
+      - name: Copy Adhoc files
+        if: ${{ matrix.type=='adhoc'}}
+        run: cp env/${{ inputs.org }}/staging/.env fastlane/.env.default
       - name: Setup ruby and bundle install
         uses: ruby/setup-ruby@v1
         with:
