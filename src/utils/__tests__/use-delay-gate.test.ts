@@ -4,6 +4,7 @@ import {useDelayGate} from '@atb/utils/use-delay-gate';
 describe('useDelayGate', () => {
   beforeAll(() => jest.useFakeTimers());
   beforeEach(() => {
+    jest.clearAllMocks();
     jest.spyOn(global, 'clearTimeout');
     jest.clearAllTimers();
   });
