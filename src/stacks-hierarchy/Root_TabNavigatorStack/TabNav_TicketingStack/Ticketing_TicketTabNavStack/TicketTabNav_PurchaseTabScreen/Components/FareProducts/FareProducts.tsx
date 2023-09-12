@@ -4,13 +4,21 @@ import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTicketingState} from '@atb/ticketing';
 import {FareProductGroup} from './FareProductGroup';
-import {ProductTypeTransportModes} from '@atb-as/config-specs';
+import {
+  LanguageAndTextType,
+  ProductTypeTransportModes,
+} from '@atb-as/config-specs';
 import {flatMap} from '@atb/utils/array';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {
+  TicketingTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 
 type GroupedFareProducts = {
   transportModes: ProductTypeTransportModes[];
   fareProducts: FareProductTypeConfig[];
+  heading?: LanguageAndTextType[];
 };
 
 export const FareProducts = ({
@@ -18,7 +26,7 @@ export const FareProducts = ({
 }: {
   onProductSelect: (config: FareProductTypeConfig) => void;
 }) => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {preassignedFareProducts, fareProductTypeConfigs, fareProductGroups} =
     useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
@@ -38,6 +46,7 @@ export const FareProducts = ({
         sellableFareProductTypeConfigs.filter((fareProduct) =>
           group.types.includes(fareProduct.type),
         ) ?? [],
+      heading: group.heading,
     }),
   );
 
@@ -60,7 +69,9 @@ export const FareProducts = ({
       {groupedFareProducts.map((group) => (
         <FareProductGroup
           heading={
-            groupedFareProducts.length === 1
+            group.heading
+              ? getTextForLanguage(group.heading, language)
+              : groupedFareProducts.length === 1
               ? t(TicketingTexts.availableFareProducts.allTickets)
               : undefined
           }

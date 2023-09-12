@@ -3,7 +3,11 @@ import {useDelayGate} from '@atb/utils/use-delay-gate';
 
 describe('useDelayGate', () => {
   beforeAll(() => jest.useFakeTimers());
-  beforeEach(() => jest.clearAllTimers());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(global, 'clearTimeout');
+    jest.clearAllTimers();
+  });
   afterAll(() => jest.useRealTimers());
 
   it('Should give true after waiting the given delay', async () => {
@@ -71,5 +75,19 @@ describe('useDelayGate', () => {
     act(() => jest.runAllTimers());
     const statesAfter = [...hook.result.all].slice(previousStatesCount);
     expect(statesAfter).toEqual([false, true]);
+  });
+
+  it('Should clear timeouts', () => {
+    const hook = renderHook(({enabled}) => useDelayGate(200, enabled), {
+      initialProps: {enabled: true},
+    });
+
+    act(() => jest.advanceTimersByTime(50));
+    hook.rerender({enabled: false}); // Should clear timeout
+    act(() => jest.advanceTimersByTime(50));
+    hook.rerender({enabled: true});
+    hook.unmount(); // Should clear timeout
+
+    expect(clearTimeout).toHaveBeenCalledTimes(2);
   });
 });

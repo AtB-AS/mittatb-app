@@ -34,21 +34,41 @@ def intent_cert_info
 end
 
 platform :ios do
-  desc 'Update ad hoc devices'
+  desc 'Update new devices and provisioning profiles'
   lane :update_devices do
     ensure_env_vars(
-      env_vars: ['IOS_DEVICES_FILE','IOS_DEVELOPMENT_TEAM_ID', 'IOS_BUNDLE_IDENTIFIER', 'IOS_APP_WIDGET_IDENTIFIER', 'IOS_APP_INTENT_IDENTIFIER', 'FASTLANE_MATCH_GIT_URL', 'FASTLANE_MATCH_TYPE']
+      env_vars: [
+        'FASTLANE_MATCH_FULL_NAME',
+        'FASTLANE_MATCH_EMAIL',
+        'FASTLANE_MATCH_GIT_SSH_URL',
+        'IOS_DEVICES_FILE',
+        'IOS_DEVELOPMENT_TEAM_ID',
+        'IOS_BUNDLE_IDENTIFIER',
+        'IOS_APP_WIDGET_IDENTIFIER',
+        'IOS_APP_INTENT_IDENTIFIER',
+        'FASTLANE_MATCH_TYPE',
+        'MATCH_DEPLOY_KEY',
+        'APPCONNECT_API_KEY_PATH',
+      ]
     )
     register_devices(
+      team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
       devices_file: ENV['IOS_DEVICES_FILE'],
+      api_key_path: ENV['APPCONNECT_API_KEY_PATH'],
     )
     identifiers = [ENV['IOS_BUNDLE_IDENTIFIER'], ENV['IOS_APP_WIDGET_IDENTIFIER'], ENV['IOS_APP_INTENT_IDENTIFIER']]
+    puts "Provisioning profiles for #{identifiers}"
     match(
-      type: "adhoc",
-      force_for_new_devices: true,
+      type: ENV["FASTLANE_MATCH_TYPE"],
       team_id: ENV['IOS_DEVELOPMENT_TEAM_ID'],
+      git_url: ENV['FASTLANE_MATCH_GIT_SSH_URL'],
+      storage_mode: 'git',
       app_identifier: identifiers,
-      git_url:ENV['FASTLANE_MATCH_GIT_URL'],
+      force_for_new_devices: true,
+      force: true,
+      git_full_name: ENV['FASTLANE_MATCH_FULL_NAME'],
+      git_user_email: ENV['FASTLANE_MATCH_EMAIL'],
+      git_private_key: ENV['MATCH_DEPLOY_KEY'],
     )
   end
 
@@ -65,7 +85,6 @@ platform :ios do
       git_url:ENV['FASTLANE_MATCH_GIT_URL'],
       type:ENV['FASTLANE_MATCH_TYPE'],
       skip_confirmation: true,
-      username: ENV['FASTLANE_MATCH_USERNAME'],
     )
     get_certs
   end

@@ -14,6 +14,7 @@ function renderToken(token: marked.Token, index: number): React.ReactElement {
     case 'text':
       return <Text key={index}>{token.text}</Text>;
 
+    case 'heading':
     case 'strong':
       return (
         <Text
@@ -24,6 +25,13 @@ function renderToken(token: marked.Token, index: number): React.ReactElement {
         </Text>
       );
 
+    case 'html':
+      return token.raw === '<br>' ? (
+        <Text key={index}>{'\n'}</Text>
+      ) : (
+        <Text key={index}>{token.raw}</Text>
+      );
+
     case 'paragraph':
       return (
         <React.Fragment key={index}>
@@ -31,6 +39,7 @@ function renderToken(token: marked.Token, index: number): React.ReactElement {
         </React.Fragment>
       );
 
+    case 'br':
     case 'space':
       return <Text key={index}>{'\n'}</Text>;
 

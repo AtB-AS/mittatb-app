@@ -18,7 +18,7 @@ export function useDelayGate(
         setGate(true);
       }, delayMs);
       return () => {
-        clearInterval(id);
+        clearTimeout(id);
       };
     }
   }, [enabled]);

@@ -184,11 +184,6 @@ const NearbyTexts = {
           cancel: _('Avbryt', 'Cancel', 'Avbryt'),
           delete: _('Slett', 'Delete', 'Slett'),
         },
-        a11yMarkFavouriteHint: _(
-          'Aktiver for å markere som favoritt',
-          'Activate to mark as favourite',
-          'Trykk her for å markere som favoritt',
-        ),
         message: {
           saved: _(`Lagt til.`, 'Added', `Lagt til.`),
           removed: _(`Fjernet.`, 'Removed', `Fjerna.`),
