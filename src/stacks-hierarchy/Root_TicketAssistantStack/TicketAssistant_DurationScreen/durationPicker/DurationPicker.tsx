@@ -170,15 +170,15 @@ export const DurationPicker = ({
             </View>
 
             <Slider
-                containerStyle={styles.slider}
-                maximumValue={DURATIONS_IN_DAYS.length - 1}
-                minimumValue={0}
-                step={1}
-                value={sliderIndex}
-                onValueChange={ (value) => {
-                  setSliderIndex(value)
-                  updateDurationFromSlider(value);
-                }}
+              containerStyle={styles.slider}
+              maximumValue={DURATIONS_IN_DAYS.length - 1}
+              minimumValue={0}
+              step={1}
+              value={sliderIndex}
+              onValueChange={(value) => {
+                setSliderIndex(value);
+                updateDurationFromSlider(value);
+              }}
             />
           </View>
         </>
