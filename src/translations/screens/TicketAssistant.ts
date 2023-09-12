@@ -13,9 +13,15 @@ const TicketAssistantTexts = {
       'Velkommen til billettrettleiaren',
     ),
     description: _(
-      'Få hjelp til å velge billetten som passer for deg som reiser med buss og trikk.',
-      'Get help choosing the ticket that\'s right for you when traveling by bus and tram.',
-      'Få hjelp til å velje billetten som passar for deg som reiser med buss og trikk.',
+      'Få hjelp til å velge billetten som passer deg.',
+      'Get help choosing the ticket that suits you.',
+      'Få hjelp til å velje billetten som passar deg.',
+    ),
+
+    boatInfo: _(
+      'Akkurat nå gjelder veilederen kun for reiser med buss & trikk, og ikke båt.',
+      'Right now, the assistant applies only to travel by bus & tram, and not by boat.',
+      'Akkurat no gjeld rettleiaren berre for reiser med buss og trikk, og ikkje båt. ',
     ),
     mainButton: _('Start', 'Start', 'Start'),
     a11yStartHint: _(
@@ -29,7 +35,6 @@ const TicketAssistantTexts = {
     title: _('Hvem er du?', 'Who are you?', 'Kven er du?'),
     chooseButton: _('Velg', 'Choose', 'Vel'),
     chosen: _('Valgt', 'Chosen', 'Valt'),
-
     a11yChooseButtonHint: (category: {value: string}) =>
       _(
         `Aktiver for å velge ${category.value} som kategori, og gå videre`,
@@ -224,7 +229,7 @@ const TicketAssistantTexts = {
     traveller: _('Reisende', 'Traveller', 'Reisande'),
     zones: _('Soner', 'Zones', 'Soner'),
     price: _('Pris', 'Price', 'Pris'),
-    pricePerTrip: _('Prisen per tur blir:', 'The price per trip is:', 'Prisen per tur blir:'),
+    pricePerTrip: _('Pris per tur:', 'Price per trip:', 'Pris per tur:'),
     resultMoreThan180Days: _(
       'Du skal reise i mer enn et halvt år.',
       'You will travel for more than half a year.',

@@ -39,19 +39,33 @@ export const TicketAssistant_WelcomeScreen = ({
         >
           {t(TicketAssistantTexts.welcome.title)}
         </ThemeText>
-
-        <ThemeText
-            style={styles.description}
-            type={'body__primary'}
-            color={themeColor}
-        >
-          {t(TicketAssistantTexts.welcome.description)}
-        </ThemeText>
       </View>
 
       <View style={styles.mainView}>
         <TicketSplash width={windowWidth} height={windowWidth / 2} />
 
+        <ThemeText
+          style={styles.description}
+          type={'body__primary'}
+          color={themeColor}
+        >
+          {t(TicketAssistantTexts.welcome.description)}
+        </ThemeText>
+
+        <View
+          style={styles.notice}
+          accessible={true}
+          accessibilityLabel={t(TicketAssistantTexts.welcome.boatInfo)}
+        >
+          <ThemeIcon style={styles.icon} svg={SvgInfo} />
+          <ThemeText
+            style={styles.noticeText}
+            type={'body__tertiary'}
+            color={themeColor}
+          >
+            {t(TicketAssistantTexts.welcome.boatInfo)}
+          </ThemeText>
+        </View>
       </View>
       <View style={styles.bottomView}>
         <Button

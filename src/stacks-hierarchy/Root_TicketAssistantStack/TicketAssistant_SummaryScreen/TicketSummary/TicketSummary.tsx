@@ -64,7 +64,7 @@ export const TicketSummary = () => {
     ? ticket.price / numberOfTravels
     : ticket.price;
 
-  const perTripPriceString = t(TicketAssistantTexts.summary.pricePerTrip) + ` ${formatDecimalNumber(
+  const perTripPriceString = `${formatDecimalNumber(
     perTripPrice,
     language,
     2,
@@ -143,18 +143,28 @@ export const TicketSummary = () => {
                 text={zonesString}
               />
             </View>
-
+            {/** Total ticket cost **/}
+            <View>
+              <ThemeText type="label__uppercase" color="secondary">
+                {t(TicketAssistantTexts.summary.price)}
+              </ThemeText>
+              <InfoChip
+                interactiveColor={interactiveColorName}
+                style={styles.infoChip}
+                text={ticketPriceString}
+              />
+            </View>
           </View>
         </View>
         <View style={styles.ticketFooter}>
           <ThemeText type={'body__secondary'} color={interactiveColor.outline}>
-            {t(TicketAssistantTexts.summary.price)}
+            {t(TicketAssistantTexts.summary.pricePerTrip)}
           </ThemeText>
           <ThemeText
             type="body__secondary--bold"
             color={interactiveColor.outline}
           >
-            {ticketPriceString}
+            {perTripPriceString}
           </ThemeText>
         </View>
       </View>
@@ -164,8 +174,6 @@ export const TicketSummary = () => {
         color={themeColor}
         accessibilityLabel={savingsText}
       >
-        {perTripPriceString}
-        {"\n"}
         {savingsText}
       </ThemeText>
     </>
@@ -200,8 +208,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalFlex: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    gap: theme.spacings.large
+    justifyContent: 'space-between',
   },
   infoChip: {
     marginVertical: theme.spacings.xSmall,

@@ -48,7 +48,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
                 },
               }
         }
-        rightButton={activeTab !== 5  && activeTab !== 0? {type: 'close'}: undefined}
+        rightButton={{type: 'chat'}}
         setFocusOnLoad={false}
       />
       <Tab.Navigator
