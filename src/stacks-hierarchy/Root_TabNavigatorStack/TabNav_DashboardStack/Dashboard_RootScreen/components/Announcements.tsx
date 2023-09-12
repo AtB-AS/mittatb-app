@@ -1,3 +1,4 @@
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsState} from '@atb/announcements';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -7,7 +8,11 @@ import {AnnouncementSheet} from './AnnouncementSheet';
 import {SectionHeading} from './SectionHeading';
 import {StyleSheet} from '@atb/theme';
 
-export const Announcements = () => {
+type Props = {
+  style?: StyleProp<ViewStyle>;
+};
+
+export const Announcements = ({style: containerStyle}: Props) => {
   const {announcements} = useAnnouncementsState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const style = useStyle();
@@ -15,7 +20,7 @@ export const Announcements = () => {
   if (announcements.length === 0) return null;
 
   return (
-    <>
+    <View style={containerStyle}>
       <SectionHeading>Aktuelt</SectionHeading>
       <ScrollView>
         {announcements.map((a, i) => (
@@ -38,7 +43,7 @@ export const Announcements = () => {
           </Section>
         ))}
       </ScrollView>
-    </>
+    </View>
   );
 };
 

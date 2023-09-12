@@ -257,9 +257,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
           />
         </View>
 
-        <View style={style.contentSection}>
-          <Announcements />
-        </View>
+        <Announcements style={style.contentSection} />
 
         {enable_ticketing && (
           <CompactFareContracts
