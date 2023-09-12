@@ -115,7 +115,12 @@ export const TransportModes = ({
         type={textType ?? 'label__uppercase'}
         color={textColor ?? 'secondary'}
         accessibilityLabel={t(
-          FareContractTexts.transportModes.a11yLabel(transportModeText),
+          customTransportModeText
+            ? FareContractTexts.transportModes.a11yLabelWithCustomText(
+                transportModeText,
+                customTransportModeText,
+              )
+            : FareContractTexts.transportModes.a11yLabel(transportModeText),
         )}
       >
         {customTransportModeText ? customTransportModeText : transportModeText}
