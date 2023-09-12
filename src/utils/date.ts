@@ -104,7 +104,7 @@ export function secondsBetween(
 ): number {
   const parsedStart = parseIfNeeded(start);
   const parsedEnd = parseIfNeeded(end);
-  return Math.abs(differenceInSeconds(parsedEnd, parsedStart));
+  return differenceInSeconds(parsedEnd, parsedStart);
 }
 
 export function formatToClock(

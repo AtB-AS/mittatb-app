@@ -84,8 +84,8 @@ export const EstimatedCallList = ({
 
       return {
         secondsUntilDeparture: secondsBetween(
-          departure.expectedDepartureTime,
           new Date(),
+          departure.expectedDepartureTime,
         ),
         departure,
         mode,
