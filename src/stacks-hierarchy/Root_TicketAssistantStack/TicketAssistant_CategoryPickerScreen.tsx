@@ -75,9 +75,9 @@ export const TicketAssistant_CategoryPickerScreen = ({
   }
   function AdditionalDescription(userTypeString: string) {
     const preLinkText = {
-      nb: 'Ungdomsbillett fra 16 til og med 19 år er ikke med i billettveilederen.',
-      en: 'Youth ticket from 16 up to 19 years is not included in the ticket guide.',
-      nn: 'Ungdomsbillett frå 16 til og med 19 år er ikkje med i billettveilederen.',
+      nb: 'Ungdomsbillett fra 16 til og med 19 år er ikke med i billettveilederen og kan ikke kjøpes i AtB-appen.',
+      en: 'Youth ticket from 16 up to and including 19 years is not included in the ticket guide and cannot be purchased in the AtB app.',
+      nn: 'Ungdomsbillett frå 16 til og med 19 år er ikkje med i billettvegleiaren og kan ikkje kjøpast i AtB-appen.',
     };
 
     const linkText = {
