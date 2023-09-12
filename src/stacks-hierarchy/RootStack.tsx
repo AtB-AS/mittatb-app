@@ -171,24 +171,26 @@ export const RootStack = () => {
         backgroundColor={statusBarColor}
       />
       <Host>
-        <NavigationContainer<RootStackParamList>
-          onStateChange={trackNavigation}
-          ref={navRef}
-          theme={ReactNavigationTheme}
-          fallback={<LoadingScreen />}
-          linking={{
-            prefixes: [`${APP_SCHEME}://`],
-            config: {
-              screens: {
-                Root_TabNavigatorStack: {
-                  screens: {
-                    TabNav_ProfileStack: 'profile',
-                    TabNav_TicketingStack: {
-                      screens: {
-                        Ticketing_RootScreen: {
-                          screens: {
-                            TicketTabNav_ActiveFareProductsTabScreen:
-                              'ticketing',
+        <LoadingScreenBoundary>
+          <NavigationContainer<RootStackParamList>
+            onStateChange={trackNavigation}
+            ref={navRef}
+            theme={ReactNavigationTheme}
+            fallback={<LoadingScreen />}
+            linking={{
+              prefixes: [`${APP_SCHEME}://`],
+              config: {
+                screens: {
+                  Root_TabNavigatorStack: {
+                    screens: {
+                      TabNav_ProfileStack: 'profile',
+                      TabNav_TicketingStack: {
+                        screens: {
+                          Ticketing_RootScreen: {
+                            screens: {
+                              TicketTabNav_ActiveFareProductsTabScreen:
+                                'ticketing',
+                            },
                           },
                         },
                       },
@@ -196,46 +198,44 @@ export const RootStack = () => {
                   },
                 },
               },
-            },
-            getStateFromPath(path, config) {
-              // If the path is not from the widget, behave as usual
-              if (!path.includes('widget')) {
-                return getStateFromPath(path, config);
-              }
+              getStateFromPath(path, config) {
+                // If the path is not from the widget, behave as usual
+                if (!path.includes('widget')) {
+                  return getStateFromPath(path, config);
+                }
 
-              // User get redirected to add new favorite departure
-              if (path.includes('addFavoriteDeparture')) {
-                return {
-                  routes: [
-                    {
-                      name: 'Root_TabNavigatorStack',
-                      state: {
-                        routes: [
-                          {
-                            name: 'TabNav_DashboardStack',
-                            state: {
-                              routes: [
-                                {name: 'Dashboard_RootScreen', index: 0},
-                                {
-                                  name: 'Dashboard_NearbyStopPlacesScreen',
-                                  params: {mode: 'Favourite'},
-                                },
-                              ],
+                // User get redirected to add new favorite departure
+                if (path.includes('addFavoriteDeparture')) {
+                  return {
+                    routes: [
+                      {
+                        name: 'Root_TabNavigatorStack',
+                        state: {
+                          routes: [
+                            {
+                              name: 'TabNav_DashboardStack',
+                              state: {
+                                routes: [
+                                  {name: 'Dashboard_RootScreen', index: 0},
+                                  {
+                                    name: 'Dashboard_NearbyStopPlacesScreen',
+                                    params: {mode: 'Favourite'},
+                                  },
+                                ],
+                              },
                             },
-                          },
-                        ],
+                          ],
+                        },
                       },
-                    },
-                  ],
-                } as ResultState;
-              }
+                    ],
+                  } as ResultState;
+                }
 
-              // Get redirected to the preferred departures view
-              return getResultStateFromPath(path);
-            },
-          }}
-        >
-          <LoadingScreenBoundary>
+                // Get redirected to the preferred departures view
+                return getResultStateFromPath(path);
+              },
+            }}
+          >
             <Stack.Navigator
               screenOptions={{
                 headerShown: false,
@@ -383,8 +383,8 @@ export const RootStack = () => {
                 />
               </Stack.Group>
             </Stack.Navigator>
-          </LoadingScreenBoundary>
-        </NavigationContainer>
+          </NavigationContainer>
+        </LoadingScreenBoundary>
       </Host>
     </>
   );
