@@ -251,6 +251,12 @@ const FareContractTexts = {
         `Ticket is valid on ${transportModes}`,
         `Billetten gjeld ${transportModes}`,
       ),
+    a11yLabelWithCustomText: (transportModes: string, customText: string) =>
+      _(
+        `Billetten gjelder ${transportModes}, produktgruppen heter ${customText}`,
+        `Ticket is valid on ${transportModes}, product group is called ${customText}`,
+        `Billetten gjeld ${transportModes}, produktgruppa heiter ${customText}`,
+      ),
     a11yLabelMultipleTravelModes: (count: number) =>
       _(
         `Totalt ${count} reisemåter`,

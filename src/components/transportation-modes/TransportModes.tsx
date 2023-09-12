@@ -64,6 +64,7 @@ export const TransportModes = ({
   textType,
   textColor,
   style,
+  customTransportModeText,
 }: {
   modes: TransportModePair[];
   iconSize?: keyof Theme['icon']['size'];
@@ -71,6 +72,7 @@ export const TransportModes = ({
   textType?: TextNames;
   textColor?: TextColor;
   style?: ViewStyle;
+  customTransportModeText?: string;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -113,10 +115,15 @@ export const TransportModes = ({
         type={textType ?? 'label__uppercase'}
         color={textColor ?? 'secondary'}
         accessibilityLabel={t(
-          FareContractTexts.transportModes.a11yLabel(transportModeText),
+          customTransportModeText
+            ? FareContractTexts.transportModes.a11yLabelWithCustomText(
+                transportModeText,
+                customTransportModeText,
+              )
+            : FareContractTexts.transportModes.a11yLabel(transportModeText),
         )}
       >
-        {transportModeText}
+        {customTransportModeText ? customTransportModeText : transportModeText}
       </ThemeText>
     </View>
   );
