@@ -14,12 +14,14 @@ export const LoadingScreen = React.memo(() => {
       style={styles.container}
       accessible={true}
       accessibilityLabel={t(dictionary.loading)}
+      testID="loadingScreen"
     >
       <ActivityIndicator size="large" />
       <ThemeText
         style={styles.loadingText}
         type="body__primary"
         color={themeColor}
+        testID="loadingScreenText"
       >
         {t(dictionary.loading)}
       </ThemeText>
