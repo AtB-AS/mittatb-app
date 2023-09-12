@@ -1,4 +1,4 @@
-import {useAnnouncements} from '@atb/announcements/use-announcements';
+import {useAnnouncementsState} from '@atb/announcements';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -8,11 +8,11 @@ import {SectionHeading} from './SectionHeading';
 import {StyleSheet} from '@atb/theme';
 
 export const Announcements = () => {
-  const {isLoading, error, announcements} = useAnnouncements();
+  const {announcements} = useAnnouncementsState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const style = useStyle();
 
-  if (isLoading || !!error) return null;
+  if (announcements.length === 0) return null;
 
   return (
     <>
