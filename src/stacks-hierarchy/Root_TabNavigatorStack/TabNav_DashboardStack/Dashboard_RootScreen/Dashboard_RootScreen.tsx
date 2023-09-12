@@ -189,8 +189,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
       >
-        <View style={[style.contentSection, style.searchHeader]}>
-          <Section>
+        <View style={style.searchHeader}>
+          <Section style={style.contentSection}>
             <LocationInputSectionItem
               accessibilityLabel={
                 t(TripSearchTexts.location.departurePicker.a11yLabel) +
@@ -435,6 +435,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   favoriteChips: {
     marginTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
   searchHeader: {
     marginTop: 0,

@@ -110,7 +110,6 @@ export function LocationSearchContent({
     <>
       <View style={styles.header}>
         <ScreenReaderAnnouncement message={errorMessage} />
-
         <View style={styles.contentBlock}>
           <TextInputSectionItem
             radius="top-bottom"
@@ -125,15 +124,15 @@ export function LocationSearchContent({
             autoFocus={!a11yContext.isScreenReaderEnabled}
             testID="locationSearchInput"
           />
-
-          <FavoriteChips
-            onSelectLocation={onSelect}
-            onMapSelection={onMapSelection}
-            chipTypes={favoriteChipTypes}
-            style={styles.chipBox}
-            onAddFavorite={onAddFavorite}
-          />
         </View>
+
+        <FavoriteChips
+          style={styles.chipBox}
+          onSelectLocation={onSelect}
+          onMapSelection={onMapSelection}
+          chipTypes={favoriteChipTypes}
+          onAddFavorite={onAddFavorite}
+        />
       </View>
 
       {error && (
@@ -198,9 +197,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   chipBox: {
     marginTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
   contentBlock: {
-    paddingHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
   marginTop: {
     marginTop: theme.spacings.medium,
