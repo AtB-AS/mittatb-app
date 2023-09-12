@@ -1,324 +1,218 @@
-import React from 'react';
-import {View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
+import {EstimatedCall} from '@atb/api/types/departures';
+import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
+import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {getTransportModeSvg} from '@atb/components/icon-box';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {
-  CancelledDepartureTexts,
-  dictionary,
-  FavoriteDeparturesTexts,
-  Language,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
-import {
-  formatLocaleTime,
-  formatToClockOrLongRelativeMinutes,
-  formatToClockOrRelativeMinutes,
-  formatToSimpleDate,
-} from '@atb/utils/date';
-import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import {
-  TransportMode,
-  TransportSubmode,
-} from '@atb/api/types/generated/journey_planner_v3_types';
-import {Mode as Mode_v2} from '@atb/api/types/generated/journey_planner_v3_types';
-import {EstimatedCall, Quay, StopPlace} from '@atb/api/types/departures';
-import {useFontScale} from '@atb/utils/use-font-scale';
-import {StyleSheet, useTheme} from '@atb/theme';
-import DeparturesTexts from '@atb/translations/screens/Departures';
-import {isToday, parseISO} from 'date-fns';
-import {
   FavouriteDepartureToggle,
-  useOnMarkFavouriteDepartures,
+  StoredFavoriteDeparture,
 } from '@atb/favorites';
-import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
-import {SvgProps} from 'react-native-svg';
 import {
   getSituationOrNoticeA11yLabel,
   getSvgForMostCriticalSituationOrNotice,
 } from '@atb/situations';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
-  getNoticesForEstimatedCall,
-  getTimeRepresentationType,
-} from '@atb/travel-details-screens/utils';
-import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
-import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+  CancelledDepartureTexts,
+  dictionary,
+  Language,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
+import DeparturesTexts from '@atb/translations/screens/Departures';
+import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
+import {
+  formatLocaleTime,
+  formatToClockOrLongRelativeMinutes,
+  formatToClockOrRelativeMinutes,
+  secondsBetween,
+} from '@atb/utils/date';
+import {useFontScale} from '@atb/utils/use-font-scale';
+import {useTransportationColor} from '@atb/utils/use-transportation-color';
+import React, {memo} from 'react';
+import {View} from 'react-native';
+import {GenericClickableSectionItem} from '@atb/components/sections';
+import {isDefined} from '@atb/utils/presence';
+import {StopPlacesMode} from '@atb/nearby-stop-places';
 
-type EstimatedCallItemProps = {
-  departure: EstimatedCall;
-  testID: string;
-  quay: Quay;
-  stopPlace: StopPlace;
-  navigateToDetails?: (
-    serviceJourneyId: string,
-    serviceDate: string,
-    date?: string,
-    fromQuayId?: string,
-    isTripCancelled?: boolean,
-  ) => void;
-  allowFavouriteSelection: boolean;
-  addedFavoritesVisibleOnDashboard?: boolean;
+export type EstimatedCallItemProps = {
+  secondsUntilDeparture: number;
   mode: StopPlacesMode;
+  departure: EstimatedCall;
+  existingFavorite?: StoredFavoriteDeparture;
+  onPressDetails: (departure: EstimatedCall) => void;
+  onPressFavorite: (
+    departure: EstimatedCall,
+    existingFavorite?: StoredFavoriteDeparture,
+  ) => void;
+  showBottomBorder: boolean;
 };
 
-export function EstimatedCallItem({
-  departure,
-  testID,
-  quay,
-  stopPlace,
-  navigateToDetails,
-  allowFavouriteSelection,
-  addedFavoritesVisibleOnDashboard,
-  mode,
-}: EstimatedCallItemProps): JSX.Element {
-  const {t, language} = useTranslation();
-  const styles = useStyles();
+export const EstimatedCallItem = memo(
+  ({
+    departure,
+    mode,
+    onPressDetails,
+    onPressFavorite,
+    existingFavorite,
+    showBottomBorder,
+  }: EstimatedCallItemProps): JSX.Element => {
+    const styles = useStyles();
+    const {t, language} = useTranslation();
 
-  const line = departure.serviceJourney?.line;
+    const onPress =
+      mode === 'Favourite'
+        ? () => onPressFavorite(departure, existingFavorite)
+        : () => onPressDetails(departure);
 
-  const isTripCancelled = departure.cancellation;
+    const a11yLabel =
+      mode === 'Favourite'
+        ? getLineA11yLabel(departure, t)
+        : getLineAndTimeA11yLabel(departure, t, language);
 
-  const lineName = departure.destinationDisplay?.frontText;
-  const lineNumber = line?.publicCode;
+    const a11yHint =
+      mode === 'Favourite'
+        ? t(DeparturesTexts.a11yMarkFavouriteHint)
+        : t(DeparturesTexts.a11yViewDepartureDetailsHint);
 
-  const notices = getNoticesForEstimatedCall(departure);
-
-  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
-    useOnMarkFavouriteDepartures(
-      {...line, lineNumber: lineNumber, lineName: lineName},
-      quay,
-      stopPlace,
-      addedFavoritesVisibleOnDashboard,
-    );
-  return (
-    <PressableOpacityOrView
-      onClick={mode === 'Favourite' ? onMarkFavourite : undefined}
-      style={styles.container}
-      accessibilityLabel={
-        mode === 'Favourite' ? getLineA11yLabel(departure, t) : undefined
-      }
-      accessibilityHint={
-        mode === 'Favourite'
-          ? t(FavoriteDeparturesTexts.a11yMarkFavouriteHint)
-          : undefined
-      }
-    >
-      <PressableOpacity
-        style={styles.actionableItem}
-        disabled={!navigateToDetails}
-        onPress={() => {
-          if (navigateToDetails && departure?.serviceJourney) {
-            navigateToDetails(
-              departure.serviceJourney?.id,
-              departure.date,
-              departure.aimedDepartureTime,
-              departure.quay?.id,
-              departure.cancellation,
-            );
-          }
-        }}
-        accessible={!!navigateToDetails}
-        importantForAccessibility={!!navigateToDetails ? 'yes' : 'no'}
-        accessibilityHint={
-          navigateToDetails
-            ? t(DeparturesTexts.a11yViewDepartureDetailsHint)
-            : undefined
-        }
-        accessibilityLabel={
-          navigateToDetails
-            ? getA11yDeparturesLabel(departure, notices, t, language)
-            : undefined
-        }
+    return (
+      <GenericClickableSectionItem
+        radius={showBottomBorder ? 'bottom' : undefined}
+        onPress={onPress}
+        accessible={true}
+        accessibilityLabel={a11yLabel}
+        accessibilityHint={a11yHint}
       >
-        <View style={styles.estimatedCallItem} testID={testID}>
-          <View style={styles.transportInfo}>
-            {line && (
-              <LineChip
-                publicCode={line.publicCode}
-                transportMode={line.transportMode}
-                transportSubmode={line.transportSubmode}
-                icon={
-                  mode !== 'Favourite'
-                    ? getSvgForMostCriticalSituationOrNotice(
-                        departure.situations,
-                        notices,
-                        departure.cancellation,
-                      )
-                    : undefined
+        <View style={styles.container}>
+          <View style={styles.estimatedCallItem}>
+            <View style={styles.transportInfo}>
+              <LineChip departure={departure} mode={mode} />
+              <ThemeText style={styles.lineName}>
+                {departure.destinationDisplay?.frontText}
+              </ThemeText>
+            </View>
+            {mode !== 'Favourite' && <DepartureTime departure={departure} />}
+            {mode !== 'Map' && (
+              <FavouriteDepartureToggle
+                existingFavorite={existingFavorite}
+                onMarkFavourite={() =>
+                  onPressFavorite(departure, existingFavorite)
                 }
-                testID={testID}
               />
             )}
-            <ThemeText style={styles.lineName} testID={testID + 'Name'}>
-              {departure.destinationDisplay?.frontText}
-            </ThemeText>
           </View>
-          {mode === 'Departure' || mode === 'Map' ? (
-            <DepartureTime
-              isRealtime={departure.realtime}
-              isTripCancelled={isTripCancelled}
-              expectedTime={departure.expectedDepartureTime}
-              aimedTime={departure.aimedDepartureTime}
-              testID={testID}
-            />
-          ) : null}
-          {allowFavouriteSelection && (
-            <FavouriteDepartureToggle
-              existingFavorite={existingFavorite}
-              onMarkFavourite={
-                mode === 'Departure' ? onMarkFavourite : undefined
-              }
-              toggleFavouriteAccessibilityLabel={
-                mode === 'Departure'
-                  ? toggleFavouriteAccessibilityLabel
-                  : undefined
-              }
-            />
-          )}
         </View>
-      </PressableOpacity>
-    </PressableOpacityOrView>
-  );
-}
+      </GenericClickableSectionItem>
+    );
+  },
+  (prev, next) => {
+    const prevMinutesUntilDeparture = prev.secondsUntilDeparture % 60;
+    const nextMinutesUntilDeparture = next.secondsUntilDeparture % 60;
+    if (
+      nextMinutesUntilDeparture < 10 &&
+      prevMinutesUntilDeparture !== nextMinutesUntilDeparture
+    ) {
+      // Rerender the item if the relative departure time is changed
+      return false;
+    }
 
-const DepartureTime = ({
-  isTripCancelled,
-  expectedTime,
-  aimedTime,
-  testID,
-  isRealtime,
-}: {
-  isTripCancelled: boolean;
-  expectedTime: string;
-  aimedTime: string;
-  testID: string;
-  isRealtime: boolean;
-}) => {
-  const styles = useStyles();
+    if (prev.departure.situations.length !== next.departure.situations.length)
+      return false;
+    if (prev.existingFavorite?.id !== next.existingFavorite?.id) return false;
+    if (prev.showBottomBorder !== next.showBottomBorder) return false;
+    if (
+      prev.departure.expectedDepartureTime !==
+      next.departure.expectedDepartureTime
+    )
+      return false;
+    if (
+      prev.departure.destinationDisplay?.frontText !==
+      next.departure.destinationDisplay?.frontText
+    )
+      return false;
+    if (prev.departure.realtime !== next.departure.realtime) return false;
+    if (prev.departure.cancellation !== next.departure.cancellation)
+      return false;
+    return true;
+  },
+);
+
+const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
   const {t, language} = useTranslation();
+  const styles = useStyles();
   const {themeName} = useTheme();
 
-  const timeRepresentationType = getTimeRepresentationType({
-    expectedTime: expectedTime,
-    aimedTime: aimedTime,
-    missingRealTime: !isRealtime,
-  });
-  const readableExpectedTime = formatToClockOrRelativeMinutes(
-    expectedTime,
-    language,
-    t(dictionary.date.units.now),
-  );
-  const readableAimedTime = formatLocaleTime(aimedTime, language);
-  const ExpectedText = (
-    <ThemeText
-      type="body__primary--bold"
-      testID={testID + 'Time'}
-      style={isTripCancelled && styles.strikethrough}
-    >
-      {readableExpectedTime}
-    </ThemeText>
-  );
-  const RealtimeWithIcon = (
-    <View style={styles.realtime}>
-      <ThemeIcon
-        style={styles.realtimeIcon}
-        svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-        size={'small'}
-      ></ThemeIcon>
-      {ExpectedText}
+  return (
+    <View>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        {departure.realtime && (
+          <ThemeIcon
+            style={styles.realtimeIcon}
+            svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
+            size={'small'}
+          />
+        )}
+        <ThemeText
+          type="body__primary--bold"
+          style={departure.cancellation && styles.strikethrough}
+        >
+          {formatToClockOrRelativeMinutes(
+            departure.expectedDepartureTime,
+            language,
+            t(dictionary.date.units.now),
+          )}
+        </ThemeText>
+      </View>
+      {isMoreThanOneMinuteDelayed(departure) && (
+        <ThemeText
+          type="body__tertiary--strike"
+          color={'secondary'}
+          style={styles.aimedTime}
+        >
+          {formatLocaleTime(departure.aimedDepartureTime, language)}
+        </ThemeText>
+      )}
     </View>
   );
-  switch (timeRepresentationType) {
-    case 'significant-difference':
-      return (
-        <View style={styles.delayedRealtime}>
-          {RealtimeWithIcon}
-          <View style={styles.aimedTimeContainer}>
-            <ThemeText
-              type="body__tertiary--strike"
-              color={'secondary'}
-              testID={testID + 'Time'}
-              style={styles.aimedTime}
-            >
-              {readableAimedTime}
-            </ThemeText>
-          </View>
-        </View>
-      );
-    case 'no-significant-difference':
-      return RealtimeWithIcon;
-    case 'no-realtime':
-      return ExpectedText;
-  }
 };
 
-function getA11yDeparturesLabel(
+export function getLineAndTimeA11yLabel(
   departure: EstimatedCall,
-  notices: NoticeFragment[],
   t: TranslateFunction,
   language: Language,
 ) {
-  let a11yDateInfo = '';
-  if (departure.expectedDepartureTime) {
-    const a11yClockExpected = formatToClockOrLongRelativeMinutes(
+  return [
+    departure.cancellation ? t(CancelledDepartureTexts.message) : undefined,
+    getLineA11yLabel(departure, t),
+    getSituationOrNoticeA11yLabel(
+      departure.situations,
+      getNoticesForEstimatedCall(departure),
+      departure.cancellation,
+      t,
+    ),
+    departure.realtime
+      ? t(dictionary.a11yRealTimePrefix)
+      : t(dictionary.a11yRouteTimePrefix),
+    formatToClockOrLongRelativeMinutes(
       departure.expectedDepartureTime,
       language,
       t(dictionary.date.units.now),
       9,
-    );
-    const a11yClockAimed = formatLocaleTime(
-      departure.aimedDepartureTime,
-      language,
-    );
-    const timeRepresentationType = getTimeRepresentationType({
-      expectedTime: departure.expectedDepartureTime,
-      aimedTime: departure.aimedDepartureTime,
-      missingRealTime: !departure.realtime,
-    });
-    let a11yTimeWithRealtimePrefix;
-    switch (timeRepresentationType) {
-      case 'significant-difference':
-        a11yTimeWithRealtimePrefix =
-          t(dictionary.a11yRealTimePrefix) +
-          a11yClockExpected +
-          ',' +
-          t(dictionary.a11yRouteTimePrefix) +
-          a11yClockAimed;
-        break;
-      case 'no-significant-difference':
-        a11yTimeWithRealtimePrefix =
-          t(dictionary.a11yRealTimePrefix) + a11yClockExpected;
-        break;
-      case 'no-realtime':
-        a11yTimeWithRealtimePrefix =
-          t(dictionary.a11yRouteTimePrefix) + a11yClockExpected;
-    }
-    const parsedDepartureTime = parseISO(departure.expectedDepartureTime);
-    const a11yDate = !isToday(parsedDepartureTime)
-      ? formatToSimpleDate(parsedDepartureTime, language) + ','
-      : '';
-    a11yDateInfo = `${a11yDate} ${a11yTimeWithRealtimePrefix}`;
-  }
-
-  const a11yWarning = getSituationOrNoticeA11yLabel(
-    departure.situations,
-    notices,
-    departure.cancellation,
-    t,
-  );
-
-  return `${
-    departure.cancellation ? t(CancelledDepartureTexts.message) : ''
-  } ${getLineA11yLabel(departure, t)} ${
-    a11yWarning ? a11yWarning + ',' : ''
-  } ${a11yDateInfo}`;
+    ),
+    isMoreThanOneMinuteDelayed(departure)
+      ? t(dictionary.a11yRouteTimePrefix) +
+        formatLocaleTime(departure.aimedDepartureTime, language)
+      : undefined,
+  ]
+    .filter(isDefined)
+    .join(screenReaderPause);
 }
 
-function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
+export function getLineA11yLabel(
+  departure: EstimatedCall,
+  t: TranslateFunction,
+) {
   const line = departure.serviceJourney?.line;
   const a11yLine = line?.publicCode
     ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
@@ -329,34 +223,36 @@ function getLineA11yLabel(departure: EstimatedCall, t: TranslateFunction) {
   return `${a11yLine} ${a11yFrontText}`;
 }
 
-type LineChipProps = {
-  publicCode?: string;
-  transportMode?: TransportMode;
-  transportSubmode?: TransportSubmode;
-  icon?: (props: SvgProps) => JSX.Element;
-  testID?: string;
-};
-
 function LineChip({
-  publicCode,
-  transportMode,
-  transportSubmode,
-  icon,
-  testID,
-}: LineChipProps): JSX.Element {
+  departure,
+  mode,
+}: Pick<EstimatedCallItemProps, 'departure' | 'mode'>) {
   const styles = useStyles();
   const fontScale = useFontScale();
   const {theme} = useTheme();
+  const {publicCode, transportMode, transportSubmode} =
+    departure.serviceJourney.line;
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
   const transportColor = useTransportationColor(
-    transportMode as Mode_v2 | undefined,
+    transportMode,
     transportSubmode,
   );
   const transportTextColor = useTransportationColor(
-    transportMode as Mode_v2 | undefined,
+    transportMode,
     transportSubmode,
     'text',
   );
+
+  const icon =
+    mode !== 'Favourite' &&
+    getSvgForMostCriticalSituationOrNotice(
+      departure.situations,
+      getNoticesForEstimatedCall(departure),
+      departure.cancellation,
+    );
+
+  if (!publicCode && !transportMode) return null;
+
   return (
     <View style={[styles.lineChip, {backgroundColor: transportColor}]}>
       <ThemeIcon
@@ -370,7 +266,6 @@ function LineChip({
             styles.lineChipText,
             {color: transportTextColor, minWidth: fontScale * 20},
           ]}
-          testID={testID + 'PublicCode'}
           type="body__primary--bold"
         >
           {publicCode}
@@ -381,13 +276,16 @@ function LineChip({
   );
 }
 
+const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
+  secondsBetween(
+    departure.aimedDepartureTime,
+    departure.expectedDepartureTime,
+  ) >= 60;
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-  },
-  actionableItem: {
     flex: 1,
   },
   estimatedCallItem: {
@@ -425,25 +323,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     color: theme.static.background.background_accent_3.text,
     textAlign: 'center',
   },
-  strikethrough: {
-    textDecorationLine: 'line-through',
-  },
-  delayedRealtime: {
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-  },
-  realtime: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  aimedTimeContainer: {
-    flexDirection: 'row',
-  },
-  aimedTime: {
-    flexGrow: 1,
-    textAlign: 'right',
-  },
-  warningIcon: {
-    marginRight: theme.spacings.small,
-  },
+  strikethrough: {textDecorationLine: 'line-through'},
+  realtimeAndText: {flexDirection: 'row', alignItems: 'center'},
+  realtime: {flexDirection: 'row', alignItems: 'center'},
+  aimedTime: {textAlign: 'right'},
+  warningIcon: {marginRight: theme.spacings.small},
 }));

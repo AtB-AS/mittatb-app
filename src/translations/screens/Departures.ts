@@ -94,6 +94,11 @@ const DeparturesTexts = {
     'Activate to view details',
     'Aktiver for å sjå detaljar',
   ),
+  a11yMarkFavouriteHint: _(
+    'Aktiver for å merke som favoritt',
+    'Activate to mark as favourite',
+    'Aktiver for å merke som favoritt',
+  ),
   favorites: {
     toggle: _(
       'Vis kun favorittavganger',

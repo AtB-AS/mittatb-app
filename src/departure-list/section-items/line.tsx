@@ -69,16 +69,16 @@ export function LineItem({
   const styles = useItemStyles();
   const {t, language} = useTranslation();
 
-  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
-    useOnMarkFavouriteDepartures(
-      {...group.lineInfo, id: group.lineInfo?.lineId},
-      quay,
-      stop,
-    );
+  const {onMarkFavourite, getExistingFavorite, toggleFavouriteAccessibilityLabel} =
+    useOnMarkFavouriteDepartures(quay, stop);
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
   }
+  const favouriteDepartureLine = {
+    ...group.lineInfo,
+    id: group.lineInfo?.lineId ?? '',
+  };
 
   const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
 
@@ -92,6 +92,7 @@ export function LineItem({
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
+  const existing = getExistingFavorite(favouriteDepartureLine);
 
   return (
     <View style={[topContainer, {padding: 0}]} testID={testID}>
@@ -124,11 +125,13 @@ export function LineItem({
         </PressableOpacity>
         {mode === 'departures' && (
           <FavouriteDepartureToggle
-            existingFavorite={existingFavorite}
-            onMarkFavourite={onMarkFavourite}
-            toggleFavouriteAccessibilityLabel={
-              toggleFavouriteAccessibilityLabel
+            existingFavorite={existing}
+            onMarkFavourite={() =>
+              onMarkFavourite(favouriteDepartureLine, existing)
             }
+            toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel(
+              favouriteDepartureLine,
+            )}
           />
         )}
       </View>

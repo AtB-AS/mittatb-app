@@ -127,10 +127,11 @@ export function formatToClock(
  * @param isoDate date to format as clock or relative time
  * @param minuteLimit threshold in minutes for when to show relative time
  */
+
 export function formatToClockOrRelativeMinutes(
   isoDate: string | Date,
   language: Language,
-  now: string,
+  nowText: string,
   minuteThreshold: number = 9,
 ) {
   const parsed = parseIfNeeded(isoDate);
@@ -141,7 +142,7 @@ export function formatToClockOrRelativeMinutes(
   }
 
   if (diff / 60 <= 1) {
-    return now;
+    return nowText;
   }
 
   return secondsToMinutesShort(diff, language);
