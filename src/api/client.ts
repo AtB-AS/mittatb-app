@@ -131,12 +131,8 @@ function responseErrorHandler(error: AxiosError) {
       break;
     case 'network-error':
     case 'timeout':
-      console.log(
-        'client, enable_network_logging: ',
-        !isCancel(error),
-        getBooleanConfigValue('enable_network_logging'),
-      );
       if (!isCancel(error) && getBooleanConfigValue('enable_network_logging')) {
+        // remove? as it is always false?
         const errorMetadata = getAxiosErrorMetadata(error);
         Bugsnag.notify(error, (event) => {
           event.addMetadata('api', {...errorMetadata});
