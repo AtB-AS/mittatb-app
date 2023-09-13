@@ -69,15 +69,23 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
       setFetchError(false);
     } catch (e) {
       setFetchError(true);
+      console.log(
+        'fail to fetch remote config ',
+        defaultRemoteConfig.enable_network_logging,
+      );
       if (isRemoteConfigError(e) && isUserInfo(e.userInfo)) {
         const {userInfo} = e;
 
         if (userInfo.code === 'failure' || userInfo.fatal) {
           if (defaultRemoteConfig.enable_network_logging) {
-            Bugsnag.notify(e, function (event) {
-              event.addMetadata('metadata', {userInfo});
-              event.severity = 'info';
-            });
+            console.log(
+              'defaultRemoteConfig.enable_network_logging: ' +
+                defaultRemoteConfig.enable_network_logging,
+            );
+            // Bugsnag.notify(e, function (event) {
+            //   event.addMetadata('metadata', {userInfo});
+            //   event.severity = 'info';
+            // });
           } else {
             Bugsnag.leaveBreadcrumb('Remote config fetch error', userInfo);
           }
