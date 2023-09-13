@@ -31,6 +31,7 @@ export const Announcements = ({style: containerStyle}: Props) => {
             style={i < announcements.length - 1 && style.announcement}
           >
             <GenericClickableSectionItem
+              accessibilityRole="button"
               accessibilityHint={t(
                 DashboardTexts.announcemens.button.accessibility,
               )}
