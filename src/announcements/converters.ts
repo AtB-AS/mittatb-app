@@ -17,6 +17,7 @@ export const mapToAnnouncement = (
   result: AnnouncementRaw,
 ): AnnouncementType | undefined => {
   if (!result) return;
+  if (!result.active) return;
 
   const summaryTitle = mapToLanguageAndTexts(result.summaryTitle);
   const summary = mapToLanguageAndTexts(result.summary);
