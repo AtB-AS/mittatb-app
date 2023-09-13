@@ -131,11 +131,13 @@ export const FavoriteChips: React.FC<Props> = ({
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
   const {theme} = useTheme();
+  const style = typeof props.style === 'object' ? props.style : {};
   return (
     <Button
       {...props}
       style={{
         marginRight: theme.spacings.small,
+        ...style,
       }}
       type="inline"
       compact={true}
