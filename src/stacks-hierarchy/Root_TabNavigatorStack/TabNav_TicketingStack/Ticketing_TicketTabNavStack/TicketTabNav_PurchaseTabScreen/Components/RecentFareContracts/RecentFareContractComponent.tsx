@@ -92,7 +92,11 @@ export const RecentFareContractComponent = ({
           )} ${fromZoneName}, ${toZoneName}`;
 
     const harborInfo = () => {
-      if (pointToPointValidity?.fromPlace && pointToPointValidity?.toPlace) {
+      if (
+        pointToPointValidity?.fromPlace &&
+        pointToPointValidity?.toPlace &&
+        direction
+      ) {
         const fromName =
           harborsQuery.data?.find(
             (sp) => sp.id === pointToPointValidity.fromPlace,

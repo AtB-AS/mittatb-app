@@ -14,7 +14,7 @@ export type RecentFareContract = {
   preassignedFareProduct: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
-  direction: string;
+  direction?: string;
   pointToPointValidity?: PointToPointValidity;
   userProfilesWithCount: UserProfileWithCount[];
 };
