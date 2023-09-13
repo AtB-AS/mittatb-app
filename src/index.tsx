@@ -31,6 +31,7 @@ import {LogBox, Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
+import {AnnouncementsContextProvider} from './announcements';
 
 configureAndStartBugsnag();
 
@@ -84,13 +85,15 @@ export const App = () => {
                                     <AppLanguageProvider>
                                       <GeolocationContextProvider>
                                         <GlobalMessagesContextProvider>
-                                          <ReactQueryProvider>
-                                            <BottomSheetProvider>
-                                              <FeedbackQuestionsProvider>
-                                                <RootStack />
-                                              </FeedbackQuestionsProvider>
-                                            </BottomSheetProvider>
-                                          </ReactQueryProvider>
+                                          <AnnouncementsContextProvider>
+                                            <ReactQueryProvider>
+                                              <BottomSheetProvider>
+                                                <FeedbackQuestionsProvider>
+                                                  <RootStack />
+                                                </FeedbackQuestionsProvider>
+                                              </BottomSheetProvider>
+                                            </ReactQueryProvider>
+                                          </AnnouncementsContextProvider>
                                         </GlobalMessagesContextProvider>
                                       </GeolocationContextProvider>
                                     </AppLanguageProvider>

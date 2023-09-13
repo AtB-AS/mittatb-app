@@ -8,7 +8,6 @@ import {FareProductTile} from './FareProductTile';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {TransportModes} from '@atb/components/transportation-modes';
-import {ThemeText} from '@atb/components/text';
 
 type Props = {
   heading?: string | undefined;
@@ -40,11 +39,14 @@ export const FareProductGroup = ({
   return (
     <View>
       {heading ? (
-        <ThemeText style={styles.heading}>{heading}</ThemeText>
-      ) : transportModes.length === 0 ? (
-        <ThemeText style={styles.heading}>
-          {t(FareContractTexts.otherFareContracts)}
-        </ThemeText>
+        <TransportModes
+          modes={transportModes}
+          iconSize={'small'}
+          style={styles.heading}
+          textType={'body__secondary'}
+          textColor={'primary'}
+          customTransportModeText={heading}
+        />
       ) : (
         <TransportModes
           modes={transportModes}
@@ -52,6 +54,11 @@ export const FareProductGroup = ({
           style={styles.heading}
           textType={'body__secondary'}
           textColor={'primary'}
+          customTransportModeText={
+            transportModes.length === 0
+              ? t(FareContractTexts.otherFareContracts)
+              : undefined
+          }
         />
       )}
       {groupedConfigs.map(([firstConfig, secondConfig], i) => (

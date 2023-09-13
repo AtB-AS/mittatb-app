@@ -162,7 +162,7 @@ export type Offer = {
 export type OfferSearchResponse = Offer[];
 
 export type RecentFareContractBackend = {
-  order_id: string;
+  direction?: string;
   products: string[];
   zones: string[];
   users: {
