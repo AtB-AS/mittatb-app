@@ -12,7 +12,12 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {dateWithReplacedTime, formatLocaleTime} from '@atb/utils/date';
+import {MessageBox} from '@atb/components/message-box';
+import {
+  dateWithReplacedTime,
+  formatLocaleTime,
+  formatToVerboseFullDate,
+} from '@atb/utils/date';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -23,10 +28,11 @@ type Props = {
   travelDate?: string;
   close: () => void;
   save: (dateString?: string) => void;
+  maximumDate?: Date;
 };
 
 export const TravelDateSheet = forwardRef<ScrollView, Props>(
-  ({travelDate, close, save}, focusRef) => {
+  ({travelDate, close, save, maximumDate}, focusRef) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
 
@@ -61,8 +67,23 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
           ref={focusRef}
           centerContent={true}
         >
+          {maximumDate && (
+            <MessageBox
+              type="info"
+              message={t(
+                TravelDateTexts.latestActivationDate.warning(
+                  formatToVerboseFullDate(maximumDate, language),
+                ),
+              )}
+            />
+          )}
+
           <Section>
-            <DateInputSectionItem value={dateString} onChange={setDate} />
+            <DateInputSectionItem
+              value={dateString}
+              onChange={setDate}
+              maximumDate={maximumDate}
+            />
             <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
         </ScrollView>

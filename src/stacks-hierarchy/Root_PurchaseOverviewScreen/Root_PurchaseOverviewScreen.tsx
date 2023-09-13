@@ -83,6 +83,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     travellerSelection,
     travelDate,
   );
+
+  const maximumDateObjectIfExisting = preassignedFareProduct.limitations
+    ?.latestActivationDate
+    ? new Date(
+        Number(preassignedFareProduct.limitations.latestActivationDate) * 1000,
+      )
+    : undefined;
+
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
     userProfilesWithCountAndOffer.some((u) => u.count);
@@ -182,6 +190,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             travelDate={travelDate}
             setTravelDate={setTravelDate}
             validFromTime={travelDate}
+            maximumDate={maximumDateObjectIfExisting}
             style={styles.selectionComponent}
           />
 
