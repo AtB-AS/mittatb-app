@@ -106,6 +106,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xLarge,
     textAlign: 'center',
   },
-  description: {marginTop: theme.spacings.medium},
+  description: {marginVertical: theme.spacings.medium},
   customerServiceButton: {marginTop: theme.spacings.medium},
 }));
