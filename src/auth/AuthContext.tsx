@@ -3,6 +3,7 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
@@ -24,6 +25,7 @@ import {
 } from './auth-utils';
 import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
 import {useCheckIfAccountCreationFinished} from './use-check-if-account-creation-finished';
+import {useSetErrorStatusIfLoadingTooLong} from '@atb/auth/use-set-error-status-if-loading-too-long';
 
 type AuthReducerState = {
   user: FirebaseAuthTypes.User | null;
@@ -120,10 +122,20 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
   useSubscribeToAuthUserChange(dispatch);
+  useSetErrorStatusIfLoadingTooLong(state.authStatus, dispatch);
   useFetchCustomerDataAfterUserChanged(state.user, dispatch);
   useCheckIfAccountCreationFinished(state.user, state.authStatus, dispatch);
 
   useUpdateAuthLanguageOnChange();
+
+  const retryAuth = useCallback(() => {
+    if (!state.user) {
+      dispatch({type: 'SET_AUTH_STATUS', authStatus: 'loading'});
+    } else {
+      // If a user is set, then the only known error state is when account creation fails
+      dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'});
+    }
+  }, [state.user?.uid]);
 
   return (
     <AuthContext.Provider
@@ -147,12 +159,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         }, []),
         authenticationType: getAuthenticationType(state.user),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
-        retryAuth: useCallback(
-          () =>
-            // As of now the only known error state is when account creation fails
-            dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'}),
-          [state.user?.uid],
-        ),
+        retryAuth,
       }}
     >
       {children}
