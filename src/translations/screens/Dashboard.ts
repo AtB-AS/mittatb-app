@@ -12,9 +12,9 @@ const DashboardTexts = {
     header: _('Aktuelt', 'Announcements', 'Aktuelt'),
     button: {
       accessibility: _(
-        'Trykk for å lese mer',
-        'Press to read more',
-        'Trykk for å lese meir',
+        'Aktiver for å lese mer',
+        'Activate to read more',
+        'Aktiver for å lese meir',
       ),
     },
   },
