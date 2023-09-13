@@ -3,7 +3,6 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
