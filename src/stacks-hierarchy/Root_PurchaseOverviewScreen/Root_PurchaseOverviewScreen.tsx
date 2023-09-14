@@ -26,7 +26,6 @@ import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {isAfter} from '@atb/utils/date';
-import {formatISO} from 'date-fns';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -54,7 +53,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       preassignedFareProduct: fp,
     });
     if (fp.limitations.latestActivationDate && travelDate) {
-      if (isAfter(travelDate, formatISO(fp.limitations.latestActivationDate)))
+      if (
+        isAfter(
+          travelDate,
+          new Date(fp.limitations.latestActivationDate * 1000),
+        )
+      )
         setTravelDate(undefined);
     }
   };
