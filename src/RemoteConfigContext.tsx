@@ -73,15 +73,7 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
         const {userInfo} = e;
 
         if (userInfo.code === 'failure' || userInfo.fatal) {
-          if (defaultRemoteConfig.enable_network_logging) {
-            // remove? as it's always false
-            Bugsnag.notify(e, function (event) {
-              event.addMetadata('metadata', {userInfo});
-              event.severity = 'info';
-            });
-          } else {
-            Bugsnag.leaveBreadcrumb('Remote config fetch error', userInfo);
-          }
+          Bugsnag.leaveBreadcrumb('Remote config fetch error', userInfo);
         }
       } else {
         Bugsnag.notify(e as any);
