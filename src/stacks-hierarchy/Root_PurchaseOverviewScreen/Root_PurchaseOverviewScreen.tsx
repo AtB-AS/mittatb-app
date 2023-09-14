@@ -25,6 +25,8 @@ import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
+import {isAfter} from '@atb/utils/date';
+import {formatISO} from 'date-fns';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -51,6 +53,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     navigation.setParams({
       preassignedFareProduct: fp,
     });
+    if (fp.limitations.latestActivationDate && travelDate) {
+      if (isAfter(travelDate, formatISO(fp.limitations.latestActivationDate)))
+        setTravelDate(undefined);
+    }
   };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
