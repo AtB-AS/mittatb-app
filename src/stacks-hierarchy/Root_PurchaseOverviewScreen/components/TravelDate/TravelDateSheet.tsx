@@ -68,17 +68,16 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
           centerContent={true}
         >
           {maximumDate && (
-            <Section withBottomPadding>
-              <MessageBox
-                type="info"
-                subtle
-                message={t(
-                  TravelDateTexts.latestActivationDate.warning(
-                    formatToVerboseFullDate(maximumDate, language),
-                  ),
-                )}
-              />
-            </Section>
+            <MessageBox
+              type="info"
+              style={styles.messageBox}
+              subtle
+              message={t(
+                TravelDateTexts.latestActivationDate.warning(
+                  formatToVerboseFullDate(maximumDate, language),
+                ),
+              )}
+            />
           )}
 
           <Section>
@@ -115,5 +114,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   saveButton: {
     marginTop: theme.spacings.medium,
+  },
+  messageBox: {
+    marginBottom: theme.spacings.large,
   },
 }));
