@@ -19,6 +19,7 @@ type StartTimeSelectionProps = {
   validFromTime?: string;
   travelDate?: string;
   selectionMode: TimeSelectionMode;
+  maximumDate?: Date;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -28,6 +29,7 @@ export function StartTimeSelection({
   validFromTime,
   travelDate,
   selectionMode,
+  maximumDate,
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
@@ -44,6 +46,7 @@ export function StartTimeSelection({
         close={closeBottomSheet}
         save={setTravelDate}
         travelDate={travelDate}
+        maximumDate={maximumDate}
         ref={onOpenFocusRef}
       />
     ));
