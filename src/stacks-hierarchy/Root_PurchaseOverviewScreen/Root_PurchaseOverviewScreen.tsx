@@ -54,7 +54,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
       preassignedFareProduct: fp,
     });
     if (fp.limitations.latestActivationDate && travelDate) {
-      if (isAfter(travelDate, formatISO(fp.limitations.latestActivationDate)))
+      if (
+        isAfter(
+          travelDate,
+          new Date(fp.limitations.latestActivationDate * 1000),
+        )
+      )
         setTravelDate(undefined);
     }
   };
