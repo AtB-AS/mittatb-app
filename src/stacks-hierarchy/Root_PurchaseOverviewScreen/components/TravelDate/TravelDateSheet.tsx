@@ -68,14 +68,17 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
           centerContent={true}
         >
           {maximumDate && (
-            <MessageBox
-              type="info"
-              message={t(
-                TravelDateTexts.latestActivationDate.warning(
-                  formatToVerboseFullDate(maximumDate, language),
-                ),
-              )}
-            />
+            <Section withBottomPadding>
+              <MessageBox
+                type="info"
+                subtle
+                message={t(
+                  TravelDateTexts.latestActivationDate.warning(
+                    formatToVerboseFullDate(maximumDate, language),
+                  ),
+                )}
+              />
+            </Section>
           )}
 
           <Section>

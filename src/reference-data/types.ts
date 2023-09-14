@@ -19,7 +19,7 @@ export type PreassignedFareProduct = {
     userProfileRefs: string[];
     appVersionMin: string | undefined;
     appVersionMax: string | undefined;
-    latestActivationDate?: string;
+    latestActivationDate?: number;
   };
 };
 

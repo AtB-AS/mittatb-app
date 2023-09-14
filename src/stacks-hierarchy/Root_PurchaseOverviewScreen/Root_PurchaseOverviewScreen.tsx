@@ -86,9 +86,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const maximumDateObjectIfExisting = preassignedFareProduct.limitations
     ?.latestActivationDate
-    ? new Date(
-        Number(preassignedFareProduct.limitations.latestActivationDate) * 1000,
-      )
+    ? new Date(preassignedFareProduct.limitations.latestActivationDate * 1000)
     : undefined;
 
   const hasSelection =
