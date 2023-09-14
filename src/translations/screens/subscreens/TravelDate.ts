@@ -13,5 +13,13 @@ const TravelDateTexts = {
     ),
   },
   primaryButton: _('Bekreft valg', 'Confirm selection', 'Bekreft val'),
+  latestActivationDate: {
+    warning: (latestActivationDate: string) =>
+      _(
+        `Billetten må aktiveres senest ${latestActivationDate}.`,
+        `This ticket must be activated by ${latestActivationDate}.`,
+        `Billetten må aktiverast seinast ${latestActivationDate}.`,
+      ),
+  },
 };
 export default TravelDateTexts;

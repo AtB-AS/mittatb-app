@@ -9,7 +9,7 @@ import {DateInputSectionItemProps} from './utils';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
 export function DateInputSectionItem(props: DateInputSectionItemProps) {
-  const {value, onChange, ...innerprops} = props;
+  const {value, onChange, maximumDate, ...innerprops} = props;
   const {t} = useTranslation();
   const locale = useLocaleContext();
   const {theme} = useTheme();
@@ -39,6 +39,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
         display="compact"
         testID="dateInput"
         minimumDate={new Date()}
+        maximumDate={maximumDate}
         onChange={(_, date) => {
           if (date) onChange(date.toISOString());
         }}
