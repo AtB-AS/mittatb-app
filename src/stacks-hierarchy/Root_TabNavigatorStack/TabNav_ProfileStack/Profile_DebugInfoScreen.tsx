@@ -217,16 +217,6 @@ export const Profile_DebugInfoScreen = () => {
           />
 
           <LinkSectionItem
-            text="Reset has read filter onboarding"
-            onPress={() =>
-              storage.set(
-                StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
-                JSON.stringify(false),
-              )
-            }
-          />
-
-          <LinkSectionItem
             text="Reset travel search filters"
             onPress={() =>
               storage.set('@ATB_user_travel_search_filters_v2', '')
