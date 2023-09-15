@@ -35,7 +35,6 @@ export type DashboardStackParams = {
   Dashboard_JourneyDatePickerScreen: JourneyDatePickerScreenParams;
   Dashboard_FavoriteDeparturesScreen: undefined;
   Dashboard_NearbyStopPlacesScreen: Dashboard_NearbyStopPlacesScreenParams;
-  Dashboard_TravelSearchFilterOnboardingScreen: undefined;
 };
 
 export type RootDashboardScreenProps =
