@@ -2,7 +2,6 @@ import remoteConfig from '@react-native-firebase/remote-config';
 import {ENABLE_TICKETING, PRIVACY_POLICY_URL} from '@env';
 
 export type RemoteConfig = {
-  enable_network_logging: boolean;
   enable_ticketing: boolean;
   enable_intercom: boolean;
   enable_period_tickets: boolean;
@@ -49,7 +48,6 @@ export type RemoteConfig = {
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
-  enable_network_logging: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
   enable_period_tickets: false,
@@ -103,8 +101,6 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
-  const enable_network_logging =
-    values['enable_network_logging']?.asBoolean() ?? true;
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
   const enable_intercom = values['enable_intercom']?.asBoolean() ?? true;
   const enable_period_tickets =
@@ -261,7 +257,6 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_loading_screen;
 
   return {
-    enable_network_logging,
     enable_ticketing,
     enable_intercom,
     enable_period_tickets,
