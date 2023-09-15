@@ -29,7 +29,8 @@ import {
 export const isScooter = (
   feature: Feature<Point> | undefined,
 ): feature is Feature<Point, VehicleBasicFragment> =>
-  feature?.properties?.vehicleType?.formFactor === FormFactor.Scooter;
+  feature?.properties?.vehicleType?.formFactor === FormFactor.Scooter ||
+  feature?.properties?.vehicleType?.formFactor === FormFactor.ScooterStanding;
 
 export const isBicycle = (
   feature: Feature<Point> | undefined,
