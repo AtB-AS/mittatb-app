@@ -54,7 +54,7 @@ jobs:
       - name: Get Github-release data
         if: matrix.org == 'atb'
         id: get_release
-        uses: bruceadams/get-release@v1.2.2
+        uses: bruceadams/get-release@v1.3.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set environment
