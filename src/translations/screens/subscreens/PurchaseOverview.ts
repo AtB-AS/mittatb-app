@@ -223,16 +223,6 @@ const PurchaseOverviewTexts = {
       `Only available on phone`,
       `Gjeld kun på mobil`,
     ),
-    messageInHarborPeriod: _(
-      `Gjelder for hurtigbåt i begge retninger på valgt strekning.`,
-      `Applies for boat between selected harbors`,
-      `Gjeld for hurtigbåt i begge retningar på vald strekning.`,
-    ),
-    messageInHarborSingle: _(
-      `Gjelder for hurtigbåt én vei på valgt strekning`,
-      `Applies for boat one way between selected harbors`,
-      `Gjeld for hurtigbåt éin veg på vald strekning`,
-    ),
     messageInHarborZones: _(
       'Gjelder for buss/trikk i sonene du reiser til og fra',
       'Applies for for bus/tram in departure and destination zones',

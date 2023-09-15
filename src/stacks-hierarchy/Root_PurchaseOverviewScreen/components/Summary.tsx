@@ -59,15 +59,6 @@ export function Summary({
         );
         return (
           <>
-            {summary(
-              t(
-                PurchaseOverviewTexts.summary[
-                  fareProductTypeConfig.type === 'boat-period'
-                    ? 'messageInHarborPeriod'
-                    : 'messageInHarborSingle'
-                ],
-              ),
-            )}
             {harborText}
             {requiredOnMobileText}
           </>
