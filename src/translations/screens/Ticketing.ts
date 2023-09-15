@@ -238,11 +238,11 @@ const TicketingTexts = {
     approved: _('Godkjent billett', 'Approved ticket', 'Godkjent billett'),
   },
   ticketAssistantTile: {
-    title: _('Billettveileder', 'Ticket assistant', 'Billettrettleiar'),
+    title: _('Billettveileder for buss og trikk', 'Ticket assistant for bus and tram', 'Billettrettleiar for buss og trikk'),
     description: _(
-      'Få hjelp til å velge billetten som passer deg best.',
+      'Få hjelp til å velge billetten som passer best for deg.',
       'Get help choosing the ticket that suits you the best.',
-      'Få hjelp til å velje billetten som passar deg best.',
+      'Få hjelp til å velje billetten som passar best for deg.',
     ),
     a11yHint: _(
       'Aktiver for å åpne billettveilederen',

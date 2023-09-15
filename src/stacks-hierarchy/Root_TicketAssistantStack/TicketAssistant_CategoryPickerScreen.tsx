@@ -1,9 +1,10 @@
-import {ScrollView, View} from 'react-native';
+import {Linking, ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 
 import {
   getTextForLanguage,
   TicketAssistantTexts,
+  translation as _,
   useTranslation,
 } from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
@@ -64,6 +65,39 @@ export const TicketAssistant_CategoryPickerScreen = ({
     return unsubscribe;
   }, [navigation]);
 
+  function getAdditionalTitleText(userTypeString: string) {
+    switch (userTypeString) {
+      case 'CHILD':
+        return t(_('/ungdom', '/youth', '/ungdom'));
+      default:
+        return '';
+    }
+  }
+  function additionalDescription(userTypeString: string) {
+    const handleLinkPress = () => {
+      Linking.openURL('https://atb.no/ungdomsbillett/');
+    };
+
+    if (userTypeString === 'CHILD') {
+      return (
+        <>
+          <ThemeText type={'body__secondary'} style={styles.expandedContent}>
+            {'\n\n' + t(TicketAssistantTexts.categoryPicker.childPreLinkText)}
+          </ThemeText>
+          <ThemeText
+            type={'body__secondary'}
+            style={[styles.expandedContent, {textDecorationLine: 'underline'}]}
+            onPress={handleLinkPress}
+          >
+            {t(TicketAssistantTexts.categoryPicker.childLinkText)}
+          </ThemeText>
+        </>
+      );
+    }
+
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -94,7 +128,8 @@ export const TicketAssistant_CategoryPickerScreen = ({
                   textType={'body__primary--bold'}
                   text={
                     (u.emoji ? u.emoji + ' ' : '') +
-                    getReferenceDataName(u, language)
+                    getReferenceDataName(u, language) +
+                    getAdditionalTitleText(u.userTypeString)
                   }
                   onPress={() => {
                     setCurrentlyOpen(index);
@@ -112,6 +147,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                           u.alternativeDescriptions,
                           language,
                         )}
+                        {additionalDescription(u.userTypeString)}
                       </ThemeText>
                       <Button
                         style={styles.chooseButton}

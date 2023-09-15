@@ -59,8 +59,7 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {privacy_policy_url, enable_ticketing} =
-    useRemoteConfig();
+  const {privacy_policy_url, enable_ticketing} = useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
@@ -317,7 +316,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <ThemeText type="heading__component">
                 {t(ProfileTexts.sections.newFeatures.heading)}
               </ThemeText>
-              <InfoTag text="Beta" style={style.betaTag} />
+              <InfoTag mode="beta" style={style.betaTag} />
             </View>
           </GenericSectionItem>
           <ToggleSectionItem

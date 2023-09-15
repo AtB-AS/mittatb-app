@@ -9,12 +9,11 @@ import {Button} from '@atb/components/button';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalytics} from '@atb/analytics';
+import {MessageBox} from '@atb/components/message-box';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -143,6 +142,16 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             </ThemeText>
 
             <TicketSummary />
+            {doesTicketCoverEntirePeriod && (
+              <MessageBox
+                style={styles.infoBox}
+                type={'info'}
+                title={t(TicketAssistantTexts.summary.durationNotice.title)}
+                message={t(
+                  TicketAssistantTexts.summary.durationNotice.description,
+                )}
+              />
+            )}
             <Button
               interactiveColor="interactive_0"
               onPress={onBuyButtonPress}
@@ -152,22 +161,6 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 TicketAssistantTexts.summary.a11yBuyButtonHint,
               )}
             />
-
-            {doesTicketCoverEntirePeriod && (
-              <View style={styles.notice}>
-                <ThemeIcon style={styles.icon} svg={SvgInfo} />
-                <ThemeText
-                  style={styles.noticeText}
-                  type={'body__tertiary'}
-                  color={themeColor}
-                  accessibilityLabel={t(
-                    TicketAssistantTexts.summary.a11yDurationNoticeLabel,
-                  )}
-                >
-                  {t(TicketAssistantTexts.summary.durationNotice)}
-                </ThemeText>
-              </View>
-            )}
           </View>
         )}
         {(error || !loading) && (
@@ -193,6 +186,9 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   contentContainer: {
     flexGrow: 1,
+  },
+  infoBox: {
+    marginBottom: theme.spacings.large,
   },
   container: {
     flex: 1,
