@@ -73,7 +73,7 @@ export const TicketingTile = ({
         <View style={styles.contentContainer}>
           {showBetaTag && (
             <View style={styles.betaTagContainer}>
-              <InfoTag text="new" style={styles.betaTag} />
+              <InfoTag mode="new" style={styles.betaTag} />
             </View>
           )}
           <ThemeText
