@@ -27,9 +27,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
-import {
-  useRealtimeMapDebugOverride,
-} from '@atb/components/map';
+import {useRealtimeMapDebugOverride} from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
@@ -232,16 +230,6 @@ export const Profile_DebugInfoScreen = () => {
             text="Reset travel search filters"
             onPress={() =>
               storage.set('@ATB_user_travel_search_filters_v2', '')
-            }
-          />
-
-          <LinkSectionItem
-            text="Reset has read scooter onboarding"
-            onPress={() =>
-              storage.set(
-                StorageModelKeysEnum.HasReadScooterOnboarding,
-                JSON.stringify(false),
-              )
             }
           />
         </Section>

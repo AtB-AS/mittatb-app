@@ -13,7 +13,6 @@ export type MapStackParams = {
   Map_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Map_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
   Map_QuayDeparturesScreen: QuayDeparturesScreenParams;
-  Map_ScooterOnboardingScreen: undefined;
 };
 
 type RootMapScreenProps = TabNavigatorScreenProps<'TabNav_MapStack'>;
