@@ -73,19 +73,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
         return '';
     }
   }
-  function AdditionalDescription(userTypeString: string) {
-    const preLinkText = {
-      nb: 'Ungdomsbillett fra 16 til og med 19 år er ikke med i billettveilederen og kan ikke kjøpes i AtB-appen.',
-      en: 'Youth ticket from 16 up to and including 19 years is not included in the ticket guide and cannot be purchased in the AtB app.',
-      nn: 'Ungdomsbillett frå 16 til og med 19 år er ikkje med i billettvegleiaren og kan ikkje kjøpast i AtB-appen.',
-    };
-
-    const linkText = {
-      nb: 'Les mer om ungdomsbillett.',
-      en: 'Read more about the youth ticket.',
-      nn: 'Les meir om ungdomsbillett.',
-    };
-
+  function additionalDescription(userTypeString: string) {
     const handleLinkPress = () => {
       Linking.openURL('https://atb.no/ungdomsbillett/');
     };
@@ -94,14 +82,14 @@ export const TicketAssistant_CategoryPickerScreen = ({
       return (
         <>
           <ThemeText type={'body__secondary'} style={styles.expandedContent}>
-            {`\n\n${preLinkText[language]} `}
+            {'\n\n' + t(TicketAssistantTexts.categoryPicker.childPreLinkText)}
           </ThemeText>
           <ThemeText
             type={'body__secondary'}
             style={[styles.expandedContent, {textDecorationLine: 'underline'}]}
             onPress={handleLinkPress}
           >
-            {linkText[language]}
+            {t(TicketAssistantTexts.categoryPicker.childLinkText)}
           </ThemeText>
         </>
       );
@@ -159,7 +147,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                           u.alternativeDescriptions,
                           language,
                         )}
-                        {AdditionalDescription(u.userTypeString)}
+                        {additionalDescription(u.userTypeString)}
                       </ThemeText>
                       <Button
                         style={styles.chooseButton}

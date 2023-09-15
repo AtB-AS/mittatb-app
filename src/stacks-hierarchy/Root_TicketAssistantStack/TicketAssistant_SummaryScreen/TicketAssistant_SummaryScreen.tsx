@@ -150,7 +150,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
                 message={t(
                   TicketAssistantTexts.summary.durationNotice.description,
                 )}
-              ></MessageBox>
+              />
             )}
             <Button
               interactiveColor="interactive_0"

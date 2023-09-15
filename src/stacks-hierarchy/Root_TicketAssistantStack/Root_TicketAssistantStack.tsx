@@ -29,6 +29,7 @@ type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
 export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const [activeTab, setActiveTab] = useState(0);
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
+  const [tabCount, setTabCount] = useState(0);
   const {theme} = useTheme();
   const [previousTab, setPreviousTab] = useState<any>();
   return (
@@ -49,13 +50,16 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
               }
         }
         rightButton={
-          activeTab !== 5 && activeTab !== 0 ? {type: 'close'} : undefined
+          activeTab !== tabCount - 1 && activeTab !== 0
+            ? {type: 'close'}
+            : undefined
         }
         setFocusOnLoad={false}
       />
       <Tab.Navigator
         tabBar={(props: MaterialTopTabBarProps) => {
           setActiveTab(props.state.index);
+          setTabCount(props.state.routes.length);
           setPreviousTab(props.state.routes[props.state.index - 1]);
           return <PageIndicator {...props} />;
         }}

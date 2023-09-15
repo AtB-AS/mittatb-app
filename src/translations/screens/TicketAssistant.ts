@@ -36,6 +36,17 @@ const TicketAssistantTexts = {
         `Activate to choose ${category.value} as category and navigate to next page`,
         `Aktiver for å velje ${category.value} som kategori, og gå vidare`,
       ),
+
+    childPreLinkText: _(
+      'Ungdomsbillett fra 16 til og med 19 år er ikke med i billettveilederen og kan ikke kjøpes i AtB-appen.',
+      'Youth ticket from 16 up to and including 19 years is not included in the ticket guide and cannot be purchased in the AtB app.',
+      'Ungdomsbillett frå 16 til og med 19 år er ikkje med i billettvegleiaren og kan ikkje kjøpast i AtB-appen.',
+    ),
+    childLinkText: _(
+      'Les mer om ungdomsbillett.',
+      'Read more about the youth ticket.',
+      'Les meir om ungdomsbillett.',
+    ),
   },
   frequency: {
     title: _(

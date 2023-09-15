@@ -5,17 +5,18 @@ import {InfoChip} from '../info-chip';
 import {InfoTagTexts, useTranslation} from '@atb/translations';
 
 type Props = {
-  text: 'beta' | 'new' | string; // Restricting text to either 'beta', 'new' or any other string
+  mode: 'beta' | 'new';
   style?: StyleProp<ViewStyle>;
 };
-export const InfoTag = ({text, style}: Props) => {
+export const InfoTag = ({mode, style}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
   const getLocalizedText = () => {
-    if (text === 'beta') return 'Beta'; // beta is same in all languages
-    if (text === 'new') return t(InfoTagTexts.newText);
-    return text; // If neither 'beta' nor 'new', return original text
+    if (mode === 'new') return t(InfoTagTexts.newText);
+    else {
+      return 'Beta';
+    }
   };
 
   return (
