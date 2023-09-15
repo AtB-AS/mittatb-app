@@ -219,6 +219,7 @@ export const TravelDetailsMapScreenComponent = ({
               coordinates: geolocation?.coordinates,
               mapCameraRef,
             });
+            setShouldTrack(false);
           }}
         />
       </View>
