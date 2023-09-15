@@ -232,16 +232,6 @@ export const Profile_DebugInfoScreen = () => {
               storage.set('@ATB_user_travel_search_filters_v2', '')
             }
           />
-
-          <LinkSectionItem
-            text="Reset has read scooter onboarding"
-            onPress={() =>
-              storage.set(
-                StorageModelKeysEnum.HasReadScooterOnboarding,
-                JSON.stringify(false),
-              )
-            }
-          />
         </Section>
         <Section withPadding withTopPadding>
           <HeaderSectionItem
