@@ -224,12 +224,6 @@ const PurchaseOverviewTexts = {
     ),
   },
   summary: {
-    destinations: (from?: string, to?: string) =>
-      _(
-        `Fra ${from || 'ukjent'}, til ${to || 'ukjent'}`,
-        `From ${from || 'unknown'}, to ${to || 'unknown'}`,
-        `Frå ${from || 'ukjent'}, til ${to || 'ukjent'}`,
-      ),
     price: (priceString: string) =>
       _(
         `Totalt ${priceString} kr`,
@@ -246,11 +240,6 @@ const PurchaseOverviewTexts = {
       `Only available on phone`,
       `Gjeld kun på mobil`,
     ),
-    messageInZone: _(
-      `Gjelder for buss/trikk i valgte soner`,
-      `Applies for bus/tram in selected zones`,
-      `Gjeld for buss/trikk i valde soner`,
-    ),
     messageInHarborPeriod: _(
       `Gjelder for hurtigbåt i begge retninger på valgt strekning.`,
       `Applies for boat between selected harbors`,
@@ -266,8 +255,6 @@ const PurchaseOverviewTexts = {
       'Applies for for bus/tram in departure and destination zones',
       'Gjeld for buss/trikk i sonene du reiser til og frå',
     ),
-    messageAppliesFor: (text: string) =>
-      _(`Gjelder for ${text}`, `Applies for ${text}`, `Gjeld for ${text}`),
     button: _('Til betaling', 'To payment', 'Til betaling'),
   },
   flexDiscount: {
@@ -314,13 +301,6 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'When traveling, you need to bring the travel card registered on your profile.',
       'Når du er på reise, må du ha med deg reisekortet som er registrert på profilen din.',
     ),
-    summary: {
-      messageInZone: _(
-        `Gjelder for buss i valgte soner`,
-        `Applies for bus in selected zones`,
-        `Gjeld for buss i valde soner`,
-      ),
-    },
   },
   fram: {
     warning: _(
@@ -329,11 +309,6 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'Når du er på reise, må du ha med deg reisekortet som er registrert på brukeren din.',
     ),
     summary: {
-      messageInZone: _(
-        `Gjelder for buss i valgte soner`,
-        `Applies for bus in selected zones`,
-        `Gjeld for buss i valde soner`,
-      ),
       messageInHarborZones: _('', '', ''),
     },
   },

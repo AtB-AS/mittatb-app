@@ -4,11 +4,7 @@ import {ThemeText} from '@atb/components/text';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContractTexts,
-  PurchaseOverviewTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
@@ -45,11 +41,6 @@ export function Summary({
     onPressBuy();
   };
 
-  const transportModesText = fareProductTypeConfig.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
-    .filter(Boolean)
-    .join('/');
-
   const SummaryText = () => {
     const summary = (text: string) => (
       <ThemeText type="body__secondary" style={styles.message}>
@@ -62,13 +53,6 @@ export function Summary({
       : null;
 
     switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
-      case 'multiple':
-      case 'multiple-stop':
-      case 'multiple-zone':
-      case 'single':
-      case 'single-stop':
-      case 'single-zone':
-        return summary(t(PurchaseOverviewTexts.summary.messageInZone));
       case 'multiple-stop-harbor':
         const harborText = summary(
           t(PurchaseOverviewTexts.summary.messageInHarborZones),
@@ -87,12 +71,6 @@ export function Summary({
             {harborText}
             {requiredOnMobileText}
           </>
-        );
-      case 'none':
-        return summary(
-          t(
-            PurchaseOverviewTexts.summary.messageAppliesFor(transportModesText),
-          ),
         );
       default:
         return null;
