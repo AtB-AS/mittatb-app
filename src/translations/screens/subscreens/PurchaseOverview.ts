@@ -223,11 +223,6 @@ const PurchaseOverviewTexts = {
       `Only available on phone`,
       `Gjeld kun på mobil`,
     ),
-    messageInHarborZones: _(
-      'Gjelder for buss/trikk i sonene du reiser til og fra',
-      'Applies for for bus/tram in departure and destination zones',
-      'Gjeld for buss/trikk i sonene du reiser til og frå',
-    ),
     button: _('Til betaling', 'To payment', 'Til betaling'),
   },
   flexDiscount: {
@@ -281,8 +276,5 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'When traveling, you need to bring the travel card registered on your user.',
       'Når du er på reise, må du ha med deg reisekortet som er registrert på brukeren din.',
     ),
-    summary: {
-      messageInHarborZones: _('', '', ''),
-    },
   },
 });

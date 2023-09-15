@@ -69,8 +69,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
   const analytics = useAnalytics();
 
-  const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
-    params.fareProductTypeConfig.configuration;
+  const {
+    timeSelectionMode,
+    travellerSelectionMode,
+    zoneSelectionMode,
+    requiresTokenOnMobile,
+  } = params.fareProductTypeConfig.configuration;
 
   const offerEndpoint =
     zoneSelectionMode === 'none'
@@ -208,20 +212,32 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
         </View>
 
-        <PurchaseMessages
-          preassignedFareProductType={preassignedFareProduct.type}
-        />
-
-        <GlobalMessage
-          globalMessageContext={GlobalMessageContextEnum.appPurchaseOverview}
-          textColor="background_0"
-          ruleVariables={{
-            preassignedFareProductType: preassignedFareProduct.type,
-            fromTariffZone: fromPlace.id,
-            toTariffZone: toPlace.id,
-          }}
-          style={styles.globalMessages}
-        />
+        {isFree ? (
+          <MessageBox
+            type="valid"
+            message={t(PurchaseOverviewTexts.summary.free)}
+            style={styles.messages}
+          />
+        ) : (
+          <>
+            <PurchaseMessages
+              preassignedFareProductType={preassignedFareProduct.type}
+              requiresTokenOnMobile={requiresTokenOnMobile}
+            />
+            <GlobalMessage
+              globalMessageContext={
+                GlobalMessageContextEnum.appPurchaseOverview
+              }
+              textColor="background_0"
+              ruleVariables={{
+                preassignedFareProductType: preassignedFareProduct.type,
+                fromTariffZone: fromPlace.id,
+                toTariffZone: toPlace.id,
+              }}
+              style={styles.messages}
+            />
+          </>
+        )}
 
         <FullScreenFooter>
           <Summary
@@ -230,7 +246,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isError={!!error || !hasSelection}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
-            fareProductTypeConfig={params.fareProductTypeConfig}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: params.fareProductTypeConfig.name,
@@ -270,7 +285,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
   },
-  globalMessages: {
+  messages: {
     marginHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },

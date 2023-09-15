@@ -12,10 +12,12 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type PurchaseWarningsProps = {
   preassignedFareProductType: string;
+  requiresTokenOnMobile: boolean;
 };
 
 export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   preassignedFareProductType,
+  requiresTokenOnMobile,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -65,7 +67,17 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         />
       )}
 
-      {shouldShowNFKNightBusPeriodNotice && (
+      {requiresTokenOnMobile && (
+        <MessageBox
+          type="info"
+          message={t(PurchaseOverviewTexts.summary.messageRequiresMobile)}
+          style={styles.warning}
+          isMarkdown={true}
+          subtle={true}
+        />
+      )}
+
+      {shouldShowNFKNightBusPeriodNotice && ( // TODO: Move to firestore
         <MessageBox
           style={styles.warning}
           message={t(PurchaseOverviewTexts.nfkNightBusPeriodNotice)}
@@ -73,7 +85,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         />
       )}
 
-      {shouldShowNFKNightBus24hourNotice && (
+      {shouldShowNFKNightBus24hourNotice && ( // TODO: Move to firestore
         <MessageBox
           style={styles.warning}
           message={t(PurchaseOverviewTexts.nfkNightBusHour24Notice)}
