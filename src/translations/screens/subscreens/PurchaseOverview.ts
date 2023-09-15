@@ -48,23 +48,6 @@ const PurchaseOverviewTexts = {
     'When traveling, you need to bring the t:card registered on your profile.',
     'Når du er ute og reiser må du ha med t:kortet som er registrert på profilen din.',
   ),
-  samarbeidsbillettenInfo: {
-    single: _(
-      'Enkeltbilletter i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
-      'Single tickets in zone A can also be used on train in zone A, but not on night buses.',
-      'Enkeltbillettar i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
-    ),
-    period: _(
-      'Periodebilletter i sone A kan også brukes på tog i sone A.',
-      'Periodic tickets in zone A can also be used on train in zone A.',
-      'Periodebillettar i sone A kan også brukast på tog i sone A.',
-    ),
-    hour24: _(
-      '24-timersbillett i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
-      '24 hour pass in zone A can also be used on train in zone A, but not on night buses.',
-      '24-timersbillett i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
-    ),
-  },
   nfkNightBusPeriodNotice: _(
     '3- og 7-dagers billett inkluderer ikke nattbuss.',
     '3 and 7 day periodic tickets does not include night bus.',

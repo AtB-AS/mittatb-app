@@ -8,21 +8,14 @@ import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
-import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export type PurchaseWarningsProps = {
   preassignedFareProductType: string;
-  fromTariffZone: TariffZoneWithMetadata | StopPlaceFragment;
-  toTariffZone: TariffZoneWithMetadata | StopPlaceFragment;
 };
 
 export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   preassignedFareProductType,
-  fromTariffZone,
-  toTariffZone,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -47,13 +40,6 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   );
   const {enable_nfk_nightbus_warning} = useRemoteConfig();
 
-  const shouldShowValidTrainTicketNotice =
-    (preassignedFareProductType === 'single' ||
-      preassignedFareProductType === 'period' ||
-      preassignedFareProductType === 'hour24') &&
-    fromTariffZone.id === 'ATB:TariffZone:1' &&
-    toTariffZone.id === 'ATB:TariffZone:1';
-
   const shouldShowNFKNightBusPeriodNotice =
     preassignedFareProductType === 'period' && enable_nfk_nightbus_warning;
 
@@ -76,14 +62,6 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
           message={inspectableTokenWarningText}
           style={styles.warning}
           isMarkdown={true}
-        />
-      )}
-
-      {shouldShowValidTrainTicketNotice && (
-        <MessageBox
-          style={styles.warning}
-          message={getValidOnTrainNoticeText(t, preassignedFareProductType)}
-          type="info"
         />
       )}
 

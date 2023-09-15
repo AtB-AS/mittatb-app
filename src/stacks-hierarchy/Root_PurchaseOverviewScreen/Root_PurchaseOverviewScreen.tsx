@@ -210,8 +210,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
         <PurchaseMessages
           preassignedFareProductType={preassignedFareProduct.type}
-          fromTariffZone={fromPlace}
-          toTariffZone={toPlace}
         />
 
         <GlobalMessage
