@@ -22,7 +22,6 @@ import {
   numberOfDepartureTimes,
   tapDepartureTime,
 } from '../utils/departures';
-import {toggleDeparturesV2} from '../utils/myprofile';
 
 describe('Departures v1', () => {
   beforeAll(async () => {
@@ -53,7 +52,6 @@ describe('Departures v1', () => {
 
     // Enable v1
     await goToTab('profile');
-    await toggleDeparturesV2(false);
 
     // Go to departures
     await goToTab('departures');

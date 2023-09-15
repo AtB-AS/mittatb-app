@@ -14,7 +14,7 @@ export type DeparturesStackParams = {
 };
 
 export type RootDeparturesScreenProps =
-  TabNavigatorScreenProps<'TabNav_NearestStack'>;
+  TabNavigatorScreenProps<'TabNav_DeparturesStack'>;
 
 export type DeparturesStackProps<T extends keyof DeparturesStackParams> =
   CompositeScreenProps<

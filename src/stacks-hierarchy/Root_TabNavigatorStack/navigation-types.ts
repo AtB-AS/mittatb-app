@@ -5,7 +5,6 @@ import {
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import {DashboardStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
-import {NearbyStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_NearbyStack';
 import {ProfileStackParams} from './TabNav_ProfileStack/navigation-types';
 import {MapStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {
@@ -14,10 +13,11 @@ import {
 } from '@react-navigation/bottom-tabs';
 import {RootStackParamList, RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {TicketingStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TabNav_TicketingStack';
+import {DeparturesStackParams} from './TabNav_DeparturesStack';
 
 export type TabNavigatorStackParams = {
   TabNav_DashboardStack: NavigatorScreenParams<DashboardStackParams>;
-  TabNav_NearestStack: NavigatorScreenParams<NearbyStackParams>;
+  TabNav_DeparturesStack: NavigatorScreenParams<DeparturesStackParams>;
   TabNav_TicketingStack: NavigatorScreenParams<TicketingStackParams>;
   TabNav_ProfileStack: NavigatorScreenParams<ProfileStackParams>;
   TabNav_MapStack: NavigatorScreenParams<MapStackParams>;

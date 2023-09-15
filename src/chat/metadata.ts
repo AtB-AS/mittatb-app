@@ -8,7 +8,6 @@ type Metadata = {
   'AtB-Auth-Type': string;
   'AtB-Install-Id': string;
   'AtB-Build-Number': string;
-  'AtB-Departures-V2': string;
   'AtB-Device-Type': string;
   'AtB-Device-Location-Enabled': boolean;
   'AtB-App-Location-Status': PermissionStatus;
@@ -18,7 +17,6 @@ type Metadata = {
   'AtB-Mobile-Token-Id': string;
   'AtB-Mobile-Token-Status': 'success' | 'error';
   'AtB-Mobile-Token-Error-Correlation-Id': string;
-  'AtB-Beta-Departures': string;
   'AtB-Beta-TripSearch': string;
 };
 

@@ -36,7 +36,7 @@ export function settingToRouteName(
     case 'assistant':
       return 'TabNav_DashboardStack';
     case 'departures':
-      return 'TabNav_NearestStack';
+      return 'TabNav_DashboardStack';
     case 'ticketing':
       return 'TabNav_TicketingStack';
     default:
