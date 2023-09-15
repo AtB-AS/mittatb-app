@@ -23,7 +23,7 @@ import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {isAfter} from '@atb/utils/date';
 
@@ -214,6 +214,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           toTariffZone={toPlace}
         />
 
+        <GlobalMessage
+          globalMessageContext={GlobalMessageContextEnum.appPurchaseOverview}
+          textColor="background_0"
+          ruleVariables={{
+            preassignedFareProductType: preassignedFareProduct.type,
+            fromTariffZone: fromPlace.id,
+            toTariffZone: toPlace.id,
+          }}
+          style={styles.globalMessages}
+        />
+
         <FullScreenFooter>
           <Summary
             isLoading={isSearchingOffer}
@@ -260,6 +271,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
+  },
+  globalMessages: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   selectionComponent: {
     marginVertical: theme.spacings.medium,
