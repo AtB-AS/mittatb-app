@@ -134,13 +134,11 @@ export const TicketAssistant_FrequencyScreen = ({
                   })}
                 </View>
                 <Slider
-                  style={styles.slider}
-                  interactiveColor={'interactive_0'}
+                  containerStyle={styles.slider}
                   maximumValue={sliderMax}
                   minimumValue={2}
                   step={1}
                   value={sliderValue}
-                  tapToSeek={true}
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}
