@@ -8,15 +8,12 @@ import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export type PurchaseWarningsProps = {
-  preassignedFareProductType: string;
   requiresTokenOnMobile: boolean;
 };
 
 export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
-  preassignedFareProductType,
   requiresTokenOnMobile,
 }) => {
   const {t} = useTranslation();
@@ -40,13 +37,6 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     remoteTokens,
     deviceIsInspectable,
   );
-  const {enable_nfk_nightbus_warning} = useRemoteConfig();
-
-  const shouldShowNFKNightBusPeriodNotice =
-    preassignedFareProductType === 'period' && enable_nfk_nightbus_warning;
-
-  const shouldShowNFKNightBus24hourNotice =
-    preassignedFareProductType === 'hour24' && enable_nfk_nightbus_warning;
 
   return (
     <>
@@ -74,22 +64,6 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
           style={styles.warning}
           isMarkdown={true}
           subtle={true}
-        />
-      )}
-
-      {shouldShowNFKNightBusPeriodNotice && ( // TODO: Move to firestore
-        <MessageBox
-          style={styles.warning}
-          message={t(PurchaseOverviewTexts.nfkNightBusPeriodNotice)}
-          type="info"
-        />
-      )}
-
-      {shouldShowNFKNightBus24hourNotice && ( // TODO: Move to firestore
-        <MessageBox
-          style={styles.warning}
-          message={t(PurchaseOverviewTexts.nfkNightBusHour24Notice)}
-          type="info"
         />
       )}
     </>

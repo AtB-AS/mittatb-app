@@ -220,10 +220,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
         ) : (
           <>
-            <PurchaseMessages
-              preassignedFareProductType={preassignedFareProduct.type}
-              requiresTokenOnMobile={requiresTokenOnMobile}
-            />
+            <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
             <GlobalMessage
               globalMessageContext={
                 GlobalMessageContextEnum.appPurchaseOverview

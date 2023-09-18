@@ -48,16 +48,6 @@ const PurchaseOverviewTexts = {
     'When traveling, you need to bring the t:card registered on your profile.',
     'Når du er ute og reiser må du ha med t:kortet som er registrert på profilen din.',
   ),
-  nfkNightBusPeriodNotice: _(
-    '3- og 7-dagers billett inkluderer ikke nattbuss.',
-    '3 and 7 day periodic tickets does not include night bus.',
-    '3- og 7-dagers billett inkluderer ikkje nattbuss.',
-  ),
-  nfkNightBusHour24Notice: _(
-    '24-timersbilletten inkluderer ikke nattbuss.',
-    'The 24 hour pass does not include night bus.',
-    '24-timersbilletten inkluderer ikkje nattbuss.',
-  ),
   fromToLabel: {
     from: _('Fra', 'From', 'Frå'),
     to: _('Til', 'To', 'Til'),
