@@ -156,7 +156,6 @@ export const DepartureDetailsScreenComponent = ({
                 type="heading--medium"
                 color="background_accent_0"
                 style={{flexShrink: 1}}
-                testID={'departureDetailsTitle'}
               >
                 {title ?? t(DepartureDetailsTexts.header.notFound)}
               </ThemeText>
