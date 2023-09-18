@@ -60,6 +60,7 @@ export const EstimatedCallItem = memo(
   }: EstimatedCallItemProps): JSX.Element => {
     const styles = useStyles();
     const {t, language} = useTranslation();
+    const testID = 'estimatedCallItem';
 
     const onPress =
       mode === 'Favourite'
@@ -84,11 +85,11 @@ export const EstimatedCallItem = memo(
         accessibilityLabel={a11yLabel}
         accessibilityHint={a11yHint}
       >
-        <View style={styles.container}>
+        <View style={styles.container} testID={testID}>
           <View style={styles.estimatedCallItem}>
             <View style={styles.transportInfo}>
-              <LineChip departure={departure} mode={mode} />
-              <ThemeText style={styles.lineName}>
+              <LineChip departure={departure} mode={mode} testID={testID} />
+              <ThemeText style={styles.lineName} testID={`${testID}FrontText`}>
                 {departure.destinationDisplay?.frontText}
               </ThemeText>
             </View>
@@ -226,6 +227,7 @@ export function getLineA11yLabel(
 function LineChip({
   departure,
   mode,
+  testID = '',
 }: Pick<EstimatedCallItemProps, 'departure' | 'mode'>) {
   const styles = useStyles();
   const fontScale = useFontScale();
@@ -267,6 +269,7 @@ function LineChip({
             {color: transportTextColor, minWidth: fontScale * 20},
           ]}
           type="body__primary--bold"
+          testID={`${testID}PublicCode`}
         >
           {publicCode}
         </ThemeText>
