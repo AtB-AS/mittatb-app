@@ -11,6 +11,7 @@ export type ProfileStackParams = {
   Profile_PaymentOptionsScreen: undefined;
   Profile_TicketHistoryScreen: undefined;
   Profile_DeleteProfileScreen: undefined;
+  Profile_EditProfileScreen: undefined;
   Profile_FavoriteListScreen: undefined;
   Profile_SortFavoritesScreen: undefined;
   Profile_FavoriteDeparturesScreen: undefined;

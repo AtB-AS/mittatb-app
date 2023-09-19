@@ -28,7 +28,6 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
-import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
@@ -199,10 +198,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               testID="loginButton"
             />
           )}
-          {authenticationType === 'phone' && (
+          {authenticationType === 'phone' && ( // check for phone login still valid?
             <LinkSectionItem
-              text={t(DeleteProfileTexts.header.title)}
-              onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.editProfile
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
             />
           )}
           {authenticationType === 'phone' && (

@@ -1210,8 +1210,6 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.4.2):
-    - React-Core
   - react-native-webview (11.26.0):
     - React-Core
   - React-NativeModulesApple (0.72.4):
@@ -1380,7 +1378,7 @@ PODS:
     - React-Core
   - SocketRocket (0.6.1)
   - SwiftProtobuf (1.20.3)
-  - TimeReactNativeLib (1.3.0):
+  - TimeReactNativeLib (1.3.1):
     - Kronos
     - React-Core
   - TokenCore (1.0.0):
@@ -1456,7 +1454,6 @@ DEPENDENCIES:
   - react-native-intercom (from `../node_modules/react-native-intercom`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -1609,8 +1606,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-slider:
-    :path: "../node_modules/@react-native-community/slider"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-NativeModulesApple:
@@ -1774,7 +1769,6 @@ SPEC CHECKSUMS:
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
   react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
-  react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
   React-NativeModulesApple: edb5ace14f73f4969df6e7b1f3e41bef0012740f
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
@@ -1812,7 +1806,7 @@ SPEC CHECKSUMS:
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
-  TimeReactNativeLib: 8f7bba2f9973fb75f3f5619e5a3da582747663d6
+  TimeReactNativeLib: fc07248a42b2d218846258cd3038a26a43e293ac
   TokenCore: 1579a2a2179a283048d9c0a007b4fd38861f4555
   TokenStateReactNativeLib: cba98cbdb61af0255d2e636565a0feedb6cda069
   Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
@@ -1821,4 +1815,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: ef2802704f9c234d0d57242b05e20c0bf15e1d82
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
