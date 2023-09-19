@@ -165,6 +165,12 @@ const BaseHeader = ({
         style={[
           css.buttons,
           {
+            /**
+             * TODO: This is a hack to make sure the buttons are positioned
+             * correctly when padding is passed as a prop, specifically for the
+             * bottom sheet. Can be removed when the bottom sheet starts using
+             * its own header. (https://github.com/AtB-AS/kundevendt/issues/4211)
+             */
             top:
               (typeof style?.paddingTop?.valueOf() === 'number'
                 ? (style.paddingTop.valueOf() as number)
