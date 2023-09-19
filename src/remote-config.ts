@@ -1,5 +1,5 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import {ENABLE_TICKETING, PRIVACY_POLICY_URL} from '@env';
+import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 
 export type RemoteConfig = {
   enable_ticketing: boolean;
@@ -52,7 +52,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_period_tickets: false,
   feedback_questions: '',
   must_upgrade_ticketing: false,
-  customer_service_url: 'https://www.atb.no/kontakt/',
+  customer_service_url: CUSTOMER_SERVICE_URL,
   customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
   tripsSearch_target_number_of_page_hits: 8,
