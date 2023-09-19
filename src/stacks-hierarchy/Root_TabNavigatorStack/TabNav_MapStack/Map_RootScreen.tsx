@@ -62,7 +62,7 @@ export const Map_RootScreen = ({
 
   return (
     <>
-      <StatusBarOnFocus barStyle="dark-content" />
+      <StatusBarOnFocus barStyle="dark-content" backgroundColor="#00000000" />
       <Map
         selectionMode={'ExploreEntities'}
         vehicles={vehicles}
