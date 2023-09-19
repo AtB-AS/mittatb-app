@@ -67,7 +67,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
   return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
 };
 
-type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
+type ScreenHeaderWithoutNavigationProps = Omit<ScreenHeaderProps, 'style'> & {
   leftButton?: HeaderButtonWithoutNavigationProps;
   rightButton?: HeaderButtonWithoutNavigationProps;
 };
@@ -80,6 +80,7 @@ type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
 export const ScreenHeaderWithoutNavigation = (
   props: ScreenHeaderWithoutNavigationProps,
 ) => {
+  const styles = useHeaderStyle();
   const themeColor = props.color ?? 'background_accent_0';
   const leftIcon = props.leftButton ? (
     <HeaderButtonWithoutNavigation color={themeColor} {...props.leftButton} />
@@ -92,7 +93,14 @@ export const ScreenHeaderWithoutNavigation = (
     <View />
   );
 
-  return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
+  return (
+    <BaseHeader
+      style={styles.bottomSheetHeaderContainer}
+      leftIcon={leftIcon}
+      rightIcon={rightIcon}
+      {...props}
+    />
+  );
 };
 
 type BaseHeaderProps = ScreenHeaderProps & {
@@ -157,7 +165,10 @@ const BaseHeader = ({
         style={[
           css.buttons,
           {
-            top: theme.spacings.large + buttonsTopOffset,
+            top:
+              (typeof style?.paddingTop?.valueOf() === 'number'
+                ? (style.paddingTop.valueOf() as number)
+                : theme.spacings.medium) + buttonsTopOffset,
             height: buttonsHeight,
           },
         ]}
@@ -177,8 +188,12 @@ const BaseHeader = ({
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
+  },
+  // TODO: Rename
+  bottomSheetHeaderContainer: {
     paddingTop: theme.spacings.large,
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
     borderTopLeftRadius: theme.border.radius.circle,
     borderTopRightRadius: theme.border.radius.circle,
   },
