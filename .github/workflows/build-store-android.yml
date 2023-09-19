@@ -37,7 +37,7 @@ jobs:
       - name: Add Entur private registry credentials
         run: bash ./scripts/add-entur-private-registry.sh
         env:
-          ENTUR_REGISTRY_USER: ${{ secrets.ENTUR_REGISTRY_USER }}
+          ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: install node v18
         uses: actions/setup-node@v1
