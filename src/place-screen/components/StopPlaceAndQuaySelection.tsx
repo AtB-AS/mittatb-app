@@ -1,5 +1,5 @@
 import {FlatList} from 'react-native-gesture-handler';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
 import DeparturesTexts from '@atb/translations/screens/Departures';
 import React from 'react';
@@ -15,10 +15,12 @@ const StopPlaceAndQuaySelection = ({
   place,
   selectedQuay,
   onPress,
+  style,
 }: {
   place: StopPlace;
   selectedQuay?: Quay;
   onPress: (selectedQuayId?: string) => void;
+  style?: ViewStyle;
 }) => {
   const styles = useStyles();
   const {theme} = useTheme();
@@ -29,7 +31,7 @@ const StopPlaceAndQuaySelection = ({
   return (
     <FlatList
       data={place.quays}
-      style={styles.quayChipContainer}
+      style={[styles.quayChipContainer, style]}
       horizontal={!isMissingQuays}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
@@ -74,7 +76,6 @@ function getQuayName(quay: Quay): string {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayChipContainer: {
     backgroundColor: theme.static.background.background_accent_0.background,
-    paddingBottom: theme.spacings.medium,
     flexShrink: 0,
     flexGrow: 0,
   },

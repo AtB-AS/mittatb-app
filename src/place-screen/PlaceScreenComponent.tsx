@@ -123,6 +123,7 @@ export const PlaceScreenComponent = ({
           place={place}
           selectedQuay={selectedQuay}
           onPress={(quayId) => onPressQuay?.(place, quayId, true)}
+          style={styles.stopPlaceAndQuaySelection}
         />
       )}
 
@@ -184,6 +185,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
+  },
+  stopPlaceAndQuaySelection: {
+    paddingBottom: theme.spacings.medium,
   },
   quayData: {flex: 1},
   messageBox: {
