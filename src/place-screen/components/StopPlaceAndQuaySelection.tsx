@@ -74,7 +74,7 @@ function getQuayName(quay: Quay): string {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   quayChipContainer: {
     backgroundColor: theme.static.background.background_accent_0.background,
-    paddingVertical: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
     flexShrink: 0,
     flexGrow: 0,
   },
