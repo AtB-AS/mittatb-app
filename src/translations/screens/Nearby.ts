@@ -1,64 +1,11 @@
 import {translation as _} from '../commons';
 
 const NearbyTexts = {
-  header: {
-    title: _('Avganger', 'Departures', 'Avgangar'),
-    altTitle: {
-      a11yPrefix: _('Avganger fra', 'Departures from', 'Avgangar frå'),
-    },
-    logo: {
-      a11yLabel: _(
-        'Gå til startskjerm',
-        'Back to start screen',
-        'Gå til startskjerm',
-      ),
-    },
-    departureFuture: (name: string, time: string) =>
-      _(`${name} (${time})`, `${name} (${time})`, `${name} (${time})`),
-  },
   search: {
     label: _('Fra', 'From', 'Frå'),
-    later: {
-      label: _('Senere', 'Later', 'Seinare'),
-      a11yLabel: _(
-        'Velg senere avreisetidspunkt',
-        'Choose later departure time',
-        'Vel seinare avgangstidspunkt',
-      ),
-      a11yHint: _(
-        'Aktiver for å velge et senere avreisetidspunkt',
-        'Activate to choose a later departure time',
-        'Aktivér for å velje eit seinare avgangstidspunkt',
-      ),
-    },
-    now: {
-      label: _('Nå', 'Now', 'No'),
-      a11yLabel: _(
-        'Velg avreisetidspunkt nå',
-        'Choose departure time now',
-        'Vel avgangstidspunkt no',
-      ),
-      a11yHint: _(
-        'Aktiver for å sette avreisetidspunkt til nå',
-        'Activate to set later departure time to now',
-        'Aktiver for å setje avgangstidspunkt til no',
-      ),
-    },
-  },
-  favorites: {
-    toggle: _(
-      'Vis kun favorittavganger',
-      'View favourite departures only',
-      'Vis berre favorittavgangar',
-    ),
   },
   location: {
     departurePicker: {
-      placeholder: _(
-        'Søk etter adresse eller sted',
-        'Search for an address or location',
-        'Søk etter adresse eller stad',
-      ),
       label: _('Fra', 'From', 'Frå'),
       a11yLabel: _(
         'Velg avreisested',
@@ -74,49 +21,6 @@ const NearbyTexts = {
     locationButton: {
       a11yLabel: _('Bruk min posisjon', 'Use my location', 'Bruk min posisjon'),
     },
-    updatingLocation: _(
-      'Oppdaterer posisjon',
-      'Updating location',
-      'Oppdaterer posisjon',
-    ),
-  },
-  dateInput: {
-    departureNow: (time: string) =>
-      _(
-        `Avganger nå (${time})`,
-        `Departing now (${time})`,
-        `Avgangar no (${time})`,
-      ),
-    departure: (time: string) =>
-      _(
-        `Avganger fra ${time}`,
-        `Departures from ${time}`,
-        `Avgangar frå ${time}`,
-      ),
-    a11yHint: _(
-      'Aktivér for å endre avgangstidspunkt',
-      'Activate to change time of departures',
-      'Aktivér for å endre avgangstidspunkt',
-    ),
-    confirm: _('Bekreft', 'Confirm', 'Bekreft'),
-    header: _('Velg dato og tid', 'Select date and time', 'Vel dato og tid'),
-    a11yInPastHint: _(
-      'Aktivér for å bekrefte tidsvalg.',
-      'Activate to confirm time and date.',
-      'Aktivér for å bekrefte tidspunktet.',
-    ),
-  },
-  messages: {
-    networkError: _(
-      'Hei, er du på nett? Vi kan ikke oppdatere avgangene siden nettforbindelsen din mangler eller er ustabil.',
-      `Are you online? We're unable to conduct a search since your device seems to be offline or the connection is unstable`,
-      'Hei, er du på nett? Vi kan ikkje oppdatere avgangene då tilkoplinga di til interett manglar eller er ustabil.',
-    ),
-    defaultFetchError: _(
-      'Oops - vi klarte ikke hente avganger. Supert om du prøver igjen 🤞',
-      'We failed at fetching departures – please retry 🤞',
-      'Oops - vi klarte ikkje å hente avgangar. Prøv igjen 🤞',
-    ),
   },
   stateAnnouncements: {
     updatingLocation: _(
@@ -137,25 +41,7 @@ const NearbyTexts = {
       ),
   },
   results: {
-    stops: {
-      header: {
-        hintShow: _(
-          'Aktiver for å vise',
-          'Activate to show',
-          'Aktivér for å vise',
-        ),
-        hintHide: _(
-          'Aktiver for å skjule',
-          'Activate to hide',
-          'Aktivér for å skjule',
-        ),
-      },
-    },
-
     lines: {
-      a11y: {
-        line: _(`Linje:`, 'Line', 'Linje:'),
-      },
       lineNameAccessibilityHint: _(
         'Aktiver for detaljer om avgang og oversikt over kommende avganger.',
         'Activate for departure details, and to review future departures',
@@ -203,39 +89,6 @@ const NearbyTexts = {
       ),
     },
     relativeTime: (time: string) => _(`om ${time}`, `in ${time}`, `om ${time}`),
-
-    quayResult: {
-      platformHeader: {
-        accessibilityLabel: (name: string, publicCode: string) =>
-          _(
-            `Avganger fra plattform ${name} ${publicCode}.`,
-            `Departures from platform ${name} ${publicCode}.`,
-            `Avgangar frå plattform ${name} ${publicCode}.`,
-          ),
-        accessibilityLabelNoPublicCode: (name: string) =>
-          _(
-            `Avganger fra plattform på holdeplassen ${name}.`,
-            `Departures from stop place platform ${name}.`,
-            `Avgangar frå plattform på haldeplassen ${name}.`,
-          ),
-        distance: {
-          label: (distance: string) =>
-            _(
-              `Det er rundt ${distance} til plattform.`,
-              `About ${distance} to platform.`,
-              `Det er omtrent ${distance} til plattformen.`,
-            ),
-        },
-      },
-
-      showMoreToggler: {
-        text: _(
-          'Vis flere avganger',
-          'Show more departures',
-          'Vis fleire avgangar',
-        ),
-      },
-    },
 
     departure: {
       hasPassedAccessibilityLabel: (time: string) =>

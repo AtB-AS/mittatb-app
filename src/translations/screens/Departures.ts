@@ -56,6 +56,15 @@ const DeparturesTexts = {
         `Vald dato: ${dateTime}`,
       ),
   },
+  dateInput: {
+    confirm: _('Bekreft', 'Confirm', 'Bekreft'),
+    header: _('Velg dato og tid', 'Select date and time', 'Vel dato og tid'),
+    a11yInPastHint: _(
+      'Aktivér for å bekrefte tidsvalg.',
+      'Activate to confirm time and date.',
+      'Aktivér for å bekrefte tidspunktet.',
+    ),
+  },
   noDepartures: _(
     'Ingen avganger i dette tidsrommet.',
     'No departures in the selected period of time.',
