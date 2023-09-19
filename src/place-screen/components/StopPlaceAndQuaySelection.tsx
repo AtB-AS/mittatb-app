@@ -1,10 +1,9 @@
 import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native';
 import {Button} from '@atb/components/button';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {StopPlace, Quay} from '@atb/api/types/departures';
 
 type quayChipData = {

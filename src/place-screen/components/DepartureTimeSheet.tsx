@@ -9,8 +9,11 @@ import {
   TimeInputSectionItem,
 } from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {
+  DeparturesTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import {
   dateWithReplacedTime,
   formatLocaleTime,

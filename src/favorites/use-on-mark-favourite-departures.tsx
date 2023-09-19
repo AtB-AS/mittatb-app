@@ -1,6 +1,6 @@
 import {useFavorites, StoredFavoriteDeparture} from '@atb/favorites';
 import {AccessibilityInfo, Alert} from 'react-native';
-import {NearbyTexts, useTranslation} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React from 'react';
@@ -50,7 +50,7 @@ export function useOnMarkFavouriteDepartures(
       visibleOnDashboard: addedFavoritesVisibleOnDashboard,
     });
     AccessibilityInfo.announceForAccessibility(
-      t(NearbyTexts.results.lines.favorite.message.saved),
+      t(DeparturesTexts.results.lines.favorite.message.saved),
     );
   };
 
@@ -66,13 +66,13 @@ export function useOnMarkFavouriteDepartures(
     const existing: any = undefined;
     return existing
       ? t(
-          NearbyTexts.results.lines.favorite.removeFavorite(
+          DeparturesTexts.results.lines.favorite.removeFavorite(
             `${line.lineNumber} ${existing.lineName ?? ''}`,
             stopPlace.name,
           ),
         )
       : t(
-          NearbyTexts.results.lines.favorite.addFavorite(
+          DeparturesTexts.results.lines.favorite.addFavorite(
             `${line.lineNumber} ${line.lineName}`,
             stopPlace.name,
           ),
@@ -85,21 +85,21 @@ export function useOnMarkFavouriteDepartures(
   ) => {
     if (existing) {
       Alert.alert(
-        t(NearbyTexts.results.lines.favorite.delete.label),
-        t(NearbyTexts.results.lines.favorite.delete.confirmWarning),
+        t(DeparturesTexts.results.lines.favorite.delete.label),
+        t(DeparturesTexts.results.lines.favorite.delete.confirmWarning),
         [
           {
-            text: t(NearbyTexts.results.lines.favorite.delete.cancel),
+            text: t(DeparturesTexts.results.lines.favorite.delete.cancel),
             style: 'cancel',
           },
           {
-            text: t(NearbyTexts.results.lines.favorite.delete.delete),
+            text: t(DeparturesTexts.results.lines.favorite.delete.delete),
             style: 'destructive',
             onPress: async () => {
               animateNextChange();
               await removeFavoriteDeparture(existing.id);
               AccessibilityInfo.announceForAccessibility(
-                t(NearbyTexts.results.lines.favorite.message.removed),
+                t(DeparturesTexts.results.lines.favorite.message.removed),
               );
             },
           },
@@ -124,5 +124,9 @@ export function useOnMarkFavouriteDepartures(
     }
   };
 
-  return {onMarkFavourite, getExistingFavorite, toggleFavouriteAccessibilityLabel};
+  return {
+    onMarkFavourite,
+    getExistingFavorite,
+    toggleFavouriteAccessibilityLabel,
+  };
 }

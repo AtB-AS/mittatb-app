@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesTexts} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {useHumanizeDistance} from '@atb/utils/location';
 import {

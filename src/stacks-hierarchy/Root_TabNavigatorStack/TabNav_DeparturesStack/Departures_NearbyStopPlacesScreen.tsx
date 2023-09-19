@@ -1,7 +1,6 @@
 import {StopPlace} from '@atb/api/types/departures';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {NearbyTexts, useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {DeparturesStackProps} from './navigation-types';
 import {NearbyStopPlacesScreenComponent} from '@atb/nearby-stop-places';

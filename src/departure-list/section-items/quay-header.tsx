@@ -12,7 +12,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {isSituationValidAtDate, SituationMessageBox} from '@atb/situations';
 import {StyleSheet} from '@atb/theme';
-import {NearbyTexts, useTranslation} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useHumanizeDistance} from '@atb/utils/location';
 
 export type QuayHeaderItemProps = SectionItemProps<{
@@ -34,18 +34,22 @@ export function QuayHeaderItem({
   const humanized = useHumanizeDistance(distance);
 
   const label = humanized
-    ? t(NearbyTexts.results.quayResult.platformHeader.distance.label(humanized))
+    ? t(
+        DeparturesTexts.results.quayResult.platformHeader.distance.label(
+          humanized,
+        ),
+      )
     : '';
 
   const accessibilityLabel = quay.publicCode
     ? t(
-        NearbyTexts.results.quayResult.platformHeader.accessibilityLabel(
+        DeparturesTexts.results.quayResult.platformHeader.accessibilityLabel(
           quay.name,
           quay.publicCode,
         ),
       )
     : t(
-        NearbyTexts.results.quayResult.platformHeader.accessibilityLabelNoPublicCode(
+        DeparturesTexts.results.quayResult.platformHeader.accessibilityLabelNoPublicCode(
           quay.name,
         ),
       );

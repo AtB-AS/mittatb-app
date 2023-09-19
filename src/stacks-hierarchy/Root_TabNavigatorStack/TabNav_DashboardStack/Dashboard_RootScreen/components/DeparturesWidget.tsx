@@ -11,8 +11,11 @@ import {useFavorites} from '@atb/favorites';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
 import {StyleSheet} from '@atb/theme';
-import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {
+  DeparturesTexts,
+  FavoriteDeparturesTexts,
+  useTranslation,
+} from '@atb/translations';
 import {Coordinates} from '@entur/sdk';
 import haversineDistance from 'haversine-distance';
 import React, {useEffect} from 'react';

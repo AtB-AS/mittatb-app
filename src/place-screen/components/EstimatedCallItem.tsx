@@ -15,12 +15,12 @@ import {
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   CancelledDepartureTexts,
+  DeparturesTexts,
   dictionary,
   Language,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
 import {
   formatLocaleTime,

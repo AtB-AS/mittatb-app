@@ -156,5 +156,115 @@ const DeparturesTexts = {
   closeButton: {
     label: _('Lukk', 'Close', 'Lukk'),
   },
+  results: {
+    lines: {
+      lineNameAccessibilityHint: _(
+        'Aktiver for detaljer om avgang og oversikt over kommende avganger.',
+        'Activate for departure details, and to review future departures',
+        'Trykk for detaljar om avgang og oversikt over komande avgangar',
+      ),
+      favorite: {
+        addFavorite: (name: string, place: string) =>
+          _(
+            `Legg til favorittavgang: ${name} frå ${place}`,
+            `Add favourite departure: ${name} from ${place}.`,
+            `Legg til favorittavgang: ${name} frå ${place}`,
+          ),
+        removeFavorite: (name: string, place: string) =>
+          _(
+            `Fjern favorittavgang: ${name} frå ${place}`,
+            `Delete favourite departure: ${name} from ${place}.`,
+            `Fjern favorittavgang: ${name} frå ${place}`,
+          ),
+        delete: {
+          label: _('Fjerne avgang?', 'Delete departure?', 'Slette avgang?'),
+          confirmWarning: _(
+            'Sikker på at du vil fjerne favorittavgang?',
+            'Sure you want to delete this favourite?',
+            'Er du sikker på at du vil slette denne favorittavgangen?',
+          ),
+          cancel: _('Avbryt', 'Cancel', 'Avbryt'),
+          delete: _('Slett', 'Delete', 'Slett'),
+        },
+        message: {
+          saved: _(`Lagt til.`, 'Added', `Lagt til.`),
+          removed: _(`Fjernet.`, 'Removed', `Fjerna.`),
+        },
+      },
+    },
+    messages: {
+      initial: _(
+        'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
+        'Search for departures from nearby stops or locations',
+        'Søk etter avgangar frå haldeplassar eller i nærleiken av stadar.',
+      ),
+      emptyResultFavorites: _(
+        'Fant ingen favorittavganger på valgt plass.',
+        'No favourite departures found at the specified location',
+        'Ingen favorittavgangar funne på valt stad.',
+      ),
+    },
+    relativeTime: (time: string) => _(`om ${time}`, `in ${time}`, `om ${time}`),
+
+    quayResult: {
+      platformHeader: {
+        accessibilityLabel: (name: string, publicCode: string) =>
+          _(
+            `Avganger fra plattform ${name} ${publicCode}.`,
+            `Departures from platform ${name} ${publicCode}.`,
+            `Avgangar frå plattform ${name} ${publicCode}.`,
+          ),
+        accessibilityLabelNoPublicCode: (name: string) =>
+          _(
+            `Avganger fra plattform på holdeplassen ${name}.`,
+            `Departures from stop place platform ${name}.`,
+            `Avgangar frå plattform på haldeplassen ${name}.`,
+          ),
+        distance: {
+          label: (distance: string) =>
+            _(
+              `Det er rundt ${distance} til plattform.`,
+              `About ${distance} to platform.`,
+              `Det er omtrent ${distance} til plattformen.`,
+            ),
+        },
+      },
+      showMoreToggler: {
+        text: _(
+          'Vis flere avganger',
+          'Show more departures',
+          'Vis fleire avgangar',
+        ),
+      },
+    },
+    departure: {
+      hasPassedAccessibilityLabel: (time: string) =>
+        _(
+          `Avgangen ${time} har trolig passert plattformen.`,
+          `Departure ${time} has likely left the platform.`,
+          `Avgangen ${time} har truleg passert plattformen.`,
+        ),
+      upcomingRealtimeAccessibilityLabel: (time: string) =>
+        _(
+          `Kommende avgang sanntid ${time} `,
+          `Next departure realtime ${time} `,
+          `Neste avgang sanntid ${time}`,
+        ),
+      upcomingAccessibilityLabel: (time: string) =>
+        _(
+          `Kommende avgang ${time} `,
+          `Next departure ${time} `,
+          `Neste avgang ${time}`,
+        ),
+      nextAccessibilityLabel: (time: string) =>
+        _(
+          `Neste avganger: ${time} `,
+          `Next departures: ${time} `,
+          `Neste avgangar: ${time}`,
+        ),
+      nextAccessibilityRealtime: (time: string) =>
+        _(`sanntid ${time}`, `realtime: ${time}`, `Sanntid: ${time}`),
+    },
+  },
 };
 export default DeparturesTexts;

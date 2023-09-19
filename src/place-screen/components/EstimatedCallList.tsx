@@ -1,10 +1,9 @@
 import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
 import {EstimatedCall} from '@atb/api/types/departures';
 import {ThemeText} from '@atb/components/text';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {FlatList} from 'react-native-gesture-handler';
 import React, {useCallback} from 'react';
-import {useTranslation} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
   EstimatedCallItem,
   EstimatedCallItemProps,
