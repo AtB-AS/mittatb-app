@@ -47,9 +47,9 @@ const OnboardingTexts = {
   alsoGoodToKnow: {
     title: _('Også greit å vite', 'Also good to know', 'Også greit å vite'),
     description: _(
-      'Billetten du kjøper blir gyldig med én gang eller til avgangen du velger. Du kan kjøpe billett til mer enn 48 timer frem i tid. Husk at kjøpet av billetten ikke er en reservasjon på avgangen.',
-      'The ticket you purchase becomes valid immediately or for the departure time you choose. Therefore, you can buy a ticket for more than 48 hours in advance. Please note that purchasing the ticket does not reserve your spot on the departure.',
-      'Billetten du kjøper blir gyldig med ein gong eller til avgangen du vel. Du kan kjøpe billett til meir enn 48 timer fram i tid. Husk at kjøpet av billetten ikkje er ein reservasjon på avgangen.',
+      'Billetten du kjøper blir gyldig med én gang eller til avgangen du velger. Husk at kjøpet av billetten ikke er en reservasjon på avgangen.',
+      'The ticket you purchase becomes valid immediately or for the departure time you choose. Please note that purchasing the ticket does not reserve your spot on the departure.',
+      'Billetten du kjøper blir gyldig med ein gong eller til avgangen du vel. Husk at kjøpet av billetten ikkje er ein reservasjon på avgangen.',
     ),
     mainButton: _('Neste', 'Next', 'Neste'),
   },
