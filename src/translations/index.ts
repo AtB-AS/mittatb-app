@@ -63,3 +63,4 @@ export {default as TicketAssistantTexts} from './screens/TicketAssistant';
 export {default as ActiveTokenRequiredTexts} from './screens/subscreens/ActiveTokenRequired';
 export {default as LoadingScreenTexts} from './screens/LoadingScreen';
 export {default as InfoTagTexts} from './components/InfoTag';
+export {default as DeparturesTexts} from './screens/Departures';

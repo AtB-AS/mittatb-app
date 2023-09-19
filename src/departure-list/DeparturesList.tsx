@@ -4,12 +4,11 @@ import {ExpandableSectionItem} from '@atb/components/sections';
 import {Location} from '@atb/favorites';
 import {MessageBox} from '@atb/components/message-box';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {NearbyTexts, useTranslation} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {hasNoGroupsWithDepartures, hasNoQuaysWithDepartures} from './utils';
 import {StopPlace} from '@atb/api/types/trips';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {
   QuaySection,
   QuaySectionProps,
@@ -50,7 +49,7 @@ export function DeparturesList({
       <View style={[styles.container, styles.container__padded]}>
         <MessageBox
           type="info"
-          message={t(NearbyTexts.results.messages.initial)}
+          message={t(DeparturesTexts.results.messages.initial)}
         />
       </View>
     );
@@ -59,7 +58,7 @@ export function DeparturesList({
   if (!isLoading && hasNoQuaysWithDepartures(departures)) {
     const message = !showOnlyFavorites
       ? t(DeparturesTexts.message.emptyResult)
-      : t(NearbyTexts.results.messages.emptyResultFavorites);
+      : t(DeparturesTexts.results.messages.emptyResultFavorites);
     return (
       <View style={styles.container}>
         <ScreenReaderAnnouncement message={message} />
