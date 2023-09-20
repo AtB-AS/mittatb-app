@@ -47,6 +47,7 @@ export type EstimatedCallItemProps = {
     existingFavorite?: StoredFavoriteDeparture,
   ) => void;
   showBottomBorder: boolean;
+  testID?: string;
 };
 
 export const EstimatedCallItem = memo(
@@ -228,7 +229,7 @@ function LineChip({
   departure,
   mode,
   testID = '',
-}: Pick<EstimatedCallItemProps, 'departure' | 'mode'>) {
+}: Pick<EstimatedCallItemProps, 'departure' | 'mode' | 'testID'>) {
   const styles = useStyles();
   const fontScale = useFontScale();
   const {theme} = useTheme();
