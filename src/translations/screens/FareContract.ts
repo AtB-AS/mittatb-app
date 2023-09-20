@@ -297,6 +297,23 @@ const FareContractTexts = {
     }
   },
   otherFareContracts: _('Andre billetter', 'Other tickets', 'Andre billettar'),
+  samarbeidsbillettenInfo: {
+    single: _(
+      'Enkeltbilletter i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
+      'Single tickets in zone A can also be used on train in zone A, but not on night buses.',
+      'Enkeltbillettar i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
+    ),
+    period: _(
+      'Periodebilletter i sone A kan også brukes på tog i sone A.',
+      'Periodic tickets in zone A can also be used on train in zone A.',
+      'Periodebillettar i sone A kan også brukast på tog i sone A.',
+    ),
+    hour24: _(
+      '24-timersbillett i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
+      '24 hour pass in zone A can also be used on train in zone A, but not on night buses.',
+      '24-timersbillett i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
+    ),
+  },
 };
 
 export default orgSpecificTranslations(FareContractTexts, {

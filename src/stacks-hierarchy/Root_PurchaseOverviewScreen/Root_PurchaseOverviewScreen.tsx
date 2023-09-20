@@ -23,7 +23,7 @@ import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {isAfter} from '@atb/utils/date';
 
@@ -69,8 +69,12 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   );
   const analytics = useAnalytics();
 
-  const {timeSelectionMode, travellerSelectionMode, zoneSelectionMode} =
-    params.fareProductTypeConfig.configuration;
+  const {
+    timeSelectionMode,
+    travellerSelectionMode,
+    zoneSelectionMode,
+    requiresTokenOnMobile,
+  } = params.fareProductTypeConfig.configuration;
 
   const offerEndpoint =
     zoneSelectionMode === 'none'
@@ -208,11 +212,29 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
         </View>
 
-        <PurchaseMessages
-          preassignedFareProductType={preassignedFareProduct.type}
-          fromTariffZone={fromPlace}
-          toTariffZone={toPlace}
-        />
+        {isFree ? (
+          <MessageBox
+            type="valid"
+            message={t(PurchaseOverviewTexts.summary.free)}
+            style={styles.messages}
+          />
+        ) : (
+          <>
+            <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
+            <GlobalMessage
+              globalMessageContext={
+                GlobalMessageContextEnum.appPurchaseOverview
+              }
+              textColor="background_0"
+              ruleVariables={{
+                preassignedFareProductType: preassignedFareProduct.type,
+                fromTariffZone: fromPlace.id,
+                toTariffZone: toPlace.id,
+              }}
+              style={styles.messages}
+            />
+          </>
+        )}
 
         <FullScreenFooter>
           <Summary
@@ -221,7 +243,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isError={!!error || !hasSelection}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
-            fareProductTypeConfig={params.fareProductTypeConfig}
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: params.fareProductTypeConfig.name,
@@ -260,6 +281,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
+  },
+  messages: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   selectionComponent: {
     marginVertical: theme.spacings.medium,

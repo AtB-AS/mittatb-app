@@ -7,12 +7,15 @@ import {
 } from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
 import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
-import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 
@@ -84,6 +87,17 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       </ScrollView>
     </View>
   );
+}
+
+export function getValidOnTrainNoticeText(
+  t: TranslateFunction,
+  fareProductType?: string,
+) {
+  if (fareProductType === 'single')
+    return t(FareContractTexts.samarbeidsbillettenInfo.single);
+  if (fareProductType === 'hour24')
+    return t(FareContractTexts.samarbeidsbillettenInfo.hour24);
+  return t(FareContractTexts.samarbeidsbillettenInfo.period);
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
