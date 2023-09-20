@@ -95,7 +95,7 @@ export const ScreenHeaderWithoutNavigation = (
 
   return (
     <BaseHeader
-      style={styles.bottomSheetHeaderContainer}
+      style={styles.withoutNavigationContainer}
       leftIcon={leftIcon}
       rightIcon={rightIcon}
       {...props}
@@ -196,8 +196,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     paddingHorizontal: theme.spacings.medium,
     paddingTop: theme.spacings.medium,
   },
-  // TODO: Rename
-  bottomSheetHeaderContainer: {
+  withoutNavigationContainer: {
     paddingTop: theme.spacings.large,
     paddingBottom: theme.spacings.small,
     borderTopLeftRadius: theme.border.radius.circle,
