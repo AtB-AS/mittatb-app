@@ -10,6 +10,7 @@ export enum GlobalMessageContextEnum {
   appDepartures = 'app-departures',
   appTicketing = 'app-ticketing',
   appPurchaseOverview = 'app-purchase-overview',
+  appFareContractDetails = 'app-fare-contract-details',
   appDepartureDetails = 'app-departure-details',
   appTripDetails = 'app-trip-details',
   appServiceDisruptions = 'app-service-disruptions',

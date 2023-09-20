@@ -1,4 +1,3 @@
-import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
@@ -6,16 +5,12 @@ import {
   isOfFareProductRef,
 } from '@atb/reference-data/utils';
 import {StyleSheet} from '@atb/theme';
-import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
-import {
-  FareContractTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {useTicketingState} from '@atb/ticketing';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
+import {DetailsContent} from '@atb/fare-contracts';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 
@@ -47,20 +42,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       orderVersion: fc.version,
     });
 
-  const shouldShowValidOnTrainNotice: boolean =
-    fc !== undefined &&
-    isPreActivatedTravelRight(firstTravelRight) &&
-    getValidityStatus(
-      now,
-      firstTravelRight.startDateTime.toMillis(),
-      firstTravelRight.endDateTime.toMillis(),
-      fc.state,
-    ) === 'valid' &&
-    !!firstTravelRight.tariffZoneRefs?.length &&
-    firstTravelRight.tariffZoneRefs?.every(
-      (val: string) => val === 'ATB:TariffZone:1',
-    ) === true;
-
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -77,27 +58,9 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
             hasActiveTravelCard={hasActiveTravelCard}
           />
         )}
-
-        {shouldShowValidOnTrainNotice && (
-          <MessageBox
-            message={getValidOnTrainNoticeText(t, preassignedFareProduct?.type)}
-            type="info"
-          />
-        )}
       </ScrollView>
     </View>
   );
-}
-
-export function getValidOnTrainNoticeText(
-  t: TranslateFunction,
-  fareProductType?: string,
-) {
-  if (fareProductType === 'single')
-    return t(FareContractTexts.samarbeidsbillettenInfo.single);
-  if (fareProductType === 'hour24')
-    return t(FareContractTexts.samarbeidsbillettenInfo.hour24);
-  return t(FareContractTexts.samarbeidsbillettenInfo.period);
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
