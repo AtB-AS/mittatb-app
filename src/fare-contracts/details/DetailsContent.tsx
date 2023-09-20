@@ -21,6 +21,13 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
+import {
+  GlobalMessage,
+  GlobalMessageContextEnum,
+  useGlobalMessagesState,
+} from '@atb/global-messages';
+import {View} from 'react-native';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   fareContract: FareContract;
@@ -38,12 +45,14 @@ export const DetailsContent: React.FC<Props> = ({
   hasActiveTravelCard = false,
 }) => {
   const {t} = useTranslation();
+  const styles = useStyles();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {
     deviceIsInspectable,
     isError: mobileTokenError,
     fallbackEnabled,
   } = useMobileTokenContextState();
+  const {findGlobalMessages} = useGlobalMessagesState();
 
   const firstTravelRight = fc.travelRights[0];
 
@@ -60,6 +69,18 @@ export const DetailsContent: React.FC<Props> = ({
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+
+    const globalMessageRuleVariables = {
+      fareProductType: preassignedFareProduct?.type ?? 'unknown',
+      firstTravelRightType: firstTravelRight.type,
+      validityStatus: validityStatus,
+      tariffZones: firstTravelRight.tariffZoneRefs ?? [],
+    };
+    const globalMessageCount = findGlobalMessages(
+      GlobalMessageContextEnum.appFareContractDetails,
+      globalMessageRuleVariables,
+    ).length;
+
     return (
       <Section withBottomPadding>
         <GenericSectionItem>
@@ -88,6 +109,20 @@ export const DetailsContent: React.FC<Props> = ({
             fareProductType={preassignedFareProduct?.type}
           />
         </GenericSectionItem>
+        {globalMessageCount > 0 && (
+          <GenericSectionItem>
+            <View style={styles.globalMessages}>
+              <GlobalMessage
+                globalMessageContext={
+                  GlobalMessageContextEnum.appFareContractDetails
+                }
+                textColor="background_0"
+                ruleVariables={globalMessageRuleVariables}
+                style={styles.globalMessages}
+              />
+            </View>
+          </GenericSectionItem>
+        )}
         <GenericSectionItem>
           <OrderDetails fareContract={fc} />
         </GenericSectionItem>
@@ -103,3 +138,10 @@ export const DetailsContent: React.FC<Props> = ({
     return <UnknownFareContractDetails fc={fc} />;
   }
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  globalMessages: {
+    flex: 1,
+    rowGap: theme.spacings.medium,
+  },
+}));
