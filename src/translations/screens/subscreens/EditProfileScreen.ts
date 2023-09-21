@@ -23,6 +23,10 @@ export const EditProfileTexts = {
           '',
         ),
     },
+    email: {
+      label: _('E-mail adresse', 'E-mail address', ''),
+      placeholder: _('Legg til e-mail', 'Add e-mail address', ''),
+    },
   },
   customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
   otp: (phoneNumber: string | undefined) =>
