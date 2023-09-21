@@ -7,6 +7,7 @@ import {findReferenceDataById} from '@atb/reference-data/utils';
 import {
   listRecentFareContracts,
   RecentFareContractBackend,
+  TravelRightDirection,
   useTicketingState,
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
@@ -15,6 +16,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {FareProductTypeConfig} from '@atb/configuration/types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {enumFromString} from '@atb/utils/enum-from-string';
 
 type State = {
   error: boolean;
@@ -127,7 +129,10 @@ const mapBackendRecentFareContracts = (
 
   const pointToPointValidity = recentFareContract.point_to_point_validity;
 
-  const orderId = recentFareContract.order_id;
+  const direction: TravelRightDirection | undefined = enumFromString(
+    TravelRightDirection,
+    recentFareContract.direction,
+  );
 
   const fromId = pointToPointValidity?.fromPlace || fromTariffZone?.id;
 
@@ -141,7 +146,7 @@ const mapBackendRecentFareContracts = (
 
   return {
     id,
-    orderId,
+    direction,
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,

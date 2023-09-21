@@ -15,12 +15,12 @@ import {
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   CancelledDepartureTexts,
+  DeparturesTexts,
   dictionary,
   Language,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
 import {
   formatLocaleTime,
@@ -47,6 +47,7 @@ export type EstimatedCallItemProps = {
     existingFavorite?: StoredFavoriteDeparture,
   ) => void;
   showBottomBorder: boolean;
+  testID?: string;
 };
 
 export const EstimatedCallItem = memo(
@@ -60,6 +61,7 @@ export const EstimatedCallItem = memo(
   }: EstimatedCallItemProps): JSX.Element => {
     const styles = useStyles();
     const {t, language} = useTranslation();
+    const testID = 'estimatedCallItem';
 
     const onPress =
       mode === 'Favourite'
@@ -84,11 +86,11 @@ export const EstimatedCallItem = memo(
         accessibilityLabel={a11yLabel}
         accessibilityHint={a11yHint}
       >
-        <View style={styles.container}>
+        <View style={styles.container} testID={testID}>
           <View style={styles.estimatedCallItem}>
             <View style={styles.transportInfo}>
-              <LineChip departure={departure} mode={mode} />
-              <ThemeText style={styles.lineName}>
+              <LineChip departure={departure} mode={mode} testID={testID} />
+              <ThemeText style={styles.lineName} testID={`${testID}FrontText`}>
                 {departure.destinationDisplay?.frontText}
               </ThemeText>
             </View>
@@ -226,7 +228,8 @@ export function getLineA11yLabel(
 function LineChip({
   departure,
   mode,
-}: Pick<EstimatedCallItemProps, 'departure' | 'mode'>) {
+  testID = '',
+}: Pick<EstimatedCallItemProps, 'departure' | 'mode' | 'testID'>) {
   const styles = useStyles();
   const fontScale = useFontScale();
   const {theme} = useTheme();
@@ -267,6 +270,7 @@ function LineChip({
             {color: transportTextColor, minWidth: fontScale * 20},
           ]}
           type="body__primary--bold"
+          testID={`${testID}PublicCode`}
         >
           {publicCode}
         </ThemeText>

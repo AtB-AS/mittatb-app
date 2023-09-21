@@ -64,11 +64,9 @@ export const TicketSummary = () => {
     ? ticket.price / numberOfTravels
     : ticket.price;
 
-  const perTripPriceString = `${formatDecimalNumber(
-    perTripPrice,
-    language,
-    2,
-  )} kr`;
+  const perTripPriceString =
+    t(TicketAssistantTexts.summary.pricePerTrip) +
+    ` ${formatDecimalNumber(perTripPrice, language, 2)} kr`;
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
 
@@ -143,28 +141,17 @@ export const TicketSummary = () => {
                 text={zonesString}
               />
             </View>
-            {/** Total ticket cost **/}
-            <View>
-              <ThemeText type="label__uppercase" color="secondary">
-                {t(TicketAssistantTexts.summary.price)}
-              </ThemeText>
-              <InfoChip
-                interactiveColor={interactiveColorName}
-                style={styles.infoChip}
-                text={ticketPriceString}
-              />
-            </View>
           </View>
         </View>
         <View style={styles.ticketFooter}>
           <ThemeText type={'body__secondary'} color={interactiveColor.outline}>
-            {t(TicketAssistantTexts.summary.pricePerTrip)}
+            {t(TicketAssistantTexts.summary.price)}
           </ThemeText>
           <ThemeText
             type="body__secondary--bold"
             color={interactiveColor.outline}
           >
-            {perTripPriceString}
+            {ticketPriceString}
           </ThemeText>
         </View>
       </View>
@@ -174,6 +161,8 @@ export const TicketSummary = () => {
         color={themeColor}
         accessibilityLabel={savingsText}
       >
+        {perTripPriceString}
+        {'\n'}
         {savingsText}
       </ThemeText>
     </>
@@ -208,7 +197,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalFlex: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: theme.spacings.large,
   },
   infoChip: {
     marginVertical: theme.spacings.xSmall,

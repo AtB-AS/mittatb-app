@@ -8,21 +8,13 @@ import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
-import {getValidOnTrainNoticeText} from '../../Root_TabNavigatorStack/TabNav_TicketingStack/utils';
-import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 
 export type PurchaseWarningsProps = {
-  preassignedFareProductType: string;
-  fromTariffZone: TariffZoneWithMetadata | StopPlaceFragment;
-  toTariffZone: TariffZoneWithMetadata | StopPlaceFragment;
+  requiresTokenOnMobile: boolean;
 };
 
 export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
-  preassignedFareProductType,
-  fromTariffZone,
-  toTariffZone,
+  requiresTokenOnMobile,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -45,20 +37,6 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
     remoteTokens,
     deviceIsInspectable,
   );
-  const {enable_nfk_nightbus_warning} = useRemoteConfig();
-
-  const shouldShowValidTrainTicketNotice =
-    (preassignedFareProductType === 'single' ||
-      preassignedFareProductType === 'period' ||
-      preassignedFareProductType === 'hour24') &&
-    fromTariffZone.id === 'ATB:TariffZone:1' &&
-    toTariffZone.id === 'ATB:TariffZone:1';
-
-  const shouldShowNFKNightBusPeriodNotice =
-    preassignedFareProductType === 'period' && enable_nfk_nightbus_warning;
-
-  const shouldShowNFKNightBus24hourNotice =
-    preassignedFareProductType === 'hour24' && enable_nfk_nightbus_warning;
 
   return (
     <>
@@ -79,27 +57,13 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
         />
       )}
 
-      {shouldShowValidTrainTicketNotice && (
+      {requiresTokenOnMobile && (
         <MessageBox
-          style={styles.warning}
-          message={getValidOnTrainNoticeText(t, preassignedFareProductType)}
           type="info"
-        />
-      )}
-
-      {shouldShowNFKNightBusPeriodNotice && (
-        <MessageBox
+          message={t(PurchaseOverviewTexts.summary.messageRequiresMobile)}
           style={styles.warning}
-          message={t(PurchaseOverviewTexts.nfkNightBusPeriodNotice)}
-          type="info"
-        />
-      )}
-
-      {shouldShowNFKNightBus24hourNotice && (
-        <MessageBox
-          style={styles.warning}
-          message={t(PurchaseOverviewTexts.nfkNightBusHour24Notice)}
-          type="info"
+          isMarkdown={true}
+          subtle={true}
         />
       )}
     </>

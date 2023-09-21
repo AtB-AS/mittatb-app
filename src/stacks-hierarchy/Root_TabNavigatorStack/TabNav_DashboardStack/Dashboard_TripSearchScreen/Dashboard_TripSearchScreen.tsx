@@ -42,7 +42,6 @@ import {ActivityIndicator, Platform, RefreshControl, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {SearchForLocations} from '../types';
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {storage, StorageModelKeysEnum} from '@atb/storage';
 import {useTravelSearchFiltersState} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-travel-search-filters-state';
 import {SelectedFiltersButtons} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/SelectedFiltersButtons';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -73,15 +72,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
   const isFocused = useIsFocusedAndActive();
-
-  const shouldShowTravelSearchFilterOnboarding =
-    useShouldShowTravelSearchFilterOnboarding();
-  useEffect(() => {
-    if (shouldShowTravelSearchFilterOnboarding) {
-      analytics.logEvent('Trip search', 'Filter onboarding shown');
-      navigation.navigate('Dashboard_TravelSearchFilterOnboardingScreen');
-    }
-  }, [shouldShowTravelSearchFilterOnboarding]);
 
   const {location, requestPermission: requestGeoPermission} =
     useGeolocationState();
@@ -624,26 +614,6 @@ function computeNoResultReasons(
   }
   return reasons;
 }
-
-export const useShouldShowTravelSearchFilterOnboarding = () => {
-  const [shouldShow, setShouldShow] = useState(false);
-  const isFocused = useIsFocused();
-  const {enabled} = useTravelSearchFiltersState();
-
-  useEffect(() => {
-    if (isFocused && enabled) {
-      (async function () {
-        const hasRead = await storage.get(
-          StorageModelKeysEnum.HasReadTravelSearchFilterOnboarding,
-        );
-        setShouldShow(hasRead ? !JSON.parse(hasRead) : true);
-      })();
-    } else {
-      setShouldShow(false);
-    }
-  }, [isFocused, enabled]);
-  return shouldShow;
-};
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {

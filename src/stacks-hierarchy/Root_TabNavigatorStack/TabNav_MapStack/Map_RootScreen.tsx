@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   Map,
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
@@ -9,21 +9,12 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 import {useStations, useVehicles} from '@atb/mobility';
-import {useShouldShowScooterOnboarding} from './use-should-show-scooter-onboarding';
-
 export const Map_RootScreen = ({
   navigation,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const vehicles = useVehicles();
   const stations = useStations();
-
-  const shouldShowScooterOnboarding = useShouldShowScooterOnboarding();
-  useEffect(() => {
-    if (shouldShowScooterOnboarding && !isScreenReaderEnabled) {
-      navigation.navigate('Map_ScooterOnboardingScreen');
-    }
-  }, [shouldShowScooterOnboarding, isScreenReaderEnabled]);
 
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
 
@@ -71,7 +62,7 @@ export const Map_RootScreen = ({
 
   return (
     <>
-      <StatusBarOnFocus barStyle="dark-content" />
+      <StatusBarOnFocus barStyle="dark-content" backgroundColor="#00000000" />
       <Map
         selectionMode={'ExploreEntities'}
         vehicles={vehicles}

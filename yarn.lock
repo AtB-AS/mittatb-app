@@ -35,10 +35,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-8.0.0.tgz#6c853131dd45dc360296390324f4abd3bca0364b"
-  integrity sha512-zt7P8nXI5gO11dJEE9LjyeEAiBRlFpUW+VxqBItQVL/cqqjMwjUYpvg52w6JLtlrIpwwBsbmn/7XaCFl69/BSg==
+"@atb-as/generate-assets@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-9.0.0.tgz#cf4c43f5940eff2aa299f1b5a8b507b023be00df"
+  integrity sha512-5vYuiRpb88kfXnZrE3xf0o3GaENoK54Y725OnBA3gM998zCMuKn6FO9yPDVG3t4FVC3So9vuA8WCgaYWIxWy3g==
   dependencies:
     "@atb-as/theme" "^7.1.1"
     commander "^9.4.0"
@@ -3576,6 +3576,11 @@
   dependencies:
     meow "^6.1.1"
 
+"@miblanchard/react-native-slider@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@miblanchard/react-native-slider/-/react-native-slider-2.3.1.tgz#79e0f1f9b1ce43ef25ee51ee9256c012e5dfa412"
+  integrity sha512-J/hZDBWmXq8fJeOnTVHqIUVDHshqMSpJVxJ4WqwuCBKl5Rke9OBYXIdkSlgi75OgtScAr8FKK5KNkDKHUf6JIg==
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"
@@ -3828,11 +3833,6 @@
   integrity sha512-VOPh5iid5MZxcr29GexyVnV6cKsUl7PKuXsLXxekffpVxxhKxh+hPBvVuQQCwB+yqmpamAcsWcxmcAm+hGwtCA==
   dependencies:
     invariant "^2.2.4"
-
-"@react-native-community/slider@^4.4.2":
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.4.2.tgz#1fea0eb3ae31841fe87bd6c4fc67569066e9cf4b"
-  integrity sha512-D9bv+3Vd2gairAhnRPAghwccgEmoM7g562pm8i4qB3Esrms5mggF81G3UvCyc0w3jjtFHh8dpQkfEoKiP0NW/Q==
 
 "@react-native-firebase/analytics@^16.5.0":
   version "16.5.0"
