@@ -18,6 +18,7 @@ export enum StorageModelKeysEnum {
   EnableNonTransitTripSearch = '@ATB_enable_non_transit_trip_search',
   ShowValidTimeInfoDebugOverride = '@ATB_show_valid_time_info_debug_override',
   EnableLoadingScreenDebugOverride = '@ATB_loading_screen_debug_override',
+  EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
@@ -40,6 +41,7 @@ export type StorageModel = {
   '@ATB_feedback_display_stats': string;
   '@ATB_last_mobile_token_user': string;
   '@ATB_user_map_filters': string;
+  ATB_beacons_debug_override: string;
 };
 
 export type StorageModelTypes = keyof StorageModel | StorageModelKeysTypes;
