@@ -75,6 +75,7 @@ export const DetailsContent: React.FC<Props> = ({
       firstTravelRightType: firstTravelRight.type,
       validityStatus: validityStatus,
       tariffZones: firstTravelRight.tariffZoneRefs ?? [],
+      numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,
     };
     const globalMessageCount = findGlobalMessages(
       GlobalMessageContextEnum.appFareContractDetails,
