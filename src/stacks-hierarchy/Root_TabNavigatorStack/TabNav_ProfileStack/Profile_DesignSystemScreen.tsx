@@ -1283,9 +1283,6 @@ export const Profile_DesignSystemScreen = () => {
             showClear={true}
             inlineLabel={false}
           />
-        </Section>
-
-        <Section withPadding withTopPadding>
           <TextInputSectionItem
             label="Label"
             placeholder="Placeholder"

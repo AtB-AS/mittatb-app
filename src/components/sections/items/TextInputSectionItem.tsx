@@ -154,13 +154,13 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         {errorText !== undefined && (
           <View
             style={styles.error}
-            accessibilityLiveRegion={'polite'}
+            accessibilityLiveRegion="polite"
             accessibilityLabel={`${t(
               dictionary.messageTypes.error,
             )}, ${errorText}`}
           >
             <ThemeIcon svg={Error} />
-            <ThemeText type={'body__secondary'} style={styles.errorMessage}>
+            <ThemeText type="body__secondary" style={styles.errorMessage}>
               {errorText}
             </ThemeText>
           </View>
