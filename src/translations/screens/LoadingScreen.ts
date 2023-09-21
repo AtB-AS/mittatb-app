@@ -58,9 +58,9 @@ export default orgSpecificTranslations(LoadingScreenTexts, {
           '\n  • Delete and reinstall the app' +
           '\n  • Contact FRAM Customer Service',
         'Appen har problem med å starta opp. Om det held fram, kan du prøve å:\n' +
-          '\n  • Sjekka om du har nett' +
+          '\n  • Sjekke om du har nett' +
           '\n  • Lukke og opne appen igjen' +
-          '\n  • Sletta og installere appen igjen' +
+          '\n  • Slette og installere appen igjen' +
           '\n  • Kontakte FRAM Kundesenter',
       ),
       installId: (installId: string) =>
