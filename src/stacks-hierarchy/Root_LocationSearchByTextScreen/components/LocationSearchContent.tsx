@@ -1,4 +1,3 @@
-import {useFavorites} from '@atb/favorites';
 import {useSearchHistory, JourneySearchHistoryEntry} from '@atb/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
@@ -45,24 +44,22 @@ export function LocationSearchContent({
   onAddFavorite,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
-  const {favorites} = useFavorites();
   const {history, addSearchEntry} = useSearchHistory();
   const {t} = useTranslation();
 
   const [text, setText] = useState<string>(defaultText ?? '');
-  const debouncedText = useDebounce(text, 200);
+  const delay = text.length == 1 ? 0 : 100;
+  const debouncedText = useDebounce(text, delay);
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(
-    debouncedText,
     history,
-    favorites,
     onlyLocalTariffZoneAuthority,
   );
 
   const {location: geolocation} = useGeolocationState();
 
-  const {locations, error} = useGeocoder(
+  const {locations, error, isSearching} = useGeocoder(
     debouncedText,
     geolocation?.coordinates ?? null,
     onlyLocalTariffZoneAuthority,
@@ -103,8 +100,9 @@ export function LocationSearchContent({
   }, [error]);
 
   const hasPreviousResults = !!previousLocations.length;
-  const hasResults = !!filteredLocations.length;
+  const hasResults = !!filteredLocations.length && filteredLocations.length > 0;
   const hasAnyResult = hasResults || (includeHistory && hasPreviousResults);
+  const searchBarIsEmpty = text === '' || text.length === 0;
 
   return (
     <>
@@ -126,13 +124,15 @@ export function LocationSearchContent({
             testID="locationSearchInput"
           />
 
-          <FavoriteChips
-            onSelectLocation={onSelect}
-            onMapSelection={onMapSelection}
-            chipTypes={favoriteChipTypes}
-            style={styles.chipBox}
-            onAddFavorite={onAddFavorite}
-          />
+          {searchBarIsEmpty && !isSearching && (
+            <FavoriteChips
+              onSelectLocation={onSelect}
+              onMapSelection={onMapSelection}
+              chipTypes={favoriteChipTypes}
+              style={styles.chipBox}
+              onAddFavorite={onAddFavorite}
+            />
+          )}
         </View>
       </View>
 
@@ -150,21 +150,24 @@ export function LocationSearchContent({
           onScrollBeginDrag={() => Keyboard.dismiss()}
           testID="historyAndResultsScrollView"
         >
-          {includeJourneyHistory && (
-            <JourneyHistory
-              searchText={debouncedText}
-              onSelect={onJourneyHistorySelected}
-            />
-          )}
-          {includeHistory && hasPreviousResults && (
-            <LocationResults
-              title={t(LocationSearchTexts.results.previousResults.heading)}
-              locations={previousLocations}
-              onSelect={onSearchSelect}
-              testIDItemPrefix="previousResultItem"
-            />
-          )}
-          {hasResults && (
+          {searchBarIsEmpty ? (
+            <>
+              {includeJourneyHistory && (
+                <JourneyHistory
+                  searchText={''}
+                  onSelect={onJourneyHistorySelected}
+                />
+              )}
+              {includeHistory && hasPreviousResults && (
+                <LocationResults
+                  title={t(LocationSearchTexts.results.previousResults.heading)}
+                  locations={previousLocations}
+                  onSelect={onSearchSelect}
+                  testIDItemPrefix="previousResultItem"
+                />
+              )}
+            </>
+          ) : (
             <LocationResults
               title={t(LocationSearchTexts.results.searchResults.heading)}
               locations={filteredLocations}
@@ -175,7 +178,8 @@ export function LocationSearchContent({
         </ScrollView>
       ) : (
         !error &&
-        !!text && (
+        !!text &&
+        !isSearching && (
           <View style={[styles.contentBlock, styles.marginTop]}>
             <MessageBox
               type="info"

@@ -1,11 +1,6 @@
-import {
-  SearchLocation,
-  StoredLocationFavorite,
-  UserFavorites,
-} from '@atb/favorites';
+import {SearchLocation} from '@atb/favorites';
 import {useSearchHistory} from '@atb/search-history';
 import {LocationSearchResultType} from './types';
-import {getLocationLayer} from '@atb/utils/location';
 
 export function useFilteredJourneySearch(searchText?: string) {
   const {journeyHistory} = useSearchHistory();
@@ -20,12 +15,10 @@ export function useFilteredJourneySearch(searchText?: string) {
 }
 
 export const filterPreviousLocations = (
-  searchText: string,
   previousLocations: SearchLocation[],
-  favorites?: UserFavorites,
   onlyLocalTariffZoneAuthority: boolean = false,
 ): LocationSearchResultType[] => {
-  const mappedHistory: LocationSearchResultType[] =
+  return (
     previousLocations
       ?.map((location) => ({
         location,
@@ -33,32 +26,7 @@ export const filterPreviousLocations = (
       .filter(
         (location) =>
           !onlyLocalTariffZoneAuthority || location.location.layer == 'venue',
-      ) ?? [];
-
-  if (!searchText) {
-    return mappedHistory;
-  }
-
-  const filteredFavorites: LocationSearchResultType[] = (favorites ?? [])
-    .filter(
-      (
-        favorite,
-      ): favorite is Omit<StoredLocationFavorite, 'location'> & {
-        location: SearchLocation;
-      } =>
-        (matchText(searchText, favorite.location.name) ||
-          matchText(searchText, favorite.name)) &&
-        (!onlyLocalTariffZoneAuthority ||
-          getLocationLayer(favorite.location) == 'venue') &&
-        favorite.location.resultType === 'search',
-    )
-    .map(({location, ...favoriteInfo}) => ({
-      location,
-      favoriteInfo,
-    }));
-
-  return filteredFavorites.concat(
-    mappedHistory.filter((l) => matchText(l.location.name)),
+      ) ?? []
   );
 };
 
