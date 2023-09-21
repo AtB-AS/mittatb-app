@@ -18,6 +18,7 @@ import {SectionItemProps} from '../types';
 import {SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {Error} from '@atb/assets/svg/color/icons/status';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -27,12 +28,14 @@ type TextProps = SectionItemProps<
     inlineLabel?: boolean;
     showClear?: boolean;
     onClear?: () => void;
+    errorText?: string;
   }
 >;
 
 export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
   (
     {
+      errorText = undefined,
       label,
       inlineLabel = true,
       onFocus,
@@ -78,9 +81,18 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       else if (props.onChangeText) props.onChangeText('');
     };
 
-    const borderColor = !isFocused
-      ? undefined
-      : {borderColor: theme.border.focus};
+    const getBorderColor = () => {
+      if (isFocused) {
+        return {borderColor: theme.border.focus};
+      } else if (errorText) {
+        return {
+          borderColor:
+            theme.interactive.interactive_destructive.destructive.background,
+        };
+      } else {
+        return undefined;
+      }
+    };
 
     const padding = {
       // There are some oddities with handling padding
@@ -102,40 +114,50 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
           inlineLabel ? styles.containerInline : styles.containerMultiline,
           topContainerStyle,
           containerPadding,
-          borderColor,
+          getBorderColor(),
         ]}
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
         <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <InternalTextInput
-          ref={combinedRef}
-          style={[
-            styles.input,
-            inlineLabel ? contentContainer : undefined,
-            padding,
-            style,
-          ]}
-          placeholderTextColor={theme.text.colors.secondary}
-          onFocus={onFocusEvent}
-          onBlur={onBlurEvent}
-          maxFontSizeMultiplier={MAX_FONT_SCALE}
-          {...props}
-        />
-        {showClear ? (
-          <View style={styles.inputClear}>
-            <PressableOpacity
-              accessible={true}
-              accessibilityRole="button"
-              accessibilityLabel={t(SectionTexts.textInput.clear)}
-              hitSlop={insets.all(8)}
-              onPress={onClearEvent}
-            >
-              <ThemeIcon svg={Close} />
-            </PressableOpacity>
+        <View style={styles.inputClear}>
+          <InternalTextInput
+            ref={combinedRef}
+            style={[
+              styles.input,
+              inlineLabel ? contentContainer : undefined,
+              padding,
+              style,
+            ]}
+            placeholderTextColor={theme.text.colors.secondary}
+            onFocus={onFocusEvent}
+            onBlur={onBlurEvent}
+            maxFontSizeMultiplier={MAX_FONT_SCALE}
+            {...props}
+          />
+          {showClear ? (
+            <View style={styles.clearButton}>
+              <PressableOpacity
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={t(SectionTexts.textInput.clear)}
+                hitSlop={insets.all(8)}
+                onPress={onClearEvent}
+              >
+                <ThemeIcon svg={Close} />
+              </PressableOpacity>
+            </View>
+          ) : null}
+        </View>
+        {errorText !== undefined && (
+          <View style={styles.error}>
+            <ThemeIcon svg={Error} />
+            <ThemeText type={'body__secondary'} style={styles.errorMessage}>
+              {errorText}
+            </ThemeText>
           </View>
-        ) : null}
+        )}
       </View>
     );
   },
@@ -166,9 +188,16 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     paddingRight: theme.spacings.xSmall,
   },
   inputClear: {
-    position: 'absolute',
-    right: theme.spacings.medium,
-    bottom: theme.spacings.medium,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  clearButton: {
     alignSelf: 'center',
+  },
+  error: {flexDirection: 'row'},
+  errorMessage: {
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
+    flex: 1,
   },
 }));
