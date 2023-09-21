@@ -122,7 +122,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <View style={styles.inputClear}>
+        <View style={styles.inputContainer}>
           <InternalTextInput
             ref={combinedRef}
             style={[
@@ -138,7 +138,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
             {...props}
           />
           {showClear ? (
-            <View style={styles.clearButton}>
+            <View style={styles.inputClear}>
               <PressableOpacity
                 accessible={true}
                 accessibilityRole="button"
@@ -194,9 +194,13 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     minWidth: 60 - theme.spacings.medium,
     paddingRight: theme.spacings.xSmall,
   },
+  inputContainer: {
+    position: 'relative',
+  },
   inputClear: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    position: 'absolute',
+    right: 0,
+    bottom: theme.spacings.medium,
   },
   clearButton: {
     alignSelf: 'center',

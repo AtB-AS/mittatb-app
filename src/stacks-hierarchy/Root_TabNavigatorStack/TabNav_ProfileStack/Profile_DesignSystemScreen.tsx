@@ -1286,6 +1286,18 @@ export const Profile_DesignSystemScreen = () => {
         </Section>
 
         <Section withPadding withTopPadding>
+          <TextInputSectionItem
+            label="Label"
+            placeholder="Placeholder"
+            onChangeText={() => {}}
+            textContentType="oneTimeCode"
+            showClear={true}
+            inlineLabel={false}
+            errorText="Something went wrong"
+          />
+        </Section>
+
+        <Section withPadding withTopPadding>
           <HeaderSectionItem text="Texts" />
 
           <GenericSectionItem>
