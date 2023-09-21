@@ -19,6 +19,7 @@ import {SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Error} from '@atb/assets/svg/color/icons/status';
+import dictionary from '@atb/translations/dictionary';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -151,7 +152,13 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
           ) : null}
         </View>
         {errorText !== undefined && (
-          <View style={styles.error}>
+          <View
+            style={styles.error}
+            accessibilityLiveRegion={'polite'}
+            accessibilityLabel={`${t(
+              dictionary.messageTypes.error,
+            )}, ${errorText}`}
+          >
             <ThemeIcon svg={Error} />
             <ThemeText type={'body__secondary'} style={styles.errorMessage}>
               {errorText}
