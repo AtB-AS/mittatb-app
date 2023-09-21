@@ -67,6 +67,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
+  const [showActivationDateWarning, setShowActivationDateWarning] =
+    useState<boolean>(false);
   const analytics = useAnalytics();
 
   const {
@@ -204,6 +206,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             validFromTime={travelDate}
             maximumDate={maximumDateObjectIfExisting}
             style={styles.selectionComponent}
+            showActivationDateWarning={showActivationDateWarning}
+            setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
           <FlexTicketDiscountInfo
