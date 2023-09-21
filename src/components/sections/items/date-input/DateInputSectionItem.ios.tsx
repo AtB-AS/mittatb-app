@@ -39,7 +39,7 @@ export function DateInputSectionItem(props: DateInputSectionItemProps) {
         display="compact"
         testID="dateInput"
         minimumDate={new Date()}
-        maximumDate={maximumDate}
+        maximumDate={undefined}
         onChange={(_, date) => {
           if (date) onChange(date.toISOString());
         }}

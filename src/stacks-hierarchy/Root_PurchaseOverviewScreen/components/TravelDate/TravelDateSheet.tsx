@@ -29,15 +29,36 @@ type Props = {
   close: () => void;
   save: (dateString?: string) => void;
   maximumDate?: Date;
+  showActivationDateWarning?: boolean;
+  setShowActivationDateWarning: (x: boolean) => void;
 };
 
 export const TravelDateSheet = forwardRef<ScrollView, Props>(
-  ({travelDate, close, save, maximumDate}, focusRef) => {
+  (
+    {
+      travelDate,
+      close,
+      save,
+      maximumDate,
+      showActivationDateWarning,
+      setShowActivationDateWarning,
+    },
+    focusRef,
+  ) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
 
     const defaultDate = travelDate ?? new Date().toISOString();
     const [dateString, setDate] = useState(defaultDate);
+
+    const onSetDate = (date: string) => {
+      console.log('new date!', date);
+
+      setDate(date);
+      // The one below should be trigged when user selects date later date than allowed
+      setShowActivationDateWarning(true);
+    };
+
     const [timeString, setTime] = useState(() =>
       formatLocaleTime(defaultDate, language),
     );
@@ -83,11 +104,21 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
           <Section>
             <DateInputSectionItem
               value={dateString}
-              onChange={setDate}
+              onChange={onSetDate}
               maximumDate={maximumDate}
             />
             <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
+          {showActivationDateWarning && (
+            <MessageBox
+              style={styles.dateWarningMessageBox}
+              type={'warning'}
+              message={t(
+                TravelDateTexts.latestActivationDate
+                  .selectedDateShouldBeEarlierWarning,
+              )}
+            />
+          )}
         </ScrollView>
         <FullScreenFooter>
           <Button
@@ -97,6 +128,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
             style={[styles.saveButton, {marginBottom: keyboardHeight}]}
             testID="confirmTimeButton"
             rightIcon={{svg: SvgConfirm}}
+            disabled={showActivationDateWarning}
           />
         </FullScreenFooter>
       </BottomSheetContainer>
@@ -117,5 +149,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   messageBox: {
     marginBottom: theme.spacings.large,
+  },
+  dateWarningMessageBox: {
+    marginTop: theme.spacings.large,
   },
 }));
