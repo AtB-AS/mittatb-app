@@ -43,8 +43,9 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
-          <View ref={focusRef} accessible={true}>
+          <View ref={focusRef}>
             <ThemeText
+              accessible={true}
               type={'heading--big'}
               style={styles.header}
               color={themeColor}

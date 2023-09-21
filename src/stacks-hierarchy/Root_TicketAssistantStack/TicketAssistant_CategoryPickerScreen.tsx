@@ -82,7 +82,9 @@ export const TicketAssistant_CategoryPickerScreen = ({
       return (
         <>
           <ThemeText type={'body__secondary'} style={styles.expandedContent}>
-            {'\n\n' + t(TicketAssistantTexts.categoryPicker.childPreLinkText)}
+            {'\n\n' +
+              t(TicketAssistantTexts.categoryPicker.childPreLinkText) +
+              ' '}
           </ThemeText>
           <ThemeText
             type={'body__secondary'}
@@ -182,38 +184,38 @@ export const TicketAssistant_CategoryPickerScreen = ({
                 screenReaderPause,
               );
               return (
-                <View key={index} style={styles.a11yCategoryCards}>
-                  <PressableOpacity
-                    onPress={() => {
-                      setCurrentlyOpen(index);
-                      navigation.navigate('TicketAssistant_FrequencyScreen');
-                    }}
-                    accessible={true}
-                    accessibilityLabel={accessibilityLabel}
-                    accessibilityHint={t(
-                      TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({
-                        value: getReferenceDataName(u, language),
-                      }),
-                    )}
-                  >
-                    <View style={styles.contentContainer}>
-                      <ThemeText
-                        style={styles.a11yTitle}
-                        type={'body__primary--bold'}
-                        isMarkdown={true}
-                      >
-                        {title}
-                      </ThemeText>
-                      <ThemeText
-                        type={'body__tertiary'}
-                        style={styles.expandedContent}
-                        isMarkdown={true}
-                      >
-                        {description}
-                      </ThemeText>
-                    </View>
-                  </PressableOpacity>
-                </View>
+                <PressableOpacity
+                  key={index}
+                  onPress={() => {
+                    setCurrentlyOpen(index);
+                    navigation.navigate('TicketAssistant_FrequencyScreen');
+                  }}
+                  style={styles.a11yCategoryCards}
+                  accessible={true}
+                  accessibilityLabel={accessibilityLabel}
+                  accessibilityHint={t(
+                    TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({
+                      value: getReferenceDataName(u, language),
+                    }),
+                  )}
+                >
+                  <View style={styles.contentContainer}>
+                    <ThemeText
+                      style={styles.a11yTitle}
+                      type={'body__primary--bold'}
+                      isMarkdown={true}
+                    >
+                      {title}
+                    </ThemeText>
+                    <ThemeText
+                      type={'body__tertiary'}
+                      style={styles.expandedContent}
+                      isMarkdown={true}
+                    >
+                      {description}
+                    </ThemeText>
+                  </View>
+                </PressableOpacity>
               );
             })}
           </>

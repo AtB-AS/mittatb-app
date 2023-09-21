@@ -245,6 +245,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   number: {
     width: '100%',
     textAlign: 'center',
+    flexWrap: 'nowrap',
     color: theme.text.colors.primary,
   },
 

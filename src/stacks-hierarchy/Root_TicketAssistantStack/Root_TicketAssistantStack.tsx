@@ -21,6 +21,7 @@ import {TicketAssistantContextProvider} from './TicketAssistantContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Platform} from 'react-native';
+import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -28,6 +29,7 @@ type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
 
 export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const [activeTab, setActiveTab] = useState(0);
+  const {t} = useTranslation();
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const [tabCount, setTabCount] = useState(0);
   const {theme} = useTheme();
@@ -35,6 +37,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
   return (
     <TicketAssistantContextProvider>
       <FullScreenHeader
+        title={t(TicketAssistantTexts.title)}
         leftButton={
           activeTab === 0
             ? {
@@ -64,6 +67,7 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
           return <PageIndicator {...props} />;
         }}
         style={{
+          paddingTop: theme.spacings.xLarge,
           paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium),
           backgroundColor: theme.static.background[themeColor].background,
         }}

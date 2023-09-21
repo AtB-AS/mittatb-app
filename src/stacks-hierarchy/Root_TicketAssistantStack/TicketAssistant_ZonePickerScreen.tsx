@@ -1,7 +1,7 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   TicketAssistant_ZonePickerScreenParams,
   TicketAssistantScreenProps,
@@ -21,8 +21,9 @@ import {
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
+import {useIsFocused} from '@react-navigation/native';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -32,8 +33,13 @@ export const TicketAssistant_ZonePickerScreen = ({
   const styles = useThemeStyles();
   const {tariffZones} = useFirestoreConfiguration();
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
 
+  const focusRef = useRef<View>(null);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    isFocused && giveFocus(focusRef);
+  }, [isFocused]);
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
 
   const {t} = useTranslation();
@@ -93,8 +99,9 @@ export const TicketAssistant_ZonePickerScreen = ({
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <View ref={focusRef} accessible={true}>
+        <View ref={focusRef}>
           <ThemeText
+            accessible={true}
             type={'heading--big'}
             style={styles.header}
             color={themeColor}

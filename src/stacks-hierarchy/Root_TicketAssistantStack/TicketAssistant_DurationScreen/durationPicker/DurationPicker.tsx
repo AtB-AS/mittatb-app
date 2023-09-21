@@ -42,10 +42,6 @@ export const DurationPicker = ({
   const a11yContext = useAccessibilityContext();
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const majorVersionIOS = parseInt(String(Platform.Version), 10);
-  const iosStyle =
-    majorVersionIOS < 13 ? {width: undefined, flex: 1} : {width: 130};
-
   const locale = useLocaleContext();
 
   function updateDurationFromPicker(duration: number) {
@@ -87,9 +83,6 @@ export const DurationPicker = ({
               mode="date"
               locale={locale.localeString}
               style={{
-                ...iosStyle,
-                alignItems: 'flex-end',
-                justifyContent: 'flex-end',
                 alignSelf: 'flex-end',
               }}
               textColor={'primary'}
@@ -222,12 +215,14 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   datePicker: {
     paddingVertical: theme.spacings.medium,
+    flexShrink: 1,
   },
   datePickerText: {
     marginLeft: theme.spacings.medium,
     textAlign: 'center',
   },
   datePickerButton: {
+    alignSelf: 'flex-end',
     backgroundColor: theme.static.background.background_1.background,
   },
   sliderContainer: {
