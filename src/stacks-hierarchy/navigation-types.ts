@@ -93,6 +93,8 @@ export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {
     | NextScreenParams<'Root_PurchaseOverviewScreen'>;
 };
 
+export type Root_CameraScreenParams = {};
+
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
@@ -125,6 +127,7 @@ export type RootStackParamList = {
   Root_LoginPhoneInputScreen: Root_LoginPhoneInputScreenParams;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
+  Root_CameraScreen: Root_CameraScreenParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
