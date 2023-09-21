@@ -41,7 +41,7 @@ export type StorageModel = {
   '@ATB_feedback_display_stats': string;
   '@ATB_last_mobile_token_user': string;
   '@ATB_user_map_filters': string;
-  ATB_beacons_debug_override: string;
+  '@ATB_beacons_debug_override': string;
 };
 
 export type StorageModelTypes = keyof StorageModel | StorageModelKeysTypes;
