@@ -101,6 +101,7 @@
     "react-native-screens": "^3.19.0",
     "react-native-svg": "^13.7.0",
     "react-native-tab-view": "^3.3.4",
+    "react-native-vision-camera": "^2.16.1",
     "react-native-webview": "^11.26.0",
     "search-params": "^4.0.1",
     "string.fromcodepoint": "^1.0.0",
