@@ -124,7 +124,7 @@ export const RootStack = () => {
           state: {
             routes: [
               {
-                name: 'TabNav_NearestStack',
+                name: 'TabNav_DeparturesStack',
                 state: {
                   routes: destination as PartialRoute<Route<string>>[],
                 },
