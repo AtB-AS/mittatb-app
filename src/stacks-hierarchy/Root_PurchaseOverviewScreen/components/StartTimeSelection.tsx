@@ -1,5 +1,9 @@
 import React from 'react';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseOverviewTexts,
+  TravelDateTexts,
+  useTranslation,
+} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, View, ViewStyle} from 'react-native';
@@ -12,6 +16,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {TravelDateSheet} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
 import {RadioSegments} from '@atb/components/radio';
 import {TimeSelectionMode} from '@atb/configuration';
+import {MessageBox} from '@atb/components/message-box';
 
 type StartTimeSelectionProps = {
   color: InteractiveColor;
@@ -95,12 +100,25 @@ export function StartTimeSelection({
           },
         ]}
       />
+      {showActivationDateWarning && (
+        <MessageBox
+          style={styles.warningBox}
+          type={'warning'}
+          message={t(
+            TravelDateTexts.latestActivationDate
+              .selectedDateShouldBeEarlierWarning,
+          )}
+        />
+      )}
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   radioSegments: {
+    marginTop: theme.spacings.medium,
+  },
+  warningBox: {
     marginTop: theme.spacings.medium,
   },
 }));

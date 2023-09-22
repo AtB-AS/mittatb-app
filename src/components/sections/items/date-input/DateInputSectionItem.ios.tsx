@@ -9,7 +9,7 @@ import {DateInputSectionItemProps} from './utils';
 import {useLocaleContext} from '@atb/LocaleProvider';
 
 export function DateInputSectionItem(props: DateInputSectionItemProps) {
-  const {value, onChange, maximumDate, ...innerprops} = props;
+  const {value, onChange, ...innerprops} = props;
   const {t} = useTranslation();
   const locale = useLocaleContext();
   const {theme} = useTheme();

@@ -17,6 +17,7 @@ import {
   dateWithReplacedTime,
   formatLocaleTime,
   formatToVerboseFullDate,
+  isAfter,
 } from '@atb/utils/date';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
@@ -52,11 +53,20 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
     const [dateString, setDate] = useState(defaultDate);
 
     const onSetDate = (date: string) => {
-      console.log('new date!', date);
-
-      setDate(date);
-      // The one below should be trigged when user selects date later date than allowed
-      setShowActivationDateWarning(true);
+      console.log('Attempting to set date: ', date);
+      if (!maximumDate) setDate(date);
+      else {
+        console.log('Max date is', maximumDate);
+        if (isAfter(date, maximumDate)) {
+          console.log('Date is after limit');
+          setShowActivationDateWarning(true);
+          setDate('2023-11-28T18:14:00.000Z');
+        } else {
+          console.log('Date is before limit');
+          if (showActivationDateWarning) setShowActivationDateWarning(false);
+          setDate(date);
+        }
+      }
     };
 
     const [timeString, setTime] = useState(() =>
