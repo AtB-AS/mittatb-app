@@ -118,7 +118,7 @@ export function LocationSearchContent({
   useEffect(() => {
     const toValue = searchBarIsEmpty ? 1 : 0;
     const scrollYToValue = searchBarIsEmpty ? 0 : -chipHeight;
-    const animationDuration = 200;
+    const animationDuration = 150;
 
     Animated.parallel([
       Animated.timing(chipOpacity, {
