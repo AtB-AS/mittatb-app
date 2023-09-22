@@ -60,7 +60,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         )
       )
         setTravelDate(undefined);
-      setShowActivationDateWarning(false);
+      if (showActivationDateWarning) setShowActivationDateWarning(false);
     }
   };
   const [travellerSelection, setTravellerSelection] =
