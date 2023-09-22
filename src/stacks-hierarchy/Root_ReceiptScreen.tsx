@@ -10,11 +10,12 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {validateEmail} from '@atb/utils/validation';
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
@@ -34,6 +35,7 @@ export function Root_ReceiptScreen({route}: Props) {
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
   const analytics = useAnalytics();
+  const messageBoxRef = useRef(null);
 
   async function onSend() {
     if (validateEmail(email.trim())) {
@@ -58,6 +60,9 @@ export function Root_ReceiptScreen({route}: Props) {
       setState('invalid-field');
     }
   }
+  useEffect(() => {
+    giveFocus(messageBoxRef, 100);
+  }, [state]);
 
   return (
     <View style={styles.container}>
@@ -67,7 +72,7 @@ export function Root_ReceiptScreen({route}: Props) {
         setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
       <View style={styles.content}>
-        <View accessibilityLiveRegion={'polite'}>
+        <View ref={messageBoxRef}>
           <MessageBox
             {...translateStateToMessage(state, t, email, reference)}
           />
