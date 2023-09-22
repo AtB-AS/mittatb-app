@@ -118,7 +118,7 @@ export function LocationSearchContent({
   useEffect(() => {
     const toValue = searchBarIsEmpty ? 1 : 0;
     const scrollYToValue = searchBarIsEmpty ? 0 : -chipHeight;
-    const animationDuration = 150;
+    const animationDuration = 200;
 
     Animated.parallel([
       Animated.timing(chipOpacity, {
@@ -146,7 +146,6 @@ export function LocationSearchContent({
       // If there are results or the search string is empty, then immediately hide the MessageBox
       setShowMessageBox(false);
     }
-    // Clear Timeout if the component is unmounted or if effectpo dependencies change before the timeout completes
     return () => timeoutId && clearTimeout(timeoutId);
   }, [isSearching, text, filteredLocations]);
 
