@@ -42,6 +42,7 @@ export const FavoriteChips: React.FC<Props> = ({
   const {t} = useTranslation();
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const disableMap = useDisableMapCheck();
+  const styles = useStyles();
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
   return (
@@ -50,12 +51,14 @@ export const FavoriteChips: React.FC<Props> = ({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={
+        contentContainerStyle={[
           (activeType('favorites') && favorites.length > 0) ||
           activeType('add-favorite')
             ? style
-            : undefined
-        }
+            : undefined,
+          style,
+          styles.staticChipsContainer,
+        ]}
       >
         {activeType('location') && (
           <FavoriteChip

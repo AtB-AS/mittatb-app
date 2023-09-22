@@ -7,12 +7,11 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {Keyboard, View} from 'react-native';
+import {Animated, Easing, Keyboard, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {FavoriteChips, ChipTypeGroup} from '@atb/favorites';
 import {MessageBox} from '@atb/components/message-box';
-import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';
 import {LocationResults} from './LocationResults';
 import {StyleSheet} from '@atb/theme';
@@ -48,7 +47,7 @@ export function LocationSearchContent({
   const {t} = useTranslation();
 
   const [text, setText] = useState<string>(defaultText ?? '');
-  const delay = text.length == 1 ? 0 : 100;
+  const delay = text.length == 1 ? 0 : 200;
   const debouncedText = useDebounce(text, delay);
 
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -101,8 +100,36 @@ export function LocationSearchContent({
 
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length && filteredLocations.length > 0;
-  const hasAnyResult = hasResults || (includeHistory && hasPreviousResults);
   const searchBarIsEmpty = text === '' || text.length === 0;
+
+  const [chipHeight, setChipHeight] = useState(0);
+  const [scrollY] = useState(new Animated.Value(0)); // Initial value as 0
+  const [chipOpacity] = useState(new Animated.Value(1));
+
+  const onChipLayout = (event: any) => {
+    const {height} = event.nativeEvent.layout;
+    setChipHeight(height);
+  };
+
+  // Handle OnLayout to set the height of the FavoriteChips container
+  useEffect(() => {
+    const toValue = searchBarIsEmpty ? 1 : 0;
+    const scrollYToValue = searchBarIsEmpty ? 0 : -chipHeight;
+
+    Animated.parallel([
+      Animated.timing(chipOpacity, {
+        toValue,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scrollY, {
+        toValue: scrollYToValue,
+        duration: 150,
+        easing: Easing.inOut(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [searchBarIsEmpty]);
 
   return (
     <>
@@ -124,7 +151,7 @@ export function LocationSearchContent({
             testID="locationSearchInput"
           />
 
-          {searchBarIsEmpty && !isSearching && (
+          <Animated.View style={{opacity: chipOpacity}} onLayout={onChipLayout}>
             <FavoriteChips
               onSelectLocation={onSelect}
               onMapSelection={onMapSelection}
@@ -132,62 +159,58 @@ export function LocationSearchContent({
               style={styles.chipBox}
               onAddFavorite={onAddFavorite}
             />
-          )}
+          </Animated.View>
         </View>
       </View>
-
       {error && (
         <View style={styles.withMargin}>
           <MessageBox type="warning" message={errorMessage} />
         </View>
       )}
-
-      {hasAnyResult ? (
-        <ScrollView
-          style={styles.fullFlex}
-          contentContainerStyle={styles.contentBlock}
-          keyboardShouldPersistTaps="handled"
-          onScrollBeginDrag={() => Keyboard.dismiss()}
-          testID="historyAndResultsScrollView"
-        >
-          {searchBarIsEmpty ? (
-            <>
-              {includeJourneyHistory && (
-                <JourneyHistory
-                  searchText={''}
-                  onSelect={onJourneyHistorySelected}
-                />
-              )}
-              {includeHistory && hasPreviousResults && (
-                <LocationResults
-                  title={t(LocationSearchTexts.results.previousResults.heading)}
-                  locations={previousLocations}
-                  onSelect={onSearchSelect}
-                  testIDItemPrefix="previousResultItem"
-                />
-              )}
-            </>
-          ) : (
-            <LocationResults
-              title={t(LocationSearchTexts.results.searchResults.heading)}
-              locations={filteredLocations}
-              onSelect={onSearchSelect}
-              testIDItemPrefix="locationSearchItem"
-            />
-          )}
-        </ScrollView>
-      ) : (
-        !error &&
-        !!text &&
-        !isSearching && (
-          <View style={[styles.contentBlock, styles.marginTop]}>
-            <MessageBox
-              type="info"
-              message={t(LocationSearchTexts.messages.emptyResult)}
-            />
-          </View>
-        )
-      )}
+      <Animated.ScrollView
+        style={{...styles.fullFlex, transform: [{translateY: scrollY}]}}
+        contentContainerStyle={styles.contentBlock}
+        keyboardShouldPersistTaps="handled"
+        onScrollBeginDrag={() => Keyboard.dismiss()}
+        testID="historyAndResultsScrollView"
+      >
+        {searchBarIsEmpty ? (
+          <>
+            {includeJourneyHistory && (
+              <JourneyHistory
+                searchText={''}
+                onSelect={onJourneyHistorySelected}
+              />
+            )}
+            {includeHistory && hasPreviousResults && (
+              <LocationResults
+                title={t(LocationSearchTexts.results.previousResults.heading)}
+                locations={previousLocations}
+                onSelect={onSearchSelect}
+                testIDItemPrefix="previousResultItem"
+              />
+            )}
+          </>
+        ) : hasResults ? (
+          <LocationResults
+            title={t(LocationSearchTexts.results.searchResults.heading)}
+            locations={filteredLocations}
+            onSelect={onSearchSelect}
+            testIDItemPrefix="locationSearchItem"
+          />
+        ) : (
+          !error &&
+          !!text &&
+          !isSearching && (
+            <View style={[styles.contentBlock, styles.marginTop]}>
+              <MessageBox
+                type="info"
+                message={t(LocationSearchTexts.messages.emptyResult)}
+              />
+            </View>
+          )
+        )}
+      </Animated.ScrollView>
     </>
   );
 }
@@ -211,5 +234,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fullFlex: {
     flex: 1,
+    backgroundColor: theme.static.background.background_2.background,
   },
 }));
