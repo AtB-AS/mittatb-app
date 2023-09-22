@@ -11,9 +11,10 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalytics} from '@atb/analytics';
 import {MessageBox} from '@atb/components/message-box';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {TICKET_ASSISTANT_SUMMARY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -24,8 +25,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const analytics = useAnalytics();
   let {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
-  const focusRef = useFocusOnLoad();
-
+  const focusRef = useNavigationFocus({
+    navigation,
+    screenName: TICKET_ASSISTANT_SUMMARY_SCREEN,
+  });
   const durationDays = inputParams.duration
     ? inputParams.duration * 24 * 60 * 60 * 1000
     : 0;

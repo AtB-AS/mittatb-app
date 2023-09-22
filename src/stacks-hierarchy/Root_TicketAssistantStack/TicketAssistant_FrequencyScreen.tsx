@@ -11,7 +11,8 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {TICKET_ASSISTANT_FREQUENCY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
@@ -28,8 +29,10 @@ export const TicketAssistant_FrequencyScreen = ({
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
   );
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
-
+  const focusRef = useNavigationFocus({
+    navigation,
+    screenName: TICKET_ASSISTANT_FREQUENCY_SCREEN,
+  });
   const sliderMax = 14;
 
   //Creating an array of numbers to sliderMax with a step size of 2

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
@@ -22,11 +22,21 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Platform} from 'react-native';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import {useNavigationState} from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 type Props = RootStackScreenProps<'Root_TicketAssistantStack'>;
+
+export const TICKET_ASSISTANT_WELCOME_SCREEN = 'TicketAssistant_WelcomeScreen';
+export const TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN =
+  'TicketAssistant_CategoryPickerScreen';
+export const TICKET_ASSISTANT_FREQUENCY_SCREEN =
+  'TicketAssistant_FrequencyScreen';
+export const TICKET_ASSISTANT_DURATION_SCREEN =
+  'TicketAssistant_DurationScreen';
+export const TICKET_ASSISTANT_ZONE_PICKER_SCREEN =
+  'TicketAssistant_ZonePickerScreen';
+export const TICKET_ASSISTANT_SUMMARY_SCREEN = 'TicketAssistant_SummaryScreen';
 
 export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -35,14 +45,6 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const [tabCount, setTabCount] = useState(0);
   const {theme} = useTheme();
   const [previousTab, setPreviousTab] = useState<any>();
-
-  const navigationState = useNavigationState((state) => state);
-
-  useEffect(() => {
-    setActiveTab(navigationState.index);
-    setTabCount(navigationState.routes.length);
-    setPreviousTab(navigationState.routes[navigationState.index - 1]);
-  }, [navigationState]);
 
   return (
     <TicketAssistantContextProvider>
@@ -71,6 +73,9 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
       />
       <Tab.Navigator
         tabBar={(props: MaterialTopTabBarProps) => {
+          setActiveTab(props.state.index);
+          setTabCount(props.state.routes.length);
+          setPreviousTab(props.state.routes[props.state.index - 1]);
           return <PageIndicator {...props} />;
         }}
         style={{
@@ -82,28 +87,28 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
         initialRouteName="TicketAssistant_WelcomeScreen"
       >
         <Tab.Screen
-          name="TicketAssistant_WelcomeScreen"
+          name={TICKET_ASSISTANT_WELCOME_SCREEN}
           component={TicketAssistant_WelcomeScreen}
         />
         <Tab.Screen
-          name="TicketAssistant_CategoryPickerScreen"
+          name={TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN}
           component={TicketAssistant_CategoryPickerScreen}
         />
         <Tab.Screen
-          name="TicketAssistant_FrequencyScreen"
+          name={TICKET_ASSISTANT_FREQUENCY_SCREEN}
           component={TicketAssistant_FrequencyScreen}
         />
         <Tab.Screen
-          name="TicketAssistant_DurationScreen"
+          name={TICKET_ASSISTANT_DURATION_SCREEN}
           component={TicketAssistant_DurationScreen}
         />
         <Tab.Screen
-          name="TicketAssistant_ZonePickerScreen"
+          name={TICKET_ASSISTANT_ZONE_PICKER_SCREEN}
           component={TicketAssistant_ZonePickerScreen}
           options={{swipeEnabled: Platform.OS === 'ios'}}
         />
         <Tab.Screen
-          name="TicketAssistant_SummaryScreen"
+          name={TICKET_ASSISTANT_SUMMARY_SCREEN}
           component={TicketAssistant_SummaryScreen}
         />
       </Tab.Navigator>

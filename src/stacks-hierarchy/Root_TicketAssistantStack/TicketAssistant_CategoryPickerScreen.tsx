@@ -20,8 +20,9 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -31,7 +32,11 @@ export const TicketAssistant_CategoryPickerScreen = ({
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
+
+  const focusRef = useNavigationFocus({
+    navigation,
+    screenName: TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN,
+  });
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
@@ -109,7 +114,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
       >
-        <View ref={focusRef} accessible={true}>
+        <View accessible={true} ref={focusRef}>
           <ThemeText
             type={'heading--big'}
             style={styles.header}

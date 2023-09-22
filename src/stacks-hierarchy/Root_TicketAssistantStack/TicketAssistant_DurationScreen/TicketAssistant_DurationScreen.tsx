@@ -10,7 +10,8 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
 import {daysInWeek} from 'date-fns';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {TICKET_ASSISTANT_DURATION_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -18,8 +19,10 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const {inputParams, updateInputParams} = useTicketAssistantState();
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const focusRef = useFocusOnLoad();
-
+  const focusRef = useNavigationFocus({
+    navigation,
+    screenName: TICKET_ASSISTANT_DURATION_SCREEN,
+  });
   const [duration, setDuration] = useState(daysInWeek);
 
   const updateDuration = () => {
