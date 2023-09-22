@@ -1,28 +1,30 @@
-import {ThemeText} from '@atb/components/text';
-import {Camera, CameraType} from 'expo-camera';
-import {useEffect} from 'react';
-import {View} from 'react-native';
+import {StyleSheet} from '@atb/theme';
 import {RootStackScreenProps} from './navigation-types';
+import {FullScreenHeader} from '@atb/components/screen-header';
+import {View} from 'react-native';
+import {Camera, PhotoFile} from '@atb/components/camera';
 
 export type Props = RootStackScreenProps<'Root_CameraScreen'>;
 
 export function Root_CameraScreen({}: Props) {
-  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const styles = useStyles();
 
-  useEffect(() => {
-    requestPermission();
-  }, []);
-
-  if (!permission)
-    return (
-      <View>
-        <ThemeText>Ingen tilgang til kamera</ThemeText>
-      </View>
-    );
+  const handleCapture = (photo: PhotoFile) => {
+    console.log(photo);
+  };
 
   return (
-    <View style={{height: '100%'}}>
-      <Camera type={CameraType.front}></Camera>
-    </View>
+    <>
+      <FullScreenHeader leftButton={{type: 'cancel'}} />
+      <View style={styles.container}>
+        <Camera onCapture={handleCapture} />
+      </View>
+    </>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook(() => ({
+  container: {
+    flex: 1,
+  },
+}));
