@@ -10,7 +10,7 @@ import {
 } from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {KeyboardAvoidingView, Platform, View} from 'react-native';
 import WebView from 'react-native-webview';
 import {
   WebViewErrorEvent,
@@ -81,19 +81,29 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
     navigateBackFromTerminal,
   );
 
+  // Using the header height to adjust the keyboard offset on android
+  const [headerHeight, setHeaderHeight] = useState<number>(0);
+  const onLayout = (event: any) => {
+    const {height} = event.nativeEvent.layout;
+    setHeaderHeight(height);
+  };
+
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        title={t(PaymentCreditCardTexts.header.title)}
-        leftButton={{
-          type: 'cancel',
-          onPress: async () => {
-            await cancelPayment();
-            analytics.logEvent('Ticketing', 'Payment cancelled');
-            navigateBackFromTerminal();
-          },
-        }}
-      />
+      <View onLayout={onLayout}>
+        <FullScreenHeader
+          title={t(PaymentCreditCardTexts.header.title)}
+          leftButton={{
+            type: 'cancel',
+            onPress: async () => {
+              await cancelPayment();
+              analytics.logEvent('Ticketing', 'Payment cancelled');
+              navigateBackFromTerminal();
+            },
+          }}
+        />
+      </View>
+
       <View
         style={{
           flex: 1,
@@ -101,15 +111,23 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
         }}
       >
         {terminalUrl && showWebView && (
-          <WebView
-            source={{
-              uri: terminalUrl,
-            }}
-            onError={onWebViewError}
-            onLoadStart={onWebViewLoadStart}
-            onLoadEnd={onWebViewLoadEnd}
-            onNavigationStateChange={onWebViewNavigationChange}
-          />
+          <KeyboardAvoidingView
+            behavior={'padding'}
+            style={{flex: 1}}
+            keyboardVerticalOffset={
+              Platform.OS === 'android' ? headerHeight : 0
+            }
+          >
+            <WebView
+              source={{
+                uri: terminalUrl,
+              }}
+              onError={onWebViewError}
+              onLoadStart={onWebViewLoadStart}
+              onLoadEnd={onWebViewLoadEnd}
+              onNavigationStateChange={onWebViewNavigationChange}
+            />
+          </KeyboardAvoidingView>
         )}
       </View>
       {isLoading && (
