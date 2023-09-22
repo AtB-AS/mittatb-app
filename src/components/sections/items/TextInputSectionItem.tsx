@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useState} from 'react';
+import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   NativeSyntheticEvent,
@@ -15,9 +15,11 @@ import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
-import {SectionTexts, useTranslation} from '@atb/translations';
+import {dictionary, SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {Error} from '@atb/assets/svg/color/icons/status';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -27,12 +29,14 @@ type TextProps = SectionItemProps<
     inlineLabel?: boolean;
     showClear?: boolean;
     onClear?: () => void;
+    errorText?: string;
   }
 >;
 
 export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
   (
     {
+      errorText = undefined,
       label,
       inlineLabel = true,
       onFocus,
@@ -51,7 +55,11 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
+    const errorFocusRef = useRef(null);
 
+    useEffect(() => {
+      giveFocus(errorFocusRef, 100);
+    }, [errorText]);
     function accessibilityEscapeKeyboard() {
       setTimeout(
         () =>
@@ -78,9 +86,18 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       else if (props.onChangeText) props.onChangeText('');
     };
 
-    const borderColor = !isFocused
-      ? undefined
-      : {borderColor: theme.border.focus};
+    const getBorderColor = () => {
+      if (isFocused) {
+        return {borderColor: theme.border.focus};
+      } else if (errorText) {
+        return {
+          borderColor:
+            theme.interactive.interactive_destructive.destructive.background,
+        };
+      } else {
+        return undefined;
+      }
+    };
 
     const padding = {
       // There are some oddities with handling padding
@@ -102,40 +119,53 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
           inlineLabel ? styles.containerInline : styles.containerMultiline,
           topContainerStyle,
           containerPadding,
-          borderColor,
+          getBorderColor(),
         ]}
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
         <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <InternalTextInput
-          ref={combinedRef}
-          style={[
-            styles.input,
-            inlineLabel ? contentContainer : undefined,
-            padding,
-            style,
-          ]}
-          placeholderTextColor={theme.text.colors.secondary}
-          onFocus={onFocusEvent}
-          onBlur={onBlurEvent}
-          maxFontSizeMultiplier={MAX_FONT_SCALE}
-          {...props}
-        />
-        {showClear ? (
-          <View style={styles.inputClear}>
-            <PressableOpacity
-              accessible={true}
-              accessibilityRole="button"
-              accessibilityLabel={t(SectionTexts.textInput.clear)}
-              hitSlop={insets.all(8)}
-              onPress={onClearEvent}
-            >
-              <ThemeIcon svg={Close} />
-            </PressableOpacity>
+        <View style={inlineLabel ? contentContainer : undefined}>
+          <InternalTextInput
+            ref={combinedRef}
+            style={[styles.input, padding, style]}
+            placeholderTextColor={theme.text.colors.secondary}
+            onFocus={onFocusEvent}
+            onBlur={onBlurEvent}
+            maxFontSizeMultiplier={MAX_FONT_SCALE}
+            {...props}
+          />
+          {showClear ? (
+            <View style={styles.inputClear}>
+              <PressableOpacity
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={t(SectionTexts.textInput.clear)}
+                hitSlop={insets.all(8)}
+                onPress={onClearEvent}
+              >
+                <ThemeIcon svg={Close} />
+              </PressableOpacity>
+            </View>
+          ) : null}
+        </View>
+        {errorText !== undefined && (
+          <View
+            ref={errorFocusRef}
+            accessible={true}
+            style={styles.error}
+            accessibilityRole="alert"
+            accessibilityLabel={`${t(
+              dictionary.messageTypes.error,
+            )}, ${errorText}`}
+          >
+            <ThemeIcon svg={Error} />
+            <ThemeText type="body__secondary" style={styles.errorMessage}>
+              {errorText}
+            </ThemeText>
           </View>
-        ) : null}
+        )}
       </View>
     );
   },
@@ -154,6 +184,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     borderColor: theme.static.background.background_0.background,
   },
   containerInline: {
+    backgroundColor: 'red',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -165,10 +196,21 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     minWidth: 60 - theme.spacings.medium,
     paddingRight: theme.spacings.xSmall,
   },
+  inputContainer: {
+    position: 'relative',
+  },
   inputClear: {
     position: 'absolute',
-    right: theme.spacings.medium,
+    right: 0,
     bottom: theme.spacings.medium,
+  },
+  clearButton: {
     alignSelf: 'center',
+  },
+  error: {flexDirection: 'row'},
+  errorMessage: {
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
+    flex: 1,
   },
 }));
