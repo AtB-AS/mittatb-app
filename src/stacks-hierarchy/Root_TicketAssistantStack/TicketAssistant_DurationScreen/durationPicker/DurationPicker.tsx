@@ -1,4 +1,4 @@
-import {Platform, View} from 'react-native';
+import {Platform, TouchableOpacity, View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {ThemeText} from '@atb/components/text';
@@ -17,7 +17,6 @@ import {StyleSheet} from '@atb/theme';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useLocaleContext} from '@atb/LocaleProvider';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
-import {Button} from '@atb/components/button';
 import {formatToVerboseFullDate} from '@atb/utils/date';
 
 type DurationPickerProps = {
@@ -100,17 +99,17 @@ export const DurationPicker = ({
               )}
             />
           ) : (
-            <Button
+            <TouchableOpacity
               style={styles.datePickerButton}
-              interactiveColor="interactive_2"
-              type="inline"
-              mode="tertiary"
-              onPress={() => setShowDatePicker(true)}
-              text={formatToVerboseFullDate(date, language)}
               accessibilityHint={t(
                 TicketAssistantTexts.duration.a11yDatePickerHint,
               )}
-            />
+              onPress={() => setShowDatePicker(true)}
+            >
+              <ThemeText numberOfLines={1} ellipsizeMode={'clip'}>
+                {formatToVerboseFullDate(date, language)}
+              </ThemeText>
+            </TouchableOpacity>
           )}
 
           {Platform.OS === 'android' && showDatePicker && (
@@ -222,8 +221,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
   },
   datePickerButton: {
+    width: '100%',
     alignSelf: 'flex-end',
     backgroundColor: theme.static.background.background_1.background,
+    padding: 8,
+    borderRadius: theme.border.radius.regular,
   },
   sliderContainer: {
     width: '100%',
