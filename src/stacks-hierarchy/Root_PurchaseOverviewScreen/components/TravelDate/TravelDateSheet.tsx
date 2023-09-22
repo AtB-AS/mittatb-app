@@ -56,24 +56,27 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
       setReplicatedShowActivationDateWarning,
     ] = useState<boolean>(false);
 
+    const setInternalAndExternalWarningState = (val: boolean) => {
+      setShowActivationDateWarning(val);
+      setReplicatedShowActivationDateWarning(val);
+    };
+
     const onSetDate = (date: string) => {
-      console.log('Attempting to set date: ', date);
-      setDate(date);
-      setShowActivationDateWarning(true);
-      setReplicatedShowActivationDateWarning(true);
-      /*if (!maximumDate) setDate(date);
+      if (!maximumDate) setDate(date);
       else {
-        console.log('Max date is', maximumDate);
         if (isAfter(date, maximumDate)) {
-          console.log('Date is after limit');
-          setShowActivationDateWarning(true);
-          setDate(defaultDate);
+          setInternalAndExternalWarningState(true);
+          setDate(date);
         } else {
-          console.log('Date is before limit');
-          if (showActivationDateWarning) setShowActivationDateWarning(false);
+          if (
+            replicatedShowActivationDateWarning ||
+            showActivationDateWarning
+          ) {
+            setInternalAndExternalWarningState(false);
+          }
           setDate(date);
         }
-      }*/
+      }
     };
 
     const [timeString, setTime] = useState(() =>
