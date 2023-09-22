@@ -112,7 +112,7 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
       >
         {terminalUrl && showWebView && (
           <KeyboardAvoidingView
-            behavior={'padding'}
+            behavior={Platform.OS === 'android' ? 'padding' : undefined}
             style={{flex: 1}}
             keyboardVerticalOffset={
               Platform.OS === 'android' ? headerHeight : 0
