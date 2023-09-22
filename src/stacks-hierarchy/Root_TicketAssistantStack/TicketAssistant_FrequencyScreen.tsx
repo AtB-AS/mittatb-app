@@ -11,7 +11,7 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
-import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-navigation-focus';
 import {TICKET_ASSISTANT_FREQUENCY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type FrequencyScreenProps =

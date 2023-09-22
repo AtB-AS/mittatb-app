@@ -13,7 +13,7 @@ import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {useAnalytics} from '@atb/analytics';
 import {MessageBox} from '@atb/components/message-box';
-import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-navigation-focus';
 import {TICKET_ASSISTANT_SUMMARY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;

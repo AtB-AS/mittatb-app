@@ -10,7 +10,7 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
 import {daysInWeek} from 'date-fns';
-import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-navigation-focus';
 import {TICKET_ASSISTANT_DURATION_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;

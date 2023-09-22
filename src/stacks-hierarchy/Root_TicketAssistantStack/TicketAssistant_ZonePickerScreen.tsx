@@ -22,7 +22,7 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useDefaultTariffZone} from '../utils';
-import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-navigation-focus';
 import {TICKET_ASSISTANT_ZONE_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;

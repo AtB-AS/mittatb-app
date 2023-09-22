@@ -21,7 +21,7 @@ import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-naviagtion-focus';
+import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-navigation-focus';
 import {TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type CategoryPickerProps =
@@ -190,7 +190,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
               );
               return (
                 <PressableOpacity
-                  key={index}
+                  key={u.id}
                   onPress={() => {
                     setCurrentlyOpen(index);
                     navigation.navigate('TicketAssistant_FrequencyScreen');

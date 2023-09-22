@@ -13,13 +13,12 @@ export const useNavigationFocus = ({
   const focusRef = useRef(null);
 
   useEffect(() => {
-    if (
-      navigation.getState().routeNames[navigation.getState().index] ==
-      screenName
-    ) {
-      giveFocus(focusRef, 100); // Assumed giveFocus is a utility function available in your project.
+    const {index, routeNames} = navigation.getState();
+
+    if (routeNames.length >= index && routeNames[index] === screenName) {
+      giveFocus(focusRef, 100);
     }
-  }, [navigation.getState().index]);
+  }, [navigation]);
 
   return focusRef;
 };
