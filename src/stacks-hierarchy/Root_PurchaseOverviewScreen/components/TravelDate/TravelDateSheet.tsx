@@ -66,16 +66,14 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
       else {
         if (isAfter(date, maximumDate)) {
           setInternalAndExternalWarningState(true);
-          setDate(date);
-        } else {
-          if (
-            replicatedShowActivationDateWarning ||
-            showActivationDateWarning
-          ) {
-            setInternalAndExternalWarningState(false);
-          }
-          setDate(date);
+        } else if (
+          replicatedShowActivationDateWarning ||
+          showActivationDateWarning
+        ) {
+          setInternalAndExternalWarningState(false);
         }
+
+        setDate(date);
       }
     };
 
