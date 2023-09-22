@@ -47,7 +47,7 @@ export function LocationSearchContent({
   const {t} = useTranslation();
 
   const [text, setText] = useState<string>(defaultText ?? '');
-  const delay = text.length == 1 ? 0 : 200;
+  const delay = text.length == 1 ? 0 : 150; //for first typing, do search immediately
   const debouncedText = useDebounce(text, delay);
 
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -115,21 +115,37 @@ export function LocationSearchContent({
   useEffect(() => {
     const toValue = searchBarIsEmpty ? 1 : 0;
     const scrollYToValue = searchBarIsEmpty ? 0 : -chipHeight;
+    const animationDuration = 150;
 
     Animated.parallel([
       Animated.timing(chipOpacity, {
         toValue,
-        duration: 150,
+        duration: animationDuration,
         useNativeDriver: true,
       }),
       Animated.timing(scrollY, {
         toValue: scrollYToValue,
-        duration: 150,
+        duration: animationDuration,
         easing: Easing.inOut(Easing.quad),
         useNativeDriver: true,
       }),
     ]).start();
   }, [searchBarIsEmpty]);
+
+  const [showMessageBox, setShowMessageBox] = useState(false);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    if (!isSearching && !!text && filteredLocations.length === 0) {
+      // If not searching, text is present, and no results, then plan to show the MessageBox after a delay
+      timeoutId = setTimeout(() => setShowMessageBox(true), 200);
+    } else if (filteredLocations.length > 0 || text.length === 0) {
+      // If there are results or the search string is empty, then immediately hide the MessageBox
+      setShowMessageBox(false);
+    }
+    // Clear Timeout if the component is unmounted or if effect dependencies change before the timeout completes
+    return () => timeoutId && clearTimeout(timeoutId);
+  }, [isSearching, text, filteredLocations]);
 
   return (
     <>
@@ -191,24 +207,23 @@ export function LocationSearchContent({
               />
             )}
           </>
-        ) : hasResults ? (
-          <LocationResults
-            title={t(LocationSearchTexts.results.searchResults.heading)}
-            locations={filteredLocations}
-            onSelect={onSearchSelect}
-            testIDItemPrefix="locationSearchItem"
-          />
         ) : (
-          !error &&
-          !!text &&
-          !isSearching && (
-            <View style={[styles.contentBlock, styles.marginTop]}>
-              <MessageBox
-                type="info"
-                message={t(LocationSearchTexts.messages.emptyResult)}
-              />
-            </View>
+          hasResults && (
+            <LocationResults
+              title={t(LocationSearchTexts.results.searchResults.heading)}
+              locations={filteredLocations}
+              onSelect={onSearchSelect}
+              testIDItemPrefix="locationSearchItem"
+            />
           )
+        )}
+        {showMessageBox && (
+          <View style={[styles.contentBlock, styles.marginTop]}>
+            <MessageBox
+              type="info"
+              message={t(LocationSearchTexts.messages.emptyResult)}
+            />
+          </View>
         )}
       </Animated.ScrollView>
     </>
