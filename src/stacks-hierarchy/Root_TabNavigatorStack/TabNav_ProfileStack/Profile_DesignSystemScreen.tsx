@@ -1284,6 +1284,15 @@ export const Profile_DesignSystemScreen = () => {
             inlineLabel={false}
           />
           <TextInputSectionItem
+            label={'Inline Label'}
+            placeholder={'Placheolder'}
+            onChangeText={() => {}}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            inlineLabel={true}
+          />
+          <TextInputSectionItem
             label="Label"
             placeholder="Placeholder"
             onChangeText={() => {}}

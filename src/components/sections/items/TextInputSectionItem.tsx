@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useState} from 'react';
+import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   NativeSyntheticEvent,
@@ -15,11 +15,11 @@ import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
-import {SectionTexts, useTranslation} from '@atb/translations';
+import {dictionary, SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Error} from '@atb/assets/svg/color/icons/status';
-import dictionary from '@atb/translations/dictionary';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -55,7 +55,11 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
+    const errorFocusRef = useRef(null);
 
+    useEffect(() => {
+      giveFocus(errorFocusRef, 100);
+    }, [errorText]);
     function accessibilityEscapeKeyboard() {
       setTimeout(
         () =>
@@ -122,15 +126,10 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <View style={styles.inputContainer}>
+        <View style={inlineLabel ? contentContainer : undefined}>
           <InternalTextInput
             ref={combinedRef}
-            style={[
-              styles.input,
-              inlineLabel ? contentContainer : undefined,
-              padding,
-              style,
-            ]}
+            style={[styles.input, padding, style]}
             placeholderTextColor={theme.text.colors.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
@@ -153,8 +152,10 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
         </View>
         {errorText !== undefined && (
           <View
+            ref={errorFocusRef}
+            accessible={true}
             style={styles.error}
-            accessibilityLiveRegion="polite"
+            accessibilityRole="alert"
             accessibilityLabel={`${t(
               dictionary.messageTypes.error,
             )}, ${errorText}`}
@@ -183,6 +184,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     borderColor: theme.static.background.background_0.background,
   },
   containerInline: {
+    backgroundColor: 'red',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
