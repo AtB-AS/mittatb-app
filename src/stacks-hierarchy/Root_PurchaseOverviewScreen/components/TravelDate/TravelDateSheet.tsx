@@ -54,7 +54,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
     const [
       replicatedShowActivationDateWarning,
       setReplicatedShowActivationDateWarning,
-    ] = useState<boolean>(false);
+    ] = useState<boolean | undefined>(showActivationDateWarning);
 
     const setInternalAndExternalWarningState = (value: boolean) => {
       setShowActivationDateWarning(value);
@@ -66,10 +66,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
       else {
         if (isAfter(date, maximumDate)) {
           setInternalAndExternalWarningState(true);
-        } else if (
-          replicatedShowActivationDateWarning ||
-          showActivationDateWarning
-        ) {
+        } else if (replicatedShowActivationDateWarning) {
           setInternalAndExternalWarningState(false);
         }
 
