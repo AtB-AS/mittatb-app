@@ -51,11 +51,16 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
 
     const defaultDate = travelDate ?? new Date().toISOString();
     const [dateString, setDate] = useState(defaultDate);
+    const [
+      replicatedShowActivationDateWarning,
+      setReplicatedShowActivationDateWarning,
+    ] = useState<boolean>(false);
 
     const onSetDate = (date: string) => {
       console.log('Attempting to set date: ', date);
       setDate(date);
       setShowActivationDateWarning(true);
+      setReplicatedShowActivationDateWarning(true);
       /*if (!maximumDate) setDate(date);
       else {
         console.log('Max date is', maximumDate);
@@ -121,7 +126,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
             />
             <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
-          {showActivationDateWarning && (
+          {replicatedShowActivationDateWarning && (
             <MessageBox
               style={styles.dateWarningMessageBox}
               type={'warning'}
@@ -140,7 +145,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
             style={[styles.saveButton, {marginBottom: keyboardHeight}]}
             testID="confirmTimeButton"
             rightIcon={{svg: SvgConfirm}}
-            disabled={showActivationDateWarning}
+            disabled={replicatedShowActivationDateWarning}
           />
         </FullScreenFooter>
       </BottomSheetContainer>
