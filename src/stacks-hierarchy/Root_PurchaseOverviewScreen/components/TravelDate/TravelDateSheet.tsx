@@ -31,7 +31,7 @@ type Props = {
   save: (dateString?: string) => void;
   maximumDate?: Date;
   showActivationDateWarning?: boolean;
-  setShowActivationDateWarning: (x: boolean) => void;
+  setShowActivationDateWarning: (value: boolean) => void;
 };
 
 export const TravelDateSheet = forwardRef<ScrollView, Props>(
@@ -56,9 +56,9 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
       setReplicatedShowActivationDateWarning,
     ] = useState<boolean>(false);
 
-    const setInternalAndExternalWarningState = (val: boolean) => {
-      setShowActivationDateWarning(val);
-      setReplicatedShowActivationDateWarning(val);
+    const setInternalAndExternalWarningState = (value: boolean) => {
+      setShowActivationDateWarning(value);
+      setReplicatedShowActivationDateWarning(value);
     };
 
     const onSetDate = (date: string) => {

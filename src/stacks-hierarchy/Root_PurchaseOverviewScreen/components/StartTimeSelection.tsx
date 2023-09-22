@@ -21,7 +21,7 @@ type StartTimeSelectionProps = {
   selectionMode: TimeSelectionMode;
   maximumDate?: Date;
   showActivationDateWarning?: boolean;
-  setShowActivationDateWarning: (x: boolean) => void;
+  setShowActivationDateWarning: (value: boolean) => void;
   style?: StyleProp<ViewStyle>;
 };
 
