@@ -596,7 +596,7 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - AbtProtobufTokenIosStubs (2.704.0):
+  - AbtProtobufTokenIosStubs (2.724.0):
     - SwiftProtobuf (~> 1.22.0)
   - boost (1.76.0)
   - BoringSSL-GRPC (0.0.24):
@@ -1394,7 +1394,7 @@ PODS:
     - Yoga (~> 1.14)
 
 DEPENDENCIES:
-  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.704.0`)"
+  - "AbtProtobufTokenIosStubs (from `git@github.com:entur/abt-protobuf-pods.git`, tag `2.724.0`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
@@ -1490,8 +1490,8 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - "TimeReactNativeLib (from `../node_modules/@entur-private/abt-time-react-native-lib`)"
-  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.2.1`)"
-  - "TokenStateReactNativeLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.2.1`)"
+  - "TokenCore (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.3.3`)"
+  - "TokenStateReactNativeLib (from `git@github.com:entur/abt-mobile-client-sdk.git`, tag `release-1.3.3`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1542,7 +1542,7 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   AbtProtobufTokenIosStubs:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
-    :tag: 2.704.0
+    :tag: 2.724.0
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   BugsnagReactNative:
@@ -1680,27 +1680,27 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@entur-private/abt-time-react-native-lib"
   TokenCore:
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-1.2.1
+    :tag: release-1.3.3
   TokenStateReactNativeLib:
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-1.2.1
+    :tag: release-1.3.3
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 CHECKOUT OPTIONS:
   AbtProtobufTokenIosStubs:
     :git: "git@github.com:entur/abt-protobuf-pods.git"
-    :tag: 2.704.0
+    :tag: 2.724.0
   TokenCore:
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-1.2.1
+    :tag: release-1.3.3
   TokenStateReactNativeLib:
     :git: "git@github.com:entur/abt-mobile-client-sdk.git"
-    :tag: release-1.2.1
+    :tag: release-1.3.3
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
-  AbtProtobufTokenIosStubs: 5dafecd84d16ae921c102d8c83396a699b34737c
+  AbtProtobufTokenIosStubs: 21a284b57088b5594b9a4c29ba576114fcfdbdee
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   BugsnagReactNative: c681c456736c24344553f48013da8253eb00ee92
@@ -1807,12 +1807,12 @@ SPEC CHECKSUMS:
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   TimeReactNativeLib: 5915a7ee0d8fed27361f5109b0fe0f7c981d80cc
-  TokenCore: cf917c94b2d8e726a10f4698b248d5813ac3a214
-  TokenStateReactNativeLib: cba98cbdb61af0255d2e636565a0feedb6cda069
+  TokenCore: c66fccf39c10238ff753b28956134c489d7ff0dd
+  TokenStateReactNativeLib: a312be9827d8f30489526ae61d8043c26e291111
   Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: e666274f914c7b5184f185cc6aba804395525691
+PODFILE CHECKSUM: 1c63e76ef4bb0faeba099954481e81e631dda720
 
 COCOAPODS: 1.12.1
