@@ -10,7 +10,7 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Animated, Easing, Keyboard, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {TextInputSectionItem} from '@atb/components/sections';
-import {FavoriteChips, ChipTypeGroup} from '@atb/favorites';
+import {FavoriteChips, ChipTypeGroup, useFavorites} from '@atb/favorites';
 import {MessageBox} from '@atb/components/message-box';
 import {JourneyHistory} from './JourneyHistory';
 import {LocationResults} from './LocationResults';
@@ -43,6 +43,7 @@ export function LocationSearchContent({
   onAddFavorite,
 }: LocationSearchContentProps) {
   const styles = useThemeStyles();
+  const {favorites} = useFavorites();
   const {history, addSearchEntry} = useSearchHistory();
   const {t} = useTranslation();
 
@@ -52,7 +53,9 @@ export function LocationSearchContent({
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(
+    debouncedText,
     history,
+    favorites,
     onlyLocalTariffZoneAuthority,
   );
 
@@ -101,15 +104,16 @@ export function LocationSearchContent({
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length && filteredLocations.length > 0;
   const searchBarIsEmpty = text === '' || text.length === 0;
-
-  const [chipHeight, setChipHeight] = useState(0);
-  const [scrollY] = useState(new Animated.Value(0)); // Initial value as 0
-  const [chipOpacity] = useState(new Animated.Value(1));
-
   const onChipLayout = (event: any) => {
     const {height} = event.nativeEvent.layout;
     setChipHeight(height);
   };
+
+  const [chipHeight, setChipHeight] = useState(0);
+  const [scrollY] = useState(
+    new Animated.Value(searchBarIsEmpty ? 0 : -chipHeight),
+  );
+  const [chipOpacity] = useState(new Animated.Value(searchBarIsEmpty ? 1 : 0));
 
   useEffect(() => {
     const toValue = searchBarIsEmpty ? 1 : 0;
@@ -129,7 +133,7 @@ export function LocationSearchContent({
         useNativeDriver: true,
       }),
     ]).start();
-  }, [searchBarIsEmpty]);
+  }, [searchBarIsEmpty, chipHeight]);
 
   const [showMessageBox, setShowMessageBox] = useState(false);
 
@@ -142,7 +146,7 @@ export function LocationSearchContent({
       // If there are results or the search string is empty, then immediately hide the MessageBox
       setShowMessageBox(false);
     }
-    // Clear Timeout if the component is unmounted or if effect dependencies change before the timeout completes
+    // Clear Timeout if the component is unmounted or if effectpo dependencies change before the timeout completes
     return () => timeoutId && clearTimeout(timeoutId);
   }, [isSearching, text, filteredLocations]);
 
