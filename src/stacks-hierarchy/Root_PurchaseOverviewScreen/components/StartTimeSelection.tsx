@@ -103,7 +103,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   radioSegments: {
     marginTop: theme.spacings.medium,
   },
-  warningBox: {
-    marginTop: theme.spacings.medium,
-  },
 }));
