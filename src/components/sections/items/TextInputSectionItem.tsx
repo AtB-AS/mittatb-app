@@ -184,7 +184,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     borderColor: theme.static.background.background_0.background,
   },
   containerInline: {
-    backgroundColor: 'red',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
