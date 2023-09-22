@@ -105,19 +105,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ? new Date(preassignedFareProduct.limitations.latestActivationDate * 1000)
     : undefined;
 
-  const onSetTravelDate = (dateToSet?: string) => {
-    if (!maximumDateObjectIfExisting || !dateToSet) {
-      setTravelDate(dateToSet);
-    } else {
-      if (isAfter(dateToSet, maximumDateObjectIfExisting)) {
-        setShowActivationDateWarning(true);
-      } else {
-        if (showActivationDateWarning) setShowActivationDateWarning(false);
-        setTravelDate(dateToSet);
-      }
-    }
-  };
-
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
     userProfilesWithCountAndOffer.some((u) => u.count);
@@ -215,7 +202,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectionMode={timeSelectionMode}
             color="interactive_2"
             travelDate={travelDate}
-            setTravelDate={onSetTravelDate}
+            setTravelDate={setTravelDate}
             validFromTime={travelDate}
             maximumDate={maximumDateObjectIfExisting}
             style={styles.selectionComponent}
