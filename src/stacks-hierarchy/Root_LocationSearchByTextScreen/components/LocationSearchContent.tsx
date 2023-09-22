@@ -111,7 +111,6 @@ export function LocationSearchContent({
     setChipHeight(height);
   };
 
-  // Handle OnLayout to set the height of the FavoriteChips container
   useEffect(() => {
     const toValue = searchBarIsEmpty ? 1 : 0;
     const scrollYToValue = searchBarIsEmpty ? 0 : -chipHeight;
@@ -138,7 +137,7 @@ export function LocationSearchContent({
     let timeoutId: ReturnType<typeof setTimeout>;
     if (!isSearching && !!text && filteredLocations.length === 0) {
       // If not searching, text is present, and no results, then plan to show the MessageBox after a delay
-      timeoutId = setTimeout(() => setShowMessageBox(true), 200);
+      timeoutId = setTimeout(() => setShowMessageBox(true), 300);
     } else if (filteredLocations.length > 0 || text.length === 0) {
       // If there are results or the search string is empty, then immediately hide the MessageBox
       setShowMessageBox(false);
