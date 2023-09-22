@@ -126,6 +126,8 @@ export const TicketAssistant_FrequencyScreen = ({
                           style={styles.number}
                           type={'body__primary'}
                           color={themeColor}
+                          numberOfLines={1}
+                          ellipsizeMode={'clip'}
                         >
                           {number}
                         </ThemeText>
@@ -241,6 +243,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   numberContainer: {
     width: 30,
     alignContent: 'center',
+    flexShrink: 1,
   },
   number: {
     width: '100%',

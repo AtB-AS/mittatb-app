@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   createMaterialTopTabNavigator,
   MaterialTopTabBarProps,
@@ -22,6 +22,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Platform} from 'react-native';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
+import {useNavigationState} from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator<TicketAssistantStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -34,6 +35,15 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
   const [tabCount, setTabCount] = useState(0);
   const {theme} = useTheme();
   const [previousTab, setPreviousTab] = useState<any>();
+
+  const navigationState = useNavigationState((state) => state);
+
+  useEffect(() => {
+    setActiveTab(navigationState.index);
+    setTabCount(navigationState.routes.length);
+    setPreviousTab(navigationState.routes[navigationState.index - 1]);
+  }, [navigationState]);
+
   return (
     <TicketAssistantContextProvider>
       <FullScreenHeader
@@ -61,9 +71,6 @@ export const Root_TicketAssistantStack = ({navigation}: Props) => {
       />
       <Tab.Navigator
         tabBar={(props: MaterialTopTabBarProps) => {
-          setActiveTab(props.state.index);
-          setTabCount(props.state.routes.length);
-          setPreviousTab(props.state.routes[props.state.index - 1]);
           return <PageIndicator {...props} />;
         }}
         style={{
