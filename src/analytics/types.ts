@@ -9,4 +9,5 @@ export type AnalyticsEventContext =
   | 'Ticketing'
   | 'Trip details'
   | 'Trip search'
-  | 'Ticket assistant';
+  | 'Ticket assistant'
+  | 'Parking violations';
