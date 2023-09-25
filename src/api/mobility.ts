@@ -18,6 +18,10 @@ import {
   BikeStationFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
+import {
+  ViolationsReportingInitQuery,
+  ViolationsReportingInitQueryResult,
+} from './types/mobility';
 
 type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
 
@@ -108,4 +112,15 @@ export const getCarStation = (
   return client
     .get<GetCarStationQuery>(stringifyUrl(url, query), opts)
     .then((res) => res.data.stations?.[0]);
+};
+
+export const initViolationsReporting = (
+  params: ViolationsReportingInitQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportingInitQueryResult> => {
+  const url = '/bff/v2/mobility/violations-reporting/init';
+  const query = qs.stringify(params);
+  return client
+    .get<ViolationsReportingInitQueryResult>(stringifyUrl(url, query), opts)
+    .then((res) => res.data);
 };
