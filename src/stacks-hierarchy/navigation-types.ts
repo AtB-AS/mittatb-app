@@ -128,6 +128,7 @@ export type RootStackParamList = {
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
   Root_CameraScreen: Root_CameraScreenParams;
+  Root_ParkingViolationsReportScreen: undefined;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

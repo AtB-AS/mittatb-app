@@ -47,7 +47,8 @@ import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
-import {Root_CameraScreen} from './Root_CameraScreen';
+import {Root_CameraScreen} from '@atb/stacks-hierarchy/Root_CameraScreen';
+import {Root_ParkingViolationsReportScreen} from './Root_ParkingViolationsReportScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -358,6 +359,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_CameraScreen"
                   component={Root_CameraScreen}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsReportScreen"
+                  component={Root_ParkingViolationsReportScreen}
                 />
               </Stack.Group>
             </Stack.Navigator>

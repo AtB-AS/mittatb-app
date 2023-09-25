@@ -261,8 +261,10 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         <Announcements style={style.contentSection} />
 
         <Button
-          onPress={() => navigation.navigate('Root_CameraScreen', {})}
-          text="Åpne kamera"
+          onPress={() =>
+            navigation.navigate('Root_ParkingViolationsReportScreen')
+          }
+          text="Registrer feilparkering"
         />
 
         {enable_ticketing && (
