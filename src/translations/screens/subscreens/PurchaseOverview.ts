@@ -59,8 +59,8 @@ const PurchaseOverviewTexts = {
         a11yLabel: _('Velg kaier', 'Select harbors', 'Vel kaier'),
       },
       noneSelected: {
-        text: _('Ingen kai valgt', 'No harbors selected', 'Inga kai valt'),
-        a11yLabel: _('Ingen kai valgt', 'No harbors selected', 'Inga kai valt'),
+        text: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),
+        a11yLabel: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),
       },
       from: {
         a11yLabel: (harbor?: string) =>
