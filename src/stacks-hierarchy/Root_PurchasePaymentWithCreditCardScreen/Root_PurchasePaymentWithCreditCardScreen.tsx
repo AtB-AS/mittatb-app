@@ -113,7 +113,7 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
         {terminalUrl && showWebView && (
           <KeyboardAvoidingView
             behavior={Platform.OS === 'android' ? 'padding' : undefined}
-            style={{flex: 1}}
+            style={styles.keyboardAvoidingView}
             keyboardVerticalOffset={
               Platform.OS === 'android' ? headerHeight : 0
             }
@@ -181,6 +181,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
   },
+  keyboardAvoidingView: {flex: 1},
   center: {flex: 1, justifyContent: 'center', padding: theme.spacings.medium},
   messageBox: {marginBottom: theme.spacings.small},
   button: {marginBottom: theme.spacings.small},
