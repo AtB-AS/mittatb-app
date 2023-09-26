@@ -7,7 +7,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {Animated, Easing, Keyboard, View} from 'react-native';
+import {Keyboard, ScrollView, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {FavoriteChips, ChipTypeGroup, useFavorites} from '@atb/favorites';
@@ -16,6 +16,7 @@ import {JourneyHistory} from './JourneyHistory';
 import {LocationResults} from './LocationResults';
 import {StyleSheet} from '@atb/theme';
 import {translateErrorType} from '@atb/stacks-hierarchy/utils';
+import {animateNextChange} from '@atb/utils/animation';
 
 type LocationSearchContentProps = {
   label: string;
@@ -104,36 +105,6 @@ export function LocationSearchContent({
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length && filteredLocations.length > 0;
   const searchBarIsEmpty = text === '' || text.length === 0;
-  const onChipLayout = (event: any) => {
-    const {height} = event.nativeEvent.layout;
-    setChipHeight(height);
-  };
-
-  const [chipHeight, setChipHeight] = useState(0);
-  const [scrollY] = useState(
-    new Animated.Value(searchBarIsEmpty ? 0 : -chipHeight),
-  );
-  const [chipOpacity] = useState(new Animated.Value(searchBarIsEmpty ? 1 : 0));
-
-  useEffect(() => {
-    const toValue = searchBarIsEmpty ? 1 : 0;
-    const scrollYToValue = searchBarIsEmpty ? 0 : -chipHeight;
-    const animationDuration = 150;
-
-    Animated.parallel([
-      Animated.timing(chipOpacity, {
-        toValue,
-        duration: animationDuration,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scrollY, {
-        toValue: scrollYToValue,
-        duration: animationDuration,
-        easing: Easing.inOut(Easing.quad),
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [searchBarIsEmpty, chipHeight]);
 
   const [showMessageBox, setShowMessageBox] = useState(false);
 
@@ -159,7 +130,13 @@ export function LocationSearchContent({
             radius="top-bottom"
             label={label}
             value={text}
-            onChangeText={setText}
+            onChangeText={(newText) => {
+              if (searchBarIsEmpty || newText.length === 0) {
+                animateNextChange();
+              }
+
+              setText(newText);
+            }}
             showClear={Boolean(text?.length)}
             onClear={() => setText('')}
             placeholder={placeholder}
@@ -169,7 +146,7 @@ export function LocationSearchContent({
             testID="locationSearchInput"
           />
 
-          <Animated.View style={{opacity: chipOpacity}} onLayout={onChipLayout}>
+          {searchBarIsEmpty && (
             <FavoriteChips
               onSelectLocation={onSelect}
               onMapSelection={onMapSelection}
@@ -177,7 +154,7 @@ export function LocationSearchContent({
               style={styles.chipBox}
               onAddFavorite={onAddFavorite}
             />
-          </Animated.View>
+          )}
         </View>
       </View>
       {error && (
@@ -185,8 +162,8 @@ export function LocationSearchContent({
           <MessageBox type="warning" message={errorMessage} />
         </View>
       )}
-      <Animated.ScrollView
-        style={{...styles.fullFlex, transform: [{translateY: scrollY}]}}
+      <ScrollView
+        style={{...styles.fullFlex}}
         contentContainerStyle={styles.contentBlock}
         keyboardShouldPersistTaps="handled"
         onScrollBeginDrag={() => Keyboard.dismiss()}
@@ -227,7 +204,7 @@ export function LocationSearchContent({
             />
           </View>
         )}
-      </Animated.ScrollView>
+      </ScrollView>
     </>
   );
 }
