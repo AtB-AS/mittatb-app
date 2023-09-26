@@ -62,6 +62,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MBXAccessToken</key>
+	<string>$(MAPBOX_PUBLIC_TOKEN)</string>
 	<key>NFCReaderUsageDescription</key>
 	<string>Vi må bruke NFC for sikkerhetsformål.</string>
 	<key>NSAppTransportSecurity</key>
@@ -85,6 +87,8 @@
 	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Du gir AtB tillatelse til å bruke bevegelsesdata til analyse og større større forståelse av reisemønster, f.eks. for å se forskjell på sykling, gåing og bilkjøring.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
 	<key>NSUserActivityTypes</key>
@@ -98,7 +102,9 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>bluetooth-central</string>
 		<string>fetch</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -113,7 +119,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>MBXAccessToken</key>
-	<string>$(MAPBOX_PUBLIC_TOKEN)</string>
 </dict>
 </plist>

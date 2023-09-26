@@ -15,10 +15,11 @@
 #import <KettleKit/KettleKit-Swift.h>
 static void InitializeKettle(NSDictionary *launchOptions) {
     KTLConfig* config = [KTLConfig KTLDefaultConfig];
+    NSString *apiKey = [NSString stringWithFormat:@"%@", KETTLE_API_KEY];
     #if DEBUG
-        config.developmentApiKey = KETTLE_API_KEY;
+        config.developmentApiKey = apiKey;
     #else
-        config.productionApiKey = KETTLE_API_KEY;
+        config.productionApiKey = apiKey;
     #endif
   
     config.developmentLogLevel = KTLLogLevelDebug;
