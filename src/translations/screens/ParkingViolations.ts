@@ -55,6 +55,14 @@ export const ParkingViolationTexts = {
     ),
     nextButton: _('Neste', 'Next', 'Neste'),
   },
+  summary: {
+    title: _(
+      'Send inn feilparkeringen',
+      'Submit the report',
+      'Send inn feilparkeringa',
+    ),
+    submitButton: _('Send inn', 'Submit', 'Send inn'),
+  },
   loadingError: _(
     'Oops! Vi fikk ikke til å starte feilrapporteringen denne gangen.',
     'Oops! We were unable to start the error reporting this time',
