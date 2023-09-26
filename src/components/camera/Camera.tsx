@@ -18,7 +18,12 @@ type Props = {
   onCapture: (photo: PhotoFile) => void;
 };
 
-export const Camera = ({zoom = 1, modes = ['photo'], onCapture}: Props) => {
+export const Camera = ({
+  style = {},
+  zoom = 1,
+  modes = ['photo'],
+  onCapture,
+}: Props) => {
   const camera = useRef<VisionCamera>(null);
   const styles = useStyles();
   const [cameraPermission, setCameraPermission] =
@@ -59,7 +64,7 @@ export const Camera = ({zoom = 1, modes = ['photo'], onCapture}: Props) => {
 
   if (cameraDevice && cameraPermission === 'authorized') {
     return (
-      <View style={styles.container}>
+      <View style={style}>
         <VisionCamera
           ref={camera}
           device={cameraDevice}
@@ -97,16 +102,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     padding: theme.spacings.medium,
   },
-  container: {
-    flex: 1,
-    alignContent: 'center',
-  },
   camera: {
     flex: 1,
   },
   captureButton: {
     position: 'absolute',
-    bottom: 80,
+    bottom: 40,
     left: 0,
     right: 0,
     alignItems: 'center',
