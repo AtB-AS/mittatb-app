@@ -25,7 +25,7 @@ export const ScreenContainer = ({
       <View style={style.backdrop}>
         <DashboardBackground width={'100%'} height={'100%'} />
       </View>
-      <ScrollView style={style.content}>
+      <ScrollView contentContainerStyle={style.content}>
         {title && (
           <ThemeText
             type="heading--big"
@@ -62,7 +62,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       margin: 0,
     },
     content: {
-      flexGrow: 1,
+      flex: 1,
       padding: theme.spacings.medium,
     },
     header: {
