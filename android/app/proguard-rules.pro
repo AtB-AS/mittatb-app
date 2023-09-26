@@ -12,4 +12,5 @@
 -keep class com.facebook.jni.** { *; }
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
-
+# For more details, see the requirements setting for Kettle at https://developer.kogenta.com/docs/react-native/add-kettle#android
+-keepclassmembers class com.kogenta.kettle.core.model.** { *; }
