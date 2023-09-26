@@ -28,7 +28,7 @@ else
     cp $ENV_FOLDER/.env .
 
     echo "Copying AndroidManifest.xm file to android folder"
-    cp $ORG_FOLDER/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+    cp $ORG_FOLDER/AndroidManifest-Debug.xml android/app/src/debug/AndroidManifest.xml
 
     # Get KETTLE_API_KEY value
     KETTLE_API_KEY="$(envprop 'KETTLE_API_KEY')"
@@ -38,13 +38,13 @@ else
         command -v brew >/dev/null 2>&1 && echo "Installing xmlstarlet dependency" && brew install xmlstarlet
 
         command -v xmlstarlet >/dev/null 2>&1 && \
-        echo "Adding [Kettle] API Key to AndroidManifest.xml" && \
+        echo "Adding [Kettle] API Key to android/app/src/debug/AndroidManifest.xml" && \
         xmlstarlet edit --inplace --omit-decl \
             -s //manifest/application -t elem -n "kettlekey" \
             -i //manifest/application/kettlekey -t attr -n "android:name" -v "com.kogenta.kettle.sdk.API_KEY" \
             -i //manifest/application/kettlekey -t attr -n "android:value" -v "$KETTLE_API_KEY" \
             -r //manifest/application/kettlekey -v meta-data \
-            android/app/src/main/AndroidManifest.xml || \
+            android/app/src/debug/AndroidManifest.xml || \
         echo "xmlstarlet is not available. Cannot add [Kettle] API Key to AndroidManifest.xml."
     else
         echo "Skipping [Kettle] API Key to AndroidManifest.xml"
