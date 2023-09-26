@@ -16,6 +16,7 @@ import {ParkingViolations_Photo} from './ParkingViolations_Photo';
 import {ParkingViolations_Qr} from './ParkingViolations_Qr';
 import {ParkingViolations_Providers} from './ParkingViolations_Providers';
 import {ParkingViolations_Intro} from './Root_ParkingViolationsIntro';
+import {ParkingViolations_Summary} from './ParkingViolations_Summary';
 
 const Tab =
   createMaterialTopTabNavigator<ParkingViolationsReportingStackParams>();
@@ -86,6 +87,10 @@ export const Root_ParkingViolationsReportingStack = ({navigation}: Props) => {
         <Tab.Screen
           name="ParkingViolations_Providers"
           component={ParkingViolations_Providers}
+        />
+        <Tab.Screen
+          name="ParkingViolations_Summary"
+          component={ParkingViolations_Summary}
         />
       </Tab.Navigator>
     </ParkingViolationsContextProvider>
