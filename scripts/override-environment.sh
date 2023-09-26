@@ -45,7 +45,7 @@ else
             -i //manifest/application/kettlekey -t attr -n "android:value" -v "$KETTLE_API_KEY" \
             -r //manifest/application/kettlekey -v meta-data \
             android/app/src/debug/AndroidManifest.xml || \
-        echo "xmlstarlet is not available. Cannot add [Kettle] API Key to AndroidManifest.xml."
+        echo "Cannot add [Kettle] API Key to AndroidManifest.xml."
     else
         echo "Skipping [Kettle] API Key to AndroidManifest.xml"
     fi
