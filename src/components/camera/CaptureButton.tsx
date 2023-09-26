@@ -1,29 +1,47 @@
 import {StyleSheet} from '@atb/theme';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 
-const CAPTURE_BUTTON_SIZE = 78;
-
 type Props = {
   onCapture: () => void;
   style?: StyleProp<ViewStyle>;
+  size?: number;
+  color?: string;
 };
 
-export const CaptureButton = ({style: containerStyle, onCapture}: Props) => {
-  const style = useStyles();
+export const CaptureButton = ({
+  style: containerStyle,
+  onCapture,
+  size,
+  color,
+}: Props) => {
+  const style = useStyles({size, color})();
   return (
     <View style={containerStyle}>
-      <TouchableOpacity onPress={onCapture} style={style.button} />
+      <TouchableOpacity onPress={onCapture} style={style.button}>
+        <View style={style.innerButton} />
+      </TouchableOpacity>
     </View>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook(() => ({
-  button: {
-    height: CAPTURE_BUTTON_SIZE,
-    width: CAPTURE_BUTTON_SIZE,
-    backgroundColor: 'transparent',
-    borderWidth: CAPTURE_BUTTON_SIZE * 0.1,
-    borderRadius: 100,
-    borderColor: 'rgba(255, 255, 255, 0.8)',
-  },
-}));
+const useStyles = ({
+  size = 78,
+  color = 'rgba(255, 255, 255, 0.8)',
+}: Pick<Props, 'size' | 'color'>) =>
+  StyleSheet.createThemeHook(() => ({
+    button: {
+      height: size,
+      width: size,
+      backgroundColor: 'transparent',
+      borderWidth: size * 0.05,
+      borderRadius: size / 2,
+      borderColor: color,
+    },
+    innerButton: {
+      flex: 1,
+      backgroundColor: color,
+      borderRadius: size / 2,
+      overflow: 'hidden',
+      margin: size * 0.05,
+    },
+  }));

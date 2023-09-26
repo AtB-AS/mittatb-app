@@ -105,10 +105,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   captureButton: {
-    position: 'absolute',
-    bottom: 40,
-    left: 0,
-    right: 0,
+    marginTop: theme.spacings.medium,
     alignItems: 'center',
   },
 }));
