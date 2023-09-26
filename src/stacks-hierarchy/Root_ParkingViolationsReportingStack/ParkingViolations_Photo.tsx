@@ -5,6 +5,8 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {useIsFocused} from '@react-navigation/native';
 import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
+import {ThemeText} from '@atb/components/text';
+import {themeColor} from './Root_ParkingViolationsReportingStack';
 
 export type PhotoScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Photo'>;
@@ -21,6 +23,9 @@ export const ParkingViolations_Photo = ({navigation}: PhotoScreenProps) => {
 
   return (
     <ScreenContainer title={t(ParkingViolationTexts.photo.title)}>
+      <ThemeText color={themeColor}>
+        {t(ParkingViolationTexts.photo.instruction)}
+      </ThemeText>
       {isFocused && (
         <Camera style={style.camera} onCapture={handlePhotoCapture}></Camera>
       )}
@@ -28,8 +33,9 @@ export const ParkingViolations_Photo = ({navigation}: PhotoScreenProps) => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   camera: {
     flexGrow: 1,
+    marginVertical: theme.spacings.large,
   },
 }));

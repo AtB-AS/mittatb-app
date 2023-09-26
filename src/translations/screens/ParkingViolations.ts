@@ -39,6 +39,11 @@ export const ParkingViolationTexts = {
       'Take a photo of the bike',
       'Ta eit billete av sykkelen',
     ),
+    instruction: _(
+      'Hold ca. 5 meter avstand. Unngå folk i bildet.',
+      'Stand approximately 5 meters away. Avoid people in the frame',
+      '"Hald ein avstand på omtrent 5 meter. Unngå folk i biletet',
+    ),
   },
   qr: {
     title: _(
