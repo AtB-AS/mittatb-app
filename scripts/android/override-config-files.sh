@@ -23,6 +23,10 @@ xmlstarlet edit --inplace --omit-decl \
   -i //manifest/application/bugsnagreleasestage -t attr -n "android:name" -v "com.bugsnag.android.RELEASE_STAGE" \
   -i //manifest/application/bugsnagreleasestage -t attr -n "android:value" -v "$BUGSNAG_RELEASE_STAGE" \
   -r //manifest/application/bugsnagreleasestage -v meta-data \
+  -s //manifest/application -t elem -n "kettlekey" \
+  -i //manifest/application/kettlekey -t attr -n "android:name" -v "com.kogenta.kettle.sdk.API_KEY" \
+  -i //manifest/application/kettlekey -t attr -n "android:value" -v "$KETTLE_API_KEY" \
+  -r //manifest/application/kettlekey -v meta-data \
    android/app/src/main/AndroidManifest.xml
 
 
