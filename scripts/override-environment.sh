@@ -41,7 +41,7 @@ else
         echo "Adding [Kettle] API Key to AndroidManifest.xml" && \
         xmlstarlet edit --inplace --omit-decl \
             -s //manifest/application -t elem -n "kettlekey" \
-            -i //manifest/application/kettlekey -t attr -n "android:name" -v "com.kogenta.kettle.sdk.$KETTLE_API_KEY" \
+            -i //manifest/application/kettlekey -t attr -n "android:name" -v "com.kogenta.kettle.sdk.API_KEY" \
             -i //manifest/application/kettlekey -t attr -n "android:value" -v "$KETTLE_API_KEY" \
             -r //manifest/application/kettlekey -v meta-data \
             android/app/src/main/AndroidManifest.xml || \
