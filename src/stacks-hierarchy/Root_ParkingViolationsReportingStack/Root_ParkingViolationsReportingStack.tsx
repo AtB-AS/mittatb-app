@@ -1,98 +1,52 @@
-import {FullScreenHeader} from '@atb/components/screen-header';
-import {RootStackScreenProps} from '../navigation-types';
-import {useState} from 'react';
-import {
-  MaterialTopTabBarProps,
-  createMaterialTopTabNavigator,
-} from '@react-navigation/material-top-tabs';
-import {PageIndicator} from '@atb/components/page-indicator';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useTheme} from '@atb/theme';
-import {ParkingViolationsReportingStackParams} from './navigation-types';
-import {ParkingViolations_SelectViolation} from './ParkingViolations_SelectViolation';
 import {StaticColorByType} from '@atb/theme/colors';
+import {createStackNavigator} from '@react-navigation/stack';
 import {ParkingViolationsContextProvider} from './ParkingViolationsContext';
 import {ParkingViolations_Photo} from './ParkingViolations_Photo';
-import {ParkingViolations_Qr} from './ParkingViolations_Qr';
 import {ParkingViolations_Providers} from './ParkingViolations_Providers';
-import {ParkingViolations_Intro} from './Root_ParkingViolationsIntro';
+import {ParkingViolations_Qr} from './ParkingViolations_Qr';
+import {ParkingViolations_SelectViolation} from './ParkingViolations_SelectViolation';
 import {ParkingViolations_Summary} from './ParkingViolations_Summary';
+import {ParkingViolations_Intro} from './Root_ParkingViolationsIntro';
+import {ParkingViolationsReportingStackParams} from './navigation-types';
 
-const Tab =
-  createMaterialTopTabNavigator<ParkingViolationsReportingStackParams>();
-type Props = RootStackScreenProps<'Root_ParkingViolationsReportingStack'>;
+const Screen = createStackNavigator<ParkingViolationsReportingStackParams>();
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
 
-export const Root_ParkingViolationsReportingStack = ({navigation}: Props) => {
-  const [activeTab, setActiveTab] = useState(0);
-  const [previousTab, setPreviousTab] = useState<any>();
-  const [tabCount, setTabCount] = useState(0);
-  const {bottom: safeAreaBottom} = useSafeAreaInsets();
-  const {theme} = useTheme();
-
+export const Root_ParkingViolationsReportingStack = () => {
   return (
     <ParkingViolationsContextProvider>
-      <FullScreenHeader
-        leftButton={
-          activeTab === 0
-            ? {
-                type: 'close',
-                analyticsEventContext: 'Parking violations',
-              }
-            : {
-                type: 'back',
-                onPress: () => {
-                  navigation.navigate(previousTab);
-                },
-              }
-        }
-        rightButton={
-          activeTab !== tabCount - 1 && activeTab !== 0
-            ? {type: 'close'}
-            : undefined
-        }
-        setFocusOnLoad={false}
-      />
-      <Tab.Navigator
-        tabBar={(props: MaterialTopTabBarProps) => {
-          setActiveTab(props.state.index);
-          setTabCount(props.state.routes.length);
-          setPreviousTab(props.state.routes[props.state.index - 1]);
-          return <PageIndicator {...props} />;
-        }}
-        style={{
-          paddingBottom: Math.max(safeAreaBottom, theme.spacings.medium),
-          backgroundColor: theme.static.background[themeColor].background,
-        }}
-        tabBarPosition="bottom"
+      <Screen.Navigator
         initialRouteName="ParkingViolations_Intro"
+        screenOptions={{
+          headerShown: false,
+        }}
       >
-        <Tab.Screen
+        <Screen.Screen
           name="ParkingViolations_Intro"
           component={ParkingViolations_Intro}
         />
-        <Tab.Screen
+        <Screen.Screen
           name="ParkingViolations_SelectViolation"
           component={ParkingViolations_SelectViolation}
         />
-        <Tab.Screen
+        <Screen.Screen
           name="ParkingViolations_Photo"
           component={ParkingViolations_Photo}
         />
-        <Tab.Screen
+        <Screen.Screen
           name="ParkingViolations_Qr"
           component={ParkingViolations_Qr}
         />
-        <Tab.Screen
+        <Screen.Screen
           name="ParkingViolations_Providers"
           component={ParkingViolations_Providers}
         />
-        <Tab.Screen
+        <Screen.Screen
           name="ParkingViolations_Summary"
           component={ParkingViolations_Summary}
         />
-      </Tab.Navigator>
+      </Screen.Navigator>
     </ParkingViolationsContextProvider>
   );
 };

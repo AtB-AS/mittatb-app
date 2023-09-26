@@ -1,46 +1,40 @@
-import {DashboardBackground} from '@atb/assets/svg/color/images';
+import {FullScreenHeader, LeftButtonProps} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {ScrollView, View} from 'react-native';
-import {themeColor} from './Root_ParkingViolationsReportingStack';
 import {PropsWithChildren, ReactNode} from 'react';
-import {ThemeText} from '@atb/components/text';
+import {ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {themeColor} from './Root_ParkingViolationsReportingStack';
 
 type Props = PropsWithChildren<{
   title?: string;
-  accessibilityTitle?: string;
+  titleA11yLabel?: string;
+  leftHeaderButton?: LeftButtonProps;
   buttons?: ReactNode;
 }>;
 
 export const ScreenContainer = ({
+  leftHeaderButton = {type: 'back'},
   children,
   title,
-  accessibilityTitle,
+  titleA11yLabel,
   buttons,
 }: Props) => {
   const style = useStyles();
 
   return (
-    <View style={style.container}>
-      <View style={style.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
+    <>
+      <FullScreenHeader
+        leftButton={leftHeaderButton}
+        title={title}
+        titleA11yLabel={titleA11yLabel}
+      />
+      <View style={style.container}>
+        <ScrollView contentContainerStyle={style.content}>
+          {children}
+        </ScrollView>
+        {buttons && <View style={style.actionButtons}>{buttons}</View>}
       </View>
-      <ScrollView contentContainerStyle={style.content}>
-        {title && (
-          <ThemeText
-            type="heading--big"
-            style={style.header}
-            color={themeColor}
-            accessibilityRole={'header'}
-            accessibilityLabel={accessibilityTitle ?? title}
-          >
-            {title}
-          </ThemeText>
-        )}
-        {children}
-      </ScrollView>
-      {buttons && <View style={style.actionButtons}>{buttons}</View>}
-    </View>
+    </>
   );
 };
 
@@ -50,7 +44,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       flex: 1,
       backgroundColor: theme.static.background[themeColor].background,
-      width: '100%',
     },
     backdrop: {
       position: 'absolute',

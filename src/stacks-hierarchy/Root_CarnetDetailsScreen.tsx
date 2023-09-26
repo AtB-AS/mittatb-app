@@ -29,7 +29,7 @@ export function Root_CarnetDetailsScreen({navigation, route}: Props) {
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'close'}}
+        leftButton={{type: 'cancel'}}
         title={t(FareContractTexts.details.header.title)}
       />
       <ScrollView contentContainerStyle={styles.content}>
