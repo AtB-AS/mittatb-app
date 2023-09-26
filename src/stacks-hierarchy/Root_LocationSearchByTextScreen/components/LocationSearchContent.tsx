@@ -221,6 +221,5 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   fullFlex: {
     flex: 1,
-    backgroundColor: theme.static.background.background_2.background,
   },
 }));
