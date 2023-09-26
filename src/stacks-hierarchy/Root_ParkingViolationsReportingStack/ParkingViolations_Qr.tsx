@@ -9,13 +9,14 @@ import {useIsFocused} from '@react-navigation/native';
 export type QrScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
 
-export const ParkingViolations_Qr = () => {
+export const ParkingViolations_Qr = ({navigation}: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
   const isFocused = useIsFocused();
 
   const handlePhotoCapture = (file: PhotoFile) => {
     console.log(file);
+    navigation.navigate('ParkingViolations_Providers');
   };
 
   return (
@@ -28,5 +29,7 @@ export const ParkingViolations_Qr = () => {
 };
 
 const useStyles = StyleSheet.createThemeHook(() => ({
-  camera: {},
+  camera: {
+    flexGrow: 1,
+  },
 }));
