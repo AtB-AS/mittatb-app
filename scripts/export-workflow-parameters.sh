@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Read a property safely from config file, instead of sourcing the file
-envprop() {
-  grep -e "^${1}=" ./.env | cut -d'=' -f2 | head -n 1;
-}
+source ./scripts/utils.sh
 
 # Export env vars from .env file
 echo "APP_VERSION=$(envprop APP_VERSION)" >> $GITHUB_ENV
