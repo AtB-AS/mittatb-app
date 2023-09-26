@@ -23,6 +23,9 @@ else
     echo "Copying $APP_ENVIRONMENT .env file to root"
     cp $ENV_FOLDER/.env .
 
+    echo "Copying AndroidManifest.xm file to android folder"
+    cp $ORG_FOLDER/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+
     echo "Copying $APP_ENVIRONMENT .env file to fastlane"
     cp $ENV_FOLDER/.env fastlane/.env.default
 
@@ -47,5 +50,13 @@ else
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
     sh ./scripts/generate-assets.sh $APP_ORG
+
+    echo "Adding [Kettle] API Key to AndroidManifest.xml"
+    [[ -z "${KETTLE_API_KEY}" ]] && xmlstarlet edit --inplace --omit-decl \
+        -s //manifest/application -t elem -n "kettlekey" \
+        -i //manifest/application/kettlekey -t attr -n "android:name" -v "com.kogenta.kettle.sdk.$KETTLE_API_KEY" \
+        -i //manifest/application/kettlekey -t attr -n "android:value" -v "$KETTLE_API_KEY" \
+        -r //manifest/application/kettlekey -v meta-data \
+        android/app/src/main/AndroidManifest.xml
 
 fi
