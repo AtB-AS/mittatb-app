@@ -13,6 +13,9 @@ import {ParkingViolations_SelectViolation} from './ParkingViolations_SelectViola
 import {StaticColorByType} from '@atb/theme/colors';
 import {ParkingViolationsContextProvider} from './ParkingViolationsContext';
 import {ParkingViolations_Photo} from './ParkingViolations_Photo';
+import {ParkingViolations_Qr} from './ParkingViolations_Qr';
+import {ParkingViolations_Providers} from './ParkingViolations_Providers';
+import {ParkingViolations_Intro} from './Root_ParkingViolationsIntro';
 
 const Tab =
   createMaterialTopTabNavigator<ParkingViolationsReportingStackParams>();
@@ -62,8 +65,12 @@ export const Root_ParkingViolationsReportingStack = ({navigation}: Props) => {
           backgroundColor: theme.static.background[themeColor].background,
         }}
         tabBarPosition="bottom"
-        initialRouteName="ParkingViolations_SelectViolation"
+        initialRouteName="ParkingViolations_Intro"
       >
+        <Tab.Screen
+          name="ParkingViolations_Intro"
+          component={ParkingViolations_Intro}
+        />
         <Tab.Screen
           name="ParkingViolations_SelectViolation"
           component={ParkingViolations_SelectViolation}
@@ -71,6 +78,14 @@ export const Root_ParkingViolationsReportingStack = ({navigation}: Props) => {
         <Tab.Screen
           name="ParkingViolations_Photo"
           component={ParkingViolations_Photo}
+        />
+        <Tab.Screen
+          name="ParkingViolations_Qr"
+          component={ParkingViolations_Qr}
+        />
+        <Tab.Screen
+          name="ParkingViolations_Providers"
+          component={ParkingViolations_Providers}
         />
       </Tab.Navigator>
     </ParkingViolationsContextProvider>

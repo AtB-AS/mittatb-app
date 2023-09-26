@@ -1,6 +1,9 @@
 import {translation as _} from '../commons';
 
 export const ParkingViolationTexts = {
+  intro: {
+    nextButton: _('Kom i gang', "Let's get started", 'Kom i gang'),
+  },
   selectViolation: {
     title: _('Hva er feil?', 'What is wrong?', 'Kva er feil?'),
     violationDescription: (code: string) => {
@@ -36,6 +39,21 @@ export const ParkingViolationTexts = {
       'Take a photo of the bike',
       'Ta eit billete av sykkelen',
     ),
+  },
+  qr: {
+    title: _(
+      'Scan QR-koden på sykkelstyret',
+      'Scan the QR code on the handlebars',
+      'Scan QR-koden på sykkelstyret',
+    ),
+  },
+  operator: {
+    title: _(
+      'Velg utleiefirmaet sykkelen er fra',
+      'Select the operator that owns the bike',
+      'Velg utleigefirmaet sykkelen er frå',
+    ),
+    nextButton: _('Neste', 'Next', 'Neste'),
   },
   loadingError: _(
     'Oops! Vi fikk ikke til å starte feilrapporteringen denne gangen.',

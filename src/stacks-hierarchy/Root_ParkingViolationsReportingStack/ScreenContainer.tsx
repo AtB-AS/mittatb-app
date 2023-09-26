@@ -72,6 +72,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     actionButtons: {
       marginHorizontal: theme.spacings.xLarge,
+      marginTop: theme.spacings.medium,
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
   };

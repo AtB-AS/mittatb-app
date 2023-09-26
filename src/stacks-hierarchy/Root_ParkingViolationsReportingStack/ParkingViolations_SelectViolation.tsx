@@ -1,6 +1,10 @@
-import {ParkingViolationType} from '@atb/api/types/mobility';
+import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
+import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {useTranslation} from '@atb/translations';
+import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
+import chunk from 'lodash/chunk';
 import {isDefined} from '@atb/utils/presence';
 import {useState} from 'react';
 import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
@@ -9,10 +13,6 @@ import {useParkingViolationsState} from './ParkingViolationsContext';
 import {themeColor} from './Root_ParkingViolationsReportingStack';
 import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
-import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useTranslation} from '@atb/translations';
-import {ThemeText} from '@atb/components/text';
-import {Button} from '@atb/components/button';
 
 export type SelectViolationScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_SelectViolation'>;
@@ -27,13 +27,6 @@ export const ParkingViolations_SelectViolation = ({
   const {t} = useTranslation();
   const {isLoading, error, violations} = useParkingViolationsState();
   const [selectedViolations, setSelectedViolations] = useState<number[]>([]);
-
-  const groupedViolations = violations.reduce<
-    [ParkingViolationType, ParkingViolationType | undefined][]
-  >((grouped, current, index, arr) => {
-    if (index % 2 === 0) return [...grouped, [current, arr[index + 1]]];
-    return grouped;
-  }, []);
 
   const handleViolationSelect = (id: number) => {
     setSelectedViolations((current) =>
@@ -72,9 +65,12 @@ export const ParkingViolations_SelectViolation = ({
       )}
       {!isLoading &&
         !error &&
-        groupedViolations.map((violationGroup) => (
-          <View style={style.violations}>
-            {violationGroup.filter(isDefined).map((violation) => (
+        chunk(violations, 2).map((violationRow) => (
+          <View
+            key={violationRow.reduce((val, v) => val + (v?.id ?? 1), 0)}
+            style={style.violationRow}
+          >
+            {violationRow.filter(isDefined).map((violation) => (
               <View style={style.violation} key={violation.id}>
                 <TouchableOpacity
                   onPress={() => handleViolationSelect(violation.id)}
@@ -91,7 +87,10 @@ export const ParkingViolations_SelectViolation = ({
                     xml={violation.icon}
                   />
                 </TouchableOpacity>
-                <ThemeText color={themeColor} style={{textAlign: 'center'}}>
+                <ThemeText
+                  color={themeColor}
+                  style={style.violationDescription}
+                >
                   {t(
                     ParkingViolationTexts.selectViolation.violationDescription(
                       violation.code,
@@ -108,7 +107,7 @@ export const ParkingViolations_SelectViolation = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   indicator: {alignSelf: 'center'},
-  violations: {
+  violationRow: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginBottom: theme.spacings.medium,
@@ -122,5 +121,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     borderRadius: ICON_SIZE / 2,
     overflow: 'hidden',
     borderWidth: 2,
+  },
+  violationDescription: {
+    textAlign: 'center',
   },
 }));
