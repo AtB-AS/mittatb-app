@@ -49,8 +49,7 @@ export function LocationSearchContent({
   const {t} = useTranslation();
 
   const [text, setText] = useState<string>(defaultText ?? '');
-  const delay = text.length == 1 ? 0 : 150; //for first typing, do search immediately
-  const debouncedText = useDebounce(text, delay);
+  const debouncedText = useDebounce(text, 200);
 
   const [errorMessage, setErrorMessage] = useState<string>('');
   const previousLocations = filterPreviousLocations(
@@ -105,20 +104,6 @@ export function LocationSearchContent({
   const hasPreviousResults = !!previousLocations.length;
   const hasResults = !!filteredLocations.length && filteredLocations.length > 0;
   const searchBarIsEmpty = text === '' || text.length === 0;
-
-  const [showMessageBox, setShowMessageBox] = useState(false);
-
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-    if (!isSearching && !!text && filteredLocations.length === 0) {
-      // If not searching, text is present, and no results, then plan to show the MessageBox after a delay
-      timeoutId = setTimeout(() => setShowMessageBox(true), 300);
-    } else if (filteredLocations.length > 0 || text.length === 0) {
-      // If there are results or the search string is empty, then immediately hide the MessageBox
-      setShowMessageBox(false);
-    }
-    return () => timeoutId && clearTimeout(timeoutId);
-  }, [isSearching, text, filteredLocations]);
 
   return (
     <>
@@ -189,22 +174,28 @@ export function LocationSearchContent({
             )}
           </>
         ) : (
-          hasResults && (
-            <LocationResults
-              title={t(LocationSearchTexts.results.searchResults.heading)}
-              locations={filteredLocations}
-              onSelect={onSearchSelect}
-              testIDItemPrefix="locationSearchItem"
-            />
-          )
-        )}
-        {showMessageBox && (
-          <View style={[styles.contentBlock, styles.marginTop]}>
-            <MessageBox
-              type="info"
-              message={t(LocationSearchTexts.messages.emptyResult)}
-            />
-          </View>
+          <>
+            {hasResults ? (
+              <LocationResults
+                title={t(LocationSearchTexts.results.searchResults.heading)}
+                locations={filteredLocations}
+                onSelect={onSearchSelect}
+                testIDItemPrefix="locationSearchItem"
+              />
+            ) : (
+              !error &&
+              !!text &&
+              locations != null &&
+              !isSearching && (
+                <View style={[styles.contentBlock, styles.marginTop]}>
+                  <MessageBox
+                    type="info"
+                    message={t(LocationSearchTexts.messages.emptyResult)}
+                  />
+                </View>
+              )
+            )}
+          </>
         )}
       </ScrollView>
     </>
