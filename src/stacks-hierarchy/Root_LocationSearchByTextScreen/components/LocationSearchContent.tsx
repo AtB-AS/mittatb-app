@@ -134,11 +134,13 @@ export function LocationSearchContent({
               if (searchBarIsEmpty || newText.length === 0) {
                 animateNextChange();
               }
-
               setText(newText);
             }}
             showClear={Boolean(text?.length)}
-            onClear={() => setText('')}
+            onClear={() => {
+              animateNextChange();
+              setText('');
+            }}
             placeholder={placeholder}
             autoCorrect={false}
             autoComplete="off"
