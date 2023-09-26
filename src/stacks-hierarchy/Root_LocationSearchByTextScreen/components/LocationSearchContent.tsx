@@ -102,7 +102,7 @@ export function LocationSearchContent({
   }, [error]);
 
   const hasPreviousResults = !!previousLocations.length;
-  const hasResults = !!filteredLocations.length && filteredLocations.length > 0;
+  const hasResults = !!filteredLocations.length;
   const searchBarIsEmpty = text === '' || text.length === 0;
 
   return (
