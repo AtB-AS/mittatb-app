@@ -1389,7 +1389,7 @@ PODS:
     - React-Core
     - TokenCore
   - Turf (2.6.1)
-  - VisionCamera (2.16.1):
+  - VisionCamera (3.1.0):
     - React
     - React-callinvoker
     - React-Core

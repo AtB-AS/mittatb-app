@@ -2,9 +2,9 @@ import {StyleSheet} from '@atb/theme';
 import {useEffect, useRef, useState} from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {
-  CameraPermissionRequestResult,
   Camera as VisionCamera,
-  useCameraDevices,
+  useCameraDevice,
+  useCameraPermission,
 } from 'react-native-vision-camera';
 import {Processing} from '../loading';
 import {MessageBox} from '../message-box';
@@ -26,18 +26,17 @@ export const Camera = ({
 }: Props) => {
   const camera = useRef<VisionCamera>(null);
   const styles = useStyles();
-  const [cameraPermission, setCameraPermission] =
-    useState<CameraPermissionRequestResult>();
-  const devices = useCameraDevices();
-  const cameraDevice = devices.back;
+  const {hasPermission, requestPermission} = useCameraPermission();
+  const [permissionAccepted, setPermissionAccepted] = useState<boolean>();
+  const device = useCameraDevice('back');
 
   useEffect(() => {
     (async () => {
-      const cameraPermissionStatus =
-        await VisionCamera.requestCameraPermission();
-      setCameraPermission(cameraPermissionStatus);
+      if (!hasPermission) {
+        setPermissionAccepted(await requestPermission());
+      }
     })();
-  }, []);
+  }, [hasPermission]);
 
   const handleCapture = async () => {
     const photo = await camera.current?.takePhoto();
@@ -46,7 +45,7 @@ export const Camera = ({
     }
   };
 
-  if (cameraPermission === 'denied') {
+  if (!hasPermission && permissionAccepted === false) {
     return (
       <View style={styles.loadingIndicator}>
         <MessageBox
@@ -62,12 +61,12 @@ export const Camera = ({
     );
   }
 
-  if (cameraDevice && cameraPermission === 'authorized') {
+  if (device && hasPermission) {
     return (
       <View style={style}>
         <VisionCamera
           ref={camera}
-          device={cameraDevice}
+          device={device}
           isActive={true}
           style={styles.camera}
           zoom={zoom}
@@ -78,7 +77,7 @@ export const Camera = ({
       </View>
     );
   }
-  if (!cameraDevice && cameraPermission === 'authorized') {
+  if (!device && permissionAccepted === null) {
     return (
       <View style={styles.loadingIndicator}>
         <MessageBox
