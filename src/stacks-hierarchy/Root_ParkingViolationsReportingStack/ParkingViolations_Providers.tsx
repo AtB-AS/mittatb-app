@@ -4,10 +4,12 @@ import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
 import {Button} from '@atb/components/button';
 import {useParkingViolationsState} from './ParkingViolationsContext';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Image, View, TouchableOpacity} from 'react-native';
 import {isDefined} from '@atb/utils/presence';
 import chunk from 'lodash/chunk';
+import {useState} from 'react';
+import {themeColor} from './Root_ParkingViolationsReportingStack';
 
 export type ProvidersScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Providers'>;
@@ -17,7 +19,9 @@ export const ParkingViolations_Providers = ({
 }: ProvidersScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
+  const {theme} = useTheme();
   const {providers} = useParkingViolationsState();
+  const [selectedProvider, setSelectedProvider] = useState<number>();
 
   return (
     <ScreenContainer
@@ -25,7 +29,7 @@ export const ParkingViolations_Providers = ({
       buttons={
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('ParkingViolations_Photo')}
+          onPress={() => navigation.navigate('ParkingViolations_Summary')}
           text={t(ParkingViolationTexts.operator.nextButton)}
           testID="nextButton"
           accessibilityHint={''} //TODO
@@ -39,7 +43,17 @@ export const ParkingViolations_Providers = ({
             key={providerRow.reduce((val, p) => val + (p?.id ?? 1), 0)}
           >
             {providerRow.filter(isDefined).map((provider) => (
-              <TouchableOpacity key={provider.id} style={style.providerLogo}>
+              <TouchableOpacity
+                key={provider.id}
+                style={{
+                  ...style.providerLogo,
+                  borderColor:
+                    selectedProvider === provider.id
+                      ? theme.static.status['valid'].background
+                      : theme.static.background[themeColor].background,
+                }}
+                onPress={() => setSelectedProvider(provider.id)}
+              >
                 <Image
                   height={80}
                   width={80}
@@ -65,5 +79,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   providerLogo: {
     borderRadius: 40,
     overflow: 'hidden',
+    borderWidth: 2,
   },
 }));
