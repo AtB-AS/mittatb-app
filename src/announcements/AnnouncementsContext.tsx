@@ -17,6 +17,7 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     const unsubscribe = firestore()
       .collection<AnnouncementRaw>('announcements')
+      .where('active', '==', true)
       .onSnapshot(
         async (snapshot) => {
           setAnnouncements(mapToAnnouncements(snapshot.docs));
