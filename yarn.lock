@@ -3966,10 +3966,10 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
-"@rnmapbox/maps@^10.0.15":
-  version "10.0.15"
-  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.0.15.tgz#cf63c8eb6beffb22451718f148c2bea655a3cdb6"
-  integrity sha512-2diBwMF+e7gR6keZ1AEI3xw8U7Cu9+xhv8ce75Bw7flg9aTk+d0KgWv4VDQn4wSphD23EroUgFprVymHvVzZGQ==
+"@rnmapbox/maps@^10.0.8-rc.1":
+  version "10.0.8-rc.1"
+  resolved "https://registry.yarnpkg.com/@rnmapbox/maps/-/maps-10.0.8-rc.1.tgz#3604400d13a2b7e10a3aac51ca6662773e297c6b"
+  integrity sha512-vCoUHFCeRCAPsjbAHnqLjFzl/jDHwwY/pMq9b3lgzGl/Y4Z52E4VTRGWHC1BBult/8aO08cHMaAm1IElffWqug==
   dependencies:
     "@turf/along" "6.5.0"
     "@turf/distance" "6.5.0"
