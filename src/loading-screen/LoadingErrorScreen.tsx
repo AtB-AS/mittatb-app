@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Linking, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
@@ -14,6 +14,7 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useAnalytics} from '@atb/analytics';
 
 const themeColor = 'background_accent_0';
 export const LoadingErrorScreen = React.memo(() => {
@@ -23,6 +24,12 @@ export const LoadingErrorScreen = React.memo(() => {
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
   const {customer_service_url} = useRemoteConfig();
+  const analytics = useAnalytics();
+
+  useEffect(() => {
+    analytics.logEvent('Loading boundary', 'Error during loading');
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
@@ -56,12 +63,21 @@ export const LoadingErrorScreen = React.memo(() => {
         <View>
           <Button
             text={t(dictionary.retry)}
-            onPress={retryAuth}
+            onPress={() => {
+              analytics.logEvent('Loading boundary', 'Try again clicked');
+              retryAuth();
+            }}
             testID="retryAuthButton"
           />
           <Button
             style={styles.customerServiceButton}
-            onPress={() => Linking.openURL(customer_service_url)}
+            onPress={() => {
+              analytics.logEvent(
+                'Loading boundary',
+                'Contact customer service clicked',
+              );
+              Linking.openURL(customer_service_url);
+            }}
             mode="secondary"
             text={t(LoadingScreenTexts.error.contactButton.text)}
             accessibilityLabel={t(
@@ -90,6 +106,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xLarge,
     textAlign: 'center',
   },
-  description: {marginTop: theme.spacings.medium},
+  description: {marginVertical: theme.spacings.medium},
   customerServiceButton: {marginTop: theme.spacings.medium},
 }));
