@@ -8,6 +8,16 @@ const DashboardTexts = {
     },
   },
   buyButton: _('Kjøp billetter', 'Buy tickets', 'Kjøp billettar'),
+  announcemens: {
+    header: _('Aktuelt', 'Announcements', 'Aktuelt'),
+    button: {
+      accessibility: _(
+        'Aktiver for å lese mer',
+        'Activate to read more',
+        'Aktiver for å lese meir',
+      ),
+    },
+  },
 };
 
 export default DashboardTexts;
