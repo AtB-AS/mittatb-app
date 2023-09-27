@@ -1,15 +1,20 @@
 import {StyleSheet} from '@atb/theme';
 import {useEffect, useRef, useState} from 'react';
-import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {
-  Camera as VisionCamera,
-  useCameraDevice,
-  useCameraPermission,
-} from 'react-native-vision-camera';
+  Linking,
+  StyleProp,
+  View,
+  ViewStyle,
+  NativeModules,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
+import {Camera as CameraKitCamera, CameraType} from 'react-native-camera-kit';
 import {Processing} from '../loading';
 import {MessageBox} from '../message-box';
 import {CaptureButton} from './CaptureButton';
 import {PhotoFile} from './types';
+const {CKCameraManager} = NativeModules;
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -18,34 +23,73 @@ type Props = {
   onCapture: (photo: PhotoFile) => void;
 };
 
-export const Camera = ({
-  style = {},
-  zoom = 1,
-  modes = ['photo'],
-  onCapture,
-}: Props) => {
-  const camera = useRef<VisionCamera>(null);
+export const Camera = ({style = {}, zoom = 1, onCapture}: Props) => {
+  const camera = useRef<CameraKitCamera>(null);
   const styles = useStyles();
-  const {hasPermission, requestPermission} = useCameraPermission();
-  const [permissionAccepted, setPermissionAccepted] = useState<boolean>();
-  const device = useCameraDevice('back');
+  const [isAuthorized, setIsAuthorized] = useState<boolean>();
+
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Camera Permission',
+          message: 'App needs camera permission',
+          buttonPositive: 'Accept',
+        },
+      );
+      // If CAMERA Permission is granted
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn(err);
+      return false;
+    }
+  };
 
   useEffect(() => {
     (async () => {
-      if (!hasPermission) {
-        setPermissionAccepted(await requestPermission());
+      if (Platform.OS === 'android') {
+        setIsAuthorized(await requestCameraPermission());
+      } else {
+        let authStatus =
+          await CKCameraManager.checkDeviceCameraAuthorizationStatus();
+        if (authStatus === -1) {
+          authStatus =
+            await CKCameraManager.checkDeviceCameraAuthorizationStatus();
+        }
+        setIsAuthorized(authStatus);
       }
     })();
-  }, [hasPermission]);
+  }, [CameraKitCamera]);
 
   const handleCapture = async () => {
-    const photo = await camera.current?.takePhoto();
+    const photo = await camera.current?.capture();
     if (photo) {
       onCapture({path: photo.path, height: photo.height, width: photo.width});
     }
   };
 
-  if (!hasPermission && permissionAccepted === false) {
+  if (isAuthorized === undefined) {
+    return (
+      <View style={styles.loadingIndicator}>
+        <Processing message={'Starter kamera...'} />
+      </View>
+    );
+  }
+
+  if (isAuthorized) {
+    return (
+      <View style={style}>
+        <CameraKitCamera
+          ref={camera}
+          cameraType={CameraType.Back}
+          style={styles.camera}
+          zoom={zoom}
+        />
+        <CaptureButton style={styles.captureButton} onCapture={handleCapture} />
+      </View>
+    );
+  } else {
     return (
       <View style={styles.loadingIndicator}>
         <MessageBox
@@ -60,39 +104,6 @@ export const Camera = ({
       </View>
     );
   }
-
-  if (device && hasPermission) {
-    return (
-      <View style={style}>
-        <VisionCamera
-          ref={camera}
-          device={device}
-          isActive={true}
-          style={styles.camera}
-          zoom={zoom}
-          photo={modes.includes('photo')}
-          video={modes.includes('video')}
-        />
-        <CaptureButton style={styles.captureButton} onCapture={handleCapture} />
-      </View>
-    );
-  }
-  if (!device && permissionAccepted === null) {
-    return (
-      <View style={styles.loadingIndicator}>
-        <MessageBox
-          message="Her må det inn en forklaring. Mest sannsynlig er du på Simulator"
-          title="Tilkobling til kamera feilet"
-          type="error"
-        />
-      </View>
-    );
-  }
-  return (
-    <View style={styles.loadingIndicator}>
-      <Processing message={'Starter kamera...'} />
-    </View>
-  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
