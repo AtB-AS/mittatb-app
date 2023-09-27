@@ -83,14 +83,19 @@ export function EstimatedCallItem({
 
   const isTripCancelled = departure.cancellation;
 
-  const lineName = getDestinationLineName(t, departure.destinationDisplay);
+  const {destinationDisplay} = departure;
+  const lineName = getDestinationLineName(t, destinationDisplay);
   const lineNumber = line?.publicCode;
 
   const notices = getNoticesForEstimatedCall(departure);
 
   const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
     useOnMarkFavouriteDepartures(
-      {...line, lineNumber: lineNumber, lineName: lineName},
+      {
+        ...line,
+        lineNumber,
+        destinationDisplay,
+      },
       quay,
       stopPlace,
       addedFavoritesVisibleOnDashboard,

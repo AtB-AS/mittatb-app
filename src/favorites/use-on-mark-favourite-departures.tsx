@@ -8,8 +8,13 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {
   TransportSubmode,
   TransportMode,
+  DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
+import {
+  getDestinationLineName,
+  mapLegacyLineNameToDestinationDisplay,
+} from '@atb/travel-details-screens/utils';
 
 type FavouriteDepartureLine = {
   id?: string;
@@ -17,7 +22,7 @@ type FavouriteDepartureLine = {
   lineNumber?: string;
   transportMode?: TransportMode;
   transportSubmode?: TransportSubmode;
-  lineName?: string;
+  destinationDisplay?: DestinationDisplay;
 };
 
 export function useOnMarkFavouriteDepartures(
@@ -34,14 +39,25 @@ export function useOnMarkFavouriteDepartures(
     close: closeBottomSheet,
     onOpenFocusRef,
   } = useBottomSheet();
-  if (!line.id || !line.lineName || !line.lineNumber) {
+  const lineDD = line.destinationDisplay;
+  const frontText = lineDD?.frontText;
+  const destinationDisplay =
+    frontText?.includes(' via ') && (lineDD?.via?.length || 0) < 1
+      ? mapLegacyLineNameToDestinationDisplay(lineDD?.frontText)
+      : lineDD; // assume legacy frontText if it includes ' via ' and the via list is empty
+
+  if (!line.id || !destinationDisplay || !line.lineNumber) {
     return {onMarkFavourite: undefined, existingFavorite: undefined};
   }
-  const addFavorite = async (forSpecificLineName: boolean) => {
+  const lineName = getDestinationLineName(t, destinationDisplay);
+
+  const addFavorite = async (forSpecificDestination: boolean) => {
     line.id &&
       (await addFavoriteDeparture({
         lineId: line.id,
-        lineName: forSpecificLineName ? line.lineName : undefined,
+        destinationDisplay: forSpecificDestination
+          ? destinationDisplay
+          : undefined,
         lineLineNumber: line.lineNumber,
         lineTransportationMode: line.transportMode,
         lineTransportationSubMode: line.transportSubmode,
@@ -57,7 +73,7 @@ export function useOnMarkFavouriteDepartures(
   };
 
   const existingFavorite = getFavoriteDeparture({
-    lineName: line.lineName,
+    destinationDisplay,
     lineId: line.id,
     stopId: stopPlace.id,
     quayId: quay.id,
@@ -66,13 +82,15 @@ export function useOnMarkFavouriteDepartures(
   const toggleFavouriteAccessibilityLabel = existingFavorite
     ? t(
         NearbyTexts.results.lines.favorite.removeFavorite(
-          `${line.lineNumber} ${existingFavorite.lineName ?? ''}`,
+          `${line.lineNumber} ${
+            getDestinationLineName(t, existingFavorite.destinationDisplay) ?? ''
+          }`,
           stopPlace.name,
         ),
       )
     : t(
         NearbyTexts.results.lines.favorite.addFavorite(
-          `${line.lineNumber} ${line.lineName}`,
+          `${line.lineNumber} ${lineName}`,
           stopPlace.name,
         ),
       );
@@ -100,11 +118,11 @@ export function useOnMarkFavouriteDepartures(
           },
         ],
       );
-    } else if (line.lineName && line.lineNumber) {
+    } else if (destinationDisplay && line.lineNumber) {
       openBottomSheet(() =>
-        line.lineName && line.lineNumber ? (
+        destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
-            lineName={line.lineName}
+            destinationDisplay={destinationDisplay}
             lineNumber={line.lineNumber}
             addFavorite={addFavorite}
             close={closeBottomSheet}

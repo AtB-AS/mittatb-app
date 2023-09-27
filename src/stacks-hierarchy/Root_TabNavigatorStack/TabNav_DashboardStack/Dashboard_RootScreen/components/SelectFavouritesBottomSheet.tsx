@@ -22,6 +22,7 @@ import {SectionSeparator} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import {getDestinationLineName} from '@atb/travel-details-screens/utils';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -156,7 +157,10 @@ export const SelectFavouritesBottomSheet = ({
                         departureQuay={favorite.quayPublicCode}
                         lineIdentifier={favorite.lineLineNumber ?? ''}
                         lineName={
-                          favorite.lineName ??
+                          getDestinationLineName(
+                            t,
+                            favorite.destinationDisplay,
+                          ) ??
                           t(
                             SelectFavouriteDeparturesText.departures
                               .allVariations,

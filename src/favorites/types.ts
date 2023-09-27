@@ -1,6 +1,7 @@
 import {Coordinates, FeatureCategory} from '@entur/sdk';
 import {StoredType} from './storage';
 import {
+  DestinationDisplay,
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
@@ -43,7 +44,8 @@ export type UserFavorites = StoredLocationFavorite[];
 
 export type FavoriteDepartureId = {
   stopId: string;
-  lineName?: string;
+  lineName?: string; // legacy, keep for migration
+  destinationDisplay?: DestinationDisplay;
   lineId: string;
   quayId: string;
 };

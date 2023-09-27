@@ -98,7 +98,7 @@ export async function getFavouriteDepartures(
     quayName: f.quayName,
     stopId: f.stopId,
     lineLineNumber: f.lineLineNumber,
-    lineName: f.lineName,
+    destinationDisplay: f.destinationDisplay,
     lineTransportationMode: f.lineTransportationMode,
     lineTransportationSubMode: f.lineTransportationSubMode,
     quayPublicCode: f.quayPublicCode,

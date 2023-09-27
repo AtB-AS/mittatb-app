@@ -11,6 +11,10 @@ import {
 } from './types';
 
 import {RCTWidgetUpdater} from '../widget-updater';
+import {
+  destinationDisplaysAreEqual,
+  mapLegacyLineNameToDestinationDisplay,
+} from '@atb/travel-details-screens/utils';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
@@ -42,7 +46,14 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       departures.getFavorites(),
     ]);
     setFavoritesState(favorites ?? []);
-    setFavoriteDeparturesState(favoriteDepartures ?? []);
+    const {
+      favoriteDeparturesWithDestinationDisplay,
+      didMigrateFavoriteDeparture,
+    } = getFavoriteDeparturesWithDestinationDisplay(favoriteDepartures);
+
+    setFavoriteDeparturesState(favoriteDeparturesWithDestinationDisplay ?? []);
+    didMigrateFavoriteDeparture &&
+      departures.setFavorites(favoriteDeparturesWithDestinationDisplay ?? []);
   }
 
   useEffect(() => {
@@ -75,7 +86,7 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
      * number on the same quay will be removed.
      */
     async addFavoriteDeparture(favoriteDeparture: FavoriteDeparture) {
-      if (!favoriteDeparture.lineName) {
+      if (!favoriteDeparture.destinationDisplay) {
         const favoritesExisting = await departures.getFavorites();
         const favoritesFiltered = favoritesExisting.filter(
           (f) =>
@@ -109,7 +120,11 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       return favoriteDepartures.find(function (favorite) {
         return (
           favorite.lineId == potential.lineId &&
-          (!favorite.lineName || favorite.lineName == potential.lineName) &&
+          (!favorite.destinationDisplay ||
+            destinationDisplaysAreEqual(
+              favorite.destinationDisplay,
+              potential.destinationDisplay,
+            )) &&
           favorite.stopId == potential.stopId &&
           favorite.quayId == potential.quayId
         );
@@ -132,4 +147,30 @@ export function useFavorites() {
     );
   }
   return context;
+}
+
+function getFavoriteDeparturesWithDestinationDisplay(
+  favoriteDepartures: UserFavoriteDepartures,
+) {
+  // app version 1.41 and earlier used lineName in favoriteDepartures
+  // this function ensures all favoriteDepartures are migrated to using destinationDisplay instead
+  let didMigrateFavoriteDeparture = false;
+  const favoriteDeparturesWithDestinationDisplay = favoriteDepartures.map(
+    (fd) => {
+      if (fd.lineName) {
+        didMigrateFavoriteDeparture = true;
+        const {lineName, ...fdWithoutLineName} = fd;
+        return {
+          ...fdWithoutLineName,
+          destinationDisplay: mapLegacyLineNameToDestinationDisplay(lineName),
+        };
+      } else {
+        return fd;
+      }
+    },
+  );
+  return {
+    favoriteDeparturesWithDestinationDisplay,
+    didMigrateFavoriteDeparture,
+  };
 }
