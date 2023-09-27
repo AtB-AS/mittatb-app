@@ -27,7 +27,11 @@ export const ParkingViolations_Photo = ({navigation}: PhotoScreenProps) => {
         {t(ParkingViolationTexts.photo.instruction)}
       </ThemeText>
       {isFocused && (
-        <Camera style={style.camera} onCapture={handlePhotoCapture}></Camera>
+        <Camera
+          mode="photo"
+          style={style.camera}
+          onCapture={handlePhotoCapture}
+        ></Camera>
       )}
     </ScreenContainer>
   );

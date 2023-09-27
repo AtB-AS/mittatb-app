@@ -1,71 +1,47 @@
 import {StyleSheet} from '@atb/theme';
-import {useEffect, useRef, useState} from 'react';
-import {
-  Linking,
-  StyleProp,
-  View,
-  ViewStyle,
-  NativeModules,
-  PermissionsAndroid,
-  Platform,
-} from 'react-native';
+import {hasProp} from '@atb/utils/object';
+import {useRef} from 'react';
+import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {Camera as CameraKitCamera, CameraType} from 'react-native-camera-kit';
 import {Processing} from '../loading';
 import {MessageBox} from '../message-box';
 import {CaptureButton} from './CaptureButton';
 import {PhotoFile} from './types';
-const {CKCameraManager} = NativeModules;
+import {usePermissions} from './use-permissions';
+
+type PhotoProps = {
+  mode: 'photo';
+  onCapture: (photo: PhotoFile) => void;
+};
+type QrProps = {
+  mode: 'qr';
+  onCapture: (qr: string) => void;
+};
 
 type Props = {
   style?: StyleProp<ViewStyle>;
   zoom?: number;
-  modes?: ('photo' | 'video')[];
-  onCapture: (photo: PhotoFile) => void;
-};
+} & (PhotoProps | QrProps);
 
-export const Camera = ({style = {}, zoom = 1, onCapture}: Props) => {
+export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
   const camera = useRef<CameraKitCamera>(null);
   const styles = useStyles();
-  const [isAuthorized, setIsAuthorized] = useState<boolean>();
-
-  const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'Camera Permission',
-          message: 'App needs camera permission',
-          buttonPositive: 'Accept',
-        },
-      );
-      // If CAMERA Permission is granted
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
-    } catch (err) {
-      console.warn(err);
-      return false;
-    }
-  };
-
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS === 'android') {
-        setIsAuthorized(await requestCameraPermission());
-      } else {
-        let authStatus =
-          await CKCameraManager.checkDeviceCameraAuthorizationStatus();
-        if (authStatus === -1) {
-          authStatus =
-            await CKCameraManager.checkDeviceCameraAuthorizationStatus();
-        }
-        setIsAuthorized(authStatus);
-      }
-    })();
-  }, [CameraKitCamera]);
+  const {isAuthorized} = usePermissions();
 
   const handleCapture = async () => {
-    const photo = await camera.current?.capture();
-    if (photo) {
-      onCapture({path: photo.path, height: photo.height, width: photo.width});
+    if (mode === 'photo') {
+      try {
+        const photo = await camera.current?.capture();
+        if (photo) {
+          onCapture({
+            path: photo.path,
+            height: photo.height,
+            width: photo.width,
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -85,6 +61,18 @@ export const Camera = ({style = {}, zoom = 1, onCapture}: Props) => {
           cameraType={CameraType.Back}
           style={styles.camera}
           zoom={zoom}
+          scanBarcode={mode === 'qr'}
+          showFrame={mode === 'qr'}
+          onReadCode={(e: unknown) => {
+            if (
+              mode === 'qr' &&
+              hasProp(e, 'nativeEvent') &&
+              hasProp(e.nativeEvent, 'codeStringValue') &&
+              typeof e.nativeEvent.codeStringValue === 'string'
+            ) {
+              onCapture(e.nativeEvent.codeStringValue);
+            }
+          }}
         />
         <CaptureButton style={styles.captureButton} onCapture={handleCapture} />
       </View>
