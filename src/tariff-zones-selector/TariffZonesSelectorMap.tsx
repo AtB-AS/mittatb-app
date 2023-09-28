@@ -11,7 +11,7 @@ import {
   PositionArrow,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
-import React, {useRef} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useGeolocationState} from '@atb/GeolocationContext';
@@ -50,9 +50,13 @@ const TariffZonesSelectorMap = ({
     updateSelectedZones(feature.id as string);
   };
 
-  const startCoordinates = geolocation
-    ? [geolocation.coordinates.longitude, geolocation.coordinates.latitude]
-    : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
+  const startCoordinates = useMemo(
+    () =>
+      geolocation
+        ? [geolocation.coordinates.longitude, geolocation.coordinates.latitude]
+        : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude],
+    [],
+  );
 
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -60,27 +64,6 @@ const TariffZonesSelectorMap = ({
   const featureCollection = mapZonesToFeatureCollection(tariffZones, language);
 
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
-
-  async function flyToCurrentLocation() {
-    flyToLocation({coordinates: geolocation?.coordinates, mapCameraRef});
-
-    if (mapViewRef.current && geolocation) {
-      let point = await mapViewRef.current.getPointInView([
-        geolocation.coordinates.longitude,
-        geolocation.coordinates.latitude,
-      ]);
-      const featuresAtPoint =
-        await mapViewRef.current.queryRenderedFeaturesAtPoint(
-          point,
-          ['all', true],
-          ['tariffZonesFill'],
-        );
-      const featureId = featuresAtPoint?.features?.[0]?.id;
-      if (featureId) {
-        updateSelectedZones(featureId as string, 'geolocation');
-      }
-    }
-  }
 
   const updateSelectedZones = (
     tariffZoneId: string,
@@ -201,12 +184,20 @@ const TariffZonesSelectorMap = ({
               centerCoordinate={startCoordinates}
               {...MapCameraConfig}
             />
+            <MapboxGL.UserLocation />
           </MapboxGL.MapView>
 
           <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
             <View>
               <View style={styles.mapControls}>
-                <PositionArrow onPress={flyToCurrentLocation} />
+                <PositionArrow
+                  onPress={() =>
+                    flyToLocation({
+                      coordinates: geolocation?.coordinates,
+                      mapCameraRef,
+                    })
+                  }
+                />
               </View>
             </View>
 

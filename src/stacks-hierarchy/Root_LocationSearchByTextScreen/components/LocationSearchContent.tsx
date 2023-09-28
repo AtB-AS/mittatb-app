@@ -7,11 +7,12 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {Keyboard, ScrollView, View} from 'react-native';
+import {Keyboard, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {TextInputSectionItem} from '@atb/components/sections';
+import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {FavoriteChips, ChipTypeGroup, useFavorites} from '@atb/favorites';
 import {MessageBox} from '@atb/components/message-box';
+import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';
 import {LocationResults} from './LocationResults';
 import {StyleSheet} from '@atb/theme';
@@ -109,8 +110,7 @@ export function LocationSearchContent({
     <>
       <View style={styles.header}>
         <ScreenReaderAnnouncement message={errorMessage} />
-
-        <View style={styles.contentBlock}>
+        <Section style={styles.contentBlock}>
           <TextInputSectionItem
             radius="top-bottom"
             label={label}
@@ -132,6 +132,7 @@ export function LocationSearchContent({
             autoFocus={!a11yContext.isScreenReaderEnabled}
             testID="locationSearchInput"
           />
+        </Section>
 
           {searchBarIsEmpty && (
             <FavoriteChips
@@ -142,7 +143,6 @@ export function LocationSearchContent({
               onAddFavorite={onAddFavorite}
             />
           )}
-        </View>
       </View>
       {error && (
         <View style={styles.withMargin}>
@@ -212,9 +212,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   chipBox: {
     marginTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
   contentBlock: {
-    paddingHorizontal: theme.spacings.medium,
+    marginHorizontal: theme.spacings.medium,
   },
   marginTop: {
     marginTop: theme.spacings.medium,

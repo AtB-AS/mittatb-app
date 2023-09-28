@@ -47,6 +47,7 @@ import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_T
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
 import {Slider} from '@atb/components/slider';
+import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -88,6 +89,7 @@ export const Profile_DebugInfoScreen = () => {
   const showValidTimeInfoDebugOverride = useShowValidTimeInfoDebugOverride();
   const loadingScreenEnabledDebugOverride =
     useLoadingScreenEnabledDebugOverride();
+  const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -311,6 +313,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable loading screen on app startup and user change"
               override={loadingScreenEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable beacons"
+              override={beaconsEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>

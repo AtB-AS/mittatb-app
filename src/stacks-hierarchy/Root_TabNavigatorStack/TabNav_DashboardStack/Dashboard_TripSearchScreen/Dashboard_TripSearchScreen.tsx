@@ -249,7 +249,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           },
         }}
         refreshControl={
-          isFocused ? (
+          // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
+          isFocused || Platform.OS === 'android' ? (
             <RefreshControl
               refreshing={
                 Platform.OS === 'ios'

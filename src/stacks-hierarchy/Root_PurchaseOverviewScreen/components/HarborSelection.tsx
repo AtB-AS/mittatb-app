@@ -123,7 +123,7 @@ const HarborSelectionItem = forwardRef<
       onPress={() => !disabled && onPress()}
       testID="selectHarborsButton"
     >
-      <View style={fromOrTo === 'from' ? styles.fromHarbor : styles.toHarbor}>
+      <View style={styles.sectionContent}>
         <ThemeText
           color={disabled ? 'disabled' : 'secondary'}
           type="body__secondary"
@@ -162,12 +162,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   sectionText: {
     marginBottom: theme.spacings.medium,
   },
-  fromHarbor: {
+  sectionContent: {
     flexDirection: 'row',
-  },
-  toHarbor: {
-    flexDirection: 'row',
-    marginTop: theme.spacings.small,
   },
   toFromLabel: {
     minWidth: 40,
