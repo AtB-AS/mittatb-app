@@ -20,7 +20,7 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true) {
   useEffect(() => {
     if (!setFocusOnLoad || !focusRef.current) return;
 
-    giveFocus(focusRef);
+    giveFocus(focusRef, 200);
   }, [focusRef.current, setFocusOnLoad]);
 
   const navigation = useNavigationSafe();
@@ -28,7 +28,7 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true) {
     if (!navigation || !focusRef.current || !setFocusOnLoad) return;
 
     const unsubscribe = navigation.addListener('focus', () =>
-      giveFocus(focusRef),
+      giveFocus(focusRef, 200),
     );
     return () => unsubscribe();
   }, [navigation, focusRef.current, setFocusOnLoad]);
