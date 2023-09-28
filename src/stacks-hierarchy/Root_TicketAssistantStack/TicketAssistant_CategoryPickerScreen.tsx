@@ -21,8 +21,7 @@ import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useNavigationFocus} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-navigation-focus';
-import {TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -33,10 +32,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
   const {t, language} = useTranslation();
   const a11yContext = useAccessibilityContext();
 
-  const focusRef = useNavigationFocus({
-    navigation,
-    screenName: TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN,
-  });
+  const focusRef = useFocusOnLoad();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
