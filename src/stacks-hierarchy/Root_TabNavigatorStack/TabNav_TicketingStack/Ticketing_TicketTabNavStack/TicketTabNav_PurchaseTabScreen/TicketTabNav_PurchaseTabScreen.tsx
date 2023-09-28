@@ -24,6 +24,8 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {TariffZone} from '@atb/reference-data/types';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
+import {Button} from '@atb/components/button';
+import {Error} from '@atb/assets/svg/mono-icons/status';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -191,7 +193,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <>
-            <ThemeText style={styles.heading} type={'body__secondary'}>
+            <ThemeText style={styles.heading} type="body__secondary">
               {t(TicketingTexts.ticketAssistantTile.title)}
             </ThemeText>
             <TicketAssistantTile
@@ -205,7 +207,26 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         )}
       </View>
     </ScrollView>
-  ) : null;
+  ) : (
+    <View style={styles.connectionFailedContainer}>
+      <View style={styles.connectionFailedInfoContainer}>
+        <Error width={50} height={50} />
+        <ThemeText
+          type="body__primary--big"
+          style={styles.connectionFailedTitle}
+        >
+          {t(TicketingTexts.retryConnect.connectionFailed)}
+        </ThemeText>
+      </View>
+
+      <Button
+        onPress={() => {
+          // TODO retry here
+        }}
+        text={t(TicketingTexts.retryConnect.tryAgain)}
+      />
+    </View>
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -216,5 +237,18 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
     margin: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
+  },
+  connectionFailedContainer: {
+    marginTop: theme.spacings.xLarge * 7,
+    padding: theme.spacings.xLarge,
+  },
+  connectionFailedInfoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  connectionFailedTitle: {
+    textAlign: 'center',
+    marginTop: theme.spacings.xSmall,
+    marginBottom: theme.spacings.xLarge,
   },
 }));

@@ -238,7 +238,11 @@ const TicketingTexts = {
     approved: _('Godkjent billett', 'Approved ticket', 'Godkjent billett'),
   },
   ticketAssistantTile: {
-    title: _('Billettveileder for buss og trikk', 'Ticket assistant for bus and tram', 'Billettrettleiar for buss og trikk'),
+    title: _(
+      'Billettveileder for buss og trikk',
+      'Ticket assistant for bus and tram',
+      'Billettrettleiar for buss og trikk',
+    ),
     description: _(
       'Få hjelp til å velge billetten som passer best for deg.',
       'Get help choosing the ticket that suits you the best.',
@@ -262,6 +266,14 @@ const TicketingTexts = {
       'Activate to get tips and information about tickets',
       'Aktiver for å få tips og informasjon om billettar',
     ),
+  },
+  retryConnect: {
+    connectionFailed: _(
+      'Tilkobling mislyktes.',
+      'Connection failed.',
+      'Tilkoplinga var mislukka.',
+    ),
+    tryAgain: _('Prøv igjen', 'Try again', 'Prøv på ny'),
   },
 };
 
