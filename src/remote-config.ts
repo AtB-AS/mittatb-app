@@ -46,6 +46,7 @@ export type RemoteConfig = {
   enable_non_transit_trip_search: boolean;
   enable_show_valid_time_info: boolean;
   enable_loading_screen: boolean;
+  token_timeout_in_seconds: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -97,6 +98,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_non_transit_trip_search: true,
   enable_show_valid_time_info: true,
   enable_loading_screen: true,
+  token_timeout_in_seconds: 0,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -260,6 +262,10 @@ export function getConfig(): RemoteConfig {
     values['enable_loading_screen']?.asBoolean() ??
     defaultRemoteConfig.enable_loading_screen;
 
+  const token_timeout_in_seconds =
+    values['token_timeout_in_seconds']?.asNumber() ??
+    defaultRemoteConfig.token_timeout_in_seconds;
+
   return {
     enable_network_logging,
     enable_ticketing,
@@ -305,6 +311,7 @@ export function getConfig(): RemoteConfig {
     enable_non_transit_trip_search,
     enable_show_valid_time_info,
     enable_loading_screen,
+    token_timeout_in_seconds,
   };
 }
 
