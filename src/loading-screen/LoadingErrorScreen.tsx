@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Linking, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
@@ -8,7 +8,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {useAuthState} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
@@ -17,18 +16,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAnalytics} from '@atb/analytics';
 
 const themeColor = 'background_accent_0';
-export const LoadingErrorScreen = React.memo(() => {
+export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
   const styles = useStyles();
   const localConfig = useLocalConfig();
-  const {retryAuth} = useAuthState();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
   const {customer_service_url} = useRemoteConfig();
   const analytics = useAnalytics();
-
-  useEffect(() => {
-    analytics.logEvent('Loading boundary', 'Error during loading');
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,10 +57,7 @@ export const LoadingErrorScreen = React.memo(() => {
         <View>
           <Button
             text={t(dictionary.retry)}
-            onPress={() => {
-              analytics.logEvent('Loading boundary', 'Try again clicked');
-              retryAuth();
-            }}
+            onPress={retry}
             testID="retryAuthButton"
           />
           <Button
