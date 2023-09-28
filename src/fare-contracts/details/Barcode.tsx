@@ -54,7 +54,7 @@ const useBarcodeCodeStatus = (
   validityStatus: ValidityStatus,
   isInspectable: boolean,
 ) => {
-  const {remoteTokens, deviceIsInspectable, isLoading, isError} =
+  const {remoteTokens, deviceIsInspectable, isLoading, isTimedout, isError} =
     useMobileTokenContextState();
   const mobileTokenEnabled = useHasEnabledMobileToken();
   const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
@@ -67,6 +67,7 @@ const useBarcodeCodeStatus = (
 
   if (!mobileTokenEnabled) return 'static';
 
+  if (isTimedout) return 'static';
   if (isLoading) return 'loading';
   if (isError) return 'static';
   if (deviceIsInspectable) return 'mobiletoken';
