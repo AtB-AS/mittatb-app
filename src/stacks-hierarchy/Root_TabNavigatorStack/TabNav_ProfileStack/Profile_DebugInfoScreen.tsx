@@ -27,9 +27,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
-import {
-  useRealtimeMapDebugOverride,
-} from '@atb/components/map';
+import {useRealtimeMapDebugOverride} from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
@@ -49,6 +47,7 @@ import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-scre
 import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
+import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -90,6 +89,8 @@ export const Profile_DebugInfoScreen = () => {
   const showValidTimeInfoDebugOverride = useShowValidTimeInfoDebugOverride();
   const loadingScreenEnabledDebugOverride =
     useLoadingScreenEnabledDebugOverride();
+  const loadingErrorScreenEnabledDebugOverride =
+    useLoadingErrorScreenEnabledDebugOverride();
 
   useEffect(() => {
     async function run() {
@@ -333,6 +334,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable loading screen on app startup and user change"
               override={loadingScreenEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable loading error screen on app startup and user change"
+              override={loadingErrorScreenEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
