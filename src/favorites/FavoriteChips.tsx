@@ -51,14 +51,7 @@ export const FavoriteChips: React.FC<Props> = ({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[
-          (activeType('favorites') && favorites.length > 0) ||
-          activeType('add-favorite')
-            ? style
-            : undefined,
-          style,
-          styles.staticChipsContainer,
-        ]}
+        contentContainerStyle={[style, styles.staticChipsContainer]}
       >
         {activeType('location') && (
           <FavoriteChip

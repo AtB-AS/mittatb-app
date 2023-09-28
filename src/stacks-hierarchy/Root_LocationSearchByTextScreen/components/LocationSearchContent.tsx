@@ -220,6 +220,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
   },
   fullFlex: {
+    backgroundColor: theme.static.background.background_2.background,
     flex: 1,
   },
 }));
