@@ -129,9 +129,9 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
     if (state.authStatus === 'create-account-timeout') {
       dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'});
     } else if (state.authStatus === 'loading') {
-      resubscribe()
+      resubscribe();
     }
-  }, [state.user?.uid]);
+  }, [state.authStatus, resubscribe]);
 
   return (
     <AuthContext.Provider

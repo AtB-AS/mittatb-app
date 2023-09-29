@@ -32,6 +32,6 @@ export const useSubscribeToAuthUserChange = (
   }, [resubscribeToggle]);
 
   return {
-    resubscribe: useCallback(() => setResubscribeToggle((s) => !s), []),
+    resubscribe: useCallback(() => setResubscribeToggle((prev) => !prev), []),
   };
 };
