@@ -112,7 +112,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             </ThemeText>
           </View>
         ) : loading ? (
-          <View style={styles.loadingSpinner} ref={focusRef} accessible={true}>
+          <View style={styles.loadingSpinner}>
             <ActivityIndicator animating={true} size="large" />
           </View>
         ) : (
@@ -129,16 +129,16 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               >
                 {t(TicketAssistantTexts.summary.title)}
               </ThemeText>
-            </View>
 
-            <ThemeText
-              color={themeColor}
-              type={'body__primary'}
-              style={styles.description}
-              accessibilityLabel={description}
-            >
-              {description}
-            </ThemeText>
+              <ThemeText
+                color={themeColor}
+                type={'body__primary'}
+                style={styles.description}
+                accessibilityLabel={description}
+              >
+                {description}
+              </ThemeText>
+            </View>
 
             <TicketSummary />
             {doesTicketCoverEntirePeriod && (
