@@ -3565,9 +3565,10 @@
     picocolors "^1.0.0"
     tslib "^2.6.0"
 
-"@react-native-async-storage/async-storage@https://github.com/AtB-AS/async-storage":
-  version "1.17.11"
-  resolved "https://github.com/AtB-AS/async-storage#cb6762425eec6fbfbf32e3ccb5c5536f3f7c8ffc"
+"@react-native-async-storage/async-storage@^1.19.3":
+  version "1.19.3"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.3.tgz#ad5fe3ed0a82d4624aa4500321c1e09c02daeb46"
+  integrity sha512-CwGfoHCWdPOTPS+2fW6YRE1fFBpT9++ahLEroX5hkgwyoQ+TkmjOaUxixdEIoVua9Pz5EF2pGOIJzqOTMWfBlA==
   dependencies:
     merge-options "^3.0.4"
 
