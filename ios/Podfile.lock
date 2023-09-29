@@ -1805,10 +1805,10 @@ SPEC CHECKSUMS:
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  TimeReactNativeLib: 5915a7ee0d8fed27361f5109b0fe0f7c981d80cc
-  TokenCore: c66fccf39c10238ff753b28956134c489d7ff0dd
-  TokenStateReactNativeLib: a312be9827d8f30489526ae61d8043c26e291111
+  SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
+  TimeReactNativeLib: 8f7bba2f9973fb75f3f5619e5a3da582747663d6
+  TokenCore: 1579a2a2179a283048d9c0a007b4fd38861f4555
+  TokenStateReactNativeLib: cba98cbdb61af0255d2e636565a0feedb6cda069
   Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
