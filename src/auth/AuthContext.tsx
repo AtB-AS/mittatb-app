@@ -119,7 +119,7 @@ const AuthContext = createContext<AuthContextState | undefined>(undefined);
 export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
-  useSubscribeToAuthUserChange(dispatch);
+  const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useFetchCustomerDataAfterUserChanged(state.user, dispatch);
   useCheckIfAccountCreationFinished(state.user, state.authStatus, dispatch);
 
@@ -128,8 +128,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const retryAuth = useCallback(() => {
     if (state.authStatus === 'create-account-timeout') {
       dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'});
+    } else if (state.authStatus === 'loading') {
+      resubscribe();
     }
-  }, [state.user?.uid]);
+  }, [state.authStatus, resubscribe]);
 
   return (
     <AuthContext.Provider
