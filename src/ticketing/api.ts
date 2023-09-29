@@ -53,11 +53,11 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
   return response.data;
 }
 
-export async function addPaymentMethod(payment_redirect_url: string) {
+export async function addPaymentMethod(paymentRedirectUrl: string) {
   const url = `ticket/v3/recurring-payments`;
   const response = await client.post<AddPaymentMethodResponse>(
     url,
-    {payment_redirect_url},
+    {paymentRedirectUrl},
     {authWithIdToken: true},
   );
   return response.data;
