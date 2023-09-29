@@ -26,10 +26,6 @@ jobs:
     timeout-minutes: 180
     runs-on: ubuntu-latest
     steps:
-      - name: Debug Variables
-        run: |
-          echo "Force build: ${{ inputs.force-build }}"
-          echo "Cache hit: ${{ steps.modules-cache.outputs.cache-hit }}"
       - name: Checkout project
         uses: actions/checkout@v1
       - name: Set global env vars
