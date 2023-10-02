@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useAuthState} from '@atb/auth';
 import {LoadingScreen} from './LoadingScreen';
 import {LoadingErrorScreen} from './LoadingErrorScreen';
 import {useAppState} from '@atb/AppContext';
 import {useLoadingScreenEnabled} from '@atb/loading-screen/use-loading-screen-enabled';
 import {useDelayGate} from '@atb/utils/use-delay-gate';
+import {useAnalytics} from '@atb/analytics';
+import {useLoadingErrorScreenEnabled} from '@atb/loading-screen/use-loading-error-screen-enabled';
 
 export const LoadingScreenBoundary = ({
   children,
@@ -12,23 +14,53 @@ export const LoadingScreenBoundary = ({
   children: JSX.Element;
 }): JSX.Element => {
   const loadingScreenEnabled = useLoadingScreenEnabled();
-  const {isLoading} = useAppState();
-  const {authStatus} = useAuthState();
+  const loadingErrorScreenEnabled = useLoadingErrorScreenEnabled();
+  const {isLoading: isLoadingAppState} = useAppState();
+  const {authStatus, retryAuth} = useAuthState();
+  const analytics = useAnalytics();
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
-  // Wait one second after user authenticated to let the app "settle".
-  const waitFinished = useDelayGate(1000, authStatus === 'authenticated');
+  const [didTimeout, setDidTimeout] = useState(false);
+
+  const loadSuccess = authStatus === 'authenticated' && !isLoadingAppState;
+
+  const setupLoadingTimeout = useCallback(() => {
+    setDidTimeout(false);
+    timeoutRef.current = setTimeout(() => {
+      analytics.logEvent('Loading boundary', 'Loading boundary timeout', {
+        isLoadingAppState,
+        authStatus,
+      });
+      setDidTimeout(true);
+    }, 10000);
+  }, []);
+
+  const retry = useCallback(() => {
+    analytics.logEvent('Loading boundary', 'Retrying auth');
+    setupLoadingTimeout();
+    retryAuth();
+  }, [setupLoadingTimeout]);
+
+  // Wait one second after load success to let the app "settle".
+  const waitFinished = useDelayGate(1000, loadSuccess);
+
+  useEffect(() => {
+    if (!loadSuccess) {
+      setupLoadingTimeout();
+    } else {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    }
+  }, [loadSuccess, setupLoadingTimeout]);
 
   if (!loadingScreenEnabled) return children;
-  if (isLoading) return <LoadingScreen />;
-  if (!waitFinished) return <LoadingScreen />;
 
-  switch (authStatus) {
-    case 'loading':
-    case 'creating-account':
-      return <LoadingScreen />;
-    case 'error':
-      return <LoadingErrorScreen />;
-    case 'authenticated':
-      return children;
+  if (!loadSuccess) {
+    if (!didTimeout) return <LoadingScreen />;
+    if (loadingErrorScreenEnabled) return <LoadingErrorScreen retry={retry} />;
+    return children;
   }
+
+  return waitFinished ? children : <LoadingScreen />;
 };
