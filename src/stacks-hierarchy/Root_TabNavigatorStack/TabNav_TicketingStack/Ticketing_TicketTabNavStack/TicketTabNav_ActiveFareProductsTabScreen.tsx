@@ -3,7 +3,7 @@ import {
   filterAndSortActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+
 import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -19,13 +19,11 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   const activeFareContracts =
     filterAndSortActiveOrCanBeUsedFareContracts(fareContracts);
 
-  const hasAnyFareContractsOnAccount = fareContracts.length > 0;
-
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
 
   const styles = useStyles();
-  const {t} = useTranslation();
+
   return (
     <View style={styles.container}>
       <FareContractAndReservationsList
@@ -33,12 +31,6 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
         fareContracts={activeFareContracts}
         isRefreshing={isRefreshingFareContracts}
         refresh={resubscribeFirestoreListeners}
-        noItemsLabel={t(
-          hasAnyFareContractsOnAccount
-            ? TicketingTexts.activeFareProductsAndReservationsTab
-                .noItemsHistoryHelpText
-            : TicketingTexts.activeFareProductsAndReservationsTab.noItems,
-        )}
         now={now}
         showTokenInfo={true}
       />

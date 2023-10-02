@@ -49,15 +49,15 @@ const TicketingTexts = {
   activeFareProductsAndReservationsTab: {
     label: _('Aktive', 'Active', 'Aktive'),
     a11yLabel: _('Aktive billetter', 'Active tickets', 'Aktive billettar'),
-    noItems: _(
-      'Du har ingen aktive billetter.',
-      'You have no active tickets.',
-      'Du har ingen aktive billettar.',
+    noActiveItemsTitle: _(
+      'Ingen aktive billetter',
+      'No active tickets',
+      'Ingen aktive billettar',
     ),
-    noItemsHistoryHelpText: _(
-      'Du har ingen aktive billetter. Billetthistorikk finner du under Min profil-fanen.',
-      'You have no active tickets right now. Ticket history can be found under the My profile tab.',
-      'Du har ingen aktive billettar. Billetthistorikk finn du under Min profil-fanen',
+    noActiveItemsDetails: _(
+      'Når du kjøper billetter vil de dukke opp her. Dra ned for å oppdatere hvis billetten din ikke vises.',
+      'When you buy tickets, they will show up here. Pull down to refresh if your ticket is not showing.',
+      'Når du kjøper billettar vil dei dukke opp her. Drag ned for å oppdatere dersom billetten din ikkje visast.',
     ),
   },
   ticketHistoryTab: {
@@ -238,7 +238,11 @@ const TicketingTexts = {
     approved: _('Godkjent billett', 'Approved ticket', 'Godkjent billett'),
   },
   ticketAssistantTile: {
-    title: _('Billettveileder for buss og trikk', 'Ticket assistant for bus and tram', 'Billettrettleiar for buss og trikk'),
+    title: _(
+      'Billettveileder for buss og trikk',
+      'Ticket assistant for bus and tram',
+      'Billettrettleiar for buss og trikk',
+    ),
     description: _(
       'Få hjelp til å velge billetten som passer best for deg.',
       'Get help choosing the ticket that suits you the best.',
@@ -283,13 +287,6 @@ export default orgSpecificTranslations(TicketingTexts, {
     },
   },
   fram: {
-    activeFareProductsAndReservationsTab: {
-      noItemsHistoryHelpText: _(
-        'Du har ingen aktive billetter. Billetthistorikk finner du under Min bruker-fanen.',
-        'You have no active tickets right now. Ticket history can be found under the My user tab.',
-        'Du har ingen aktive billettar. Billetthistorikk finn du under Min brukar-fana.',
-      ),
-    },
     travelCardInformation: {
       illustrationa11yLabel: (travelCardId: string) =>
         _(
