@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {filterExpiredFareContracts, useTicketingState} from '@atb/ticketing';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
@@ -27,7 +27,6 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         reservations={rejectedReservations}
         isRefreshing={isRefreshingFareContracts}
         refresh={() => setNow(Date.now())}
-        noItemsLabel={t(TicketingTexts.ticketHistoryTab.noItems)}
         now={now}
       />
     </View>
