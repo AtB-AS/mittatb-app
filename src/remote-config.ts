@@ -43,6 +43,7 @@ export type RemoteConfig = {
   enable_show_valid_time_info: boolean;
   enable_loading_screen: boolean;
   enable_beacons: boolean;
+  token_timeout_in_seconds: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -91,6 +92,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_loading_screen: true,
   enable_beacons: false,
+  token_timeout_in_seconds: 0,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -243,6 +245,10 @@ export function getConfig(): RemoteConfig {
   const enable_beacons =
     values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
 
+  const token_timeout_in_seconds =
+    values['token_timeout_in_seconds']?.asNumber() ??
+    defaultRemoteConfig.token_timeout_in_seconds;
+
   return {
     enable_ticketing,
     enable_intercom,
@@ -285,6 +291,7 @@ export function getConfig(): RemoteConfig {
     enable_show_valid_time_info,
     enable_loading_screen,
     enable_beacons,
+    token_timeout_in_seconds,
   };
 }
 
