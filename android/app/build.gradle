@@ -79,6 +79,13 @@ android {
         versionName appVersionName
         multiDexEnabled true
 
+        if (System.getenv()["KETTLE_API_KEY"]) {
+            manifestPlaceholders [KETTLE_API_KEY: System.getenv()["KETTLE_API_KEY"] as String]
+        } else {
+            // If this value is not set, an exception will be raised at runtime. Refer to the documentation at https://developer.kogenta.com/docs/react-native/add-kettle#android for more information.
+            // NOTE: To avoid breaking the app and to prevent the SDK from initializing, you can use a value other than an API key.
+            manifestPlaceholders [KETTLE_API_KEY: "NoKettleIdNeeded"]
+        }
 
         if (System.getenv()["CI"]) {
             versionCode System.getenv()["BUILD_ID"] as Integer
