@@ -594,7 +594,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        {isBeaconsEnabled && KETTLE_API_KEY && (
+        {isBeaconsEnabled && !!KETTLE_API_KEY && (
           <Section withPadding withTopPadding>
             <ExpandableSectionItem
               text="Kettle SDK"
