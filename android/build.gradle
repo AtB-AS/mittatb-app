@@ -3,7 +3,6 @@
 buildscript {
     ext {
         buildToolsVersion = "33.0.0"
-        kotlin_version = '1.8.0'
         minSdkVersion = 23
         compileSdkVersion = 33
         targetSdkVersion = 33
@@ -23,7 +22,7 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath 'com.google.gms:google-services:4.3.13'
 
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${KOTLIN_VERSION}"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
