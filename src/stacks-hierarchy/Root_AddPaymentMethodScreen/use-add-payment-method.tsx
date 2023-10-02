@@ -1,21 +1,13 @@
+import {AddPaymentMethodResponse, addPaymentMethod} from '@atb/ticketing';
+import Bugsnag from '@bugsnag/react-native';
+import {APP_SCHEME} from '@env';
 import {useEffect, useState} from 'react';
 import {
-  AddPaymentMethodResponse,
-  addPaymentMethod,
-  getResponseCode,
-} from '@atb/ticketing';
-import {APP_SCHEME} from '@env';
-import {
   WebViewErrorEvent,
-  WebViewNavigation,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import Bugsnag from '@bugsnag/react-native';
 
-export const useAddPaymentMethod = (
-  onSuccess: () => void,
-  onCancel: () => void,
-) => {
+export const useAddPaymentMethod = () => {
   const [addPaymentMethodResponse, setAddPaymentMethodResponse] =
     useState<AddPaymentMethodResponse>();
   const [isLoading, setIsLoading] = useState(true);
@@ -36,18 +28,6 @@ export const useAddPaymentMethod = (
     });
   };
 
-  const onWebViewNavigationChange = (event: WebViewNavigation) => {
-    if (event.url.includes('/ticket/v3/recurring-payments')) {
-      const responseCode = getResponseCode(event);
-      if (responseCode === 'Cancel') {
-        onCancel();
-      } else if (responseCode === 'OK') {
-        //TODO: Call authorize endpoint
-        onSuccess();
-      }
-    }
-  };
-
   const onWebViewLoadEnd = () => {
     setIsLoading(false);
   };
@@ -59,7 +39,6 @@ export const useAddPaymentMethod = (
   return {
     terminalUrl: addPaymentMethodResponse?.terminal_url,
     onWebViewLoadStart,
-    onWebViewNavigationChange,
     onWebViewLoadEnd,
     onWebViewError,
     isLoading,

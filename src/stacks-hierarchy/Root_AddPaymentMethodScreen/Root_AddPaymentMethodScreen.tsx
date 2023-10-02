@@ -20,12 +20,11 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
   const {
     terminalUrl,
     onWebViewLoadStart,
-    onWebViewNavigationChange,
     onWebViewLoadEnd,
     onWebViewError,
     isLoading,
     error,
-  } = useAddPaymentMethod(onSuccess, onCancel);
+  } = useAddPaymentMethod();
 
   useEffect(
     () => navigation.addListener('blur', () => setShowWebView(false)),
@@ -33,14 +32,6 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
   );
 
   const navigateBack = () => navigation.pop();
-
-  function onSuccess() {
-    navigateBack();
-  }
-
-  function onCancel() {
-    navigateBack();
-  }
 
   return (
     <View style={styles.container}>
@@ -84,7 +75,6 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
             onError={onWebViewError}
             onLoadStart={onWebViewLoadStart}
             onLoadEnd={onWebViewLoadEnd}
-            onNavigationStateChange={onWebViewNavigationChange}
           />
         )}
       </View>
