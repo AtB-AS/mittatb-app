@@ -39,7 +39,7 @@ export const LoadingScreenBoundary = ({
     analytics.logEvent('Loading boundary', 'Retrying auth');
     setupLoadingTimeout();
     retryAuth();
-  }, [setupLoadingTimeout]);
+  }, [setupLoadingTimeout, retryAuth]);
 
   // Wait one second after load success to let the app "settle".
   const waitFinished = useDelayGate(1000, loadSuccess);
