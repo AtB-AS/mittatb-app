@@ -12,6 +12,7 @@ import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {TICKET_ASSISTANT_DURATION_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
@@ -99,7 +100,7 @@ export const TicketAssistant_FrequencyScreen = ({
                     interactiveColor="interactive_2"
                     onPress={() => {
                       setSliderValue(number);
-                      navigation.navigate('TicketAssistant_DurationScreen');
+                      navigation.navigate(TICKET_ASSISTANT_DURATION_SCREEN);
                     }}
                     text={number.toString()}
                     accessibilityHint={t(

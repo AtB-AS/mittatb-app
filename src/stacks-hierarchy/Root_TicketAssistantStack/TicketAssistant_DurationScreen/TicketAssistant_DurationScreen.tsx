@@ -11,6 +11,7 @@ import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistan
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
 import {daysInWeek} from 'date-fns';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {TICKET_ASSISTANT_ZONE_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 type DurationProps =
   TicketAssistantScreenProps<'TicketAssistant_DurationScreen'>;
 
@@ -65,7 +66,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
             interactiveColor="interactive_0"
             onPress={() => {
               updateDuration();
-              navigation.navigate('TicketAssistant_ZonePickerScreen');
+              navigation.navigate(TICKET_ASSISTANT_ZONE_PICKER_SCREEN);
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"
