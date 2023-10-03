@@ -47,7 +47,10 @@ import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_T
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
 import {Slider} from '@atb/components/slider';
-import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
+import {
+  useBeaconsEnabledDebugOverride,
+  useIsBeaconsEnabled,
+} from '@atb/beacons';
 import {Kettle} from 'react-native-kettle-module';
 
 function setClipboard(content: string) {
@@ -166,7 +169,7 @@ export const Profile_DebugInfoScreen = () => {
     walkSpeed: 1.3,
   };
 
-  const [isBeaconsEnabled] = beaconsEnabledDebugOverride;
+  const [isBeaconsEnabled, isBeaconsEnabledReady] = useIsBeaconsEnabled();
 
   return (
     <View style={style.container}>
@@ -594,7 +597,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        {isBeaconsEnabled && !!KETTLE_API_KEY && (
+        {isBeaconsEnabled && isBeaconsEnabledReady && !!KETTLE_API_KEY && (
           <Section withPadding withTopPadding>
             <ExpandableSectionItem
               text="Kettle SDK"
