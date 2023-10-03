@@ -48,10 +48,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {Slider} from '@atb/components/slider';
-import {
-  useBeaconsEnabledDebugOverride,
-  useIsBeaconsEnabled,
-} from '@atb/beacons';
+import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {Kettle} from 'react-native-kettle-module';
 
 function setClipboard(content: string) {
