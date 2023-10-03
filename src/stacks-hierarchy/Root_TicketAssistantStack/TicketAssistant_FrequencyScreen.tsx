@@ -27,8 +27,10 @@ export const TicketAssistant_FrequencyScreen = ({
   const [sliderValue, setSliderValue] = useState<number>(
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
   );
+  const focusRef = useFocusOnLoad(true, 200);
+
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
+
   const sliderMax = 14;
 
   //Creating an array of numbers to sliderMax with a step size of 2

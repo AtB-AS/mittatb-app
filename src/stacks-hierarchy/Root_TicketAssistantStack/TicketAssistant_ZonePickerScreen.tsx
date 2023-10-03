@@ -33,7 +33,7 @@ export const TicketAssistant_ZonePickerScreen = ({
   const {tariffZones} = useFirestoreConfiguration();
   const a11yContext = useAccessibilityContext();
 
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(true, 200);
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
   const {t} = useTranslation();
 
