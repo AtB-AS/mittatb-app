@@ -1,3 +1,4 @@
+import {MessageBox} from '@atb/components/message-box';
 import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
@@ -10,13 +11,13 @@ import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useAnalytics} from '@atb/analytics';
 import {TravelCardInformation} from '@atb/fare-contracts/components/TravelCardInformation';
-import {NoActiveTickets} from './NoActiveTickets';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
 type Props = {
   reservations?: Reservation[];
   fareContracts?: FareContract[];
+  noItemsLabel: string;
   isRefreshing: boolean;
   refresh: () => void;
   now: number;
@@ -27,6 +28,7 @@ type Props = {
 export const FareContractAndReservationsList: React.FC<Props> = ({
   fareContracts,
   reservations,
+  noItemsLabel,
   isRefreshing,
   refresh,
   now,
@@ -62,7 +64,13 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           ) : hasActiveTravelCard ? (
             <TravelCardInformation travelCard={travelCard} />
           ) : null)}
-        {!fareContractsAndReservationsSorted.length && <NoActiveTickets />}
+        {!fareContractsAndReservationsSorted.length && (
+          <MessageBox
+            style={styles.messageBox}
+            type="info"
+            message={noItemsLabel}
+          />
+        )}
         {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
           <FareContractOrReservation
             now={now}
@@ -86,4 +94,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1},
   scrollView: {flex: 1, padding: theme.spacings.medium},
+  messageBox: {
+    marginBottom: theme.spacings.large,
+  },
 }));
