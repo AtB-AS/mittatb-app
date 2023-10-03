@@ -37,7 +37,6 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
         title={t(AddPaymentMethodTexts.header)}
         leftButton={{
           type: 'cancel',
-          onPress: () => navigation.goBack(),
         }}
       />
       {isLoading && !error && (
