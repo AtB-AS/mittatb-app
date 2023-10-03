@@ -172,7 +172,7 @@ export const Profile_DebugInfoScreen = () => {
     walkSpeed: 1.3,
   };
 
-  const [isBeaconsEnabled, isBeaconsEnabledReady] = useIsBeaconsEnabled();
+  const [isBeaconsEnabled] = beaconsEnabledDebugOverride;
 
   return (
     <View style={style.container}>
@@ -606,7 +606,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        {isBeaconsEnabled && isBeaconsEnabledReady && !!KETTLE_API_KEY && (
+        {isBeaconsEnabled && !!KETTLE_API_KEY && (
           <Section withPadding withTopPadding>
             <ExpandableSectionItem
               text="Kettle SDK"
