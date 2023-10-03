@@ -47,6 +47,7 @@ import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
+import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -353,6 +354,10 @@ export const RootStack = () => {
                   component={
                     Root_ActiveTokenOnPhoneRequiredForFareProductScreen
                   }
+                />
+                <Stack.Screen
+                    name="Root_AddPaymentMethodScreen"
+                    component={Root_AddPaymentMethodScreen}
                 />
               </Stack.Group>
             </Stack.Navigator>
