@@ -6,7 +6,6 @@ const AddPaymentMethodTexts = {
     'Add payment method',
     'Legg til betalingsmåte',
   ),
-  loading: _('Laster…', 'Loading…', 'Lastar…'),
   genericError: _(
     'Det oppstod en feil. Vennligst prøv igjen',
     'An error occurred. Please try again',

@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useAddPaymentMethod} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/use-add-payment-method';
 import {Processing} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithCreditCardScreen/Processing';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {MessageBox} from '@atb/components/message-box';
 import {Button} from '@atb/components/button';
 import AddPaymentMethodTexts from '@atb/translations/screens/subscreens/AddPaymentMethodTexts';
@@ -31,20 +31,18 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
     [navigation],
   );
 
-  const navigateBack = () => navigation.pop();
-
   return (
     <View style={styles.container}>
       <FullScreenHeader
         title={t(AddPaymentMethodTexts.header)}
         leftButton={{
           type: 'cancel',
-          onPress: () => navigateBack(),
+          onPress: () => navigation.goBack(),
         }}
       />
-      {isLoading && (
+      {isLoading && !error && (
         <View style={styles.center}>
-          <Processing message={t(AddPaymentMethodTexts.loading)} />
+          <Processing message={t(dictionary.loading)} />
         </View>
       )}
       {!!error && (
@@ -56,7 +54,7 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
           />
           <Button
             interactiveColor="interactive_1"
-            onPress={navigateBack}
+            onPress={() => navigation.goBack()}
             text={t(AddPaymentMethodTexts.buttons.goBack)}
           />
         </View>

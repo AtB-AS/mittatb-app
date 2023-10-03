@@ -41,7 +41,7 @@ export const Profile_PaymentOptionsScreen = ({
   const {t} = useTranslation();
   const {user} = useAuthState();
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [storedCards, setStoredCards] = useState<RecurringPayment[]>([]);
   const [showError, setShowError] = useState<boolean>(false);
 
@@ -55,10 +55,6 @@ export const Profile_PaymentOptionsScreen = ({
       return [];
     }
   }
-
-  useEffect(() => {
-    refreshCards();
-  }, []);
 
   useEffect(() => {
     const addPaymentMethodCallbackHandler = async ({url}: {url: string}) => {
@@ -85,6 +81,11 @@ export const Profile_PaymentOptionsScreen = ({
         }
       }
     };
+
+    refreshCards();
+
+    // Listen to deep link redirects back here after
+    // the add card process completes.
     const eventSubscription = Linking.addEventListener(
       'url',
       addPaymentMethodCallbackHandler,
@@ -136,9 +137,9 @@ export const Profile_PaymentOptionsScreen = ({
       >
         {storedCards.length > 0 && (
           <Section>
-            {storedCards.map((item) => (
-              <GenericSectionItem key={'card-' + item.id}>
-                <Card card={item} removePaymentHandler={handleRemovePayment} />
+            {storedCards.map((sc) => (
+              <GenericSectionItem key={'card-' + sc.id}>
+                <Card card={sc} removePaymentHandler={handleRemovePayment} />
               </GenericSectionItem>
             ))}
           </Section>
