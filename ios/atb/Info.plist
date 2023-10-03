@@ -88,7 +88,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Du gir AtB tillatelse til å bruke bevegelsesdata til analyse og større større forståelse av reisemønster, f.eks. for å se forskjell på sykling, gåing og bilkjøring.</string>
+	<string>Du gir tillatelse til å bruke bevegelsesdata til analyse og større forståelse av reisemønster, f.eks. for å skille mellom sykling, gåing og bilkjøring.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
 	<key>NSUserActivityTypes</key>
