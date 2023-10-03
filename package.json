@@ -86,7 +86,7 @@
     "react": "18.2.0",
     "react-native": "0.72.4",
     "react-native-bootsplash": "^4.4.1",
-    "react-native-camera-kit": "^13.0.0",
+    "react-native-camera-kit": "14.0.0-beta12",
     "react-native-device-info": "^10.3.0",
     "react-native-flipper": "^0.191.0",
     "react-native-geolocation-service": "^5.3.1",
