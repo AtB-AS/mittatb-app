@@ -188,18 +188,20 @@ const TariffZonesSelectorMap = ({
           </MapboxGL.MapView>
 
           <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
-            <View>
-              <View style={styles.mapControls}>
-                <PositionArrow
-                  onPress={() =>
-                    flyToLocation({
-                      coordinates: geolocation?.coordinates,
-                      mapCameraRef,
-                    })
-                  }
-                />
+            {geolocation && (
+              <View>
+                <View style={styles.mapControls}>
+                  <PositionArrow
+                    onPress={() =>
+                      flyToLocation({
+                        coordinates: geolocation?.coordinates,
+                        mapCameraRef,
+                      })
+                    }
+                  />
+                </View>
               </View>
-            </View>
+            )}
 
             {onSave && (
               <View style={styles.saveButton}>

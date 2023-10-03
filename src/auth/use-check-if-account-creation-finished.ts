@@ -25,7 +25,10 @@ export const useCheckIfAccountCreationFinished = (
           });
           clearInterval(intervalId);
         } else if (retryCount >= 10) {
-          dispatch({type: 'SET_AUTH_STATUS', authStatus: 'error'});
+          dispatch({
+            type: 'SET_AUTH_STATUS',
+            authStatus: 'create-account-timeout',
+          });
           clearInterval(intervalId);
         } else {
           retryCount += 1;

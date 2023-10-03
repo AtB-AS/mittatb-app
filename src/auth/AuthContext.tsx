@@ -24,7 +24,6 @@ import {
 } from './auth-utils';
 import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
 import {useCheckIfAccountCreationFinished} from './use-check-if-account-creation-finished';
-import {useSetErrorStatusIfLoadingTooLong} from '@atb/auth/use-set-error-status-if-loading-too-long';
 
 type AuthReducerState = {
   user: FirebaseAuthTypes.User | null;
@@ -120,21 +119,19 @@ const AuthContext = createContext<AuthContextState | undefined>(undefined);
 export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
-  useSubscribeToAuthUserChange(dispatch);
-  useSetErrorStatusIfLoadingTooLong(state.authStatus, dispatch);
+  const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useFetchCustomerDataAfterUserChanged(state.user, dispatch);
   useCheckIfAccountCreationFinished(state.user, state.authStatus, dispatch);
 
   useUpdateAuthLanguageOnChange();
 
   const retryAuth = useCallback(() => {
-    if (!state.user) {
-      dispatch({type: 'SET_AUTH_STATUS', authStatus: 'loading'});
-    } else {
-      // If a user is set, then the only known error state is when account creation fails
+    if (state.authStatus === 'create-account-timeout') {
       dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'});
+    } else if (state.authStatus === 'loading') {
+      resubscribe();
     }
-  }, [state.user?.uid]);
+  }, [state.authStatus, resubscribe]);
 
   return (
     <AuthContext.Provider
