@@ -224,7 +224,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
     alignSelf: 'flex-end',
     backgroundColor: theme.static.background.background_1.background,
-    padding: 8,
+    padding: theme.spacings.small,
     borderRadius: theme.border.radius.regular,
   },
   sliderContainer: {
