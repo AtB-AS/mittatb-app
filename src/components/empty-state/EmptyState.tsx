@@ -25,7 +25,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       >
         {title}
       </ThemeText>
-      <ThemeText type="body__secondary" color="secondary">
+      <ThemeText
+        type="body__secondary"
+        color="secondary"
+        style={styles.emptyStateDetails}
+      >
         {details}
       </ThemeText>
     </View>
@@ -42,5 +46,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   emptyStateTitle: {
     marginTop: theme.spacings.xSmall,
     marginBottom: theme.spacings.xSmall,
+  },
+  emptyStateDetails: {
+    textAlign: 'center',
   },
 }));
