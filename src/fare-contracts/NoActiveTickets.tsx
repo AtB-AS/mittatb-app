@@ -1,10 +1,8 @@
-import {useTheme} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
 
 export const NoActiveTickets = () => {
-  const {theme} = useTheme();
   const {t} = useTranslation();
 
   return (
@@ -16,9 +14,7 @@ export const NoActiveTickets = () => {
         TicketingTexts.activeFareProductsAndReservationsTab
           .noActiveItemsDetails,
       )}
-      illustrationComponent={
-        <TicketTilted height={theme.icon.size.large * 4} />
-      }
+      illustrationComponent={<TicketTilted height={84} />}
     />
   );
 };
