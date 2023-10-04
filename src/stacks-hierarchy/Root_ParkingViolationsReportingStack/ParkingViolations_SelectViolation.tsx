@@ -31,13 +31,15 @@ export const ParkingViolations_SelectViolation = ({
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {isLoading, error, violations} = useParkingViolationsState();
-  const [selectedViolations, setSelectedViolations] = useState<number[]>([]);
+  const [selectedViolations, setSelectedViolations] = useState<
+    ParkingViolationType[]
+  >([]);
 
-  const handleViolationSelect = (id: number) => {
+  const handleViolationSelect = (violation: ParkingViolationType) => {
     setSelectedViolations((current) =>
-      current.includes(id)
-        ? current.filter((it) => it !== id)
-        : [...current, id],
+      current.includes(violation)
+        ? current.filter((it) => it !== violation)
+        : [...current, violation],
     );
   };
 
@@ -47,7 +49,9 @@ export const ParkingViolations_SelectViolation = ({
       buttons={
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('ParkingViolations_Photo')}
+          onPress={() =>
+            navigation.navigate('ParkingViolations_Photo', {selectedViolations})
+          }
           text={t(ParkingViolationTexts.selectViolation.nextButton)}
           testID="nextButton"
           accessibilityHint={''} //TODO
@@ -82,7 +86,7 @@ export const ParkingViolations_SelectViolation = ({
 
 type SelectableViolationProps = {
   violation: ParkingViolationType;
-  onSelect: (id: number) => void;
+  onSelect: (violation: ParkingViolationType) => void;
   style?: StyleProp<ViewStyle>;
 };
 const SelectableViolation = ({
@@ -101,7 +105,7 @@ const SelectableViolation = ({
 
   const handleSelect = () => {
     setIsSelected((val) => !val);
-    onSelect(violation.id);
+    onSelect(violation);
   };
 
   return (

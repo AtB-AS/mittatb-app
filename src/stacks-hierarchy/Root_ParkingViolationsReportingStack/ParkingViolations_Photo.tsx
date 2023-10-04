@@ -11,10 +11,18 @@ import {themeColor} from './Root_ParkingViolationsReportingStack';
 export type PhotoScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Photo'>;
 
-export const ParkingViolations_Photo = ({navigation}: PhotoScreenProps) => {
+export const ParkingViolations_Photo = ({
+  navigation,
+  route: {params},
+}: PhotoScreenProps) => {
   const {t} = useTranslation();
   const isFocused = useIsFocused();
   const style = useStyles();
+  const {selectedViolations} = params;
+  console.log(
+    'selectedViolations',
+    selectedViolations.map((v) => v.id),
+  );
 
   const handlePhotoCapture = (file: PhotoFile) => {
     console.log(file);
