@@ -225,3 +225,8 @@ export type TravelCard = {
   id: number;
   token_id?: string;
 };
+
+export type AddPaymentMethodResponse = {
+  recurring_payment_id: number;
+  terminal_url: string;
+};

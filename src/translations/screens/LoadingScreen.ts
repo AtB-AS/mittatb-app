@@ -6,14 +6,17 @@ const LoadingScreenTexts = {
     heading: _('Noe gikk galt', 'Something went wrong', 'Noko gjekk gale'),
     description: _(
       'Vi har trøbbel med å starte opp appen. Hvis problemet vedvarer så kan du forsøke å:\n' +
+        '\n  • Forsikre deg om at du har nett' +
         '\n  • Lukke og åpne appen på nytt' +
         '\n  • Reinstallere appen' +
         '\n  • Kontakte kundeservice',
       'We are having trouble starting the app properly. If the problem continues you can try to:\n' +
+        '\n  • Ensure that you have Internet connection' +
         '\n  • Close and reopen the app' +
         '\n  • Reinstall the app' +
         '\n  • Contact customer service',
       'Vi har trøbbel med å starte opp appen. Hvis problemet held fram så kan du forsøke å:' +
+        '\n  • Forsikre deg om at du har nett' +
         '\n  • Lukke og åpne appen på nytt' +
         '\n  • Reinstallere appen' +
         '\n  • Kontakte kundeservice',
@@ -58,9 +61,9 @@ export default orgSpecificTranslations(LoadingScreenTexts, {
           '\n  • Delete and reinstall the app' +
           '\n  • Contact FRAM Customer Service',
         'Appen har problem med å starta opp. Om det held fram, kan du prøve å:\n' +
-          '\n  • Sjekka om du har nett' +
+          '\n  • Sjekke om du har nett' +
           '\n  • Lukke og opne appen igjen' +
-          '\n  • Sletta og installere appen igjen' +
+          '\n  • Slette og installere appen igjen' +
           '\n  • Kontakte FRAM Kundesenter',
       ),
       installId: (installId: string) =>

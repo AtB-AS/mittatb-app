@@ -119,11 +119,19 @@ const AuthContext = createContext<AuthContextState | undefined>(undefined);
 export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
-  useSubscribeToAuthUserChange(dispatch);
+  const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useFetchCustomerDataAfterUserChanged(state.user, dispatch);
   useCheckIfAccountCreationFinished(state.user, state.authStatus, dispatch);
 
   useUpdateAuthLanguageOnChange();
+
+  const retryAuth = useCallback(() => {
+    if (state.authStatus === 'create-account-timeout') {
+      dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'});
+    } else if (state.authStatus === 'loading') {
+      resubscribe();
+    }
+  }, [state.authStatus, resubscribe]);
 
   return (
     <AuthContext.Provider
@@ -147,12 +155,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         }, []),
         authenticationType: getAuthenticationType(state.user),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
-        retryAuth: useCallback(
-          () =>
-            // As of now the only known error state is when account creation fails
-            dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'}),
-          [state.user?.uid],
-        ),
+        retryAuth,
       }}
     >
       {children}

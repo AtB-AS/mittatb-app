@@ -9,7 +9,7 @@ import {InteractiveColor} from '@atb/theme/colors';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, ViewStyle} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   ChipTypeGroup,
@@ -39,52 +39,44 @@ export const FavoriteChips: React.FC<Props> = ({
   onAddFavorite,
 }) => {
   const {favorites} = useFavorites();
-  const styles = useStyles();
   const {t} = useTranslation();
   const {onCurrentLocation} = useCurrentLocationChip(onSelectLocation);
   const disableMap = useDisableMapCheck();
+  const styles = useStyles();
   const activeType = (type: ChipTypeGroup) => chipTypes.includes(type);
 
   return (
     <>
-      {(activeType('location') || activeType('map')) && (
-        <View style={[style, styles.staticChipsContainer]}>
-          {activeType('location') && (
-            <FavoriteChip
-              interactiveColor={themeColor}
-              mode="secondary"
-              text={t(FavoriteTexts.chips.currentLocation)}
-              accessibilityRole="button"
-              accessibilityHint={chipActionHint ?? ''}
-              leftIcon={{svg: LocationIcon}}
-              onPress={onCurrentLocation}
-              testID="currentLocationChip"
-            />
-          )}
-          {activeType('map') && !disableMap && (
-            <FavoriteChip
-              text={t(FavoriteTexts.chips.mapLocation)}
-              accessibilityRole="button"
-              leftIcon={{svg: Pin}}
-              onPress={onMapSelection}
-              interactiveColor={themeColor}
-              mode="secondary"
-              testID="mapLocationChip"
-            />
-          )}
-        </View>
-      )}
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={
-          (activeType('favorites') && favorites.length > 0) ||
-          activeType('add-favorite')
-            ? style
-            : undefined
-        }
+        contentContainerStyle={[style, styles.staticChipsContainer]}
       >
+        {activeType('location') && (
+          <FavoriteChip
+            interactiveColor={themeColor}
+            mode="secondary"
+            text={t(FavoriteTexts.chips.currentLocation)}
+            accessibilityRole="button"
+            accessibilityHint={chipActionHint ?? ''}
+            leftIcon={{svg: LocationIcon}}
+            onPress={onCurrentLocation}
+            testID="currentLocationChip"
+          />
+        )}
+        {activeType('map') && !disableMap && (
+          <FavoriteChip
+            text={t(FavoriteTexts.chips.mapLocation)}
+            accessibilityRole="button"
+            leftIcon={{svg: Pin}}
+            onPress={onMapSelection}
+            interactiveColor={themeColor}
+            mode="secondary"
+            testID="mapLocationChip"
+          />
+        )}
+
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
@@ -131,11 +123,13 @@ export const FavoriteChips: React.FC<Props> = ({
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
   const {theme} = useTheme();
+  const style = typeof props.style === 'object' ? props.style : {};
   return (
     <Button
       {...props}
       style={{
         marginRight: theme.spacings.small,
+        ...style,
       }}
       type="inline"
       compact={true}

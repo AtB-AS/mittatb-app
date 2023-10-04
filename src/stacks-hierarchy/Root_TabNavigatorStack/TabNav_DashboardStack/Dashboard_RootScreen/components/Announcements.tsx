@@ -7,6 +7,7 @@ import {Announcement} from './Announcement';
 import {AnnouncementSheet} from './AnnouncementSheet';
 import {SectionHeading} from './SectionHeading';
 import {StyleSheet} from '@atb/theme';
+import {DashboardTexts, useTranslation} from '@atb/translations';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -15,13 +16,14 @@ type Props = {
 export const Announcements = ({style: containerStyle}: Props) => {
   const {announcements} = useAnnouncementsState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {t} = useTranslation();
   const style = useStyle();
 
   if (announcements.length === 0) return null;
 
   return (
     <View style={containerStyle}>
-      <SectionHeading>Aktuelt</SectionHeading>
+      <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
       <ScrollView>
         {announcements.map((a, i) => (
           <Section
@@ -29,6 +31,10 @@ export const Announcements = ({style: containerStyle}: Props) => {
             style={i < announcements.length - 1 && style.announcement}
           >
             <GenericClickableSectionItem
+              accessibilityRole="button"
+              accessibilityHint={t(
+                DashboardTexts.announcemens.button.accessibility,
+              )}
               onPress={() =>
                 openBottomSheet(() => (
                   <AnnouncementSheet

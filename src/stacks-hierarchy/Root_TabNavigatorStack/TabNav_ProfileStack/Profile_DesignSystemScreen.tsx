@@ -1283,6 +1283,24 @@ export const Profile_DesignSystemScreen = () => {
             showClear={true}
             inlineLabel={false}
           />
+          <TextInputSectionItem
+            label={'Inline Label'}
+            placeholder={'Placheolder'}
+            onChangeText={() => {}}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            inlineLabel={true}
+          />
+          <TextInputSectionItem
+            label="Label"
+            placeholder="Placeholder"
+            onChangeText={() => {}}
+            textContentType="oneTimeCode"
+            showClear={true}
+            inlineLabel={false}
+            errorText="Something went wrong"
+          />
         </Section>
 
         <Section withPadding withTopPadding>

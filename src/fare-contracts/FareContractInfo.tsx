@@ -69,7 +69,6 @@ export type FareContractInfoDetailsProps = {
   now?: number;
   validTo?: number;
   fareProductType?: string;
-  showInspectionSymbol?: boolean;
 };
 
 export const FareContractInfo = ({
@@ -142,7 +141,6 @@ export const FareContractInfo = ({
         isInspectable={isInspectable}
         omitUserProfileCount={omitUserProfileCount}
         preassignedFareProduct={preassignedFareProduct}
-        showInspectionSymbol={fromStopPlaceId && toStopPlaceId ? false : true}
       />
     </View>
   );
@@ -233,7 +231,6 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
     userProfilesWithCount,
     omitUserProfileCount,
     status,
-    showInspectionSymbol = true,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -260,9 +257,7 @@ const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
             />
           )}
         </View>
-        {showInspectionSymbol && isValidFareContract(status) && (
-          <InspectionSymbol {...props} />
-        )}
+        {isValidFareContract(status) && <InspectionSymbol {...props} />}
       </View>
     </View>
   );
