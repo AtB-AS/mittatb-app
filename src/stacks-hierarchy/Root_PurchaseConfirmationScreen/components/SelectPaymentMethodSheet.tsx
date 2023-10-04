@@ -389,6 +389,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           </ThemeText>
           <View style={styles.saveButton}>
             <Checkbox
+              style={styles.saveButtonCheckbox}
               checked={save}
               accessibility={{
                 accessibilityHint: t(
@@ -498,6 +499,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     paddingTop: theme.spacings.small,
+  },
+  saveButtonCheckbox: {
+    marginRight: theme.spacings.small,
   },
   expireDate: {
     opacity: 0.6,
