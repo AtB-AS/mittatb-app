@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
-import {Ticket} from '@atb/assets/svg/color/images';
+import {TicketTilted} from '@atb/assets/svg/color/images';
 
 export const NoActiveTickets = () => {
   const styles = useStyles();
@@ -11,7 +11,7 @@ export const NoActiveTickets = () => {
 
   return (
     <View style={styles.noActiveTicketsContainer}>
-      <Ticket height={theme.icon.size.large * 4} />
+      <TicketTilted height={theme.icon.size.large * 4} />
       <ThemeText
         type="body__primary--bold"
         color="secondary"
