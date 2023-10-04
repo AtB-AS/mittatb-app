@@ -10,8 +10,12 @@ import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 
 export const TicketTabNav_ActiveFareProductsTabScreen = () => {
-  const {reservations, fareContracts, isRefreshingFareContracts} =
-    useTicketingState();
+  const {
+    reservations,
+    fareContracts,
+    isRefreshingFareContracts,
+    resubscribeFirestoreListeners,
+  } = useTicketingState();
   const activeFareContracts =
     filterAndSortActiveOrCanBeUsedFareContracts(fareContracts);
 
@@ -26,7 +30,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
         reservations={reservations}
         fareContracts={activeFareContracts}
         isRefreshing={isRefreshingFareContracts}
-        refresh={() => {}} // resubscribeFirestoreListeners
+        refresh={resubscribeFirestoreListeners}
         now={now}
         showTokenInfo={true}
       />

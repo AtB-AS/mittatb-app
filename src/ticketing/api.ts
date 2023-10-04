@@ -1,6 +1,6 @@
 import {APP_SCHEME} from '@env';
 import {AxiosRequestConfig} from 'axios';
-import {ReserveOfferRequestBody} from '.';
+import {AddPaymentMethodResponse, ReserveOfferRequestBody} from '.';
 import {client} from '../api';
 import {
   Offer,
@@ -53,9 +53,31 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
   return response.data;
 }
 
+export async function addPaymentMethod(paymentRedirectUrl: string) {
+  const url = `ticket/v3/recurring-payments`;
+  const response = await client.post<AddPaymentMethodResponse>(
+    url,
+    {paymentRedirectUrl},
+    {authWithIdToken: true},
+  );
+  return response.data;
+}
+
 export async function deleteRecurringPayment(paymentId: number) {
   const url = `ticket/v3/recurring-payments/${paymentId}`;
   await client.delete<void>(url, {authWithIdToken: true});
+}
+
+export async function authorizeRecurringPayment(paymentId: number) {
+  const url = `ticket/v3/recurring-payments/${paymentId}/authorize`;
+  const response = await client.post<void>(url, {}, {authWithIdToken: true});
+  return response.data;
+}
+
+export async function cancelRecurringPayment(paymentId: number) {
+  const url = `ticket/v3/recurring-payments/${paymentId}/cancel`;
+  const response = await client.post<void>(url, {}, {authWithIdToken: true});
+  return response.data;
 }
 
 type ReserveOfferParams = {

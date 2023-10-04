@@ -10,7 +10,7 @@ type SnapshotListener<T> = {
   onError: (err: Error) => void;
 };
 
-export function setupFirestoreListener(
+export function setupFirestoreListeners(
   abtCustomerId: string,
   listeners: {
     fareContracts: SnapshotListener<FareContract[]>;
@@ -19,7 +19,7 @@ export function setupFirestoreListener(
     customer: SnapshotListener<CustomerProfile>;
   },
 ) {
-  const fareContractSub = firestore()
+  const fareContractUnsub = firestore()
     .collection('customers')
     .doc(abtCustomerId)
     .collection('fareContracts')
@@ -43,7 +43,7 @@ export function setupFirestoreListener(
       },
     );
 
-  const reservationsSub = firestore()
+  const reservationsUnsub = firestore()
     .collection('customers')
     .doc(abtCustomerId)
     .collection('reservations')
@@ -67,7 +67,7 @@ export function setupFirestoreListener(
       },
     );
 
-  const rejectedReservationsSub = firestore()
+  const rejectedReservationsUnsub = firestore()
     .collection('customers')
     .doc(abtCustomerId)
     .collection('reservations')
@@ -90,7 +90,7 @@ export function setupFirestoreListener(
       },
     );
 
-  const customerProfileSub = firestore()
+  const customerProfileUnsub = firestore()
     .collection('customers')
     .doc(abtCustomerId)
     .onSnapshot(
@@ -113,9 +113,9 @@ export function setupFirestoreListener(
 
   // Stop listening for updates when no longer required
   return function removeListeners() {
-    fareContractSub();
-    reservationsSub();
-    customerProfileSub();
-    rejectedReservationsSub();
+    fareContractUnsub();
+    reservationsUnsub();
+    customerProfileUnsub();
+    rejectedReservationsUnsub();
   };
 }
