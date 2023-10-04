@@ -1,9 +1,6 @@
 import {translation as _} from '../commons';
 
 export const ParkingViolationTexts = {
-  intro: {
-    nextButton: _('Kom i gang', "Let's get started", 'Kom i gang'),
-  },
   selectViolation: {
     title: _(
       'Rapporter feilparkering av sparkesykkel',
@@ -60,22 +57,11 @@ export const ParkingViolationTexts = {
       'The QR contains information about brand and id of the scooter',
       'QR-koden inneheld informasjon om merke og registreringsnummer på sparkesykkelen.',
     ),
-  },
-  operator: {
-    title: _(
-      'Velg utleiefirmaet sykkelen er fra',
-      'Select the operator that owns the bike',
-      'Velg utleigefirmaet sykkelen er frå',
+    scanningNotPossible: _(
+      'Ikke mulig å scanne',
+      'Not possible to scan',
+      'Ikkje mogleg å scanne',
     ),
-    nextButton: _('Neste', 'Next', 'Neste'),
-  },
-  summary: {
-    title: _(
-      'Send inn feilparkeringen',
-      'Submit the report',
-      'Send inn feilparkeringa',
-    ),
-    submitButton: _('Send inn', 'Submit', 'Send inn'),
   },
   loadingError: _(
     'Oops! Vi fikk ikke til å starte feilrapporteringen denne gangen.',

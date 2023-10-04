@@ -18,6 +18,7 @@ import {SvgXml} from 'react-native-svg';
 import {useParkingViolationsState} from './ParkingViolationsContext';
 import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export type SelectViolationScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_SelectViolation'>;
@@ -70,16 +71,18 @@ export const ParkingViolations_SelectViolation = ({
           type={'error'}
         />
       )}
-      {!isLoading &&
-        !error &&
-        violations.map((violation) => (
-          <SelectableViolation
-            style={style.violation}
-            violation={violation}
-            onSelect={handleViolationSelect}
-            key={violation.id}
-          />
-        ))}
+      <ScrollView style={style.container}>
+        {!isLoading &&
+          !error &&
+          violations.map((violation) => (
+            <SelectableViolation
+              style={style.violation}
+              violation={violation}
+              onSelect={handleViolationSelect}
+              key={violation.id}
+            />
+          ))}
+      </ScrollView>
     </ScreenContainer>
   );
 };
@@ -159,10 +162,15 @@ const useSelectableViolationStyle = StyleSheet.createThemeHook((theme) => ({
     borderWidth: 2,
     marginRight: theme.spacings.medium,
   },
-  description: {},
+  description: {
+    flexShrink: 1,
+  },
 }));
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flex: 1,
+  },
   indicator: {alignSelf: 'center'},
   violation: {
     marginBottom: theme.spacings.medium,

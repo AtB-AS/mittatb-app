@@ -1,11 +1,11 @@
 import {LeftButtonProps} from '@atb/components/screen-header';
-import {StyleSheet} from '@atb/theme';
-import {PropsWithChildren, ReactNode} from 'react';
-import {ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {themeColor} from './Root_ParkingViolationsReportingStack';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
+import {PropsWithChildren, ReactNode} from 'react';
+import {View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {themeColor} from './Root_ParkingViolationsReportingStack';
 
 type Props = PropsWithChildren<{
   title?: string;
@@ -34,7 +34,7 @@ export const ScreenContainer = ({
       }}
       contentContainerStyle={style.contentContainer}
     >
-      <ScrollView contentContainerStyle={style.content}>
+      <View style={style.content}>
         <View style={style.header}>
           <ThemeText color={themeColor} type="heading--medium">
             {title}
@@ -42,7 +42,7 @@ export const ScreenContainer = ({
         </View>
         <ThemeText color={themeColor}>{secondaryText}</ThemeText>
         {children}
-      </ScrollView>
+      </View>
       {buttons && <View style={style.actionButtons}>{buttons}</View>}
     </FullScreenView>
   );
@@ -65,8 +65,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacings.large,
     },
     actionButtons: {
-      marginHorizontal: theme.spacings.xLarge,
-      marginTop: theme.spacings.medium,
+      marginHorizontal: theme.spacings.medium,
+
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
   };

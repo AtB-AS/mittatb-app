@@ -7,15 +7,21 @@ import {useEffect, useState} from 'react';
 import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
 import {Alert, Dimensions} from 'react-native';
+import {Button} from '@atb/components/button';
+import {SelectProviderBottomSheet} from './SelectProviderBottomSheet';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {useParkingViolationsState} from './ParkingViolationsContext';
 
 export type QrScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
 
-export const ParkingViolations_Qr = ({navigation}: QrScreenProps) => {
+export const ParkingViolations_Qr = ({}: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
   const isFocused = useIsFocused();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {providers} = useParkingViolationsState();
 
   useEffect(() => {
     if (isFocused) {
@@ -27,15 +33,35 @@ export const ParkingViolations_Qr = ({navigation}: QrScreenProps) => {
     if (!hasCapturedQr) {
       setHasCapturedQr(true);
       console.log(qr);
-      //navigation.navigate('ParkingViolations_Providers');
       Alert.alert(qr);
     }
+  };
+
+  const selectProvider = () => {
+    openBottomSheet(() => (
+      <SelectProviderBottomSheet
+        providers={providers}
+        onSelect={(provider) => {
+          Alert.alert('Selected provider', provider.name);
+          closeBottomSheet();
+        }}
+        close={closeBottomSheet}
+      />
+    ));
   };
 
   return (
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
+      buttons={
+        <Button
+          mode="secondary"
+          interactiveColor={'interactive_0'}
+          onPress={selectProvider}
+          text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+        />
+      }
     >
       {isFocused && (
         <Camera mode="qr" style={style.camera} onCapture={handlePhotoCapture} />

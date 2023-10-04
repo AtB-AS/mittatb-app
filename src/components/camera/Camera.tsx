@@ -35,9 +35,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
         const photo = await camera.current?.capture();
         if (photo) {
           onCapture({
-            path: photo.path,
-            height: photo.height,
-            width: photo.width,
+            path: photo.uri,
           });
         }
       } catch (e) {
