@@ -10,6 +10,7 @@ import {ThemeText} from '@atb/components/text';
 type Props = PropsWithChildren<{
   title?: string;
   titleA11yLabel?: string;
+  secondaryText?: string;
   leftHeaderButton?: LeftButtonProps;
   buttons?: ReactNode;
 }>;
@@ -19,6 +20,7 @@ export const ScreenContainer = ({
   children,
   title,
   titleA11yLabel,
+  secondaryText,
   buttons,
 }: Props) => {
   const style = useStyles();
@@ -32,12 +34,13 @@ export const ScreenContainer = ({
       }}
       contentContainerStyle={style.contentContainer}
     >
-      <ScrollView style={style.content}>
+      <ScrollView contentContainerStyle={style.content}>
         <View style={style.header}>
           <ThemeText color={themeColor} type="heading--medium">
             {title}
           </ThemeText>
         </View>
+        <ThemeText color={themeColor}>{secondaryText}</ThemeText>
         {children}
       </ScrollView>
       {buttons && <View style={style.actionButtons}>{buttons}</View>}

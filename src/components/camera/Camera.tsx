@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {hasProp} from '@atb/utils/object';
 import {useRef} from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
@@ -27,6 +27,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
   const camera = useRef<CameraKitCamera>(null);
   const styles = useStyles();
   const {isAuthorized} = usePermissions();
+  const {theme} = useTheme();
 
   const handleCapture = async () => {
     if (mode === 'photo') {
@@ -59,10 +60,15 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
         <CameraKitCamera
           ref={camera}
           cameraType={CameraType.Back}
-          style={styles.camera}
+          style={{
+            ...styles.camera,
+            backgroundColor: 'transparent',
+          }}
           zoom={zoom}
           scanBarcode={mode === 'qr'}
           showFrame={mode === 'qr'}
+          frameColor={theme.interactive.interactive_0.default.background}
+          laserColor={'transparent'}
           onReadCode={(e: unknown) => {
             if (
               mode === 'qr' &&
@@ -74,7 +80,12 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
             }
           }}
         />
-        <CaptureButton style={styles.captureButton} onCapture={handleCapture} />
+        {mode !== 'qr' && (
+          <CaptureButton
+            style={styles.captureButton}
+            onCapture={handleCapture}
+          />
+        )}
       </View>
     );
   } else {
@@ -102,9 +113,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   camera: {
     flex: 1,
+    padding: 0,
+    margin: 0,
   },
   captureButton: {
     marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
     alignItems: 'center',
   },
 }));

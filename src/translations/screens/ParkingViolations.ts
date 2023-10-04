@@ -55,6 +55,11 @@ export const ParkingViolationTexts = {
       'Scan the QR code on the handlebars',
       'Scan QR-koden på sykkelstyret',
     ),
+    instructions: _(
+      'QR-koden innholder informasjon om merke og registreringsnummer på sparkesykkelen.',
+      'The QR contains information about brand and id of the scooter',
+      'QR-koden inneheld informasjon om merke og registreringsnummer på sparkesykkelen.',
+    ),
   },
   operator: {
     title: _(
