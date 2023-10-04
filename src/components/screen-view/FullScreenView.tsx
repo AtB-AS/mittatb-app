@@ -5,6 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
 import {useState} from 'react';
+import {StyleProp, ViewStyle} from 'react-native';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -20,6 +21,7 @@ type Props = {
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
 };
 
 type PropsWithParallaxContent = Props &
@@ -62,7 +64,10 @@ export function FullScreenView(props: Props) {
           backgroundColor={backgroundColor}
         />
       ) : (
-        <ChildrenInNormalScrollView {...props} />
+        <ChildrenInNormalScrollView
+          {...props}
+          backgroundColor={backgroundColor}
+        />
       )}
     </>
   );
@@ -99,8 +104,19 @@ const ChildrenWithParallaxScrollContent = ({
   );
 };
 
-const ChildrenInNormalScrollView = ({refreshControl, children}: Props) => (
-  <ScrollView refreshControl={refreshControl}>{children}</ScrollView>
+const ChildrenInNormalScrollView = ({
+  refreshControl,
+  children,
+  contentContainerStyle,
+  backgroundColor,
+}: Props & {backgroundColor: string}) => (
+  <ScrollView
+    refreshControl={refreshControl}
+    contentContainerStyle={contentContainerStyle}
+    style={{backgroundColor}}
+  >
+    {children}
+  </ScrollView>
 );
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

@@ -1,23 +1,28 @@
+import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Button} from '@atb/components/button';
+import {Checkbox} from '@atb/components/checkbox';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import chunk from 'lodash/chunk';
-import {isDefined} from '@atb/utils/presence';
 import {useState} from 'react';
-import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {useParkingViolationsState} from './ParkingViolationsContext';
-import {themeColor} from './Root_ParkingViolationsReportingStack';
 import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
 
 export type SelectViolationScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_SelectViolation'>;
 
-const ICON_SIZE = 100;
+const ICON_SIZE = 50;
 
 export const ParkingViolations_SelectViolation = ({
   navigation,
@@ -35,8 +40,6 @@ export const ParkingViolations_SelectViolation = ({
         : [...current, id],
     );
   };
-
-  const isViolationSelected = (id: number) => selectedViolations.includes(id);
 
   return (
     <ScreenContainer
@@ -65,64 +68,99 @@ export const ParkingViolations_SelectViolation = ({
       )}
       {!isLoading &&
         !error &&
-        chunk(violations, 2).map((violationRow) => (
-          <View
-            key={violationRow.reduce((val, v) => val + (v?.id ?? 1), 0)}
-            style={style.violationRow}
-          >
-            {violationRow.filter(isDefined).map((violation) => (
-              <View style={style.violation} key={violation.id}>
-                <TouchableOpacity
-                  onPress={() => handleViolationSelect(violation.id)}
-                  style={{
-                    ...style.violationImage,
-                    borderColor: isViolationSelected(violation.id)
-                      ? theme.static.status['valid'].background
-                      : theme.static.background[themeColor].background,
-                  }}
-                >
-                  <SvgXml
-                    height={ICON_SIZE}
-                    width={ICON_SIZE}
-                    xml={violation.icon}
-                  />
-                </TouchableOpacity>
-                <ThemeText
-                  color={themeColor}
-                  style={style.violationDescription}
-                >
-                  {t(
-                    ParkingViolationTexts.selectViolation.violationDescription(
-                      violation.code,
-                    ),
-                  )}
-                </ThemeText>
-              </View>
-            ))}
-          </View>
+        violations.map((violation) => (
+          <SelectableViolation
+            style={style.violation}
+            violation={violation}
+            onSelect={handleViolationSelect}
+            key={violation.id}
+          />
         ))}
     </ScreenContainer>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  indicator: {alignSelf: 'center'},
-  violationRow: {
+type SelectableViolationProps = {
+  violation: ParkingViolationType;
+  onSelect: (id: number) => void;
+  style?: StyleProp<ViewStyle>;
+};
+const SelectableViolation = ({
+  style: containerStyle,
+  violation,
+  onSelect,
+}: SelectableViolationProps) => {
+  const style = useSelectableViolationStyle();
+  const {theme} = useTheme();
+  const {t} = useTranslation();
+  const [isSlected, setIsSelected] = useState(false);
+
+  const background = theme.static.background.background_0.background;
+  const selectedBackground = theme.interactive.interactive_2.active.background;
+  const selectedBorder = theme.interactive.interactive_0.default.background;
+
+  const handleSelect = () => {
+    setIsSelected((val) => !val);
+    onSelect(violation.id);
+  };
+
+  return (
+    <View style={containerStyle}>
+      <TouchableOpacity
+        onPress={handleSelect}
+        style={{
+          ...style.container,
+          backgroundColor: isSlected ? selectedBackground : background,
+          borderColor: isSlected ? selectedBorder : background,
+        }}
+      >
+        <Checkbox style={style.checkbox} checked={isSlected} />
+        <SvgXml
+          style={{
+            ...style.image,
+            borderColor: isSlected ? selectedBorder : background,
+          }}
+          height={ICON_SIZE}
+          width={ICON_SIZE}
+          xml={violation.icon}
+        />
+        <ThemeText style={style.description}>
+          {t(
+            ParkingViolationTexts.selectViolation.violationDescription(
+              violation.code,
+            ),
+          )}
+        </ThemeText>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const useSelectableViolationStyle = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    backgroundColor: theme.static.background.background_0.background,
+    borderRadius: theme.border.radius.regular,
+    borderWidth: 2,
+    paddingVertical: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.xLarge,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: theme.spacings.medium,
-  },
-  violation: {
-    flexDirection: 'column',
-    maxWidth: '40%',
     alignItems: 'center',
   },
-  violationImage: {
+  checkbox: {
+    marginRight: theme.spacings.medium,
+  },
+  image: {
     borderRadius: ICON_SIZE / 2,
     overflow: 'hidden',
     borderWidth: 2,
+    marginRight: theme.spacings.medium,
   },
-  violationDescription: {
-    textAlign: 'center',
+  description: {},
+}));
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  indicator: {alignSelf: 'center'},
+  violation: {
+    marginBottom: theme.spacings.medium,
   },
 }));

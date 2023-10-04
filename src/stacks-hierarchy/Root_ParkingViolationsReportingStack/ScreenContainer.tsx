@@ -1,9 +1,11 @@
-import {FullScreenHeader, LeftButtonProps} from '@atb/components/screen-header';
+import {LeftButtonProps} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {PropsWithChildren, ReactNode} from 'react';
 import {ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {themeColor} from './Root_ParkingViolationsReportingStack';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ThemeText} from '@atb/components/text';
 
 type Props = PropsWithChildren<{
   title?: string;
@@ -20,48 +22,44 @@ export const ScreenContainer = ({
   buttons,
 }: Props) => {
   const style = useStyles();
-
   return (
-    <>
-      <FullScreenHeader
-        leftButton={leftHeaderButton}
-        title={title}
-        titleA11yLabel={titleA11yLabel}
-      />
-      <View style={style.container}>
-        <ScrollView contentContainerStyle={style.content}>
-          {children}
-        </ScrollView>
-        {buttons && <View style={style.actionButtons}>{buttons}</View>}
-      </View>
-    </>
+    <FullScreenView
+      headerProps={{
+        leftButton: leftHeaderButton,
+        title,
+        titleA11yLabel,
+        color: 'background_accent_0',
+      }}
+      contentContainerStyle={style.contentContainer}
+    >
+      <ScrollView style={style.content}>
+        <View style={style.header}>
+          <ThemeText color={themeColor} type="heading--medium">
+            {title}
+          </ThemeText>
+        </View>
+        {children}
+      </ScrollView>
+      {buttons && <View style={style.actionButtons}>{buttons}</View>}
+    </FullScreenView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
-    container: {
-      flex: 1,
+    backdrop: {
       backgroundColor: theme.static.background[themeColor].background,
     },
-    backdrop: {
-      position: 'absolute',
-      height: 250,
-      left: 0,
-      right: 0,
-      bottom: 45,
-      padding: 0,
-      margin: 0,
+    contentContainer: {
+      flex: 1,
     },
     content: {
       flex: 1,
       padding: theme.spacings.medium,
     },
     header: {
-      textAlign: 'center',
-      paddingHorizontal: theme.spacings.xLarge,
-      marginBottom: theme.spacings.xLarge,
+      marginBottom: theme.spacings.large,
     },
     actionButtons: {
       marginHorizontal: theme.spacings.xLarge,

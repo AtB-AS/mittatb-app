@@ -5,7 +5,11 @@ export const ParkingViolationTexts = {
     nextButton: _('Kom i gang', "Let's get started", 'Kom i gang'),
   },
   selectViolation: {
-    title: _('Hva er feil?', 'What is wrong?', 'Kva er feil?'),
+    title: _(
+      'Rapporter feilparkering av sparkesykkel',
+      'Report scooter parking violations',
+      'Rapporter feilparkering av sparkesykkel',
+    ),
     violationDescription: (code: string) => {
       switch (code) {
         case 'no_parking':

@@ -6,7 +6,6 @@ import {ParkingViolations_Providers} from './ParkingViolations_Providers';
 import {ParkingViolations_Qr} from './ParkingViolations_Qr';
 import {ParkingViolations_SelectViolation} from './ParkingViolations_SelectViolation';
 import {ParkingViolations_Summary} from './ParkingViolations_Summary';
-import {ParkingViolations_Intro} from './Root_ParkingViolationsIntro';
 import {ParkingViolationsReportingStackParams} from './navigation-types';
 
 const Screen = createStackNavigator<ParkingViolationsReportingStackParams>();
@@ -17,15 +16,11 @@ export const Root_ParkingViolationsReportingStack = () => {
   return (
     <ParkingViolationsContextProvider>
       <Screen.Navigator
-        initialRouteName="ParkingViolations_Intro"
+        initialRouteName="ParkingViolations_SelectViolation"
         screenOptions={{
           headerShown: false,
         }}
       >
-        <Screen.Screen
-          name="ParkingViolations_Intro"
-          component={ParkingViolations_Intro}
-        />
         <Screen.Screen
           name="ParkingViolations_SelectViolation"
           component={ParkingViolations_SelectViolation}

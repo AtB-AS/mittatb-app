@@ -3,7 +3,6 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 export type ParkingViolationsReportingStackParams = {
-  ParkingViolations_Intro: undefined;
   ParkingViolations_SelectViolation: undefined;
   ParkingViolations_Photo: undefined;
   ParkingViolations_Qr: undefined;
