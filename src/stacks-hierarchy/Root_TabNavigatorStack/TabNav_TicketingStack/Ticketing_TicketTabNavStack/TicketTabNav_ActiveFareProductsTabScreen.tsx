@@ -8,6 +8,7 @@ import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
+import {useTranslation, TicketingTexts} from '@atb/translations';
 
 export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   const {
@@ -23,6 +24,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   useInterval(() => setNow(Date.now()), 2500);
 
   const styles = useStyles();
+  const {t} = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -33,6 +35,14 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
         refresh={resubscribeFirestoreListeners}
         now={now}
         showTokenInfo={true}
+        emptyStateTitleText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .noActiveTicketsTitle,
+        )}
+        emptyStateDetailsText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .noActiveTicketsDetails,
+        )}
       />
     </View>
   );

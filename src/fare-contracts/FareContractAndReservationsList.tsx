@@ -10,7 +10,8 @@ import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useAnalytics} from '@atb/analytics';
 import {TravelCardInformation} from '@atb/fare-contracts/components/TravelCardInformation';
-import {NoActiveTickets} from './NoActiveTickets';
+import {TicketTilted} from '@atb/assets/svg/color/images';
+import {EmptyState} from '@atb/components/empty-state';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -22,6 +23,8 @@ type Props = {
   now: number;
   travelCard?: TravelCard;
   showTokenInfo?: boolean;
+  emptyStateTitleText: string;
+  emptyStateDetailsText: string;
 };
 
 export const FareContractAndReservationsList: React.FC<Props> = ({
@@ -32,6 +35,8 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   now,
   travelCard,
   showTokenInfo,
+  emptyStateTitleText,
+  emptyStateDetailsText,
 }) => {
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
@@ -62,7 +67,13 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           ) : hasActiveTravelCard ? (
             <TravelCardInformation travelCard={travelCard} />
           ) : null)}
-        {!fareContractsAndReservationsSorted.length && <NoActiveTickets />}
+        {!fareContractsAndReservationsSorted.length && (
+          <EmptyState
+            title={emptyStateTitleText}
+            details={emptyStateDetailsText}
+            illustrationComponent={<TicketTilted height={84} />}
+          />
+        )}
         {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
           <FareContractOrReservation
             now={now}
