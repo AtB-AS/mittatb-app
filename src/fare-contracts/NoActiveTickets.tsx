@@ -1,46 +1,24 @@
-import {View} from 'react-native';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useTheme} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {ThemeText} from '@atb/components/text';
 import {TicketTilted} from '@atb/assets/svg/color/images';
+import {EmptyState} from '@atb/components/empty-state';
 
 export const NoActiveTickets = () => {
-  const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
 
   return (
-    <View style={styles.noActiveTicketsContainer}>
-      <TicketTilted height={theme.icon.size.large * 4} />
-      <ThemeText
-        type="body__primary--bold"
-        color="secondary"
-        style={styles.noActiveTicketsTitle}
-      >
-        {t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .noActiveItemsTitle,
-        )}
-      </ThemeText>
-      <ThemeText type="body__secondary" color="secondary">
-        {t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .noActiveItemsDetails,
-        )}
-      </ThemeText>
-    </View>
+    <EmptyState
+      title={t(
+        TicketingTexts.activeFareProductsAndReservationsTab.noActiveItemsTitle,
+      )}
+      details={t(
+        TicketingTexts.activeFareProductsAndReservationsTab
+          .noActiveItemsDetails,
+      )}
+      illustrationComponent={
+        <TicketTilted height={theme.icon.size.large * 4} />
+      }
+    />
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  noActiveTicketsContainer: {
-    margin: theme.spacings.medium,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  noActiveTicketsTitle: {
-    marginTop: theme.spacings.small,
-    marginBottom: theme.spacings.xSmall,
-  },
-}));
