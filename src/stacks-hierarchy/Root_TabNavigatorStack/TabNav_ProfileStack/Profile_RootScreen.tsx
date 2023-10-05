@@ -510,6 +510,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               onPress={() => navigation.navigate('Profile_DesignSystemScreen')}
             />
             <LinkSectionItem
+              text="Fare contracts"
+              onPress={() => navigation.navigate('Profile_FareContractsScreen')}
+            />
+            <LinkSectionItem
               text="Debug"
               testID="debugButton"
               onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
