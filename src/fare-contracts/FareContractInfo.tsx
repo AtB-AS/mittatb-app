@@ -38,21 +38,17 @@ import {
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
-import {WarningMessage} from '../fare-contracts/components/WarningMessage';
-import {Barcode} from '../fare-contracts/details/Barcode';
-import {SectionSeparator} from '@atb/components/sections';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
+import {MessageBox} from '@atb/components/message-box';
 
 export type FareContractInfoProps = {
-  travelRights: PreActivatedTravelRight[];
+  travelRight: PreActivatedTravelRight;
   status: ValidityStatus;
   isInspectable: boolean;
-  omitUserProfileCount?: boolean;
   testID?: string;
-  fareContract?: FareContract;
   fareProductType?: string;
 };
 
@@ -71,102 +67,27 @@ export type FareContractInfoDetailsProps = {
   fareProductType?: string;
 };
 
-export const FareContractInfo = ({
-  travelRights,
+export const FareContractInfoHeader = ({
+  travelRight,
   status,
   isInspectable,
-  omitUserProfileCount,
   testID,
-  fareContract,
   fareProductType,
 }: FareContractInfoProps) => {
-  const {tariffZones, userProfiles, preassignedFareProducts} =
-    useFirestoreConfiguration();
-
-  const firstTravelRight = travelRights[0];
+  const styles = useStyles();
+  const {language} = useTranslation();
+  const {preassignedFareProducts} = useFirestoreConfiguration();
   const {
     fareProductRef: productRef,
-    tariffZoneRefs,
     startPointRef: fromStopPlaceId,
     endPointRef: toStopPlaceId,
-  } = firstTravelRight;
-
-  const firstZone = tariffZoneRefs?.[0];
-  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+  } = travelRight;
 
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     productRef,
   );
-  const fromTariffZone = firstZone
-    ? findReferenceDataById(tariffZones, firstZone)
-    : undefined;
-  const toTariffZone = lastZone
-    ? findReferenceDataById(tariffZones, lastZone)
-    : undefined;
 
-  const userProfilesWithCount = mapToUserProfilesWithCount(
-    travelRights.map((tr) => tr.userProfileRef),
-    userProfiles,
-  );
-
-  return (
-    <View style={{flex: 1}}>
-      <FareContractInfoHeader
-        preassignedFareProduct={preassignedFareProduct}
-        travelRights={travelRights}
-        isInspectable={isInspectable}
-        testID={testID}
-        status={status}
-        fareProductType={fareProductType}
-        fromStopPlaceId={fromStopPlaceId}
-        toStopPlaceId={toStopPlaceId}
-      />
-      <SectionSeparator />
-      {fareContract && (
-        <>
-          <Barcode
-            validityStatus={status}
-            isInspectable={isInspectable}
-            fc={fareContract}
-          />
-          {isInspectable && <SectionSeparator />}
-        </>
-      )}
-      <FareContractInfoDetails
-        fromTariffZone={fromTariffZone}
-        toTariffZone={toTariffZone}
-        userProfilesWithCount={userProfilesWithCount}
-        status={status}
-        isInspectable={isInspectable}
-        omitUserProfileCount={omitUserProfileCount}
-        preassignedFareProduct={preassignedFareProduct}
-      />
-    </View>
-  );
-};
-
-const FareContractInfoHeader = ({
-  preassignedFareProduct,
-  isInspectable,
-  testID,
-  status,
-  travelRights,
-  fareProductType,
-  fromStopPlaceId,
-  toStopPlaceId,
-}: {
-  preassignedFareProduct?: PreassignedFareProduct;
-  isInspectable?: boolean;
-  testID?: string;
-  status: FareContractInfoProps['status'];
-  travelRights?: FareContractInfoProps['travelRights'];
-  fareProductType?: string;
-  fromStopPlaceId?: string;
-  toStopPlaceId?: string;
-}) => {
-  const styles = useStyles();
-  const {language} = useTranslation();
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
@@ -183,48 +104,45 @@ const FareContractInfoHeader = ({
     isInspectable,
     fareProductType,
   );
-  const showTwoWayIcon =
-    travelRights?.[0].direction === TravelRightDirection.Both;
+  const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
 
   return (
     <View style={styles.header}>
-      <View style={styles.fareContractHeader}>
-        {productName && (
-          <ThemeText
-            type="body__primary--bold"
-            style={styles.product}
-            accessibilityLabel={productName + screenReaderPause}
-            testID={testID + 'Product'}
-          >
-            {productName}
-          </ThemeText>
-        )}
-        {productDescription && (
-          <ThemeText
-            type="body__secondary"
-            style={styles.product}
-            accessibilityLabel={productDescription + screenReaderPause}
-            testID={testID + 'ProductDescription'}
-          >
-            {productDescription}
-          </ThemeText>
-        )}
-      </View>
-      {fromStopPlaceId && toStopPlaceId && (
-        <View style={styles.harborStopPlaces}>
-          <FareContractHarborStopPlaces
-            fromStopPlaceId={fromStopPlaceId}
-            toStopPlaceId={toStopPlaceId}
-            showTwoWayIcon={showTwoWayIcon}
-          />
-        </View>
+      {productName && (
+        <ThemeText
+          type="body__primary--bold"
+          accessibilityLabel={productName + screenReaderPause}
+          testID={testID + 'Product'}
+        >
+          {productName}
+        </ThemeText>
       )}
-      {status === 'valid' && warning && <WarningMessage message={warning} />}
+      {productDescription && (
+        <ThemeText
+          type="body__secondary"
+          accessibilityLabel={productDescription + screenReaderPause}
+          testID={testID + 'ProductDescription'}
+        >
+          {productDescription}
+        </ThemeText>
+      )}
+      {fromStopPlaceId && toStopPlaceId && (
+        <FareContractHarborStopPlaces
+          fromStopPlaceId={fromStopPlaceId}
+          toStopPlaceId={toStopPlaceId}
+          showTwoWayIcon={showTwoWayIcon}
+        />
+      )}
+      {status === 'valid' && warning && (
+        <MessageBox message={warning} type="warning" subtle={true} />
+      )}
     </View>
   );
 };
 
-const FareContractInfoDetails = (props: FareContractInfoDetailsProps) => {
+export const FareContractInfoDetails = (
+  props: FareContractInfoDetailsProps,
+) => {
   const {
     fromTariffZone,
     toTariffZone,
@@ -344,25 +262,23 @@ export const getFareContractInfoDetails = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1, paddingTop: theme.spacings.xSmall},
-  product: {
-    marginTop: theme.spacings.small,
-  },
+  container: {flex: 1},
   fareContractDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  details: {flex: 1},
+  details: {
+    flex: 1,
+    rowGap: theme.spacings.medium,
+    justifyContent: 'center',
+  },
   header: {
-    justifyContent: 'space-between',
-    marginBottom: theme.spacings.medium,
+    flex: 1,
+    rowGap: theme.spacings.medium,
   },
   fareContractHeader: {
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginTop: theme.spacings.xSmall,
-  },
-  harborStopPlaces: {
-    marginTop: theme.spacings.large,
   },
 }));

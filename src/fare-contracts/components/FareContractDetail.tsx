@@ -17,21 +17,12 @@ export function FareContractDetail({
   const styles = useStyles();
   return (
     <View style={styles.container}>
-      <View>
-        <ThemeText
-          type="body__secondary"
-          style={styles.header}
-          color={'secondary'}
-        >
+      <View style={styles.content}>
+        <ThemeText type="body__secondary" color={'secondary'}>
           {header}
         </ThemeText>
         {content.map((c) => (
-          <InfoChip
-            text={c}
-            key={c}
-            style={styles.infoChip}
-            interactiveColor={themeColor}
-          />
+          <InfoChip text={c} key={c} interactiveColor={themeColor} />
         ))}
       </View>
     </View>
@@ -39,14 +30,10 @@ export function FareContractDetail({
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  header: {
-    marginTop: theme.spacings.small,
-  },
   container: {
     flexDirection: 'row',
-    marginVertical: theme.spacings.xSmall,
   },
-  infoChip: {
-    marginTop: theme.spacings.small,
+  content: {
+    rowGap: theme.spacings.small,
   },
 }));

@@ -1,10 +1,16 @@
 import {FareContractState, PreActivatedTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {FareContractInfo} from './FareContractInfo';
+import {
+  FareContractInfoHeader,
+  FareContractInfoDetails,
+} from './FareContractInfo';
 import {ValidityHeader} from './ValidityHeader';
 import {ValidityLine} from './ValidityLine';
-import {getValidityStatus} from '@atb/fare-contracts/utils';
+import {
+  getValidityStatus,
+  mapToUserProfilesWithCount,
+} from '@atb/fare-contracts/utils';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {findReferenceDataById} from '@atb/reference-data/utils';
 import {
@@ -38,7 +44,8 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   const {startDateTime, endDateTime} = firstTravelRight;
   const validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
+  const {tariffZones, userProfiles, preassignedFareProducts} =
+    useFirestoreConfiguration();
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
     firstTravelRight.fareProductRef,
@@ -50,6 +57,23 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
     validTo,
     fareContractState,
   );
+
+  const {tariffZoneRefs} = firstTravelRight;
+  const firstZone = tariffZoneRefs?.[0];
+  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
+
+  const userProfilesWithCount = mapToUserProfilesWithCount(
+    travelRights.map((tr) => tr.userProfileRef),
+    userProfiles,
+  );
+
   return (
     <Section withBottomPadding testID={testID}>
       <GenericSectionItem>
@@ -69,13 +93,22 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
         />
-
-        <FareContractInfo
-          travelRights={travelRights}
+        <FareContractInfoHeader
+          travelRight={firstTravelRight}
           status={validityStatus}
           isInspectable={isInspectable}
           testID={testID}
           fareProductType={preassignedFareProduct?.type}
+        />
+      </GenericSectionItem>
+      <GenericSectionItem>
+        <FareContractInfoDetails
+          fromTariffZone={fromTariffZone}
+          toTariffZone={toTariffZone}
+          userProfilesWithCount={userProfilesWithCount}
+          status={validityStatus}
+          isInspectable={isInspectable}
+          preassignedFareProduct={preassignedFareProduct}
         />
       </GenericSectionItem>
       {!hideDetails && (
