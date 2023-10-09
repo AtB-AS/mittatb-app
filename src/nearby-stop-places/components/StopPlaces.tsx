@@ -4,6 +4,9 @@ import {StopPlaceItem} from './StopPlaceItem';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {ScrollView} from 'react-native-gesture-handler';
+import {EmptyState} from '@atb/components/empty-state';
+import {NearbyTexts, useTranslation} from '@atb/translations';
+import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 
 export const StopPlaces = ({
   header,
@@ -16,10 +19,11 @@ export const StopPlaces = ({
   navigateToPlace: (place: StopPlace) => void;
   testID?: string;
 }) => {
+  const {t} = useTranslation();
   const styles = useStyles();
   return (
     <ScrollView style={styles.container} testID={testID}>
-      {header && (
+      {header && stopPlaces.length > 0 && (
         <ThemeText
           style={styles.header}
           type="body__secondary"
@@ -36,6 +40,20 @@ export const StopPlaces = ({
           testID={'stopPlaceItem' + stopPlaces.indexOf(node)}
         />
       ))}
+      {stopPlaces.length === 0 && (
+        <EmptyState
+          title={t(NearbyTexts.stateAnnouncements.emptyNearbyLocationsTitle)}
+          details={t(
+            NearbyTexts.stateAnnouncements.emptyNearbyLocationsDetails,
+          )}
+          illustrationComponent={
+            <ThemedOnBehalfOf
+              height={90}
+              style={styles.emptyStopPlacesIllustration}
+            />
+          }
+        />
+      )}
     </ScrollView>
   );
 };
@@ -50,5 +68,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   noStopMessage: {
     marginHorizontal: theme.spacings.large,
+  },
+  emptyStopPlacesIllustration: {
+    marginBottom: theme.spacings.medium,
   },
 }));

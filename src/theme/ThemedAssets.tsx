@@ -7,6 +7,8 @@ import {Map as LightMap} from '@atb/assets/svg/color/images/light';
 import {Map as DarkMap} from '@atb/assets/svg/color/images/dark';
 import {NoFavouriteDeparture as LightNoFavouriteDeparture} from '@atb/assets/svg/color/images/light';
 import {NoFavouriteDeparture as DarkNoFavouriteDeparture} from '@atb/assets/svg/color/images/dark';
+import {OnBehalfOf as LightOnBehalfOf} from '@atb/assets/svg/color/images/light';
+import {OnBehalfOf as DarkOnBehalfOf} from '@atb/assets/svg/color/images/dark';
 import {useTheme} from '@atb/theme/ThemeContext';
 
 export const ThemedTokenTravelCard = () => {
@@ -32,4 +34,10 @@ export const ThemedNoFavouriteDepartureImage = () => {
   const NoFavouriteDeparture =
     themeName === 'dark' ? DarkNoFavouriteDeparture : LightNoFavouriteDeparture;
   return <NoFavouriteDeparture />;
+};
+
+export const ThemedOnBehalfOf = ({...props}) => {
+  const {themeName} = useTheme();
+  const OnBehalfOf = themeName === 'dark' ? DarkOnBehalfOf : LightOnBehalfOf;
+  return <OnBehalfOf {...props} />;
 };
