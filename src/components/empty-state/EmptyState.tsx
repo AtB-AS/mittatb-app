@@ -46,6 +46,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   emptyStateTitle: {
     marginTop: theme.spacings.xSmall,
     marginBottom: theme.spacings.xSmall,
+    textAlign: 'center',
   },
   emptyStateDetails: {
     textAlign: 'center',
