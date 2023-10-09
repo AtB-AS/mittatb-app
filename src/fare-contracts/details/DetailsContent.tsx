@@ -132,7 +132,7 @@ export const DetailsContent: React.FC<Props> = ({
             status={validityStatus}
             isInspectable={isInspectable}
             testID="details"
-            fareProductType={preassignedFareProduct?.type}
+            preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>
         {isInspectable && (

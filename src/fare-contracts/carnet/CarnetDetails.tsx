@@ -110,7 +110,7 @@ export function CarnetDetails(props: {
         status={usedAccessValidityStatus}
         isInspectable={inspectable}
         testID={props.testID}
-        fareProductType={'carnet'}
+        preassignedFareProduct={preassignedFareProduct}
       />
       <View style={style.sectionSeparator}>
         <SectionSeparator />

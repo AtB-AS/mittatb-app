@@ -36,7 +36,6 @@ import {
   tariffZonesSummary,
 } from '../fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
@@ -49,7 +48,7 @@ export type FareContractInfoProps = {
   status: ValidityStatus;
   isInspectable: boolean;
   testID?: string;
-  fareProductType?: string;
+  preassignedFareProduct?: PreassignedFareProduct;
 };
 
 export type FareContractInfoDetailsProps = {
@@ -72,21 +71,12 @@ export const FareContractInfoHeader = ({
   status,
   isInspectable,
   testID,
-  fareProductType,
+  preassignedFareProduct,
 }: FareContractInfoProps) => {
   const styles = useStyles();
   const {language} = useTranslation();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-  const {
-    fareProductRef: productRef,
-    startPointRef: fromStopPlaceId,
-    endPointRef: toStopPlaceId,
-  } = travelRight;
-
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    productRef,
-  );
+  const {startPointRef: fromStopPlaceId, endPointRef: toStopPlaceId} =
+    travelRight;
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -102,7 +92,7 @@ export const FareContractInfoHeader = ({
     t,
     remoteTokens,
     isInspectable,
-    fareProductType,
+    preassignedFareProduct?.type,
   );
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
 

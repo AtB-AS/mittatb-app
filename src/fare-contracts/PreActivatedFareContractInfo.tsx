@@ -39,18 +39,15 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   testID,
 }) => {
   const {t} = useTranslation();
-
-  const firstTravelRight = travelRights[0];
-  const {startDateTime, endDateTime} = firstTravelRight;
-  const validTo = endDateTime.toMillis();
-  const validFrom = startDateTime.toMillis();
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    firstTravelRight.fareProductRef,
-  );
 
+  const firstTravelRight = travelRights[0];
+  const {startDateTime, endDateTime, tariffZoneRefs, fareProductRef} =
+    firstTravelRight;
+
+  const validTo = endDateTime.toMillis();
+  const validFrom = startDateTime.toMillis();
   const validityStatus = getValidityStatus(
     now,
     validFrom,
@@ -58,16 +55,19 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
     fareContractState,
   );
 
-  const {tariffZoneRefs} = firstTravelRight;
   const firstZone = tariffZoneRefs?.[0];
   const lastZone = tariffZoneRefs?.slice(-1)?.[0];
-
   const fromTariffZone = firstZone
     ? findReferenceDataById(tariffZones, firstZone)
     : undefined;
   const toTariffZone = lastZone
     ? findReferenceDataById(tariffZones, lastZone)
     : undefined;
+
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    fareProductRef,
+  );
 
   const userProfilesWithCount = mapToUserProfilesWithCount(
     travelRights.map((tr) => tr.userProfileRef),
@@ -98,7 +98,7 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           status={validityStatus}
           isInspectable={isInspectable}
           testID={testID}
-          fareProductType={preassignedFareProduct?.type}
+          preassignedFareProduct={preassignedFareProduct}
         />
       </GenericSectionItem>
       <GenericSectionItem>
