@@ -24,9 +24,9 @@ const dictionary = {
   },
   missingRealTimePrefix: _('ca. ', 'ca. ', `ca. `),
   a11yPullToRefresh: _(
-    `Dra ned med ${a11yPullToRefreshFingers} fingre for å oppdatere`,
-    `Pull down with ${a11yPullToRefreshFingers} fingers to refresh`,
-    `Drag ned med ${a11yPullToRefreshFingers} fingrar for å oppdatere`,
+    `Dra ned med ${a11yPullToRefreshFingers} fingre for å oppdatere.`,
+    `Pull down with ${a11yPullToRefreshFingers} fingers to refresh.`,
+    `Drag ned med ${a11yPullToRefreshFingers} fingrar for å oppdatere.`,
   ),
   a11yRouteTimePrefix: _('rutetid ', 'route time ', `rutetid `),
   a11yRealTimePrefix: _('sanntid ', 'realtime ', `sanntid `),
