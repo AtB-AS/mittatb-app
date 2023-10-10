@@ -9,11 +9,9 @@ import NavigationHelper from '../utils/navigation.helper';
 
 describe('Travel search', () => {
   before(async () => {
-    //await AppHelper.launchApp();
-    await AppHelper.waitOnLoadingScreen()
+    await AppHelper.waitOnLoadingScreen();
+    await OnboardingPage.skipOnboarding('travelsearch');
     await AppHelper.pause(5000, true);
-    //https://github.com/AtB-AS/kundevendt/issues/4157#issuecomment-1707973260
-    //await OnboardingPage.skipOnboarding('travelsearch');
   });
   beforeEach(async () => {
     await NavigationHelper.tapMenu('assistant');
@@ -40,9 +38,6 @@ describe('Travel search', () => {
       await ElementHelper.waitForElement('id', 'searchToButton');
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
-
-      // Onboarding (Check just in case)
-      await TravelsearchOverviewPage.confirmOnboarding();
 
       const startTime: string = await TravelsearchOverviewPage.getStartTime(0);
       const endTime: string = await TravelsearchOverviewPage.getEndTime(0);
@@ -111,11 +106,7 @@ describe('Travel search', () => {
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
 
-      // Onboarding
-      await TravelsearchOverviewPage.confirmOnboarding(5);
-
       // Number of legs
-      await ElementHelper.waitForElement('id', `tripSearchSearchResult0`);
       const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
       await TravelsearchOverviewPage.openFirstSearchResult();
       await AppHelper.scrollDownUntilId(`legContainer${noLegs - 1}`);

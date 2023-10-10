@@ -18,11 +18,8 @@ on:
         description: 'Define branch to test'
         required: true
         default: 'master'
-  #schedule:
-  #  - cron: '0 6 * * *'
-  push:
-    branches:
-      - tor/e2e-appium
+  schedule:
+    - cron: '0 6 * * *'
 
 jobs:
   run_tests:
@@ -46,8 +43,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
         with:
-          # ref: ${{ env.INPUT_BRANCH }}
-          ref: tor/e2e-appium
+          ref: ${{ env.INPUT_BRANCH }}
 
       # Download APK
       - name: Get AppCenter APK

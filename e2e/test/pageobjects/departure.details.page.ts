@@ -43,7 +43,7 @@ class DepartureDetailPage extends Page {
     await $$(legId)[legIndex].$(quayNameId).click();
     await AppHelper.pause(500);
     await ElementHelper.waitForElement('id', 'quaySection');
-    await ElementHelper.waitForElement('id', 'departureItem0');
+    await ElementHelper.waitForElement('id', 'estimatedCallItem');
   }
 }
 

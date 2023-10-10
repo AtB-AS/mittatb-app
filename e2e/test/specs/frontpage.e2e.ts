@@ -10,10 +10,9 @@ import FavoritePage from '../pageobjects/favorite.page';
 describe('Frontpage', () => {
   before(async () => {
     //await AppHelper.launchApp();
-    await AppHelper.waitOnLoadingScreen()
+    await AppHelper.waitOnLoadingScreen();
+    await OnboardingPage.skipOnboarding('frontpage');
     await AppHelper.pause(5000, true);
-    //https://github.com/AtB-AS/kundevendt/issues/4157#issuecomment-1707973260
-    //await OnboardingPage.skipOnboarding('frontpage');
   });
   beforeEach(async () => {
     await NavigationHelper.tapMenu('assistant');
@@ -39,7 +38,7 @@ describe('Frontpage', () => {
       await SearchPage.setSearchLocation(stopPlace);
 
       // Before
-      await ElementHelper.waitForElement('id', 'departureItem0');
+      await ElementHelper.waitForElement('id', 'estimatedCallItem');
       expect(await FavoritePage.getFavoriteIcon('semi', 0, 0)).not.toExist();
       expect(await FavoritePage.getFavoriteIcon('no', 0, 1)).toExist();
 

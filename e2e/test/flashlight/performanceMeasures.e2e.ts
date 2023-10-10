@@ -17,7 +17,6 @@ import MapPage from '../pageobjects/map.page';
  * - Find departures
  * - Open the ticket page
  * - Open my profile
- * - Put the app in background and activate it again TODO REMOVE
  */
 describe('Flashlight performance measure', () => {
   // Waiting time between actions in ms
@@ -26,10 +25,8 @@ describe('Flashlight performance measure', () => {
   before(async () => {
     //await AppHelper.launchApp();
     await AppHelper.waitOnLoadingScreen();
-    await AppHelper.pause(5000, true);
-    ////https://github.com/AtB-AS/kundevendt/issues/4157#issuecomment-1707973260
-    //await OnboardingPage.skipOnboarding('flashlight');
-    //await AppHelper.pause(waitingTime)
+    await OnboardingPage.skipOnboarding('flashlight');
+    await AppHelper.pause(5000);
   });
   // Put the app in the background between each test - easier to distinguish the separate tests in graphs
   // (i.e. the JS-thread CPU is 0)
@@ -56,9 +53,6 @@ describe('Flashlight performance measure', () => {
       await ElementHelper.waitForElement('id', 'searchToButton');
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
-
-      // Onboarding (Check just in case)
-      await TravelsearchOverviewPage.confirmOnboarding();
       await AppHelper.pause(waitingTime);
 
       // ** Details **
@@ -73,7 +67,7 @@ describe('Flashlight performance measure', () => {
   /**
    * Map: open the map
    */
-  it('should show the map', async () => {
+  it.only('should show the map', async () => {
     try {
       await NavigationHelper.tapMenu('map');
       await NavigationHelper.tapMenu('map');
@@ -142,7 +136,7 @@ describe('Flashlight performance measure', () => {
   /**
    * My profile: open my profile
    */
-  it('should show my profile', async () => {
+  it.only('should show my profile', async () => {
     try {
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');
@@ -154,27 +148,4 @@ describe('Flashlight performance measure', () => {
       throw errMsg;
     }
   });
-
-  /**
-   * Background: put the app in background and awake it
-   */
-  /*
-  TODO: Remove as background() is used between each test
-  it('should awake from background', async () => {
-    try {
-      await NavigationHelper.tapMenu('assistant');
-      await NavigationHelper.tapMenu('assistant');
-      await ElementHelper.waitForElement('id', 'searchFromButton');
-
-      await AppHelper.pause(waitingTime);
-      await driver.background(10);
-      await AppHelper.pause(2000);
-      await NavigationHelper.tapMenu('departures');
-      await AppHelper.pause(waitingTime);
-    } catch (errMsg) {
-      await AppHelper.screenshot('error_should_awake_from_background');
-      throw errMsg;
-    }
-  });
-   */
 });

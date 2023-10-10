@@ -11,9 +11,9 @@ class ElementHelper {
    * @param timeout: optionally wait longer than default (ms)
    */
   async waitForElement(
-    type: 'id' | 'text',
+    type: 'id' | 'ids' | 'text',
     id: string,
-    timeout: number = 10000,
+    timeout?: number = 10000,
   ) {
     const timeoutValue = AppHelper.isCI() ? timeout * 2 : timeout;
     let requestedEl = '';
@@ -26,6 +26,36 @@ class ElementHelper {
         break;
     }
     return $(requestedEl).waitForDisplayed({
+      timeout: timeoutValue,
+      interval: 1000,
+    });
+  }
+
+  /**
+   * Waits for an element in an array to be displayed given default timeout
+   * @param type: test-id or text
+   * @param id: name of the test-id or text to wait for
+   * @param index: if type = ids
+   * @param timeout: optionally wait longer than default (ms)
+   */
+  async waitForIndexedElement(
+    type: 'id' | 'text',
+    id: string,
+    index?: number = 0,
+    timeout?: number = 10000,
+  ) {
+    const timeoutValue = AppHelper.isCI() ? timeout * 2 : timeout;
+    let requestedEl = '';
+    switch (type) {
+      case 'id':
+        requestedEl = `//*[@resource-id="${id}"]`;
+        break;
+      case 'text':
+        requestedEl = `//*[@text="${id}"]`;
+        break;
+    }
+    await this.waitForElement('id', id);
+    return $$(requestedEl)[index].waitForDisplayed({
       timeout: timeoutValue,
       interval: 1000,
     });

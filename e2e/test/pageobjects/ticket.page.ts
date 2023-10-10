@@ -2,7 +2,6 @@ import Page from './page';
 import AppHelper from '../utils/app.helper';
 
 class TicketPage extends Page {
-
   /**
    * Choose a ticket a.k.a fare product
    * @param fareProduct: fare product to choose, e.g. 'single'

@@ -59,7 +59,7 @@ class FavoritePage extends Page {
     }
     const reqId = `//*[@resource-id="${typeId}"]`;
     await $(reqId).click();
-    await ElementHelper.waitForElement('id', 'departureItem0');
+    await ElementHelper.waitForElement('id', 'estimatedCallItem');
   }
 
   /**
@@ -74,9 +74,9 @@ class FavoritePage extends Page {
     depIndex: number = 0,
   ) {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const depId = `//*[@resource-id="departureItem${depIndex}"]`;
+    const depId = `//*[@resource-id="estimatedCallItem"]`;
     const favId = `//*[@resource-id="${favorite}Favorite"]`;
-    return $(quayId).$(depId).$(favId);
+    return $(quayId).$$(depId)[depIndex].$(favId);
   }
 }
 

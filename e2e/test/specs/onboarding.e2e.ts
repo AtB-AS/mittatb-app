@@ -3,11 +3,9 @@ import AppHelper from '../utils/app.helper';
 import ElementHelper from '../utils/element.helper';
 import {HeadingTexts} from '../texts';
 
-//https://github.com/AtB-AS/kundevendt/issues/4157#issuecomment-1707973260
-xdescribe('Onboarding', () => {
+describe('Onboarding', () => {
   before(async () => {
-    //await AppHelper.launchApp();
-    await AppHelper.waitOnLoadingScreen()
+    await AppHelper.waitOnLoadingScreen();
     await AppHelper.pause(5000, true);
   });
 

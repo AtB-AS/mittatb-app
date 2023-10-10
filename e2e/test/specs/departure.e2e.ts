@@ -12,11 +12,9 @@ const stopPlace = 'Prinsens gate';
 
 describe('Departure', () => {
   before(async () => {
-    //await AppHelper.launchApp();
-    await AppHelper.waitOnLoadingScreen()
+    await AppHelper.waitOnLoadingScreen();
+    await OnboardingPage.skipOnboarding('flashlight');
     await AppHelper.pause(5000, true);
-    //https://github.com/AtB-AS/kundevendt/issues/4157#issuecomment-1707973260
-    //await OnboardingPage.skipOnboarding('departure');
   });
   beforeEach(async () => {
     await NavigationHelper.tapMenu('departures');
