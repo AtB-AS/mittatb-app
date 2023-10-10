@@ -370,7 +370,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 export function useHasEnabledMobileToken() {
   const {customerProfile} = useTicketingState();
   const {enable_period_tickets} = useRemoteConfig();
-  // return true;
 
   if (Platform.OS !== 'android' && DeviceInfo.isEmulatorSync()) {
     return false;
