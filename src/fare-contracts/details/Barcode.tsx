@@ -86,11 +86,11 @@ function useScreenBrightnessIncrease() {
 
   useEffect(
     function () {
-      let originalBrightness = 0.5;
+      let originalBrightness: number | undefined;
       async function setLevel() {
         try {
-          originalBrightness = await DeviceBrightness.getBrightnessLevel();
           if (isActive) {
+            originalBrightness = await DeviceBrightness.getBrightnessLevel();
             DeviceBrightness.setBrightnessLevel(1);
           }
         } catch (e) {
@@ -102,7 +102,9 @@ function useScreenBrightnessIncrease() {
 
       return () => {
         try {
-          DeviceBrightness.setBrightnessLevel(originalBrightness);
+          if (originalBrightness) {
+            DeviceBrightness.setBrightnessLevel(originalBrightness);
+          }
         } catch (e) {
           Bugsnag.leaveBreadcrumb(`Failed to reset brightness.`);
         }
