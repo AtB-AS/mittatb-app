@@ -1,10 +1,12 @@
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {DetailsContent} from '@atb/fare-contracts';
 import {
   findReferenceDataById,
   isOfFareProductRef,
 } from '@atb/reference-data/utils';
+import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
 import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -14,7 +16,6 @@ import {ScrollView, View} from 'react-native';
 import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
 import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
