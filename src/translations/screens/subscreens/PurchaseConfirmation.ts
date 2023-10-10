@@ -14,6 +14,7 @@ const PurchaseConfirmationTexts = {
       'Oops - vi klarte ikkje å søke opp prisen. Supert om du prøvar igjen 🤞',
     ),
   },
+  title: _('Billettsammendrag', 'Ticket summary', 'Billettsamandrag'),
   validityTexts: {
     zone: {
       single: (zoneName: string) =>
