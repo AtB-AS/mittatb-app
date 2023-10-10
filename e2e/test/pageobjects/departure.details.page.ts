@@ -1,8 +1,7 @@
-import Page from './page';
 import AppHelper from '../utils/app.helper';
 import ElementHelper from '../utils/element.helper';
 
-class DepartureDetailPage extends Page {
+class DepartureDetailPage {
   /**
    * Get all passed legs
    */

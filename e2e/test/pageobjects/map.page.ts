@@ -1,7 +1,6 @@
-import Page from './page';
 import ElementHelper from '../utils/element.helper';
 
-class MapPage extends Page {
+class MapPage {
   /**
    * Confirm the map onboarding - if it exists
    * @param timeoutValue: How long to search for the onboarding confirmation button

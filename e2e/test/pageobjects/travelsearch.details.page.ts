@@ -1,6 +1,4 @@
-import Page from './page';
-
-class TravelSearchDetailsPage extends Page {
+class TravelSearchDetailsPage {
   /**
    * Get the travel time
    */

@@ -1,7 +1,6 @@
-import Page from './page';
 import ElementHelper from '../utils/element.helper';
 
-class TravelSearchOverviewPage extends Page {
+class TravelSearchOverviewPage {
   /**
    * Get the first travel suggestion
    */

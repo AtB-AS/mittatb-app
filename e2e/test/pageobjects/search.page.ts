@@ -1,8 +1,7 @@
-import Page from './page';
 import ElementHelper from '../utils/element.helper';
 import AppHelper from '../utils/app.helper';
 
-class SearchPage extends Page {
+class SearchPage {
   /**
    * The input field for searching
    */

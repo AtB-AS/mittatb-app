@@ -1,6 +1,4 @@
-import Page from './page';
-
-class FrontPagePage extends Page {
+class FrontPagePage {
   /**
    * Search from
    */

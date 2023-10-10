@@ -1,8 +1,7 @@
-import Page from './page';
 import AppHelper from '../utils/app.helper';
 import ElementHelper from '../utils/element.helper';
 
-class DepartureOverviewPage extends Page {
+class DepartureOverviewPage {
   /**
    * The 'all stops' button
    */

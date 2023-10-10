@@ -1,7 +1,6 @@
-import Page from './page';
 import ElementHelper from '../utils/element.helper';
 
-class DepartureSearchPage extends Page {
+class DepartureSearchPage {
   /**
    * Search from
    */

@@ -1,9 +1,8 @@
-import Page from './page';
 import ElementHelper from '../utils/element.helper';
 import AppHelper from '../utils/app.helper';
 import AlertHelper from '../utils/alert.helper';
 
-class FavoritePage extends Page {
+class FavoritePage {
   /**
    * Close / confirm favorite choices
    */
