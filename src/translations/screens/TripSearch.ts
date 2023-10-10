@@ -161,25 +161,25 @@ const TripSearchTexts = {
     },
 
     info: {
-      emptyResult: _(
-        'Vi fant dessverre ingen kollektivreiser som passer til ditt søk.',
-        'We could not find any public transport routes matching your search criteria.',
-        'Vi fann dessverre ingen kollektivreiser som passa til ditt søk.',
+      emptySearchResultsTitle: _(
+        'Ingen kollektivreiser passer til ditt søk',
+        'No public transportation routes match your search criteria',
+        'Ingen kollektivreiser passar til søket ditt',
+      ),
+      emptySearchResultsDetails: _(
+        'Prøv å justere på sted eller tidspunkt.',
+        'Try adjusting your time or location input.',
+        'Prøv å justere på stad eller tidspunkt.',
+      ),
+      emptySearchResultsDetailsWithFilters: _(
+        'Prøv å justere på sted, filter eller tidspunkt.',
+        'Try adjusting your time, filters or location input.',
+        'Prøv å justere på stad, filter eller tidspunkt.',
       ),
       reasonsTitle: _(
         'Mulige årsaker:',
         'Possible causes:',
         'Moglege årsaker:',
-      ),
-      genericHint: _(
-        'Prøv å justere på sted eller tidspunkt.',
-        'Try adjusting your time or location input.',
-        'Prøv å justere på stad eller tidspunkt.',
-      ),
-      genericHintWithFilters: _(
-        'Prøv å justere sted, filter eller tidspunkt.',
-        'Try adjusting your time, filters or location input.',
-        'Prøv å justere stad, filter eller tidspunkt.',
       ),
       resultList: {
         listPositionExplanation: (

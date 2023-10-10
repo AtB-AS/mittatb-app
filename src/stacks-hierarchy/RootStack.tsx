@@ -22,7 +22,6 @@ import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
 import {Root_MobileTokenOnboardingStack} from './Root_MobileTokenOnboarding';
-import {useDeparturesV2Enabled} from './Root_TabNavigatorStack/TabNav_DeparturesStack';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
@@ -48,6 +47,7 @@ import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
+import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -58,7 +58,6 @@ const Stack = createStackNavigator<RootStackParamList>();
 export const RootStack = () => {
   const {isLoading} = useAppState();
   const {theme} = useTheme();
-  const departuresV2Enabled = useDeparturesV2Enabled();
   const navRef = useNavigationContainerRef<RootStackParamList>();
   useFlipper(navRef);
 
@@ -80,56 +79,31 @@ export const RootStack = () => {
 
   function getResultStateFromPath(path: string): ResultState {
     const params = parse(path);
-    let destination: PartialRoute<any>[] | undefined;
+    let destination: PartialRoute<any>[] = [
+      {
+        // Index is needed so that the user can go back after
+        // opening the app with the widget when it was not open previously
+        index: 0,
+        name: 'Departures_NearbyStopPlacesScreen',
+      },
+      {
+        name: 'Departures_PlaceScreen',
+        index: 1,
+        params: {
+          place: {
+            name: params.stopName,
+            id: params.stopId,
+          },
+          selectedQuayId: params.quayId,
+          showOnlyFavoritesByDefault: true,
+          mode: 'Departure',
+        },
+      },
+    ];
 
-    if (departuresV2Enabled) {
-      destination = [
-        {
-          // Index is needed so that the user can go back after
-          // opening the app with the widget when it was not open previously
-          index: 0,
-          name: 'Departures_NearbyStopPlacesScreen',
-        },
-        {
-          name: 'Departures_PlaceScreen',
-          index: 1,
-          params: {
-            place: {
-              name: params.stopName,
-              id: params.stopId,
-            },
-            selectedQuayId: params.quayId,
-            showOnlyFavoritesByDefault: true,
-            mode: 'Departure',
-          },
-        },
-      ];
-    } else {
-      destination = [
-        {
-          name: 'Nearby_RootScreen',
-          index: 0,
-          params: {
-            location: {
-              id: params.stopId,
-              name: params.stopName,
-              label: params.stopName,
-              layer: 'address',
-              coordinates: {
-                latitude: params.latitude,
-                longitude: params.longitude,
-              },
-              resultType: 'search',
-            },
-          },
-        },
-      ];
-    }
     if (path.includes('details')) {
       destination.push({
-        name: departuresV2Enabled
-          ? 'Departures_DepartureDetailsScreen'
-          : 'Nearby_DepartureDetailsScreen',
+        name: 'Departures_DepartureDetailsScreen',
         params: {
           activeItemIndex: 0,
           items: [
@@ -151,7 +125,7 @@ export const RootStack = () => {
           state: {
             routes: [
               {
-                name: 'TabNav_NearestStack',
+                name: 'TabNav_DeparturesStack',
                 state: {
                   routes: destination as PartialRoute<Route<string>>[],
                 },
@@ -380,6 +354,10 @@ export const RootStack = () => {
                   component={
                     Root_ActiveTokenOnPhoneRequiredForFareProductScreen
                   }
+                />
+                <Stack.Screen
+                    name="Root_AddPaymentMethodScreen"
+                    component={Root_AddPaymentMethodScreen}
                 />
               </Stack.Group>
             </Stack.Navigator>

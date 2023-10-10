@@ -1,10 +1,17 @@
-import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useCallback,
+  useState,
+} from 'react';
 import {useAuthState} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
-import {setupFirestoreListener} from './firestore';
+import {setupFirestoreListeners} from './firestore';
 
 type TicketingReducerState = {
   fareContracts: FareContract[];
@@ -98,6 +105,7 @@ const ticketingReducer: TicketingReducer = (
 type TicketingState = {
   fareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
+  resubscribeFirestoreListeners: () => void;
 } & Pick<
   TicketingReducerState,
   | 'reservations'
@@ -119,12 +127,15 @@ const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
 
-  const {user, abtCustomerId} = useAuthState();
+  // A toggle to trigger resubscribe. The actual boolean value is not important.
+  const [resubscribeToggle, setResubscribeToggle] = useState(true);
+
+  const {abtCustomerId} = useAuthState();
   const {enable_ticketing} = useRemoteConfig();
 
   useEffect(() => {
-    if (user && abtCustomerId && enable_ticketing) {
-      const removeListeners = setupFirestoreListener(abtCustomerId, {
+    if (abtCustomerId && enable_ticketing) {
+      const removeListeners = setupFirestoreListeners(abtCustomerId, {
         fareContracts: {
           onSnapshot: (fareContracts) =>
             dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
@@ -164,7 +175,7 @@ export const TicketingContextProvider: React.FC = ({children}) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [user, abtCustomerId, enable_ticketing]);
+  }, [resubscribeToggle, abtCustomerId, enable_ticketing]);
 
   return (
     <TicketingContext.Provider
@@ -172,6 +183,10 @@ export const TicketingContextProvider: React.FC = ({children}) => {
         ...state,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
+        resubscribeFirestoreListeners: useCallback(
+          () => setResubscribeToggle((prev) => !prev),
+          [],
+        ),
       }}
     >
       {children}

@@ -6,7 +6,7 @@ export type AuthStatus =
   | 'loading'
   | 'creating-account'
   | 'authenticated'
-  | 'error';
+  | 'create-account-timeout';
 
 export type AuthReducerAction =
   | {

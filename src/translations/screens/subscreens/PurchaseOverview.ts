@@ -48,33 +48,6 @@ const PurchaseOverviewTexts = {
     'When traveling, you need to bring the t:card registered on your profile.',
     'Når du er ute og reiser må du ha med t:kortet som er registrert på profilen din.',
   ),
-  samarbeidsbillettenInfo: {
-    single: _(
-      'Enkeltbilletter i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
-      'Single tickets in zone A can also be used on train in zone A, but not on night buses.',
-      'Enkeltbillettar i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
-    ),
-    period: _(
-      'Periodebilletter i sone A kan også brukes på tog i sone A.',
-      'Periodic tickets in zone A can also be used on train in zone A.',
-      'Periodebillettar i sone A kan også brukast på tog i sone A.',
-    ),
-    hour24: _(
-      '24-timersbillett i sone A kan også brukes på tog i sone A, men ikke på nattbuss.',
-      '24 hour pass in zone A can also be used on train in zone A, but not on night buses.',
-      '24-timersbillett i sone A kan også brukast på tog i sone A, men ikkje på nattbuss.',
-    ),
-  },
-  nfkNightBusPeriodNotice: _(
-    '3- og 7-dagers billett inkluderer ikke nattbuss.',
-    '3 and 7 day periodic tickets does not include night bus.',
-    '3- og 7-dagers billett inkluderer ikkje nattbuss.',
-  ),
-  nfkNightBusHour24Notice: _(
-    '24-timersbilletten inkluderer ikke nattbuss.',
-    'The 24 hour pass does not include night bus.',
-    '24-timersbilletten inkluderer ikkje nattbuss.',
-  ),
   fromToLabel: {
     from: _('Fra', 'From', 'Frå'),
     to: _('Til', 'To', 'Til'),
@@ -86,8 +59,8 @@ const PurchaseOverviewTexts = {
         a11yLabel: _('Velg kaier', 'Select harbors', 'Vel kaier'),
       },
       noneSelected: {
-        text: _('Ingen kai valgt', 'No harbors selected', 'Inga kai valt'),
-        a11yLabel: _('Ingen kai valgt', 'No harbors selected', 'Inga kai valt'),
+        text: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),
+        a11yLabel: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),
       },
       from: {
         a11yLabel: (harbor?: string) =>
@@ -211,7 +184,7 @@ const PurchaseOverviewTexts = {
       'Vel starttidspunkt',
     ),
     now: _('Oppstart nå', 'Start now', 'Start no'),
-    later: _('Senere', 'Later', 'Seinare'),
+    later: _('Oppstart senere', 'Start later', 'Oppstart seinare'),
     a11yLaterHint: _(
       'Aktiver for å velge et senere oppstartstidspunkt',
       'Activate to select a later start time',
@@ -224,12 +197,6 @@ const PurchaseOverviewTexts = {
     ),
   },
   summary: {
-    destinations: (from?: string, to?: string) =>
-      _(
-        `Fra ${from || 'ukjent'}, til ${to || 'ukjent'}`,
-        `From ${from || 'unknown'}, to ${to || 'unknown'}`,
-        `Frå ${from || 'ukjent'}, til ${to || 'ukjent'}`,
-      ),
     price: (priceString: string) =>
       _(
         `Totalt ${priceString} kr`,
@@ -246,28 +213,6 @@ const PurchaseOverviewTexts = {
       `Only available on phone`,
       `Gjeld kun på mobil`,
     ),
-    messageInZone: _(
-      `Gjelder for buss/trikk i valgte soner`,
-      `Applies for bus/tram in selected zones`,
-      `Gjeld for buss/trikk i valde soner`,
-    ),
-    messageInHarborPeriod: _(
-      `Gjelder for hurtigbåt i begge retninger på valgt strekning.`,
-      `Applies for boat between selected harbors`,
-      `Gjeld for hurtigbåt i begge retningar på vald strekning.`,
-    ),
-    messageInHarborSingle: _(
-      `Gjelder for hurtigbåt én vei på valgt strekning`,
-      `Applies for boat one way between selected harbors`,
-      `Gjeld for hurtigbåt éin veg på vald strekning`,
-    ),
-    messageInHarborZones: _(
-      'Gjelder for buss/trikk i sonene du reiser til og fra',
-      'Applies for for bus/tram in departure and destination zones',
-      'Gjeld for buss/trikk i sonene du reiser til og frå',
-    ),
-    messageAppliesFor: (text: string) =>
-      _(`Gjelder for ${text}`, `Applies for ${text}`, `Gjeld for ${text}`),
     button: _('Til betaling', 'To payment', 'Til betaling'),
   },
   flexDiscount: {
@@ -314,13 +259,6 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'When traveling, you need to bring the travel card registered on your profile.',
       'Når du er på reise, må du ha med deg reisekortet som er registrert på profilen din.',
     ),
-    summary: {
-      messageInZone: _(
-        `Gjelder for buss i valgte soner`,
-        `Applies for bus in selected zones`,
-        `Gjeld for buss i valde soner`,
-      ),
-    },
   },
   fram: {
     warning: _(
@@ -328,13 +266,5 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'When traveling, you need to bring the travel card registered on your user.',
       'Når du er på reise, må du ha med deg reisekortet som er registrert på brukeren din.',
     ),
-    summary: {
-      messageInZone: _(
-        `Gjelder for buss i valgte soner`,
-        `Applies for bus in selected zones`,
-        `Gjeld for buss i valde soner`,
-      ),
-      messageInHarborZones: _('', '', ''),
-    },
   },
 });

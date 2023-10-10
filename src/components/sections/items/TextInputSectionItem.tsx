@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useState} from 'react';
+import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   NativeSyntheticEvent,
@@ -15,10 +15,11 @@ import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
-import {SectionTexts, useTranslation} from '@atb/translations';
+import {dictionary, SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {Error} from '@atb/assets/svg/color/icons/status';
+import {giveFocus} from '@atb/utils/use-focus-on-load';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -54,7 +55,11 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
+    const errorFocusRef = useRef(null);
 
+    useEffect(() => {
+      giveFocus(errorFocusRef, 100);
+    }, [errorText]);
     function accessibilityEscapeKeyboard() {
       setTimeout(
         () =>
@@ -81,11 +86,14 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
       else if (props.onChangeText) props.onChangeText('');
     };
 
-    const borderColor = () => {
+    const getBorderColor = () => {
       if (isFocused) {
         return {borderColor: theme.border.focus};
       } else if (errorText) {
-        return {borderColor: theme.static.status.error.background};
+        return {
+          borderColor:
+            theme.interactive.interactive_destructive.destructive.background,
+        };
       } else {
         return undefined;
       }
@@ -111,22 +119,17 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
           inlineLabel ? styles.containerInline : styles.containerMultiline,
           topContainerStyle,
           containerPadding,
-          borderColor(),
+          getBorderColor(),
         ]}
         onAccessibilityEscape={accessibilityEscapeKeyboard}
       >
         <ThemeText type="body__secondary" style={styles.label}>
           {label}
         </ThemeText>
-        <View style={{justifyContent: 'space-between'}}>
+        <View style={inlineLabel ? contentContainer : undefined}>
           <InternalTextInput
             ref={combinedRef}
-            style={[
-              styles.input,
-              inlineLabel ? contentContainer : undefined,
-              padding,
-              style,
-            ]}
+            style={[styles.input, padding, style]}
             placeholderTextColor={theme.text.colors.secondary}
             onFocus={onFocusEvent}
             onBlur={onBlurEvent}
@@ -148,9 +151,19 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
           ) : null}
         </View>
         {errorText !== undefined && (
-          <View style={{flexDirection: 'row'}}>
+          <View
+            ref={errorFocusRef}
+            accessible={true}
+            style={styles.error}
+            accessibilityRole="alert"
+            accessibilityLabel={`${t(
+              dictionary.messageTypes.error,
+            )}, ${errorText}`}
+          >
             <ThemeIcon svg={Error} />
-            <ThemeText>{errorText}</ThemeText>
+            <ThemeText type="body__secondary" style={styles.errorMessage}>
+              {errorText}
+            </ThemeText>
           </View>
         )}
       </View>
@@ -182,10 +195,21 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     minWidth: 60 - theme.spacings.medium,
     paddingRight: theme.spacings.xSmall,
   },
+  inputContainer: {
+    position: 'relative',
+  },
   inputClear: {
     position: 'absolute',
-    right: theme.spacings.medium,
+    right: 0,
     bottom: theme.spacings.medium,
+  },
+  clearButton: {
     alignSelf: 'center',
+  },
+  error: {flexDirection: 'row'},
+  errorMessage: {
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
+    flex: 1,
   },
 }));

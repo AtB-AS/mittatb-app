@@ -11,9 +11,9 @@ import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssis
 import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_SummaryScreen/TicketSummary';
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useAnalytics} from '@atb/analytics';
 import {MessageBox} from '@atb/components/message-box';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
 
@@ -24,8 +24,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const analytics = useAnalytics();
   let {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
-  const focusRef = useFocusOnLoad();
-
+  const focusRef = useFocusOnLoad(true, 200);
   const durationDays = inputParams.duration
     ? inputParams.duration * 24 * 60 * 60 * 1000
     : 0;
@@ -113,7 +112,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             </ThemeText>
           </View>
         ) : loading ? (
-          <View style={styles.loadingSpinner} ref={focusRef} accessible={true}>
+          <View style={styles.loadingSpinner}>
             <ActivityIndicator animating={true} size="large" />
           </View>
         ) : (
@@ -130,16 +129,16 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
               >
                 {t(TicketAssistantTexts.summary.title)}
               </ThemeText>
-            </View>
 
-            <ThemeText
-              color={themeColor}
-              type={'body__primary'}
-              style={styles.description}
-              accessibilityLabel={description}
-            >
-              {description}
-            </ThemeText>
+              <ThemeText
+                color={themeColor}
+                type={'body__primary'}
+                style={styles.description}
+                accessibilityLabel={description}
+              >
+                {description}
+              </ThemeText>
+            </View>
 
             <TicketSummary />
             {doesTicketCoverEntirePeriod && (

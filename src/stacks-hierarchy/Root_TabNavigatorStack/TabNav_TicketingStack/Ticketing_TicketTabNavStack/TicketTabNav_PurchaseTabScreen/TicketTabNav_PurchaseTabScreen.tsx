@@ -211,6 +211,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginTop: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
   },
   heading: {
     margin: theme.spacings.medium,

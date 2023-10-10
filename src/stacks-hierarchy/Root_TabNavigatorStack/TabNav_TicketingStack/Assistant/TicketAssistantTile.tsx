@@ -48,7 +48,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   );
 
   return (
-    <View style={styles.tipsAndInformation}>
+    <View style={styles.container}>
       {requiresLoginConfig && (
         <TicketingTile
           accented={accented}
@@ -67,10 +67,9 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  tipsAndInformation: {
+  container: {
     flexShrink: 1,
     alignSelf: 'stretch',
     marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.large,
   },
 }));

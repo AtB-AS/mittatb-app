@@ -14,7 +14,6 @@ import {
   expectNotToBeEnabled,
 } from '../utils/expectHelpers';
 import {skipOnboarding} from '../utils/onboarding';
-import {toggleDeparturesV2} from '../utils/myprofile';
 import {
   chooseBusStop,
   departureSearch,
@@ -42,7 +41,7 @@ import {expectGreaterThan, expectNumber} from '../utils/jestAssertions';
     await device.setURLBlacklist(['.*api.mapbox.com.*'])
 */
 
-describe('Departures v2', () => {
+describe('Departures', () => {
   beforeAll(async () => {
     await device.launchApp({
       permissions: {
@@ -75,7 +74,6 @@ describe('Departures v2', () => {
 
     // Enable v2
     await goToTab('profile');
-    await toggleDeparturesV2(true);
 
     // Go to departures
     await goToTab('departures');
@@ -168,7 +166,6 @@ describe('Departures v2', () => {
 
     // Enable v2
     await goToTab('profile');
-    await toggleDeparturesV2(true);
 
     // Go to departures
     await goToTab('departures');

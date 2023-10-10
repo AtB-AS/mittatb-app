@@ -20,6 +20,8 @@ type StartTimeSelectionProps = {
   travelDate?: string;
   selectionMode: TimeSelectionMode;
   maximumDate?: Date;
+  showActivationDateWarning?: boolean;
+  setShowActivationDateWarning: (value: boolean) => void;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -30,6 +32,8 @@ export function StartTimeSelection({
   travelDate,
   selectionMode,
   maximumDate,
+  showActivationDateWarning,
+  setShowActivationDateWarning,
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
@@ -48,6 +52,8 @@ export function StartTimeSelection({
         travelDate={travelDate}
         maximumDate={maximumDate}
         ref={onOpenFocusRef}
+        showActivationDateWarning={showActivationDateWarning}
+        setShowActivationDateWarning={setShowActivationDateWarning}
       />
     ));
   };

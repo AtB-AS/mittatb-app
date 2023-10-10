@@ -10,7 +10,7 @@ import {
 } from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
 import {
-  NearbyTexts,
+  DeparturesTexts,
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
@@ -56,7 +56,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
     return (
       <BottomSheetContainer>
         <ScreenHeaderWithoutNavigation
-          title={t(NearbyTexts.dateInput.header)}
+          title={t(DeparturesTexts.dateInput.header)}
           leftButton={{
             type: 'cancel',
             onPress: close,
@@ -79,9 +79,9 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
           <Button
             onPress={onSelect}
             interactiveColor="interactive_0"
-            text={t(NearbyTexts.dateInput.confirm)}
+            text={t(DeparturesTexts.dateInput.confirm)}
             rightIcon={{svg: Confirm}}
-            accessibilityHint={t(NearbyTexts.dateInput.a11yInPastHint)}
+            accessibilityHint={t(DeparturesTexts.dateInput.a11yInPastHint)}
           />
         </ScrollView>
 

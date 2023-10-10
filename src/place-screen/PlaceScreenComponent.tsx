@@ -3,8 +3,7 @@ import {Button} from '@atb/components/button';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {SearchTime} from './types';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
@@ -123,6 +122,7 @@ export const PlaceScreenComponent = ({
           place={place}
           selectedQuay={selectedQuay}
           onPress={(quayId) => onPressQuay?.(place, quayId, true)}
+          style={styles.stopPlaceAndQuaySelection}
         />
       )}
 
@@ -184,6 +184,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
+  },
+  stopPlaceAndQuaySelection: {
+    paddingBottom: theme.spacings.medium,
   },
   quayData: {flex: 1},
   messageBox: {

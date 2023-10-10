@@ -2,7 +2,6 @@ import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
-import {updateMetadata} from '@atb/chat/metadata';
 import {ActivityIndicatorOverlay} from '@atb/components/activity-indicator-overlay';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -14,7 +13,6 @@ import {
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
 import {useSearchHistory} from '@atb/search-history';
@@ -40,13 +38,11 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {useIsLoading} from '@atb/utils/use-is-loading';
-import {useDeparturesV2Enabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 import {
   GenericSectionItem,
   HeaderSectionItem,
   LinkSectionItem,
   Section,
-  ToggleSectionItem,
 } from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
@@ -72,9 +68,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     filterActiveOrCanBeUsedFareContracts(fareContracts);
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
-  const {setPreference} = usePreferences();
-  const isDeparturesV2Enabled = useDeparturesV2Enabled();
-
   const {configurableLinks} = useFirestoreConfiguration();
   const ticketingInfo = configurableLinks?.ticketingInfo;
   const termsInfo = configurableLinks?.termsInfo;
@@ -85,21 +78,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
 
-  const {enable_departures_v2_as_default, disable_travelcard} =
-    useRemoteConfig();
-  const setDeparturesV2Enabled = (value: boolean) => {
-    if (enable_departures_v2_as_default) {
-      updateMetadata({
-        'AtB-Departures-V2': value ? 'enabled' : 'disabled',
-      });
-      setPreference({departuresV2: value});
-    } else {
-      updateMetadata({
-        'AtB-Beta-Departures': value ? 'enabled' : 'disabled',
-      });
-      setPreference({newDepartures: value});
-    }
-  };
+  const {disable_travelcard} = useRemoteConfig();
 
   const [isLoading, setIsLoading] = useIsLoading(false);
 
@@ -321,12 +300,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               <InfoTag mode="beta" style={style.betaTag} />
             </View>
           </GenericSectionItem>
-          <ToggleSectionItem
-            text={t(ProfileTexts.sections.newFeatures.departures)}
-            value={isDeparturesV2Enabled}
-            onValueChange={setDeparturesV2Enabled}
-            testID="newDeparturesToggle"
-          />
 
           <LinkSectionItem
             text={t(

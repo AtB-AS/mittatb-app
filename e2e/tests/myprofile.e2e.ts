@@ -77,7 +77,6 @@ describe('My profile', () => {
     // New features
     await scrollToText('profileHomeScrollView', 'BETA', 'up');
     await expectToBeVisibleByText('New features');
-    await expectToBeVisibleById('newDeparturesToggle');
     await expectToBeVisibleByText('Try the new departure view');
     await expectToBeVisibleById('invitationCodeButton');
     await expectToBeVisibleByText('Invitation code');

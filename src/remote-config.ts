@@ -1,5 +1,5 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import {ENABLE_TICKETING, PRIVACY_POLICY_URL} from '@env';
+import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 
 export type RemoteConfig = {
   enable_ticketing: boolean;
@@ -21,7 +21,6 @@ export type RemoteConfig = {
   enable_vipps_login: boolean;
   favourite_departures_poll_interval: number;
   new_favourites_info_url: string;
-  enable_departures_v2_as_default: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_vehicles_in_map: boolean;
   vehicles_poll_interval: number;
@@ -33,8 +32,6 @@ export type RemoteConfig = {
   enable_ticketing_assistant: boolean;
   enable_tips_and_information: boolean;
   enable_flexible_transport: boolean;
-  enable_nfk_nightbus_warning: boolean;
-  enable_nfk_hour24_warning: boolean;
   use_flexible_on_accessMode: boolean;
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
@@ -45,6 +42,9 @@ export type RemoteConfig = {
   enable_non_transit_trip_search: boolean;
   enable_show_valid_time_info: boolean;
   enable_loading_screen: boolean;
+  enable_loading_error_screen: boolean;
+  token_timeout_in_seconds: number;
+  enable_beacons: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -53,7 +53,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_period_tickets: false,
   feedback_questions: '',
   must_upgrade_ticketing: false,
-  customer_service_url: 'https://www.atb.no/kontakt/',
+  customer_service_url: CUSTOMER_SERVICE_URL,
   customer_feedback_url: '',
   tripsSearch_target_number_of_initial_hits: 8,
   tripsSearch_target_number_of_page_hits: 8,
@@ -67,7 +67,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_vipps_login: false,
   favourite_departures_poll_interval: 30000,
   new_favourites_info_url: '',
-  enable_departures_v2_as_default: false,
   enable_from_travel_search_to_ticket: false,
   enable_vehicles_in_map: false,
   vehicles_poll_interval: 20000,
@@ -83,8 +82,6 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing_assistant: false,
   enable_tips_and_information: false,
   enable_flexible_transport: false,
-  enable_nfk_nightbus_warning: false,
-  enable_nfk_hour24_warning: false,
   use_flexible_on_accessMode: true,
   use_flexible_on_directMode: true,
   use_flexible_on_egressMode: true,
@@ -95,6 +92,9 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_non_transit_trip_search: true,
   enable_show_valid_time_info: true,
   enable_loading_screen: true,
+  enable_loading_error_screen: false,
+  token_timeout_in_seconds: 0,
+  enable_beacons: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -160,10 +160,6 @@ export function getConfig(): RemoteConfig {
     values['new_favourites_info_url']?.asString() ??
     defaultRemoteConfig.new_favourites_info_url;
 
-  const enable_departures_v2_as_default =
-    values['enable_departures_v2_as_default']?.asBoolean() ??
-    defaultRemoteConfig.enable_departures_v2_as_default;
-
   const enable_from_travel_search_to_ticket =
     values['enable_from_travel_search_to_ticket']?.asBoolean() ??
     defaultRemoteConfig.enable_from_travel_search_to_ticket;
@@ -208,14 +204,6 @@ export function getConfig(): RemoteConfig {
     values['enable_flexible_transport']?.asBoolean() ??
     defaultRemoteConfig.enable_flexible_transport;
 
-  const enable_nfk_nightbus_warning =
-    values['enable_nfk_nightbus_warning']?.asBoolean() ??
-    defaultRemoteConfig.enable_nfk_nightbus_warning;
-
-  const enable_nfk_hour24_warning =
-    values['enable_nfk_hour24_warning']?.asBoolean() ??
-    defaultRemoteConfig.enable_nfk_hour24_warning;
-
   const use_flexible_on_accessMode =
     values['use_flexible_on_accessMode']?.asBoolean() ??
     defaultRemoteConfig.use_flexible_on_accessMode;
@@ -256,6 +244,17 @@ export function getConfig(): RemoteConfig {
     values['enable_loading_screen']?.asBoolean() ??
     defaultRemoteConfig.enable_loading_screen;
 
+  const enable_loading_error_screen =
+      values['enable_loading_error_screen']?.asBoolean() ??
+      defaultRemoteConfig.enable_loading_error_screen;
+
+  const token_timeout_in_seconds =
+    values['token_timeout_in_seconds']?.asNumber() ??
+    defaultRemoteConfig.token_timeout_in_seconds;
+
+  const enable_beacons =
+    values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
+
   return {
     enable_ticketing,
     enable_intercom,
@@ -276,7 +275,6 @@ export function getConfig(): RemoteConfig {
     enable_vipps_login,
     favourite_departures_poll_interval,
     new_favourites_info_url,
-    enable_departures_v2_as_default,
     enable_from_travel_search_to_ticket,
     enable_vehicles_in_map,
     vehicles_poll_interval,
@@ -288,8 +286,6 @@ export function getConfig(): RemoteConfig {
     enable_ticketing_assistant,
     enable_tips_and_information,
     enable_flexible_transport,
-    enable_nfk_nightbus_warning,
-    enable_nfk_hour24_warning,
     use_flexible_on_accessMode,
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
@@ -300,6 +296,9 @@ export function getConfig(): RemoteConfig {
     enable_non_transit_trip_search,
     enable_show_valid_time_info,
     enable_loading_screen,
+    enable_loading_error_screen,
+    token_timeout_in_seconds,
+    enable_beacons,
   };
 }
 
