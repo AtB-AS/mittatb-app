@@ -150,12 +150,12 @@ export const Profile_FareContractsScreen = () => {
     travelRights: [
       {
         ...BASE.travelRights[0],
-      type: 'CarnetTicket',
-      fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
-      id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-1',
-      maximumNumberOfAccesses: 50,
-      numberOfUsedAccesses: 3,
-      status: 1,
+        type: 'CarnetTicket',
+        fareProductRef: 'ATB:AmountOfPriceUnitProduct:KlippekortBuss',
+        id: 'ATB:CustomerPurchasePackage:4cb81f08-4499-44c4-8e23-507256f782a6-1',
+        maximumNumberOfAccesses: 50,
+        numberOfUsedAccesses: 3,
+        status: 1,
         usedAccesses: [
           {
             startDateTime: toTimeStamp(daysFromNow(-2)),
