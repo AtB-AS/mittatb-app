@@ -150,6 +150,7 @@ export const NearbyStopPlacesScreenComponent = ({
   }
 
   const isFocused = useIsFocusedAndActive();
+  console.log('isLoading', isLoading);
 
   return (
     <FullScreenView
@@ -181,6 +182,8 @@ export const NearbyStopPlacesScreenComponent = ({
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
       <StopPlaces
+        location={location}
+        isLoading={isLoading}
         header={getListDescription()}
         stopPlaces={orderedStopPlaces}
         navigateToPlace={onSelectStopPlace}

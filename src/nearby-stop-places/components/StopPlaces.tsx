@@ -7,23 +7,29 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {EmptyState} from '@atb/components/empty-state';
 import {NearbyTexts, useTranslation} from '@atb/translations';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
+import {Location} from '@atb/favorites';
 
 export const StopPlaces = ({
   header,
   stopPlaces,
   navigateToPlace,
   testID,
+  location,
+  isLoading,
 }: {
   header?: string;
   stopPlaces: NearestStopPlaceNode[];
   navigateToPlace: (place: StopPlace) => void;
   testID?: string;
+  location?: Location;
+  isLoading: boolean;
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const noStopPlacesFound = stopPlaces.length === 0 && location && !isLoading;
   return (
     <ScrollView style={styles.container} testID={testID}>
-      {header && stopPlaces.length > 0 && (
+      {header && !noStopPlacesFound && (
         <ThemeText
           style={styles.header}
           type="body__secondary"
@@ -40,7 +46,7 @@ export const StopPlaces = ({
           testID={'stopPlaceItem' + stopPlaces.indexOf(node)}
         />
       ))}
-      {stopPlaces.length === 0 && (
+      {noStopPlacesFound && (
         <EmptyState
           title={t(NearbyTexts.stateAnnouncements.emptyNearbyLocationsTitle)}
           details={t(
