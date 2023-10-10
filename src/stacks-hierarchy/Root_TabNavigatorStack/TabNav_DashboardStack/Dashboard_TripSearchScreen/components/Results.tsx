@@ -20,6 +20,9 @@ import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {getIsTooLateToBookTripPattern} from '@atb/travel-details-screens/utils';
 import {useNow} from '@atb/utils/use-now';
 
+import {EmptyState} from '@atb/components/empty-state';
+import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
+
 type Props = {
   tripPatterns: TripPatternWithKey[];
   showEmptyScreen: boolean;
@@ -82,11 +85,22 @@ export const Results: React.FC<Props> = ({
 
   if (isEmptyResult) {
     return (
-      <MessageBox
-        type="info"
-        style={styles.messageBoxContainer}
-        message={getTextForEmptyResult(resultReasons, anyFiltersApplied, t)}
-      />
+      <View style={styles.emptyStateContainer}>
+        <EmptyState
+          title={t(TripSearchTexts.results.info.emptySearchResultsTitle)}
+          details={getDetailsTextForEmptyResult(
+            resultReasons,
+            anyFiltersApplied,
+            t,
+          )}
+          illustrationComponent={
+            <ThemedOnBehalfOf
+              height={90}
+              style={styles.emptySearchResultsIllustration}
+            />
+          }
+        />
+      </View>
     );
   }
 
@@ -113,16 +127,16 @@ export const Results: React.FC<Props> = ({
   );
 };
 
-const getTextForEmptyResult = (
+const getDetailsTextForEmptyResult = (
   resultReasons: string[],
   anyFiltersApplied: boolean,
   t: TranslateFunction,
 ) => {
-  let text = t(TripSearchTexts.results.info.emptyResult) + '\n\n';
+  let text = '';
   if (!resultReasons?.length) {
     text += anyFiltersApplied
-      ? t(TripSearchTexts.results.info.genericHintWithFilters)
-      : t(TripSearchTexts.results.info.genericHint);
+      ? t(TripSearchTexts.results.info.emptySearchResultsDetailsWithFilters)
+      : t(TripSearchTexts.results.info.emptySearchResultsDetails);
   } else if (resultReasons.length === 1) {
     text += resultReasons[0];
   } else {
@@ -144,5 +158,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   messageBoxContainer: {
     marginHorizontal: theme.spacings.medium,
     marginTop: theme.spacings.medium,
+  },
+  emptyStateContainer: {
+    marginTop: theme.spacings.medium,
+  },
+  emptySearchResultsIllustration: {
+    marginBottom: theme.spacings.medium,
   },
 }));
