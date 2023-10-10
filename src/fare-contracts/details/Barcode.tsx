@@ -20,6 +20,9 @@ import {GenericSectionItem} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import QRCode from 'qrcode';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
+import DeviceBrightness from '@adrianso/react-native-device-brightness';
+import Bugsnag from '@bugsnag/react-native';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -33,6 +36,7 @@ export function Barcode({
   fc,
 }: Props): JSX.Element | null {
   const status = useBarcodeCodeStatus(validityStatus, isInspectable);
+  useScreenBrightnessIncrease();
 
   switch (status) {
     case 'none':
@@ -76,6 +80,37 @@ const useBarcodeCodeStatus = (
 
   return 'static';
 };
+
+function useScreenBrightnessIncrease() {
+  const isActive = useIsFocusedAndActive();
+
+  useEffect(
+    function () {
+      let originalBrightness = 0.5;
+      async function setLevel() {
+        try {
+          originalBrightness = await DeviceBrightness.getBrightnessLevel();
+          if (isActive) {
+            DeviceBrightness.setBrightnessLevel(1);
+          }
+        } catch (e) {
+          Bugsnag.leaveBreadcrumb(`Failed to set brightness.`);
+        }
+      }
+
+      setLevel();
+
+      return () => {
+        try {
+          DeviceBrightness.setBrightnessLevel(originalBrightness);
+        } catch (e) {
+          Bugsnag.leaveBreadcrumb(`Failed to reset brightness.`);
+        }
+      };
+    },
+    [isActive],
+  );
+}
 
 const UPDATE_INTERVAL = 10000;
 /**

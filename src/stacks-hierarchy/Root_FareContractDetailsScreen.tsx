@@ -1,20 +1,18 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {DetailsContent} from '@atb/fare-contracts';
 import {
   findReferenceDataById,
   isOfFareProductRef,
 } from '@atb/reference-data/utils';
+import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
-import {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {DetailsContent} from '@atb/fare-contracts';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
-import DeviceBrightness from '@adrianso/react-native-device-brightness';
-import Bugsnag from '@bugsnag/react-native';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -28,7 +26,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {t} = useTranslation();
 
   useApplePassPresentationSuppression();
-  useScreenBrightnessIncrease();
 
   const {preassignedFareProducts} = useFirestoreConfiguration();
   const preassignedFareProduct = findReferenceDataById(
@@ -64,30 +61,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       </ScrollView>
     </View>
   );
-}
-
-function useScreenBrightnessIncrease() {
-  useEffect(function () {
-    let originalBrightness = 0.5;
-    async function setLevel() {
-      try {
-        originalBrightness = await DeviceBrightness.getBrightnessLevel();
-        DeviceBrightness.setBrightnessLevel(1);
-      } catch (e) {
-        Bugsnag.leaveBreadcrumb(`Failed to set brightness.`);
-      }
-    }
-
-    setLevel();
-
-    return () => {
-      try {
-        DeviceBrightness.setBrightnessLevel(originalBrightness);
-      } catch (e) {
-        Bugsnag.leaveBreadcrumb(`Failed to reset brightness.`);
-      }
-    };
-  }, []);
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
