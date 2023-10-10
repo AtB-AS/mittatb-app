@@ -45,7 +45,7 @@ const PurchaseConfirmationTexts = {
         ),
       messageInHarborZones: _(
         'Gjelder for buss/trikk i sonene du reiser til og fra',
-        'Applies for for bus/tram in departure and destination zones',
+        'Applies for bus/tram in departure and destination zones',
         'Gjeld for buss/trikk i sonene du reiser til og frå',
       ),
       onlyOnPhone: _(
