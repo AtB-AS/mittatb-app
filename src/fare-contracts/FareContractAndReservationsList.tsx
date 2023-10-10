@@ -25,6 +25,7 @@ type Props = {
   showTokenInfo?: boolean;
   emptyStateTitleText: string;
   emptyStateDetailsText: string;
+  emptyStateDetailsA11yLabel?: string;
 };
 
 export const FareContractAndReservationsList: React.FC<Props> = ({
@@ -37,6 +38,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   showTokenInfo,
   emptyStateTitleText,
   emptyStateDetailsText,
+  emptyStateDetailsA11yLabel,
 }) => {
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
@@ -71,6 +73,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           <EmptyState
             title={emptyStateTitleText}
             details={emptyStateDetailsText}
+            detailsA11yLabel={emptyStateDetailsA11yLabel}
             illustrationComponent={<TicketTilted height={84} />}
           />
         )}

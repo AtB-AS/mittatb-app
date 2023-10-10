@@ -8,7 +8,7 @@ import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
-import {useTranslation, TicketingTexts} from '@atb/translations';
+import {useTranslation, TicketingTexts, dictionary} from '@atb/translations';
 
 export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   const {
@@ -26,6 +26,10 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const noActiveTicketsDetailsText = t(
+    TicketingTexts.activeFareProductsAndReservationsTab.noActiveTickets.details,
+  );
+
   return (
     <View style={styles.container}>
       <FareContractAndReservationsList
@@ -36,13 +40,16 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
         now={now}
         showTokenInfo={true}
         emptyStateTitleText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .noActiveTicketsTitle,
+          TicketingTexts.activeFareProductsAndReservationsTab.noActiveTickets
+            .title,
         )}
-        emptyStateDetailsText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .noActiveTicketsDetails,
-        )}
+        emptyStateDetailsText={`${noActiveTicketsDetailsText} ${t(
+          TicketingTexts.activeFareProductsAndReservationsTab.noActiveTickets
+            .pullToRefresh,
+        )}`}
+        emptyStateDetailsA11yLabel={`${noActiveTicketsDetailsText} ${t(
+          dictionary.a11yPullToRefresh,
+        )}`}
       />
     </View>
   );

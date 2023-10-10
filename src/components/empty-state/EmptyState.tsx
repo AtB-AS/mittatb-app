@@ -5,12 +5,14 @@ import {ThemeText} from '@atb/components/text';
 export type EmptyStateProps = {
   title: string;
   details: string;
+  detailsA11yLabel?: string;
   illustrationComponent: JSX.Element;
 };
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   details,
+  detailsA11yLabel,
   illustrationComponent,
 }) => {
   const styles = useStyles();
@@ -29,6 +31,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         type="body__secondary"
         color="secondary"
         style={styles.emptyStateDetails}
+        accessibilityLabel={detailsA11yLabel}
       >
         {details}
       </ThemeText>

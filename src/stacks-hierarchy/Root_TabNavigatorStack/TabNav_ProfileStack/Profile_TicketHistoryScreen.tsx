@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {useTranslation, TicketingTexts} from '@atb/translations';
+import {useTranslation, TicketingTexts, dictionary} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {filterExpiredFareContracts, useTicketingState} from '@atb/ticketing';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
@@ -20,6 +20,10 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
 
   const styles = useStyles();
   const {t} = useTranslation();
+  const emptyTicketHistoryDetailsText = t(
+    TicketingTexts.activeFareProductsAndReservationsTab.emptyTicketHistory
+      .details,
+  );
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -36,13 +40,16 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         }}
         now={now}
         emptyStateTitleText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .emptyTicketHistoryTitle,
+          TicketingTexts.activeFareProductsAndReservationsTab.emptyTicketHistory
+            .title,
         )}
-        emptyStateDetailsText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .emptyTicketHistoryDetails,
-        )}
+        emptyStateDetailsText={`${emptyTicketHistoryDetailsText} ${t(
+          TicketingTexts.activeFareProductsAndReservationsTab.emptyTicketHistory
+            .pullToRefresh,
+        )}`}
+        emptyStateDetailsA11yLabel={`${emptyTicketHistoryDetailsText} ${t(
+          dictionary.a11yPullToRefresh,
+        )}`}
       />
     </View>
   );

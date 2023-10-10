@@ -3,6 +3,7 @@ import {translation as _} from './commons';
 import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 
 const softhyphen = Platform.OS === 'ios' ? '\u00AD' : '\u200B';
+const a11yPullToRefreshFingers = Platform.OS === 'ios' ? 3 : 2;
 
 const dictionary = {
   myPosition: _('Min posisjon', 'My position', 'Min posisjon'),
@@ -22,6 +23,11 @@ const dictionary = {
     profile_a11y: _('Min profil', 'My profile', `Min profil`),
   },
   missingRealTimePrefix: _('ca. ', 'ca. ', `ca. `),
+  a11yPullToRefresh: _(
+    `Dra ned med ${a11yPullToRefreshFingers} fingre for å oppdatere`,
+    `Pull down with ${a11yPullToRefreshFingers} fingers to refresh`,
+    `Drag ned med ${a11yPullToRefreshFingers} fingrar for å oppdatere`,
+  ),
   a11yRouteTimePrefix: _('rutetid ', 'route time ', `rutetid `),
   a11yRealTimePrefix: _('sanntid ', 'realtime ', `sanntid `),
   travel: {
