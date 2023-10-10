@@ -7,6 +7,8 @@ on:
       - '**.ts'
       - '**.tsx'
       - '**/tsc.yml'
+      - 'package.json'
+      - 'yarn.lock'
 
 jobs:
   tsc:
