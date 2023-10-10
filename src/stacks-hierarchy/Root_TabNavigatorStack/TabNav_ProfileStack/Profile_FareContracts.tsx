@@ -226,24 +226,24 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
 Mocks the Firestore Timestamp class, since importing it from the SDK is not
 possible. Not a complete implementation, only what is needed for the tests.
 
-Copied from here, with modifications:
+Copied from here, with some modifications:
 https://github.com/invertase/react-native-firebase/blob/c9b695aa8fd75d5a1d070ecbb6bb9ac4e9ff062e/packages/firestore/lib/modular/Timestamp.d.ts#L15
 
-Original license:
+LICENSE:
 
-Copyright (c) 2016-present Invertase Limited <oss@invertase.io>
+  Copyright (c) 2016-present Invertase Limited <oss@invertase.io>
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
 */
 class FirestoreTimestampMock {
   _seconds: number;
