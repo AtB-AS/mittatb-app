@@ -336,7 +336,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={getTextForLanguage(fareProductTypeConfig.name, language)}
+        title={t(PurchaseConfirmationTexts.title)}
         leftButton={headerLeftButton}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />

@@ -1,6 +1,7 @@
 import {translation as _} from '../commons';
 
 const TicketAssistantTexts = {
+  title: _('Billettveileder', 'Ticket assistant', 'billettrettleiaren'),
   welcome: {
     title: _(
       'Velkommen til billettveilederen',

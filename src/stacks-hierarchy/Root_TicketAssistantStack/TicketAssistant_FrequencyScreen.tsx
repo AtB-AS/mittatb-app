@@ -12,6 +12,7 @@ import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {TICKET_ASSISTANT_DURATION_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
@@ -27,8 +28,9 @@ export const TicketAssistant_FrequencyScreen = ({
   const [sliderValue, setSliderValue] = useState<number>(
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
   );
+  const focusRef = useFocusOnLoad(true, 200);
+
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
 
   const sliderMax = 14;
 
@@ -98,7 +100,7 @@ export const TicketAssistant_FrequencyScreen = ({
                     interactiveColor="interactive_2"
                     onPress={() => {
                       setSliderValue(number);
-                      navigation.navigate('TicketAssistant_DurationScreen');
+                      navigation.navigate(TICKET_ASSISTANT_DURATION_SCREEN);
                     }}
                     text={number.toString()}
                     accessibilityHint={t(
@@ -126,6 +128,8 @@ export const TicketAssistant_FrequencyScreen = ({
                           style={styles.number}
                           type={'body__primary'}
                           color={themeColor}
+                          numberOfLines={1}
+                          ellipsizeMode={'clip'}
                         >
                           {number}
                         </ThemeText>
@@ -241,10 +245,12 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   numberContainer: {
     width: 30,
     alignContent: 'center',
+    flexShrink: 1,
   },
   number: {
     width: '100%',
     textAlign: 'center',
+    flexWrap: 'nowrap',
     color: theme.text.colors.primary,
   },
 

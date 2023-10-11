@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@adrianso/react-native-device-brightness@^1.2.7":
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/@adrianso/react-native-device-brightness/-/react-native-device-brightness-1.2.7.tgz#46905d0358c4f6dce5c88eb51882f528cc716f60"
+  integrity sha512-q3OTFGohAh04R8cBka7/eNXaeSD8bAZocMsifLIR3oDF5N9cNH2UVEjzJaFXW8DHFEsODpljpT+eyGWIhKlkow==
+
 "@ampproject/remapping@^2.1.0":
   version "2.1.1"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.1.1.tgz"
@@ -35,10 +40,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-9.0.0.tgz#cf4c43f5940eff2aa299f1b5a8b507b023be00df"
-  integrity sha512-5vYuiRpb88kfXnZrE3xf0o3GaENoK54Y725OnBA3gM998zCMuKn6FO9yPDVG3t4FVC3So9vuA8WCgaYWIxWy3g==
+"@atb-as/generate-assets@^9.1.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-9.1.0.tgz#d8122caa8c9360459725b8e01ca26b85e20712a3"
+  integrity sha512-AVu8U7h4RxMolQzGHaROI6LYooC3ex3TbOS54hrmwS05JQ0VeUt6ImXMbCqiGM7Os1J53R1HSv2XjtnifGts9A==
   dependencies:
     "@atb-as/theme" "^7.1.1"
     commander "^9.4.0"
