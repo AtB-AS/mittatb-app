@@ -7,13 +7,15 @@ type PhotoParams = {selectedViolations: ParkingViolationType[]};
 type QrParams = PhotoParams & {
   photo: string;
 };
+type ConfirmationParams = QrParams & {
+  providerId: number;
+};
 
 export type ParkingViolationsReportingStackParams = {
   ParkingViolations_SelectViolation: undefined;
   ParkingViolations_Photo: PhotoParams;
   ParkingViolations_Qr: QrParams;
-  ParkingViolations_Providers: undefined;
-  ParkingViolations_Confirmation: undefined;
+  ParkingViolations_Confirmation: ConfirmationParams;
 };
 
 export type ParkingViolationsReportingStackRootProps =

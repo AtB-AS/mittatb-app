@@ -15,7 +15,10 @@ import {useParkingViolationsState} from './ParkingViolationsContext';
 export type QrScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
 
-export const ParkingViolations_Qr = ({navigation}: QrScreenProps) => {
+export const ParkingViolations_Qr = ({
+  navigation,
+  route: {params},
+}: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
   const isFocused = useIsFocused();
@@ -33,7 +36,10 @@ export const ParkingViolations_Qr = ({navigation}: QrScreenProps) => {
     if (!hasCapturedQr) {
       setHasCapturedQr(true);
       console.log(qr);
-      navigation.navigate('ParkingViolations_Confirmation');
+      navigation.navigate('ParkingViolations_Confirmation', {
+        ...params,
+        providerId: 123,
+      });
     }
   };
 
@@ -43,7 +49,10 @@ export const ParkingViolations_Qr = ({navigation}: QrScreenProps) => {
         providers={providers}
         onSelect={(provider) => {
           console.log('Selected provider', provider.name);
-          navigation.navigate('ParkingViolations_Confirmation');
+          navigation.navigate('ParkingViolations_Confirmation', {
+            ...params,
+            providerId: provider.id,
+          });
           closeBottomSheet();
         }}
         close={closeBottomSheet}
