@@ -42,6 +42,7 @@ First line is mandatory, but `scope` is optional. `scope` can be anything to gro
 - `refactor:` A code change that neither fixes a bug nor adds a feature
 - `style:` Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 - `test:` Adding missing tests or correcting existing tests
+- `chore:` Other changes that don't modify src or test files
 
 **([from Angular preset](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#type))**
 
