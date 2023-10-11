@@ -1,4 +1,4 @@
-import {LeftButtonProps} from '@atb/components/screen-header';
+import {LeftButtonProps, RightButtonProps} from '@atb/components/screen-header';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
@@ -12,11 +12,13 @@ type Props = PropsWithChildren<{
   titleA11yLabel?: string;
   secondaryText?: string;
   leftHeaderButton?: LeftButtonProps;
+  rightHeaderButton?: RightButtonProps;
   buttons?: ReactNode;
 }>;
 
 export const ScreenContainer = ({
   leftHeaderButton = {type: 'back'},
+  rightHeaderButton,
   children,
   title,
   titleA11yLabel,
@@ -28,6 +30,7 @@ export const ScreenContainer = ({
     <FullScreenView
       headerProps={{
         leftButton: leftHeaderButton,
+        rightButton: rightHeaderButton,
         title,
         titleA11yLabel,
         color: 'background_accent_0',

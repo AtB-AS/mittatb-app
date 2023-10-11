@@ -6,7 +6,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
 import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
-import {Alert, Dimensions} from 'react-native';
+import {Dimensions} from 'react-native';
 import {Button} from '@atb/components/button';
 import {SelectProviderBottomSheet} from './SelectProviderBottomSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -15,7 +15,7 @@ import {useParkingViolationsState} from './ParkingViolationsContext';
 export type QrScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
 
-export const ParkingViolations_Qr = ({}: QrScreenProps) => {
+export const ParkingViolations_Qr = ({navigation}: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
   const isFocused = useIsFocused();
@@ -33,7 +33,7 @@ export const ParkingViolations_Qr = ({}: QrScreenProps) => {
     if (!hasCapturedQr) {
       setHasCapturedQr(true);
       console.log(qr);
-      Alert.alert(qr);
+      navigation.navigate('ParkingViolations_Confirmation');
     }
   };
 
@@ -42,7 +42,8 @@ export const ParkingViolations_Qr = ({}: QrScreenProps) => {
       <SelectProviderBottomSheet
         providers={providers}
         onSelect={(provider) => {
-          Alert.alert('Selected provider', provider.name);
+          console.log('Selected provider', provider.name);
+          navigation.navigate('ParkingViolations_Confirmation');
           closeBottomSheet();
         }}
         close={closeBottomSheet}

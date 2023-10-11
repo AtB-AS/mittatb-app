@@ -13,7 +13,7 @@ export type ParkingViolationsReportingStackParams = {
   ParkingViolations_Photo: PhotoParams;
   ParkingViolations_Qr: QrParams;
   ParkingViolations_Providers: undefined;
-  ParkingViolations_Summary: undefined;
+  ParkingViolations_Confirmation: undefined;
 };
 
 export type ParkingViolationsReportingStackRootProps =

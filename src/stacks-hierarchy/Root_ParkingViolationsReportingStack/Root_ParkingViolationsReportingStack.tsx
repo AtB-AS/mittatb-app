@@ -5,6 +5,7 @@ import {ParkingViolations_Photo} from './ParkingViolations_Photo';
 import {ParkingViolations_Qr} from './ParkingViolations_Qr';
 import {ParkingViolations_SelectViolation} from './ParkingViolations_SelectViolation';
 import {ParkingViolationsReportingStackParams} from './navigation-types';
+import {ParkingViolations_Confirmation} from './ParkingViolations_Confirmation';
 
 const Screen = createStackNavigator<ParkingViolationsReportingStackParams>();
 export const themeColor: StaticColorByType<'background'> =
@@ -30,6 +31,10 @@ export const Root_ParkingViolationsReportingStack = () => {
         <Screen.Screen
           name="ParkingViolations_Qr"
           component={ParkingViolations_Qr}
+        />
+        <Screen.Screen
+          name="ParkingViolations_Confirmation"
+          component={ParkingViolations_Confirmation}
         />
       </Screen.Navigator>
     </ParkingViolationsContextProvider>

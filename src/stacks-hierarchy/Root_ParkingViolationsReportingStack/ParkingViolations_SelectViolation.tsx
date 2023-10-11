@@ -32,6 +32,7 @@ export const ParkingViolations_SelectViolation = ({
 
   return (
     <ScreenContainer
+      leftHeaderButton={{type: 'close'}}
       title={t(ParkingViolationTexts.selectViolation.title)}
       buttons={
         <Button
