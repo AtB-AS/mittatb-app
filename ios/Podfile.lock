@@ -1244,7 +1244,7 @@ PODS:
   - react-native-intercom (21.1.1):
     - Intercom (~> 10)
     - React
-  - react-native-kettle-module (1.0.1):
+  - react-native-kettle-module (1.0.3):
     - KettleKit (= 1.0.13)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -1824,7 +1824,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
-  react-native-kettle-module: a692d912319bdef2be242439d4893c0083d8fde5
+  react-native-kettle-module: f41b7728a6acb22c982c9f7130ac5390e12220a2
   react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
@@ -1865,7 +1865,7 @@ SPEC CHECKSUMS:
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  TimeReactNativeLib: f14a3b19d32248220f0f978e7b420a97d9122c70
+  TimeReactNativeLib: 5915a7ee0d8fed27361f5109b0fe0f7c981d80cc
   TokenCore: c66fccf39c10238ff753b28956134c489d7ff0dd
   TokenStateReactNativeLib: a312be9827d8f30489526ae61d8043c26e291111
   Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
@@ -1874,4 +1874,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1c63e76ef4bb0faeba099954481e81e631dda720
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.12.1
