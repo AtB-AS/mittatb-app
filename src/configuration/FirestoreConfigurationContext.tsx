@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -65,6 +66,7 @@ type ConfigurationContextState = {
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
+  resubscribe: () => void;
 };
 
 const defaultConfigurationContextState: ConfigurationContextState = {
@@ -82,6 +84,7 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   configurableLinks: undefined,
   mobilityOperators: undefined,
   harborConnectionOverrides: [],
+  resubscribe: () => {},
 };
 
 // resubscribe her --> start med denne, den er viktigst
@@ -123,94 +126,103 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     HarborConnectionOverrideType[]
   >([]);
 
+  const [toggle, setToggle] = useState(true);
+
   useEffect(() => {
-    firestore()
-      .collection('configuration')
-      .onSnapshot(
-        (snapshot) => {
-          const preassignedFareProducts =
-            getPreassignedFareContractsFromSnapshot(snapshot);
-          if (preassignedFareProducts) {
-            setPreassignedFareProducts(preassignedFareProducts);
-          }
+    const removeListener = () => {
+      firestore()
+        .collection('configuration')
+        .onSnapshot(
+          (snapshot) => {
+            const preassignedFareProducts =
+              getPreassignedFareContractsFromSnapshot(snapshot);
+            if (preassignedFareProducts) {
+              setPreassignedFareProducts(preassignedFareProducts);
+            }
 
-          const tariffZones = getTariffZonesFromSnapshot(snapshot);
-          if (tariffZones) {
-            setTariffZones(tariffZones);
-          }
+            const tariffZones = getTariffZonesFromSnapshot(snapshot);
+            if (tariffZones) {
+              setTariffZones(tariffZones);
+            }
 
-          const cityZones = getCityZonesFromSnapshot(snapshot);
-          if (cityZones) {
-            setCityZones(cityZones);
-          }
+            const cityZones = getCityZonesFromSnapshot(snapshot);
+            if (cityZones) {
+              setCityZones(cityZones);
+            }
 
-          const userProfiles = getUserProfilesFromSnapshot(snapshot);
-          if (userProfiles) {
-            setUserProfiles(userProfiles);
-          }
+            const userProfiles = getUserProfilesFromSnapshot(snapshot);
+            if (userProfiles) {
+              setUserProfiles(userProfiles);
+            }
 
-          const modesWeSellTicketsFor =
-            getModesWeSellTicketsForFromSnapshot(snapshot);
-          if (modesWeSellTicketsFor) {
-            setModesWeSellTicketsFor(modesWeSellTicketsFor);
-          }
+            const modesWeSellTicketsFor =
+              getModesWeSellTicketsForFromSnapshot(snapshot);
+            if (modesWeSellTicketsFor) {
+              setModesWeSellTicketsFor(modesWeSellTicketsFor);
+            }
 
-          const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
-          if (paymentTypes) {
-            setPaymentTypes(paymentTypes);
-          }
+            const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
+            if (paymentTypes) {
+              setPaymentTypes(paymentTypes);
+            }
 
-          const vatPercent = getVatPercentFromSnapshot(snapshot);
-          if (vatPercent) {
-            setVatPercent(vatPercent);
-          }
+            const vatPercent = getVatPercentFromSnapshot(snapshot);
+            if (vatPercent) {
+              setVatPercent(vatPercent);
+            }
 
-          const fareProductTypeConfigs =
-            getFareProductTypeConfigsFromSnapshot(snapshot);
-          if (fareProductTypeConfigs) {
-            setFareProductTypeConfigs(fareProductTypeConfigs);
-          }
+            const fareProductTypeConfigs =
+              getFareProductTypeConfigsFromSnapshot(snapshot);
+            if (fareProductTypeConfigs) {
+              setFareProductTypeConfigs(fareProductTypeConfigs);
+            }
 
-          const fareProductGroups = getFareProductGroupsFromSnapshot(snapshot);
-          if (fareProductGroups) {
-            setFareProductGroups(fareProductGroups);
-          }
+            const fareProductGroups =
+              getFareProductGroupsFromSnapshot(snapshot);
+            if (fareProductGroups) {
+              setFareProductGroups(fareProductGroups);
+            }
 
-          const travelSearchFilters =
-            getTravelSearchFiltersFromSnapshot(snapshot);
-          if (travelSearchFilters) {
-            setTravelSearchFilters(travelSearchFilters);
-          }
+            const travelSearchFilters =
+              getTravelSearchFiltersFromSnapshot(snapshot);
+            if (travelSearchFilters) {
+              setTravelSearchFilters(travelSearchFilters);
+            }
 
-          const appTexts = getAppTextsFromSnapshot(snapshot);
-          if (appTexts) {
-            setAppTexts(appTexts);
-          }
+            const appTexts = getAppTextsFromSnapshot(snapshot);
+            if (appTexts) {
+              setAppTexts(appTexts);
+            }
 
-          const configurableLinks = getConfigurableLinksFromSnapshot(snapshot);
-          if (configurableLinks) {
-            setConfigurableLinks(configurableLinks);
-          }
+            const configurableLinks =
+              getConfigurableLinksFromSnapshot(snapshot);
+            if (configurableLinks) {
+              setConfigurableLinks(configurableLinks);
+            }
 
-          const mobilityOperators = getMobilityOperatorsFromSnapshot(snapshot);
-          if (mobilityOperators) {
-            setMobilityOperators(mobilityOperators);
-          }
+            const mobilityOperators =
+              getMobilityOperatorsFromSnapshot(snapshot);
+            if (mobilityOperators) {
+              setMobilityOperators(mobilityOperators);
+            }
 
-          const harborConnectionOverrides =
-            getHarborConnectionOverridesFromSnapshot(snapshot);
-          if (harborConnectionOverrides) {
-            setHarborConnectionOverrides(harborConnectionOverrides);
-          }
-        },
-        (error) => {
-          Bugsnag.leaveBreadcrumb(
-            `Firebase Error when fetching Configuration from Firestore`,
-            error,
-          );
-        },
-      );
-  }, []);
+            const harborConnectionOverrides =
+              getHarborConnectionOverridesFromSnapshot(snapshot);
+            if (harborConnectionOverrides) {
+              setHarborConnectionOverrides(harborConnectionOverrides);
+            }
+          },
+          (error) => {
+            Bugsnag.leaveBreadcrumb(
+              `Firebase Error when fetching Configuration from Firestore`,
+              error,
+            );
+          },
+        );
+    };
+    console.log();
+    return () => removeListener();
+  }, [toggle]);
 
   const memoizedState = useMemo(() => {
     return {
@@ -247,7 +259,15 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   ]);
 
   return (
-    <FirestoreConfigurationContext.Provider value={memoizedState}>
+    <FirestoreConfigurationContext.Provider
+      value={{
+        ...memoizedState,
+        resubscribe: useCallback(
+          () => setToggle((prevState) => !prevState),
+          [],
+        ),
+      }}
+    >
       {children}
     </FirestoreConfigurationContext.Provider>
   );

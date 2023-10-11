@@ -7,6 +7,7 @@ import {useLoadingScreenEnabled} from '@atb/loading-screen/use-loading-screen-en
 import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {useAnalytics} from '@atb/analytics';
 import {useLoadingErrorScreenEnabled} from '@atb/loading-screen/use-loading-error-screen-enabled';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 export const LoadingScreenBoundary = ({
   children,
@@ -19,6 +20,7 @@ export const LoadingScreenBoundary = ({
   const {authStatus, retryAuth} = useAuthState();
   const analytics = useAnalytics();
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const {resubscribe} = useFirestoreConfiguration();
 
   const [didTimeout, setDidTimeout] = useState(false);
 
@@ -38,6 +40,8 @@ export const LoadingScreenBoundary = ({
   const retry = useCallback(() => {
     analytics.logEvent('Loading boundary', 'Retrying auth');
     setupLoadingTimeout();
+    // maybe have if-check here for whether we have firestore data cached or at all?
+    resubscribe();
     retryAuth();
   }, [setupLoadingTimeout, retryAuth]);
 
