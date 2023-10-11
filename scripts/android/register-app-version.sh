@@ -32,8 +32,6 @@ if [[
   exit 2
 fi
 
-BUILD_ID=2
-
 # Get values based on environment
 case ${APP_ENVIRONMENT} in
   staging)
