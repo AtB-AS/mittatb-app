@@ -14,6 +14,7 @@ const PurchaseConfirmationTexts = {
       'Oops - vi klarte ikkje å søke opp prisen. Supert om du prøvar igjen 🤞',
     ),
   },
+  title: _('Billettsammendrag', 'Ticket summary', 'Billettsamandrag'),
   validityTexts: {
     zone: {
       single: (zoneName: string) =>
@@ -44,7 +45,7 @@ const PurchaseConfirmationTexts = {
         ),
       messageInHarborZones: _(
         'Gjelder for buss/trikk i sonene du reiser til og fra',
-        'Applies for for bus/tram in departure and destination zones',
+        'Applies for bus/tram in departure and destination zones',
         'Gjeld for buss/trikk i sonene du reiser til og frå',
       ),
       onlyOnPhone: _(

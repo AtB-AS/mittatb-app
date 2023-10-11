@@ -1,10 +1,10 @@
 import {AxiosError} from 'axios';
 import {useCallback, useEffect, useState} from 'react';
 import {WebViewNavigation} from 'react-native-webview/lib/WebViewTypes';
-import {parse as parseURL} from 'search-params';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {
   cancelPayment,
+  getResponseCode,
   listRecurringPayments,
   OfferReservation,
   PaymentType,
@@ -80,15 +80,6 @@ export function useTerminalState(
   useEffect(() => {
     reserveOffer();
   }, [reserveOffer]);
-
-  /**
-   * Get response code from query param. iOS uses 'responseCode' and Android
-   * uses 'response_code'.
-   */
-  function getResponseCode(event: WebViewNavigation) {
-    const params = parseURL(event.url);
-    return params['responseCode'] ?? params['response_code'];
-  }
 
   const onWebViewLoadEnd = () => {
     setIsLoading(false);

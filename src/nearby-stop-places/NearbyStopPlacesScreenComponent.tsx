@@ -185,6 +185,8 @@ export const NearbyStopPlacesScreenComponent = ({
         stopPlaces={orderedStopPlaces}
         navigateToPlace={onSelectStopPlace}
         testID={'nearbyStopsContainerView'}
+        location={location}
+        isLoading={isLoading}
       />
     </FullScreenView>
   );

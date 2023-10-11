@@ -21,8 +21,9 @@ import {
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
+import {useDefaultTariffZone} from '../utils';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
+import {TICKET_ASSISTANT_SUMMARY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
@@ -32,10 +33,9 @@ export const TicketAssistant_ZonePickerScreen = ({
   const styles = useThemeStyles();
   const {tariffZones} = useFirestoreConfiguration();
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
 
+  const focusRef = useFocusOnLoad(true, 200);
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
-
   const {t} = useTranslation();
 
   const isApplicableOnSingleZoneOnly = false;
@@ -129,7 +129,7 @@ export const TicketAssistant_ZonePickerScreen = ({
           <Button
             interactiveColor="interactive_0"
             onPress={() => {
-              navigation.navigate('TicketAssistant_SummaryScreen');
+              navigation.navigate(TICKET_ASSISTANT_SUMMARY_SCREEN);
             }}
             text={t(TicketAssistantTexts.frequency.mainButton)}
             testID="nextButton"

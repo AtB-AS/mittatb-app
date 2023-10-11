@@ -120,7 +120,7 @@ export const TicketSummary = () => {
 
           <View style={styles.horizontalFlex}>
             {/** Traveller **/}
-            <View>
+            <View accessible={true}>
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.traveller)}
               </ThemeText>
@@ -131,7 +131,7 @@ export const TicketSummary = () => {
               />
             </View>
             {/** Zones **/}
-            <View>
+            <View accessible={true}>
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.zones)}
               </ThemeText>
@@ -143,7 +143,7 @@ export const TicketSummary = () => {
             </View>
           </View>
         </View>
-        <View style={styles.ticketFooter}>
+        <View accessible={true} style={styles.ticketFooter}>
           <ThemeText type={'body__secondary'} color={interactiveColor.outline}>
             {t(TicketAssistantTexts.summary.price)}
           </ThemeText>

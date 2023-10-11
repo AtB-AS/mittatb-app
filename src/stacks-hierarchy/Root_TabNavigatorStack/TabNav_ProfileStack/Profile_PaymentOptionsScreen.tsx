@@ -1,39 +1,47 @@
+import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {useAuthState} from '@atb/auth';
 import {MessageBox} from '@atb/components/message-box';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {
+  GenericSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
+  RecurringPayment,
+  authorizeRecurringPayment,
+  cancelRecurringPayment,
   deleteRecurringPayment,
   listRecurringPayments,
-  RecurringPayment,
 } from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {useIsFocused} from '@react-navigation/native';
+import {parseUrl} from 'query-string/base';
 import React, {useEffect, useState} from 'react';
-import {FlatList, View} from 'react-native';
-import {destructiveAlert} from './utils';
+import {Linking, RefreshControl, View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {destructiveAlert} from './utils';
+import {animateNextChange} from '@atb/utils/animation';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
-type RecurringPaymentRenderItem = {
-  item: RecurringPayment;
-};
-
-export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
+export const Profile_PaymentOptionsScreen = ({
+  navigation,
+}: PaymentOptionsProps) => {
   const style = useStyle();
   const {t} = useTranslation();
   const {user} = useAuthState();
-  const isFocused = useIsFocused();
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [storedCards, setStoredCards] = useState<RecurringPayment[]>([]);
   const [showError, setShowError] = useState<boolean>(false);
 
@@ -49,10 +57,41 @@ export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
   }
 
   useEffect(() => {
-    if (isFocused) {
-      refreshCards();
-    }
-  }, [isFocused]);
+    const addPaymentMethodCallbackHandler = async ({url}: {url: string}) => {
+      if (
+        url.includes('response_code') &&
+        url.includes('recurring_payment_id')
+      ) {
+        // Timeout required to make loading spinner appear,
+        // see https://github.com/facebook/react-native/issues/37308
+        setTimeout(() => setIsLoading(true), 20);
+        const responseCode = parseUrl(url).query.response_code;
+        const paymentId = Number(parseUrl(url).query.recurring_payment_id);
+        try {
+          if (responseCode === 'OK') {
+            await authorizeRecurringPayment(paymentId);
+            await refreshCards();
+          } else if (responseCode === 'CANCEL') {
+            await cancelRecurringPayment(paymentId);
+          }
+        } catch (error: any) {
+          setShowError(true);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    refreshCards();
+
+    // Listen to deep link redirects back here after
+    // the add card process completes.
+    const eventSubscription = Linking.addEventListener(
+      'url',
+      addPaymentMethodCallbackHandler,
+    );
+    return () => eventSubscription.remove();
+  }, []);
 
   async function handleRemovePayment(paymentOption: RecurringPayment) {
     setIsLoading(true);
@@ -68,12 +107,17 @@ export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
     setIsLoading(true);
     try {
       const remoteOptions = await getRecurringPaymentOptions();
+      animateNextChange();
       setStoredCards(remoteOptions);
     } catch (error: any) {
     } finally {
       setIsLoading(false);
     }
   }
+
+  const onAddRecurringPayment = async () => {
+    navigation.push('Root_AddPaymentMethodScreen');
+  };
 
   return (
     <View style={style.container}>
@@ -84,25 +128,31 @@ export const Profile_PaymentOptionsScreen = ({}: PaymentOptionsProps) => {
           leftButton={{type: 'back'}}
         />
       </View>
-      <View style={style.contentContainer}>
-        <FlatList
-          ListHeaderComponent={
-            !isLoading && showError ? (
-              <GenericError />
-            ) : !isLoading && storedCards.length == 0 ? (
-              <NoCardsInfo />
-            ) : null
-          }
-          refreshing={isLoading}
-          onRefresh={() => refreshCards()}
-          progressViewOffset={0}
-          data={storedCards}
-          keyExtractor={(item) => 'card-' + item.id}
-          renderItem={({item}: RecurringPaymentRenderItem) => (
-            <Card card={item} removePaymentHandler={handleRemovePayment} />
-          )}
-        />
-      </View>
+      {showError && <GenericError />}
+      <ScrollView
+        style={style.contentContainer}
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
+        }
+      >
+        {storedCards.length > 0 && (
+          <Section>
+            {storedCards.map((sc) => (
+              <GenericSectionItem key={'card-' + sc.id}>
+                <Card card={sc} removePaymentHandler={handleRemovePayment} />
+              </GenericSectionItem>
+            ))}
+          </Section>
+        )}
+        {!isLoading && storedCards.length == 0 && <NoCardsInfo />}
+        <Section style={style.addPaymentMethod}>
+          <LinkSectionItem
+            text={t(PaymentOptionsTexts.addPaymentMethod)}
+            onPress={onAddRecurringPayment}
+            icon={<ThemeIcon svg={Add} />}
+          />
+        </Section>
+      </ScrollView>
     </View>
   );
 };
@@ -208,14 +258,10 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   contentContainer: {
     padding: theme.spacings.medium,
-    overflow: 'hidden',
-    height: '100%',
+    flex: 1,
   },
   card: {
-    marginVertical: theme.spacings.xSmall,
-    borderRadius: theme.border.radius.regular,
-    backgroundColor: theme.static.background.background_0.background,
-    padding: theme.spacings.medium,
+    flex: 1,
   },
   cardTop: {
     flex: 1,
@@ -232,5 +278,8 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   messageStyle: {
     marginBottom: theme.spacings.medium,
+  },
+  addPaymentMethod: {
+    marginTop: theme.spacings.medium,
   },
 }));
