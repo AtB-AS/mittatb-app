@@ -23,7 +23,7 @@ import {Profile_TravelTokenScreen} from './Profile_TravelTokenScreen';
 import {Profile_SelectTravelTokenScreen} from './Profile_SelectTravelTokenScreen';
 import {Profile_FavoriteListScreen} from './Profile_FavoriteListScreen';
 import {Profile_SortFavoritesScreen} from './Profile_SortFavoritesScreen';
-import {Profile_FareContractsScreen} from './Profile_FareContracts';
+import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
