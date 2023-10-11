@@ -84,6 +84,11 @@ const defaultConfigurationContextState: ConfigurationContextState = {
   harborConnectionOverrides: [],
 };
 
+// resubscribe her --> start med denne, den er viktigst
+// identifisere hvilken data herfra man skal sjekke opp mot for å se om man må resubscribe
+
+// test with flightmode + wifi on/off
+
 const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
   defaultConfigurationContextState,
 );

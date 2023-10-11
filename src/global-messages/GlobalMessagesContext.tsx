@@ -19,6 +19,7 @@ import {
 } from '@atb/global-messages/types';
 import {checkRules, RuleVariables} from './rules';
 
+// resubscribe i 2. iterasjon.
 type GlobalMessageContextState = {
   findGlobalMessages: (
     context: GlobalMessageContextEnum,
