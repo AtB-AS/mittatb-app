@@ -22,7 +22,11 @@
     "get_ios_certs": "sh ./scripts/ios/get_ios_certs.sh",
     "generate-native-assets": "sh ./scripts/generate-native-assets.sh",
     "link-assets": "react-native link",
-    "unimported": "npx unimported"
+    "unimported": "npx unimported",
+    "test:android": "wdio ./e2e/conf/android.conf.ts",
+    "test:android:local:dev": "IS_LOCAL=true wdio ./e2e/conf/android.conf.local.dev.ts",
+    "test:android:local:appcenter": "IS_LOCAL=true wdio ./e2e/conf/android.conf.local.appcenter.ts",
+    "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"yarn test:android:local:dev --spec e2e/test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1"
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
@@ -140,12 +144,18 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
+    "@wdio/appium-service": "8.3.11",
+    "@wdio/cli": "8.3.11",
+    "@wdio/junit-reporter": "8.3.0",
+    "@wdio/local-runner": "8.3.11",
+    "@wdio/mocha-framework": "8.3.0",
+    "@wdio/spec-reporter": "8.3.0",
+    "@wdio/globals": "8.5.6",
     "app-icon": "^0.13.2",
     "babel-jest": "^29.6.3",
     "babel-plugin-module-resolver": "^5.0.0",
     "child-process-promise": "^2.2.1",
     "conventional-changelog-cli": "^2.2.2",
-    "detox": "^20.1.2",
     "eslint": "8.47.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "5.0.0",
@@ -164,7 +174,10 @@
     "react-native-flipper-performance-plugin": "^0.4.0",
     "react-test-renderer": "^18.2.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.1.6"
+    "ts-node": "10.9.1",
+    "typescript": "^5.1.6",
+    "wdio-mochawesome-reporter": "4.0.0",
+    "wdio-wait-for": "3.0.2"
   },
   "engines": {
     "node": ">=18"
