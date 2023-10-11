@@ -801,13 +801,9 @@
 				PRODUCT_NAME = AtB;
 				PROVISIONING_PROFILE_SPECIFIER = "match Development $(IOS_BUNDLE_IDENTIFIER)";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development $(IOS_BUNDLE_IDENTIFIER)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "atb-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -841,12 +837,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = AtB;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "atb-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
