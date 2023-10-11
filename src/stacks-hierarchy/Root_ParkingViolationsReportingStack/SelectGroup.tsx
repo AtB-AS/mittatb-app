@@ -15,7 +15,7 @@ type SelectGroupProps<T> = ViewProps & {
   multiple?: boolean;
   onSelect: (selectedItems: T[]) => void;
   renderItem: (item: T, isSelected: boolean) => React.ReactElement | null;
-  generateAccessibilityLabel: (
+  generateAccessibilityLabel?: (
     item: T,
     isSelected: boolean,
   ) => string | undefined;
@@ -69,7 +69,7 @@ type ItemProps<T> = {
   selected: boolean;
   onSelect: (item: T) => void;
   renderItem: (item: T, isSelected: boolean) => React.ReactElement | null;
-  generateAccessibilityLabel: (
+  generateAccessibilityLabel?: (
     item: T,
     isSelected: boolean,
   ) => string | undefined;
@@ -101,7 +101,11 @@ const SelectItem = <T,>({
         onPress={() => onSelect(item)}
         accessibilityRole={multiple ? 'checkbox' : 'radio'}
         accessibilityState={{selected: selected}}
-        accessibilityLabel={generateAccessibilityLabel(item, selected)}
+        accessibilityLabel={
+          generateAccessibilityLabel
+            ? generateAccessibilityLabel(item, selected)
+            : undefined
+        }
       >
         {multiple ? (
           <Checkbox style={itemStyles.indicator} checked={selected} />
