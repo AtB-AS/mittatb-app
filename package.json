@@ -25,6 +25,7 @@
     "unimported": "npx unimported"
   },
   "dependencies": {
+    "@adrianso/react-native-device-brightness": "^1.2.7",
     "@atb-as/config-specs": "^3.6.0",
     "@atb-as/generate-assets": "^9.1.0",
     "@atb-as/theme": "^7.1.1",
