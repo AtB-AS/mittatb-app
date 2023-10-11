@@ -62,7 +62,7 @@ export const ParkingViolations_SelectViolation = ({
       <ScrollView style={style.container}>
         {!isLoading && !error && (
           <SelectGroup
-            multiple={true}
+            multiple
             items={violations}
             keyExtractor={(item) => 'violation' + item.id}
             onSelect={setSelectedViolations}

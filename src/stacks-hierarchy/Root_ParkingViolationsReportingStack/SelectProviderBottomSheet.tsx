@@ -4,8 +4,14 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {Image, ScrollView, TouchableOpacity} from 'react-native';
+import {Image, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SelectGroup} from './SelectGroup';
+import {Button} from '@atb/components/button';
+import {useState} from 'react';
+import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
+
+const ICON_SIZE = 50;
 
 type Props = {
   providers: ViolationsReportingProvider[];
@@ -20,6 +26,8 @@ export const SelectProviderBottomSheet = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+  const [selectedProvider, setSelectedProvider] =
+    useState<ViolationsReportingProvider>();
 
   return (
     <BottomSheetContainer>
@@ -31,31 +39,46 @@ export const SelectProviderBottomSheet = ({
         }}
         color={'background_1'}
         setFocusOnLoad={false}
-        title="Velg leverandør"
+        title={t(ParkingViolationTexts.selectProvider.title)}
       />
-      <ScrollView contentContainerStyle={styles.container}>
-        <ThemeText>
+      <>
+        <ThemeText style={styles.content}>
           Hvis QR-koden ikke er mulig å skanne kan du oppgi utleiefirmaet
           manuelt.
         </ThemeText>
-        {providers.map((provider) => (
-          <TouchableOpacity
-            key={provider.id}
-            style={{
-              ...styles.providerLogo,
-            }}
-            onPress={() => onSelect(provider)}
-          >
-            <Image
-              height={80}
-              width={80}
-              source={{
-                uri: `data:image/png;base64,${provider.image.base64}`,
-              }}
-            />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+        <ScrollView style={styles.providerList}>
+          <SelectGroup
+            style={styles.content}
+            items={providers}
+            onSelect={(providers) => setSelectedProvider(providers[0])}
+            keyExtractor={(provider) => 'provider' + provider.id}
+            generateAccessibilityLabel={(provider) => provider.name}
+            renderItem={(provider) => (
+              <>
+                <View style={styles.providerLogo}>
+                  <Image
+                    height={ICON_SIZE}
+                    width={ICON_SIZE}
+                    source={{
+                      uri: `data:image/png;base64,${provider.image.base64}`,
+                    }}
+                  />
+                </View>
+                <ThemeText>{provider.name}</ThemeText>
+              </>
+            )}
+          />
+        </ScrollView>
+        <View style={[styles.content, styles.footer]}>
+          <Button
+            text={t(ParkingViolationTexts.selectProvider.confirm)}
+            onPress={() =>
+              selectedProvider ? onSelect(selectedProvider) : undefined
+            }
+            disabled={!selectedProvider}
+          />
+        </View>
+      </>
     </BottomSheetContainer>
   );
 };
@@ -63,16 +86,22 @@ export const SelectProviderBottomSheet = ({
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
-    container: {
-      flexGrow: 1,
-      flexShrink: 0,
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+    content: {
       marginHorizontal: theme.spacings.medium,
     },
+    providerList: {
+      marginTop: theme.spacings.medium,
+      flexGrow: 1,
+    },
     providerLogo: {
-      borderRadius: 40,
+      borderRadius: ICON_SIZE / 2,
       overflow: 'hidden',
       borderWidth: 2,
+      marginRight: theme.spacings.medium,
+    },
+    footer: {
+      marginTop: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacings.medium),
     },
   };
 });

@@ -63,6 +63,14 @@ export const ParkingViolationTexts = {
       'Ikkje mogleg å scanne',
     ),
   },
+  selectProvider: {
+    title: _('Velg leverandør', 'Select provider', 'Velg leverandør'),
+    confirm: _(
+      'Bekreft og send inn rapport',
+      'Confirm and submit report',
+      'Bekreft og send inn rapport',
+    ),
+  },
   loadingError: _(
     'Oops! Vi fikk ikke til å starte feilrapporteringen denne gangen.',
     'Oops! We were unable to start the error reporting this time',
