@@ -1261,6 +1261,7 @@ export const Profile_DesignSystemScreen = () => {
             onPress={() => {}}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
+          <LinkSectionItem text="Link with label" label={'new'} />
         </Section>
 
         <Section withPadding withTopPadding>
