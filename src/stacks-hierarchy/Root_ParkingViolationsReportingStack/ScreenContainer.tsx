@@ -40,7 +40,9 @@ export const ScreenContainer = ({
             {title}
           </ThemeText>
         </View>
-        <ThemeText color={themeColor}>{secondaryText}</ThemeText>
+        {secondaryText && (
+          <ThemeText color={themeColor}>{secondaryText}</ThemeText>
+        )}
         {children}
       </View>
       {buttons && <View style={style.actionButtons}>{buttons}</View>}
