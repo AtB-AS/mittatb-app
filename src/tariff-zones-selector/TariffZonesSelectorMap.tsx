@@ -128,7 +128,7 @@ const TariffZonesSelectorMap = ({
             {...MapViewConfig}
           >
             <MapboxGL.ShapeSource
-              id={'tariffZonesShape'}
+              id="tariffZonesShape"
               shape={featureCollection}
               hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
               onPress={selectFeature}

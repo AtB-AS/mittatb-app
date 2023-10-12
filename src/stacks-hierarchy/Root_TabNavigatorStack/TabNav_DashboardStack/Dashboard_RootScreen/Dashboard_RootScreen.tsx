@@ -183,7 +183,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       />
 
       <View style={style.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
+        <DashboardBackground width="100%" height="100%" />
       </View>
 
       <ScrollView

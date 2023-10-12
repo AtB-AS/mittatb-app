@@ -158,7 +158,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
-          color={'background_1'}
+          color="background_1"
           setFocusOnLoad={false}
         />
         <View style={{flexShrink: 1, flexGrow: 1}}>

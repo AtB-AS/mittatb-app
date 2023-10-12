@@ -195,7 +195,7 @@ const DeviceNotInspectable = () => {
   return (
     <GenericSectionItem>
       <MessageBox
-        type={'warning'}
+        type="warning"
         title={t(
           FareContractTexts.details.barcodeErrors.notInspectableDevice.title,
         )}

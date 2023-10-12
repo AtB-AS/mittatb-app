@@ -301,7 +301,7 @@ export const Profile_DesignSystemScreen = ({
               type="info"
               title="With dismiss"
               onDismiss={() => Alert.alert('Closed')}
-              message={`This is a message with dismiss button`}
+              message="This is a message with dismiss button"
             />
           </GenericSectionItem>
 
@@ -314,7 +314,7 @@ export const Profile_DesignSystemScreen = ({
                 action: presser,
                 text: 'Do action',
               }}
-              message={`This is a message with dismiss and action`}
+              message="This is a message with dismiss and action"
             />
           </GenericSectionItem>
 
@@ -327,7 +327,7 @@ export const Profile_DesignSystemScreen = ({
                 url: 'https://atb.no',
                 text: 'Go to atb.no',
               }}
-              message={`This is a message with dismiss and link`}
+              message="This is a message with dismiss and link"
             />
           </GenericSectionItem>
 
@@ -337,7 +337,7 @@ export const Profile_DesignSystemScreen = ({
               isMarkdown={true}
               title="Without icon"
               noStatusIcon={true}
-              message={`This is a message without status icon`}
+              message="This is a message without status icon"
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -382,9 +382,9 @@ export const Profile_DesignSystemScreen = ({
 
         <Section style={style.section}>
           <ExpandableSectionItem
-            text={'InfoChip'}
+            text="InfoChip"
             showIconText={false}
-            textType={'heading__title'}
+            textType="heading__title"
             expandContent={
               <View
                 style={{
@@ -395,7 +395,7 @@ export const Profile_DesignSystemScreen = ({
               >
                 <InfoChip
                   text="Interactive/0"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                   style={{
                     marginRight: theme.spacings.small,
                     marginTop: theme.spacings.small,
@@ -403,7 +403,7 @@ export const Profile_DesignSystemScreen = ({
                 />
                 <InfoChip
                   text="Interactive/1"
-                  interactiveColor={'interactive_1'}
+                  interactiveColor="interactive_1"
                   style={{
                     marginRight: theme.spacings.small,
                     marginTop: theme.spacings.small,
@@ -411,7 +411,7 @@ export const Profile_DesignSystemScreen = ({
                 />
                 <InfoChip
                   text="Interactive/2"
-                  interactiveColor={'interactive_2'}
+                  interactiveColor="interactive_2"
                   style={{
                     marginRight: theme.spacings.small,
                     marginTop: theme.spacings.small,
@@ -419,7 +419,7 @@ export const Profile_DesignSystemScreen = ({
                 />
                 <InfoChip
                   text="Interactive/destructive"
-                  interactiveColor={'interactive_destructive'}
+                  interactiveColor="interactive_destructive"
                   style={{
                     marginRight: theme.spacings.small,
                     marginTop: theme.spacings.small,
@@ -432,14 +432,14 @@ export const Profile_DesignSystemScreen = ({
 
         <Section style={style.section}>
           <ExpandableSectionItem
-            text={'Buttons'}
+            text="Buttons"
             showIconText={false}
-            textType={'heading__title'}
+            textType="heading__title"
             expandContent={
               <View>
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Primary - block - interactive/0
                 </ThemeText>
@@ -448,34 +448,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Primary - block - interactive/1
                 </ThemeText>
@@ -484,34 +484,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default - block"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Primary - block - interactive/2
                 </ThemeText>
@@ -520,34 +520,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Primary - block - interactive/destructive
                 </ThemeText>
@@ -556,34 +556,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="primary"
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="primary"
                     active={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="primary"
                     disabled={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="primary"
                     compact={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Secondary - block - interactive/0
                 </ThemeText>
@@ -592,34 +592,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="secondary"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="secondary"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="secondary"
                     disabled={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="secondary"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Secondary - block - interactive/1
                 </ThemeText>
@@ -628,34 +628,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="secondary"
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="secondary"
                     active={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="secondary"
                     disabled={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="secondary"
                     compact={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Secondary - block - interactive/2
                 </ThemeText>
@@ -664,34 +664,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="secondary"
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="secondary"
                     active={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="secondary"
                     disabled={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="secondary"
                     compact={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Secondary - block - interactive/destructive
                 </ThemeText>
@@ -700,34 +700,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="secondary"
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="secondary"
                     active={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="secondary"
                     disabled={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="secondary"
                     compact={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   tertiary - block - interactive/0
                 </ThemeText>
@@ -736,34 +736,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="tertiary"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="tertiary"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   tertiary - block - interactive/1
                 </ThemeText>
@@ -772,34 +772,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="tertiary"
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
                     active={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="tertiary"
                     compact={true}
-                    interactiveColor={'interactive_1'}
+                    interactiveColor="interactive_1"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   tertiary - block - interactive/2
                 </ThemeText>
@@ -808,34 +808,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="tertiary"
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
                     active={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="tertiary"
                     compact={true}
-                    interactiveColor={'interactive_2'}
+                    interactiveColor="interactive_2"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   tertiary - block - interactive/destructive
                 </ThemeText>
@@ -844,34 +844,34 @@ export const Profile_DesignSystemScreen = ({
                     text="Default"
                     onPress={presser}
                     mode="tertiary"
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
                     active={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="tertiary"
                     compact={true}
-                    interactiveColor={'interactive_destructive'}
+                    interactiveColor="interactive_destructive"
                   />
                 </ButtonGroup>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Inline button examples (interactive_0)
                 </ThemeText>
@@ -881,7 +881,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="inline"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -890,7 +890,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="inline"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -899,7 +899,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="inline"
                     disabled={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -908,7 +908,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="inline"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -916,7 +916,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="inline"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -925,7 +925,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="inline"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -934,7 +934,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="inline"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -942,7 +942,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="inline"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -951,14 +951,14 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     type="inline"
                     disabled={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                 </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   Pill button examples (interactive_0)
                 </ThemeText>
@@ -968,7 +968,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="pill"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -977,7 +977,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="pill"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -986,7 +986,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="pill"
                     disabled={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -995,7 +995,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="pill"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1003,7 +1003,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="pill"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1012,7 +1012,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="pill"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1021,7 +1021,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="pill"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1029,7 +1029,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="pill"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1038,14 +1038,14 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     type="pill"
                     disabled={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                 </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
-                  type={'heading__paragraph'}
+                  type="heading__paragraph"
                 >
                   With icons examples (interactive_0)
                 </ThemeText>
@@ -1053,7 +1053,7 @@ export const Profile_DesignSystemScreen = ({
                   text="Example"
                   onPress={presser}
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                   leftIcon={{svg: Add}}
                   style={{margin: 4}}
                 />
@@ -1061,7 +1061,7 @@ export const Profile_DesignSystemScreen = ({
                   text="Example"
                   onPress={presser}
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                   rightIcon={{
                     svg: Delete,
                     notification: {color: 'interactive_0'},
@@ -1072,7 +1072,7 @@ export const Profile_DesignSystemScreen = ({
                   text="Example"
                   onPress={presser}
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                   disabled={true}
                   leftIcon={{svg: Add}}
                   rightIcon={{svg: Delete}}
@@ -1089,7 +1089,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="inline"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     leftIcon={{svg: Add, notification: {color: 'valid'}}}
                     style={{margin: 4}}
                   />
@@ -1099,7 +1099,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="inline"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1109,7 +1109,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="inline"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1119,7 +1119,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     type="inline"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1129,7 +1129,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="inline"
                     active={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1137,7 +1137,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="inline"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
                   />
@@ -1146,7 +1146,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="primary"
                     type="inline"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1154,7 +1154,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="inline"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1162,7 +1162,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="inline"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1171,7 +1171,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="primary"
                     type="pill"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
                   />
@@ -1181,7 +1181,7 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="pill"
                     compact={true}
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1190,7 +1190,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="pill"
-                    interactiveColor={'interactive_0'}
+                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1270,7 +1270,7 @@ export const Profile_DesignSystemScreen = ({
             onPress={() => {}}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
-          <LinkSectionItem text="Link with label" label={'new'} />
+          <LinkSectionItem text="Link with label" label="new" />
         </Section>
 
         <Section withPadding withTopPadding>
@@ -1294,8 +1294,8 @@ export const Profile_DesignSystemScreen = ({
             inlineLabel={false}
           />
           <TextInputSectionItem
-            label={'Inline Label'}
-            placeholder={'Placheolder'}
+            label="Inline Label"
+            placeholder="Placheolder"
             onChangeText={() => {}}
             keyboardType="email-address"
             autoCapitalize="none"

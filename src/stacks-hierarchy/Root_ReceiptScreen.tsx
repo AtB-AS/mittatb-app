@@ -67,7 +67,7 @@ export function Root_ReceiptScreen({route}: Props) {
         setFocusOnLoad={a11yContext.isScreenReaderEnabled}
       />
       <View style={styles.content}>
-        <View accessibilityLiveRegion={'polite'}>
+        <View accessibilityLiveRegion="polite">
           <MessageBox
             {...translateStateToMessage(state, t, email, reference)}
           />

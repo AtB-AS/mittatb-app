@@ -92,7 +92,7 @@ const ResultItemHeader: React.FC<{
     <View style={styles.resultHeader}>
       <ThemeText
         style={styles.fromPlaceText}
-        type={'body__secondary--bold'}
+        type="body__secondary--bold"
         testID="resultDeparturePlace"
       >
         {startName
@@ -206,7 +206,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       accessibilityHint={t(
         TripSearchTexts.results.resultItem.footer.detailsHint,
       )}
-      accessibilityRole={'button'}
+      accessibilityRole="button"
       style={styles.pressableOpacity}
       onPress={() => onDetailsPressed(tripPattern, resultIndex)}
       accessible={true}

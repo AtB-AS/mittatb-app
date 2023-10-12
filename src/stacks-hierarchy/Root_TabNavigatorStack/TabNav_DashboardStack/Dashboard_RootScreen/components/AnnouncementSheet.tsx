@@ -31,7 +31,7 @@ export const AnnouncementSheet = ({announcement, close}: Props) => {
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
         title={getTextForLanguage(announcement.fullTitle, language)}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
 
