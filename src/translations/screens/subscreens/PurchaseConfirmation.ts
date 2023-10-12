@@ -70,14 +70,6 @@ const PurchaseConfirmationTexts = {
         `Inkl. ${vatPercentString}% mva (${vatAmountString} kr)`,
       ),
   },
-  infoText: {
-    validInFuture: (time: string) =>
-      _(
-        `Denne billetten blir gyldig fra ${time}.`,
-        `This ticket will be valid from ${time}.`,
-        `Denne billetten blir gyldig frå ${time}.`,
-      ),
-  },
   travelDate: {
     futureDate: (time: string) =>
       _(`Oppstart ${time}`, `Start time ${time}`, `Oppstart ${time}`),
