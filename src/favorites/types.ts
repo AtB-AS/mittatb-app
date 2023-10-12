@@ -44,6 +44,7 @@ export type UserFavorites = StoredLocationFavorite[];
 
 export type FavoriteDepartureId = {
   stopId: string;
+  /** @deprecated Use destinationDisplay instead */
   lineName?: string; // legacy, keep for migration
   destinationDisplay?: DestinationDisplay;
   lineId: string;
