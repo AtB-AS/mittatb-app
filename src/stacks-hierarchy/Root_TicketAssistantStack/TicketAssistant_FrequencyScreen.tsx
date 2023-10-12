@@ -119,30 +119,26 @@ export const TicketAssistant_FrequencyScreen = ({
           ) : (
             <View>
               <View style={styles.sliderContainer}>
-                <View style={styles.horizontalLine}>
-                  {numbersAsStrings.map((number) => {
-                    return (
-                      <View key={number} style={styles.numberContainer}>
-                        <ThemeText
-                          key={number}
-                          style={styles.number}
-                          type={'body__primary'}
-                          color={themeColor}
-                          numberOfLines={1}
-                          ellipsizeMode={'clip'}
-                        >
-                          {number}
-                        </ThemeText>
-                      </View>
-                    );
-                  })}
-                </View>
                 <Slider
                   containerStyle={styles.slider}
                   maximumValue={sliderMax}
                   minimumValue={2}
                   step={1}
                   value={sliderValue}
+                  trackMarks={numbers}
+                  trackMarkComponent={(index) => {
+                    return (
+                      <ThemeText
+                        style={{
+                          top: -30,
+                          textAlign: 'center',
+                          minWidth: 20,
+                        }}
+                      >
+                        {numbersAsStrings[index]}
+                      </ThemeText>
+                    );
+                  }}
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}
@@ -195,8 +191,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   sliderContainer: {
     width: '100%',
     backgroundColor: theme.static.background.background_0.background,
-    paddingVertical: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
+    paddingHorizontal: theme.spacings.large,
     borderRadius: theme.border.radius.regular,
   },
   slider: {
@@ -242,18 +239,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     paddingHorizontal: theme.spacings.medium,
   },
-  numberContainer: {
-    width: 30,
-    alignContent: 'center',
-    flexShrink: 1,
-  },
-  number: {
-    width: '100%',
-    textAlign: 'center',
-    flexWrap: 'nowrap',
-    color: theme.text.colors.primary,
-  },
-
   travelText: {
     width: '100%',
     textAlign: 'center',
