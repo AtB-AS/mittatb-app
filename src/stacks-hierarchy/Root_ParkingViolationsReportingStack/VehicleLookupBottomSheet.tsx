@@ -13,7 +13,7 @@ import {ProviderLogo} from './ProviderLogo';
 type Props = {
   provider: ViolationsReportingProvider;
   vehicleId: string | undefined;
-  onReportSubmit: (providerId: number, vehicleId: string | undefined) => void;
+  onReportSubmit: (providerId: number) => void;
   close: () => void;
 };
 
@@ -45,7 +45,7 @@ export const VehicleLookupConfirmationBottomSheet = ({
       <View style={styles.footer}>
         <Button
           text="Send inn rapport"
-          onPress={() => onReportSubmit(Number(provider.id), vehicleId)}
+          onPress={() => onReportSubmit(Number(provider.id))}
         />
       </View>
     </BottomSheetContainer>
