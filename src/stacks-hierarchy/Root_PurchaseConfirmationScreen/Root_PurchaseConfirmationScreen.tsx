@@ -466,7 +466,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         ? Vipps
                         : Visa,
                   }}
-                  viewContainerStyle={styles.paymentButton}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -518,7 +517,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   });
                   selectPaymentMethod();
                 }}
-                viewContainerStyle={styles.paymentButton}
                 testID="choosePaymentOptionButton"
               />
             )}
@@ -628,7 +626,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   warningMessage: {
-    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   infoSection: {padding: theme.spacings.medium},
   userProfileItem: {
@@ -660,8 +658,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   smallTopMargin: {
     marginTop: theme.spacings.xSmall,
-  },
-  paymentButton: {
-    marginTop: theme.spacings.medium,
   },
 }));
