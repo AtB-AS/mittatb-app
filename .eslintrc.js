@@ -31,6 +31,9 @@ module.exports = {
     'no-console': [1, {allow: ['warn', 'error']}],
     'no-fallthrough': 2,
 
+    // Error on using var, e.g. 'var name = John'
+    'no-var': 2,
+
     'no-restricted-exports': [
       'error',
       {restrictDefaultExports: {direct: true}},
