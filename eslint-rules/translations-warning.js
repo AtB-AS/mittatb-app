@@ -20,12 +20,12 @@ module.exports = {
       'translation',
     ]);
 
-    let identifiers = {};
+    const identifiers = {};
 
     return {
       ImportDeclaration(node) {
         if (!node.source.value.startsWith(config.translateModulePrefix)) return;
-        for (let s of node.specifiers) {
+        for (const s of node.specifiers) {
           const identifier = s.local.name;
           if (NOT_TRANSLATION_SPECIFIERS.hasOwnProperty(identifier)) continue;
           identifiers[identifier] = true;

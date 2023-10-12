@@ -89,7 +89,7 @@ const useTravellersWithPreselectedCounts = (
   defaultSelections: UserProfileTypeWithCount[],
 ) =>
   useMemo(() => {
-    let mappedUserProfiles = userProfiles
+    const mappedUserProfiles = userProfiles
       .filter((u) =>
         preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
       )

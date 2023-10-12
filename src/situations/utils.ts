@@ -13,8 +13,8 @@ import {Statuses} from '@atb-as/theme';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {
-  let seenIds: string[] = [];
-  let seenSituationNumbers: string[] = [];
+  const seenIds: string[] = [];
+  const seenSituationNumbers: string[] = [];
   return situations.filter((s) => {
     if ('id' in s) {
       if (seenIds.includes(s.id)) return false;
