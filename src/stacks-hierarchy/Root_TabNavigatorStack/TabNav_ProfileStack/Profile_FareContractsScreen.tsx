@@ -227,7 +227,7 @@ Mocks the Firestore Timestamp class, since importing it from the SDK is not
 possible. Not a complete implementation, only what is needed for the tests.
 
 Copied from here, with some modifications:
-https://github.com/invertase/react-native-firebase/blob/c9b695aa8fd75d5a1d070ecbb6bb9ac4e9ff062e/packages/firestore/lib/modular/Timestamp.d.ts#L15
+https://github.com/invertase/react-native-firebase/blob/305d38b/packages/firestore/lib/modular/Timestamp.d.ts
 
 LICENSE:
 
