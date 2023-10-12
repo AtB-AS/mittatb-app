@@ -32,3 +32,19 @@ export type ViolationsVehicleLookupQueryResult = {
   provider_id: number;
   vehicle_id: string;
 };
+
+export type ViolationsReportQuery = {
+  providerId: number;
+  longitude: number;
+  latitude: number;
+  image: string; //base64 encoded image blob
+  imageType: string; // e.g. 'png'
+  qr: string;
+  appId: number;
+  violations: string[];
+  timestamp: string;
+};
+
+export type ViolationsReportQueryResult = {
+  status: 'OK';
+};

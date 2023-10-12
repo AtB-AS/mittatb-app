@@ -19,6 +19,8 @@ import {
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
 import {
+  ViolationsReportQuery,
+  ViolationsReportQueryResult,
   ViolationsReportingInitQuery,
   ViolationsReportingInitQueryResult,
   ViolationsVehicleLookupQuery,
@@ -135,5 +137,15 @@ export const lookupVehicleByQr = (
   const query = qs.stringify(params);
   return client
     .get<ViolationsVehicleLookupQueryResult>(stringifyUrl(url, query), opts)
+    .then((res) => res.data);
+};
+
+export const sendViolationsReport = (
+  data: ViolationsReportQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportQueryResult> => {
+  const url = '/bff/v2/mobility/violations-reporting/report';
+  return client
+    .post<ViolationsReportQueryResult>(url, data, opts)
     .then((res) => res.data);
 };
