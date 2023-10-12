@@ -95,7 +95,7 @@ export const JourneyDatePickerScreenComponent = ({
           interactiveColor="interactive_0"
           text={t(JourneyDatePickerTexts.searchButton.text)}
           testID="searchButton"
-        ></Button>
+         />
       </ScrollView>
     </View>
   );

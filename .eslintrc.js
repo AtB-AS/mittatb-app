@@ -20,6 +20,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: [
     '@typescript-eslint',
+    'react',
     'react-hooks',
     'react-native',
     'rulesdir',
@@ -45,6 +46,9 @@ module.exports = {
         message: 'No wildcard imports',
       },
     ],
+
+    // Error on components without children with closing tag
+    'react/self-closing-comp': 2,
 
     // React-Hooks Plugin
     // The following rules are made available via `eslint-plugin-react-hooks`

@@ -81,7 +81,7 @@ export const CompactTravelDetailsMap: React.FC<MapProps> = ({
             defaultSettings={{bounds}}
             ref={cameraRef}
           />
-          <MapRoute lines={features}></MapRoute>
+          <MapRoute lines={features} />
           {toPlace && (
             <MapLabel
               point={pointOf(toPlace)}
