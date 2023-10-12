@@ -39,6 +39,9 @@ module.exports = {
     // Error on fallthrough in switch statements
     'no-fallthrough': 2,
 
+    // Error on using var, e.g. 'var name = "John"'
+    'no-var': 2,
+
     // Error on 'export default'
     'no-restricted-exports': [
       'error',
@@ -144,7 +147,6 @@ module.exports = {
   /*
    Possible future improvements:
     - Exchaustive deps!!!
-    - Not allow var
     - Not allow let that isn't reassigned
     - Not use brackets when specifying strings: E.g. `foo="bar"` instead of `foo={'bar'}`
     - Use self closing for components that have no children: E.g. `<Component />` instead of `<Component></Component>`

@@ -157,8 +157,8 @@ export const useFareContractInfoTexts = (
     serialComma: false,
   });
 
-  var accessibilityLabel: string = '';
-  var timeUntilExpireOrWarning: string | undefined;
+  let accessibilityLabel: string = '';
+  let timeUntilExpireOrWarning: string | undefined;
 
   if (isInspectable) {
     timeUntilExpireOrWarning = t(
