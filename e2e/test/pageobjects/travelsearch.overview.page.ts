@@ -19,6 +19,14 @@ class TravelSearchOverviewPage {
   }
 
   /**
+   * Wait until the results are loaded
+   */
+  async waitForTravelSearchResults() {
+    await ElementHelper.waitForElement('id', `tripSearchContentView`, 20000);
+    await ElementHelper.waitForElement('id', `tripSearchSearchResult0`, 20000);
+  }
+
+  /**
    * Confirm the travel search onboarding - if it exists
    * @param timeoutValue: How long to search for the onboarding confirmation button
    */

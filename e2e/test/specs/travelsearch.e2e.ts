@@ -39,6 +39,8 @@ describe('Travel search', () => {
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
 
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
+
       const startTime: string = await TravelsearchOverviewPage.getStartTime(0);
       const endTime: string = await TravelsearchOverviewPage.getEndTime(0);
       const travelTime: number = await TravelsearchOverviewPage.getTravelTime(
@@ -105,6 +107,8 @@ describe('Travel search', () => {
       await ElementHelper.waitForElement('id', 'searchToButton');
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
+
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       // Number of legs
       const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
