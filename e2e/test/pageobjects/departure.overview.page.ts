@@ -36,6 +36,19 @@ class DepartureOverviewPage {
   }
 
   /**
+   * Get the given departure for the given quay
+   * @param quayIndex: index for the quay, default: first
+   * @param departureIndex: index for the departure, default: first
+   */
+  async openDeparture(quayIndex: number = 0, departureIndex: number = 0) {
+    const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
+    const depId = `//*[@resource-id="estimatedCallItem"]`;
+    await ElementHelper.waitForElement('id', `quaySection${quayIndex}`);
+    await ElementHelper.waitForElement('id', 'estimatedCallItem');
+    await $(quayId).$$(depId)[departureIndex].click();
+  }
+
+  /**
    * Hide or expand (depending on the state) departures section for a given quay
    * @param quayIndex: index for the quay, default: first
    */

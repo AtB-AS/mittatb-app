@@ -106,8 +106,7 @@ describe('Departure', () => {
       // Departure details
       const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
       const lineName = await DepartureOverviewPage.getLineName();
-      const departure = await DepartureOverviewPage.getDeparture();
-      await departure.click();
+      await DepartureOverviewPage.openDeparture();
       await ElementHelper.waitForElement('id', 'departureDetailsContentView');
       await ElementHelper.expectText(`${linePublicCode} ${lineName}`);
 

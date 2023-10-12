@@ -45,8 +45,7 @@ describe('Frontpage', () => {
       // Choose departure
       const linePublicCode = await DepartureOverviewPage.getLinePublicCode();
       const lineName = await DepartureOverviewPage.getLineName();
-      const departure = await DepartureOverviewPage.getDeparture();
-      await departure.click();
+      await DepartureOverviewPage.openDeparture();
 
       // Choose only marked departure
       await ElementHelper.waitForElement('id', 'chooseFavoriteBottomSheet');
