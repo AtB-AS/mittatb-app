@@ -23,3 +23,12 @@ export type ViolationsReportingInitQueryResult = {
   providers: ViolationsReportingProvider[];
   violations: ParkingViolationType[];
 };
+
+export type ViolationsVehicleLookupQuery = {
+  qr: string;
+};
+
+export type ViolationsVehicleLookupQueryResult = {
+  provider_id: number;
+  vehicle_id: string;
+};
