@@ -16,18 +16,7 @@ import {
   UserProfile,
 } from '@atb/reference-data/types';
 import Bugsnag from '@bugsnag/react-native';
-import {
-  defaultCityZones,
-  defaultFareProductTypeConfig,
-  defaultPreassignedFareProducts,
-  defaultTariffZones,
-  defaultUserProfiles,
-} from '@atb/reference-data/defaults';
-import {
-  defaultModesWeSellTicketsFor,
-  defaultPaymentTypes,
-  defaultVatPercent,
-} from '@atb/configuration/defaults';
+import {defaultVatPercent} from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
 import {FareProductGroupType, FareProductTypeConfig} from './types';
 import {
@@ -66,25 +55,8 @@ type ConfigurationContextState = {
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
-  resubscribe: () => void;
-};
-
-const defaultConfigurationContextState: ConfigurationContextState = {
-  preassignedFareProducts: defaultPreassignedFareProducts,
-  fareProductGroups: [],
-  tariffZones: defaultTariffZones,
-  cityZones: defaultCityZones,
-  userProfiles: defaultUserProfiles,
-  modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
-  paymentTypes: defaultPaymentTypes,
-  vatPercent: defaultVatPercent,
-  fareProductTypeConfigs: defaultFareProductTypeConfig,
-  travelSearchFilters: undefined,
-  appTexts: undefined,
-  configurableLinks: undefined,
-  mobilityOperators: undefined,
-  harborConnectionOverrides: [],
-  resubscribe: () => {},
+  hasFirestoreSnapshot: boolean;
+  resubscribeFirestoreConfig: () => void;
 };
 
 // resubscribe her --> start med denne, den er viktigst
@@ -92,25 +64,25 @@ const defaultConfigurationContextState: ConfigurationContextState = {
 
 // test with flightmode + wifi on/off
 
-const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
-  defaultConfigurationContextState,
-);
+const FirestoreConfigurationContext = createContext<
+  ConfigurationContextState | undefined
+>(undefined);
 
 export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
-  const [preassignedFareProducts, setPreassignedFareProducts] = useState(
-    defaultPreassignedFareProducts,
+  const [preassignedFareProducts, setPreassignedFareProducts] = useState<
+    PreassignedFareProduct[]
+  >([]);
+  const [tariffZones, setTariffZones] = useState<TariffZone[]>([]);
+  const [cityZones, setCityZones] = useState<CityZone[]>([]);
+  const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
+  const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState<string[]>(
+    [],
   );
-  const [tariffZones, setTariffZones] = useState(defaultTariffZones);
-  const [cityZones, setCityZones] = useState(defaultCityZones);
-  const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
-  const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
-    defaultModesWeSellTicketsFor,
-  );
-  const [paymentTypes, setPaymentTypes] = useState(defaultPaymentTypes);
+  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
   const [vatPercent, setVatPercent] = useState(defaultVatPercent);
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
-  >(defaultFareProductTypeConfig);
+  >([]);
   const [fareProductGroups, setFareProductGroups] = useState<
     FareProductGroupType[]
   >([]);
@@ -125,104 +97,109 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
     HarborConnectionOverrideType[]
   >([]);
+  const [hasFirestoreSnapshot, setHasFirestoreSnapshot] = useState(false);
 
-  const [toggle, setToggle] = useState(true);
+  const subscribeFirestore = () => {
+    console.log('Running subscribeFirestore');
+
+    firestore()
+      .collection('configuration')
+      .onSnapshot(
+        (snapshot) => {
+          console.log(
+            'setHasFirestoreSnapshot: ' + !snapshot.metadata.fromCache,
+          );
+          // does not quit loading screen when this changes
+          setHasFirestoreSnapshot(!snapshot.metadata.fromCache);
+
+          const preassignedFareProducts =
+            getPreassignedFareContractsFromSnapshot(snapshot);
+          if (preassignedFareProducts) {
+            setPreassignedFareProducts(preassignedFareProducts);
+          }
+
+          const tariffZones = getTariffZonesFromSnapshot(snapshot);
+          if (tariffZones) {
+            setTariffZones(tariffZones);
+          }
+
+          const cityZones = getCityZonesFromSnapshot(snapshot);
+          if (cityZones) {
+            setCityZones(cityZones);
+          }
+
+          const userProfiles = getUserProfilesFromSnapshot(snapshot);
+          if (userProfiles) {
+            setUserProfiles(userProfiles);
+          }
+
+          const modesWeSellTicketsFor =
+            getModesWeSellTicketsForFromSnapshot(snapshot);
+          if (modesWeSellTicketsFor) {
+            setModesWeSellTicketsFor(modesWeSellTicketsFor);
+          }
+
+          const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
+          if (paymentTypes) {
+            setPaymentTypes(paymentTypes);
+          }
+
+          const vatPercent = getVatPercentFromSnapshot(snapshot);
+          if (vatPercent) {
+            setVatPercent(vatPercent);
+          }
+
+          const fareProductTypeConfigs =
+            getFareProductTypeConfigsFromSnapshot(snapshot);
+          if (fareProductTypeConfigs) {
+            setFareProductTypeConfigs(fareProductTypeConfigs);
+          }
+
+          const fareProductGroups = getFareProductGroupsFromSnapshot(snapshot);
+          if (fareProductGroups) {
+            setFareProductGroups(fareProductGroups);
+          }
+
+          const travelSearchFilters =
+            getTravelSearchFiltersFromSnapshot(snapshot);
+          if (travelSearchFilters) {
+            setTravelSearchFilters(travelSearchFilters);
+          }
+
+          const appTexts = getAppTextsFromSnapshot(snapshot); // I don't think these exists in Firestore?
+          if (appTexts) {
+            setAppTexts(appTexts);
+          }
+
+          const configurableLinks = getConfigurableLinksFromSnapshot(snapshot);
+          if (configurableLinks) {
+            setConfigurableLinks(configurableLinks);
+          }
+
+          const mobilityOperators = getMobilityOperatorsFromSnapshot(snapshot);
+          if (mobilityOperators) {
+            setMobilityOperators(mobilityOperators);
+          }
+
+          const harborConnectionOverrides =
+            getHarborConnectionOverridesFromSnapshot(snapshot);
+          if (harborConnectionOverrides) {
+            setHarborConnectionOverrides(harborConnectionOverrides);
+          }
+        },
+        (error) => {
+          Bugsnag.leaveBreadcrumb(
+            `Firebase Error when fetching Configuration from Firestore`,
+            error,
+          );
+        },
+      );
+  };
 
   useEffect(() => {
-    const removeListener = () => {
-      firestore()
-        .collection('configuration')
-        .onSnapshot(
-          (snapshot) => {
-            const preassignedFareProducts =
-              getPreassignedFareContractsFromSnapshot(snapshot);
-            if (preassignedFareProducts) {
-              setPreassignedFareProducts(preassignedFareProducts);
-            }
-
-            const tariffZones = getTariffZonesFromSnapshot(snapshot);
-            if (tariffZones) {
-              setTariffZones(tariffZones);
-            }
-
-            const cityZones = getCityZonesFromSnapshot(snapshot);
-            if (cityZones) {
-              setCityZones(cityZones);
-            }
-
-            const userProfiles = getUserProfilesFromSnapshot(snapshot);
-            if (userProfiles) {
-              setUserProfiles(userProfiles);
-            }
-
-            const modesWeSellTicketsFor =
-              getModesWeSellTicketsForFromSnapshot(snapshot);
-            if (modesWeSellTicketsFor) {
-              setModesWeSellTicketsFor(modesWeSellTicketsFor);
-            }
-
-            const paymentTypes = getPaymentTypesFromSnapshot(snapshot);
-            if (paymentTypes) {
-              setPaymentTypes(paymentTypes);
-            }
-
-            const vatPercent = getVatPercentFromSnapshot(snapshot);
-            if (vatPercent) {
-              setVatPercent(vatPercent);
-            }
-
-            const fareProductTypeConfigs =
-              getFareProductTypeConfigsFromSnapshot(snapshot);
-            if (fareProductTypeConfigs) {
-              setFareProductTypeConfigs(fareProductTypeConfigs);
-            }
-
-            const fareProductGroups =
-              getFareProductGroupsFromSnapshot(snapshot);
-            if (fareProductGroups) {
-              setFareProductGroups(fareProductGroups);
-            }
-
-            const travelSearchFilters =
-              getTravelSearchFiltersFromSnapshot(snapshot);
-            if (travelSearchFilters) {
-              setTravelSearchFilters(travelSearchFilters);
-            }
-
-            const appTexts = getAppTextsFromSnapshot(snapshot);
-            if (appTexts) {
-              setAppTexts(appTexts);
-            }
-
-            const configurableLinks =
-              getConfigurableLinksFromSnapshot(snapshot);
-            if (configurableLinks) {
-              setConfigurableLinks(configurableLinks);
-            }
-
-            const mobilityOperators =
-              getMobilityOperatorsFromSnapshot(snapshot);
-            if (mobilityOperators) {
-              setMobilityOperators(mobilityOperators);
-            }
-
-            const harborConnectionOverrides =
-              getHarborConnectionOverridesFromSnapshot(snapshot);
-            if (harborConnectionOverrides) {
-              setHarborConnectionOverrides(harborConnectionOverrides);
-            }
-          },
-          (error) => {
-            Bugsnag.leaveBreadcrumb(
-              `Firebase Error when fetching Configuration from Firestore`,
-              error,
-            );
-          },
-        );
-    };
-    console.log();
-    return () => removeListener();
-  }, [toggle]);
+    subscribeFirestore();
+    console.log('Running remove listener');
+  }, []);
 
   const memoizedState = useMemo(() => {
     return {
@@ -240,6 +217,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       configurableLinks,
       mobilityOperators,
       harborConnectionOverrides,
+      hasFirestoreSnapshot,
     };
   }, [
     preassignedFareProducts,
@@ -256,16 +234,14 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     configurableLinks,
     mobilityOperators,
     harborConnectionOverrides,
+    hasFirestoreSnapshot,
   ]);
 
   return (
     <FirestoreConfigurationContext.Provider
       value={{
         ...memoizedState,
-        resubscribe: useCallback(
-          () => setToggle((prevState) => !prevState),
-          [],
-        ),
+        resubscribeFirestoreConfig: useCallback(() => subscribeFirestore(), []),
       }}
     >
       {children}

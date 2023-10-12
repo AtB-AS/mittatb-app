@@ -20,11 +20,16 @@ export const LoadingScreenBoundary = ({
   const {authStatus, retryAuth} = useAuthState();
   const analytics = useAnalytics();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const {resubscribe} = useFirestoreConfiguration();
+  const {resubscribeFirestoreConfig, userProfiles, hasFirestoreSnapshot} =
+    useFirestoreConfiguration();
 
   const [didTimeout, setDidTimeout] = useState(false);
 
-  const loadSuccess = authStatus === 'authenticated' && !isLoadingAppState;
+  const loadSuccess =
+    authStatus === 'authenticated' &&
+    !isLoadingAppState &&
+    // hasFirestoreSnapshot; // ?????
+    console.log('hasFirestoreSnapshot: ' + hasFirestoreSnapshot);
 
   const setupLoadingTimeout = useCallback(() => {
     setDidTimeout(false);
@@ -37,13 +42,22 @@ export const LoadingScreenBoundary = ({
     }, 10000);
   }, []);
 
+  console.log('userProfiles: ' + userProfiles);
+
   const retry = useCallback(() => {
     analytics.logEvent('Loading boundary', 'Retrying auth');
     setupLoadingTimeout();
-    // maybe have if-check here for whether we have firestore data cached or at all?
-    resubscribe();
     retryAuth();
-  }, [setupLoadingTimeout, retryAuth]);
+    // maybe have if-check here for whether we have firestore data cached or at all?
+    if (!hasFirestoreSnapshot) {
+      console.log('Resubscribe from LoadingScreenBoundary');
+      analytics.logEvent(
+        'Loading boundary',
+        'Retrying resubscribe to Firestore config',
+      ); // Add event logging?
+      resubscribeFirestoreConfig();
+    }
+  }, [setupLoadingTimeout, retryAuth, resubscribeFirestoreConfig]); // add to dependency?
 
   // Wait one second after load success to let the app "settle".
   const waitFinished = useDelayGate(1000, loadSuccess);
