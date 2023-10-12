@@ -166,11 +166,13 @@ export const RecentFareContractComponent = ({
         </View>
 
         {direction !== undefined && pointToPointValidity && (
-          <FareContractHarborStopPlaces
-            showTwoWayIcon={showTwoWayIcon}
-            fromStopPlaceId={pointToPointValidity?.fromPlace}
-            toStopPlaceId={pointToPointValidity?.toPlace}
-          />
+          <View style={styles.harbors}>
+            <FareContractHarborStopPlaces
+              showTwoWayIcon={showTwoWayIcon}
+              fromStopPlaceId={pointToPointValidity?.fromPlace}
+              toStopPlaceId={pointToPointValidity?.toPlace}
+            />
+          </View>
         )}
 
         <View style={styles.horizontalFlex}>
@@ -307,5 +309,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacings.xLarge,
     paddingVertical: theme.spacings.medium,
+  },
+  harbors: {
+    marginBottom: theme.spacings.medium,
   },
 }));
