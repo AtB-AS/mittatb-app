@@ -25,7 +25,7 @@ export const TicketingTile = ({
   title,
   description,
   accessibilityLabel,
-  showBetaTag = false,
+  showInfoTag = undefined,
 }: {
   accented?: boolean;
   onPress: () => void;
@@ -35,7 +35,7 @@ export const TicketingTile = ({
   title?: string;
   description?: string;
   accessibilityLabel?: string;
-  showBetaTag?: boolean;
+  showInfoTag?: 'new' | 'beta';
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -71,9 +71,9 @@ export const TicketingTile = ({
     >
       <View style={styles.spreadContent} testID={testID}>
         <View style={styles.contentContainer}>
-          {showBetaTag && (
+          {showInfoTag && (
             <View style={styles.betaTagContainer}>
-              <InfoTag mode="new" style={styles.betaTag} />
+              <InfoTag mode={showInfoTag} style={styles.betaTag} />
             </View>
           )}
           <ThemeText
