@@ -7,13 +7,16 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useState} from 'react';
+import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SvgXml} from 'react-native-svg';
-import {useParkingViolationsState} from './ParkingViolationsContext';
+import {
+  PermissionReqiredError,
+  useParkingViolationsState,
+} from './ParkingViolationsContext';
 import {ScreenContainer} from './ScreenContainer';
 import {SelectGroup} from './SelectGroup';
 import {ParkingViolationsScreenProps} from './navigation-types';
-import {View} from 'react-native';
 
 export type SelectViolationScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_SelectViolation'>;
@@ -54,12 +57,7 @@ export const ParkingViolations_SelectViolation = ({
           <Processing message={t(dictionary.loading)} />
         </View>
       )}
-      {!isLoading && error && (
-        <MessageBox
-          message={t(ParkingViolationTexts.loadingError)}
-          type={'error'}
-        />
-      )}
+      {error && <ErrorMessage error={error} />}
       {!isLoading && !error && (
         <ScrollView style={style.container}>
           <SelectGroup
@@ -100,6 +98,32 @@ export const ParkingViolations_SelectViolation = ({
         </ScrollView>
       )}
     </ScreenContainer>
+  );
+};
+
+type ErrorMessageProps = {error: unknown};
+const ErrorMessage = ({error}: ErrorMessageProps) => {
+  const {t} = useTranslation();
+
+  if (error instanceof PermissionReqiredError) {
+    return (
+      <MessageBox
+        title={t(ParkingViolationTexts.error.position.title)}
+        message={t(ParkingViolationTexts.error.position.message)}
+        onPressConfig={{
+          text: t(ParkingViolationTexts.error.position.action),
+          action: () => Linking.openSettings(),
+        }}
+        type={'warning'}
+      />
+    );
+  }
+  return (
+    <MessageBox
+      title={t(ParkingViolationTexts.error.loading.title)}
+      message={t(ParkingViolationTexts.error.loading.message)}
+      type={'error'}
+    />
   );
 };
 

@@ -1,4 +1,3 @@
-import {FOCUS_LATITUDE, FOCUS_LONGITUDE} from '@env';
 import {initViolationsReporting} from '@atb/api/mobility';
 import {
   ParkingViolationType,
@@ -6,16 +5,18 @@ import {
 } from '@atb/api/types/mobility';
 import {Coordinates} from '@atb/utils/coordinates';
 import {createContext, useContext, useEffect, useState} from 'react';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
-export const DEFAULT_POSITION: Coordinates = {
-  latitude: parseFloat(FOCUS_LATITUDE),
-  longitude: parseFloat(FOCUS_LONGITUDE),
-};
+export class PermissionReqiredError extends Error {
+  constructor() {
+    super('Permission required');
+  }
+}
 
 type ParkingViolationsState = {
   isLoading: boolean;
   error: unknown;
-  position: Coordinates;
+  position: Coordinates | undefined;
   violations: ParkingViolationType[];
   providers: ViolationsReportingProvider[];
 };
@@ -26,25 +27,45 @@ const ParkingViolationsContext = createContext<
 
 const ParkingViolationsContextProvider: React.FC = ({children}) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [position, setPosition] = useState<Coordinates>(DEFAULT_POSITION);
+  const [error, setError] = useState<Error>();
   const [providers, setProviders] = useState<ViolationsReportingProvider[]>([]);
   const [violations, setViolations] = useState<ParkingViolationType[]>([]);
+  const [position, setPosition] = useState<Coordinates>();
+  const {
+    location: userPosition,
+    status: locationPermissionStatus,
+    requestPermission,
+  } = useGeolocationState();
 
   useEffect(() => {
-    const userPosition = DEFAULT_POSITION; //TODO: get actual position
-    setPosition(userPosition);
-    initViolationsReporting({
-      lat: userPosition.latitude.toString(),
-      lng: userPosition.longitude.toString(),
-    })
-      .then((res) => {
-        setProviders(res.providers);
-        setViolations(res.violations);
-        setIsLoading(false);
+    console.log('location', userPosition, 'status', locationPermissionStatus);
+    if (locationPermissionStatus !== 'granted') {
+      requestPermission()
+        .then((s) => {
+          console.log('Permission requested', s);
+          s === 'granted'
+            ? setError(undefined)
+            : setError(new PermissionReqiredError());
+        })
+        .catch(setError);
+    }
+    if (userPosition) {
+      setPosition({
+        latitude: userPosition.coordinates.latitude,
+        longitude: userPosition.coordinates.longitude,
+      });
+      initViolationsReporting({
+        lat: userPosition.coordinates.latitude.toString(),
+        lng: userPosition.coordinates.longitude.toString(),
       })
-      .catch(setError);
-  }, []);
+        .then((res) => {
+          setProviders(res.providers);
+          setViolations(res.violations);
+          setIsLoading(false);
+        })
+        .catch(setError);
+    }
+  }, [userPosition, locationPermissionStatus]);
 
   return (
     <ParkingViolationsContext.Provider

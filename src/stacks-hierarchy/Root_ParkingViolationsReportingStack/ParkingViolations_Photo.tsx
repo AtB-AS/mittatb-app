@@ -8,6 +8,7 @@ import {ImageConfirmationBottomSheet} from './ImageConfirmationBottomSheet';
 import {ScreenContainer} from './ScreenContainer';
 import {ParkingViolationsScreenProps} from './navigation-types';
 import {Dimensions} from 'react-native';
+import {useParkingViolationsState} from './ParkingViolationsContext';
 
 export type PhotoScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Photo'>;
@@ -19,6 +20,7 @@ export const ParkingViolations_Photo = ({
   const {t} = useTranslation();
   const isFocused = useIsFocused();
   const style = useStyles();
+  const {position} = useParkingViolationsState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const handlePhotoCapture = (file: PhotoFile) => {
@@ -31,6 +33,7 @@ export const ParkingViolations_Photo = ({
             photo: file.path,
           });
         }}
+        position={position}
         file={file}
         close={closeBottomSheet}
       />

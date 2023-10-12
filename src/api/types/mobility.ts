@@ -34,14 +34,14 @@ export type ViolationsVehicleLookupQueryResult = {
 };
 
 export type ViolationsReportQuery = {
-  providerId: number;
+  providerId: ViolationsReportingProvider['id'];
   longitude: number;
   latitude: number;
-  image: string; //base64 encoded image blob
-  imageType: string; // e.g. 'png'
-  qr: string;
-  appId: number;
-  violations: string[];
+  image?: string; //base64 encoded image blob
+  imageType?: string; // file name suffix;
+  qr?: string;
+  appId?: string; // Unique id identifying the customer
+  violations?: ParkingViolationType['code'][];
   timestamp: string;
 };
 

@@ -15,6 +15,8 @@ import {ParkingViolationsScreenProps} from './navigation-types';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
 import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
+import {blobToBase64} from './utils';
+import {useAuthState} from '@atb/auth';
 
 export type QrScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
@@ -31,6 +33,7 @@ export const ParkingViolations_Qr = ({
   const [isError, setIsError] = useState(false);
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {providers, position} = useParkingViolationsState();
+  const {abtCustomerId} = useAuthState();
 
   useEffect(() => {
     if (isFocused) {
@@ -42,38 +45,31 @@ export const ParkingViolations_Qr = ({
     setIsLoading(true);
     const result = await fetch(params.photo);
     const data = await result.blob();
-    const image = (await blobToBase64(data)) as string;
-    // sendViolationsReport({
-    //   appId: 123,
-    //   image,
-    //   imageType: data.type,
-    //   latitude: position.latitude,
-    //   longitude: position.longitude,
-    //   providerId,
-    //   qr: capturedQr ?? '',
-    //   violations: params.selectedViolations.map((v) => v.id.toString()),
-    //   timestamp: new Date().toISOString(),
-    // })
-    //   .then(() => {
-    navigation.navigate('ParkingViolations_Confirmation');
-    enableScanning();
-    // })
-    // .catch((e) => {
-    //   console.error(e);
-    //   setIsError(true);
-    //   enableScanning();
-    // });
+    const base64Image = (await blobToBase64(data)) as string;
+    const image = base64Image.split(',')[1];
+    //Nivel use the file name suffix as imageType
+    const imageType = params.photo.split('.').pop();
+    sendViolationsReport({
+      appId: abtCustomerId,
+      image,
+      imageType,
+      latitude: position?.latitude ?? 0,
+      longitude: position?.longitude ?? 0,
+      providerId,
+      qr: capturedQr,
+      violations: params.selectedViolations.map((v) => v.code),
+      timestamp: new Date().toISOString(),
+    })
+      .then(() => {
+        navigation.navigate('ParkingViolations_Confirmation');
+        enableScanning();
+      })
+      .catch((e) => {
+        console.error(e);
+        setIsError(true);
+        enableScanning();
+      });
   };
-
-  const blobToBase64 = useCallback((blob: Blob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    return new Promise((resolve) => {
-      reader.onloadend = () => {
-        resolve(reader.result);
-      };
-    });
-  }, []);
 
   const getProviderByQr = async (qr: string) =>
     lookupVehicleByQr({qr})
@@ -136,6 +132,7 @@ export const ParkingViolations_Qr = ({
           interactiveColor={'interactive_0'}
           onPress={selectProvider}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+          disabled={isError}
         />
       }
     >
@@ -145,13 +142,12 @@ export const ParkingViolations_Qr = ({
         </View>
       )}
       {isError && (
-        <View style={style.centered}>
-          <MessageBox
-            title="Opps!"
-            message={'Innsending av rapporten feilet. '}
-            type={'error'}
-          />
-        </View>
+        <MessageBox
+          style={style.error}
+          title={t(ParkingViolationTexts.error.sendReport.title)}
+          message={t(ParkingViolationTexts.error.sendReport.message)}
+          type={'error'}
+        />
       )}
       {isFocused && !isLoading && !isError && !capturedQr && (
         <Camera mode="qr" style={style.camera} onCapture={handlePhotoCapture} />
@@ -171,6 +167,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height:
       (Dimensions.get('window').width - 2 * theme.spacings.medium) * 1.33333,
     width: Dimensions.get('window').width - 2 * theme.spacings.medium,
+  },
+  error: {
+    marginTop: theme.spacings.medium,
   },
   centered: {
     flex: 1,

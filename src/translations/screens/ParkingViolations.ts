@@ -74,9 +74,35 @@ export const ParkingViolationTexts = {
   vehicleLookup: {
     title: _('Sparkesykkel funnet', 'Scooter found', 'Sparkesykkel funnen'),
   },
-  loadingError: _(
-    'Oops! Vi fikk ikke til å starte feilrapporteringen denne gangen.',
-    'Oops! We were unable to start the error reporting this time',
-    'Oops! Vi fekk ikkje til å starte feilrapporteringa denne gongen.',
-  ),
+  error: {
+    loading: {
+      title: _('Oops!', 'Oops!', 'Oops!'),
+      message: _(
+        'Vi fikk ikke til å starte feilrapporteringen denne gangen.',
+        'We were unable to start the error reporting this time',
+        'Vi fekk ikkje til å starte feilrapporteringa denne gongen.',
+      ),
+    },
+    position: {
+      title: _(
+        'Du har blokkert posisjonsdeling',
+        'You have blocked location sharing',
+        'Du har blokkert posisjonsdeling',
+      ),
+      message: _(
+        'For å rapportere feilparkering må du gi tilgang til din posisjon.',
+        'To report illegal parking, you must provide access to your location.',
+        'For å rapportera feilparkering må du tillata deling av din posisjon',
+      ),
+      action: _('Gi tilgang', 'Grant access', 'Gje tilgang'),
+    },
+    sendReport: {
+      title: _('Oops!', 'Oops!', 'Oops!'),
+      message: _(
+        'Vi fikk ikke til å sende feilrapporteringen',
+        'We were unable to submit the error report',
+        'Vi fekk ikkje til å sende feilrapporteringa.',
+      ),
+    },
+  },
 };

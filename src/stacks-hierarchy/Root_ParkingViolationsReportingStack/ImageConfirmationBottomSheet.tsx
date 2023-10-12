@@ -7,15 +7,19 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Coordinates} from '@atb/utils/coordinates';
+import {UserPositionMap} from './UserPositionMap';
 
 type Props = {
   file: PhotoFile;
+  position: Coordinates | undefined;
   onConfirm: () => void;
   close: () => void;
 };
 
 export const ImageConfirmationBottomSheet = ({
   file,
+  position,
   onConfirm,
   close,
 }: Props) => {
@@ -35,7 +39,7 @@ export const ImageConfirmationBottomSheet = ({
       />
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.imageAndPosition}>
-          <View style={styles.image}>
+          <View style={styles.fullHeight}>
             <Image
               source={{uri: file.path}}
               style={{
@@ -44,7 +48,12 @@ export const ImageConfirmationBottomSheet = ({
               }}
             />
           </View>
-          <View style={styles.position}></View>
+          <View style={styles.fullHeight}>
+            <UserPositionMap
+              style={styles.fullHeight}
+              userPosition={position}
+            />
+          </View>
         </View>
         <Button style={styles.button} onPress={onConfirm} text="Ja" />
         <Button
@@ -72,13 +81,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       columnGap: theme.spacings.medium,
     },
-    image: {
-      backgroundColor: 'lightblue',
-      flex: 1,
-      // minHeight: 200,
-    },
-    position: {
-      backgroundColor: 'lightgreen',
+    fullHeight: {
       flex: 1,
     },
     button: {
