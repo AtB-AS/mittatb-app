@@ -71,6 +71,9 @@ export const ParkingViolationTexts = {
       'Bekreft og send inn rapport',
     ),
   },
+  vehicleLookup: {
+    title: _('Sparkesykkel funnet', 'Scooter found', 'Sparkesykkel funnen'),
+  },
   loadingError: _(
     'Oops! Vi fikk ikke til å starte feilrapporteringen denne gangen.',
     'Oops! We were unable to start the error reporting this time',

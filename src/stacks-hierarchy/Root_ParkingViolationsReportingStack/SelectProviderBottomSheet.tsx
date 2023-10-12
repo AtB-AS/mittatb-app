@@ -1,17 +1,16 @@
 import {ViolationsReportingProvider} from '@atb/api/types/mobility';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {Button} from '@atb/components/button';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {Image, ScrollView, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {SelectGroup} from './SelectGroup';
-import {Button} from '@atb/components/button';
-import {useState} from 'react';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-
-const ICON_SIZE = 50;
+import {useState} from 'react';
+import {ScrollView, View} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {ProviderLogo} from './ProviderLogo';
+import {SelectGroup} from './SelectGroup';
 
 type Props = {
   providers: ViolationsReportingProvider[];
@@ -25,6 +24,7 @@ export const SelectProviderBottomSheet = ({
   onSelect,
 }: Props) => {
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const styles = useStyles();
   const [selectedProvider, setSelectedProvider] =
     useState<ViolationsReportingProvider>();
@@ -53,17 +53,19 @@ export const SelectProviderBottomSheet = ({
             onSelect={(providers) => setSelectedProvider(providers[0])}
             keyExtractor={(provider) => 'provider' + provider.id}
             generateAccessibilityLabel={(provider) => provider.name}
-            renderItem={(provider) => (
+            renderItem={(provider, isSeleted) => (
               <>
-                <View style={styles.providerLogo}>
-                  <Image
-                    height={ICON_SIZE}
-                    width={ICON_SIZE}
-                    source={{
-                      uri: `data:image/png;base64,${provider.image.base64}`,
-                    }}
-                  />
-                </View>
+                <ProviderLogo
+                  style={[
+                    styles.providerLogo,
+                    {
+                      borderColor: isSeleted
+                        ? theme.interactive.interactive_0.default.background
+                        : theme.static.background.background_0.background,
+                    },
+                  ]}
+                  provider={provider}
+                />
                 <ThemeText>{provider.name}</ThemeText>
               </>
             )}
@@ -94,8 +96,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexGrow: 1,
     },
     providerLogo: {
-      borderRadius: ICON_SIZE / 2,
-      overflow: 'hidden',
       borderWidth: 2,
       marginRight: theme.spacings.medium,
     },

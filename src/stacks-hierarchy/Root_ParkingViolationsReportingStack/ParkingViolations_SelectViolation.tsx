@@ -1,18 +1,19 @@
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Button} from '@atb/components/button';
+import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useState} from 'react';
-import {ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SvgXml} from 'react-native-svg';
 import {useParkingViolationsState} from './ParkingViolationsContext';
 import {ScreenContainer} from './ScreenContainer';
 import {SelectGroup} from './SelectGroup';
 import {ParkingViolationsScreenProps} from './navigation-types';
+import {View} from 'react-native';
 
 export type SelectViolationScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_SelectViolation'>;
@@ -49,10 +50,9 @@ export const ParkingViolations_SelectViolation = ({
       }
     >
       {isLoading && !error && (
-        <ActivityIndicator
-          color={theme.text.colors.primary}
-          style={style.indicator}
-        />
+        <View style={style.processing}>
+          <Processing message={t(dictionary.loading)} />
+        </View>
       )}
       {!isLoading && error && (
         <MessageBox
@@ -60,8 +60,8 @@ export const ParkingViolations_SelectViolation = ({
           type={'error'}
         />
       )}
-      <ScrollView style={style.container}>
-        {!isLoading && !error && (
+      {!isLoading && !error && (
+        <ScrollView style={style.container}>
           <SelectGroup
             multiple
             items={violations}
@@ -97,8 +97,8 @@ export const ParkingViolations_SelectViolation = ({
               </>
             )}
           />
-        )}
-      </ScrollView>
+        </ScrollView>
+      )}
     </ScreenContainer>
   );
 };
@@ -107,7 +107,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
   },
-  indicator: {alignSelf: 'center'},
+  processing: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   violation: {
     marginBottom: theme.spacings.medium,
   },

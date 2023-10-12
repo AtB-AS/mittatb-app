@@ -1,16 +1,19 @@
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {Button} from '@atb/components/button';
 import {Camera} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useIsFocused} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
-import {ScreenContainer} from './ScreenContainer';
-import {ParkingViolationsScreenProps} from './navigation-types';
-import {Dimensions} from 'react-native';
-import {Button} from '@atb/components/button';
-import {SelectProviderBottomSheet} from './SelectProviderBottomSheet';
-import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {Dimensions, View} from 'react-native';
 import {useParkingViolationsState} from './ParkingViolationsContext';
+import {ScreenContainer} from './ScreenContainer';
+import {SelectProviderBottomSheet} from './SelectProviderBottomSheet';
+import {VehicleLookupConfirmationBottomSheet} from './VehicleLookupBottomSheet';
+import {ParkingViolationsScreenProps} from './navigation-types';
+import {lookupVehicleByQr} from '@atb/api/mobility';
+import {Processing} from '@atb/components/loading';
 
 export type QrScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
@@ -23,6 +26,7 @@ export const ParkingViolations_Qr = ({
   const style = useStyles();
   const isFocused = useIsFocused();
   const [hasCapturedQr, setHasCapturedQr] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {providers} = useParkingViolationsState();
 
@@ -32,14 +36,40 @@ export const ParkingViolations_Qr = ({
     }
   }, [isFocused]);
 
-  const handlePhotoCapture = (qr: string) => {
+  const submitReport = (providerId: number, vehicleId?: string | undefined) => {
+    navigation.navigate('ParkingViolations_Confirmation', {
+      ...params,
+      providerId,
+      vehicleId,
+    });
+    enableScanning();
+  };
+
+  const getProviderByQr = async (qr: string) =>
+    lookupVehicleByQr({qr})
+      .then(({provider_id, vehicle_id}) => {
+        const provider = providers.find((p) => p.id === provider_id);
+        if (!provider) return undefined;
+        return {provider, vehicle_id};
+      })
+      .catch(() => undefined); // If lookup fails let user select operator manually.
+
+  const handlePhotoCapture = async (qr: string) => {
     if (!hasCapturedQr) {
-      setHasCapturedQr(true);
-      console.log(qr);
-      navigation.navigate('ParkingViolations_Confirmation', {
-        ...params,
-        providerId: 123,
-      });
+      disableScanning();
+      const providerAndVehicleId = await getProviderByQr(qr);
+      if (providerAndVehicleId) {
+        openBottomSheet(() => (
+          <VehicleLookupConfirmationBottomSheet
+            vehicleId={providerAndVehicleId.vehicle_id}
+            provider={providerAndVehicleId.provider}
+            onReportSubmit={submitReport}
+            close={enableScanning}
+          />
+        ));
+      } else {
+        selectProvider();
+      }
     }
   };
 
@@ -48,16 +78,22 @@ export const ParkingViolations_Qr = ({
       <SelectProviderBottomSheet
         providers={providers}
         onSelect={(provider) => {
-          console.log('Selected provider', provider.name);
-          navigation.navigate('ParkingViolations_Confirmation', {
-            ...params,
-            providerId: provider.id,
-          });
-          closeBottomSheet();
+          submitReport(provider.id);
         }}
-        close={closeBottomSheet}
+        close={enableScanning}
       />
     ));
+  };
+
+  const disableScanning = () => {
+    setHasCapturedQr(true);
+    setIsLoading(true);
+  };
+
+  const enableScanning = () => {
+    setIsLoading(false);
+    setHasCapturedQr(false);
+    closeBottomSheet();
   };
 
   return (
@@ -73,7 +109,13 @@ export const ParkingViolations_Qr = ({
         />
       }
     >
-      {isFocused && (
+      {isLoading && (
+        <View style={style.processing}>
+          <Processing message={t(dictionary.loading)} />
+        </View>
+      )}
+
+      {isFocused && !isLoading && !hasCapturedQr && (
         <Camera mode="qr" style={style.camera} onCapture={handlePhotoCapture} />
       )}
     </ScreenContainer>
@@ -91,5 +133,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     height:
       (Dimensions.get('window').width - 2 * theme.spacings.medium) * 1.33333,
     width: Dimensions.get('window').width - 2 * theme.spacings.medium,
+  },
+  processing: {
+    flex: 1,
+    justifyContent: 'center',
   },
 }));

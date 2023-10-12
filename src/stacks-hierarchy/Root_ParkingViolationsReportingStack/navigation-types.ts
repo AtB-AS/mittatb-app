@@ -9,6 +9,7 @@ type QrParams = PhotoParams & {
 };
 type ConfirmationParams = QrParams & {
   providerId: number;
+  vehicleId?: string;
 };
 
 export type ParkingViolationsReportingStackParams = {
