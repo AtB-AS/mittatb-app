@@ -266,9 +266,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     rowGap: theme.spacings.medium,
   },
-  fareContractHeader: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginTop: theme.spacings.xSmall,
-  },
 }));
