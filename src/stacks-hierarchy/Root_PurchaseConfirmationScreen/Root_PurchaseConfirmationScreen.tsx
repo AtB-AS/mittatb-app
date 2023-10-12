@@ -436,19 +436,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             </View>
           </GenericSectionItem>
         </Section>
-
-        <MessageBox
-          type="info"
-          message={
-            travelDate
-              ? t(
-                  PurchaseConfirmationTexts.infoText.validInFuture(
-                    formatToLongDateTime(travelDate, language),
-                  ),
-                )
-              : t(PurchaseConfirmationTexts.infoText.validNow)
-          }
-        />
+        {travelDate && (
+          <MessageBox
+            type="info"
+            message={t(
+              PurchaseConfirmationTexts.infoText.validInFuture(
+                formatToLongDateTime(travelDate, language),
+              ),
+            )}
+          />
+        )}
         {inspectableTokenWarningText && (
           <MessageBox
             type="warning"
