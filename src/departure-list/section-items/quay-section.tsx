@@ -17,6 +17,7 @@ import {QuayHeaderItem} from './quay-header';
 import {Location} from '@atb/favorites';
 import {StopPlace} from '@atb/api/types/trips';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
+import {getDestinationLineName} from '@atb/travel-details-screens/utils';
 
 const LIMIT_SIZE = 5;
 
@@ -79,7 +80,12 @@ export const QuaySection = React.memo(function QuaySection({
             group={group}
             stop={stop}
             quay={quayGroup.quay}
-            key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
+            key={
+              group.lineInfo?.lineId +
+              String(
+                getDestinationLineName(t, group.lineInfo?.destinationDisplay),
+              )
+            }
             searchDate={searchDate}
             testID={'lineItem' + i}
             mode={mode}
