@@ -13,7 +13,7 @@ class ElementHelper {
   async waitForElement(
     type: 'id' | 'ids' | 'text',
     id: string,
-    timeout?: number = 10000,
+    timeout: number = 10000,
   ) {
     const timeoutValue = AppHelper.isCI() ? timeout * 2 : timeout;
     let requestedEl = '';
@@ -41,8 +41,8 @@ class ElementHelper {
   async waitForIndexedElement(
     type: 'id' | 'text',
     id: string,
-    index?: number = 0,
-    timeout?: number = 10000,
+    index: number = 0,
+    timeout: number = 10000,
   ) {
     const timeoutValue = AppHelper.isCI() ? timeout * 2 : timeout;
     let requestedEl = '';
