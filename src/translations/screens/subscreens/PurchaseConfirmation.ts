@@ -71,11 +71,6 @@ const PurchaseConfirmationTexts = {
       ),
   },
   infoText: {
-    validNow: _(
-      'Denne billetten blir gyldig med en gang kjøpet blir gjennomført.',
-      'This ticket is valid when the purchase is completed.',
-      'Denne billetten blir gyldig med ein gong kjøpet blir gjennomført.',
-    ),
     validInFuture: (time: string) =>
       _(
         `Denne billetten blir gyldig fra ${time}.`,
