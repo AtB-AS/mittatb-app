@@ -33,7 +33,6 @@ module.exports = {
     '@tanstack/query',
   ],
   rules: {
-
     // Warning on console.log
     'no-console': [1, {allow: ['warn', 'error']}],
 
@@ -143,6 +142,13 @@ module.exports = {
         ],
       },
     },
+    // Not enforce self-closing brackets on svg assets
+    {
+      files: ['src/assets/svg/**'],
+      rules: {
+        'react/self-closing-comp': 0,
+      },
+    },
   ],
 
   /*
@@ -157,5 +163,4 @@ module.exports = {
     - Look into if able to give error on inline component creation during render
     - Shared eslint-settings that can be reused in our repos
    */
-
 };
