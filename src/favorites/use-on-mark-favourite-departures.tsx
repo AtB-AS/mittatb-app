@@ -22,7 +22,7 @@ type FavouriteDepartureLine = {
   lineNumber?: string;
   transportMode?: TransportMode;
   transportSubmode?: TransportSubmode;
-  destinationDisplay?: DestinationDisplay;
+  lineName?: string;
 };
 
 export function useOnMarkFavouriteDepartures(
@@ -39,25 +39,16 @@ export function useOnMarkFavouriteDepartures(
     close: closeBottomSheet,
     onOpenFocusRef,
   } = useBottomSheet();
-  const lineDD = line.destinationDisplay;
-  const frontText = lineDD?.frontText;
-  const destinationDisplay =
-    frontText?.includes(' via ') && (lineDD?.via?.length || 0) < 1
-      ? mapLegacyLineNameToDestinationDisplay(lineDD?.frontText)
-      : lineDD; // assume legacy frontText if it includes ' via ' and the via list is empty
 
-  if (!line.id || !destinationDisplay || !line.lineNumber) {
+  if (!line.id || !line.lineName || !line.lineNumber) {
     return {onMarkFavourite: undefined, existingFavorite: undefined};
   }
-  const lineName = getDestinationLineName(t, destinationDisplay);
 
   const addFavorite = async (forSpecificDestination: boolean) => {
     line.id &&
       (await addFavoriteDeparture({
         lineId: line.id,
-        destinationDisplay: forSpecificDestination
-          ? destinationDisplay
-          : undefined,
+        lineName: forSpecificDestination ? line.lineName : undefined,
         lineLineNumber: line.lineNumber,
         lineTransportationMode: line.transportMode,
         lineTransportationSubMode: line.transportSubmode,
@@ -73,7 +64,7 @@ export function useOnMarkFavouriteDepartures(
   };
 
   const existingFavorite = getFavoriteDeparture({
-    destinationDisplay,
+    lineName: line.lineName,
     lineId: line.id,
     stopId: stopPlace.id,
     quayId: quay.id,
@@ -82,15 +73,13 @@ export function useOnMarkFavouriteDepartures(
   const toggleFavouriteAccessibilityLabel = existingFavorite
     ? t(
         NearbyTexts.results.lines.favorite.removeFavorite(
-          `${line.lineNumber} ${
-            getDestinationLineName(t, existingFavorite.destinationDisplay) ?? ''
-          }`,
+          `${line.lineNumber} ${existingFavorite.lineName ?? ''}`,
           stopPlace.name,
         ),
       )
     : t(
         NearbyTexts.results.lines.favorite.addFavorite(
-          `${line.lineNumber} ${lineName}`,
+          `${line.lineNumber} ${line.lineName}`,
           stopPlace.name,
         ),
       );
@@ -118,11 +107,11 @@ export function useOnMarkFavouriteDepartures(
           },
         ],
       );
-    } else if (destinationDisplay && line.lineNumber) {
+    } else if (line.lineName && line.lineNumber) {
       openBottomSheet(() =>
-        destinationDisplay && line.lineNumber ? (
+        line.lineName && line.lineNumber ? (
           <FavoriteDialogSheet
-            destinationDisplay={destinationDisplay}
+            lineName={line.lineName}
             lineNumber={line.lineNumber}
             addFavorite={addFavorite}
             close={closeBottomSheet}

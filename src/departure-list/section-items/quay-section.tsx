@@ -80,12 +80,7 @@ export const QuaySection = React.memo(function QuaySection({
             group={group}
             stop={stop}
             quay={quayGroup.quay}
-            key={
-              group.lineInfo?.lineId +
-              String(
-                getDestinationLineName(t, group.lineInfo?.destinationDisplay),
-              )
-            }
+            key={group.lineInfo?.lineId + String(group.lineInfo?.lineName)}
             searchDate={searchDate}
             testID={'lineItem' + i}
             mode={mode}

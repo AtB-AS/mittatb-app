@@ -32,10 +32,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
     return <FavoriteItemContent {...props} />;
   }
   const favorite = props.favorite;
-  const favoriteLineName = getDestinationLineName(
-    t,
-    favorite.destinationDisplay,
-  );
+  const favoriteLineName = favorite.lineName;
   const a11yLabel = favorite.quayPublicCode
     ? `${favorite.lineLineNumber} ${
         favoriteLineName ?? t(SectionTexts.favoriteDeparture.allVariations)
@@ -76,8 +73,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
       <View style={contentContainer}>
         <ThemeText>
           {favorite.lineLineNumber}{' '}
-          {getDestinationLineName(t, favorite.destinationDisplay) ??
-            t(SectionTexts.favoriteDeparture.allVariations)}
+          {favorite.lineName ?? t(SectionTexts.favoriteDeparture.allVariations)}
         </ThemeText>
         <ThemeText type="body__secondary" color="secondary">
           {t(SectionTexts.favoriteDeparture.from)} {favorite.quayName}{' '}

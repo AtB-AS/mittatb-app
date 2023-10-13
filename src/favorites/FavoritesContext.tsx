@@ -86,7 +86,7 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
      * number on the same quay will be removed.
      */
     async addFavoriteDeparture(favoriteDeparture: FavoriteDeparture) {
-      if (!favoriteDeparture.destinationDisplay) {
+      if (!favoriteDeparture.lineName) {
         const favoritesExisting = await departures.getFavorites();
         const favoritesFiltered = favoritesExisting.filter(
           (f) =>
@@ -120,11 +120,7 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       return favoriteDepartures.find(function (favorite) {
         return (
           favorite.lineId == potential.lineId &&
-          (!favorite.destinationDisplay ||
-            destinationDisplaysAreEqual(
-              favorite.destinationDisplay,
-              potential.destinationDisplay,
-            )) &&
+          (!favorite.lineName || favorite.lineName === potential.lineName) &&
           favorite.stopId == potential.stopId &&
           favorite.quayId == potential.quayId
         );
@@ -152,25 +148,8 @@ export function useFavorites() {
 function getFavoriteDeparturesWithDestinationDisplay(
   favoriteDepartures: UserFavoriteDepartures,
 ) {
-  // app version 1.41 and earlier used lineName in favoriteDepartures
-  // this function ensures all favoriteDepartures are migrated to using destinationDisplay instead
-  let didMigrateFavoriteDeparture = false;
-  const favoriteDeparturesWithDestinationDisplay = favoriteDepartures.map(
-    (fd) => {
-      if (fd.lineName) {
-        didMigrateFavoriteDeparture = true;
-        const {lineName, ...fdWithoutLineName} = fd;
-        return {
-          ...fdWithoutLineName,
-          destinationDisplay: mapLegacyLineNameToDestinationDisplay(lineName),
-        };
-      } else {
-        return fd;
-      }
-    },
-  );
   return {
-    favoriteDeparturesWithDestinationDisplay,
-    didMigrateFavoriteDeparture,
+    favoriteDeparturesWithDestinationDisplay: favoriteDepartures,
+    didMigrateFavoriteDeparture: false,
   };
 }

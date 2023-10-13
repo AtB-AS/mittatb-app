@@ -18,16 +18,15 @@ import {getDestinationLineName} from '@atb/travel-details-screens/utils';
 
 type Props = {
   lineNumber: string;
-  destinationDisplay: DestinationDisplay;
+  lineName?: string;
   addFavorite: (forSpecificLineName: boolean) => void;
   close: () => void;
 };
 
 export const FavoriteDialogSheet = forwardRef<View, Props>(
-  ({lineNumber, destinationDisplay, addFavorite, close}, focusRef) => {
+  ({lineNumber, lineName, addFavorite, close}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
-    const lineName = getDestinationLineName(t, destinationDisplay) || '';
     return (
       <BottomSheetContainer testID="chooseFavoriteBottomSheet">
         <ScreenHeaderWithoutNavigation
@@ -42,7 +41,10 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
         <View style={styles.text} ref={focusRef} accessible={true}>
           <ThemeText>
             {t(
-              NearbyTexts.favoriteDialogSheet.description(lineNumber, lineName),
+              NearbyTexts.favoriteDialogSheet.description(
+                lineNumber,
+                lineName || '',
+              ),
             )}
           </ThemeText>
         </View>
@@ -57,7 +59,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
               text={t(
                 NearbyTexts.favoriteDialogSheet.buttons.specific(
                   lineNumber,
-                  lineName,
+                  lineName || '',
                 ),
               )}
               rightIcon={{svg: SvgFavoriteSemi}}

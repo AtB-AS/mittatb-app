@@ -83,10 +83,7 @@ export function LineItem({
     return null;
   }
 
-  const title = `${group.lineInfo?.lineNumber} ${getDestinationLineName(
-    t,
-    group.lineInfo?.destinationDisplay,
-  )}`;
+  const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
 
   const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,

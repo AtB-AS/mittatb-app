@@ -94,7 +94,7 @@ export function EstimatedCallItem({
       {
         ...line,
         lineNumber,
-        destinationDisplay,
+        lineName,
       },
       quay,
       stopPlace,

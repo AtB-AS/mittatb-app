@@ -39,7 +39,7 @@ const SelectableFavouriteDeparture = ({
   const lineTransportationMode = favorite.lineTransportationMode ?? LegMode.BUS;
 
   const lineName =
-    getDestinationLineName(t, favorite.destinationDisplay) ??
+    favorite.lineName ??
     t(SelectFavouriteDeparturesText.departures.allVariations);
 
   return (

@@ -17,6 +17,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {dictionary, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
+import {isDefined} from '@atb/utils/presence';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -125,43 +126,52 @@ export function destinationDisplaysAreEqual(
   ); // doesn't check for same order in via arrays, but should it?
 }
 
+// export function getDestinationLineName(
+//   t: TranslateFunction,
+//   destinationDisplay: DestinationDisplay | undefined,
+// ): string | undefined {
+//   if (destinationDisplay === undefined) {
+//     return undefined;
+//   }
+//   const frontText = destinationDisplay?.frontText || '';
+//   const via = destinationDisplay?.via || [];
+//   if (via.length < 1) {
+//     return frontText;
+//   }
+//   let viaNames = via[0];
+//   if (via.length > 1) {
+//     viaNames =
+//       via.slice(0, -1).join(', ') +
+//       ` ${t(dictionary.listConcatWord)} ` +
+//       via[via.length - 1];
+//   }
+
+//   return frontText + ` ${t(dictionary.via)} ` + viaNames;
+// }
+
 export function getDestinationLineName(
   t: TranslateFunction,
   destinationDisplay: DestinationDisplay | undefined,
-): string | undefined {
-  if (destinationDisplay === undefined) {
-    return undefined;
-  }
+): string {
   const frontText = destinationDisplay?.frontText || '';
-  const via = destinationDisplay?.via || [];
-  if (via.length < 1) {
-    return frontText;
-  }
-  let viaNames = via[0];
-  if (via.length > 1) {
-    viaNames =
-      via.slice(0, -1).join(', ') +
-      ` ${t(dictionary.listConcatWord)} ` +
-      via[via.length - 1];
-  }
-
-  return frontText + ` ${t(dictionary.via)} ` + viaNames;
+  const viaPlacesText = destinationDisplay?.via?.join(' / ') || '';
+  return frontText + (viaPlacesText.length > 0 ? ' via ' + viaPlacesText : '');
 }
 
-export function mapLegacyLineNameToDestinationDisplay(
-  legacyLineName: string | undefined,
-): DestinationDisplay | undefined {
-  if (legacyLineName === undefined) {
-    return undefined;
-  }
-  const [frontText, viaItemsString] = legacyLineName.split(' via ');
-  if (viaItemsString === undefined) {
-    return {frontText, via: undefined};
-  }
-  const viaItems = viaItemsString.split(',');
-  const via = viaItems.map((viaItem) => viaItem.trim());
-  return {frontText, via};
-}
+// export function mapLegacyLineNameToDestinationDisplay(
+//   legacyLineName: string | undefined,
+// ): DestinationDisplay | undefined {
+//   if (legacyLineName === undefined) {
+//     return undefined;
+//   }
+//   const [frontText, viaItemsString] = legacyLineName.split(' via ');
+//   if (viaItemsString === undefined) {
+//     return {frontText, via: undefined};
+//   }
+//   const viaItems = viaItemsString.split(',');
+//   const via = viaItems.map((viaItem) => viaItem.trim());
+//   return {frontText, via};
+// }
 
 export function getLineName(t: TranslateFunction, leg: Leg) {
   const name =

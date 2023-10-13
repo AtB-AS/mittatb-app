@@ -44,7 +44,7 @@ export const FavouriteDepartureToggle = ({
 const getFavoriteIcon = (existingFavorite?: StoredType<FavoriteDeparture>) => {
   if (!existingFavorite) {
     return SvgFavorite;
-  } else if (existingFavorite.destinationDisplay) {
+  } else if (existingFavorite.lineName) {
     return SvgFavoriteSemi;
   } else {
     return SvgFavoriteFill;
@@ -56,7 +56,7 @@ const getFavoriteIconTestID = (
 ) => {
   if (!existingFavorite) {
     return 'noFavorite';
-  } else if (existingFavorite.destinationDisplay) {
+  } else if (existingFavorite.lineName) {
     return 'semiFavorite';
   } else {
     return 'allFavorite';
