@@ -18,7 +18,6 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 
 import io.intercom.android.sdk.Intercom;
-import tech.bam.rnperformance.flipper.BuildConfig;
 
 import com.kogenta.kettle.common.config.KettleConfig;
 import com.kogenta.kettle.common.logging.LogLevel;
