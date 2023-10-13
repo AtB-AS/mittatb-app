@@ -80,7 +80,7 @@ export type FareContract = {
   minimumSecurityLevel: number;
   travelRights: TravelRight[];
   qrCode: string;
-  paymentType?: string;
+  paymentType?: string[];
 };
 
 export enum FareContractState {

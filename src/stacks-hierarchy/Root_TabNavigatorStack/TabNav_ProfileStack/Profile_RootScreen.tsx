@@ -260,7 +260,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                         .travelToken.label,
                     )
               }
-              label={'new'}
               onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
               testID="travelTokenButton"
             />

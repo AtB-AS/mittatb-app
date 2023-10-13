@@ -38,8 +38,13 @@ import {
   TextInputSectionItem,
   ToggleSectionItem,
 } from '@atb/components/sections';
+import {ProfileScreenProps} from './navigation-types';
 
-export const Profile_DesignSystemScreen = () => {
+type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
+
+export const Profile_DesignSystemScreen = ({
+  navigation,
+}: DesignSystemScreenProps) => {
   const style = useProfileHomeStyle();
   const fontScale = useFontScale();
   const {theme} = useTheme();
@@ -153,6 +158,10 @@ export const Profile_DesignSystemScreen = () => {
         <Section withPadding withTopPadding>
           <HeaderSectionItem
             text={'Current font scale: ' + fontScale.toFixed(3)}
+          />
+          <LinkSectionItem
+            text="Fare contracts"
+            onPress={() => navigation.navigate('Profile_FareContractsScreen')}
           />
         </Section>
         <Section withPadding withTopPadding>
@@ -1261,6 +1270,7 @@ export const Profile_DesignSystemScreen = () => {
             onPress={() => {}}
             icon={<ThemeIcon svg={Delete} colorType="error" />}
           />
+          <LinkSectionItem text="Link with label" label={'new'} />
         </Section>
 
         <Section withPadding withTopPadding>

@@ -48,7 +48,7 @@ const SelectFavouriteDeparturesText = {
   edit_button: {
     text: _(
       'Rediger favorittavganger',
-      'Edit favorite departures',
+      'Edit favourite departures',
       'Rediger favorittavgangar',
     ),
     a11yhint: _(

@@ -126,7 +126,7 @@ const DeparturesTexts = {
     ),
     noFavouritesWidget: _(
       'Du har ingen favorittavganger. \nTrykk “Legg til favorittavgang” for å lagre en avgang du bruker ofte.',
-      'You have no favorite departures. \nPress “Add favorite departure” to save a frequently used departure.',
+      'You have no favourite departures. \nPress “Add favourite departure” to save a frequently used departure.',
       'Du har ingen favorittavgangar. \nTrykk "Legg til favorittavgang" for å lagre ein avgang du brukar ofte.',
     ),
     emptyResult: _(

@@ -59,7 +59,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
         style={style.marginTop}
       >
         {t(FareContractTexts.details.paymentMethod)}
-        {_.capitalize(fareContract?.paymentType)}
+        {_.capitalize(fareContract?.paymentType?.join(', '))}
       </ThemeText>
       <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>
     </View>

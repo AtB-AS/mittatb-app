@@ -27,9 +27,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   const title = t(TicketingTexts.ticketAssistantTile.title);
   const description = t(TicketingTexts.ticketAssistantTile.description);
 
-  const accessibilityLabel = [title, 'Beta', description].join(
-    screenReaderPause,
-  );
+  const accessibilityLabel = [title, description].join(screenReaderPause);
 
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -59,7 +57,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
           title={title}
           description={description}
           accessibilityLabel={accessibilityLabel}
-          showBetaTag={true}
+          infoTag={'new'}
         />
       )}
     </View>

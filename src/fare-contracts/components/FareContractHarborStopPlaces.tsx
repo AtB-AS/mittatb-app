@@ -120,7 +120,6 @@ export function FareContractHarborStopPlaces({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginBottom: theme.spacings.medium,
     marginLeft: theme.spacings.xSmall,
   },
   loading: {alignItems: 'flex-start', marginTop: 12},
