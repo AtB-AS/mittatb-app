@@ -13,7 +13,7 @@ const FavoriteDeparturesTexts = {
   favoriteItemAdd: {
     label: _(
       'Legg til favorittavgang',
-      'Add favorite departure',
+      'Add favourite departure',
       'Legg til favorittavgang',
     ),
     a11yHint: _(

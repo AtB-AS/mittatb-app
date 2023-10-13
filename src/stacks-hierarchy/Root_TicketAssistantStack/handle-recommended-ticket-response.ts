@@ -48,7 +48,7 @@ export function handleRecommendedTicketResponse(
 
   if (!ticket || !preAssignedFareProduct || !fareProductTypeConfig) return;
 
-  let purchaseDetailsData: RecommendedTicketSummary = {
+  const purchaseDetailsData: RecommendedTicketSummary = {
     tariffZones: tariffZonesWithMetaData,
     userProfileWithCount: [travellerWithCount],
     preassignedFareProduct: preAssignedFareProduct,

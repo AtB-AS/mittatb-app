@@ -19,7 +19,7 @@ export function updateStopsWithRealtime(
   realtime: DeparturesRealtimeData,
 ): DepartureGroupMetadata['data'] {
   return stops.map<StopPlaceGroup>(function (stop) {
-    let quays = stop.quays.map(function (quayGroup) {
+    const quays = stop.quays.map(function (quayGroup) {
       const quayId = quayGroup.quay.id;
       const realtimeForQuay = realtime[quayId];
       const newQuayGroup = filterOutOutdatedDepartures(quayGroup);

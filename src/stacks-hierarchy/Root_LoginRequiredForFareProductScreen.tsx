@@ -104,7 +104,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
           </ThemeText>
         </PressableOpacity>
         <View style={styles.carrotInfo}>
-          <Psst></Psst>
+          <Psst />
           <ThemeText
             style={styles.carrotTitle}
             type="body__primary--bold"

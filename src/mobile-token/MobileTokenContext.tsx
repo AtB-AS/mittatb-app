@@ -183,7 +183,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     if (enabled) {
       const traceId = uuid();
 
-      let cancelTimeoutHandler = timeoutHandler(() => {
+      const cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
         setTimeoutFlag(true);

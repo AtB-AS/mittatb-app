@@ -86,7 +86,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
         </ScrollView>
 
         <FullScreenFooter>
-          <View></View>
+          <View />
         </FullScreenFooter>
       </BottomSheetContainer>
     );

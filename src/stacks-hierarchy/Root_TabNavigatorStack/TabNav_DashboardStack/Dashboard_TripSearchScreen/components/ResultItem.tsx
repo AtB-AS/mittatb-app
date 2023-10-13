@@ -525,10 +525,10 @@ const LegDash = () => {
   return (
     <>
       <View style={styles.lineContainer}>
-        <View style={[styles.legLine, styles.leftLegLine, lineHeight]}></View>
+        <View style={[styles.legLine, styles.leftLegLine, lineHeight]} />
       </View>
       <View style={styles.lineContainer}>
-        <View style={[styles.legLine, styles.rightLegLine, lineHeight]}></View>
+        <View style={[styles.legLine, styles.rightLegLine, lineHeight]} />
       </View>
     </>
   );
