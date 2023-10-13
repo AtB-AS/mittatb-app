@@ -51,10 +51,10 @@ else
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
     # Check if ENV_FOLDER/manifests exists and is a directory
-    if [ -d "$ENV_FOLDER/manifests" ]
+    if [ -d "$ORG_FOLDER/manifests" ]
     then
         # Iterate through all subfolders of ENV_FOLDER/manifests
-        for folder in "$ENV_FOLDER/manifests"/*;
+        for folder in "$ORG_FOLDER/manifests"/*;
         do
             # Check if the folder contains XML files
             if [ -n "$(find "$folder" -name '*.xml' -type f)" ]

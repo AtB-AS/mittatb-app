@@ -126,8 +126,8 @@ android {
         }
     }
 
-    buildTypes.all {
-        buildConfigField 'String', 'KETTLE_API_KEY', "\"${System.getenv('KETTLE_API_KEY')}\""
+    buildTypes.each{
+        it.buildConfigField 'String', 'KETTLE_API_KEY', "\"${System.getenv()["KETTLE_API_KEY"]}\""
     }
 
     packagingOptions {
