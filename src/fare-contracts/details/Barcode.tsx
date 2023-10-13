@@ -258,7 +258,7 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
   if (!qrCodeSvg) return null;
 
   return (
-    <GenericSectionItem>
+    <GenericSectionItem type="compact">
       <View
         style={[styles.aztecCode, styles.staticQrCode]}
         accessible={true}
@@ -279,8 +279,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: '#FFFFFF',
   },
   staticQrCode: {
-    width: '80%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    padding: 0,
   },
 }));
