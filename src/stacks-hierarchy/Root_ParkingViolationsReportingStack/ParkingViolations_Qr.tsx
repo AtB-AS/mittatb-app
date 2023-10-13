@@ -93,9 +93,8 @@ export const ParkingViolations_Qr = ({
       .catch(() => undefined); // If lookup fails let user select operator manually.
 
   const handlePhotoCapture = async (qr: string) => {
-    console.log('qr', qr);
     if (!capturedQr) {
-      disableScanning('https://m.ryde.vip/scooter.html?n=152529');
+      disableScanning(qr);
       const providerAndVehicleId = await getProviderByQr(qr);
       if (providerAndVehicleId) {
         openBottomSheet(() => (
