@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {TransportModes} from '@atb/components/transportation-modes';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {InfoChip} from '@atb/components/info-chip';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
@@ -85,6 +85,10 @@ export const TicketSummary = () => {
           })
       : TicketAssistantTexts.summary.singleTicketNotice,
   );
+  const perTripAndSavingsAccessibilityLabel = [
+    perTripPriceString,
+    savingsText,
+  ].join(screenReaderPause);
 
   const a11ySummary = t(
     TicketAssistantTexts.summary.ticketSummaryA11yLabel({
@@ -120,7 +124,7 @@ export const TicketSummary = () => {
 
           <View style={styles.horizontalFlex}>
             {/** Traveller **/}
-            <View>
+            <View accessible={true}>
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.traveller)}
               </ThemeText>
@@ -131,7 +135,7 @@ export const TicketSummary = () => {
               />
             </View>
             {/** Zones **/}
-            <View>
+            <View accessible={true}>
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.zones)}
               </ThemeText>
@@ -143,7 +147,7 @@ export const TicketSummary = () => {
             </View>
           </View>
         </View>
-        <View style={styles.ticketFooter}>
+        <View accessible={true} style={styles.ticketFooter}>
           <ThemeText type={'body__secondary'} color={interactiveColor.outline}>
             {t(TicketAssistantTexts.summary.price)}
           </ThemeText>
@@ -159,7 +163,7 @@ export const TicketSummary = () => {
         type={'body__secondary'}
         style={styles.savingsText}
         color={themeColor}
-        accessibilityLabel={savingsText}
+        accessibilityLabel={perTripAndSavingsAccessibilityLabel}
       >
         {perTripPriceString}
         {'\n'}

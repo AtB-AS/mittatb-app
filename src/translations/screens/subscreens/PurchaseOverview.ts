@@ -184,7 +184,7 @@ const PurchaseOverviewTexts = {
       'Vel starttidspunkt',
     ),
     now: _('Oppstart nå', 'Start now', 'Start no'),
-    later: _('Senere', 'Later', 'Seinare'),
+    later: _('Oppstart senere', 'Start later', 'Oppstart seinare'),
     a11yLaterHint: _(
       'Aktiver for å velge et senere oppstartstidspunkt',
       'Activate to select a later start time',

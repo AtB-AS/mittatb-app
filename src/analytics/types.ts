@@ -3,6 +3,7 @@ export type AnalyticsEventContext =
   | 'Departure details'
   | 'Favorites'
   | 'Flexible transport'
+  | 'Loading boundary'
   | 'Map'
   | 'Mobility'
   | 'Receipt'

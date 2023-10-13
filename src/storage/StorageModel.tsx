@@ -18,6 +18,7 @@ export enum StorageModelKeysEnum {
   EnableNonTransitTripSearch = '@ATB_enable_non_transit_trip_search',
   ShowValidTimeInfoDebugOverride = '@ATB_show_valid_time_info_debug_override',
   EnableLoadingScreenDebugOverride = '@ATB_loading_screen_debug_override',
+  EnableLoadingErrorScreenDebugOverride = '@ATB_loading_error_screen_debug_override',
   EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
 }
 

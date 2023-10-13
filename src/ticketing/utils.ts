@@ -12,6 +12,8 @@ import {
   CarnetTravelRight,
   TravelRight,
 } from './types';
+import {WebViewNavigation} from 'react-native-webview/lib/WebViewTypes';
+import {parse as parseURL} from 'search-params';
 
 export function isCarnetTravelRight(
   travelRight: TravelRight | undefined,
@@ -222,3 +224,12 @@ export const filterValidRightNowFareContract = (
     return false;
   });
 };
+
+/**
+ * Get response code from query param. iOS uses 'responseCode' and Android
+ * uses 'response_code'.
+ */
+export function getResponseCode(event: WebViewNavigation) {
+  const params = parseURL(event.url);
+  return params['responseCode'] ?? params['response_code'];
+}

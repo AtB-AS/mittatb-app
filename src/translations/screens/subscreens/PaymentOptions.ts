@@ -42,6 +42,11 @@ const PaymentOptionsTexts = {
         `Aktiver for å fjerne ${paymentName} som sluttar på ${masked_pan}`,
       ),
   },
+  addPaymentMethod: _(
+    'Legg til betalingsmåte',
+    'Add payment method',
+    'Legg til betalingsmåte',
+  ),
 };
 
 export default PaymentOptionsTexts;

@@ -80,7 +80,7 @@ export type FareContract = {
   minimumSecurityLevel: number;
   travelRights: TravelRight[];
   qrCode: string;
-  paymentType?: string;
+  paymentType?: string[];
 };
 
 export enum FareContractState {
@@ -224,4 +224,9 @@ export type TravelCard = {
   expires: Timestamp;
   id: number;
   token_id?: string;
+};
+
+export type AddPaymentMethodResponse = {
+  recurring_payment_id: number;
+  terminal_url: string;
 };

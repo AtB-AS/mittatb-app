@@ -3,6 +3,7 @@ import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 
 export type AnnouncementRaw = {
   id: string;
+  active: boolean;
   summaryTitle?: LanguageAndTextType[];
   summary: LanguageAndTextType[];
   summaryImage?: string;
@@ -16,7 +17,7 @@ export type AnnouncementRaw = {
 
 export type AnnouncementType = Omit<
   AnnouncementRaw,
-  'startDate' | 'endDate'
+  'active' | 'startDate' | 'endDate'
 > & {
   startDate?: number;
   endDate?: number;

@@ -125,6 +125,7 @@ export type RootStackParamList = {
   Root_LoginPhoneInputScreen: Root_LoginPhoneInputScreenParams;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
+  Root_AddPaymentMethodScreen: undefined;
   Root_ParkingViolationsReportingStack: undefined;
 };
 
