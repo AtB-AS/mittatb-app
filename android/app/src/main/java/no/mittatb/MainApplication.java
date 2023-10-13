@@ -77,7 +77,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
             kettleConfig.setInProduction(false);
         } else {
             kettleConfig.setProductionApiKey(BuildConfig.KETTLE_API_KEY);
-            kettleConfig.setProductionLogLevel(LogLevel.INFO); // optional - default to INFO
+            kettleConfig.setProductionLogLevel(LogLevel.INFO);
             kettleConfig.setInProduction(true);
         }
         Kettle.initialize(kettleConfig, getApplicationContext());
