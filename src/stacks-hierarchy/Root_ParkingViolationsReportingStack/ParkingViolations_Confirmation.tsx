@@ -1,5 +1,5 @@
 import {View} from 'react-native';
-import {ScreenContainer} from './ScreenContainer';
+import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {themeColor} from './Root_ParkingViolationsReportingStack';

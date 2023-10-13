@@ -14,8 +14,8 @@ import {
   PermissionReqiredError,
   useParkingViolationsState,
 } from './ParkingViolationsContext';
-import {ScreenContainer} from './ScreenContainer';
-import {SelectGroup} from './SelectGroup';
+import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
+import {SelectGroup} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/SelectGroup';
 import {ParkingViolationsScreenProps} from './navigation-types';
 
 export type SelectViolationScreenProps =

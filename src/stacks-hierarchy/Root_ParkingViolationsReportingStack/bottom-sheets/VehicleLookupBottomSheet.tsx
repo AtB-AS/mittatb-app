@@ -8,7 +8,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {ProviderLogo} from './ProviderLogo';
+import {ProviderLogo} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ProviderLogo';
 
 type Props = {
   provider: ViolationsReportingProvider;
