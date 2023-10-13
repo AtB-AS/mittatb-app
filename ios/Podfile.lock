@@ -884,6 +884,7 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - NextLevelSessionExporter (0.4.6)
   - OpenSSL-Universal (1.1.1100)
   - Permission-LocationWhenInUse (3.6.1):
     - RNPermissions
@@ -1188,6 +1189,10 @@ PODS:
   - React-jsinspector (0.72.4)
   - React-logger (0.72.4):
     - glog
+  - react-native-compressor (1.8.12):
+    - NextLevelSessionExporter
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - react-native-flipper (0.191.0):
     - React-Core
   - react-native-flipper-performance-plugin (0.4.0):
@@ -1449,6 +1454,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-compressor (from `../node_modules/react-native-compressor`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-flipper-performance-plugin (from `../node_modules/react-native-flipper-performance-plugin`)
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
@@ -1535,6 +1541,7 @@ SPEC REPOS:
     - MapboxMaps
     - MapboxMobileEvents
     - nanopb
+    - NextLevelSessionExporter
     - OpenSSL-Universal
     - PromisesObjC
     - SocketRocket
@@ -1595,6 +1602,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-compressor:
+    :path: "../node_modules/react-native-compressor"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
   react-native-flipper-performance-plugin:
@@ -1749,6 +1758,7 @@ SPEC CHECKSUMS:
   MapboxMaps: cb76511b98d3b95c74b0771ed105bc69f30ace6b
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  NextLevelSessionExporter: 4d8aa5e617f1c709724f2453efe5d4628480f65a
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-LocationWhenInUse: 3ba99e45c852763f730eabecec2870c2382b7bd4
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
@@ -1767,6 +1777,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c7f826e40fa9cab5d37cab6130b1af237332b594
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: da1ebe05ae06eb6db4b162202faeafac4b435e77
+  react-native-compressor: 31281c7b026dc2d9faa61ff952ea184f5c9d059d
   react-native-flipper: 5d8dcbcb905a7e8076c9a61a3709944c23cf48ee
   react-native-flipper-performance-plugin: 42ec5017abd26e7c5a1f527f2db92c14a90cabdb
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
