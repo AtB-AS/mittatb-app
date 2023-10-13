@@ -7,6 +7,7 @@ import {
   StoredFavoriteDeparture,
   StoredLocationFavorite,
   UserFavoriteDepartures,
+  UserFavoriteDeparturesLegacy,
   UserFavorites,
 } from './types';
 
@@ -150,14 +151,14 @@ export function useFavorites() {
 }
 
 function getFavoriteDeparturesWithDestinationDisplay(
-  favoriteDepartures: UserFavoriteDepartures,
+  favoriteDepartures: UserFavoriteDepartures | UserFavoriteDeparturesLegacy,
 ) {
   // app version 1.41 and earlier used lineName in favoriteDepartures
   // this function ensures all favoriteDepartures are migrated to using destinationDisplay instead
   let didMigrateFavoriteDeparture = false;
   const favoriteDeparturesWithDestinationDisplay = favoriteDepartures.map(
     (fd) => {
-      if (fd.lineName) {
+      if ('lineName' in fd) {
         didMigrateFavoriteDeparture = true;
         const {lineName, ...fdWithoutLineName} = fd;
         return {

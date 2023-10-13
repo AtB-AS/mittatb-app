@@ -39,19 +39,26 @@ export type LocationFavorite = {
   name?: string;
 };
 
+export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
+
 export type StoredLocationFavorite = StoredType<LocationFavorite>;
 export type UserFavorites = StoredLocationFavorite[];
 
-export type FavoriteDepartureId = {
+type FavoriteDepartureBaseIds = {
   stopId: string;
-  /** @deprecated Use destinationDisplay instead */
-  lineName?: string; // legacy, keep for migration
-  destinationDisplay?: DestinationDisplay;
   lineId: string;
   quayId: string;
 };
 
-export type FavoriteDeparture = FavoriteDepartureId & {
+export type FavoriteDepartureIdLegacy = FavoriteDepartureBaseIds & {
+  lineName?: string;
+};
+
+export type FavoriteDepartureId = FavoriteDepartureBaseIds & {
+  destinationDisplay?: DestinationDisplay;
+};
+
+type FavoriteDepartureWithoutId = {
   lineLineNumber?: string;
   lineTransportationMode?: TransportMode;
   lineTransportationSubMode?: TransportSubmode;
@@ -60,7 +67,12 @@ export type FavoriteDeparture = FavoriteDepartureId & {
   visibleOnDashboard?: boolean;
 };
 
-export type ChipTypeGroup = 'location' | 'map' | 'favorites' | 'add-favorite';
-
+export type FavoriteDeparture = FavoriteDepartureId &
+  FavoriteDepartureWithoutId;
 export type StoredFavoriteDeparture = StoredType<FavoriteDeparture>;
 export type UserFavoriteDepartures = StoredFavoriteDeparture[];
+
+type FavoriteDepartureLegacy = FavoriteDepartureIdLegacy &
+  FavoriteDepartureWithoutId;
+type StoredFavoriteDepartureLegacy = StoredType<FavoriteDepartureLegacy>;
+export type UserFavoriteDeparturesLegacy = StoredFavoriteDepartureLegacy[];

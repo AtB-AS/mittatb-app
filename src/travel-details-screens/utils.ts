@@ -158,7 +158,7 @@ export function mapLegacyLineNameToDestinationDisplay(
   if (viaItemsString === undefined) {
     return {frontText, via: undefined};
   }
-  const viaItems = viaItemsString.split(',');
+  const viaItems = viaItemsString.split('/');
   const via = viaItems.map((viaItem) => viaItem.trim());
   return {frontText, via};
 }
