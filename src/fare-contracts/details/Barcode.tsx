@@ -16,7 +16,6 @@ import {
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
 import {FareContract} from '@atb/ticketing';
-import {GenericSectionItem} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import QRCode from 'qrcode';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
@@ -145,18 +144,16 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   }
 
   return (
-    <GenericSectionItem>
-      <View style={{alignItems: 'center'}}>
-        <View
-          style={styles.aztecCode}
-          accessible={true}
-          accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-          testID="mobileTokenBarcode"
-        >
-          <SvgXml xml={aztecXml} width="100%" height="100%" />
-        </View>
+    <View style={{alignItems: 'center'}}>
+      <View
+        style={styles.aztecCode}
+        accessible={true}
+        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+        testID="mobileTokenBarcode"
+      >
+        <SvgXml xml={aztecXml} width="100%" height="100%" />
       </View>
-    </GenericSectionItem>
+    </View>
   );
 };
 
@@ -193,27 +190,23 @@ const DeviceNotInspectable = () => {
         ),
       );
   return (
-    <GenericSectionItem>
-      <MessageBox
-        type={'warning'}
-        title={t(
-          FareContractTexts.details.barcodeErrors.notInspectableDevice.title,
-        )}
-        message={message}
-        isMarkdown={true}
-      />
-    </GenericSectionItem>
+    <MessageBox
+      type={'warning'}
+      title={t(
+        FareContractTexts.details.barcodeErrors.notInspectableDevice.title,
+      )}
+      message={message}
+      isMarkdown={true}
+    />
   );
 };
 
 const LoadingBarcode = () => {
   const {theme} = useTheme();
   return (
-    <GenericSectionItem>
-      <View style={{flex: 1}}>
-        <ActivityIndicator animating={true} color={theme.text.colors.primary} />
-      </View>
-    </GenericSectionItem>
+    <View style={{flex: 1}}>
+      <ActivityIndicator animating={true} color={theme.text.colors.primary} />
+    </View>
   );
 };
 
@@ -231,16 +224,14 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
   if (!aztecXml) return null;
 
   return (
-    <GenericSectionItem>
-      <View
-        style={styles.aztecCode}
-        accessible={true}
-        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-        testID="staticBarcode"
-      >
-        <SvgXml xml={aztecXml} width="100%" height="100%" />
-      </View>
-    </GenericSectionItem>
+    <View
+      style={styles.aztecCode}
+      accessible={true}
+      accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+      testID="staticBarcode"
+    >
+      <SvgXml xml={aztecXml} width="100%" height="100%" />
+    </View>
   );
 };
 
@@ -258,16 +249,14 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
   if (!qrCodeSvg) return null;
 
   return (
-    <GenericSectionItem>
-      <View
-        style={[styles.aztecCode, styles.staticQrCode]}
-        accessible={true}
-        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-        testID="staticQRCode"
-      >
-        <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
-      </View>
-    </GenericSectionItem>
+    <View
+      style={[styles.aztecCode, styles.staticQrCode]}
+      accessible={true}
+      accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+      testID="staticQRCode"
+    >
+      <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+    </View>
   );
 };
 
@@ -279,8 +268,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: '#FFFFFF',
   },
   staticQrCode: {
-    width: '80%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    padding: 0,
   },
 }));
