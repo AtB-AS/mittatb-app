@@ -17,6 +17,7 @@ import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
 import {blobToBase64} from './utils';
 import {useAuthState} from '@atb/auth';
+import {Image} from 'react-native-compressor';
 
 export type QrScreenProps =
   ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
@@ -43,15 +44,26 @@ export const ParkingViolations_Qr = ({
 
   const submitReport = async (providerId: number) => {
     setIsLoading(true);
-    const result = await fetch(params.photo);
-    const data = await result.blob();
-    const base64Image = (await blobToBase64(data)) as string;
-    const image = base64Image.split(',')[1];
-    //Nivel use the file name suffix as imageType
+    closeBottomSheet();
+
+    const compressed = await Image.compress(params.photo, {
+      maxHeight: 2048,
+      maxWidth: 2048,
+    });
+    const image = await fetch(compressed);
+    const imageBlob = await image.blob();
+    const base64Image = (await blobToBase64(imageBlob)) as string;
+    // Remove meta data, e.g. 'data:image/png;base64',
+    // and keep just the base64 encoded pard of the image
+    // Nivel does not accept the metadata being a part of the image.
+    const base64data = base64Image.split(',').pop();
+    // Nivel use the file name suffix as imageType.
+    // (omg, why not just accept the base64 metadata, or at least a mime type as imageType?)
     const imageType = params.photo.split('.').pop();
+
     sendViolationsReport({
       appId: abtCustomerId,
-      image,
+      image: base64data,
       imageType,
       latitude: position?.latitude ?? 0,
       longitude: position?.longitude ?? 0,
@@ -81,8 +93,9 @@ export const ParkingViolations_Qr = ({
       .catch(() => undefined); // If lookup fails let user select operator manually.
 
   const handlePhotoCapture = async (qr: string) => {
+    console.log('qr', qr);
     if (!capturedQr) {
-      disableScanning(qr);
+      disableScanning('https://m.ryde.vip/scooter.html?n=152529');
       const providerAndVehicleId = await getProviderByQr(qr);
       if (providerAndVehicleId) {
         openBottomSheet(() => (
