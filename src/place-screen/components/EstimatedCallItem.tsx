@@ -13,7 +13,10 @@ import {
   getSvgForMostCriticalSituationOrNotice,
 } from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getDestinationLineName} from '@atb/travel-details-screens/utils';
+import {
+  destinationDisplaysAreEqual,
+  getDestinationLineName,
+} from '@atb/travel-details-screens/utils';
 
 import {
   CancelledDepartureTexts,
@@ -134,8 +137,10 @@ export const EstimatedCallItem = memo(
     )
       return false;
     if (
-      prev.departure.destinationDisplay?.frontText !==
-      next.departure.destinationDisplay?.frontText
+      destinationDisplaysAreEqual(
+        prev.departure.destinationDisplay,
+        next.departure.destinationDisplay,
+      )
     )
       return false;
     if (prev.departure.realtime !== next.departure.realtime) return false;
