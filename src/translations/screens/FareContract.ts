@@ -251,6 +251,12 @@ const FareContractTexts = {
         `Ticket is valid on ${transportModes}`,
         `Billetten gjeld ${transportModes}`,
       ),
+    a11yLabelWithCustomText: (transportModes: string, customText: string) =>
+      _(
+        `Billetten gjelder ${transportModes}, produktgruppen heter ${customText}`,
+        `Ticket is valid on ${transportModes}, product group is called ${customText}`,
+        `Billetten gjeld ${transportModes}, produktgruppa heiter ${customText}`,
+      ),
     a11yLabelMultipleTravelModes: (count: number) =>
       _(
         `Totalt ${count} reisemåter`,
@@ -270,11 +276,11 @@ const FareContractTexts = {
         return _('trikk', 'tram', 'trikk');
       case TransportMode.Water:
         if (subMode === 'highSpeedPassengerService') {
-          return _('hurtigbåt', 'passenger boat', 'hurtigbåt');
+          return _('hurtigbåt', 'express boat', 'hurtigbåt');
         } else if (subMode === 'highSpeedVehicleService') {
           // https://enturas.atlassian.net/wiki/spaces/PUBLIC/pages/825393529/Norwegian+submodes+and+their+definitions
           // -> "A high-speed boat service with car carrying capacity. The ship type is usually a catamaran."
-          return _('hurtigbåt', 'passenger boat', 'hurtigbåt');
+          return _('hurtigbåt', 'express boat', 'hurtigbåt');
         } else {
           return _('båt', 'boat', 'båt');
         }

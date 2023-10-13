@@ -1,6 +1,6 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {
-  NearbyTexts,
+  DeparturesTexts,
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
@@ -31,7 +31,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
     return (
       <BottomSheetContainer testID="chooseFavoriteBottomSheet">
         <ScreenHeaderWithoutNavigation
-          title={t(NearbyTexts.favoriteDialogSheet.title)}
+          title={t(DeparturesTexts.favoriteDialogSheet.title)}
           color="background_1"
           leftButton={{
             type: 'cancel',
@@ -42,7 +42,10 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
         <View style={styles.text} ref={focusRef} accessible={true}>
           <ThemeText>
             {t(
-              NearbyTexts.favoriteDialogSheet.description(lineNumber, lineName),
+              DeparturesTexts.favoriteDialogSheet.description(
+                lineNumber,
+                lineName,
+              ),
             )}
           </ThemeText>
         </View>
@@ -55,7 +58,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
                 addFavorite(true);
               }}
               text={t(
-                NearbyTexts.favoriteDialogSheet.buttons.specific(
+                DeparturesTexts.favoriteDialogSheet.buttons.specific(
                   lineNumber,
                   lineName,
                 ),
@@ -69,7 +72,9 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
                 close();
                 addFavorite(false);
               }}
-              text={t(NearbyTexts.favoriteDialogSheet.buttons.all(lineNumber))}
+              text={t(
+                DeparturesTexts.favoriteDialogSheet.buttons.all(lineNumber),
+              )}
               rightIcon={{svg: SvgFavoriteFill}}
               testID="allVariationsOfDeparture"
             />

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {TicketingTexts, useTranslation} from '@atb/translations';
+import {useTranslation, TicketingTexts} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {filterExpiredFareContracts, useTicketingState} from '@atb/ticketing';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
@@ -8,8 +8,12 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
 
 export const Profile_TicketHistoryScreen: React.FC = () => {
-  const {fareContracts, isRefreshingFareContracts, rejectedReservations} =
-    useTicketingState();
+  const {
+    fareContracts,
+    isRefreshingFareContracts,
+    rejectedReservations,
+    resubscribeFirestoreListeners,
+  } = useTicketingState();
 
   const [now, setNow] = useState<number>(Date.now());
   const expiredFareContracts = filterExpiredFareContracts(fareContracts);
@@ -26,9 +30,19 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         fareContracts={expiredFareContracts}
         reservations={rejectedReservations}
         isRefreshing={isRefreshingFareContracts}
-        refresh={() => setNow(Date.now())}
-        noItemsLabel={t(TicketingTexts.ticketHistoryTab.noItems)}
+        refresh={() => {
+          setNow(Date.now());
+          resubscribeFirestoreListeners();
+        }}
         now={now}
+        emptyStateTitleText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .emptyTicketHistoryTitle,
+        )}
+        emptyStateDetailsText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .emptyTicketHistoryDetails,
+        )}
       />
     </View>
   );

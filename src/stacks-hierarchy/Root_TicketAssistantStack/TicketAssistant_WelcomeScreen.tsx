@@ -8,8 +8,7 @@ import {Button} from '@atb/components/button';
 import {StaticColorByType} from '@atb/theme/colors';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import SvgInfo from '@atb/assets/svg/color/icons/status/Info';
+import {TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -22,7 +21,7 @@ export const TicketAssistant_WelcomeScreen = ({
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
-  const focusRef = useFocusOnLoad();
+  const focusRef = useFocusOnLoad(true, 200);
 
   return (
     <ScrollView
@@ -39,10 +38,6 @@ export const TicketAssistant_WelcomeScreen = ({
         >
           {t(TicketAssistantTexts.welcome.title)}
         </ThemeText>
-      </View>
-
-      <View style={styles.mainView}>
-        <TicketSplash width={windowWidth} height={windowWidth / 2} />
 
         <ThemeText
           style={styles.description}
@@ -51,27 +46,16 @@ export const TicketAssistant_WelcomeScreen = ({
         >
           {t(TicketAssistantTexts.welcome.description)}
         </ThemeText>
+      </View>
 
-        <View
-          style={styles.notice}
-          accessible={true}
-          accessibilityLabel={t(TicketAssistantTexts.welcome.boatInfo)}
-        >
-          <ThemeIcon style={styles.icon} svg={SvgInfo} />
-          <ThemeText
-            style={styles.noticeText}
-            type={'body__tertiary'}
-            color={themeColor}
-          >
-            {t(TicketAssistantTexts.welcome.boatInfo)}
-          </ThemeText>
-        </View>
+      <View style={styles.mainView}>
+        <TicketSplash width={windowWidth} height={windowWidth / 2} />
       </View>
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
           onPress={() =>
-            navigation.navigate('TicketAssistant_CategoryPickerScreen')
+            navigation.navigate(TICKET_ASSISTANT_CATEGORY_PICKER_SCREEN)
           }
           text={t(TicketAssistantTexts.welcome.mainButton)}
           testID="nextButton"

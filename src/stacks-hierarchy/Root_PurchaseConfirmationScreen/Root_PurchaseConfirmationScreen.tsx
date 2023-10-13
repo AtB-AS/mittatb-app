@@ -336,7 +336,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        title={getTextForLanguage(fareProductTypeConfig.name, language)}
+        title={t(PurchaseConfirmationTexts.title)}
         leftButton={headerLeftButton}
         globalMessageContext={GlobalMessageContextEnum.appTicketing}
       />
@@ -436,19 +436,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             </View>
           </GenericSectionItem>
         </Section>
-
-        <MessageBox
-          type="info"
-          message={
-            travelDate
-              ? t(
-                  PurchaseConfirmationTexts.infoText.validInFuture(
-                    formatToLongDateTime(travelDate, language),
-                  ),
-                )
-              : t(PurchaseConfirmationTexts.infoText.validNow)
-          }
-        />
         {inspectableTokenWarningText && (
           <MessageBox
             type="warning"
@@ -479,7 +466,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         ? Vipps
                         : Visa,
                   }}
-                  viewContainerStyle={styles.paymentButton}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -531,7 +517,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   });
                   selectPaymentMethod();
                 }}
-                viewContainerStyle={styles.paymentButton}
                 testID="choosePaymentOptionButton"
               />
             )}
@@ -641,7 +626,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   warningMessage: {
-    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   infoSection: {padding: theme.spacings.medium},
   userProfileItem: {
@@ -673,8 +658,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   smallTopMargin: {
     marginTop: theme.spacings.xSmall,
-  },
-  paymentButton: {
-    marginTop: theme.spacings.medium,
   },
 }));

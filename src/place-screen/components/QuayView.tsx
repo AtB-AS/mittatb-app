@@ -11,15 +11,10 @@ import {useDeparturesData} from '../hooks/use-departures-data';
 import {hasFavorites} from './StopPlaceView';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {MessageBox} from '@atb/components/message-box';
-import DeparturesTexts from '@atb/translations/screens/Departures';
-import {dictionary, useTranslation} from '@atb/translations';
+import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 1000;
-
-export type QuayViewParams = {
-  quay: Quay;
-};
 
 export type QuayViewProps = {
   quay: Quay;
@@ -136,7 +131,6 @@ export function QuayView({
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
-          allowFavouriteSelection={true}
           searchDate={searchStartTime}
           mode={mode}
         />

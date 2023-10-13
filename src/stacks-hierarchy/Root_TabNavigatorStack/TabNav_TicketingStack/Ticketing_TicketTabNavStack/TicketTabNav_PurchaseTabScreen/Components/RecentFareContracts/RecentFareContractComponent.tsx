@@ -21,7 +21,7 @@ import {
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
-import {TravelRightDirection, useTicketingState} from '@atb/ticketing';
+import {TravelRightDirection} from '@atb/ticketing';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -45,7 +45,7 @@ export const RecentFareContractComponent = ({
     toTariffZone,
     userProfilesWithCount,
     pointToPointValidity,
-    orderId,
+    direction,
   } = recentFareContract;
   const {language} = useTranslation();
   const styles = useStyles();
@@ -56,14 +56,11 @@ export const RecentFareContractComponent = ({
   const {width} = Dimensions.get('window');
 
   const harborsQuery = useHarborsQuery();
-  const {findFareContractByOrderId} = useTicketingState();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === recentFareContract.preassignedFareProduct.type,
   );
-  const direction: TravelRightDirection | undefined =
-    findFareContractByOrderId(orderId)?.travelRights?.[0].direction;
 
   if (!fareProductTypeConfig) return null;
   const returnAccessibilityLabel = () => {
@@ -95,7 +92,11 @@ export const RecentFareContractComponent = ({
           )} ${fromZoneName}, ${toZoneName}`;
 
     const harborInfo = () => {
-      if (pointToPointValidity?.fromPlace && pointToPointValidity?.toPlace) {
+      if (
+        pointToPointValidity?.fromPlace &&
+        pointToPointValidity?.toPlace &&
+        direction
+      ) {
         const fromName =
           harborsQuery.data?.find(
             (sp) => sp.id === pointToPointValidity.fromPlace,
@@ -165,11 +166,13 @@ export const RecentFareContractComponent = ({
         </View>
 
         {direction !== undefined && pointToPointValidity && (
-          <FareContractHarborStopPlaces
-            showTwoWayIcon={showTwoWayIcon}
-            fromStopPlaceId={pointToPointValidity?.fromPlace}
-            toStopPlaceId={pointToPointValidity?.toPlace}
-          />
+          <View style={styles.harbors}>
+            <FareContractHarborStopPlaces
+              showTwoWayIcon={showTwoWayIcon}
+              fromStopPlaceId={pointToPointValidity?.fromPlace}
+              toStopPlaceId={pointToPointValidity?.toPlace}
+            />
+          </View>
         )}
 
         <View style={styles.horizontalFlex}>
@@ -306,5 +309,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacings.xLarge,
     paddingVertical: theme.spacings.medium,
+  },
+  harbors: {
+    marginBottom: theme.spacings.medium,
   },
 }));

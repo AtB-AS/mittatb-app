@@ -10,8 +10,7 @@ import {FavoriteToggle} from './FavoriteToggle';
 import {DateSelection} from './DateSelection';
 import {StopPlacesMode} from '@atb/nearby-stop-places/types';
 import {MessageBox} from '@atb/components/message-box';
-import DeparturesTexts from '@atb/translations/screens/Departures';
-import {dictionary, useTranslation} from '@atb/translations';
+import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
@@ -31,7 +30,6 @@ type StopPlaceViewProps = {
     date?: string,
     fromQuayId?: string,
   ) => void;
-  allowFavouriteSelection: boolean;
   searchTime: SearchTime;
   setSearchTime: (searchTime: SearchTime) => void;
   showOnlyFavorites: boolean;
@@ -60,7 +58,6 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
     showTimeNavigation = true,
     navigateToQuay,
     navigateToDetails,
-    allowFavouriteSelection,
     searchTime,
     setSearchTime,
     showOnlyFavorites,
@@ -175,7 +172,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
                   : styles.headerWithoutNavigation
               }
             >
-              {allowFavouriteSelection && placeHasFavorites && (
+              {placeHasFavorites && (
                 <FavoriteToggle
                   enabled={showOnlyFavorites}
                   setEnabled={setShowOnlyFavorites}
@@ -210,7 +207,6 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
             testID={'quaySection' + index}
             stopPlace={stopPlace}
             showOnlyFavorites={showOnlyFavorites}
-            allowFavouriteSelection={allowFavouriteSelection}
             addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
             searchDate={searchStartTime}
             mode={mode}

@@ -158,6 +158,9 @@ Specific notes on QA:
 
 - [QA Ticketing](./docs/TicketingQA.md)
 
+### Debugging
+- [Debugging](./docs/Debugging.md)
+
 ## Using with other organizations
 
 See documentation on setting up other environments.

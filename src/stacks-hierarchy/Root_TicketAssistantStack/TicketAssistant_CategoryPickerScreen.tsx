@@ -1,9 +1,10 @@
-import {ScrollView, View} from 'react-native';
+import {Linking, ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 
 import {
   getTextForLanguage,
   TicketAssistantTexts,
+  translation as _,
   useTranslation,
 } from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
@@ -19,8 +20,9 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {TICKET_ASSISTANT_FREQUENCY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type CategoryPickerProps =
   TicketAssistantScreenProps<'TicketAssistant_CategoryPickerScreen'>;
@@ -30,7 +32,8 @@ export const TicketAssistant_CategoryPickerScreen = ({
   const styles = useThemeStyles();
   const {t, language} = useTranslation();
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
+
+  const focusRef = useFocusOnLoad(true, 200);
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
@@ -64,6 +67,41 @@ export const TicketAssistant_CategoryPickerScreen = ({
     return unsubscribe;
   }, [navigation]);
 
+  function getAdditionalTitleText(userTypeString: string) {
+    switch (userTypeString) {
+      case 'CHILD':
+        return t(_('/ungdom', '/youth', '/ungdom'));
+      default:
+        return '';
+    }
+  }
+  function additionalDescription(userTypeString: string) {
+    const handleLinkPress = () => {
+      Linking.openURL('https://atb.no/ungdomsbillett/');
+    };
+
+    if (userTypeString === 'CHILD') {
+      return (
+        <>
+          <ThemeText type={'body__secondary'} style={styles.expandedContent}>
+            {'\n\n' +
+              t(TicketAssistantTexts.categoryPicker.childPreLinkText) +
+              ' '}
+          </ThemeText>
+          <ThemeText
+            type={'body__secondary'}
+            style={[styles.expandedContent, {textDecorationLine: 'underline'}]}
+            onPress={handleLinkPress}
+          >
+            {t(TicketAssistantTexts.categoryPicker.childLinkText)}
+          </ThemeText>
+        </>
+      );
+    }
+
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
@@ -73,7 +111,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
         style={styles.scrollView}
         contentContainerStyle={styles.contentContainer}
       >
-        <View ref={focusRef} accessible={true}>
+        <View accessible={true} ref={focusRef}>
           <ThemeText
             type={'heading--big'}
             style={styles.header}
@@ -94,7 +132,8 @@ export const TicketAssistant_CategoryPickerScreen = ({
                   textType={'body__primary--bold'}
                   text={
                     (u.emoji ? u.emoji + ' ' : '') +
-                    getReferenceDataName(u, language)
+                    getReferenceDataName(u, language) +
+                    getAdditionalTitleText(u.userTypeString)
                   }
                   onPress={() => {
                     setCurrentlyOpen(index);
@@ -112,6 +151,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                           u.alternativeDescriptions,
                           language,
                         )}
+                        {additionalDescription(u.userTypeString)}
                       </ThemeText>
                       <Button
                         style={styles.chooseButton}
@@ -146,38 +186,38 @@ export const TicketAssistant_CategoryPickerScreen = ({
                 screenReaderPause,
               );
               return (
-                <View key={index} style={styles.a11yCategoryCards}>
-                  <PressableOpacity
-                    onPress={() => {
-                      setCurrentlyOpen(index);
-                      navigation.navigate('TicketAssistant_FrequencyScreen');
-                    }}
-                    accessible={true}
-                    accessibilityLabel={accessibilityLabel}
-                    accessibilityHint={t(
-                      TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({
-                        value: getReferenceDataName(u, language),
-                      }),
-                    )}
-                  >
-                    <View style={styles.contentContainer}>
-                      <ThemeText
-                        style={styles.a11yTitle}
-                        type={'body__primary--bold'}
-                        isMarkdown={true}
-                      >
-                        {title}
-                      </ThemeText>
-                      <ThemeText
-                        type={'body__tertiary'}
-                        style={styles.expandedContent}
-                        isMarkdown={true}
-                      >
-                        {description}
-                      </ThemeText>
-                    </View>
-                  </PressableOpacity>
-                </View>
+                <PressableOpacity
+                  key={u.id}
+                  onPress={() => {
+                    setCurrentlyOpen(index);
+                    navigation.navigate(TICKET_ASSISTANT_FREQUENCY_SCREEN);
+                  }}
+                  style={styles.a11yCategoryCards}
+                  accessible={true}
+                  accessibilityLabel={accessibilityLabel}
+                  accessibilityHint={t(
+                    TicketAssistantTexts.categoryPicker.a11yChooseButtonHint({
+                      value: getReferenceDataName(u, language),
+                    }),
+                  )}
+                >
+                  <View style={styles.contentContainer}>
+                    <ThemeText
+                      style={styles.a11yTitle}
+                      type={'body__primary--bold'}
+                      isMarkdown={true}
+                    >
+                      {title}
+                    </ThemeText>
+                    <ThemeText
+                      type={'body__tertiary'}
+                      style={styles.expandedContent}
+                      isMarkdown={true}
+                    >
+                      {description}
+                    </ThemeText>
+                  </View>
+                </PressableOpacity>
               );
             })}
           </>

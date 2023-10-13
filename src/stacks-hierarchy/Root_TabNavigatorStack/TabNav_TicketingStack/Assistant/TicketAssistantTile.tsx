@@ -27,9 +27,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   const title = t(TicketingTexts.ticketAssistantTile.title);
   const description = t(TicketingTexts.ticketAssistantTile.description);
 
-  const accessibilityLabel = [title, 'Beta', description].join(
-    screenReaderPause,
-  );
+  const accessibilityLabel = [title, description].join(screenReaderPause);
 
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -48,7 +46,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
   );
 
   return (
-    <View style={styles.tipsAndInformation}>
+    <View style={styles.container}>
       {requiresLoginConfig && (
         <TicketingTile
           accented={accented}
@@ -59,7 +57,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
           title={title}
           description={description}
           accessibilityLabel={accessibilityLabel}
-          showBetaTag={true}
+          infoTag={'new'}
         />
       )}
     </View>
@@ -67,10 +65,9 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  tipsAndInformation: {
+  container: {
     flexShrink: 1,
     alignSelf: 'stretch',
     marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.large,
   },
 }));

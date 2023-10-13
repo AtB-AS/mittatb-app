@@ -17,7 +17,7 @@ export const getAxiosErrorType = (
       return didTimeOut ? 'timeout' : 'cancel';
     }
     if (axios.isAxiosError(error)) {
-      if (error.response) {
+      if (error.response && error.code !== 'ERR_NETWORK') {
         return 'default';
       } else {
         if (error.code === 'ECONNABORTED') {

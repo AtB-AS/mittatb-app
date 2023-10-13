@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import {TransportModes} from '@atb/components/transportation-modes';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {InfoChip} from '@atb/components/info-chip';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
@@ -64,11 +64,9 @@ export const TicketSummary = () => {
     ? ticket.price / numberOfTravels
     : ticket.price;
 
-  const perTripPriceString = `${formatDecimalNumber(
-    perTripPrice,
-    language,
-    2,
-  )} kr`;
+  const perTripPriceString =
+    t(TicketAssistantTexts.summary.pricePerTrip) +
+    ` ${formatDecimalNumber(perTripPrice, language, 2)} kr`;
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
 
@@ -87,6 +85,10 @@ export const TicketSummary = () => {
           })
       : TicketAssistantTexts.summary.singleTicketNotice,
   );
+  const perTripAndSavingsAccessibilityLabel = [
+    perTripPriceString,
+    savingsText,
+  ].join(screenReaderPause);
 
   const a11ySummary = t(
     TicketAssistantTexts.summary.ticketSummaryA11yLabel({
@@ -122,7 +124,7 @@ export const TicketSummary = () => {
 
           <View style={styles.horizontalFlex}>
             {/** Traveller **/}
-            <View>
+            <View accessible={true}>
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.traveller)}
               </ThemeText>
@@ -133,7 +135,7 @@ export const TicketSummary = () => {
               />
             </View>
             {/** Zones **/}
-            <View>
+            <View accessible={true}>
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.zones)}
               </ThemeText>
@@ -143,28 +145,17 @@ export const TicketSummary = () => {
                 text={zonesString}
               />
             </View>
-            {/** Total ticket cost **/}
-            <View>
-              <ThemeText type="label__uppercase" color="secondary">
-                {t(TicketAssistantTexts.summary.price)}
-              </ThemeText>
-              <InfoChip
-                interactiveColor={interactiveColorName}
-                style={styles.infoChip}
-                text={ticketPriceString}
-              />
-            </View>
           </View>
         </View>
-        <View style={styles.ticketFooter}>
+        <View accessible={true} style={styles.ticketFooter}>
           <ThemeText type={'body__secondary'} color={interactiveColor.outline}>
-            {t(TicketAssistantTexts.summary.pricePerTrip)}
+            {t(TicketAssistantTexts.summary.price)}
           </ThemeText>
           <ThemeText
             type="body__secondary--bold"
             color={interactiveColor.outline}
           >
-            {perTripPriceString}
+            {ticketPriceString}
           </ThemeText>
         </View>
       </View>
@@ -172,8 +163,10 @@ export const TicketSummary = () => {
         type={'body__secondary'}
         style={styles.savingsText}
         color={themeColor}
-        accessibilityLabel={savingsText}
+        accessibilityLabel={perTripAndSavingsAccessibilityLabel}
       >
+        {perTripPriceString}
+        {'\n'}
         {savingsText}
       </ThemeText>
     </>
@@ -208,7 +201,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalFlex: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: theme.spacings.large,
   },
   infoChip: {
     marginVertical: theme.spacings.xSmall,

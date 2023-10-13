@@ -13,7 +13,7 @@ const FavoriteDeparturesTexts = {
   favoriteItemAdd: {
     label: _(
       'Legg til favorittavgang',
-      'Add favorite departure',
+      'Add favourite departure',
       'Legg til favorittavgang',
     ),
     a11yHint: _(
@@ -32,10 +32,5 @@ const FavoriteDeparturesTexts = {
     cancel: _('Avbryt', 'Cancel', 'Avbryt'),
     delete: _('Slett', 'Delete', 'Slett'),
   },
-  a11yMarkFavouriteHint: _(
-    'Aktiver for å merke som favoritt',
-    'Activate to mark as favourite',
-    'Aktiver for å merke som favoritt',
-  ),
 };
 export default FavoriteDeparturesTexts;

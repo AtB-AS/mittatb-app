@@ -5,10 +5,12 @@ import {
   SituationsTexts,
   TranslateFunction,
 } from '@atb/translations';
-import {Error, Info, Warning} from '@atb/assets/svg/color/icons/status';
+import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {SvgProps} from 'react-native-svg';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {isAfter, isBefore, isBetween} from '@atb/utils/date';
+import {Statuses} from '@atb-as/theme';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {
   let seenIds: string[] = [];
@@ -54,18 +56,35 @@ export const getSvgForSituation = (
   }
 };
 
+export const getMsgTypeForMostCriticalSituationOrNotice = (
+  situations: SituationType[],
+  notices?: NoticeFragment[],
+  cancellation: boolean = false,
+): Statuses | undefined => {
+  if (cancellation) return 'error';
+  if (!situations.length) {
+    return notices?.length ? 'info' : undefined;
+  }
+  return situations
+    .map(getMessageTypeForSituation)
+    .reduce(
+      (mostCritical, msgType) =>
+        msgType === 'warning' ? 'warning' : mostCritical,
+      'info',
+    );
+};
+
 export const getSvgForMostCriticalSituationOrNotice = (
   situations: SituationType[],
   notices?: NoticeFragment[],
   cancellation: boolean = false,
 ) => {
-  if (cancellation) return Error;
-  if (!situations.length) {
-    return notices?.length ? Info : undefined;
-  }
-  return situations
-    .map(getMessageTypeForSituation)
-    .reduce((svg, msgType) => (msgType === 'warning' ? Warning : svg), Info);
+  const msgType = getMsgTypeForMostCriticalSituationOrNotice(
+    situations,
+    notices,
+    cancellation,
+  );
+  return msgType && messageTypeToIcon(msgType, true);
 };
 
 export const getSituationOrNoticeA11yLabel = (
@@ -73,10 +92,10 @@ export const getSituationOrNoticeA11yLabel = (
   notices: NoticeFragment[],
   cancellation: boolean = false,
   t: TranslateFunction,
-): string => {
+): string | undefined => {
   if (cancellation) return t(SituationsTexts.a11yLabel.error);
   if (!situations.length) {
-    return notices.length ? t(SituationsTexts.a11yLabel.info) : '';
+    return notices.length ? t(SituationsTexts.a11yLabel.info) : undefined;
   }
   const messageType = situations
     .map(getMessageTypeForSituation)

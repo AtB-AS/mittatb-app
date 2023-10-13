@@ -1,6 +1,6 @@
-import {useFavorites} from '@atb/favorites';
+import {useFavorites, StoredFavoriteDeparture} from '@atb/favorites';
 import {AccessibilityInfo, Alert} from 'react-native';
-import {NearbyTexts, useTranslation} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {FavoriteDialogSheet} from '@atb/departure-list/section-items/FavoriteDialogSheet';
 import React from 'react';
@@ -17,7 +17,7 @@ import {
 } from '@atb/travel-details-screens/utils';
 
 type FavouriteDepartureLine = {
-  id?: string;
+  id: string;
   description?: string;
   lineNumber?: string;
   transportMode?: TransportMode;
@@ -26,7 +26,6 @@ type FavouriteDepartureLine = {
 };
 
 export function useOnMarkFavouriteDepartures(
-  line: FavouriteDepartureLine,
   quay: Quay,
   stopPlace: StopPlace,
   addedFavoritesVisibleOnDashboard?: boolean,
@@ -39,97 +38,106 @@ export function useOnMarkFavouriteDepartures(
     close: closeBottomSheet,
     onOpenFocusRef,
   } = useBottomSheet();
-
-  const destinationDisplay = ensureViaFormat(line.destinationDisplay);
-
-  if (!line.id || !destinationDisplay || !line.lineNumber) {
-    return {onMarkFavourite: undefined, existingFavorite: undefined};
-  }
-  const lineName = getDestinationLineName(t, destinationDisplay);
-
-  const addFavorite = async (forSpecificDestination: boolean) => {
-    line.id &&
-      (await addFavoriteDeparture({
-        lineId: line.id,
-        destinationDisplay: forSpecificDestination
-          ? destinationDisplay
-          : undefined,
-        lineLineNumber: line.lineNumber,
-        lineTransportationMode: line.transportMode,
-        lineTransportationSubMode: line.transportSubmode,
-        quayName: quay.name,
-        quayPublicCode: quay.publicCode,
-        quayId: quay.id,
-        stopId: stopPlace.id,
-        visibleOnDashboard: addedFavoritesVisibleOnDashboard,
-      }));
+  const addFavorite = async (
+    line: FavouriteDepartureLine,
+    forSpecificDestination: boolean,
+  ) => {
+    await addFavoriteDeparture({
+      lineId: line.id,
+      destinationDisplay: forSpecificDestination
+        ? line.destinationDisplay
+        : undefined,
+      lineLineNumber: line.lineNumber,
+      lineTransportationMode: line.transportMode,
+      lineTransportationSubMode: line.transportSubmode,
+      quayName: quay.name,
+      quayPublicCode: quay.publicCode,
+      quayId: quay.id,
+      stopId: stopPlace.id,
+      visibleOnDashboard: addedFavoritesVisibleOnDashboard,
+    });
     AccessibilityInfo.announceForAccessibility(
-      t(NearbyTexts.results.lines.favorite.message.saved),
+      t(DeparturesTexts.results.lines.favorite.message.saved),
     );
   };
 
-  const existingFavorite = getFavoriteDeparture({
-    destinationDisplay,
-    lineId: line.id,
-    stopId: stopPlace.id,
-    quayId: quay.id,
-  });
+  const getExistingFavorite = (line: FavouriteDepartureLine) =>
+    getFavoriteDeparture({
+      destinationDisplay: ensureViaFormat(line.destinationDisplay),
+      lineId: line.id,
+      stopId: stopPlace.id,
+      quayId: quay.id,
+    });
 
-  const toggleFavouriteAccessibilityLabel = existingFavorite
-    ? t(
-        NearbyTexts.results.lines.favorite.removeFavorite(
-          `${line.lineNumber} ${
-            getDestinationLineName(t, existingFavorite.destinationDisplay) ?? ''
-          }`,
-          stopPlace.name,
-        ),
-      )
-    : t(
-        NearbyTexts.results.lines.favorite.addFavorite(
-          `${line.lineNumber} ${lineName}`,
-          stopPlace.name,
-        ),
-      );
+  const toggleFavouriteAccessibilityLabel = (line: FavouriteDepartureLine) => {
+    const existing: any = undefined;
+    return existing
+      ? t(
+          DeparturesTexts.results.lines.favorite.removeFavorite(
+            `${line.lineNumber} ${existing.lineName ?? ''}`,
+            stopPlace.name,
+          ),
+        )
+      : t(
+          DeparturesTexts.results.lines.favorite.addFavorite(
+            `${line.lineNumber} ${getDestinationLineName(
+              t,
+              line.destinationDisplay,
+            )}`,
+            stopPlace.name,
+          ),
+        );
+  };
 
-  const onMarkFavourite = () => {
-    if (existingFavorite) {
+  const onMarkFavourite = (
+    line: FavouriteDepartureLine,
+    existing: StoredFavoriteDeparture | undefined,
+  ) => {
+    if (existing) {
       Alert.alert(
-        t(NearbyTexts.results.lines.favorite.delete.label),
-        t(NearbyTexts.results.lines.favorite.delete.confirmWarning),
+        t(DeparturesTexts.results.lines.favorite.delete.label),
+        t(DeparturesTexts.results.lines.favorite.delete.confirmWarning),
         [
           {
-            text: t(NearbyTexts.results.lines.favorite.delete.cancel),
+            text: t(DeparturesTexts.results.lines.favorite.delete.cancel),
             style: 'cancel',
           },
           {
-            text: t(NearbyTexts.results.lines.favorite.delete.delete),
+            text: t(DeparturesTexts.results.lines.favorite.delete.delete),
             style: 'destructive',
             onPress: async () => {
               animateNextChange();
-              await removeFavoriteDeparture(existingFavorite.id);
+              await removeFavoriteDeparture(existing.id);
               AccessibilityInfo.announceForAccessibility(
-                t(NearbyTexts.results.lines.favorite.message.removed),
+                t(DeparturesTexts.results.lines.favorite.message.removed),
               );
             },
           },
         ],
       );
-    } else if (destinationDisplay && line.lineNumber) {
-      openBottomSheet(() =>
-        destinationDisplay && line.lineNumber ? (
+    } else if (line.destinationDisplay && line.lineNumber) {
+      openBottomSheet(() => {
+        const destinationDisplay = ensureViaFormat(line.destinationDisplay);
+        return destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
             destinationDisplay={destinationDisplay}
             lineNumber={line.lineNumber}
-            addFavorite={addFavorite}
+            addFavorite={(forSpecificLineName: boolean) =>
+              addFavorite(line, forSpecificLineName)
+            }
             close={closeBottomSheet}
             ref={onOpenFocusRef}
           />
         ) : (
           <></>
-        ),
-      );
+        );
+      });
     }
   };
 
-  return {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel};
+  return {
+    onMarkFavourite,
+    getExistingFavorite,
+    toggleFavouriteAccessibilityLabel,
+  };
 }

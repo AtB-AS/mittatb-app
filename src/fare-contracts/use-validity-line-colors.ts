@@ -12,7 +12,7 @@ export function useValidityLineColors(fareProductType?: string) {
 
   const {mode, subMode} = fareProductTypeConfig?.transportModes?.[0] || {};
 
-  let lineColor = theme.static.background.background_accent_0.background;
+  let lineColor = theme.static.background.background_2.background;
   const backgroundColor = useTransportationColor(mode, subMode);
 
   return {

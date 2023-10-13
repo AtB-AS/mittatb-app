@@ -56,6 +56,15 @@ const DeparturesTexts = {
         `Vald dato: ${dateTime}`,
       ),
   },
+  dateInput: {
+    confirm: _('Bekreft', 'Confirm', 'Bekreft'),
+    header: _('Velg dato og tid', 'Select date and time', 'Vel dato og tid'),
+    a11yInPastHint: _(
+      'Aktivér for å bekrefte tidsvalg.',
+      'Activate to confirm time and date.',
+      'Aktivér for å bekrefte tidspunktet.',
+    ),
+  },
   noDepartures: _(
     'Ingen avganger i dette tidsrommet.',
     'No departures in the selected period of time.',
@@ -94,6 +103,11 @@ const DeparturesTexts = {
     'Activate to view details',
     'Aktiver for å sjå detaljar',
   ),
+  a11yMarkFavouriteHint: _(
+    'Aktiver for å merke som favoritt',
+    'Activate to mark as favourite',
+    'Aktiver for å merke som favoritt',
+  ),
   favorites: {
     toggle: _(
       'Vis kun favorittavganger',
@@ -112,7 +126,7 @@ const DeparturesTexts = {
     ),
     noFavouritesWidget: _(
       'Du har ingen favorittavganger. \nTrykk “Legg til favorittavgang” for å lagre en avgang du bruker ofte.',
-      'You have no favorite departures. \nPress “Add favorite departure” to save a frequently used departure.',
+      'You have no favourite departures. \nPress “Add favourite departure” to save a frequently used departure.',
       'Du har ingen favorittavgangar. \nTrykk "Legg til favorittavgang" for å lagre ein avgang du brukar ofte.',
     ),
     emptyResult: _(
@@ -141,6 +155,144 @@ const DeparturesTexts = {
   },
   closeButton: {
     label: _('Lukk', 'Close', 'Lukk'),
+  },
+  results: {
+    lines: {
+      lineNameAccessibilityHint: _(
+        'Aktiver for detaljer om avgang og oversikt over kommende avganger.',
+        'Activate for departure details, and to review future departures',
+        'Trykk for detaljar om avgang og oversikt over komande avgangar',
+      ),
+      favorite: {
+        addFavorite: (name: string, place: string) =>
+          _(
+            `Legg til favorittavgang: ${name} frå ${place}`,
+            `Add favourite departure: ${name} from ${place}.`,
+            `Legg til favorittavgang: ${name} frå ${place}`,
+          ),
+        removeFavorite: (name: string, place: string) =>
+          _(
+            `Fjern favorittavgang: ${name} frå ${place}`,
+            `Delete favourite departure: ${name} from ${place}.`,
+            `Fjern favorittavgang: ${name} frå ${place}`,
+          ),
+        delete: {
+          label: _('Fjerne avgang?', 'Delete departure?', 'Slette avgang?'),
+          confirmWarning: _(
+            'Sikker på at du vil fjerne favorittavgang?',
+            'Sure you want to delete this favourite?',
+            'Er du sikker på at du vil slette denne favorittavgangen?',
+          ),
+          cancel: _('Avbryt', 'Cancel', 'Avbryt'),
+          delete: _('Slett', 'Delete', 'Slett'),
+        },
+        message: {
+          saved: _(`Lagt til.`, 'Added', `Lagt til.`),
+          removed: _(`Fjernet.`, 'Removed', `Fjerna.`),
+        },
+      },
+    },
+    messages: {
+      initial: _(
+        'Søk etter avganger fra holdeplasser eller i nærheten av steder.',
+        'Search for departures from nearby stops or locations',
+        'Søk etter avgangar frå haldeplassar eller i nærleiken av stadar.',
+      ),
+      emptyResultFavorites: _(
+        'Fant ingen favorittavganger på valgt plass.',
+        'No favourite departures found at the specified location',
+        'Ingen favorittavgangar funne på valt stad.',
+      ),
+    },
+    relativeTime: (time: string) => _(`om ${time}`, `in ${time}`, `om ${time}`),
+
+    quayResult: {
+      platformHeader: {
+        accessibilityLabel: (name: string, publicCode: string) =>
+          _(
+            `Avganger fra plattform ${name} ${publicCode}.`,
+            `Departures from platform ${name} ${publicCode}.`,
+            `Avgangar frå plattform ${name} ${publicCode}.`,
+          ),
+        accessibilityLabelNoPublicCode: (name: string) =>
+          _(
+            `Avganger fra plattform på holdeplassen ${name}.`,
+            `Departures from stop place platform ${name}.`,
+            `Avgangar frå plattform på haldeplassen ${name}.`,
+          ),
+        distance: {
+          label: (distance: string) =>
+            _(
+              `Det er rundt ${distance} til plattform.`,
+              `About ${distance} to platform.`,
+              `Det er omtrent ${distance} til plattformen.`,
+            ),
+        },
+      },
+      showMoreToggler: {
+        text: _(
+          'Vis flere avganger',
+          'Show more departures',
+          'Vis fleire avgangar',
+        ),
+      },
+    },
+    departure: {
+      hasPassedAccessibilityLabel: (time: string) =>
+        _(
+          `Avgangen ${time} har trolig passert plattformen.`,
+          `Departure ${time} has likely left the platform.`,
+          `Avgangen ${time} har truleg passert plattformen.`,
+        ),
+      upcomingRealtimeAccessibilityLabel: (time: string) =>
+        _(
+          `Kommende avgang sanntid ${time} `,
+          `Next departure realtime ${time} `,
+          `Neste avgang sanntid ${time}`,
+        ),
+      upcomingAccessibilityLabel: (time: string) =>
+        _(
+          `Kommende avgang ${time} `,
+          `Next departure ${time} `,
+          `Neste avgang ${time}`,
+        ),
+      nextAccessibilityLabel: (time: string) =>
+        _(
+          `Neste avganger: ${time} `,
+          `Next departures: ${time} `,
+          `Neste avgangar: ${time}`,
+        ),
+      nextAccessibilityRealtime: (time: string) =>
+        _(`sanntid ${time}`, `realtime: ${time}`, `Sanntid: ${time}`),
+    },
+  },
+
+  favoriteDialogSheet: {
+    title: _(
+      'Velg favorittavgang',
+      'Select favourite departure',
+      'Vel favorittavgang',
+    ),
+    description: (lineNumber: string, lineName: string) =>
+      _(
+        `Vil du favorittmarkere kun '${lineNumber} ${lineName}' eller alle variasjoner av linje ${lineNumber}?`,
+        `Do you want to favourite mark only '${lineNumber} ${lineName}' or all variations of line ${lineNumber}?`,
+        `Vil du kun merke '${lineNumber} ${lineName}' som favoritt eller alle variasjonane av linje ${lineNumber}?`,
+      ),
+    buttons: {
+      specific: (lineNumber: string, lineName: string) =>
+        _(
+          `Kun '${lineNumber} ${lineName}'`,
+          `Only '${lineNumber} ${lineName}'`,
+          `Berre '${lineNumber} ${lineName}'`,
+        ),
+      all: (lineNumber: string) =>
+        _(
+          `Alle variasjoner av linje ${lineNumber}`,
+          `All variations of line ${lineNumber}`,
+          `Alle variasjonar av linje ${lineNumber}`,
+        ),
+    },
   },
 };
 export default DeparturesTexts;

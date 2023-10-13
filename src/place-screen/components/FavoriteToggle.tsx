@@ -1,6 +1,5 @@
 import {ToggleSectionItem} from '@atb/components/sections';
-import {useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 
 type FavoriteToggleProps = {

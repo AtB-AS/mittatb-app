@@ -9,8 +9,7 @@ import {StopPlaces} from './components/StopPlaces';
 import {useNearestStopsData} from './use-nearest-stops-data';
 import {useDoOnceWhen} from '@atb/utils/use-do-once-when';
 import {StyleSheet} from '@atb/theme';
-import {NearbyTexts, useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {DeparturesTexts, NearbyTexts, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Platform, RefreshControl, View} from 'react-native';
@@ -155,7 +154,8 @@ export const NearbyStopPlacesScreenComponent = ({
   return (
     <FullScreenView
       refreshControl={
-        isFocused ? (
+        // Quick fix for iOS to fix stuck spinner by removing the RefreshControl when not focused
+        isFocused || Platform.OS === 'android' ? (
           <RefreshControl
             refreshing={Platform.OS === 'ios' ? false : isLoading}
             onRefresh={refresh}
@@ -185,6 +185,8 @@ export const NearbyStopPlacesScreenComponent = ({
         stopPlaces={orderedStopPlaces}
         navigateToPlace={onSelectStopPlace}
         testID={'nearbyStopsContainerView'}
+        location={location}
+        isLoading={isLoading}
       />
     </FullScreenView>
   );
@@ -213,8 +215,8 @@ const Header = React.memo(function Header({
   const styles = useStyles();
 
   return (
-    <View style={styles.locationInputSection}>
-      <Section>
+    <View style={styles.header}>
+      <Section style={styles.locationInputSection}>
         <LocationInputSectionItem
           label={t(NearbyTexts.location.departurePicker.label)}
           updatingLocation={updatingLocation}
@@ -263,11 +265,14 @@ function sortAndFilterStopPlaces(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  locationInputSection: {
+  header: {
     backgroundColor: theme.static.background.background_accent_0.background,
+  },
+  locationInputSection: {
     marginHorizontal: theme.spacings.medium,
   },
   favoriteChips: {
     marginTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
 }));

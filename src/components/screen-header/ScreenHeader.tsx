@@ -67,7 +67,7 @@ export const ScreenHeader: React.FC<ScreenHeaderProps> = (props) => {
   return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
 };
 
-type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
+type ScreenHeaderWithoutNavigationProps = Omit<ScreenHeaderProps, 'style'> & {
   leftButton?: HeaderButtonWithoutNavigationProps;
   rightButton?: HeaderButtonWithoutNavigationProps;
 };
@@ -80,6 +80,7 @@ type ScreenHeaderWithoutNavigationProps = ScreenHeaderProps & {
 export const ScreenHeaderWithoutNavigation = (
   props: ScreenHeaderWithoutNavigationProps,
 ) => {
+  const styles = useHeaderStyle();
   const themeColor = props.color ?? 'background_accent_0';
   const leftIcon = props.leftButton ? (
     <HeaderButtonWithoutNavigation color={themeColor} {...props.leftButton} />
@@ -92,7 +93,14 @@ export const ScreenHeaderWithoutNavigation = (
     <View />
   );
 
-  return <BaseHeader leftIcon={leftIcon} rightIcon={rightIcon} {...props} />;
+  return (
+    <BaseHeader
+      style={styles.withoutNavigationContainer}
+      leftIcon={leftIcon}
+      rightIcon={rightIcon}
+      {...props}
+    />
+  );
 };
 
 type BaseHeaderProps = ScreenHeaderProps & {
@@ -157,7 +165,16 @@ const BaseHeader = ({
         style={[
           css.buttons,
           {
-            top: theme.spacings.large + buttonsTopOffset,
+            /**
+             * TODO: This is a hack to make sure the buttons are positioned
+             * correctly when padding is passed as a prop, specifically for the
+             * bottom sheet. Can be removed when the bottom sheet starts using
+             * its own header. (https://github.com/AtB-AS/kundevendt/issues/4211)
+             */
+            top:
+              (typeof style?.paddingTop?.valueOf() === 'number'
+                ? (style.paddingTop.valueOf() as number)
+                : theme.spacings.medium) + buttonsTopOffset,
             height: buttonsHeight,
           },
         ]}
@@ -177,8 +194,11 @@ const BaseHeader = ({
 const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
     paddingHorizontal: theme.spacings.medium,
+    paddingTop: theme.spacings.medium,
+  },
+  withoutNavigationContainer: {
     paddingTop: theme.spacings.large,
-    paddingBottom: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
     borderTopLeftRadius: theme.border.radius.circle,
     borderTopRightRadius: theme.border.radius.circle,
   },

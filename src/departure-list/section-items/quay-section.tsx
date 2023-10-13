@@ -5,7 +5,7 @@ import {
 } from '@atb/api/departures/types';
 import {Section} from '@atb/components/sections';
 import {useTheme} from '@atb/theme';
-import {NearbyTexts, useTranslation} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
@@ -95,7 +95,7 @@ export const QuaySection = React.memo(function QuaySection({
         {hasMoreItems && mode !== 'frontpage' && (
           <MoreItem
             onPress={() => setLimit(limit + LIMIT_SIZE)}
-            text={t(NearbyTexts.results.quayResult.showMoreToggler.text)}
+            text={t(DeparturesTexts.results.quayResult.showMoreToggler.text)}
           />
         )}
       </Section>

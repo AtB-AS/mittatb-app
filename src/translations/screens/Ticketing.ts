@@ -49,15 +49,25 @@ const TicketingTexts = {
   activeFareProductsAndReservationsTab: {
     label: _('Aktive', 'Active', 'Aktive'),
     a11yLabel: _('Aktive billetter', 'Active tickets', 'Aktive billettar'),
-    noItems: _(
-      'Du har ingen aktive billetter.',
-      'You have no active tickets.',
-      'Du har ingen aktive billettar.',
+    noActiveTicketsTitle: _(
+      'Ingen aktive billetter',
+      'No active tickets',
+      'Ingen aktive billettar',
     ),
-    noItemsHistoryHelpText: _(
-      'Du har ingen aktive billetter. Billetthistorikk finner du under Min profil-fanen.',
-      'You have no active tickets right now. Ticket history can be found under the My profile tab.',
-      'Du har ingen aktive billettar. Billetthistorikk finn du under Min profil-fanen',
+    noActiveTicketsDetails: _(
+      'Når du kjøper billetter vil de dukke opp her. Dra ned for å oppdatere hvis billetten din ikke vises.',
+      'When you buy tickets, they will show up here. Pull down to refresh if your ticket is not showing.',
+      'Når du kjøper billettar vil dei dukke opp her. Drag ned for å oppdatere dersom billetten din ikkje visast.',
+    ),
+    emptyTicketHistoryTitle: _(
+      'Ingen billetter kjøpt',
+      'No tickets bought',
+      'Ingen billettar kjøpt',
+    ),
+    emptyTicketHistoryDetails: _(
+      'Dine utløpte billetter vil dukke opp her. Dra ned for å oppdatere om du ikke finner billetten din.',
+      "Your expired tickets will show here. Pull down to refresh if you can't find your ticket.",
+      'Billettane dine som har gått ut vil dukke opp her. Drag ned for å oppdatere om du ikkje finn billetten din.',
     ),
   },
   ticketHistoryTab: {
@@ -238,11 +248,15 @@ const TicketingTexts = {
     approved: _('Godkjent billett', 'Approved ticket', 'Godkjent billett'),
   },
   ticketAssistantTile: {
-    title: _('Billettveileder', 'Ticket assistant', 'Billettrettleiar'),
+    title: _(
+      'Billettveileder for buss og trikk',
+      'Ticket assistant for bus and tram',
+      'Billettrettleiar for buss og trikk',
+    ),
     description: _(
-      'Få hjelp til å velge billetten som passer deg best.',
+      'Få hjelp til å velge billetten som passer best for deg.',
       'Get help choosing the ticket that suits you the best.',
-      'Få hjelp til å velje billetten som passar deg best.',
+      'Få hjelp til å velje billetten som passar best for deg.',
     ),
     a11yHint: _(
       'Aktiver for å åpne billettveilederen',
@@ -283,13 +297,6 @@ export default orgSpecificTranslations(TicketingTexts, {
     },
   },
   fram: {
-    activeFareProductsAndReservationsTab: {
-      noItemsHistoryHelpText: _(
-        'Du har ingen aktive billetter. Billetthistorikk finner du under Min bruker-fanen.',
-        'You have no active tickets right now. Ticket history can be found under the My user tab.',
-        'Du har ingen aktive billettar. Billetthistorikk finn du under Min brukar-fana.',
-      ),
-    },
     travelCardInformation: {
       illustrationa11yLabel: (travelCardId: string) =>
         _(

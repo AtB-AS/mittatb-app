@@ -17,9 +17,9 @@ import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   CancelledDepartureTexts,
+  DeparturesTexts,
   dictionary,
   Language,
-  NearbyTexts,
   useTranslation,
 } from '@atb/translations';
 import {
@@ -72,16 +72,19 @@ export function LineItem({
   const styles = useItemStyles();
   const {t, language} = useTranslation();
 
-  const {onMarkFavourite, existingFavorite, toggleFavouriteAccessibilityLabel} =
-    useOnMarkFavouriteDepartures(
-      {...group.lineInfo, id: group.lineInfo?.lineId},
-      quay,
-      stop,
-    );
+  const {
+    onMarkFavourite,
+    getExistingFavorite,
+    toggleFavouriteAccessibilityLabel,
+  } = useOnMarkFavouriteDepartures(quay, stop);
 
   if (hasNoDeparturesOnGroup(group)) {
     return null;
   }
+  const favouriteDepartureLine = {
+    ...group.lineInfo,
+    id: group.lineInfo?.lineId ?? '',
+  };
 
   const title = `${group.lineInfo?.lineNumber} ${getDestinationLineName(
     t,
@@ -98,6 +101,7 @@ export function LineItem({
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
+  const existing = getExistingFavorite(favouriteDepartureLine);
 
   return (
     <View style={[topContainer, {padding: 0}]} testID={testID}>
@@ -108,7 +112,7 @@ export function LineItem({
           hitSlop={insets.symmetric(12, 0)}
           accessibilityRole="button"
           accessibilityHint={
-            t(NearbyTexts.results.lines.lineNameAccessibilityHint) +
+            t(DeparturesTexts.results.lines.lineNameAccessibilityHint) +
             screenReaderPause
           }
           accessibilityLabel={getAccessibilityTextFirstDeparture(
@@ -130,11 +134,13 @@ export function LineItem({
         </PressableOpacity>
         {mode === 'departures' && (
           <FavouriteDepartureToggle
-            existingFavorite={existingFavorite}
-            onMarkFavourite={onMarkFavourite}
-            toggleFavouriteAccessibilityLabel={
-              toggleFavouriteAccessibilityLabel
+            existingFavorite={existing}
+            onMarkFavourite={() =>
+              onMarkFavourite(favouriteDepartureLine, existing)
             }
+            toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel(
+              favouriteDepartureLine,
+            )}
           />
         )}
       </View>
@@ -172,7 +178,7 @@ function labelForTime(
   );
 
   if (isRelativeButNotNow(time)) {
-    return t(NearbyTexts.results.relativeTime(resultTime));
+    return t(DeparturesTexts.results.relativeTime(resultTime));
   }
 
   return addDatePrefixIfNecessary(
@@ -202,18 +208,18 @@ function getAccessibilityTextFirstDeparture(
   const upcoming =
     (inPast
       ? t(
-          NearbyTexts.results.departure.hasPassedAccessibilityLabel(
+          DeparturesTexts.results.departure.hasPassedAccessibilityLabel(
             formatToClock(firstResult.time, language, 'floor'),
           ),
         )
       : firstResult.realtime
       ? t(
-          NearbyTexts.results.departure.upcomingRealtimeAccessibilityLabel(
+          DeparturesTexts.results.departure.upcomingRealtimeAccessibilityLabel(
             firstResultScreenReaderTimeText,
           ),
         )
       : t(
-          NearbyTexts.results.departure.upcomingAccessibilityLabel(
+          DeparturesTexts.results.departure.upcomingAccessibilityLabel(
             firstResultScreenReaderTimeText,
           ),
         )) +
@@ -221,13 +227,13 @@ function getAccessibilityTextFirstDeparture(
 
   const nextLabel = secondResult
     ? t(
-        NearbyTexts.results.departure.nextAccessibilityLabel(
+        DeparturesTexts.results.departure.nextAccessibilityLabel(
           [secondResult, ...rest]
             .map(
               (i) =>
                 (i.realtime
                   ? t(
-                      NearbyTexts.results.departure.nextAccessibilityRealtime(
+                      DeparturesTexts.results.departure.nextAccessibilityRealtime(
                         labelForTime(i.time, searchDate, t, language, true),
                       ),
                     )

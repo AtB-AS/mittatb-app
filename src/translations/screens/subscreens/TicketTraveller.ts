@@ -33,11 +33,10 @@ const SpecificExtensionsInternal = {
 const SpecificExtensions = orgSpecificTranslations(SpecificExtensionsInternal, {
   nfk: {
     singleChild: _('', '', ''),
-    periodAdult: _(
-      'Gyldig på nattbuss.',
-      'Valid for night bus.',
-      'Gyldig på nattbuss.',
-    ),
+    periodAdult: _('', '', ''),
+    periodChild: _('', '', ''),
+    periodStudent: _('', '', ''),
+    periodSenior: _('', '', ''),
   },
   fram: {
     singleChild: _('', '', ''),

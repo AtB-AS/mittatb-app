@@ -1,18 +1,12 @@
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContractTexts,
-  PurchaseOverviewTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import React from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import {MessageBox} from '@atb/components/message-box';
 
 type Props = {
   price: number;
@@ -20,7 +14,6 @@ type Props = {
   isLoading: boolean;
   isError: boolean;
   userProfilesWithCount: UserProfileWithCount[];
-  fareProductTypeConfig: FareProductTypeConfig;
   onPressBuy: () => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -31,7 +24,6 @@ export function Summary({
   isLoading,
   isError,
   userProfilesWithCount,
-  fareProductTypeConfig,
   onPressBuy,
   style,
 }: Props) {
@@ -45,82 +37,18 @@ export function Summary({
     onPressBuy();
   };
 
-  const transportModesText = fareProductTypeConfig.transportModes
-    .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
-    .filter(Boolean)
-    .join('/');
-
-  const SummaryText = () => {
-    const summary = (text: string) => (
-      <ThemeText type="body__secondary" style={styles.message}>
-        {text}
-      </ThemeText>
-    );
-    const requiredOnMobileText = fareProductTypeConfig.configuration
-      .requiresTokenOnMobile
-      ? summary(t(PurchaseOverviewTexts.summary.messageRequiresMobile))
-      : null;
-
-    switch (fareProductTypeConfig.configuration.zoneSelectionMode) {
-      case 'multiple':
-      case 'multiple-stop':
-      case 'multiple-zone':
-      case 'single':
-      case 'single-stop':
-      case 'single-zone':
-        return summary(t(PurchaseOverviewTexts.summary.messageInZone));
-      case 'multiple-stop-harbor':
-        const harborText = summary(
-          t(PurchaseOverviewTexts.summary.messageInHarborZones),
-        );
-        return (
-          <>
-            {summary(
-              t(
-                PurchaseOverviewTexts.summary[
-                  fareProductTypeConfig.type === 'boat-period'
-                    ? 'messageInHarborPeriod'
-                    : 'messageInHarborSingle'
-                ],
-              ),
-            )}
-            {harborText}
-            {requiredOnMobileText}
-          </>
-        );
-      case 'none':
-        return summary(
-          t(
-            PurchaseOverviewTexts.summary.messageAppliesFor(transportModesText),
-          ),
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <View style={style}>
       {isLoading ? (
         <ActivityIndicator size="large" />
       ) : (
-        <>
-          <ThemeText
-            type="body__primary--bold"
-            style={styles.price}
-            testID="offerTotalPriceText"
-          >
-            {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
-          </ThemeText>
-          <SummaryText />
-        </>
-      )}
-      {isFree && (
-        <MessageBox
-          type="valid"
-          message={t(PurchaseOverviewTexts.summary.free)}
-          style={styles.free}
-        />
+        <ThemeText
+          type="body__primary--bold"
+          style={styles.price}
+          testID="offerTotalPriceText"
+        >
+          {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
+        </ThemeText>
       )}
       <Button
         interactiveColor="interactive_0"

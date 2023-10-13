@@ -1,20 +1,18 @@
-import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {DetailsContent} from '@atb/fare-contracts';
 import {
   findReferenceDataById,
   isOfFareProductRef,
 } from '@atb/reference-data/utils';
+import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
-import {isPreActivatedTravelRight, useTicketingState} from '@atb/ticketing';
+import {useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {DetailsContent, getValidityStatus} from '@atb/fare-contracts';
-import {getValidOnTrainNoticeText} from '../stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/utils';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -44,20 +42,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       orderVersion: fc.version,
     });
 
-  const shouldShowValidOnTrainNotice: boolean =
-    fc !== undefined &&
-    isPreActivatedTravelRight(firstTravelRight) &&
-    getValidityStatus(
-      now,
-      firstTravelRight.startDateTime.toMillis(),
-      firstTravelRight.endDateTime.toMillis(),
-      fc.state,
-    ) === 'valid' &&
-    !!firstTravelRight.tariffZoneRefs?.length &&
-    firstTravelRight.tariffZoneRefs?.every(
-      (val: string) => val === 'ATB:TariffZone:1',
-    ) === true;
-
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -72,13 +56,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
             now={now}
             onReceiptNavigate={onReceiptNavigate}
             hasActiveTravelCard={hasActiveTravelCard}
-          />
-        )}
-
-        {shouldShowValidOnTrainNotice && (
-          <MessageBox
-            message={getValidOnTrainNoticeText(t, preassignedFareProduct?.type)}
-            type="info"
           />
         )}
       </ScrollView>

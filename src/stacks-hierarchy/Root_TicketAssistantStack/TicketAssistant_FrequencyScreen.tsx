@@ -12,6 +12,7 @@ import {useTicketAssistantState} from './TicketAssistantContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {SectionSeparator} from '@atb/components/sections';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {TICKET_ASSISTANT_DURATION_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 
 type FrequencyScreenProps =
   TicketAssistantScreenProps<'TicketAssistant_FrequencyScreen'>;
@@ -27,8 +28,9 @@ export const TicketAssistant_FrequencyScreen = ({
   const [sliderValue, setSliderValue] = useState<number>(
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
   );
+  const focusRef = useFocusOnLoad(true, 200);
+
   const a11yContext = useAccessibilityContext();
-  const focusRef = useFocusOnLoad();
 
   const sliderMax = 14;
 
@@ -68,7 +70,7 @@ export const TicketAssistant_FrequencyScreen = ({
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
-          <View ref={focusRef} accessible={true}>
+          <View style={styles.textBox} ref={focusRef} accessible={true}>
             <ThemeText
               type={'heading--big'}
               style={styles.header}
@@ -82,7 +84,7 @@ export const TicketAssistant_FrequencyScreen = ({
             </ThemeText>
             <ThemeText
               color={themeColor}
-              type={'body__secondary'}
+              type={'body__primary'}
               style={styles.description}
               accessibilityLabel={t(TicketAssistantTexts.frequency.description)}
             >
@@ -98,7 +100,7 @@ export const TicketAssistant_FrequencyScreen = ({
                     interactiveColor="interactive_2"
                     onPress={() => {
                       setSliderValue(number);
-                      navigation.navigate('TicketAssistant_DurationScreen');
+                      navigation.navigate(TICKET_ASSISTANT_DURATION_SCREEN);
                     }}
                     text={number.toString()}
                     accessibilityHint={t(
@@ -117,30 +119,26 @@ export const TicketAssistant_FrequencyScreen = ({
           ) : (
             <View>
               <View style={styles.sliderContainer}>
-                <View style={styles.horizontalLine}>
-                  {numbersAsStrings.map((number) => {
-                    return (
-                      <View key={number} style={styles.numberContainer}>
-                        <ThemeText
-                          key={number}
-                          style={styles.number}
-                          type={'body__primary'}
-                          color={themeColor}
-                        >
-                          {number}
-                        </ThemeText>
-                      </View>
-                    );
-                  })}
-                </View>
                 <Slider
-                  style={styles.slider}
-                  interactiveColor={'interactive_0'}
+                  containerStyle={styles.slider}
                   maximumValue={sliderMax}
                   minimumValue={2}
                   step={1}
                   value={sliderValue}
-                  tapToSeek={true}
+                  trackMarks={numbers}
+                  trackMarkComponent={(index) => {
+                    return (
+                      <ThemeText
+                        style={{
+                          top: -30,
+                          textAlign: 'center',
+                          minWidth: 20,
+                        }}
+                      >
+                        {numbersAsStrings[index]}
+                      </ThemeText>
+                    );
+                  }}
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}
@@ -185,6 +183,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   mainView: {
     flex: 1,
+    gap: theme.spacings.xLarge,
     paddingHorizontal: theme.spacings.large,
     paddingBottom: theme.spacings.xLarge,
     width: '100%',
@@ -192,20 +191,22 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   sliderContainer: {
     width: '100%',
     backgroundColor: theme.static.background.background_0.background,
-    paddingVertical: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
+    paddingHorizontal: theme.spacings.large,
     borderRadius: theme.border.radius.regular,
-    marginVertical: theme.spacings.medium,
   },
   slider: {
     width: '100%',
     alignSelf: 'center',
     marginVertical: theme.spacings.medium,
   },
+  textBox: {
+    gap: theme.spacings.medium,
+  },
   description: {
     textAlign: 'center',
     paddingHorizontal: theme.spacings.xLarge,
-    paddingVertical: theme.spacings.xLarge,
   },
   header: {
     textAlign: 'center',
@@ -238,16 +239,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     paddingHorizontal: theme.spacings.medium,
   },
-  numberContainer: {
-    width: 30,
-    alignContent: 'center',
-  },
-  number: {
-    width: '100%',
-    textAlign: 'center',
-    color: theme.text.colors.primary,
-  },
-
   travelText: {
     width: '100%',
     textAlign: 'center',

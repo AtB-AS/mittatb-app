@@ -37,6 +37,7 @@ type MobileTokenContextState = {
   remoteTokens?: RemoteToken[];
   deviceIsInspectable: boolean;
   isLoading: boolean;
+  isTimedout: boolean;
   isError: boolean;
   getSignedToken: () => Promise<string | undefined>;
   toggleToken: (
@@ -61,6 +62,7 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {abtCustomerId, authStatus} = useAuthState();
 
+  const {token_timeout_in_seconds} = useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
   const {enable_token_fallback: fallbackEnabled} = useRemoteConfig();
@@ -78,6 +80,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [token, setToken] = useState<ActivatedToken>();
   const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
   const [isLoading, setIsLoading] = useState(true);
+  const [isTimedout, setTimeoutFlag] = useState(false);
   const [isError, setIsError] = useState(false);
 
   const enabled =
@@ -179,12 +182,36 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const load = useCallback(async () => {
     if (enabled) {
       const traceId = uuid();
+
+      let cancelTimeoutHandler = timeoutHandler(() => {
+        // When timeout has occured, we notify errors in Bugsnag
+        // and set state that indicates timeout.
+        setTimeoutFlag(true);
+        setIsLoading(false);
+
+        Bugsnag.notify(
+          new Error(
+            `Token loading timed out after ${token_timeout_in_seconds} seconds`,
+          ),
+          (event) => {
+            event.addMetadata('token', {
+              abtCustomerId,
+              traceId,
+              description: 'Native and remote tokens took too long to load.',
+            });
+          },
+        );
+      }, token_timeout_in_seconds);
+
       setIsLoading(true);
       setIsError(false);
       setToken(undefined);
       setRemoteTokens(undefined);
       let nativeToken: ActivatedToken;
       let remoteTokens: RemoteToken[];
+
+      // This still happens even on timeout, but we mark the state as timedout.
+      // If it works in the background after a while the timeout will be reversed.
       try {
         // Retry loading native token and remote tokens twice for improved stability
         try {
@@ -198,6 +225,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         } catch (_) {
           remoteTokens = await loadRemoteTokens(traceId);
         }
+
         setToken(nativeToken);
         setRemoteTokens(remoteTokens);
         updateMetadata({
@@ -224,10 +252,14 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           });
         });
       } finally {
+        // We've finished with remote tokens. Cancel timeout notification.
+        cancelTimeoutHandler();
+        setTimeoutFlag(false);
+
         setIsLoading(false);
       }
     }
-  }, [enabled, loadNativeToken, loadRemoteTokens]);
+  }, [enabled, loadNativeToken, loadRemoteTokens, token_timeout_in_seconds]);
 
   useEffect(() => {
     load();
@@ -306,6 +338,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         remoteTokens,
         toggleToken,
         isLoading,
+        isTimedout,
         isError,
         retry: () => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
@@ -353,4 +386,25 @@ export function useMobileTokenContextState() {
     );
   }
   return context;
+}
+
+/**
+ * Call and cancel an action with a specific timeout.
+ * If timeoutInSeconds is 0 the timeout is deactivated.
+ *
+ * @param fn handle to call on time
+ * @param timeoutInSeconds timeout in seconds
+ * @returns cancellable timeout
+ */
+function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
+  if (timeoutInSeconds <= 0) {
+    // Do nothing, as timeout is deactivated
+    return () => {};
+  }
+
+  const timeoutId = setTimeout(fn, timeoutInSeconds * 1000);
+
+  return () => {
+    clearTimeout(timeoutId);
+  };
 }

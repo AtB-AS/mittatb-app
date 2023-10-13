@@ -2,7 +2,7 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
-import {Language, useTranslation} from '@atb/translations';
+import {DeparturesTexts, Language, useTranslation} from '@atb/translations';
 import {
   formatToClock,
   formatToShortDate,
@@ -14,7 +14,6 @@ import {Date as DateIcon} from '@atb/assets/svg/mono-icons/time';
 import {addDays, isSameDay, isToday, parseISO} from 'date-fns';
 import {DepartureTimeSheet} from './DepartureTimeSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {SearchTime} from '../types';
 import {useFontScale} from '@atb/utils/use-font-scale';
 

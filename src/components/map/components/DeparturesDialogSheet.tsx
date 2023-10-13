@@ -1,10 +1,14 @@
 import {StyleSheet} from '@atb/theme';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import DeparturesTexts from '@atb/translations/screens/Departures';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {dictionary, ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {
+  DeparturesTexts,
+  dictionary,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import {
   SearchTime,
   StopPlaceView,
@@ -101,7 +105,6 @@ export const DeparturesDialogSheet = ({
             showOnlyFavorites={false}
             setShowOnlyFavorites={(_) => {}}
             testID="departuresContentView"
-            allowFavouriteSelection={false}
             mode={'Map'}
             distance={distance}
             setTravelTarget={(target) => {

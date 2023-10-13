@@ -9,10 +9,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
-import {
-  TabNav_DeparturesStack,
-  useDeparturesV2Enabled,
-} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
+import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
 import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/stacks-hierarchy/Root_MobileTokenOnboarding/utils';
 import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
@@ -26,11 +23,11 @@ import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/ty
 import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
-import {TabNav_NearbyStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_NearbyStack';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {InteractionManager} from 'react-native';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -41,13 +38,16 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const departuresV2Enabled = useDeparturesV2Enabled();
   const {onboarded} = useAppState();
 
   useGoToMobileTokenOnboardingWhenNecessary();
 
   useEffect(() => {
-    if (!onboarded) navigation.navigate('Root_OnboardingStack');
+    if (!onboarded) {
+      InteractionManager.runAfterInteractions(() =>
+        navigation.navigate('Root_OnboardingStack'),
+      );
+    }
   }, [onboarded]);
 
   return (
@@ -90,10 +90,8 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
         )}
       />
       <Tab.Screen
-        name="TabNav_NearestStack"
-        component={
-          departuresV2Enabled ? TabNav_DeparturesStack : TabNav_NearbyStack
-        }
+        name="TabNav_DeparturesStack"
+        component={TabNav_DeparturesStack}
         options={tabSettings(
           t(dictionary.navigation.nearby),
           t(dictionary.navigation.nearby),

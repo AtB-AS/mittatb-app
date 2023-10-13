@@ -215,6 +215,7 @@ export const TravelDetailsMapScreenComponent = ({
       <View style={controlStyles.controlsContainer}>
         <PositionArrow
           onPress={() => {
+            setShouldTrack(false);
             flyToLocation({
               coordinates: geolocation?.coordinates,
               mapCameraRef,

@@ -5,23 +5,24 @@ import {
   GenericSectionItem,
   LinkSectionItem,
   Section,
-  SectionSeparator,
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
-import {TranslateFunction, useTranslation} from '@atb/translations';
-import DeparturesTexts from '@atb/translations/screens/Departures';
+import {
+  DeparturesTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
-import {EstimatedCallItem} from './EstimatedCallItem';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
+import {EstimatedCallList} from '@atb/place-screen/components/EstimatedCallList';
 import {getDestinationLineName} from '@atb/travel-details-screens/utils';
 
-type QuaySectionProps = {
+export type QuaySectionProps = {
   quay: Quay;
   departuresPerQuay?: number;
   data: EstimatedCall[] | null;
@@ -34,19 +35,12 @@ type QuaySectionProps = {
     serviceDate: string,
     date?: string,
     fromQuayId?: string,
-    isTripCancelled?: boolean,
   ) => void;
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;
-  allowFavouriteSelection: boolean;
   searchDate?: string | Date;
   addedFavoritesVisibleOnDashboard?: boolean;
   mode: StopPlacesMode;
-};
-
-type EstimatedCallRenderItem = {
-  item: EstimatedCall;
-  index: number;
 };
 
 export function QuaySection({
@@ -60,7 +54,6 @@ export function QuaySection({
   navigateToDetails,
   stopPlace,
   showOnlyFavorites,
-  allowFavouriteSelection,
   addedFavoritesVisibleOnDashboard,
   searchDate,
   mode,
@@ -84,10 +77,10 @@ export function QuaySection({
   }, [showOnlyFavorites]);
 
   const hasMoreItemsThanDisplayLimit =
-    departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
+    !!departuresPerQuay && departuresToDisplay.length > departuresPerQuay;
 
   const shouldShowMoreItemsLink =
-    navigateToQuay &&
+    !!navigateToQuay &&
     !isMinimized &&
     (mode === 'Departure' || mode === 'Map' || hasMoreItemsThanDisplayLimit);
 
@@ -137,63 +130,20 @@ export function QuaySection({
            This is under its own 'isMinimized' as nesting section items in React
            fragment breaks the section separator.
            */
-          situations.map((s) => <SituationSectionItem situation={s} />)}
+          situations.map((s) => (
+            <SituationSectionItem key={s.id} situation={s} />
+          ))}
         {!isMinimized && (
-          <FlatList
-            ItemSeparatorComponent={SectionSeparator}
-            data={
-              departuresToDisplay &&
-              departuresToDisplay.slice(0, departuresPerQuay)
-            }
-            renderItem={({item: departure, index}: EstimatedCallRenderItem) => (
-              <GenericSectionItem
-                radius={
-                  index === departuresToDisplay.length - 1 &&
-                  !shouldShowMoreItemsLink
-                    ? 'bottom'
-                    : undefined
-                }
-                testID={'departureItem' + index}
-              >
-                <EstimatedCallItem
-                  departure={departure}
-                  testID={'departureItem' + index}
-                  quay={quay}
-                  stopPlace={stopPlace}
-                  navigateToDetails={navigateToDetails}
-                  addedFavoritesVisibleOnDashboard={
-                    addedFavoritesVisibleOnDashboard
-                  }
-                  allowFavouriteSelection={allowFavouriteSelection}
-                  mode={mode}
-                />
-              </GenericSectionItem>
-            )}
-            keyExtractor={(item: EstimatedCall) =>
-              // ServiceJourney ID is not a unique key if a ServiceJourney
-              // passes by the same stop several times, (e.g. Ringen in Oslo)
-              // which is why it is used in combination with aimedDepartureTime.
-              item.serviceJourney?.id + item.aimedDepartureTime
-            }
-            ListEmptyComponent={
-              <>
-                {data && !isLoading && (
-                  <GenericSectionItem
-                    radius={!shouldShowMoreItemsLink ? 'bottom' : undefined}
-                  >
-                    <ThemeText
-                      color="secondary"
-                      type="body__secondary"
-                      style={{textAlign: 'center', width: '100%'}}
-                    >
-                      {showOnlyFavorites
-                        ? t(DeparturesTexts.noDeparturesForFavorites)
-                        : t(DeparturesTexts.noDepartures)}
-                    </ThemeText>
-                  </GenericSectionItem>
-                )}
-              </>
-            }
+          <EstimatedCallList
+            quay={quay}
+            stopPlace={stopPlace}
+            departures={departuresToDisplay.slice(0, departuresPerQuay)}
+            mode={mode}
+            addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}
+            shouldShowMoreItemsLink={shouldShowMoreItemsLink}
+            navigateToDetails={navigateToDetails}
+            showOnlyFavorites={showOnlyFavorites}
+            noDeparturesToShow={!!data && !isLoading}
           />
         )}
         {!isMinimized && didLoadingDataFail && !isLoading && (

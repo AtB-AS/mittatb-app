@@ -2,16 +2,26 @@ import {StyleProp, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {InfoChip} from '../info-chip';
+import {InfoTagTexts, useTranslation} from '@atb/translations';
 
 type Props = {
-  text: string;
+  mode: 'beta' | 'new';
   style?: StyleProp<ViewStyle>;
 };
-export const InfoTag = ({text, style}: Props) => {
+export const InfoTag = ({mode, style}: Props) => {
   const styles = useStyles();
+  const {t} = useTranslation();
+
+  const getLocalizedText = () => {
+    if (mode === 'new') return t(InfoTagTexts.newText);
+    else {
+      return 'Beta';
+    }
+  };
+
   return (
     <InfoChip
-      text={text}
+      text={getLocalizedText()}
       interactiveColor="interactive_0"
       style={[styles.infoLabel, style]}
     />

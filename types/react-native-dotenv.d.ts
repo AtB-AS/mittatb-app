@@ -4,6 +4,7 @@ declare module '@env' {
   export const APP_VERSION: string;
   export const IOS_BUNDLE_IDENTIFIER: string;
   export const PRIVACY_POLICY_URL: string;
+  export const CUSTOMER_SERVICE_URL: string;
   export const MAPBOX_API_TOKEN: string;
   export const MAPBOX_STOP_PLACES_STYLE_URL: string;
   export const AUTHORITY: string;

@@ -11,7 +11,6 @@ import {
 } from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
-import {getBooleanConfigValue} from '../remote-config';
 import auth from '@react-native-firebase/auth';
 import {Platform} from 'react-native';
 
@@ -131,13 +130,6 @@ function responseErrorHandler(error: AxiosError) {
       break;
     case 'network-error':
     case 'timeout':
-      if (!isCancel(error) && getBooleanConfigValue('enable_network_logging')) {
-        const errorMetadata = getAxiosErrorMetadata(error);
-        Bugsnag.notify(error, (event) => {
-          event.addMetadata('api', {...errorMetadata});
-          event.severity = 'info';
-        });
-      }
       break;
   }
 
@@ -162,8 +154,8 @@ export type TimeoutRequest = {
 
 export const useTimeoutRequest = (): TimeoutRequest => {
   const controller = new AbortController();
-  var didTimeout = false;
-  var timerId: NodeJS.Timeout | undefined;
+  let didTimeout = false;
+  let timerId: NodeJS.Timeout | undefined;
 
   const start = () => {
     timerId = setTimeout(() => {

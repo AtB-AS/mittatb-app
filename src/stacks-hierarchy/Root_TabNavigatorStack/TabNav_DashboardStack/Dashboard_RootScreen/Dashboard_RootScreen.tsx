@@ -38,6 +38,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {DashboardScreenProps} from '../navigation-types';
 import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
+import {Announcements} from './components/Announcements';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -189,8 +190,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         contentContainerStyle={style.scrollView}
         testID="dashboardScrollView"
       >
-        <View style={[style.contentSection, style.searchHeader]}>
-          <Section>
+        <View style={style.searchHeader}>
+          <Section style={[style.contentSection, style.contentSection__first]}>
             <LocationInputSectionItem
               accessibilityLabel={
                 t(TripSearchTexts.location.departurePicker.a11yLabel) +
@@ -255,6 +256,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             }
           />
         </View>
+
+        <Announcements style={style.contentSection} />
 
         {enable_ticketing && (
           <CompactFareContracts
@@ -433,8 +436,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.large,
     marginHorizontal: theme.spacings.medium,
   },
+  contentSection__first: {
+    marginTop: 0,
+  },
   favoriteChips: {
     marginTop: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
   searchHeader: {
     marginTop: 0,
