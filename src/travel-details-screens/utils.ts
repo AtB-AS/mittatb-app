@@ -163,6 +163,14 @@ export function mapLegacyLineNameToDestinationDisplay(
   return {frontText, via};
 }
 
+export function ensureViaFormat(dd?: DestinationDisplay) {
+  if (dd?.frontText?.includes(' via ') && (dd?.via?.length || 0) < 1) {
+    return mapLegacyLineNameToDestinationDisplay(dd?.frontText);
+  } else {
+    return dd;
+  }
+}
+
 export function getLineName(t: TranslateFunction, leg: Leg) {
   const name =
     getDestinationLineName(t, leg.fromEstimatedCall?.destinationDisplay) ??

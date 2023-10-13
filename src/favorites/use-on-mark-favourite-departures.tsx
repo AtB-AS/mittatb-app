@@ -12,8 +12,8 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
 import {
+  ensureViaFormat,
   getDestinationLineName,
-  mapLegacyLineNameToDestinationDisplay,
 } from '@atb/travel-details-screens/utils';
 
 type FavouriteDepartureLine = {
@@ -39,12 +39,8 @@ export function useOnMarkFavouriteDepartures(
     close: closeBottomSheet,
     onOpenFocusRef,
   } = useBottomSheet();
-  const lineDD = line.destinationDisplay;
-  const frontText = lineDD?.frontText;
-  const destinationDisplay =
-    frontText?.includes(' via ') && (lineDD?.via?.length || 0) < 1
-      ? mapLegacyLineNameToDestinationDisplay(lineDD?.frontText)
-      : lineDD; // assume legacy frontText if it includes ' via ' and the via list is empty
+
+  const destinationDisplay = ensureViaFormat(line.destinationDisplay);
 
   if (!line.id || !destinationDisplay || !line.lineNumber) {
     return {onMarkFavourite: undefined, existingFavorite: undefined};
