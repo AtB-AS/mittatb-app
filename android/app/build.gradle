@@ -79,20 +79,6 @@ android {
         versionName appVersionName
         multiDexEnabled true
 
-        if (System.getenv()["KETTLE_API_KEY"]) {
-            manifestPlaceholders = [
-                KETTLE_API_KEY: System.getenv()["KETTLE_API_KEY"] as String,
-                ACTIVITY_RECOGNITION_PERMISSION_MODE: "merge"
-            ]
-        } else {
-            // If `KETTLE_API_KEY` value is not set, an exception will be raised at runtime. Refer to the documentation at https://developer.kogenta.com/docs/react-native/add-kettle#android for more information.
-            // NOTE: To avoid breaking the app and to prevent the SDK from initializing, you can use a value other than an API key.
-            manifestPlaceholders = [
-                KETTLE_API_KEY: "NoKettleIdNeeded",
-                ACTIVITY_RECOGNITION_PERMISSION_MODE: "remove"
-            ]
-        }
-
         if (System.getenv()["CI"]) {
             versionCode System.getenv()["BUILD_ID"] as Integer
         } else {
@@ -140,6 +126,10 @@ android {
         }
     }
 
+    buildTypes.all {
+        buildConfigField 'String', 'KETTLE_API_KEY', "\"${System.getenv('KETTLE_API_KEY')}\""
+    }
+
     packagingOptions {
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
         pickFirst "lib/arm64-v8a/libc++_shared.so"
@@ -166,6 +156,12 @@ dependencies {
 
     implementation 'io.intercom.android:intercom-sdk-base:9.+'
     implementation 'io.intercom.android:intercom-sdk:9.+'
+
+    // Note: The Kettle SDK dependency can be added conditionally based on the presence of the KETTLE_API_KEY environment variable.
+    // However, due to a limitation with Java imports, conditionally utilizing this dependency in the MainApplication.java (or other Java files)
+    // cannot be directly achieved through conditional imports.
+    // https://docs.oracle.com/javase/specs/jls/se7/html/jls-7.html
+    implementation 'com.kogenta.kettle:kettle-sdk:1.2.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group: 'com.facebook.fbjni'
