@@ -25,6 +25,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: [
     '@typescript-eslint',
+    'react',
     'react-hooks',
     'react-native',
     'rulesdir',
@@ -32,7 +33,6 @@ module.exports = {
     '@tanstack/query',
   ],
   rules: {
-
     // Warning on console.log
     'no-console': [1, {allow: ['warn', 'error']}],
 
@@ -59,6 +59,9 @@ module.exports = {
         message: 'No wildcard imports',
       },
     ],
+
+    // Error on components without children with closing tag
+    'react/self-closing-comp': 2,
 
     // Error on:
     // - hooks outside of React components and custom hooks
@@ -142,6 +145,13 @@ module.exports = {
         ],
       },
     },
+    // Not enforce self-closing brackets on svg assets
+    {
+      files: ['src/assets/svg/**'],
+      rules: {
+        'react/self-closing-comp': 0,
+      },
+    },
   ],
 
   /*
@@ -149,12 +159,10 @@ module.exports = {
     - Exchaustive deps!!!
     - Not allow let that isn't reassigned
     - Not use brackets when specifying strings: E.g. `foo="bar"` instead of `foo={'bar'}`
-    - Use self closing for components that have no children: E.g. `<Component />` instead of `<Component></Component>`
     - Force imports from index files also from other modules than just the components folder
     - Not allow cyclic dependencies
     - Not allow crisscross importing inside stacks-hierarchy
     - Look into if able to give error on inline component creation during render
     - Shared eslint-settings that can be reused in our repos
    */
-
 };

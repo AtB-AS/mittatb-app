@@ -427,7 +427,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </View>
           )}
           {!tripPatterns.length && (
-            <View style={style.emptyResultsSpacer}></View>
+            <View style={style.emptyResultsSpacer} />
           )}
           {!error && isValidLocations && (
             <PressableOpacity
