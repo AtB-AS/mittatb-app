@@ -5,7 +5,7 @@ import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useIsFocused} from '@react-navigation/native';
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Dimensions, View} from 'react-native';
 import {useParkingViolationsState} from './ParkingViolationsContext';
 import {ScreenContainer} from './ScreenContainer';

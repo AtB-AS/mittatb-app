@@ -38,11 +38,9 @@ const ParkingViolationsContextProvider: React.FC = ({children}) => {
   } = useGeolocationState();
 
   useEffect(() => {
-    console.log('location', userPosition, 'status', locationPermissionStatus);
     if (locationPermissionStatus !== 'granted') {
       requestPermission()
         .then((s) => {
-          console.log('Permission requested', s);
           s === 'granted'
             ? setError(undefined)
             : setError(new PermissionReqiredError());
