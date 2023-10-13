@@ -20,16 +20,15 @@ export const LoadingScreenBoundary = ({
   const {authStatus, retryAuth} = useAuthState();
   const analytics = useAnalytics();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const {resubscribeFirestoreConfig, userProfiles, hasFirestoreSnapshot} =
+  const {resubscribeFirestoreConfig, userProfiles, hasFirestoreConfigData} =
     useFirestoreConfiguration();
 
   const [didTimeout, setDidTimeout] = useState(false);
 
   const loadSuccess =
-    authStatus === 'authenticated' &&
-    !isLoadingAppState &&
-    // hasFirestoreSnapshot; // ?????
-    console.log('hasFirestoreSnapshot: ' + hasFirestoreSnapshot);
+    // authStatus === 'authenticated' && !isLoadingAppState;
+    hasFirestoreConfigData;
+  console.log('loadSuccess: ' + loadSuccess);
 
   const setupLoadingTimeout = useCallback(() => {
     setDidTimeout(false);
@@ -42,14 +41,13 @@ export const LoadingScreenBoundary = ({
     }, 10000);
   }, []);
 
-  console.log('userProfiles: ' + userProfiles);
+  console.log('userProfiles: ' + JSON.stringify(userProfiles));
 
   const retry = useCallback(() => {
     analytics.logEvent('Loading boundary', 'Retrying auth');
     setupLoadingTimeout();
     retryAuth();
-    // maybe have if-check here for whether we have firestore data cached or at all?
-    if (!hasFirestoreSnapshot) {
+    if (!hasFirestoreConfigData) {
       console.log('Resubscribe from LoadingScreenBoundary');
       analytics.logEvent(
         'Loading boundary',
@@ -57,7 +55,7 @@ export const LoadingScreenBoundary = ({
       ); // Add event logging?
       resubscribeFirestoreConfig();
     }
-  }, [setupLoadingTimeout, retryAuth, resubscribeFirestoreConfig]); // add to dependency?
+  }, [setupLoadingTimeout, retryAuth]); // add to dependency?
 
   // Wait one second after load success to let the app "settle".
   const waitFinished = useDelayGate(1000, loadSuccess);
@@ -76,7 +74,7 @@ export const LoadingScreenBoundary = ({
 
   if (!loadSuccess) {
     if (!didTimeout) return <LoadingScreen />;
-    if (loadingErrorScreenEnabled) return <LoadingErrorScreen retry={retry} />;
+    if (loadingErrorScreenEnabled) return <LoadingErrorScreen retry={retry} />; // we will let users in the app if this is toggled off and we will have hasFirestoreConfigData is not set
     return children;
   }
 

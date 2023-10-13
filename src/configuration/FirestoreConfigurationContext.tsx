@@ -55,7 +55,7 @@ type ConfigurationContextState = {
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
-  hasFirestoreSnapshot: boolean;
+  hasFirestoreConfigData: boolean;
   resubscribeFirestoreConfig: () => void;
 };
 
@@ -97,7 +97,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
     HarborConnectionOverrideType[]
   >([]);
-  const [hasFirestoreSnapshot, setHasFirestoreSnapshot] = useState(false);
+  const [hasFirestoreConfigData, setHasFirestoreConfigData] =
+    useState<boolean>(false);
 
   const subscribeFirestore = () => {
     console.log('Running subscribeFirestore');
@@ -106,11 +107,13 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          console.log(
-            'setHasFirestoreSnapshot: ' + !snapshot.metadata.fromCache,
-          );
-          // does not quit loading screen when this changes
-          setHasFirestoreSnapshot(!snapshot.metadata.fromCache);
+          console.log('metadata: ' + JSON.stringify(snapshot.metadata));
+          snapshot.docs.forEach((d) => {
+            console.log(d.id + ': ' + JSON.stringify(d.data()));
+          });
+
+          // does not work with check towards snapshot.metadata
+          setHasFirestoreConfigData(snapshot.docs.length > 0);
 
           const preassignedFareProducts =
             getPreassignedFareContractsFromSnapshot(snapshot);
@@ -198,7 +201,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     subscribeFirestore();
-    console.log('Running remove listener');
   }, []);
 
   const memoizedState = useMemo(() => {
@@ -217,7 +219,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       configurableLinks,
       mobilityOperators,
       harborConnectionOverrides,
-      hasFirestoreSnapshot,
+      hasFirestoreConfigData,
     };
   }, [
     preassignedFareProducts,
@@ -234,14 +236,17 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     configurableLinks,
     mobilityOperators,
     harborConnectionOverrides,
-    hasFirestoreSnapshot,
+    hasFirestoreConfigData,
   ]);
 
   return (
     <FirestoreConfigurationContext.Provider
       value={{
         ...memoizedState,
-        resubscribeFirestoreConfig: useCallback(() => subscribeFirestore(), []),
+        resubscribeFirestoreConfig: useCallback(
+          () => subscribeFirestore(),
+          [], // dep here?
+        ),
       }}
     >
       {children}
