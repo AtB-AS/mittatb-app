@@ -587,7 +587,7 @@ function computeNoResultReasons(
   from?: Location,
   to?: Location,
 ): string[] {
-  let reasons = [];
+  const reasons = [];
 
   if (!!from && !!to) {
     if (coordinatesAreEqual(from.coordinates, to.coordinates)) {

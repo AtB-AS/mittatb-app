@@ -23,7 +23,7 @@ export const useOperatorToggle = (
   };
 
   const onOperatorToggle = (operator: string) => (checked: boolean) => {
-    let newFilter = getNewFilterState(checked, operator, filter, allOperators);
+    const newFilter = getNewFilterState(checked, operator, filter, allOperators);
     setFilter(newFilter);
     onFilterChange(newFilter);
   };

@@ -141,7 +141,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
 
   useEffect(() => {
     async function run() {
-      let remoteOptions = await getRecurringPaymentOptions();
+      const remoteOptions = await getRecurringPaymentOptions();
       setRemoteOptions(remoteOptions);
       setLoadingRecurringOptions(false);
     }
@@ -267,7 +267,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     label: string;
     hint: string;
   } {
-    let paymentTypeName = getPaymentTypeName(option.paymentType);
+    const paymentTypeName = getPaymentTypeName(option.paymentType);
 
     if (option.savedType === 'normal') {
       return {

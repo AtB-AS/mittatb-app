@@ -42,6 +42,9 @@ module.exports = {
     // Error on using var, e.g. 'var name = "John"'
     'no-var': 2,
 
+    // Error on using let for variable declaration that could be const
+    'prefer-const': 2,
+
     // Error on 'export default'
     'no-restricted-exports': [
       'error',
@@ -157,7 +160,6 @@ module.exports = {
   /*
    Possible future improvements:
     - Exchaustive deps!!!
-    - Not allow let that isn't reassigned
     - Not use brackets when specifying strings: E.g. `foo="bar"` instead of `foo={'bar'}`
     - Force imports from index files also from other modules than just the components folder
     - Not allow cyclic dependencies

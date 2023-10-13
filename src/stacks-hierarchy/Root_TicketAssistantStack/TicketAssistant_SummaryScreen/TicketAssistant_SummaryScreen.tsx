@@ -22,7 +22,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const {t, language} = useTranslation();
   const {authenticationType} = useAuthState();
   const analytics = useAnalytics();
-  let {loading, inputParams, recommendedTicketSummary, error} =
+  const {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
   const focusRef = useFocusOnLoad(true, 200);
   const durationDays = inputParams.duration

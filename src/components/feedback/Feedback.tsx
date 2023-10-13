@@ -69,7 +69,7 @@ export const Feedback = ({
       };
 
       let versionStatsList: VersionStats[] = [];
-      let fetchedVersionsStatsJson = await storage.get(
+      const fetchedVersionsStatsJson = await storage.get(
         '@ATB_feedback_display_stats',
       );
       if (fetchedVersionsStatsJson) {

@@ -348,7 +348,7 @@ function getVatPercentFromSnapshot(
 function getPaymentTypesFromSnapshot(
   snapshot: FirebaseFirestoreTypes.QuerySnapshot,
 ): PaymentType[] | undefined {
-  let paymentTypesField = snapshot.docs
+  const paymentTypesField = snapshot.docs
     .find((doc) => doc.id == 'paymentTypes')
     ?.get<string[]>('app');
   if (paymentTypesField != undefined) {
