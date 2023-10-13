@@ -20,15 +20,15 @@ export const LoadingScreenBoundary = ({
   const {authStatus, retryAuth} = useAuthState();
   const analytics = useAnalytics();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const {resubscribeFirestoreConfig, userProfiles, hasFirestoreConfigData} =
+  const {resubscribeFirestoreConfig, hasFirestoreConfigData} =
     useFirestoreConfiguration();
 
   const [didTimeout, setDidTimeout] = useState(false);
 
   const loadSuccess =
-    // authStatus === 'authenticated' && !isLoadingAppState;
+    authStatus === 'authenticated' &&
+    !isLoadingAppState &&
     hasFirestoreConfigData;
-  console.log('loadSuccess: ' + loadSuccess);
 
   const setupLoadingTimeout = useCallback(() => {
     setDidTimeout(false);
@@ -41,14 +41,11 @@ export const LoadingScreenBoundary = ({
     }, 10000);
   }, []);
 
-  console.log('userProfiles: ' + JSON.stringify(userProfiles));
-
   const retry = useCallback(() => {
     analytics.logEvent('Loading boundary', 'Retrying auth');
     setupLoadingTimeout();
     retryAuth();
     if (!hasFirestoreConfigData) {
-      console.log('Resubscribe from LoadingScreenBoundary');
       analytics.logEvent(
         'Loading boundary',
         'Retrying resubscribe to Firestore config',

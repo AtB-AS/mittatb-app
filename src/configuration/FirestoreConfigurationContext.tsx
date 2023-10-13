@@ -59,11 +59,6 @@ type ConfigurationContextState = {
   resubscribeFirestoreConfig: () => void;
 };
 
-// resubscribe her --> start med denne, den er viktigst
-// identifisere hvilken data herfra man skal sjekke opp mot for å se om man må resubscribe
-
-// test with flightmode + wifi on/off
-
 const FirestoreConfigurationContext = createContext<
   ConfigurationContextState | undefined
 >(undefined);
@@ -101,17 +96,10 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     useState<boolean>(false);
 
   const subscribeFirestore = () => {
-    console.log('Running subscribeFirestore');
-
     firestore()
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          console.log('metadata: ' + JSON.stringify(snapshot.metadata));
-          snapshot.docs.forEach((d) => {
-            console.log(d.id + ': ' + JSON.stringify(d.data()));
-          });
-
           // does not work with check towards snapshot.metadata
           setHasFirestoreConfigData(snapshot.docs.length > 0);
 

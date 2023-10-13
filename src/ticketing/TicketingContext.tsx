@@ -122,7 +122,6 @@ const initialReducerState: TicketingReducerState = {
   errorRefreshingFareContracts: false,
   customerProfile: undefined,
 };
-// use toggle from here to in loading screen, i iterasjon 2. ikke nå
 
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider: React.FC = ({children}) => {
