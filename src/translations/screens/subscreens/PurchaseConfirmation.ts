@@ -191,4 +191,11 @@ export default orgSpecificTranslations(PurchaseConfirmationTexts, {
       },
     },
   },
+  nfk: {
+    validityTexts: {
+      harbor: {
+        messageInHarborZones: _('', '', ''),
+      },
+    },
+  },
 });
