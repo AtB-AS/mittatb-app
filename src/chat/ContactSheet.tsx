@@ -1,4 +1,3 @@
-import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -18,92 +17,108 @@ import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button, ButtonProps} from '@atb/components/button';
+import {useAnalytics} from '@atb/analytics';
 
 type Props = {
   close: () => void;
+  onReportParkingViolation: () => void;
 };
 
-export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
-  const {t} = useTranslation();
-  const unreadCount = useChatUnreadCount();
-  const {customer_service_url, enable_intercom, customer_feedback_url} =
-    useRemoteConfig();
+export const ContactSheet = forwardRef<View, Props>(
+  ({close, onReportParkingViolation}, focusRef) => {
+    const {t} = useTranslation();
+    const unreadCount = useChatUnreadCount();
+    const {customer_service_url, enable_intercom, customer_feedback_url} =
+      useRemoteConfig();
+    const analytics = useAnalytics();
 
-  const showWebsiteFeedback = !!customer_feedback_url;
-  const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;
+    const showWebsiteFeedback = !!customer_feedback_url;
+    const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;
 
-  return (
-    <BottomSheetContainer>
-      <ScreenHeaderWithoutNavigation
-        title={t(ContactSheetTexts.header.title)}
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        color={'background_1'}
-        setFocusOnLoad={false}
-      />
-      <FullScreenFooter>
-        {showWebsiteFeedback ? (
-          <ContactItem
-            body={t(ContactSheetTexts.customer_feedback_website.body)}
-            buttonText={t(ContactSheetTexts.customer_feedback_website.button)}
-            accessibilityHint={t(
-              ContactSheetTexts.customer_feedback_website.a11yHint,
-            )}
-            icon={() => (
-              <ThemeIcon svg={ExternalLink} colorType="background_accent_3" />
-            )}
-            onPress={() => {
-              Linking.openURL(customer_feedback_url);
-              close();
-            }}
-          />
-        ) : undefined}
-
-        {showIntercomFeedback ? (
-          <ContactItem
-            screenReaderHidden={screenReaderHidden}
-            body={t(ContactSheetTexts.customer_feedback.body)}
-            buttonText={t(ContactSheetTexts.customer_feedback.button)}
-            accessibilityHint={t(ContactSheetTexts.customer_feedback.a11yHint)}
-            onPress={() => {
-              unreadCount
-                ? Intercom.displayMessenger()
-                : Intercom.displayConversationsList();
-              close();
-            }}
-            icon={() => (
-              <ThemeIcon
-                colorType="background_accent_3"
-                svg={Chat}
-                notification={unreadCount ? {color: 'valid'} : undefined}
-              />
-            )}
-          />
-        ) : undefined}
-        <ContactItem
-          body={t(ContactSheetTexts.customer_service.body)}
-          buttonText={t(ContactSheetTexts.customer_service.button)}
-          focusRef={focusRef}
-          accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
-          buttonMode={'secondary'}
-          icon={() => <ThemeIcon svg={ExternalLink} />}
-          onPress={() => {
-            Linking.openURL(customer_service_url);
-            close();
+    return (
+      <BottomSheetContainer>
+        <ScreenHeaderWithoutNavigation
+          title={t(ContactSheetTexts.header.title)}
+          leftButton={{
+            type: 'close',
+            onPress: close,
+            text: t(ScreenHeaderTexts.headerButton.close.text),
           }}
+          color={'background_1'}
+          setFocusOnLoad={false}
         />
-      </FullScreenFooter>
-    </BottomSheetContainer>
-  );
-});
+        <FullScreenFooter>
+          {showWebsiteFeedback ? (
+            <ContactItem
+              buttonText={t(ContactSheetTexts.customer_feedback_website.button)}
+              accessibilityHint={t(
+                ContactSheetTexts.customer_feedback_website.a11yHint,
+              )}
+              icon={() => (
+                <ThemeIcon svg={ExternalLink} colorType="background_accent_3" />
+              )}
+              onPress={() => {
+                Linking.openURL(customer_feedback_url);
+                analytics.logEvent('Contact', 'Send customer feedback clicked');
+                close();
+              }}
+            />
+          ) : undefined}
+
+          {showIntercomFeedback ? (
+            <ContactItem
+              screenReaderHidden={screenReaderHidden}
+              buttonText={t(ContactSheetTexts.customer_feedback.button)}
+              accessibilityHint={t(
+                ContactSheetTexts.customer_feedback.a11yHint,
+              )}
+              onPress={() => {
+                unreadCount
+                  ? Intercom.displayMessenger()
+                  : Intercom.displayConversationsList();
+                analytics.logEvent('Contact', 'Send Intercom message clicked');
+                close();
+              }}
+              icon={() => (
+                <ThemeIcon
+                  colorType="background_accent_3"
+                  svg={Chat}
+                  notification={unreadCount ? {color: 'valid'} : undefined}
+                />
+              )}
+            />
+          ) : undefined}
+          <ContactItem
+            buttonText={t(ContactSheetTexts.customer_service.button)}
+            focusRef={focusRef}
+            accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
+            buttonMode={'secondary'}
+            icon={() => <ThemeIcon svg={ExternalLink} />}
+            onPress={() => {
+              Linking.openURL(customer_service_url);
+              analytics.logEvent('Contact', 'Contact customer service clicked');
+              close();
+            }}
+          />
+          <ContactItem
+            buttonText={t(ContactSheetTexts.parking_violations.buttonText)}
+            accessibilityHint={t(ContactSheetTexts.parking_violations.a11yHint)}
+            buttonMode={'secondary'}
+            onPress={() => {
+              onReportParkingViolation();
+              analytics.logEvent('Contact', 'Report parking violation clicked');
+              close();
+            }}
+          />
+        </FullScreenFooter>
+      </BottomSheetContainer>
+    );
+  },
+);
 
 type ContactProps = {
   onPress: () => void;
   icon?: () => JSX.Element;
-  body: string;
   buttonText: string;
   accessibilityHint: string;
   focusRef?: React.ForwardedRef<View>;
@@ -114,7 +129,6 @@ type ContactProps = {
 const ContactItem: React.FC<ContactProps> = ({
   onPress,
   icon,
-  body,
   buttonText,
   accessibilityHint,
   focusRef,
@@ -125,10 +139,8 @@ const ContactItem: React.FC<ContactProps> = ({
 
   return (
     <View style={styles.container} {...screenReaderHidden}>
-      <View style={styles.descriptionSection} ref={focusRef} accessible>
-        <ThemeText>{body}</ThemeText>
-      </View>
       <Button
+        ref={focusRef}
         mode={buttonMode}
         interactiveColor={
           buttonMode == 'primary' ? 'interactive_0' : 'interactive_2'
@@ -144,7 +156,6 @@ const ContactItem: React.FC<ContactProps> = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
-    descriptionSection: {marginBottom: theme.spacings.medium},
     container: {
       marginBottom: theme.spacings.medium,
     },
