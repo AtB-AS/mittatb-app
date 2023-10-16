@@ -7,7 +7,7 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {useIsFocused} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
 import {Dimensions, View} from 'react-native';
-import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
+import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';

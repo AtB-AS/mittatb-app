@@ -9,8 +9,8 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {ProviderLogo} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ProviderLogo';
-import {SelectGroup} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/SelectGroup';
+import {ProviderLogo} from '../components/ProviderLogo';
+import {SelectGroup} from '../components/SelectGroup';
 
 type Props = {
   providers: ViolationsReportingProvider[];

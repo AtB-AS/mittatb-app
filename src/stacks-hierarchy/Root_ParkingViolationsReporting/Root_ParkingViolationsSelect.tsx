@@ -1,18 +1,18 @@
-import {ParkingViolationType} from '@atb/api/types/mobility';
+import {useState} from 'react';
+import {Linking, View} from 'react-native';
+import {SvgXml} from 'react-native-svg';
+import {ScrollView} from 'react-native-gesture-handler';
+import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
-import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useState} from 'react';
-import {Linking, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {SvgXml} from 'react-native-svg';
-import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
-import {SelectGroup} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/SelectGroup';
+import {ParkingViolationType} from '@atb/api/types/mobility';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
+import {ScreenContainer} from './components/ScreenContainer';
+import {SelectGroup} from './components/SelectGroup';
 import {useParkingViolations} from './use-parking-violations';
 import {PermissionRequiredError} from './use-user-location';
 

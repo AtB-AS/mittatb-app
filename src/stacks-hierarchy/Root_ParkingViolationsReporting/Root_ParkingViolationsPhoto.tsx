@@ -5,7 +5,7 @@ import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useIsFocused} from '@react-navigation/native';
 import {ImageConfirmationBottomSheet} from './bottom-sheets/ImageConfirmationBottomSheet';
-import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
+import {ScreenContainer} from './components/ScreenContainer';
 import {Dimensions} from 'react-native';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useParkingViolations} from './use-parking-violations';

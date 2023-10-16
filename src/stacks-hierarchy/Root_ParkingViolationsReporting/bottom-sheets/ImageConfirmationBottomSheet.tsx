@@ -8,7 +8,7 @@ import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Coordinates} from '@atb/utils/coordinates';
-import {UserPositionMap} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/UserPositionMap';
+import {UserPositionMap} from '../components/UserPositionMap';
 
 type Props = {
   file: PhotoFile;

@@ -1,6 +1,6 @@
-import {useUserLocation} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/use-user-location';
-import {useInitQuery} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/use-init-query';
 import {isDefined} from '@atb/utils/presence';
+import {useUserLocation} from './use-user-location';
+import {useInitQuery} from './use-init-query';
 
 export const useParkingViolations = () => {
   const {position, error: locationError} = useUserLocation();
