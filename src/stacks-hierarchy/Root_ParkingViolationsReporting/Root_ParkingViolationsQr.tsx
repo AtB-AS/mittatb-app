@@ -135,16 +135,18 @@ export const Root_ParkingViolationsQr = ({
 
   return (
     <ScreenContainer
-      title={t(ParkingViolationTexts.qr.title)}
-      secondaryText={t(ParkingViolationTexts.qr.instructions)}
+      title={!isLoading ? t(ParkingViolationTexts.qr.title) : ''}
+      secondaryText={!isLoading ? t(ParkingViolationTexts.qr.instructions) : ''}
       buttons={
-        <Button
-          mode="secondary"
-          interactiveColor={'interactive_0'}
-          onPress={selectProvider}
-          text={t(ParkingViolationTexts.qr.scanningNotPossible)}
-          disabled={isError}
-        />
+        !isLoading &&
+        !isError && (
+          <Button
+            mode="secondary"
+            interactiveColor={'interactive_0'}
+            onPress={selectProvider}
+            text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+          />
+        )
       }
     >
       {isLoading && (
