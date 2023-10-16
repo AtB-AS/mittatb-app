@@ -125,10 +125,7 @@ export const initViolationsReporting = (
   const url = '/bff/v2/mobility/violations-reporting/init';
   const query = qs.stringify(params);
   return client
-    .get<ViolationsReportingInitQueryResult>(stringifyUrl(url, query), {
-      ...opts,
-      baseURL: 'http://localhost:8080',
-    })
+    .get<ViolationsReportingInitQueryResult>(stringifyUrl(url, query), opts)
     .then((res) => res.data);
 };
 
