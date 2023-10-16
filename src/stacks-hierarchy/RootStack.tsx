@@ -53,7 +53,7 @@ import {
   Root_ParkingViolationsQr,
   Root_ParkingViolationsSelect,
   Root_ParkingViolationsConfirmation,
-} from 'src/stacks-hierarchy/Root_ParkingViolationsReporting';
+} from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
