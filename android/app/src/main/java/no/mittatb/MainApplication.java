@@ -19,6 +19,10 @@ import java.util.List;
 
 import io.intercom.android.sdk.Intercom;
 
+import com.kogenta.kettle.common.config.KettleConfig;
+import com.kogenta.kettle.common.logging.LogLevel;
+import com.kogenta.kettle.sdk.Kettle;
+
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -63,6 +67,20 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     tryInitializeBugsnag();
     tryInitializeIntercom();
     SoLoader.init(this, /* native exopackage */ false);
+
+    if (BuildConfig.KETTLE_API_KEY != null && !BuildConfig.KETTLE_API_KEY.isEmpty()) {
+        KettleConfig kettleConfig = new KettleConfig();
+        if (BuildConfig.DEBUG) {
+            kettleConfig.setDevelopmentApiKey(BuildConfig.KETTLE_API_KEY);
+            kettleConfig.setDevelopmentLogLevel(LogLevel.TRACE);
+            kettleConfig.setInProduction(false);
+        } else {
+            kettleConfig.setProductionApiKey(BuildConfig.KETTLE_API_KEY);
+            kettleConfig.setProductionLogLevel(LogLevel.INFO);
+            kettleConfig.setInProduction(true);
+        }
+        Kettle.initialize(kettleConfig, getApplicationContext());
+    }
 
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.

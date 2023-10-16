@@ -1,3 +1,7 @@
+#!/bin/sh
+
+source ./scripts/utils.sh
+
 if [ "$#" -ne 2 ]
 then
     echo "Argument error!"
@@ -46,6 +50,23 @@ else
     echo "Copying boot splash image to assets/"
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
-    sh ./scripts/generate-assets.sh $APP_ORG
+    # Check if ENV_FOLDER/manifests exists and is a directory
+    if [ -d "$ORG_FOLDER/manifests" ]
+    then
+        # Iterate through all subfolders of ENV_FOLDER/manifests
+        for folder in "$ORG_FOLDER/manifests"/*;
+        do
+            # Check if the folder contains XML files
+            if [ -n "$(find "$folder" -name '*.xml' -type f)" ]
+            then
+                # Get the name of the folder
+                folder_name=$(basename "$folder")
+                
+                echo "Copying $folder_name with XML files to android/app/src/"
+                cp -r "$folder" "android/app/src/$folder_name"
+            fi
+        done
+    fi
 
+    sh ./scripts/generate-assets.sh $APP_ORG
 fi
