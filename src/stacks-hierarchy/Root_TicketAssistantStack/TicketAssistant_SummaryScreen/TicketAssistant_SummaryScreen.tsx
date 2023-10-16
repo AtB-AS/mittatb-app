@@ -91,20 +91,20 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
       contentContainerStyle={styles.contentContainer}
     >
       <View style={styles.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
+        <DashboardBackground width="100%" height="100%" />
       </View>
       <View style={styles.mainView}>
         {error ? (
           <View ref={focusRef} accessible={true}>
             <ThemeText
-              type={'heading--big'}
+              type="heading--big"
               color={themeColor}
               style={styles.header}
             >
               {t(TicketAssistantTexts.summary.crashedHeader)}
             </ThemeText>
             <ThemeText
-              type={'body__primary'}
+              type="body__primary"
               color={themeColor}
               style={styles.description}
             >
@@ -119,10 +119,10 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
           <View>
             <View ref={focusRef} accessible={true}>
               <ThemeText
-                type={'heading--big'}
+                type="heading--big"
                 style={styles.header}
                 color={themeColor}
-                accessibilityRole={'header'}
+                accessibilityRole="header"
                 accessibilityLabel={t(
                   TicketAssistantTexts.summary.titleA11yLabel,
                 )}
@@ -132,7 +132,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 
               <ThemeText
                 color={themeColor}
-                type={'body__primary'}
+                type="body__primary"
                 style={styles.description}
                 accessibilityLabel={description}
               >
@@ -144,7 +144,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
             {doesTicketCoverEntirePeriod && (
               <MessageBox
                 style={styles.infoBox}
-                type={'info'}
+                type="info"
                 title={t(TicketAssistantTexts.summary.durationNotice.title)}
                 message={t(
                   TicketAssistantTexts.summary.durationNotice.description,

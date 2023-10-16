@@ -463,7 +463,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                       <ThemeIcon
                         colorType="secondary"
                         svg={ExpandMore}
-                        size={'normal'}
+                        size="normal"
                       />
                       <ThemeText color="secondary" testID="resultsLoaded">
                         {' '}

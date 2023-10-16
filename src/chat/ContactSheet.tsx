@@ -41,7 +41,7 @@ export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
       <FullScreenFooter>
@@ -88,7 +88,7 @@ export const ContactSheet = forwardRef<View, Props>(({close}, focusRef) => {
           buttonText={t(ContactSheetTexts.customer_service.button)}
           focusRef={focusRef}
           accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
-          buttonMode={'secondary'}
+          buttonMode="secondary"
           icon={() => <ThemeIcon svg={ExternalLink} />}
           onPress={() => {
             Linking.openURL(customer_service_url);

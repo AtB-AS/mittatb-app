@@ -83,7 +83,7 @@ function Item(props: ItemProps) {
       style={[styles.item, sectionStyles.spaceBetween, topContainer]}
       testID={props.testID}
     >
-      <View importantForAccessibility={'no-hide-descendants'}>
+      <View importantForAccessibility="no-hide-descendants">
         <FavoriteIcon favorite={item} />
       </View>
       <ThemeText type="body__primary" style={contentContainer}>
@@ -120,7 +120,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   if (index === 0 && !isDown) {
     return (
       <View style={styles.moveIcon}>
-        <ThemeIcon svg={Icon} colorType={'disabled'} />
+        <ThemeIcon svg={Icon} colorType="disabled" />
       </View>
     );
   }
@@ -128,7 +128,7 @@ function MoveIcon({direction, item, index, length, onPress}: MoveIconProps) {
   if (index === length - 1 && isDown) {
     return (
       <View style={styles.moveIcon}>
-        <ThemeIcon svg={Icon} colorType={'disabled'} />
+        <ThemeIcon svg={Icon} colorType="disabled" />
       </View>
     );
   }

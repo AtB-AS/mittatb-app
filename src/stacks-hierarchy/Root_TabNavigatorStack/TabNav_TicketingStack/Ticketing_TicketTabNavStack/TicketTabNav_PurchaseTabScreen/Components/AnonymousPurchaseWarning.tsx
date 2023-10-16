@@ -17,7 +17,7 @@ export const AnonymousPurchaseWarning = ({onPress}: {onPress: () => void}) => {
           action: onPress,
           text: t(AnonymousPurchases.warning.checkHere),
         }}
-        type={'warning'}
+        type="warning"
         isMarkdown={true}
       />
     </View>

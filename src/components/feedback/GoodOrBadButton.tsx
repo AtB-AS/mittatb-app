@@ -56,10 +56,10 @@ export const GoodOrBadButton = ({
 
           <View style={styles.emoji}>
             {opinion === Opinions.Good && (
-              <ThemeText type={'body__primary--jumbo'}>🙌</ThemeText>
+              <ThemeText type="body__primary--jumbo">🙌</ThemeText>
             )}
             {opinion === Opinions.Bad && (
-              <ThemeText type={'body__primary--jumbo'}>👎</ThemeText>
+              <ThemeText type="body__primary--jumbo">👎</ThemeText>
             )}
           </View>
         </View>

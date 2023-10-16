@@ -89,7 +89,7 @@ export function TravelTokenBox({
         <ThemeText
           style={styles.howToChange}
           color="background_accent_3"
-          type={'body__tertiary'}
+          type="body__tertiary"
           isMarkdown={true}
         >
           {t(TravelTokenBoxTexts.howToChange)}
@@ -129,7 +129,7 @@ export const TravelDeviceTitle = ({
           {travelCardId?.substring(0, 2) + ' ' + travelCardId?.substring(2)}
         </ThemeText>
         <ThemeText color="background_accent_3" style={styles.transparent}>
-          {'X'}
+          X
         </ThemeText>
       </View>
     );
@@ -157,7 +157,7 @@ const ErrorMessages = (alwaysShowErrors?: boolean) => {
   if (isError) {
     return fallbackEnabled && !alwaysShowErrors ? null : (
       <MessageBox
-        type={'warning'}
+        type="warning"
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
         style={styles.errorMessage}
@@ -174,7 +174,7 @@ const ErrorMessages = (alwaysShowErrors?: boolean) => {
   if (!inspectableToken) {
     return (
       <MessageBox
-        type={'warning'}
+        type="warning"
         isMarkdown={true}
         title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}

@@ -74,6 +74,9 @@ module.exports = {
     // Error on raw text that is not inside Text or ThemeText
     'react-native/no-raw-text': [2, {skip: ['ThemeText']}],
 
+    // Error on using curly braces for strings, e.g. field={'whatever'}
+    "react/jsx-curly-brace-presence": [2, 'never'],
+
     // Warning on arrays with single elements in style prop, as the array is recreated on every render
     'react-native/no-single-element-style-arrays': 1,
 
@@ -160,7 +163,6 @@ module.exports = {
   /*
    Possible future improvements:
     - Exchaustive deps!!!
-    - Not use brackets when specifying strings: E.g. `foo="bar"` instead of `foo={'bar'}`
     - Force imports from index files also from other modules than just the components folder
     - Not allow cyclic dependencies
     - Not allow crisscross importing inside stacks-hierarchy

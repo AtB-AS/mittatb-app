@@ -39,16 +39,16 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
+        <DashboardBackground width="100%" height="100%" />
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
           <View ref={focusRef} accessible={true}>
             <ThemeText
-              type={'heading--big'}
+              type="heading--big"
               style={styles.header}
               color={themeColor}
-              accessibilityRole={'header'}
+              accessibilityRole="header"
               accessibilityLabel={t(
                 TicketAssistantTexts.duration.titleA11yLabel({
                   value: travelFrequency,

@@ -138,7 +138,7 @@ export const Root_LoginOptionsScreen = ({
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View accessible={true} accessibilityRole="header">
           <ThemeText
-            type={'body__primary--jumbo--bold'}
+            type="body__primary--jumbo--bold"
             style={styles.title}
             color={themeColor}
           >

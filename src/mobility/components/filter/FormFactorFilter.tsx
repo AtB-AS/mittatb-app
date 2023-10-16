@@ -37,7 +37,7 @@ export const FormFactorFilter = ({
 
   return (
     <View style={style}>
-      <ThemeText style={filterStyle.sectionHeader} type={'body__secondary'}>
+      <ThemeText style={filterStyle.sectionHeader} type="body__secondary">
         {t(MobilityTexts.formFactor(formFactor))}
       </ThemeText>
       <Section>

@@ -191,7 +191,7 @@ const DeviceNotInspectable = () => {
       );
   return (
     <MessageBox
-      type={'warning'}
+      type="warning"
       title={t(
         FareContractTexts.details.barcodeErrors.notInspectableDevice.title,
       )}

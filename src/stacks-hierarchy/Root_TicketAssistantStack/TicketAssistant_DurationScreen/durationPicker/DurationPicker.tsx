@@ -63,11 +63,11 @@ export const DurationPicker = ({
     <View style={styles.durationPickerContainer}>
       <View style={styles.topPart}>
         <View style={styles.datePickerHeader}>
-          <ThemeIcon svg={SvgDate} size={'large'} style={styles.dateIcon} />
+          <ThemeIcon svg={SvgDate} size="large" style={styles.dateIcon} />
           <ThemeText
-            type={'body__primary--bold'}
+            type="body__primary--bold"
             style={styles.sliderText}
-            color={'primary'}
+            color="primary"
             accessibilityLabel={t(
               TicketAssistantTexts.duration.datePickerHeaderA11yLabel,
             )}
@@ -84,7 +84,7 @@ export const DurationPicker = ({
               style={{
                 alignSelf: 'flex-end',
               }}
-              textColor={'primary'}
+              textColor="primary"
               display="compact"
               testID="dateInput"
               minimumDate={new Date()}
@@ -106,7 +106,7 @@ export const DurationPicker = ({
               )}
               onPress={() => setShowDatePicker(true)}
             >
-              <ThemeText numberOfLines={1} ellipsizeMode={'clip'}>
+              <ThemeText numberOfLines={1} ellipsizeMode="clip">
                 {formatToVerboseFullDate(date, language)}
               </ThemeText>
             </TouchableOpacity>
@@ -117,7 +117,7 @@ export const DurationPicker = ({
               value={date}
               mode="date"
               locale={locale.localeString}
-              textColor={'primary'}
+              textColor="primary"
               display="default"
               testID="dateInput"
               minimumDate={new Date()}
@@ -139,9 +139,9 @@ export const DurationPicker = ({
           <View style={styles.sliderContainer}>
             <View style={styles.limitHeader}>
               <ThemeText
-                type={'body__primary'}
+                type="body__primary"
                 style={styles.sliderText}
-                color={'primary'}
+                color="primary"
                 accessibilityLabel={t(
                   TicketAssistantTexts.duration.minLimitA11yLabel,
                 )}
@@ -151,7 +151,7 @@ export const DurationPicker = ({
                 )}
               </ThemeText>
               <ThemeText
-                type={'body__primary'}
+                type="body__primary"
                 style={styles.sliderText}
                 accessibilityLabel={t(
                   TicketAssistantTexts.duration.maxLimitA11yLabel,
@@ -178,7 +178,7 @@ export const DurationPicker = ({
 
       <SectionSeparator />
       <ThemeText
-        type={'body__primary'}
+        type="body__primary"
         style={styles.description}
         accessibilityLabel={durationText}
       >

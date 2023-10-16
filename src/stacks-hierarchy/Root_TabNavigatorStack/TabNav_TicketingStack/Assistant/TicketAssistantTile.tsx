@@ -57,7 +57,7 @@ export const TicketAssistantTile: React.FC<TicketAssistantProps> = ({
           title={title}
           description={description}
           accessibilityLabel={accessibilityLabel}
-          infoTag={'new'}
+          infoTag="new"
         />
       )}
     </View>
