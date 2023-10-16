@@ -1,5 +1,6 @@
-#!/bin/sh
+# Read a property safely from config file, instead of sourcing the file
+prop() {
+  grep -e "^${1}=" ./.env | cut -d'=' -f2 | head -n 1;
+}
 
-source ./scripts/utils.sh
-
-react-native run-android --appId "$(envprop 'ANDROID_APPLICATION_ID')"
+react-native run-android --appId "$(prop 'ANDROID_APPLICATION_ID')"
