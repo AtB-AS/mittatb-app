@@ -25,7 +25,7 @@ export const ParkingViolationTexts = {
           return _('Hindrer trafikk', 'Blocks traffic', 'Blokkerar trafikk');
         case 'fallen':
           return _('Har veltet', 'Has fallen', 'Har velta');
-        case 'underwater':
+        case 'in_water':
           return _('Er i vann', 'Is in water', 'Er i vatn');
         case 'other_issue':
         default:
