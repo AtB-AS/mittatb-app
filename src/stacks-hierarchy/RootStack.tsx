@@ -48,7 +48,12 @@ import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-h
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
 import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
-import {Root_ParkingViolationsReportingStack} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack';
+import {
+  Root_ParkingViolationsPhoto,
+  Root_ParkingViolationsQr,
+  Root_ParkingViolationsSelect,
+  Root_ParkingViolationsConfirmation,
+} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -357,12 +362,24 @@ export const RootStack = () => {
                   }
                 />
                 <Stack.Screen
-                    name="Root_AddPaymentMethodScreen"
-                    component={Root_AddPaymentMethodScreen}
+                  name="Root_AddPaymentMethodScreen"
+                  component={Root_AddPaymentMethodScreen}
                 />
                 <Stack.Screen
-                  name="Root_ParkingViolationsReportingStack"
-                  component={Root_ParkingViolationsReportingStack}
+                  name="Root_ParkingViolationsSelect"
+                  component={Root_ParkingViolationsSelect}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsPhoto"
+                  component={Root_ParkingViolationsPhoto}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsQr"
+                  component={Root_ParkingViolationsQr}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsConfirmation"
+                  component={Root_ParkingViolationsConfirmation}
                 />
               </Stack.Group>
             </Stack.Navigator>

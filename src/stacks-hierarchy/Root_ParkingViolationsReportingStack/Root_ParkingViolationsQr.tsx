@@ -7,22 +7,21 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {useIsFocused} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
 import {Dimensions, View} from 'react-native';
-import {useParkingViolationsState} from './ParkingViolationsContext';
 import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
-import {ParkingViolationsScreenProps} from './navigation-types';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
 import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
 import {blobToBase64} from './utils';
 import {useAuthState} from '@atb/auth';
 import {Image} from 'react-native-compressor';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useParkingViolations} from './use-parking-violations';
 
-export type QrScreenProps =
-  ParkingViolationsScreenProps<'ParkingViolations_Qr'>;
+export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQr'>;
 
-export const ParkingViolations_Qr = ({
+export const Root_ParkingViolationsQr = ({
   navigation,
   route: {params},
 }: QrScreenProps) => {
@@ -33,7 +32,7 @@ export const ParkingViolations_Qr = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const {providers, position} = useParkingViolationsState();
+  const {providers, position} = useParkingViolations();
   const {abtCustomerId} = useAuthState();
 
   useEffect(() => {
@@ -73,7 +72,7 @@ export const ParkingViolations_Qr = ({
       timestamp: new Date().toISOString(),
     })
       .then(() => {
-        navigation.navigate('ParkingViolations_Confirmation');
+        navigation.navigate('Root_ParkingViolationsConfirmation');
         enableScanning();
       })
       .catch((e) => {

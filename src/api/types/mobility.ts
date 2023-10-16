@@ -13,10 +13,8 @@ export type ViolationsReportingProvider = {
 };
 
 export type ParkingViolationType = {
-  id: number;
   code: string;
   icon: string;
-  selectable: boolean;
 };
 
 export type ViolationsReportingInitQueryResult = {

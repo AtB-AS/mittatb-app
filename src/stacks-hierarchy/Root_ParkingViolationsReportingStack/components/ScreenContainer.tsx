@@ -5,7 +5,10 @@ import {StyleSheet} from '@atb/theme';
 import {PropsWithChildren, ReactNode} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {themeColor} from '../Root_ParkingViolationsReportingStack';
+import {StaticColorByType} from '@atb/theme/colors';
+
+export const themeColor: StaticColorByType<'background'> =
+  'background_accent_0';
 
 type Props = PropsWithChildren<{
   title?: string;

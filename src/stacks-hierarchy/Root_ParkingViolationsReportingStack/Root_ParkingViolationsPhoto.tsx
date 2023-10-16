@@ -6,21 +6,21 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {useIsFocused} from '@react-navigation/native';
 import {ImageConfirmationBottomSheet} from './bottom-sheets/ImageConfirmationBottomSheet';
 import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
-import {ParkingViolationsScreenProps} from './navigation-types';
 import {Dimensions} from 'react-native';
-import {useParkingViolationsState} from './ParkingViolationsContext';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useParkingViolations} from './use-parking-violations';
 
 export type PhotoScreenProps =
-  ParkingViolationsScreenProps<'ParkingViolations_Photo'>;
+  RootStackScreenProps<'Root_ParkingViolationsPhoto'>;
 
-export const ParkingViolations_Photo = ({
+export const Root_ParkingViolationsPhoto = ({
   navigation,
   route: {params},
 }: PhotoScreenProps) => {
   const {t} = useTranslation();
   const isFocused = useIsFocused();
   const style = useStyles();
-  const {position} = useParkingViolationsState();
+  const {position} = useParkingViolations();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const handlePhotoCapture = (file: PhotoFile) => {
@@ -28,7 +28,7 @@ export const ParkingViolations_Photo = ({
       <ImageConfirmationBottomSheet
         onConfirm={() => {
           closeBottomSheet();
-          navigation.navigate('ParkingViolations_Qr', {
+          navigation.navigate('Root_ParkingViolationsQr', {
             ...params,
             photo: file.path,
           });

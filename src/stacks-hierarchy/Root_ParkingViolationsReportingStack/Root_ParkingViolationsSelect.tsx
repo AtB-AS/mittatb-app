@@ -3,33 +3,30 @@ import {Button} from '@atb/components/button';
 import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useState} from 'react';
 import {Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {SvgXml} from 'react-native-svg';
-import {
-  PermissionReqiredError,
-  useParkingViolationsState,
-} from './ParkingViolationsContext';
 import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
 import {SelectGroup} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/SelectGroup';
-import {ParkingViolationsScreenProps} from './navigation-types';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useParkingViolations} from './use-parking-violations';
+import {PermissionRequiredError} from './use-user-location';
 
 export type SelectViolationScreenProps =
-  ParkingViolationsScreenProps<'ParkingViolations_SelectViolation'>;
+  RootStackScreenProps<'Root_ParkingViolationsSelect'>;
 
 const ICON_SIZE = 50;
 
-export const ParkingViolations_SelectViolation = ({
+export const Root_ParkingViolationsSelect = ({
   navigation,
 }: SelectViolationScreenProps) => {
   const style = useStyles();
-  const {theme} = useTheme();
   const {t} = useTranslation();
-  const {isLoading, error, violations} = useParkingViolationsState();
+  const {isLoading, isError, errors, violations} = useParkingViolations();
   const [selectedViolations, setSelectedViolations] = useState<
     ParkingViolationType[]
   >([]);
@@ -42,7 +39,7 @@ export const ParkingViolations_SelectViolation = ({
         <Button
           interactiveColor="interactive_0"
           onPress={() => {
-            navigation.navigate('ParkingViolations_Photo', {
+            navigation.navigate('Root_ParkingViolationsPhoto', {
               selectedViolations,
             });
           }}
@@ -52,18 +49,18 @@ export const ParkingViolations_SelectViolation = ({
         />
       }
     >
-      {isLoading && !error && (
+      {isLoading && !isError && (
         <View style={style.processing}>
           <Processing message={t(dictionary.loading)} />
         </View>
       )}
-      {error && <ErrorMessage error={error} />}
-      {!isLoading && !error && (
+      {isError && errors.map((error) => <ErrorMessage error={error} />)}
+      {!isLoading && !isError && (
         <ScrollView style={style.container}>
           <SelectGroup
             multiple
             items={violations}
-            keyExtractor={(item) => 'violation' + item.id}
+            keyExtractor={(item) => 'violation' + item.code}
             onSelect={setSelectedViolations}
             generateAccessibilityLabel={(violation) =>
               t(
@@ -72,15 +69,10 @@ export const ParkingViolations_SelectViolation = ({
                 ),
               )
             }
-            renderItem={(violation, isSelected) => (
+            renderItem={(violation) => (
               <>
                 <SvgXml
-                  style={{
-                    ...style.itemImage,
-                    borderColor: isSelected
-                      ? theme.interactive.interactive_0.default.background
-                      : theme.static.background.background_0.background,
-                  }}
+                  style={style.itemImage}
                   height={ICON_SIZE}
                   width={ICON_SIZE}
                   xml={violation.icon}
@@ -105,7 +97,7 @@ type ErrorMessageProps = {error: unknown};
 const ErrorMessage = ({error}: ErrorMessageProps) => {
   const {t} = useTranslation();
 
-  if (error instanceof PermissionReqiredError) {
+  if (error instanceof PermissionRequiredError) {
     return (
       <MessageBox
         title={t(ParkingViolationTexts.error.position.title)}
@@ -139,9 +131,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   itemImage: {
-    borderRadius: ICON_SIZE / 2,
-    overflow: 'hidden',
-    borderWidth: 2,
     marginRight: theme.spacings.medium,
   },
   itemDescription: {

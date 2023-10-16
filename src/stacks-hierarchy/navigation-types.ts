@@ -12,6 +12,7 @@ import {ReserveOffer} from '@atb/ticketing';
 import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
+import {ParkingViolationType} from '@atb/api/types/mobility';
 
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
@@ -93,6 +94,14 @@ export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {
     | NextScreenParams<'Root_PurchaseOverviewScreen'>;
 };
 
+type Root_ParkingViolationsPhotoParams = {
+  selectedViolations: ParkingViolationType[];
+};
+
+type Root_ParkingViolationsQrParams = Root_ParkingViolationsPhotoParams & {
+  photo: string;
+};
+
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
@@ -126,7 +135,11 @@ export type RootStackParamList = {
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
   Root_AddPaymentMethodScreen: undefined;
-  Root_ParkingViolationsReportingStack: undefined;
+
+  Root_ParkingViolationsSelect: undefined;
+  Root_ParkingViolationsPhoto: Root_ParkingViolationsPhotoParams;
+  Root_ParkingViolationsQr: Root_ParkingViolationsQrParams;
+  Root_ParkingViolationsConfirmation: undefined;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

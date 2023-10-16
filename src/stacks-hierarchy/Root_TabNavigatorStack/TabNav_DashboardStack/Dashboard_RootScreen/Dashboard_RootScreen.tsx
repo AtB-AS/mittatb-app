@@ -261,9 +261,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         <Announcements style={style.contentSection} />
 
         <Button
-          onPress={() =>
-            navigation.navigate('Root_ParkingViolationsReportingStack')
-          }
+          onPress={() => navigation.navigate('Root_ParkingViolationsSelect')}
           text="Registrer feilparkering"
         />
 

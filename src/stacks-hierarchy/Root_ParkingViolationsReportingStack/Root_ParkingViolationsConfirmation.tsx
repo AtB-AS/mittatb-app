@@ -1,20 +1,23 @@
 import {View} from 'react-native';
-import {ScreenContainer} from '@atb/stacks-hierarchy/Root_ParkingViolationsReportingStack/components/ScreenContainer';
+import {ScreenContainer, themeColor} from './components/ScreenContainer';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {themeColor} from './Root_ParkingViolationsReportingStack';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {ParkingViolationsScreenProps} from './navigation-types';
+import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
 export type ConfirmationScreenProps =
-  ParkingViolationsScreenProps<'ParkingViolations_Confirmation'>;
+  RootStackScreenProps<'Root_ParkingViolationsConfirmation'>;
 
-export const ParkingViolations_Confirmation = ({}: ConfirmationScreenProps) => {
+export const Root_ParkingViolationsConfirmation = ({
+  navigation,
+}: ConfirmationScreenProps) => {
   const styles = useStyles();
 
   return (
-    <ScreenContainer rightHeaderButton={{type: 'close'}}>
+    <ScreenContainer
+      rightHeaderButton={{type: 'close', onPress: () => navigation.popToTop()}}
+    >
       <View style={styles.confirmation}>
         <ThemeText color={themeColor} type="heading--big">
           Feilparkering rapportert!
