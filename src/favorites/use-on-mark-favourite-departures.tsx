@@ -11,10 +11,7 @@ import {
   DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
-import {
-  ensureViaFormat,
-  getDestinationLineName,
-} from '@atb/travel-details-screens/utils';
+import {getDestinationLineName} from '@atb/travel-details-screens/utils';
 
 type FavouriteDepartureLine = {
   id: string;
@@ -63,7 +60,7 @@ export function useOnMarkFavouriteDepartures(
 
   const getExistingFavorite = (line: FavouriteDepartureLine) =>
     getFavoriteDeparture({
-      destinationDisplay: ensureViaFormat(line.destinationDisplay),
+      destinationDisplay: line.destinationDisplay,
       lineId: line.id,
       stopId: stopPlace.id,
       quayId: quay.id,
@@ -117,10 +114,9 @@ export function useOnMarkFavouriteDepartures(
       );
     } else if (line.destinationDisplay && line.lineNumber) {
       openBottomSheet(() => {
-        const destinationDisplay = ensureViaFormat(line.destinationDisplay);
-        return destinationDisplay && line.lineNumber ? (
+        return line.destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
-            destinationDisplay={destinationDisplay}
+            destinationDisplay={line.destinationDisplay}
             lineNumber={line.lineNumber}
             addFavorite={(forSpecificLineName: boolean) =>
               addFavorite(line, forSpecificLineName)

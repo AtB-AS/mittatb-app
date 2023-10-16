@@ -154,21 +154,10 @@ export function mapLegacyLineNameToDestinationDisplay(
   if (legacyLineName === undefined) {
     return undefined;
   }
-  const [frontText, viaItemsString] = legacyLineName.split(' via ');
-  if (viaItemsString === undefined) {
-    return {frontText, via: undefined};
-  }
-  const viaItems = viaItemsString.split('/');
-  const via = viaItems.map((viaItem) => viaItem.trim());
-  return {frontText, via};
-}
-
-export function ensureViaFormat(dd?: DestinationDisplay) {
-  if (dd?.frontText?.includes(' via ') && (dd?.via?.length || 0) < 1) {
-    return mapLegacyLineNameToDestinationDisplay(dd?.frontText);
-  } else {
-    return dd;
-  }
+  return {
+    frontText: legacyLineName,
+    via: undefined,
+  };
 }
 
 export function getLineName(t: TranslateFunction, leg: Leg) {
