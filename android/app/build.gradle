@@ -88,12 +88,6 @@ android {
             versionCode appVersionCode.toInteger()
         }
 
-        // Check if KETTLE_API_KEY exists `manifestPlaceholders` does not like NULL values
-        if (KETTLE_API_KEY_VALUE) {
-            // This is fetched inside Manifests
-            manifestPlaceholders = [KETTLE_API_KEY: KETTLE_API_KEY_VALUE]
-        }
-
         // This is fetched inside Java / Kotlin code
         buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
     }
