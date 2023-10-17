@@ -1,13 +1,12 @@
 import {useState} from 'react';
-import {Linking, View} from 'react-native';
+import {Linking} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
@@ -37,6 +36,7 @@ export const Root_ParkingViolationsSelect = ({
       title={t(ParkingViolationTexts.selectViolation.title)}
       buttons={
         <Button
+          disabled={isError}
           interactiveColor="interactive_0"
           onPress={() => {
             navigation.navigate('Root_ParkingViolationsPhoto', {
@@ -48,14 +48,10 @@ export const Root_ParkingViolationsSelect = ({
           accessibilityHint={''} //TODO
         />
       }
+      isLoading={isLoading}
     >
-      {isLoading && !isError && (
-        <View style={style.processing}>
-          <Processing message={t(dictionary.loading)} />
-        </View>
-      )}
       {isError && errors.map((error) => <ErrorMessage error={error} />)}
-      {!isLoading && !isError && (
+      {!isError && (
         <ScrollView style={style.container}>
           <SelectGroup
             multiple
@@ -122,10 +118,6 @@ const ErrorMessage = ({error}: ErrorMessageProps) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
-  },
-  processing: {
-    flex: 1,
-    justifyContent: 'center',
   },
   violation: {
     marginBottom: theme.spacings.medium,

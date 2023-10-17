@@ -2,16 +2,15 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {Camera} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
-import {dictionary, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useIsFocused} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
-import {Dimensions, View} from 'react-native';
+import {Dimensions} from 'react-native';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
-import {Processing} from '@atb/components/loading';
 import {MessageBox} from '@atb/components/message-box';
 import {blobToBase64} from './utils';
 import {useAuthState} from '@atb/auth';
@@ -135,25 +134,19 @@ export const Root_ParkingViolationsQr = ({
 
   return (
     <ScreenContainer
-      title={!isLoading ? t(ParkingViolationTexts.qr.title) : ''}
-      secondaryText={!isLoading ? t(ParkingViolationTexts.qr.instructions) : ''}
+      title={t(ParkingViolationTexts.qr.title)}
+      secondaryText={t(ParkingViolationTexts.qr.instructions)}
       buttons={
-        !isLoading &&
-        !isError && (
-          <Button
-            mode="secondary"
-            interactiveColor={'interactive_0'}
-            onPress={selectProvider}
-            text={t(ParkingViolationTexts.qr.scanningNotPossible)}
-          />
-        )
+        <Button
+          disabled={isError}
+          mode="secondary"
+          interactiveColor={'interactive_0'}
+          onPress={selectProvider}
+          text={t(ParkingViolationTexts.qr.scanningNotPossible)}
+        />
       }
+      isLoading={isLoading}
     >
-      {isLoading && (
-        <View style={style.centered}>
-          <Processing message={t(dictionary.loading)} />
-        </View>
-      )}
       {isError && (
         <MessageBox
           style={style.error}
@@ -183,9 +176,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   error: {
     marginTop: theme.spacings.medium,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
   },
 }));

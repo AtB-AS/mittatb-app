@@ -20,7 +20,7 @@ export const Root_ParkingViolationsPhoto = ({
   const {t} = useTranslation();
   const isFocused = useIsFocused();
   const style = useStyles();
-  const {position} = useParkingViolations();
+  const {position, isLoading} = useParkingViolations();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const handlePhotoCapture = (file: PhotoFile) => {
@@ -44,6 +44,7 @@ export const Root_ParkingViolationsPhoto = ({
     <ScreenContainer
       title={t(ParkingViolationTexts.photo.title)}
       secondaryText={t(ParkingViolationTexts.photo.instruction)}
+      isLoading={isLoading}
     >
       {isFocused && (
         <Camera

@@ -6,6 +6,8 @@ import {PropsWithChildren, ReactNode} from 'react';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StaticColorByType} from '@atb/theme/colors';
+import {Processing} from '@atb/components/loading';
+import {dictionary, useTranslation} from '@atb/translations';
 
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -17,18 +19,19 @@ type Props = PropsWithChildren<{
   leftHeaderButton?: LeftButtonProps;
   rightHeaderButton?: RightButtonProps;
   buttons?: ReactNode;
+  isLoading?: boolean;
 }>;
 
-export const ScreenContainer = ({
-  leftHeaderButton = {type: 'back'},
-  rightHeaderButton,
-  children,
-  title,
-  titleA11yLabel,
-  secondaryText,
-  buttons,
-}: Props) => {
+export const ScreenContainer = (props: Props) => {
   const style = useStyles();
+  const {
+    leftHeaderButton = {type: 'back'},
+    rightHeaderButton,
+    title,
+    titleA11yLabel,
+    isLoading = false,
+  } = props;
+
   return (
     <FullScreenView
       headerProps={{
@@ -40,6 +43,26 @@ export const ScreenContainer = ({
       }}
       contentContainerStyle={style.contentContainer}
     >
+      {isLoading && <LoadingBody />}
+      {!isLoading && <ContentBody {...props} />}
+    </FullScreenView>
+  );
+};
+
+const LoadingBody = () => {
+  const style = useStyles();
+  const {t} = useTranslation();
+  return (
+    <View style={style.centered}>
+      <Processing message={t(dictionary.loading)} />
+    </View>
+  );
+};
+
+const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
+  const style = useStyles();
+  return (
+    <>
       <View style={style.content}>
         <View style={style.header}>
           <ThemeText color={themeColor} type="heading--medium">
@@ -52,7 +75,7 @@ export const ScreenContainer = ({
         {children}
       </View>
       {buttons && <View style={style.actionButtons}>{buttons}</View>}
-    </FullScreenView>
+    </>
   );
 };
 
@@ -72,9 +95,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     header: {
       marginBottom: theme.spacings.large,
     },
+    centered: {
+      flex: 1,
+      justifyContent: 'center',
+    },
     actionButtons: {
       marginHorizontal: theme.spacings.medium,
-
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
   };
