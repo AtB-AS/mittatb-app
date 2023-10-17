@@ -69,6 +69,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    // Store the KETTLE_API_KEY in a constant
+    def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
+
     namespace "no.mittatb"
     defaultConfig {
         resValue "string", "app_name", appName
@@ -83,6 +86,23 @@ android {
             versionCode System.getenv()["BUILD_ID"] as Integer
         } else {
             versionCode appVersionCode.toInteger()
+        }
+
+        // Check if KETTLE_API_KEY exists `manifestPlaceholders` does not like NULL values
+        if (KETTLE_API_KEY_VALUE) {
+            // This is fetched inside Manifests
+            manifestPlaceholders = [KETTLE_API_KEY: KETTLE_API_KEY_VALUE]
+        }
+
+        // This is fetched inside Java / Kotlin code
+        buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
+    }
+
+    productFlavors {
+        if (KETTLE_API_KEY_VALUE) {
+            kettle {
+                dimension "type"
+            }
         }
     }
 
@@ -124,13 +144,6 @@ android {
             //     exclude "lib/x86_64/libjscexecutor.so"
             // }
         }
-    }
-
-    buildTypes.all {
-        // This is fetch inside Java / Kotlin code
-        buildConfigField 'String', 'KETTLE_API_KEY', "\"${System.getenv()["KETTLE_API_KEY"]}\""
-        // This is fetch inside Manifests
-        manifestPlaceholders = [KETTLE_API_KEY: System.getenv()["KETTLE_API_KEY"]]
     }
 
     packagingOptions {
