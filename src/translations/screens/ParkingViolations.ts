@@ -94,6 +94,18 @@ export const ParkingViolationTexts = {
       'Report sent!',
       'Feilparkering rapportert!',
     ),
+    description: (providerName?: string) =>
+      _(
+        `Feilparkeringen er sendt til ${
+          providerName ?? 'operatøren'
+        } og til kommunen.`,
+        `The report is sent to ${
+          providerName ?? 'the provider'
+        } and the municipality.`,
+        `Feilparkeringa er sendt til ${
+          providerName ?? 'operatøren'
+        } og til kommunen.`,
+      ),
   },
   error: {
     loading: {

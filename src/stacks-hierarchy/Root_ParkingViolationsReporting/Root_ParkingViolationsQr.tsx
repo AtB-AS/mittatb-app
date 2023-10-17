@@ -71,7 +71,9 @@ export const Root_ParkingViolationsQr = ({
       timestamp: new Date().toISOString(),
     })
       .then(() => {
-        navigation.navigate('Root_ParkingViolationsConfirmation');
+        navigation.navigate('Root_ParkingViolationsConfirmation', {
+          providerName: providers.find((p) => p.id === providerId)?.name,
+        });
         enableScanning();
       })
       .catch((e) => {

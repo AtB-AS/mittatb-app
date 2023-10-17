@@ -102,6 +102,10 @@ type Root_ParkingViolationsQrParams = Root_ParkingViolationsPhotoParams & {
   photo: string;
 };
 
+type Root_ParkingViolationsConfirmationParams = {
+  providerName: string | undefined;
+};
+
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
@@ -139,7 +143,7 @@ export type RootStackParamList = {
   Root_ParkingViolationsSelect: undefined;
   Root_ParkingViolationsPhoto: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQr: Root_ParkingViolationsQrParams;
-  Root_ParkingViolationsConfirmation: undefined;
+  Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
