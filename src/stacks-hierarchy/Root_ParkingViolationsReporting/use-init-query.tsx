@@ -14,4 +14,5 @@ export const useInitQuery = ({latitude, longitude}: Coordinates) =>
       }),
     staleTime: ONE_HOUR_MS,
     cacheTime: ONE_HOUR_MS,
+    enabled: latitude !== 0 && longitude !== 0,
   });
