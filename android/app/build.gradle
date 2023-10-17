@@ -98,10 +98,13 @@ android {
         buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
     }
 
+    // NOTE: This is made to merge Kettle -> AndroidManifest.xml into the main AndroidManifest.xml
+    // For more information, refers to https://developer.android.com/build/build-variants?utm_source=android-studio#product-flavors
+    flavorDimensions.add("sdk")
     productFlavors {
         if (KETTLE_API_KEY_VALUE) {
             kettle {
-                dimension "type"
+                dimension "sdk"
             }
         }
     }
