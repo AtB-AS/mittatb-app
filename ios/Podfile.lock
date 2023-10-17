@@ -906,7 +906,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.4)
   - hermes-engine/Pre-built (0.72.4)
   - Intercom (10.4.0)
-  - KettleKit (1.0.13)
+  - KettleKit (1.1.0)
   - Kronos (4.2.2)
   - leveldb-library (1.22.2)
   - libevent (2.1.12)
@@ -1244,8 +1244,8 @@ PODS:
   - react-native-intercom (21.1.1):
     - Intercom (~> 10)
     - React
-  - react-native-kettle-module (1.0.3):
-    - KettleKit (= 1.0.13)
+  - react-native-kettle-module (1.1.0):
+    - KettleKit (= 1.1.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-pager-view (6.1.2):
@@ -1791,7 +1791,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   hermes-engine: 81191603c4eaa01f5e4ae5737a9efcf64756c7b2
   Intercom: fc68809088ec0b2452c441eae6f6466d5b906518
-  KettleKit: 7be8bd0ef31d4498f1f594e567da1caa077fd1dc
+  KettleKit: 587c10f66114c579cc89374ec9ace456fa358751
   Kronos: dfa27819541f9f1bf6834d5bfefa792f499001bb
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -1824,7 +1824,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
-  react-native-kettle-module: f41b7728a6acb22c982c9f7130ac5390e12220a2
+  react-native-kettle-module: 940ba0b02280d4540c7d3d70026ef152f4283ecd
   react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
