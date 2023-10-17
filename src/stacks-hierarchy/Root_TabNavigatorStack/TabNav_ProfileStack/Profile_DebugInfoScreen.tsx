@@ -355,7 +355,7 @@ export const Profile_DebugInfoScreen = () => {
 
         <Section withPadding withTopPadding>
           <ExpandableSectionItem
-            text={'Trip search parameters'}
+            text="Trip search parameters"
             showIconText={true}
             expandContent={
               <View>
@@ -485,7 +485,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               <>
                 <View>
-                  <MapEntry title={'app_group_name'} value={APP_GROUP_NAME} />
+                  <MapEntry title="app_group_name" value={APP_GROUP_NAME} />
                 </View>
                 {storedValues && (
                   <View>

@@ -113,7 +113,7 @@ export const FavoriteChips: React.FC<Props> = ({
             leftIcon={{svg: Add}}
             onPress={onAddFavorite}
             style={{marginRight: 0}}
-            testID={'addFavoriteButton'}
+            testID="addFavoriteButton"
           />
         )}
       </ScrollView>

@@ -19,7 +19,7 @@ export const VehicleStat = ({
   <View style={{alignItems: 'center'}}>
     <IconText svg={svg} text={String(primaryStat)} />
     {secondaryStat && (
-      <ThemeText type={'body__secondary'} style={secondaryStatStyle}>
+      <ThemeText type="body__secondary" style={secondaryStatStyle}>
         {secondaryStat}
       </ThemeText>
     )}

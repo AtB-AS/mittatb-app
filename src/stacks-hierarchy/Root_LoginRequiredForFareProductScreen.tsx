@@ -67,7 +67,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
-            type={'body__primary--jumbo--bold'}
+            type="body__primary--jumbo--bold"
             style={styles.title}
             color={themeColor}
           >
@@ -104,7 +104,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
           </ThemeText>
         </PressableOpacity>
         <View style={styles.carrotInfo}>
-          <Psst></Psst>
+          <Psst />
           <ThemeText
             style={styles.carrotTitle}
             type="body__primary--bold"

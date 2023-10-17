@@ -3,12 +3,19 @@ import {
   FareContract,
   isInspectableTravelRight,
   isPreActivatedTravelRight,
+  NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {FareContractInfo} from '../FareContractInfo';
+import {
+  FareContractInfoHeader,
+  FareContractInfoDetails,
+} from '../FareContractInfo';
 import {ValidityHeader} from '../ValidityHeader';
 import {ValidityLine} from '../ValidityLine';
-import {getValidityStatus} from '@atb/fare-contracts/utils';
+import {
+  getValidityStatus,
+  mapToUserProfilesWithCount,
+} from '@atb/fare-contracts/utils';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
@@ -28,6 +35,9 @@ import {
 } from '@atb/global-messages';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {findReferenceDataById} from '@atb/reference-data/utils';
+import {Barcode} from './Barcode';
 
 type Props = {
   fareContract: FareContract;
@@ -55,6 +65,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {findGlobalMessages} = useGlobalMessagesState();
 
   const firstTravelRight = fc.travelRights[0];
+  const {tariffZones, userProfiles} = useFirestoreConfiguration();
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
@@ -69,6 +80,21 @@ export const DetailsContent: React.FC<Props> = ({
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+
+    const {tariffZoneRefs} = firstTravelRight;
+    const firstZone = tariffZoneRefs?.[0];
+    const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+
+    const fromTariffZone = firstZone
+      ? findReferenceDataById(tariffZones, firstZone)
+      : undefined;
+    const toTariffZone = lastZone
+      ? findReferenceDataById(tariffZones, lastZone)
+      : undefined;
+    const userProfilesWithCount = mapToUserProfilesWithCount(
+      fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
+      userProfiles,
+    );
 
     const globalMessageRuleVariables = {
       fareProductType: preassignedFareProduct?.type ?? 'unknown',
@@ -101,13 +127,32 @@ export const DetailsContent: React.FC<Props> = ({
             isInspectable={isInspectable}
             fareProductType={preassignedFareProduct?.type}
           />
-          <FareContractInfo
-            travelRights={fc.travelRights.filter(isPreActivatedTravelRight)}
+          <FareContractInfoHeader
+            travelRight={firstTravelRight}
             status={validityStatus}
             isInspectable={isInspectable}
-            testID={'details'}
-            fareContract={fc}
-            fareProductType={preassignedFareProduct?.type}
+            testID="details"
+            preassignedFareProduct={preassignedFareProduct}
+          />
+        </GenericSectionItem>
+        {isInspectable && (
+          <GenericSectionItem>
+            <Barcode
+              validityStatus={validityStatus}
+              isInspectable={isInspectable}
+              fc={fc}
+            />
+          </GenericSectionItem>
+        )}
+        <GenericSectionItem>
+          <FareContractInfoDetails
+            omitUserProfileCount={true}
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            userProfilesWithCount={userProfilesWithCount}
+            status={validityStatus}
+            isInspectable={isInspectable}
+            preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>
         {globalMessageCount > 0 && (

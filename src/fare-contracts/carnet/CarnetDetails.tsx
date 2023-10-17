@@ -4,17 +4,25 @@ import {
   FareContract,
   flattenCarnetTravelRightAccesses,
 } from '@atb/ticketing';
-import {getValidityStatus} from '@atb/fare-contracts/utils';
+import {
+  getValidityStatus,
+  mapToUserProfilesWithCount,
+} from '@atb/fare-contracts/utils';
 import {ValidityHeader} from '@atb/fare-contracts/ValidityHeader';
 import {UsedAccessValidityHeader} from '@atb/fare-contracts/carnet/UsedAccessValidityHeader';
 import {ValidityLine} from '@atb/fare-contracts/ValidityLine';
 import {View} from 'react-native';
 import {GenericSectionItem, SectionSeparator} from '@atb/components/sections';
-import {FareContractInfo} from '@atb/fare-contracts/FareContractInfo';
+import {
+  FareContractInfoHeader,
+  FareContractInfoDetails,
+} from '@atb/fare-contracts/FareContractInfo';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {UsedAccessStatus} from '@atb/fare-contracts/carnet/types';
+import {findReferenceDataById} from '@atb/reference-data/utils';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 export function CarnetDetails(props: {
   now: number;
@@ -28,13 +36,13 @@ export function CarnetDetails(props: {
   const {now, inspectable, travelRights, fareContract} = props;
   const {usedAccesses, maximumNumberOfAccesses, numberOfUsedAccesses} =
     flattenCarnetTravelRightAccesses(travelRights);
-
+  const {tariffZones, userProfiles, preassignedFareProducts} =
+    useFirestoreConfiguration();
   const {
     status: usedAccessValidityStatus,
     validFrom: usedAccessValidFrom,
     validTo: usedAccessValidTo,
   } = getLastUsedAccess(now, usedAccesses);
-
   const style = useStyles();
   const fareContractValidityStatus = getValidityStatus(
     now,
@@ -42,59 +50,89 @@ export function CarnetDetails(props: {
     fareContractValidTo,
     fareContract.state,
   );
+  const firstTravelRight = travelRights[0];
+  const {tariffZoneRefs} = firstTravelRight;
+  const firstZone = tariffZoneRefs?.[0];
+  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
+  const userProfilesWithCount = mapToUserProfilesWithCount(
+    travelRights.map((tr) => tr.userProfileRef),
+    userProfiles,
+  );
+
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    firstTravelRight.fareProductRef,
+  );
 
   return (
-    <>
-      <GenericSectionItem radius="top">
-        {fareContractValidityStatus !== 'valid' ? (
-          <ValidityHeader
-            now={now}
-            status={fareContractValidityStatus}
-            validFrom={fareContractValidFrom}
-            validTo={fareContractValidTo}
-            isInspectable={inspectable}
-            fareProductType={'carnet'}
-          />
-        ) : (
-          <UsedAccessValidityHeader
-            now={now}
-            status={usedAccessValidityStatus}
-            validFrom={usedAccessValidFrom}
-            validTo={usedAccessValidTo}
-            isInspectable={inspectable}
-          />
-        )}
-        {usedAccessValidTo && usedAccessValidFrom ? (
-          <ValidityLine
-            status={usedAccessValidityStatus}
-            now={props.now}
-            validFrom={usedAccessValidFrom}
-            validTo={usedAccessValidTo}
-            isInspectable={false}
-            fareProductType={'carnet'}
-          />
-        ) : (
-          <View style={style.container}>
-            <SectionSeparator />
-          </View>
-        )}
-        <FareContractInfo
-          travelRights={travelRights}
-          status={usedAccessValidityStatus}
+    <GenericSectionItem radius="top">
+      {fareContractValidityStatus !== 'valid' ? (
+        <ValidityHeader
+          now={now}
+          status={fareContractValidityStatus}
+          validFrom={fareContractValidFrom}
+          validTo={fareContractValidTo}
           isInspectable={inspectable}
-          omitUserProfileCount={true}
-          testID={props.testID}
-          fareProductType={'carnet'}
+          fareProductType="carnet"
         />
-      </GenericSectionItem>
-      <GenericSectionItem>
-        <CarnetFooter
-          active={usedAccessValidityStatus === 'valid'}
-          maximumNumberOfAccesses={maximumNumberOfAccesses}
-          numberOfUsedAccesses={numberOfUsedAccesses}
+      ) : (
+        <UsedAccessValidityHeader
+          now={now}
+          status={usedAccessValidityStatus}
+          validFrom={usedAccessValidFrom}
+          validTo={usedAccessValidTo}
+          isInspectable={inspectable}
         />
-      </GenericSectionItem>
-    </>
+      )}
+      {usedAccessValidTo && usedAccessValidFrom ? (
+        <ValidityLine
+          status={usedAccessValidityStatus}
+          now={props.now}
+          validFrom={usedAccessValidFrom}
+          validTo={usedAccessValidTo}
+          isInspectable={false}
+          fareProductType="carnet"
+        />
+      ) : (
+        <View style={style.sectionSeparator}>
+          <SectionSeparator />
+        </View>
+      )}
+      <FareContractInfoHeader
+        travelRight={firstTravelRight}
+        status={usedAccessValidityStatus}
+        isInspectable={inspectable}
+        testID={props.testID}
+        preassignedFareProduct={preassignedFareProduct}
+      />
+      <View style={style.sectionSeparator}>
+        <SectionSeparator />
+      </View>
+      <FareContractInfoDetails
+        omitUserProfileCount={true}
+        fromTariffZone={fromTariffZone}
+        toTariffZone={toTariffZone}
+        userProfilesWithCount={userProfilesWithCount}
+        status={usedAccessValidityStatus}
+        isInspectable={inspectable}
+        preassignedFareProduct={preassignedFareProduct}
+      />
+      <View style={style.sectionSeparator}>
+        <SectionSeparator />
+      </View>
+      <CarnetFooter
+        active={usedAccessValidityStatus === 'valid'}
+        maximumNumberOfAccesses={maximumNumberOfAccesses}
+        numberOfUsedAccesses={numberOfUsedAccesses}
+      />
+    </GenericSectionItem>
   );
 }
 
@@ -134,7 +172,7 @@ export function getLastUsedAccess(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
+  sectionSeparator: {
     marginVertical: theme.spacings.medium,
     marginHorizontal: -theme.spacings.medium,
     flexDirection: 'row',

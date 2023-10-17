@@ -32,7 +32,7 @@ export const TravelCardInformation: React.FC<Props> = ({travelCard}) => {
       <ActiveTravelCard
         cardId={travelCard.id?.toString()}
         color="background_accent_2"
-      ></ActiveTravelCard>
+       />
       {/* <ThemeText
         type="body__tertiary"
         color="secondary"

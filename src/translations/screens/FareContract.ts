@@ -87,6 +87,12 @@ const FareContractTexts = {
       'Barcode. Show this code in case of inspection. ',
       'Barkode. Vis denne koden ved billettkontroll.',
     ),
+    barcodeButtonA11yLabel: _(
+      'Vis stor barkode for enklere avlesing.',
+      'Show larger barcode for better validation',
+      'Vis stor strekkode for enklare avlesing.',
+    ),
+    bottomSheetTitle: _('Barkode', 'Barcode', 'Barkode'),
     barcodeErrors: {
       notInspectableDevice: {
         title: _('Barkode', 'Barcode', 'Barkode'),
@@ -276,11 +282,11 @@ const FareContractTexts = {
         return _('trikk', 'tram', 'trikk');
       case TransportMode.Water:
         if (subMode === 'highSpeedPassengerService') {
-          return _('hurtigbåt', 'passenger boat', 'hurtigbåt');
+          return _('hurtigbåt', 'express boat', 'hurtigbåt');
         } else if (subMode === 'highSpeedVehicleService') {
           // https://enturas.atlassian.net/wiki/spaces/PUBLIC/pages/825393529/Norwegian+submodes+and+their+definitions
           // -> "A high-speed boat service with car carrying capacity. The ship type is usually a catamaran."
-          return _('hurtigbåt', 'passenger boat', 'hurtigbåt');
+          return _('hurtigbåt', 'express boat', 'hurtigbåt');
         } else {
           return _('båt', 'boat', 'båt');
         }

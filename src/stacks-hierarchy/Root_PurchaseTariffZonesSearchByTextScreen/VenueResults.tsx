@@ -65,10 +65,10 @@ export const VenueResults: React.FC<Props> = ({
                   />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText type={'body__primary--bold'}>
+                  <ThemeText type="body__primary--bold">
                     {location.name}
                   </ThemeText>
-                  <ThemeText type={'body__secondary'}>
+                  <ThemeText type="body__secondary">
                     {t(
                       TariffZoneSearchTexts.results.item.zoneLabel(
                         getReferenceDataName(tariffZone, language),

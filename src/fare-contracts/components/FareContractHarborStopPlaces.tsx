@@ -73,7 +73,7 @@ export function FareContractHarborStopPlaces({
           borderLeftWidth: decorationLineWidth,
         }}
       >
-        <ThemeText type="body__secondary" color={'primary'}>
+        <ThemeText type="body__secondary" color="primary">
           {fromName}
         </ThemeText>
 
@@ -102,7 +102,7 @@ export function FareContractHarborStopPlaces({
           )}
         </View>
 
-        <ThemeText type="body__secondary" color={'primary'}>
+        <ThemeText type="body__secondary" color="primary">
           {toName}
         </ThemeText>
       </View>
@@ -120,7 +120,6 @@ export function FareContractHarborStopPlaces({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    marginBottom: theme.spacings.medium,
     marginLeft: theme.spacings.xSmall,
   },
   loading: {alignItems: 'flex-start', marginTop: 12},

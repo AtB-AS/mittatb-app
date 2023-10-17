@@ -88,7 +88,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
             <ThemeText
-              type={'body__primary--jumbo--bold'}
+              type="body__primary--jumbo--bold"
               style={styles.title}
               color={themeColor}
             >

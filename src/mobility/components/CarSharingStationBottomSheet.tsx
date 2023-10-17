@@ -58,7 +58,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
         title={stationName}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
       <>
@@ -95,7 +95,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                           </View>
                           <View style={style.carDetails}>
                             <CarName vehicleType={vehicle.vehicleType} />
-                            <ThemeText type={'body__secondary'}>
+                            <ThemeText type="body__secondary">
                               {t(
                                 CarSharingTexts.propultionType(
                                   vehicle.vehicleType.propulsionType,
@@ -109,7 +109,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                                     vehicle.count,
                                   ),
                                 )}
-                                interactiveColor={'interactive_0'}
+                                interactiveColor="interactive_0"
                               />
                             </View>
                           </View>
@@ -120,7 +120,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
               {!isAnyAvailable(station.vehicleTypesAvailable) && (
                 <Section withTopPadding withBottomPadding>
                   <View style={style.noCarsAvailable}>
-                    <ThemeText type={'body__secondary'}>
+                    <ThemeText type="body__secondary">
                       {t(CarSharingTexts.stations.noCarsAvailable)}
                     </ThemeText>
                   </View>
@@ -134,7 +134,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
                   onPress={openOperatorApp}
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                 />
               )}
             </View>

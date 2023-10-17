@@ -123,7 +123,7 @@ export const Map = (props: MapProps) => {
           <MapboxGL.UserLocation showsUserHeadingIndicator />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <MapboxGL.PointAnnotation
-              id={'selectionPin'}
+              id="selectionPin"
               coordinate={[
                 selectedCoordinates.longitude,
                 selectedCoordinates.latitude,

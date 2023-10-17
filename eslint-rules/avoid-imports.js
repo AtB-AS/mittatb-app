@@ -91,7 +91,7 @@ function findSuggestedModule(mappings, name) {
   if (!Array.isArray(mappings)) {
     return mappings[name];
   }
-  for (let item of mappings) {
+  for (const item of mappings) {
     if (typeof item === 'string') continue;
     if (item[name]) return item[name];
   }

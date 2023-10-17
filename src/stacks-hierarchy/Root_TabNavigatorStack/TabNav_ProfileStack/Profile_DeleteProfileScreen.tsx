@@ -79,7 +79,7 @@ export const Profile_DeleteProfileScreen = ({
       <ScrollView>
         <MessageBox
           message={t(DeleteProfileTexts.deleteInfo)}
-          type={'info'}
+          type="info"
           style={style.contentMargin}
         />
 

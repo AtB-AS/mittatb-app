@@ -191,7 +191,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <>
-            <ThemeText style={styles.heading} type={'body__secondary'}>
+            <ThemeText style={styles.heading} type="body__secondary">
               {t(TicketingTexts.ticketAssistantTile.title)}
             </ThemeText>
             <TicketAssistantTile
