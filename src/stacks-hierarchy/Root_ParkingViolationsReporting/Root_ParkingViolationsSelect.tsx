@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Linking} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {ScrollView} from 'react-native-gesture-handler';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
@@ -25,6 +25,7 @@ export const Root_ParkingViolationsSelect = ({
 }: SelectViolationScreenProps) => {
   const style = useStyles();
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const {isLoading, isError, errors, violations} = useParkingViolations();
   const [selectedViolations, setSelectedViolations] = useState<
     ParkingViolationType[]
@@ -62,10 +63,15 @@ export const Root_ParkingViolationsSelect = ({
                 ),
               )
             }
-            renderItem={(violation) => (
+            renderItem={(violation, isSelected) => (
               <>
                 <SvgXml
-                  style={style.itemImage}
+                  style={{
+                    ...style.itemImage,
+                    borderColor: isSelected
+                      ? theme.interactive.interactive_2.outline.background
+                      : theme.static.background.background_0.background,
+                  }}
                   height={ICON_SIZE}
                   width={ICON_SIZE}
                   xml={violation.icon}
@@ -121,6 +127,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   itemImage: {
     marginRight: theme.spacings.medium,
+    borderColor: theme.interactive.interactive_2.outline.background,
+    borderRadius: ICON_SIZE / 2,
+    height: ICON_SIZE,
+    width: ICON_SIZE,
+    borderWidth: 1,
   },
   itemDescription: {
     flexShrink: 1,

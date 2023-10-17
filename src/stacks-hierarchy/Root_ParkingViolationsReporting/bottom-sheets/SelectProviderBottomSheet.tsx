@@ -95,7 +95,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       flexGrow: 1,
     },
     providerLogo: {
-      borderWidth: 2,
+      borderWidth: 1,
       marginRight: theme.spacings.medium,
     },
     footer: {
