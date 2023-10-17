@@ -87,6 +87,7 @@ const FareContractTexts = {
       'Barcode. Show this code in case of inspection. ',
       'Barkode. Vis denne koden ved billettkontroll.',
     ),
+    bottomSheetTitle: _('Barkode', 'Barcode', 'Barkode'),
     barcodeErrors: {
       notInspectableDevice: {
         title: _('Barkode', 'Barcode', 'Barkode'),
