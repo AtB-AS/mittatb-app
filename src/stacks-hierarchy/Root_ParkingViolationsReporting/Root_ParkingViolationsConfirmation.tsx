@@ -43,8 +43,8 @@ export const Root_ParkingViolationsConfirmation = ({
         </ThemeText>
         <PressableOpacity style={styles.checkmark} onPress={closeReporting}>
           <ThemeIcon
-            stroke={'white'}
-            fill={'white'}
+            stroke={'#fff'}
+            fill={'#fff'}
             size={'large'}
             svg={Confirm}
           />
