@@ -9,6 +9,7 @@ import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useEffect} from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useAnalytics} from '@atb/analytics';
 
 export type ConfirmationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsConfirmation'>;
@@ -19,8 +20,12 @@ export const Root_ParkingViolationsConfirmation = ({
 }: ConfirmationScreenProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const analytics = useAnalytics();
 
-  const closeReporting = () => navigation.popToTop();
+  const closeReporting = () => {
+    analytics.logEvent('Mobility', 'Parking violation report sent');
+    navigation.popToTop();
+  };
 
   useEffect(() => {
     // Automatically close this screen after 5 seconds
