@@ -70,21 +70,35 @@ export const TicketSummary = () => {
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
 
-  const savingsText = t(
-    ticket.duration !== 0
-      ? savings === 0
-        ? TicketAssistantTexts.summary.equalPriceNotice
-        : TicketAssistantTexts.summary.savings({
-            totalSavings: formatDecimalNumber(savings, language, 2),
-            perTripSavings: formatDecimalNumber(
-              recommendedTicketSummary.singleTicketPrice - perTripPrice,
-              language,
-              2,
-            ),
-            alternative: numberOfTravels.toString(),
-          })
-      : TicketAssistantTexts.summary.singleTicketNotice,
-  );
+  let savingsText;
+
+  if (ticket.duration !== 0) {
+    if (savings < 0) {
+      savingsText = t(
+        TicketAssistantTexts.summary.lossNotice({
+          numberOfTickets: numberOfTravels.toString(),
+          totalLoss: formatDecimalNumber(-savings, language, 2),
+        }),
+      );
+    } else if (savings === 0) {
+      savingsText = t(TicketAssistantTexts.summary.equalPriceNotice);
+    } else {
+      savingsText = t(
+        TicketAssistantTexts.summary.savings({
+          totalSavings: formatDecimalNumber(savings, language, 2),
+          perTripSavings: formatDecimalNumber(
+            recommendedTicketSummary.singleTicketPrice - perTripPrice,
+            language,
+            2,
+          ),
+          alternative: numberOfTravels.toString(),
+        }),
+      );
+    }
+  } else {
+    savingsText = t(TicketAssistantTexts.summary.singleTicketNotice);
+  }
+
   const perTripAndSavingsAccessibilityLabel = [
     perTripPriceString,
     savingsText,
