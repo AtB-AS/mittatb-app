@@ -9,6 +9,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Coordinates} from '@atb/utils/coordinates';
 import {UserPositionMap} from '../components/UserPositionMap';
+import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 
 type Props = {
   file: PhotoFile;
@@ -35,7 +36,7 @@ export const ImageConfirmationBottomSheet = ({
         }}
         color={'background_1'}
         setFocusOnLoad={false}
-        title="Er du fornøyd med bildet?"
+        title={t(ParkingViolationTexts.imageConfirmation.title)}
       />
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.imageAndPosition}>
@@ -55,13 +56,17 @@ export const ImageConfirmationBottomSheet = ({
             />
           </View>
         </View>
-        <Button style={styles.button} onPress={onConfirm} text="Ja" />
+        <Button
+          style={styles.button}
+          onPress={onConfirm}
+          text={t(ParkingViolationTexts.imageConfirmation.confirmButton)}
+        />
         <Button
           style={styles.button}
           mode="secondary"
           interactiveColor={'interactive_2'}
           onPress={close}
-          text="Ta nytt bilde"
+          text={t(ParkingViolationTexts.imageConfirmation.retryButton)}
         />
       </ScrollView>
     </BottomSheetContainer>

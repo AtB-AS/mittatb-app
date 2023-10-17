@@ -8,6 +8,8 @@ import {MessageBox} from '../message-box';
 import {CaptureButton} from './CaptureButton';
 import {PhotoFile} from './types';
 import {usePermissions} from './use-permissions';
+import CameraTexts from '@atb/translations/components/Camera';
+import {useTranslation} from '@atb/translations';
 
 type PhotoProps = {
   mode: 'photo';
@@ -28,6 +30,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
   const styles = useStyles();
   const {isAuthorized} = usePermissions();
   const {theme} = useTheme();
+  const {t} = useTranslation();
 
   const handleCapture = async () => {
     if (mode === 'photo') {
@@ -47,7 +50,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
   if (isAuthorized === undefined) {
     return (
       <View style={styles.loadingIndicator}>
-        <Processing message={'Starter kamera...'} />
+        <Processing message={t(CameraTexts.loading)} />
       </View>
     );
   }
@@ -90,12 +93,12 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
     return (
       <View style={styles.loadingIndicator}>
         <MessageBox
-          title="Gi tilgang til kamera"
-          message="For å bruke denne funksjonen må du gi AtB-appen tilgang til å bruke kamera. Det gjør du under Personvern og sikkerhet i Innstillinger."
+          title={t(CameraTexts.permissionRequired.title)}
+          message={t(CameraTexts.permissionRequired.message)}
           type={'warning'}
           onPressConfig={{
             action: () => Linking.openSettings(),
-            text: 'Gå til Innstilinger',
+            text: t(CameraTexts.permissionRequired.action),
           }}
         />
       </View>

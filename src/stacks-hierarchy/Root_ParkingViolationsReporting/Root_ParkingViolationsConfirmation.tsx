@@ -5,6 +5,8 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {useTranslation} from '@atb/translations';
+import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 
 export type ConfirmationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsConfirmation'>;
@@ -13,6 +15,7 @@ export const Root_ParkingViolationsConfirmation = ({
   navigation,
 }: ConfirmationScreenProps) => {
   const styles = useStyles();
+  const {t} = useTranslation();
 
   return (
     <ScreenContainer
@@ -20,7 +23,7 @@ export const Root_ParkingViolationsConfirmation = ({
     >
       <View style={styles.confirmation}>
         <ThemeText color={themeColor} type="heading--big">
-          Feilparkering rapportert!
+          {t(ParkingViolationTexts.confirmation.title)}
         </ThemeText>
         <View style={styles.checkmark}>
           <ThemeIcon stroke={'white'} fill={'white'} svg={Confirm} />

@@ -46,6 +46,15 @@ export const ParkingViolationTexts = {
       '"Hald ein avstand på omtrent 5 meter. Unngå folk i biletet',
     ),
   },
+  imageConfirmation: {
+    title: _(
+      'Er du fornøyd med bildet?',
+      'Are you satisfied with the photo?',
+      'Er du nøgd med biletet?',
+    ),
+    confirmButton: _('Ja', 'Yes', 'Ja'),
+    retryButton: _('Ta nytt bilde', 'Retake photo', 'Ta nytt bilete'),
+  },
   qr: {
     title: _(
       'Scan QR-koden på sykkelstyret',
@@ -70,9 +79,21 @@ export const ParkingViolationTexts = {
       'Confirm and submit report',
       'Bekreft og send inn rapport',
     ),
+    description: _(
+      'Hvis QR-koden ikke er mulig å skanne kan du oppgi utleiefirmaet manuelt.',
+      'If the QR code cannot be scanned, you can enter the provider manually.',
+      'Om QR-kode ikkje let seg scanna kan du oppgje utleigefirmaet manuelt',
+    ),
   },
   vehicleLookup: {
     title: _('Sparkesykkel funnet', 'Scooter found', 'Sparkesykkel funnen'),
+  },
+  confirmation: {
+    title: _(
+      'Feilparkering rapportert!',
+      'Report sent!',
+      'Feilparkering rapportert!',
+    ),
   },
   error: {
     loading: {

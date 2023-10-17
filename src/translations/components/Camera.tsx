@@ -1,0 +1,20 @@
+import {translation as _} from '../commons';
+
+const CameraTexts = {
+  loading: _('Starter kamera...', 'Starting camera...', 'Startar camera'),
+  permissionRequired: {
+    title: _(
+      'Gi tilgang til kamera',
+      'Grant access to camera',
+      'Gje tilgang til kamera',
+    ),
+    message: _(
+      'For å bruke denne funksjonen må du gi appen tilgang til å bruke kamera. Det gjør du under Personvern og sikkerhet i Innstillinger.',
+      'To use this feature, you must grant the app permission to access the camera. You can do this in the Privacy and Security section of the Settings.',
+      'For å bruke denne funksjonen må du gi appen tilgong til å bruke kamera. Dette gjer du under Personvern og sikkerhet i Innstillinger.',
+    ),
+    action: _('Gå til Innstilinger', 'Open Settings', 'Gå til Innstillinger'),
+  },
+};
+
+export default CameraTexts;

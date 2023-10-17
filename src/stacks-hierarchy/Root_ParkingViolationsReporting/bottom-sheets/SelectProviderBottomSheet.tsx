@@ -43,8 +43,7 @@ export const SelectProviderBottomSheet = ({
       />
       <>
         <ThemeText style={styles.content}>
-          Hvis QR-koden ikke er mulig å skanne kan du oppgi utleiefirmaet
-          manuelt.
+          {t(ParkingViolationTexts.selectProvider.description)}
         </ThemeText>
         <ScrollView style={styles.providerList}>
           <SelectGroup

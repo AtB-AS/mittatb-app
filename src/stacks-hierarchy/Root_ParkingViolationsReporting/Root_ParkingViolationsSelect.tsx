@@ -37,15 +37,12 @@ export const Root_ParkingViolationsSelect = ({
       buttons={
         <Button
           disabled={isError}
-          interactiveColor="interactive_0"
           onPress={() => {
             navigation.navigate('Root_ParkingViolationsPhoto', {
               selectedViolations,
             });
           }}
           text={t(ParkingViolationTexts.selectViolation.nextButton)}
-          testID="nextButton"
-          accessibilityHint={''} //TODO
         />
       }
       isLoading={isLoading}
