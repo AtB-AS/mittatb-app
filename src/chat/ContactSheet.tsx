@@ -15,7 +15,7 @@ import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useAnalytics} from '@atb/analytics';
 
@@ -104,6 +104,7 @@ export const ContactSheet = forwardRef<View, Props>(
             buttonText={t(ContactSheetTexts.parking_violations.buttonText)}
             accessibilityHint={t(ContactSheetTexts.parking_violations.a11yHint)}
             buttonMode={'secondary'}
+            icon={() => <ThemeIcon svg={ArrowRight} />}
             onPress={() => {
               onReportParkingViolation();
               analytics.logEvent('Contact', 'Report parking violation clicked');
