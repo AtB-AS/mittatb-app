@@ -1,27 +1,37 @@
+import DeviceBrightness from '@adrianso/react-native-device-brightness';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
+import {MessageBox} from '@atb/components/message-box';
+import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
-import {ActivityIndicator, View} from 'react-native';
-import {FareContractTexts, useTranslation} from '@atb/translations';
-import {SvgXml} from 'react-native-svg';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {useInterval} from '@atb/utils/use-interval';
-import {MessageBox} from '@atb/components/message-box';
 import {
   findInspectable,
   getDeviceName,
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {FareContract} from '@atb/ticketing';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import QRCode from 'qrcode';
-import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
-import DeviceBrightness from '@adrianso/react-native-device-brightness';
-import Bugsnag from '@bugsnag/react-native';
+import {
+  FareContractTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
+import {useInterval} from '@atb/utils/use-interval';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import Bugsnag from '@bugsnag/react-native';
+import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
+import QRCode from 'qrcode';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {SvgXml} from 'react-native-svg';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -214,6 +224,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [aztecXml, setAztecXml] = useState<string>();
+  const onOpenBarcodePress = useStaticBarcodeBottomSheet(aztecXml);
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -230,7 +241,13 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
       accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
       testID="staticBarcode"
     >
-      <SvgXml xml={aztecXml} width="100%" height="100%" />
+      <PressableOpacity
+        onPress={onOpenBarcodePress}
+        accessibilityRole="button"
+        accessibilityHint={t(FareContractTexts.details.barcodeButtonA11yLabel)}
+      >
+        <SvgXml xml={aztecXml} width="100%" height="100%" />
+      </PressableOpacity>
     </View>
   );
 };
@@ -239,6 +256,7 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const [qrCodeSvg, setQrCodeSvg] = useState<string>();
+  const onOpenBarcodePress = useStaticBarcodeBottomSheet(qrCodeSvg);
 
   useEffect(() => {
     if (fc.qrCode) {
@@ -250,12 +268,18 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
 
   return (
     <View
-      style={[styles.aztecCode, styles.staticQrCode]}
+      style={[styles.aztecCode, styles.staticQrCode, styles.staticQrCodeSmall]}
       accessible={true}
       accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
       testID="staticQRCode"
     >
-      <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+      <PressableOpacity
+        onPress={onOpenBarcodePress}
+        accessibilityRole="button"
+        accessibilityHint={t(FareContractTexts.details.barcodeButtonA11yLabel)}
+      >
+        <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
+      </PressableOpacity>
     </View>
   );
 };
@@ -267,7 +291,58 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.large,
     backgroundColor: '#FFFFFF',
   },
+  staticBottomContainer: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
   staticQrCode: {
     padding: 0,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: 300,
+  },
+  staticQrCodeSmall: {
+    maxWidth: 200,
   },
 }));
+
+function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
+  const styles = useStyles();
+  const {t} = useTranslation();
+
+  const {
+    open: openBottomSheet,
+    close: closeBottomSheet,
+    onOpenFocusRef,
+  } = useBottomSheet();
+
+  const onOpenBarcodePress = () => {
+    openBottomSheet(() => (
+      <BottomSheetContainer testID="barcodeBottomSheet" fullHeight>
+        <ScreenHeaderWithoutNavigation
+          title={t(FareContractTexts.details.bottomSheetTitle)}
+          color="background_1"
+          leftButton={{
+            text: t(ScreenHeaderTexts.headerButton.close.text),
+            type: 'close',
+            onPress: closeBottomSheet,
+          }}
+        />
+
+        <View style={styles.staticBottomContainer}>
+          <View
+            ref={onOpenFocusRef}
+            style={[styles.aztecCode, styles.staticQrCode]}
+            accessible={true}
+            accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+            testID="staticQRCode"
+          >
+            <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+          </View>
+        </View>
+      </BottomSheetContainer>
+    ));
+  };
+
+  return onOpenBarcodePress;
+}
