@@ -9,7 +9,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackScreenProps} from './navigation-types';
 import {Button} from '@atb/components/button';
 import {Linking, View} from 'react-native';
-import {TicketTilted} from '@atb/assets/svg/color/images';
+import {Beacons} from '@atb/assets/svg/color/images';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
@@ -35,8 +35,7 @@ export const Root_ShareTravelHabitsScreen = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        {/* todo: replace with correct illustration */}
-        <TicketTilted height={110} />
+        <Beacons height={132} />
         <ThemeText
           type="body__primary--big--bold"
           color="background_accent_0"
