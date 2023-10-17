@@ -127,7 +127,10 @@ android {
     }
 
     buildTypes.all {
+        // This is fetch inside Java / Kotlin code
         buildConfigField 'String', 'KETTLE_API_KEY', "\"${System.getenv()["KETTLE_API_KEY"]}\""
+        // This is fetch inside Manifests
+        manifestPlaceholders = [KETTLE_API_KEY: System.getenv()["KETTLE_API_KEY"]]
     }
 
     packagingOptions {

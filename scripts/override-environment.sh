@@ -50,20 +50,28 @@ else
     echo "Copying boot splash image to assets/"
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
-    # Check if ENV_FOLDER/manifests exists and is a directory
+    # Check if ORG_FOLDER/manifests exists and is a directory
     if [ -d "$ORG_FOLDER/manifests" ]
     then
-        # Iterate through all subfolders of ENV_FOLDER/manifests
+        # Iterate through all subfolders of ORG_FOLDER/manifests
         for folder in "$ORG_FOLDER/manifests"/*;
         do
-            # Check if the folder contains XML files
-            if [ -n "$(find "$folder" -name '*.xml' -type f)" ]
+            # Check if the folder contains XML files with 'Manifest' in the name
+            if [ -n "$(find "$folder" -iname '*manifest*.xml' -type f)" ]
             then
                 # Get the name of the folder
-                folder_name=$(basename "$folder")
-                
-                echo "Copying $folder_name with XML files to android/app/src/"
-                cp -r "$folder" "android/app/src/$folder_name"
+                FOLDER_NAME=$(basename "$folder")
+
+                # Define target folder path
+                TARGET_FOLDER="android/app/src/$FOLDER_NAME"
+
+                echo "Copying XML files with 'Manifest' from $FOLDER_NAME to $TARGET_FOLDER/"
+
+                # Create target folder if not exists
+                mkdir -p "$TARGET_FOLDER"
+
+                # Copy only XML files with 'Manifest' in the name (case-insensitive)
+                find "$folder" -iname '*manifest*.xml' -type f -exec cp {} "$TARGET_FOLDER/" \;
             fi
         done
     fi
