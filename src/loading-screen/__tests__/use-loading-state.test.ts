@@ -1,8 +1,6 @@
 import {act, renderHook} from '@testing-library/react-hooks';
-import {
-  LoadingParams,
-  useLoadingState,
-} from '@atb/loading-screen/use-loading-state';
+import {useLoadingState} from '@atb/loading-screen/use-loading-state';
+import {LoadingParams} from "@atb/loading-screen/types";
 
 const DEFAULT_MOCK_STATE: LoadingParams = {
   isLoadingAppState: true,

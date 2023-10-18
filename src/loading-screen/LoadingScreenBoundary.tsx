@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {LoadingScreen} from './LoadingScreen';
 import {LoadingErrorScreen} from './LoadingErrorScreen';
 import {useLoadingScreenEnabled} from '@atb/loading-screen/use-loading-screen-enabled';
 import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {useLoadingErrorScreenEnabled} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {useLoadingState} from '@atb/loading-screen/use-loading-state';
-import {useAnalytics} from '@atb/analytics';
+import {useLogEventOnTimeout} from '@atb/loading-screen/use-log-event-on-timeout';
 
 const LOADING_TIMEOUT_MS = 10000;
 
@@ -16,29 +16,15 @@ export const LoadingScreenBoundary = ({
 }): JSX.Element => {
   const loadingScreenEnabled = useLoadingScreenEnabled();
   const errScreenEnabled = useLoadingErrorScreenEnabled();
-  const analytics = useAnalytics();
-  const {
-    status: loadingStatus,
-    retry,
-    paramsRef: loadingParamsRef,
-  } = useLoadingState(LOADING_TIMEOUT_MS);
+  const {status, retry, paramsRef} = useLoadingState(LOADING_TIMEOUT_MS);
+  useLogEventOnTimeout(status, paramsRef);
 
   // Wait one second after load success to let the app "settle".
-  const waitFinished = useDelayGate(1000, loadingStatus === 'success');
-
-  useEffect(() => {
-    if (loadingStatus === 'timeout') {
-      analytics.logEvent(
-        'Loading boundary',
-        'Loading boundary timeout',
-        loadingParamsRef.current || undefined,
-      );
-    }
-  }, [analytics, loadingStatus, loadingParamsRef]);
+  const waitFinished = useDelayGate(1000, status === 'success');
 
   if (!loadingScreenEnabled) return children;
 
-  switch (loadingStatus) {
+  switch (status) {
     case 'loading':
       return <LoadingScreen />;
     case 'timeout':
