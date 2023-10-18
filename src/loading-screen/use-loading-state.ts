@@ -7,9 +7,7 @@ import {LoadingState, LoadingStatus} from '@atb/loading-screen/types';
 export const useLoadingState = (timeoutMs: number): LoadingState => {
   const {isLoading: isLoadingAppState} = useAppState();
   const {authStatus, retryAuth} = useAuthState();
-
   const [status, setStatus] = useState<LoadingStatus>('loading');
-
   const paramsRef = useRef({isLoadingAppState, authStatus});
 
   useEffect(() => {
@@ -35,9 +33,5 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
     }
   }, [status, authStatus, retryAuth]);
 
-  return {
-    status,
-    retry,
-    paramsRef,
-  };
+  return {status, retry, paramsRef};
 };
