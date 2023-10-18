@@ -51,8 +51,8 @@ export const Root_ParkingViolationsQr = ({
     const image = await fetch(compressed);
     const imageBlob = await image.blob();
     const base64Image = (await blobToBase64(imageBlob)) as string;
-    // Remove meta data, e.g. 'data:image/png;base64',
-    // and keep just the base64 encoded pard of the image
+    // Remove metadata, e.g. 'data:image/png;base64',
+    // and keep just the base64 encoded part of the image
     // Nivel does not accept the metadata being a part of the image.
     const base64data = base64Image.split(',').pop();
     // Nivel use the file name suffix as imageType.
