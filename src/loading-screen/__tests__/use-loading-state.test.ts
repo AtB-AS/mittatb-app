@@ -104,6 +104,19 @@ describe('useLoadingState', () => {
     expect(hook.result.current.status).toBe('timeout');
   });
 
+  it('Should not go to timeout after timeout ms if state is success', async () => {
+    mockState = {isLoadingAppState: false, authStatus: 'loading'};
+    const hook = renderHook(() => useLoadingState(100));
+    act(() => jest.advanceTimersByTime(80));
+    expect(hook.result.current.status).toBe('loading');
+    mockState = {isLoadingAppState: false, authStatus: 'authenticated'};
+    hook.rerender();
+    expect(hook.result.current.status).toBe('success');
+    act(() => jest.advanceTimersByTime(50));
+    hook.rerender();
+    expect(hook.result.current.status).toBe('success');
+  });
+
   it('Should go to loading after retry', async () => {
     mockState = {isLoadingAppState: false, authStatus: 'loading'};
     const hook = renderHook(() => useLoadingState(100));
