@@ -88,6 +88,7 @@ jobs:
         if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane android build
         env:
+          APP_FLAVOR: ${{ matrix.org == 'atb' && 'beacons' || 'app' }}
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
