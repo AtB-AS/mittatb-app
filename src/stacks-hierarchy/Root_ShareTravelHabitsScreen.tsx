@@ -54,12 +54,10 @@ export const Root_ShareTravelHabitsScreen = ({
         </ThemeText>
         <PressableOpacity
           onPress={() => {
-            const dataSharingInfoUrl =
-              getTextForLanguage(
-                configurableLinks?.dataSharingInfo,
-                language,
-              ) ??
-              'https://www.atb.no/forside/aktuelt/nar-du-deler-reisevaner-med-oss'; // todo: remove fallback when implemented in firestore
+            const dataSharingInfoUrl = getTextForLanguage(
+              configurableLinks?.dataSharingInfo,
+              language,
+            );
             dataSharingInfoUrl && Linking.openURL(dataSharingInfoUrl);
           }}
           accessibilityRole="link"
