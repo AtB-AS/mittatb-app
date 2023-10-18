@@ -15,6 +15,15 @@ const CameraTexts = {
     ),
     action: _('Gå til Innstilinger', 'Open Settings', 'Gå til Innstillinger'),
   },
+  permissionsDialog: {
+    title: _('Tilgang til kamera', 'Camera Permission', 'Tilgang til kamera'),
+    message: _(
+      'Denne funksjonen trenger tilgang til kamera',
+      'This feature needs camera permission',
+      'Denne funksjonen treng tilgang til kamera',
+    ),
+    action: _('Godta', 'Accept', 'Godta'),
+  },
 };
 
 export default CameraTexts;

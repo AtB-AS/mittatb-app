@@ -1,8 +1,11 @@
 import {useEffect, useState} from 'react';
 import {PermissionsAndroid, Platform, NativeModules} from 'react-native';
+import CameraTexts from '@atb/translations/components/Camera';
+import {useTranslation} from '@atb/translations';
 const {CKCameraManager} = NativeModules;
 
 export const usePermissions = () => {
+  const {t} = useTranslation();
   const [isAuthorized, setIsAuthorized] = useState<boolean>();
 
   const requestCameraPermissionAndroid = async () => {
@@ -10,9 +13,9 @@ export const usePermissions = () => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
-          title: 'Camera Permission',
-          message: 'App needs camera permission',
-          buttonPositive: 'Accept',
+          title: t(CameraTexts.permissionsDialog.title),
+          message: t(CameraTexts.permissionsDialog.message),
+          buttonPositive: t(CameraTexts.permissionsDialog.action),
         },
       );
       // If CAMERA Permission is granted
