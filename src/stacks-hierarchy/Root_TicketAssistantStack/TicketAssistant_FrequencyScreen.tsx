@@ -66,16 +66,16 @@ export const TicketAssistant_FrequencyScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
+        <DashboardBackground width="100%" height="100%" />
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
           <View style={styles.textBox} ref={focusRef} accessible={true}>
             <ThemeText
-              type={'heading--big'}
+              type="heading--big"
               style={styles.header}
               color={themeColor}
-              accessibilityRole={'header'}
+              accessibilityRole="header"
               accessibilityLabel={t(
                 TicketAssistantTexts.frequency.titleA11yLabel,
               )}
@@ -84,7 +84,7 @@ export const TicketAssistant_FrequencyScreen = ({
             </ThemeText>
             <ThemeText
               color={themeColor}
-              type={'body__primary'}
+              type="body__primary"
               style={styles.description}
               accessibilityLabel={t(TicketAssistantTexts.frequency.description)}
             >
@@ -145,7 +145,7 @@ export const TicketAssistant_FrequencyScreen = ({
                 />
                 <SectionSeparator />
 
-                <ThemeText type={'body__secondary'} style={styles.travelText}>
+                <ThemeText type="body__secondary" style={styles.travelText}>
                   {resultString}
                 </ThemeText>
               </View>

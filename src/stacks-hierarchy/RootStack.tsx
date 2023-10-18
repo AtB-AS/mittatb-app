@@ -85,7 +85,7 @@ export const RootStack = () => {
 
   function getResultStateFromPath(path: string): ResultState {
     const params = parse(path);
-    let destination: PartialRoute<any>[] = [
+    const destination: PartialRoute<any>[] = [
       {
         // Index is needed so that the user can go back after
         // opening the app with the widget when it was not open previously

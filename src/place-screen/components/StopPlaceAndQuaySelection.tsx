@@ -47,7 +47,7 @@ const StopPlaceAndQuaySelection = ({
               style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
               accessibilityHint={t(DeparturesTexts.quayChips.a11yAllStopsHint)}
               testID="allStopsSelectionButton"
-            ></Button>
+             />
           )}
         </>
       }
@@ -62,7 +62,7 @@ const StopPlaceAndQuaySelection = ({
             t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
           }
           testID="quaySelectionButton"
-        ></Button>
+         />
       )}
     />
   );

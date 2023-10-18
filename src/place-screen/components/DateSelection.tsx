@@ -78,7 +78,7 @@ export const DateSelection = ({
         initialTime={searchTime}
         setSearchTime={onSetSearchTime}
         allowTimeInPast={false}
-      ></DepartureTimeSheet>
+       />
     ));
   };
 
@@ -113,7 +113,7 @@ export const DateSelection = ({
         textContainerStyle={styles.nextPrevButtonTextContainer}
         viewContainerStyle={styles.nextPrevButtonContainer}
         testID="previousDayButton"
-      ></Button>
+       />
       <Button
         interactiveColor="interactive_2"
         onPress={onLaterTimePress}
@@ -131,7 +131,7 @@ export const DateSelection = ({
         style={styles.button}
         textStyle={styles.buttonText}
         testID="setDateButton"
-      ></Button>
+       />
       <Button
         interactiveColor="interactive_2"
         onPress={() => {
@@ -162,7 +162,7 @@ export const DateSelection = ({
         viewContainerStyle={styles.nextPrevButtonContainer}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
         testID="nextDayButton"
-      ></Button>
+       />
     </View>
   );
 };

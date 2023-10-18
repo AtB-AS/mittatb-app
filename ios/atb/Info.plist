@@ -62,6 +62,8 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MBXAccessToken</key>
+	<string>$(MAPBOX_PUBLIC_TOKEN)</string>
 	<key>NFCReaderUsageDescription</key>
 	<string>Vi må bruke NFC for sikkerhetsformål.</string>
 	<key>NSAppTransportSecurity</key>
@@ -76,15 +78,17 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>For å kunne tilby raskere inspeksjon av reisebevis kan vi ha behov for tilgang til Bluetooth</string>
+	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>For å kunne tilby raskere inspeksjon av reisebevis kan vi ha behov for tilgang til Bluetooth</string>
+	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
+	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
+	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon</string>
+	<string>Vi bruker posisjon til å vise din posisjon i kart og reisesøk, og til å finne holdeplasser og steder i nærheten.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Du gir tillatelse til å bruke bevegelsesdata til analyse og større forståelse av reisemønster, f.eks. for å skille mellom sykling, gåing og bilkjøring.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
 	<key>NSCameraUsageDescription</key>
@@ -100,7 +104,9 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>bluetooth-central</string>
 		<string>fetch</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -115,7 +121,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>MBXAccessToken</key>
-	<string>$(MAPBOX_PUBLIC_TOKEN)</string>
 </dict>
 </plist>

@@ -103,7 +103,7 @@ export const TransportModes = ({
       {modesCount > modesDisplayLimit && (
         <CounterIconBox
           count={modesCount - modesDisplayLimit}
-          size={'small'}
+          size="small"
           accessibilityLabel={t(
             FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
               modesCount,

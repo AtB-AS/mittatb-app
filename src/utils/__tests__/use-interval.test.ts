@@ -2,7 +2,7 @@ import {renderHook} from '@testing-library/react-hooks';
 import {useInterval} from '../use-interval';
 
 describe('useInterval', () => {
-  let callback = jest.fn();
+  const callback = jest.fn();
 
   beforeEach(() => {
     jest.useFakeTimers();

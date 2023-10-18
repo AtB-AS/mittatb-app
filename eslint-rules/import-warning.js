@@ -18,7 +18,7 @@ module.exports = {
     return {
       ImportDeclaration(node) {
         const actualModule = node.source.value;
-        for (let specifierNode of node.specifiers) {
+        for (const specifierNode of node.specifiers) {
           const identifier = specifierNode.local.name;
           const preferredModule = mappings[identifier];
           if (!preferredModule) continue;

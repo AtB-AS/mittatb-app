@@ -389,8 +389,8 @@ export function daysBetween(base: string | Date, target: string | Date) {
 
 export function isSeveralDays(items: string[]) {
   if (!items.length) return false;
-  let first = parseISO(items[0]);
-  for (let item of items) {
+  const first = parseISO(items[0]);
+  for (const item of items) {
     if (!isSameDay(first, parseISO(item))) {
       return false;
     }

@@ -127,7 +127,7 @@ export function QuayView({
           isLoading={state.isLoading}
           didLoadingDataFail={didLoadingDataFail}
           navigateToDetails={navigateToDetails}
-          testID={'quaySection'}
+          testID="quaySection"
           stopPlace={stopPlace}
           showOnlyFavorites={showOnlyFavorites}
           addedFavoritesVisibleOnDashboard={addedFavoritesVisibleOnDashboard}

@@ -146,11 +146,11 @@ export const RecentFareContractComponent = ({
     >
       <View
         style={[styles.upperPart, {minWidth: width * 0.6}]}
-        importantForAccessibility={'no-hide-descendants'}
+        importantForAccessibility="no-hide-descendants"
       >
         <View style={styles.travelModeWrapper}>
           <TransportModes
-            iconSize={'small'}
+            iconSize="small"
             modes={fareProductTypeConfig.transportModes}
             style={{flex: 2}}
           />

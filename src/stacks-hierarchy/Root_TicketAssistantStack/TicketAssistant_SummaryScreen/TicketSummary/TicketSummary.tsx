@@ -106,13 +106,13 @@ export const TicketSummary = () => {
         <View style={styles.upperPart}>
           <View style={styles.travelModeWrapper}>
             <TransportModes
-              iconSize={'small'}
+              iconSize="small"
               modes={transportModes}
               style={styles.transportModes}
             />
           </View>
 
-          <View style={styles.productName} testID={'Title'}>
+          <View style={styles.productName} testID="Title">
             <ThemeText
               type="body__secondary--bold"
               color={interactiveColor.default}
@@ -148,7 +148,7 @@ export const TicketSummary = () => {
           </View>
         </View>
         <View accessible={true} style={styles.ticketFooter}>
-          <ThemeText type={'body__secondary'} color={interactiveColor.outline}>
+          <ThemeText type="body__secondary" color={interactiveColor.outline}>
             {t(TicketAssistantTexts.summary.price)}
           </ThemeText>
           <ThemeText
@@ -160,7 +160,7 @@ export const TicketSummary = () => {
         </View>
       </View>
       <ThemeText
-        type={'body__secondary'}
+        type="body__secondary"
         style={styles.savingsText}
         color={themeColor}
         accessibilityLabel={perTripAndSavingsAccessibilityLabel}

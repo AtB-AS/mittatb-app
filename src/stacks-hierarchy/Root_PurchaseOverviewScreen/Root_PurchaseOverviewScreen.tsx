@@ -142,7 +142,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         {params.mode === 'TravelSearch' && (
           <MessageBox
             style={styles.travelSearchInfo}
-            type={'valid'}
+            type="valid"
             message={t(PurchaseOverviewTexts.travelSearchInfo)}
           />
         )}

@@ -17,7 +17,7 @@ async function getCardFromRecurringPaymentId(
 
   if (!user || !recurringPaymentId) return undefined;
 
-  let allRecurringPaymentOptions = await listRecurringPayments();
+  const allRecurringPaymentOptions = await listRecurringPayments();
   const card = allRecurringPaymentOptions.find((item) => {
     return item.id === recurringPaymentId;
   });

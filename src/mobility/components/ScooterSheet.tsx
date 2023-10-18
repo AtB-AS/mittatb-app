@@ -81,7 +81,7 @@ export const ScooterSheet = ({
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
       <>
@@ -149,7 +149,7 @@ export const ScooterSheet = ({
                       : openOperatorApp()
                   }
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                 />
               )}
               <Button

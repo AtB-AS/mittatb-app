@@ -23,7 +23,7 @@ export const TripRow: React.FC<TripRowProps> = ({
   const rowContent = (
     <>
       <View style={styles.leftColumn}>{rowLabel}</View>
-      <View style={styles.decorationPlaceholder}></View>
+      <View style={styles.decorationPlaceholder} />
       <View style={styles.rightColumn}>{children}</View>
     </>
   );

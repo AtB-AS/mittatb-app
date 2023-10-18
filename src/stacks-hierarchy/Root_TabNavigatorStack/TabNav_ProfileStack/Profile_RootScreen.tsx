@@ -345,7 +345,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
-            icon={'external-link'}
+            icon="external-link"
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,

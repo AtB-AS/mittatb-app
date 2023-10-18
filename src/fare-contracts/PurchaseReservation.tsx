@@ -58,7 +58,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             ) : (
               <FareContractStatusSymbol
                 status={status}
-              ></FareContractStatusSymbol>
+               />
             )}
             <ThemeText type="body__secondary" style={styles.reservationStatus}>
               {t(TicketingTexts.reservation[status])}
