@@ -59,6 +59,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: theme.spacings.medium,
   },
   description: {
     marginVertical: theme.spacings.medium,

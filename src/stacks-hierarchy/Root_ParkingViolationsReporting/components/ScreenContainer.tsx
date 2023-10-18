@@ -68,10 +68,12 @@ const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
           <ThemeText color={themeColor} type="heading--medium">
             {title}
           </ThemeText>
+          {secondaryText && (
+            <ThemeText style={style.secondaryText} color={themeColor}>
+              {secondaryText}
+            </ThemeText>
+          )}
         </View>
-        {secondaryText && (
-          <ThemeText color={themeColor}>{secondaryText}</ThemeText>
-        )}
         {children}
       </View>
       {buttons && <View style={style.actionButtons}>{buttons}</View>}
@@ -90,10 +92,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     content: {
       flex: 1,
-      padding: theme.spacings.medium,
+      paddingVertical: theme.spacings.medium,
     },
     header: {
+      paddingHorizontal: theme.spacings.medium,
       marginBottom: theme.spacings.large,
+    },
+    secondaryText: {
+      marginTop: theme.spacings.medium,
     },
     centered: {
       flex: 1,

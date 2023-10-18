@@ -6,7 +6,6 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {useIsFocused} from '@react-navigation/native';
 import {ImageConfirmationBottomSheet} from './bottom-sheets/ImageConfirmationBottomSheet';
 import {ScreenContainer} from './components/ScreenContainer';
-import {Dimensions} from 'react-native';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useParkingViolations} from './use-parking-violations';
 
@@ -57,12 +56,8 @@ export const Root_ParkingViolationsPhoto = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   camera: {
     flexGrow: 1,
-    marginVertical: theme.spacings.large,
-    height:
-      (Dimensions.get('window').width - 2 * theme.spacings.medium) * (4 / 3),
-    width: Dimensions.get('window').width - 2 * theme.spacings.medium,
   },
 }));

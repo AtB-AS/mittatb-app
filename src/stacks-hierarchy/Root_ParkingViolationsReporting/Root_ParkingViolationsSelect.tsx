@@ -121,6 +121,7 @@ const ErrorMessage = ({error}: ErrorMessageProps) => {
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
+    paddingHorizontal: theme.spacings.medium,
   },
   violation: {
     marginBottom: theme.spacings.medium,

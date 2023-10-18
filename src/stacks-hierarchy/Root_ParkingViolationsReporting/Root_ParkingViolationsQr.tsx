@@ -6,7 +6,6 @@ import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {useIsFocused} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
-import {Dimensions} from 'react-native';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
@@ -167,14 +166,6 @@ export const Root_ParkingViolationsQr = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   camera: {
     flexGrow: 1,
-    marginVertical: theme.spacings.large,
-    justifyContent: 'flex-start',
-    // QR camera is always 4/3 aspect ratio but the QR code frame overlay is 100% height.
-    // Setting the height and width explicitly prevents the overlay from overflowing
-    // the camera view.
-    height:
-      (Dimensions.get('window').width - 2 * theme.spacings.medium) * 1.33333,
-    width: Dimensions.get('window').width - 2 * theme.spacings.medium,
   },
   error: {
     marginTop: theme.spacings.medium,
