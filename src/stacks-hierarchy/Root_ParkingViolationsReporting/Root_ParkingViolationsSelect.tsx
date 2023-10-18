@@ -105,7 +105,7 @@ const ErrorMessage = ({error}: ErrorMessageProps) => {
           text: t(ParkingViolationTexts.error.position.action),
           action: () => Linking.openSettings(),
         }}
-        type={'warning'}
+        type="warning"
       />
     );
   }
@@ -113,7 +113,7 @@ const ErrorMessage = ({error}: ErrorMessageProps) => {
     <MessageBox
       title={t(ParkingViolationTexts.error.loading.title)}
       message={t(ParkingViolationTexts.error.loading.message)}
-      type={'error'}
+      type="error"
     />
   );
 };

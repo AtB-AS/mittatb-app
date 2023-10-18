@@ -34,7 +34,7 @@ export const VehicleLookupConfirmationBottomSheet = ({
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
         title={t(ParkingViolationTexts.vehicleLookup.title)}
       />

@@ -154,8 +154,8 @@ export const ScooterSheet = ({
               )}
               <Button
                 text={t(MobilityTexts.reportParkingViolation)}
-                mode={'secondary'}
-                interactiveColor={'interactive_2'}
+                mode="secondary"
+                interactiveColor="interactive_2"
                 onPress={onReportParkingViolation}
                 rightIcon={{svg: ArrowRight}}
               />

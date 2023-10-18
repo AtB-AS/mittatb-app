@@ -142,7 +142,7 @@ export const Root_ParkingViolationsQr = ({
         <Button
           disabled={isError}
           mode="secondary"
-          interactiveColor={'interactive_0'}
+          interactiveColor="interactive_0"
           onPress={selectProvider}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
         />
@@ -154,7 +154,7 @@ export const Root_ParkingViolationsQr = ({
           style={style.error}
           title={t(ParkingViolationTexts.error.sendReport.title)}
           message={t(ParkingViolationTexts.error.sendReport.message)}
-          type={'error'}
+          type="error"
         />
       )}
       {isFocused && !isLoading && !isError && !capturedQr && (

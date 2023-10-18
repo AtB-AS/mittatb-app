@@ -69,7 +69,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
           scanBarcode={mode === 'qr'}
           showFrame={mode === 'qr'}
           frameColor={theme.interactive.interactive_0.default.background}
-          laserColor={'transparent'}
+          laserColor="transparent"
           onReadCode={(e: unknown) => {
             if (
               mode === 'qr' &&
@@ -95,7 +95,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
         <MessageBox
           title={t(CameraTexts.permissionRequired.title)}
           message={t(CameraTexts.permissionRequired.message)}
-          type={'warning'}
+          type="warning"
           onPressConfig={{
             action: () => Linking.openSettings(),
             text: t(CameraTexts.permissionRequired.action),

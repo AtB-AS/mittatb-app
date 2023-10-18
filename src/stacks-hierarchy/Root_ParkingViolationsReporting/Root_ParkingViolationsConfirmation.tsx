@@ -47,12 +47,7 @@ export const Root_ParkingViolationsConfirmation = ({
           )}
         </ThemeText>
         <PressableOpacity style={styles.checkmark} onPress={closeReporting}>
-          <ThemeIcon
-            stroke={'#fff'}
-            fill={'#fff'}
-            size={'large'}
-            svg={Confirm}
-          />
+          <ThemeIcon stroke="#fff" fill="#fff" size="large" svg={Confirm} />
         </PressableOpacity>
       </View>
     </ScreenContainer>

@@ -34,7 +34,7 @@ export const ImageConfirmationBottomSheet = ({
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
         title={t(ParkingViolationTexts.imageConfirmation.title)}
       />
@@ -64,7 +64,7 @@ export const ImageConfirmationBottomSheet = ({
         <Button
           style={styles.button}
           mode="secondary"
-          interactiveColor={'interactive_2'}
+          interactiveColor="interactive_2"
           onPress={close}
           text={t(ParkingViolationTexts.imageConfirmation.retryButton)}
         />

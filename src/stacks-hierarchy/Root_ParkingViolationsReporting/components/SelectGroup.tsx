@@ -111,7 +111,7 @@ const SelectItem = <T,>({
           <Checkbox style={itemStyles.indicator} checked={selected} />
         ) : (
           <View style={itemStyles.indicator}>
-            <RadioIcon checked={selected} color={'interactive_0'} />
+            <RadioIcon checked={selected} color="interactive_0" />
           </View>
         )}
         {renderItem(item, selected)}

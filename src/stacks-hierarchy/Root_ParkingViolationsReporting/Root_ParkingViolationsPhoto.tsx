@@ -51,7 +51,7 @@ export const Root_ParkingViolationsPhoto = ({
           mode="photo"
           style={style.camera}
           onCapture={handlePhotoCapture}
-        ></Camera>
+        />
       )}
     </ScreenContainer>
   );
