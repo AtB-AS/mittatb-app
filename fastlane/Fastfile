@@ -312,13 +312,15 @@ platform :android do
 
   lane :build do
     ensure_env_vars(
-      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'APP_FLAVOR', 'CI','KEYSTORE_PATH']
         )
     build_type = ENV['APP_ENVIRONMENT']
+    app_flavor = ENV['APP_FLAVOR']
     gradle(task: 'clean', project_dir: 'android/')
     gradle(
       task: 'assemble',
       build_type: build_type,
+      flavor: app_flavor,
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
       properties: {
@@ -335,13 +337,15 @@ platform :android do
 
   lane :build_aab do
     ensure_env_vars(
-      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'CI','KEYSTORE_PATH']
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'APP_FLAVOR', 'CI','KEYSTORE_PATH']
     )
     build_type = ENV['APP_ENVIRONMENT']
+    app_flavor = ENV['APP_FLAVOR']
     gradle(task: 'clean', project_dir: 'android/')
     gradle(
       task: 'bundle',
       build_type: build_type,
+      flavor: app_flavor,
       project_dir: 'android/',
       print_command: false, #don't print my passwords please
       properties: {

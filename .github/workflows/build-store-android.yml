@@ -73,6 +73,7 @@ jobs:
         if: (matrix.org == 'atb') || (matrix.org == 'nfk')
         run: bundle exec fastlane android build
         env:
+          APP_FLAVOR: ${{ matrix.org == 'atb' && 'beacons' || 'app' }}
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
@@ -80,6 +81,7 @@ jobs:
         if: matrix.org == 'fram'
         run: bundle exec fastlane android build_aab
         env:
+          APP_FLAVOR: 'app'
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
