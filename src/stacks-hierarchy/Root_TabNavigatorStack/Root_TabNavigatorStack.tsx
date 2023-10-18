@@ -27,7 +27,8 @@ import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {InteractionManager} from 'react-native';
+import {InteractionManager, Platform} from 'react-native';
+import {useOnBeaconsSessionCount} from '@atb/beacons/use-on-beacons-session-count';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -49,6 +50,20 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       );
     }
   }, [onboarded]);
+
+  const showShareTravelHabitsScreenOnSessionCount =
+    Platform.OS === 'android' ? 0 : 10;
+
+  useOnBeaconsSessionCount(
+    showShareTravelHabitsScreenOnSessionCount,
+    () => {
+      // todo: add check here to not show this if permissions already accepted
+      InteractionManager.runAfterInteractions(() => {
+        navigation.navigate('Root_ShareTravelHabitsScreen');
+      });
+    },
+    'share_travel_habits',
+  );
 
   return (
     <Tab.Navigator
