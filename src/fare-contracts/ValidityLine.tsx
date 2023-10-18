@@ -25,7 +25,7 @@ export const ValidityLine = (props: Props): ReactElement => {
 
   const {theme} = useTheme();
   const styles = useStyles();
-  let {lineColor, backgroundColor} = useValidityLineColors(
+  const {lineColor, backgroundColor} = useValidityLineColors(
     status === 'valid' ? props.fareProductType : undefined,
   );
 
@@ -200,7 +200,7 @@ const VerticalLine = ({
       angle={120}
       locations={[0.25, 0.25, 0.75, 0.75]}
       colors={['transparent', color, color, 'transparent']}
-      pointerEvents={'none'}
+      pointerEvents="none"
     />
   );
 };

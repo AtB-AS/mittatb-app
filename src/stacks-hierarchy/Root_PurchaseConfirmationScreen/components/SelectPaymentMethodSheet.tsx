@@ -141,7 +141,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
 
   useEffect(() => {
     async function run() {
-      let remoteOptions = await getRecurringPaymentOptions();
+      const remoteOptions = await getRecurringPaymentOptions();
       setRemoteOptions(remoteOptions);
       setLoadingRecurringOptions(false);
     }
@@ -158,7 +158,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
-          color={'background_1'}
+          color="background_1"
           setFocusOnLoad={false}
         />
         <View style={{flexShrink: 1, flexGrow: 1}}>
@@ -267,7 +267,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     label: string;
     hint: string;
   } {
-    let paymentTypeName = getPaymentTypeName(option.paymentType);
+    const paymentTypeName = getPaymentTypeName(option.paymentType);
 
     if (option.savedType === 'normal') {
       return {

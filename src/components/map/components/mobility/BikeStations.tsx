@@ -16,7 +16,7 @@ export const BikeStations = ({stations}: Props) => {
     'text',
   );
   return (
-    <MapboxGL.ShapeSource id={'bikeStations'} shape={stations} tolerance={0}>
+    <MapboxGL.ShapeSource id="bikeStations" shape={stations} tolerance={0}>
       <MapboxGL.SymbolLayer
         id="bikeStationPin"
         minZoomLevel={13}

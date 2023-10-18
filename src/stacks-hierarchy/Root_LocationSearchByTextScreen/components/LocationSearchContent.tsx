@@ -160,7 +160,7 @@ export function LocationSearchContent({
           <>
             {includeJourneyHistory && (
               <JourneyHistory
-                searchText={''}
+                searchText=""
                 onSelect={onJourneyHistorySelected}
               />
             )}

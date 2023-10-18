@@ -11,7 +11,7 @@ export async function getServiceJourneyWithEstimatedCalls(
 ): Promise<ServiceJourneyWithEstCallsFragment> {
   const encodedId = encodeURIComponent(id);
   const formattedDate = formatISO(date, {representation: 'date'});
-  let url = `bff/v2/servicejourney/${encodedId}/calls?date=${formattedDate}`;
+  const url = `bff/v2/servicejourney/${encodedId}/calls?date=${formattedDate}`;
   const response = await client.get<{
     value: ServiceJourneyWithEstCallsFragment;
   }>(url);

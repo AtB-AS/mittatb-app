@@ -17,6 +17,6 @@ export const BackArrow: React.FC<{onBack(): void} & AccessibilityProps> = ({
       hitSlop={insets.symmetric(12, 20)}
       leftIcon={{svg: ArrowLeft}}
       style={shadows}
-    ></Button>
+     />
   );
 };

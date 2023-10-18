@@ -127,7 +127,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
           {replicatedShowActivationDateWarning && (
             <MessageBox
               style={styles.dateWarningMessageBox}
-              type={'warning'}
+              type="warning"
               message={t(
                 TravelDateTexts.latestActivationDate
                   .selectedDateShouldBeEarlierWarning,

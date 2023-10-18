@@ -96,12 +96,12 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                   <View style={styles.infoChips}>
                     <InfoChip
                       style={styles.infoChips_first}
-                      interactiveColor={'interactive_2'}
+                      interactiveColor="interactive_2"
                       text={discountText}
                     />
                     <InfoChip
                       text={priceText}
-                      interactiveColor={'interactive_2'}
+                      interactiveColor="interactive_2"
                     />
                   </View>
                 </View>
@@ -111,7 +111,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         {expanded && (
           <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
-            icon={'external-link'}
+            icon="external-link"
             onPress={() => Linking.openURL(flex_ticket_url)}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),

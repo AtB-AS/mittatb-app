@@ -95,10 +95,10 @@ export const TicketAssistant_ZonePickerScreen = ({
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View ref={focusRef} accessible={true}>
           <ThemeText
-            type={'heading--big'}
+            type="heading--big"
             style={styles.header}
             color={themeColor}
-            accessibilityRole={'header'}
+            accessibilityRole="header"
             accessibilityLabel={t(
               TicketAssistantTexts.zonesSelector.titleA11yLabel,
             )}

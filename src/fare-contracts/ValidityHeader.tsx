@@ -46,7 +46,7 @@ export const ValidityHeader: React.FC<{
           fareProductTypeConfig && (
             <TransportModes
               modes={fareProductTypeConfig.transportModes}
-              iconSize={'small'}
+              iconSize="small"
               style={{flex: 2}}
             />
           )
@@ -120,7 +120,6 @@ function validityTimeText(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  iconContainer: {marginRight: theme.spacings.medium},
   validityHeader: {
     flex: 1,
     flexDirection: 'row',
@@ -132,15 +131,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
-  },
-  transportationMode: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  validityDashContainer: {
-    marginVertical: theme.spacings.medium,
-    marginHorizontal: -theme.spacings.medium,
-    flexDirection: 'row',
   },
   label: {
     flex: 3,

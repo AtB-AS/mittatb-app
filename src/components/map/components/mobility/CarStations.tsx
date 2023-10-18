@@ -12,7 +12,7 @@ export const CarStations = ({stations}: Props) => {
   const stationBackgroundColor = useTransportationColor(Mode.Car);
   const stationTextColor = useTransportationColor(Mode.Car, undefined, 'text');
   return (
-    <MapboxGL.ShapeSource id={'carStations'} shape={stations} tolerance={0}>
+    <MapboxGL.ShapeSource id="carStations" shape={stations} tolerance={0}>
       <MapboxGL.SymbolLayer
         id="carStationPin"
         minZoomLevel={12}

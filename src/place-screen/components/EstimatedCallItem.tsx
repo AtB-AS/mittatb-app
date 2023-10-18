@@ -152,7 +152,7 @@ const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
           <ThemeIcon
             style={styles.realtimeIcon}
             svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-            size={'small'}
+            size="small"
           />
         )}
         <ThemeText
@@ -169,7 +169,7 @@ const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
       {isMoreThanOneMinuteDelayed(departure) && (
         <ThemeText
           type="body__tertiary--strike"
-          color={'secondary'}
+          color="secondary"
           style={styles.aimedTime}
         >
           {formatLocaleTime(departure.aimedDepartureTime, language)}

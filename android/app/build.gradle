@@ -69,6 +69,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    // Store the KETTLE_API_KEY in a constant
+    def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
+
     namespace "no.mittatb"
     defaultConfig {
         resValue "string", "app_name", appName
@@ -79,11 +82,25 @@ android {
         versionName appVersionName
         multiDexEnabled true
 
-
         if (System.getenv()["CI"]) {
             versionCode System.getenv()["BUILD_ID"] as Integer
         } else {
             versionCode appVersionCode.toInteger()
+        }
+
+        // This is fetched inside Java / Kotlin code
+        buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
+    }
+
+    // NOTE: This is made to merge Kettle -> AndroidManifest.xml into the main AndroidManifest.xml,
+    // with their own custom permissions if needed. It can be used for other purposes as well.
+    // For more information, refers to https://developer.android.com/build/build-variants?utm_source=android-studio#product-flavors
+    setFlavorDimensions(["sdk"])
+    productFlavors {
+        if (KETTLE_API_KEY_VALUE) {
+            kettle {
+                dimension "sdk"
+            }
         }
     }
 
@@ -153,6 +170,12 @@ dependencies {
 
     implementation 'io.intercom.android:intercom-sdk-base:9.+'
     implementation 'io.intercom.android:intercom-sdk:9.+'
+
+    // Note: The Kettle SDK dependency can be added conditionally based on the presence of the KETTLE_API_KEY environment variable.
+    // However, due to a limitation with Java imports, conditionally utilizing this dependency in the MainApplication.java (or other Java files)
+    // cannot be directly achieved through conditional imports.
+    // https://docs.oracle.com/javase/specs/jls/se7/html/jls-7.html
+    implementation 'com.kogenta.kettle:kettle-sdk:1.2.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group: 'com.facebook.fbjni'

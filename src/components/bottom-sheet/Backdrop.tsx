@@ -19,7 +19,7 @@ export function Backdrop({animatedOffset}: {animatedOffset: Animated.Value}) {
         ...styles.backdrop,
         opacity,
       }}
-      pointerEvents={'box-none'}
+      pointerEvents="box-none"
     />
   );
 }

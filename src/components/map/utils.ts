@@ -104,7 +104,7 @@ export const getFeaturesAtClick = async (
 ) => {
   if (!mapViewRef.current) return undefined;
   const coords = mapPositionToCoordinates(clickedFeature.geometry.coordinates);
-  let point = await mapViewRef.current?.getPointInView([
+  const point = await mapViewRef.current?.getPointInView([
     coords.longitude,
     coords.latitude,
   ]);

@@ -80,7 +80,7 @@ export const HarborResults: React.FC<Props> = ({
               >
                 <ThemeIcon svg={Boat} />
                 <View style={styles.nameContainer}>
-                  <ThemeText type={'body__primary--bold'}>
+                  <ThemeText type="body__primary--bold">
                     {harbor.name}
                   </ThemeText>
                 </View>
