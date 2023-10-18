@@ -16,12 +16,14 @@ type Props = {
   providers: ViolationsReportingProvider[];
   close: () => void;
   onSelect: (provider: ViolationsReportingProvider) => void;
+  qrScanFailed: boolean | undefined;
 };
 
 export const SelectProviderBottomSheet = ({
   providers,
   close,
   onSelect,
+  qrScanFailed,
 }: Props) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
@@ -43,7 +45,9 @@ export const SelectProviderBottomSheet = ({
       />
       <>
         <ThemeText style={styles.content}>
-          {t(ParkingViolationTexts.selectProvider.description)}
+          {qrScanFailed
+            ? t(ParkingViolationTexts.selectProvider.qrFailedDescription)
+            : t(ParkingViolationTexts.selectProvider.description)}
         </ThemeText>
         <ScrollView style={styles.providerList}>
           <SelectGroup

@@ -84,6 +84,11 @@ export const ParkingViolationTexts = {
       'If the QR code cannot be scanned, you can enter the provider manually.',
       'Om QR-kode ikkje let seg scanna kan du oppgje utleigefirmaet manuelt',
     ),
+    qrFailedDescription: _(
+      'Vi kjenner dessverre ikke igjen QR-koden, men du kan oppgi utleieiefirma manuelt.',
+      'Unfortunately, we do not recognize the QR code, but you can enter the provider manually.',
+      'Dessverre kjenner vi ikkje igjen QR-koden, men du kan velje utleigefirmaet manuelt.',
+    ),
   },
   vehicleLookup: {
     title: _('Sparkesykkel funnet', 'Scooter found', 'Sparkesykkel funnen'),

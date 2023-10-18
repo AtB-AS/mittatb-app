@@ -105,15 +105,16 @@ export const Root_ParkingViolationsQr = ({
           />
         ));
       } else {
-        selectProvider();
+        selectProvider(true);
       }
     }
   };
 
-  const selectProvider = () => {
+  const selectProvider = (qrScanFailed?: boolean) => {
     openBottomSheet(() => (
       <SelectProviderBottomSheet
         providers={providers}
+        qrScanFailed={qrScanFailed}
         onSelect={(provider) => {
           submitReport(provider.id);
         }}
@@ -142,7 +143,7 @@ export const Root_ParkingViolationsQr = ({
           disabled={isError}
           mode="secondary"
           interactiveColor="interactive_0"
-          onPress={selectProvider}
+          onPress={() => selectProvider()}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
         />
       }
