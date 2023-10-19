@@ -1,7 +1,7 @@
 import {translation as _} from '../commons';
 
 const CameraTexts = {
-  loading: _('Starter kamera...', 'Starting camera...', 'Startar camera'),
+  loading: _('Starter kamera...', 'Starting camera...', 'Startar kamera'),
   permissionRequired: {
     title: _(
       'Gi tilgang til kamera',
