@@ -312,7 +312,7 @@ platform :android do
 
   lane :build do
     ensure_env_vars(
-      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'APP_FLAVOR', 'CI','KEYSTORE_PATH']
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'APP_FLAVOR', 'CI','KEYSTORE_PATH', 'APK_FILE_NAME']
         )
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
@@ -329,7 +329,7 @@ platform :android do
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
-    sh("cp", "../android/app/build/outputs/apk/#{app_flavor}/#{build_type}/app-#{app_flavor}-#{build_type}.apk", "../")
+    sh("cp", "../android/app/build/outputs/apk/#{app_flavor}/#{build_type}/app-#{app_flavor}-#{build_type}.apk", "../#{ENV["APK_FILE_NAME"]}")
     sh("mkdir", "-p", "../bundle")
     sh("cp", "../android/app/build/generated/assets/createBundle#{app_flavor.capitalize}#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{app_flavor}#{build_type.capitalize}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
@@ -337,7 +337,7 @@ platform :android do
 
   lane :build_aab do
     ensure_env_vars(
-      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'APP_FLAVOR', 'CI','KEYSTORE_PATH']
+      env_vars: ['BUILD_ID','KEYSTORE_PASS', 'KEY_ALIAS', 'KEY_PASS', 'APP_ENVIRONMENT', 'APP_FLAVOR', 'CI','KEYSTORE_PATH', 'AAB_FILE_NAME']
     )
     build_type = ENV['APP_ENVIRONMENT']
     app_flavor = ENV['APP_FLAVOR']
@@ -354,7 +354,7 @@ platform :android do
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
-      sh("cp", "../android/app/build/outputs/bundle/#{app_flavor}/#{build_type}/app-#{app_flavor}-#{build_type}.aab", "../")
+      sh("cp", "../android/app/build/outputs/bundle/#{app_flavor}/#{build_type}/app-#{app_flavor}-#{build_type}.aab", "../#{ENV["AAB_FILE_NAME"]}")
       sh("mkdir", "-p", "../bundle")
       sh("cp", "../android/app/build/generated/assets/createBundle#{app_flavor.capitalize}#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
       sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{app_flavor}#{build_type.capitalize}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
