@@ -45,7 +45,7 @@ const ContactSheetTexts = {
     a11yHint: _(
       'Aktivér for å rapportere feilparkert sparkesykkel',
       'Activate to report wrongly parked scooter',
-      'Aktivér for å rapportera feilparkert sparkesykkel',
+      'Aktivér for å rapportere feilparkert sparkesykkel',
     ),
   },
 };
