@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# Get root directory from GitHub Actions environment variable or use a custom one
-ROOT_DIR="${GITHUB_WORKSPACE:-${ROOT_DIR:-$(pwd)}}"
-
-# Source utils.sh
-source "${ROOT_DIR}/scripts/utils.sh"
+envprop() { awk -F= "\/^$1=/ {print \$2;exit}" ./.env; }
 
 react-native run-android --appId "$(envprop 'ANDROID_APPLICATION_ID')"
