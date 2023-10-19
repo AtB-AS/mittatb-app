@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Get the directory of the currently executing script
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get root directory from GitHub Actions environment variable or use a custom one
+ROOT_DIR="${GITHUB_WORKSPACE:-${ROOT_DIR:-$(pwd)}}"
 
-# Source utils.sh from the same directory as this script
-source "${DIR}/utils.sh"
+# Source utils.sh
+source "${ROOT_DIR}/scripts/utils.sh"
 
 echo "Generating app icons"
 yarn icons
