@@ -1,7 +1,7 @@
 import {Checkbox} from '@atb/components/checkbox';
 import {RadioIcon} from '@atb/components/radio';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {useState} from 'react';
+import {useState, ReactElement} from 'react';
 import {
   StyleProp,
   TouchableOpacity,
@@ -10,11 +10,9 @@ import {
   ViewStyle,
 } from 'react-native';
 
-type SelectGroupProps<T> = ViewProps & {
+type BaseProps<T> = ViewProps & {
   items: T[];
-  multiple?: boolean;
-  onSelect: (selectedItems: T[]) => void;
-  renderItem: (item: T, isSelected: boolean) => React.ReactElement | null;
+  renderItem: (item: T, isSelected: boolean) => ReactElement | null;
   generateAccessibilityLabel?: (
     item: T,
     isSelected: boolean,
@@ -23,17 +21,28 @@ type SelectGroupProps<T> = ViewProps & {
   itemStyle?: StyleProp<ViewStyle>;
 };
 
+type SingleSelectProps<T> = BaseProps<T> & {
+  mode: 'radio';
+  onSelect: (selectedItem: T) => void;
+};
+
+type MultipleSelectProps<T> = BaseProps<T> & {
+  mode: 'checkbox';
+  onSelect: (selectedItems: T[]) => void;
+};
+type SelectGroupProps<T> = SingleSelectProps<T> | MultipleSelectProps<T>;
+
 export const SelectGroup = <T,>(props: SelectGroupProps<T>) => {
   const [selectedItems, setSelectedItems] = useState<T[]>([]);
   const {
     items,
-    multiple = false,
-    onSelect,
     renderItem,
     generateAccessibilityLabel,
     keyExtractor,
     itemStyle,
   } = props;
+
+  const multiple = props.mode === 'checkbox';
 
   const onItemSelect = (item: T) => {
     const newSelected = multiple
@@ -42,7 +51,9 @@ export const SelectGroup = <T,>(props: SelectGroupProps<T>) => {
         : [...selectedItems, item]
       : [item];
     setSelectedItems(newSelected);
-    onSelect(newSelected);
+    props.mode === 'checkbox'
+      ? props.onSelect(newSelected)
+      : props.onSelect(newSelected[0]);
   };
 
   return (
@@ -68,7 +79,7 @@ type ItemProps<T> = {
   multiple: boolean;
   selected: boolean;
   onSelect: (item: T) => void;
-  renderItem: (item: T, isSelected: boolean) => React.ReactElement | null;
+  renderItem: (item: T, isSelected: boolean) => ReactElement | null;
   generateAccessibilityLabel?: (
     item: T,
     isSelected: boolean,

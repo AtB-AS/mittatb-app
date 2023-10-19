@@ -52,9 +52,9 @@ export const Root_ParkingViolationsSelect = ({
       {!isError && (
         <ScrollView style={style.container}>
           <SelectGroup
-            multiple
+            mode="checkbox"
             items={violations}
-            keyExtractor={(item) => 'violation' + item.code}
+            keyExtractor={(violation) => 'violation' + violation.code}
             onSelect={setSelectedViolations}
             generateAccessibilityLabel={(violation) =>
               t(

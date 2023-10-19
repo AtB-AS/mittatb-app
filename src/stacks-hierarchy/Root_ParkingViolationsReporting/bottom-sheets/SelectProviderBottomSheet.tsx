@@ -51,9 +51,10 @@ export const SelectProviderBottomSheet = ({
         </ThemeText>
         <ScrollView style={styles.providerList}>
           <SelectGroup
+            mode="radio"
             style={styles.content}
             items={providers}
-            onSelect={(providers) => setSelectedProvider(providers[0])}
+            onSelect={setSelectedProvider}
             keyExtractor={(provider) => 'provider' + provider.id}
             generateAccessibilityLabel={(provider) => provider.name}
             renderItem={(provider, isSeleted) => (
