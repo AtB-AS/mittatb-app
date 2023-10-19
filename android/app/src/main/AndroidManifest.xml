@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="no.mittatb">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -28,5 +29,6 @@
                 <data android:scheme="@string/app_scheme" />
             </intent-filter>
         </activity>
+        <provider android:name="com.kogenta.kettle.core.api.KettleInitializer" android:authorities="${applicationId}.KettleInitializer" tools:node="remove" />
     </application>
 </manifest>
