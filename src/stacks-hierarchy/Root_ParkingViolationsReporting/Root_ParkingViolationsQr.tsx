@@ -35,7 +35,7 @@ export const Root_ParkingViolationsQr = ({
 
   useEffect(() => {
     if (isFocused) {
-      seCapturedQr(undefined);
+      setCapturedQr(undefined);
     }
   }, [isFocused]);
 
@@ -124,13 +124,13 @@ export const Root_ParkingViolationsQr = ({
   };
 
   const disableScanning = (qr: string) => {
-    seCapturedQr(qr);
+    setCapturedQr(qr);
     setIsLoading(true);
   };
 
   const enableScanning = () => {
     setIsLoading(false);
-    seCapturedQr(undefined);
+    setCapturedQr(undefined);
     closeBottomSheet();
   };
 
