@@ -38,7 +38,7 @@ export const ParkingViolationTexts = {
     title: _(
       'Ta bilde av sykkelen',
       'Take a photo of the bike',
-      'Ta eit billete av sykkelen',
+      'Ta bilete av sykkelen',
     ),
     instruction: _(
       'Hold ca. 5 meter avstand. Unngå folk i bildet.',
