@@ -130,7 +130,7 @@ export const ParkingViolationTexts = {
       message: _(
         'For å rapportere feilparkering må du gi tilgang til din posisjon.',
         'To report illegal parking, you must provide access to your location.',
-        'For å rapportera feilparkering må du tillata deling av din posisjon',
+        'For å rapportere feilparkering må du tillate deling av posisjonen din',
       ),
       action: _('Gi tilgang', 'Grant access', 'Gje tilgang'),
     },
