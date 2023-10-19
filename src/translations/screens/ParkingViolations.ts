@@ -13,7 +13,7 @@ export const ParkingViolationTexts = {
           return _(
             'Forbudsområde / privat tomt',
             'Restricted area / private property',
-            'Forbudsområde / privat tomt',
+            'Forbodsområde / privat tomt',
           );
         case 'blocks_walkway':
           return _(
