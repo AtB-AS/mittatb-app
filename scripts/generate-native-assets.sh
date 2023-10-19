@@ -1,6 +1,6 @@
 #!/bin/sh
 
-envprop() { awk -F= "\/^$1=/ {print \$2;exit}" ./.env; }
+envprop() { grep "^${1}=" ./.env | cut -d'=' -f2 | head -n 1; }
 
 echo "Generating app icons"
 yarn icons
