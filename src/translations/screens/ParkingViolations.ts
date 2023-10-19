@@ -29,7 +29,7 @@ export const ParkingViolationTexts = {
           return _('Er i vann', 'Is in water', 'Er i vatn');
         case 'other_issue':
         default:
-          return _('Andre feil', 'Other', 'Andre fel');
+          return _('Andre feil', 'Other', 'Andre feil');
       }
     },
     nextButton: _('Neste', 'Next', 'Neste'),
