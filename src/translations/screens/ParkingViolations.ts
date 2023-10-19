@@ -82,7 +82,7 @@ export const ParkingViolationTexts = {
     description: _(
       'Hvis QR-koden ikke er mulig å scanne kan du oppgi utleiefirmaet manuelt.',
       'If the QR code cannot be scanned, you can enter the provider manually.',
-      'Om QR-kode ikkje let seg scanna kan du oppgje utleigefirmaet manuelt',
+      'Om QR-kode ikkje let seg scanne kan du oppgje utleigefirmaet manuelt',
     ),
     qrFailedDescription: _(
       'Vi kjenner dessverre ikke igjen QR-koden, men du kan oppgi utleieiefirma manuelt.',
