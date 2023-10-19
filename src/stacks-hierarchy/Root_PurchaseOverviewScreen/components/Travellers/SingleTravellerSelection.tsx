@@ -6,7 +6,7 @@ import {
   PurchaseOverviewTexts,
   getTextForLanguage,
 } from '@atb/translations';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName} from '@atb/configuration';
 import {usePreferences} from '@atb/preferences';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';

@@ -16,9 +16,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {getReferenceDataName} from '@atb/reference-data/utils';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProduct, getReferenceDataName} from '@atb/configuration';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';

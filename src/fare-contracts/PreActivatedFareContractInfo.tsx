@@ -11,8 +11,10 @@ import {
   getValidityStatus,
   mapToUserProfilesWithCount,
 } from '@atb/fare-contracts/utils';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {
+  useFirestoreConfiguration,
+  findReferenceDataById,
+} from '@atb/configuration';
 import {
   GenericSectionItem,
   LinkSectionItem,

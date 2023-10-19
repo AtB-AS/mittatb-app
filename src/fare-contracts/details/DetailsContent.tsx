@@ -22,7 +22,6 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -36,7 +35,10 @@ import {
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {
+  findReferenceDataById,
+  PreassignedFareProduct,
+} from '@atb/configuration';
 import {Barcode} from './Barcode';
 
 type Props = {

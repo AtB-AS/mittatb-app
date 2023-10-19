@@ -12,13 +12,15 @@ import {
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useMemo, useRef} from 'react';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {TariffZone} from '@atb/reference-data/types';
+import {
+  TariffZone,
+  useFirestoreConfiguration,
+  getReferenceDataName,
+} from '@atb/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
-import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';

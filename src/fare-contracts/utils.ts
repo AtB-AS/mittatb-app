@@ -1,10 +1,11 @@
 import {FareContractState} from '@atb/ticketing';
-import {UserProfile, TariffZone} from '@atb/reference-data/types';
-import {UserProfileWithCount} from '@atb/fare-contracts';
 import {
+  UserProfile,
+  TariffZone,
   findReferenceDataById,
   getReferenceDataName,
-} from '@atb/reference-data/utils';
+} from '@atb/configuration';
+import {UserProfileWithCount} from '@atb/fare-contracts';
 import {RemoteToken} from '@atb/mobile-token/types';
 import {
   FareContractTexts,

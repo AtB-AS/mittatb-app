@@ -9,16 +9,21 @@ import React, {
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
+import Bugsnag from '@bugsnag/react-native';
+import {defaultVatPercent} from '@atb/configuration/defaults';
+import {PaymentType} from '@atb/ticketing';
 import {
+  FareProductGroupType,
+  FareProductTypeConfig,
+  ConfigurableLinksType,
+  HarborConnectionOverrideType,
+  TravelSearchFiltersType,
   CityZone,
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-} from '@atb/reference-data/types';
-import Bugsnag from '@bugsnag/react-native';
-import {defaultVatPercent} from '@atb/configuration/defaults';
-import {PaymentType} from '@atb/ticketing';
-import {FareProductGroupType, FareProductTypeConfig} from './types';
+  MobilityOperatorType,
+} from './types';
 import {
   mapLanguageAndTextType,
   mapToFareProductGroups,
@@ -29,12 +34,6 @@ import {
   mapToTransportModeFilterOptions,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
-import {
-  ConfigurableLinksType,
-  HarborConnectionOverrideType,
-  TravelSearchFiltersType,
-} from '@atb-as/config-specs';
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];

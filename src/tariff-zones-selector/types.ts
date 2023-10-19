@@ -1,4 +1,4 @@
-import {TariffZone} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/configuration';
 
 export type TariffZoneResultType = 'venue' | 'geolocation' | 'zone';
 export type TariffZoneWithMetadata = TariffZone & {

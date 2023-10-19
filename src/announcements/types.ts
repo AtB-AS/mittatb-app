@@ -1,4 +1,4 @@
-import {LanguageAndTextType} from '@atb-as/config-specs';
+import {LanguageAndTextType} from '@atb/configuration';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 
 export type AnnouncementRaw = {
