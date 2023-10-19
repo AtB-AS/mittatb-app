@@ -11,7 +11,7 @@ const CameraTexts = {
     message: _(
       'For å bruke denne funksjonen må du gi appen tilgang til å bruke kamera. Det gjør du under Personvern og sikkerhet i Innstillinger.',
       'To use this feature, you must grant the app permission to access the camera. You can do this in the Privacy and Security section of the Settings.',
-      'For å bruke denne funksjonen må du gi appen tilgong til å bruke kamera. Dette gjer du under Personvern og sikkerhet i Innstillinger.',
+      'For å bruke denne funksjonen må du gi appen tilgang til å bruke kamera. Dette gjer du under Personvern og sikkerhet i Innstillinger.',
     ),
     action: _('Gå til Innstilinger', 'Open Settings', 'Gå til Innstillinger'),
   },
