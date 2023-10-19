@@ -29,8 +29,9 @@ export const usePermissions = () => {
   const requestCameraPermissionIOS = async () => {
     let authStatus =
       await CKCameraManager.checkDeviceCameraAuthorizationStatus();
+    // -1 means 'undetermined'
     if (authStatus === -1) {
-      authStatus = await CKCameraManager.checkDeviceCameraAuthorizationStatus();
+      authStatus = await CKCameraManager.requestDeviceCameraAuthorization();
     }
     return authStatus;
   };
