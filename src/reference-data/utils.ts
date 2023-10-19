@@ -8,6 +8,8 @@ import {APP_VERSION} from '@env';
 import {compareVersion} from '@atb/utils/compare-version';
 import {CustomerProfile} from '@atb/ticketing';
 
+// TODO: move file to another location?
+
 /**
  * Wrapper for getting the name of a NeTeX entity in the given language.
  *

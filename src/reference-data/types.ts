@@ -2,6 +2,8 @@ import {Polygon} from 'geojson';
 import {LanguageAndTextType} from '@atb/translations';
 import {ZoneSelectionMode} from '@atb-as/config-specs';
 
+// TODO: move file to another location?
+
 export type DistributionChannel = 'web' | 'app' | 'debug-web' | 'debug-app';
 
 export type PreassignedFareProduct = {

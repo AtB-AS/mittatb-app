@@ -7,6 +7,7 @@ import {useLoadingScreenEnabled} from '@atb/loading-screen/use-loading-screen-en
 import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {useAnalytics} from '@atb/analytics';
 import {useLoadingErrorScreenEnabled} from '@atb/loading-screen/use-loading-error-screen-enabled';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 export const LoadingScreenBoundary = ({
   children,
@@ -19,6 +20,8 @@ export const LoadingScreenBoundary = ({
   const {authStatus, retryAuth} = useAuthState();
   const analytics = useAnalytics();
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const {resubscribeFirestoreConfig, hasFirestoreConfigData} =
+    useFirestoreConfiguration();
 
   const [didTimeout, setDidTimeout] = useState(false);
 
@@ -39,7 +42,15 @@ export const LoadingScreenBoundary = ({
     analytics.logEvent('Loading boundary', 'Retrying auth');
     setupLoadingTimeout();
     retryAuth();
-  }, [setupLoadingTimeout, retryAuth]);
+    if (!hasFirestoreConfigData) {
+      analytics.logEvent(
+        'Loading boundary',
+        'Retrying resubscribe to Firestore config',
+      );
+      console.log('resubscribeFirestoreConfig');
+      resubscribeFirestoreConfig();
+    }
+  }, [setupLoadingTimeout, retryAuth]); // resubscribeFirestoreConfig?
 
   // Wait one second after load success to let the app "settle".
   const waitFinished = useDelayGate(1000, loadSuccess);
