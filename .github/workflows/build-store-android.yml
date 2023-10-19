@@ -69,8 +69,6 @@ jobs:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
         run: yarn generate-native-assets
-      - name: Determine App flavor
-        run: echo "APP_FLAVOR=$(if [ -n \"$KETTLE_API_KEY\" ]; then echo 'beacons'; else echo 'app'; fi)" >> $GITHUB_ENV
       - name: Run fastlane build APK
         if: (matrix.org == 'atb') || (matrix.org == 'nfk')
         run: bundle exec fastlane android build
