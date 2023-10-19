@@ -329,7 +329,7 @@ platform :android do
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
-    sh("cp", "../android/app/build/outputs/apk/#{app_flavor}/#{build_type}/app-#{build_type}.apk", "../")
+    sh("cp", "../android/app/build/outputs/apk/#{app_flavor}/#{build_type}/app-#{app_flavor}-#{build_type}.apk", "../")
     sh("mkdir", "-p", "../bundle")
     sh("cp", "../android/app/build/generated/assets/createBundle#{app_flavor.capitalize}#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
     sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{app_flavor}#{build_type.capitalize}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
@@ -354,7 +354,7 @@ platform :android do
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
-      sh("cp", "../android/app/build/outputs/bundle/#{app_flavor}/#{build_type}/app-#{build_type}.aab", "../")
+      sh("cp", "../android/app/build/outputs/bundle/#{app_flavor}/#{build_type}/app-#{app_flavor}-#{build_type}.aab", "../")
       sh("mkdir", "-p", "../bundle")
       sh("cp", "../android/app/build/generated/assets/createBundle#{app_flavor.capitalize}#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
       sh("cp", "../android/app/build/intermediates/sourcemaps/react/#{app_flavor}#{build_type.capitalize}/index.android.bundle.packager.map", "../bundle/index.android.bundle.map")
