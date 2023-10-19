@@ -1,7 +1,6 @@
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {DetailsContent} from '@atb/fare-contracts';
 import {
   findReferenceDataById,
   isOfFareProductRef,
