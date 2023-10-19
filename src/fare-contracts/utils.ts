@@ -92,14 +92,14 @@ export const mapToUserProfilesWithCount = (
 
 export const getNonInspectableTokenWarning = (
   isError: boolean,
-  fallbackEnabled: boolean,
+  fallbackActive: boolean,
   t: TranslateFunction,
   remoteTokens?: RemoteToken[],
   isInspectable?: boolean,
   fareProductType?: string,
 ) => {
   const inspectableToken = findInspectable(remoteTokens);
-  if (isError && fallbackEnabled) return null;
+  if (fallbackActive) return null;
   if (fareProductType !== 'carnet') {
     if (isError) return t(FareContractTexts.warning.unableToRetrieveToken);
     if (!inspectableToken)
@@ -124,14 +124,13 @@ export const getNonInspectableTokenWarning = (
 
 export const getOtherDeviceIsInspectableWarning = (
   tokensEnabled: boolean,
-  isError: boolean,
-  fallbackEnabled: boolean,
+  fallbackActive: boolean,
   t: TranslateFunction,
   remoteTokens?: RemoteToken[],
   deviceIsInspectable?: boolean,
 ) => {
   const shouldShowWarning =
-    tokensEnabled && (isError ? !fallbackEnabled : !deviceIsInspectable);
+    tokensEnabled && !fallbackActive && !deviceIsInspectable;
   if (!shouldShowWarning) return;
 
   const activeToken = findInspectable(remoteTokens);
