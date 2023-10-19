@@ -100,11 +100,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       .onSnapshot(
         (snapshot) => {
           console.log('metadata: ' + JSON.stringify(snapshot.metadata));
-          // snapshot.docs.forEach((d) => {
-          //   console.log(d.id + ': ' + JSON.stringify(d.data()));
-          // });
-          console.log(snapshot.docs.at(0));
-          // setHasFirestoreConfigData(snapshot.docs.length > 0);
+          // is this correct?
           setHasFirestoreConfigData(!snapshot.metadata.fromCache);
 
           const preassignedFareProducts =
