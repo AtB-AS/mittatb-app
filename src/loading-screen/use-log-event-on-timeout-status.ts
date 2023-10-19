@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {LoadingState} from '@atb/loading-screen/types';
 import {useAnalytics} from '@atb/analytics';
 
-export const useLogEventOnTimeout = (
+export const useLogEventOnTimeoutStatus = (
   status: LoadingState['status'],
   paramsRef: LoadingState['paramsRef'],
 ) => {

@@ -5,7 +5,7 @@ import {useLoadingScreenEnabled} from '@atb/loading-screen/use-loading-screen-en
 import {useDelayGate} from '@atb/utils/use-delay-gate';
 import {useLoadingErrorScreenEnabled} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {useLoadingState} from '@atb/loading-screen/use-loading-state';
-import {useLogEventOnTimeout} from '@atb/loading-screen/use-log-event-on-timeout';
+import {useLogEventOnTimeoutStatus} from '@atb/loading-screen/use-log-event-on-timeout-status';
 
 const LOADING_TIMEOUT_MS = 10000;
 
@@ -17,7 +17,7 @@ export const LoadingScreenBoundary = ({
   const loadingScreenEnabled = useLoadingScreenEnabled();
   const errScreenEnabled = useLoadingErrorScreenEnabled();
   const {status, retry, paramsRef} = useLoadingState(LOADING_TIMEOUT_MS);
-  useLogEventOnTimeout(status, paramsRef);
+  useLogEventOnTimeoutStatus(status, paramsRef);
 
   // Wait one second after load success to let the app "settle".
   const waitFinished = useDelayGate(1000, status === 'success');

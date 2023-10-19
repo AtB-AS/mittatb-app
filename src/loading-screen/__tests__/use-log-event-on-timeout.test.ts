@@ -1,6 +1,6 @@
 import {renderHook} from '@testing-library/react-hooks';
 import {LoadingParams, LoadingStatus} from '@atb/loading-screen/types';
-import {useLogEventOnTimeout} from '@atb/loading-screen/use-log-event-on-timeout';
+import {useLogEventOnTimeoutStatus} from '@atb/loading-screen/use-log-event-on-timeout-status';
 import React, {MutableRefObject} from 'react';
 import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 import jestExpect from 'expect';
@@ -23,7 +23,7 @@ jest.mock('@atb/analytics', () => ({
   useAnalytics: () => logEventMock,
 }));
 
-describe('useLogEventOnTimeout', () => {
+describe('useLogEventOnTimeoutStatus', () => {
   beforeAll(() => jest.useFakeTimers());
   beforeEach(() => {
     jest.clearAllMocks();
@@ -34,7 +34,7 @@ describe('useLogEventOnTimeout', () => {
 
   it('Should log event if status timeout', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    renderHook(() => useLogEventOnTimeout('timeout', ref));
+    renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
     expect(mockLoggedEvent).toEqual([
       jestExpect.anything(),
       jestExpect.anything(),
@@ -47,21 +47,24 @@ describe('useLogEventOnTimeout', () => {
 
   it('Should not log event if status loading', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    renderHook(() => useLogEventOnTimeout('loading', ref));
+    renderHook(() => useLogEventOnTimeoutStatus('loading', ref));
     expect(mockLoggedEvent).toEqual(undefined);
   });
 
   it('Should not log event if status success', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    renderHook(() => useLogEventOnTimeout('success', ref));
+    renderHook(() => useLogEventOnTimeoutStatus('success', ref));
     expect(mockLoggedEvent).toEqual(undefined);
   });
 
   it('Should log event on rerender if status changes to timeout', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    const hook = renderHook(({status}) => useLogEventOnTimeout(status, ref), {
-      initialProps: {status: 'loading' as LoadingStatus},
-    });
+    const hook = renderHook(
+      ({status}) => useLogEventOnTimeoutStatus(status, ref),
+      {
+        initialProps: {status: 'loading' as LoadingStatus},
+      },
+    );
     expect(mockLoggedEvent).toEqual(undefined);
     hook.rerender({status: 'timeout'});
     expect(mockLoggedEvent).toEqual([
@@ -76,7 +79,7 @@ describe('useLogEventOnTimeout', () => {
 
   it('Should not log event on rerender when no params change', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    const hook = renderHook(() => useLogEventOnTimeout('timeout', ref));
+    const hook = renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
     expect(mockLoggedEvent).toEqual([
       jestExpect.anything(),
       jestExpect.anything(),
@@ -92,9 +95,12 @@ describe('useLogEventOnTimeout', () => {
 
   it('Should log event with updated ref params', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    const hook = renderHook(({status}) => useLogEventOnTimeout(status, ref), {
-      initialProps: {status: 'loading' as LoadingStatus},
-    });
+    const hook = renderHook(
+      ({status}) => useLogEventOnTimeoutStatus(status, ref),
+      {
+        initialProps: {status: 'loading' as LoadingStatus},
+      },
+    );
     expect(mockLoggedEvent).toEqual(undefined);
     ref.current = {isLoadingAppState: true, authStatus: 'creating-account'};
     hook.rerender({status: 'timeout'});
@@ -110,7 +116,7 @@ describe('useLogEventOnTimeout', () => {
 
   it('Should not log event again when ref params change', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    const hook = renderHook(() => useLogEventOnTimeout('timeout', ref));
+    const hook = renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
     expect(mockLoggedEvent).toEqual([
       jestExpect.anything(),
       jestExpect.anything(),
