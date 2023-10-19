@@ -84,11 +84,12 @@ jobs:
       - name: Generate native assets
         if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: yarn generate-native-assets
+      - name: Determine App flavor
+        run: echo "APP_FLAVOR=$(if [ -n \"$KETTLE_API_KEY\" ]; then echo 'beacons'; else echo 'app'; fi)" >> $GITHUB_ENV
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.apk-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane android build
         env:
-          APP_FLAVOR: ${{ matrix.org == 'atb' && 'beacons' || 'app' }}
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
