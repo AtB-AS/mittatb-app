@@ -1,6 +1,6 @@
 #!/bin/bash
 
-envprop() { awk -F= "\/^$1=/ {print \$2;exit}" ./.env; }
+envprop() { grep "^${1}=" ./.env | cut -d'=' -f2 | head -n 1; }
 
 # Export env vars from .env file
 echo "APP_VERSION=$(envprop APP_VERSION)" >> $GITHUB_ENV
