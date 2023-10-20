@@ -13,6 +13,10 @@ import {Beacons} from '@atb/assets/svg/color/images';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {
+  PermissionType,
+  checkAndRequestPermission,
+} from '@atb/utils/permissions';
 
 export type SearchStopPlaceProps =
   RootStackScreenProps<'Root_ShareTravelHabitsScreen'>;
@@ -25,10 +29,19 @@ export const Root_ShareTravelHabitsScreen = ({
 
   const {configurableLinks} = useFirestoreConfiguration();
 
-  const choosePermissions = () => {
-    // todo: add permission requests here
-
-    // then close the screen
+  const choosePermissions = async () => {
+    const bluetoothPermissionGranted = await checkAndRequestPermission(
+      PermissionType.Bluetooth,
+    );
+    if (bluetoothPermissionGranted) {
+      const locationAlwaysAllowPermissionGranted =
+        await checkAndRequestPermission(PermissionType.LocationAlwaysAllow);
+      if (locationAlwaysAllowPermissionGranted) {
+        await checkAndRequestPermission(
+          PermissionType.MotionAndFitnessActivity,
+        );
+      }
+    }
     navigation.goBack();
   };
 

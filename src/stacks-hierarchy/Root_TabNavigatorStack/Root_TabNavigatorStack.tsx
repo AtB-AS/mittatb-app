@@ -27,8 +27,15 @@ import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {InteractionManager, Platform} from 'react-native';
+import {InteractionManager} from 'react-native';
 import {useOnBeaconsSessionCount} from '@atb/beacons/use-on-beacons-session-count';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  getHasBluetoothPermission,
+  getHasLocationAlwaysAllowPermission,
+  getHasLocationWhenInUsePermission,
+  getHasMotionAndFitnessActivityPermission,
+} from '@atb/utils/permissions';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -40,6 +47,8 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
   const {onboarded} = useAppState();
+  const {delay_share_travel_habits_screen_by_sessions_count} =
+    useRemoteConfig();
 
   useGoToMobileTokenOnboardingWhenNecessary();
 
@@ -51,16 +60,32 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     }
   }, [onboarded]);
 
-  const showShareTravelHabitsScreenOnSessionCount =
-    Platform.OS === 'android' ? 0 : 10;
-
   useOnBeaconsSessionCount(
-    showShareTravelHabitsScreenOnSessionCount,
-    () => {
-      // todo: add check here to not show this if permissions already accepted
-      InteractionManager.runAfterInteractions(() => {
-        navigation.navigate('Root_ShareTravelHabitsScreen');
-      });
+    delay_share_travel_habits_screen_by_sessions_count,
+    async () => {
+      const hasLocationWhenInUsePermission =
+        await getHasLocationWhenInUsePermission();
+      const hasLocationAlwaysAllowPermission =
+        await getHasLocationAlwaysAllowPermission();
+      const hasMotionAndFitnessActivityPermission =
+        await getHasMotionAndFitnessActivityPermission();
+      const hasBluetoothPermission = await getHasBluetoothPermission();
+
+      const allPrerequisitePermissionsGranted = hasLocationWhenInUsePermission;
+
+      const allPermissionsToRequestAlreadyGranted =
+        hasBluetoothPermission &&
+        hasLocationAlwaysAllowPermission &&
+        hasMotionAndFitnessActivityPermission;
+
+      if (
+        allPrerequisitePermissionsGranted &&
+        !allPermissionsToRequestAlreadyGranted
+      ) {
+        InteractionManager.runAfterInteractions(() => {
+          navigation.navigate('Root_ShareTravelHabitsScreen');
+        });
+      }
     },
     'share_travel_habits',
   );
