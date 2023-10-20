@@ -45,6 +45,7 @@ export type RemoteConfig = {
   enable_loading_error_screen: boolean;
   token_timeout_in_seconds: number;
   enable_beacons: boolean;
+  delay_share_travel_habits_screen_by_sessions_count: number;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -95,6 +96,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_error_screen: false,
   token_timeout_in_seconds: 0,
   enable_beacons: false,
+  delay_share_travel_habits_screen_by_sessions_count: 100,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -245,8 +247,8 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_loading_screen;
 
   const enable_loading_error_screen =
-      values['enable_loading_error_screen']?.asBoolean() ??
-      defaultRemoteConfig.enable_loading_error_screen;
+    values['enable_loading_error_screen']?.asBoolean() ??
+    defaultRemoteConfig.enable_loading_error_screen;
 
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
@@ -254,6 +256,10 @@ export function getConfig(): RemoteConfig {
 
   const enable_beacons =
     values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
+
+  const delay_share_travel_habits_screen_by_sessions_count =
+    values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
+    defaultRemoteConfig.delay_share_travel_habits_screen_by_sessions_count;
 
   return {
     enable_ticketing,
@@ -299,6 +305,7 @@ export function getConfig(): RemoteConfig {
     enable_loading_error_screen,
     token_timeout_in_seconds,
     enable_beacons,
+    delay_share_travel_habits_screen_by_sessions_count,
   };
 }
 
