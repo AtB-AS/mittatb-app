@@ -98,7 +98,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_error_screen: false,
   token_timeout_in_seconds: 0,
   enable_beacons: false,
-  delay_share_travel_habits_screen_by_sessions_count: 100,
+  delay_share_travel_habits_screen_by_sessions_count: 0,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
