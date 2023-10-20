@@ -21,7 +21,7 @@ import {
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
-import {APP_GROUP_NAME} from '@env';
+import {APP_GROUP_NAME, KETTLE_API_KEY} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
@@ -49,6 +49,7 @@ import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-load
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
+import {Kettle} from 'react-native-kettle-module';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -93,6 +94,9 @@ export const Profile_DebugInfoScreen = () => {
   const loadingErrorScreenEnabledDebugOverride =
     useLoadingErrorScreenEnabledDebugOverride();
   const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
+  const [isKettleStarted, setIsKettleStarted] = useState(false);
+  const [kettleIdentifier, setKettleIdentifier] = useState();
+  const [kettleConsents, setKettleConsents] = useState([]);
 
   useEffect(() => {
     async function run() {
@@ -107,6 +111,21 @@ export const Profile_DebugInfoScreen = () => {
     run();
   }, [user]);
 
+  useEffect(() => {
+    async function checkKettleInfo() {
+      const status = await Kettle.isStarted();
+      setIsKettleStarted(status);
+
+      const identifier = await Kettle.getIdentifier();
+      setKettleIdentifier(identifier);
+
+      const consents = await Kettle.getGrantedConsents();
+      setKettleConsents(consents);
+    }
+
+    checkKettleInfo();
+  }, []);
+
   const {
     token,
     remoteTokens,
@@ -116,7 +135,7 @@ export const Profile_DebugInfoScreen = () => {
     validateToken,
     removeRemoteToken,
     renewToken,
-    fallbackEnabled,
+    fallbackActive,
     isLoading,
     isError,
   } = useMobileTokenContextState();
@@ -149,6 +168,8 @@ export const Profile_DebugInfoScreen = () => {
     walkReluctance: 1.5,
     walkSpeed: 1.3,
   };
+
+  const [isBeaconsEnabled] = beaconsEnabledDebugOverride;
 
   return (
     <View style={style.container}>
@@ -523,7 +544,7 @@ export const Profile_DebugInfoScreen = () => {
                       ).toISOString()}`}</ThemeText>
                     </View>
                   )}
-                  <ThemeText>{`Fallback enabled: ${fallbackEnabled}`}</ThemeText>
+                  <ThemeText>{`Fallback active: ${fallbackActive}`}</ThemeText>
                   <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
                   <ThemeText>{`Is error: ${isError}`}</ThemeText>
                   <Button
@@ -581,6 +602,22 @@ export const Profile_DebugInfoScreen = () => {
             }
           />
         </Section>
+
+        {isBeaconsEnabled && !!KETTLE_API_KEY && (
+          <Section withPadding withTopPadding>
+            <ExpandableSectionItem
+              text="Kettle SDK"
+              showIconText={true}
+              expandContent={
+                <View>
+                  <ThemeText>{`Identifier: ${kettleIdentifier}`}</ThemeText>
+                  <ThemeText>{`Status: ${isKettleStarted}`}</ThemeText>
+                  <ThemeText>{`Granted consents: ${kettleConsents}`}</ThemeText>
+                </View>
+              }
+            />
+          </Section>
+        )}
       </ScrollView>
     </View>
   );

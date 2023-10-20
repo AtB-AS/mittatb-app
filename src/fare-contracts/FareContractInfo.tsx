@@ -84,11 +84,11 @@ export const FareContractInfoHeader = ({
   const productDescription = preassignedFareProduct
     ? getTextForLanguage(preassignedFareProduct.description, language)
     : undefined;
-  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
+  const {isError, remoteTokens, fallbackActive} = useMobileTokenContextState();
   const {t} = useTranslation();
   const warning = getNonInspectableTokenWarning(
     isError,
-    fallbackEnabled,
+    fallbackActive,
     t,
     remoteTokens,
     isInspectable,
@@ -177,8 +177,7 @@ export const getFareContractInfoDetails = (
   customerProfile: CustomerProfile | undefined,
   hasEnabledMobileToken: boolean,
   deviceIsInspectable: boolean,
-  mobileTokenError: boolean,
-  fallbackEnabled: boolean,
+  fallbackActive: boolean,
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
@@ -196,8 +195,7 @@ export const getFareContractInfoDetails = (
     hasActiveTravelCard,
     hasEnabledMobileToken,
     deviceIsInspectable,
-    mobileTokenError,
-    fallbackEnabled,
+    fallbackActive,
   );
   const fareContractState = fareContract.state;
   let validTo = endDateTime.toMillis();

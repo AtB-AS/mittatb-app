@@ -46,7 +46,7 @@ type MobileTokenContextState = {
   ) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
-  fallbackEnabled: boolean;
+  fallbackActive: boolean;
   // For debugging
   createToken: () => void;
   validateToken: () => void;
@@ -65,7 +65,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {token_timeout_in_seconds} = useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
-  const {enable_token_fallback: fallbackEnabled} = useRemoteConfig();
+  const {
+    enable_token_fallback: fallbackOnErrorEnabled,
+    enable_token_fallback_on_timeout: fallbackOnTimeoutEnabled,
+  } = useRemoteConfig();
 
   const wipeToken = useCallback(
     async (token: ActivatedToken | undefined, traceId: string) => {
@@ -85,6 +88,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const enabled =
     hasEnabledMobileToken && abtCustomerId && authStatus === 'authenticated';
+
+  const fallbackActive =
+    (isError && fallbackOnErrorEnabled) ||
+    (isTimedout && fallbackOnTimeoutEnabled);
 
   /**
    * Load/create native token and handle the situations that can arise.
@@ -347,7 +354,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         createToken: () => mobileTokenClient.create(uuid()).then(setToken),
         wipeToken: () =>
           wipeToken(token, uuid()).then(() => setToken(undefined)),
-        fallbackEnabled,
+        fallbackActive,
         validateToken: () =>
           mobileTokenClient
             .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])

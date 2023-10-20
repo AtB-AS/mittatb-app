@@ -3,7 +3,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
-  EnableTravelSearchFiltersDebugOverride = '@ATB_enable_travel_search_filters_debug_override',
   EnableFlexibleTransportDebugOverride = '@ATB_enable_flexible_transport',
   UseFlexibleTransportAccessModeDebugOverride = '@ATB_use_flexible_on_accessMode',
   UseFlexibleTransportDirectModeDebugOverride = '@ATB_use_flexible_on_directMode',
@@ -30,14 +29,12 @@ export type StorageModel = {
   '@ATB_user_frontpage_departures': string;
   '@ATB_user_preferences': string;
   install_id: string;
-  customer_id: string;
   '@ATB_onboarded': string;
   '@ATB_search-history': string;
   '@ATB_journey_search-history': string;
   '@ATB_ticket_informational_accepted': string;
   '@ATB_user_travel_search_filters': string;
   '@ATB_user_travel_search_filters_v2': string;
-  '@ATB_previous_build_number': string;
   '@ATB_saved_payment_methods': string;
   '@ATB_feedback_display_stats': string;
   '@ATB_last_mobile_token_user': string;
@@ -59,7 +56,7 @@ const leaveBreadCrumb = (
   Bugsnag.leaveBreadcrumb('storage_action', {
     action,
     key,
-    value: __DEV__ ? value : undefined,
+    value,
   });
 };
 

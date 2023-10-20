@@ -9,6 +9,8 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 export const useChatIcon = (
   color?: StaticColor | TextColor,
@@ -22,10 +24,17 @@ export const useChatIcon = (
     onOpenFocusRef,
   } = useBottomSheet();
   const {t} = useTranslation();
+  const navigation = useNavigation<RootNavigationProps>();
 
   const openContactSheet = () => {
     openBottomSheet(() => (
-      <ContactSheet close={closeBottomSheet} ref={onOpenFocusRef} />
+      <ContactSheet
+        close={closeBottomSheet}
+        onReportParkingViolation={() =>
+          navigation.navigate('Root_ParkingViolationsSelect')
+        }
+        ref={onOpenFocusRef}
+      />
     ));
   };
 
