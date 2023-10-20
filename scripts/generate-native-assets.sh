@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source ./scripts/utils.sh
+envprop() { grep "^${1}=" ./.env | cut -d'=' -f2 | head -n 1; }
 
 echo "Generating app icons"
 yarn icons

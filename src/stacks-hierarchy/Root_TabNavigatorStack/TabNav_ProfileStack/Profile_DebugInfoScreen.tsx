@@ -135,7 +135,7 @@ export const Profile_DebugInfoScreen = () => {
     validateToken,
     removeRemoteToken,
     renewToken,
-    fallbackEnabled,
+    fallbackActive,
     isLoading,
     isError,
   } = useMobileTokenContextState();
@@ -544,7 +544,7 @@ export const Profile_DebugInfoScreen = () => {
                       ).toISOString()}`}</ThemeText>
                     </View>
                   )}
-                  <ThemeText>{`Fallback enabled: ${fallbackEnabled}`}</ThemeText>
+                  <ThemeText>{`Fallback active: ${fallbackActive}`}</ThemeText>
                   <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
                   <ThemeText>{`Is error: ${isError}`}</ThemeText>
                   <Button

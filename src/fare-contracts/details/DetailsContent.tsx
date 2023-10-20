@@ -59,11 +59,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-  } = useMobileTokenContextState();
+  const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {findGlobalMessages} = useGlobalMessagesState();
 
   const firstTravelRight = fc.travelRights[0];
@@ -77,8 +73,7 @@ export const DetailsContent: React.FC<Props> = ({
       hasActiveTravelCard,
       hasEnabledMobileToken,
       deviceIsInspectable,
-      mobileTokenError,
-      fallbackEnabled,
+      fallbackActive,
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);

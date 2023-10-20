@@ -44,11 +44,10 @@ export function isInspectableTravelRight(
   hasActiveTravelCard: boolean,
   mobileTokenEnabled: boolean,
   deviceIsInspectable: boolean,
-  mobileTokenError: boolean,
-  fallbackEnabled: boolean,
+  fallbackActive: boolean,
 ): boolean {
   if (mobileTokenEnabled) {
-    return deviceIsInspectable || (mobileTokenError && fallbackEnabled);
+    return deviceIsInspectable || fallbackActive;
   } else return !hasActiveTravelCard && isSingleTravelRight(travelRight);
 }
 

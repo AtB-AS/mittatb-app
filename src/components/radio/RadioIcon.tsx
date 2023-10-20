@@ -2,15 +2,18 @@ import React from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {View} from 'react-native';
 import {
+  isInteractiveColor,
   isStaticColor,
   TextColor,
   StaticColor,
+  InteractiveColor,
+  getInteractiveColor,
   getStaticColor,
 } from '@atb/theme/colors';
 
 type CheckedProps = {
   checked: boolean;
-  color?: TextColor | StaticColor;
+  color?: TextColor | StaticColor | InteractiveColor;
 };
 
 export function RadioIcon({checked, color = 'primary'}: CheckedProps) {
@@ -19,6 +22,8 @@ export function RadioIcon({checked, color = 'primary'}: CheckedProps) {
 
   const colorValue = isStaticColor(color)
     ? getStaticColor(themeName, color).text
+    : isInteractiveColor(color)
+    ? getInteractiveColor(themeName, color).background
     : theme.text.colors[color];
 
   return (

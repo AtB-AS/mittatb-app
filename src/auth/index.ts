@@ -3,4 +3,5 @@ export type {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
   VippsSignInErrorCode,
+  AuthStatus,
 } from './types';
