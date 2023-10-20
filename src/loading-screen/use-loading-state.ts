@@ -8,9 +8,13 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
   const {isLoading: isLoadingAppState} = useAppState();
   const {authStatus, retryAuth} = useAuthState();
   const [status, setStatus] = useState<LoadingStatus>('loading');
-  const paramsRef = useRef({isLoadingAppState, authStatus});
   const {resubscribeFirestoreConfig, hasFirestoreConfigData} =
     useFirestoreConfiguration();
+  const paramsRef = useRef({
+    isLoadingAppState,
+    authStatus,
+    hasFirestoreConfigData,
+  });
 
   useEffect(() => {
     if (
@@ -22,7 +26,7 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
     } else {
       setStatus((prev) => (prev === 'timeout' ? 'timeout' : 'loading'));
     }
-    paramsRef.current = {isLoadingAppState, authStatus};
+    paramsRef.current = {isLoadingAppState, authStatus, hasFirestoreConfigData};
   }, [isLoadingAppState, authStatus, hasFirestoreConfigData]);
 
   useEffect(() => {

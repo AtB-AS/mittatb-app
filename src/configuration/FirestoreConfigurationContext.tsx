@@ -92,7 +92,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     HarborConnectionOverrideType[]
   >([]);
   const [hasFirestoreConfigData, setHasFirestoreConfigData] =
-    useState<boolean>(false);
+    useState<boolean>(false); // firestoreConfigDataStatus, 'loading' | 'success'
 
   const subscribeFirestore = () => {
     firestore()
