@@ -4,7 +4,6 @@ import {Camera} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useIsFocused} from '@react-navigation/native';
 import {useEffect, useState} from 'react';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
@@ -16,6 +15,7 @@ import {useAuthState} from '@atb/auth';
 import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useParkingViolations} from './use-parking-violations';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQr'>;
 
@@ -25,7 +25,7 @@ export const Root_ParkingViolationsQr = ({
 }: QrScreenProps) => {
   const {t} = useTranslation();
   const style = useStyles();
-  const isFocused = useIsFocused();
+  const isFocused = useIsFocusedAndActive();
   const [capturedQr, setCapturedQr] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);

@@ -3,11 +3,11 @@ import {Camera, PhotoFile} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useIsFocused} from '@react-navigation/native';
 import {ImageConfirmationBottomSheet} from './bottom-sheets/ImageConfirmationBottomSheet';
 import {ScreenContainer} from './components/ScreenContainer';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useParkingViolations} from './use-parking-violations';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type PhotoScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsPhoto'>;
@@ -17,7 +17,7 @@ export const Root_ParkingViolationsPhoto = ({
   route: {params},
 }: PhotoScreenProps) => {
   const {t} = useTranslation();
-  const isFocused = useIsFocused();
+  const isFocused = useIsFocusedAndActive();
   const style = useStyles();
   const {position, isLoading} = useParkingViolations();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
