@@ -29,12 +29,18 @@ import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {useBenefits} from '@atb/mobility/use-benefits';
 import {Button} from '@atb/components/button';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
   vehicleId: VehicleId;
   close: () => void;
+  onReportParkingViolation: () => void;
 };
-export const ScooterSheet = ({vehicleId: id, close}: Props) => {
+export const ScooterSheet = ({
+  vehicleId: id,
+  close,
+  onReportParkingViolation,
+}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
   const {
@@ -75,7 +81,7 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
       <>
@@ -131,9 +137,10 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                 />
               )}
             </ScrollView>
-            {rentalAppUri && (
-              <View style={style.footer}>
+            <View style={style.footer}>
+              {rentalAppUri && (
                 <Button
+                  style={style.appSwitchButton}
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
                   onPress={() =>
                     operatorBenefit &&
@@ -142,10 +149,17 @@ export const ScooterSheet = ({vehicleId: id, close}: Props) => {
                       : openOperatorApp()
                   }
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                 />
-              </View>
-            )}
+              )}
+              <Button
+                text={t(MobilityTexts.reportParkingViolation)}
+                mode="secondary"
+                interactiveColor="interactive_2"
+                onPress={onReportParkingViolation}
+                rightIcon={{svg: ArrowRight}}
+              />
+            </View>
           </>
         )}
         {!isLoading && (isError || !vehicle) && (
@@ -183,6 +197,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
+    },
+    appSwitchButton: {
+      marginBottom: theme.spacings.medium,
     },
   };
 });

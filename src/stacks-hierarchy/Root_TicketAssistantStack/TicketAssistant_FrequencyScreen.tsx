@@ -66,16 +66,16 @@ export const TicketAssistant_FrequencyScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
+        <DashboardBackground width="100%" height="100%" />
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style={styles.mainView}>
           <View style={styles.textBox} ref={focusRef} accessible={true}>
             <ThemeText
-              type={'heading--big'}
+              type="heading--big"
               style={styles.header}
               color={themeColor}
-              accessibilityRole={'header'}
+              accessibilityRole="header"
               accessibilityLabel={t(
                 TicketAssistantTexts.frequency.titleA11yLabel,
               )}
@@ -84,7 +84,7 @@ export const TicketAssistant_FrequencyScreen = ({
             </ThemeText>
             <ThemeText
               color={themeColor}
-              type={'body__primary'}
+              type="body__primary"
               style={styles.description}
               accessibilityLabel={t(TicketAssistantTexts.frequency.description)}
             >
@@ -119,37 +119,33 @@ export const TicketAssistant_FrequencyScreen = ({
           ) : (
             <View>
               <View style={styles.sliderContainer}>
-                <View style={styles.horizontalLine}>
-                  {numbersAsStrings.map((number) => {
-                    return (
-                      <View key={number} style={styles.numberContainer}>
-                        <ThemeText
-                          key={number}
-                          style={styles.number}
-                          type={'body__primary'}
-                          color={themeColor}
-                          numberOfLines={1}
-                          ellipsizeMode={'clip'}
-                        >
-                          {number}
-                        </ThemeText>
-                      </View>
-                    );
-                  })}
-                </View>
                 <Slider
                   containerStyle={styles.slider}
                   maximumValue={sliderMax}
                   minimumValue={2}
                   step={1}
                   value={sliderValue}
+                  trackMarks={numbers}
+                  trackMarkComponent={(index) => {
+                    return (
+                      <ThemeText
+                        style={{
+                          top: -30,
+                          textAlign: 'center',
+                          minWidth: 20,
+                        }}
+                      >
+                        {numbersAsStrings[index]}
+                      </ThemeText>
+                    );
+                  }}
                   onValueChange={(value) => {
                     setSliderValue(value);
                   }}
                 />
                 <SectionSeparator />
 
-                <ThemeText type={'body__secondary'} style={styles.travelText}>
+                <ThemeText type="body__secondary" style={styles.travelText}>
                   {resultString}
                 </ThemeText>
               </View>
@@ -195,8 +191,9 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   sliderContainer: {
     width: '100%',
     backgroundColor: theme.static.background.background_0.background,
-    paddingVertical: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
+    paddingHorizontal: theme.spacings.large,
     borderRadius: theme.border.radius.regular,
   },
   slider: {
@@ -242,18 +239,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     alignSelf: 'center',
     paddingHorizontal: theme.spacings.medium,
   },
-  numberContainer: {
-    width: 30,
-    alignContent: 'center',
-    flexShrink: 1,
-  },
-  number: {
-    width: '100%',
-    textAlign: 'center',
-    flexWrap: 'nowrap',
-    color: theme.text.colors.primary,
-  },
-
   travelText: {
     width: '100%',
     textAlign: 'center',

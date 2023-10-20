@@ -33,3 +33,10 @@ export function flattenObject<T extends object>(obj: T): Flattened<T> {
   });
   return flattened as Flattened<T>;
 }
+
+export function hasProp<K extends PropertyKey>(
+  obj: unknown,
+  key: K,
+): obj is Record<K, unknown> {
+  return obj != null && typeof obj === 'object' && key in obj;
+}

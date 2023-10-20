@@ -48,6 +48,12 @@ import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-h
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
 import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
+import {
+  Root_ParkingViolationsPhoto,
+  Root_ParkingViolationsQr,
+  Root_ParkingViolationsSelect,
+  Root_ParkingViolationsConfirmation,
+} from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -79,7 +85,7 @@ export const RootStack = () => {
 
   function getResultStateFromPath(path: string): ResultState {
     const params = parse(path);
-    let destination: PartialRoute<any>[] = [
+    const destination: PartialRoute<any>[] = [
       {
         // Index is needed so that the user can go back after
         // opening the app with the widget when it was not open previously
@@ -356,8 +362,24 @@ export const RootStack = () => {
                   }
                 />
                 <Stack.Screen
-                    name="Root_AddPaymentMethodScreen"
-                    component={Root_AddPaymentMethodScreen}
+                  name="Root_AddPaymentMethodScreen"
+                  component={Root_AddPaymentMethodScreen}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsSelect"
+                  component={Root_ParkingViolationsSelect}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsPhoto"
+                  component={Root_ParkingViolationsPhoto}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsQr"
+                  component={Root_ParkingViolationsQr}
+                />
+                <Stack.Screen
+                  name="Root_ParkingViolationsConfirmation"
+                  component={Root_ParkingViolationsConfirmation}
                 />
               </Stack.Group>
             </Stack.Navigator>

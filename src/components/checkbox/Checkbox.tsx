@@ -1,14 +1,19 @@
 import React from 'react';
-import {AccessibilityProps, View} from 'react-native';
+import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 
 type CheckedProps = {
   checked: boolean;
   accessibility?: AccessibilityProps;
+  style?: StyleProp<ViewStyle>;
 };
 
-export const Checkbox: React.FC<CheckedProps> = ({checked, accessibility}) => {
+export const Checkbox: React.FC<CheckedProps> = ({
+  checked,
+  style,
+  accessibility,
+}) => {
   const styles = useStyles();
   return (
     <View
@@ -16,6 +21,7 @@ export const Checkbox: React.FC<CheckedProps> = ({checked, accessibility}) => {
       accessibilityState={{selected: checked}}
       {...accessibility}
       style={[
+        style,
         styles.saveCheckbox,
         checked ? styles.saveCheckboxChecked : styles.saveCheckboxDefault,
       ]}
@@ -27,7 +33,6 @@ export const Checkbox: React.FC<CheckedProps> = ({checked, accessibility}) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   saveCheckbox: {
-    marginRight: theme.spacings.small,
     height: theme.spacings.large,
     width: theme.spacings.large,
     borderRadius: theme.border.radius.small,

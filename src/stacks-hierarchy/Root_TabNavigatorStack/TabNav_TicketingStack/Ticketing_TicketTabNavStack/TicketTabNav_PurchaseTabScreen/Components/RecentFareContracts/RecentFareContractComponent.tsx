@@ -146,11 +146,11 @@ export const RecentFareContractComponent = ({
     >
       <View
         style={[styles.upperPart, {minWidth: width * 0.6}]}
-        importantForAccessibility={'no-hide-descendants'}
+        importantForAccessibility="no-hide-descendants"
       >
         <View style={styles.travelModeWrapper}>
           <TransportModes
-            iconSize={'small'}
+            iconSize="small"
             modes={fareProductTypeConfig.transportModes}
             style={{flex: 2}}
           />
@@ -166,11 +166,13 @@ export const RecentFareContractComponent = ({
         </View>
 
         {direction !== undefined && pointToPointValidity && (
-          <FareContractHarborStopPlaces
-            showTwoWayIcon={showTwoWayIcon}
-            fromStopPlaceId={pointToPointValidity?.fromPlace}
-            toStopPlaceId={pointToPointValidity?.toPlace}
-          />
+          <View style={styles.harbors}>
+            <FareContractHarborStopPlaces
+              showTwoWayIcon={showTwoWayIcon}
+              fromStopPlaceId={pointToPointValidity?.fromPlace}
+              toStopPlaceId={pointToPointValidity?.toPlace}
+            />
+          </View>
         )}
 
         <View style={styles.horizontalFlex}>
@@ -307,5 +309,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     paddingHorizontal: theme.spacings.xLarge,
     paddingVertical: theme.spacings.medium,
+  },
+  harbors: {
+    marginBottom: theme.spacings.medium,
   },
 }));

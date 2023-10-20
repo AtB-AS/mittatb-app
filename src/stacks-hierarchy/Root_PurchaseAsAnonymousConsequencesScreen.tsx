@@ -1,7 +1,11 @@
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import React from 'react';
 import {AnonymousPurchaseConsequencesScreenComponent} from '@atb/anonymous-purchase-consequences-screen';
-import {RootStackScreenProps} from './navigation-types';
+import {RootStackParamList, RootStackScreenProps} from './navigation-types';
+import {
+  filterActiveOrCanBeUsedFareContracts,
+  useTicketingState,
+} from '@atb/ticketing';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
@@ -10,29 +14,23 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
 }: Props) => {
   const {enable_vipps_login} = useRemoteConfig();
 
+  const {fareContracts} = useTicketingState();
+  const activeFareContracts =
+    filterActiveOrCanBeUsedFareContracts(fareContracts);
+  const hasActiveFareContracts = activeFareContracts.length > 0;
+
   return (
     <AnonymousPurchaseConsequencesScreenComponent
-      onPressLogin={() =>
-        navigation.navigate(
-          enable_vipps_login
-            ? 'Root_LoginOptionsScreen'
-            : 'Root_LoginPhoneInputScreen',
-          {
-            afterLogin: {
-              screen: 'Root_TabNavigatorStack',
-              params: {
-                screen: 'TabNav_TicketingStack',
-                params: {
-                  screen: 'Ticketing_RootScreen',
-                  params: {
-                    screen: 'TicketTabNav_PurchaseTabScreen',
-                  },
-                },
-              },
-            },
-          },
-        )
-      }
+      onPressLogin={() => {
+        let screen: keyof RootStackParamList = 'Root_LoginPhoneInputScreen';
+        if (hasActiveFareContracts) {
+          screen = 'Root_LoginActiveFareContractWarningScreen';
+        } else if (enable_vipps_login) {
+          screen = 'Root_LoginOptionsScreen';
+        }
+
+        return navigation.navigate(screen, {});
+      }}
       onPressContinueWithoutLogin={navigation.goBack}
       showHeader={true}
     />

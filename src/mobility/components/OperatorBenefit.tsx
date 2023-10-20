@@ -23,6 +23,6 @@ export const OperatorBenefit = ({isUserEligible, benefit, style}: Props) => {
   if (!text) return null;
 
   return (
-    <MessageBox style={style} type={'info'} message={text} isMarkdown={true} />
+    <MessageBox style={style} type="info" message={text} isMarkdown={true} />
   );
 };

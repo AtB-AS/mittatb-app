@@ -93,7 +93,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
                   <View style={styles.validityContainer}>
                     <ThemeIcon
                       svg={Time}
-                      colorType={'secondary'}
+                      colorType="secondary"
                       style={styles.validityIcon}
                     />
                     <ThemeText

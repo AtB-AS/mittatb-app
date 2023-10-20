@@ -139,7 +139,7 @@ export const useFareContractInfoTexts = (
   } = props;
 
   const {t, language} = useTranslation();
-  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
+  const {isError, remoteTokens, fallbackActive} = useMobileTokenContextState();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -157,8 +157,8 @@ export const useFareContractInfoTexts = (
     serialComma: false,
   });
 
-  var accessibilityLabel: string = '';
-  var timeUntilExpireOrWarning: string | undefined;
+  let accessibilityLabel: string = '';
+  let timeUntilExpireOrWarning: string | undefined;
 
   if (isInspectable) {
     timeUntilExpireOrWarning = t(
@@ -167,7 +167,7 @@ export const useFareContractInfoTexts = (
   } else {
     const warning = getNonInspectableTokenWarning(
       isError,
-      fallbackEnabled,
+      fallbackActive,
       t,
       remoteTokens,
       isInspectable,

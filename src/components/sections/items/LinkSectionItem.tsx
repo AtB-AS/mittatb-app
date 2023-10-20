@@ -87,13 +87,6 @@ export function LinkSectionItem({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   disabled: {opacity: 0.2},
-  flag: {
-    backgroundColor: theme.static.background.background_accent_3.background,
-    marginRight: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.xSmall,
-    borderRadius: theme.border.radius.regular,
-  },
 }));

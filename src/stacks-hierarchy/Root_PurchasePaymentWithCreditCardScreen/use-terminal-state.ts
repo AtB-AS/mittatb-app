@@ -125,7 +125,7 @@ export function useTerminalState(
           const checkIfRecurringCardHasBeenSavedAtEntur = async (
             recurringPaymentId: number,
           ) => {
-            let allRecurringPaymentOptions = await listRecurringPayments();
+            const allRecurringPaymentOptions = await listRecurringPayments();
             const card = allRecurringPaymentOptions.find((item) => {
               return item.id === recurringPaymentId;
             });

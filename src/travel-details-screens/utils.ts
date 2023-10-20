@@ -270,7 +270,7 @@ export function getEarliestBookingDateFromLeg(
 ): Date {
   const latestBookingDate = getLatestBookingDateFromLeg(leg);
 
-  let earliestBookingDate = new Date(latestBookingDate);
+  const earliestBookingDate = new Date(latestBookingDate);
   earliestBookingDate.setDate(
     earliestBookingDate.getDate() - flex_booking_number_of_days_available,
   );

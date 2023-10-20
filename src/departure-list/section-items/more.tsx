@@ -29,7 +29,7 @@ export function MoreItem({
     <PressableOpacity
       onPress={onPress}
       {...accessibility}
-      accessibilityRole={'button'}
+      accessibilityRole="button"
       style={[topContainer, sectionStyle.spaceBetween]}
     >
       <ThemeText style={[styles.center, contentContainer]}>{text}</ThemeText>

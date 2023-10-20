@@ -46,11 +46,7 @@ export const CompactFareContracts: React.FC<Props> = ({
 
   const {t} = useTranslation();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-  } = useMobileTokenContextState();
+  const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
 
@@ -73,8 +69,7 @@ export const CompactFareContracts: React.FC<Props> = ({
             customerProfile,
             hasEnabledMobileToken,
             deviceIsInspectable,
-            mobileTokenError,
-            fallbackEnabled,
+            fallbackActive,
             tariffZones,
             userProfiles,
             preassignedFareProducts,

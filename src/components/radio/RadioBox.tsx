@@ -55,7 +55,7 @@ export function RadioBox({
       onPress={onPress}
       accessibilityLabel={a11yLabel}
       accessibilityHint={a11yHint}
-      accessibilityRole={'radio'}
+      accessibilityRole="radio"
       accessibilityState={{
         selected,
         disabled,

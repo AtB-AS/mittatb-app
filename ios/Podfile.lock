@@ -906,7 +906,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.4)
   - hermes-engine/Pre-built (0.72.4)
   - Intercom (10.4.0)
-  - KettleKit (1.0.13)
+  - KettleKit (1.1.0)
   - Kronos (4.2.2)
   - leveldb-library (1.22.2)
   - libevent (2.1.12)
@@ -924,6 +924,7 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - NextLevelSessionExporter (0.4.6)
   - OpenSSL-Universal (1.1.1100)
   - Permission-LocationWhenInUse (3.6.1):
     - RNPermissions
@@ -1228,6 +1229,10 @@ PODS:
   - React-jsinspector (0.72.4)
   - React-logger (0.72.4):
     - glog
+  - react-native-compressor (1.8.12):
+    - NextLevelSessionExporter
+    - RCT-Folly (= 2021.07.22.00)
+    - React-Core
   - react-native-device-brightness (1.2.7):
     - React
   - react-native-flipper (0.191.0):
@@ -1244,8 +1249,8 @@ PODS:
   - react-native-intercom (21.1.1):
     - Intercom (~> 10)
     - React
-  - react-native-kettle-module (1.0.3):
-    - KettleKit (= 1.0.13)
+  - react-native-kettle-module (1.1.0):
+    - KettleKit (= 1.1.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-pager-view (6.1.2):
@@ -1368,6 +1373,8 @@ PODS:
     - React-jsi (= 0.72.4)
     - React-logger (= 0.72.4)
     - React-perflogger (= 0.72.4)
+  - ReactNativeCameraKit (14.0.0-beta12):
+    - React-Core
   - RecaptchaInterop (100.0.0)
   - RNBootSplash (4.4.1):
     - React-Core
@@ -1494,6 +1501,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-compressor (from `../node_modules/react-native-compressor`)
   - "react-native-device-brightness (from `../node_modules/@adrianso/react-native-device-brightness`)"
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-flipper-performance-plugin (from `../node_modules/react-native-flipper-performance-plugin`)
@@ -1521,6 +1529,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeCameraKit (from `../node_modules/react-native-camera-kit`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
@@ -1582,6 +1591,7 @@ SPEC REPOS:
     - MapboxMaps
     - MapboxMobileEvents
     - nanopb
+    - NextLevelSessionExporter
     - OpenSSL-Universal
     - PromisesObjC
     - RecaptchaInterop
@@ -1643,6 +1653,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-compressor:
+    :path: "../node_modules/react-native-compressor"
   react-native-device-brightness:
     :path: "../node_modules/@adrianso/react-native-device-brightness"
   react-native-flipper:
@@ -1697,6 +1709,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeCameraKit:
+    :path: "../node_modules/react-native-camera-kit"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
@@ -1791,7 +1805,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
   hermes-engine: 81191603c4eaa01f5e4ae5737a9efcf64756c7b2
   Intercom: fc68809088ec0b2452c441eae6f6466d5b906518
-  KettleKit: 7be8bd0ef31d4498f1f594e567da1caa077fd1dc
+  KettleKit: 587c10f66114c579cc89374ec9ace456fa358751
   Kronos: dfa27819541f9f1bf6834d5bfefa792f499001bb
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -1800,6 +1814,7 @@ SPEC CHECKSUMS:
   MapboxMaps: fdbe05e3899abd24f31a7f91789586e44e57f7fc
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  NextLevelSessionExporter: 4d8aa5e617f1c709724f2453efe5d4628480f65a
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   Permission-LocationWhenInUse: 3ba99e45c852763f730eabecec2870c2382b7bd4
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
@@ -1818,13 +1833,14 @@ SPEC CHECKSUMS:
   React-jsiexecutor: c7f826e40fa9cab5d37cab6130b1af237332b594
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: da1ebe05ae06eb6db4b162202faeafac4b435e77
+  react-native-compressor: 31281c7b026dc2d9faa61ff952ea184f5c9d059d
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
   react-native-flipper: 5d8dcbcb905a7e8076c9a61a3709944c23cf48ee
   react-native-flipper-performance-plugin: 42ec5017abd26e7c5a1f527f2db92c14a90cabdb
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
-  react-native-kettle-module: f41b7728a6acb22c982c9f7130ac5390e12220a2
+  react-native-kettle-module: 940ba0b02280d4540c7d3d70026ef152f4283ecd
   react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
@@ -1845,6 +1861,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 4941cc1b3cf08b792fbf666342c9fc95f1969035
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
+  ReactNativeCameraKit: 80ee467bdc72ab04dea312eb275c0d2cd682f2db
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   RNBootSplash: 4f968c1e098c7ec97939ace039f735e3d335bd4b
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb

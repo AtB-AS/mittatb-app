@@ -54,7 +54,7 @@ export function ProductSelectionByAlias({
         contentContainerStyle={styles.durationContentContainer}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        testID={'selectDurationScrollView'}
+        testID="selectDurationScrollView"
       >
         {selectableProducts.map((fp, i) => {
           const text = getTextForLanguage(fp.productAlias, language);

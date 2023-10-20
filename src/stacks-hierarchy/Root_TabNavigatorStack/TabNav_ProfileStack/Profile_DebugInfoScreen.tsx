@@ -135,7 +135,7 @@ export const Profile_DebugInfoScreen = () => {
     validateToken,
     removeRemoteToken,
     renewToken,
-    fallbackEnabled,
+    fallbackActive,
     isLoading,
     isError,
   } = useMobileTokenContextState();
@@ -355,7 +355,7 @@ export const Profile_DebugInfoScreen = () => {
 
         <Section withPadding withTopPadding>
           <ExpandableSectionItem
-            text={'Trip search parameters'}
+            text="Trip search parameters"
             showIconText={true}
             expandContent={
               <View>
@@ -485,7 +485,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               <>
                 <View>
-                  <MapEntry title={'app_group_name'} value={APP_GROUP_NAME} />
+                  <MapEntry title="app_group_name" value={APP_GROUP_NAME} />
                 </View>
                 {storedValues && (
                   <View>
@@ -544,7 +544,7 @@ export const Profile_DebugInfoScreen = () => {
                       ).toISOString()}`}</ThemeText>
                     </View>
                   )}
-                  <ThemeText>{`Fallback enabled: ${fallbackEnabled}`}</ThemeText>
+                  <ThemeText>{`Fallback active: ${fallbackActive}`}</ThemeText>
                   <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
                   <ThemeText>{`Is error: ${isError}`}</ThemeText>
                   <Button

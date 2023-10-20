@@ -212,7 +212,7 @@ const useHeaderStyle = StyleSheet.createThemeHook((theme) => ({
     width: '100%',
   },
   globalMessageBox: {
-    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
 }));
 

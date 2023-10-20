@@ -42,7 +42,7 @@ export function getSliderIndex(days: number, durations: number[]) {
   let minDifference = Math.abs(days - durations[0]);
 
   for (let i = 1; i < durations.length; i++) {
-    let difference = Math.abs(days - durations[i]);
+    const difference = Math.abs(days - durations[i]);
     if (difference < minDifference) {
       closestIndex = i;
       minDifference = difference;

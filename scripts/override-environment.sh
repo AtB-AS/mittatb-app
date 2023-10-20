@@ -1,7 +1,5 @@
 #!/bin/sh
 
-source ./scripts/utils.sh
-
 if [ "$#" -ne 2 ]
 then
     echo "Argument error!"
