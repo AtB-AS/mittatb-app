@@ -1,5 +1,5 @@
 import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor} from '@atb/theme/colors';
+import {getStaticColor, StaticColor} from '@atb/theme/colors';
 import {RefreshControlProps, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
@@ -20,6 +20,7 @@ type Props = {
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
+  contentColor?: StaticColor;
 };
 
 type PropsWithParallaxContent = Props &
@@ -59,12 +60,12 @@ export function FullScreenView(props: Props) {
         <ChildrenWithParallaxScrollContent
           {...props}
           handleScroll={handleScroll}
-          backgroundColor={backgroundColor}
+          headerColor={backgroundColor}
         />
       ) : (
         <ChildrenInNormalScrollView
           {...props}
-          backgroundColor={backgroundColor}
+          contentColor={props.contentColor}
         />
       )}
     </>
@@ -78,16 +79,16 @@ const ChildrenWithParallaxScrollContent = ({
   parallaxContent,
   refreshControl,
   children,
-  backgroundColor,
+  headerColor,
   handleScroll,
-}: PropsWithParallaxContent & {backgroundColor: string}) => {
+}: PropsWithParallaxContent & {headerColor: string}) => {
   const focusRef = useFocusOnLoad();
   const styles = useStyles();
   return (
     <View style={styles.container}>
       <ParallaxScroll
         header={
-          <View style={{backgroundColor}}>
+          <View style={{backgroundColor: headerColor}}>
             <View style={styles.childrenContainer}>
               {parallaxContent(focusRef)}
             </View>
@@ -105,16 +106,22 @@ const ChildrenWithParallaxScrollContent = ({
 const ChildrenInNormalScrollView = ({
   refreshControl,
   children,
-  backgroundColor,
-}: Props & {backgroundColor: string}) => (
-  <ScrollView
-    refreshControl={refreshControl}
-    contentContainerStyle={{flexGrow: 1}}
-    style={{backgroundColor}}
-  >
-    {children}
-  </ScrollView>
-);
+  contentColor,
+}: Props & {contentColor?: StaticColor}) => {
+  const {themeName} = useTheme();
+  const backgroundColor = contentColor
+    ? getStaticColor(themeName, contentColor).background
+    : undefined;
+  return (
+    <ScrollView
+      refreshControl={refreshControl}
+      contentContainerStyle={{flexGrow: 1}}
+      style={{backgroundColor}}
+    >
+      {children}
+    </ScrollView>
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

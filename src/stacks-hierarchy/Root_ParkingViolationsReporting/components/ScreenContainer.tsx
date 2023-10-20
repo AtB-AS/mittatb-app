@@ -40,6 +40,7 @@ export const ScreenContainer = (props: Props) => {
         titleA11yLabel,
         color: 'background_accent_0',
       }}
+      contentColor={themeColor}
     >
       {isLoading && <LoadingBody />}
       {!isLoading && <ContentBody {...props} />}
