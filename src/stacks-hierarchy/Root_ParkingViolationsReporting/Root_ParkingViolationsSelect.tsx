@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Linking} from 'react-native';
+import {Linking, View, ViewProps} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {ScrollView} from 'react-native-gesture-handler';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -48,7 +48,10 @@ export const Root_ParkingViolationsSelect = ({
       }
       isLoading={isLoading}
     >
-      {isError && errors.map((error) => <ErrorMessage error={error} />)}
+      {isError &&
+        errors.map((error) => (
+          <ErrorMessage style={style.container} error={error} />
+        ))}
       {!isError && (
         <ScrollView style={style.container}>
           <SelectGroup
@@ -92,29 +95,33 @@ export const Root_ParkingViolationsSelect = ({
   );
 };
 
-type ErrorMessageProps = {error: unknown};
-const ErrorMessage = ({error}: ErrorMessageProps) => {
+type ErrorMessageProps = ViewProps & {error: unknown};
+const ErrorMessage = (props: ErrorMessageProps) => {
   const {t} = useTranslation();
 
-  if (error instanceof PermissionRequiredError) {
+  if (props.error instanceof PermissionRequiredError) {
     return (
-      <MessageBox
-        title={t(ParkingViolationTexts.error.position.title)}
-        message={t(ParkingViolationTexts.error.position.message)}
-        onPressConfig={{
-          text: t(ParkingViolationTexts.error.position.action),
-          action: () => Linking.openSettings(),
-        }}
-        type="warning"
-      />
+      <View {...props}>
+        <MessageBox
+          title={t(ParkingViolationTexts.error.position.title)}
+          message={t(ParkingViolationTexts.error.position.message)}
+          onPressConfig={{
+            text: t(ParkingViolationTexts.error.position.action),
+            action: () => Linking.openSettings(),
+          }}
+          type="warning"
+        />
+      </View>
     );
   }
   return (
-    <MessageBox
-      title={t(ParkingViolationTexts.error.loading.title)}
-      message={t(ParkingViolationTexts.error.loading.message)}
-      type="error"
-    />
+    <View {...props}>
+      <MessageBox
+        title={t(ParkingViolationTexts.error.loading.title)}
+        message={t(ParkingViolationTexts.error.loading.message)}
+        type="error"
+      />
+    </View>
   );
 };
 

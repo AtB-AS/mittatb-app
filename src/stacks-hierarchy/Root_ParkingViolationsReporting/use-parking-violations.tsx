@@ -10,10 +10,12 @@ export const useParkingViolations = () => {
     data,
   } = useInitQuery(position ?? {latitude: 0, longitude: 0});
 
+  const isError = !!(loadingError || locationError);
+
   return {
     position,
-    isLoading,
-    isError: !!(loadingError || locationError),
+    isLoading: isLoading && !isError,
+    isError,
     errors: [locationError, loadingError].filter(isDefined),
     violations: data?.violations ?? [],
     providers: data?.providers ?? [],
