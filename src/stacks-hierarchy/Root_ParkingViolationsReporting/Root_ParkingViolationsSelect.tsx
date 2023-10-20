@@ -26,7 +26,7 @@ export const Root_ParkingViolationsSelect = ({
   const style = useStyles();
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const {isLoading, isError, errors, violations} = useParkingViolations();
+  const {isLoading, isError, error, violations} = useParkingViolations();
   const [selectedViolations, setSelectedViolations] = useState<
     ParkingViolationType[]
   >([]);
@@ -48,10 +48,7 @@ export const Root_ParkingViolationsSelect = ({
       }
       isLoading={isLoading}
     >
-      {isError &&
-        errors.map((error) => (
-          <ErrorMessage style={style.container} error={error} />
-        ))}
+      {isError && <ErrorMessage style={style.error} error={error} />}
       {!isError && (
         <ScrollView style={style.container}>
           <SelectGroup
@@ -143,5 +140,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   itemDescription: {
     flexShrink: 1,
+  },
+  error: {
+    paddingHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
 }));

@@ -1,4 +1,3 @@
-import {isDefined} from '@atb/utils/presence';
 import {useUserLocation} from './use-user-location';
 import {useInitQuery} from './use-init-query';
 
@@ -16,7 +15,9 @@ export const useParkingViolations = () => {
     position,
     isLoading: isLoading && !isError,
     isError,
-    errors: [locationError, loadingError].filter(isDefined),
+    // If both errors are present, the locationError is most relevant
+    // and should be shown rather than the loadingError
+    error: locationError ?? loadingError,
     violations: data?.violations ?? [],
     providers: data?.providers ?? [],
   };
