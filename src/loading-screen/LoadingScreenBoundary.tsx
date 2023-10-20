@@ -25,7 +25,10 @@ export const LoadingScreenBoundary = ({
 
   const [didTimeout, setDidTimeout] = useState(false);
 
-  const loadSuccess = authStatus === 'authenticated' && !isLoadingAppState;
+  const loadSuccess =
+    authStatus === 'authenticated' &&
+    !isLoadingAppState &&
+    hasFirestoreConfigData;
 
   const setupLoadingTimeout = useCallback(() => {
     setDidTimeout(false);
@@ -43,14 +46,9 @@ export const LoadingScreenBoundary = ({
     setupLoadingTimeout();
     retryAuth();
     if (!hasFirestoreConfigData) {
-      analytics.logEvent(
-        'Loading boundary',
-        'Retrying resubscribe to Firestore config',
-      );
-      console.log('resubscribeFirestoreConfig');
       resubscribeFirestoreConfig();
     }
-  }, [setupLoadingTimeout, retryAuth]); // resubscribeFirestoreConfig?
+  }, [setupLoadingTimeout, retryAuth, resubscribeFirestoreConfig]);
 
   // Wait one second after load success to let the app "settle".
   const waitFinished = useDelayGate(1000, loadSuccess);

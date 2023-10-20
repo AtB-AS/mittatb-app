@@ -99,9 +99,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          console.log('metadata: ' + JSON.stringify(snapshot.metadata));
-          // is this correct?
-          setHasFirestoreConfigData(!snapshot.metadata.fromCache);
+          setHasFirestoreConfigData(!snapshot.empty);
 
           const preassignedFareProducts =
             getPreassignedFareContractsFromSnapshot(snapshot);
