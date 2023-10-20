@@ -19,20 +19,15 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-    remoteTokens,
-  } = useMobileTokenContextState();
+  const {deviceIsInspectable, fallbackActive, remoteTokens} =
+    useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
   const {customerProfile} = useTicketingState();
   const hasProfileTravelCard = !!customerProfile?.travelcard;
   const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
     tokensEnabled,
-    mobileTokenError,
-    fallbackEnabled,
+    fallbackActive,
     t,
     remoteTokens,
     deviceIsInspectable,
