@@ -94,7 +94,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_non_transit_trip_search: true,
   enable_show_valid_time_info: true,
   enable_loading_screen: true,
-  enable_loading_error_screen: true,
+  enable_loading_error_screen: false,
   token_timeout_in_seconds: 0,
   enable_beacons: false,
 };
