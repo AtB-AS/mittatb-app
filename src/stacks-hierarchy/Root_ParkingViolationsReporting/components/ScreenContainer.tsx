@@ -23,7 +23,6 @@ type Props = PropsWithChildren<{
 }>;
 
 export const ScreenContainer = (props: Props) => {
-  const style = useStyles();
   const {
     leftHeaderButton = {type: 'back'},
     rightHeaderButton,
@@ -41,7 +40,6 @@ export const ScreenContainer = (props: Props) => {
         titleA11yLabel,
         color: 'background_accent_0',
       }}
-      contentContainerStyle={style.contentContainer}
     >
       {isLoading && <LoadingBody />}
       {!isLoading && <ContentBody {...props} />}
@@ -84,12 +82,6 @@ const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
-    backdrop: {
-      backgroundColor: theme.static.background[themeColor].background,
-    },
-    contentContainer: {
-      flex: 1,
-    },
     content: {
       flex: 1,
       paddingVertical: theme.spacings.medium,

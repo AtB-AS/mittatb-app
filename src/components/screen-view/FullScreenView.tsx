@@ -5,7 +5,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
 import {useState} from 'react';
-import {StyleProp, ViewStyle} from 'react-native';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -21,7 +20,6 @@ type Props = {
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
-  contentContainerStyle?: StyleProp<ViewStyle>;
 };
 
 type PropsWithParallaxContent = Props &
@@ -107,12 +105,11 @@ const ChildrenWithParallaxScrollContent = ({
 const ChildrenInNormalScrollView = ({
   refreshControl,
   children,
-  contentContainerStyle,
   backgroundColor,
 }: Props & {backgroundColor: string}) => (
   <ScrollView
     refreshControl={refreshControl}
-    contentContainerStyle={contentContainerStyle}
+    contentContainerStyle={{flexGrow: 1}}
     style={{backgroundColor}}
   >
     {children}
