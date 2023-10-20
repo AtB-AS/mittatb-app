@@ -19,6 +19,7 @@ export enum StorageModelKeysEnum {
   EnableLoadingScreenDebugOverride = '@ATB_loading_screen_debug_override',
   EnableLoadingErrorScreenDebugOverride = '@ATB_loading_error_screen_debug_override',
   EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
+  EnableParkingViolationsReportingDebugOverride = '@ATB_enable_parking_violations_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

@@ -10,11 +10,13 @@ import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomShe
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
 import {MessageBox} from '@atb/components/message-box';
-import {blobToBase64} from './utils';
+import {
+  blobToBase64,
+  useParkingViolations,
+} from '@atb/parking-violations-reporting';
 import {useAuthState} from '@atb/auth';
 import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {useParkingViolations} from './use-parking-violations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQr'>;
