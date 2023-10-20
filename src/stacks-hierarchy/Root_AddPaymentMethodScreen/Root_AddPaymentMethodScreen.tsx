@@ -3,13 +3,13 @@ import React, {useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useAddPaymentMethod} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/use-add-payment-method';
-import {Processing} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithCreditCardScreen/Processing';
 import {dictionary, useTranslation} from '@atb/translations';
 import {MessageBox} from '@atb/components/message-box';
 import {Button} from '@atb/components/button';
 import AddPaymentMethodTexts from '@atb/translations/screens/subscreens/AddPaymentMethodTexts';
 import WebView from 'react-native-webview';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {Processing} from "@atb/components/loading";
 
 type Props = RootStackScreenProps<'Root_AddPaymentMethodScreen'>;
 

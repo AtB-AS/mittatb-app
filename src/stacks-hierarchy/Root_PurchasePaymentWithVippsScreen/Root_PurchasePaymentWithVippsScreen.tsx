@@ -10,7 +10,7 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {Processing} from '../Root_PurchasePaymentWithCreditCardScreen/Processing';
+import {Processing} from '@atb/components/loading';
 import {useVippsState, ErrorContext, State} from './use-vipps-state';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 
