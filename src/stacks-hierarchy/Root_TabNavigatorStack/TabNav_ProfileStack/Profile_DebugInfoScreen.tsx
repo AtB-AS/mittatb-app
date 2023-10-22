@@ -50,6 +50,7 @@ import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {Kettle} from 'react-native-kettle-module';
+import {requestBluetoothPermission} from '@atb/utils/permissions';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -613,6 +614,16 @@ export const Profile_DebugInfoScreen = () => {
                   <ThemeText>{`Identifier: ${kettleIdentifier}`}</ThemeText>
                   <ThemeText>{`Status: ${isKettleStarted}`}</ThemeText>
                   <ThemeText>{`Granted consents: ${kettleConsents}`}</ThemeText>
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={() => {
+                      requestBluetoothPermission((granted) => {
+                        console.log('OK: ', granted);
+                      });
+                    }}
+                    text={'Onboard for beacons'}
+                    testID="nextButtonOnboardingWelcome"
+                  />
                 </View>
               }
             />
