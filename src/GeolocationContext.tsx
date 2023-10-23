@@ -188,7 +188,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     startLocationWatcher();
     return stopLocationWatcher;
-  }, [hasPermission]);
+  }, []);
 
   useOnResume(startLocationWatcher);
   useOnPause(stopLocationWatcher);
