@@ -183,13 +183,15 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }, [hasPermission, geoLocationName, dispatch]);
 
+  const stopLocationWatcher = () => Geolocation.clearWatch(watchIdRef.current);
+
   useEffect(() => {
     startLocationWatcher();
-    return () => Geolocation.clearWatch(watchIdRef.current);
+    return stopLocationWatcher;
   }, [hasPermission]);
 
   useOnResume(startLocationWatcher);
-  useOnPause(() => Geolocation.clearWatch(watchIdRef.current));
+  useOnPause(stopLocationWatcher);
 
   const currentLocationError = state.locationError;
   const appStatus = useAppStateStatus();
