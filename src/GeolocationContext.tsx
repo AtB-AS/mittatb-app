@@ -1,4 +1,11 @@
-import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
 import {Alert, Platform, Rationale} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
@@ -18,6 +25,8 @@ import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
 import {dictionary, useTranslation} from '@atb/translations';
+import {useOnResume} from './utils/use-on-resume';
+import {useOnPause} from './utils/use-on-pause';
 
 type GeolocationState = {
   status: PermissionStatus | null;
@@ -143,39 +152,44 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }
 
+  const watchIdRef = useRef<number>(-1);
+
   const hasPermission = state.status === 'granted' && state.locationEnabled;
-  useEffect(() => {
-    let watchId: number;
 
-    async function startLocationWatcher() {
-      if (!hasPermission) {
-        dispatch({
-          type: 'LOCATION_CHANGED',
-          position: null,
-          locationName: geoLocationName,
-        });
-      } else {
-        const config: GeoOptions = {
-          enableHighAccuracy: true,
-          distanceFilter: 20,
-        };
+  const startLocationWatcher = useCallback(async () => {
+    if (!hasPermission) {
+      dispatch({
+        type: 'LOCATION_CHANGED',
+        position: null,
+        locationName: geoLocationName,
+      });
+    } else {
+      const config: GeoOptions = {
+        enableHighAccuracy: true,
+        distanceFilter: 20,
+      };
 
-        watchId = Geolocation.watchPosition(
-          (position) => {
-            dispatch({
-              type: 'LOCATION_CHANGED',
-              position,
-              locationName: geoLocationName,
-            });
-          },
-          handleLocationError,
-          config,
-        );
-      }
+      watchIdRef.current = Geolocation.watchPosition(
+        (position) => {
+          dispatch({
+            type: 'LOCATION_CHANGED',
+            position,
+            locationName: geoLocationName,
+          });
+        },
+        handleLocationError,
+        config,
+      );
     }
+  }, [hasPermission, geoLocationName, dispatch]);
+
+  useEffect(() => {
     startLocationWatcher();
-    return () => Geolocation.clearWatch(watchId);
+    return () => Geolocation.clearWatch(watchIdRef.current);
   }, [hasPermission]);
+
+  useOnResume(startLocationWatcher);
+  useOnPause(() => Geolocation.clearWatch(watchIdRef.current));
 
   const currentLocationError = state.locationError;
   const appStatus = useAppStateStatus();
