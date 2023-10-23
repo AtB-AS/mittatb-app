@@ -1,12 +1,13 @@
 import {AuthStatus} from '@atb/auth';
 import {RefObject} from 'react';
+import {FirestoreConfigStatus} from '@atb/configuration/types';
 
 export type LoadingStatus = 'loading' | 'success' | 'timeout';
 
 export type LoadingParams = {
   isLoadingAppState: boolean;
   authStatus: AuthStatus;
-  hasFirestoreConfigData: boolean;
+  firestoreConfigStatus: FirestoreConfigStatus;
 };
 
 export type LoadingState = {

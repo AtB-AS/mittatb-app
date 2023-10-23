@@ -36,7 +36,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     const ref = createRef({
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     });
     renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
     expect(mockLoggedEvent).toEqual([
@@ -53,7 +53,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     const ref = createRef({
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     });
     renderHook(() => useLogEventOnTimeoutStatus('loading', ref));
     expect(mockLoggedEvent).toEqual(undefined);
@@ -63,7 +63,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     const ref = createRef({
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     });
     renderHook(() => useLogEventOnTimeoutStatus('success', ref));
     expect(mockLoggedEvent).toEqual(undefined);
@@ -73,7 +73,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     const ref = createRef({
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     });
     const hook = renderHook(
       ({status}) => useLogEventOnTimeoutStatus(status, ref),
@@ -97,7 +97,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     const ref = createRef({
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     });
     const hook = renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
     expect(mockLoggedEvent).toEqual([
@@ -117,7 +117,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     const ref = createRef({
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     });
     const hook = renderHook(
       ({status}) => useLogEventOnTimeoutStatus(status, ref),
@@ -129,7 +129,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     ref.current = {
       isLoadingAppState: true,
       authStatus: 'creating-account',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender({status: 'timeout'});
     expect(mockLoggedEvent).toEqual([
@@ -146,7 +146,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     const ref = createRef({
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     });
     const hook = renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
     expect(mockLoggedEvent).toEqual([
@@ -161,7 +161,7 @@ describe('useLogEventOnTimeoutStatus', () => {
     ref.current = {
       isLoadingAppState: true,
       authStatus: 'creating-account',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(mockLoggedEvent).toEqual(undefined);

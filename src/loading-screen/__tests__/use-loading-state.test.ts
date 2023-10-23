@@ -5,7 +5,7 @@ import {LoadingParams} from '@atb/loading-screen/types';
 const DEFAULT_MOCK_STATE: LoadingParams = {
   isLoadingAppState: true,
   authStatus: 'loading',
-  hasFirestoreConfigData: false,
+  firestoreConfigStatus: 'loading',
 };
 
 let mockState = DEFAULT_MOCK_STATE;
@@ -23,7 +23,7 @@ jest.mock('@atb/auth', () => ({
 }));
 jest.mock('@atb/configuration', () => ({
   useFirestoreConfiguration: () => ({
-    hasFirestoreConfigData: mockState.hasFirestoreConfigData,
+    firestoreConfigStatus: mockState.firestoreConfigStatus,
     resubscribeFirestoreConfig: () => {
       mockRetryFirestoreConfigInvoked = true;
     },
@@ -52,7 +52,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('loading');
@@ -60,7 +60,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: true,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('loading');
@@ -84,7 +84,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     expect(hook.result.current.status).toBe('success');
@@ -97,7 +97,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('success');
@@ -110,7 +110,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('success');
@@ -120,14 +120,14 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     expect(hook.result.current.status).toBe('success');
     mockState = {
       isLoadingAppState: true,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('loading');
@@ -137,7 +137,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -145,7 +145,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: true,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('timeout');
@@ -155,7 +155,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(80));
@@ -163,7 +163,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     hook.rerender();
     expect(hook.result.current.status).toBe('success');
@@ -176,7 +176,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -189,7 +189,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -197,17 +197,17 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     act(() => hook.result.current.retry());
     expect(hook.result.current.status).toBe('success');
   });
 
-  it('Should go to success after retry when receiving firestore config data', async () => {
+  it('Should go to success after retry when receiving firestor config data', async () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: false,
+      firestoreConfigStatus: 'loading',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -215,7 +215,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     act(() => hook.result.current.retry());
     expect(hook.result.current.status).toBe('success');
@@ -225,7 +225,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: true,
       authStatus: 'creating-account',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => hook.result.current.retry());
@@ -236,7 +236,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'creating-account',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -249,7 +249,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: false,
+      firestoreConfigStatus: 'loading',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -262,7 +262,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: true,
       authStatus: 'authenticated',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));
@@ -274,7 +274,7 @@ describe('useLoadingState', () => {
     mockState = {
       isLoadingAppState: false,
       authStatus: 'loading',
-      hasFirestoreConfigData: true,
+      firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
     act(() => jest.advanceTimersByTime(120));

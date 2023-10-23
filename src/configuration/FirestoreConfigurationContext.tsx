@@ -23,6 +23,7 @@ import {
   TariffZone,
   UserProfile,
   MobilityOperatorType,
+  FirestoreConfigStatus,
 } from './types';
 import {
   mapLanguageAndTextType,
@@ -54,7 +55,7 @@ type ConfigurationContextState = {
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
-  hasFirestoreConfigData: boolean;
+  firestoreConfigStatus: FirestoreConfigStatus;
   resubscribeFirestoreConfig: () => void;
 };
 
@@ -91,15 +92,15 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
     HarborConnectionOverrideType[]
   >([]);
-  const [hasFirestoreConfigData, setHasFirestoreConfigData] =
-    useState<boolean>(false); // firestoreConfigDataStatus, 'loading' | 'success'
+  const [firestoreConfigStatus, setFirestoreConfigStatus] =
+    useState<FirestoreConfigStatus>('loading');
 
   const subscribeFirestore = () => {
     firestore()
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          setHasFirestoreConfigData(!snapshot.empty);
+          setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
 
           const preassignedFareProducts =
             getPreassignedFareContractsFromSnapshot(snapshot);
@@ -205,7 +206,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       configurableLinks,
       mobilityOperators,
       harborConnectionOverrides,
-      hasFirestoreConfigData,
+      firestoreConfigStatus,
     };
   }, [
     preassignedFareProducts,
@@ -222,7 +223,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     configurableLinks,
     mobilityOperators,
     harborConnectionOverrides,
-    hasFirestoreConfigData,
+    firestoreConfigStatus,
   ]);
 
   return (
