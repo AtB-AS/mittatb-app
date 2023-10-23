@@ -9,6 +9,7 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
+import {useAnalytics} from '@atb/analytics';
 
 export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   const {
@@ -19,6 +20,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   } = useTicketingState();
   const activeFareContracts =
     filterAndSortActiveOrCanBeUsedFareContracts(fareContracts);
+  const analytics = useAnalytics();
 
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
@@ -32,7 +34,13 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
         reservations={reservations}
         fareContracts={activeFareContracts}
         isRefreshing={isRefreshingFareContracts}
-        refresh={resubscribeFirestoreListeners}
+        refresh={() => {
+          resubscribeFirestoreListeners();
+          analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
+            reservationsCount: reservations.length,
+            activeFareContractsCount: activeFareContracts.length,
+          });
+        }}
         now={now}
         showTokenInfo={true}
         emptyStateTitleText={t(
