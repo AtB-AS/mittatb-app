@@ -1,6 +1,5 @@
 import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
@@ -38,16 +37,19 @@ export function RadioBox({
   const {theme} = useTheme();
   const spacing = useSpacing(type);
 
-  const themeColor: StaticColorByType<'background'> = selected
-    ? 'background_accent_3'
-    : 'background_0';
+  const themeColor = selected
+    ? theme.interactive.interactive_2.active.text
+    : theme.interactive.interactive_2.default.text;
+  console.log('theme' + themeColor);
 
   return (
     <PressableOpacity
       style={[
         styles.container,
         {
-          backgroundColor: theme.static.background[themeColor].background,
+          backgroundColor: selected
+            ? theme.interactive.interactive_2.active.background
+            : theme.interactive.interactive_2.default.background,
           padding: spacing,
         },
         style,
@@ -65,7 +67,7 @@ export function RadioBox({
     >
       <ThemeText
         type="heading__title"
-        color={themeColor}
+        color={themeColor} //TODO: fix tsc
         style={{...styles.title, marginBottom: spacing}}
       >
         {title}
