@@ -623,7 +623,7 @@ export const Profile_DebugInfoScreen = () => {
                     }}
                     disabled={isBeaconsOnboarded}
                     style={style.button}
-                    text="Onboard for beacons"
+                    text="Onboard"
                   />
                   <Button
                     interactiveColor="interactive_0"
@@ -632,7 +632,7 @@ export const Profile_DebugInfoScreen = () => {
                     }}
                     style={style.button}
                     disabled={isKettleStarted || !isBeaconsOnboarded}
-                    text="Start beacons"
+                    text="Start"
                   />
                   <Button
                     interactiveColor="interactive_0"
@@ -641,7 +641,7 @@ export const Profile_DebugInfoScreen = () => {
                     }}
                     style={style.button}
                     disabled={!isKettleStarted}
-                    text="Stop beacons"
+                    text="Stop"
                   />
                 </View>
               }
