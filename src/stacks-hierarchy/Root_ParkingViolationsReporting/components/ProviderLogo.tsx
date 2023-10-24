@@ -42,7 +42,6 @@ const UnknownProvider = ({height, width}: {height: number; width: number}) => {
       style={{
         backgroundColor:
           theme.static.background['background_accent_0'].background,
-        //backgroundColor: 'red',
         height,
         width,
         alignItems: 'center',
