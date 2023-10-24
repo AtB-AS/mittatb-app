@@ -50,6 +50,7 @@ import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {Kettle} from 'react-native-kettle-module';
+import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -94,6 +95,8 @@ export const Profile_DebugInfoScreen = () => {
   const loadingErrorScreenEnabledDebugOverride =
     useLoadingErrorScreenEnabledDebugOverride();
   const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
+  const parkingViolationsReportingEnabledDebugOverride =
+    useParkingViolationsReportingEnabledDebugOverride();
   const [isKettleStarted, setIsKettleStarted] = useState(false);
   const [kettleIdentifier, setKettleIdentifier] = useState();
   const [kettleConsents, setKettleConsents] = useState([]);
@@ -135,7 +138,7 @@ export const Profile_DebugInfoScreen = () => {
     validateToken,
     removeRemoteToken,
     renewToken,
-    fallbackEnabled,
+    fallbackActive,
     isLoading,
     isError,
   } = useMobileTokenContextState();
@@ -351,6 +354,12 @@ export const Profile_DebugInfoScreen = () => {
               override={beaconsEnabledDebugOverride}
             />
           </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable parking violations reporting"
+              override={parkingViolationsReportingEnabledDebugOverride}
+            />
+          </GenericSectionItem>
         </Section>
 
         <Section withPadding withTopPadding>
@@ -544,7 +553,7 @@ export const Profile_DebugInfoScreen = () => {
                       ).toISOString()}`}</ThemeText>
                     </View>
                   )}
-                  <ThemeText>{`Fallback enabled: ${fallbackEnabled}`}</ThemeText>
+                  <ThemeText>{`Fallback active: ${fallbackActive}`}</ThemeText>
                   <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
                   <ThemeText>{`Is error: ${isError}`}</ThemeText>
                   <Button

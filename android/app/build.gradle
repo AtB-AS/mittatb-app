@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 
 apply plugin: "com.facebook.react"
 
+apply plugin: "kotlin-android"
+
 apply from: "../../node_modules/@bugsnag/react-native/bugsnag-react-native.gradle"
 
 /**

@@ -71,6 +71,11 @@ export const MobilityTexts = {
   filter: {
     selectAll: _('Alle', 'All', 'Alle'),
   },
+  reportParkingViolation: _(
+    'Rapporter som feilparkert',
+    'Report as wrongly parked',
+    'Rapporter som feilparkert',
+  ),
 };
 
 export const ScooterTexts = {

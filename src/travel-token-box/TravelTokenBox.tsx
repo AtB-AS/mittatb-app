@@ -151,11 +151,11 @@ export const TravelDeviceTitle = ({
 const ErrorMessages = (alwaysShowErrors?: boolean) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {isError, retry, remoteTokens, fallbackEnabled} =
+  const {isError, isTimedout, retry, remoteTokens, fallbackActive} =
     useMobileTokenContextState();
 
-  if (isError) {
-    return fallbackEnabled && !alwaysShowErrors ? null : (
+  if (isError || isTimedout) {
+    return fallbackActive && !alwaysShowErrors ? null : (
       <MessageBox
         type="warning"
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}

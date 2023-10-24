@@ -91,6 +91,8 @@
 	<string>Du gir tillatelse til å bruke bevegelsesdata til analyse og større forståelse av reisemønster, f.eks. for å skille mellom sykling, gåing og bilkjøring.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send bilder for å hjelpe til med å løse problemer i appen</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(APP_NAME) trenger tilgang til kamera</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>UseLocationIntent</string>

@@ -1,25 +1,17 @@
 import React from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {View} from 'react-native';
-import {
-  isStaticColor,
-  TextColor,
-  StaticColor,
-  getStaticColor,
-} from '@atb/theme/colors';
 
 type CheckedProps = {
   checked: boolean;
-  color?: TextColor | StaticColor;
+  color?: string;
 };
 
 export function RadioIcon({checked, color = 'primary'}: CheckedProps) {
   const styles = useStyles();
-  const {theme, themeName} = useTheme();
+  const {theme} = useTheme();
 
-  const colorValue = isStaticColor(color)
-    ? getStaticColor(themeName, color).text
-    : theme.text.colors[color];
+  const colorValue = color ?? theme.text.colors.primary;
 
   return (
     <View style={[styles.radio, {borderColor: colorValue}]}>
