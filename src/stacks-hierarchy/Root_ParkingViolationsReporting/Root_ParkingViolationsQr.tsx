@@ -4,17 +4,19 @@ import {Camera} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
 import {MessageBox} from '@atb/components/message-box';
-import {blobToBase64} from './utils';
+import {
+  blobToBase64,
+  useParkingViolations,
+} from '@atb/parking-violations-reporting';
 import {useAuthState} from '@atb/auth';
 import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {useParkingViolations} from './use-parking-violations';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQr'>;
@@ -33,13 +35,21 @@ export const Root_ParkingViolationsQr = ({
   const {providers, position} = useParkingViolations();
   const {abtCustomerId} = useAuthState();
 
+  const providersList = useMemo(
+    () => [
+      ...providers,
+      {name: t(ParkingViolationTexts.selectProvider.unknownProvider)},
+    ],
+    [providers],
+  );
+
   useEffect(() => {
     if (isFocused) {
       setCapturedQr(undefined);
     }
   }, [isFocused]);
 
-  const submitReport = async (providerId: number) => {
+  const submitReport = async (providerId?: number) => {
     setIsLoading(true);
     closeBottomSheet();
 
@@ -113,7 +123,7 @@ export const Root_ParkingViolationsQr = ({
   const selectProvider = (qrScanFailed?: boolean) => {
     openBottomSheet(() => (
       <SelectProviderBottomSheet
-        providers={providers}
+        providers={providersList}
         qrScanFailed={qrScanFailed}
         onSelect={(provider) => {
           submitReport(provider.id);
@@ -138,6 +148,7 @@ export const Root_ParkingViolationsQr = ({
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
+      leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}
       buttons={
         <Button
           disabled={isError}
@@ -169,6 +180,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   error: {
-    marginTop: theme.spacings.medium,
+    margin: theme.spacings.medium,
   },
 }));

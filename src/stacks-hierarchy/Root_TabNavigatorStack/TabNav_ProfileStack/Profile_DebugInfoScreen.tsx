@@ -50,6 +50,7 @@ import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {Kettle} from 'react-native-kettle-module';
+import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -94,6 +95,8 @@ export const Profile_DebugInfoScreen = () => {
   const loadingErrorScreenEnabledDebugOverride =
     useLoadingErrorScreenEnabledDebugOverride();
   const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
+  const parkingViolationsReportingEnabledDebugOverride =
+    useParkingViolationsReportingEnabledDebugOverride();
   const [isKettleStarted, setIsKettleStarted] = useState(false);
   const [kettleIdentifier, setKettleIdentifier] = useState();
   const [kettleConsents, setKettleConsents] = useState([]);
@@ -349,6 +352,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable beacons"
               override={beaconsEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable parking violations reporting"
+              override={parkingViolationsReportingEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>

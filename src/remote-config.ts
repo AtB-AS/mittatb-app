@@ -47,6 +47,7 @@ export type RemoteConfig = {
   token_timeout_in_seconds: number;
   enable_beacons: boolean;
   delay_share_travel_habits_screen_by_sessions_count: number;
+  enable_parking_violations_reporting: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -99,6 +100,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   token_timeout_in_seconds: 0,
   enable_beacons: false,
   delay_share_travel_habits_screen_by_sessions_count: 0,
+  enable_parking_violations_reporting: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -266,6 +268,9 @@ export function getConfig(): RemoteConfig {
   const delay_share_travel_habits_screen_by_sessions_count =
     values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
     defaultRemoteConfig.delay_share_travel_habits_screen_by_sessions_count;
+  const enable_parking_violations_reporting =
+    values['enable_parking_violations_reporting']?.asBoolean() ??
+    defaultRemoteConfig.enable_parking_violations_reporting;
 
   return {
     enable_ticketing,
@@ -313,6 +318,7 @@ export function getConfig(): RemoteConfig {
     token_timeout_in_seconds,
     enable_beacons,
     delay_share_travel_habits_screen_by_sessions_count,
+    enable_parking_violations_reporting,
   };
 }
 
