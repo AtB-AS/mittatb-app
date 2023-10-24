@@ -11,6 +11,7 @@
       android:icon="@mipmap/ic_launcher"
       android:allowBackup="false"
       android:theme="@style/BootTheme">
+        <provider android:name="com.kogenta.kettle.core.api.KettleInitializer" android:authorities="${applicationId}.KettleInitializer" tools:node="remove" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -29,6 +30,5 @@
                 <data android:scheme="@string/app_scheme" />
             </intent-filter>
         </activity>
-        <provider android:name="com.kogenta.kettle.core.api.KettleInitializer" android:authorities="${applicationId}.KettleInitializer" tools:node="remove" />
     </application>
 </manifest>

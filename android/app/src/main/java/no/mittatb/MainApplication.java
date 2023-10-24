@@ -1,8 +1,6 @@
 package no.mittatb;
 
 import androidx.multidex.MultiDexApplication;
-
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -20,6 +18,10 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 
 import io.intercom.android.sdk.Intercom;
+
+import com.kogenta.kettle.common.config.KettleConfig;
+import com.kogenta.kettle.common.logging.LogLevel;
+import com.kogenta.kettle.sdk.Kettle;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -72,8 +74,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
-
-  public void addExtraConfigurations(Context context) {}
 
   private void tryInitializeBugsnag() {
     try {
