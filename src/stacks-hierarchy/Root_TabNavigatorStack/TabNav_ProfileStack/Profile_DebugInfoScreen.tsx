@@ -49,8 +49,7 @@ import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-load
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
-import {Kettle} from 'react-native-kettle-module';
-import {requestBluetoothPermission} from '@atb/utils/permissions';
+import {useBeacons} from '@atb/utils/use-beacons';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -64,6 +63,15 @@ export const Profile_DebugInfoScreen = () => {
     restartMobileTokenWithoutTravelcardOnboarding,
     restartOnboarding,
   } = useAppState();
+  const {
+    onboardForBeacons,
+    startBeacons,
+    stopBeacons,
+    isBeaconsOnboarded,
+    kettleIdentifier,
+    isKettleStarted,
+    kettleConsents,
+  } = useBeacons();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {user, abtCustomerId} = useAuthState();
   const [idToken, setIdToken] = useState<
@@ -95,9 +103,6 @@ export const Profile_DebugInfoScreen = () => {
   const loadingErrorScreenEnabledDebugOverride =
     useLoadingErrorScreenEnabledDebugOverride();
   const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
-  const [isKettleStarted, setIsKettleStarted] = useState(false);
-  const [kettleIdentifier, setKettleIdentifier] = useState();
-  const [kettleConsents, setKettleConsents] = useState([]);
 
   useEffect(() => {
     async function run() {
@@ -111,21 +116,6 @@ export const Profile_DebugInfoScreen = () => {
 
     run();
   }, [user]);
-
-  useEffect(() => {
-    async function checkKettleInfo() {
-      const status = await Kettle.isStarted();
-      setIsKettleStarted(status);
-
-      const identifier = await Kettle.getIdentifier();
-      setKettleIdentifier(identifier);
-
-      const consents = await Kettle.getGrantedConsents();
-      setKettleConsents(consents);
-    }
-
-    checkKettleInfo();
-  }, []);
 
   const {
     token,
@@ -613,16 +603,36 @@ export const Profile_DebugInfoScreen = () => {
                 <View>
                   <ThemeText>{`Identifier: ${kettleIdentifier}`}</ThemeText>
                   <ThemeText>{`Status: ${isKettleStarted}`}</ThemeText>
-                  <ThemeText>{`Granted consents: ${kettleConsents}`}</ThemeText>
+                  <ThemeText>{`Granted consents: ${Object.keys(
+                    kettleConsents ?? {},
+                  )}`}</ThemeText>
                   <Button
                     interactiveColor="interactive_0"
-                    onPress={() => {
-                      requestBluetoothPermission((granted) => {
-                        console.log('OK: ', granted);
-                      });
+                    onPress={async () => {
+                      const granted = await onboardForBeacons();
+                      Alert.alert('Onboarding', `Access granted: ${granted}`);
                     }}
-                    text={'Onboard for beacons'}
-                    testID="nextButtonOnboardingWelcome"
+                    disabled={isBeaconsOnboarded}
+                    style={style.button}
+                    text="Onboard for beacons"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      startBeacons();
+                    }}
+                    style={style.button}
+                    disabled={isBeaconsOnboarded && isKettleStarted}
+                    text="Start beacons"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      stopBeacons();
+                    }}
+                    style={style.button}
+                    disabled={!isKettleStarted}
+                    text="Stop beacons"
                   />
                 </View>
               }
