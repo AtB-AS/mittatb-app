@@ -39,7 +39,14 @@ export const Root_ParkingViolationsConfirmation = ({
             ParkingViolationTexts.confirmation.description(params.providerName),
           )}
         </ThemeText>
-        <PressableOpacity style={styles.checkmark} onPress={closeReporting}>
+        <PressableOpacity
+          style={styles.checkmark}
+          onPress={closeReporting}
+          accessibilityLabel={t(
+            ParkingViolationTexts.confirmation.closeA11yHint,
+          )}
+          accessibilityRole="button"
+        >
           <ThemeIcon stroke="#fff" fill="#fff" size="large" svg={Confirm} />
         </PressableOpacity>
       </View>
