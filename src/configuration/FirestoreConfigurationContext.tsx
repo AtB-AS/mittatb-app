@@ -10,7 +10,6 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import Bugsnag from '@bugsnag/react-native';
-import {defaultVatPercent} from '@atb/configuration/defaults';
 import {PaymentType} from '@atb/ticketing';
 import {
   FareProductGroupType,
@@ -35,6 +34,8 @@ import {
   mapToTransportModeFilterOptions,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
+
+export const defaultVatPercent: number = 12;
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
@@ -74,7 +75,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     [],
   );
   const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
-  const [vatPercent, setVatPercent] = useState(defaultVatPercent);
+  const [vatPercent, setVatPercent] = useState<number>(defaultVatPercent);
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
   >([]);
@@ -95,8 +96,11 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
 
-  const subscribeFirestore = () => {
-    firestore()
+  // A toggle to trigger resubscribe. The actual boolean value is not important.
+  const [toggle, setToggle] = useState<boolean>(true);
+
+  const subscribeFirestore = useCallback(() => {
+    return firestore()
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
@@ -184,11 +188,33 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           );
         },
       );
+  }, []);
+
+  const clearState = () => {
+    setFirestoreConfigStatus('loading');
+    setPreassignedFareProducts([]);
+    setTariffZones([]);
+    setCityZones([]);
+    setUserProfiles([]);
+    setModesWeSellTicketsFor([]);
+    setPaymentTypes([]);
+    setVatPercent(defaultVatPercent);
+    setFareProductTypeConfigs([]);
+    setFareProductGroups([]);
+    setTravelSearchFilters(undefined);
+    setAppTexts(undefined);
+    setConfigurableLinks(undefined);
+    setMobilityOperators([]);
+    setHarborConnectionOverrides([]);
   };
 
   useEffect(() => {
-    subscribeFirestore();
-  }, []);
+    const unsubscribeFirestore = subscribeFirestore();
+    return () => {
+      clearState();
+      unsubscribeFirestore();
+    };
+  }, [toggle, subscribeFirestore]);
 
   const memoizedState = useMemo(() => {
     return {
@@ -230,7 +256,10 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     <FirestoreConfigurationContext.Provider
       value={{
         ...memoizedState,
-        resubscribeFirestoreConfig: useCallback(() => subscribeFirestore(), []),
+        resubscribeFirestoreConfig: useCallback(
+          () => setToggle((prev) => !prev),
+          [],
+        ),
       }}
     >
       {children}
