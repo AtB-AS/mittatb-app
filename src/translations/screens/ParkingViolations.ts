@@ -7,6 +7,7 @@ export const ParkingViolationTexts = {
       'Report scooter parking violations',
       'Rapporter feilparkering av sparkesykkel',
     ),
+    description: _('Velg feil', 'Select violation', 'Velg feil'),
     violationDescription: (code: string) => {
       switch (code) {
         case 'no_parking':
