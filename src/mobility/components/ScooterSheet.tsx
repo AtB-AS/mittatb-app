@@ -30,6 +30,7 @@ import {useBenefits} from '@atb/mobility/use-benefits';
 import {Button} from '@atb/components/button';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
 
 type Props = {
   vehicleId: VehicleId;
@@ -67,6 +68,8 @@ export const ScooterSheet = ({
     appStoreUri,
     rentalAppUri,
   });
+  const [isParkingViolationsReportingEnabled] =
+    useParkingViolationsReportingEnabled();
 
   // The data model handles multiple benefits per operator,
   // but we currently know there is only one,
@@ -152,13 +155,15 @@ export const ScooterSheet = ({
                   interactiveColor="interactive_0"
                 />
               )}
-              <Button
-                text={t(MobilityTexts.reportParkingViolation)}
-                mode="secondary"
-                interactiveColor="interactive_2"
-                onPress={onReportParkingViolation}
-                rightIcon={{svg: ArrowRight}}
-              />
+              {isParkingViolationsReportingEnabled && (
+                <Button
+                  text={t(MobilityTexts.reportParkingViolation)}
+                  mode="secondary"
+                  interactiveColor="interactive_2"
+                  onPress={onReportParkingViolation}
+                  rightIcon={{svg: ArrowRight}}
+                />
+              )}
             </View>
           </>
         )}

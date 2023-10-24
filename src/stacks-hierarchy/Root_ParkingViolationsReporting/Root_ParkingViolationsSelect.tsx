@@ -12,8 +12,10 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectGroup} from './components/SelectGroup';
-import {useParkingViolations} from './use-parking-violations';
-import {PermissionRequiredError} from './use-user-location';
+import {
+  useParkingViolations,
+  PermissionRequiredError,
+} from '@atb/parking-violations-reporting';
 
 export type SelectViolationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsSelect'>;
