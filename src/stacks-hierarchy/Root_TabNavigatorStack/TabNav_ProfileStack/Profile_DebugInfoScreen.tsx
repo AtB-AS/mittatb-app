@@ -611,7 +611,9 @@ export const Profile_DebugInfoScreen = () => {
               expandContent={
                 <View>
                   <ThemeText>{`Identifier: ${kettleIdentifier}`}</ThemeText>
-                  <ThemeText>{`Status: ${isKettleStarted}`}</ThemeText>
+                  <ThemeText>{`Status: ${
+                    isKettleStarted ? 'Running' : 'Stopped'
+                  }`}</ThemeText>
                   <ThemeText>{`Granted consents: ${kettleConsents}`}</ThemeText>
                   <Button
                     interactiveColor="interactive_0"
