@@ -71,9 +71,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    // Store the KETTLE_API_KEY in a constant
-    def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
-
     namespace "no.mittatb"
     defaultConfig {
         resValue "string", "app_name", appName
@@ -90,10 +87,8 @@ android {
         } else {
             versionCode appVersionCode.toInteger()
         }
-
-        // This is fetched inside Java / Kotlin code
-        buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
     }
+
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
