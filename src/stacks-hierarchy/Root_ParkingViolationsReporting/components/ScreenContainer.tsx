@@ -22,15 +22,14 @@ type Props = PropsWithChildren<{
   isLoading?: boolean;
 }>;
 
-export const ScreenContainer = (props: Props) => {
-  const {
-    leftHeaderButton = {type: 'back'},
-    rightHeaderButton,
-    title,
-    titleA11yLabel,
-    isLoading = false,
-  } = props;
-
+export const ScreenContainer = ({
+  leftHeaderButton,
+  rightHeaderButton,
+  title,
+  titleA11yLabel,
+  isLoading = false,
+  ...props
+}: Props) => {
   return (
     <FullScreenView
       headerProps={{
