@@ -138,6 +138,7 @@ export const Root_ParkingViolationsQr = ({
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
+      leftHeaderButton={isLoading ? {type: 'none'} : {type: 'back'}}
       buttons={
         <Button
           disabled={isError}
@@ -169,6 +170,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   error: {
-    marginTop: theme.spacings.medium,
+    margin: theme.spacings.medium,
   },
 }));
