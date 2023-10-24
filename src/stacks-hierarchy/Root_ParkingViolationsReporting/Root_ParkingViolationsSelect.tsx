@@ -37,6 +37,7 @@ export const Root_ParkingViolationsSelect = ({
     <ScreenContainer
       leftHeaderButton={{type: 'close'}}
       title={t(ParkingViolationTexts.selectViolation.title)}
+      secondaryText={t(ParkingViolationTexts.selectViolation.description)}
       buttons={
         <Button
           disabled={isError}

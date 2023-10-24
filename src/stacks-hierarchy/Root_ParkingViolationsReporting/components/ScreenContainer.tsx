@@ -22,27 +22,18 @@ type Props = PropsWithChildren<{
   isLoading?: boolean;
 }>;
 
-export const ScreenContainer = ({
-  leftHeaderButton,
-  rightHeaderButton,
-  title,
-  titleA11yLabel,
-  isLoading = false,
-  ...props
-}: Props) => {
+export const ScreenContainer = (props: Props) => {
   return (
     <FullScreenView
       headerProps={{
-        leftButton: leftHeaderButton,
-        rightButton: rightHeaderButton,
-        title,
-        titleA11yLabel,
+        leftButton: props.leftHeaderButton,
+        rightButton: props.rightHeaderButton,
         color: 'background_accent_0',
       }}
       contentColor={themeColor}
     >
-      {isLoading && <LoadingBody />}
-      {!isLoading && <ContentBody {...props} />}
+      {props.isLoading && <LoadingBody />}
+      {!props.isLoading && <ContentBody {...props} />}
     </FullScreenView>
   );
 };
