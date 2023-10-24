@@ -63,7 +63,7 @@ export const useBeacons = () => {
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
 
-    var granted = false;
+    let granted = false;
     if (Platform.OS === 'ios') {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
       granted = await NativeModules.BeaconsPermissions.request();
