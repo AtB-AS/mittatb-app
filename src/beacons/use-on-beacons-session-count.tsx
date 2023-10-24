@@ -1,20 +1,28 @@
-import {useOnResume} from '@atb/utils/use-on-resume';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useIsBeaconsEnabled} from './use-is-beacons-enabled';
 import {storage} from '@atb/storage';
 
+import {useAppStateStatus} from '@atb/utils/use-app-state-status';
+import {usePrevious} from '@atb/utils/use-previous';
+
 export const useOnBeaconsSessionCount = (
-  count: number,
+  runOnCount: number,
   runOnCountFunc: () => void,
   keyAppendix: string, // appendix to ensure unique storage keys
 ) => {
-  const beaconsSessionCount = useBeaconsSessionCounter(count + 1, keyAppendix);
+  const beaconsSessionCount = useBeaconsSessionCounter(
+    runOnCount + 1,
+    keyAppendix,
+  );
 
   useEffect(() => {
-    if (beaconsSessionCount !== undefined && beaconsSessionCount === count) {
+    if (
+      beaconsSessionCount !== undefined &&
+      beaconsSessionCount === runOnCount
+    ) {
       runOnCountFunc();
     }
-  }, [beaconsSessionCount]);
+  }, [beaconsSessionCount, runOnCountFunc, runOnCount]);
 };
 
 enum storeKey {
@@ -32,13 +40,19 @@ const useBeaconsSessionCounter = (
   const [isBeaconsEnabled, isBeaconsEnabledDebugOverrideReady] =
     useIsBeaconsEnabled();
 
-  const setStoredBeaconsSessionCount = async (count: number) => {
-    setBeaconsSessionCount(count);
-    await storage.set(
-      storeKey.beaconsSessionCountKey + keyAppendix,
-      JSON.stringify(count),
-    );
-  };
+  const appStatus = useAppStateStatus();
+  const prevAppStatus = usePrevious(appStatus);
+
+  const setStoredBeaconsSessionCount = useCallback(
+    async (count: number) => {
+      setBeaconsSessionCount(count);
+      await storage.set(
+        storeKey.beaconsSessionCountKey + keyAppendix,
+        JSON.stringify(count),
+      );
+    },
+    [keyAppendix],
+  );
 
   useEffect(() => {
     const loadStoredBeaconsSessionCount = async () => {
@@ -53,16 +67,24 @@ const useBeaconsSessionCounter = (
       }
     };
     loadStoredBeaconsSessionCount();
-  }, []); // load and conditionally increase count on app open
+  }, [setStoredBeaconsSessionCount, keyAppendix, stopCountingOn]); // load and conditionally increase count on app open
 
-  useOnResume(() => {
+  useEffect(() => {
     if (
+      appStatus === 'active' &&
+      prevAppStatus !== 'active' &&
       beaconsSessionCount !== undefined &&
       beaconsSessionCount < stopCountingOn
     ) {
       setStoredBeaconsSessionCount(beaconsSessionCount + 1);
     }
-  }); // increase count on app resume
+  }, [
+    appStatus,
+    beaconsSessionCount,
+    setStoredBeaconsSessionCount,
+    stopCountingOn,
+    prevAppStatus,
+  ]);
 
   useEffect(() => {
     if (
@@ -72,7 +94,12 @@ const useBeaconsSessionCounter = (
     ) {
       setStoredBeaconsSessionCount(0); // restart count when beacons disabled
     }
-  }, [isBeaconsEnabled, isBeaconsEnabledDebugOverrideReady]);
+  }, [
+    isBeaconsEnabled,
+    isBeaconsEnabledDebugOverrideReady,
+    beaconsSessionCount,
+    setStoredBeaconsSessionCount,
+  ]);
 
   return beaconsSessionCount;
 };
