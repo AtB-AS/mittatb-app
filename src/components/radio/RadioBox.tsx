@@ -1,9 +1,10 @@
-import {View, ViewStyle} from 'react-native';
+import {TextStyle, View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {InteractiveColor} from '@atb/theme/colors';
 
 type ContainerSizingType = 'compact' | 'standard' | 'spacious';
 
@@ -19,6 +20,7 @@ type Props = {
   onPress: () => void;
   style?: ViewStyle;
   testID?: string;
+  interactiveColor?: InteractiveColor;
 };
 export function RadioBox({
   title,
@@ -32,24 +34,22 @@ export function RadioBox({
   onPress,
   style,
   testID,
+  interactiveColor = 'interactive_2',
 }: Props) {
   const styles = useStyles();
   const {theme} = useTheme();
   const spacing = useSpacing(type);
 
-  const themeColor = selected
-    ? theme.interactive.interactive_2.active.text
-    : theme.interactive.interactive_2.default.text;
-  console.log('theme' + themeColor);
+  const {background: backgroundColor, text: textColor} =
+    theme.interactive[interactiveColor][selected ? 'active' : 'default'];
+  const styleText: TextStyle = {color: textColor};
 
   return (
     <PressableOpacity
       style={[
         styles.container,
         {
-          backgroundColor: selected
-            ? theme.interactive.interactive_2.active.background
-            : theme.interactive.interactive_2.default.background,
+          backgroundColor: backgroundColor,
           padding: spacing,
         },
         style,
@@ -67,16 +67,14 @@ export function RadioBox({
     >
       <ThemeText
         type="heading__title"
-        color={themeColor} //TODO: fix tsc
-        style={{...styles.title, marginBottom: spacing}}
+        style={[{...styles.title, marginBottom: spacing}, styleText]}
       >
         {title}
       </ThemeText>
       <View style={{...styles.icon, marginBottom: spacing}}>{icon}</View>
       <ThemeText
         type="body__secondary"
-        color={themeColor}
-        style={{...styles.description, marginBottom: spacing}}
+        style={[{...styles.description, marginBottom: spacing}, styleText]}
         accessible={false}
       >
         {description}
@@ -85,7 +83,7 @@ export function RadioBox({
         style={styles.radioIcon}
         testID={testID + (selected ? 'RadioChecked' : 'RadioNotChecked')}
       >
-        <RadioIcon checked={selected} color={themeColor} />
+        <RadioIcon checked={selected} color={textColor} />
       </View>
     </PressableOpacity>
   );

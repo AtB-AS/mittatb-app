@@ -11,7 +11,7 @@ export function RadioIcon({checked, color = 'primary'}: CheckedProps) {
   const styles = useStyles();
   const {theme} = useTheme();
 
-  const colorValue = color ? color : theme.text.colors.primary;
+  const colorValue = color ?? theme.text.colors.primary;
 
   return (
     <View style={[styles.radio, {borderColor: colorValue}]}>
