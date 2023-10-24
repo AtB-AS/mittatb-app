@@ -51,7 +51,7 @@ export const TicketSummary = () => {
   const days = Math.min(inputDuration, daysInWeek);
   const numberOfTravels = Math.ceil(effectiveDuration * (frequency / days));
 
-  const savings =
+  const priceDiff =
     numberOfTravels * recommendedTicketSummary.singleTicketPrice - ticket.price;
 
   const ticketPriceString = `${formatDecimalNumber(
@@ -73,19 +73,19 @@ export const TicketSummary = () => {
   let savingsText;
 
   if (ticket.duration !== 0) {
-    if (savings < 0) {
+    if (priceDiff < 0) {
       savingsText = t(
         TicketAssistantTexts.summary.lossNotice({
           numberOfTickets: numberOfTravels.toString(),
-          totalLoss: formatDecimalNumber(-savings, language, 2),
+          priceDiff: formatDecimalNumber(Math.abs(priceDiff), language, 2),
         }),
       );
-    } else if (savings === 0) {
+    } else if (priceDiff === 0) {
       savingsText = t(TicketAssistantTexts.summary.equalPriceNotice);
     } else {
       savingsText = t(
         TicketAssistantTexts.summary.savings({
-          totalSavings: formatDecimalNumber(savings, language, 2),
+          totalSavings: formatDecimalNumber(priceDiff, language, 2),
           perTripSavings: formatDecimalNumber(
             recommendedTicketSummary.singleTicketPrice - perTripPrice,
             language,

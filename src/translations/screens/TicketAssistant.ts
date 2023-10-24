@@ -217,11 +217,11 @@ const TicketAssistantTexts = {
         `For ${data.frequency} trips per week until ${data.date}`,
         `For ${data.frequency} turar i veka fram til ${data.date}`,
       ),
-    lossNotice: (data: {numberOfTickets: string; totalLoss: string}) =>
+    lossNotice: (data: {numberOfTickets: string; priceDiff: string}) =>
       _(
-        `Med ${data.numberOfTickets} enkeltbilletter, sparer du ${data.totalLoss} kr. Likevel anbefaler vi periodebillett for mer fleksibilitet.`,
-        `With ${data.numberOfTickets} single tickets, you save ${data.totalLoss} kr. However, we recommend a period ticket for more flexibility.`,
-        `Med ${data.numberOfTickets} enkeltbilletter, sparar du ${data.totalLoss} kr. Likevel tilrår vi periodebilletten for meir fleksibilitet.`,
+        `Med ${data.numberOfTickets} enkeltbilletter, sparer du ${data.priceDiff} kr. Likevel anbefaler vi periodebillett for mer fleksibilitet.`,
+        `With ${data.numberOfTickets} single tickets, you save ${data.priceDiff} kr. However, we recommend a period ticket for more flexibility.`,
+        `Med ${data.numberOfTickets} enkeltbilletter, sparar du ${data.priceDiff} kr. Likevel tilrår vi periodebilletten for meir fleksibilitet.`,
       ),
 
     savings: (data: {
