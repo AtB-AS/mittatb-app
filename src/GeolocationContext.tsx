@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-} from 'react';
+import React, {createContext, useContext, useEffect, useReducer} from 'react';
 import {Alert, Platform, Rationale} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
@@ -25,8 +18,11 @@ import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
 import {dictionary, useTranslation} from '@atb/translations';
-import {useOnResume} from './utils/use-on-resume';
-import {useOnPause} from './utils/use-on-pause';
+
+const config: GeoOptions = {
+  enableHighAccuracy: true,
+  distanceFilter: 20,
+};
 
 type GeolocationState = {
   status: PermissionStatus | null;
@@ -121,6 +117,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     geolocationReducer,
     defaultState,
   );
+  const appStatus = useAppStateStatus();
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
 
@@ -152,60 +149,40 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }
 
-  const watchIdRef = useRef<number>(-1);
-
   const hasPermission = state.status === 'granted' && state.locationEnabled;
 
-  const startLocationWatcher = useCallback(async () => {
-    if (!hasPermission) {
-      dispatch({
-        type: 'LOCATION_CHANGED',
-        position: null,
-        locationName: geoLocationName,
-      });
-    } else {
-      const config: GeoOptions = {
-        enableHighAccuracy: true,
-        distanceFilter: 20,
-      };
-
-      watchIdRef.current = Geolocation.watchPosition(
-        (position) => {
-          dispatch({
-            type: 'LOCATION_CHANGED',
-            position,
-            locationName: geoLocationName,
-          });
-        },
-        handleLocationError,
-        config,
-      );
-    }
-  }, [hasPermission, geoLocationName, dispatch]);
-
-  const stopLocationWatcher = () => Geolocation.clearWatch(watchIdRef.current);
+  const updateLocation = (position: GeoPosition | null, locationName: string) =>
+    dispatch({
+      type: 'LOCATION_CHANGED',
+      position,
+      locationName,
+    });
 
   useEffect(() => {
-    startLocationWatcher();
-    return stopLocationWatcher;
-  }, []);
-
-  useOnResume(startLocationWatcher);
-  useOnPause(stopLocationWatcher);
+    if (appStatus === 'active') {
+      if (!hasPermission) {
+        updateLocation(null, geoLocationName);
+      } else {
+        const watchId = Geolocation.watchPosition(
+          (position) => updateLocation(position, geoLocationName),
+          handleLocationError,
+          config,
+        );
+        return () => Geolocation.clearWatch(watchId);
+      }
+    }
+  }, [geoLocationName, hasPermission, appStatus]);
 
   const currentLocationError = state.locationError;
-  const appStatus = useAppStateStatus();
+
   useEffect(() => {
     if (!!currentLocationError && appStatus === 'active') {
-      Geolocation.getCurrentPosition((position) => {
-        dispatch({
-          type: 'LOCATION_CHANGED',
-          position,
-          locationName: geoLocationName,
-        });
-      }, handleLocationError);
+      Geolocation.getCurrentPosition(
+        (position) => updateLocation(position, geoLocationName),
+        handleLocationError,
+      );
     }
-  }, [currentLocationError, appStatus]);
+  }, [currentLocationError, appStatus, geoLocationName]);
 
   useEffect(() => {
     async function checkPermission() {
