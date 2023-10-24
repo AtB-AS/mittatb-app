@@ -4,7 +4,7 @@ import {Camera} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
@@ -32,6 +32,14 @@ export const Root_ParkingViolationsQr = ({
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {providers, position} = useParkingViolations();
   const {abtCustomerId} = useAuthState();
+
+  const providersList = useMemo(
+    () => [
+      ...providers,
+      {name: t(ParkingViolationTexts.selectProvider.unknownProvider)},
+    ],
+    [providers],
+  );
 
   useEffect(() => {
     if (isFocused) {
@@ -113,10 +121,7 @@ export const Root_ParkingViolationsQr = ({
   const selectProvider = (qrScanFailed?: boolean) => {
     openBottomSheet(() => (
       <SelectProviderBottomSheet
-        providers={[
-          ...providers,
-          {name: t(ParkingViolationTexts.selectProvider.unknownProvider)},
-        ]}
+        providers={providersList}
         qrScanFailed={qrScanFailed}
         onSelect={(provider) => {
           submitReport(provider.id);
