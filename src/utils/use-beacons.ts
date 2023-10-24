@@ -6,6 +6,13 @@ import {Kettle, KettleModules} from 'react-native-kettle-module';
 import {KettleConsents} from 'react-native-kettle-module';
 import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
+let BEACONS_CONSENTS = [
+  KettleConsents.SURVEYS,
+  KettleConsents.ANALYTICS,
+  KettleConsents.CAMPAIGNS,
+  KettleConsents.ADS,
+];
+
 export const useBeacons = () => {
   const [isBeaconsEnabled] = useIsBeaconsEnabled();
   const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY;
@@ -72,12 +79,7 @@ export const useBeacons = () => {
     }
 
     if (granted) {
-      Kettle.grant([
-        KettleConsents.SURVEYS,
-        KettleConsents.ANALYTICS,
-        KettleConsents.CAMPAIGNS,
-        KettleConsents.ADS,
-      ]);
+      Kettle.grant(BEACONS_CONSENTS);
     }
 
     return granted;
