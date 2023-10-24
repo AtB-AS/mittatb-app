@@ -16,25 +16,25 @@ type Props = PropsWithChildren<{
   title?: string;
   titleA11yLabel?: string;
   secondaryText?: string;
-  leftHeaderButton?: LeftButtonProps;
+  leftHeaderButton?: {type: 'none'} | LeftButtonProps;
   rightHeaderButton?: RightButtonProps;
   buttons?: ReactNode;
   isLoading?: boolean;
 }>;
 
-export const ScreenContainer = (props: Props) => {
-  const {
-    leftHeaderButton = {type: 'back'},
-    rightHeaderButton,
-    title,
-    titleA11yLabel,
-    isLoading = false,
-  } = props;
-
+export const ScreenContainer = ({
+  leftHeaderButton = {type: 'back', withIcon: true},
+  rightHeaderButton,
+  title,
+  titleA11yLabel,
+  isLoading = false,
+  ...props
+}: Props) => {
   return (
     <FullScreenView
       headerProps={{
-        leftButton: leftHeaderButton,
+        leftButton:
+          leftHeaderButton?.type !== 'none' ? leftHeaderButton : undefined,
         rightButton: rightHeaderButton,
         title,
         titleA11yLabel,

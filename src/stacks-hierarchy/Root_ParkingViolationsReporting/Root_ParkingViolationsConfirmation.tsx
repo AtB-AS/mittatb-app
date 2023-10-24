@@ -35,6 +35,7 @@ export const Root_ParkingViolationsConfirmation = ({
 
   return (
     <ScreenContainer
+      leftHeaderButton={{type: 'none'}}
       rightHeaderButton={{type: 'close', onPress: closeReporting}}
     >
       <View style={styles.confirmation}>
