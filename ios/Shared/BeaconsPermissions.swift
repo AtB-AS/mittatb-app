@@ -23,22 +23,43 @@ class BeaconsPermissions: NSObject, CLLocationManagerDelegate, CBCentralManagerD
       return
     }
 
-    requestWhileInUseLocation()
+    self.requestWhileInUseLocation()
   }
 
   @objc func requestWhileInUseLocation() {
     locationManager.delegate = self
-    locationManager.requestWhenInUseAuthorization()
+    let currentStatus = CLLocationManager.authorizationStatus()
+
+    // Already authorized
+    if currentStatus == .authorizedWhenInUse {
+      return requestAlwaysLocation()
+    }
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
+      locationManager.requestWhenInUseAuthorization()
+    }
   }
 
   @objc func requestAlwaysLocation() {
     locationManager.delegate = self
-    locationManager.requestAlwaysAuthorization()
+    let currentStatus = CLLocationManager.authorizationStatus()
+    
+    // Already authorized
+    if currentStatus == .authorizedAlways {
+      requestMotionPermission { [self] granted in
+        resolve?(granted)
+      }
+      return
+    }
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
+      locationManager.requestAlwaysAuthorization()
+    }
   }
 
   private func requestMotionPermission(completion: @escaping (Bool) -> Void) {
       if CMMotionActivityManager.isActivityAvailable() {
-        motionManager.queryActivityStarting(from: Date(), to: Date(), to: .main, withHandler: { _,_  in
+        motionManager.queryActivityStarting(from: Date(), to: Date(), to: .main, withHandler: { _, _  in
           completion(CMMotionActivityManager.authorizationStatus() == .authorized)
           self.motionManager.stopActivityUpdates()
         })
@@ -49,9 +70,7 @@ class BeaconsPermissions: NSObject, CLLocationManagerDelegate, CBCentralManagerD
 
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     if status == .authorizedWhenInUse {
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-        self.requestAlwaysLocation()
-      }
+      self.requestAlwaysLocation()
     } else if status == .authorizedAlways {
       requestMotionPermission { [self] granted in
         resolve?(granted)
@@ -61,7 +80,7 @@ class BeaconsPermissions: NSObject, CLLocationManagerDelegate, CBCentralManagerD
     }
   }
 
-  @objc func request(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+  @objc func request(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     self.resolve = resolve
     requestBluetoothPermission()
   }
