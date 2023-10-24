@@ -16,14 +16,14 @@ type Props = PropsWithChildren<{
   title?: string;
   titleA11yLabel?: string;
   secondaryText?: string;
-  leftHeaderButton?: {type: 'none'} | LeftButtonProps;
+  leftHeaderButton?: LeftButtonProps;
   rightHeaderButton?: RightButtonProps;
   buttons?: ReactNode;
   isLoading?: boolean;
 }>;
 
 export const ScreenContainer = ({
-  leftHeaderButton = {type: 'back', withIcon: true},
+  leftHeaderButton,
   rightHeaderButton,
   title,
   titleA11yLabel,
@@ -33,8 +33,7 @@ export const ScreenContainer = ({
   return (
     <FullScreenView
       headerProps={{
-        leftButton:
-          leftHeaderButton?.type !== 'none' ? leftHeaderButton : undefined,
+        leftButton: leftHeaderButton,
         rightButton: rightHeaderButton,
         title,
         titleA11yLabel,

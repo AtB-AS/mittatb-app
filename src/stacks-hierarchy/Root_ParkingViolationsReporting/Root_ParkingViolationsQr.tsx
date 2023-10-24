@@ -141,7 +141,7 @@ export const Root_ParkingViolationsQr = ({
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
-      leftHeaderButton={isLoading ? {type: 'none'} : {type: 'back'}}
+      leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}
       buttons={
         <Button
           disabled={isError}
