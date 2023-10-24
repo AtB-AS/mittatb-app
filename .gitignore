@@ -85,7 +85,6 @@ assets/bootsplash_logo*.png
 ios/atb/BootSplash.storyboard
 ios/atb/Images.xcassets/BootSplashLogo.imageset/bootsplash_logo*.png
 /ios/ios-devices.txt
-android/app/src/kettle
 
 #Service files
 android/app/google-services.json

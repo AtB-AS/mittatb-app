@@ -21,10 +21,6 @@ import java.util.List;
 
 import io.intercom.android.sdk.Intercom;
 
-import com.kogenta.kettle.common.config.KettleConfig;
-import com.kogenta.kettle.common.logging.LogLevel;
-import com.kogenta.kettle.sdk.Kettle;
-
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
