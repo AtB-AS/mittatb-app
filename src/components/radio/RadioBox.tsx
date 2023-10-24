@@ -1,4 +1,4 @@
-import {TextStyle, View, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
@@ -40,9 +40,9 @@ export function RadioBox({
   const {theme} = useTheme();
   const spacing = useSpacing(type);
 
-  const {background: backgroundColor, text: textColor} =
+  const themeColor =
     theme.interactive[interactiveColor][selected ? 'active' : 'default'];
-  const styleText: TextStyle = {color: textColor};
+  const {background: backgroundColor, text: textColor} = themeColor;
 
   return (
     <PressableOpacity
@@ -67,14 +67,16 @@ export function RadioBox({
     >
       <ThemeText
         type="heading__title"
-        style={[{...styles.title, marginBottom: spacing}, styleText]}
+        color={themeColor}
+        style={{...styles.title, marginBottom: spacing}}
       >
         {title}
       </ThemeText>
       <View style={{...styles.icon, marginBottom: spacing}}>{icon}</View>
       <ThemeText
         type="body__secondary"
-        style={[{...styles.description, marginBottom: spacing}, styleText]}
+        color={themeColor}
+        style={{...styles.description, marginBottom: spacing}}
         accessible={false}
       >
         {description}
