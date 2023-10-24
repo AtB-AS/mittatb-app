@@ -6,7 +6,7 @@ import {Kettle, KettleModules} from 'react-native-kettle-module';
 import {KettleConsents} from 'react-native-kettle-module';
 import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
-let BEACONS_CONSENTS = [
+const BEACONS_CONSENTS = [
   KettleConsents.SURVEYS,
   KettleConsents.ANALYTICS,
   KettleConsents.CAMPAIGNS,
