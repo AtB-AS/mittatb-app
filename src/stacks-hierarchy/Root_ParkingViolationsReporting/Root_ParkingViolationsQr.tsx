@@ -39,7 +39,7 @@ export const Root_ParkingViolationsQr = ({
     }
   }, [isFocused]);
 
-  const submitReport = async (providerId: number) => {
+  const submitReport = async (providerId?: number) => {
     setIsLoading(true);
     closeBottomSheet();
 
@@ -113,7 +113,10 @@ export const Root_ParkingViolationsQr = ({
   const selectProvider = (qrScanFailed?: boolean) => {
     openBottomSheet(() => (
       <SelectProviderBottomSheet
-        providers={providers}
+        providers={[
+          ...providers,
+          {name: t(ParkingViolationTexts.selectProvider.unknownProvider)},
+        ]}
         qrScanFailed={qrScanFailed}
         onSelect={(provider) => {
           submitReport(provider.id);

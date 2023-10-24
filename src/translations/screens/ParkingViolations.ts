@@ -89,6 +89,7 @@ export const ParkingViolationTexts = {
       'Unfortunately, we do not recognize the QR code, but you can enter the provider manually.',
       'Dessverre kjenner vi ikkje igjen QR-koden, men du kan velje utleigefirmaet manuelt.',
     ),
+    unknownProvider: _('Ukjent firma', 'Unknown provider', 'Ukjend firma'),
   },
   vehicleLookup: {
     title: _('Sparkesykkel funnet', 'Scooter found', 'Sparkesykkel funnen'),
