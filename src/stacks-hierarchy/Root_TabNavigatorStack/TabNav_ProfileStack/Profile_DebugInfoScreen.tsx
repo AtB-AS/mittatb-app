@@ -619,16 +619,16 @@ export const Profile_DebugInfoScreen = () => {
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      startBeacons();
+                      await startBeacons();
                     }}
                     style={style.button}
-                    disabled={isBeaconsOnboarded && isKettleStarted}
+                    disabled={isKettleStarted || !isBeaconsOnboarded}
                     text="Start beacons"
                   />
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      stopBeacons();
+                      await stopBeacons();
                     }}
                     style={style.button}
                     disabled={!isKettleStarted}
