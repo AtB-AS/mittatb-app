@@ -216,9 +216,7 @@ export function isLegFlexibleTransport(leg: Leg): boolean {
   return !!leg.line?.flexibleLineType;
 }
 
-export function getPublicCodeFromLeg(leg: Leg): string {
-  return leg.fromPlace?.quay?.publicCode || leg.line?.publicCode || '';
-}
+export const getPublicCodeFromLeg = (leg: Leg) => leg.line?.publicCode || '';
 
 export function getLatestBookingDateFromLeg(leg: Leg): Date {
   const latestBookingTime = leg.bookingArrangements?.latestBookingTime; // e.g. '15:16:00'
