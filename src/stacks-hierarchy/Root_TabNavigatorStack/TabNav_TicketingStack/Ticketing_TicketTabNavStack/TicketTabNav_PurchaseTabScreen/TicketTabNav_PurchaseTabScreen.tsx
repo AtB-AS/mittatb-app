@@ -21,7 +21,7 @@ import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
 import {useHarborsQuery} from '@atb/queries';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {TariffZone} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 

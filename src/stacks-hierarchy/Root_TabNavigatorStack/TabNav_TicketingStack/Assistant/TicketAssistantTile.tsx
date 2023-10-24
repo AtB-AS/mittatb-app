@@ -1,13 +1,13 @@
 import {StyleSheet} from '@atb/theme';
-
 import {View} from 'react-native';
 import {screenReaderPause} from '@atb/components/text';
 import React from 'react';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-
-import {FareProductTypeConfig} from '@atb-as/config-specs';
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {isProductSellableInApp} from '@atb/reference-data/utils';
+import {
+  isProductSellableInApp,
+  FareProductTypeConfig,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {useTicketingState} from '@atb/ticketing';
 import {TicketingTile} from '../TicketingTile';
 

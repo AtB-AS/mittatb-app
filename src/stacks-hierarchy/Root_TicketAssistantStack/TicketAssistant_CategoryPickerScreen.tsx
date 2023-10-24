@@ -15,7 +15,7 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName} from '@atb/configuration';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';

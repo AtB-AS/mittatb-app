@@ -2,7 +2,7 @@ import React, {forwardRef} from 'react';
 import {ZonesSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ZonesSelection';
 import {HarborSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/HarborSelection';
 import {FareProductTypeConfig} from '@atb/configuration';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/configuration';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StyleProp, ViewStyle} from 'react-native';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';

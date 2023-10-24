@@ -1,4 +1,4 @@
-import {HarborConnectionOverrideType} from '@atb-as/config-specs';
+import {HarborConnectionOverrideType} from '@atb/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useHarborConnectionOverrides} from '@atb/harbors/use-harbor-connection-overrides';
 import {useHarborsQuery} from '@atb/queries';
