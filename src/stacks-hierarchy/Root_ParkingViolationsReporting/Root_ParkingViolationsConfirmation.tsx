@@ -7,7 +7,6 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useEffect} from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useAnalytics} from '@atb/analytics';
 
@@ -26,12 +25,6 @@ export const Root_ParkingViolationsConfirmation = ({
     analytics.logEvent('Mobility', 'Parking violation report sent');
     navigation.popToTop();
   };
-
-  useEffect(() => {
-    // Automatically close this screen after 5 seconds
-    const timer = setTimeout(closeReporting, 5000);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <ScreenContainer
