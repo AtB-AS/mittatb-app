@@ -78,8 +78,9 @@ export const useBeacons = () => {
         KettleConsents.CAMPAIGNS,
         KettleConsents.ADS,
       ]);
-      startBeacons();
     }
+
+    return granted;
   }, [startBeacons, isBeaconsSupported]);
 
   return {
