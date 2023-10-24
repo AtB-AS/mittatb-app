@@ -603,9 +603,7 @@ export const Profile_DebugInfoScreen = () => {
                 <View>
                   <ThemeText>{`Identifier: ${kettleIdentifier}`}</ThemeText>
                   <ThemeText>{`Status: ${isKettleStarted}`}</ThemeText>
-                  <ThemeText>{`Granted consents: ${Object.keys(
-                    kettleConsents ?? {},
-                  )}`}</ThemeText>
+                  <ThemeText>{`Granted consents: ${kettleConsents}`}</ThemeText>
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
