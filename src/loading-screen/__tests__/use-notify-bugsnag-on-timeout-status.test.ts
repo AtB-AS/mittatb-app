@@ -57,7 +57,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     expect(mockBugsnagNotification).toEqual(undefined);
     hook.rerender({status: 'timeout'});
     expect(mockBugsnagNotification).toEqual([
-      jestExpect.anything(),
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
@@ -71,7 +71,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       useNotifyBugsnagOnTimeoutStatus('timeout', ref),
     );
     expect(mockBugsnagNotification).toEqual([
-      jestExpect.anything(),
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
@@ -94,7 +94,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     ref.current = {isLoadingAppState: true, authStatus: 'creating-account'};
     hook.rerender({status: 'timeout'});
     expect(mockBugsnagNotification).toEqual([
-      jestExpect.anything(),
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'creating-account',
@@ -108,7 +108,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       useNotifyBugsnagOnTimeoutStatus('timeout', ref),
     );
     expect(mockBugsnagNotification).toEqual([
-      jestExpect.anything(),
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
