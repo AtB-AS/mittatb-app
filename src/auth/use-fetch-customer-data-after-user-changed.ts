@@ -12,12 +12,12 @@ export const useFetchCustomerDataAfterUserChanged = (
       auth()
         .currentUser?.getIdTokenResult()
         .then((idToken) => {
-          const abtCustomerIdFull = idToken.claims['abt_id'];
+          const abtCustomerId = idToken.claims['abt_id'];
           const customerNumber = idToken.claims['customer_number'];
 
           dispatch({
             type: 'SET_CUSTOMER_DATA',
-            abtCustomerIdFull,
+            abtCustomerId,
             customerNumber,
           });
         });

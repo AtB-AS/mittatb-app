@@ -75,13 +75,13 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
         ? 'authenticated'
         : 'creating-account';
       Bugsnag.leaveBreadcrumb('Retrieved auth user data', {
-        abtCustomerIdFull: action.abtCustomerIdFull,
+        abtCustomerId: action.abtCustomerId,
         customerNumber: action.customerNumber,
         authStatus,
       });
       return {
         ...prevState,
-        abtCustomerId: action.abtCustomerIdFull,
+        abtCustomerId: action.abtCustomerId,
         customerNumber: action.customerNumber,
         authStatus,
       };
@@ -105,7 +105,7 @@ const initialReducerState: AuthReducerState = {
   phoneNumber: undefined,
   authenticationType: 'none',
   confirmationHandler: undefined,
-  abtCustomerIdFull: undefined,
+  abtCustomerId: undefined,
   customerNumber: undefined,
   authStatus: 'loading',
 };

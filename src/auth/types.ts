@@ -21,7 +21,7 @@ export type AuthReducerAction =
     }
   | {
       type: 'SET_CUSTOMER_DATA';
-      abtCustomerIdFull: string | undefined;
+      abtCustomerId: string | undefined;
       customerNumber: number | undefined;
     }
   | {
