@@ -155,6 +155,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               }}
               style={styles.leftRadioBox}
               testID="selectTravelcard"
+              interactiveColor="interactive_2"
             />
           )}
           <RadioBox

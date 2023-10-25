@@ -1,8 +1,6 @@
 package no.mittatb;
 
 import androidx.multidex.MultiDexApplication;
-
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -66,16 +64,12 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     tryInitializeIntercom();
     SoLoader.init(this, /* native exopackage */ false);
 
-    addExtraConfigurations(getApplicationContext());
-
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
-
-  public void addExtraConfigurations(Context context) {}
 
   private void tryInitializeBugsnag() {
     try {

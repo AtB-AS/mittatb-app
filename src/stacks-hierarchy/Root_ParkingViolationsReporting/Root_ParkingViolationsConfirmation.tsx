@@ -7,7 +7,6 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useEffect} from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useAnalytics} from '@atb/analytics';
 
@@ -27,12 +26,6 @@ export const Root_ParkingViolationsConfirmation = ({
     navigation.popToTop();
   };
 
-  useEffect(() => {
-    // Automatically close this screen after 5 seconds
-    const timer = setTimeout(closeReporting, 5000);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <ScreenContainer
       rightHeaderButton={{type: 'close', onPress: closeReporting}}
@@ -46,7 +39,14 @@ export const Root_ParkingViolationsConfirmation = ({
             ParkingViolationTexts.confirmation.description(params.providerName),
           )}
         </ThemeText>
-        <PressableOpacity style={styles.checkmark} onPress={closeReporting}>
+        <PressableOpacity
+          style={styles.checkmark}
+          onPress={closeReporting}
+          accessibilityLabel={t(
+            ParkingViolationTexts.confirmation.closeA11yHint,
+          )}
+          accessibilityRole="button"
+        >
           <ThemeIcon stroke="#fff" fill="#fff" size="large" svg={Confirm} />
         </PressableOpacity>
       </View>

@@ -51,7 +51,7 @@ export const TicketSummary = () => {
   const days = Math.min(inputDuration, daysInWeek);
   const numberOfTravels = Math.ceil(effectiveDuration * (frequency / days));
 
-  const savings =
+  const priceDiff =
     numberOfTravels * recommendedTicketSummary.singleTicketPrice - ticket.price;
 
   const ticketPriceString = `${formatDecimalNumber(
@@ -70,21 +70,35 @@ export const TicketSummary = () => {
 
   const transportModes = recommendedTicketTypeConfig.transportModes;
 
-  const savingsText = t(
-    ticket.duration !== 0
-      ? savings === 0
-        ? TicketAssistantTexts.summary.equalPriceNotice
-        : TicketAssistantTexts.summary.savings({
-            totalSavings: formatDecimalNumber(savings, language, 2),
-            perTripSavings: formatDecimalNumber(
-              recommendedTicketSummary.singleTicketPrice - perTripPrice,
-              language,
-              2,
-            ),
-            alternative: numberOfTravels.toString(),
-          })
-      : TicketAssistantTexts.summary.singleTicketNotice,
-  );
+  let savingsText;
+
+  if (ticket.duration !== 0) {
+    if (priceDiff < 0) {
+      savingsText = t(
+        TicketAssistantTexts.summary.lossNotice({
+          numberOfTickets: numberOfTravels.toString(),
+          priceDiff: formatDecimalNumber(Math.abs(priceDiff), language, 2),
+        }),
+      );
+    } else if (priceDiff === 0) {
+      savingsText = t(TicketAssistantTexts.summary.equalPriceNotice);
+    } else {
+      savingsText = t(
+        TicketAssistantTexts.summary.savings({
+          totalSavings: formatDecimalNumber(priceDiff, language, 2),
+          perTripSavings: formatDecimalNumber(
+            recommendedTicketSummary.singleTicketPrice - perTripPrice,
+            language,
+            2,
+          ),
+          alternative: numberOfTravels.toString(),
+        }),
+      );
+    }
+  } else {
+    savingsText = t(TicketAssistantTexts.summary.singleTicketNotice);
+  }
+
   const perTripAndSavingsAccessibilityLabel = [
     perTripPriceString,
     savingsText,

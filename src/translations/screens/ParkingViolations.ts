@@ -7,6 +7,7 @@ export const ParkingViolationTexts = {
       'Report scooter parking violations',
       'Rapporter feilparkering av sparkesykkel',
     ),
+    description: _('Velg feil', 'Select violation', 'Velg feil'),
     violationDescription: (code: string) => {
       switch (code) {
         case 'no_parking':
@@ -89,6 +90,7 @@ export const ParkingViolationTexts = {
       'Unfortunately, we do not recognize the QR code, but you can enter the provider manually.',
       'Dessverre kjenner vi ikkje igjen QR-koden, men du kan velje utleigefirmaet manuelt.',
     ),
+    unknownProvider: _('Ukjent firma', 'Unknown provider', 'Ukjend firma'),
   },
   vehicleLookup: {
     title: _('Sparkesykkel funnet', 'Scooter found', 'Sparkesykkel funnen'),
@@ -111,6 +113,7 @@ export const ParkingViolationTexts = {
           providerName ?? 'operatøren'
         } og til kommunen.`,
       ),
+    closeA11yHint: _('Fullført', 'Completed', 'Fullført'),
   },
   error: {
     loading: {
