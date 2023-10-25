@@ -83,7 +83,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
   const [loadingRecurringOptions, setLoadingRecurringOptions] =
     useState<boolean>(true);
 
-  const {user} = useAuthState();
+  const {authenticationType} = useAuthState();
   const {theme} = useTheme();
   const {paymentTypes} = useFirestoreConfiguration();
 
@@ -105,7 +105,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
   async function getRecurringPaymentOptions(): Promise<
     Array<SavedPaymentOption>
   > {
-    if (!user || user.isAnonymous) return [];
+    if (authenticationType !== 'phone') return [];
     const recurringOptions: Array<SavedPaymentOption> = (
       await listRecurringPayments()
     ).map((option) => {
@@ -254,7 +254,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   const [save, setSave] = useState<boolean>(false);
   const {t} = useTranslation();
   const styles = useStyles();
-  const {user} = useAuthState();
+  const {authenticationType} = useAuthState();
 
   useEffect(() => {
     if (selected) {
@@ -375,7 +375,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         </View>
       </PressableOpacity>
       {selected &&
-      user?.phoneNumber &&
+      authenticationType === 'phone' &&
       option.savedType === 'normal' &&
       option.paymentType !== PaymentType.Vipps ? (
         <PressableOpacity
