@@ -34,7 +34,7 @@ export const BikeStations = ({stations}: Props) => {
       <MapboxGL.CircleLayer
         id="bikeStationMini"
         maxZoomLevel={13}
-        minZoomLevel={11}
+        minZoomLevel={12}
         style={{
           circleColor: stationBackgroundColor,
           circleStrokeColor: stationTextColor,

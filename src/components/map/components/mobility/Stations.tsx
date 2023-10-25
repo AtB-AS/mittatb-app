@@ -38,11 +38,10 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
     if (isClusterFeature(feature)) {
       const clusterExpansionZoom =
         (await clustersSource.current?.getClusterExpansionZoom(feature)) ?? 0;
-      const zoomLevel = Math.max(clusterExpansionZoom, 17.5);
       flyToLocation({
         coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
         mapCameraRef,
-        zoomLevel,
+        zoomLevel: clusterExpansionZoom,
         animationDuration: 400,
       });
       onClusterClick(feature);
