@@ -18,8 +18,14 @@ export function useFocusOnLoad(
   timeOutMilliseconds?: number,
 ) {
   const focusRef = useRef(null);
-
   const navigation = useNavigationSafe();
+
+  useEffect(() => {
+    if (!setFocusOnLoad || !focusRef.current) return;
+
+    giveFocus(focusRef);
+  }, [focusRef.current, setFocusOnLoad]);
+
   useEffect(() => {
     if (!navigation || !focusRef.current || !setFocusOnLoad) return;
 
