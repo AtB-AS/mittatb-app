@@ -324,14 +324,18 @@ function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
         />
 
         <View style={styles.staticBottomContainer}>
-          <View
-            ref={onOpenFocusRef}
-            style={[styles.aztecCode, styles.staticQrCode]}
-            accessible={true}
-            accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-            testID="staticQRCode"
-          >
-            <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+          <View style={[styles.aztecCode, styles.staticQrCode]}>
+            <PressableOpacity
+              ref={onOpenFocusRef}
+              onPress={closeBottomSheet}
+              accessible={true}
+              accessibilityLabel={t(
+                FareContractTexts.details.barcodeBottomSheetA11yLabel,
+              )}
+              testID="staticBigQRCode"
+            >
+              <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+            </PressableOpacity>
           </View>
         </View>
       </BottomSheetContainer>

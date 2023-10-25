@@ -87,6 +87,11 @@ const FareContractTexts = {
       'Barcode. Show this code in case of inspection. Activate for to show larger barcode.',
       'Barkode. Vis denne koden ved billettkontroll. Aktivér for større barkode.',
     ),
+    barcodeBottomSheetA11yLabel: _(
+      'Stor barkode. Vis frem denne koden ved billettkontroll. Aktivér for å lukke dialog med stor barkode.',
+      'Large barcode. Show this code in case of inspection. Activate to close dialog with small barcode',
+      'Stor barkode. Vis denne koden ved billettkontroll. Aktivér for å late att dialog med stor barkode.',
+    ),
     bottomSheetTitle: _('Barkode', 'Barcode', 'Barkode'),
     barcodeErrors: {
       notInspectableDevice: {
