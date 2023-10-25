@@ -34,6 +34,7 @@ import {
   mapToTransportModeFilterOptions,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
+import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 
 export const defaultVatPercent: number = 12;
 
@@ -95,9 +96,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   >([]);
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
-
-  // A toggle to trigger resubscribe. The actual boolean value is not important.
-  const [toggle, setToggle] = useState<boolean>(true);
+  const {resubscribe, resubscribeToggle} = useResubscribeToggle();
 
   const subscribeFirestore = useCallback(() => {
     return firestore()
@@ -214,7 +213,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       clearState();
       unsubscribeFirestore();
     };
-  }, [toggle, subscribeFirestore]);
+  }, [resubscribeToggle, subscribeFirestore]);
 
   const memoizedState = useMemo(() => {
     return {
@@ -256,10 +255,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     <FirestoreConfigurationContext.Provider
       value={{
         ...memoizedState,
-        resubscribeFirestoreConfig: useCallback(
-          () => setToggle((prev) => !prev),
-          [],
-        ),
+        resubscribeFirestoreConfig: resubscribe,
       }}
     >
       {children}
