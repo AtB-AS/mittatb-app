@@ -83,6 +83,11 @@ const FareContractTexts = {
       'Få kvittering tilsendt',
     ),
     barcodeA11yLabel: _(
+      'Barkode. Vis frem denne koden ved billettkontroll.',
+      'Barcode. Show this code in case of inspection.',
+      'Barkode. Vis denne koden ved billettkontroll.',
+    ),
+    barcodeA11yLabelWithActivation: _(
       'Barkode. Vis frem denne koden ved billettkontroll. Aktivér for å vise større barkode.',
       'Barcode. Show this code in case of inspection. Activate for to show larger barcode.',
       'Barkode. Vis denne koden ved billettkontroll. Aktivér for større barkode.',
