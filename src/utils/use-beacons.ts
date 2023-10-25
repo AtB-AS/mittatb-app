@@ -93,6 +93,7 @@ export const useBeacons = () => {
     isKettleStarted,
     kettleIdentifier,
     kettleConsents,
+    isBeaconsSupported,
   };
 };
 
