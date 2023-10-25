@@ -28,7 +28,7 @@ class BluetoothPermission: NSObject, CBCentralManagerDelegate {
   override init() {
     super.init()
   }
-  
+
   deinit {
     bluetoothManager?.delegate = nil
   }
@@ -56,7 +56,7 @@ class WhenInUsePermission: NSObject, CLLocationManagerDelegate {
   override init() {
     super.init()
   }
-  
+
   deinit {
     locationManager?.delegate = nil
   }
@@ -73,7 +73,7 @@ class WhenInUsePermission: NSObject, CLLocationManagerDelegate {
   func requestPermission(callback onComplete: @escaping PermissionCallback) {
     self.onComplete = onComplete
     switch CLLocationManager.authorizationStatus() {
-    case .authorizedWhenInUse:
+    case .authorizedWhenInUse, .authorizedAlways:
       onComplete(true)
     case .notDetermined:
       UserDefaults.standard.setBool(false, for: .alwaysLocationAuthorizationKey)
