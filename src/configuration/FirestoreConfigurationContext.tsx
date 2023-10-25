@@ -104,8 +104,6 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
-          setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
-
           const preassignedFareProducts =
             getPreassignedFareContractsFromSnapshot(snapshot);
           if (preassignedFareProducts) {
@@ -180,6 +178,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (harborConnectionOverrides) {
             setHarborConnectionOverrides(harborConnectionOverrides);
           }
+          setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
