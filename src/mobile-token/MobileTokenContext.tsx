@@ -117,8 +117,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       /*
        Check if there has been a user change.
        */
-      const lastUser = await storage.get('@ATB_last_mobile_token_user');
-      const noUserChange = lastUser === userId;
+      const lastUserId = await storage.get('@ATB_last_mobile_token_user');
+      const noUserChange = lastUserId === userId;
 
       let token: ActivatedToken | undefined;
       if (noUserChange) {
