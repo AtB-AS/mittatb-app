@@ -1,23 +1,28 @@
 import {Dispatch, useEffect} from 'react';
-import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import {AuthReducerAction, AuthStatus} from './types';
+import Bugsnag from '@bugsnag/react-native';
 
 /*
  * Check whether the user creation is finished up to 10 times with an interval
  * of 1 second.
  */
 export const useCheckIfAccountCreationFinished = (
-  user: FirebaseAuthTypes.User | null,
+  userId: string | undefined,
   authStatus: AuthStatus,
   dispatch: Dispatch<AuthReducerAction>,
 ) => {
   useEffect(() => {
-    if (user && authStatus === 'creating-account') {
+    if (userId && authStatus === 'creating-account') {
+      const user = auth().currentUser;
       let retryCount = 0;
       const intervalId = setInterval(async () => {
         const idToken = await user?.getIdTokenResult(true);
         const customerNumber = idToken?.claims['customer_number'];
         if (customerNumber) {
+          Bugsnag.leaveBreadcrumb(
+            `Received custom claims after ${retryCount + 1} tries`,
+          );
           dispatch({
             type: 'SET_AUTH_STATUS',
             authStatus: 'authenticated',
@@ -25,6 +30,7 @@ export const useCheckIfAccountCreationFinished = (
           });
           clearInterval(intervalId);
         } else if (retryCount >= 10) {
+          Bugsnag.leaveBreadcrumb(`No custom claims received after 10 tries`);
           dispatch({
             type: 'SET_AUTH_STATUS',
             authStatus: 'create-account-timeout',
@@ -36,5 +42,5 @@ export const useCheckIfAccountCreationFinished = (
       }, 1000);
       return () => clearInterval(intervalId);
     }
-  }, [user?.uid, authStatus]);
+  }, [dispatch, userId, authStatus]);
 };
