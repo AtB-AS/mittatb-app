@@ -41,13 +41,16 @@ export const CarStations = ({stations}: Props) => {
         shape={stations}
         tolerance={0}
         cluster
+        clusterProperties={{
+          sum: ['+', ['get', 'count']],
+        }}
       >
         <MapboxGL.SymbolLayer
           id="carStationClusterPin"
           minZoomLevel={12}
           filter={['has', 'point_count']}
           style={{
-            textField: ['concat', ['get', 'point_count'], '+'],
+            textField: ['get', 'sum'],
             textAnchor: 'center',
             textOffset: [0.75, 0],
             textColor: stationBackgroundColor,
