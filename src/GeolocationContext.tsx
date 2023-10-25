@@ -1,4 +1,10 @@
-import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from 'react';
 import {Alert, Platform, Rationale} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
@@ -24,6 +30,7 @@ type GeolocationState = {
   locationEnabled: boolean;
   location: GeoLocation | null;
   locationError: GeoError | null;
+  getCurrentPosition: () => Promise<GeoLocation | null>;
 };
 
 type GeolocationReducerAction =
@@ -105,6 +112,7 @@ const defaultState: GeolocationState = {
   locationEnabled: false,
   location: null,
   locationError: null,
+  getCurrentPosition: () => Promise.resolve(null),
 };
 
 export const GeolocationContextProvider: React.FC = ({children}) => {
@@ -206,8 +214,23 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     checkPermission();
   }, [appStatus]);
 
+  const getCurrentPosition = useCallback((): Promise<GeoLocation | null> => {
+    return new Promise((resolve, reject) => {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          resolve(mapPositionToGeoLocation(position, geoLocationName));
+        },
+        (error) => {
+          reject(error);
+        },
+      );
+    });
+  }, [Geolocation, mapPositionToGeoLocation]);
+
   return (
-    <GeolocationContext.Provider value={{...state, requestPermission}}>
+    <GeolocationContext.Provider
+      value={{...state, requestPermission, getCurrentPosition}}
+    >
       {children}
     </GeolocationContext.Provider>
   );
