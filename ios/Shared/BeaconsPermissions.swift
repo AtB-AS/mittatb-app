@@ -27,7 +27,7 @@ class BeaconsPermissions: NSObject, CLLocationManagerDelegate, CBCentralManagerD
   }
 
   @objc func requestWhileInUseLocation() {
-    locationManager.delegate = self
+    locationManager.delegate = nil
     let currentStatus = CLLocationManager.authorizationStatus()
 
     // Already authorized
@@ -35,15 +35,21 @@ class BeaconsPermissions: NSObject, CLLocationManagerDelegate, CBCentralManagerD
       return requestAlwaysLocation()
     }
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
-      locationManager.requestWhenInUseAuthorization()
+    if currentStatus == .notDetermined {
+      locationManager.delegate = self
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
+        locationManager.requestWhenInUseAuthorization()
+      }
+      return
     }
+
+    resolve?(false)
   }
 
   @objc func requestAlwaysLocation() {
-    locationManager.delegate = self
+    locationManager.delegate = nil
     let currentStatus = CLLocationManager.authorizationStatus()
-    
+
     // Already authorized
     if currentStatus == .authorizedAlways {
       requestMotionPermission { [self] granted in
@@ -51,10 +57,16 @@ class BeaconsPermissions: NSObject, CLLocationManagerDelegate, CBCentralManagerD
       }
       return
     }
-    
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
-      locationManager.requestAlwaysAuthorization()
+
+    if currentStatus == .authorizedWhenInUse || currentStatus == .notDetermined {
+      locationManager.delegate = self
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
+        locationManager.requestAlwaysAuthorization()
+      }
+      return
     }
+
+    resolve?(false)
   }
 
   private func requestMotionPermission(completion: @escaping (Bool) -> Void) {
