@@ -239,7 +239,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
       <PressableOpacity
         onPress={onOpenBarcodePress}
         accessibilityRole="button"
-        accessibilityHint={t(FareContractTexts.details.barcodeButtonA11yLabel)}
+        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
         testID="staticBarcode"
       >
         <SvgXml xml={aztecXml} width="100%" height="100%" />
