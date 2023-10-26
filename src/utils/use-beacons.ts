@@ -9,8 +9,6 @@ import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 const BEACONS_CONSENTS = [
   KettleConsents.SURVEYS,
   KettleConsents.ANALYTICS,
-  KettleConsents.CAMPAIGNS,
-  KettleConsents.ADS,
 ];
 
 export const useBeacons = () => {
