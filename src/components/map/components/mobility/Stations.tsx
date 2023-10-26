@@ -18,7 +18,7 @@ import {CarStations} from './CarStations';
 type Props = {
   stations: StationFeatures;
   mapCameraRef: RefObject<Camera>;
-  onClusterClick: (feature: Feature<Point, Cluster>) => void;
+  onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
 
 export type StationsWithCount = FeatureCollection<
@@ -44,7 +44,7 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
         zoomLevel: clusterExpansionZoom,
         animationDuration: 400,
       });
-      onClusterClick(feature);
+      onClusterClick && onClusterClick(feature);
     }
   };
 
