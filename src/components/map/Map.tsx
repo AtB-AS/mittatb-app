@@ -124,8 +124,9 @@ export const Map = (props: MapProps) => {
           )}
           {props.vehicles && (
             <Vehicles
-              mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
+              mapCameraRef={mapCameraRef}
+              mapViewRef={mapViewRef}
               onClusterClick={(feature) => {
                 onMapClick({
                   source: 'cluster-click',
