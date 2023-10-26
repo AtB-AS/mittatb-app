@@ -14,7 +14,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import React, {forwardRef} from 'react';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
-import {getDestinationLineName} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 type Props = {
   lineNumber: string;
@@ -27,7 +27,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
   ({lineNumber, destinationDisplay, addFavorite, close}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
-    const lineName = getDestinationLineName(t, destinationDisplay) || '';
+    const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
     return (
       <BottomSheetContainer testID="chooseFavoriteBottomSheet">
         <ScreenHeaderWithoutNavigation

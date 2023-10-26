@@ -125,7 +125,7 @@ export function destinationDisplaysAreEqual(
   ); // doesn't check for same order in via arrays, but should it?
 }
 
-export function getDestinationLineName(
+export function formatDestinationDisplay(
   t: TranslateFunction,
   destinationDisplay: DestinationDisplay | undefined,
 ): string | undefined {
@@ -162,7 +162,7 @@ export function mapLegacyLineNameToDestinationDisplay(
 
 export function getLineName(t: TranslateFunction, leg: Leg) {
   const name =
-    getDestinationLineName(t, leg.fromEstimatedCall?.destinationDisplay) ??
+    formatDestinationDisplay(t, leg.fromEstimatedCall?.destinationDisplay) ??
     leg.line?.name ??
     '';
   return leg.line?.publicCode

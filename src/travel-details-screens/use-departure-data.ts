@@ -10,7 +10,7 @@ import {EstimatedCallWithQuayFragment} from '@atb/api/types/generated/fragments/
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {
-  getDestinationLineName,
+  formatDestinationDisplay,
   getNoticesForServiceJourney,
 } from '@atb/travel-details-screens/utils';
 import {useTranslation} from '@atb/translations';
@@ -59,7 +59,7 @@ export function useDepartureData(
 
       const publicCode =
         serviceJourney.publicCode || serviceJourney.line?.publicCode;
-      const title = `${publicCode} ${getDestinationLineName(
+      const title = `${publicCode} ${formatDestinationDisplay(
         t,
         focusedEstimatedCall.destinationDisplay,
       )}`;

@@ -15,7 +15,7 @@ import {
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   destinationDisplaysAreEqual,
-  getDestinationLineName,
+  formatDestinationDisplay,
 } from '@atb/travel-details-screens/utils';
 
 import {
@@ -84,7 +84,7 @@ export const EstimatedCallItem = memo(
         : t(DeparturesTexts.a11yViewDepartureDetailsHint);
 
     const {destinationDisplay} = departure;
-    const lineName = getDestinationLineName(t, destinationDisplay);
+    const lineName = formatDestinationDisplay(t, destinationDisplay);
 
     return (
       <GenericClickableSectionItem
@@ -229,7 +229,7 @@ export function getLineA11yLabel(
   const a11yLine = line?.publicCode
     ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
     : '';
-  const lineName = getDestinationLineName(t, departure.destinationDisplay);
+  const lineName = formatDestinationDisplay(t, departure.destinationDisplay);
   const a11yLineName = lineName ? `${lineName}.` : '';
   return `${a11yLine} ${a11yLineName}`;
 }

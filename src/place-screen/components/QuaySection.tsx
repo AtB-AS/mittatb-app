@@ -20,7 +20,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
 import {EstimatedCallList} from '@atb/place-screen/components/EstimatedCallList';
-import {getDestinationLineName} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 export type QuaySectionProps = {
   quay: Quay;
@@ -196,8 +196,8 @@ function compareByLineNameAndDesc(
 ): number {
   const lineNumber1 = d1.serviceJourney?.line.publicCode;
   const lineNumber2 = d2.serviceJourney?.line.publicCode;
-  const lineDesc1 = getDestinationLineName(t, d1?.destinationDisplay);
-  const lineDesc2 = getDestinationLineName(t, d2?.destinationDisplay);
+  const lineDesc1 = formatDestinationDisplay(t, d1?.destinationDisplay);
+  const lineDesc2 = formatDestinationDisplay(t, d2?.destinationDisplay);
 
   if (!lineNumber1) return 1;
   if (!lineNumber2) return -1;

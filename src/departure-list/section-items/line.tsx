@@ -40,7 +40,7 @@ import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark'
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {
   filterNotices,
-  getDestinationLineName,
+  formatDestinationDisplay,
 } from '@atb/travel-details-screens/utils';
 import {
   FavouriteDepartureToggle,
@@ -86,7 +86,7 @@ export function LineItem({
     id: group.lineInfo?.lineId ?? '',
   };
 
-  const title = `${group.lineInfo?.lineNumber} ${getDestinationLineName(
+  const title = `${group.lineInfo?.lineNumber} ${formatDestinationDisplay(
     t,
     group.lineInfo?.destinationDisplay,
   )}`;

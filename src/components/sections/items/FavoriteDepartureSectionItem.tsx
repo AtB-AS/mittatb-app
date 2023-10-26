@@ -10,7 +10,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {getDestinationLineName} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;
@@ -32,7 +32,7 @@ export function FavoriteDepartureSectionItem(props: Props) {
     return <FavoriteItemContent {...props} />;
   }
   const favorite = props.favorite;
-  const favoriteLineName = getDestinationLineName(
+  const favoriteLineName = formatDestinationDisplay(
     t,
     favorite.destinationDisplay,
   );
@@ -76,7 +76,7 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
       <View style={contentContainer}>
         <ThemeText>
           {favorite.lineLineNumber}{' '}
-          {getDestinationLineName(t, favorite.destinationDisplay) ??
+          {formatDestinationDisplay(t, favorite.destinationDisplay) ??
             t(SectionTexts.favoriteDeparture.allVariations)}
         </ThemeText>
         <ThemeText type="body__secondary" color="secondary">

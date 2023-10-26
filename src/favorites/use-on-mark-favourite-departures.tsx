@@ -11,7 +11,7 @@ import {
   DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
-import {getDestinationLineName} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 type FavouriteDepartureLine = {
   id: string;
@@ -77,7 +77,7 @@ export function useOnMarkFavouriteDepartures(
         )
       : t(
           DeparturesTexts.results.lines.favorite.addFavorite(
-            `${line.lineNumber} ${getDestinationLineName(
+            `${line.lineNumber} ${formatDestinationDisplay(
               t,
               line.destinationDisplay,
             )}`,
