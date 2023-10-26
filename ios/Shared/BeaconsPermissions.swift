@@ -149,10 +149,10 @@ class AlwaysUsePermission: NSObject, PermissionRequestable, CLLocationManagerDel
     self.onComplete = onComplete
     switch CLLocationManager.authorizationStatus() {
     case .authorizedAlways:
-      onComplete(true)
+      response(true)
     case .authorizedWhenInUse:
       guard !UserDefaults.standard.getBool(for: .alwaysLocationAuthorizationKey) else {
-        onComplete(mandatory ? false : true)
+        response(mandatory ? false : true)
         return
       }
 
@@ -160,11 +160,38 @@ class AlwaysUsePermission: NSObject, PermissionRequestable, CLLocationManagerDel
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
         UserDefaults.standard.setBool(true, for: .alwaysLocationAuthorizationKey)
         self?.locationManager?.delegate = self
+        self?.addDidBecomeActiveNotification()
         self?.locationManager?.requestAlwaysAuthorization()
       }
     default:
-      onComplete(mandatory ? false : true)
+      response(mandatory ? false : true)
     }
+  }
+
+  private func addDidBecomeActiveNotification() {
+    NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+  }
+
+  private func removeDidBecomeActiveNotification() {
+    NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+  }
+
+  func response(_ status: Bool) {
+    onComplete?(status)
+    onComplete = nil
+    removeDidBecomeActiveNotification()
+  }
+
+  @objc func appDidBecomeActive() {
+    // NOTE: If the app becomes active and the status remains the same `authorizedWhenInUse` means that the user kept the same
+    // permissions, meaning didn't grant the new `always`
+    if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+      response(mandatory ? false : true)
+    }
+  }
+
+  @objc private func checkPermissionStatus() {
+    response(mandatory ? CLLocationManager.authorizationStatus() == .authorizedWhenInUse : true)
   }
 }
 
