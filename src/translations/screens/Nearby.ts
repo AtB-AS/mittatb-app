@@ -23,6 +23,16 @@ const NearbyTexts = {
     },
   },
   stateAnnouncements: {
+    noAccessToLocationTitle: _(
+      'Holdeplasser i nærheten er ikke tilgjengelig.',
+      'Nearby departures are not available.',
+      'Holdeplassar i nærleiken er ikkje tilgjengelege.',
+    ),
+    noAccessToLocation: _(
+      'Del din posisjon for å finne holdeplasser i nærheten. Bruk søkefeltet for å finne andre holdeplasser.',
+      'Share your location to find nearby stops. Use the search field to find other stops.',
+      'Del posisjonen din for å finne haldeplassar i nærleiken. Bruk søkjefeltet for å finne andre haldeplassar.',
+    ),
     updatingLocation: _(
       'Oppdaterer posisjon for å finne avganger i nærheten.',
       'Updating your location to find nearby departures',
