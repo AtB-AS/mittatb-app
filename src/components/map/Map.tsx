@@ -134,7 +134,18 @@ export const Map = (props: MapProps) => {
               }}
             />
           )}
-          {props.stations && <Stations stations={props.stations.stations} />}
+          {props.stations && (
+            <Stations
+              stations={props.stations.stations}
+              mapCameraRef={mapCameraRef}
+              onClusterClick={(feature) => {
+                onMapClick({
+                  source: 'cluster-click',
+                  feature,
+                });
+              }}
+            />
+          )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
