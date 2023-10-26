@@ -67,11 +67,13 @@ export function useOnMarkFavouriteDepartures(
     });
 
   const toggleFavouriteAccessibilityLabel = (line: FavouriteDepartureLine) => {
-    const existing: any = undefined;
+    const existing = getExistingFavorite(line);
     return existing
       ? t(
           DeparturesTexts.results.lines.favorite.removeFavorite(
-            `${line.lineNumber} ${existing.lineName ?? ''}`,
+            `${line.lineNumber} ${
+              formatDestinationDisplay(t, existing.destinationDisplay) ?? ''
+            }`,
             stopPlace.name,
           ),
         )
