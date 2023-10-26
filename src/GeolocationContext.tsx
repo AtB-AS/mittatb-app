@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useEffect, useReducer} from 'react';
-import {Alert, Platform, Rationale} from 'react-native';
+import {Alert, Linking, Platform} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
   GeoOptions,
@@ -17,7 +17,7 @@ import {
 import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
-import {dictionary, useTranslation} from '@atb/translations';
+import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 
 type GeolocationState = {
   status: PermissionStatus | null;
@@ -118,19 +118,67 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   async function requestPermission() {
     if (!(await isLocationEnabled())) {
       Alert.alert(
-        'Du har blokkert posisjonsdeling',
-        'For å kunne bruke posisjonen din må du aktivere lokasjonstjenester på telefonen din.',
+        t(GeoLocationTexts.blockedLocation.title),
+        t(GeoLocationTexts.blockedLocation.message),
       );
-      dispatch({
-        type: 'PERMISSION_CHANGED',
-        status: state.status,
-        locationEnabled: false,
-      });
     } else {
       const status = await requestGeolocationPermission();
       dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
       return status;
     }
+  }
+
+  async function requestGeolocationPermission(): Promise<PermissionStatus> {
+    if (Platform.OS === 'ios') {
+      const permissionStatus = await checkGeolocationPermission();
+      if (permissionStatus === 'blocked') {
+        openSettingsAlert();
+        return permissionStatus;
+      } else {
+        return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+      }
+    } else {
+      // Android
+      const permissionStatus = await checkGeolocationPermission();
+
+      if (permissionStatus === 'denied') {
+        // Android never returns if the permission was blocked with the check, and therefore it must be checked with a request
+        const requestedStatus = await requestMultiple([
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+        ]);
+
+        if (
+          requestedStatus[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+            'blocked' &&
+          requestedStatus[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
+            'blocked'
+        ) {
+          openSettingsAlert();
+          return permissionStatus;
+        }
+      }
+
+      return await checkGeolocationPermission();
+    }
+  }
+  function openSettingsAlert() {
+    Alert.alert(
+      t(GeoLocationTexts.locationPermission.title),
+      t(GeoLocationTexts.locationPermission.message),
+      [
+        {
+          text: t(GeoLocationTexts.locationPermission.goToSettings),
+          onPress: () => Linking.openSettings(),
+        },
+        {
+          text: t(GeoLocationTexts.locationPermission.cancel),
+          onPress: () => {},
+          style: 'cancel',
+        },
+      ],
+      {cancelable: true},
+    );
   }
 
   async function handleLocationError(locationError: GeoError) {
@@ -231,40 +279,14 @@ export async function checkGeolocationPermission(): Promise<PermissionStatus> {
       PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
     ]);
+    const androidFineLocationStatus =
+      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
     if (
-      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] !== 'denied' ||
-      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] !== 'unavailable'
+      androidFineLocationStatus !== 'denied' &&
+      androidFineLocationStatus !== 'unavailable'
     ) {
       return statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
     }
-    if (
-      statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] === 'denied' ||
-      statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] === 'unavailable'
-    ) {
-      return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
-    } else {
-      return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
-    }
-  }
-}
-
-async function requestGeolocationPermission(): Promise<PermissionStatus> {
-  const rationale: Rationale = {
-    title: 'Vil du tillate at AtB bruker posisjonen din?',
-    message:
-      'Ved å tillate deling av posisjon kan du finne nærmeste holdeplass og planlegge reisen fra din lokasjon',
-    buttonNeutral: 'Spør meg senere',
-    buttonNegative: 'Ikke tillat',
-    buttonPositive: 'Tillat',
-  };
-
-  if (Platform.OS === 'ios') {
-    return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, rationale);
-  } else {
-    await requestMultiple([
-      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
-    ]);
-    return await checkGeolocationPermission();
+    return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
   }
 }
