@@ -204,7 +204,9 @@ export const TravelDetailsMapScreenComponent = ({
             isError={isLiveConnected}
           />
         )}
-        {stations && <Stations stations={stations.stations} />}
+        {stations && (
+          <Stations stations={stations.stations} mapCameraRef={mapCameraRef} />
+        )}
       </MapboxGL.MapView>
       <View style={controlStyles.backArrowContainer}>
         <BackArrow

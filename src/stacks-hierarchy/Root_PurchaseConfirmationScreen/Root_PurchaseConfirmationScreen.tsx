@@ -1,5 +1,4 @@
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
-import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
@@ -94,12 +93,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const {user} = useAuthState();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
   const [previousMethod, setPreviousMethod] = useState<
     PaymentMethod | undefined
   >(undefined);
-  const previousPaymentMethod = usePreviousPaymentMethod(user);
+  const previousPaymentMethod = usePreviousPaymentMethod();
   const {deviceIsInspectable, remoteTokens, fallbackActive} =
     useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();

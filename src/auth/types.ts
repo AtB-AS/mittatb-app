@@ -15,14 +15,14 @@ export type AuthReducerAction =
     }
   | {
       type: 'SET_USER';
-      user: FirebaseAuthTypes.User | null;
+      userId?: string;
+      phoneNumber?: string;
+      authenticationType: AuthenticationType;
     }
   | {
       type: 'SET_CUSTOMER_DATA';
       abtCustomerId: string | undefined;
-      abtCustomerIdFull: string | undefined;
       customerNumber: number | undefined;
-      authStatus: AuthStatus;
     }
   | {
       type: 'SET_AUTH_STATUS';
