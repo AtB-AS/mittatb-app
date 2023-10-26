@@ -29,16 +29,17 @@ export const Vehicles = ({
     if (isClusterFeature(feature)) {
       const clusterExpansionZoom =
         (await clustersSource.current?.getClusterExpansionZoom(feature)) ?? 0;
-      mapViewRef.current?.getZoom().then((fromZoomLevel) => {
-        // Zoom "2 levels" or to the point where the cluster expands, whichever
-        // is greater.
-        const toZoomLevel = Math.max(fromZoomLevel + 2, clusterExpansionZoom);
-        flyToLocation({
-          coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
-          mapCameraRef,
-          zoomLevel: toZoomLevel,
-          animationDuration: Math.abs(fromZoomLevel - toZoomLevel) * 100,
-        });
+
+      const fromZoomLevel = (await mapViewRef.current?.getZoom()) ?? 0;
+      // Zoom "2 levels" or to the point where the cluster expands, whichever
+      // is greater.
+      const toZoomLevel = Math.max(fromZoomLevel + 2, clusterExpansionZoom);
+
+      flyToLocation({
+        coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
+        mapCameraRef,
+        zoomLevel: toZoomLevel,
+        animationDuration: Math.abs(fromZoomLevel - toZoomLevel) * 100,
       });
       onClusterClick(feature);
     }
