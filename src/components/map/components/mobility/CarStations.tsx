@@ -18,6 +18,17 @@ export const CarStations = ({stations, onClusterClick}: Props) => {
   const stationTextColor = useTransportationColor(Mode.Car, undefined, 'text');
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
 
+  const symbolStyling = {
+    textAnchor: 'center',
+    textOffset: [0.75, 0],
+    textColor: stationBackgroundColor,
+    textSize: 12,
+    textAllowOverlap: true,
+    iconImage: 'CarChip',
+    iconAllowOverlap: true,
+    iconSize: 0.85,
+  };
+
   return (
     <>
       <MapboxGL.ShapeSource
@@ -31,15 +42,8 @@ export const CarStations = ({stations, onClusterClick}: Props) => {
           filter={['!', ['has', 'point_count']]}
           minZoomLevel={12}
           style={{
+            ...symbolStyling,
             textField: ['get', 'count'],
-            textAnchor: 'center',
-            textOffset: [0.75, 0],
-            textColor: stationBackgroundColor,
-            textSize: 12,
-            textAllowOverlap: true,
-            iconImage: 'CarChip',
-            iconAllowOverlap: true,
-            iconSize: 0.85,
           }}
         />
       </MapboxGL.ShapeSource>
@@ -59,15 +63,8 @@ export const CarStations = ({stations, onClusterClick}: Props) => {
           minZoomLevel={12}
           filter={['has', 'point_count']}
           style={{
+            ...symbolStyling,
             textField: ['get', 'sum'],
-            textAnchor: 'center',
-            textOffset: [0.75, 0],
-            textColor: stationBackgroundColor,
-            textSize: 12,
-            textAllowOverlap: true,
-            iconImage: 'CarChip',
-            iconAllowOverlap: true,
-            iconSize: 0.85,
           }}
         />
       </MapboxGL.ShapeSource>

@@ -21,6 +21,15 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
     'text',
   );
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
+  const symbolStyling = {
+    textAnchor: 'center',
+    textOffset: [0.75, 0],
+    textColor: stationBackgroundColor,
+    textSize: 12,
+    iconImage: 'BikeChip',
+    iconAllowOverlap: true,
+    iconSize: 0.85,
+  };
 
   return (
     <>
@@ -35,14 +44,8 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
           filter={['!', ['has', 'point_count']]}
           minZoomLevel={13}
           style={{
+            ...symbolStyling,
             textField: ['get', 'count'],
-            textAnchor: 'center',
-            textOffset: [0.75, 0],
-            textColor: stationBackgroundColor,
-            textSize: 12,
-            iconImage: 'BikeChip',
-            iconAllowOverlap: true,
-            iconSize: 0.85,
           }}
         />
       </MapboxGL.ShapeSource>
@@ -62,14 +65,8 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
           filter={['has', 'point_count']}
           minZoomLevel={13}
           style={{
+            ...symbolStyling,
             textField: ['get', 'sum'],
-            textAnchor: 'center',
-            textOffset: [0.75, 0],
-            textColor: stationBackgroundColor,
-            textSize: 12,
-            iconImage: 'BikeChip',
-            iconAllowOverlap: true,
-            iconSize: 0.85,
           }}
         />
       </MapboxGL.ShapeSource>
