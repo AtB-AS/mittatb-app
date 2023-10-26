@@ -42,7 +42,7 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
         coordinates: mapPositionToCoordinates(feature.geometry.coordinates),
         mapCameraRef,
         zoomLevel: clusterExpansionZoom,
-        animationDuration: 400,
+        animationDuration: 200,
       });
       onClusterClick && onClusterClick(feature);
     }
