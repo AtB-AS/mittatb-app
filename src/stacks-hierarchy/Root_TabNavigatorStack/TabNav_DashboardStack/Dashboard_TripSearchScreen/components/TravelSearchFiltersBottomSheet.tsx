@@ -167,6 +167,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           >
             <View style={styles.saveOptionSection}>
               <Checkbox
+                style={styles.saveOptionSectionCheckbox}
                 checked={saveFilters}
                 accessibility={{
                   accessibilityLabel: t(
@@ -178,7 +179,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                   ),
                 }}
               />
-              <ThemeText type={'body__secondary'} color={'secondary'}>
+              <ThemeText type="body__secondary" color="secondary">
                 {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
               </ThemeText>
             </View>
@@ -210,5 +211,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     paddingHorizontal: theme.spacings.xSmall,
     paddingVertical: theme.spacings.xSmall,
+  },
+  saveOptionSectionCheckbox: {
+    marginRight: theme.spacings.small,
   },
 }));

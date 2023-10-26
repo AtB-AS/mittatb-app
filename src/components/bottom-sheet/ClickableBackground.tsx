@@ -21,7 +21,7 @@ export function ClickableBackground({
       onPress={close}
       accessibilityLabel={t(BottomSheetTexts.background.a11yLabel)}
       accessibilityHint={t(BottomSheetTexts.background.a11yHint)}
-      pointerEvents={'box-only'}
+      pointerEvents="box-only"
       style={{
         ...styles.clickableBackground,
         bottom: height,

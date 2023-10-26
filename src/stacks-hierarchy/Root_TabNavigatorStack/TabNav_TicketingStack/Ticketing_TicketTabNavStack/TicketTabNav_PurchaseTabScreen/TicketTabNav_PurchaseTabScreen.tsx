@@ -29,8 +29,7 @@ type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
 export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {must_upgrade_ticketing} = useRemoteConfig();
-  const {abtCustomerId, authenticationType} = useAuthState();
-  const isSignedInAsAbtCustomer = !!abtCustomerId;
+  const {authenticationType} = useAuthState();
   const {theme} = useTheme();
   const {recentFareContracts, loading} = useRecentFareContracts();
   const hasRecentFareContracts = !!recentFareContracts.length;
@@ -155,7 +154,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     });
   };
 
-  return isSignedInAsAbtCustomer ? (
+  return authenticationType !== 'none' ? (
     <ScrollView>
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
@@ -191,7 +190,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <>
-            <ThemeText style={styles.heading} type={'body__secondary'}>
+            <ThemeText style={styles.heading} type="body__secondary">
               {t(TicketingTexts.ticketAssistantTile.title)}
             </ThemeText>
             <TicketAssistantTile

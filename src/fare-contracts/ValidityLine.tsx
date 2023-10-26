@@ -200,7 +200,7 @@ const VerticalLine = ({
       angle={120}
       locations={[0.25, 0.25, 0.75, 0.75]}
       colors={['transparent', color, color, 'transparent']}
-      pointerEvents={'none'}
+      pointerEvents="none"
     />
   );
 };

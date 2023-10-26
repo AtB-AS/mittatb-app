@@ -7849,7 +7849,14 @@ eslint-plugin-react-native-globals@^0.1.1:
   resolved "https://registry.npmjs.org/eslint-plugin-react-native-globals/-/eslint-plugin-react-native-globals-0.1.2.tgz"
   integrity sha512-9aEPf1JEpiTjcFAmmyw8eiIXmcNZOqaZyHO77wgm0/dWfT/oxC1SrIq8ET38pMxHYrcB6Uew+TzUVsBeczF88g==
 
-eslint-plugin-react-native@4.0.0, eslint-plugin-react-native@^4.0.0:
+eslint-plugin-react-native@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-native/-/eslint-plugin-react-native-4.1.0.tgz#5343acd3b2246bc1b857ac38be708f070d18809f"
+  integrity sha512-QLo7rzTBOl43FvVqDdq5Ql9IoElIuTdjrz9SKAXCvULvBoRZ44JGSkx9z4999ZusCsb4rK3gjS8gOGyeYqZv2Q==
+  dependencies:
+    eslint-plugin-react-native-globals "^0.1.1"
+
+eslint-plugin-react-native@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-native/-/eslint-plugin-react-native-4.0.0.tgz#eec41984abe4970bdd7c6082dff7a98a5e34d0bb"
   integrity sha512-kMmdxrSY7A1WgdqaGC+rY/28rh7kBGNBRsk48ovqkQmdg5j4K+DaFmegENDzMrdLkoufKGRNkKX6bgSwQTCAxQ==
@@ -7857,7 +7864,7 @@ eslint-plugin-react-native@4.0.0, eslint-plugin-react-native@^4.0.0:
     "@babel/traverse" "^7.7.4"
     eslint-plugin-react-native-globals "^0.1.1"
 
-eslint-plugin-react@^7.30.1:
+eslint-plugin-react@^7.30.1, eslint-plugin-react@^7.33.2:
   version "7.33.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.33.2.tgz#69ee09443ffc583927eafe86ffebb470ee737608"
   integrity sha512-73QQMKALArI8/7xGLNI/3LylrEYrlKZSb5C9+q3OtOewTnMQi5cT+aE9E41sLCmli3I9PGGmD1yiZydyo4FEPw==
@@ -13023,6 +13030,16 @@ react-native-bootsplash@^4.4.1:
     fs-extra "^11.1.0"
     jimp "^0.16.2"
     picocolors "^1.0.0"
+
+react-native-camera-kit@14.0.0-beta12:
+  version "14.0.0-beta12"
+  resolved "https://registry.yarnpkg.com/react-native-camera-kit/-/react-native-camera-kit-14.0.0-beta12.tgz#a9fb9dfe9e913b2b0bff54a5b236adc32069e125"
+  integrity sha512-SUBcjq/lcGX3unEXSDWkdegx/kw9Z7b3zj9Zo1vI7V/bvT7CFdSeZS39Z+LE5peVFbU74I58ETnqpIKjgj2STA==
+
+react-native-compressor@^1.8.12:
+  version "1.8.12"
+  resolved "https://registry.yarnpkg.com/react-native-compressor/-/react-native-compressor-1.8.12.tgz#6e50247d3d2a12845eb27cfa983ef4c56a00738f"
+  integrity sha512-KyS9hk2LnWiuZyqQcUrQv38kW0R9C8B9FLTc4ML3S9MglXhzbarfBMECxc+23GR7r/NkImMzQc0j9mgIDtRp9A==
 
 react-native-device-info@^10.3.0:
   version "10.3.0"

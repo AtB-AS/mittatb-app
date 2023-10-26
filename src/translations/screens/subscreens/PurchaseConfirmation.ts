@@ -70,19 +70,6 @@ const PurchaseConfirmationTexts = {
         `Inkl. ${vatPercentString}% mva (${vatAmountString} kr)`,
       ),
   },
-  infoText: {
-    validNow: _(
-      'Denne billetten blir gyldig med en gang kjøpet blir gjennomført.',
-      'This ticket is valid when the purchase is completed.',
-      'Denne billetten blir gyldig med ein gong kjøpet blir gjennomført.',
-    ),
-    validInFuture: (time: string) =>
-      _(
-        `Denne billetten blir gyldig fra ${time}.`,
-        `This ticket will be valid from ${time}.`,
-        `Denne billetten blir gyldig frå ${time}.`,
-      ),
-  },
   travelDate: {
     futureDate: (time: string) =>
       _(`Oppstart ${time}`, `Start time ${time}`, `Oppstart ${time}`),
@@ -198,6 +185,13 @@ const PurchaseConfirmationTexts = {
 };
 export default orgSpecificTranslations(PurchaseConfirmationTexts, {
   fram: {
+    validityTexts: {
+      harbor: {
+        messageInHarborZones: _('', '', ''),
+      },
+    },
+  },
+  nfk: {
     validityTexts: {
       harbor: {
         messageInHarborZones: _('', '', ''),

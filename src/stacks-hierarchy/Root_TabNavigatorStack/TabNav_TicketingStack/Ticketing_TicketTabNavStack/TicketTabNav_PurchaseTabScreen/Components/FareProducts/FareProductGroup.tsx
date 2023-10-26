@@ -41,19 +41,19 @@ export const FareProductGroup = ({
       {heading ? (
         <TransportModes
           modes={transportModes}
-          iconSize={'small'}
+          iconSize="small"
           style={styles.heading}
-          textType={'body__secondary'}
-          textColor={'primary'}
+          textType="body__secondary"
+          textColor="primary"
           customTransportModeText={heading}
         />
       ) : (
         <TransportModes
           modes={transportModes}
-          iconSize={'small'}
+          iconSize="small"
           style={styles.heading}
-          textType={'body__secondary'}
-          textColor={'primary'}
+          textType="body__secondary"
+          textColor="primary"
           customTransportModeText={
             transportModes.length === 0
               ? t(FareContractTexts.otherFareContracts)

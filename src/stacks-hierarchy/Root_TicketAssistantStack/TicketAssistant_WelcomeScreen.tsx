@@ -33,7 +33,7 @@ export const TicketAssistant_WelcomeScreen = ({
           type="heading--big"
           style={styles.header}
           color={themeColor}
-          accessibilityRole={'header'}
+          accessibilityRole="header"
           accessibilityLabel={t(TicketAssistantTexts.welcome.titleA11yLabel)}
         >
           {t(TicketAssistantTexts.welcome.title)}
@@ -41,7 +41,7 @@ export const TicketAssistant_WelcomeScreen = ({
 
         <ThemeText
           style={styles.description}
-          type={'body__primary'}
+          type="body__primary"
           color={themeColor}
         >
           {t(TicketAssistantTexts.welcome.description)}

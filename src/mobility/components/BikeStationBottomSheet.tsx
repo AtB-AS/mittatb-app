@@ -88,7 +88,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
         title={stationName ?? ''}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
       <>
@@ -154,7 +154,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                       : openOperatorApp()
                   }
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                 />
               </View>
             )}

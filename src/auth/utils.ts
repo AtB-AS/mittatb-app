@@ -1,7 +1,7 @@
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {AuthenticationType} from './types';
 
-export const getAuthenticationType = (
+export const mapAuthenticationType = (
   user: FirebaseAuthTypes.User | null,
 ): AuthenticationType => {
   if (user?.phoneNumber) return 'phone';

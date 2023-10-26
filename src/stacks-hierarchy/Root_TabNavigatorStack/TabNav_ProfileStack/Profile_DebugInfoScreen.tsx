@@ -49,6 +49,7 @@ import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-load
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
+import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -63,7 +64,8 @@ export const Profile_DebugInfoScreen = () => {
     restartOnboarding,
   } = useAppState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
-  const {user, abtCustomerId} = useAuthState();
+  const {userId} = useAuthState();
+  const user = auth().currentUser;
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
@@ -93,18 +95,14 @@ export const Profile_DebugInfoScreen = () => {
   const loadingErrorScreenEnabledDebugOverride =
     useLoadingErrorScreenEnabledDebugOverride();
   const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
+  const parkingViolationsReportingEnabledDebugOverride =
+    useParkingViolationsReportingEnabledDebugOverride();
 
   useEffect(() => {
-    async function run() {
-      if (!!user) {
-        const idToken = await user.getIdTokenResult();
-        setIdToken(idToken);
-      } else {
-        setIdToken(undefined);
-      }
-    }
-
-    run();
+    (async function () {
+      const idToken = await user?.getIdTokenResult();
+      setIdToken(idToken);
+    })();
   }, [user]);
 
   const {
@@ -116,7 +114,7 @@ export const Profile_DebugInfoScreen = () => {
     validateToken,
     removeRemoteToken,
     renewToken,
-    fallbackEnabled,
+    fallbackActive,
     isLoading,
     isError,
   } = useMobileTokenContextState();
@@ -134,9 +132,9 @@ export const Profile_DebugInfoScreen = () => {
   }, []);
 
   function copyFirestoreLink() {
-    if (abtCustomerId)
+    if (userId)
       setClipboard(
-        `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${abtCustomerId}`,
+        `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${userId}`,
       );
   }
 
@@ -330,11 +328,17 @@ export const Profile_DebugInfoScreen = () => {
               override={beaconsEnabledDebugOverride}
             />
           </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable parking violations reporting"
+              override={parkingViolationsReportingEnabledDebugOverride}
+            />
+          </GenericSectionItem>
         </Section>
 
         <Section withPadding withTopPadding>
           <ExpandableSectionItem
-            text={'Trip search parameters'}
+            text="Trip search parameters"
             showIconText={true}
             expandContent={
               <View>
@@ -464,7 +468,7 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={
               <>
                 <View>
-                  <MapEntry title={'app_group_name'} value={APP_GROUP_NAME} />
+                  <MapEntry title="app_group_name" value={APP_GROUP_NAME} />
                 </View>
                 {storedValues && (
                   <View>
@@ -523,7 +527,7 @@ export const Profile_DebugInfoScreen = () => {
                       ).toISOString()}`}</ThemeText>
                     </View>
                   )}
-                  <ThemeText>{`Fallback enabled: ${fallbackEnabled}`}</ThemeText>
+                  <ThemeText>{`Fallback active: ${fallbackActive}`}</ThemeText>
                   <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
                   <ThemeText>{`Is error: ${isError}`}</ThemeText>
                   <Button

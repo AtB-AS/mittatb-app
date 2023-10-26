@@ -8,7 +8,6 @@ import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page'
 import DepartureSearchPage from '../pageobjects/departure.search.page';
 import DepartureOverviewPage from '../pageobjects/departure.overview.page';
 import TicketPage from '../pageobjects/ticket.page';
-import MapPage from '../pageobjects/map.page';
 
 /**
  * Runs through some simple use cases in the app. Used together with '$ flashlight measure' to get performance metrics
@@ -23,7 +22,6 @@ describe('Flashlight performance measure', () => {
   const waitingTime = 5000;
 
   before(async () => {
-    //await AppHelper.launchApp();
     await AppHelper.waitOnLoadingScreen();
     await OnboardingPage.skipOnboarding('flashlight');
     await AppHelper.pause(5000);
@@ -54,6 +52,7 @@ describe('Flashlight performance measure', () => {
       await FrontPagePage.searchTo.click();
       await SearchPage.setSearchLocation(arrival);
       await AppHelper.pause(waitingTime);
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
 
       // ** Details **
       await TravelsearchOverviewPage.openFirstSearchResult();
@@ -67,13 +66,10 @@ describe('Flashlight performance measure', () => {
   /**
    * Map: open the map
    */
-  it.only('should show the map', async () => {
+  it('should show the map', async () => {
     try {
       await NavigationHelper.tapMenu('map');
       await NavigationHelper.tapMenu('map');
-
-      // Onboarding (Check just in case)
-      await MapPage.confirmOnboarding();
       await AppHelper.pause(waitingTime);
     } catch (errMsg) {
       await AppHelper.screenshot('error_should_show_the_map');
@@ -136,7 +132,7 @@ describe('Flashlight performance measure', () => {
   /**
    * My profile: open my profile
    */
-  it.only('should show my profile', async () => {
+  it('should show my profile', async () => {
     try {
       await NavigationHelper.tapMenu('profile');
       await NavigationHelper.tapMenu('profile');

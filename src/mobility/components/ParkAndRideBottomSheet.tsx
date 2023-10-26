@@ -68,7 +68,7 @@ export const ParkAndRideBottomSheet = ({
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
         title={heading}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
       <ScrollView>
@@ -99,7 +99,7 @@ export const ParkAndRideBottomSheet = ({
             left={
               <VehicleStat
                 svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
-                primaryStat={''}
+                primaryStat=""
                 secondaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
               />
             }

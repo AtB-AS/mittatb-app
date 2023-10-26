@@ -33,7 +33,7 @@ export const PricingPlan = ({
       <PriceInfo
         price={plan.price}
         pricingSegment={plan.perMinPricing[0]}
-        unit={'min'}
+        unit="min"
         eligibleBenefits={eligibleBenefits}
       />
     );
@@ -44,7 +44,7 @@ export const PricingPlan = ({
       <PriceInfo
         price={plan.price}
         pricingSegment={plan.perKmPricing[0]}
-        unit={'km'}
+        unit="km"
         eligibleBenefits={eligibleBenefits}
       />
     );

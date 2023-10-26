@@ -190,7 +190,7 @@ export const NearbyStopPlacesScreenComponent = ({
           header={getListDescription()}
           stopPlaces={orderedStopPlaces}
           navigateToPlace={onSelectStopPlace}
-          testID={'nearbyStopsContainerView'}
+          testID="nearbyStopsContainerView"
           location={location}
           isLoading={isLoading}
         />

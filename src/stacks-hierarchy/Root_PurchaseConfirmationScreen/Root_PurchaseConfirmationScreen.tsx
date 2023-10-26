@@ -1,5 +1,4 @@
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
-import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
@@ -92,26 +91,20 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const {user} = useAuthState();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
   const [previousMethod, setPreviousMethod] = useState<
     PaymentMethod | undefined
   >(undefined);
-  const previousPaymentMethod = usePreviousPaymentMethod(user);
-  const {
-    deviceIsInspectable,
-    remoteTokens,
-    fallbackEnabled,
-    isError: mobileTokenError,
-  } = useMobileTokenContextState();
+  const previousPaymentMethod = usePreviousPaymentMethod();
+  const {deviceIsInspectable, remoteTokens, fallbackActive} =
+    useMobileTokenContextState();
   const tokensEnabled = useHasEnabledMobileToken();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
     tokensEnabled,
-    mobileTokenError,
-    fallbackEnabled,
+    fallbackActive,
     t,
     remoteTokens,
     deviceIsInspectable,
@@ -436,19 +429,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             </View>
           </GenericSectionItem>
         </Section>
-
-        <MessageBox
-          type="info"
-          message={
-            travelDate
-              ? t(
-                  PurchaseConfirmationTexts.infoText.validInFuture(
-                    formatToLongDateTime(travelDate, language),
-                  ),
-                )
-              : t(PurchaseConfirmationTexts.infoText.validNow)
-          }
-        />
         {inspectableTokenWarningText && (
           <MessageBox
             type="warning"
@@ -479,7 +459,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         ? Vipps
                         : Visa,
                   }}
-                  viewContainerStyle={styles.paymentButton}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -531,7 +510,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   });
                   selectPaymentMethod();
                 }}
-                viewContainerStyle={styles.paymentButton}
                 testID="choosePaymentOptionButton"
               />
             )}
@@ -641,7 +619,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   warningMessage: {
-    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   infoSection: {padding: theme.spacings.medium},
   userProfileItem: {
@@ -673,8 +651,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   smallTopMargin: {
     marginTop: theme.spacings.xSmall,
-  },
-  paymentButton: {
-    marginTop: theme.spacings.medium,
   },
 }));

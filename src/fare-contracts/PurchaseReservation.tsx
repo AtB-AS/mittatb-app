@@ -20,7 +20,7 @@ type Props = {
 export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {abtCustomerIdFull} = useAuthState();
+  const {abtCustomerId} = useAuthState();
   const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
@@ -43,7 +43,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   };
 
   // Filter out reservations for subaccounts
-  if (reservation.customerAccountId !== abtCustomerIdFull) return null;
+  if (reservation.customerAccountId !== abtCustomerId) return null;
 
   const status = getStatus();
 
@@ -58,7 +58,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             ) : (
               <FareContractStatusSymbol
                 status={status}
-              ></FareContractStatusSymbol>
+               />
             )}
             <ThemeText type="body__secondary" style={styles.reservationStatus}>
               {t(TicketingTexts.reservation[status])}

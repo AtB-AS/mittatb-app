@@ -30,7 +30,7 @@ export async function setPreference(
 export async function resetPreference(
   key: PreferenceItem,
 ): Promise<UserPreferences> {
-  let preferences = (await getPreferences()) ?? {};
+  const preferences = (await getPreferences()) ?? {};
   delete preferences[key];
   return await setPreference(preferences);
 }

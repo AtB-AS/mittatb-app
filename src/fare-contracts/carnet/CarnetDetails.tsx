@@ -80,7 +80,7 @@ export function CarnetDetails(props: {
           validFrom={fareContractValidFrom}
           validTo={fareContractValidTo}
           isInspectable={inspectable}
-          fareProductType={'carnet'}
+          fareProductType="carnet"
         />
       ) : (
         <UsedAccessValidityHeader
@@ -98,7 +98,7 @@ export function CarnetDetails(props: {
           validFrom={usedAccessValidFrom}
           validTo={usedAccessValidTo}
           isInspectable={false}
-          fareProductType={'carnet'}
+          fareProductType="carnet"
         />
       ) : (
         <View style={style.sectionSeparator}>

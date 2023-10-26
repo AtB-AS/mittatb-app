@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 
 apply plugin: "com.facebook.react"
 
+apply plugin: "kotlin-android"
+
 apply from: "../../node_modules/@bugsnag/react-native/bugsnag-react-native.gradle"
 
 /**
@@ -126,7 +128,6 @@ android {
             // }
         }
     }
-
     packagingOptions {
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
         pickFirst "lib/arm64-v8a/libc++_shared.so"

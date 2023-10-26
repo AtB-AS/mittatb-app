@@ -18,6 +18,14 @@ import {
   BikeStationFragment,
   CarStationFragment,
 } from '@atb/api/types/generated/fragments/stations';
+import {
+  ViolationsReportQuery,
+  ViolationsReportQueryResult,
+  ViolationsReportingInitQuery,
+  ViolationsReportingInitQueryResult,
+  ViolationsVehicleLookupQuery,
+  ViolationsVehicleLookupQueryResult,
+} from './types/mobility';
 
 type VehicleRequestOpts = Pick<AxiosRequestConfig, 'signal'>;
 
@@ -108,4 +116,36 @@ export const getCarStation = (
   return client
     .get<GetCarStationQuery>(stringifyUrl(url, query), opts)
     .then((res) => res.data.stations?.[0]);
+};
+
+export const initViolationsReporting = (
+  params: ViolationsReportingInitQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportingInitQueryResult> => {
+  const url = '/bff/v2/mobility/violations-reporting/init';
+  const query = qs.stringify(params);
+  return client
+    .get<ViolationsReportingInitQueryResult>(stringifyUrl(url, query), opts)
+    .then((res) => res.data);
+};
+
+export const lookupVehicleByQr = (
+  params: ViolationsVehicleLookupQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsVehicleLookupQueryResult> => {
+  const url = '/bff/v2/mobility/violations-reporting/vehicle';
+  const query = qs.stringify(params);
+  return client
+    .get<ViolationsVehicleLookupQueryResult>(stringifyUrl(url, query), opts)
+    .then((res) => res.data);
+};
+
+export const sendViolationsReport = (
+  data: ViolationsReportQuery,
+  opts?: AxiosRequestConfig,
+): Promise<ViolationsReportQueryResult> => {
+  const url = '/bff/v2/mobility/violations-reporting/report';
+  return client
+    .post<ViolationsReportQueryResult>(url, data, opts)
+    .then((res) => res.data);
 };
