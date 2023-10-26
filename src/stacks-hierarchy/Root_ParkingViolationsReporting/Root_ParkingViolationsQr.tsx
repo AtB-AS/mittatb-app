@@ -33,7 +33,7 @@ export const Root_ParkingViolationsQr = ({
   const [isError, setIsError] = useState(false);
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {providers, position} = useParkingViolations();
-  const {abtCustomerId} = useAuthState();
+  const {userId} = useAuthState();
 
   const providersList = useMemo(
     () => [
@@ -69,7 +69,7 @@ export const Root_ParkingViolationsQr = ({
     const imageType = params.photo.split('.').pop();
 
     sendViolationsReport({
-      appId: abtCustomerId,
+      appId: userId,
       image: base64data,
       imageType,
       latitude: position?.latitude ?? 0,

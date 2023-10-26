@@ -122,12 +122,12 @@ export const TicketingContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
   const {resubscribeToggle, resubscribe} = useResubscribeToggle();
 
-  const {abtCustomerId} = useAuthState();
+  const {userId} = useAuthState();
   const {enable_ticketing} = useRemoteConfig();
 
   useEffect(() => {
-    if (abtCustomerId && enable_ticketing) {
-      const removeListeners = setupFirestoreListeners(abtCustomerId, {
+    if (userId && enable_ticketing) {
+      const removeListeners = setupFirestoreListeners(userId, {
         fareContracts: {
           onSnapshot: (fareContracts) =>
             dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
@@ -167,7 +167,7 @@ export const TicketingContextProvider: React.FC = ({children}) => {
       // Stop listening for updates when no longer required
       return () => removeListeners();
     }
-  }, [resubscribeToggle, abtCustomerId, enable_ticketing]);
+  }, [resubscribeToggle, userId, enable_ticketing]);
 
   return (
     <TicketingContext.Provider

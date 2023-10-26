@@ -64,7 +64,8 @@ export const Profile_DebugInfoScreen = () => {
     restartOnboarding,
   } = useAppState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
-  const {user, abtCustomerId} = useAuthState();
+  const {userId} = useAuthState();
+  const user = auth().currentUser;
   const [idToken, setIdToken] = useState<
     FirebaseAuthTypes.IdTokenResult | undefined
   >(undefined);
@@ -98,16 +99,10 @@ export const Profile_DebugInfoScreen = () => {
     useParkingViolationsReportingEnabledDebugOverride();
 
   useEffect(() => {
-    async function run() {
-      if (!!user) {
-        const idToken = await user.getIdTokenResult();
-        setIdToken(idToken);
-      } else {
-        setIdToken(undefined);
-      }
-    }
-
-    run();
+    (async function () {
+      const idToken = await user?.getIdTokenResult();
+      setIdToken(idToken);
+    })();
   }, [user]);
 
   const {
@@ -137,9 +132,9 @@ export const Profile_DebugInfoScreen = () => {
   }, []);
 
   function copyFirestoreLink() {
-    if (abtCustomerId)
+    if (userId)
       setClipboard(
-        `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${abtCustomerId}`,
+        `https://console.firebase.google.com/u/1/project/atb-mobility-platform-staging/firestore/data/~2Fcustomers~2F${userId}`,
       );
   }
 
