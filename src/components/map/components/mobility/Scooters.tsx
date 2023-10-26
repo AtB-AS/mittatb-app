@@ -29,6 +29,7 @@ export const Scooters = ({scooters, onClusterClick}: Props) => {
         cluster
         maxZoomLevel={22}
         clusterMaxZoomLevel={21}
+        clusterRadius={40}
         onPress={(e) => onClusterClick(e, clustersSource)}
       >
         <MapboxGL.SymbolLayer
@@ -73,6 +74,7 @@ export const Scooters = ({scooters, onClusterClick}: Props) => {
         tolerance={0}
         cluster
         maxZoomLevel={22}
+        clusterRadius={40}
         clusterMaxZoomLevel={21}
       >
         <MapboxGL.SymbolLayer
