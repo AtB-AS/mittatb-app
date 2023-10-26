@@ -1,43 +1,32 @@
 import {renderHook} from '@testing-library/react-hooks';
 import {LoadingParams, LoadingStatus} from '@atb/loading-screen/types';
-import {useLogEventOnTimeoutStatus} from '@atb/loading-screen/use-log-event-on-timeout-status';
+import {useNotifyBugsnagOnTimeoutStatus} from '@atb/loading-screen/use-notify-bugsnag-on-timeout-status';
 import React, {MutableRefObject} from 'react';
-import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 import jestExpect from 'expect';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
-let mockLoggedEvent:
-  | Parameters<ReturnType<typeof useAnalytics>['logEvent']>
-  | undefined;
+let mockBugsnagNotification: Parameters<typeof notifyBugsnag> | undefined;
 
-const logEventMock = {
-  logEvent: (
-    ctx: AnalyticsEventContext,
-    event: string,
-    props?: {[key: string]: any},
-  ) => {
-    mockLoggedEvent = [ctx, event, props];
+jest.mock('@atb/utils/bugsnag-utils', () => ({
+  notifyBugsnag: (error: string, metadata: any) => {
+    mockBugsnagNotification = [error, metadata];
   },
-};
-
-jest.mock('@atb/analytics', () => ({
-  useAnalytics: () => logEventMock,
 }));
 
-describe('useLogEventOnTimeoutStatus', () => {
+describe('useNotifyBugsnagOnTimeoutStatus', () => {
   beforeAll(() => jest.useFakeTimers());
   beforeEach(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
-    mockLoggedEvent = undefined;
+    mockBugsnagNotification = undefined;
   });
   afterAll(() => jest.useRealTimers());
 
   it('Should log event if status timeout', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
-    expect(mockLoggedEvent).toEqual([
-      jestExpect.anything(),
-      jestExpect.anything(),
+    renderHook(() => useNotifyBugsnagOnTimeoutStatus('timeout', ref));
+    expect(mockBugsnagNotification).toEqual([
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
@@ -47,29 +36,28 @@ describe('useLogEventOnTimeoutStatus', () => {
 
   it('Should not log event if status loading', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    renderHook(() => useLogEventOnTimeoutStatus('loading', ref));
-    expect(mockLoggedEvent).toEqual(undefined);
+    renderHook(() => useNotifyBugsnagOnTimeoutStatus('loading', ref));
+    expect(mockBugsnagNotification).toEqual(undefined);
   });
 
   it('Should not log event if status success', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    renderHook(() => useLogEventOnTimeoutStatus('success', ref));
-    expect(mockLoggedEvent).toEqual(undefined);
+    renderHook(() => useNotifyBugsnagOnTimeoutStatus('success', ref));
+    expect(mockBugsnagNotification).toEqual(undefined);
   });
 
   it('Should log event on rerender if status changes to timeout', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
     const hook = renderHook(
-      ({status}) => useLogEventOnTimeoutStatus(status, ref),
+      ({status}) => useNotifyBugsnagOnTimeoutStatus(status, ref),
       {
         initialProps: {status: 'loading' as LoadingStatus},
       },
     );
-    expect(mockLoggedEvent).toEqual(undefined);
+    expect(mockBugsnagNotification).toEqual(undefined);
     hook.rerender({status: 'timeout'});
-    expect(mockLoggedEvent).toEqual([
-      jestExpect.anything(),
-      jestExpect.anything(),
+    expect(mockBugsnagNotification).toEqual([
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
@@ -79,34 +67,34 @@ describe('useLogEventOnTimeoutStatus', () => {
 
   it('Should not log event on rerender when no params change', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    const hook = renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
-    expect(mockLoggedEvent).toEqual([
-      jestExpect.anything(),
-      jestExpect.anything(),
+    const hook = renderHook(() =>
+      useNotifyBugsnagOnTimeoutStatus('timeout', ref),
+    );
+    expect(mockBugsnagNotification).toEqual([
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
       }),
     ]);
-    mockLoggedEvent = undefined;
+    mockBugsnagNotification = undefined;
     hook.rerender();
-    expect(mockLoggedEvent).toEqual(undefined);
+    expect(mockBugsnagNotification).toEqual(undefined);
   });
 
   it('Should log event with updated ref params', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
     const hook = renderHook(
-      ({status}) => useLogEventOnTimeoutStatus(status, ref),
+      ({status}) => useNotifyBugsnagOnTimeoutStatus(status, ref),
       {
         initialProps: {status: 'loading' as LoadingStatus},
       },
     );
-    expect(mockLoggedEvent).toEqual(undefined);
+    expect(mockBugsnagNotification).toEqual(undefined);
     ref.current = {isLoadingAppState: true, authStatus: 'creating-account'};
     hook.rerender({status: 'timeout'});
-    expect(mockLoggedEvent).toEqual([
-      jestExpect.anything(),
-      jestExpect.anything(),
+    expect(mockBugsnagNotification).toEqual([
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'creating-account',
@@ -116,19 +104,20 @@ describe('useLogEventOnTimeoutStatus', () => {
 
   it('Should not log event again when ref params change', async () => {
     const ref = createRef({isLoadingAppState: true, authStatus: 'loading'});
-    const hook = renderHook(() => useLogEventOnTimeoutStatus('timeout', ref));
-    expect(mockLoggedEvent).toEqual([
-      jestExpect.anything(),
-      jestExpect.anything(),
+    const hook = renderHook(() =>
+      useNotifyBugsnagOnTimeoutStatus('timeout', ref),
+    );
+    expect(mockBugsnagNotification).toEqual([
+      jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
       }),
     ]);
-    mockLoggedEvent = undefined;
+    mockBugsnagNotification = undefined;
     ref.current = {isLoadingAppState: true, authStatus: 'creating-account'};
     hook.rerender();
-    expect(mockLoggedEvent).toEqual(undefined);
+    expect(mockBugsnagNotification).toEqual(undefined);
   });
 });
 
