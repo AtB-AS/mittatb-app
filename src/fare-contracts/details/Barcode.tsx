@@ -235,16 +235,14 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
   if (!aztecXml) return null;
 
   return (
-    <View
-      style={styles.aztecCode}
-      accessible={true}
-      accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-      testID="staticBarcode"
-    >
+    <View style={styles.aztecCode}>
       <PressableOpacity
         onPress={onOpenBarcodePress}
         accessibilityRole="button"
-        accessibilityHint={t(FareContractTexts.details.barcodeButtonA11yLabel)}
+        accessibilityLabel={t(
+          FareContractTexts.details.barcodeA11yLabelWithActivation,
+        )}
+        testID="staticBarcode"
       >
         <SvgXml xml={aztecXml} width="100%" height="100%" />
       </PressableOpacity>
@@ -269,14 +267,14 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
   return (
     <View
       style={[styles.aztecCode, styles.staticQrCode, styles.staticQrCodeSmall]}
-      accessible={true}
-      accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-      testID="staticQRCode"
     >
       <PressableOpacity
         onPress={onOpenBarcodePress}
         accessibilityRole="button"
-        accessibilityHint={t(FareContractTexts.details.barcodeButtonA11yLabel)}
+        accessibilityLabel={t(
+          FareContractTexts.details.barcodeA11yLabelWithActivation,
+        )}
+        testID="staticQRCode"
       >
         <SvgXml xml={qrCodeSvg} width="100%" height="100%" />
       </PressableOpacity>
@@ -330,14 +328,18 @@ function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
         />
 
         <View style={styles.staticBottomContainer}>
-          <View
-            ref={onOpenFocusRef}
-            style={[styles.aztecCode, styles.staticQrCode]}
-            accessible={true}
-            accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
-            testID="staticQRCode"
-          >
-            <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+          <View style={[styles.aztecCode, styles.staticQrCode]}>
+            <PressableOpacity
+              ref={onOpenFocusRef}
+              onPress={closeBottomSheet}
+              accessible={true}
+              accessibilityLabel={t(
+                FareContractTexts.details.barcodeBottomSheetA11yLabel,
+              )}
+              testID="staticBigQRCode"
+            >
+              <SvgXml xml={qrCodeSvg ?? ''} width="100%" height="100%" />
+            </PressableOpacity>
           </View>
         </View>
       </BottomSheetContainer>

@@ -2,15 +2,28 @@ import Bugsnag, {Event} from '@bugsnag/react-native';
 import {ClientConfig} from '@entur-private/abt-mobile-client-sdk';
 
 export const logger: ClientConfig['logger'] = {
-  info: (msg, metadata?) => {
-    Bugsnag.leaveBreadcrumb(msg, metadata);
+  debug: (msg, metadata?) => {
+    Bugsnag.leaveBreadcrumb('Mobiletoken sdk debug message: ' + msg, metadata);
   },
-  error: (err, metadata?) => {
-    const onError = metadata
-      ? (event: Event) => {
-          event.addMetadata('metadata', metadata);
-        }
-      : undefined;
+  info: (msg, metadata?) => {
+    Bugsnag.leaveBreadcrumb('Mobiletoken sdk info message: ' + msg, metadata);
+  },
+  warn: (msg, err, metadata?) => {
+    const onError = toOnErrorCallback('warning', msg, metadata);
+    Bugsnag.notify(err, onError);
+  },
+  error: (msg, err, metadata?) => {
+    const onError = toOnErrorCallback('error', msg, metadata);
     if (err) Bugsnag.notify(err, onError);
   },
 };
+
+const toOnErrorCallback =
+  (logLevel: string, msg: string, metadata?: Record<string, string>) =>
+  (event: Event) => {
+    event.addMetadata('metadata', {
+      logLevel: logLevel,
+      originalMessage: msg,
+      ...(metadata || {}),
+    });
+  };

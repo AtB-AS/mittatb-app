@@ -1,5 +1,5 @@
 import {FareProductTypeConfig} from '@atb/configuration';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragmentWithIsFree} from '@atb/harbors/types';

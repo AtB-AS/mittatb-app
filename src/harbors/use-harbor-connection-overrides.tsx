@@ -1,6 +1,6 @@
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useEffect, useState} from 'react';
-import {HarborConnectionOverrideType} from '@atb-as/config-specs';
+import {HarborConnectionOverrideType} from '@atb/configuration';
 
 export const useHarborConnectionOverrides = (fromHarborId?: string) => {
   const [overrides, setOverrides] = useState<HarborConnectionOverrideType[]>(
