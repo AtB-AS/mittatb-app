@@ -1,4 +1,5 @@
 #import "KettleSDKExtension.h"
+#import "AppDelegate.h"
 
 #ifdef KETTLE_API_KEY
 #import <KettleKit/KettleKit.h>
@@ -26,7 +27,15 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_METHOD(initializeKettleSDK)
 {
 #ifdef KETTLE_API_KEY
-  InitializeKettle(nil);
+  dispatch_async(dispatch_get_main_queue(), ^{
+    InitializeKettle([AppDelegate sharedInstance].launchOptions);
+  });
 #endif
 }
+
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
 @end

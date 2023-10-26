@@ -610,7 +610,7 @@ export const Profile_DebugInfoScreen = () => {
         {isBeaconsEnabled && !!KETTLE_API_KEY && (
           <Section withPadding withTopPadding>
             <ExpandableSectionItem
-              text="Kettle SDK"
+              text="Beacons"
               showIconText={true}
               expandContent={
                 <View>
