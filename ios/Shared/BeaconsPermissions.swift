@@ -20,13 +20,35 @@ extension UserDefaults {
 
 typealias PermissionCallback = (Bool) -> Void
 
+protocol PermissionRequestable: AnyObject {
+  var onComplete: PermissionCallback? { get set }
+  var mandatory: Bool { get set }
+  init(mandatory: Bool)
+  func request(callback onComplete: @escaping PermissionCallback)
+  func response(_ status: Bool)
+}
+
+extension PermissionRequestable {
+  func response(_ status: Bool) {
+    onComplete?(status)
+    // NOTE: OnComplete must only be fired once!
+    onComplete = nil
+  }
+}
+
 // Bluetooth Permission
-class BluetoothPermission: NSObject, CBCentralManagerDelegate {
+class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDelegate {
+  internal var mandatory: Bool
+  internal var onComplete: PermissionCallback?
   private var bluetoothManager: CBCentralManager?
-  private var onComplete: PermissionCallback?
 
   override init() {
+    self.mandatory = true
     super.init()
+  }
+
+  required init(mandatory: Bool) {
+    self.mandatory = mandatory
   }
 
   deinit {
@@ -35,26 +57,33 @@ class BluetoothPermission: NSObject, CBCentralManagerDelegate {
 
   func centralManagerDidUpdateState(_ central: CBCentralManager) {
     guard central.state == .poweredOn else {
-      onComplete?(false)
+      response(mandatory ? false : true)
       return
     }
 
-    onComplete?(true)
+    response(true)
   }
 
-  func requestPermission(callback onComplete: @escaping PermissionCallback) {
+  func request(callback onComplete: @escaping PermissionCallback) {
     self.onComplete = onComplete
     bluetoothManager = CBCentralManager(delegate: self, queue: nil)
   }
 }
 
 // When In Use Permission
-class WhenInUsePermission: NSObject, CLLocationManagerDelegate {
+class WhenInUsePermission: NSObject, PermissionRequestable, CLLocationManagerDelegate {
+  internal var mandatory: Bool
+  internal var onComplete: PermissionCallback?
+
   private var locationManager: CLLocationManager?
-  var onComplete: PermissionCallback?
 
   override init() {
+    self.mandatory = true
     super.init()
+  }
+
+  required init(mandatory: Bool) {
+    self.mandatory = mandatory
   }
 
   deinit {
@@ -63,18 +92,18 @@ class WhenInUsePermission: NSObject, CLLocationManagerDelegate {
 
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     guard status == .authorizedWhenInUse else {
-      onComplete?(false)
+      response(mandatory ? false : true)
       return
     }
 
-    onComplete?(true)
+    response(true)
   }
 
-  func requestPermission(callback onComplete: @escaping PermissionCallback) {
+  func request(callback onComplete: @escaping PermissionCallback) {
     self.onComplete = onComplete
     switch CLLocationManager.authorizationStatus() {
     case .authorizedWhenInUse, .authorizedAlways:
-      onComplete(true)
+      response(true)
     case .notDetermined:
       UserDefaults.standard.setBool(false, for: .alwaysLocationAuthorizationKey)
       locationManager = CLLocationManager()
@@ -83,18 +112,24 @@ class WhenInUsePermission: NSObject, CLLocationManagerDelegate {
         self?.locationManager?.requestWhenInUseAuthorization()
       }
     default:
-      onComplete(false)
+      response(mandatory ? false : true)
     }
   }
 }
 
 // When In Use Permission
-class AlwaysUsePermission: NSObject, CLLocationManagerDelegate {
+class AlwaysUsePermission: NSObject, PermissionRequestable, CLLocationManagerDelegate {
+  internal var mandatory: Bool
+  internal var onComplete: PermissionCallback?
   private var locationManager: CLLocationManager?
-  var onComplete: PermissionCallback?
 
   override init() {
+    self.mandatory = true
     super.init()
+  }
+
+  required init(mandatory: Bool) {
+    self.mandatory = mandatory
   }
 
   deinit {
@@ -103,21 +138,21 @@ class AlwaysUsePermission: NSObject, CLLocationManagerDelegate {
 
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     guard status == .authorizedAlways else {
-      onComplete?(false)
+      response(mandatory ? false : true)
       return
     }
 
-    onComplete?(true)
+    response(true)
   }
 
-  func requestPermission(callback onComplete: @escaping PermissionCallback) {
+  func request(callback onComplete: @escaping PermissionCallback) {
     self.onComplete = onComplete
     switch CLLocationManager.authorizationStatus() {
     case .authorizedAlways:
       onComplete(true)
     case .authorizedWhenInUse:
       guard !UserDefaults.standard.getBool(for: .alwaysLocationAuthorizationKey) else {
-        onComplete(false)
+        onComplete(mandatory ? false : true)
         return
       }
 
@@ -128,28 +163,41 @@ class AlwaysUsePermission: NSObject, CLLocationManagerDelegate {
         self?.locationManager?.requestAlwaysAuthorization()
       }
     default:
-      onComplete(false)
+      onComplete(mandatory ? false : true)
     }
   }
 }
 
 // Motion Permission
-class MotionPermission: NSObject {
+class MotionPermission: NSObject, PermissionRequestable {
+  internal var mandatory: Bool
+  internal var onComplete: PermissionCallback?
   private var motionManager: CMMotionActivityManager?
 
   override init() {
+    self.mandatory = true
     super.init()
   }
 
-  func requestPermission(callback onComplete: @escaping PermissionCallback) {
+  required init(mandatory: Bool) {
+    self.mandatory = mandatory
+  }
+
+  func request(callback onComplete: @escaping PermissionCallback) {
+    self.onComplete = onComplete
     if CMMotionActivityManager.isActivityAvailable() {
       motionManager = CMMotionActivityManager()
       motionManager?.queryActivityStarting(from: Date(), to: Date(), to: .main, withHandler: { [weak self] _, _  in
-        onComplete(CMMotionActivityManager.authorizationStatus() == .authorized)
         self?.motionManager?.stopActivityUpdates()
+        guard let mandatory = self?.mandatory, mandatory else {
+          self?.response(true)
+          return
+        }
+
+        self?.response(CMMotionActivityManager.authorizationStatus() == .authorized)
       })
     } else {
-      onComplete(false)
+      response(mandatory ? false : true)
     }
   }
 }
@@ -163,17 +211,17 @@ class BeaconsPermissions: NSObject {
 
   @objc func request(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     bluetoothPermission = BluetoothPermission()
-    whenInUsePermission = WhenInUsePermission()
-    alwaysPermission = AlwaysUsePermission()
-    motionPermission = MotionPermission()
+    whenInUsePermission = WhenInUsePermission(mandatory: false)
+    alwaysPermission = AlwaysUsePermission(mandatory: false)
+    motionPermission = MotionPermission(mandatory: false)
 
-    bluetoothPermission?.requestPermission { [weak self] bluetoothPermissionGranted in
+    bluetoothPermission?.request { [weak self] bluetoothPermissionGranted in
       if bluetoothPermissionGranted {
-        self?.whenInUsePermission?.requestPermission { [weak self] whenInUsePermissionGranted in
+        self?.whenInUsePermission?.request { [weak self] whenInUsePermissionGranted in
           if whenInUsePermissionGranted {
-            self?.alwaysPermission?.requestPermission { [weak self] alwaysPermissionGranted in
+            self?.alwaysPermission?.request { [weak self] alwaysPermissionGranted in
               if alwaysPermissionGranted {
-                self?.motionPermission?.requestPermission { [weak self] motionPermissionGranted in
+                self?.motionPermission?.request { [weak self] motionPermissionGranted in
                   resolve(motionPermissionGranted)
                   self?.releasePermissionObjects()
                 }
