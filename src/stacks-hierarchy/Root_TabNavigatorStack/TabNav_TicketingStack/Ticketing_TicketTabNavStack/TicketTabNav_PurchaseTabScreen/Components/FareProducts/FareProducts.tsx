@@ -1,13 +1,13 @@
 import React from 'react';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {isProductSellableInApp} from '@atb/reference-data/utils';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {useTicketingState} from '@atb/ticketing';
 import {FareProductGroup} from './FareProductGroup';
 import {
+  useFirestoreConfiguration,
+  FareProductTypeConfig,
   LanguageAndTextType,
   ProductTypeTransportModes,
-} from '@atb-as/config-specs';
+  isProductSellableInApp,
+} from '@atb/configuration';
 import {flatMap} from '@atb/utils/array';
 import {
   TicketingTexts,

@@ -21,7 +21,7 @@ import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {UsedAccessStatus} from '@atb/fare-contracts/carnet/types';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {findReferenceDataById} from '@atb/configuration';
 import {useFirestoreConfiguration} from '@atb/configuration';
 
 export function CarnetDetails(props: {

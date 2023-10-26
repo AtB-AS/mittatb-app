@@ -4,12 +4,14 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {UserProfile} from '@atb/reference-data/types';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {
+  UserProfile,
+  useFirestoreConfiguration,
+  getReferenceDataName,
+} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {View} from 'react-native';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 
 export const Profile_DefaultUserProfileScreen = () => {
   const {

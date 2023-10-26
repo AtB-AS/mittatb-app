@@ -32,10 +32,7 @@ import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import {
-  findReferenceDataById,
-  isOfFareProductRef,
-} from '@atb/reference-data/utils';
+import {findReferenceDataById, isOfFareProductRef} from '@atb/configuration';
 
 type Props = {onAfterSave: () => void};
 

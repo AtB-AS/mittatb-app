@@ -4,12 +4,14 @@ import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {
+  useFirestoreConfiguration,
+  getReferenceDataName,
+} from '@atb/configuration';
 import {
   useHasEnabledMobileToken,
   useMobileTokenContextState,
 } from '@atb/mobile-token/MobileTokenContext';
-import {getReferenceDataName} from '@atb/reference-data/utils';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
@@ -43,7 +45,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
 import {Info} from '@atb/assets/svg/color/icons/status';
-import {TariffZone} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';

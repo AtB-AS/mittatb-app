@@ -1,4 +1,4 @@
-import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
+import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
 import {
   CounterIconBox,
   TransportationIconBox,

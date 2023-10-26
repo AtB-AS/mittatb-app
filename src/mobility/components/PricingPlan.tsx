@@ -8,7 +8,7 @@ import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
-import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitIdType} from '@atb/configuration';
 
 type PricingPlanProps = {
   operator: string;

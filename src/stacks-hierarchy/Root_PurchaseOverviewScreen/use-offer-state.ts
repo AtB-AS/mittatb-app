@@ -1,6 +1,6 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {PreassignedFareProduct, TariffZone} from '@atb/configuration';
 import {
   FlexDiscountLadder,
   Offer,
