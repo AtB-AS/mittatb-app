@@ -33,6 +33,9 @@ const NearbyTexts = {
       'Share your location to find nearby stops. Use the search field to find other stops.',
       'Del posisjonen din for å finne haldeplassar i nærleiken. Bruk søkjefeltet for å finne andre haldeplassar.',
     ),
+    sharePositionButton: {
+      title: _('Del din posisjon', 'Share your position', 'Del din posisjon'),
+    },
     updatingLocation: _(
       'Oppdaterer posisjon for å finne avganger i nærheten.',
       'Updating your location to find nearby departures',

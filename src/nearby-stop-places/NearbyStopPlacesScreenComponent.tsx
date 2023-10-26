@@ -207,7 +207,7 @@ export const NearbyStopPlacesScreenComponent = ({
           buttonComponent={
             <Button
               interactiveColor="interactive_3"
-              text="Del din posisjon"
+              text={t(NearbyTexts.stateAnnouncements.sharePositionButton.title)}
               mode="primary"
               onPress={requestPermission}
               compact={true}
