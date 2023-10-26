@@ -206,12 +206,12 @@ export const NearbyStopPlacesScreenComponent = ({
           }
           buttonComponent={
             <Button
-              interactiveColor={'interactive_3'}
-              text={'Del din posisjon'}
-              mode={'primary'}
+              interactiveColor="interactive_3"
+              text="Del din posisjon"
+              mode="primary"
               onPress={requestPermission}
               compact={true}
-              type={'pill'}
+              type="pill"
             />
           }
         />
