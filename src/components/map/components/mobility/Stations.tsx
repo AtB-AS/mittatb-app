@@ -50,7 +50,10 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
 
   return (
     <>
-      <BikeStations stations={bikeStations} />
+      <BikeStations
+        stations={bikeStations}
+        onClusterClick={handleClusterClick}
+      />
       <CarStations stations={carStations} onClusterClick={handleClusterClick} />
     </>
   );
