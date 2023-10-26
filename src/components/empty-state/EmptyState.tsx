@@ -6,12 +6,14 @@ export type EmptyStateProps = {
   title: string;
   details: string;
   illustrationComponent: JSX.Element;
+  buttonComponent?: JSX.Element;
 };
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   details,
   illustrationComponent,
+  buttonComponent,
 }) => {
   const styles = useStyles();
 
@@ -32,6 +34,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       >
         {details}
       </ThemeText>
+      {buttonComponent}
     </View>
   );
 };
@@ -50,5 +53,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   emptyStateDetails: {
     textAlign: 'center',
+    marginBottom: theme.spacings.medium,
   },
 }));
