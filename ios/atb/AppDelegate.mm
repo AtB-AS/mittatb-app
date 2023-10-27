@@ -10,26 +10,6 @@
 
 #import "RNBootSplash.h"
 
-#ifdef KETTLE_API_KEY
-#import <KettleKit/KettleKit.h>
-#import <KettleKit/KettleKit-Swift.h>
-static void InitializeKettle(NSDictionary *launchOptions) {
-    KTLConfig* config = [KTLConfig KTLDefaultConfig];
-    NSString *apiKey = [NSString stringWithFormat:@"%@", KETTLE_API_KEY];
-    #if DEBUG
-        config.developmentApiKey = apiKey;
-    #else
-        config.productionApiKey = apiKey;
-    #endif
-  
-    config.developmentLogLevel = KTLLogLevelDebug;
-    config.productionLogLevel = KTLLogLevelNone;
-
-    // Initialize Kettle
-    [KTLKettle prepare:config launchOptions:launchOptions];
-}
-#endif
-
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -52,11 +32,16 @@ static void InitializeFlipper(UIApplication *application) {
 
 @implementation AppDelegate
 
+@synthesize launchOptions;
+
++ (AppDelegate *)sharedInstance {
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  #ifdef KETTLE_API_KEY
-    InitializeKettle(launchOptions);
-  #endif
+  self.launchOptions = launchOptions;
+  
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
   #endif

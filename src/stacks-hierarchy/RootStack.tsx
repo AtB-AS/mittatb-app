@@ -54,6 +54,7 @@ import {
   Root_ParkingViolationsSelect,
   Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
+import {useBeacons} from '@atb/utils/use-beacons';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -67,6 +68,7 @@ export const RootStack = () => {
   const navRef = useNavigationContainerRef<RootStackParamList>();
   useFlipper(navRef);
 
+  useBeacons();
   useTestIds();
 
   if (isLoading) {

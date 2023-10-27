@@ -6,10 +6,7 @@ import {Kettle, KettleModules} from 'react-native-kettle-module';
 import {KettleConsents} from 'react-native-kettle-module';
 import {PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
-const BEACONS_CONSENTS = [
-  KettleConsents.SURVEYS,
-  KettleConsents.ANALYTICS,
-];
+const BEACONS_CONSENTS = [KettleConsents.SURVEYS, KettleConsents.ANALYTICS];
 
 export const useBeacons = () => {
   const [isBeaconsEnabled] = useIsBeaconsEnabled();
@@ -19,6 +16,17 @@ export const useBeacons = () => {
   const [kettleIdentifier, setKettleIdentifier] = useState(null);
   const [kettleConsents, setKettleConsents] = useState();
   const [isBeaconsOnboarded, setIsBeaconsOnboarded] = useState(false);
+
+  const initializeBeacons = useCallback(async () => {
+    // This will set kettle if KETTLE_API_KEY is set on the native side
+    await NativeModules.KettleSDKExtension.initializeKettleSDK();
+  }, [NativeModules]);
+
+  useEffect(() => {
+    if (isBeaconsSupported) {
+      initializeBeacons();
+    }
+  }, [initializeBeacons, isBeaconsSupported]);
 
   useEffect(() => {
     let isMounted = true;

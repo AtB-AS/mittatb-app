@@ -35,7 +35,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+          packages.add(new KettleSDKPackage());
           return packages;
         }
 
@@ -66,16 +66,12 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     tryInitializeIntercom();
     SoLoader.init(this, /* native exopackage */ false);
 
-    addExtraConfigurations(getApplicationContext());
-
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
       // If you opted-in for the New Architecture, we load the native entry point for this app.
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
-
-  public void addExtraConfigurations(Context context) {}
 
   private void tryInitializeBugsnag() {
     try {

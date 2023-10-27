@@ -1,10 +1,10 @@
 import {View, ViewStyle} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {RadioIcon} from './RadioIcon';
 import React from 'react';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {InteractiveColor} from '@atb/theme/colors';
 
 type ContainerSizingType = 'compact' | 'standard' | 'spacious';
 
@@ -20,6 +20,7 @@ type Props = {
   onPress: () => void;
   style?: ViewStyle;
   testID?: string;
+  interactiveColor?: InteractiveColor;
 };
 export function RadioBox({
   title,
@@ -33,21 +34,22 @@ export function RadioBox({
   onPress,
   style,
   testID,
+  interactiveColor = 'interactive_2',
 }: Props) {
   const styles = useStyles();
   const {theme} = useTheme();
   const spacing = useSpacing(type);
 
-  const themeColor: StaticColorByType<'background'> = selected
-    ? 'background_accent_3'
-    : 'background_0';
+  const themeColor =
+    theme.interactive[interactiveColor][selected ? 'active' : 'default'];
+  const {background: backgroundColor, text: textColor} = themeColor;
 
   return (
     <PressableOpacity
       style={[
         styles.container,
         {
-          backgroundColor: theme.static.background[themeColor].background,
+          backgroundColor: backgroundColor,
           padding: spacing,
         },
         style,
@@ -83,7 +85,7 @@ export function RadioBox({
         style={styles.radioIcon}
         testID={testID + (selected ? 'RadioChecked' : 'RadioNotChecked')}
       >
-        <RadioIcon checked={selected} color={themeColor} />
+        <RadioIcon checked={selected} color={textColor} />
       </View>
     </PressableOpacity>
   );

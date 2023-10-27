@@ -41,6 +41,7 @@ export const Root_ParkingViolationsPhoto = ({
 
   return (
     <ScreenContainer
+      leftHeaderButton={{type: 'back', withIcon: true}}
       title={t(ParkingViolationTexts.photo.title)}
       secondaryText={t(ParkingViolationTexts.photo.instruction)}
       isLoading={isLoading}

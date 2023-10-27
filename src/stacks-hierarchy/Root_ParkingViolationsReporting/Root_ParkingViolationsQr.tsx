@@ -4,7 +4,7 @@ import {Camera} from '@atb/components/camera';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
@@ -33,7 +33,15 @@ export const Root_ParkingViolationsQr = ({
   const [isError, setIsError] = useState(false);
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {providers, position} = useParkingViolations();
-  const {abtCustomerId} = useAuthState();
+  const {userId} = useAuthState();
+
+  const providersList = useMemo(
+    () => [
+      ...providers,
+      {name: t(ParkingViolationTexts.selectProvider.unknownProvider)},
+    ],
+    [providers],
+  );
 
   useEffect(() => {
     if (isFocused) {
@@ -41,7 +49,7 @@ export const Root_ParkingViolationsQr = ({
     }
   }, [isFocused]);
 
-  const submitReport = async (providerId: number) => {
+  const submitReport = async (providerId?: number) => {
     setIsLoading(true);
     closeBottomSheet();
 
@@ -61,7 +69,7 @@ export const Root_ParkingViolationsQr = ({
     const imageType = params.photo.split('.').pop();
 
     sendViolationsReport({
-      appId: abtCustomerId,
+      appId: userId,
       image: base64data,
       imageType,
       latitude: position?.latitude ?? 0,
@@ -115,7 +123,7 @@ export const Root_ParkingViolationsQr = ({
   const selectProvider = (qrScanFailed?: boolean) => {
     openBottomSheet(() => (
       <SelectProviderBottomSheet
-        providers={providers}
+        providers={providersList}
         qrScanFailed={qrScanFailed}
         onSelect={(provider) => {
           submitReport(provider.id);
@@ -140,6 +148,7 @@ export const Root_ParkingViolationsQr = ({
     <ScreenContainer
       title={t(ParkingViolationTexts.qr.title)}
       secondaryText={t(ParkingViolationTexts.qr.instructions)}
+      leftHeaderButton={isLoading ? undefined : {type: 'back', withIcon: true}}
       buttons={
         <Button
           disabled={isError}
@@ -171,6 +180,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   error: {
-    marginTop: theme.spacings.medium,
+    margin: theme.spacings.medium,
   },
 }));

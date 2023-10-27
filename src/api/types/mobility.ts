@@ -4,9 +4,9 @@ export type ViolationsReportingInitQuery = {
 };
 
 export type ViolationsReportingProvider = {
-  id: number;
+  id?: number;
   name: string;
-  image: {
+  image?: {
     type: string;
     base64: string;
   };

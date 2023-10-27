@@ -1,14 +1,31 @@
 package no.mittatb;
 
-import android.content.Context;
+import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.module.annotations.ReactModule;
 import com.kogenta.kettle.common.config.KettleConfig;
 import com.kogenta.kettle.common.logging.LogLevel;
 import com.kogenta.kettle.sdk.Kettle;
 
-public class BeaconsApplication extends MainApplication {
+@ReactModule(name = KettleSDKExtension.NAME)
+public class KettleSDKExtension extends ReactContextBaseJavaModule {
+    public static final String NAME = "KettleSDKExtension";
+
+    KettleSDKExtension(ReactApplicationContext context) {
+        super(context);
+    }
+
     @Override
-    public void addExtraConfigurations(Context context) {
+    @NonNull
+    public String getName() {
+        return NAME;
+    }
+
+    @ReactMethod
+    public void initializeKettleSDK() {
         if (BuildConfig.KETTLE_API_KEY != null && !BuildConfig.KETTLE_API_KEY.isEmpty()) {
             KettleConfig kettleConfig = new KettleConfig();
             if (BuildConfig.DEBUG) {
@@ -20,7 +37,7 @@ public class BeaconsApplication extends MainApplication {
                 kettleConfig.setProductionLogLevel(LogLevel.INFO);
                 kettleConfig.setInProduction(true);
             }
-            Kettle.initialize(kettleConfig, context);
+            Kettle.initialize(kettleConfig, getReactApplicationContext());
         }
     }
 }

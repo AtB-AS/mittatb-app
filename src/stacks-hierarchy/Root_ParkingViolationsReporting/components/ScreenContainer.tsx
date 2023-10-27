@@ -23,27 +23,17 @@ type Props = PropsWithChildren<{
 }>;
 
 export const ScreenContainer = (props: Props) => {
-  const {
-    leftHeaderButton = {type: 'back'},
-    rightHeaderButton,
-    title,
-    titleA11yLabel,
-    isLoading = false,
-  } = props;
-
   return (
     <FullScreenView
       headerProps={{
-        leftButton: leftHeaderButton,
-        rightButton: rightHeaderButton,
-        title,
-        titleA11yLabel,
+        leftButton: props.leftHeaderButton,
+        rightButton: props.rightHeaderButton,
         color: 'background_accent_0',
       }}
       contentColor={themeColor}
     >
-      {isLoading && <LoadingBody />}
-      {!isLoading && <ContentBody {...props} />}
+      {props.isLoading && <LoadingBody />}
+      {!props.isLoading && <ContentBody {...props} />}
     </FullScreenView>
   );
 };

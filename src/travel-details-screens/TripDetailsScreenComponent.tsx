@@ -7,9 +7,8 @@ import {Button} from '@atb/components/button';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {TariffZone} from '@atb/reference-data/types';
+import {TariffZone, useFirestoreConfiguration} from '@atb/configuration';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';

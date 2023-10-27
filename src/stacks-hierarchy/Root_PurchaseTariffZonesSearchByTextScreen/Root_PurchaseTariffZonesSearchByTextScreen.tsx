@@ -1,11 +1,10 @@
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useFirestoreConfiguration, TariffZone} from '@atb/configuration';
 import {SearchLocation} from '@atb/favorites';
 import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {TariffZone} from '@atb/reference-data/types';
 import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import {useDebounce} from '@atb/utils/useDebounce';

@@ -17,7 +17,7 @@ import CityBoxMessageTexts from '@atb/translations/components/CityBoxMessage';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {InteractiveColor} from '@atb/theme/colors';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
-import {CityZone} from '@atb/reference-data/types';
+import {CityZone} from '@atb/configuration';
 import {useAnalytics} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 

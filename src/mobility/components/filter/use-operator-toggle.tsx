@@ -1,6 +1,6 @@
 import {FormFactorFilterType} from '@atb/components/map';
 import {useEffect, useState} from 'react';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
+import {MobilityOperatorType} from '@atb/configuration';
 
 export const useOperatorToggle = (
   allOperators: MobilityOperatorType[],
@@ -23,7 +23,12 @@ export const useOperatorToggle = (
   };
 
   const onOperatorToggle = (operator: string) => (checked: boolean) => {
-    const newFilter = getNewFilterState(checked, operator, filter, allOperators);
+    const newFilter = getNewFilterState(
+      checked,
+      operator,
+      filter,
+      allOperators,
+    );
     setFilter(newFilter);
     onFilterChange(newFilter);
   };
