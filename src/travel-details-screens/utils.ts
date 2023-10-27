@@ -16,7 +16,10 @@ import {
   DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {dictionary, TranslateFunction} from '@atb/translations';
+import {StoredFavoriteDeparture} from '@atb/favorites';
 import {APP_ORG} from '@env';
+import {StopPlaceGroup} from '@atb/api/departures/types';
+import {flatten, uniqBy} from 'lodash';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -107,6 +110,91 @@ export function significantWalkTime(seconds: number) {
 export function significantWaitTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
+
+export type FavoriteDepartureMigrationPair = {
+  lineName?: string;
+  destinationDisplay?: DestinationDisplay;
+};
+
+const getUniqueFavoriteDepartureMigrationPairs = (
+  stopPlaceGroups: StopPlaceGroup[],
+): FavoriteDepartureMigrationPair[] => {
+  const nestedFavoriteDepartureMigrationPairs = stopPlaceGroups.map(
+    (stopPlaceGroup) =>
+      stopPlaceGroup?.quays.map((quay) =>
+        quay.group.map((groupItem) => ({
+          lineName: groupItem?.lineInfo?.lineName,
+          destinationDisplay: groupItem?.lineInfo?.destinationDisplay,
+        })),
+      ),
+  );
+  // flatten 3d array to 1d and ensure unique migration pairs
+  return uniqBy(
+    flatten(flatten(nestedFavoriteDepartureMigrationPairs)),
+    (pair) => pair.lineName,
+  );
+};
+
+const shouldStoredFavoriteDepartureBeMigrated = (
+  storedFavDep: StoredFavoriteDeparture,
+  favDepMigrationPair: FavoriteDepartureMigrationPair,
+): boolean => {
+  const storedFavDepDD = storedFavDep?.destinationDisplay;
+  const storedFrontText = storedFavDepDD?.frontText;
+
+  const {lineName, destinationDisplay} = favDepMigrationPair;
+
+  const storedFrontTextEqualsLineName = storedFrontText === lineName;
+  const storedFrontTextIncludesVia = !!storedFrontText?.includes(' via ');
+  const storedFavDepDDViaIsEmpty = (storedFavDepDD?.via?.length || 0) === 0;
+  const destinationDisplayViaIsNotEmpty =
+    (destinationDisplay?.via?.length || 0) > 0;
+  return (
+    storedFrontTextEqualsLineName &&
+    storedFrontTextIncludesVia &&
+    storedFavDepDDViaIsEmpty &&
+    destinationDisplayViaIsNotEmpty
+  );
+};
+
+export const getUpToDateFavoriteDepartures = (
+  storedFavoriteDepartures: StoredFavoriteDeparture[],
+  stopPlaceGroups: StopPlaceGroup[],
+): {
+  upToDateFavoriteDepartures: StoredFavoriteDeparture[];
+  aFavoriteDepartureWasMigrated: boolean;
+} => {
+  const favDepMigrationPairs =
+    getUniqueFavoriteDepartureMigrationPairs(stopPlaceGroups);
+
+  let aFavoriteDepartureWasMigrated = false;
+  const upToDateFavoriteDepartures = storedFavoriteDepartures.map(
+    (storedFavDep) => {
+      let upToDateFavDep = storedFavDep;
+      for (const favDepMigrationPair of favDepMigrationPairs) {
+        if (
+          shouldStoredFavoriteDepartureBeMigrated(
+            storedFavDep,
+            favDepMigrationPair,
+          )
+        ) {
+          aFavoriteDepartureWasMigrated = true;
+
+          upToDateFavDep = {
+            ...storedFavDep,
+            destinationDisplay: favDepMigrationPair?.destinationDisplay,
+          };
+          break;
+        }
+      }
+      return upToDateFavDep;
+    },
+  );
+  return {
+    upToDateFavoriteDepartures,
+    aFavoriteDepartureWasMigrated,
+  };
+};
 
 /* NB this is the same function as in the bff. Keep in sync! */
 export function destinationDisplaysAreEqual(

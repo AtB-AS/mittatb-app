@@ -24,6 +24,7 @@ import {useInterval} from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
+import {getUpToDateFavoriteDepartures} from '@atb/travel-details-screens/utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -64,7 +65,9 @@ const initialState: Omit<
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      favoriteDepartures?: UserFavoriteDepartures;
+      dashboardFavoriteDepartures: UserFavoriteDepartures;
+      favoriteDepartures: UserFavoriteDepartures;
+      setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
       lastHardRefreshTime: MutableRefObject<Date>;
       lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
@@ -127,11 +130,21 @@ const reducer: ReducerWithSideEffects<
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getFavouriteDepartures(
-              action.favoriteDepartures || [],
+              action.dashboardFavoriteDepartures,
               queryInput,
             );
             action.lastHardRefreshTime.current = new Date();
             action.lastRealtimeRefreshTime.current = new Date();
+
+            const stopPlaceGroups = result?.data || [];
+            const {upToDateFavoriteDepartures, aFavoriteDepartureWasMigrated} =
+              getUpToDateFavoriteDepartures(
+                action.favoriteDepartures,
+                stopPlaceGroups,
+              );
+
+            aFavoriteDepartureWasMigrated &&
+              action.setFavoriteDepartures(upToDateFavoriteDepartures);
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
@@ -264,23 +277,33 @@ export function useFavoriteDepartureData(
     lastRefreshTime: new Date(),
   });
   const isFocused = useIsFocused();
-  const {favoriteDepartures} = useFavorites();
-  const dashboardFavorites = favoriteDepartures.filter(
+  const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
+  const dashboardFavoriteDepartures = favoriteDepartures.filter(
     (f) => f.visibleOnDashboard,
   );
 
-  const dashboardFavoriteIds = dashboardFavorites.map((f) => f.id);
+  const dashboardFavoriteDepartureIds = dashboardFavoriteDepartures.map(
+    (f) => f.id,
+  );
   const loadInitialDepartures = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        favoriteDepartures: dashboardFavorites,
+        dashboardFavoriteDepartures,
+        favoriteDepartures,
+        setFavoriteDepartures,
         lastHardRefreshTime,
         lastRealtimeRefreshTime,
       }),
-    [JSON.stringify(dashboardFavoriteIds)],
+    [
+      JSON.stringify(dashboardFavoriteDepartureIds),
+      setFavoriteDepartures,
+      favoriteDepartures,
+    ],
   );
-  const dashboardFavoriteLineIds = dashboardFavorites.map((f) => f.lineId);
+  const dashboardFavoriteLineIds = dashboardFavoriteDepartures.map(
+    (f) => f.lineId,
+  );
   const loadRealTimeData = useCallback(
     () =>
       dispatch({

@@ -9,6 +9,8 @@ import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 type Notice = {text?: string};
 
 export type DepartureLineInfo = {
+  /** @deprecated Use destinationDisplay instead */
+  lineName?: string;
   destinationDisplay: DestinationDisplay;
   lineNumber: string;
   transportMode?: TransportMode;
