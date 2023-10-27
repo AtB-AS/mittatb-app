@@ -18,11 +18,7 @@ const DashboardTexts = {
       ),
     },
     announcement: {
-      closeA11yHint: _(
-        'Fjern meldingen',
-        'Dismiss announcement',
-        'Fjern meldinga',
-      ),
+      closeA11yHint: _('Lukk melding', 'Close announcement', 'Lukk melding'),
     },
   },
 };
