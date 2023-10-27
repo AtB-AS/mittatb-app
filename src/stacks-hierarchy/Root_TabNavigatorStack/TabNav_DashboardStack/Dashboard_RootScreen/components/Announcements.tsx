@@ -8,18 +8,30 @@ import {AnnouncementSheet} from './AnnouncementSheet';
 import {SectionHeading} from './SectionHeading';
 import {StyleSheet} from '@atb/theme';
 import {DashboardTexts, useTranslation} from '@atb/translations';
+import {animateNextChange} from '@atb/utils/animation';
+import {useAnalytics} from '@atb/analytics';
+import {AnnouncementType} from '@atb/announcements/types';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
 export const Announcements = ({style: containerStyle}: Props) => {
-  const {announcements} = useAnnouncementsState();
+  const {announcements, dismissAnnouncement} = useAnnouncementsState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const style = useStyle();
+  const analytics = useAnalytics();
 
   if (announcements.length === 0) return null;
+
+  const handleDismiss = (announcement: AnnouncementType) => {
+    animateNextChange();
+    dismissAnnouncement(announcement);
+    analytics.logEvent('Dashboard', 'Announcement dismissed', {
+      id: announcement.id,
+    });
+  };
 
   return (
     <View style={containerStyle}>
@@ -44,7 +56,10 @@ export const Announcements = ({style: containerStyle}: Props) => {
                 ))
               }
             >
-              <Announcement announcement={a} />
+              <Announcement
+                announcement={a}
+                onDismiss={() => handleDismiss(a)}
+              />
             </GenericClickableSectionItem>
           </Section>
         ))}

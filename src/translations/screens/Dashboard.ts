@@ -17,6 +17,13 @@ const DashboardTexts = {
         'Aktiver for å lese meir',
       ),
     },
+    announcement: {
+      closeA11yHint: _(
+        'Fjern meldingen',
+        'Dismiss announcement',
+        'Fjern meldinga',
+      ),
+    },
   },
 };
 
