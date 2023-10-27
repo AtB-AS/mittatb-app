@@ -1,15 +1,15 @@
-import {Dispatch, useCallback, useEffect, useState} from 'react';
+import {Dispatch, useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
 import {updateMetadata} from '@atb/chat/metadata';
 import {AuthReducerAction} from './types';
 import {mapAuthenticationType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
+import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 
 export const useSubscribeToAuthUserChange = (
   dispatch: Dispatch<AuthReducerAction>,
 ) => {
-  // A toggle to trigger resubscribe. The actual boolean value is not important.
-  const [resubscribeToggle, setResubscribeToggle] = useState(true);
+  const {resubscribeToggle, resubscribe} = useResubscribeToggle();
 
   useEffect(() => {
     Bugsnag.leaveBreadcrumb('Subscribing to auth user changes');
@@ -44,6 +44,6 @@ export const useSubscribeToAuthUserChange = (
   }, [resubscribeToggle, dispatch]);
 
   return {
-    resubscribe: useCallback(() => setResubscribeToggle((prev) => !prev), []),
+    resubscribe: resubscribe,
   };
 };
