@@ -2,7 +2,6 @@ import {Button} from '@atb/components/button';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {StyleSheet} from '@atb/theme';
 import {
   filterValidRightNowFareContract,
@@ -19,11 +18,7 @@ import {View, ViewStyle} from 'react-native';
 import {SectionHeading} from './SectionHeading';
 
 type Props = {
-  onPressDetails?: (
-    isCarnet: boolean,
-    isInspectable: boolean,
-    orderId: string,
-  ) => void;
+  onPressDetails?: (isCarnet: boolean, orderId: string) => void;
   onPressBuy(): void;
   style?: ViewStyle;
 };
@@ -38,11 +33,10 @@ export const CompactFareContracts: React.FC<Props> = ({
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 1000);
 
-  const {fareContracts, customerProfile} = useTicketingState();
+  const {fareContracts} = useTicketingState();
   const validFareContracts = filterValidRightNowFareContract(fareContracts);
 
   const {t} = useTranslation();
-  const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
 
@@ -62,9 +56,6 @@ export const CompactFareContracts: React.FC<Props> = ({
           const fareContractInfoDetailsProps = getFareContractInfoDetails(
             fareContract,
             now,
-            customerProfile,
-            deviceIsInspectable,
-            fallbackActive,
             tariffZones,
             userProfiles,
             preassignedFareProducts,
@@ -83,7 +74,6 @@ export const CompactFareContracts: React.FC<Props> = ({
               onPressDetails={() => {
                 onPressDetails?.(
                   fareContractInfoDetailsProps.isCarnetFareContract ?? false,
-                  fareContractInfoDetailsProps.isInspectable ?? false,
                   fareContract.orderId,
                 );
               }}

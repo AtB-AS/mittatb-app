@@ -20,12 +20,12 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 type Props = {
   fareContractState: FareContractState;
   travelRights: PreActivatedTravelRight[];
   now: number;
-  isInspectable: boolean;
   hideDetails?: boolean;
   onPressDetails?: () => void;
   testID?: string;
@@ -35,7 +35,6 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   fareContractState,
   travelRights,
   now,
-  isInspectable,
   hideDetails,
   onPressDetails,
   testID,
@@ -43,6 +42,7 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   const {t} = useTranslation();
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   const firstTravelRight = travelRights[0];
   const {startDateTime, endDateTime, tariffZoneRefs, fareProductRef} =
@@ -81,7 +81,6 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
       <GenericSectionItem>
         <ValidityHeader
           status={validityStatus}
-          isInspectable={isInspectable}
           now={now}
           validFrom={validFrom}
           validTo={validTo}
@@ -89,7 +88,6 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
         />
         <ValidityLine
           status={validityStatus}
-          isInspectable={isInspectable}
           now={now}
           validFrom={validFrom}
           validTo={validTo}
@@ -98,7 +96,6 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
         <FareContractInfoHeader
           travelRight={firstTravelRight}
           status={validityStatus}
-          isInspectable={isInspectable}
           testID={testID}
           preassignedFareProduct={preassignedFareProduct}
         />
@@ -109,14 +106,14 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           toTariffZone={toTariffZone}
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
-          isInspectable={isInspectable}
           preassignedFareProduct={preassignedFareProduct}
         />
       </GenericSectionItem>
       {!hideDetails && (
         <LinkSectionItem
           text={t(
-            validityStatus === 'valid' && isInspectable
+            validityStatus === 'valid' &&
+              deviceInspectionStatus === 'inspectable'
               ? FareContractTexts.detailsLink.valid
               : FareContractTexts.detailsLink.notValid,
           )}

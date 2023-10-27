@@ -48,7 +48,6 @@ type PaymentParams = {
 
 type CarnetDetailsRouteParams = {
   orderId: string;
-  isInspectable: boolean;
 };
 
 type ReceiptScreenRouteParams = {

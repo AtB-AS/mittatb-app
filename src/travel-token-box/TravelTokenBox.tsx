@@ -27,7 +27,7 @@ export function TravelTokenBox({
 }) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceIsInspectable, remoteTokens, isLoading} =
+  const {deviceInspectionStatus, remoteTokens, isLoading} =
     useMobileTokenContextState();
 
   if (isLoading) {
@@ -41,7 +41,7 @@ export function TravelTokenBox({
   const errorMessages = ErrorMessages(alwaysShowErrors);
   if (errorMessages) return errorMessages;
 
-  if (deviceIsInspectable && !showIfThisDevice) {
+  if (deviceInspectionStatus === 'inspectable' && !showIfThisDevice) {
     return null;
   }
 
@@ -151,11 +151,12 @@ export const TravelDeviceTitle = ({
 const ErrorMessages = (alwaysShowErrors?: boolean) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {isError, isTimedout, retry, remoteTokens, fallbackActive} =
+  const {isError, isTimedout, retry, remoteTokens, deviceInspectionStatus} =
     useMobileTokenContextState();
 
   if (isError || isTimedout) {
-    return fallbackActive && !alwaysShowErrors ? null : (
+    return deviceInspectionStatus === 'inspectable' &&
+      !alwaysShowErrors ? null : (
       <MessageBox
         type="warning"
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}

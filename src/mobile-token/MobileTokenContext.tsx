@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 import {useAuthState} from '@atb/auth';
@@ -34,7 +33,7 @@ import {tokenService} from '@atb/mobile-token/tokenService';
 type MobileTokenContextState = {
   token?: ActivatedToken;
   remoteTokens?: RemoteToken[];
-  deviceIsInspectable: boolean;
+  deviceInspectionStatus: DeviceInspectionStatus;
   isLoading: boolean;
   isTimedout: boolean;
   isError: boolean;
@@ -45,7 +44,6 @@ type MobileTokenContextState = {
   ) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
-  fallbackActive: boolean;
   // For debugging
   createToken: () => void;
   validateToken: () => void;
@@ -63,11 +61,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
-
-  const {
-    enable_token_fallback: fallbackOnErrorEnabled,
-    enable_token_fallback_on_timeout: fallbackOnTimeoutEnabled,
-  } = useRemoteConfig();
 
   const wipeToken = useCallback(
     async (token: ActivatedToken | undefined, traceId: string) => {
@@ -87,10 +80,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const enabled =
     mobileTokenEnabled && userId && authStatus === 'authenticated';
-
-  const fallbackActive =
-    (isError && fallbackOnErrorEnabled) ||
-    (isTimedout && fallbackOnTimeoutEnabled);
 
   /**
    * Load/create native token and handle the situations that can arise.
@@ -292,21 +281,13 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     return undefined;
   }, [token]);
 
-  /**
-   * Whether this device is inspectable or not. It is inspectable if:
-   * - A native token is found
-   * - A remote token is found matching the token id of the native token
-   * - The found remote token has the inspectable action
-   */
-  const deviceInspectable: boolean = useMemo(() => {
-    if (!token) return false;
-    if (!remoteTokens) return false;
-    const matchingRemoteToken = remoteTokens.find(
-      (r) => r.id === token.getTokenId(),
-    );
-    if (!matchingRemoteToken) return false;
-    return isInspectable(matchingRemoteToken);
-  }, [token, remoteTokens]);
+  const deviceInspectionStatus = useDeviceInspectionStatus(
+    isLoading,
+    isError,
+    isTimedout,
+    token,
+    remoteTokens,
+  );
 
   const toggleToken = useCallback(
     async (tokenId: string, bypassRestrictions: boolean) => {
@@ -338,7 +319,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       value={{
         token,
         getSignedToken,
-        deviceIsInspectable: deviceInspectable,
+        deviceInspectionStatus,
         remoteTokens,
         toggleToken,
         isLoading,
@@ -351,7 +332,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         createToken: () => mobileTokenClient.create(uuid()).then(setToken),
         wipeToken: () =>
           wipeToken(token, uuid()).then(() => setToken(undefined)),
-        fallbackActive,
         validateToken: () =>
           mobileTokenClient
             .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])
@@ -405,3 +385,49 @@ function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
     clearTimeout(timeoutId);
   };
 }
+
+export type DeviceInspectionStatus =
+  | 'loading'
+  | 'inspectable'
+  | 'not-inspectable';
+
+const useDeviceInspectionStatus = (
+  isLoading: boolean,
+  isError: boolean,
+  isTimedout: boolean,
+  token?: ActivatedToken,
+  remoteTokens?: RemoteToken[],
+): DeviceInspectionStatus => {
+  const {enable_token_fallback, enable_token_fallback_on_timeout} =
+    useRemoteConfig();
+  if (isTimedout) {
+    return enable_token_fallback_on_timeout ? 'inspectable' : 'loading';
+  } else if (isError) {
+    return enable_token_fallback ? 'inspectable' : 'not-inspectable';
+  } else if (isLoading) {
+    return 'loading';
+  } else {
+    return deviceInspectable(token, remoteTokens)
+      ? 'inspectable'
+      : 'not-inspectable';
+  }
+};
+
+/**
+ * Whether this device is inspectable or not. It is inspectable if:
+ * - A native token is found
+ * - A remote token is found matching the token id of the native token
+ * - The found remote token has the inspectable action
+ */
+const deviceInspectable = (
+  token?: ActivatedToken,
+  remoteTokens?: RemoteToken[],
+): boolean => {
+  if (!token) return false;
+  if (!remoteTokens) return false;
+  const matchingRemoteToken = remoteTokens.find(
+    (r) => r.id === token.getTokenId(),
+  );
+  if (!matchingRemoteToken) return false;
+  return isInspectable(matchingRemoteToken);
+};

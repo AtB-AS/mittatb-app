@@ -32,16 +32,11 @@ import {SvgXml} from 'react-native-svg';
 
 type Props = {
   validityStatus: ValidityStatus;
-  isInspectable: boolean;
   fc: FareContract;
 };
 
-export function Barcode({
-  validityStatus,
-  isInspectable,
-  fc,
-}: Props): JSX.Element | null {
-  const status = useBarcodeCodeStatus(validityStatus, isInspectable);
+export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
+  const status = useBarcodeCodeStatus(validityStatus);
   useScreenBrightnessIncrease();
 
   switch (status) {
@@ -60,16 +55,13 @@ export function Barcode({
   }
 }
 
-const useBarcodeCodeStatus = (
-  validityStatus: ValidityStatus,
-  isInspectable: boolean,
-) => {
-  const {remoteTokens, deviceIsInspectable, isLoading, isTimedout, isError} =
+const useBarcodeCodeStatus = (validityStatus: ValidityStatus) => {
+  const {remoteTokens, deviceInspectionStatus, isLoading, isTimedout, isError} =
     useMobileTokenContextState();
   const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
     useRemoteConfig();
 
-  if (!isInspectable) return 'none';
+  if (deviceInspectionStatus === 'not-inspectable') return 'none';
   if (validityStatus !== 'valid') return 'none';
 
   if (useTryggOvergangQrCode) return 'staticQrCode';
@@ -77,7 +69,7 @@ const useBarcodeCodeStatus = (
   if (isTimedout) return 'static';
   if (isLoading) return 'loading';
   if (isError) return 'static';
-  if (deviceIsInspectable) return 'mobiletoken';
+  if (deviceInspectionStatus === 'inspectable') return 'mobiletoken';
 
   if (findInspectable(remoteTokens)) return 'other';
 

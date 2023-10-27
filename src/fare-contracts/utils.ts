@@ -19,6 +19,7 @@ import {
   isMobileToken,
   isTravelCardToken,
 } from '@atb/mobile-token/utils';
+import {DeviceInspectionStatus} from '@atb/mobile-token/MobileTokenContext';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -93,21 +94,23 @@ export const mapToUserProfilesWithCount = (
 
 export const getNonInspectableTokenWarning = (
   isError: boolean,
-  fallbackActive: boolean,
+  deviceInspectionStatus: DeviceInspectionStatus,
   t: TranslateFunction,
   remoteTokens?: RemoteToken[],
-  isInspectable?: boolean,
   fareProductType?: string,
 ) => {
   const inspectableToken = findInspectable(remoteTokens);
-  if (fallbackActive) return null;
+  if (deviceInspectionStatus === 'inspectable') return null;
   if (fareProductType !== 'carnet') {
     if (isError) return t(FareContractTexts.warning.unableToRetrieveToken);
     if (!inspectableToken)
       return t(FareContractTexts.warning.noInspectableTokenFound);
     if (isTravelCardToken(inspectableToken))
       return t(FareContractTexts.warning.travelCardAstoken);
-    if (isMobileToken(inspectableToken) && !isInspectable)
+    if (
+      isMobileToken(inspectableToken) &&
+      deviceInspectionStatus === 'not-inspectable'
+    )
       return t(
         FareContractTexts.warning.anotherMobileAsToken(
           getDeviceName(inspectableToken) ||
@@ -124,12 +127,11 @@ export const getNonInspectableTokenWarning = (
 };
 
 export const getOtherDeviceIsInspectableWarning = (
-  fallbackActive: boolean,
+  deviceInspectionStatus: DeviceInspectionStatus,
   t: TranslateFunction,
   remoteTokens?: RemoteToken[],
-  deviceIsInspectable?: boolean,
 ) => {
-  const shouldShowWarning = !fallbackActive && !deviceIsInspectable;
+  const shouldShowWarning = deviceInspectionStatus !== 'inspectable';
   if (!shouldShowWarning) return;
 
   const activeToken = findInspectable(remoteTokens);

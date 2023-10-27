@@ -14,21 +14,22 @@ import {isValidFareContract, ValidityStatus} from './utils';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 export const ValidityHeader: React.FC<{
   status: ValidityStatus;
   now: number;
   validFrom: number;
   validTo: number;
-  isInspectable: boolean;
   fareProductType: string | undefined;
-}> = ({status, now, validFrom, validTo, isInspectable, fareProductType}) => {
+}> = ({status, now, validFrom, validTo, fareProductType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === fareProductType,
   );
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   const validityTime: string = validityTimeText(
     status,
@@ -57,7 +58,7 @@ export const ValidityHeader: React.FC<{
           style={styles.label}
           type="body__secondary"
           accessibilityLabel={
-            !isInspectable
+            deviceInspectionStatus !== 'inspectable'
               ? validityTime +
                 ', ' +
                 t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)

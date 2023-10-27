@@ -95,16 +95,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     PaymentMethod | undefined
   >(undefined);
   const previousPaymentMethod = usePreviousPaymentMethod();
-  const {deviceIsInspectable, remoteTokens, fallbackActive} =
-    useMobileTokenContextState();
+  const {deviceInspectionStatus, remoteTokens} = useMobileTokenContextState();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    fallbackActive,
+    deviceInspectionStatus,
     t,
     remoteTokens,
-    deviceIsInspectable,
   );
 
   const {

@@ -15,13 +15,11 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {deviceIsInspectable, fallbackActive, remoteTokens} =
-    useMobileTokenContextState();
+  const {deviceInspectionStatus, remoteTokens} = useMobileTokenContextState();
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    fallbackActive,
+    deviceInspectionStatus,
     t,
     remoteTokens,
-    deviceIsInspectable,
   );
 
   return (

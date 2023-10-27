@@ -8,11 +8,9 @@ import {
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
-  CustomerProfile,
   FareContract,
   flattenCarnetTravelRightAccesses,
   isCarnetTravelRight,
-  isInspectableTravelRight,
   NormalTravelRight,
   PreActivatedTravelRight,
   TravelRightDirection,
@@ -44,7 +42,6 @@ import {MessageBox} from '@atb/components/message-box';
 export type FareContractInfoProps = {
   travelRight: PreActivatedTravelRight;
   status: ValidityStatus;
-  isInspectable: boolean;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
 };
@@ -55,7 +52,6 @@ export type FareContractInfoDetailsProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: FareContractInfoProps['status'];
-  isInspectable: boolean;
   isCarnetFareContract?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
@@ -67,7 +63,6 @@ export type FareContractInfoDetailsProps = {
 export const FareContractInfoHeader = ({
   travelRight,
   status,
-  isInspectable,
   testID,
   preassignedFareProduct,
 }: FareContractInfoProps) => {
@@ -82,14 +77,13 @@ export const FareContractInfoHeader = ({
   const productDescription = preassignedFareProduct
     ? getTextForLanguage(preassignedFareProduct.description, language)
     : undefined;
-  const {isError, remoteTokens, fallbackActive} = useMobileTokenContextState();
+  const {isError, remoteTokens, deviceInspectionStatus} = useMobileTokenContextState();
   const {t} = useTranslation();
   const warning = getNonInspectableTokenWarning(
     isError,
-    fallbackActive,
+    deviceInspectionStatus,
     t,
     remoteTokens,
-    isInspectable,
     preassignedFareProduct?.type,
   );
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
@@ -172,9 +166,6 @@ export const FareContractInfoDetails = (
 export const getFareContractInfoDetails = (
   fareContract: FareContract,
   now: number,
-  customerProfile: CustomerProfile | undefined,
-  deviceIsInspectable: boolean,
-  fallbackActive: boolean,
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
@@ -186,10 +177,6 @@ export const getFareContractInfoDetails = (
     fareProductRef: productRef,
     tariffZoneRefs,
   } = firstTravelRight;
-  const isInspectable = isInspectableTravelRight(
-    deviceIsInspectable,
-    fallbackActive,
-  );
   const fareContractState = fareContract.state;
   let validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
@@ -237,7 +224,6 @@ export const getFareContractInfoDetails = (
     status: validityStatus,
     now: now,
     validTo: validTo,
-    isInspectable: isInspectable,
     isCarnetFareContract: isACarnetFareContract,
   };
 };

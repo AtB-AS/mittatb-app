@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   FareContract,
-  isInspectableTravelRight,
   isPreActivatedTravelRight,
   NormalTravelRight,
 } from '@atb/ticketing';
@@ -54,19 +53,15 @@ export const DetailsContent: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {findGlobalMessages} = useGlobalMessagesState();
 
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const isInspectable = isInspectableTravelRight(
-      deviceIsInspectable,
-      fallbackActive,
-    );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
@@ -105,7 +100,6 @@ export const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
             fareProductType={preassignedFareProduct?.type}
           />
           <ValidityLine
@@ -113,22 +107,19 @@ export const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
             fareProductType={preassignedFareProduct?.type}
           />
           <FareContractInfoHeader
             travelRight={firstTravelRight}
             status={validityStatus}
-            isInspectable={isInspectable}
             testID="details"
             preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>
-        {isInspectable && (
+        {deviceInspectionStatus === 'inspectable' && (
           <GenericSectionItem>
             <Barcode
               validityStatus={validityStatus}
-              isInspectable={isInspectable}
               fc={fc}
             />
           </GenericSectionItem>
@@ -140,7 +131,6 @@ export const DetailsContent: React.FC<Props> = ({
             toTariffZone={toTariffZone}
             userProfilesWithCount={userProfilesWithCount}
             status={validityStatus}
-            isInspectable={isInspectable}
             preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>

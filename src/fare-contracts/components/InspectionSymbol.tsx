@@ -15,12 +15,12 @@ import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {ContrastColor} from '@atb-as/theme';
 import {getTransportationColor} from '@atb/theme/colors';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
-  isInspectable: boolean;
   isLoading?: boolean;
 };
 
@@ -28,7 +28,6 @@ export const InspectionSymbol = ({
   preassignedFareProduct,
   fromTariffZone,
   toTariffZone,
-  isInspectable,
   isLoading,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
@@ -44,9 +43,12 @@ export const InspectionSymbol = ({
     fareProductTypeConfig?.transportModes[0].subMode,
   );
 
-  const themeColor = isInspectable
-    ? getTransportationColor(themeName, transportColor)
-    : theme.static.status['warning'];
+  const {deviceInspectionStatus} = useMobileTokenContextState();
+
+  const themeColor =
+    deviceInspectionStatus === 'inspectable'
+      ? getTransportationColor(themeName, transportColor)
+      : theme.static.status['warning'];
 
   if (isLoading) {
     return <ActivityIndicator size="large" />;
@@ -56,7 +58,7 @@ export const InspectionSymbol = ({
     <View
       style={[styles.symbolContainer, {borderColor: themeColor.background}]}
     >
-      {isInspectable ? (
+      {deviceInspectionStatus === 'inspectable' ? (
         <InspectableContent
           preassignedFareProduct={preassignedFareProduct}
           fromTariffZone={fromTariffZone}
