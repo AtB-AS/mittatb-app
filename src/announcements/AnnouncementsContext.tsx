@@ -1,14 +1,29 @@
-import {createContext, useContext, useEffect, useState} from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {AnnouncementRaw, AnnouncementType} from './types';
 import {mapToAnnouncements} from './converters';
+import {
+  addDismissedAnnouncementInStore,
+  getDismissedAnnouncementsFromStore,
+  setDismissedAnnouncementInStore,
+} from '@atb/announcements/storage';
 
 type AnnouncementsContextState = {
   announcements: AnnouncementType[];
+  dismissAnnouncement: (announcement: AnnouncementType) => void;
+  resetDismissedAnnouncements: () => void;
 };
 
 const AnnouncementsContext = createContext<AnnouncementsContextState>({
   announcements: [],
+  dismissAnnouncement: (_: AnnouncementType) => {},
+  resetDismissedAnnouncements: () => {},
 });
 
 const AnnouncementsContextProvider: React.FC = ({children}) => {
@@ -20,7 +35,11 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
       .where('active', '==', true)
       .onSnapshot(
         async (snapshot) => {
-          setAnnouncements(mapToAnnouncements(snapshot.docs));
+          const dismissedIds = await getDismissedAnnouncementsFromStore();
+          const allAnnouncements = mapToAnnouncements(snapshot.docs);
+          setAnnouncements(
+            allAnnouncements.filter((a) => !dismissedIds.includes(a.id)),
+          );
         },
         (err) => {
           console.warn(err);
@@ -29,10 +48,26 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
     return () => unsubscribe();
   }, []);
 
+  const dismissAnnouncement = useCallback(
+    (dismissedAnnouncement: AnnouncementType) => {
+      addDismissedAnnouncementInStore(dismissedAnnouncement.id);
+      setAnnouncements((announcements) =>
+        announcements.filter((a) => a.id !== dismissedAnnouncement.id),
+      );
+    },
+    [addDismissedAnnouncementInStore],
+  );
+
+  const resetDismissedAnnouncements = useCallback(() => {
+    setDismissedAnnouncementInStore([]);
+  }, [setDismissedAnnouncementInStore]);
+
   return (
     <AnnouncementsContext.Provider
       value={{
         announcements,
+        dismissAnnouncement,
+        resetDismissedAnnouncements,
       }}
     >
       {children}
