@@ -1,6 +1,7 @@
 export {
   useParkingViolations,
   PermissionRequiredError,
+  NoLocationError,
 } from './use-parking-violations';
 export {
   useParkingViolationsReportingEnabled,

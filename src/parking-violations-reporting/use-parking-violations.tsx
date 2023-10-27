@@ -12,6 +12,11 @@ export class PermissionRequiredError extends Error {
     super('Permission required');
   }
 }
+export class NoLocationError extends Error {
+  constructor() {
+    super('Location missing');
+  }
+}
 
 export const useParkingViolations = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,29 +43,28 @@ export const useParkingViolations = () => {
 
   useEffect(() => {
     if (locationPermissionStatus !== 'granted') return;
+    const position = getCurrentPosition();
+    if (!position) {
+      setError(new NoLocationError());
+      return;
+    }
     setError(undefined);
     setIsLoading(true);
-    getCurrentPosition()
-      .then((position) => {
-        if (!position) {
-          throw new PermissionRequiredError();
-        }
-        setPosition({
-          latitude: position.coordinates.latitude,
-          longitude: position.coordinates.longitude,
-        });
-        return initViolationsReporting({
-          lat: position.coordinates.latitude.toString(),
-          lng: position.coordinates.longitude.toString(),
-        });
-      })
+    setPosition({
+      latitude: position.coordinates.latitude,
+      longitude: position.coordinates.longitude,
+    });
+    initViolationsReporting({
+      lat: position.coordinates.latitude.toString(),
+      lng: position.coordinates.longitude.toString(),
+    })
       .then((data) => {
         setViolations(data.violations);
         setProviders(data.providers);
       })
       .catch(setError)
       .finally(() => setIsLoading(false));
-  }, [locationPermissionStatus]);
+  }, [locationPermissionStatus, getCurrentPosition, initViolationsReporting]);
 
   return {
     isLoading: isLoading && !error,
