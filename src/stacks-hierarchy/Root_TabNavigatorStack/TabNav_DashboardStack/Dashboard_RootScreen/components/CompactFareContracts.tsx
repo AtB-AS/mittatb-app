@@ -2,10 +2,7 @@ import {Button} from '@atb/components/button';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {StyleSheet} from '@atb/theme';
 import {
   filterValidRightNowFareContract,
@@ -45,7 +42,6 @@ export const CompactFareContracts: React.FC<Props> = ({
   const validFareContracts = filterValidRightNowFareContract(fareContracts);
 
   const {t} = useTranslation();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -67,7 +63,6 @@ export const CompactFareContracts: React.FC<Props> = ({
             fareContract,
             now,
             customerProfile,
-            hasEnabledMobileToken,
             deviceIsInspectable,
             fallbackActive,
             tariffZones,

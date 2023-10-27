@@ -124,14 +124,12 @@ export const getNonInspectableTokenWarning = (
 };
 
 export const getOtherDeviceIsInspectableWarning = (
-  tokensEnabled: boolean,
   fallbackActive: boolean,
   t: TranslateFunction,
   remoteTokens?: RemoteToken[],
   deviceIsInspectable?: boolean,
 ) => {
-  const shouldShowWarning =
-    tokensEnabled && !fallbackActive && !deviceIsInspectable;
+  const shouldShowWarning = !fallbackActive && !deviceIsInspectable;
   if (!shouldShowWarning) return;
 
   const activeToken = findInspectable(remoteTokens);

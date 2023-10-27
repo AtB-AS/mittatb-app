@@ -1,10 +1,6 @@
 import {MessageBox} from '@atb/components/message-box';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {StyleSheet} from '@atb/theme';
-import {useTicketingState} from '@atb/ticketing';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
@@ -21,12 +17,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
 
   const {deviceIsInspectable, fallbackActive, remoteTokens} =
     useMobileTokenContextState();
-  const tokensEnabled = useHasEnabledMobileToken();
-  const {customerProfile} = useTicketingState();
-  const hasProfileTravelCard = !!customerProfile?.travelcard;
-  const showProfileTravelcardWarning = !tokensEnabled && hasProfileTravelCard;
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    tokensEnabled,
     fallbackActive,
     t,
     remoteTokens,
@@ -35,14 +26,6 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
 
   return (
     <>
-      {showProfileTravelcardWarning && (
-        <MessageBox
-          style={styles.warning}
-          message={t(PurchaseOverviewTexts.warning)}
-          type="warning"
-        />
-      )}
-
       {inspectableTokenWarningText && (
         <MessageBox
           type="warning"

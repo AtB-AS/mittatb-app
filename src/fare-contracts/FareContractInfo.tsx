@@ -173,14 +173,12 @@ export const getFareContractInfoDetails = (
   fareContract: FareContract,
   now: number,
   customerProfile: CustomerProfile | undefined,
-  hasEnabledMobileToken: boolean,
   deviceIsInspectable: boolean,
   fallbackActive: boolean,
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
 ): FareContractInfoDetailsProps => {
-  const hasActiveTravelCard = !!customerProfile?.travelcard;
   const firstTravelRight = fareContract.travelRights?.[0] as NormalTravelRight;
   const {
     startDateTime,
@@ -189,9 +187,6 @@ export const getFareContractInfoDetails = (
     tariffZoneRefs,
   } = firstTravelRight;
   const isInspectable = isInspectableTravelRight(
-    firstTravelRight,
-    hasActiveTravelCard,
-    hasEnabledMobileToken,
     deviceIsInspectable,
     fallbackActive,
   );

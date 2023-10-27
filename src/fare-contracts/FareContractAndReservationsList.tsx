@@ -1,4 +1,3 @@
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 import {StyleSheet} from '@atb/theme';
@@ -9,7 +8,6 @@ import React, {useMemo} from 'react';
 import {RefreshControl, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useAnalytics} from '@atb/analytics';
-import {TravelCardInformation} from '@atb/fare-contracts/components/TravelCardInformation';
 import {TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
 
@@ -33,16 +31,13 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   isRefreshing,
   refresh,
   now,
-  travelCard,
   showTokenInfo,
   emptyStateTitleText,
   emptyStateDetailsText,
 }) => {
   const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const analytics = useAnalytics();
-  const hasActiveTravelCard = !!travelCard;
 
   const fareContractsAndReservationsSorted = useMemo(() => {
     return [...(fareContracts || []), ...(reservations || [])].sort(
@@ -58,15 +53,9 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
           <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
         }
       >
-        {showTokenInfo &&
-          (hasEnabledMobileToken ? (
-            <TravelTokenBox
-              showIfThisDevice={false}
-              showHowToChangeHint={true}
-            />
-          ) : hasActiveTravelCard ? (
-            <TravelCardInformation travelCard={travelCard} />
-          ) : null)}
+        {showTokenInfo && (
+          <TravelTokenBox showIfThisDevice={false} showHowToChangeHint={true} />
+        )}
         {!fareContractsAndReservationsSorted.length && (
           <EmptyState
             title={emptyStateTitleText}

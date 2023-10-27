@@ -7,10 +7,7 @@ import {
 import {MessageBox} from '@atb/components/message-box';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {
   findInspectable,
   getDeviceName,
@@ -69,7 +66,6 @@ const useBarcodeCodeStatus = (
 ) => {
   const {remoteTokens, deviceIsInspectable, isLoading, isTimedout, isError} =
     useMobileTokenContextState();
-  const mobileTokenEnabled = useHasEnabledMobileToken();
   const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
     useRemoteConfig();
 
@@ -77,8 +73,6 @@ const useBarcodeCodeStatus = (
   if (validityStatus !== 'valid') return 'none';
 
   if (useTryggOvergangQrCode) return 'staticQrCode';
-
-  if (!mobileTokenEnabled) return 'static';
 
   if (isTimedout) return 'static';
   if (isLoading) return 'loading';

@@ -4,7 +4,6 @@ import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 export type RemoteConfig = {
   enable_ticketing: boolean;
   enable_intercom: boolean;
-  enable_period_tickets: boolean;
   feedback_questions: string;
   must_upgrade_ticketing: boolean;
   customer_service_url: string;
@@ -52,7 +51,6 @@ export type RemoteConfig = {
 export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
-  enable_period_tickets: false,
   feedback_questions: '',
   must_upgrade_ticketing: false,
   customer_service_url: CUSTOMER_SERVICE_URL,
@@ -107,9 +105,6 @@ export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
   const enable_intercom = values['enable_intercom']?.asBoolean() ?? true;
-  const enable_period_tickets =
-    values['enable_period_tickets']?.asBoolean() ??
-    defaultRemoteConfig.enable_period_tickets;
   const enable_flex_tickets =
     values['enable_flex_tickets']?.asBoolean() ??
     defaultRemoteConfig.enable_flex_tickets;
@@ -270,7 +265,6 @@ export function getConfig(): RemoteConfig {
   return {
     enable_ticketing,
     enable_intercom,
-    enable_period_tickets,
     feedback_questions,
     must_upgrade_ticketing,
     customer_service_url,

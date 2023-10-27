@@ -7,7 +7,6 @@ import React, {
   useState,
 } from 'react';
 import {useAuthState} from '@atb/auth';
-import {useTicketingState} from '@atb/ticketing';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {
@@ -63,7 +62,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {userId, authStatus} = useAuthState();
 
   const {token_timeout_in_seconds} = useRemoteConfig();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
+  const mobileTokenEnabled = hasEnabledMobileToken();
 
   const {
     enable_token_fallback: fallbackOnErrorEnabled,
@@ -87,7 +86,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [isError, setIsError] = useState(false);
 
   const enabled =
-    hasEnabledMobileToken && userId && authStatus === 'authenticated';
+    mobileTokenEnabled && userId && authStatus === 'authenticated';
 
   const fallbackActive =
     (isError && fallbackOnErrorEnabled) ||
@@ -110,9 +109,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
    */
   const loadNativeToken = useCallback(
     async (traceId: string) => {
-      Bugsnag.leaveBreadcrumb(
-        `Loading mobile token state for user ${userId}`,
-      );
+      Bugsnag.leaveBreadcrumb(`Loading mobile token state for user ${userId}`);
 
       /*
        Check if there has been a user change.
@@ -374,16 +371,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useHasEnabledMobileToken() {
-  const {customerProfile} = useTicketingState();
-  const {enable_period_tickets} = useRemoteConfig();
-
-  if (Platform.OS !== 'android' && DeviceInfo.isEmulatorSync()) {
-    return false;
-  }
-
-  return customerProfile?.enableMobileToken || enable_period_tickets;
-}
+/** Not enabled on mobile token simulator */
+const hasEnabledMobileToken = () =>
+  Platform.OS === 'android' || !DeviceInfo.isEmulatorSync();
 
 export function useMobileTokenContextState() {
   const context = useContext(MobileTokenContext);

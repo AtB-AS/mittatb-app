@@ -16,10 +16,7 @@ import {
   getValidityStatus,
   mapToUserProfilesWithCount,
 } from '@atb/fare-contracts/utils';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
 import {
@@ -54,11 +51,9 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
-  hasActiveTravelCard = false,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {findGlobalMessages} = useGlobalMessagesState();
 
@@ -69,9 +64,6 @@ export const DetailsContent: React.FC<Props> = ({
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
     const isInspectable = isInspectableTravelRight(
-      firstTravelRight,
-      hasActiveTravelCard,
-      hasEnabledMobileToken,
       deviceIsInspectable,
       fallbackActive,
     );

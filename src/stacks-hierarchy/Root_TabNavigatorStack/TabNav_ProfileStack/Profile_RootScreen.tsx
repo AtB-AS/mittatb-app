@@ -8,10 +8,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
@@ -56,7 +53,6 @@ type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {privacy_policy_url, enable_ticketing} = useRemoteConfig();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
@@ -252,7 +248,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
           ) : null}
 
-          {authenticationType === 'phone' && hasEnabledMobileToken && (
+          {authenticationType === 'phone' && (
             <LinkSectionItem
               text={
                 disable_travelcard

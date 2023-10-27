@@ -40,15 +40,10 @@ export function isSingleTravelRight(
 }
 
 export function isInspectableTravelRight(
-  travelRight: TravelRight,
-  hasActiveTravelCard: boolean,
-  mobileTokenEnabled: boolean,
   deviceIsInspectable: boolean,
   fallbackActive: boolean,
 ): boolean {
-  if (mobileTokenEnabled) {
-    return deviceIsInspectable || fallbackActive;
-  } else return !hasActiveTravelCard && isSingleTravelRight(travelRight);
+  return deviceIsInspectable || fallbackActive;
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {

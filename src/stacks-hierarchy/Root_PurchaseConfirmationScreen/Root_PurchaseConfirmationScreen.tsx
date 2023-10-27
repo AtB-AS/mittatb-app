@@ -8,10 +8,7 @@ import {
   useFirestoreConfiguration,
   getReferenceDataName,
 } from '@atb/configuration';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
@@ -100,12 +97,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const previousPaymentMethod = usePreviousPaymentMethod();
   const {deviceIsInspectable, remoteTokens, fallbackActive} =
     useMobileTokenContextState();
-  const tokensEnabled = useHasEnabledMobileToken();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    tokensEnabled,
     fallbackActive,
     t,
     remoteTokens,

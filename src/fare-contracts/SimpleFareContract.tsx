@@ -8,10 +8,7 @@ import React from 'react';
 import {PreActivatedFareContractInfo} from './PreActivatedFareContractInfo';
 import {UnknownFareContract} from './UnknownFareContract';
 import {CarnetFareContractInfo} from './carnet/CarnetFareContractInfo';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 
 type Props = {
   fareContract: FareContract;
@@ -28,15 +25,10 @@ export const SimpleFareContract: React.FC<Props> = ({
   hideDetails,
   onPressDetails,
   testID,
-  hasActiveTravelCard = false,
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const isInspectable = isInspectableTravelRight(
-    firstTravelRight,
-    hasActiveTravelCard,
-    hasEnabledMobileToken,
     deviceIsInspectable,
     fallbackActive,
   );
