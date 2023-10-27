@@ -15,7 +15,7 @@ import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {ContrastColor} from '@atb-as/theme';
 import {getTransportationColor} from '@atb/theme/colors';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;

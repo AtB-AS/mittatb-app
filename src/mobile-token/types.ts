@@ -85,3 +85,15 @@ export type CompleteTokenRenawalResponse = {
 export type InitiateTokenRenewalResponse = {
   pendingTokenDetails: PendingTokenDetails;
 };
+
+export type Token = RemoteToken & {
+  isThisDevice: boolean;
+  isInspectable: boolean;
+  type: 'travel-card' | 'mobile';
+  travelCardId?: string;
+};
+
+export type DeviceInspectionStatus =
+  | 'loading'
+  | 'inspectable'
+  | 'not-inspectable';

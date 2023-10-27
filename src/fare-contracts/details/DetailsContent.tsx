@@ -15,7 +15,7 @@ import {
   getValidityStatus,
   mapToUserProfilesWithCount,
 } from '@atb/fare-contracts/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
 import {

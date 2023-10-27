@@ -10,7 +10,7 @@ import {
   tariffZonesSummary,
   userProfileCountAndName,
 } from '@atb/fare-contracts/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {secondsToDuration} from '@atb/utils/date';
 import {FareContractInfoDetailsProps} from './FareContractInfo';
 import {screenReaderPause} from '@atb/components/text';
@@ -140,7 +140,7 @@ export const useFareContractInfoTexts = (
   const {
     deviceInspectionStatus,
     details: {isError},
-    remoteTokens,
+    tokens,
   } = useMobileTokenContextState();
 
   const productName = preassignedFareProduct
@@ -171,7 +171,7 @@ export const useFareContractInfoTexts = (
       isError,
       deviceInspectionStatus,
       t,
-      remoteTokens,
+      tokens,
       preassignedFareProduct?.type,
     );
 

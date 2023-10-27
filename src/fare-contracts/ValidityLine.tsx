@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {SectionSeparator} from '@atb/components/sections';
 import {useValidityLineColors} from './use-validity-line-colors';
-import {useMobileTokenContextState} from "@atb/mobile-token/MobileTokenContext";
+import {useMobileTokenContextState} from "@atb/mobile-token";
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);

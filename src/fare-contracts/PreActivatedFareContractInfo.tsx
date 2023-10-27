@@ -20,7 +20,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type Props = {
   fareContractState: FareContractState;

@@ -31,7 +31,7 @@ import {
   getValidityStatus,
   tariffZonesSummary,
 } from '../fare-contracts/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
@@ -79,7 +79,7 @@ export const FareContractInfoHeader = ({
     : undefined;
   const {
     details: {isError},
-    remoteTokens,
+    tokens,
     deviceInspectionStatus,
   } = useMobileTokenContextState();
   const {t} = useTranslation();
@@ -87,7 +87,7 @@ export const FareContractInfoHeader = ({
     isError,
     deviceInspectionStatus,
     t,
-    remoteTokens,
+    tokens,
     preassignedFareProduct?.type,
   );
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;

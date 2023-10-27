@@ -1,5 +1,5 @@
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {
   formatToShortDateWithYear,
   formatToVerboseFullDate,

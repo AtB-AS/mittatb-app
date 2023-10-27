@@ -8,7 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../navigation-types';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';
 import {ChangeTokenAction} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/ChangeTokenAction';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useIsFocused} from '@react-navigation/native';
 import {useTokenToggleDetails} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/use-token-toggle-details';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';

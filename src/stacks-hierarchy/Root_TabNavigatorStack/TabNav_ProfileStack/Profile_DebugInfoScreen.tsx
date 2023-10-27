@@ -9,7 +9,7 @@ import {useAuthState} from '@atb/auth';
 import {useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
@@ -103,12 +103,12 @@ export const Profile_DebugInfoScreen = () => {
   }, [user]);
 
   const {
-    token,
-    remoteTokens,
+    tokens,
     retry,
     wipeToken,
     deviceInspectionStatus,
     details: {
+      token,
       createToken,
       validateToken,
       removeRemoteToken,
@@ -560,7 +560,7 @@ export const Profile_DebugInfoScreen = () => {
                 <ExpandableSectionItem
                   text="Remote tokens"
                   showIconText={true}
-                  expandContent={remoteTokens?.map((token) => (
+                  expandContent={tokens?.map((token) => (
                     <View key={token.id} style={style.remoteToken}>
                       {keys(token).map((k) => (
                         <ThemeText key={token.id + k}>

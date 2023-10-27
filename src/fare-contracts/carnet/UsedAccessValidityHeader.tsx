@@ -12,7 +12,7 @@ import {View} from 'react-native';
 import {UsedAccessStatus} from './types';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type Props = {
   now: number;

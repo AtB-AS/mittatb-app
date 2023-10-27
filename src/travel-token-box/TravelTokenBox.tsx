@@ -1,4 +1,4 @@
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {Token, useMobileTokenContextState} from '@atb/mobile-token';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 
@@ -8,13 +8,6 @@ import {dictionary, useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import {MessageBox} from '@atb/components/message-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
-import {
-  findInspectable,
-  getDeviceName,
-  getTravelCardId,
-  isTravelCardToken,
-} from '@atb/mobile-token/utils';
-import {RemoteToken} from '@atb/mobile-token/types';
 
 export function TravelTokenBox({
   showIfThisDevice,
@@ -27,8 +20,7 @@ export function TravelTokenBox({
 }) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceInspectionStatus, remoteTokens} =
-    useMobileTokenContextState();
+  const {deviceInspectionStatus, tokens} = useMobileTokenContextState();
 
   if (deviceInspectionStatus === 'loading') {
     return (
@@ -45,22 +37,23 @@ export function TravelTokenBox({
     return null;
   }
 
-  const inspectableToken = findInspectable(remoteTokens);
+  const inspectableToken = tokens.find((t) => t.isInspectable);
   if (!inspectableToken) return null;
 
   const a11yLabel =
-    (isTravelCardToken(inspectableToken)
+    (inspectableToken.type === 'travel-card'
       ? t(TravelTokenBoxTexts.tcard.a11yLabel)
       : t(
           TravelTokenBoxTexts.mobile.a11yLabel(
-            getDeviceName(inspectableToken) ||
+            inspectableToken.name ||
               t(TravelTokenBoxTexts.mobile.unnamedDevice),
           ),
         )) + (showHowToChangeHint ? t(TravelTokenBoxTexts.howToChange) : '');
 
-  const description = isTravelCardToken(inspectableToken)
-    ? t(TravelTokenBoxTexts.tcard.description)
-    : t(TravelTokenBoxTexts.mobile.description);
+  const description =
+    inspectableToken.type === 'travel-card'
+      ? t(TravelTokenBoxTexts.tcard.description)
+      : t(TravelTokenBoxTexts.mobile.description);
 
   return (
     <View
@@ -75,7 +68,7 @@ export function TravelTokenBox({
           style={{alignItems: 'center'}}
           testID={inspectableToken.type + 'Icon'}
         >
-          {isTravelCardToken(inspectableToken) ? (
+          {inspectableToken.type === 'travel-card' ? (
             <ThemedTokenTravelCard />
           ) : (
             <ThemedTokenPhone />
@@ -102,13 +95,13 @@ export function TravelTokenBox({
 export const TravelDeviceTitle = ({
   inspectableToken,
 }: {
-  inspectableToken: RemoteToken;
+  inspectableToken: Token;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
-  if (isTravelCardToken(inspectableToken)) {
-    const travelCardId = getTravelCardId(inspectableToken);
+  if (inspectableToken.type === 'travel-card') {
+    const travelCardId = inspectableToken.travelCardId;
     return (
       <View style={styles.travelCardTitleContainer}>
         <ThemeText
@@ -141,8 +134,7 @@ export const TravelDeviceTitle = ({
         style={styles.title}
         testID="mobileTokenName"
       >
-        {getDeviceName(inspectableToken) ||
-          t(TravelTokenBoxTexts.mobile.unnamedDevice)}
+        {inspectableToken.name || t(TravelTokenBoxTexts.mobile.unnamedDevice)}
       </ThemeText>
     );
   }
@@ -151,7 +143,7 @@ export const TravelDeviceTitle = ({
 const ErrorMessages = (alwaysShowErrors?: boolean) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {isSuccess, retry, remoteTokens, deviceInspectionStatus} =
+  const {isSuccess, retry, tokens, deviceInspectionStatus} =
     useMobileTokenContextState();
 
   if (!isSuccess) {
@@ -170,7 +162,7 @@ const ErrorMessages = (alwaysShowErrors?: boolean) => {
     );
   }
 
-  const inspectableToken = findInspectable(remoteTokens);
+  const inspectableToken = tokens.find((t) => t.isInspectable);
 
   if (!inspectableToken) {
     return (

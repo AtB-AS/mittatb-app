@@ -3,10 +3,17 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  DeviceInspectionStatus,
+  RemoteToken,
+  Token,
+  TokenLimitResponse,
+} from './types';
 
 import {
   TokenEncodingInvalidRemoteTokenStateError,
@@ -17,22 +24,21 @@ import {
 import {v4 as uuid} from 'uuid';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
-import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
-import {RemoteToken, TokenLimitResponse} from './types';
+import {mobileTokenClient} from './mobileTokenClient';
 import {
   ActivatedToken,
   TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
-import {isInspectable} from '@atb/mobile-token/utils';
+import {getTravelCardId, isInspectable, isTravelCardToken} from './utils';
 
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
 import {updateMetadata} from '@atb/chat/metadata';
-import {tokenService} from '@atb/mobile-token/tokenService';
+import {tokenService} from './tokenService';
 
 type MobileTokenContextState = {
-  token?: ActivatedToken;
-  remoteTokens?: RemoteToken[];
+  // token?: ActivatedToken;
+  tokens: Token[];
   isSuccess: boolean;
   deviceInspectionStatus: DeviceInspectionStatus;
   getSignedToken: () => Promise<string | undefined>;
@@ -45,6 +51,7 @@ type MobileTokenContextState = {
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
   /** Low level details of the mobile token process, use with care */
   details: {
+    token?: ActivatedToken;
     isError: boolean;
     isLoading: boolean;
     isTimedout: boolean;
@@ -317,13 +324,26 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     }
   }, []);
 
+  const tokens = useMemo(
+    () =>
+      remoteTokens?.map((rt): Token => {
+        return {
+          ...rt,
+          isThisDevice: rt.id === token?.tokenId,
+          isInspectable: isInspectable(rt),
+          type: isTravelCardToken(rt) ? 'travel-card' : 'mobile',
+          travelCardId: getTravelCardId(rt),
+        };
+      }) || [],
+    [remoteTokens, token],
+  );
+
   return (
     <MobileTokenContext.Provider
       value={{
-        token,
+        tokens,
         getSignedToken,
         deviceInspectionStatus,
-        remoteTokens,
         toggleToken,
         isSuccess: !isError && !isLoading,
         retry: () => {
@@ -334,6 +354,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           wipeToken(token, uuid()).then(() => setToken(undefined)),
         getTokenToggleDetails,
         details: {
+          token,
           isError,
           isLoading,
           isTimedout,
@@ -391,11 +412,6 @@ function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
     clearTimeout(timeoutId);
   };
 }
-
-export type DeviceInspectionStatus =
-  | 'loading'
-  | 'inspectable'
-  | 'not-inspectable';
 
 const useDeviceInspectionStatus = (
   isLoading: boolean,

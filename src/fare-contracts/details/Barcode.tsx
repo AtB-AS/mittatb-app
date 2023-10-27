@@ -7,12 +7,7 @@ import {
 import {MessageBox} from '@atb/components/message-box';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {
-  findInspectable,
-  getDeviceName,
-  isTravelCardToken,
-} from '@atb/mobile-token/utils';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {FareContract} from '@atb/ticketing';
 import {
@@ -57,7 +52,7 @@ export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
 
 const useBarcodeCodeStatus = (validityStatus: ValidityStatus) => {
   const {
-    remoteTokens,
+    tokens,
     deviceInspectionStatus,
     details: {isLoading, isTimedout, isError},
   } = useMobileTokenContextState();
@@ -74,7 +69,7 @@ const useBarcodeCodeStatus = (validityStatus: ValidityStatus) => {
   if (isError) return 'static';
   if (deviceInspectionStatus === 'inspectable') return 'mobiletoken';
 
-  if (findInspectable(remoteTokens)) return 'other';
+  if (tokens.some((t) => t.isInspectable)) return 'other';
 
   return 'static';
 };
@@ -174,20 +169,21 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
 
 const DeviceNotInspectable = () => {
   const {t} = useTranslation();
-  const {remoteTokens} = useMobileTokenContextState();
-  const inspectableToken = findInspectable(remoteTokens);
+  const {tokens} = useMobileTokenContextState();
+  const inspectableToken = tokens.find((t) => t.isInspectable);
   if (!inspectableToken) return null;
-  const message = isTravelCardToken(inspectableToken)
-    ? t(FareContractTexts.details.barcodeErrors.notInspectableDevice.tCard)
-    : t(
-        FareContractTexts.details.barcodeErrors.notInspectableDevice.wrongDevice(
-          getDeviceName(inspectableToken) ||
-            t(
-              FareContractTexts.details.barcodeErrors.notInspectableDevice
-                .unnamedDevice,
-            ),
-        ),
-      );
+  const message =
+    inspectableToken.type === 'travel-card'
+      ? t(FareContractTexts.details.barcodeErrors.notInspectableDevice.tCard)
+      : t(
+          FareContractTexts.details.barcodeErrors.notInspectableDevice.wrongDevice(
+            inspectableToken.name ||
+              t(
+                FareContractTexts.details.barcodeErrors.notInspectableDevice
+                  .unnamedDevice,
+              ),
+          ),
+        );
   return (
     <MessageBox
       type="warning"

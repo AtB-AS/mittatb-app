@@ -14,7 +14,7 @@ import {isValidFareContract, ValidityStatus} from './utils';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export const ValidityHeader: React.FC<{
   status: ValidityStatus;

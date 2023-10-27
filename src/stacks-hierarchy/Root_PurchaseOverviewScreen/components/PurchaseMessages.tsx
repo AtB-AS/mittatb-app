@@ -1,5 +1,5 @@
 import {MessageBox} from '@atb/components/message-box';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -15,11 +15,11 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {deviceInspectionStatus, remoteTokens} = useMobileTokenContextState();
+  const {deviceInspectionStatus, tokens} = useMobileTokenContextState();
   const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
     deviceInspectionStatus,
     t,
-    remoteTokens,
+    tokens,
   );
 
   return (
