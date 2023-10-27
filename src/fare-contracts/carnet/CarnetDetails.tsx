@@ -21,7 +21,7 @@ import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {UsedAccessStatus} from '@atb/fare-contracts/carnet/types';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {findReferenceDataById} from '@atb/configuration';
 import {useFirestoreConfiguration} from '@atb/configuration';
 
 export function CarnetDetails(props: {
@@ -80,7 +80,7 @@ export function CarnetDetails(props: {
           validFrom={fareContractValidFrom}
           validTo={fareContractValidTo}
           isInspectable={inspectable}
-          fareProductType={'carnet'}
+          fareProductType="carnet"
         />
       ) : (
         <UsedAccessValidityHeader
@@ -98,7 +98,7 @@ export function CarnetDetails(props: {
           validFrom={usedAccessValidFrom}
           validTo={usedAccessValidTo}
           isInspectable={false}
-          fareProductType={'carnet'}
+          fareProductType="carnet"
         />
       ) : (
         <View style={style.sectionSeparator}>

@@ -3,13 +3,14 @@ import {
   FlexibleTransportOptionType,
   HarborConnectionOverride,
   TransportModeFilterOptionType,
-} from '@atb-as/config-specs';
+  MobilityOperator,
+  FareProductGroup,
+  FareProductGroupType,
+} from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
 import {isDefined} from '@atb/utils/presence';
-import {MobilityOperator} from '@atb-as/config-specs/lib/mobility-operators';
-import {FareProductGroup, FareProductGroupType} from '@atb/configuration/types';
 
 export function mapToFareProductTypeConfigs(
   config: any,

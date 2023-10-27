@@ -85,7 +85,7 @@ export const Trip: React.FC<TripProps> = ({
   const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
 
   const tripPatternLegs = tripPattern?.legs.map((leg) => {
-    let mode: AnyMode = isLegFlexibleTransport(leg) ? 'flex' : leg.mode;
+    const mode: AnyMode = isLegFlexibleTransport(leg) ? 'flex' : leg.mode;
     return {
       ...leg,
       mode,

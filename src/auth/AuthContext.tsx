@@ -9,13 +9,12 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {useSubscribeToAuthUserChange} from './use-subscribe-to-auth-user-change';
 import {
   AuthenticationType,
+  AuthReducerAction,
+  AuthStatus,
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
-  AuthStatus,
   VippsSignInErrorCode,
-  AuthReducerAction,
 } from '@atb/auth/types';
-import {getAuthenticationType} from './utils';
 import {useFetchCustomerDataAfterUserChanged} from './use-fetch-customer-data-after-user-changed';
 import {
   authConfirmCode,
@@ -24,13 +23,15 @@ import {
 } from './auth-utils';
 import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
 import {useCheckIfAccountCreationFinished} from './use-check-if-account-creation-finished';
+import Bugsnag from '@bugsnag/react-native';
 
 type AuthReducerState = {
-  user: FirebaseAuthTypes.User | null;
+  userId: string | undefined;
+  authenticationType: AuthenticationType;
+  phoneNumber: string | undefined;
   confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
+  /** Full abt customer id, which is the user id including prefix like "ABT:CustomerAccount:" */
   abtCustomerId: string | undefined;
-  /** Full abt customer id, including prefix like "ABT:CustomerAccount:" */
-  abtCustomerIdFull: string | undefined;
   customerNumber: number | undefined;
   authStatus: AuthStatus;
 };
@@ -49,39 +50,47 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       };
     }
     case 'SET_USER': {
-      const sameUser = prevState.user?.uid === action.user?.uid;
+      const sameUser = prevState.userId === action.userId;
       if (sameUser) {
         return {
           ...prevState,
-          user: action.user,
+          phoneNumber: action.phoneNumber,
+          authenticationType: action.authenticationType,
         };
       } else {
+        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.userId});
         return {
+          userId: action.userId,
+          phoneNumber: action.phoneNumber,
+          authenticationType: action.authenticationType,
           confirmationHandler: undefined,
           abtCustomerId: undefined,
-          abtCustomerIdFull: undefined,
           customerNumber: undefined,
-          user: action.user,
           authStatus: 'loading',
         };
       }
     }
     case 'SET_CUSTOMER_DATA': {
+      const authStatus = action.customerNumber
+        ? 'authenticated'
+        : 'creating-account';
+      Bugsnag.leaveBreadcrumb('Retrieved auth user data', {
+        abtCustomerId: action.abtCustomerId,
+        customerNumber: action.customerNumber,
+        authStatus,
+      });
       return {
         ...prevState,
         abtCustomerId: action.abtCustomerId,
-        abtCustomerIdFull: action.abtCustomerIdFull,
         customerNumber: action.customerNumber,
-        /*
-          If no customerNumber, this means the user was newly created in Firestore,
-          but the asynchronous creation of the Entur account is not finished yet.
-        */
-        authStatus: action.customerNumber
-          ? 'authenticated'
-          : 'creating-account',
+        authStatus,
       };
     }
     case 'SET_AUTH_STATUS': {
+      Bugsnag.leaveBreadcrumb('Updating auth status', {
+        authStatus: action.authStatus,
+        customerNumber: action.customerNumber,
+      });
       return {
         ...prevState,
         authStatus: action.authStatus,
@@ -92,11 +101,12 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
 };
 
 const initialReducerState: AuthReducerState = {
+  userId: undefined,
+  phoneNumber: undefined,
+  authenticationType: 'none',
   confirmationHandler: undefined,
   abtCustomerId: undefined,
-  abtCustomerIdFull: undefined,
   customerNumber: undefined,
-  user: null,
   authStatus: 'loading',
 };
 
@@ -120,8 +130,8 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
-  useFetchCustomerDataAfterUserChanged(state.user, dispatch);
-  useCheckIfAccountCreationFinished(state.user, state.authStatus, dispatch);
+  useFetchCustomerDataAfterUserChanged(state.userId, dispatch);
+  useCheckIfAccountCreationFinished(state.userId, state.authStatus, dispatch);
 
   useUpdateAuthLanguageOnChange();
 
@@ -153,7 +163,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         signOut: useCallback(async () => {
           await auth().signInAnonymously();
         }, []),
-        authenticationType: getAuthenticationType(state.user),
+        authenticationType: state.authenticationType,
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
         retryAuth,
       }}

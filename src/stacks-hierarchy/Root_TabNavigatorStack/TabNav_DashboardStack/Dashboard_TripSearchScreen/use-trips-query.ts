@@ -262,7 +262,7 @@ function decorateTripPatternWithKey(
 function filterDuplicateTripPatterns(
   tripPatterns: TripPatternWithKey[],
 ): TripPatternWithKey[] {
-  let existing = new Map<string, TripPatternWithKey>();
+  const existing = new Map<string, TripPatternWithKey>();
   return tripPatterns.filter((tp) => {
     if (existing.has(tp.key)) {
       Bugsnag.leaveBreadcrumb(

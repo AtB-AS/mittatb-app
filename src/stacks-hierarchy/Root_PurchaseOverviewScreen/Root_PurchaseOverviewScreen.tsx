@@ -1,8 +1,7 @@
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
   dictionary,
@@ -142,7 +141,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         {params.mode === 'TravelSearch' && (
           <MessageBox
             style={styles.travelSearchInfo}
-            type={'valid'}
+            type="valid"
             message={t(PurchaseOverviewTexts.travelSearchInfo)}
           />
         )}

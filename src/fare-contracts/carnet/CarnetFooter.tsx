@@ -73,7 +73,7 @@ export const CarnetFooter: React.FC<Props> = ({
               ]}
             >
               {idx === activeIndex && (
-                <View style={styles.dotFill__active}></View>
+                <View style={styles.dotFill__active} />
               )}
             </View>
           ))}
@@ -86,12 +86,12 @@ function MultiCarnet({count}: {count: number}) {
   const styles = useStyles();
   return (
     <View>
-      <View style={[styles.dot, {marginRight: 8}]}></View>
+      <View style={[styles.dot, {marginRight: 8}]} />
       <View
         style={[styles.dot, {opacity: 0.8, position: 'absolute', left: 8}]}
-      ></View>
+       />
       <View style={styles.box}>
-        <View style={styles.triangle}></View>
+        <View style={styles.triangle} />
       </View>
       <View style={styles.count}>
         <ThemeText type="body__tertiary">{count}</ThemeText>

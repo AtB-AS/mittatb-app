@@ -8,7 +8,7 @@ import {
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Location} from '@atb/assets/svg/mono-icons/places';
 import React from 'react';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName} from '@atb/configuration';
 import {TariffZoneSelection, TariffZoneWithMetadata} from './types';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';

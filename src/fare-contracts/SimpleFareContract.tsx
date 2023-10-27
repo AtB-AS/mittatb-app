@@ -32,18 +32,13 @@ export const SimpleFareContract: React.FC<Props> = ({
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-  } = useMobileTokenContextState();
+  const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const isInspectable = isInspectableTravelRight(
     firstTravelRight,
     hasActiveTravelCard,
     hasEnabledMobileToken,
     deviceIsInspectable,
-    mobileTokenError,
-    fallbackEnabled,
+    fallbackActive,
   );
 
   if (isPreActivatedTravelRight(firstTravelRight)) {

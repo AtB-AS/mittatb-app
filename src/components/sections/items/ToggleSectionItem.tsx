@@ -9,7 +9,7 @@ import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
-import {LabelType} from '@atb-as/config-specs';
+import {LabelType} from '@atb/configuration';
 import {LabelInfo} from '@atb/components/label-info';
 
 type Props = SectionItemProps<{

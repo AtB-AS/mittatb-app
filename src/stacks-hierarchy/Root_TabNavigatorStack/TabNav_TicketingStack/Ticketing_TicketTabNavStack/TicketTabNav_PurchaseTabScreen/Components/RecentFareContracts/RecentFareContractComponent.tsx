@@ -5,7 +5,7 @@ import RecentFareContractsTexts from '@atb/translations/screens/subscreens/Recen
 import {RecentFareContract} from '../../types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, View} from 'react-native';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName} from '@atb/configuration';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
@@ -146,11 +146,11 @@ export const RecentFareContractComponent = ({
     >
       <View
         style={[styles.upperPart, {minWidth: width * 0.6}]}
-        importantForAccessibility={'no-hide-descendants'}
+        importantForAccessibility="no-hide-descendants"
       >
         <View style={styles.travelModeWrapper}>
           <TransportModes
-            iconSize={'small'}
+            iconSize="small"
             modes={fareProductTypeConfig.transportModes}
             style={{flex: 2}}
           />

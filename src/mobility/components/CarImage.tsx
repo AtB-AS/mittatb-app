@@ -29,7 +29,7 @@ const DefaultCarImage = () => {
         alignItems: 'center',
       }}
     >
-      <ThemeIcon size={'large'} fill={'#A9AEB1'} svg={Car} />
+      <ThemeIcon size="large" fill="#A9AEB1" svg={Car} />
     </View>
   );
 };

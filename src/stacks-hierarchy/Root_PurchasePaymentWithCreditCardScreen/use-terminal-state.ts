@@ -30,7 +30,7 @@ export function useTerminalState(
   const [reservation, setReservation] = useState<OfferReservation>();
   const [error, setError] = useState<PaymentError>();
 
-  const {user, abtCustomerIdFull} = useAuthState();
+  const {userId, phoneNumber, abtCustomerId} = useAuthState();
 
   const handleAxiosError = useCallback(function (
     err: AxiosError | unknown,
@@ -56,7 +56,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
-              customerAccountId: abtCustomerIdFull!,
+              customerAccountId: abtCustomerId!,
             })
           : await reserveOffers({
               offers,
@@ -66,7 +66,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
-              customerAccountId: abtCustomerIdFull!,
+              customerAccountId: abtCustomerId!,
             });
         setReservation(response);
       } catch (err) {
@@ -108,13 +108,13 @@ export function useTerminalState(
     recurringPaymentId?: number,
   ) {
     if (recurringPaymentId) {
-      if (user?.phoneNumber) {
+      if (userId && phoneNumber) {
         const existingMethods = await listRecurringPayments();
         const alreadyAddedRecurringCard = existingMethods.find((item) => {
           return item.id === recurringPaymentId;
         });
         if (alreadyAddedRecurringCard) {
-          savePreviousPaymentMethodByUser(user.uid, {
+          savePreviousPaymentMethodByUser(userId, {
             savedType: 'recurring',
             paymentType: paymentType,
             recurringCard: alreadyAddedRecurringCard,
@@ -125,19 +125,19 @@ export function useTerminalState(
           const checkIfRecurringCardHasBeenSavedAtEntur = async (
             recurringPaymentId: number,
           ) => {
-            let allRecurringPaymentOptions = await listRecurringPayments();
+            const allRecurringPaymentOptions = await listRecurringPayments();
             const card = allRecurringPaymentOptions.find((item) => {
               return item.id === recurringPaymentId;
             });
 
             if (card) {
-              savePreviousPaymentMethodByUser(user.uid, {
+              savePreviousPaymentMethodByUser(userId, {
                 savedType: 'recurring',
                 paymentType: paymentType,
                 recurringCard: card,
               });
             } else {
-              savePreviousPaymentMethodByUser(user.uid, {
+              savePreviousPaymentMethodByUser(userId, {
                 savedType: 'recurring-without-card',
                 paymentType: paymentType,
                 recurringPaymentId: recurringPaymentId,
@@ -149,8 +149,8 @@ export function useTerminalState(
         }
       }
     } else {
-      if (user) {
-        savePreviousPaymentMethodByUser(user.uid, {
+      if (userId) {
+        savePreviousPaymentMethodByUser(userId, {
           savedType: 'normal',
           paymentType: paymentType,
         });

@@ -275,7 +275,7 @@ export async function checkGeolocationPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
   } else {
-    let statuses = await checkMultiple([
+    const statuses = await checkMultiple([
       PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
     ]);

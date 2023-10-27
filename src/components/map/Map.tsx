@@ -1,25 +1,23 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useAnalytics} from '@atb/analytics';
+import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
+import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL from '@rnmapbox/maps';
+import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
-import {LocationBar} from './components/LocationBar';
-import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
-import {isFeaturePoint} from './utils';
-import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import SelectionPinConfirm from '@atb/assets/svg/color/map/SelectionPinConfirm';
-import SelectionPinShadow from '@atb/assets/svg/color/map/SelectionPinShadow';
-import {MapFilterType, MapProps, MapRegion} from './types';
-import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
+import {SelectionPin} from './components/SelectionPin';
+import {LocationBar} from './components/LocationBar';
 import {PositionArrow} from './components/PositionArrow';
-import {shadows} from './components/shadows';
 import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
-import {useAnalytics} from '@atb/analytics';
-import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import {useControlPositionsStyle} from './hooks/use-control-styles';
+import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
+import {MapFilterType, MapProps, MapRegion} from './types';
+import {isFeaturePoint} from './utils';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -122,23 +120,13 @@ export const Map = (props: MapProps) => {
           {mapLines && <MapRoute lines={mapLines} />}
           <MapboxGL.UserLocation showsUserHeadingIndicator />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
-            <MapboxGL.PointAnnotation
-              id={'selectionPin'}
-              coordinate={[
-                selectedCoordinates.longitude,
-                selectedCoordinates.latitude,
-              ]}
-            >
-              <View style={styles.pin}>
-                <SelectionPinConfirm width={40} height={40} />
-                <SelectionPinShadow width={40} height={4} />
-              </View>
-            </MapboxGL.PointAnnotation>
+            <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}
           {props.vehicles && (
             <Vehicles
-              mapCameraRef={mapCameraRef}
               vehicles={props.vehicles.vehicles}
+              mapCameraRef={mapCameraRef}
+              mapViewRef={mapViewRef}
               onClusterClick={(feature) => {
                 onMapClick({
                   source: 'cluster-click',
@@ -147,7 +135,18 @@ export const Map = (props: MapProps) => {
               }}
             />
           )}
-          {props.stations && <Stations stations={props.stations.stations} />}
+          {props.stations && (
+            <Stations
+              stations={props.stations.stations}
+              mapCameraRef={mapCameraRef}
+              onClusterClick={(feature) => {
+                onMapClick({
+                  source: 'cluster-click',
+                  feature,
+                });
+              }}
+            />
+          )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
@@ -177,5 +176,4 @@ export const Map = (props: MapProps) => {
 
 const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
-  pin: {...shadows},
 }));

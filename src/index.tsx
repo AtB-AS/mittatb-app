@@ -62,7 +62,7 @@ export const App = () => {
   }, []);
 
   if (isLoading) {
-    return <GestureHandlerRootView style={{flex: 1}}></GestureHandlerRootView>;
+    return <GestureHandlerRootView style={{flex: 1}} />;
   }
 
   return (

@@ -33,7 +33,7 @@ export async function getDepartures(
 ): Promise<DeparturesMetadata> {
   const {numberOfDepartures, pageOffset = 0, pageSize = 2} = query;
   const startTime = query.startTime;
-  let url = `bff/v1/departures-from-location-paging?limit=${numberOfDepartures}&pageSize=${pageSize}&pageOffset=${pageOffset}&startTime=${startTime}`;
+  const url = `bff/v1/departures-from-location-paging?limit=${numberOfDepartures}&pageSize=${pageSize}&pageOffset=${pageOffset}&startTime=${startTime}`;
   const response = await client.post<DeparturesMetadata>(url, location, opts);
   return response.data;
 }

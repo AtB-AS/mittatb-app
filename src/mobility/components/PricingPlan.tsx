@@ -8,7 +8,7 @@ import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
-import {OperatorBenefitIdType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitIdType} from '@atb/configuration';
 
 type PricingPlanProps = {
   operator: string;
@@ -33,7 +33,7 @@ export const PricingPlan = ({
       <PriceInfo
         price={plan.price}
         pricingSegment={plan.perMinPricing[0]}
-        unit={'min'}
+        unit="min"
         eligibleBenefits={eligibleBenefits}
       />
     );
@@ -44,7 +44,7 @@ export const PricingPlan = ({
       <PriceInfo
         price={plan.price}
         pricingSegment={plan.perKmPricing[0]}
-        unit={'km'}
+        unit="km"
         eligibleBenefits={eligibleBenefits}
       />
     );

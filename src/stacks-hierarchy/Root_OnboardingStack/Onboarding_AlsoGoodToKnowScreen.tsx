@@ -27,7 +27,7 @@ export const Onboarding_AlsoGoodToKnowScreen = ({
     >
       <View style={styles.mainView}>
         <ThemeText
-          type={'body__primary--jumbo--bold'}
+          type="body__primary--jumbo--bold"
           color={themeColor}
           style={styles.header}
         >
