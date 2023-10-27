@@ -1,4 +1,10 @@
-import {createContext, useContext, useEffect, useState} from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {AnnouncementRaw, AnnouncementType} from './types';
 import {mapToAnnouncements} from './converters';
@@ -42,16 +48,19 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
     return () => unsubscribe();
   }, []);
 
-  const dismissAnnouncement = (dismissedAnnouncement: AnnouncementType) => {
-    addDismissedAnnouncementInStore(dismissedAnnouncement.id);
-    setAnnouncements((announcements) =>
-      announcements.filter((a) => a.id !== dismissedAnnouncement.id),
-    );
-  };
+  const dismissAnnouncement = useCallback(
+    (dismissedAnnouncement: AnnouncementType) => {
+      addDismissedAnnouncementInStore(dismissedAnnouncement.id);
+      setAnnouncements((announcements) =>
+        announcements.filter((a) => a.id !== dismissedAnnouncement.id),
+      );
+    },
+    [addDismissedAnnouncementInStore],
+  );
 
-  const resetDismissedAnnouncements = () => {
+  const resetDismissedAnnouncements = useCallback(() => {
     setDismissedAnnouncementInStore([]);
-  };
+  }, [setDismissedAnnouncementInStore]);
 
   return (
     <AnnouncementsContext.Provider
