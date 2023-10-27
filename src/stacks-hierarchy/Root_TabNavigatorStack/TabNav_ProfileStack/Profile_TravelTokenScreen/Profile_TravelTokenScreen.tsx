@@ -18,10 +18,10 @@ type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
 export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {isError, isLoading} = useMobileTokenContextState();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
   const screenHasFocus = useIsFocused();
   const {disable_travelcard} = useRemoteConfig();
-  const shouldFetchTokenDetails = screenHasFocus && !isError && !isLoading;
+  const shouldFetchTokenDetails = screenHasFocus && deviceInspectionStatus !== 'loading';
   const {shouldShowLoader, toggleLimit, maxToggleLimit} = useTokenToggleDetails(
     shouldFetchTokenDetails,
   );

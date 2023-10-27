@@ -31,7 +31,7 @@ const ChangeTokenAction = ({
 }) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {isError, isLoading} = useMobileTokenContextState();
+  const {isSuccess} = useMobileTokenContextState();
   const {disable_travelcard} = useRemoteConfig();
   const now = new Date();
   const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -85,7 +85,7 @@ const ChangeTokenAction = ({
             ? t(TravelTokenTexts.travelToken.changeTokenWithoutTravelcardButton)
             : t(TravelTokenTexts.travelToken.changeTokenButton)
         }
-        disabled={isError || isLoading || toggleLimit === 0}
+        disabled={!isSuccess || toggleLimit === 0}
         onPress={onChange}
         testID="switchTokenButton"
         icon={<ThemeIcon svg={Swap} />}

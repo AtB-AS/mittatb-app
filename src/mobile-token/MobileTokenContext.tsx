@@ -33,10 +33,8 @@ import {tokenService} from '@atb/mobile-token/tokenService';
 type MobileTokenContextState = {
   token?: ActivatedToken;
   remoteTokens?: RemoteToken[];
+  isSuccess: boolean;
   deviceInspectionStatus: DeviceInspectionStatus;
-  isLoading: boolean;
-  isTimedout: boolean;
-  isError: boolean;
   getSignedToken: () => Promise<string | undefined>;
   toggleToken: (
     tokenId: string,
@@ -44,12 +42,17 @@ type MobileTokenContextState = {
   ) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
-  // For debugging
-  createToken: () => void;
-  validateToken: () => void;
-  removeRemoteToken: (tokenId: string) => void;
-  renewToken: () => void;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
+  /** Low level details of the mobile token process, use with care */
+  details: {
+    isError: boolean;
+    isLoading: boolean;
+    isTimedout: boolean;
+    createToken: () => void;
+    validateToken: () => void;
+    removeRemoteToken: (tokenId: string) => void;
+    renewToken: () => void;
+  };
 };
 
 const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
@@ -322,28 +325,31 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         deviceInspectionStatus,
         remoteTokens,
         toggleToken,
-        isLoading,
-        isTimedout,
-        isError,
+        isSuccess: !isError && !isLoading,
         retry: () => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
           load();
         },
-        createToken: () => mobileTokenClient.create(uuid()).then(setToken),
         wipeToken: () =>
           wipeToken(token, uuid()).then(() => setToken(undefined)),
-        validateToken: () =>
-          mobileTokenClient
-            .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])
-            .then((signed) => tokenService.validate(token!, signed, uuid())),
-        removeRemoteToken: async (tokenId) => {
-          const removed = await tokenService.removeToken(tokenId, uuid());
-          if (removed) {
-            setRemoteTokens(remoteTokens?.filter(({id}) => id !== tokenId));
-          }
-        },
-        renewToken: () => mobileTokenClient.renew(token!, uuid()),
         getTokenToggleDetails,
+        details: {
+          isError,
+          isLoading,
+          isTimedout,
+          createToken: () => mobileTokenClient.create(uuid()).then(setToken),
+          validateToken: () =>
+            mobileTokenClient
+              .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])
+              .then((signed) => tokenService.validate(token!, signed, uuid())),
+          removeRemoteToken: async (tokenId) => {
+            const removed = await tokenService.removeToken(tokenId, uuid());
+            if (removed) {
+              setRemoteTokens(remoteTokens?.filter(({id}) => id !== tokenId));
+            }
+          },
+          renewToken: () => mobileTokenClient.renew(token!, uuid()),
+        },
       }}
     >
       {children}

@@ -27,10 +27,10 @@ export function TravelTokenBox({
 }) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceInspectionStatus, remoteTokens, isLoading} =
+  const {deviceInspectionStatus, remoteTokens} =
     useMobileTokenContextState();
 
-  if (isLoading) {
+  if (deviceInspectionStatus === 'loading') {
     return (
       <View style={styles.loadingIndicator}>
         <ActivityIndicator size="large" />
@@ -151,10 +151,10 @@ export const TravelDeviceTitle = ({
 const ErrorMessages = (alwaysShowErrors?: boolean) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {isError, isTimedout, retry, remoteTokens, deviceInspectionStatus} =
+  const {isSuccess, retry, remoteTokens, deviceInspectionStatus} =
     useMobileTokenContextState();
 
-  if (isError || isTimedout) {
+  if (!isSuccess) {
     return deviceInspectionStatus === 'inspectable' &&
       !alwaysShowErrors ? null : (
       <MessageBox

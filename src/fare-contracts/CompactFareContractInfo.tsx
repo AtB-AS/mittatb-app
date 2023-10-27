@@ -38,7 +38,6 @@ export const CompactFareContractInfo = (
   const styles = useStyles();
   const {status} = props;
   const isValid = isValidFareContract(status);
-  const {isLoading} = useMobileTokenContextState();
 
   const fareContractTexts = useFareContractInfoTexts(props);
   const fareContractInfoTextsProps = {
@@ -60,7 +59,7 @@ export const CompactFareContractInfo = (
         <View style={styles.container}>
           <View style={styles.ticketDetails}>
             <CompactFareContractInfoTexts {...fareContractInfoTextsProps} />
-            {isValid && <InspectionSymbol {...props} isLoading={isLoading} />}
+            {isValid && <InspectionSymbol {...props} />}
           </View>
         </View>
       </GenericClickableSectionItem>
@@ -138,8 +137,11 @@ export const useFareContractInfoTexts = (
   } = props;
 
   const {t, language} = useTranslation();
-  const {deviceInspectionStatus, isError, remoteTokens} =
-    useMobileTokenContextState();
+  const {
+    deviceInspectionStatus,
+    details: {isError},
+    remoteTokens,
+  } = useMobileTokenContextState();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)

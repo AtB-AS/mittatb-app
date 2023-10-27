@@ -21,14 +21,12 @@ export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
-  isLoading?: boolean;
 };
 
 export const InspectionSymbol = ({
   preassignedFareProduct,
   fromTariffZone,
   toTariffZone,
-  isLoading,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
@@ -50,7 +48,7 @@ export const InspectionSymbol = ({
       ? getTransportationColor(themeName, transportColor)
       : theme.static.status['warning'];
 
-  if (isLoading) {
+  if (deviceInspectionStatus === 'loading') {
     return <ActivityIndicator size="large" />;
   }
 

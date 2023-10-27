@@ -56,8 +56,11 @@ export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
 }
 
 const useBarcodeCodeStatus = (validityStatus: ValidityStatus) => {
-  const {remoteTokens, deviceInspectionStatus, isLoading, isTimedout, isError} =
-    useMobileTokenContextState();
+  const {
+    remoteTokens,
+    deviceInspectionStatus,
+    details: {isLoading, isTimedout, isError},
+  } = useMobileTokenContextState();
   const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
     useRemoteConfig();
 

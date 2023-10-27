@@ -106,14 +106,16 @@ export const Profile_DebugInfoScreen = () => {
     token,
     remoteTokens,
     retry,
-    createToken,
     wipeToken,
-    validateToken,
-    removeRemoteToken,
-    renewToken,
     deviceInspectionStatus,
-    isLoading,
-    isError,
+    details: {
+      createToken,
+      validateToken,
+      removeRemoteToken,
+      renewToken,
+      isLoading,
+      isError,
+    },
   } = useMobileTokenContextState();
 
   const remoteConfig = useRemoteConfig();
