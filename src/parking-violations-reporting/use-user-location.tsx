@@ -12,21 +12,12 @@ export const useUserLocation = () => {
   const [error, setError] = useState<Error>();
   const [position, setPosition] = useState<Coordinates>();
 
-  const {
-    location: userPosition,
-    status: locationPermissionStatus,
-    requestPermission,
-  } = useGeolocationState();
+  const {location: userPosition, status: locationPermissionStatus} =
+    useGeolocationState();
 
   useEffect(() => {
     if (locationPermissionStatus !== 'granted') {
-      requestPermission()
-        .then((s) => {
-          s === 'granted'
-            ? setError(undefined)
-            : setError(new PermissionRequiredError());
-        })
-        .catch(setError);
+      setError(new PermissionRequiredError());
     }
     if (userPosition) {
       setPosition({
