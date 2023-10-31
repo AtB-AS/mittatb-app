@@ -442,12 +442,13 @@ const useBarcodeStatus = (
   token?: ActivatedToken,
   remoteTokens?: RemoteToken[],
 ): BarcodeStatus => {
-  const {enable_token_fallback, enable_token_fallback_on_timeout} =
-    useRemoteConfig();
-  const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
-    useRemoteConfig();
+  const {
+    enable_token_fallback,
+    enable_token_fallback_on_timeout,
+    use_trygg_overgang_qr_code,
+  } = useRemoteConfig();
 
-  if (useTryggOvergangQrCode) return 'staticQr';
+  if (use_trygg_overgang_qr_code) return 'staticQr';
 
   switch (status) {
     case 'disabled': // As of now, handle disabled as loading, as mobile token should never be disabled
@@ -464,19 +465,16 @@ const useBarcodeStatus = (
 
 /**
  * Whether this device is inspectable or not. It is inspectable if:
- * - A native token is found
- * - A remote token is found matching the token id of the native token
+ * - A mobile token for this device exists
+ * - A remote token is found matching the id of the mobile token for this device
  * - The found remote token has the inspectable action
  */
 const deviceInspectable = (
   token?: ActivatedToken,
   remoteTokens?: RemoteToken[],
 ): boolean => {
-  if (!token) return false;
-  if (!remoteTokens) return false;
-  const matchingRemoteToken = remoteTokens.find(
-    (r) => r.id === token.getTokenId(),
-  );
+  if (!token || !remoteTokens) return false;
+  const matchingRemoteToken = remoteTokens.find((r) => r.id === token.tokenId);
   if (!matchingRemoteToken) return false;
   return isInspectable(matchingRemoteToken);
 };
