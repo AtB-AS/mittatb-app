@@ -16,6 +16,7 @@ export const FareContractStatusSymbol = ({
     case 'expired':
     case 'refunded':
     case 'rejected':
+    case 'cancelled':
       return (
         <ThemeIcon
           svg={TicketInvalid}
