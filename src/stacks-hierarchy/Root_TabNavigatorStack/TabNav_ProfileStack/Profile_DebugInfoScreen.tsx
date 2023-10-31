@@ -113,8 +113,7 @@ export const Profile_DebugInfoScreen = () => {
       validateToken,
       removeRemoteToken,
       renewToken,
-      isLoading,
-      isError,
+      status: mobileTokenStatus,
     },
   } = useMobileTokenContextState();
 
@@ -523,9 +522,8 @@ export const Profile_DebugInfoScreen = () => {
                     ).toISOString()}`}</ThemeText>
                   </View>
                 )}
+                <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
-                <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
-                <ThemeText>{`Is error: ${isError}`}</ThemeText>
                 <Button
                   style={style.button}
                   text="Reload token(s)"

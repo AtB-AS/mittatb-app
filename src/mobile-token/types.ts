@@ -93,6 +93,12 @@ export type Token = RemoteToken & {
   travelCardId?: string;
 };
 
+export type MobileTokenStatus =
+  | 'loading'
+  | 'timeouted'
+  | 'error'
+  | 'success';
+
 export type DeviceInspectionStatus =
   | 'loading'
   | 'inspectable'

@@ -11,6 +11,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
   BarcodeStatus,
   DeviceInspectionStatus,
+  MobileTokenStatus,
   RemoteToken,
   Token,
   TokenLimitResponse,
@@ -57,8 +58,7 @@ type MobileTokenContextState = {
    */
   debug: {
     token?: ActivatedToken;
-    isError: boolean;
-    isLoading: boolean;
+    status: MobileTokenStatus;
     createToken: () => void;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
@@ -88,9 +88,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const [token, setToken] = useState<ActivatedToken>();
   const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isTimedout, setTimeoutFlag] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [status, setStatus] = useState<MobileTokenStatus>('loading');
 
   const enabled =
     mobileTokenEnabled && userId && authStatus === 'authenticated';
@@ -193,8 +191,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       const cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        setTimeoutFlag(true);
-        setIsLoading(false);
+        setStatus('timeouted');
 
         Bugsnag.notify(
           new Error(
@@ -210,8 +207,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         );
       }, token_timeout_in_seconds);
 
-      setIsLoading(true);
-      setIsError(false);
+      setStatus('loading');
       setToken(undefined);
       setRemoteTokens(undefined);
       let nativeToken: ActivatedToken;
@@ -240,8 +236,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           'AtB-Mobile-Token-Status': 'success',
           'AtB-Mobile-Token-Error-Correlation-Id': undefined,
         });
+
+        setStatus('success');
       } catch (err: any) {
-        setIsError(true);
+        setStatus('error');
         /*
          Errors that needs a certain action should already be handled. Just log
          to Bugsnag here.
@@ -261,9 +259,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       } finally {
         // We've finished with remote tokens. Cancel timeout notification.
         cancelTimeoutHandler();
-        setTimeoutFlag(false);
-
-        setIsLoading(false);
       }
     }
   }, [enabled, loadNativeToken, loadRemoteTokens, token_timeout_in_seconds]);
@@ -296,20 +291,12 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   }, [token]);
 
   const deviceInspectionStatus = useDeviceInspectionStatus(
-    isLoading,
-    isError,
-    isTimedout,
+    status,
     token,
     remoteTokens,
   );
 
-  const barcodeStatus = useBarcodeStatus(
-    isLoading,
-    isError,
-    isTimedout,
-    token,
-    remoteTokens,
-  );
+  const barcodeStatus = useBarcodeStatus(status, token, remoteTokens);
 
   const toggleToken = useCallback(
     async (tokenId: string, bypassRestrictions: boolean) => {
@@ -358,7 +345,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         deviceInspectionStatus,
         barcodeStatus,
         toggleToken,
-        isSuccess: !isError && !isLoading,
+        isSuccess: status === 'success',
         retry: () => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
           load();
@@ -368,8 +355,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         getTokenToggleDetails,
         debug: {
           token,
-          isError,
-          isLoading,
+          status,
           createToken: () => mobileTokenClient.create(uuid()).then(setToken),
           validateToken: () =>
             mobileTokenClient
@@ -426,31 +412,29 @@ function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
 }
 
 const useDeviceInspectionStatus = (
-  isLoading: boolean,
-  isError: boolean,
-  isTimedout: boolean,
+  status: MobileTokenStatus,
   token?: ActivatedToken,
   remoteTokens?: RemoteToken[],
 ): DeviceInspectionStatus => {
   const {enable_token_fallback, enable_token_fallback_on_timeout} =
     useRemoteConfig();
-  if (isTimedout) {
-    return enable_token_fallback_on_timeout ? 'inspectable' : 'loading';
-  } else if (isError) {
-    return enable_token_fallback ? 'inspectable' : 'not-inspectable';
-  } else if (isLoading) {
-    return 'loading';
-  } else {
-    return deviceInspectable(token, remoteTokens)
-      ? 'inspectable'
-      : 'not-inspectable';
+
+  switch (status) {
+    case 'loading':
+      return 'loading';
+    case 'timeouted':
+      return enable_token_fallback_on_timeout ? 'inspectable' : 'loading';
+    case 'error':
+      return enable_token_fallback ? 'inspectable' : 'not-inspectable';
+    case 'success':
+      return deviceInspectable(token, remoteTokens)
+        ? 'inspectable'
+        : 'not-inspectable';
   }
 };
 
 const useBarcodeStatus = (
-  isLoading: boolean,
-  isError: boolean,
-  isTimedout: boolean,
+  status: MobileTokenStatus,
   token?: ActivatedToken,
   remoteTokens?: RemoteToken[],
 ): BarcodeStatus => {
@@ -459,16 +443,17 @@ const useBarcodeStatus = (
   const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
     useRemoteConfig();
 
-  if (useTryggOvergangQrCode) {
-    return 'staticQr';
-  } else if (isTimedout) {
-    return enable_token_fallback_on_timeout ? 'static' : 'loading';
-  } else if (isError) {
-    return enable_token_fallback ? 'static' : 'error';
-  } else if (isLoading) {
-    return 'loading';
-  } else {
-    return deviceInspectable(token, remoteTokens) ? 'mobiletoken' : 'other';
+  if (useTryggOvergangQrCode) return 'staticQr';
+
+  switch (status) {
+    case 'loading':
+      return 'loading';
+    case 'timeouted':
+      return enable_token_fallback_on_timeout ? 'static' : 'loading';
+    case 'error':
+      return enable_token_fallback ? 'static' : 'error';
+    case 'success':
+      return deviceInspectable(token, remoteTokens) ? 'mobiletoken' : 'other';
   }
 };
 
