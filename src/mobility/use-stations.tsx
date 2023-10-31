@@ -17,7 +17,7 @@ import {useIsCarSharingEnabled} from './use-car-sharing-enabled';
 import {getStations} from '@atb/api/mobility';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
-const MIN_ZOOM_LEVEL = 12;
+const MIN_ZOOM_LEVEL = 11;
 const BUFFER_DISTANCE_IN_METERS = 500;
 
 const emptyCollection = toFeatureCollection<Point, StationBasicFragment>([]);

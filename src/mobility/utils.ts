@@ -21,10 +21,7 @@ import {
 } from '@atb/api/types/generated/fragments/stations';
 import {Language} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {
-  OperatorBenefitIdType,
-  OperatorBenefitType,
-} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitIdType, OperatorBenefitType} from '@atb/configuration';
 
 export const isScooter = (
   feature: Feature<Point> | undefined,

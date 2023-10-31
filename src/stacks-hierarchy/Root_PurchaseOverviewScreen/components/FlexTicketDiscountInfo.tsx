@@ -8,8 +8,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {UserProfileWithCountAndOffer} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
-import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {
+  useFirestoreConfiguration,
+  getReferenceDataName,
+} from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {StyleSheet} from '@atb/theme';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';

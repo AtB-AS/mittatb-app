@@ -5,7 +5,7 @@ import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {StyleProp, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/configuration';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';

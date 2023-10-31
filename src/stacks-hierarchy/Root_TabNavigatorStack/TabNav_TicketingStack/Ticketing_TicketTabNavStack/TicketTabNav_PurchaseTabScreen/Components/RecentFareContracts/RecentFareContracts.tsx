@@ -1,13 +1,15 @@
 import {ThemeText} from '@atb/components/text';
-import {isProductSellableInApp} from '@atb/reference-data/utils';
+import {
+  isProductSellableInApp,
+  useFirestoreConfiguration,
+  FareProductTypeConfig,
+} from '@atb/configuration';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import RecentFareContractsTexts from '@atb/translations/screens/subscreens/RecentFareContractsTexts';
 import React, {useMemo} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {FareProductTypeConfig} from '@atb/configuration';
 import {RecentFareContract} from '../../types';
 import {useTicketingState} from '@atb/ticketing';
 
