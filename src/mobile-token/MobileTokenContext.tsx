@@ -40,9 +40,25 @@ import {tokenService} from './tokenService';
 
 type MobileTokenContextState = {
   tokens: Token[];
+  /**
+   * The technical status of the mobile token process. Note that 'success' means
+   * that a token was created for this mobile, but not necessarily that it is
+   * inspectable.
+   */
   status: MobileTokenStatus;
-  deviceInspectionStatus: DeviceInspectionStatus;
+  /**
+   * A status which represents which type of barcode to show. This also takes into
+   * account the fallback settings for error and loading.
+   */
   barcodeStatus: BarcodeStatus;
+  /**
+   * A simplified status representing whether this device is inspectable or not.
+   * The status 'inspectable' includes both working mobile token and static
+   * barcode because of fallbacks. The status 'not-inspectable' includes both
+   * situations where the current mobile token is not inspectable, or an error
+   * has occurred (without fallback).
+   */
+  deviceInspectionStatus: DeviceInspectionStatus;
   getSignedToken: () => Promise<string | undefined>;
   toggleToken: (
     tokenId: string,
@@ -87,7 +103,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const [token, setToken] = useState<ActivatedToken>();
   const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
-  const [status, setStatus] = useState<MobileTokenStatus>('loading');
+  const [status, setStatus] = useState<MobileTokenStatus>('disabled');
 
   const enabled =
     mobileTokenEnabled && userId && authStatus === 'authenticated';
@@ -267,13 +283,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     return undefined;
   }, [token]);
 
-  const deviceInspectionStatus = useDeviceInspectionStatus(
-    status,
-    token,
-    remoteTokens,
-  );
-
   const barcodeStatus = useBarcodeStatus(status, token, remoteTokens);
+  const deviceInspectionStatus = getDeviceInspectionStatus(barcodeStatus);
 
   const toggleToken = useCallback(
     async (tokenId: string, bypassRestrictions: boolean) => {
@@ -367,23 +378,19 @@ export function useMobileTokenContextState() {
   return context;
 }
 
-const useDeviceInspectionStatus = (
-  status: MobileTokenStatus,
-  token?: ActivatedToken,
-  remoteTokens?: RemoteToken[],
+const getDeviceInspectionStatus = (
+  barcodeStatus: BarcodeStatus,
 ): DeviceInspectionStatus => {
-  const {enable_token_fallback, enable_token_fallback_on_timeout} =
-    useRemoteConfig();
-
-  switch (status) {
+  switch (barcodeStatus) {
     case 'loading':
-      return enable_token_fallback_on_timeout ? 'inspectable' : 'loading';
+      return 'loading';
+    case 'staticQr':
+    case 'static':
+    case 'mobiletoken':
+      return 'inspectable';
     case 'error':
-      return enable_token_fallback ? 'inspectable' : 'not-inspectable';
-    case 'success':
-      return deviceInspectable(token, remoteTokens)
-        ? 'inspectable'
-        : 'not-inspectable';
+    case 'other':
+      return 'not-inspectable';
   }
 };
 
@@ -400,6 +407,7 @@ const useBarcodeStatus = (
   if (useTryggOvergangQrCode) return 'staticQr';
 
   switch (status) {
+    case 'disabled': // As of now, handle disabled as loading, as mobile token should never be disabled
     case 'loading':
       return enable_token_fallback_on_timeout ? 'static' : 'loading';
     case 'error':
