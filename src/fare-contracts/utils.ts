@@ -87,24 +87,18 @@ export const mapToUserProfilesWithCount = (
     );
 
 export const getNonInspectableTokenWarning = (
-  isSuccess: boolean,
   deviceInspectionStatus: DeviceInspectionStatus,
   t: TranslateFunction,
   tokens: Token[],
   fareProductType?: string,
 ) => {
-  const inspectableToken = tokens.find((t) => t.isInspectable);
   if (deviceInspectionStatus === 'inspectable') return null;
+  const inspectableToken = tokens.find((t) => t.isInspectable);
   if (fareProductType !== 'carnet') {
-    if (!isSuccess) return t(FareContractTexts.warning.unableToRetrieveToken);
-    if (!inspectableToken)
-      return t(FareContractTexts.warning.noInspectableTokenFound);
+    if (!inspectableToken) return t(FareContractTexts.warning.errorWithToken);
     if (inspectableToken.type === 'travel-card')
       return t(FareContractTexts.warning.travelCardAstoken);
-    if (
-      inspectableToken.type === 'mobile' &&
-      deviceInspectionStatus === 'not-inspectable'
-    )
+    if (inspectableToken.type === 'mobile')
       return t(
         FareContractTexts.warning.anotherMobileAsToken(
           inspectableToken.name || t(FareContractTexts.warning.unnamedDevice),

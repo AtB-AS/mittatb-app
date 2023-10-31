@@ -95,7 +95,6 @@ export type Token = RemoteToken & {
 
 export type MobileTokenStatus =
   | 'loading'
-  | 'timeouted'
   | 'error'
   | 'success';
 

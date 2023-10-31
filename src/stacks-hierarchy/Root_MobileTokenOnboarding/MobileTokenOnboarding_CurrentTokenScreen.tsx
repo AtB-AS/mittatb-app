@@ -9,11 +9,11 @@ type Props =
 export const MobileTokenOnboarding_CurrentTokenScreen = ({
   navigation,
 }: Props) => {
-  const {tokens, isSuccess} = useMobileTokenContextState();
+  const {tokens, status} = useMobileTokenContextState();
 
   const close = () => navigation.pop();
 
-  if (!isSuccess) return <NoTokenInfo close={close} />;
+  if (status !== 'success') return <NoTokenInfo close={close} />;
 
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
