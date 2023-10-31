@@ -51,6 +51,8 @@ import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {Kettle} from 'react-native-kettle-module';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
+import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
+import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -249,6 +251,16 @@ export const Profile_DebugInfoScreen = () => {
             text="Reset travel search filters"
             onPress={() =>
               storage.set('@ATB_user_travel_search_filters_v2', '')
+            }
+          />
+          <LinkSectionItem
+            text="Reset ShareTravelHabits session counter"
+            onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
+          />
+          <LinkSectionItem
+            text="Reset has seen ShareTravelHabitsScreen"
+            onPress={() =>
+              storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
             }
           />
         </Section>

@@ -4,7 +4,7 @@ import {
   useTranslation,
   getTextForLanguage,
 } from '@atb/translations';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackScreenProps} from './navigation-types';
 import {Button} from '@atb/components/button';
@@ -17,6 +17,7 @@ import {
   PermissionType,
   checkAndRequestPermission,
 } from '@atb/utils/permissions';
+import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 
 export type SearchStopPlaceProps =
   RootStackScreenProps<'Root_ShareTravelHabitsScreen'>;
@@ -28,6 +29,12 @@ export const Root_ShareTravelHabitsScreen = ({
   const styles = useThemeStyles();
 
   const {configurableLinks} = useFirestoreConfiguration();
+
+  const [_, setAndStoreHasSeenShareTravelHabitsScreen] =
+    useHasSeenShareTravelHabitsScreen();
+  useEffect(() => {
+    setAndStoreHasSeenShareTravelHabitsScreen(true);
+  }, [setAndStoreHasSeenShareTravelHabitsScreen]);
 
   const choosePermissions = async () => {
     const bluetoothPermissionGranted = await checkAndRequestPermission(

@@ -28,7 +28,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
-import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-on-beacons-session-count';
+import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
