@@ -87,7 +87,7 @@ export const mapToUserProfilesWithCount = (
     );
 
 export const getNonInspectableTokenWarning = (
-  isError: boolean,
+  isSuccess: boolean,
   deviceInspectionStatus: DeviceInspectionStatus,
   t: TranslateFunction,
   tokens: Token[],
@@ -96,7 +96,7 @@ export const getNonInspectableTokenWarning = (
   const inspectableToken = tokens.find((t) => t.isInspectable);
   if (deviceInspectionStatus === 'inspectable') return null;
   if (fareProductType !== 'carnet') {
-    if (isError) return t(FareContractTexts.warning.unableToRetrieveToken);
+    if (!isSuccess) return t(FareContractTexts.warning.unableToRetrieveToken);
     if (!inspectableToken)
       return t(FareContractTexts.warning.noInspectableTokenFound);
     if (inspectableToken.type === 'travel-card')

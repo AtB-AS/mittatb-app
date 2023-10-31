@@ -97,3 +97,11 @@ export type DeviceInspectionStatus =
   | 'loading'
   | 'inspectable'
   | 'not-inspectable';
+
+export type BarcodeStatus =
+  | 'loading'
+  | 'static'
+  | 'staticQr'
+  | 'mobiletoken'
+  | 'other'
+  | 'error';

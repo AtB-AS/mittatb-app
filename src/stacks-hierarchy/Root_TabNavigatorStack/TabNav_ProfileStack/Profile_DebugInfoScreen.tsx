@@ -107,7 +107,7 @@ export const Profile_DebugInfoScreen = () => {
     retry,
     wipeToken,
     deviceInspectionStatus,
-    details: {
+    debug: {
       token,
       createToken,
       validateToken,

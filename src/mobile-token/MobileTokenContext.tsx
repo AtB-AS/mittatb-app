@@ -9,6 +9,7 @@ import React, {
 import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
+  BarcodeStatus,
   DeviceInspectionStatus,
   RemoteToken,
   Token,
@@ -41,6 +42,7 @@ type MobileTokenContextState = {
   tokens: Token[];
   isSuccess: boolean;
   deviceInspectionStatus: DeviceInspectionStatus;
+  barcodeStatus: BarcodeStatus;
   getSignedToken: () => Promise<string | undefined>;
   toggleToken: (
     tokenId: string,
@@ -49,12 +51,14 @@ type MobileTokenContextState = {
   retry: () => void;
   wipeToken: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
-  /** Low level details of the mobile token process, use with care */
-  details: {
+  /**
+   * Low level debug details and functions of the mobile token process, for the
+   * debug screen
+   */
+  debug: {
     token?: ActivatedToken;
     isError: boolean;
     isLoading: boolean;
-    isTimedout: boolean;
     createToken: () => void;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
@@ -299,6 +303,14 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     remoteTokens,
   );
 
+  const barcodeStatus = useBarcodeStatus(
+    isLoading,
+    isError,
+    isTimedout,
+    token,
+    remoteTokens,
+  );
+
   const toggleToken = useCallback(
     async (tokenId: string, bypassRestrictions: boolean) => {
       try {
@@ -344,6 +356,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         tokens,
         getSignedToken,
         deviceInspectionStatus,
+        barcodeStatus,
         toggleToken,
         isSuccess: !isError && !isLoading,
         retry: () => {
@@ -353,11 +366,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         wipeToken: () =>
           wipeToken(token, uuid()).then(() => setToken(undefined)),
         getTokenToggleDetails,
-        details: {
+        debug: {
           token,
           isError,
           isLoading,
-          isTimedout,
           createToken: () => mobileTokenClient.create(uuid()).then(setToken),
           validateToken: () =>
             mobileTokenClient
@@ -432,6 +444,31 @@ const useDeviceInspectionStatus = (
     return deviceInspectable(token, remoteTokens)
       ? 'inspectable'
       : 'not-inspectable';
+  }
+};
+
+const useBarcodeStatus = (
+  isLoading: boolean,
+  isError: boolean,
+  isTimedout: boolean,
+  token?: ActivatedToken,
+  remoteTokens?: RemoteToken[],
+): BarcodeStatus => {
+  const {enable_token_fallback, enable_token_fallback_on_timeout} =
+    useRemoteConfig();
+  const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
+    useRemoteConfig();
+
+  if (useTryggOvergangQrCode) {
+    return 'staticQr';
+  } else if (isTimedout) {
+    return enable_token_fallback_on_timeout ? 'static' : 'loading';
+  } else if (isError) {
+    return enable_token_fallback ? 'static' : 'error';
+  } else if (isLoading) {
+    return 'loading';
+  } else {
+    return deviceInspectable(token, remoteTokens) ? 'mobiletoken' : 'other';
   }
 };
 

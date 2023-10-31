@@ -1,5 +1,4 @@
 import DeviceBrightness from '@adrianso/react-native-device-brightness';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
   BottomSheetContainer,
   useBottomSheet,
@@ -24,6 +23,7 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
+import {GenericSectionItem} from '@atb/components/sections';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -31,48 +31,25 @@ type Props = {
 };
 
 export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
-  const status = useBarcodeCodeStatus(validityStatus);
+  const {barcodeStatus} = useMobileTokenContextState();
   useScreenBrightnessIncrease();
+  if (validityStatus !== 'valid') return null;
 
-  switch (status) {
-    case 'none':
-      return null;
+  switch (barcodeStatus) {
     case 'loading':
       return <LoadingBarcode />;
     case 'static':
       return <StaticAztec fc={fc} />;
+    case 'staticQr':
+      return <StaticQrCode fc={fc} />;
     case 'mobiletoken':
       return <MobileTokenAztec fc={fc} />;
     case 'other':
       return <DeviceNotInspectable />;
-    case 'staticQrCode':
-      return <StaticQrCode fc={fc} />;
+    case 'error':
+      return <BarcodeError />;
   }
 }
-
-const useBarcodeCodeStatus = (validityStatus: ValidityStatus) => {
-  const {
-    tokens,
-    deviceInspectionStatus,
-    details: {isLoading, isTimedout, isError},
-  } = useMobileTokenContextState();
-  const {use_trygg_overgang_qr_code: useTryggOvergangQrCode} =
-    useRemoteConfig();
-
-  if (deviceInspectionStatus === 'not-inspectable') return 'none';
-  if (validityStatus !== 'valid') return 'none';
-
-  if (useTryggOvergangQrCode) return 'staticQrCode';
-
-  if (isTimedout) return 'static';
-  if (isLoading) return 'loading';
-  if (isError) return 'static';
-  if (deviceInspectionStatus === 'inspectable') return 'mobiletoken';
-
-  if (tokens.some((t) => t.isInspectable)) return 'other';
-
-  return 'static';
-};
 
 function useScreenBrightnessIncrease() {
   const isActive = useIsFocusedAndActive();
@@ -151,21 +128,24 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   );
 };
 
-// const BarcodeError = ({retry}: {retry?: (forceRestart: boolean) => void}) => {
-//   const {t} = useTranslation();
-//
-//   return (
-//     <GenericSectionItem>
-//       <MessageBox
-//         type={'error'}
-//         title={t(TicketTexts.details.barcodeErrors.generic.title)}
-//         message={t(TicketTexts.details.barcodeErrors.generic.text)}
-//         onPress={retry && (() => retry(true))}
-//         onPressText={retry && t(TicketTexts.details.barcodeErrors.generic.retry)}
-//       />
-//     </GenericSectionItem>
-//   );
-// };
+const BarcodeError = () => {
+  const {t} = useTranslation();
+  const {retry} = useMobileTokenContextState();
+
+  return (
+    <GenericSectionItem>
+      <MessageBox
+        type="error"
+        title={t(FareContractTexts.details.barcodeErrors.generic.title)}
+        message={t(FareContractTexts.details.barcodeErrors.generic.text)}
+        onPressConfig={{
+          action: retry,
+          text: t(FareContractTexts.details.barcodeErrors.generic.retry),
+        }}
+      />
+    </GenericSectionItem>
+  );
+};
 
 const DeviceNotInspectable = () => {
   const {t} = useTranslation();
