@@ -12,6 +12,7 @@ import {
 } from '@atb/utils/permissions';
 import {useIsBeaconsEnabled} from './use-is-beacons-enabled';
 import {useHasSeenShareTravelHabitsScreen} from './use-has-seen-share-travel-habits-screen';
+import {useAppState} from '@atb/AppContext';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count';
@@ -27,10 +28,12 @@ export const useMaybeShowShareTravelHabitsScreen = (
 
   const appStatus = useAppStateStatus();
 
+  const {onboarded} = useAppState();
   const [isBeaconsEnabled, isBeaconsEnabledDebugOverrideReady] =
     useIsBeaconsEnabled();
   const [hasSeenShareTravelHabitsScreen] = useHasSeenShareTravelHabitsScreen();
   const enabled =
+    onboarded &&
     isBeaconsEnabledDebugOverrideReady &&
     isBeaconsEnabled &&
     hasSeenShareTravelHabitsScreen !== null &&
