@@ -292,6 +292,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onPress={() => navigation.navigate('Profile_LanguageScreen')}
             testID="languageButton"
           />
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.notifications
+                .label,
+            )}
+            onPress={() => navigation.navigate('Profile_NotificationsScreen')}
+            testID="notificationsButton"
+          />
         </Section>
         <Section withPadding>
           <GenericSectionItem>

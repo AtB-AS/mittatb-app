@@ -86,6 +86,18 @@ const ProfileTexts = {
         language: {
           label: _('Språk', 'Language', 'Språk'),
         },
+        notifications: {
+          label: _('Varslinger', 'Notifications', 'Varslingar'),
+          heading: _('Varslinger', 'Notifications', 'Varslingar'),
+          pushToggle: {
+            text: _('Push-varsel', 'Push notifications', 'Push-varsel'),
+            subText: _(
+              'Tillat at AtB sender varslinger til denne telefonen.',
+              'Allow AtB to send notifications to this phone.',
+              'Tillat at AtB sender varslingar til denne telefonen.',
+            ),
+          },
+        },
         enrollment: {
           label: _('Invitasjonskode', 'Invitation code', 'Invitasjonskode'),
         },
