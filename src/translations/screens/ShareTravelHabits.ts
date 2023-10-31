@@ -33,10 +33,6 @@ const ShareTravelHabitsTexts = {
     'If you allow the app to use Bluetooth, you simultaneously turn on the sharing of your travel habits and of buses and stops near you. You also turn on notifications about relevant surveys.',
     'Om du tillet at appen brukar Bluetooth, skrur du samtidig på deling av reisevanane dine og av bussar og haldeplassar i nærheita av deg. Du skrur også på varslingar om relevante undersøkingar.',
   ),
-  choosePermissions: _(
-    'Velg tillatelser',
-    'Choose permissions',
-    'Vel tillatingar',
-  ),
+  choosePermissions: _('Velg tillatelser', 'Choose permissions', 'Vel løyve'),
 };
 export default ShareTravelHabitsTexts;
