@@ -137,7 +137,8 @@ export const useFareContractInfoTexts = (
   } = props;
 
   const {t, language} = useTranslation();
-  const {deviceInspectionStatus, tokens} = useMobileTokenContextState();
+  const {deviceInspectionStatus, isSuccess, tokens} =
+    useMobileTokenContextState();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -164,6 +165,7 @@ export const useFareContractInfoTexts = (
     );
   } else {
     const warning = getNonInspectableTokenWarning(
+      isSuccess,
       deviceInspectionStatus,
       t,
       tokens,

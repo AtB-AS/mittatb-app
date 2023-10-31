@@ -77,9 +77,14 @@ export const FareContractInfoHeader = ({
   const productDescription = preassignedFareProduct
     ? getTextForLanguage(preassignedFareProduct.description, language)
     : undefined;
-  const {tokens, deviceInspectionStatus} = useMobileTokenContextState();
+  const {
+    isSuccess,
+    tokens,
+    deviceInspectionStatus,
+  } = useMobileTokenContextState();
   const {t} = useTranslation();
   const warning = getNonInspectableTokenWarning(
+    isSuccess,
     deviceInspectionStatus,
     t,
     tokens,

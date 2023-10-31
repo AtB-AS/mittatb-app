@@ -203,6 +203,25 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     if (enabled) {
       const traceId = uuid();
 
+      const cancelTimeoutHandler = timeoutHandler(() => {
+        // When timeout has occured, we notify errors in Bugsnag
+        // and set state that indicates timeout.
+        setStatus('timeouted');
+
+        Bugsnag.notify(
+          new Error(
+            `Token loading timed out after ${token_timeout_in_seconds} seconds`,
+          ),
+          (event) => {
+            event.addMetadata('token', {
+              userId,
+              traceId,
+              description: 'Native and remote tokens took too long to load.',
+            });
+          },
+        );
+      }, token_timeout_in_seconds);
+
       setStatus('loading');
       setToken(undefined);
       setRemoteTokens(undefined);
@@ -252,6 +271,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
             description: 'Error loading native and remote tokens',
           });
         });
+      } finally {
+        // We've finished with remote tokens. Cancel timeout notification.
+        cancelTimeoutHandler();
       }
     }
   }, [enabled, loadNativeToken, loadRemoteTokens, token_timeout_in_seconds]);
@@ -329,8 +351,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     <MobileTokenContext.Provider
       value={{
         tokens,
-        status,
         getSignedToken,
+        status,
         deviceInspectionStatus,
         barcodeStatus,
         toggleToken,
@@ -378,6 +400,27 @@ export function useMobileTokenContextState() {
   return context;
 }
 
+/**
+ * Call and cancel an action with a specific timeout.
+ * If timeoutInSeconds is 0 the timeout is deactivated.
+ *
+ * @param fn handle to call on time
+ * @param timeoutInSeconds timeout in seconds
+ * @returns cancellable timeout
+ */
+function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
+  if (timeoutInSeconds <= 0) {
+    // Do nothing, as timeout is deactivated
+    return () => {};
+  }
+
+  const timeoutId = setTimeout(fn, timeoutInSeconds * 1000);
+
+  return () => {
+    clearTimeout(timeoutId);
+  };
+}
+
 const getDeviceInspectionStatus = (
   barcodeStatus: BarcodeStatus,
 ): DeviceInspectionStatus => {
@@ -409,6 +452,8 @@ const useBarcodeStatus = (
   switch (status) {
     case 'disabled': // As of now, handle disabled as loading, as mobile token should never be disabled
     case 'loading':
+      return 'loading';
+    case 'timeouted':
       return enable_token_fallback_on_timeout ? 'static' : 'loading';
     case 'error':
       return enable_token_fallback ? 'static' : 'error';
