@@ -211,15 +211,10 @@ const FareContractTexts = {
     zone: _('Sone', 'Zone', 'Sone'),
   },
   warning: {
-    unableToRetrieveToken: _(
+    errorWithToken: _(
       'Feil ved uthenting av t:kort / mobil',
       'Error retrieving t:card / phone',
       'Feil ved uthenting av t:kort / mobil',
-    ),
-    noInspectableTokenFound: _(
-      'Du må bruke billett på t:kort eller mobil',
-      'You must use a ticket on t:card or phone',
-      'Du må bruke billett på t:kort eller mobil',
     ),
     travelCardAstoken: _(
       'Bruk t:kort når du reiser',
@@ -330,15 +325,10 @@ export default orgSpecificTranslations(FareContractTexts, {
       },
     },
     warning: {
-      unableToRetrieveToken: _(
+      errorWithToken: _(
         'Feil ved uthenting av reisekort / mobil',
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
-      ),
-      noInspectableTokenFound: _(
-        'Du må bruke billett på reisekort eller mobil',
-        'You must use a ticket on travel card or phone',
-        'Du må bruke billett på reisekort eller mobil',
       ),
       travelCardAstoken: _(
         'Bruk reisekort når du reiser',
@@ -376,15 +366,10 @@ export default orgSpecificTranslations(FareContractTexts, {
       },
     },
     warning: {
-      unableToRetrieveToken: _(
+      errorWithToken: _(
         'Feil ved uthenting av reisekort / mobil',
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
-      ),
-      noInspectableTokenFound: _(
-        'Du må bruke billett på reisekort eller mobil',
-        'You must use a ticket on travel card or phone',
-        'Du må bruke billett på reisekort eller mobil',
       ),
       travelCardAstoken: _(
         'Bruk reisekort når du reiser',
