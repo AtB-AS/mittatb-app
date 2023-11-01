@@ -172,7 +172,7 @@ export const getUpToDateFavoriteDepartures = (
   let aFavoriteDepartureWasUpdated = false;
   const upToDateFavoriteDepartures = storedFavoriteDepartures.map(
     (storedFavoriteDeparture) => {
-      let upToDateFavoriteDeparture = storedFavoriteDeparture;
+      const upToDateFavoriteDeparture = storedFavoriteDeparture;
       for (const destinationDisplayMigrationPair of destinationDisplayMigrationPairs) {
         if (
           shouldDestinationDisplayBeMigrated(
