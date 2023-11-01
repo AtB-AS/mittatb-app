@@ -135,7 +135,7 @@ const getUniqueFavoriteDepartureMigrationPairs = (
   );
 };
 
-const shouldStoredFavoriteDepartureBeMigrated = (
+export const shouldStoredFavoriteDepartureBeMigrated = (
   storedFavDep: StoredFavoriteDeparture,
   favDepMigrationPair: FavoriteDepartureMigrationPair,
 ): boolean => {
