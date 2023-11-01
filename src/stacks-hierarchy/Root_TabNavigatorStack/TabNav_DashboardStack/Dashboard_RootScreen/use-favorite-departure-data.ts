@@ -65,7 +65,6 @@ type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
       dashboardFavoriteDepartures: UserFavoriteDepartures;
-      favoriteDepartures: UserFavoriteDepartures;
       lastHardRefreshTime: MutableRefObject<Date>;
       lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
@@ -278,7 +277,6 @@ export function useFavoriteDepartureData(
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
         dashboardFavoriteDepartures,
-        favoriteDepartures,
         lastHardRefreshTime,
         lastRealtimeRefreshTime,
       }),
