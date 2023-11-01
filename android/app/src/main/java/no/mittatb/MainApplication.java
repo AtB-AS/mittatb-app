@@ -18,6 +18,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 
 import io.intercom.android.sdk.Intercom;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 

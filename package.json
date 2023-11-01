@@ -101,6 +101,7 @@
     "react-native-intercom": "21.1.1",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-localize": "^2.2.4",
+    "react-native-notifications": "^5.1.0",
     "react-native-pager-view": "^6.1.2",
     "react-native-permissions": "^3.6.1",
     "react-native-portalize": "^1.0.7",
