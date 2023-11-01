@@ -14,8 +14,10 @@ import {
 import {RCTWidgetUpdater} from '../widget-updater';
 import {
   destinationDisplaysAreEqual,
+  getUpToDateFavoriteDepartures,
   mapLegacyLineNameToDestinationDisplay,
 } from '@atb/travel-details-screens/utils';
+import {StopPlaceGroup} from '@atb/api/departures/types';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
@@ -23,6 +25,7 @@ type FavoriteContextState = {
   addFavoriteLocation(location: LocationFavorite): Promise<void>;
   removeFavoriteLocation(id: string): Promise<void>;
   setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
+  migrateFavoriteDepartures(stopPlaceGroups: StopPlaceGroup[]): Promise<void>;
   setDashboardFavorite(id: string, value: boolean): Promise<void>;
   updateFavoriteLocation(favorite: StoredLocationFavorite): Promise<void>;
   setFavoriteLocations(favorites: UserFavorites): Promise<void>;
@@ -109,6 +112,18 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       setFavoriteDeparturesState(favorites);
       await departures.setFavorites(favorites);
       RCTWidgetUpdater.refreshWidgets();
+    },
+    async migrateFavoriteDepartures(stopPlaceGroups) {
+      if (!stopPlaceGroups.length) return;
+
+      const {upToDateFavoriteDepartures, aFavoriteDepartureWasUpdated} =
+        getUpToDateFavoriteDepartures(favoriteDepartures, stopPlaceGroups);
+
+      if (aFavoriteDepartureWasUpdated) {
+        setFavoriteDeparturesState(upToDateFavoriteDepartures);
+        await departures.setFavorites(upToDateFavoriteDepartures);
+        RCTWidgetUpdater.refreshWidgets();
+      }
     },
     async setDashboardFavorite(id: string, value: boolean) {
       const updatedFavorites = favoriteDepartures.map((f) =>

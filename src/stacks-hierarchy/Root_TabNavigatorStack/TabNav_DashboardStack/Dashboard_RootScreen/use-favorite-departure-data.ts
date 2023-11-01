@@ -24,7 +24,6 @@ import {useInterval} from '@atb/utils/use-interval';
 import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
-import {getUpToDateFavoriteDepartures} from '@atb/travel-details-screens/utils';
 
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
@@ -67,7 +66,6 @@ type DepartureDataActions =
       type: 'LOAD_INITIAL_DEPARTURES';
       dashboardFavoriteDepartures: UserFavoriteDepartures;
       favoriteDepartures: UserFavoriteDepartures;
-      setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
       lastHardRefreshTime: MutableRefObject<Date>;
       lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
@@ -135,16 +133,6 @@ const reducer: ReducerWithSideEffects<
             );
             action.lastHardRefreshTime.current = new Date();
             action.lastRealtimeRefreshTime.current = new Date();
-
-            const stopPlaceGroups = result?.data || [];
-            const {upToDateFavoriteDepartures, aFavoriteDepartureWasUpdated} =
-              getUpToDateFavoriteDepartures(
-                action.favoriteDepartures,
-                stopPlaceGroups,
-              );
-
-            aFavoriteDepartureWasUpdated &&
-              action.setFavoriteDepartures(upToDateFavoriteDepartures);
 
             dispatch({
               type: 'UPDATE_DEPARTURES',
@@ -277,7 +265,7 @@ export function useFavoriteDepartureData(
     lastRefreshTime: new Date(),
   });
   const isFocused = useIsFocused();
-  const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
+  const {favoriteDepartures, migrateFavoriteDepartures} = useFavorites();
   const dashboardFavoriteDepartures = favoriteDepartures.filter(
     (f) => f.visibleOnDashboard,
   );
@@ -291,16 +279,16 @@ export function useFavoriteDepartureData(
         type: 'LOAD_INITIAL_DEPARTURES',
         dashboardFavoriteDepartures,
         favoriteDepartures,
-        setFavoriteDepartures,
         lastHardRefreshTime,
         lastRealtimeRefreshTime,
       }),
-    [
-      JSON.stringify(dashboardFavoriteDepartureIds),
-      setFavoriteDepartures,
-      favoriteDepartures,
-    ],
+    [JSON.stringify(dashboardFavoriteDepartureIds), favoriteDepartures],
   );
+
+  useEffect(() => {
+    migrateFavoriteDepartures(state.data || []);
+  }, [state.data, migrateFavoriteDepartures]);
+
   const dashboardFavoriteLineIds = dashboardFavoriteDepartures.map(
     (f) => f.lineId,
   );
