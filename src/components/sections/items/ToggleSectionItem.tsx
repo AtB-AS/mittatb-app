@@ -22,6 +22,7 @@ type Props = SectionItemProps<{
   interactiveColor?: InteractiveColor;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
+  disabled?: boolean;
 }>;
 export function ToggleSectionItem({
   text,
@@ -34,6 +35,7 @@ export function ToggleSectionItem({
   testID,
   interactiveColor,
   textType,
+  disabled = false,
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
@@ -78,6 +80,7 @@ export function ToggleSectionItem({
           onValueChange={onChange}
           testID={testID}
           interactiveColor={interactiveColor}
+          disabled={disabled}
         />
       </View>
       {subtext && (
