@@ -179,11 +179,8 @@ export const getUpToDateFavoriteDepartures = (
           )
         ) {
           aFavoriteDepartureWasMigrated = true;
-
-          upToDateFavDep = {
-            ...storedFavDep,
-            destinationDisplay: favDepMigrationPair?.destinationDisplay,
-          };
+          upToDateFavDep.destinationDisplay =
+            favDepMigrationPair.destinationDisplay;
           break;
         }
       }

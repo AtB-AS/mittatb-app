@@ -19,7 +19,7 @@ const bffMigrationPairAfter = {
   },
 };
 
-describe('useInterval', () => {
+describe('shouldStoredFavoriteDepartureBeMigrated', () => {
   it('returns false when bffMigrationPair via is not migrated', async () => {
     expect(
       shouldStoredFavoriteDepartureBeMigrated(
