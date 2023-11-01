@@ -10,14 +10,23 @@ export const usePushNotifications = () => {
   const [isPermissionAccepted, setIsPermissionAccepted] = useState<boolean>();
   const [token, setToken] = useState<string>();
   const [isError, setIsError] = useState(false);
-  const {isError: isRegisterError, isInitialLoading} =
-    useRegisterForPushNotifications(token);
+  const {
+    isError: isRegisterError,
+    isLoading,
+    mutate,
+  } = useRegisterForPushNotifications();
 
   useEffect(() => {
     Notifications.isRegisteredForRemoteNotifications().then(
       setIsPermissionAccepted,
     );
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      mutate(token);
+    }
+  }, [token]);
 
   const register = () => {
     try {
@@ -46,7 +55,7 @@ export const usePushNotifications = () => {
 
   return {
     isError: isError || isRegisterError,
-    isLoading: isInitialLoading,
+    isLoading,
     isPermissionAccepted,
     register,
   };
