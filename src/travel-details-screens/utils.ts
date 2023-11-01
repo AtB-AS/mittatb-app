@@ -135,24 +135,24 @@ const getUniqueFavoriteDepartureMigrationPairs = (
   );
 };
 
-export const shouldStoredFavoriteDepartureBeMigrated = (
-  storedFavDep: StoredFavoriteDeparture,
+export const shouldStoredDestinationDisplayBeMigrated = (
+  storedDestinationDisplay: DestinationDisplay | undefined,
   favDepMigrationPair: FavoriteDepartureMigrationPair,
 ): boolean => {
-  const storedFavDepDD = storedFavDep?.destinationDisplay;
-  const storedFrontText = storedFavDepDD?.frontText;
+  const storedFrontText = storedDestinationDisplay?.frontText;
 
   const {lineName, destinationDisplay} = favDepMigrationPair;
 
   const storedFrontTextEqualsLineName = storedFrontText === lineName;
   const storedFrontTextIncludesVia = !!storedFrontText?.includes(' via ');
-  const storedFavDepDDViaIsEmpty = (storedFavDepDD?.via?.length || 0) === 0;
+  const storedDestinationDisplayViaIsEmpty =
+    (storedDestinationDisplay?.via?.length || 0) === 0;
   const destinationDisplayViaIsNotEmpty =
     (destinationDisplay?.via?.length || 0) > 0;
   return (
     storedFrontTextEqualsLineName &&
     storedFrontTextIncludesVia &&
-    storedFavDepDDViaIsEmpty &&
+    storedDestinationDisplayViaIsEmpty &&
     destinationDisplayViaIsNotEmpty
   );
 };
@@ -173,8 +173,8 @@ export const getUpToDateFavoriteDepartures = (
       let upToDateFavDep = storedFavDep;
       for (const favDepMigrationPair of favDepMigrationPairs) {
         if (
-          shouldStoredFavoriteDepartureBeMigrated(
-            storedFavDep,
+          shouldStoredDestinationDisplayBeMigrated(
+            storedFavDep?.destinationDisplay,
             favDepMigrationPair,
           )
         ) {
