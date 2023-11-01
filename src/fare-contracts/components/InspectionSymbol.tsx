@@ -3,12 +3,15 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
-import {getReferenceDataName} from '@atb/reference-data/utils';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Boat, Bus} from '@atb/assets/svg/mono-icons/transportation';
-import {PreassignedFareProduct, TariffZone} from '@atb/reference-data/types';
+import {
+  getReferenceDataName,
+  PreassignedFareProduct,
+  TariffZone,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {ContrastColor} from '@atb-as/theme';
 import {getTransportationColor} from '@atb/theme/colors';
@@ -129,7 +132,7 @@ const InspectableContent = ({
       <ThemeIcon
         svg={InspectionSvg}
         fill={shouldFill ? themeColor.text : undefined}
-        size={'large'}
+        size="large"
       />
     </View>
   );

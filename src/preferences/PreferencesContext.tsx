@@ -17,11 +17,11 @@ const PreferencesContext = createContext<PreferencesContextState | undefined>(
 );
 
 export const PreferencesContextProvider: React.FC = ({children}) => {
-  let [preferences, setPreferencesState] = useState<UserPreferences>({});
-  let colorScheme = useColorScheme();
+  const [preferences, setPreferencesState] = useState<UserPreferences>({});
+  const colorScheme = useColorScheme();
 
   async function populatePreferences() {
-    let preferences = await getPreferences_storage();
+    const preferences = await getPreferences_storage();
     setPreferencesState(preferences);
   }
 

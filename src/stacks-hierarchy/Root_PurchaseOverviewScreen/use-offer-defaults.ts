@@ -1,7 +1,10 @@
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {usePreferences} from '@atb/preferences';
-import {PreassignedFareProduct, UserProfile} from '@atb/reference-data/types';
-import {isProductSellableInApp} from '@atb/reference-data/utils';
+import {
+  PreassignedFareProduct,
+  UserProfile,
+  useFirestoreConfiguration,
+  isProductSellableInApp,
+} from '@atb/configuration';
 import {useMemo} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
@@ -89,7 +92,7 @@ const useTravellersWithPreselectedCounts = (
   defaultSelections: UserProfileTypeWithCount[],
 ) =>
   useMemo(() => {
-    let mappedUserProfiles = userProfiles
+    const mappedUserProfiles = userProfiles
       .filter((u) =>
         preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
       )

@@ -2,8 +2,10 @@ import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-} from '@atb/reference-data/types';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+  FareProductTypeConfig,
+  useFirestoreConfiguration,
+  findReferenceDataById,
+} from '@atb/configuration';
 import {
   listRecentFareContracts,
   RecentFareContractBackend,
@@ -12,9 +14,7 @@ import {
 } from '@atb/ticketing';
 import {useEffect, useMemo, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
-import {FareProductTypeConfig} from '@atb/configuration/types';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {enumFromString} from '@atb/utils/enum-from-string';
 

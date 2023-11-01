@@ -1,12 +1,12 @@
 import {
   FlexibleTransportOptionType,
   TransportModeFilterOptionType,
-} from '@atb-as/config-specs';
+} from '@atb/configuration';
 
 export {
   TransportModeFilterOptionType,
   TravelSearchFiltersType,
-} from '@atb-as/config-specs';
+} from '@atb/configuration/types';
 
 export type TransportModeFilterOptionWithSelectionType =
   TransportModeFilterOptionType & {selected: boolean};

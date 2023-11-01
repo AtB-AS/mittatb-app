@@ -15,6 +15,7 @@ export type RemoteConfig = {
   privacy_policy_url: string;
   service_disruption_url: string;
   enable_token_fallback: boolean;
+  enable_token_fallback_on_timeout: boolean;
   enable_flex_tickets: boolean;
   flex_ticket_url: string;
   flex_booking_number_of_days_available: number;
@@ -45,6 +46,8 @@ export type RemoteConfig = {
   enable_loading_error_screen: boolean;
   token_timeout_in_seconds: number;
   enable_beacons: boolean;
+  delay_share_travel_habits_screen_by_sessions_count: number;
+  enable_parking_violations_reporting: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -61,6 +64,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   privacy_policy_url: PRIVACY_POLICY_URL,
   service_disruption_url: '',
   enable_token_fallback: true,
+  enable_token_fallback_on_timeout: true,
   enable_flex_tickets: false,
   flex_ticket_url: '',
   flex_booking_number_of_days_available: 7,
@@ -95,6 +99,8 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_error_screen: false,
   token_timeout_in_seconds: 0,
   enable_beacons: false,
+  delay_share_travel_habits_screen_by_sessions_count: 0,
+  enable_parking_violations_reporting: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -147,6 +153,10 @@ export function getConfig(): RemoteConfig {
   const enable_token_fallback =
     values['enable_token_fallback']?.asBoolean() ??
     defaultRemoteConfig.enable_token_fallback;
+
+  const enable_token_fallback_on_timeout =
+    values['enable_token_fallback_on_timeout']?.asBoolean() ??
+    defaultRemoteConfig.enable_token_fallback_on_timeout;
 
   const enable_vipps_login =
     values['enable_vipps_login']?.asBoolean() ??
@@ -245,8 +255,8 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.enable_loading_screen;
 
   const enable_loading_error_screen =
-      values['enable_loading_error_screen']?.asBoolean() ??
-      defaultRemoteConfig.enable_loading_error_screen;
+    values['enable_loading_error_screen']?.asBoolean() ??
+    defaultRemoteConfig.enable_loading_error_screen;
 
   const token_timeout_in_seconds =
     values['token_timeout_in_seconds']?.asNumber() ??
@@ -254,6 +264,13 @@ export function getConfig(): RemoteConfig {
 
   const enable_beacons =
     values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
+
+  const delay_share_travel_habits_screen_by_sessions_count =
+    values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
+    defaultRemoteConfig.delay_share_travel_habits_screen_by_sessions_count;
+  const enable_parking_violations_reporting =
+    values['enable_parking_violations_reporting']?.asBoolean() ??
+    defaultRemoteConfig.enable_parking_violations_reporting;
 
   return {
     enable_ticketing,
@@ -269,6 +286,7 @@ export function getConfig(): RemoteConfig {
     privacy_policy_url,
     service_disruption_url,
     enable_token_fallback,
+    enable_token_fallback_on_timeout,
     enable_flex_tickets,
     flex_ticket_url,
     flex_booking_number_of_days_available,
@@ -299,6 +317,8 @@ export function getConfig(): RemoteConfig {
     enable_loading_error_screen,
     token_timeout_in_seconds,
     enable_beacons,
+    delay_share_travel_habits_screen_by_sessions_count,
+    enable_parking_violations_reporting,
   };
 }
 

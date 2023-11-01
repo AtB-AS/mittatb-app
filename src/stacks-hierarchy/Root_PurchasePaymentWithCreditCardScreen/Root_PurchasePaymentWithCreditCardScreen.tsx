@@ -16,7 +16,7 @@ import {
   WebViewErrorEvent,
   WebViewNavigationEvent,
 } from 'react-native-webview/lib/WebViewTypes';
-import {Processing} from './Processing';
+import {Processing} from '@atb/components/loading';
 import {useTerminalState, ErrorContext} from './use-terminal-state';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';

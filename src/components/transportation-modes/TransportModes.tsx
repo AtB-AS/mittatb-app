@@ -1,4 +1,4 @@
-import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
+import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
 import {
   CounterIconBox,
   TransportationIconBox,
@@ -103,7 +103,7 @@ export const TransportModes = ({
       {modesCount > modesDisplayLimit && (
         <CounterIconBox
           count={modesCount - modesDisplayLimit}
-          size={'small'}
+          size="small"
           accessibilityLabel={t(
             FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
               modesCount,

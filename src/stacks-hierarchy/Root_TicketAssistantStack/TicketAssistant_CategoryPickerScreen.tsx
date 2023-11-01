@@ -15,7 +15,7 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useOfferDefaults} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-defaults';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName} from '@atb/configuration';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Traveller} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
@@ -83,13 +83,13 @@ export const TicketAssistant_CategoryPickerScreen = ({
     if (userTypeString === 'CHILD') {
       return (
         <>
-          <ThemeText type={'body__secondary'} style={styles.expandedContent}>
+          <ThemeText type="body__secondary" style={styles.expandedContent}>
             {'\n\n' +
               t(TicketAssistantTexts.categoryPicker.childPreLinkText) +
               ' '}
           </ThemeText>
           <ThemeText
-            type={'body__secondary'}
+            type="body__secondary"
             style={[styles.expandedContent, {textDecorationLine: 'underline'}]}
             onPress={handleLinkPress}
           >
@@ -105,7 +105,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.backdrop}>
-        <DashboardBackground width={'100%'} height={'100%'} />
+        <DashboardBackground width="100%" height="100%" />
       </View>
       <ScrollView
         style={styles.scrollView}
@@ -113,9 +113,9 @@ export const TicketAssistant_CategoryPickerScreen = ({
       >
         <View accessible={true} ref={focusRef}>
           <ThemeText
-            type={'heading--big'}
+            type="heading--big"
             style={styles.header}
-            accessibilityRole={'header'}
+            accessibilityRole="header"
             color={themeColor}
             accessibilityLabel={t(TicketAssistantTexts.categoryPicker.title)}
           >
@@ -129,7 +129,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
               return (
                 <ExpandableSectionItem
                   key={index}
-                  textType={'body__primary--bold'}
+                  textType="body__primary--bold"
                   text={
                     (u.emoji ? u.emoji + ' ' : '') +
                     getReferenceDataName(u, language) +
@@ -143,7 +143,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
                   expandContent={
                     <View>
                       <ThemeText
-                        type={'body__secondary'}
+                        type="body__secondary"
                         style={styles.expandedContent}
                         isMarkdown={true}
                       >
@@ -204,13 +204,13 @@ export const TicketAssistant_CategoryPickerScreen = ({
                   <View style={styles.contentContainer}>
                     <ThemeText
                       style={styles.a11yTitle}
-                      type={'body__primary--bold'}
+                      type="body__primary--bold"
                       isMarkdown={true}
                     >
                       {title}
                     </ThemeText>
                     <ThemeText
-                      type={'body__tertiary'}
+                      type="body__tertiary"
                       style={styles.expandedContent}
                       isMarkdown={true}
                     >

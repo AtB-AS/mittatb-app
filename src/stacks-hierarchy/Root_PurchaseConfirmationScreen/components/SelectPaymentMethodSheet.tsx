@@ -83,7 +83,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
   const [loadingRecurringOptions, setLoadingRecurringOptions] =
     useState<boolean>(true);
 
-  const {user} = useAuthState();
+  const {authenticationType} = useAuthState();
   const {theme} = useTheme();
   const {paymentTypes} = useFirestoreConfiguration();
 
@@ -105,7 +105,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
   async function getRecurringPaymentOptions(): Promise<
     Array<SavedPaymentOption>
   > {
-    if (!user || user.isAnonymous) return [];
+    if (authenticationType !== 'phone') return [];
     const recurringOptions: Array<SavedPaymentOption> = (
       await listRecurringPayments()
     ).map((option) => {
@@ -141,7 +141,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
 
   useEffect(() => {
     async function run() {
-      let remoteOptions = await getRecurringPaymentOptions();
+      const remoteOptions = await getRecurringPaymentOptions();
       setRemoteOptions(remoteOptions);
       setLoadingRecurringOptions(false);
     }
@@ -158,7 +158,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
             onPress: close,
             text: t(ScreenHeaderTexts.headerButton.cancel.text),
           }}
-          color={'background_1'}
+          color="background_1"
           setFocusOnLoad={false}
         />
         <View style={{flexShrink: 1, flexGrow: 1}}>
@@ -254,7 +254,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
   const [save, setSave] = useState<boolean>(false);
   const {t} = useTranslation();
   const styles = useStyles();
-  const {user} = useAuthState();
+  const {authenticationType} = useAuthState();
 
   useEffect(() => {
     if (selected) {
@@ -267,7 +267,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     label: string;
     hint: string;
   } {
-    let paymentTypeName = getPaymentTypeName(option.paymentType);
+    const paymentTypeName = getPaymentTypeName(option.paymentType);
 
     if (option.savedType === 'normal') {
       return {
@@ -375,7 +375,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
         </View>
       </PressableOpacity>
       {selected &&
-      user?.phoneNumber &&
+      authenticationType === 'phone' &&
       option.savedType === 'normal' &&
       option.paymentType !== PaymentType.Vipps ? (
         <PressableOpacity
@@ -389,6 +389,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
           </ThemeText>
           <View style={styles.saveButton}>
             <Checkbox
+              style={styles.saveButtonCheckbox}
               checked={save}
               accessibility={{
                 accessibilityHint: t(
@@ -498,6 +499,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     flexDirection: 'row',
     paddingTop: theme.spacings.small,
+  },
+  saveButtonCheckbox: {
+    marginRight: theme.spacings.small,
   },
   expireDate: {
     opacity: 0.6,

@@ -32,7 +32,7 @@ export const OperatorLogo = ({operatorName, logoUrl}: OperatorLogoProps) => {
           />
         )
       ) : (
-        <ThemeText type={'body__primary--big--bold'}>{operatorName}</ThemeText>
+        <ThemeText type="body__primary--big--bold">{operatorName}</ThemeText>
       )}
     </View>
   );

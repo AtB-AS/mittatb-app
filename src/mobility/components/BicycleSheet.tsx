@@ -51,7 +51,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        color={'background_1'}
+        color="background_1"
         setFocusOnLoad={false}
       />
       <>
@@ -87,7 +87,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                   ) : (
                     <VehicleStat
                       svg={Bicycle}
-                      primaryStat={''}
+                      primaryStat=""
                       secondaryStat={t(BicycleTexts.humanPoweredBike)}
                     />
                   )
@@ -106,7 +106,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
                   onPress={openOperatorApp}
                   mode="primary"
-                  interactiveColor={'interactive_0'}
+                  interactiveColor="interactive_0"
                 />
               </View>
             )}

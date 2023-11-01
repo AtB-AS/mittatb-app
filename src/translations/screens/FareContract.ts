@@ -1,4 +1,4 @@
-import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
+import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
@@ -83,10 +83,21 @@ const FareContractTexts = {
       'Få kvittering tilsendt',
     ),
     barcodeA11yLabel: _(
-      'Barkode. Vis frem denne koden ved billettkontroll',
-      'Barcode. Show this code in case of inspection. ',
+      'Barkode. Vis frem denne koden ved billettkontroll.',
+      'Barcode. Show this code in case of inspection.',
       'Barkode. Vis denne koden ved billettkontroll.',
     ),
+    barcodeA11yLabelWithActivation: _(
+      'Barkode. Vis frem denne koden ved billettkontroll. Aktivér for å vise større barkode.',
+      'Barcode. Show this code in case of inspection. Activate for to show larger barcode.',
+      'Barkode. Vis denne koden ved billettkontroll. Aktivér for større barkode.',
+    ),
+    barcodeBottomSheetA11yLabel: _(
+      'Stor barkode. Vis frem denne koden ved billettkontroll. Aktivér for å lukke dialog med stor barkode.',
+      'Large barcode. Show this code in case of inspection. Activate to close dialog with small barcode',
+      'Stor barkode. Vis denne koden ved billettkontroll. Aktivér for å late att dialog med stor barkode.',
+    ),
+    bottomSheetTitle: _('Barkode', 'Barcode', 'Barkode'),
     barcodeErrors: {
       notInspectableDevice: {
         title: _('Barkode', 'Barcode', 'Barkode'),

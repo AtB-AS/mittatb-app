@@ -21,7 +21,7 @@ export function useDelayGate(
         clearTimeout(id);
       };
     }
-  }, [enabled]);
+  }, [delayMs, enabled]);
 
   return enabled ? gate : true;
 }

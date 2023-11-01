@@ -25,6 +25,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: [
     '@typescript-eslint',
+    'react',
     'react-hooks',
     'react-native',
     'rulesdir',
@@ -32,7 +33,6 @@ module.exports = {
     '@tanstack/query',
   ],
   rules: {
-
     // Warning on console.log
     'no-console': [1, {allow: ['warn', 'error']}],
 
@@ -41,6 +41,9 @@ module.exports = {
 
     // Error on using var, e.g. 'var name = "John"'
     'no-var': 2,
+
+    // Error on using let for variable declaration that could be const
+    'prefer-const': 2,
 
     // Error on 'export default'
     'no-restricted-exports': [
@@ -60,6 +63,9 @@ module.exports = {
       },
     ],
 
+    // Error on components without children with closing tag
+    'react/self-closing-comp': 2,
+
     // Error on:
     // - hooks outside of React components and custom hooks
     // - hooks inside loops, conditions, or nested functions
@@ -67,6 +73,9 @@ module.exports = {
 
     // Error on raw text that is not inside Text or ThemeText
     'react-native/no-raw-text': [2, {skip: ['ThemeText']}],
+
+    // Error on using curly braces for strings, e.g. field={'whatever'}
+    "react/jsx-curly-brace-presence": [2, 'never'],
 
     // Warning on arrays with single elements in style prop, as the array is recreated on every render
     'react-native/no-single-element-style-arrays': 1,
@@ -142,19 +151,22 @@ module.exports = {
         ],
       },
     },
+    // Not enforce self-closing brackets on svg assets
+    {
+      files: ['src/assets/svg/**'],
+      rules: {
+        'react/self-closing-comp': 0,
+      },
+    },
   ],
 
   /*
    Possible future improvements:
     - Exchaustive deps!!!
-    - Not allow let that isn't reassigned
-    - Not use brackets when specifying strings: E.g. `foo="bar"` instead of `foo={'bar'}`
-    - Use self closing for components that have no children: E.g. `<Component />` instead of `<Component></Component>`
     - Force imports from index files also from other modules than just the components folder
     - Not allow cyclic dependencies
     - Not allow crisscross importing inside stacks-hierarchy
     - Look into if able to give error on inline component creation during render
     - Shared eslint-settings that can be reused in our repos
    */
-
 };

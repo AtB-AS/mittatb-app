@@ -22,7 +22,6 @@ import {
 } from '@atb/mobile-token/MobileTokenContext';
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -36,7 +35,10 @@ import {
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {
+  findReferenceDataById,
+  PreassignedFareProduct,
+} from '@atb/configuration';
 import {Barcode} from './Barcode';
 
 type Props = {
@@ -57,11 +59,7 @@ export const DetailsContent: React.FC<Props> = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-  } = useMobileTokenContextState();
+  const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {findGlobalMessages} = useGlobalMessagesState();
 
   const firstTravelRight = fc.travelRights[0];
@@ -75,8 +73,7 @@ export const DetailsContent: React.FC<Props> = ({
       hasActiveTravelCard,
       hasEnabledMobileToken,
       deviceIsInspectable,
-      mobileTokenError,
-      fallbackEnabled,
+      fallbackActive,
     );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);

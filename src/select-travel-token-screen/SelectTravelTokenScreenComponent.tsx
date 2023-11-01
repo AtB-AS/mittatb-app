@@ -32,10 +32,7 @@ import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import {
-  findReferenceDataById,
-  isOfFareProductRef,
-} from '@atb/reference-data/utils';
+import {findReferenceDataById, isOfFareProductRef} from '@atb/configuration';
 
 type Props = {onAfterSave: () => void};
 
@@ -158,6 +155,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               }}
               style={styles.leftRadioBox}
               testID="selectTravelcard"
+              interactiveColor="interactive_2"
             />
           )}
           <RadioBox
@@ -184,7 +182,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
         {selectedType === 'travelCard' && !travelCardToken && (
           <MessageBox
-            type={'warning'}
+            type="warning"
             message={t(TravelTokenTexts.toggleToken.noTravelCard)}
             style={styles.errorMessageBox}
             isMarkdown={true}
@@ -193,7 +191,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
         {selectedType === 'mobile' && !mobileTokens?.length && (
           <MessageBox
-            type={'warning'}
+            type="warning"
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
             style={styles.errorMessageBox}
             isMarkdown={false}
@@ -207,7 +205,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           isTravelCardToken(inspectableToken) &&
           hasActiveCarnetFareContract && (
             <MessageBox
-              type={'warning'}
+              type="warning"
               message={t(TravelTokenTexts.toggleToken.hasCarnet)}
               style={styles.errorMessageBox}
               isMarkdown={false}
@@ -216,7 +214,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
         {requiresTokenOnMobile && (
           <MessageBox
-            type={'error'}
+            type="error"
             title={t(
               TravelTokenTexts.toggleToken.notAllowedToUseTravelCardError.title,
             )}

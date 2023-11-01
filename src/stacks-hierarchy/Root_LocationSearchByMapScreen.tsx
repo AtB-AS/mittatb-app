@@ -36,7 +36,7 @@ export const Root_LocationSearchByMapScreen: React.FC<Props> = ({
       <Map
         onLocationSelect={onLocationSelect}
         initialLocation={initialLocation}
-        selectionMode={'ExploreLocation'}
+        selectionMode="ExploreLocation"
       />
     </View>
   );

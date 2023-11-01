@@ -1,4 +1,11 @@
-import React, {createContext, useContext, useEffect, useReducer} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react';
 import {Alert, Platform, Rationale} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
@@ -19,11 +26,17 @@ import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
 import {dictionary, useTranslation} from '@atb/translations';
 
+const config: GeoOptions = {
+  enableHighAccuracy: true,
+  distanceFilter: 20,
+};
+
 type GeolocationState = {
   status: PermissionStatus | null;
   locationEnabled: boolean;
   location: GeoLocation | null;
   locationError: GeoError | null;
+  getCurrentPosition: () => GeoLocation | null;
 };
 
 type GeolocationReducerAction =
@@ -105,6 +118,7 @@ const defaultState: GeolocationState = {
   locationEnabled: false,
   location: null,
   locationError: null,
+  getCurrentPosition: () => null,
 };
 
 export const GeolocationContextProvider: React.FC = ({children}) => {
@@ -112,8 +126,10 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     geolocationReducer,
     defaultState,
   );
+  const appStatus = useAppStateStatus();
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
+  const locationRef = useRef<GeoLocation | null>();
 
   async function requestPermission() {
     if (!(await isLocationEnabled())) {
@@ -144,52 +160,39 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   }
 
   const hasPermission = state.status === 'granted' && state.locationEnabled;
+
+  const updateLocation = (position: GeoPosition | null, locationName: string) =>
+    dispatch({
+      type: 'LOCATION_CHANGED',
+      position,
+      locationName,
+    });
+
   useEffect(() => {
-    let watchId: number;
-
-    async function startLocationWatcher() {
+    if (appStatus === 'active') {
       if (!hasPermission) {
-        dispatch({
-          type: 'LOCATION_CHANGED',
-          position: null,
-          locationName: geoLocationName,
-        });
+        updateLocation(null, geoLocationName);
       } else {
-        const config: GeoOptions = {
-          enableHighAccuracy: true,
-          distanceFilter: 20,
-        };
-
-        watchId = Geolocation.watchPosition(
-          (position) => {
-            dispatch({
-              type: 'LOCATION_CHANGED',
-              position,
-              locationName: geoLocationName,
-            });
-          },
+        const watchId = Geolocation.watchPosition(
+          (position) => updateLocation(position, geoLocationName),
           handleLocationError,
           config,
         );
+        return () => Geolocation.clearWatch(watchId);
       }
     }
-    startLocationWatcher();
-    return () => Geolocation.clearWatch(watchId);
-  }, [hasPermission]);
+  }, [geoLocationName, hasPermission, appStatus]);
 
   const currentLocationError = state.locationError;
-  const appStatus = useAppStateStatus();
+
   useEffect(() => {
     if (!!currentLocationError && appStatus === 'active') {
-      Geolocation.getCurrentPosition((position) => {
-        dispatch({
-          type: 'LOCATION_CHANGED',
-          position,
-          locationName: geoLocationName,
-        });
-      }, handleLocationError);
+      Geolocation.getCurrentPosition(
+        (position) => updateLocation(position, geoLocationName),
+        handleLocationError,
+      );
     }
-  }, [currentLocationError, appStatus]);
+  }, [currentLocationError, appStatus, geoLocationName]);
 
   useEffect(() => {
     async function checkPermission() {
@@ -206,8 +209,16 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     checkPermission();
   }, [appStatus]);
 
+  useEffect(() => {
+    locationRef.current = state.location;
+  }, [state.location]);
+
+  const getCurrentPosition = useCallback(() => locationRef.current ?? null, []);
+
   return (
-    <GeolocationContext.Provider value={{...state, requestPermission}}>
+    <GeolocationContext.Provider
+      value={{...state, requestPermission, getCurrentPosition}}
+    >
       {children}
     </GeolocationContext.Provider>
   );
@@ -227,7 +238,7 @@ export async function checkGeolocationPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     return await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
   } else {
-    let statuses = await checkMultiple([
+    const statuses = await checkMultiple([
       PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
       PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
     ]);

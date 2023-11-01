@@ -46,7 +46,7 @@ type MobileTokenContextState = {
   ) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
-  fallbackEnabled: boolean;
+  fallbackActive: boolean;
   // For debugging
   createToken: () => void;
   validateToken: () => void;
@@ -60,12 +60,15 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 );
 
 export const MobileTokenContextProvider: React.FC = ({children}) => {
-  const {abtCustomerId, authStatus} = useAuthState();
+  const {userId, authStatus} = useAuthState();
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const hasEnabledMobileToken = useHasEnabledMobileToken();
 
-  const {enable_token_fallback: fallbackEnabled} = useRemoteConfig();
+  const {
+    enable_token_fallback: fallbackOnErrorEnabled,
+    enable_token_fallback_on_timeout: fallbackOnTimeoutEnabled,
+  } = useRemoteConfig();
 
   const wipeToken = useCallback(
     async (token: ActivatedToken | undefined, traceId: string) => {
@@ -84,7 +87,11 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const [isError, setIsError] = useState(false);
 
   const enabled =
-    hasEnabledMobileToken && abtCustomerId && authStatus === 'authenticated';
+    hasEnabledMobileToken && userId && authStatus === 'authenticated';
+
+  const fallbackActive =
+    (isError && fallbackOnErrorEnabled) ||
+    (isTimedout && fallbackOnTimeoutEnabled);
 
   /**
    * Load/create native token and handle the situations that can arise.
@@ -104,14 +111,14 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const loadNativeToken = useCallback(
     async (traceId: string) => {
       Bugsnag.leaveBreadcrumb(
-        `Loading mobile token state for user ${abtCustomerId}`,
+        `Loading mobile token state for user ${userId}`,
       );
 
       /*
        Check if there has been a user change.
        */
-      const lastUser = await storage.get('@ATB_last_mobile_token_user');
-      const noUserChange = lastUser === abtCustomerId;
+      const lastUserId = await storage.get('@ATB_last_mobile_token_user');
+      const noUserChange = lastUserId === userId;
 
       let token: ActivatedToken | undefined;
       if (noUserChange) {
@@ -163,10 +170,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
         token = await mobileTokenClient.create(traceId);
       }
-      await storage.set('@ATB_last_mobile_token_user', abtCustomerId!);
+      await storage.set('@ATB_last_mobile_token_user', userId!);
       return token;
     },
-    [abtCustomerId],
+    [userId],
   );
 
   const loadRemoteTokens = useCallback(async (traceId: string) => {
@@ -183,7 +190,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     if (enabled) {
       const traceId = uuid();
 
-      let cancelTimeoutHandler = timeoutHandler(() => {
+      const cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
         setTimeoutFlag(true);
@@ -195,7 +202,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           ),
           (event) => {
             event.addMetadata('token', {
-              abtCustomerId,
+              userId,
               traceId,
               description: 'Native and remote tokens took too long to load.',
             });
@@ -246,7 +253,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         });
         Bugsnag.notify(err, (event) => {
           event.addMetadata('token', {
-            abtCustomerId,
+            userId,
             traceId,
             description: 'Error loading native and remote tokens',
           });
@@ -277,7 +284,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       } catch (err: any) {
         Bugsnag.notify(err, (event) => {
           event.addMetadata('token', {
-            abtCustomerId,
+            userId,
             tokenId: token.tokenId,
             description: 'Error encoding signed token',
           });
@@ -347,7 +354,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         createToken: () => mobileTokenClient.create(uuid()).then(setToken),
         wipeToken: () =>
           wipeToken(token, uuid()).then(() => setToken(undefined)),
-        fallbackEnabled,
+        fallbackActive,
         validateToken: () =>
           mobileTokenClient
             .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])

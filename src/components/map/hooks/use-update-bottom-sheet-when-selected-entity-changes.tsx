@@ -1,6 +1,6 @@
 import {MapProps, MapSelectionActionType} from '../types';
 import React, {RefObject, useEffect, useState} from 'react';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
@@ -18,6 +18,7 @@ import {
 } from '@atb/mobility';
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -35,6 +36,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const analytics = useMapSelectionAnalytics();
+  const navigation = useNavigation<RootNavigationProps>();
 
   const closeWithCallback = () => {
     closeBottomSheet();
@@ -113,6 +115,14 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             <ScooterSheet
               vehicleId={selectedFeature.properties.id}
               close={closeWithCallback}
+              onReportParkingViolation={() => {
+                closeWithCallback();
+                analytics.logEvent(
+                  'Mobility',
+                  'Report parking violation clicked',
+                );
+                navigation.navigate('Root_ParkingViolationsSelect');
+              }}
             />
           );
         }, false);

@@ -12,13 +12,15 @@ import {
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
 import React, {useMemo, useRef} from 'react';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
-import {TariffZone} from '@atb/reference-data/types';
+import {
+  TariffZone,
+  useFirestoreConfiguration,
+  getReferenceDataName,
+} from '@atb/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
-import {getReferenceDataName} from '@atb/reference-data/utils';
 import turfCentroid from '@turf/centroid';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -39,7 +41,7 @@ const TariffZonesSelectorMap = ({
 }: Props) => {
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
-  const {location: geolocation} = useGeolocationState();
+  const {location: geolocation, getCurrentPosition} = useGeolocationState();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
@@ -50,13 +52,12 @@ const TariffZonesSelectorMap = ({
     updateSelectedZones(feature.id as string);
   };
 
-  const startCoordinates = useMemo(
-    () =>
-      geolocation
-        ? [geolocation.coordinates.longitude, geolocation.coordinates.latitude]
-        : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude],
-    [],
-  );
+  const startCoordinates = useMemo(() => {
+    const pos = getCurrentPosition();
+    return pos
+      ? [pos.coordinates.longitude, pos.coordinates.latitude]
+      : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
+  }, [getCurrentPosition]);
 
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -128,7 +129,7 @@ const TariffZonesSelectorMap = ({
             {...MapViewConfig}
           >
             <MapboxGL.ShapeSource
-              id={'tariffZonesShape'}
+              id="tariffZonesShape"
               shape={featureCollection}
               hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
               onPress={selectFeature}

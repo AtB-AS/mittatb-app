@@ -1,10 +1,10 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {DetailsContent} from '@atb/fare-contracts';
 import {
   findReferenceDataById,
   isOfFareProductRef,
-} from '@atb/reference-data/utils';
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';

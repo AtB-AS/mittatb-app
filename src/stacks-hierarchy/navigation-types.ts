@@ -9,9 +9,10 @@ import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ReserveOffer} from '@atb/ticketing';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
+import {PreassignedFareProduct} from '@atb/configuration';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
+import {ParkingViolationType} from '@atb/api/types/mobility';
 
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
@@ -93,6 +94,18 @@ export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {
     | NextScreenParams<'Root_PurchaseOverviewScreen'>;
 };
 
+type Root_ParkingViolationsPhotoParams = {
+  selectedViolations: ParkingViolationType[];
+};
+
+type Root_ParkingViolationsQrParams = Root_ParkingViolationsPhotoParams & {
+  photo: string;
+};
+
+type Root_ParkingViolationsConfirmationParams = {
+  providerName: string | undefined;
+};
+
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
@@ -103,6 +116,7 @@ export type RootStackParamList = {
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;
   Root_AddEditFavoritePlaceScreen: Root_AddEditFavoritePlaceScreenParams;
   Root_SearchStopPlaceScreen: undefined;
+  Root_ShareTravelHabitsScreen: undefined;
   Root_PurchaseOverviewScreen: Root_PurchaseOverviewScreenParams;
   Root_PurchaseConfirmationScreen: Root_PurchaseConfirmationScreenParams;
   Root_PurchaseTariffZonesSearchByMapScreen: Root_PurchaseTariffZonesSearchByMapScreenParams;
@@ -126,6 +140,11 @@ export type RootStackParamList = {
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
   Root_AddPaymentMethodScreen: undefined;
+
+  Root_ParkingViolationsSelect: undefined;
+  Root_ParkingViolationsPhoto: Root_ParkingViolationsPhotoParams;
+  Root_ParkingViolationsQr: Root_ParkingViolationsQrParams;
+  Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

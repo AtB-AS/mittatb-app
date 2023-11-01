@@ -225,7 +225,7 @@ export const DepartureDetailsScreenComponent = ({
           ) : !isWithinSameDate(new Date(), activeItem.date) ? (
             <>
               <View style={styles.date}>
-                <ThemeText type={'body__primary'} color={'secondary'}>
+                <ThemeText type="body__primary" color="secondary">
                   {formatToVerboseFullDate(activeItem.date, language)}
                 </ThemeText>
               </View>

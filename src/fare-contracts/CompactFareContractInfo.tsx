@@ -1,5 +1,5 @@
 import {ThemeText} from '@atb/components/text';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -139,7 +139,7 @@ export const useFareContractInfoTexts = (
   } = props;
 
   const {t, language} = useTranslation();
-  const {isError, remoteTokens, fallbackEnabled} = useMobileTokenContextState();
+  const {isError, remoteTokens, fallbackActive} = useMobileTokenContextState();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -167,7 +167,7 @@ export const useFareContractInfoTexts = (
   } else {
     const warning = getNonInspectableTokenWarning(
       isError,
-      fallbackEnabled,
+      fallbackActive,
       t,
       remoteTokens,
       isInspectable,

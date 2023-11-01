@@ -61,7 +61,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t, language} = useTranslation();
-  const {authenticationType, signOut, user, customerNumber} = useAuthState();
+  const {
+    authenticationType,
+    signOut,
+    phoneNumber: authPhoneNumber,
+    customerNumber,
+  } = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketingState();
@@ -83,7 +88,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const [isLoading, setIsLoading] = useIsLoading(false);
 
-  const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+  const phoneNumber = parsePhoneNumber(authPhoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
@@ -345,7 +350,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
-            icon={'external-link'}
+            icon="external-link"
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,

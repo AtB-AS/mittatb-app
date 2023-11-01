@@ -2,8 +2,7 @@ import {screenReaderPause} from '@atb/components/text';
 import {LocationIcon} from '@atb/components/location-icon';
 import {ThemeText} from '@atb/components/text';
 import {SearchLocation} from '@atb/favorites';
-import {TariffZone} from '@atb/reference-data/types';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+import {getReferenceDataName, TariffZone} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
@@ -65,10 +64,10 @@ export const VenueResults: React.FC<Props> = ({
                   />
                 </View>
                 <View style={styles.nameContainer}>
-                  <ThemeText type={'body__primary--bold'}>
+                  <ThemeText type="body__primary--bold">
                     {location.name}
                   </ThemeText>
-                  <ThemeText type={'body__secondary'}>
+                  <ThemeText type="body__secondary">
                     {t(
                       TariffZoneSearchTexts.results.item.zoneLabel(
                         getReferenceDataName(tariffZone, language),

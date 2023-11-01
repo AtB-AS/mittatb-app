@@ -108,7 +108,7 @@ export function CounterSectionItem({
         >
           <ThemeText
             accessible={false}
-            importantForAccessibility={'no'}
+            importantForAccessibility="no"
             style={[
               counterStyles.countText,
               activeColor && {color: activeColor.text},

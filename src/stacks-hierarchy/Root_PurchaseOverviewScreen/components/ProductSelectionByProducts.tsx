@@ -4,13 +4,13 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {
+  PreassignedFareProduct,
+  useFirestoreConfiguration,
   getReferenceDataName,
   isProductSellableInApp,
-} from '@atb/reference-data/utils';
-import {StyleProp, View, ViewStyle} from 'react-native';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+} from '@atb/configuration';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {RadioGroupSection, Section} from '@atb/components/sections';

@@ -357,9 +357,7 @@ export function isLegFlexibleTransport(leg: Leg): boolean {
   return !!leg.line?.flexibleLineType;
 }
 
-export function getPublicCodeFromLeg(leg: Leg): string {
-  return leg.fromPlace?.quay?.publicCode || leg.line?.publicCode || '';
-}
+export const getPublicCodeFromLeg = (leg: Leg) => leg.line?.publicCode || '';
 
 export function getLatestBookingDateFromLeg(leg: Leg): Date {
   const latestBookingTime = leg.bookingArrangements?.latestBookingTime; // e.g. '15:16:00'
@@ -411,7 +409,7 @@ export function getEarliestBookingDateFromLeg(
 ): Date {
   const latestBookingDate = getLatestBookingDateFromLeg(leg);
 
-  let earliestBookingDate = new Date(latestBookingDate);
+  const earliestBookingDate = new Date(latestBookingDate);
   earliestBookingDate.setDate(
     earliestBookingDate.getDate() - flex_booking_number_of_days_available,
   );
