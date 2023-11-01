@@ -28,7 +28,7 @@ export function useIsLoading(
     return () => {
       clearTimeout(timer);
     };
-  }, [isLoadingInternal]);
+  }, [delayTimeInMs, isLoadingInternal]);
 
   return [isLoading, setIsLoadingInternal];
 }

@@ -90,4 +90,16 @@ describe('useDelayGate', () => {
 
     expect(clearTimeout).toHaveBeenCalledTimes(2);
   });
+
+  it('Should give true after new delay time when delay time is changed', () => {
+    const hook = renderHook(({delayTime}) => useDelayGate(delayTime, true), {
+      initialProps: {delayTime: 300},
+    });
+
+    act(() => jest.advanceTimersByTime(50));
+    expect(hook.result.current).toBe(false);
+    hook.rerender({delayTime: 100});
+    act(() => jest.advanceTimersByTime(120));
+    expect(hook.result.current).toBe(true);
+  });
 });
