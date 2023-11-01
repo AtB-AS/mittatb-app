@@ -137,13 +137,13 @@ const reducer: ReducerWithSideEffects<
             action.lastRealtimeRefreshTime.current = new Date();
 
             const stopPlaceGroups = result?.data || [];
-            const {upToDateFavoriteDepartures, aFavoriteDepartureWasMigrated} =
+            const {upToDateFavoriteDepartures, aFavoriteDepartureWasUpdated} =
               getUpToDateFavoriteDepartures(
                 action.favoriteDepartures,
                 stopPlaceGroups,
               );
 
-            aFavoriteDepartureWasMigrated &&
+            aFavoriteDepartureWasUpdated &&
               action.setFavoriteDepartures(upToDateFavoriteDepartures);
 
             dispatch({

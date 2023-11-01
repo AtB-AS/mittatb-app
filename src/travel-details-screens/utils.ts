@@ -111,15 +111,15 @@ export function significantWaitTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
 
-export type FavoriteDepartureMigrationPair = {
+export type DestinationDisplayMigrationPair = {
   lineName?: string;
   destinationDisplay?: DestinationDisplay;
 };
 
-const getUniqueFavoriteDepartureMigrationPairs = (
+const getUniqueDestinationDisplayMigrationPairs = (
   stopPlaceGroups: StopPlaceGroup[],
-): FavoriteDepartureMigrationPair[] => {
-  const nestedFavoriteDepartureMigrationPairs = stopPlaceGroups.map(
+): DestinationDisplayMigrationPair[] => {
+  const nestedDestinationDisplayMigrationPairs = stopPlaceGroups.map(
     (stopPlaceGroup) =>
       stopPlaceGroup?.quays.map((quay) =>
         quay.group.map((groupItem) => ({
@@ -130,18 +130,18 @@ const getUniqueFavoriteDepartureMigrationPairs = (
   );
   // flatten 3d array to 1d and ensure unique migration pairs
   return uniqBy(
-    flatten(flatten(nestedFavoriteDepartureMigrationPairs)),
+    flatten(flatten(nestedDestinationDisplayMigrationPairs)),
     (pair) => pair.lineName,
   );
 };
 
 export const shouldStoredDestinationDisplayBeMigrated = (
   storedDestinationDisplay: DestinationDisplay | undefined,
-  favDepMigrationPair: FavoriteDepartureMigrationPair,
+  destinationDisplayMigrationPair: DestinationDisplayMigrationPair,
 ): boolean => {
   const storedFrontText = storedDestinationDisplay?.frontText;
 
-  const {lineName, destinationDisplay} = favDepMigrationPair;
+  const {lineName, destinationDisplay} = destinationDisplayMigrationPair;
 
   const storedFrontTextEqualsLineName = storedFrontText === lineName;
   const storedFrontTextIncludesVia = !!storedFrontText?.includes(' via ');
@@ -162,25 +162,25 @@ export const getUpToDateFavoriteDepartures = (
   stopPlaceGroups: StopPlaceGroup[],
 ): {
   upToDateFavoriteDepartures: StoredFavoriteDeparture[];
-  aFavoriteDepartureWasMigrated: boolean;
+  aFavoriteDepartureWasUpdated: boolean;
 } => {
-  const favDepMigrationPairs =
-    getUniqueFavoriteDepartureMigrationPairs(stopPlaceGroups);
+  const destinationDisplayMigrationPairs =
+    getUniqueDestinationDisplayMigrationPairs(stopPlaceGroups);
 
-  let aFavoriteDepartureWasMigrated = false;
+  let aFavoriteDepartureWasUpdated = false;
   const upToDateFavoriteDepartures = storedFavoriteDepartures.map(
     (storedFavDep) => {
       let upToDateFavDep = storedFavDep;
-      for (const favDepMigrationPair of favDepMigrationPairs) {
+      for (const destinationDisplayMigrationPair of destinationDisplayMigrationPairs) {
         if (
           shouldStoredDestinationDisplayBeMigrated(
             storedFavDep?.destinationDisplay,
-            favDepMigrationPair,
+            destinationDisplayMigrationPair,
           )
         ) {
-          aFavoriteDepartureWasMigrated = true;
+          aFavoriteDepartureWasUpdated = true;
           upToDateFavDep.destinationDisplay =
-            favDepMigrationPair.destinationDisplay;
+            destinationDisplayMigrationPair.destinationDisplay;
           break;
         }
       }
@@ -189,7 +189,7 @@ export const getUpToDateFavoriteDepartures = (
   );
   return {
     upToDateFavoriteDepartures,
-    aFavoriteDepartureWasMigrated,
+    aFavoriteDepartureWasUpdated,
   };
 };
 
