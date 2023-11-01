@@ -135,25 +135,27 @@ const getUniqueDestinationDisplayMigrationPairs = (
   );
 };
 
-export const shouldStoredDestinationDisplayBeMigrated = (
-  storedDestinationDisplay: DestinationDisplay | undefined,
+export const shouldDestinationDisplayBeMigrated = (
+  destinationDisplay: DestinationDisplay | undefined,
   destinationDisplayMigrationPair: DestinationDisplayMigrationPair,
 ): boolean => {
-  const storedFrontText = storedDestinationDisplay?.frontText;
+  const {
+    lineName: migrationLineName,
+    destinationDisplay: migrationDestinationDisplay,
+  } = destinationDisplayMigrationPair;
 
-  const {lineName, destinationDisplay} = destinationDisplayMigrationPair;
-
-  const storedFrontTextEqualsLineName = storedFrontText === lineName;
-  const storedFrontTextIncludesVia = !!storedFrontText?.includes(' via ');
-  const storedDestinationDisplayViaIsEmpty =
-    (storedDestinationDisplay?.via?.length || 0) === 0;
-  const destinationDisplayViaIsNotEmpty =
-    (destinationDisplay?.via?.length || 0) > 0;
+  const frontTextEqualsMigrationLineName =
+    destinationDisplay?.frontText === migrationLineName;
+  const frontTextIncludesViaString =
+    !!destinationDisplay?.frontText?.includes(' via ');
+  const viaIsEmpty = (destinationDisplay?.via?.length || 0) === 0;
+  const migrationViaIsNotEmpty =
+    (migrationDestinationDisplay?.via?.length || 0) > 0;
   return (
-    storedFrontTextEqualsLineName &&
-    storedFrontTextIncludesVia &&
-    storedDestinationDisplayViaIsEmpty &&
-    destinationDisplayViaIsNotEmpty
+    frontTextEqualsMigrationLineName &&
+    frontTextIncludesViaString &&
+    viaIsEmpty &&
+    migrationViaIsNotEmpty
   );
 };
 
@@ -169,22 +171,22 @@ export const getUpToDateFavoriteDepartures = (
 
   let aFavoriteDepartureWasUpdated = false;
   const upToDateFavoriteDepartures = storedFavoriteDepartures.map(
-    (storedFavDep) => {
-      let upToDateFavDep = storedFavDep;
+    (storedFavoriteDeparture) => {
+      let upToDateFavoriteDeparture = storedFavoriteDeparture;
       for (const destinationDisplayMigrationPair of destinationDisplayMigrationPairs) {
         if (
-          shouldStoredDestinationDisplayBeMigrated(
-            storedFavDep?.destinationDisplay,
+          shouldDestinationDisplayBeMigrated(
+            storedFavoriteDeparture?.destinationDisplay,
             destinationDisplayMigrationPair,
           )
         ) {
-          aFavoriteDepartureWasUpdated = true;
-          upToDateFavDep.destinationDisplay =
+          upToDateFavoriteDeparture.destinationDisplay =
             destinationDisplayMigrationPair.destinationDisplay;
+          aFavoriteDepartureWasUpdated = true;
           break;
         }
       }
-      return upToDateFavDep;
+      return upToDateFavoriteDeparture;
     },
   );
   return {
