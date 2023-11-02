@@ -19,7 +19,7 @@ const bffMigrationPairAfter = {
 };
 
 describe('shouldDestinationDisplayBeMigrated', () => {
-  it('returns false when bffMigrationPair via is not migrated', async () => {
+  it('returns false when bffMigrationPair via is not migrated', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {frontText: 'Lohove via sentrum', via: undefined},
@@ -28,7 +28,7 @@ describe('shouldDestinationDisplayBeMigrated', () => {
     ).toBe(false);
   });
 
-  it('returns true when via included in stored frontText and undefined stored via array, but is in via array from bff', async () => {
+  it('returns true when via included in stored frontText and undefined stored via array, but is in via array from bff', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {frontText: 'Lohove via sentrum', via: undefined},
@@ -37,7 +37,7 @@ describe('shouldDestinationDisplayBeMigrated', () => {
     ).toBe(true);
   });
 
-  it('returns true when via included in stored frontText and empty stored via array, but is in via array from bff', async () => {
+  it('returns true when via included in stored frontText and empty stored via array, but is in via array from bff', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {frontText: 'Lohove via sentrum', via: []},
@@ -46,7 +46,7 @@ describe('shouldDestinationDisplayBeMigrated', () => {
     ).toBe(true);
   });
 
-  it('returns false when already of the same format', async () => {
+  it('returns false when already of the same format', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {frontText: 'Lohove', via: ['sentrum']},
@@ -55,7 +55,7 @@ describe('shouldDestinationDisplayBeMigrated', () => {
     ).toBe(false);
   });
 
-  it('does not cross match different line names', async () => {
+  it('does not cross match different line names', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {frontText: 'Lohove via utkanten', via: []},
@@ -64,7 +64,7 @@ describe('shouldDestinationDisplayBeMigrated', () => {
     ).toBe(false);
   });
 
-  it('does not cross match different line names with via migrated', async () => {
+  it('does not cross match different line names with via migrated', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {frontText: 'Lohove', via: ['utkanten']},
@@ -73,7 +73,7 @@ describe('shouldDestinationDisplayBeMigrated', () => {
     ).toBe(false);
   });
 
-  it('handles several elements and chars in via when matching', async () => {
+  it('handles several elements and chars in via when matching', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {
@@ -91,7 +91,7 @@ describe('shouldDestinationDisplayBeMigrated', () => {
     ).toBe(true);
   });
 
-  it('handles several elements and chars in via when not matching', async () => {
+  it('handles several elements and chars in via when not matching', () => {
     expect(
       shouldDestinationDisplayBeMigrated(
         {
