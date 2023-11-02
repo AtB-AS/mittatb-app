@@ -174,13 +174,10 @@ export const AppContextProvider: React.FC = ({children}) => {
         storeKey.notificationPermissionOnboarding,
       );
 
-      console.log('saved', savedNotificationPermissionOnboarded);
       const notificationPermissionOnboarded =
         !savedNotificationPermissionOnboarded
           ? false
           : JSON.parse(savedNotificationPermissionOnboarded);
-
-      console.log('should be the same', notificationPermissionOnboarded);
 
       if (onboarded) {
         registerChatUser();
