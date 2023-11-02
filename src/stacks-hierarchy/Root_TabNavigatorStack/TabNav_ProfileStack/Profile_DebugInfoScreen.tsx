@@ -65,6 +65,7 @@ export const Profile_DebugInfoScreen = () => {
     restartMobileTokenOnboarding,
     restartMobileTokenWithoutTravelcardOnboarding,
     restartOnboarding,
+    restartNotificationPermissionOnboarding,
   } = useAppState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId} = useAuthState();
@@ -179,6 +180,10 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Restart onboarding"
             onPress={restartOnboarding}
+          />
+          <LinkSectionItem
+            text="Restart notification onboarding"
+            onPress={restartNotificationPermissionOnboarding}
           />
           <LinkSectionItem
             text="Set mobile token onboarded to false"
