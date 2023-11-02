@@ -1,4 +1,5 @@
 import {
+  DestinationDisplay,
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
@@ -8,7 +9,9 @@ import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 type Notice = {text?: string};
 
 export type DepartureLineInfo = {
-  lineName: string;
+  /** @deprecated Use destinationDisplay instead */
+  lineName?: string;
+  destinationDisplay: DestinationDisplay;
   lineNumber: string;
   transportMode?: TransportMode;
   transportSubmode?: TransportSubmode;

@@ -5,6 +5,7 @@ import {
   PtSituationElement,
   TransportMode,
   TransportSubmode,
+  DestinationDisplay,
 } from './generated/journey_planner_v3_types';
 
 type QuayWithEstimatedCalls = Required<Types.DeparturesQuery>['quays'][0];
@@ -28,22 +29,10 @@ export type NearestStopPlaceNode = Omit<NearestPlaceNode, 'place'> & {
 
 export type Quay = Required<StopPlace>['quays'][0];
 
-export type FavouriteAPIParam = {
-  quayId: string;
-  lineId: string;
-  lineName: string | undefined;
-};
-
-export type FavouriteDepartureAPIParam = {
-  quayId: string;
-  lineId: string;
-  lineName: string;
-};
-
 export type FavouriteResponse = {};
 
 export type DepartureLineInfo = {
-  lineName: string;
+  destinationDisplay: DestinationDisplay;
   lineNumber: string;
   transportMode?: TransportMode;
   transportSubmode?: TransportSubmode;

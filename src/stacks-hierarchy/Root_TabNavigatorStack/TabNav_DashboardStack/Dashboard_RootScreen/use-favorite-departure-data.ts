@@ -64,7 +64,7 @@ const initialState: Omit<
 type DepartureDataActions =
   | {
       type: 'LOAD_INITIAL_DEPARTURES';
-      favoriteDepartures?: UserFavoriteDepartures;
+      dashboardFavoriteDepartures: UserFavoriteDepartures;
       lastHardRefreshTime: MutableRefObject<Date>;
       lastRealtimeRefreshTime: MutableRefObject<Date>;
     }
@@ -127,7 +127,7 @@ const reducer: ReducerWithSideEffects<
           try {
             // Fresh fetch, reset paging and use new query input with new startTime
             const result = await getFavouriteDepartures(
-              action.favoriteDepartures || [],
+              action.dashboardFavoriteDepartures,
               queryInput,
             );
             action.lastHardRefreshTime.current = new Date();
@@ -264,23 +264,32 @@ export function useFavoriteDepartureData(
     lastRefreshTime: new Date(),
   });
   const isFocused = useIsFocused();
-  const {favoriteDepartures} = useFavorites();
-  const dashboardFavorites = favoriteDepartures.filter(
+  const {favoriteDepartures, migrateFavoriteDepartures} = useFavorites();
+  const dashboardFavoriteDepartures = favoriteDepartures.filter(
     (f) => f.visibleOnDashboard,
   );
 
-  const dashboardFavoriteIds = dashboardFavorites.map((f) => f.id);
+  const dashboardFavoriteDepartureIds = dashboardFavoriteDepartures.map(
+    (f) => f.id,
+  );
   const loadInitialDepartures = useCallback(
     () =>
       dispatch({
         type: 'LOAD_INITIAL_DEPARTURES',
-        favoriteDepartures: dashboardFavorites,
+        dashboardFavoriteDepartures,
         lastHardRefreshTime,
         lastRealtimeRefreshTime,
       }),
-    [JSON.stringify(dashboardFavoriteIds)],
+    [JSON.stringify(dashboardFavoriteDepartureIds), favoriteDepartures],
   );
-  const dashboardFavoriteLineIds = dashboardFavorites.map((f) => f.lineId);
+
+  useEffect(() => {
+    migrateFavoriteDepartures(state.data || []);
+  }, [state.data, migrateFavoriteDepartures]);
+
+  const dashboardFavoriteLineIds = dashboardFavoriteDepartures.map(
+    (f) => f.lineId,
+  );
   const loadRealTimeData = useCallback(
     () =>
       dispatch({
