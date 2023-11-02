@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -8,27 +9,21 @@ import React, {
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
+import Bugsnag from '@bugsnag/react-native';
+import {PaymentType} from '@atb/ticketing';
 import {
+  FareProductGroupType,
+  FareProductTypeConfig,
+  ConfigurableLinksType,
+  HarborConnectionOverrideType,
+  TravelSearchFiltersType,
   CityZone,
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-} from '@atb/reference-data/types';
-import Bugsnag from '@bugsnag/react-native';
-import {
-  defaultCityZones,
-  defaultFareProductTypeConfig,
-  defaultPreassignedFareProducts,
-  defaultTariffZones,
-  defaultUserProfiles,
-} from '@atb/reference-data/defaults';
-import {
-  defaultModesWeSellTicketsFor,
-  defaultPaymentTypes,
-  defaultVatPercent,
-} from '@atb/configuration/defaults';
-import {PaymentType} from '@atb/ticketing';
-import {FareProductGroupType, FareProductTypeConfig} from './types';
+  MobilityOperatorType,
+  FirestoreConfigStatus,
+} from './types';
 import {
   mapLanguageAndTextType,
   mapToFareProductGroups,
@@ -39,12 +34,9 @@ import {
   mapToTransportModeFilterOptions,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
-import {MobilityOperatorType} from '@atb-as/config-specs/lib/mobility-operators';
-import {
-  ConfigurableLinksType,
-  HarborConnectionOverrideType,
-  TravelSearchFiltersType,
-} from '@atb-as/config-specs';
+import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
+
+export const defaultVatPercent: number = 12;
 
 export type AppTexts = {
   discountInfo: LanguageAndTextType[];
@@ -65,44 +57,29 @@ type ConfigurationContextState = {
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
+  firestoreConfigStatus: FirestoreConfigStatus;
+  resubscribeFirestoreConfig: () => void;
 };
 
-const defaultConfigurationContextState: ConfigurationContextState = {
-  preassignedFareProducts: defaultPreassignedFareProducts,
-  fareProductGroups: [],
-  tariffZones: defaultTariffZones,
-  cityZones: defaultCityZones,
-  userProfiles: defaultUserProfiles,
-  modesWeSellTicketsFor: defaultModesWeSellTicketsFor,
-  paymentTypes: defaultPaymentTypes,
-  vatPercent: defaultVatPercent,
-  fareProductTypeConfigs: defaultFareProductTypeConfig,
-  travelSearchFilters: undefined,
-  appTexts: undefined,
-  configurableLinks: undefined,
-  mobilityOperators: undefined,
-  harborConnectionOverrides: [],
-};
-
-const FirestoreConfigurationContext = createContext<ConfigurationContextState>(
-  defaultConfigurationContextState,
-);
+const FirestoreConfigurationContext = createContext<
+  ConfigurationContextState | undefined
+>(undefined);
 
 export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
-  const [preassignedFareProducts, setPreassignedFareProducts] = useState(
-    defaultPreassignedFareProducts,
+  const [preassignedFareProducts, setPreassignedFareProducts] = useState<
+    PreassignedFareProduct[]
+  >([]);
+  const [tariffZones, setTariffZones] = useState<TariffZone[]>([]);
+  const [cityZones, setCityZones] = useState<CityZone[]>([]);
+  const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
+  const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState<string[]>(
+    [],
   );
-  const [tariffZones, setTariffZones] = useState(defaultTariffZones);
-  const [cityZones, setCityZones] = useState(defaultCityZones);
-  const [userProfiles, setUserProfiles] = useState(defaultUserProfiles);
-  const [modesWeSellTicketsFor, setModesWeSellTicketsFor] = useState(
-    defaultModesWeSellTicketsFor,
-  );
-  const [paymentTypes, setPaymentTypes] = useState(defaultPaymentTypes);
-  const [vatPercent, setVatPercent] = useState(defaultVatPercent);
+  const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
+  const [vatPercent, setVatPercent] = useState<number>(defaultVatPercent);
   const [fareProductTypeConfigs, setFareProductTypeConfigs] = useState<
     FareProductTypeConfig[]
-  >(defaultFareProductTypeConfig);
+  >([]);
   const [fareProductGroups, setFareProductGroups] = useState<
     FareProductGroupType[]
   >([]);
@@ -117,9 +94,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
     HarborConnectionOverrideType[]
   >([]);
+  const [firestoreConfigStatus, setFirestoreConfigStatus] =
+    useState<FirestoreConfigStatus>('loading');
+  const {resubscribe, resubscribeToggle} = useResubscribeToggle();
 
-  useEffect(() => {
-    firestore()
+  const subscribeFirestore = useCallback(() => {
+    return firestore()
       .collection('configuration')
       .onSnapshot(
         (snapshot) => {
@@ -197,6 +177,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
           if (harborConnectionOverrides) {
             setHarborConnectionOverrides(harborConnectionOverrides);
           }
+          setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -206,6 +187,32 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
         },
       );
   }, []);
+
+  const clearState = () => {
+    setFirestoreConfigStatus('loading');
+    setPreassignedFareProducts([]);
+    setTariffZones([]);
+    setCityZones([]);
+    setUserProfiles([]);
+    setModesWeSellTicketsFor([]);
+    setPaymentTypes([]);
+    setVatPercent(defaultVatPercent);
+    setFareProductTypeConfigs([]);
+    setFareProductGroups([]);
+    setTravelSearchFilters(undefined);
+    setAppTexts(undefined);
+    setConfigurableLinks(undefined);
+    setMobilityOperators([]);
+    setHarborConnectionOverrides([]);
+  };
+
+  useEffect(() => {
+    const unsubscribeFirestore = subscribeFirestore();
+    return () => {
+      clearState();
+      unsubscribeFirestore();
+    };
+  }, [resubscribeToggle, subscribeFirestore]);
 
   const memoizedState = useMemo(() => {
     return {
@@ -223,6 +230,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       configurableLinks,
       mobilityOperators,
       harborConnectionOverrides,
+      firestoreConfigStatus,
     };
   }, [
     preassignedFareProducts,
@@ -239,10 +247,16 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     configurableLinks,
     mobilityOperators,
     harborConnectionOverrides,
+    firestoreConfigStatus,
   ]);
 
   return (
-    <FirestoreConfigurationContext.Provider value={memoizedState}>
+    <FirestoreConfigurationContext.Provider
+      value={{
+        ...memoizedState,
+        resubscribeFirestoreConfig: resubscribe,
+      }}
+    >
       {children}
     </FirestoreConfigurationContext.Provider>
   );
@@ -454,6 +468,7 @@ function getConfigurableLinksFromSnapshot(
   const flexTransportInfo = mapLanguageAndTextType(
     urls?.get('flexTransportInfo'),
   );
+  const dataSharingInfo = mapLanguageAndTextType(urls?.get('dataSharingInfo'));
 
   return {
     ticketingInfo,
@@ -461,6 +476,7 @@ function getConfigurableLinksFromSnapshot(
     inspectionInfo,
     refundInfo,
     flexTransportInfo,
+    dataSharingInfo,
   };
 }
 

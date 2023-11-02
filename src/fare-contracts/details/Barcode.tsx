@@ -239,7 +239,9 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
       <PressableOpacity
         onPress={onOpenBarcodePress}
         accessibilityRole="button"
-        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+        accessibilityLabel={t(
+          FareContractTexts.details.barcodeA11yLabelWithActivation,
+        )}
         testID="staticBarcode"
       >
         <SvgXml xml={aztecXml} width="100%" height="100%" />
@@ -269,7 +271,9 @@ const StaticQrCode = ({fc}: {fc: FareContract}) => {
       <PressableOpacity
         onPress={onOpenBarcodePress}
         accessibilityRole="button"
-        accessibilityLabel={t(FareContractTexts.details.barcodeA11yLabel)}
+        accessibilityLabel={t(
+          FareContractTexts.details.barcodeA11yLabelWithActivation,
+        )}
         testID="staticQRCode"
       >
         <SvgXml xml={qrCodeSvg} width="100%" height="100%" />

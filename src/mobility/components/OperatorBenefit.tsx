@@ -1,6 +1,6 @@
 import React from 'react';
 import {ViewStyle} from 'react-native';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb/configuration';
 import {MessageBox} from '@atb/components/message-box';
 import {getTextForLanguage} from '@atb/translations/utils';
 import {useTranslation} from '@atb/translations';

@@ -3,7 +3,7 @@ import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {DetailsContent, SimpleFareContract} from '@atb/fare-contracts';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {findReferenceDataById} from '@atb/configuration';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FareContract, Reservation, TravelRightDirection} from '@atb/ticketing';
 import {addDays} from 'date-fns';

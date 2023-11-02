@@ -8,8 +8,10 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {
   TransportSubmode,
   TransportMode,
+  DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {animateNextChange} from '@atb/utils/animation';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 type FavouriteDepartureLine = {
   id: string;
@@ -17,7 +19,7 @@ type FavouriteDepartureLine = {
   lineNumber?: string;
   transportMode?: TransportMode;
   transportSubmode?: TransportSubmode;
-  lineName?: string;
+  destinationDisplay?: DestinationDisplay;
 };
 
 export function useOnMarkFavouriteDepartures(
@@ -35,11 +37,13 @@ export function useOnMarkFavouriteDepartures(
   } = useBottomSheet();
   const addFavorite = async (
     line: FavouriteDepartureLine,
-    forSpecificLineName: boolean,
+    forSpecificDestination: boolean,
   ) => {
     await addFavoriteDeparture({
       lineId: line.id,
-      lineName: forSpecificLineName ? line.lineName : undefined,
+      destinationDisplay: forSpecificDestination
+        ? line.destinationDisplay
+        : undefined,
       lineLineNumber: line.lineNumber,
       lineTransportationMode: line.transportMode,
       lineTransportationSubMode: line.transportSubmode,
@@ -56,24 +60,29 @@ export function useOnMarkFavouriteDepartures(
 
   const getExistingFavorite = (line: FavouriteDepartureLine) =>
     getFavoriteDeparture({
-      lineName: line.lineName,
+      destinationDisplay: line.destinationDisplay,
       lineId: line.id,
       stopId: stopPlace.id,
       quayId: quay.id,
     });
 
   const toggleFavouriteAccessibilityLabel = (line: FavouriteDepartureLine) => {
-    const existing: any = undefined;
+    const existing = getExistingFavorite(line);
     return existing
       ? t(
           DeparturesTexts.results.lines.favorite.removeFavorite(
-            `${line.lineNumber} ${existing.lineName ?? ''}`,
+            `${line.lineNumber} ${
+              formatDestinationDisplay(t, existing.destinationDisplay) ?? ''
+            }`,
             stopPlace.name,
           ),
         )
       : t(
           DeparturesTexts.results.lines.favorite.addFavorite(
-            `${line.lineNumber} ${line.lineName}`,
+            `${line.lineNumber} ${formatDestinationDisplay(
+              t,
+              line.destinationDisplay,
+            )}`,
             stopPlace.name,
           ),
         );
@@ -105,11 +114,11 @@ export function useOnMarkFavouriteDepartures(
           },
         ],
       );
-    } else if (line.lineName && line.lineNumber) {
-      openBottomSheet(() =>
-        line.lineName && line.lineNumber ? (
+    } else if (line.destinationDisplay && line.lineNumber) {
+      openBottomSheet(() => {
+        return line.destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
-            lineName={line.lineName}
+            destinationDisplay={line.destinationDisplay}
             lineNumber={line.lineNumber}
             addFavorite={(forSpecificLineName: boolean) =>
               addFavorite(line, forSpecificLineName)
@@ -119,8 +128,8 @@ export function useOnMarkFavouriteDepartures(
           />
         ) : (
           <></>
-        ),
-      );
+        );
+      });
     }
   };
 

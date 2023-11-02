@@ -11,6 +11,12 @@ import {
 } from './types';
 
 import {RCTWidgetUpdater} from '../widget-updater';
+import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
+import {
+  getFavoriteDeparturesWithDestinationDisplay,
+  getUpToDateFavoriteDepartures,
+} from './utils';
+import {StopPlaceGroup} from '@atb/api/departures/types';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
@@ -18,6 +24,7 @@ type FavoriteContextState = {
   addFavoriteLocation(location: LocationFavorite): Promise<void>;
   removeFavoriteLocation(id: string): Promise<void>;
   setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
+  migrateFavoriteDepartures(stopPlaceGroups: StopPlaceGroup[]): Promise<void>;
   setDashboardFavorite(id: string, value: boolean): Promise<void>;
   updateFavoriteLocation(favorite: StoredLocationFavorite): Promise<void>;
   setFavoriteLocations(favorites: UserFavorites): Promise<void>;
@@ -42,7 +49,14 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       departures.getFavorites(),
     ]);
     setFavoritesState(favorites ?? []);
-    setFavoriteDeparturesState(favoriteDepartures ?? []);
+    const {
+      favoriteDeparturesWithDestinationDisplay,
+      didMigrateFavoriteDeparture,
+    } = getFavoriteDeparturesWithDestinationDisplay(favoriteDepartures);
+
+    setFavoriteDeparturesState(favoriteDeparturesWithDestinationDisplay ?? []);
+    didMigrateFavoriteDeparture &&
+      departures.setFavorites(favoriteDeparturesWithDestinationDisplay ?? []);
   }
 
   useEffect(() => {
@@ -75,7 +89,7 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
      * number on the same quay will be removed.
      */
     async addFavoriteDeparture(favoriteDeparture: FavoriteDeparture) {
-      if (!favoriteDeparture.lineName) {
+      if (!favoriteDeparture.destinationDisplay) {
         const favoritesExisting = await departures.getFavorites();
         const favoritesFiltered = favoritesExisting.filter(
           (f) =>
@@ -98,6 +112,18 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       await departures.setFavorites(favorites);
       RCTWidgetUpdater.refreshWidgets();
     },
+    async migrateFavoriteDepartures(stopPlaceGroups) {
+      if (!stopPlaceGroups.length) return;
+
+      const {upToDateFavoriteDepartures, aFavoriteDepartureWasUpdated} =
+        getUpToDateFavoriteDepartures(favoriteDepartures, stopPlaceGroups);
+
+      if (aFavoriteDepartureWasUpdated) {
+        setFavoriteDeparturesState(upToDateFavoriteDepartures);
+        await departures.setFavorites(upToDateFavoriteDepartures);
+        RCTWidgetUpdater.refreshWidgets();
+      }
+    },
     async setDashboardFavorite(id: string, value: boolean) {
       const updatedFavorites = favoriteDepartures.map((f) =>
         f.id == id ? {...f, visibleOnDashboard: value} : f,
@@ -109,7 +135,11 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       return favoriteDepartures.find(function (favorite) {
         return (
           favorite.lineId == potential.lineId &&
-          (!favorite.lineName || favorite.lineName == potential.lineName) &&
+          (!favorite.destinationDisplay ||
+            destinationDisplaysAreEqual(
+              favorite.destinationDisplay,
+              potential.destinationDisplay,
+            )) &&
           favorite.stopId == potential.stopId &&
           favorite.quayId == potential.quayId
         );

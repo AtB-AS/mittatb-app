@@ -1,35 +1,9 @@
-import {EstimatedCall, Leg, Quay} from '../sdk';
+import {Quay} from '../sdk';
 import {Quay as Quay_v2} from '../api/types/trips';
 import {dictionary, TranslatedString} from '../translations';
 import {AnyMode} from '@atb/components/icon-box';
 import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
 
-export function getLineName(leg: Leg) {
-  return leg.line
-    ? leg.line.publicCode +
-        ' ' +
-        leg.fromEstimatedCall?.destinationDisplay?.frontText ?? leg.line.name
-    : '';
-}
-
-export function getLineNameFromEstimatedCall(call: EstimatedCall): {
-  publicCode?: string;
-  name?: string;
-} {
-  const name =
-    call.destinationDisplay?.frontText ??
-    call.serviceJourney.journeyPattern?.line.name;
-
-  const publicCode = call.serviceJourney.journeyPattern?.line.publicCode;
-
-  if (!publicCode && !name) {
-    return {};
-  }
-  if (!publicCode) {
-    return {name};
-  }
-  return {publicCode, name};
-}
 export function getTranslatedModeName(mode?: AnyMode): TranslatedString {
   const legModeNames = dictionary.travel.legModes;
   switch (mode) {

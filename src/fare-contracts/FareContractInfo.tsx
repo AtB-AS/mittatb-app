@@ -3,11 +3,9 @@ import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-} from '@atb/reference-data/types';
-import {
   findReferenceDataById,
   getReferenceDataName,
-} from '@atb/reference-data/utils';
+} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
   CustomerProfile,

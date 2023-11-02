@@ -2,7 +2,7 @@ import {PaymentType} from '@atb/ticketing';
 import {format, parseISO} from 'date-fns';
 import {ErrorType} from '@atb/api/utils';
 import {LocationSearchTexts, TranslateFunction} from '@atb/translations';
-import {TariffZone} from '@atb/reference-data/types';
+import {TariffZone} from '@atb/configuration';
 import {
   TariffZoneWithMetadata,
   useTariffZoneFromLocation,
