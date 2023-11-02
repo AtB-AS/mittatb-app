@@ -80,6 +80,7 @@ export const usePollableResource = <T, E extends Error = Error>(
 
   useEffect(() => {
     const abortController = new AbortController();
+    firstLoadIsDone.current = false;
     abortControllerRef.current = abortController;
     reload('WITH_LOADING', abortController);
     return () => abortController.abort();
