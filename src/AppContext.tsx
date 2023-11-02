@@ -15,7 +15,7 @@ enum storeKey {
   ticketing = '@ATB_ticket_informational_accepted',
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
-  notificationPermissionOnboarding = '@ATB_notification_permission_onboarding',
+  notificationPermissionOnboarding = '@ATB_notification_permission_onboarded',
 }
 type AppState = {
   isLoading: boolean;
@@ -76,8 +76,7 @@ const appReducer: AppReducer = (prevState, action) => {
         mobileTokenOnboarded: action.mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded:
           action.mobileTokenWithoutTravelcardOnboarded,
-        notificationPermissionOnboarding:
-          action.notificationPermissionOnboarded,
+        notificationPermissionOnboarded: action.notificationPermissionOnboarded,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -174,10 +173,14 @@ export const AppContextProvider: React.FC = ({children}) => {
       const savedNotificationPermissionOnboarded = await storage.get(
         storeKey.notificationPermissionOnboarding,
       );
+
+      console.log('saved', savedNotificationPermissionOnboarded);
       const notificationPermissionOnboarded =
         !savedNotificationPermissionOnboarded
           ? false
           : JSON.parse(savedNotificationPermissionOnboarded);
+
+      console.log('should be the same', notificationPermissionOnboarded);
 
       if (onboarded) {
         registerChatUser();
@@ -253,18 +256,18 @@ export const AppContextProvider: React.FC = ({children}) => {
         );
       },
       completeNotificationPermissionOnboarding: async () => {
-        dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
         await storage.set(
           storeKey.notificationPermissionOnboarding,
           JSON.stringify(true),
         );
+        dispatch({type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'});
       },
       restartNotificationPermissionOnboarding: async () => {
-        dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
         await storage.set(
           storeKey.notificationPermissionOnboarding,
           JSON.stringify(false),
         );
+        dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
       },
     }),
     [],

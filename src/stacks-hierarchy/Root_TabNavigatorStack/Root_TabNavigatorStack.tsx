@@ -43,8 +43,6 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
 
   useGoToMobileTokenOnboardingWhenNecessary();
 
-  const askedForNotifications = false;
-
   useEffect(() => {
     if (!onboarded) {
       InteractionManager.runAfterInteractions(() =>
@@ -55,7 +53,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
         navigation.navigate('Root_NotificationPermissionScreen'),
       );
     }
-  }, [onboarded, navigation, askedForNotifications]);
+  }, [onboarded, navigation, notificationPermissionOnboarded]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
     InteractionManager.runAfterInteractions(() =>
