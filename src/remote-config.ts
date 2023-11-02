@@ -46,6 +46,7 @@ export type RemoteConfig = {
   enable_loading_error_screen: boolean;
   token_timeout_in_seconds: number;
   enable_beacons: boolean;
+  delay_share_travel_habits_screen_by_sessions_count: number;
   enable_parking_violations_reporting: boolean;
 };
 
@@ -98,6 +99,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_loading_error_screen: false,
   token_timeout_in_seconds: 0,
   enable_beacons: false,
+  delay_share_travel_habits_screen_by_sessions_count: 0,
   enable_parking_violations_reporting: false,
 };
 
@@ -263,6 +265,9 @@ export function getConfig(): RemoteConfig {
   const enable_beacons =
     values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
 
+  const delay_share_travel_habits_screen_by_sessions_count =
+    values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
+    defaultRemoteConfig.delay_share_travel_habits_screen_by_sessions_count;
   const enable_parking_violations_reporting =
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
@@ -312,6 +317,7 @@ export function getConfig(): RemoteConfig {
     enable_loading_error_screen,
     token_timeout_in_seconds,
     enable_beacons,
+    delay_share_travel_habits_screen_by_sessions_count,
     enable_parking_violations_reporting,
   };
 }

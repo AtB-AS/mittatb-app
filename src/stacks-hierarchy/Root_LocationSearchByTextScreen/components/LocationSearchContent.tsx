@@ -2,7 +2,7 @@ import {useSearchHistory, JourneySearchHistoryEntry} from '@atb/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {useDebounce} from '@atb/utils/useDebounce';
-import {filterCurrentLocation, filterPreviousLocations} from '../utils';
+import {filterPreviousLocations} from '../utils';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';
 import {LocationSearchResultType, SelectableLocationType} from '../types';
@@ -68,10 +68,8 @@ export function LocationSearchContent({
     onlyLocalTariffZoneAuthority,
   );
 
-  const filteredLocations = filterCurrentLocation(
-    locations,
-    includeHistory ? previousLocations : [],
-  );
+  const locationSearchResults: LocationSearchResultType[] =
+    locations?.map((location) => ({location})) ?? [];
 
   const onSearchSelect = (searchResult: LocationSearchResultType) => {
     if (!searchResult.favoriteInfo) {
@@ -103,7 +101,7 @@ export function LocationSearchContent({
   }, [error]);
 
   const hasPreviousResults = !!previousLocations.length;
-  const hasResults = !!filteredLocations.length;
+  const hasResults = !!locationSearchResults.length;
   const searchBarIsEmpty = text === '' || text.length === 0;
 
   return (
@@ -134,15 +132,15 @@ export function LocationSearchContent({
           />
         </Section>
 
-          {searchBarIsEmpty && (
-            <FavoriteChips
-              onSelectLocation={onSelect}
-              onMapSelection={onMapSelection}
-              chipTypes={favoriteChipTypes}
-              style={styles.chipBox}
-              onAddFavorite={onAddFavorite}
-            />
-          )}
+        {searchBarIsEmpty && (
+          <FavoriteChips
+            onSelectLocation={onSelect}
+            onMapSelection={onMapSelection}
+            chipTypes={favoriteChipTypes}
+            style={styles.chipBox}
+            onAddFavorite={onAddFavorite}
+          />
+        )}
       </View>
       {error && (
         <View style={styles.withMargin}>
@@ -178,7 +176,7 @@ export function LocationSearchContent({
             {hasResults ? (
               <LocationResults
                 title={t(LocationSearchTexts.results.searchResults.heading)}
-                locations={filteredLocations}
+                locations={locationSearchResults}
                 onSelect={onSearchSelect}
                 testIDItemPrefix="locationSearchItem"
               />

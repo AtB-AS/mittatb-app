@@ -13,8 +13,9 @@ import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectGroup} from './components/SelectGroup';
 import {
-  useParkingViolations,
+  NoLocationError,
   PermissionRequiredError,
+  useParkingViolations,
 } from '@atb/parking-violations-reporting';
 
 export type SelectViolationScreenProps =
@@ -103,12 +104,23 @@ const ErrorMessage = (props: ErrorMessageProps) => {
     return (
       <View {...props}>
         <MessageBox
-          title={t(ParkingViolationTexts.error.position.title)}
-          message={t(ParkingViolationTexts.error.position.message)}
+          title={t(ParkingViolationTexts.error.positionNotGranted.title)}
+          message={t(ParkingViolationTexts.error.positionNotGranted.message)}
           onPressConfig={{
-            text: t(ParkingViolationTexts.error.position.action),
+            text: t(ParkingViolationTexts.error.positionNotGranted.action),
             action: () => Linking.openSettings(),
           }}
+          type="warning"
+        />
+      </View>
+    );
+  }
+  if (props.error instanceof NoLocationError) {
+    return (
+      <View {...props}>
+        <MessageBox
+          title={t(ParkingViolationTexts.error.noLocation.title)}
+          message={t(ParkingViolationTexts.error.noLocation.message)}
           type="warning"
         />
       </View>
