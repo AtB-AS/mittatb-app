@@ -41,7 +41,7 @@ const TariffZonesSelectorMap = ({
 }: Props) => {
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
-  const {location: geolocation} = useGeolocationState();
+  const {location: geolocation, getCurrentPosition} = useGeolocationState();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
@@ -52,13 +52,12 @@ const TariffZonesSelectorMap = ({
     updateSelectedZones(feature.id as string);
   };
 
-  const startCoordinates = useMemo(
-    () =>
-      geolocation
-        ? [geolocation.coordinates.longitude, geolocation.coordinates.latitude]
-        : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude],
-    [],
-  );
+  const startCoordinates = useMemo(() => {
+    const pos = getCurrentPosition();
+    return pos
+      ? [pos.coordinates.longitude, pos.coordinates.latitude]
+      : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
+  }, [getCurrentPosition]);
 
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);

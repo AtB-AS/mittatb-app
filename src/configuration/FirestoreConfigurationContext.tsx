@@ -468,6 +468,7 @@ function getConfigurableLinksFromSnapshot(
   const flexTransportInfo = mapLanguageAndTextType(
     urls?.get('flexTransportInfo'),
   );
+  const dataSharingInfo = mapLanguageAndTextType(urls?.get('dataSharingInfo'));
 
   return {
     ticketingInfo,
@@ -475,6 +476,7 @@ function getConfigurableLinksFromSnapshot(
     inspectionInfo,
     refundInfo,
     flexTransportInfo,
+    dataSharingInfo,
   };
 }
 

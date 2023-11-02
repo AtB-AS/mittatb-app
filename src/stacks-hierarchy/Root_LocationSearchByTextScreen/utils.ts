@@ -66,14 +66,3 @@ const matchText = (searchText: string, text?: string) =>
   text?.toLowerCase()?.startsWith(searchText.toLowerCase()) || false;
 const matchLocation = (searchText: string, location: SearchLocation) =>
   matchText(searchText, location.name);
-
-export const filterCurrentLocation = (
-  locations: SearchLocation[] | null,
-  previousLocations: LocationSearchResultType[] | null,
-): LocationSearchResultType[] => {
-  if (!previousLocations?.length || !locations)
-    return locations?.map((location) => ({location})) ?? [];
-  return locations
-    .filter((l) => !previousLocations.some((pl) => pl.location.id === l.id))
-    .map((location) => ({location}));
-};
