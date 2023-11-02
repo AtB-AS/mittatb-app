@@ -4,27 +4,34 @@ import {
   RegistrationError,
 } from 'react-native-notifications';
 import {useEffect, useState} from 'react';
-import {useRegisterForPushNotifications} from '@atb/notifications/use-register-for-push-notifications';
+import {useRegister} from '@atb/notifications/use-register';
+import {useConfig} from '@atb/notifications/use-config';
+import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export const usePushNotifications = () => {
   const [isPermissionAccepted, setIsPermissionAccepted] = useState<boolean>();
   const [token, setToken] = useState<string>();
   const [isError, setIsError] = useState(false);
-  const {
-    isError: isRegisterError,
-    isLoading,
-    mutate,
-  } = useRegisterForPushNotifications();
+  const isFocusedAndActive = useIsFocusedAndActive();
+  const {mutation: registerMutation} = useRegister();
+  const {query: configQuery} = useConfig();
 
   useEffect(() => {
-    Notifications.isRegisteredForRemoteNotifications().then(
-      setIsPermissionAccepted,
-    );
-  }, []);
+    // Check if the user has granted permission to use push notifications on os level
+    // "Resubscribe" to this callback when isFocusedAndActive has changed in order to refresh
+    // isPermissionAccepted if the user has enabled/disabled push in Settings and then returns to the app.
+    if (isFocusedAndActive) {
+      Notifications.isRegisteredForRemoteNotifications().then(
+        (isRegistered) => {
+          setIsPermissionAccepted(isRegistered);
+        },
+      );
+    }
+  }, [Notifications, isFocusedAndActive]);
 
   useEffect(() => {
     if (token) {
-      mutate(token);
+      registerMutation.mutate(token);
     }
   }, [token]);
 
@@ -54,9 +61,10 @@ export const usePushNotifications = () => {
   };
 
   return {
-    isError: isError || isRegisterError,
-    isLoading,
+    isError: isError || registerMutation.isError,
+    isLoading: registerMutation.isLoading || configQuery.isInitialLoading,
     isPermissionAccepted,
+    config: configQuery.data,
     register,
   };
 };
