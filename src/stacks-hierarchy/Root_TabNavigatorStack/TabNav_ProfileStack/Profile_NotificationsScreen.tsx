@@ -8,6 +8,8 @@ import {StyleSheet} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import {usePushNotifications} from '@atb/notifications';
 import {MessageBox} from '@atb/components/message-box';
+import {useConfig} from '@atb/notifications/use-config';
+import {isConfigEnabled} from '@atb/notifications/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -18,14 +20,16 @@ export const Profile_NotificationsScreen = () => {
     isPermissionAccepted: isPushPermissionAccepted,
     isLoading,
     isError,
+    config,
     register,
   } = usePushNotifications();
+  const {mutation: configMutation} = useConfig();
 
-  const handlePushNotificationToggle = async (checked: boolean) => {
-    if (checked) {
+  const handlePushNotificationToggle = async (enabled: boolean) => {
+    if (enabled) {
       register();
     }
-    // TODO: Update /config if !checked
+    configMutation.mutate({config_type: 'mode', id: 'push', enabled});
   };
 
   return (
@@ -58,8 +62,11 @@ export const Profile_NotificationsScreen = () => {
               ProfileTexts.sections.settings.linkSectionItems.notifications
                 .pushToggle.subText,
             )}
-            value={isPushPermissionAccepted}
-            disabled={isLoading}
+            value={
+              isPushPermissionAccepted === true &&
+              isConfigEnabled(config?.modes, 'push')
+            }
+            disabled={isLoading || !isPushPermissionAccepted}
             onValueChange={handlePushNotificationToggle}
           />
         </Section>
