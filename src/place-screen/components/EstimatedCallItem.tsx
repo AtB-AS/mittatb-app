@@ -13,10 +13,8 @@ import {
   getSvgForMostCriticalSituationOrNotice,
 } from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {
-  destinationDisplaysAreEqual,
-  formatDestinationDisplay,
-} from '@atb/travel-details-screens/utils';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 
 import {
   CancelledDepartureTexts,

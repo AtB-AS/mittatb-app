@@ -16,10 +16,7 @@ import {
   DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {dictionary, TranslateFunction} from '@atb/translations';
-import {StoredFavoriteDeparture} from '@atb/favorites';
 import {APP_ORG} from '@env';
-import {StopPlaceGroup} from '@atb/api/departures/types';
-import {flatten, uniqBy} from 'lodash';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -111,107 +108,6 @@ export function significantWaitTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
 
-export type DestinationDisplayMigrationPair = {
-  lineName?: string;
-  destinationDisplay?: DestinationDisplay;
-};
-
-const getUniqueDestinationDisplayMigrationPairs = (
-  stopPlaceGroups: StopPlaceGroup[],
-): DestinationDisplayMigrationPair[] => {
-  const nestedDestinationDisplayMigrationPairs = stopPlaceGroups.map(
-    (stopPlaceGroup) =>
-      stopPlaceGroup?.quays.map((quay) =>
-        quay.group.map((groupItem) => ({
-          lineName: groupItem?.lineInfo?.lineName,
-          destinationDisplay: groupItem?.lineInfo?.destinationDisplay,
-        })),
-      ),
-  );
-  // flatten 3d array to 1d and ensure unique migration pairs
-  return uniqBy(
-    flatten(flatten(nestedDestinationDisplayMigrationPairs)),
-    (pair) => pair.lineName,
-  );
-};
-
-export const shouldDestinationDisplayBeMigrated = (
-  destinationDisplay: DestinationDisplay | undefined,
-  destinationDisplayMigrationPair: DestinationDisplayMigrationPair,
-): boolean => {
-  const {
-    lineName: migrationLineName,
-    destinationDisplay: migrationDestinationDisplay,
-  } = destinationDisplayMigrationPair;
-
-  const frontTextEqualsMigrationLineName =
-    destinationDisplay?.frontText === migrationLineName;
-  const frontTextIncludesViaString =
-    !!destinationDisplay?.frontText?.includes(' via ');
-  const viaIsEmpty = (destinationDisplay?.via?.length || 0) === 0;
-  const migrationViaIsNotEmpty =
-    (migrationDestinationDisplay?.via?.length || 0) > 0;
-  return (
-    frontTextEqualsMigrationLineName &&
-    frontTextIncludesViaString &&
-    viaIsEmpty &&
-    migrationViaIsNotEmpty
-  );
-};
-
-export const getUpToDateFavoriteDepartures = (
-  storedFavoriteDepartures: StoredFavoriteDeparture[],
-  stopPlaceGroups: StopPlaceGroup[],
-): {
-  upToDateFavoriteDepartures: StoredFavoriteDeparture[];
-  aFavoriteDepartureWasUpdated: boolean;
-} => {
-  const destinationDisplayMigrationPairs =
-    getUniqueDestinationDisplayMigrationPairs(stopPlaceGroups);
-
-  let aFavoriteDepartureWasUpdated = false;
-  const upToDateFavoriteDepartures = storedFavoriteDepartures.map(
-    (storedFavoriteDeparture) => {
-      const upToDateFavoriteDeparture = storedFavoriteDeparture;
-      for (const destinationDisplayMigrationPair of destinationDisplayMigrationPairs) {
-        if (
-          shouldDestinationDisplayBeMigrated(
-            storedFavoriteDeparture?.destinationDisplay,
-            destinationDisplayMigrationPair,
-          )
-        ) {
-          upToDateFavoriteDeparture.destinationDisplay =
-            destinationDisplayMigrationPair.destinationDisplay;
-          aFavoriteDepartureWasUpdated = true;
-          break;
-        }
-      }
-      return upToDateFavoriteDeparture;
-    },
-  );
-  return {
-    upToDateFavoriteDepartures,
-    aFavoriteDepartureWasUpdated,
-  };
-};
-
-/* NB this is the same function as in the bff. Keep in sync! */
-export function destinationDisplaysAreEqual(
-  destinationDisplay1: DestinationDisplay | undefined,
-  destinationDisplay2: DestinationDisplay | undefined,
-) {
-  const frontTextIsEqual =
-    destinationDisplay1?.frontText === destinationDisplay2?.frontText;
-  const viaLengthIsEqual =
-    destinationDisplay1?.via?.length === destinationDisplay2?.via?.length;
-  if (!frontTextIsEqual || !viaLengthIsEqual) {
-    return false;
-  }
-  return !!(destinationDisplay1?.via || []).every((via1Item) =>
-    destinationDisplay2?.via?.includes(via1Item),
-  ); // doesn't check for same order in via arrays, but should it?
-}
-
 export function formatDestinationDisplay(
   t: TranslateFunction,
   destinationDisplay: DestinationDisplay | undefined,
@@ -233,18 +129,6 @@ export function formatDestinationDisplay(
   }
 
   return frontText + ` ${t(dictionary.via)} ` + viaNames;
-}
-
-export function mapLegacyLineNameToDestinationDisplay(
-  legacyLineName: string | undefined,
-): DestinationDisplay | undefined {
-  if (legacyLineName === undefined) {
-    return undefined;
-  }
-  return {
-    frontText: legacyLineName,
-    via: undefined,
-  };
 }
 
 export function getLineName(t: TranslateFunction, leg: Leg) {

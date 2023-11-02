@@ -7,16 +7,15 @@ import {
   StoredFavoriteDeparture,
   StoredLocationFavorite,
   UserFavoriteDepartures,
-  UserFavoriteDeparturesLegacy,
   UserFavorites,
 } from './types';
 
 import {RCTWidgetUpdater} from '../widget-updater';
+import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 import {
-  destinationDisplaysAreEqual,
+  getFavoriteDeparturesWithDestinationDisplay,
   getUpToDateFavoriteDepartures,
-  mapLegacyLineNameToDestinationDisplay,
-} from '@atb/travel-details-screens/utils';
+} from './utils';
 import {StopPlaceGroup} from '@atb/api/departures/types';
 
 type FavoriteContextState = {
@@ -163,30 +162,4 @@ export function useFavorites() {
     );
   }
   return context;
-}
-
-function getFavoriteDeparturesWithDestinationDisplay(
-  favoriteDepartures: UserFavoriteDepartures | UserFavoriteDeparturesLegacy,
-) {
-  // app version 1.41 and earlier used lineName in favoriteDepartures
-  // this function ensures all favoriteDepartures are migrated to using destinationDisplay instead
-  let didMigrateFavoriteDeparture = false;
-  const favoriteDeparturesWithDestinationDisplay = favoriteDepartures.map(
-    (fd) => {
-      if ('lineName' in fd) {
-        didMigrateFavoriteDeparture = true;
-        const {lineName, ...fdWithoutLineName} = fd;
-        return {
-          ...fdWithoutLineName,
-          destinationDisplay: mapLegacyLineNameToDestinationDisplay(lineName),
-        };
-      } else {
-        return fd;
-      }
-    },
-  );
-  return {
-    favoriteDeparturesWithDestinationDisplay,
-    didMigrateFavoriteDeparture,
-  };
 }
