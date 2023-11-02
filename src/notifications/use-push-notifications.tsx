@@ -15,6 +15,7 @@ export const usePushNotifications = () => {
   const isFocusedAndActive = useIsFocusedAndActive();
   const {mutation: registerMutation} = useRegister();
   const {query: configQuery} = useConfig();
+  const {mutation: configMutation} = useConfig();
 
   useEffect(() => {
     // Check if the user has granted permission to use push notifications on os level
@@ -61,10 +62,18 @@ export const usePushNotifications = () => {
   };
 
   return {
-    isError: isError || registerMutation.isError,
-    isLoading: registerMutation.isLoading || configQuery.isInitialLoading,
+    isError:
+      isError ||
+      registerMutation.isError ||
+      configQuery.isError ||
+      configMutation.isError,
+    isLoading:
+      registerMutation.isLoading ||
+      configQuery.isInitialLoading ||
+      configMutation.isLoading,
     isPermissionAccepted,
     config: configQuery.data,
+    updateConfig: configMutation.mutate,
     register,
   };
 };

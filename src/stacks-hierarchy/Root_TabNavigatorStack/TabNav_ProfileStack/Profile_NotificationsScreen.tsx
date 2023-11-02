@@ -8,7 +8,6 @@ import {StyleSheet} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import {usePushNotifications} from '@atb/notifications';
 import {MessageBox} from '@atb/components/message-box';
-import {useConfig} from '@atb/notifications/use-config';
 import {isConfigEnabled} from '@atb/notifications/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -22,14 +21,14 @@ export const Profile_NotificationsScreen = () => {
     isError,
     config,
     register,
+    updateConfig,
   } = usePushNotifications();
-  const {mutation: configMutation} = useConfig();
 
   const handlePushNotificationToggle = async (enabled: boolean) => {
     if (enabled) {
       register();
     }
-    configMutation.mutate({config_type: 'mode', id: 'push', enabled});
+    updateConfig({config_type: 'mode', id: 'push', enabled});
   };
 
   return (
