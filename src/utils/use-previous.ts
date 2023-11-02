@@ -1,8 +1,11 @@
 import {useEffect, useRef} from 'react';
 
 /**
- * Returns a current reference to the previous value. The returned value is safe
- * to use in dependency arrays as refs won't trigger reruns.
+ * Returns a reference to the previous value. The returned value won't trigger
+ * hook reruns as refs don't have an effect in dependency arrays.
+ *
+ * @param value the new value
+ * @return the previous value
  */
 export const usePrevious = <T>(value: T): T | undefined => {
   const ref = useRef<T>();
