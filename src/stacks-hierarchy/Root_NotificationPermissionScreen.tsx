@@ -10,6 +10,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import NotificationPermissionTexts from '@atb/translations/screens/NotificationPermission';
 import {PushNotification} from '@atb/assets/svg/color/images';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {useAppState} from '@atb/AppContext';
 
 type Props = RootStackScreenProps<'Root_NotificationPermissionScreen'>;
 
@@ -18,9 +19,13 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad(true, 200);
 
+  const {completeNotificationPermissionOnboarding} = useAppState();
+
   const {width: windowWidth} = useWindowDimensions();
 
   const handleButtonPress = () => {
+    // TODO: add permission logic
+    completeNotificationPermissionOnboarding();
     navigation.popToTop();
   };
 

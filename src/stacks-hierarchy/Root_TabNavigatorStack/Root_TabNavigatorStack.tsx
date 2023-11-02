@@ -39,17 +39,23 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const {onboarded} = useAppState();
+  const {onboarded, notificationPermissionOnboarded} = useAppState();
 
   useGoToMobileTokenOnboardingWhenNecessary();
+
+  const askedForNotifications = false;
 
   useEffect(() => {
     if (!onboarded) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
+    } else if (!notificationPermissionOnboarded) {
+      InteractionManager.runAfterInteractions(() =>
+        navigation.navigate('Root_NotificationPermissionScreen'),
+      );
     }
-  }, [onboarded, navigation]);
+  }, [onboarded, navigation, askedForNotifications]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
     InteractionManager.runAfterInteractions(() =>

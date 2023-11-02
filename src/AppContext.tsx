@@ -15,6 +15,7 @@ enum storeKey {
   ticketing = '@ATB_ticket_informational_accepted',
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
+  notificationPermissionOnboarding = '@ATB_notification_permission_onboarding',
 }
 type AppState = {
   isLoading: boolean;
@@ -22,6 +23,7 @@ type AppState = {
   ticketingAccepted: boolean;
   mobileTokenOnboarded: boolean;
   mobileTokenWithoutTravelcardOnboarded: boolean;
+  notificationPermissionOnboarded: boolean;
 };
 
 type AppReducerAction =
@@ -31,6 +33,7 @@ type AppReducerAction =
       ticketingAccepted: boolean;
       mobileTokenOnboarded: boolean;
       mobileTokenWithoutTravelcardOnboarded: boolean;
+      notificationPermissionOnboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
@@ -39,7 +42,9 @@ type AppReducerAction =
   | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
   | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'}
   | {type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
-  | {type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'};
+  | {type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
+  | {type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'}
+  | {type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
@@ -50,6 +55,8 @@ type AppContextState = AppState & {
   restartMobileTokenOnboarding: () => void;
   completeMobileTokenWithoutTravelcardOnboarding: () => void;
   restartMobileTokenWithoutTravelcardOnboarding: () => void;
+  completeNotificationPermissionOnboarding: () => void;
+  restartNotificationPermissionOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -69,6 +76,8 @@ const appReducer: AppReducer = (prevState, action) => {
         mobileTokenOnboarded: action.mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded:
           action.mobileTokenWithoutTravelcardOnboarded,
+        notificationPermissionOnboarding:
+          action.notificationPermissionOnboarded,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -110,6 +119,18 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         mobileTokenWithoutTravelcardOnboarded: false,
       };
+
+    case 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING':
+      return {
+        ...prevState,
+        notificationPermissionOnboarded: true,
+      };
+
+    case 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING':
+      return {
+        ...prevState,
+        notificationPermissionOnboarded: false,
+      };
   }
 };
 
@@ -119,6 +140,7 @@ const defaultAppState: AppState = {
   ticketingAccepted: false,
   mobileTokenOnboarded: false,
   mobileTokenWithoutTravelcardOnboarded: false,
+  notificationPermissionOnboarded: false,
 };
 
 export const AppContextProvider: React.FC = ({children}) => {
@@ -149,6 +171,14 @@ export const AppContextProvider: React.FC = ({children}) => {
           ? false
           : JSON.parse(savedMobileTokenWithoutTravelcardOnboarded);
 
+      const savedNotificationPermissionOnboarded = await storage.get(
+        storeKey.notificationPermissionOnboarding,
+      );
+      const notificationPermissionOnboarded =
+        !savedNotificationPermissionOnboarded
+          ? false
+          : JSON.parse(savedNotificationPermissionOnboarded);
+
       if (onboarded) {
         registerChatUser();
       }
@@ -159,6 +189,7 @@ export const AppContextProvider: React.FC = ({children}) => {
         ticketingAccepted,
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
+        notificationPermissionOnboarded,
       });
 
       RNBootSplash.hide({fade: true});
@@ -175,6 +206,8 @@ export const AppContextProvider: React.FC = ({children}) => {
     restartMobileTokenOnboarding,
     completeMobileTokenWithoutTravelcardOnboarding,
     restartMobileTokenWithoutTravelcardOnboarding,
+    completeNotificationPermissionOnboarding,
+    restartNotificationPermissionOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -219,6 +252,20 @@ export const AppContextProvider: React.FC = ({children}) => {
           JSON.stringify(false),
         );
       },
+      completeNotificationPermissionOnboarding: async () => {
+        dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
+        await storage.set(
+          storeKey.notificationPermissionOnboarding,
+          JSON.stringify(true),
+        );
+      },
+      restartNotificationPermissionOnboarding: async () => {
+        dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
+        await storage.set(
+          storeKey.notificationPermissionOnboarding,
+          JSON.stringify(false),
+        );
+      },
     }),
     [],
   );
@@ -235,6 +282,8 @@ export const AppContextProvider: React.FC = ({children}) => {
         restartMobileTokenOnboarding,
         completeMobileTokenWithoutTravelcardOnboarding,
         restartMobileTokenWithoutTravelcardOnboarding,
+        completeNotificationPermissionOnboarding,
+        restartNotificationPermissionOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
