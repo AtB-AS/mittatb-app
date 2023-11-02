@@ -7,8 +7,10 @@ export function destinationDisplaysAreEqual(
 ) {
   const frontTextIsEqual =
     destinationDisplay1?.frontText === destinationDisplay2?.frontText;
-  const viaLengthIsEqual =
-    destinationDisplay1?.via?.length === destinationDisplay2?.via?.length;
+  // fallback to empty array to allow undefined via to match with empty via
+  const via1 = destinationDisplay1?.via || [];
+  const via2 = destinationDisplay1?.via || [];
+  const viaLengthIsEqual = via1.length === via2.length;
   if (!frontTextIsEqual || !viaLengthIsEqual) {
     return false;
   }
