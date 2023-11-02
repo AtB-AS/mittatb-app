@@ -56,5 +56,7 @@ export function useInterval(
         clearTimeout(id as number);
       }
     };
-  }, [delay, disabled].concat(deps));
+    // Concatenation of deps can't be statically checked, so disabling rule here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [delay, disabled, triggerImmediately].concat(deps));
 }
