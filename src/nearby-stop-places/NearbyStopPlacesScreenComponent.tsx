@@ -19,7 +19,6 @@ import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {EmptyState} from '@atb/components/empty-state';
-import {Button} from '@atb/components/button';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -204,16 +203,10 @@ export const NearbyStopPlacesScreenComponent = ({
               style={styles.emptyStopPlacesIllustration}
             />
           }
-          buttonComponent={
-            <Button
-              interactiveColor="interactive_3"
-              text={t(NearbyTexts.stateAnnouncements.sharePositionButton.title)}
-              mode="primary"
-              onPress={requestPermission}
-              compact={true}
-              type="pill"
-            />
-          }
+          buttonProps={{
+            onPress: requestPermission,
+            text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
+          }}
         />
       )}
     </FullScreenView>

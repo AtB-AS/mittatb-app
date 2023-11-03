@@ -1,19 +1,24 @@
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
+import {Button} from '@atb/components/button';
+import React from 'react';
 
 export type EmptyStateProps = {
   title: string;
   details: string;
   illustrationComponent: JSX.Element;
-  buttonComponent?: JSX.Element;
+  buttonProps?: {
+    onPress: () => void;
+    text: string;
+  };
 };
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   details,
   illustrationComponent,
-  buttonComponent,
+  buttonProps,
 }) => {
   const styles = useStyles();
 
@@ -34,7 +39,16 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       >
         {details}
       </ThemeText>
-      {buttonComponent}
+      {buttonProps && (
+        <Button
+          interactiveColor="interactive_3"
+          text={buttonProps.text}
+          mode="primary"
+          onPress={buttonProps.onPress}
+          compact={true}
+          type="pill"
+        />
+      )}
     </View>
   );
 };
