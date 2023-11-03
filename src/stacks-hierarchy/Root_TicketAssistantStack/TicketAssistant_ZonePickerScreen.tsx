@@ -1,7 +1,7 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TicketAssistant_ZonePickerScreenParams,
   TicketAssistantScreenProps,
@@ -43,17 +43,11 @@ export const TicketAssistant_ZonePickerScreen = ({
   const fromTariffZone = route.params?.fromTariffZone ?? defaultTariffZone;
   const toTariffZone = route.params?.toTariffZone ?? defaultTariffZone;
 
-  const initialState: TariffZoneSelection = useMemo(
-    () => ({
-      from: fromTariffZone,
-      to: toTariffZone,
-      selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
-    }),
-    [fromTariffZone, toTariffZone, isApplicableOnSingleZoneOnly],
-  );
-
-  const [selectedZones, setSelectedZones] =
-    useState<TariffZoneSelection>(initialState);
+  const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
+    from: fromTariffZone,
+    to: toTariffZone,
+    selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
+  });
 
   const {updateInputParams} = useTicketAssistantState();
 
