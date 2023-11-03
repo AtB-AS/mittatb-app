@@ -1,3 +1,4 @@
+import { storage } from '@atb/storage';
 import { useIsBeaconsEnabled } from './use-is-beacons-enabled';
 import { KETTLE_API_KEY } from '@env';
 import { useCallback, useEffect, useState } from 'react';
@@ -26,75 +27,72 @@ export type KettleInfo = {
 };
 
 export const useBeacons = () => {
-  const [isBeaconsEnabled] = useIsBeaconsEnabled();
+  const [isBeaconsEnabled, debugOverrideReady] = useIsBeaconsEnabled();
   const [kettleInfo, setKettleInfo] = useState<KettleInfo>();
+  // The kettle SDK was initialized
+  const [isKettleSDKInitialized, setKettleSDKInitialized] = useState(false);
+  // The app was compiled to support beacons and KEYTLE_API_KEY is set
+  const isBeaconsSupported = (isBeaconsEnabled && debugOverrideReady) && !!KETTLE_API_KEY;
 
-  const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY && !!kettleInfo?.kettleConsents;
-
-  const initializeBeacons = useCallback(async () => {
-    // This will set kettle if KETTLE_API_KEY is set on the native side
-    await NativeModules.KettleSDKExtension.initializeKettleSDK();
-  }, [NativeModules]);
-
-  useEffect(() => {
-    if (isBeaconsSupported) {
-      initializeBeacons();
-    }
-  }, [initializeBeacons, isBeaconsSupported]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function checkKettleInfo() {
+  const updateKettleInfo = useCallback(async () => {
+    if (isBeaconsSupported && isKettleSDKInitialized) {
       const status = await Kettle.isStarted();
       const identifier = await Kettle.getIdentifier();
       const consents = await Kettle.getGrantedConsents();
       const privacyDashboardUrl = await Kettle.getPrivacyDashboardUrl();
       const privacyTermsUrl = await Kettle.getPrivacyTermsUrl();
 
-      if (isMounted) {
-        setKettleInfo({
-          isKettleStarted: status,
-          kettleIdentifier: identifier,
-          kettleConsents: consents,
-          isBeaconsOnboarded: Object.keys(consents).length > 0,
-          privacyDashboardUrl,
-          privacyTermsUrl,
-        });
-      }
+      setKettleInfo({
+        isKettleStarted: status,
+        kettleIdentifier: identifier,
+        kettleConsents: consents,
+        isBeaconsOnboarded: Object.keys(consents).length > 0,
+        privacyDashboardUrl,
+        privacyTermsUrl,
+      });
     }
+  }, [setKettleInfo, isBeaconsSupported, isKettleSDKInitialized]);
 
-    if (isBeaconsSupported) checkKettleInfo();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [isBeaconsSupported, setKettleInfo]);
+  // This function must be called before consent is granted
+  const initializeBeaconsSDK = useCallback(async () => {
+    // This will set kettle if KETTLE_API_KEY is set on the native side
+    if (!isKettleSDKInitialized && isBeaconsSupported) {
+      await NativeModules.KettleSDKExtension.initializeKettleSDK();
+      setKettleSDKInitialized(true);
+    }
+  }, [isKettleSDKInitialized, setKettleSDKInitialized, isBeaconsSupported]);
 
   // This function should be called only once and should be called after the user has onboarded for beacons
   const startBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    if (!kettleInfo.isKettleStarted && kettleInfo.isBeaconsOnboarded) {
-      Kettle.start(allowedPermissionForKettle());
+    if (!kettleInfo?.isKettleStarted && isKettleSDKInitialized && kettleInfo?.isBeaconsOnboarded) {
+      const permisions = await allowedPermissionForKettle();
+      Kettle.start(permisions);
     }
-  }, [isBeaconsSupported, kettleInfo, allowedPermissionForKettle]);
+  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, allowedPermissionForKettle]);
 
   const stopBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    if (kettleInfo.isKettleStarted) {
-      Kettle.stop(allowedPermissionForKettle());
+    if (kettleInfo?.isKettleStarted && isKettleSDKInitialized) {
+      const permisions = await allowedPermissionForKettle();
+      Kettle.stop(permisions);
     }
-  }, [isBeaconsSupported, kettleInfo, allowedPermissionForKettle]);
+  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, allowedPermissionForKettle]);
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    if (kettleInfo.isKettleStarted) Kettle.revoke(BEACONS_CONSENTS);
-  }, [isBeaconsSupported, kettleInfo]);
+    if (isKettleSDKInitialized) {
+      Kettle.revoke(BEACONS_CONSENTS);
+      await storage.set('@ATB_beacons_consent_granted', "false");
+    }
+  }, [isBeaconsSupported, isKettleSDKInitialized]);
 
-  const deleteCollectedData = useCallback(async () => {
+  const deleteCollectedData = useCallback(() => {
     if (!isBeaconsSupported) return;
-    if (kettleInfo.isKettleStarted) Kettle.deleteCollectedData();
-  }, [isBeaconsSupported, kettleInfo]);
+    if (isKettleSDKInitialized) {
+      Kettle.deleteCollectedData();
+    }
+  }, [isBeaconsSupported]);
 
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
@@ -108,10 +106,26 @@ export const useBeacons = () => {
     }
 
     if (granted) {
+      await storage.set('@ATB_beacons_consent_granted', "true");
+      // Initialize beacons SDK after consent is granted
+      await initializeBeaconsSDK();
       Kettle.grant(BEACONS_CONSENTS);
     }
 
     return granted;
+  }, [isBeaconsSupported, initializeBeaconsSDK]);
+
+  useEffect(() => {
+    if (isBeaconsSupported && isKettleSDKInitialized) updateKettleInfo();
+  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, updateKettleInfo]);
+
+  useEffect(() => {
+    async function checkIsBeaconsReadyToBeInitialized() {
+      const consentGranted = await storage.get('@ATB_beacons_consent_granted') ?? "false";
+      const isReadyToInitialize = isBeaconsSupported && consentGranted === "true";
+      if (isReadyToInitialize) await initializeBeaconsSDK();
+    }
+    checkIsBeaconsReadyToBeInitialized();
   }, [isBeaconsSupported]);
 
   return {
