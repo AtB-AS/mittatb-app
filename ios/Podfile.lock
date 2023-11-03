@@ -926,8 +926,6 @@ PODS:
   - nanopb/encode (2.30909.0)
   - NextLevelSessionExporter (0.4.6)
   - OpenSSL-Universal (1.1.1100)
-  - Permission-LocationWhenInUse (3.6.1):
-    - RNPermissions
   - PromisesObjC (2.3.1)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -1423,7 +1421,7 @@ PODS:
     - React
     - React-Core
     - Turf
-  - RNPermissions (3.6.1):
+  - RNPermissions (3.10.0):
     - React-Core
   - RNScreens (3.19.0):
     - React-Core
@@ -1483,7 +1481,6 @@ DEPENDENCIES:
   - Intercom
   - libevent (~> 2.1.12)
   - OpenSSL-Universal (= 1.1.1100)
-  - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -1621,8 +1618,6 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2023-08-07-RNv0.72.4-813b2def12bc9df02654b3e3653ae4a68d0572e0
-  Permission-LocationWhenInUse:
-    :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -1812,7 +1807,6 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   NextLevelSessionExporter: 4d8aa5e617f1c709724f2453efe5d4628480f65a
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Permission-LocationWhenInUse: 3ba99e45c852763f730eabecec2870c2382b7bd4
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: c0569ecc035894e4a68baecb30fe6a7ea6e399f9
@@ -1873,7 +1867,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
   rnmapbox-maps: b6219b7432508ae2cea169365116a811f822612e
-  RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
+  RNPermissions: df4aaa2d975b3bd8698f4f7c91d5ffdd1cb1a591
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
@@ -1885,6 +1879,6 @@ SPEC CHECKSUMS:
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: f4940b14b95149f5aa5a24dbef8f291b59f0c61e
+PODFILE CHECKSUM: fea6525a6c25852e809e9d067ce92cef0e66d91c
 
 COCOAPODS: 1.12.1

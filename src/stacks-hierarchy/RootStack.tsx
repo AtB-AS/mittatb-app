@@ -55,7 +55,7 @@ import {
   Root_ParkingViolationsSelect,
   Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
-import {useBeacons} from '@atb/utils/use-beacons';
+import {useBeacons} from '@atb/beacons/use-beacons';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;

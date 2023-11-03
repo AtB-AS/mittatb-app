@@ -78,6 +78,8 @@
 		FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FED22488286F06AC0049ECE3 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		FED3D5DF2968501400B7DEC4 /* NoFavoriteViewSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */; };
 		FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */; };
+		FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */; };
+		FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -188,6 +190,8 @@
 		FED22488286F06AC0049ECE3 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 		FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewSmall.swift; sourceTree = "<group>"; };
 		FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewMedium.swift; sourceTree = "<group>"; };
+		FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconsPermissions.swift; sourceTree = "<group>"; };
+		FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeaconsPermissionsBridge.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -377,9 +381,10 @@
 		FEBDDCCC2931035E00C3755B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */,
 				5038614B28FD750A00E16E13 /* LocationChangeManager.swift */,
-				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
 				6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */,
+				FEBDDCD02931065D00C3755B /* WidgetUpdater.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -387,6 +392,7 @@
 		FEBDDCD829310DCB00C3755B /* BridgeModules */ = {
 			isa = PBXGroup;
 			children = (
+				FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */,
 				FEBDDCDC2934D49600C3755B /* ChangeNativeBridge.h */,
 				FEBDDCDD2934D49600C3755B /* ChangeNativeBridge.m */,
 				FE8BA01B2AEAF48A00E8CF1C /* KettleSDKExtension.h */,
@@ -669,6 +675,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */,
+				FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */,
 				38CD3270254B612600C6B978 /* AtBRootView.m in Sources */,
 				6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */,
 				FE8BA01D2AEAF48A00E8CF1C /* KettleSDKExtension.m in Sources */,

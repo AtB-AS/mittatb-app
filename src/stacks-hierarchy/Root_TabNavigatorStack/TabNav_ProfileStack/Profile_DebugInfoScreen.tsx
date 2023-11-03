@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
@@ -21,7 +21,7 @@ import {
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
-import {APP_GROUP_NAME, KETTLE_API_KEY} from '@env';
+import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
@@ -49,7 +49,7 @@ import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-load
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
-import {Kettle} from 'react-native-kettle-module';
+import {useBeacons} from '@atb/beacons/use-beacons';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
@@ -68,6 +68,15 @@ export const Profile_DebugInfoScreen = () => {
     restartMobileTokenWithoutTravelcardOnboarding,
     restartOnboarding,
   } = useAppState();
+  const {
+    onboardForBeacons,
+    startBeacons,
+    stopBeacons,
+    revokeBeacons,
+    deleteCollectedData,
+    kettleInfo,
+    isBeaconsSupported,
+  } = useBeacons();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId} = useAuthState();
   const user = auth().currentUser;
@@ -102,9 +111,6 @@ export const Profile_DebugInfoScreen = () => {
   const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
   const parkingViolationsReportingEnabledDebugOverride =
     useParkingViolationsReportingEnabledDebugOverride();
-  const [isKettleStarted, setIsKettleStarted] = useState(false);
-  const [kettleIdentifier, setKettleIdentifier] = useState();
-  const [kettleConsents, setKettleConsents] = useState([]);
   const {resetDismissedAnnouncements} = useAnnouncementsState();
   const pushNotificationsEnabledDebugOverride =
     usePushNotificationsEnabledDebugOverride();
@@ -115,21 +121,6 @@ export const Profile_DebugInfoScreen = () => {
       setIdToken(idToken);
     })();
   }, [user]);
-
-  useEffect(() => {
-    async function checkKettleInfo() {
-      const status = await Kettle.isStarted();
-      setIsKettleStarted(status);
-
-      const identifier = await Kettle.getIdentifier();
-      setKettleIdentifier(identifier);
-
-      const consents = await Kettle.getGrantedConsents();
-      setKettleConsents(consents);
-    }
-
-    checkKettleInfo();
-  }, []);
 
   const {
     token,
@@ -173,8 +164,6 @@ export const Profile_DebugInfoScreen = () => {
     walkReluctance: 1.5,
     walkSpeed: 1.3,
   };
-
-  const [isBeaconsEnabled] = beaconsEnabledDebugOverride;
 
   return (
     <View style={style.container}>
@@ -634,16 +623,94 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        {isBeaconsEnabled && !!KETTLE_API_KEY && (
+        {isBeaconsSupported && (
           <Section withPadding withTopPadding>
             <ExpandableSectionItem
               text="Beacons"
               showIconText={true}
               expandContent={
                 <View>
-                  <ThemeText>{`Identifier: ${kettleIdentifier}`}</ThemeText>
-                  <ThemeText>{`Status: ${isKettleStarted}`}</ThemeText>
-                  <ThemeText>{`Granted consents: ${kettleConsents}`}</ThemeText>
+                  {kettleInfo && (
+                    <View>
+                      <ThemeText>{`Identifier: ${kettleInfo.kettleIdentifier}`}</ThemeText>
+                      <ThemeText>{`Status: ${
+                        kettleInfo.isKettleStarted ? 'Running' : 'Stopped'
+                      }`}</ThemeText>
+                      <ThemeText>{`Granted consents: ${kettleInfo.kettleConsents}`}</ThemeText>
+                    </View>
+                  )}
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      const granted = await onboardForBeacons();
+                      Alert.alert('Onboarding', `Access granted: ${granted}`);
+                    }}
+                    disabled={
+                      kettleInfo?.isBeaconsOnboarded &&
+                      !!kettleInfo?.kettleConsents
+                    }
+                    style={style.button}
+                    text="Onboard"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await startBeacons();
+                    }}
+                    style={style.button}
+                    disabled={
+                      kettleInfo?.isKettleStarted ||
+                      !kettleInfo?.isBeaconsOnboarded
+                    }
+                    text="Start"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await stopBeacons();
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isKettleStarted}
+                    text="Stop"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await revokeBeacons();
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Revoke"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await deleteCollectedData();
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Delete Collected Data"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      kettleInfo?.privacyDashboardUrl &&
+                        Linking.openURL(kettleInfo.privacyDashboardUrl);
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Open Privacy Dashboard"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      kettleInfo?.privacyTermsUrl &&
+                        Linking.openURL(kettleInfo.privacyTermsUrl);
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Open Privacy Terms"
+                  />
                 </View>
               }
             />
