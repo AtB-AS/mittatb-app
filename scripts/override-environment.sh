@@ -1,3 +1,5 @@
+#!/bin/sh
+
 if [ "$#" -ne 2 ]
 then
     echo "Argument error!"
@@ -47,5 +49,4 @@ else
     cp $ORG_FOLDER/bootsplash_logo_original.png assets/
 
     sh ./scripts/generate-assets.sh $APP_ORG
-
 fi

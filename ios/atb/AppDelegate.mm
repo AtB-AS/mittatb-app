@@ -32,8 +32,16 @@ static void InitializeFlipper(UIApplication *application) {
 
 @implementation AppDelegate
 
+@synthesize launchOptions;
+
++ (AppDelegate *)sharedInstance {
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  self.launchOptions = launchOptions;
+  
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
   #endif
