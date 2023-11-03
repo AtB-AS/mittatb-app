@@ -1,7 +1,7 @@
 import {useSearchHistory, JourneySearchHistoryEntry} from '@atb/search-history';
 import {LocationSearchTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
-import {useDebounce} from '@atb/utils/useDebounce';
+import {useDebounce} from '@atb/utils/use-debounce';
 import {filterPreviousLocations} from '../utils';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useGeocoder} from '@atb/geocoder';
