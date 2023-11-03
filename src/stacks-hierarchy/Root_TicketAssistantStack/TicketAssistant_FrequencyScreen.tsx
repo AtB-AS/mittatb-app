@@ -55,13 +55,15 @@ export const TicketAssistant_FrequencyScreen = ({
     updateInputParams({frequency: sliderValue});
   };
 
-  const unsubscribe = navigation.addListener('blur', () => {
-    updateFrequency();
-  });
-
   useEffect(() => {
-    return unsubscribe;
-  }, [unsubscribe]);
+    const unsubscribe = navigation.addListener('blur', () => {
+      updateFrequency();
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation]);
 
   return (
     <View style={styles.container}>

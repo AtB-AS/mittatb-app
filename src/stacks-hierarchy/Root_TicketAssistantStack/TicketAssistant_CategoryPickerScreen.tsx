@@ -55,17 +55,19 @@ export const TicketAssistant_CategoryPickerScreen = ({
     updateInputParams({traveller: traveller});
   }
 
-  const unsubscribe = navigation.addListener('blur', () => {
-    const traveller = selectableTravellers[currentlyOpen];
-    updateCategory({
-      id: traveller.userTypeString,
-      userType: traveller.userTypeString,
-    });
-  });
-
   useEffect(() => {
-    return unsubscribe;
-  }, [unsubscribe]);
+    const unsubscribe = navigation.addListener('blur', () => {
+      const traveller = selectableTravellers[currentlyOpen];
+      updateCategory({
+        id: traveller.userTypeString,
+        userType: traveller.userTypeString,
+      });
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation, selectableTravellers, currentlyOpen, updateCategory]);
 
   function getAdditionalTitleText(userTypeString: string) {
     switch (userTypeString) {

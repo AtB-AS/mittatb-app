@@ -59,14 +59,19 @@ export const TicketAssistant_ZonePickerScreen = ({
     }));
   }, [fromTariffZone, toTariffZone]);
 
-  const unsubscribe = navigation.addListener('blur', () => {
-    const zoneIds = [selectedZones.from.id, selectedZones.to.id];
-    updateInputParams({zones: zoneIds});
-  });
-
   useEffect(() => {
-    return unsubscribe;
-  }, [unsubscribe]);
+    const unsubscribe = navigation.addListener('blur', () => {
+      const zoneIds = [selectedZones.from.id, selectedZones.to.id];
+      updateInputParams({zones: zoneIds});
+    });
+
+    return () => unsubscribe();
+  }, [
+    navigation,
+    selectedZones.from.id,
+    selectedZones.to.id,
+    updateInputParams,
+  ]);
 
   const onVenueSearchClick = (
     callerRouteParam: keyof TicketAssistant_ZonePickerScreenParams,

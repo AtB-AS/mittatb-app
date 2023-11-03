@@ -26,13 +26,15 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
     updateInputParams({duration: duration});
   };
 
-  const unsubscribe = navigation.addListener('blur', () => {
-    updateDuration();
-  });
-
   useEffect(() => {
-    return unsubscribe;
-  }, [unsubscribe]);
+    const unsubscribe = navigation.addListener('blur', () => {
+      updateDuration();
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation, updateDuration]);
 
   const travelFrequency = inputParams.frequency ?? 0;
 
