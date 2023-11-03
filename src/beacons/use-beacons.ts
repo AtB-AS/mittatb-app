@@ -59,8 +59,9 @@ export const useBeacons = () => {
 
   // This function must be called before consent is granted
   const initializeBeaconsSDK = useCallback(async () => {
+    const permissions = await allowedPermissionForKettle();
     // This will set kettle if KETTLE_API_KEY is set on the native side
-    if (!isKettleSDKInitialized && isBeaconsSupported) {
+    if (!isKettleSDKInitialized && isBeaconsSupported && permissions.length > 0) {
       await NativeModules.KettleSDKExtension.initializeKettleSDK();
       setKettleSDKInitialized(true);
     }
@@ -70,16 +71,16 @@ export const useBeacons = () => {
   const startBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
     if (!kettleInfo?.isKettleStarted && isKettleSDKInitialized && kettleInfo?.isBeaconsOnboarded) {
-      const permisions = await allowedPermissionForKettle();
-      Kettle.start(permisions);
+      const permissions = await allowedPermissionForKettle();
+      Kettle.start(permissions);
     }
   }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo]);
 
   const stopBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
     if (kettleInfo?.isKettleStarted && isKettleSDKInitialized) {
-      const permisions = await allowedPermissionForKettle();
-      Kettle.stop(permisions);
+      const permissions = await allowedPermissionForKettle();
+      Kettle.stop(permissions);
     }
   }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo]);
 
