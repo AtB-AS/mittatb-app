@@ -34,7 +34,7 @@ const NearbyTexts = {
       'Del posisjonen din for å finne haldeplassar i nærleiken. Bruk søkjefeltet for å finne andre haldeplassar.',
     ),
     sharePositionButton: {
-      title: _('Del din posisjon', 'Share your position', 'Del din posisjon'),
+      title: _('Del din posisjon', 'Share your position', 'Del posisjonen din'),
     },
     updatingLocation: _(
       'Oppdaterer posisjon for å finne avganger i nærheten.',
