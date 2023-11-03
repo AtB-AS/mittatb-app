@@ -20,7 +20,7 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
@@ -28,6 +28,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
+import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -48,7 +49,15 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
         navigation.navigate('Root_OnboardingStack'),
       );
     }
-  }, [onboarded]);
+  }, [onboarded, navigation]);
+
+  const showShareTravelHabitsScreen = useCallback(() => {
+    InteractionManager.runAfterInteractions(() =>
+      navigation.navigate('Root_ShareTravelHabitsScreen'),
+    );
+  }, [navigation]);
+
+  useMaybeShowShareTravelHabitsScreen(showShareTravelHabitsScreen);
 
   return (
     <Tab.Navigator

@@ -10,6 +10,8 @@ export const useGetServiceJourneyVehicles = (serviceJourneyIds?: string[]) => {
       getServiceJourneyVehicles(serviceJourneyIds, {
         signal,
       }),
+    // Disabling as this works, and no quick fix in sight without causing havoc
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(serviceJourneyIds)],
   );
 

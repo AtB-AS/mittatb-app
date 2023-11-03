@@ -31,7 +31,7 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
         host: POSTHOG_HOST,
       }).then(setClient);
     }
-  }, []);
+  }, [client]);
 
   useEffect(() => {
     if (userId && client) {
@@ -46,7 +46,7 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     client?.capture(`App status: ${appStatus}`);
-  }, [appStatus]);
+  }, [appStatus, client]);
 
   return (
     <AnalyticsContext.Provider value={client}>

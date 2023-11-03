@@ -128,13 +128,13 @@ export const Profile_PaymentOptionsScreen = ({
           leftButton={{type: 'back'}}
         />
       </View>
-      {showError && <GenericError />}
       <ScrollView
         style={style.contentContainer}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
         }
       >
+        {showError && <GenericError />}
         {storedCards.length > 0 && (
           <Section>
             {storedCards.map((sc) => (

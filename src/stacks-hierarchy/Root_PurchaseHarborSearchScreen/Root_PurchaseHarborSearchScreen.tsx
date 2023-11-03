@@ -14,7 +14,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useIsFocused} from '@react-navigation/native';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
-import {useDebounce} from '@atb/utils/useDebounce';
+import {useDebounce} from '@atb/utils/use-debounce';
 import {HarborResults} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/HarborResults';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch';

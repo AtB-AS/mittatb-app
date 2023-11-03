@@ -41,11 +41,11 @@ export const useCurrentTripPatternWithUpdates = (
 
   useEffect(() => {
     if (error) {
-      setTripPatternUpdates({tp: originalTripPattern, error});
+      setTripPatternUpdates((prev) => ({...prev, error}));
     } else if (updatedTripPattern) {
       setTripPatternUpdates({tp: updatedTripPattern, error: undefined});
     } else {
-      setTripPatternUpdates({tp: originalTripPattern, error: undefined});
+      setTripPatternUpdates((prev) => ({...prev, error: undefined}));
     }
   }, [updatedTripPattern, error]);
 

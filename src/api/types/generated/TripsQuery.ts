@@ -49,7 +49,7 @@ export type TripFragment = {
       fromEstimatedCall?: {
         aimedDepartureTime: any;
         expectedDepartureTime: any;
-        destinationDisplay?: {frontText?: string};
+        destinationDisplay?: {frontText?: string; via?: Array<string>};
         quay: {publicCode?: string; name: string};
         notices: Array<{id: string; text?: string}>;
       };

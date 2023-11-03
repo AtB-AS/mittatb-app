@@ -51,6 +51,9 @@ import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {Kettle} from 'react-native-kettle-module';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
+import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
+import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
+import {useAnnouncementsState} from '@atb/announcements';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -101,6 +104,7 @@ export const Profile_DebugInfoScreen = () => {
   const [isKettleStarted, setIsKettleStarted] = useState(false);
   const [kettleIdentifier, setKettleIdentifier] = useState();
   const [kettleConsents, setKettleConsents] = useState([]);
+  const {resetDismissedAnnouncements} = useAnnouncementsState();
 
   useEffect(() => {
     (async function () {
@@ -210,6 +214,10 @@ export const Profile_DebugInfoScreen = () => {
             onPress={resetDismissedGlobalMessages}
           />
           <LinkSectionItem
+            text="Reset dismissed Announcements"
+            onPress={resetDismissedAnnouncements}
+          />
+          <LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
             icon="arrow-upleft"
             onPress={() => copyFirestoreLink()}
@@ -244,6 +252,16 @@ export const Profile_DebugInfoScreen = () => {
             text="Reset travel search filters"
             onPress={() =>
               storage.set('@ATB_user_travel_search_filters_v2', '')
+            }
+          />
+          <LinkSectionItem
+            text="Reset ShareTravelHabits session counter"
+            onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
+          />
+          <LinkSectionItem
+            text="Reset has seen ShareTravelHabitsScreen"
+            onPress={() =>
+              storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
             }
           />
         </Section>

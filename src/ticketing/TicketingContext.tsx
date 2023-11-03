@@ -1,17 +1,11 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useCallback,
-  useState,
-} from 'react';
+import React, {createContext, useContext, useEffect, useReducer} from 'react';
 import {useAuthState} from '../auth';
 import {Reservation, FareContract, PaymentStatus} from './types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
+import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 
 type TicketingReducerState = {
   fareContracts: FareContract[];
@@ -126,9 +120,7 @@ const initialReducerState: TicketingReducerState = {
 const TicketingContext = createContext<TicketingState | undefined>(undefined);
 export const TicketingContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer(ticketingReducer, initialReducerState);
-
-  // A toggle to trigger resubscribe. The actual boolean value is not important.
-  const [resubscribeToggle, setResubscribeToggle] = useState(true);
+  const {resubscribeToggle, resubscribe} = useResubscribeToggle();
 
   const {userId} = useAuthState();
   const {enable_ticketing} = useRemoteConfig();
@@ -183,10 +175,7 @@ export const TicketingContextProvider: React.FC = ({children}) => {
         ...state,
         findFareContractByOrderId: (orderId) =>
           state.fareContracts.find((fc) => fc.orderId === orderId),
-        resubscribeFirestoreListeners: useCallback(
-          () => setResubscribeToggle((prev) => !prev),
-          [],
-        ),
+        resubscribeFirestoreListeners: resubscribe,
       }}
     >
       {children}

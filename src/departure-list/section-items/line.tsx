@@ -38,7 +38,10 @@ import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
-import {filterNotices} from '@atb/travel-details-screens/utils';
+import {
+  filterNotices,
+  formatDestinationDisplay,
+} from '@atb/travel-details-screens/utils';
 import {
   FavouriteDepartureToggle,
   useOnMarkFavouriteDepartures,
@@ -83,7 +86,10 @@ export function LineItem({
     id: group.lineInfo?.lineId ?? '',
   };
 
-  const title = `${group.lineInfo?.lineNumber} ${group.lineInfo?.lineName}`;
+  const title = `${group.lineInfo?.lineNumber} ${formatDestinationDisplay(
+    t,
+    group.lineInfo?.destinationDisplay,
+  )}`;
 
   const items = group.departures.map<ServiceJourneyDeparture>((dep) => ({
     serviceJourneyId: dep.serviceJourneyId!,
