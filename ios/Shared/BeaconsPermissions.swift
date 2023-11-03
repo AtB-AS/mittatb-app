@@ -244,6 +244,12 @@ class BeaconsPermissions: NSObject {
 
     bluetoothPermission?.request { [weak self] bluetoothPermissionGranted in
       if bluetoothPermissionGranted {
+        // NOTE: If the user already denied the location before, then do not continue asking for more permissions.
+        if CLLocationManager.authorizationStatus() == .denied || CLLocationManager.authorizationStatus() == .restricted {
+          resolve(true)
+          self?.releasePermissionObjects()
+        }
+
         self?.whenInUsePermission?.request { [weak self] whenInUsePermissionGranted in
           if whenInUsePermissionGranted {
             self?.alwaysPermission?.request { [weak self] alwaysPermissionGranted in
