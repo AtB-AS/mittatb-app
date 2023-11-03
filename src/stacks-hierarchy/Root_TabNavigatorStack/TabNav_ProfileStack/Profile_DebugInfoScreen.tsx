@@ -21,7 +21,7 @@ import {
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
-import {APP_GROUP_NAME, KETTLE_API_KEY} from '@env';
+import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
@@ -615,25 +615,32 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        {isBeaconsEnabled && !!KETTLE_API_KEY && kettleInfo && (
+        {isBeaconsEnabled && (
           <Section withPadding withTopPadding>
             <ExpandableSectionItem
               text="Beacons"
               showIconText={true}
               expandContent={
                 <View>
-                  <ThemeText>{`Identifier: ${kettleInfo.kettleIdentifier}`}</ThemeText>
-                  <ThemeText>{`Status: ${
-                    kettleInfo.isKettleStarted ? 'Running' : 'Stopped'
-                  }`}</ThemeText>
-                  <ThemeText>{`Granted consents: ${kettleInfo.kettleConsents}`}</ThemeText>
+                  {kettleInfo && (
+                    <View>
+                      <ThemeText>{`Identifier: ${kettleInfo.kettleIdentifier}`}</ThemeText>
+                      <ThemeText>{`Status: ${
+                        kettleInfo.isKettleStarted ? 'Running' : 'Stopped'
+                      }`}</ThemeText>
+                      <ThemeText>{`Granted consents: ${kettleInfo.kettleConsents}`}</ThemeText>
+                    </View>
+                  )}
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
                       const granted = await onboardForBeacons();
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
                     }}
-                    disabled={kettleInfo.isBeaconsOnboarded}
+                    disabled={
+                      kettleInfo?.isBeaconsOnboarded &&
+                      !!kettleInfo?.kettleConsents
+                    }
                     style={style.button}
                     text="Onboard"
                   />
@@ -644,8 +651,8 @@ export const Profile_DebugInfoScreen = () => {
                     }}
                     style={style.button}
                     disabled={
-                      kettleInfo.isKettleStarted ||
-                      !kettleInfo.isBeaconsOnboarded
+                      kettleInfo?.isKettleStarted ||
+                      !kettleInfo?.isBeaconsOnboarded
                     }
                     text="Start"
                   />
@@ -655,7 +662,7 @@ export const Profile_DebugInfoScreen = () => {
                       await stopBeacons();
                     }}
                     style={style.button}
-                    disabled={!kettleInfo.isKettleStarted}
+                    disabled={!kettleInfo?.isKettleStarted}
                     text="Stop"
                   />
                   <Button
@@ -664,7 +671,7 @@ export const Profile_DebugInfoScreen = () => {
                       await revokeBeacons();
                     }}
                     style={style.button}
-                    disabled={!kettleInfo.isKettleStarted}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
                     text="Revoke"
                   />
                   <Button
@@ -673,27 +680,27 @@ export const Profile_DebugInfoScreen = () => {
                       await deleteCollectedData();
                     }}
                     style={style.button}
-                    disabled={!kettleInfo.isBeaconsOnboarded}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
                     text="Delete Collected Data"
                   />
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      kettleInfo.privacyDashboardUrl &&
+                      kettleInfo?.privacyDashboardUrl &&
                         Linking.openURL(kettleInfo.privacyDashboardUrl);
                     }}
                     style={style.button}
-                    disabled={!kettleInfo.isBeaconsOnboarded}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
                     text="Open Privacy Dashboard"
                   />
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      kettleInfo.privacyTermsUrl &&
+                      kettleInfo?.privacyTermsUrl &&
                         Linking.openURL(kettleInfo.privacyTermsUrl);
                     }}
                     style={style.button}
-                    disabled={!kettleInfo.isBeaconsOnboarded}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
                     text="Open Privacy Terms"
                   />
                 </View>
