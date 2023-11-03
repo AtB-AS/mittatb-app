@@ -1,7 +1,7 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   TicketAssistant_ZonePickerScreenParams,
   TicketAssistantScreenProps,
@@ -42,27 +42,28 @@ export const TicketAssistant_ZonePickerScreen = ({
 
   const fromTariffZone = route.params?.fromTariffZone ?? defaultTariffZone;
   const toTariffZone = route.params?.toTariffZone ?? defaultTariffZone;
-  const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
-    from: fromTariffZone,
-    to: toTariffZone,
-    selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
-  });
+
+  const initialState: TariffZoneSelection = useMemo(
+    () => ({
+      from: fromTariffZone,
+      to: toTariffZone,
+      selectNext: isApplicableOnSingleZoneOnly ? 'from' : 'to',
+    }),
+    [fromTariffZone, toTariffZone, isApplicableOnSingleZoneOnly],
+  );
+
+  const [selectedZones, setSelectedZones] =
+    useState<TariffZoneSelection>(initialState);
 
   const {updateInputParams} = useTicketAssistantState();
 
   useEffect(() => {
-    setSelectedZones({
-      ...selectedZones,
+    setSelectedZones((currentSelectedZones) => ({
+      ...currentSelectedZones,
       from: fromTariffZone,
-    });
-  }, [fromTariffZone]);
-
-  useEffect(() => {
-    setSelectedZones({
-      ...selectedZones,
       to: toTariffZone,
-    });
-  }, [toTariffZone]);
+    }));
+  }, [fromTariffZone, toTariffZone]);
 
   const unsubscribe = navigation.addListener('blur', () => {
     const zoneIds = [selectedZones.from.id, selectedZones.to.id];
@@ -71,7 +72,7 @@ export const TicketAssistant_ZonePickerScreen = ({
 
   useEffect(() => {
     return unsubscribe;
-  }, [navigation]);
+  }, [unsubscribe]);
 
   const onVenueSearchClick = (
     callerRouteParam: keyof TicketAssistant_ZonePickerScreenParams,
