@@ -55,7 +55,7 @@ export const useBeacons = () => {
         privacyTermsUrl,
       });
     }
-  }, [setKettleInfo, isBeaconsSupported, isKettleSDKInitialized]);
+  }, [isBeaconsSupported, isKettleSDKInitialized]);
 
   // This function must be called before consent is granted
   const initializeBeaconsSDK = useCallback(async () => {
@@ -64,7 +64,7 @@ export const useBeacons = () => {
       await NativeModules.KettleSDKExtension.initializeKettleSDK();
       setKettleSDKInitialized(true);
     }
-  }, [isKettleSDKInitialized, setKettleSDKInitialized, isBeaconsSupported]);
+  }, [isKettleSDKInitialized, isBeaconsSupported]);
 
   // This function should be called only once and should be called after the user has onboarded for beacons
   const startBeacons = useCallback(async () => {
@@ -73,7 +73,7 @@ export const useBeacons = () => {
       const permisions = await allowedPermissionForKettle();
       Kettle.start(permisions);
     }
-  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, allowedPermissionForKettle]);
+  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo]);
 
   const stopBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
@@ -81,7 +81,7 @@ export const useBeacons = () => {
       const permisions = await allowedPermissionForKettle();
       Kettle.stop(permisions);
     }
-  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, allowedPermissionForKettle]);
+  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo]);
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
@@ -130,7 +130,7 @@ export const useBeacons = () => {
       if (isReadyToInitialize) await initializeBeaconsSDK();
     }
     checkIsBeaconsReadyToBeInitialized();
-  }, [isBeaconsSupported]);
+  }, [isBeaconsSupported, initializeBeaconsSDK]);
 
   return {
     onboardForBeacons,
