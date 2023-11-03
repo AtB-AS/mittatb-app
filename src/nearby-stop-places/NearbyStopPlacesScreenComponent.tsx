@@ -184,7 +184,7 @@ export const NearbyStopPlacesScreenComponent = ({
       )}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
-      {hasLocationPermission ? (
+      {hasLocationPermission || !!location ? (
         <StopPlaces
           header={getListDescription()}
           stopPlaces={orderedStopPlaces}
