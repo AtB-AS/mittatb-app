@@ -7,7 +7,7 @@ import {useGeocoder} from '@atb/geocoder';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
 import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
-import {useDebounce} from '@atb/utils/useDebounce';
+import {useDebounce} from '@atb/utils/use-debounce';
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {

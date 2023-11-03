@@ -124,7 +124,7 @@ export const ParkingViolationTexts = {
         'Vi fekk ikkje til å starte feilrapporteringa denne gongen.',
       ),
     },
-    position: {
+    positionNotGranted: {
       title: _(
         'Du har blokkert posisjonsdeling',
         'You have blocked location sharing',
@@ -136,6 +136,14 @@ export const ParkingViolationTexts = {
         'For å rapportere feilparkering må du tillate deling av posisjonen din',
       ),
       action: _('Gi tilgang', 'Grant access', 'Gje tilgang'),
+    },
+    noLocation: {
+      title: _('Oops!', 'Oops!', 'Oops!'),
+      message: _(
+        'Vi fikk ikke til å finne posisjonen din. Prøv å bevege deg litt. Lukk appen og åpne den på nytt dersom problemet ikke løser seg.',
+        'We were unable to obtain your position. Try to move around a bit. Close the app, and open it again if the problem persists.',
+        'Vi fekk ikkje til å finne posisjonen din. Prøv å bevege deg litt. Lukk appen og åpne han på nytt om problemet ikkje løyser seg.',
+      ),
     },
     sendReport: {
       title: _('Oops!', 'Oops!', 'Oops!'),

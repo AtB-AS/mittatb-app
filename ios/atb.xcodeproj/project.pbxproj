@@ -14,6 +14,7 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 298D19492AEBC45E00065733 /* InfoPlist.strings */; };
 		2B1414B72357D7554DECE78C /* libPods-app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1338AAD1AA0412FBA40A6ED7 /* libPods-app.a */; };
 		385EE0D3242C0AFC002E1272 /* enforce-bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */; };
 		38CD3270254B612600C6B978 /* AtBRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CD326F254B612600C6B978 /* AtBRootView.m */; };
@@ -127,6 +128,9 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = atb/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = atb/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = atb/main.m; sourceTree = "<group>"; };
+		298D19482AEBC45E00065733 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		298D194A2AEBC45F00065733 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		298D194B2AEBC55C00065733 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "enforce-bridge.swift"; sourceTree = "<group>"; };
 		38CD326F254B612600C6B978 /* AtBRootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AtBRootView.m; path = atb/AtBRootView.m; sourceTree = "<group>"; };
 		38CD3275254B616300C6B978 /* AtBRootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AtBRootView.h; path = atb/AtBRootView.h; sourceTree = "<group>"; };
@@ -254,6 +258,7 @@
 				FEBDDCD829310DCB00C3755B /* BridgeModules */,
 				FE8186AC297593DA000D2195 /* Configs */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
+				298D19492AEBC45E00065733 /* InfoPlist.strings */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -493,6 +498,7 @@
 				en,
 				Base,
 				nb,
+				nn,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -512,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */,
 				0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */,
@@ -760,6 +767,16 @@
 			);
 			name = LaunchScreen.xib;
 			path = atb;
+			sourceTree = "<group>";
+		};
+		298D19492AEBC45E00065733 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				298D19482AEBC45E00065733 /* en */,
+				298D194A2AEBC45F00065733 /* nb */,
+				298D194B2AEBC55C00065733 /* nn */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		50488983293F4B660016DD7A /* Localizable.strings */ = {

@@ -440,7 +440,7 @@ export type ItineraryFilters = {
   groupSimilarityKeepThree?: InputMaybe<Scalars['Float']>;
   /** Of the itineraries grouped to maximum of three itineraries, how much worse can the non-grouped legs be compared to the lowest cost. 2.0 means that they can be double the cost, and any itineraries having a higher cost will be filtered. Default value is 2.0, use a value lower than 1.0 to turn off */
   groupedOtherThanSameLegsMaxCostMultiplier?: InputMaybe<Scalars['Float']>;
-  /** Set a relative limit for all transit itineraries. The limit is calculated based on the transit itinerary generalized-cost and the time between itineraries Itineraries without transit legs are excluded from this filter. Example: costLimitFunction(x) = 3600 + 2.0 x and intervalRelaxFactor = 0.5. If the lowest cost returned is 10 000, then the limit is set to: 3 600 + 2 * 10 000 = 26 600 plus half of the time between either departure or arrival times of the itinerary. Default: {"costLimitFunction": 900.0 + 1.5 x, "intervalRelaxFactor": 0.75} */
+  /** Set a relative limit for all transit itineraries. The limit is calculated based on the transit itinerary generalized-cost and the time between itineraries Itineraries without transit legs are excluded from this filter. Example: costLimitFunction(x) = 3600 + 2.0 x and intervalRelaxFactor = 0.5. If the lowest cost returned is 10 000, then the limit is set to: 3 600 + 2 * 10 000 = 26 600 plus half of the time between either departure or arrival times of the itinerary. Default: {"costLimitFunction": 15m + 1.50 t, "intervalRelaxFactor": 0.75} */
   transitGeneralizedCostLimit?: InputMaybe<TransitGeneralizedCostFilterParams>;
 };
 
@@ -710,6 +710,28 @@ export type PathGuidance = {
   stayOn?: Maybe<Scalars['Boolean']>;
   /** The name of the street. */
   streetName?: Maybe<Scalars['String']>;
+};
+
+/** A combination of street mode and penalty for time and cost. */
+export type PenaltyForStreetMode = {
+  /**
+   *     This is used to take the time-penalty and multiply by the `costFactor`.
+   *     The result is added to the generalized-cost.
+   *
+   */
+  costFactor?: InputMaybe<Scalars['Float']>;
+  /**
+   * List of modes with the given penalty is applied to. A street-mode should not be listed
+   * in more than one element. If empty or null the penalty is applied to all unlisted modes,
+   * it becomes the default penalty for this query.
+   *
+   */
+  streetMode: StreetMode;
+  /**
+   * Penalty applied to the time for the given list of modes.
+   *
+   */
+  timePenalty: Scalars['DoubleFunction'];
 };
 
 /** Common super class for all places (stop places, quays, car parks, bike parks and bike rental stations ) */
@@ -1085,6 +1107,7 @@ export type QueryTypeStopPlacesByBboxArgs = {
 };
 
 export type QueryTypeTripArgs = {
+  accessEgressPenalty?: InputMaybe<Array<PenaltyForStreetMode>>;
   alightSlackDefault?: InputMaybe<Scalars['Int']>;
   alightSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
   arriveBy?: InputMaybe<Scalars['Boolean']>;
@@ -1215,8 +1238,6 @@ export enum RoutingErrorCode {
   OutsideServicePeriod = 'outsideServicePeriod',
   /** The routing request timed out. */
   ProcessingTimeout = 'processingTimeout',
-  /** An unknown error happened during the search. The details have been logged to the server logs */
-  SystemError = 'systemError',
   /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */
   WalkingBetterThanTransit = 'walkingBetterThanTransit',
 }
@@ -1847,6 +1868,8 @@ export type TripPattern = {
    * @deprecated Replaced with expectedStartTime
    */
   startTime?: Maybe<Scalars['DateTime']>;
+  /** How far the user has to walk, bike and/or drive in meters. It includes all street(none transit) modes. */
+  streetDistance?: Maybe<Scalars['Float']>;
   /** Get all system notices. */
   systemNotices: Array<SystemNotice>;
   /** A cost calculated to favor transfer with higher priority. This field is meant for debugging only. */
@@ -1855,7 +1878,7 @@ export type TripPattern = {
   waitTimeOptimizedCost?: Maybe<Scalars['Int']>;
   /** How much time is spent waiting for transit to arrive, in seconds. */
   waitingTime?: Maybe<Scalars['Long']>;
-  /** How far the user has to walk, in meters. */
+  /** @deprecated Replaced by `streetDistance`. */
   walkDistance?: Maybe<Scalars['Float']>;
   /** How much time is spent walking, in seconds. */
   walkTime?: Maybe<Scalars['Long']>;

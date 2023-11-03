@@ -10,12 +10,17 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {StyleSheet} from '@atb/theme';
-import {DeparturesTexts, useTranslation} from '@atb/translations';
+import {
+  DeparturesTexts,
+  TranslateFunction,
+  useTranslation,
+} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {isSituationValidAtDate, SituationSectionItem} from '@atb/situations';
 import {EstimatedCallList} from '@atb/place-screen/components/EstimatedCallList';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 export type QuaySectionProps = {
   quay: Quay;
@@ -61,7 +66,7 @@ export function QuaySection({
 
   const departuresToDisplay =
     mode === 'Favourite'
-      ? departures.sort(compareByLineNameAndDesc)
+      ? departures.sort((a, b) => compareByLineNameAndDesc(t, a, b))
       : departures;
   useEffect(() => {
     if (!showOnlyFavorites) return setIsMinimized(false);
@@ -185,13 +190,14 @@ function getDeparturesForQuay(
 }
 
 function compareByLineNameAndDesc(
+  t: TranslateFunction,
   d1: EstimatedCall,
   d2: EstimatedCall,
 ): number {
   const lineNumber1 = d1.serviceJourney?.line.publicCode;
   const lineNumber2 = d2.serviceJourney?.line.publicCode;
-  const lineDesc1 = d1?.destinationDisplay?.frontText;
-  const lineDesc2 = d2?.destinationDisplay?.frontText;
+  const lineDesc1 = formatDestinationDisplay(t, d1?.destinationDisplay);
+  const lineDesc2 = formatDestinationDisplay(t, d2?.destinationDisplay);
 
   if (!lineNumber1) return 1;
   if (!lineNumber2) return -1;
