@@ -234,6 +234,7 @@ export const useRecentFareContracts = () => {
     [
       state.recentFareContracts,
       preassignedFareProducts,
+      fareProductTypeConfigs,
       tariffZones,
       userProfiles,
     ],

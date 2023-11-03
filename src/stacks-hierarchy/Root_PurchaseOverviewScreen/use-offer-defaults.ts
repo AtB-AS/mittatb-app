@@ -5,7 +5,6 @@ import {
   useFirestoreConfiguration,
   isProductSellableInApp,
 } from '@atb/configuration';
-import {useMemo} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useTicketingState} from '@atb/ticketing';
@@ -90,22 +89,21 @@ const useTravellersWithPreselectedCounts = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
-) =>
-  useMemo(() => {
-    const mappedUserProfiles = userProfiles
-      .filter((u) =>
-        preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-      )
-      .map((u) => ({
-        ...u,
-        count: getCountIfUserIsIncluded(u, defaultSelections),
-      }));
+) => {
+  const mappedUserProfiles = userProfiles
+    .filter((u) =>
+      preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+    )
+    .map((u) => ({
+      ...u,
+      count: getCountIfUserIsIncluded(u, defaultSelections),
+    }));
 
-    if (
-      !mappedUserProfiles.some(({count}) => count) &&
-      mappedUserProfiles.length > 0 // how to handle if length 0?
-    ) {
-      mappedUserProfiles[0].count = 1;
-    }
-    return mappedUserProfiles;
-  }, [userProfiles, preassignedFareProduct]);
+  if (
+    !mappedUserProfiles.some(({count}) => count) &&
+    mappedUserProfiles.length > 0 // how to handle if length 0?
+  ) {
+    mappedUserProfiles[0].count = 1;
+  }
+  return mappedUserProfiles;
+};

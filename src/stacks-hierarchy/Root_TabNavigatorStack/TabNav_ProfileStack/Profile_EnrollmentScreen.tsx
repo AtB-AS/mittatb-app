@@ -91,7 +91,7 @@ const useEnroll = () => {
         setIsLoading(false);
       }
     },
-    [setHasError, setIsLoading, setIsEnrolled],
+    [setHasError, setIsLoading, setIsEnrolled, refresh],
   );
 
   return {

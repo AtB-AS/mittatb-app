@@ -8,28 +8,26 @@ const useTokenToggleDetails = (shouldFetchTokenDetails: boolean) => {
 
   const {getTokenToggleDetails} = useMobileTokenContextState();
 
-  const fetchToggleLimit = async () => {
-    setShouldShowLoader(true);
-    const toggleToggleDetails = await getTokenToggleDetails();
-    if (toggleToggleDetails) {
-      const {toggleMaxLimit, toggledCount} = toggleToggleDetails;
-      if (toggleMaxLimit) {
-        if (toggleMaxLimit >= toggledCount) {
-          setToggleLimit(toggleMaxLimit - toggledCount);
-        } else {
-          //We can end up here if we decide to reduce max limit value in firestore
-          setToggleLimit(0);
-        }
-      }
-      setMaxToggleLimit(toggleMaxLimit);
-    }
-    setShouldShowLoader(false);
-  };
-
   useEffect(() => {
-    if (shouldFetchTokenDetails) {
-      fetchToggleLimit();
-    }
+    (async function () {
+      if (shouldFetchTokenDetails) {
+        setShouldShowLoader(true);
+        const toggleToggleDetails = await getTokenToggleDetails();
+        if (toggleToggleDetails) {
+          const {toggleMaxLimit, toggledCount} = toggleToggleDetails;
+          if (toggleMaxLimit) {
+            if (toggleMaxLimit >= toggledCount) {
+              setToggleLimit(toggleMaxLimit - toggledCount);
+            } else {
+              //We can end up here if we decide to reduce max limit value in firestore
+              setToggleLimit(0);
+            }
+          }
+          setMaxToggleLimit(toggleMaxLimit);
+        }
+        setShouldShowLoader(false);
+      }
+    })();
   }, [shouldFetchTokenDetails, getTokenToggleDetails]);
 
   return {shouldShowLoader, toggleLimit, maxToggleLimit};

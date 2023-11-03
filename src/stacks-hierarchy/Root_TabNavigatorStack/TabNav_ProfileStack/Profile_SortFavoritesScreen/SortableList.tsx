@@ -31,7 +31,7 @@ export function SortableList({data, onSort}: SortableListFallbackProps) {
       const newData = immutableMove(data, from, to);
       onSort(newData);
     },
-    [data],
+    [data, onSort],
   );
 
   return (
