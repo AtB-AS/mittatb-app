@@ -26,7 +26,7 @@ const NearbyTexts = {
     noAccessToLocationTitle: _(
       'Holdeplasser i nærheten er ikke tilgjengelig.',
       'Nearby departures are not available.',
-      'Holdeplassar i nærleiken er ikkje tilgjengelege.',
+      'Haldeplassar i nærleiken er ikkje tilgjengeleg.',
     ),
     noAccessToLocation: _(
       'Del din posisjon for å finne holdeplasser i nærheten. Bruk søkefeltet for å finne andre holdeplasser.',
