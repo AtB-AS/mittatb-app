@@ -5,7 +5,7 @@ import {DashboardBackground} from '@atb/assets/svg/color/images';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
@@ -22,9 +22,9 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const focusRef = useFocusOnLoad(true, 200);
   const [duration, setDuration] = useState(daysInWeek);
 
-  const updateDuration = () => {
+  const updateDuration = useCallback(() => {
     updateInputParams({duration: duration});
-  };
+  }, [updateInputParams, duration]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
