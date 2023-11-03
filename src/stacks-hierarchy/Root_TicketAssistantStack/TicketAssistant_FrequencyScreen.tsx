@@ -61,7 +61,7 @@ export const TicketAssistant_FrequencyScreen = ({
 
   useEffect(() => {
     return unsubscribe;
-  }, [navigation]);
+  }, [unsubscribe]);
 
   return (
     <View style={styles.container}>

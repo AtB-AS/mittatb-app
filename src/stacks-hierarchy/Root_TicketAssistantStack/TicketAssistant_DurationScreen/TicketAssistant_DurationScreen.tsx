@@ -32,7 +32,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
 
   useEffect(() => {
     return unsubscribe;
-  }, [navigation]);
+  }, [unsubscribe]);
 
   const travelFrequency = inputParams.frequency ?? 0;
 

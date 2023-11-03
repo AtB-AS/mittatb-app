@@ -65,7 +65,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
   useEffect(() => {
     return unsubscribe;
-  }, [navigation]);
+  }, [unsubscribe]);
 
   function getAdditionalTitleText(userTypeString: string) {
     switch (userTypeString) {
