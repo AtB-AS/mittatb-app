@@ -3796,12 +3796,12 @@
   dependencies:
     invariant "^2.2.4"
 
-"@react-native-firebase/analytics@^18.5.0":
+"@react-native-firebase/analytics@~18.5.0":
   version "18.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-18.5.0.tgz#cca5858e44f3f8cbf387fa7cd6debb95fbcf8023"
   integrity sha512-+8fkDedcftieOBEkNdqEW0lS/FB9SKzfUc3yYXnJcLTy3Ceg9JZga/tWz4BGbbxPddUy1Sm2UuWDuOxsdkFUyA==
 
-"@react-native-firebase/app@^18.5.0":
+"@react-native-firebase/app@~18.5.0":
   version "18.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-18.5.0.tgz#198a133229d1b8710f257e76d9703dcb7e4cd6e0"
   integrity sha512-AhHQi5KFDlKZn/lH7rEYtLfpsGamEq+P/cXZWcNPcP0WGlmi++abk7Pxnn4MjnG7TNhEyG/C9uq//qb6VhXaZg==
@@ -3809,19 +3809,24 @@
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/auth@^18.5.0":
+"@react-native-firebase/auth@~18.5.0":
   version "18.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-18.5.0.tgz#9969d0b756c7f68b9f46813759b1f7ca0c9f2c2d"
   integrity sha512-RGuqXVQWIRc0edomtS8JxsfEZD7PKUz95L5Q1t+kLI+4lULOFamKlYY5sadv+QnMkYmMmcbKpTeTWfnf+WvHcQ==
   dependencies:
     plist "^3.1.0"
 
-"@react-native-firebase/firestore@^18.5.0":
+"@react-native-firebase/firestore@~18.5.0":
   version "18.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-18.5.0.tgz#dbbcc0c29ac70b37277f8c4bc3a4ff241bfea381"
   integrity sha512-/LiCWjuB4YuPvxHz2H6Nu/dY3zjeIjLfzvMWAuHRb10UtRUxaFlgrIgWioR6plwv8JHrgZBNdnZCyc+sVxEqRg==
 
-"@react-native-firebase/remote-config@^18.5.0":
+"@react-native-firebase/messaging@~18.5.0":
+  version "18.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-18.5.0.tgz#2a80b25816470e9843682e031a3a113566067ce6"
+  integrity sha512-y1FApYxBMcygmbWBqUPFC+fCfvx6Yf6TdZewun7kPwx+S+tkYzoKx1IsXtxOXtqyJjCNEYirjFgNrs5SSd02zA==
+
+"@react-native-firebase/remote-config@~18.5.0":
   version "18.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/remote-config/-/remote-config-18.5.0.tgz#5ece65cdd2b2c2179b6be409287f3b837ef39824"
   integrity sha512-EOXToa1tLtskWjCAjW9RZHB19BHk8+MiLLS4B2DSAHs/t6QVRtjlK+xqI2nSppHSFdzMI6Nd9wi869baK/y5RA==
