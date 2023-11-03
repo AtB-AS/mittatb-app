@@ -44,7 +44,11 @@ export const Root_TipsAndInformation = ({}: Props) => {
             console.warn(err);
           },
         ),
-    [],
+    /*
+    Resubscribing on language change? Doh. Note that we shouldn't have
+    translation logic in firestore subscription handlers.
+     */
+    [language],
   );
 
   return (

@@ -13,7 +13,7 @@ export type DeparturesQuery = {
       realtime: boolean;
       cancellation: boolean;
       quay: {id: string};
-      destinationDisplay?: {frontText?: string};
+      destinationDisplay?: {frontText?: string; via?: Array<string>};
       serviceJourney: {
         id: string;
         line: {

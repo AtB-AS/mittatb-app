@@ -13,6 +13,9 @@ import {
   getSvgForMostCriticalSituationOrNotice,
 } from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
+
 import {
   CancelledDepartureTexts,
   DeparturesTexts,
@@ -78,6 +81,9 @@ export const EstimatedCallItem = memo(
         ? t(DeparturesTexts.a11yMarkFavouriteHint)
         : t(DeparturesTexts.a11yViewDepartureDetailsHint);
 
+    const {destinationDisplay} = departure;
+    const lineName = formatDestinationDisplay(t, destinationDisplay);
+
     return (
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
@@ -90,8 +96,8 @@ export const EstimatedCallItem = memo(
           <View style={styles.estimatedCallItem}>
             <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
-              <ThemeText style={styles.lineName} testID={`${testID}FrontText`}>
-                {departure.destinationDisplay?.frontText}
+              <ThemeText style={styles.lineName} testID={`${testID}LineName`}>
+                {lineName}
               </ThemeText>
             </View>
             {mode !== 'Favourite' && <DepartureTime departure={departure} />}
@@ -129,8 +135,10 @@ export const EstimatedCallItem = memo(
     )
       return false;
     if (
-      prev.departure.destinationDisplay?.frontText !==
-      next.departure.destinationDisplay?.frontText
+      destinationDisplaysAreEqual(
+        prev.departure.destinationDisplay,
+        next.departure.destinationDisplay,
+      )
     )
       return false;
     if (prev.departure.realtime !== next.departure.realtime) return false;
@@ -219,10 +227,9 @@ export function getLineA11yLabel(
   const a11yLine = line?.publicCode
     ? `${t(DeparturesTexts.line)} ${line?.publicCode},`
     : '';
-  const a11yFrontText = departure.destinationDisplay?.frontText
-    ? `${departure.destinationDisplay?.frontText}.`
-    : '';
-  return `${a11yLine} ${a11yFrontText}`;
+  const lineName = formatDestinationDisplay(t, departure.destinationDisplay);
+  const a11yLineName = lineName ? `${lineName}.` : '';
+  return `${a11yLine} ${a11yLineName}`;
 }
 
 function LineChip({

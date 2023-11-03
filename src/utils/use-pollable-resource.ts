@@ -47,7 +47,7 @@ export const usePollableResource = <T, E extends Error = Error>(
   const [isLoading, setIsLoading] = useIsLoading(false);
   const [error, setError] = useState<E | undefined>(undefined);
   const [state, setState] = useState<T>(initialValue);
-  const [abortController, setAbortController] = useState<AbortController>();
+  const abortControllerRef = useRef<AbortController>();
   const pollTime = pollingTimeInSeconds * 1000;
 
   const prevState = usePrevious(state);
@@ -75,12 +75,13 @@ export const usePollableResource = <T, E extends Error = Error>(
           }
         });
     },
-    [callback],
+    [callback, prevState, setIsLoading],
   );
 
   useEffect(() => {
     const abortController = new AbortController();
-    setAbortController(abortController);
+    firstLoadIsDone.current = false;
+    abortControllerRef.current = abortController;
     reload('WITH_LOADING', abortController);
     return () => abortController.abort();
   }, [reload]);
@@ -88,13 +89,13 @@ export const usePollableResource = <T, E extends Error = Error>(
   useEffect(() => {
     if (!pollOnFocus || !firstLoadIsDone.current || !isFocused) return;
     const abortController = new AbortController();
-    setAbortController(abortController);
+    abortControllerRef.current = abortController;
     reload('NO_LOADING', abortController);
     return () => abortController.abort();
-  }, [isFocused]);
+  }, [reload, isFocused, pollOnFocus]);
 
   useInterval(
-    () => reload('NO_LOADING', abortController),
+    () => reload('NO_LOADING', abortControllerRef.current),
     pollTime,
     [reload],
     opts.disabled || (pollOnFocus && !isFocused),

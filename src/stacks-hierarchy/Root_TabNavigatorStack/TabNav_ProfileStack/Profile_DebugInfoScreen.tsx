@@ -53,6 +53,7 @@ import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-vi
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useAnnouncementsState} from '@atb/announcements';
+import {usePushNotificationsEnabledDebugOverride} from '@atb/push-notifications';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -102,6 +103,8 @@ export const Profile_DebugInfoScreen = () => {
   const parkingViolationsReportingEnabledDebugOverride =
     useParkingViolationsReportingEnabledDebugOverride();
   const {resetDismissedAnnouncements} = useAnnouncementsState();
+  const pushNotificationsEnabledDebugOverride =
+    usePushNotificationsEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -355,6 +358,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable parking violations reporting"
               override={parkingViolationsReportingEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable push notifications"
+              override={pushNotificationsEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>

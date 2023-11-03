@@ -64,3 +64,4 @@ export {default as ActiveTokenRequiredTexts} from './screens/subscreens/ActiveTo
 export {default as LoadingScreenTexts} from './screens/LoadingScreen';
 export {default as InfoTagTexts} from './components/InfoTag';
 export {default as DeparturesTexts} from './screens/Departures';
+export {default as GeoLocationTexts} from './GeoLocation';

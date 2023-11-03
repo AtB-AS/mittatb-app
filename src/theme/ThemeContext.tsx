@@ -60,7 +60,7 @@ export const ThemeContextProvider: React.FC = ({children}) => {
     if (!overrideSystemAppearance) {
       RCTChangeNative.changeAppearance(null);
     }
-  }, [overrideSystemAppearance, storedColorScheme]);
+  }, [overrideSystemAppearance, storedColorScheme, colorScheme]);
 
   const overrideOSThemePreference = (override: boolean) => {
     setPreference({overrideSystemAppearance: override});

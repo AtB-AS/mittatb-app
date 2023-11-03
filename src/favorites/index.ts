@@ -13,6 +13,7 @@ export type {
   StoredLocationFavorite,
   StoredFavoriteDeparture,
   FavoriteDeparture,
+  FavoriteDepartureIdLegacy,
   FavoriteDepartureId,
   ChipTypeGroup,
 } from './types';
