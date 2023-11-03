@@ -21,7 +21,7 @@ import {
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
-import {APP_GROUP_NAME, KETTLE_API_KEY} from '@env';
+import {APP_GROUP_NAME} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
@@ -164,8 +164,6 @@ export const Profile_DebugInfoScreen = () => {
     walkReluctance: 1.5,
     walkSpeed: 1.3,
   };
-
-  const [isBeaconsEnabled] = beaconsEnabledDebugOverride;
 
   return (
     <View style={style.container}>
