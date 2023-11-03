@@ -21,7 +21,7 @@ import {
   useRemoteConfig,
 } from '@atb/RemoteConfigContext';
 import {useGlobalMessagesState} from '@atb/global-messages';
-import {APP_GROUP_NAME} from '@env';
+import {APP_GROUP_NAME, KETTLE_API_KEY} from '@env';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {useVehiclesInMapDebugOverride} from '@atb/mobility';
@@ -54,6 +54,7 @@ import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-vi
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useAnnouncementsState} from '@atb/announcements';
+import {usePushNotificationsEnabledDebugOverride} from '@atb/push-notifications';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -111,6 +112,8 @@ export const Profile_DebugInfoScreen = () => {
   const parkingViolationsReportingEnabledDebugOverride =
     useParkingViolationsReportingEnabledDebugOverride();
   const {resetDismissedAnnouncements} = useAnnouncementsState();
+  const pushNotificationsEnabledDebugOverride =
+    usePushNotificationsEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -161,6 +164,8 @@ export const Profile_DebugInfoScreen = () => {
     walkReluctance: 1.5,
     walkSpeed: 1.3,
   };
+
+  const [isBeaconsEnabled] = beaconsEnabledDebugOverride;
 
   return (
     <View style={style.container}>
@@ -360,6 +365,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable parking violations reporting"
               override={parkingViolationsReportingEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable push notifications"
+              override={pushNotificationsEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
