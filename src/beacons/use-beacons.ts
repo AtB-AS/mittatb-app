@@ -26,7 +26,7 @@ export type KettleInfo = {
 };
 
 export const useBeacons = () => {
-  const [isBeaconsEnabled] = useIsBeaconsEnabled();
+  const [isBeaconsEnabled, isBeaconsEnabledDebugOverrideReady] = useIsBeaconsEnabled();
   const [kettleInfo, setKettleInfo] = useState<KettleInfo>();
 
   const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY && !!kettleInfo?.kettleConsents;
