@@ -7,6 +7,10 @@ import { Kettle, KettleModules } from 'react-native-kettle-module';
 import { KettleConsents } from 'react-native-kettle-module';
 import { PERMISSIONS, Permission, RESULTS, check, checkMultiple, request } from 'react-native-permissions';
 
+enum storeKey {
+  beaconsConsent = '@ATB_beacons_consent_granted',
+}
+
 const BEACONS_CONSENTS = [KettleConsents.SURVEYS, KettleConsents.ANALYTICS];
 
 type PermissionKey = 'bluetooth' | 'location' | 'motion';
@@ -83,7 +87,7 @@ export const useBeacons = () => {
     if (!isBeaconsSupported) return;
     if (isKettleSDKInitialized) {
       Kettle.revoke(BEACONS_CONSENTS);
-      await storage.set('@ATB_beacons_consent_granted', "false");
+      await storage.set(storeKey.beaconsConsent, "false");
     }
   }, [isBeaconsSupported, isKettleSDKInitialized]);
 
@@ -106,7 +110,7 @@ export const useBeacons = () => {
     }
 
     if (granted) {
-      await storage.set('@ATB_beacons_consent_granted', "true");
+      await storage.set(storeKey.beaconsConsent, "true");
       // Initialize beacons SDK after consent is granted
       await initializeBeaconsSDK();
       Kettle.grant(BEACONS_CONSENTS);
@@ -121,7 +125,7 @@ export const useBeacons = () => {
 
   useEffect(() => {
     async function checkIsBeaconsReadyToBeInitialized() {
-      const consentGranted = await storage.get('@ATB_beacons_consent_granted') ?? "false";
+      const consentGranted = await storage.get(storeKey.beaconsConsent) ?? "false";
       const isReadyToInitialize = isBeaconsSupported && consentGranted === "true";
       if (isReadyToInitialize) await initializeBeaconsSDK();
     }
