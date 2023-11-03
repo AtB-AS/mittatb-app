@@ -56,6 +56,7 @@ import {
   Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
+import {useBeacons} from '@atb/beacons/use-beacons';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -69,6 +70,7 @@ export const RootStack = () => {
   const navRef = useNavigationContainerRef<RootStackParamList>();
   useFlipper(navRef);
 
+  useBeacons();
   useTestIds();
 
   if (isLoading) {
