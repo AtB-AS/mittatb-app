@@ -74,6 +74,7 @@ export const Profile_DebugInfoScreen = () => {
     revokeBeacons,
     deleteCollectedData,
     kettleInfo,
+    isBeaconsSupported,
   } = useBeacons();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId} = useAuthState();
@@ -160,8 +161,6 @@ export const Profile_DebugInfoScreen = () => {
     walkReluctance: 1.5,
     walkSpeed: 1.3,
   };
-
-  const [isBeaconsEnabled] = beaconsEnabledDebugOverride;
 
   return (
     <View style={style.container}>
@@ -615,7 +614,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        {isBeaconsEnabled && (
+        {isBeaconsSupported && (
           <Section withPadding withTopPadding>
             <ExpandableSectionItem
               text="Beacons"
