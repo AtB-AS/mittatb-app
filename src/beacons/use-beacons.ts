@@ -29,7 +29,7 @@ export const useBeacons = () => {
   const [isBeaconsEnabled, isBeaconsEnabledDebugOverrideReady] = useIsBeaconsEnabled();
   const [kettleInfo, setKettleInfo] = useState<KettleInfo>();
 
-  const isBeaconsSupported = isBeaconsEnabled && !!KETTLE_API_KEY && !!kettleInfo?.kettleConsents;
+  const isBeaconsSupported = isBeaconsEnabled && isBeaconsEnabledDebugOverrideReady && !!KETTLE_API_KEY && !!kettleInfo?.kettleConsents;
 
   const initializeBeacons = useCallback(async () => {
     // This will set kettle if KETTLE_API_KEY is set on the native side
