@@ -29,6 +29,7 @@ import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
+import {usePushNotificationsEnabled} from '@atb/push-notifications';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -41,6 +42,8 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
 
   const {onboarded, notificationPermissionOnboarded} = useAppState();
 
+  const pushNotificationsEnabled = usePushNotificationsEnabled();
+
   useGoToMobileTokenOnboardingWhenNecessary();
 
   useEffect(() => {
@@ -48,12 +51,17 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
-    } else if (!notificationPermissionOnboarded) {
+    } else if (!notificationPermissionOnboarded && pushNotificationsEnabled) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
       );
     }
-  }, [onboarded, navigation, notificationPermissionOnboarded]);
+  }, [
+    onboarded,
+    navigation,
+    notificationPermissionOnboarded,
+    pushNotificationsEnabled,
+  ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
     InteractionManager.runAfterInteractions(() =>
