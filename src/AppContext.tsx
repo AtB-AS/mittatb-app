@@ -12,7 +12,6 @@ import {storage} from '@atb/storage';
 
 enum storeKey {
   onboarding = '@ATB_onboarded',
-  ticketing = '@ATB_ticket_informational_accepted',
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
 }
@@ -28,13 +27,11 @@ type AppReducerAction =
   | {
       type: 'LOAD_APP_SETTINGS';
       onboarded: boolean;
-      ticketingAccepted: boolean;
       mobileTokenOnboarded: boolean;
       mobileTokenWithoutTravelcardOnboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
-  | {type: 'ACCEPT_TICKETING'}
   | {type: 'RESET_TICKETING'}
   | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
   | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'}
@@ -44,7 +41,6 @@ type AppReducerAction =
 type AppContextState = AppState & {
   completeOnboarding: () => void;
   restartOnboarding: () => void;
-  acceptTicketing: () => void;
   resetTicketing: () => void;
   completeMobileTokenOnboarding: () => void;
   restartMobileTokenOnboarding: () => void;
@@ -64,7 +60,6 @@ const appReducer: AppReducer = (prevState, action) => {
       return {
         ...prevState,
         onboarded: action.onboarded,
-        ticketingAccepted: action.ticketingAccepted,
         isLoading: false,
         mobileTokenOnboarded: action.mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded:
@@ -79,11 +74,6 @@ const appReducer: AppReducer = (prevState, action) => {
       return {
         ...prevState,
         onboarded: false,
-      };
-    case 'ACCEPT_TICKETING':
-      return {
-        ...prevState,
-        ticketingAccepted: true,
       };
     case 'RESET_TICKETING':
       return {
@@ -129,11 +119,6 @@ export const AppContextProvider: React.FC = ({children}) => {
       const savedOnboarded = await storage.get(storeKey.onboarding);
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
 
-      const savedTicketingAccepted = await storage.get(storeKey.ticketing);
-      const ticketingAccepted = !savedTicketingAccepted
-        ? false
-        : JSON.parse(savedTicketingAccepted);
-
       const savedMobileTokenOnboarded = await storage.get(
         storeKey.mobileTokenOnboarding,
       );
@@ -156,7 +141,6 @@ export const AppContextProvider: React.FC = ({children}) => {
       dispatch({
         type: 'LOAD_APP_SETTINGS',
         onboarded,
-        ticketingAccepted,
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
       });
@@ -169,7 +153,6 @@ export const AppContextProvider: React.FC = ({children}) => {
   const {
     completeOnboarding,
     restartOnboarding,
-    acceptTicketing,
     resetTicketing,
     completeMobileTokenOnboarding,
     restartMobileTokenOnboarding,
@@ -186,10 +169,6 @@ export const AppContextProvider: React.FC = ({children}) => {
       restartOnboarding: async () => {
         await storage.set(storeKey.onboarding, JSON.stringify(false));
         dispatch({type: 'RESTART_ONBOARDING'});
-      },
-      acceptTicketing: async () => {
-        await storage.set(storeKey.ticketing, JSON.stringify(true));
-        dispatch({type: 'ACCEPT_TICKETING'});
       },
       resetTicketing: async () => {
         dispatch({type: 'RESET_TICKETING'});
@@ -229,7 +208,6 @@ export const AppContextProvider: React.FC = ({children}) => {
         ...state,
         completeOnboarding,
         restartOnboarding,
-        acceptTicketing,
         resetTicketing,
         completeMobileTokenOnboarding,
         restartMobileTokenOnboarding,
