@@ -15,6 +15,7 @@ enum storeKey {
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
   notificationPermissionOnboarding = '@ATB_notification_permission_onboarded',
+  locationWhenInUsePermissionOnboarding = '@ATB_location_when_in_use_permission_onboarded',
 }
 type AppState = {
   isLoading: boolean;
@@ -22,6 +23,7 @@ type AppState = {
   mobileTokenOnboarded: boolean;
   mobileTokenWithoutTravelcardOnboarded: boolean;
   notificationPermissionOnboarded: boolean;
+  locationWhenInUsePermissionOnboarding: boolean;
 };
 
 type AppReducerAction =
@@ -31,6 +33,7 @@ type AppReducerAction =
       mobileTokenOnboarded: boolean;
       mobileTokenWithoutTravelcardOnboarded: boolean;
       notificationPermissionOnboarded: boolean;
+      locationWhenInUsePermissionOnboarding: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
@@ -39,7 +42,9 @@ type AppReducerAction =
   | {type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
   | {type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
   | {type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'}
-  | {type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'};
+  | {type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'}
+  | {type: 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'}
+  | {type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
@@ -50,6 +55,8 @@ type AppContextState = AppState & {
   restartMobileTokenWithoutTravelcardOnboarding: () => void;
   completeNotificationPermissionOnboarding: () => void;
   restartNotificationPermissionOnboarding: () => void;
+  completeLocationWhenInUsePermissionOnboarding: () => void;
+  restartLocationWhenInUsePermissionOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -61,14 +68,21 @@ type AppReducer = (prevState: AppState, action: AppReducerAction) => AppState;
 const appReducer: AppReducer = (prevState, action) => {
   switch (action.type) {
     case 'LOAD_APP_SETTINGS':
+      const {
+        onboarded,
+        mobileTokenOnboarded,
+        mobileTokenWithoutTravelcardOnboarded,
+        notificationPermissionOnboarded,
+        locationWhenInUsePermissionOnboarding,
+      } = action;
       return {
         ...prevState,
-        onboarded: action.onboarded,
+        onboarded,
         isLoading: false,
-        mobileTokenOnboarded: action.mobileTokenOnboarded,
-        mobileTokenWithoutTravelcardOnboarded:
-          action.mobileTokenWithoutTravelcardOnboarded,
-        notificationPermissionOnboarded: action.notificationPermissionOnboarded,
+        mobileTokenOnboarded,
+        mobileTokenWithoutTravelcardOnboarded,
+        notificationPermissionOnboarded,
+        locationWhenInUsePermissionOnboarding,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -112,6 +126,18 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         notificationPermissionOnboarded: false,
       };
+
+    case 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING':
+      return {
+        ...prevState,
+        locationWhenInUsePermissionOnboarding: true,
+      };
+
+    case 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING':
+      return {
+        ...prevState,
+        locationWhenInUsePermissionOnboarding: false,
+      };
   }
 };
 
@@ -121,6 +147,7 @@ const defaultAppState: AppState = {
   mobileTokenOnboarded: false,
   mobileTokenWithoutTravelcardOnboarded: false,
   notificationPermissionOnboarded: false,
+  locationWhenInUsePermissionOnboarding: false,
 };
 
 export const AppContextProvider: React.FC = ({children}) => {
@@ -155,6 +182,14 @@ export const AppContextProvider: React.FC = ({children}) => {
           ? false
           : JSON.parse(savedNotificationPermissionOnboarded);
 
+      const savedLocationWhenInUsePermissionOnboarded = await storage.get(
+        storeKey.locationWhenInUsePermissionOnboarding,
+      );
+      const locationWhenInUsePermissionOnboarding =
+        !savedLocationWhenInUsePermissionOnboarded
+          ? false
+          : JSON.parse(savedLocationWhenInUsePermissionOnboarded);
+
       if (onboarded) {
         registerChatUser();
       }
@@ -165,6 +200,7 @@ export const AppContextProvider: React.FC = ({children}) => {
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
         notificationPermissionOnboarded,
+        locationWhenInUsePermissionOnboarding,
       });
 
       RNBootSplash.hide({fade: true});
@@ -181,6 +217,8 @@ export const AppContextProvider: React.FC = ({children}) => {
     restartMobileTokenWithoutTravelcardOnboarding,
     completeNotificationPermissionOnboarding,
     restartNotificationPermissionOnboarding,
+    completeLocationWhenInUsePermissionOnboarding,
+    restartLocationWhenInUsePermissionOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -232,6 +270,21 @@ export const AppContextProvider: React.FC = ({children}) => {
         );
         dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
       },
+
+      completeLocationWhenInUsePermissionOnboarding: async () => {
+        await storage.set(
+          storeKey.locationWhenInUsePermissionOnboarding,
+          JSON.stringify(true),
+        );
+        dispatch({type: 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'});
+      },
+      restartLocationWhenInUsePermissionOnboarding: async () => {
+        await storage.set(
+          storeKey.locationWhenInUsePermissionOnboarding,
+          JSON.stringify(false),
+        );
+        dispatch({type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'});
+      },
     }),
     [],
   );
@@ -248,6 +301,8 @@ export const AppContextProvider: React.FC = ({children}) => {
         restartMobileTokenWithoutTravelcardOnboarding,
         completeNotificationPermissionOnboarding,
         restartNotificationPermissionOnboarding,
+        completeLocationWhenInUsePermissionOnboarding,
+        restartLocationWhenInUsePermissionOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>

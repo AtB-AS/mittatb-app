@@ -68,6 +68,7 @@ export const Profile_DebugInfoScreen = () => {
     restartMobileTokenWithoutTravelcardOnboarding,
     restartOnboarding,
     restartNotificationPermissionOnboarding,
+    restartLocationWhenInUsePermissionOnboarding,
   } = useAppState();
   const {
     onboardForBeacons,
@@ -197,6 +198,10 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Restart notification onboarding"
             onPress={restartNotificationPermissionOnboarding}
+          />
+          <LinkSectionItem
+            text="Restart location when in use onboarding"
+            onPress={restartLocationWhenInUsePermissionOnboarding}
           />
           <LinkSectionItem
             text="Set mobile token onboarded to false"
