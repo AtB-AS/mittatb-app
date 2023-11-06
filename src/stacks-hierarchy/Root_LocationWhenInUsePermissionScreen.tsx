@@ -2,7 +2,7 @@ import {useTranslation} from '@atb/translations';
 import React, {useCallback} from 'react';
 
 import LocationWhenInUsePermissionTexts from '@atb/translations/screens/LocationWhenInUsePermission';
-import {PushNotification} from '@atb/assets/svg/color/images';
+import {MyLocation} from '@atb/assets/svg/color/images';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useAppState} from '@atb/AppContext';
 import {OnboardingScreen} from '@atb/onboarding-screen';
@@ -22,8 +22,7 @@ export const Root_LocationWhenInUsePermissionScreen = ({navigation}: Props) => {
 
   return (
     <OnboardingScreen
-      // todo: switch PushNotification icon to MyLocation
-      illustration={<PushNotification height={220} />}
+      illustration={<MyLocation height={220} />}
       title={t(LocationWhenInUsePermissionTexts.title)}
       description={t(LocationWhenInUsePermissionTexts.description)}
       buttonText={t(LocationWhenInUsePermissionTexts.button)}
