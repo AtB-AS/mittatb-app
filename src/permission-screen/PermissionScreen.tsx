@@ -6,6 +6,7 @@ import {Button} from '@atb/components/button';
 import {View, ScrollView} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type DescriptionLink = {
   text: string;
@@ -33,11 +34,12 @@ export const PermissionScreen = ({
   buttonOnPress,
 }: PermissionScreenParams) => {
   const styles = useThemeStyles();
+  const focusRef = useFocusOnLoad(true, 200);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
+      <ScrollView contentContainerStyle={styles.headerScrollViewContainer}>
+        <View style={styles.header} ref={focusRef} accessible>
           {illustration}
           <ThemeText
             type="body__primary--big--bold"
@@ -73,13 +75,15 @@ export const PermissionScreen = ({
       </ScrollView>
       <View style={styles.footer}>
         {footerDescription && (
-          <ThemeText
-            type="body__tertiary"
-            color="background_accent_0"
-            style={styles.footerDescription}
-          >
-            {footerDescription}
-          </ThemeText>
+          <ScrollView style={styles.footerScrollView}>
+            <ThemeText
+              type="body__tertiary"
+              color="background_accent_0"
+              style={styles.footerDescription}
+            >
+              {footerDescription}
+            </ThemeText>
+          </ScrollView>
         )}
         <Button
           interactiveColor="interactive_0"
@@ -99,8 +103,11 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     padding: theme.spacings.xLarge,
   },
+  headerScrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
   header: {
-    marginTop: theme.spacings.large * 2,
     alignItems: 'center',
   },
   title: {
@@ -114,12 +121,15 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   descriptionLink: {
     textAlign: 'center',
   },
+  footerScrollView: {
+    marginBottom: theme.spacings.small,
+    maxHeight: 180,
+  },
   footerDescription: {
     padding: theme.spacings.medium,
-    marginVertical: theme.spacings.small,
   },
   footer: {
-    flex: 1,
+    paddingTop: theme.spacings.small,
     justifyContent: 'flex-end',
   },
 }));

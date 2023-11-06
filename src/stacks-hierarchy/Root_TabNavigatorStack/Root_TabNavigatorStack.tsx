@@ -52,6 +52,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
         navigation.navigate('Root_OnboardingStack'),
       );
     } else if (!notificationPermissionOnboarded && pushNotificationsEnabled) {
+      // todo: also require !hasGrantedNotificationPermission
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
       );
