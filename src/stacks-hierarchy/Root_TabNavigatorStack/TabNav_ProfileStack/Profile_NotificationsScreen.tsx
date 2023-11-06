@@ -21,6 +21,7 @@ export const Profile_NotificationsScreen = () => {
   const {
     permissionStatus,
     isLoading,
+    isUpdating,
     isError,
     config,
     register,
@@ -77,6 +78,7 @@ export const Profile_NotificationsScreen = () => {
                 permissionStatus === 'granted' &&
                 isConfigEnabled(config?.modes, 'push')
               }
+              disabled={isUpdating}
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
