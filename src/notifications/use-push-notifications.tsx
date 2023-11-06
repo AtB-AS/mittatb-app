@@ -1,64 +1,66 @@
-import {
-  Notifications,
-  Registered,
-  RegistrationError,
-} from 'react-native-notifications';
-import {useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {useRegister} from '@atb/notifications/use-register';
 import {useConfig} from '@atb/notifications/use-config';
-import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {PermissionsAndroid, Platform} from 'react-native';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
+
+type PermissionStatus = 'granted' | 'denied' | 'undetermined';
 
 export const usePushNotifications = () => {
-  const [isPermissionAccepted, setIsPermissionAccepted] = useState<boolean>();
-  const [token, setToken] = useState<string>();
+  const [permissionStatus, setPermissionStatus] =
+    useState<PermissionStatus>('undetermined');
+  const [isLoadingPermissionStatus, setIsLoadingPermissionStatus] =
+    useState<boolean>();
   const [isError, setIsError] = useState(false);
-  const isFocusedAndActive = useIsFocusedAndActive();
   const {mutation: registerMutation} = useRegister();
   const {query: configQuery} = useConfig();
   const {mutation: configMutation} = useConfig();
 
-  useEffect(() => {
-    // Check if the user has granted permission to use push notifications on os level
-    // "Resubscribe" to this callback when isFocusedAndActive has changed in order to refresh
-    // isPermissionAccepted if the user has enabled/disabled push in Settings and then returns to the app.
-    if (isFocusedAndActive) {
-      Notifications.isRegisteredForRemoteNotifications().then(
-        (isRegistered) => {
-          setIsPermissionAccepted(isRegistered);
-        },
-      );
-    }
-  }, [Notifications, isFocusedAndActive]);
-
-  useEffect(() => {
-    if (token) {
-      registerMutation.mutate(token);
-    }
-  }, [token]);
-
-  const register = () => {
-    try {
-      Notifications.registerRemoteNotifications();
-      Notifications.events().registerRemoteNotificationsRegistered(
-        (event: Registered) => {
-          setToken(event.deviceToken);
-        },
-      );
-      Notifications.events().registerRemoteNotificationsRegistrationFailed(
-        (event: RegistrationError) => {
-          console.error(
-            `${event.code} ${event.domain} ${event.localizedDescription}`,
-          );
+  const checkPermissions = useCallback(() => {
+    setIsLoadingPermissionStatus(true);
+    if (Platform.OS === 'ios') {
+      messaging()
+        .hasPermission()
+        .then((status) => setPermissionStatus(mapIosPermissionStatus(status)))
+        .catch((e) => {
           setIsError(true);
-        },
-      );
-      Notifications.events().registerRemoteNotificationsRegistrationDenied(() =>
-        setIsPermissionAccepted(false),
-      );
-    } catch (e) {
-      console.error(e);
+          console.error(e);
+        })
+        .finally(() => setIsLoadingPermissionStatus(false));
+    } else if (Platform.OS === 'android') {
+      PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      )
+        .then((hasPermission) => {
+          //Request Android permission (For API level 33+, for 32 or below is not required)
+          setPermissionStatus(
+            hasPermission || Number(Platform.Version) < 33
+              ? 'granted'
+              : 'denied',
+          );
+        })
+        .catch((e) => {
+          setIsError(true);
+          console.error(e);
+        })
+        .finally(() => setIsLoadingPermissionStatus(false));
+    } else {
+      setIsLoadingPermissionStatus(false);
       setIsError(true);
     }
+  }, []);
+
+  const register = async () => {
+    const permissionStatus = await requestUserPermission();
+    setPermissionStatus(permissionStatus);
+    const token = await messaging().getToken();
+    if (!token) {
+      setIsError(true);
+      return;
+    }
+    registerMutation.mutate(token);
   };
 
   return {
@@ -67,29 +69,59 @@ export const usePushNotifications = () => {
       registerMutation.isError ||
       configQuery.isError ||
       configMutation.isError,
-    isLoading:
-      registerMutation.isLoading ||
-      configQuery.isInitialLoading ||
-      configMutation.isLoading,
-    isPermissionAccepted,
+    isLoading: isLoadingPermissionStatus || configQuery.isInitialLoading,
+    isUpdating: registerMutation.isLoading || configMutation.isLoading,
+    permissionStatus,
     config: configQuery.data,
     updateConfig: configMutation.mutate,
+    checkPermissions,
     register,
   };
 };
 
-// Notifications.events().registerNotificationReceivedForeground(
-//   (notification: Notification, completion) => {
-//     console.log(
-//       `Notification received in foreground: ${notification.title} : ${notification.body}`,
-//     );
-//     completion({alert: false, sound: false, badge: false});
-//   },
-// );
-//
-// Notifications.events().registerNotificationOpened(
-//   (notification: Notification, completion) => {
-//     console.log(`Notification opened: ${notification.payload}`);
-//     completion();
-//   },
-// );
+async function requestUserPermission(): Promise<PermissionStatus> {
+  if (Platform.OS === 'ios') {
+    const authStatus = await messaging().requestPermission();
+    return mapIosPermissionStatus(authStatus);
+  } else if (Platform.OS === 'android') {
+    const permissionStatus = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
+    //Request Android permission (For API level 33+, for 32 or below is not required)
+    return Platform.Version < 33
+      ? 'granted'
+      : mapAndroidPermissionStatus(permissionStatus);
+  }
+  return 'undetermined';
+}
+
+function mapIosPermissionStatus(
+  authStatus: FirebaseMessagingTypes.AuthorizationStatus,
+) {
+  switch (authStatus) {
+    case messaging.AuthorizationStatus.AUTHORIZED:
+    case messaging.AuthorizationStatus.PROVISIONAL:
+    case messaging.AuthorizationStatus.EPHEMERAL:
+      return 'granted';
+    case messaging.AuthorizationStatus.DENIED:
+      return 'denied';
+    case messaging.AuthorizationStatus.NOT_DETERMINED:
+      return 'undetermined';
+    default:
+      return 'undetermined';
+  }
+}
+
+function mapAndroidPermissionStatus(
+  permissionStatus: 'granted' | 'denied' | 'never_ask_again',
+) {
+  switch (permissionStatus) {
+    case 'granted':
+      return 'granted';
+    case 'denied':
+    case 'never_ask_again':
+      return 'denied';
+    default:
+      return 'undetermined';
+  }
+}

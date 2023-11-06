@@ -16,7 +16,7 @@ export const registerForPushNotifications = (token: string) =>
         app_id: getApplicationName(),
         app_version: getVersion(),
         platform: Platform.OS,
-        platform_version: Platform.Version,
+        platform_version: String(Platform.Version),
         language: 'no',
         token,
       },
