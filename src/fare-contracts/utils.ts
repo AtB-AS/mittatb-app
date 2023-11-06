@@ -27,6 +27,7 @@ export type ValidityStatus =
   | 'reserving'
   | 'unknown'
   | 'refunded'
+  | 'cancelled'
   | 'inactive'
   | 'rejected'
   | 'approved';
@@ -58,6 +59,7 @@ export function getValidityStatus(
   state: FareContractState,
 ): ValidityStatus {
   if (state === FareContractState.Refunded) return 'refunded';
+  if (state === FareContractState.Cancelled) return 'cancelled';
   return getRelativeValidity(now, validFrom, validTo);
 }
 

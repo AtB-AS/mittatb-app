@@ -62,6 +62,7 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'expired':
     case 'inactive':
     case 'rejected':
+    case 'cancelled':
       return (
         <View style={styles.container}>
           <SectionSeparator />
