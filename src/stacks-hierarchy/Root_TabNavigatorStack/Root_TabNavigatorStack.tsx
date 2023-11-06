@@ -40,7 +40,11 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const {onboarded, notificationPermissionOnboarded} = useAppState();
+  const {
+    onboarded,
+    notificationPermissionOnboarded,
+    locationWhenInUsePermissionOnboarded,
+  } = useAppState();
 
   const pushNotificationsEnabled = usePushNotificationsEnabled();
 
@@ -51,17 +55,25 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
-    } else if (!notificationPermissionOnboarded && pushNotificationsEnabled) {
-      // todo: also require !hasGrantedNotificationPermission
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_NotificationPermissionScreen'),
-      );
+    } else {
+      if (!notificationPermissionOnboarded && pushNotificationsEnabled) {
+        // todo: also require !hasGrantedNotificationPermission
+        InteractionManager.runAfterInteractions(() =>
+          navigation.navigate('Root_NotificationPermissionScreen'),
+        );
+      } else if (!locationWhenInUsePermissionOnboarded) {
+        // todo: also require !hasGrantedLocationWhenInUsePermission
+        InteractionManager.runAfterInteractions(() =>
+          navigation.navigate('Root_LocationWhenInUsePermissionScreen'),
+        );
+      }
     }
   }, [
     onboarded,
     navigation,
     notificationPermissionOnboarded,
     pushNotificationsEnabled,
+    locationWhenInUsePermissionOnboarded,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {

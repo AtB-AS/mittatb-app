@@ -15,7 +15,7 @@ enum storeKey {
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
   notificationPermissionOnboarding = '@ATB_notification_permission_onboarded',
-  locationWhenInUsePermissionOnboarding = '@ATB_location_when_in_use_permission_onboarded',
+  locationWhenInUsePermissionOnboarded = '@ATB_location_when_in_use_permission_onboarded',
 }
 type AppState = {
   isLoading: boolean;
@@ -23,7 +23,7 @@ type AppState = {
   mobileTokenOnboarded: boolean;
   mobileTokenWithoutTravelcardOnboarded: boolean;
   notificationPermissionOnboarded: boolean;
-  locationWhenInUsePermissionOnboarding: boolean;
+  locationWhenInUsePermissionOnboarded: boolean;
 };
 
 type AppReducerAction =
@@ -33,7 +33,7 @@ type AppReducerAction =
       mobileTokenOnboarded: boolean;
       mobileTokenWithoutTravelcardOnboarded: boolean;
       notificationPermissionOnboarded: boolean;
-      locationWhenInUsePermissionOnboarding: boolean;
+      locationWhenInUsePermissionOnboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
@@ -73,7 +73,7 @@ const appReducer: AppReducer = (prevState, action) => {
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
         notificationPermissionOnboarded,
-        locationWhenInUsePermissionOnboarding,
+        locationWhenInUsePermissionOnboarded,
       } = action;
       return {
         ...prevState,
@@ -82,7 +82,7 @@ const appReducer: AppReducer = (prevState, action) => {
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
         notificationPermissionOnboarded,
-        locationWhenInUsePermissionOnboarding,
+        locationWhenInUsePermissionOnboarded,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -130,13 +130,13 @@ const appReducer: AppReducer = (prevState, action) => {
     case 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING':
       return {
         ...prevState,
-        locationWhenInUsePermissionOnboarding: true,
+        locationWhenInUsePermissionOnboarded: true,
       };
 
     case 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING':
       return {
         ...prevState,
-        locationWhenInUsePermissionOnboarding: false,
+        locationWhenInUsePermissionOnboarded: false,
       };
   }
 };
@@ -147,7 +147,7 @@ const defaultAppState: AppState = {
   mobileTokenOnboarded: false,
   mobileTokenWithoutTravelcardOnboarded: false,
   notificationPermissionOnboarded: false,
-  locationWhenInUsePermissionOnboarding: false,
+  locationWhenInUsePermissionOnboarded: false,
 };
 
 export const AppContextProvider: React.FC = ({children}) => {
@@ -183,9 +183,9 @@ export const AppContextProvider: React.FC = ({children}) => {
           : JSON.parse(savedNotificationPermissionOnboarded);
 
       const savedLocationWhenInUsePermissionOnboarded = await storage.get(
-        storeKey.locationWhenInUsePermissionOnboarding,
+        storeKey.locationWhenInUsePermissionOnboarded,
       );
-      const locationWhenInUsePermissionOnboarding =
+      const locationWhenInUsePermissionOnboarded =
         !savedLocationWhenInUsePermissionOnboarded
           ? false
           : JSON.parse(savedLocationWhenInUsePermissionOnboarded);
@@ -200,7 +200,7 @@ export const AppContextProvider: React.FC = ({children}) => {
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
         notificationPermissionOnboarded,
-        locationWhenInUsePermissionOnboarding,
+        locationWhenInUsePermissionOnboarded,
       });
 
       RNBootSplash.hide({fade: true});
@@ -273,14 +273,14 @@ export const AppContextProvider: React.FC = ({children}) => {
 
       completeLocationWhenInUsePermissionOnboarding: async () => {
         await storage.set(
-          storeKey.locationWhenInUsePermissionOnboarding,
+          storeKey.locationWhenInUsePermissionOnboarded,
           JSON.stringify(true),
         );
         dispatch({type: 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'});
       },
       restartLocationWhenInUsePermissionOnboarding: async () => {
         await storage.set(
-          storeKey.locationWhenInUsePermissionOnboarding,
+          storeKey.locationWhenInUsePermissionOnboarded,
           JSON.stringify(false),
         );
         dispatch({type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'});

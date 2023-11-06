@@ -56,6 +56,7 @@ import {
   Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
+import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeacons} from '@atb/beacons/use-beacons';
 
 type ResultState = PartialState<NavigationState> & {
@@ -392,6 +393,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_NotificationPermissionScreen"
                   component={Root_NotificationPermissionScreen}
+                />
+                <Stack.Screen
+                  name="Root_LocationWhenInUsePermissionScreen"
+                  component={Root_LocationWhenInUsePermissionScreen}
                 />
               </Stack.Group>
             </Stack.Navigator>

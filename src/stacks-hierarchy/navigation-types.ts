@@ -146,6 +146,7 @@ export type RootStackParamList = {
   Root_ParkingViolationsQr: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
   Root_NotificationPermissionScreen: undefined;
+  Root_LocationWhenInUsePermissionScreen: undefined;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

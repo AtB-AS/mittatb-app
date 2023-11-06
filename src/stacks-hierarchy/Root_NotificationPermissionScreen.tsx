@@ -1,5 +1,5 @@
 import {useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import NotificationPermissionTexts from '@atb/translations/screens/NotificationPermission';
 import {PushNotification} from '@atb/assets/svg/color/images';
@@ -14,11 +14,11 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
 
   const {completeNotificationPermissionOnboarding} = useAppState();
 
-  const handleButtonPress = () => {
+  const buttonOnPress = useCallback(() => {
     // TODO: add permission logic
     navigation.popToTop();
     completeNotificationPermissionOnboarding();
-  };
+  }, [navigation, completeNotificationPermissionOnboarding]);
 
   return (
     <OnboardingScreen
@@ -26,7 +26,7 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}
       buttonText={t(NotificationPermissionTexts.button)}
-      buttonOnPress={handleButtonPress}
+      buttonOnPress={buttonOnPress}
     />
   );
 };

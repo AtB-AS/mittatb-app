@@ -12,7 +12,7 @@ const NotificationPermissionTexts = {
     'Du kan tillate appen å sende deg varsel for å bli informert før billettane dine går ut.',
   ),
 
-  button: _('Velg tillatelser', 'Select permissions', 'Vel løyve'),
+  button: _('Velg tillatelser', 'Choose permissions', 'Vel løyve'),
 };
 
 export default NotificationPermissionTexts;
