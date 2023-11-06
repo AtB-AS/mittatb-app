@@ -14,7 +14,7 @@ import {
   checkAndRequestPermission,
 } from '@atb/utils/permissions';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
-import {PermissionScreen} from '@atb/permission-screen';
+import {OnboardingScreen} from '@atb/onboarding-screen';
 
 export type SearchStopPlaceProps =
   RootStackScreenProps<'Root_ShareTravelHabitsScreen'>;
@@ -49,7 +49,7 @@ export const Root_ShareTravelHabitsScreen = ({
   };
 
   return (
-    <PermissionScreen
+    <OnboardingScreen
       illustration={<Beacons height={132} />}
       title={t(ShareTravelHabitsTexts.title)}
       description={

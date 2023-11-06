@@ -5,7 +5,7 @@ import NotificationPermissionTexts from '@atb/translations/screens/NotificationP
 import {PushNotification} from '@atb/assets/svg/color/images';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useAppState} from '@atb/AppContext';
-import {PermissionScreen} from '@atb/permission-screen';
+import {OnboardingScreen} from '@atb/onboarding-screen';
 
 type Props = RootStackScreenProps<'Root_NotificationPermissionScreen'>;
 
@@ -21,7 +21,7 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
   };
 
   return (
-    <PermissionScreen
+    <OnboardingScreen
       illustration={<PushNotification height={220} />}
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}

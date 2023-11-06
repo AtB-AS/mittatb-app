@@ -14,7 +14,7 @@ type DescriptionLink = {
   onPress: () => void;
 };
 
-export type PermissionScreenParams = {
+export type OnboardingScreenParams = {
   illustration: JSX.Element;
   title: string;
   description: string;
@@ -24,7 +24,7 @@ export type PermissionScreenParams = {
   buttonOnPress: () => void;
 };
 
-export const PermissionScreen = ({
+export const OnboardingScreen = ({
   illustration,
   title,
   description,
@@ -32,7 +32,7 @@ export const PermissionScreen = ({
   footerDescription,
   buttonText,
   buttonOnPress,
-}: PermissionScreenParams) => {
+}: OnboardingScreenParams) => {
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad(true, 200);
 
