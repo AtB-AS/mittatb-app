@@ -40,7 +40,8 @@ export const getVehicles = (
     scooterOperators,
   }: GetVehiclesQueryVariables,
   opts?: VehicleRequestOpts,
-) => {
+): Promise<GetVehiclesQuery> => {
+  if (!includeBicycles && !includeScooters) return Promise.resolve({});
   const url = '/bff/v2/mobility/vehicles_v2';
   const query = qs.stringify({
     lat,
@@ -80,7 +81,8 @@ export const getStations = (
     carOperators,
   }: GetStationsQueryVariables,
   opts?: AxiosRequestConfig,
-) => {
+): Promise<GetStationsQuery> => {
+  if (!includeBicycles && !includeCars) return Promise.resolve({});
   const url = '/bff/v2/mobility/stations_v2';
   const query = qs.stringify({
     lat,
