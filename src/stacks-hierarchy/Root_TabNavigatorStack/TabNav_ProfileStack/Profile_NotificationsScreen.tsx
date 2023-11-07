@@ -82,27 +82,30 @@ export const Profile_NotificationsScreen = () => {
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
-          {!isLoading && !isError && permissionStatus === 'denied' && (
-            <MessageBox
-              style={style.messageBox}
-              type="info"
-              title={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionRequired.title,
-              )}
-              message={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionRequired.message,
-              )}
-              onPressConfig={{
-                text: t(
+          {!isLoading &&
+            !isError &&
+            isConfigEnabled(config?.modes, 'push') &&
+            permissionStatus === 'denied' && (
+              <MessageBox
+                style={style.messageBox}
+                type="info"
+                title={t(
                   ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .permissionRequired.action,
-                ),
-                action: () => Linking.openSettings(),
-              }}
-            />
-          )}
+                    .permissionRequired.title,
+                )}
+                message={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .permissionRequired.message,
+                )}
+                onPressConfig={{
+                  text: t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.permissionRequired.action,
+                  ),
+                  action: () => Linking.openSettings(),
+                }}
+              />
+            )}
           {!isLoading && isError && (
             <MessageBox
               style={style.messageBox}
