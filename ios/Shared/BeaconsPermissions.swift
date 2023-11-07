@@ -238,33 +238,27 @@ class BeaconsPermissions: NSObject {
 
   @objc func request(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     bluetoothPermission = BluetoothPermission()
-    whenInUsePermission = WhenInUsePermission(mandatory: false)
-    alwaysPermission = AlwaysUsePermission(mandatory: false)
-    motionPermission = MotionPermission(mandatory: false)
+    whenInUsePermission = WhenInUsePermission()
+    alwaysPermission = AlwaysUsePermission()
+    motionPermission = MotionPermission()
 
     bluetoothPermission?.request { [weak self] bluetoothPermissionGranted in
       if bluetoothPermissionGranted {
-        // NOTE: If the user already denied the location before, then do not continue asking for more permissions.
-        if CLLocationManager.authorizationStatus() == .denied || CLLocationManager.authorizationStatus() == .restricted {
-          resolve(true)
-          self?.releasePermissionObjects()
-        }
-
         self?.whenInUsePermission?.request { [weak self] whenInUsePermissionGranted in
           if whenInUsePermissionGranted {
             self?.alwaysPermission?.request { [weak self] alwaysPermissionGranted in
               if alwaysPermissionGranted {
-                self?.motionPermission?.request { [weak self] motionPermissionGranted in
-                  resolve(motionPermissionGranted)
+                self?.motionPermission?.request { [weak self] _ in
+                  resolve(true)
                   self?.releasePermissionObjects()
                 }
               } else {
-                resolve(false)
+                resolve(true)
                 self?.releasePermissionObjects()
               }
             }
           } else {
-            resolve(false)
+            resolve(true)
             self?.releasePermissionObjects()
           }
         }
