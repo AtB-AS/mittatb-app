@@ -94,7 +94,7 @@ const ProfileTexts = {
             subText: _(
               'Tillat at AtB sender varslinger til denne telefonen.',
               'Allow AtB to send notifications to this phone.',
-              'Tillat at AtB sender varslingar til denne telefonen.',
+              'Gi AtB løyve til å sende varslingar til denne telefonen.',
             ),
           },
           permissionRequired: {
