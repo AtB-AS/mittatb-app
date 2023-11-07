@@ -127,19 +127,16 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       includeJourneyHistory: true,
     });
 
-  const setCurrentLocationOrRequest = useCallback(
-    async function setCurrentLocationOrRequest() {
-      if (currentLocation) {
+  const setCurrentLocationOrRequest = useCallback(async () => {
+    if (currentLocation) {
+      setCurrentLocationAsFrom();
+    } else {
+      const status = await requestLocationPermission();
+      if (status === 'granted') {
         setCurrentLocationAsFrom();
-      } else {
-        const status = await requestLocationPermission();
-        if (status === 'granted') {
-          setCurrentLocationAsFrom();
-        }
       }
-    },
-    [currentLocation, setCurrentLocationAsFrom, requestLocationPermission],
-  );
+    }
+  }, [currentLocation, setCurrentLocationAsFrom, requestLocationPermission]);
 
   function swap() {
     log('swap', {
