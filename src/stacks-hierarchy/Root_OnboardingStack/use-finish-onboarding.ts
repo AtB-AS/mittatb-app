@@ -4,10 +4,10 @@ import {useCallback} from 'react';
 
 export const useFinishOnboarding = () => {
   const {completeOnboarding} = useAppState();
-  const {status, requestPermission} = useGeolocationState();
+  const {status, requestLocationPermission} = useGeolocationState();
 
   return useCallback(async () => {
     completeOnboarding();
-    if (status !== 'granted') await requestPermission();
-  }, [completeOnboarding, requestPermission]);
+    if (status !== 'granted') await requestLocationPermission();
+  }, [completeOnboarding, requestLocationPermission]);
 };

@@ -58,11 +58,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
 
-  const {
-    locationIsAvailable,
-    location,
-    requestPermission: requestLocationPermission,
-  } = useGeolocationState();
+  const {locationIsAvailable, location, requestLocationPermission} =
+    useGeolocationState();
 
   const currentLocation = location || undefined;
 

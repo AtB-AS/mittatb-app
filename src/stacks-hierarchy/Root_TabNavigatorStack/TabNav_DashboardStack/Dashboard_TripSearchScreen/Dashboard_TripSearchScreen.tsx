@@ -73,8 +73,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const analytics = useAnalytics();
   const isFocused = useIsFocusedAndActive();
 
-  const {location, requestPermission: requestLocationPermission} =
-    useGeolocationState();
+  const {location, requestLocationPermission} = useGeolocationState();
 
   const currentLocation = location || undefined;
 
