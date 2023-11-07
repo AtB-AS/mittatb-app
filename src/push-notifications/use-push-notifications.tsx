@@ -19,8 +19,7 @@ export const usePushNotifications = () => {
     useState<boolean>();
   const [isError, setIsError] = useState(false);
   const {mutation: registerMutation} = useRegister();
-  const {query: configQuery} = useConfig();
-  const {mutation: configMutation} = useConfig();
+  const {query: configQuery, mutation: configMutation} = useConfig();
 
   const checkPermissions = useCallback(() => {
     setIsLoadingPermissionStatus(true);
