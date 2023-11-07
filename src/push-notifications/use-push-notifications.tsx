@@ -39,7 +39,8 @@ export const usePushNotifications = () => {
         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
       )
         .then((hasPermission) => {
-          // Check permission for API level 33+. Not required for 32 or below.
+          // On SDK versions < 33 permission is not required, yet check() will return 'false' for those devices.
+          // However, getToken() will yield a device token for sdk < 33 even if check() returns 'false'.
           setPermissionStatus(
             hasPermission || platformVersion < 33 ? 'granted' : 'denied',
           );
