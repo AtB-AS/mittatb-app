@@ -34,15 +34,14 @@ export const usePushNotifications = () => {
         })
         .finally(() => setIsLoadingPermissionStatus(false));
     } else if (Platform.OS === 'android') {
+      const platformVersion = Platform.Version; // Extracted outside promise to make typescript understand it's a number since Platform === 'android'
       PermissionsAndroid.check(
         PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
       )
         .then((hasPermission) => {
-          //Request Android permission (For API level 33+, for 32 or below is not required)
+          // Check permission for API level 33+. Not required for 32 or below.
           setPermissionStatus(
-            hasPermission || Number(Platform.Version) < 33
-              ? 'granted'
-              : 'denied',
+            hasPermission || platformVersion < 33 ? 'granted' : 'denied',
           );
         })
         .catch((e) => {
@@ -54,7 +53,7 @@ export const usePushNotifications = () => {
       setIsLoadingPermissionStatus(false);
       setIsError(true);
     }
-  }, []);
+  }, [Platform, messaging, PermissionsAndroid]);
 
   const register = async () => {
     const permissionStatus = await requestUserPermission();
@@ -91,7 +90,7 @@ async function requestUserPermission(): Promise<PermissionStatus> {
     const permissionStatus = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
     );
-    //Request Android permission (For API level 33+, for 32 or below is not required)
+    // Request permission for API level 33+. Not required for 32 or below.
     return Platform.Version < 33
       ? 'granted'
       : mapAndroidPermissionStatus(permissionStatus);
