@@ -43,10 +43,9 @@ export const NearbyStopPlacesScreenComponent = ({
   const {
     locationIsAvailable,
     location: geolocation,
-    requestPermission,
+    requestLocationPermission,
   } = useGeolocationState();
 
-  const requestGeoPermission = requestPermission;
   const currentLocation = geolocation || undefined;
 
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
@@ -103,7 +102,7 @@ export const NearbyStopPlacesScreenComponent = ({
     if (currentLocation) {
       setCurrentLocationAsFrom();
     } else {
-      const status = await requestGeoPermission();
+      const status = await requestLocationPermission();
       if (status === 'granted') {
         setCurrentLocationAsFrom();
       }

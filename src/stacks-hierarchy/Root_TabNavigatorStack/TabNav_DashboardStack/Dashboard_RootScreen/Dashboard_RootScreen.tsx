@@ -61,7 +61,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const {
     locationIsAvailable,
     location,
-    requestPermission: requestGeoPermission,
+    requestPermission: requestLocationPermission,
   } = useGeolocationState();
 
   const currentLocation = location || undefined;
@@ -135,13 +135,13 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       if (currentLocation) {
         setCurrentLocationAsFrom();
       } else {
-        const status = await requestGeoPermission();
+        const status = await requestLocationPermission();
         if (status === 'granted') {
           setCurrentLocationAsFrom();
         }
       }
     },
-    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
+    [currentLocation, setCurrentLocationAsFrom, requestLocationPermission],
   );
 
   function swap() {

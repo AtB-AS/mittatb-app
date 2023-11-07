@@ -6,6 +6,7 @@ import {MyLocation} from '@atb/assets/svg/color/images';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useAppState} from '@atb/AppContext';
 import {OnboardingScreen} from '@atb/onboarding-screen';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
 type Props = RootStackScreenProps<'Root_LocationWhenInUsePermissionScreen'>;
 
@@ -13,9 +14,10 @@ export const Root_LocationWhenInUsePermissionScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
 
   const {completeLocationWhenInUsePermissionOnboarding} = useAppState();
+  const {requestLocationPermission} = useGeolocationState();
 
-  const buttonOnPress = useCallback(() => {
-    // TODO: add permission logic
+  const buttonOnPress = useCallback(async () => {
+    await requestLocationPermission();
     navigation.popToTop();
     completeLocationWhenInUsePermissionOnboarding();
   }, [navigation, completeLocationWhenInUsePermissionOnboarding]);

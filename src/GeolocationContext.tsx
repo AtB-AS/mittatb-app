@@ -103,11 +103,10 @@ const mapPositionToGeoLocation = (
       }
     : null;
 
-export type PermissionOpts = {useSettingsFallback: boolean};
-export type RequestPermissionFn = () => Promise<PermissionStatus | undefined>;
+type RequestLocationPermissionFn = () => Promise<PermissionStatus | undefined>;
 
 type GeolocationContextState = GeolocationState & {
-  requestPermission: RequestPermissionFn;
+  requestLocationPermission: RequestLocationPermissionFn;
 };
 
 const GeolocationContext = createContext<GeolocationContextState | undefined>(
@@ -133,7 +132,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
   const locationRef = useRef<GeoLocation | null>();
 
-  async function requestPermission() {
+  const requestLocationPermission = useCallback(async () => {
     if (!(await isLocationEnabled())) {
       Alert.alert(
         t(GeoLocationTexts.blockedLocation.title),
@@ -144,7 +143,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
       dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
       return status;
     }
-  }
+  }, [requestGeolocationPermission, t]);
 
   async function requestGeolocationPermission(): Promise<PermissionStatus> {
     if (Platform.OS === 'ios') {
@@ -271,7 +270,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
       value={{
         ...state,
         locationIsAvailable,
-        requestPermission,
+        requestLocationPermission,
         getCurrentPosition,
       }}
     >

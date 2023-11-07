@@ -73,7 +73,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const analytics = useAnalytics();
   const isFocused = useIsFocusedAndActive();
 
-  const {location, requestPermission: requestGeoPermission} =
+  const {location, requestPermission: requestLocationPermission} =
     useGeolocationState();
 
   const currentLocation = location || undefined;
@@ -158,13 +158,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       if (currentLocation) {
         setCurrentLocationAsFrom();
       } else {
-        const status = await requestGeoPermission();
+        const status = await requestLocationPermission();
         if (status === 'granted') {
           setCurrentLocationAsFrom();
         }
       }
     },
-    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
+    [currentLocation, setCurrentLocationAsFrom, requestLocationPermission],
   );
 
   const onPressed = useCallback(
@@ -426,9 +426,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               />
             </View>
           )}
-          {!tripPatterns.length && (
-            <View style={style.emptyResultsSpacer} />
-          )}
+          {!tripPatterns.length && <View style={style.emptyResultsSpacer} />}
           {!error && isValidLocations && (
             <PressableOpacity
               onPress={loadMore}

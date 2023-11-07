@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {initViolationsReporting} from '@atb/api/mobility';
 import {
@@ -28,10 +28,8 @@ export const useParkingViolations = () => {
   const {
     getCurrentPosition,
     status: locationPermissionStatus,
-    requestPermission,
+    requestLocationPermission,
   } = useGeolocationState();
-
-  const requestLocationPermission = useCallback(requestPermission, []);
 
   useEffect(() => {
     if (locationPermissionStatus !== 'granted') {
