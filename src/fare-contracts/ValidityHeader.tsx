@@ -90,6 +90,8 @@ function validityTimeText(
   switch (status) {
     case 'refunded':
       return t(FareContractTexts.validityHeader.refunded);
+    case 'cancelled':
+      return t(FareContractTexts.validityHeader.cancelled);
     case 'upcoming': {
       const secondsUntilValid = (validFrom - now) / 1000;
       const durationText = toDurationText(secondsUntilValid);

@@ -27,10 +27,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.6.0.tgz#f57996270093113f722235a676a83bbcd916623f"
-  integrity sha512-JsJX9/du4HiYI6TJJFCkUesgJ7R0vLkkzhQeHG7SeW7y2qvHk7uAo/PybpP9GwuQzUGQ7+H1a5HHRbuN8xJq/w==
+"@atb-as/config-specs@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.7.0.tgz#ae3ca851b88b2ad960a16857774de27edb3bafd6"
+  integrity sha512-s3D5OlvKyhrMcDUpKaQjaeafMxQiOtQNWbXqE5HEXdQ84x8jisRYXc8UHWrEdrBxAiVe/TOFd1CZ6nMM5m+6XQ==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -40,10 +40,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-9.1.0.tgz#d8122caa8c9360459725b8e01ca26b85e20712a3"
-  integrity sha512-AVu8U7h4RxMolQzGHaROI6LYooC3ex3TbOS54hrmwS05JQ0VeUt6ImXMbCqiGM7Os1J53R1HSv2XjtnifGts9A==
+"@atb-as/generate-assets@^9.4.0":
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-9.4.0.tgz#1fd814b5cbf76c94702087a8cc4f40107cc15ea0"
+  integrity sha512-NA8aizwk2+tw33+E1EtTBi3fQM7iC08uI75o1T/PdFWBQ4sMSmHXC4r9T7ZBYFAgYX96dqh4DbRnpYL22ONqbA==
   dependencies:
     "@atb-as/theme" "^7.1.1"
     commander "^9.4.0"
@@ -10389,7 +10389,7 @@ json-schema-traverse@^0.4.1:
 
 json-schema-traverse@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz#ae7bcb3656ab77a73ba5c49bf654f38e6b6860e2"
   integrity sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==
 
 json-stable-stringify-without-jsonify@^1.0.1:
@@ -13068,6 +13068,11 @@ react-native-intercom@21.1.1:
   resolved "https://registry.npmjs.org/react-native-intercom/-/react-native-intercom-21.1.1.tgz"
   integrity sha512-Cj7GoPIBeTKydLfA2123NZ6x49xueNmlX9LsAbYvv2CmEEyXDEI0rGuweqzumnJUp9tntrFr4piOZkrhhg6CYA==
 
+react-native-kettle-module@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.1.0.tgz#a3805f3d009c0416daf2a34d6e9fd2985f4082b3"
+  integrity sha512-wnxXV5rpYYevgga1KC8tYVdIlkiFhjI7pyBh1ShekjLTGkW7QWUMXsPE1o6X2AWM2FhfXEQ+3lixcXc4qWE0dg==
+
 react-native-linear-gradient@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz#56598a76832724b2afa7889747635b5c80948f38"
@@ -13083,10 +13088,10 @@ react-native-pager-view@^6.1.2:
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.1.2.tgz#3522079b9a9d6634ca5e8d153bc0b4d660254552"
   integrity sha512-qs2KSFc+7N7B+UZ6SG2sTvCkppagm5fVyRclv1KFKc7lDtrhXLzN59tXJw575LDP/dRJoXsNwqUAhZJdws6ABQ==
 
-react-native-permissions@^3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.6.1.tgz#73adcc1cef8cd57a9ef167b4507405f4ff5749c4"
-  integrity sha512-fzPpPQXeD34inUccqtoResSwYubfrwUguP4qrVUUv8+KSMjYSaHGoS5HaIJLZHlN9gO+TvLJZ2L5ZljTsb6qnQ==
+react-native-permissions@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.10.0.tgz#946fa7e07908ed90620b3f07eb652f20f482196d"
+  integrity sha512-6SB6JInfC0u54Wco8M1QsRoOGThnVjrhaks5IDWyYgwfi6JpXfTIi+F9fZZmRycyyPCgU8vGtht/5gF4VWEB/A==
 
 react-native-portalize@^1.0.7:
   version "1.0.7"
@@ -13554,7 +13559,7 @@ require-directory@^2.1.1:
 
 require-from-string@^2.0.2:
   version "2.0.2"
-  resolved "https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/require-from-string/-/require-from-string-2.0.2.tgz#89a7fdd938261267318eafe14f9c32e598c36909"
   integrity sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==
 
 require-main-filename@^2.0.0:
@@ -15762,6 +15767,6 @@ zod-to-json-schema@^3.20.4:
   integrity sha512-fjUZh4nQ1s6HMccgIeE0VP4QG/YRGPmyjO9sAh890aQKPEk3nqbfUXhMFaC+Dr5KvYBm8BCyvfpZf2jY9aGSsw==
 
 zod@^3.21.4:
-  version "3.22.2"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.2.tgz#3add8c682b7077c05ac6f979fea6998b573e157b"
-  integrity sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==
+  version "3.22.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
+  integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==

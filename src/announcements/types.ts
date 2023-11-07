@@ -1,8 +1,10 @@
 import {LanguageAndTextType} from '@atb/configuration';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 
+export type AnnouncementId = string;
+
 export type AnnouncementRaw = {
-  id: string;
+  id: AnnouncementId;
   active: boolean;
   summaryTitle?: LanguageAndTextType[];
   summary: LanguageAndTextType[];

@@ -24,6 +24,7 @@ import type {NavigationState, PartialState} from '@react-navigation/routers';
 import {Root_MobileTokenOnboardingStack} from './Root_MobileTokenOnboarding';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
+import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
 import {Root_LocationSearchByMapScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByMapScreen';
 import {Root_LocationSearchByTextScreen} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreen} from './Root_PurchaseOverviewScreen';
@@ -54,6 +55,8 @@ import {
   Root_ParkingViolationsSelect,
   Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
+import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
+import {useBeacons} from '@atb/beacons/use-beacons';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -67,6 +70,7 @@ export const RootStack = () => {
   const navRef = useNavigationContainerRef<RootStackParamList>();
   useFlipper(navRef);
 
+  useBeacons();
   useTestIds();
 
   if (isLoading) {
@@ -322,6 +326,10 @@ export const RootStack = () => {
                   component={Root_SearchStopPlaceScreen}
                 />
                 <Stack.Screen
+                  name="Root_ShareTravelHabitsScreen"
+                  component={Root_ShareTravelHabitsScreen}
+                />
+                <Stack.Screen
                   name="Root_TicketAssistantStack"
                   component={Root_TicketAssistantStack}
                   options={{
@@ -380,6 +388,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_ParkingViolationsConfirmation"
                   component={Root_ParkingViolationsConfirmation}
+                />
+                <Stack.Screen
+                  name="Root_NotificationPermissionScreen"
+                  component={Root_NotificationPermissionScreen}
                 />
               </Stack.Group>
             </Stack.Navigator>

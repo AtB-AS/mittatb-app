@@ -10,6 +10,7 @@ import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 type BaseProps = {
   favorite: StoredFavoriteDeparture;
@@ -31,11 +32,15 @@ export function FavoriteDepartureSectionItem(props: Props) {
     return <FavoriteItemContent {...props} />;
   }
   const favorite = props.favorite;
+  const favoriteLineName = formatDestinationDisplay(
+    t,
+    favorite.destinationDisplay,
+  );
   const a11yLabel = favorite.quayPublicCode
     ? `${favorite.lineLineNumber} ${
-        favorite.lineName ?? t(SectionTexts.favoriteDeparture.allVariations)
+        favoriteLineName ?? t(SectionTexts.favoriteDeparture.allVariations)
       }, ${favorite.quayName} ${favorite.quayPublicCode}`
-    : `${favorite.lineLineNumber} ${favorite.lineName}, ${favorite.quayName}`;
+    : `${favorite.lineLineNumber} ${favoriteLineName}, ${favorite.quayName}`;
 
   return (
     <PressableOpacity
@@ -61,7 +66,6 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
-
   return (
     <View style={[sectionStyle.spaceBetween, topContainer, styles.flexStart]}>
       <TransportationIconBox
@@ -72,7 +76,8 @@ function FavoriteItemContent({favorite, icon, ...props}: BaseProps) {
       <View style={contentContainer}>
         <ThemeText>
           {favorite.lineLineNumber}{' '}
-          {favorite.lineName ?? t(SectionTexts.favoriteDeparture.allVariations)}
+          {formatDestinationDisplay(t, favorite.destinationDisplay) ??
+            t(SectionTexts.favoriteDeparture.allVariations)}
         </ThemeText>
         <ThemeText type="body__secondary" color="secondary">
           {t(SectionTexts.favoriteDeparture.from)} {favorite.quayName}{' '}

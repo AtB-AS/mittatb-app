@@ -2,7 +2,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
@@ -46,7 +46,12 @@ import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-load
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
+import {useBeacons} from '@atb/beacons/use-beacons';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
+import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
+import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
+import {useAnnouncementsState} from '@atb/announcements';
+import {usePushNotificationsEnabledDebugOverride} from '@atb/push-notifications';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -59,7 +64,17 @@ export const Profile_DebugInfoScreen = () => {
     restartMobileTokenOnboarding,
     restartMobileTokenWithoutTravelcardOnboarding,
     restartOnboarding,
+    restartNotificationPermissionOnboarding,
   } = useAppState();
+  const {
+    onboardForBeacons,
+    startBeacons,
+    stopBeacons,
+    revokeBeacons,
+    deleteCollectedData,
+    kettleInfo,
+    isBeaconsSupported,
+  } = useBeacons();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId} = useAuthState();
   const user = auth().currentUser;
@@ -94,6 +109,9 @@ export const Profile_DebugInfoScreen = () => {
   const beaconsEnabledDebugOverride = useBeaconsEnabledDebugOverride();
   const parkingViolationsReportingEnabledDebugOverride =
     useParkingViolationsReportingEnabledDebugOverride();
+  const {resetDismissedAnnouncements} = useAnnouncementsState();
+  const pushNotificationsEnabledDebugOverride =
+    usePushNotificationsEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -173,6 +191,10 @@ export const Profile_DebugInfoScreen = () => {
             onPress={restartOnboarding}
           />
           <LinkSectionItem
+            text="Restart notification onboarding"
+            onPress={restartNotificationPermissionOnboarding}
+          />
+          <LinkSectionItem
             text="Set mobile token onboarded to false"
             onPress={restartMobileTokenOnboarding}
           />
@@ -183,6 +205,10 @@ export const Profile_DebugInfoScreen = () => {
           <LinkSectionItem
             text="Reset dismissed Global messages"
             onPress={resetDismissedGlobalMessages}
+          />
+          <LinkSectionItem
+            text="Reset dismissed Announcements"
+            onPress={resetDismissedAnnouncements}
           />
           <LinkSectionItem
             text="Copy link to customer in Firestore (staging)"
@@ -219,6 +245,16 @@ export const Profile_DebugInfoScreen = () => {
             text="Reset travel search filters"
             onPress={() =>
               storage.set('@ATB_user_travel_search_filters_v2', '')
+            }
+          />
+          <LinkSectionItem
+            text="Reset ShareTravelHabits session counter"
+            onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
+          />
+          <LinkSectionItem
+            text="Reset has seen ShareTravelHabitsScreen"
+            onPress={() =>
+              storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
             }
           />
         </Section>
@@ -328,6 +364,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable parking violations reporting"
               override={parkingViolationsReportingEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable push notifications"
+              override={pushNotificationsEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
@@ -576,6 +618,100 @@ export const Profile_DebugInfoScreen = () => {
             }
           />
         </Section>
+
+        {isBeaconsSupported && (
+          <Section withPadding withTopPadding>
+            <ExpandableSectionItem
+              text="Beacons"
+              showIconText={true}
+              expandContent={
+                <View>
+                  {kettleInfo && (
+                    <View>
+                      <ThemeText>{`Identifier: ${kettleInfo.kettleIdentifier}`}</ThemeText>
+                      <ThemeText>{`Status: ${
+                        kettleInfo.isKettleStarted ? 'Running' : 'Stopped'
+                      }`}</ThemeText>
+                      <ThemeText>{`Granted consents: ${kettleInfo.kettleConsents}`}</ThemeText>
+                    </View>
+                  )}
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      const granted = await onboardForBeacons();
+                      Alert.alert('Onboarding', `Access granted: ${granted}`);
+                    }}
+                    disabled={
+                      kettleInfo?.isBeaconsOnboarded &&
+                      !!kettleInfo?.kettleConsents
+                    }
+                    style={style.button}
+                    text="Onboard"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await startBeacons();
+                    }}
+                    style={style.button}
+                    disabled={
+                      kettleInfo?.isKettleStarted ||
+                      !kettleInfo?.isBeaconsOnboarded
+                    }
+                    text="Start"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await stopBeacons();
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isKettleStarted}
+                    text="Stop"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await revokeBeacons();
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Revoke"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      await deleteCollectedData();
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Delete Collected Data"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      kettleInfo?.privacyDashboardUrl &&
+                        Linking.openURL(kettleInfo.privacyDashboardUrl);
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Open Privacy Dashboard"
+                  />
+                  <Button
+                    interactiveColor="interactive_0"
+                    onPress={async () => {
+                      kettleInfo?.privacyTermsUrl &&
+                        Linking.openURL(kettleInfo.privacyTermsUrl);
+                    }}
+                    style={style.button}
+                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    text="Open Privacy Terms"
+                  />
+                </View>
+              }
+            />
+          </Section>
+        )}
       </ScrollView>
     </View>
   );

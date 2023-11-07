@@ -29,6 +29,7 @@ const FareContractTexts = {
     expired: (dateTime: string) =>
       _(`Utløpt ${dateTime}`, `Expired ${dateTime}`, `Utgått ${dateTime}`),
     refunded: _(`Refundert`, 'Refunded', `Refundert`),
+    cancelled: _(`Kansellert`, 'Cancelled', `Kansellert`),
     upcoming: (duration: string) =>
       _(
         `Blir gyldig om ${duration}`,

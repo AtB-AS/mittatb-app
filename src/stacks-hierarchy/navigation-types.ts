@@ -115,6 +115,7 @@ export type RootStackParamList = {
   Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;
   Root_AddEditFavoritePlaceScreen: Root_AddEditFavoritePlaceScreenParams;
   Root_SearchStopPlaceScreen: undefined;
+  Root_ShareTravelHabitsScreen: undefined;
   Root_PurchaseOverviewScreen: Root_PurchaseOverviewScreenParams;
   Root_PurchaseConfirmationScreen: Root_PurchaseConfirmationScreenParams;
   Root_PurchaseTariffZonesSearchByMapScreen: Root_PurchaseTariffZonesSearchByMapScreenParams;
@@ -143,6 +144,7 @@ export type RootStackParamList = {
   Root_ParkingViolationsPhoto: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQr: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
+  Root_NotificationPermissionScreen: undefined;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

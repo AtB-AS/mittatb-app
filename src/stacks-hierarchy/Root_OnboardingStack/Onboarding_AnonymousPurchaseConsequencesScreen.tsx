@@ -16,7 +16,6 @@ export const Onboarding_AnonymousPurchaseConsequencesScreen = ({
   return (
     <AnonymousPurchaseConsequencesScreenComponent
       onPressLogin={() => {
-        finishOnboarding();
         navigation.popToTop();
         navigation.navigate(
           enable_vipps_login

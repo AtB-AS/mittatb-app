@@ -13,7 +13,9 @@ import {differenceInSeconds, parseISO} from 'date-fns';
 import {
   Mode,
   TariffZone,
+  DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {dictionary, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
@@ -106,9 +108,32 @@ export function significantWaitTime(seconds: number) {
   return seconds > MIN_SIGNIFICANT_WAIT_IN_SECONDS;
 }
 
-export function getLineName(leg: Leg) {
+export function formatDestinationDisplay(
+  t: TranslateFunction,
+  destinationDisplay: DestinationDisplay | undefined,
+): string | undefined {
+  if (destinationDisplay === undefined) {
+    return undefined;
+  }
+  const frontText = destinationDisplay?.frontText || '';
+  const via = destinationDisplay?.via || [];
+  if (via.length < 1) {
+    return frontText;
+  }
+  let viaNames = via[0];
+  if (via.length > 1) {
+    viaNames =
+      via.slice(0, -1).join(', ') +
+      ` ${t(dictionary.listConcatWord)} ` +
+      via[via.length - 1];
+  }
+
+  return frontText + ` ${t(dictionary.via)} ` + viaNames;
+}
+
+export function getLineName(t: TranslateFunction, leg: Leg) {
   const name =
-    leg.fromEstimatedCall?.destinationDisplay?.frontText ??
+    formatDestinationDisplay(t, leg.fromEstimatedCall?.destinationDisplay) ??
     leg.line?.name ??
     '';
   return leg.line?.publicCode
