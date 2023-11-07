@@ -41,15 +41,14 @@ export const NearbyStopPlacesScreenComponent = ({
   onAddFavorite,
 }: Props) => {
   const {
-    status,
+    locationIsAvailable,
     location: geolocation,
-    locationEnabled,
     requestPermission,
   } = useGeolocationState();
 
   const requestGeoPermission = requestPermission;
   const currentLocation = geolocation || undefined;
-  const hasLocationPermission = locationEnabled && status === 'granted';
+
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
   const {t} = useTranslation();
@@ -61,7 +60,7 @@ export const NearbyStopPlacesScreenComponent = ({
     Boolean(currentLocation) && screenHasFocus,
   );
 
-  const updatingLocation = !location && hasLocationPermission;
+  const updatingLocation = !location && locationIsAvailable;
 
   const {state} = useNearestStopsData(location);
 

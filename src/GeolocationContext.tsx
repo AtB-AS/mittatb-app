@@ -34,6 +34,7 @@ const config: GeoOptions = {
 type GeolocationState = {
   status: PermissionStatus | null;
   locationEnabled: boolean;
+  locationIsAvailable: boolean;
   location: GeoLocation | null;
   locationError: GeoError | null;
   getCurrentPosition: () => GeoLocation | null;
@@ -116,6 +117,7 @@ const GeolocationContext = createContext<GeolocationContextState | undefined>(
 const defaultState: GeolocationState = {
   status: null,
   locationEnabled: false,
+  locationIsAvailable: false,
   location: null,
   locationError: null,
   getCurrentPosition: () => null,
@@ -207,7 +209,8 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }
 
-  const hasPermission = state.status === 'granted' && state.locationEnabled;
+  const locationIsAvailable =
+    state.status === 'granted' && state.locationEnabled;
 
   const updateLocation = (position: GeoPosition | null, locationName: string) =>
     dispatch({
@@ -218,7 +221,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     if (appStatus === 'active') {
-      if (!hasPermission) {
+      if (!locationIsAvailable) {
         updateLocation(null, geoLocationName);
       } else {
         const watchId = Geolocation.watchPosition(
@@ -229,7 +232,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
         return () => Geolocation.clearWatch(watchId);
       }
     }
-  }, [geoLocationName, hasPermission, appStatus]);
+  }, [geoLocationName, locationIsAvailable, appStatus]);
 
   const currentLocationError = state.locationError;
 
@@ -265,7 +268,12 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
 
   return (
     <GeolocationContext.Provider
-      value={{...state, requestPermission, getCurrentPosition}}
+      value={{
+        ...state,
+        locationIsAvailable,
+        requestPermission,
+        getCurrentPosition,
+      }}
     >
       {children}
     </GeolocationContext.Provider>

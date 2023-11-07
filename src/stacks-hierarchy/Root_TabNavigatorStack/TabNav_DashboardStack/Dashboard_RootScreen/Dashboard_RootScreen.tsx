@@ -59,22 +59,20 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const analytics = useAnalytics();
 
   const {
-    status,
-    locationEnabled,
+    locationIsAvailable,
     location,
     requestPermission: requestGeoPermission,
   } = useGeolocationState();
 
-  const hasLocationPermission = locationEnabled && status === 'granted';
   const currentLocation = location || undefined;
 
   useDoOnceWhen(
     () => setUpdatingLocation(true),
-    !Boolean(currentLocation) && hasLocationPermission,
+    !Boolean(currentLocation) && locationIsAvailable,
   );
   useDoOnceWhen(
     () => setUpdatingLocation(false),
-    Boolean(currentLocation) && hasLocationPermission,
+    Boolean(currentLocation) && locationIsAvailable,
   );
   useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
 
