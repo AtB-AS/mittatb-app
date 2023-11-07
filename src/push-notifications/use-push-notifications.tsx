@@ -5,10 +5,14 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
+import {usePreferences} from '@atb/preferences';
 
 type PermissionStatus = 'granted' | 'denied' | 'undetermined';
 
 export const usePushNotifications = () => {
+  const {
+    preferences: {language = 'nb'},
+  } = usePreferences();
   const [permissionStatus, setPermissionStatus] =
     useState<PermissionStatus>('undetermined');
   const [isLoadingPermissionStatus, setIsLoadingPermissionStatus] =
@@ -60,7 +64,7 @@ export const usePushNotifications = () => {
       setIsError(true);
       return;
     }
-    registerMutation.mutate(token);
+    registerMutation.mutate({token, language});
   };
 
   return {

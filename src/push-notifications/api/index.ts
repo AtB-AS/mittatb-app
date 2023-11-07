@@ -1,23 +1,29 @@
 import {client} from '@atb/api';
 import {Platform} from 'react-native';
-import {getVersion} from 'react-native-device-info';
-import {getApplicationName} from 'react-native-device-info/src';
+import {getBundleId, getVersion} from 'react-native-device-info';
 import {
   NotificationConfig,
   NotificationConfigType,
   NotificationConfigValue,
 } from '@atb/push-notifications/types';
+import {Preference_Language} from '@atb/preferences';
 
-export const registerForPushNotifications = (token: string) =>
+export const registerForPushNotifications = ({
+  token,
+  language,
+}: {
+  token: string;
+  language: Preference_Language;
+}) =>
   client
     .post(
       `/notification/v1/register`,
       {
-        app_id: getApplicationName(),
+        app_id: getBundleId(),
         app_version: getVersion(),
         platform: Platform.OS,
         platform_version: String(Platform.Version),
-        language: 'no',
+        language,
         token,
       },
       {authWithIdToken: true},
