@@ -5,10 +5,10 @@ import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {
-  useFirestoreConfiguration,
   getReferenceDataName,
+  TariffZone,
+  useFirestoreConfiguration,
 } from '@atb/configuration';
-import {useMobileTokenContextState} from '@atb/mobile-token';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
@@ -30,7 +30,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {getOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
+import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
 import {
   useOfferState,
   UserProfileWithCountAndOffer,
@@ -42,7 +42,6 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
 import {Info} from '@atb/assets/svg/color/icons/status';
-import {TariffZone} from '@atb/configuration';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
@@ -95,15 +94,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     PaymentMethod | undefined
   >(undefined);
   const previousPaymentMethod = usePreviousPaymentMethod();
-  const {deviceInspectionStatus, tokens} = useMobileTokenContextState();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
-  const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    deviceInspectionStatus,
-    t,
-    tokens,
-  );
+  const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const {
     fareProductTypeConfig,

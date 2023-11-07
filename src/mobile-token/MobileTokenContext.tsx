@@ -45,7 +45,7 @@ type MobileTokenContextState = {
    * that a token was created for this mobile, but not necessarily that it is
    * inspectable.
    */
-  status: MobileTokenStatus;
+  mobileTokenStatus: MobileTokenStatus;
   /**
    * A status which represents which type of barcode to show. This also takes into
    * account the fallback settings for error and loading.
@@ -73,7 +73,6 @@ type MobileTokenContextState = {
    */
   debug: {
     token?: ActivatedToken;
-    status: MobileTokenStatus;
     createToken: () => void;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
@@ -103,7 +102,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const [token, setToken] = useState<ActivatedToken>();
   const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
-  const [status, setStatus] = useState<MobileTokenStatus>('disabled');
+  const [mobileTokenStatus, setMobileTokenStatus] =
+    useState<MobileTokenStatus>('disabled');
 
   const enabled =
     mobileTokenEnabled && userId && authStatus === 'authenticated';
@@ -206,7 +206,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       const cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        setStatus('timeouted');
+        setMobileTokenStatus('timeout');
 
         Bugsnag.notify(
           new Error(
@@ -222,7 +222,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         );
       }, token_timeout_in_seconds);
 
-      setStatus('loading');
+      setMobileTokenStatus('loading');
       setToken(undefined);
       setRemoteTokens(undefined);
       let nativeToken: ActivatedToken;
@@ -252,9 +252,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           'AtB-Mobile-Token-Error-Correlation-Id': undefined,
         });
 
-        setStatus('success');
+        setMobileTokenStatus('success');
       } catch (err: any) {
-        setStatus('error');
+        setMobileTokenStatus('error');
         /*
          Errors that needs a certain action should already be handled. Just log
          to Bugsnag here.
@@ -305,7 +305,11 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     return undefined;
   }, [token]);
 
-  const barcodeStatus = useBarcodeStatus(status, token, remoteTokens);
+  const barcodeStatus = useBarcodeStatus(
+    mobileTokenStatus,
+    token,
+    remoteTokens,
+  );
   const deviceInspectionStatus = getDeviceInspectionStatus(barcodeStatus);
 
   const toggleToken = useCallback(
@@ -352,7 +356,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       value={{
         tokens,
         getSignedToken,
-        status,
+        mobileTokenStatus,
         deviceInspectionStatus,
         barcodeStatus,
         toggleToken,
@@ -365,7 +369,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         getTokenToggleDetails,
         debug: {
           token,
-          status,
           createToken: () => mobileTokenClient.create(uuid()).then(setToken),
           validateToken: () =>
             mobileTokenClient
@@ -454,7 +457,7 @@ const useBarcodeStatus = (
     case 'disabled': // As of now, handle disabled as loading, as mobile token should never be disabled
     case 'loading':
       return 'loading';
-    case 'timeouted':
+    case 'timeout':
       return enable_token_fallback_on_timeout ? 'static' : 'loading';
     case 'error':
       return enable_token_fallback ? 'static' : 'error';

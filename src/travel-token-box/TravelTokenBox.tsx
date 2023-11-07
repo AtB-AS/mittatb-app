@@ -143,10 +143,10 @@ export const TravelDeviceTitle = ({
 const ErrorMessages = (alwaysShowErrors?: boolean) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {status, retry, tokens, deviceInspectionStatus} =
+  const {mobileTokenStatus, retry, tokens, deviceInspectionStatus} =
     useMobileTokenContextState();
 
-  if (status !== 'success') {
+  if (mobileTokenStatus !== 'success') {
     return deviceInspectionStatus === 'inspectable' &&
       !alwaysShowErrors ? null : (
       <MessageBox

@@ -11,9 +11,10 @@ import {
   Language,
   TariffZonesTexts,
   TranslateFunction,
+  useTranslation,
 } from '@atb/translations';
 
-import {DeviceInspectionStatus, Token} from '@atb/mobile-token';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -88,48 +89,62 @@ export const mapToUserProfilesWithCount = (
         'id' in userProfileWithCount,
     );
 
-export const getNonInspectableTokenWarning = (
-  deviceInspectionStatus: DeviceInspectionStatus,
-  t: TranslateFunction,
-  tokens: Token[],
-  fareProductType?: string,
-) => {
-  if (deviceInspectionStatus === 'inspectable') return null;
-  const inspectableToken = tokens.find((t) => t.isInspectable);
-  if (fareProductType !== 'carnet') {
-    if (!inspectableToken) return t(FareContractTexts.warning.errorWithToken);
-    if (inspectableToken.type === 'travel-card')
-      return t(FareContractTexts.warning.travelCardAstoken);
-    if (inspectableToken.type === 'mobile')
-      return t(
-        FareContractTexts.warning.anotherMobileAsToken(
-          inspectableToken.name || t(FareContractTexts.warning.unnamedDevice),
-        ),
-      );
-  } else {
-    if (inspectableToken?.type !== 'travel-card') {
-      return t(FareContractTexts.warning.carnetWarning);
-    } else {
-      return t(FareContractTexts.warning.travelCardAstoken);
-    }
+export const useNonInspectableTokenWarning = (fareProductType?: string) => {
+  const {t} = useTranslation();
+  const {barcodeStatus, tokens} = useMobileTokenContextState();
+  switch (barcodeStatus) {
+    case 'mobiletoken':
+    case 'static':
+    case 'staticQr':
+    case 'loading':
+      return undefined;
+    case 'error':
+      return t(FareContractTexts.warning.errorWithToken);
+    case 'other':
+      const inspectableToken = tokens.find((t) => t.isInspectable);
+      if (fareProductType === 'carnet') {
+        if (inspectableToken?.type !== 'travel-card') {
+          return t(FareContractTexts.warning.carnetWarning);
+        } else {
+          return t(FareContractTexts.warning.travelCardAstoken);
+        }
+      } else {
+        return inspectableToken?.type === 'travel-card'
+          ? t(FareContractTexts.warning.travelCardAstoken)
+          : t(
+              FareContractTexts.warning.anotherMobileAsToken(
+                inspectableToken?.name ||
+                  t(FareContractTexts.warning.unnamedDevice),
+              ),
+            );
+      }
   }
 };
 
-export const getOtherDeviceIsInspectableWarning = (
-  deviceInspectionStatus: DeviceInspectionStatus,
-  t: TranslateFunction,
-  tokens: Token[],
-) => {
-  const shouldShowWarning = deviceInspectionStatus !== 'inspectable';
-  if (!shouldShowWarning) return;
+export const useOtherDeviceIsInspectableWarning = () => {
+  const {t} = useTranslation();
+  const {barcodeStatus, tokens} = useMobileTokenContextState();
+  switch (barcodeStatus) {
+    case 'mobiletoken':
+    case 'static':
+    case 'staticQr':
+    case 'loading':
+      return undefined;
+    case 'error':
+      return t(FareContractTexts.warning.errorWithToken);
+    case 'other':
+      const inspectableToken = tokens.find((t) => t.isInspectable);
+      const deviceName =
+        inspectableToken?.name || t(FareContractTexts.warning.unnamedDevice);
 
-  const inspectableToken = tokens.find((t) => t.isInspectable);
-  const deviceName =
-    inspectableToken?.name || t(FareContractTexts.warning.unnamedDevice);
-
-  return inspectableToken?.type === 'travel-card'
-    ? t(FareContractTexts.warning.tcardIsInspectableWarning)
-    : t(FareContractTexts.warning.anotherPhoneIsInspectableWarning(deviceName));
+      return inspectableToken?.type === 'travel-card'
+        ? t(FareContractTexts.warning.tcardIsInspectableWarning)
+        : t(
+            FareContractTexts.warning.anotherPhoneIsInspectableWarning(
+              deviceName,
+            ),
+          );
+  }
 };
 
 export const isValidFareContract = (status: ValidityStatus) =>

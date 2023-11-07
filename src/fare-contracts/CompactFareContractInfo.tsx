@@ -1,19 +1,18 @@
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {getReferenceDataName} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
-  getNonInspectableTokenWarning,
   isValidFareContract,
   tariffZonesSummary,
+  useNonInspectableTokenWarning,
   userProfileCountAndName,
 } from '@atb/fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {secondsToDuration} from '@atb/utils/date';
 import {FareContractInfoDetailsProps} from './FareContractInfo';
-import {screenReaderPause} from '@atb/components/text';
 import {InspectionSymbol} from '@atb/fare-contracts/components/InspectionSymbol';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
 
@@ -137,7 +136,7 @@ export const useFareContractInfoTexts = (
   } = props;
 
   const {t, language} = useTranslation();
-  const {deviceInspectionStatus, tokens} = useMobileTokenContextState();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -155,24 +154,13 @@ export const useFareContractInfoTexts = (
     serialComma: false,
   });
 
+  const tokenWarning = useNonInspectableTokenWarning(
+    preassignedFareProduct?.type,
+  );
+  const timeUntilExpireOrWarning: string | undefined =
+    tokenWarning ?? t(FareContractTexts.validityHeader.valid(durationText));
+
   let accessibilityLabel: string = '';
-  let timeUntilExpireOrWarning: string | undefined;
-
-  if (deviceInspectionStatus === 'inspectable') {
-    timeUntilExpireOrWarning = t(
-      FareContractTexts.validityHeader.valid(durationText),
-    );
-  } else {
-    const warning = getNonInspectableTokenWarning(
-      deviceInspectionStatus,
-      t,
-      tokens,
-      preassignedFareProduct?.type,
-    );
-
-    timeUntilExpireOrWarning = warning ?? undefined;
-  }
-
   accessibilityLabel += timeUntilExpireOrWarning + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
     (u) =>

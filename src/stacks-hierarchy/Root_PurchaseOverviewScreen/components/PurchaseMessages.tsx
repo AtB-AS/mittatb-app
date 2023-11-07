@@ -1,9 +1,8 @@
 import {MessageBox} from '@atb/components/message-box';
-import {useMobileTokenContextState} from '@atb/mobile-token';
 import {StyleSheet} from '@atb/theme';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {getOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
+import {useOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
 
 export type PurchaseWarningsProps = {
   requiresTokenOnMobile: boolean;
@@ -15,12 +14,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   const {t} = useTranslation();
   const styles = useStyles();
 
-  const {deviceInspectionStatus, tokens} = useMobileTokenContextState();
-  const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    deviceInspectionStatus,
-    t,
-    tokens,
-  );
+  const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   return (
     <>
