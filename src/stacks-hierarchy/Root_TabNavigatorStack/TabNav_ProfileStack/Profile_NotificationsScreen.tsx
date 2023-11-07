@@ -105,7 +105,7 @@ export const Profile_NotificationsScreen = () => {
                 }}
               />
             )}
-          {!isLoading && isError && (
+          {isError && (
             <MessageBox
               style={style.messageBox}
               type="error"
