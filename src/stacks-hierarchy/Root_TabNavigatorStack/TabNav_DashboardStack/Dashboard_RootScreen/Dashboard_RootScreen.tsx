@@ -264,7 +264,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             style={style.contentSection}
             onPressDetails={(
               isCarnet: boolean,
-              isInspectable: boolean,
               orderId: string,
             ) => {
               if (isCarnet) {
@@ -272,7 +271,6 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
                   name: 'Root_CarnetDetailsScreen',
                   params: {
                     orderId,
-                    isInspectable,
                   },
                 });
               }

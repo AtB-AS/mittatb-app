@@ -10,7 +10,6 @@ type Props = {
   fareContract: FareContract;
   travelRights: CarnetTravelRight[];
   now: number;
-  isInspectable: boolean;
   testID?: string;
 };
 
@@ -20,7 +19,6 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
   fareContract,
   travelRights,
   now,
-  isInspectable,
   testID,
 }) => {
   const {t} = useTranslation();
@@ -30,7 +28,6 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
     <Section withBottomPadding testID={testID}>
       <CarnetDetails
         now={now}
-        inspectable={isInspectable}
         travelRights={travelRights}
         testID={testID}
         fareContract={fareContract}
@@ -42,7 +39,6 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
             name: 'Root_CarnetDetailsScreen',
             params: {
               orderId: fareContract.orderId,
-              isInspectable: isInspectable,
             },
           })
         }

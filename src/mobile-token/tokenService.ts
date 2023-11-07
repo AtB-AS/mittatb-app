@@ -18,7 +18,7 @@ import {
   RemoveTokenResponse,
   ToggleResponse,
   TokenLimitResponse,
-} from '@atb/mobile-token/types';
+} from './types';
 import {
   parseRemoteError,
   RemoteTokenStateError,

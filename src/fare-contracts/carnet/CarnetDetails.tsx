@@ -26,14 +26,13 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 
 export function CarnetDetails(props: {
   now: number;
-  inspectable: boolean;
   travelRights: CarnetTravelRight[];
   testID?: string;
   fareContract: FareContract;
 }) {
   const fareContractValidFrom = props.travelRights[0].startDateTime.toMillis();
   const fareContractValidTo = props.travelRights[0].endDateTime.toMillis();
-  const {now, inspectable, travelRights, fareContract} = props;
+  const {now, travelRights, fareContract} = props;
   const {usedAccesses, maximumNumberOfAccesses, numberOfUsedAccesses} =
     flattenCarnetTravelRightAccesses(travelRights);
   const {tariffZones, userProfiles, preassignedFareProducts} =
@@ -79,7 +78,6 @@ export function CarnetDetails(props: {
           status={fareContractValidityStatus}
           validFrom={fareContractValidFrom}
           validTo={fareContractValidTo}
-          isInspectable={inspectable}
           fareProductType="carnet"
         />
       ) : (
@@ -88,7 +86,6 @@ export function CarnetDetails(props: {
           status={usedAccessValidityStatus}
           validFrom={usedAccessValidFrom}
           validTo={usedAccessValidTo}
-          isInspectable={inspectable}
         />
       )}
       {usedAccessValidTo && usedAccessValidFrom ? (
@@ -97,7 +94,6 @@ export function CarnetDetails(props: {
           now={props.now}
           validFrom={usedAccessValidFrom}
           validTo={usedAccessValidTo}
-          isInspectable={false}
           fareProductType="carnet"
         />
       ) : (
@@ -108,7 +104,6 @@ export function CarnetDetails(props: {
       <FareContractInfoHeader
         travelRight={firstTravelRight}
         status={usedAccessValidityStatus}
-        isInspectable={inspectable}
         testID={props.testID}
         preassignedFareProduct={preassignedFareProduct}
       />
@@ -121,7 +116,6 @@ export function CarnetDetails(props: {
         toTariffZone={toTariffZone}
         userProfilesWithCount={userProfilesWithCount}
         status={usedAccessValidityStatus}
-        isInspectable={inspectable}
         preassignedFareProduct={preassignedFareProduct}
       />
       <View style={style.sectionSeparator}>
