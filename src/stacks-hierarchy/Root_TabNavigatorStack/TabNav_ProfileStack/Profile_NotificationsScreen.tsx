@@ -82,8 +82,7 @@ export const Profile_NotificationsScreen = () => {
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
-          {!isLoading &&
-            !isError &&
+          {!isError &&
             isConfigEnabled(config?.modes, 'push') &&
             permissionStatus === 'denied' && (
               <MessageBox
