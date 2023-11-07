@@ -148,7 +148,7 @@ function useCurrentLocationChip(
 ) {
   const {location, requestPermission} = useGeolocationState();
 
-  const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
+  const [recentlyAllowedGeo, setRecentlyAllowedGeo] = useState(false);
 
   const onCurrentLocation = useCallback(
     async function () {
@@ -157,7 +157,7 @@ function useCurrentLocationChip(
       } else {
         const status = await requestPermission();
         if (status === 'granted') {
-          setsetRecentlyAllowedGeo(true);
+          setRecentlyAllowedGeo(true);
         }
       }
     },
