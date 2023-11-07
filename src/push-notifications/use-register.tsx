@@ -1,4 +1,4 @@
-import {registerForPushNotifications} from '@atb/notifications/api';
+import {registerForPushNotifications} from '@atb/push-notifications/api';
 import {useMutation} from '@tanstack/react-query';
 
 export const useRegister = () => {

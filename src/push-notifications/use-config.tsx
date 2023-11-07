@@ -3,7 +3,7 @@ import {
   getConfig,
   NotificationConfigUpdate,
   updateConfig,
-} from '@atb/notifications/api';
+} from '@atb/push-notifications/api';
 
 export const useConfig = () => {
   const queryClient = useQueryClient();

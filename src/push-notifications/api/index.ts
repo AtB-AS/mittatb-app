@@ -6,7 +6,7 @@ import {
   NotificationConfig,
   NotificationConfigType,
   NotificationConfigValue,
-} from '@atb/notifications/types';
+} from '@atb/push-notifications/types';
 
 export const registerForPushNotifications = (token: string) =>
   client

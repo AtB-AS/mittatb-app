@@ -6,11 +6,11 @@ import {ThemeText} from '@atb/components/text';
 import {StaticColorByType} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
 import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
-import {usePushNotifications} from '@atb/notifications';
 import {MessageBox} from '@atb/components/message-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {isConfigEnabled} from '@atb/notifications/utils';
+import {isConfigEnabled} from '@atb/push-notifications/utils';
+import {usePushNotifications} from '@atb/push-notifications';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
