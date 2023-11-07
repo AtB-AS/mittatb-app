@@ -101,7 +101,7 @@ const ProfileTexts = {
             title: _(
               'Tillatelse kreves',
               'Permission required',
-              'Tillating krevjast',
+              'Løyve krevjast',
             ),
             message: _(
               'Skru på varslinger i telefoninnstillingene for å motta varslinger fra AtB.',
