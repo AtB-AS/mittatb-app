@@ -106,7 +106,7 @@ const ProfileTexts = {
             message: _(
               'Skru på varslinger i telefoninnstillingene for å motta varslinger fra AtB.',
               'Enable notifications in Settings to receive notifications from AtB.',
-              'Skru på varslingar i telefoninnstillingene for å motta varslingar frå AtB.',
+              'Skru på varslingar i telefoninnstillingane for å få varslingar frå AtB.',
             ),
             action: _(
               'Åpne telefoninnstillinger',
