@@ -19,7 +19,7 @@ export const useParkingViolations = () => {
   useEffect(() => {
     const getLocationAndInitReporting = async () => {
       try {
-        const location = await getCurrentLocation();
+        const location = await getCurrentLocation(true);
         setError(undefined);
         setIsLoading(true);
         setPosition({
