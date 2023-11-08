@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   FareContract,
-  isInspectableTravelRight,
   isPreActivatedTravelRight,
   NormalTravelRight,
 } from '@atb/ticketing';
@@ -16,10 +15,7 @@ import {
   getValidityStatus,
   mapToUserProfilesWithCount,
 } from '@atb/fare-contracts/utils';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
 import {
@@ -54,27 +50,18 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
-  hasActiveTravelCard = false,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {deviceIsInspectable, fallbackActive} = useMobileTokenContextState();
   const {findGlobalMessages} = useGlobalMessagesState();
 
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const isInspectable = isInspectableTravelRight(
-      firstTravelRight,
-      hasActiveTravelCard,
-      hasEnabledMobileToken,
-      deviceIsInspectable,
-      fallbackActive,
-    );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
@@ -113,7 +100,6 @@ export const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
             fareProductType={preassignedFareProduct?.type}
           />
           <ValidityLine
@@ -121,22 +107,19 @@ export const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
             fareProductType={preassignedFareProduct?.type}
           />
           <FareContractInfoHeader
             travelRight={firstTravelRight}
             status={validityStatus}
-            isInspectable={isInspectable}
             testID="details"
             preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>
-        {isInspectable && (
+        {deviceInspectionStatus === 'inspectable' && (
           <GenericSectionItem>
             <Barcode
               validityStatus={validityStatus}
-              isInspectable={isInspectable}
               fc={fc}
             />
           </GenericSectionItem>
@@ -148,7 +131,6 @@ export const DetailsContent: React.FC<Props> = ({
             toTariffZone={toTariffZone}
             userProfilesWithCount={userProfilesWithCount}
             status={validityStatus}
-            isInspectable={isInspectable}
             preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>

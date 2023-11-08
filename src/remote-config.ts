@@ -4,7 +4,6 @@ import {ENABLE_TICKETING, PRIVACY_POLICY_URL, CUSTOMER_SERVICE_URL} from '@env';
 export type RemoteConfig = {
   enable_ticketing: boolean;
   enable_intercom: boolean;
-  enable_period_tickets: boolean;
   feedback_questions: string;
   must_upgrade_ticketing: boolean;
   customer_service_url: string;
@@ -48,12 +47,12 @@ export type RemoteConfig = {
   enable_beacons: boolean;
   delay_share_travel_habits_screen_by_sessions_count: number;
   enable_parking_violations_reporting: boolean;
+  enable_push_notifications: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
   enable_intercom: true,
-  enable_period_tickets: false,
   feedback_questions: '',
   must_upgrade_ticketing: false,
   customer_service_url: CUSTOMER_SERVICE_URL,
@@ -101,6 +100,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_beacons: false,
   delay_share_travel_habits_screen_by_sessions_count: 0,
   enable_parking_violations_reporting: false,
+  enable_push_notifications: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -109,9 +109,6 @@ export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
   const enable_intercom = values['enable_intercom']?.asBoolean() ?? true;
-  const enable_period_tickets =
-    values['enable_period_tickets']?.asBoolean() ??
-    defaultRemoteConfig.enable_period_tickets;
   const enable_flex_tickets =
     values['enable_flex_tickets']?.asBoolean() ??
     defaultRemoteConfig.enable_flex_tickets;
@@ -272,10 +269,13 @@ export function getConfig(): RemoteConfig {
     values['enable_parking_violations_reporting']?.asBoolean() ??
     defaultRemoteConfig.enable_parking_violations_reporting;
 
+  const enable_push_notifications =
+    values['enable_push_notifications']?.asBoolean() ??
+    defaultRemoteConfig.enable_push_notifications;
+
   return {
     enable_ticketing,
     enable_intercom,
-    enable_period_tickets,
     feedback_questions,
     must_upgrade_ticketing,
     customer_service_url,
@@ -319,6 +319,7 @@ export function getConfig(): RemoteConfig {
     enable_beacons,
     delay_share_travel_habits_screen_by_sessions_count,
     enable_parking_violations_reporting,
+    enable_push_notifications,
   };
 }
 

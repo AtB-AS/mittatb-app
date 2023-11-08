@@ -215,9 +215,7 @@ export type CustomerProfile = {
   firstName?: string;
   id?: string;
   surname?: string;
-  travelcard?: TravelCard;
   debug?: boolean;
-  enableMobileToken?: boolean;
 };
 
 export type TravelCard = {

@@ -16,8 +16,7 @@ import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAss
 import {TipsAndInformationTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TipsAndInformationTile';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
 import {useAnalytics} from '@atb/analytics';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {findInspectable, isMobileToken} from '@atb/mobile-token/utils';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useHarborsQuery} from '@atb/queries';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -40,9 +39,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const showTicketAssistant = useTicketingAssistantEnabled();
   const analytics = useAnalytics();
 
-  const {remoteTokens} = useMobileTokenContextState();
-  const inspectableToken = findInspectable(remoteTokens);
-  const hasInspectableMobileToken = isMobileToken(inspectableToken);
+  const {tokens} = useMobileTokenContextState();
+  const inspectableToken = tokens.find((t) => t.isInspectable);
+  const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
   const harborsQuery = useHarborsQuery();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;

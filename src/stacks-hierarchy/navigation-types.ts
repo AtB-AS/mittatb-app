@@ -48,7 +48,6 @@ type PaymentParams = {
 
 type CarnetDetailsRouteParams = {
   orderId: string;
-  isInspectable: boolean;
 };
 
 type ReceiptScreenRouteParams = {
@@ -145,6 +144,7 @@ export type RootStackParamList = {
   Root_ParkingViolationsPhoto: Root_ParkingViolationsPhotoParams;
   Root_ParkingViolationsQr: Root_ParkingViolationsQrParams;
   Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
+  Root_NotificationPermissionScreen: undefined;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

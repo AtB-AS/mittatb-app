@@ -20,6 +20,7 @@ export enum StorageModelKeysEnum {
   EnableLoadingErrorScreenDebugOverride = '@ATB_loading_error_screen_debug_override',
   EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
   EnableParkingViolationsReportingDebugOverride = '@ATB_enable_parking_violations_debug_override',
+  EnablePushNotificationsDebugOverride = '@ATB_enable_push_notifications_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
@@ -33,7 +34,6 @@ export type StorageModel = {
   '@ATB_onboarded': string;
   '@ATB_search-history': string;
   '@ATB_journey_search-history': string;
-  '@ATB_ticket_informational_accepted': string;
   '@ATB_user_travel_search_filters': string;
   '@ATB_user_travel_search_filters_v2': string;
   '@ATB_saved_payment_methods': string;

@@ -12,44 +12,44 @@ import {storage} from '@atb/storage';
 
 enum storeKey {
   onboarding = '@ATB_onboarded',
-  ticketing = '@ATB_ticket_informational_accepted',
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
+  notificationPermissionOnboarding = '@ATB_notification_permission_onboarded',
 }
 type AppState = {
   isLoading: boolean;
   onboarded: boolean;
-  ticketingAccepted: boolean;
   mobileTokenOnboarded: boolean;
   mobileTokenWithoutTravelcardOnboarded: boolean;
+  notificationPermissionOnboarded: boolean;
 };
 
 type AppReducerAction =
   | {
       type: 'LOAD_APP_SETTINGS';
       onboarded: boolean;
-      ticketingAccepted: boolean;
       mobileTokenOnboarded: boolean;
       mobileTokenWithoutTravelcardOnboarded: boolean;
+      notificationPermissionOnboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
-  | {type: 'ACCEPT_TICKETING'}
-  | {type: 'RESET_TICKETING'}
   | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
   | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'}
   | {type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
-  | {type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'};
+  | {type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
+  | {type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'}
+  | {type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
   restartOnboarding: () => void;
-  acceptTicketing: () => void;
-  resetTicketing: () => void;
   completeMobileTokenOnboarding: () => void;
   restartMobileTokenOnboarding: () => void;
   completeMobileTokenWithoutTravelcardOnboarding: () => void;
   restartMobileTokenWithoutTravelcardOnboarding: () => void;
+  completeNotificationPermissionOnboarding: () => void;
+  restartNotificationPermissionOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -64,11 +64,11 @@ const appReducer: AppReducer = (prevState, action) => {
       return {
         ...prevState,
         onboarded: action.onboarded,
-        ticketingAccepted: action.ticketingAccepted,
         isLoading: false,
         mobileTokenOnboarded: action.mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded:
           action.mobileTokenWithoutTravelcardOnboarded,
+        notificationPermissionOnboarded: action.notificationPermissionOnboarded,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -79,16 +79,6 @@ const appReducer: AppReducer = (prevState, action) => {
       return {
         ...prevState,
         onboarded: false,
-      };
-    case 'ACCEPT_TICKETING':
-      return {
-        ...prevState,
-        ticketingAccepted: true,
-      };
-    case 'RESET_TICKETING':
-      return {
-        ...prevState,
-        ticketingAccepted: false,
       };
     case 'COMPLETE_MOBILE_TOKEN_ONBOARDING':
       return {
@@ -110,15 +100,27 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         mobileTokenWithoutTravelcardOnboarded: false,
       };
+
+    case 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING':
+      return {
+        ...prevState,
+        notificationPermissionOnboarded: true,
+      };
+
+    case 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING':
+      return {
+        ...prevState,
+        notificationPermissionOnboarded: false,
+      };
   }
 };
 
 const defaultAppState: AppState = {
   isLoading: true,
   onboarded: false,
-  ticketingAccepted: false,
   mobileTokenOnboarded: false,
   mobileTokenWithoutTravelcardOnboarded: false,
+  notificationPermissionOnboarded: false,
 };
 
 export const AppContextProvider: React.FC = ({children}) => {
@@ -128,11 +130,6 @@ export const AppContextProvider: React.FC = ({children}) => {
     async function loadAppSettings() {
       const savedOnboarded = await storage.get(storeKey.onboarding);
       const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
-
-      const savedTicketingAccepted = await storage.get(storeKey.ticketing);
-      const ticketingAccepted = !savedTicketingAccepted
-        ? false
-        : JSON.parse(savedTicketingAccepted);
 
       const savedMobileTokenOnboarded = await storage.get(
         storeKey.mobileTokenOnboarding,
@@ -149,6 +146,15 @@ export const AppContextProvider: React.FC = ({children}) => {
           ? false
           : JSON.parse(savedMobileTokenWithoutTravelcardOnboarded);
 
+      const savedNotificationPermissionOnboarded = await storage.get(
+        storeKey.notificationPermissionOnboarding,
+      );
+
+      const notificationPermissionOnboarded =
+        !savedNotificationPermissionOnboarded
+          ? false
+          : JSON.parse(savedNotificationPermissionOnboarded);
+
       if (onboarded) {
         registerChatUser();
       }
@@ -156,9 +162,9 @@ export const AppContextProvider: React.FC = ({children}) => {
       dispatch({
         type: 'LOAD_APP_SETTINGS',
         onboarded,
-        ticketingAccepted,
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
+        notificationPermissionOnboarded,
       });
 
       RNBootSplash.hide({fade: true});
@@ -169,12 +175,12 @@ export const AppContextProvider: React.FC = ({children}) => {
   const {
     completeOnboarding,
     restartOnboarding,
-    acceptTicketing,
-    resetTicketing,
     completeMobileTokenOnboarding,
     restartMobileTokenOnboarding,
     completeMobileTokenWithoutTravelcardOnboarding,
     restartMobileTokenWithoutTravelcardOnboarding,
+    completeNotificationPermissionOnboarding,
+    restartNotificationPermissionOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -186,13 +192,6 @@ export const AppContextProvider: React.FC = ({children}) => {
       restartOnboarding: async () => {
         await storage.set(storeKey.onboarding, JSON.stringify(false));
         dispatch({type: 'RESTART_ONBOARDING'});
-      },
-      acceptTicketing: async () => {
-        await storage.set(storeKey.ticketing, JSON.stringify(true));
-        dispatch({type: 'ACCEPT_TICKETING'});
-      },
-      resetTicketing: async () => {
-        dispatch({type: 'RESET_TICKETING'});
       },
       completeMobileTokenOnboarding: async () => {
         dispatch({type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'});
@@ -219,6 +218,20 @@ export const AppContextProvider: React.FC = ({children}) => {
           JSON.stringify(false),
         );
       },
+      completeNotificationPermissionOnboarding: async () => {
+        await storage.set(
+          storeKey.notificationPermissionOnboarding,
+          JSON.stringify(true),
+        );
+        dispatch({type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'});
+      },
+      restartNotificationPermissionOnboarding: async () => {
+        await storage.set(
+          storeKey.notificationPermissionOnboarding,
+          JSON.stringify(false),
+        );
+        dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
+      },
     }),
     [],
   );
@@ -229,12 +242,12 @@ export const AppContextProvider: React.FC = ({children}) => {
         ...state,
         completeOnboarding,
         restartOnboarding,
-        acceptTicketing,
-        resetTicketing,
         completeMobileTokenOnboarding,
         restartMobileTokenOnboarding,
         completeMobileTokenWithoutTravelcardOnboarding,
         restartMobileTokenWithoutTravelcardOnboarding,
+        completeNotificationPermissionOnboarding,
+        restartNotificationPermissionOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>

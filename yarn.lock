@@ -40,10 +40,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^9.2.0":
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-9.2.0.tgz#841af73f4817e3e5501a805bf7a54e6f10e3a2ff"
-  integrity sha512-vxcZw/rsZej4L/NGzWYTKxTCs/Fy7AZrADxu5l7N9qt+7Y5yQ1bRpLrnpnedtPlBrm9YVUBrlgecvzZtjoTdWg==
+"@atb-as/generate-assets@^9.4.0":
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-9.4.0.tgz#1fd814b5cbf76c94702087a8cc4f40107cc15ea0"
+  integrity sha512-NA8aizwk2+tw33+E1EtTBi3fQM7iC08uI75o1T/PdFWBQ4sMSmHXC4r9T7ZBYFAgYX96dqh4DbRnpYL22ONqbA==
   dependencies:
     "@atb-as/theme" "^7.1.1"
     commander "^9.4.0"
@@ -13068,6 +13068,11 @@ react-native-intercom@21.1.1:
   resolved "https://registry.npmjs.org/react-native-intercom/-/react-native-intercom-21.1.1.tgz"
   integrity sha512-Cj7GoPIBeTKydLfA2123NZ6x49xueNmlX9LsAbYvv2CmEEyXDEI0rGuweqzumnJUp9tntrFr4piOZkrhhg6CYA==
 
+react-native-kettle-module@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.1.0.tgz#a3805f3d009c0416daf2a34d6e9fd2985f4082b3"
+  integrity sha512-wnxXV5rpYYevgga1KC8tYVdIlkiFhjI7pyBh1ShekjLTGkW7QWUMXsPE1o6X2AWM2FhfXEQ+3lixcXc4qWE0dg==
+
 react-native-linear-gradient@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz#56598a76832724b2afa7889747635b5c80948f38"
@@ -13083,10 +13088,10 @@ react-native-pager-view@^6.1.2:
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.1.2.tgz#3522079b9a9d6634ca5e8d153bc0b4d660254552"
   integrity sha512-qs2KSFc+7N7B+UZ6SG2sTvCkppagm5fVyRclv1KFKc7lDtrhXLzN59tXJw575LDP/dRJoXsNwqUAhZJdws6ABQ==
 
-react-native-permissions@^3.6.1:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.6.1.tgz#73adcc1cef8cd57a9ef167b4507405f4ff5749c4"
-  integrity sha512-fzPpPQXeD34inUccqtoResSwYubfrwUguP4qrVUUv8+KSMjYSaHGoS5HaIJLZHlN9gO+TvLJZ2L5ZljTsb6qnQ==
+react-native-permissions@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.10.0.tgz#946fa7e07908ed90620b3f07eb652f20f482196d"
+  integrity sha512-6SB6JInfC0u54Wco8M1QsRoOGThnVjrhaks5IDWyYgwfi6JpXfTIi+F9fZZmRycyyPCgU8vGtht/5gF4VWEB/A==
 
 react-native-portalize@^1.0.7:
   version "1.0.7"
