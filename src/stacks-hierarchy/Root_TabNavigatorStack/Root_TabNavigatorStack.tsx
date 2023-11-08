@@ -79,6 +79,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     notificationPermissionOnboarded,
     pushNotificationsEnabled,
     locationWhenInUsePermissionOnboarded,
+    locationWhenInUsePermissionStatus,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
