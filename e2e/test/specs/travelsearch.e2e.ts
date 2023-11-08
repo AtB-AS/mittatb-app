@@ -31,7 +31,7 @@ describe('Travel search', () => {
      */
 
     try {
-      timeIsEqual('28 min', 'Times is: 29 minutes');
+      timeIsCorrect('28 min', 'Times is: 29 minutes');
 
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await FrontPagePage.searchFrom.click();
@@ -83,18 +83,18 @@ describe('Travel search', () => {
       // Check travel time
       const travelTimeInDep =
         await TravelsearchDetailsPage.travelTime.getText();
-      expect(timeIsEqual(travelTimeInDep, travelTime)).toEqual(true);
+      expect(timeIsCorrect(travelTimeInDep, travelTime)).toEqual(true);
 
       await NavigationHelper.back();
 
       /**
-       * Check if two times are equal
-       * Note! Simple check for this search wher travel time is in minutes
+       * Check if two times are equal within an allowed margin
+       * Note! Simple check for this search where travel time is in minutes
        * @param time1 String that contains some digits to compare
        * @param time2 String that contains some digits to compare
        * @param allowedDiff Allow a time difference
        */
-      function timeIsEqual(
+      function timeIsCorrect(
         time1: string,
         time2: string,
         allowedDiff: number = 1,
