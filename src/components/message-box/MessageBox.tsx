@@ -39,6 +39,7 @@ export type MessageBoxProps = {
   subtle?: boolean;
   /** Text color to use when `subtle` is true. */
   textColor?: StaticColor;
+  testID?: string;
 };
 
 export const MessageBox = ({
@@ -52,6 +53,7 @@ export const MessageBox = ({
   onDismiss,
   subtle,
   textColor,
+  testID,
 }: MessageBoxProps) => {
   const {theme} = useTheme();
   const styles = useStyles();
@@ -84,6 +86,7 @@ export const MessageBox = ({
         style,
       ]}
       accessible={false}
+      testID={testID}
     >
       {!noStatusIcon && (
         <ThemeIcon
@@ -138,6 +141,7 @@ export const MessageBox = ({
             accessibilityLabel={t(MessageBoxTexts.dismiss.allyLabel)}
             accessibilityRole="button"
             hitSlop={insets.all(theme.spacings.medium)}
+            testID={testID ? `${testID}Close` : 'close'}
           >
             <ThemeIcon svg={Close} {...iconColorProps} />
           </PressableOpacity>
