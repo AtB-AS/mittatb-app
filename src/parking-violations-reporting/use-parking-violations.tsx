@@ -7,17 +7,6 @@ import {
 } from '@atb/api/types/mobility';
 import {Coordinates} from '@entur/sdk';
 
-export class PermissionRequiredError extends Error {
-  constructor() {
-    super('Permission required');
-  }
-}
-export class NoLocationError extends Error {
-  constructor() {
-    super('Location missing');
-  }
-}
-
 export const useParkingViolations = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error>();
@@ -25,44 +14,32 @@ export const useParkingViolations = () => {
   const [providers, setProviders] = useState<ViolationsReportingProvider[]>([]);
   const [position, setPosition] = useState<Coordinates>();
 
-  const {
-    getCurrentPosition,
-    status: locationPermissionStatus,
-    requestLocationPermission,
-  } = useGeolocationState();
+  const {getCurrentLocation} = useGeolocationState();
 
   useEffect(() => {
-    if (locationPermissionStatus !== 'granted') {
-      requestLocationPermission().then((permission) => {
-        if (permission !== 'granted') setError(new PermissionRequiredError());
-      });
-    }
-  }, [locationPermissionStatus, requestLocationPermission]);
-
-  useEffect(() => {
-    if (locationPermissionStatus !== 'granted') return;
-    const position = getCurrentPosition();
-    if (!position) {
-      setError(new NoLocationError());
-      return;
-    }
-    setError(undefined);
-    setIsLoading(true);
-    setPosition({
-      latitude: position.coordinates.latitude,
-      longitude: position.coordinates.longitude,
-    });
-    initViolationsReporting({
-      lat: position.coordinates.latitude.toString(),
-      lng: position.coordinates.longitude.toString(),
-    })
-      .then((data) => {
-        setViolations(data.violations);
-        setProviders(data.providers);
-      })
-      .catch(setError)
-      .finally(() => setIsLoading(false));
-  }, [locationPermissionStatus, getCurrentPosition, initViolationsReporting]);
+    const getLocationAndInitReporting = async () => {
+      try {
+        const location = await getCurrentLocation();
+        setError(undefined);
+        setIsLoading(true);
+        setPosition({
+          latitude: location.coordinates.latitude,
+          longitude: location.coordinates.longitude,
+        });
+        const violationsReportingData = await initViolationsReporting({
+          lat: location.coordinates.latitude.toString(),
+          lng: location.coordinates.longitude.toString(),
+        });
+        setViolations(violationsReportingData.violations);
+        setProviders(violationsReportingData.providers);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getLocationAndInitReporting();
+  }, [getCurrentLocation]);
 
   return {
     isLoading: isLoading && !error,

@@ -37,7 +37,7 @@ type GeolocationState = {
   locationIsAvailable: boolean;
   location: GeoLocation | null;
   locationError: GeoError | null;
-  getCurrentPosition: () => GeoLocation | null;
+  getCurrentLocation: () => Promise<GeoLocation>;
 };
 
 type GeolocationReducerAction =
@@ -73,10 +73,7 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
     case 'LOCATION_CHANGED':
       return {
         ...prevState,
-        location: mapPositionToGeoLocation(
-          action.position,
-          action.locationName,
-        ),
+        location: mapPositionToLocation(action.position, action.locationName),
         locationError: null,
       };
     case 'LOCATION_ERROR':
@@ -87,7 +84,7 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
   }
 };
 
-const mapPositionToGeoLocation = (
+const mapPositionToLocation = (
   position: GeoPosition | null,
   name: string,
 ): GeoLocation | null =>
@@ -119,7 +116,7 @@ const defaultState: GeolocationState = {
   locationIsAvailable: false,
   location: null,
   locationError: null,
-  getCurrentPosition: () => null,
+  getCurrentLocation: () => Promise.resolve({} as GeoLocation),
 };
 
 export const GeolocationContextProvider: React.FC = ({children}) => {
@@ -132,71 +129,93 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
   const locationRef = useRef<GeoLocation | null>();
 
-  const requestLocationPermission = useCallback(async () => {
-    if (!(await isLocationEnabled())) {
-      Alert.alert(
-        t(GeoLocationTexts.blockedLocation.title),
-        t(GeoLocationTexts.blockedLocation.message),
-      );
-    } else {
-      const status = await requestGeolocationPermission();
-      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
-      return status;
-    }
-  }, [requestGeolocationPermission, t]);
+  const locationPermissionTitle = t(GeoLocationTexts.locationPermission.title);
+  const locationPermissionMessage = t(
+    GeoLocationTexts.locationPermission.message,
+  );
+  const locationPermissionGoToSettings = t(
+    GeoLocationTexts.locationPermission.goToSettings,
+  );
+  const locationPermissionCancel = t(
+    GeoLocationTexts.locationPermission.cancel,
+  );
 
-  async function requestGeolocationPermission(): Promise<PermissionStatus> {
-    if (Platform.OS === 'ios') {
-      const permissionStatus = await checkGeolocationPermission();
-      if (permissionStatus === 'blocked') {
-        openSettingsAlert();
-        return permissionStatus;
-      } else {
-        return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-      }
-    } else {
-      // Android
-      const permissionStatus = await checkGeolocationPermission();
+  const blockedLocationTitle = t(GeoLocationTexts.blockedLocation.title);
+  const blockedLocationMessage = t(GeoLocationTexts.blockedLocation.message);
 
-      if (permissionStatus === 'denied') {
-        // Android never returns if the permission was blocked with the check, and therefore it must be checked with a request
-        const requestedStatus = await requestMultiple([
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-          PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
-        ]);
-
-        if (
-          requestedStatus[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-            'blocked' &&
-          requestedStatus[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
-            'blocked'
-        ) {
-          openSettingsAlert();
-          return permissionStatus;
-        }
-      }
-
-      return await checkGeolocationPermission();
-    }
-  }
-  function openSettingsAlert() {
+  const openSettingsAlert = useCallback(() => {
     Alert.alert(
-      t(GeoLocationTexts.locationPermission.title),
-      t(GeoLocationTexts.locationPermission.message),
+      locationPermissionTitle,
+      locationPermissionMessage,
       [
         {
-          text: t(GeoLocationTexts.locationPermission.goToSettings),
+          text: locationPermissionGoToSettings,
           onPress: () => Linking.openSettings(),
         },
         {
-          text: t(GeoLocationTexts.locationPermission.cancel),
+          text: locationPermissionCancel,
           onPress: () => {},
           style: 'cancel',
         },
       ],
       {cancelable: true},
     );
-  }
+  }, [
+    locationPermissionTitle,
+    locationPermissionMessage,
+    locationPermissionGoToSettings,
+    locationPermissionCancel,
+  ]);
+
+  const requestGeolocationPermission =
+    useCallback(async (): Promise<PermissionStatus> => {
+      if (Platform.OS === 'ios') {
+        const permissionStatus = await checkGeolocationPermission();
+        if (permissionStatus === 'blocked') {
+          openSettingsAlert();
+          return permissionStatus;
+        } else {
+          return await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        }
+      } else {
+        // Android
+        const permissionStatus = await checkGeolocationPermission();
+
+        if (permissionStatus === 'denied') {
+          // Android never returns if the permission was blocked with the check, and therefore it must be checked with a request
+          const requestedStatus = await requestMultiple([
+            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+            PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION,
+          ]);
+
+          if (
+            requestedStatus[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+              'blocked' &&
+            requestedStatus[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION] ===
+              'blocked'
+          ) {
+            openSettingsAlert();
+            return permissionStatus;
+          }
+        }
+
+        return await checkGeolocationPermission();
+      }
+    }, [openSettingsAlert]);
+
+  const requestLocationPermission = useCallback(async () => {
+    if (!(await isLocationEnabled())) {
+      Alert.alert(blockedLocationTitle, blockedLocationMessage);
+    } else {
+      const status = await requestGeolocationPermission();
+      dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
+      return status;
+    }
+  }, [
+    requestGeolocationPermission,
+    blockedLocationTitle,
+    blockedLocationMessage,
+  ]);
 
   async function handleLocationError(locationError: GeoError) {
     const status = await checkGeolocationPermission();
@@ -257,13 +276,43 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
       }
     }
     checkPermission();
-  }, [appStatus]);
+  }, [appStatus, state.status]);
 
   useEffect(() => {
     locationRef.current = state.location;
   }, [state.location]);
 
-  const getCurrentPosition = useCallback(() => locationRef.current ?? null, []);
+  const getCurrentLocation = useCallback((): Promise<GeoLocation> => {
+    return new Promise(async (resolve, reject) => {
+      if (locationRef.current) {
+        resolve(locationRef.current);
+      } else {
+        if (state.status !== 'granted') {
+          const status = await requestLocationPermission();
+          status !== 'granted' && reject(new LocationPermissionRequiredError());
+        }
+        Geolocation.getCurrentPosition(
+          (position) => {
+            updateLocation(position, geoLocationName);
+            const currentLocation = mapPositionToLocation(
+              position,
+              geoLocationName,
+            );
+            if (currentLocation) {
+              resolve(currentLocation);
+            } else {
+              reject(new NoLocationError());
+            }
+          },
+          (error) => {
+            handleLocationError(error);
+            reject(new NoLocationError()); //reject(error);
+          },
+          config,
+        );
+      }
+    });
+  }, [geoLocationName, state.status, requestLocationPermission]);
 
   return (
     <GeolocationContext.Provider
@@ -271,7 +320,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
         ...state,
         locationIsAvailable,
         requestLocationPermission,
-        getCurrentPosition,
+        getCurrentLocation,
       }}
     >
       {children}
@@ -306,5 +355,17 @@ export async function checkGeolocationPermission(): Promise<PermissionStatus> {
       return statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
     }
     return statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
+  }
+}
+
+export class LocationPermissionRequiredError extends Error {
+  constructor() {
+    super('Permission required');
+  }
+}
+
+export class NoLocationError extends Error {
+  constructor() {
+    super('Location missing');
   }
 }
