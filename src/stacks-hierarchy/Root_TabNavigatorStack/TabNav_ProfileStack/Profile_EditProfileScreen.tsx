@@ -12,6 +12,8 @@ import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import parsePhoneNumber from 'libphonenumber-js';
 import firestore from '@react-native-firebase/firestore';
+import {MessageBox} from '@atb/components/message-box';
+import {SectionHeading} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SectionHeading';
 
 export type CustomerProfile = {
   email?: string;
@@ -29,11 +31,11 @@ export const Profile_EditProfileScreen = ({
 }: EditProfileScreenProps) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const {authenticationType, user, customerNumber, abtCustomerId} =
-    useAuthState();
+  const {authenticationType, customerNumber, abtCustomerId} = useAuthState();
   // const [customerProfile, setCustomerProfile] = useState<CustomerProfile>();
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
+  const [surName, setSurName] = useState('');
   const [invalidEmail, setInvalidEmail] = useState(false);
 
   const [submitted, setSubmitted] = useState(false);
@@ -42,7 +44,8 @@ export const Profile_EditProfileScreen = ({
       .collection('customers')
       .doc(abtCustomerId)
       .onSnapshot((snapshot) => {
-        const data = snapshot.data();
+        // const data = snapshot.data();
+        // console.log('data: ' + data);
         // const profile: CustomerProfile = data
         //   ? {
         //       email: data.email,
@@ -56,20 +59,23 @@ export const Profile_EditProfileScreen = ({
         //     }
         //   : {};
         // setCustomerProfile(profile);
-        setEmail(data?.email);
-        setFirstName(data?.firstName);
+        // setEmail(data?.email);
+        // setFirstName(data?.firstName);
       });
   }, []);
 
   const phoneNumber = parsePhoneNumber(
-    user?.phoneNumber ?? '', // from firebase or authState?
+    '+4700000000',
+    // user?.phoneNumber ?? '', // from firebase or authState?
   )?.formatInternational();
 
   const onSubmit = () => {
     if (isValidEmail(email)) {
       setSubmitted(true);
+      setInvalidEmail(false);
     } else {
       setInvalidEmail(true);
+      setSubmitted(false);
     }
   };
 
@@ -93,13 +99,16 @@ export const Profile_EditProfileScreen = ({
     >
       {authenticationType !== 'phone' ? (
         <View>
-          <Text>{'Looks like you are not logged in'}</Text>
+          <ThemeText>{t(EditProfileTexts.notProfile)}</ThemeText>
         </View>
       ) : (
         <>
-          <Text accessibilityRole="header">
+          <SectionHeading>
             {t(EditProfileTexts.personalia.header)}
-          </Text>
+          </SectionHeading>
+          <ThemeText accessibilityRole="header">
+            {t(EditProfileTexts.personalia.header)}
+          </ThemeText>
 
           <Section withPadding withTopPadding>
             <TextInputSectionItem
@@ -107,19 +116,20 @@ export const Profile_EditProfileScreen = ({
               onChangeText={setFirstName}
               label={t(EditProfileTexts.personalia.firstName.label)}
               placeholder={t(EditProfileTexts.personalia.firstName.placeholder)}
-              keyboardType="phone-pad"
               showClear
               inlineLabel={false}
-              autoCapitalize={'words'}
+              autoCapitalize="words"
             />
           </Section>
           <Section withPadding>
             <TextInputSectionItem
+              value={surName}
+              onChangeText={setSurName}
               label={t(EditProfileTexts.personalia.surname.label)}
               placeholder={t(EditProfileTexts.personalia.surname.placeholder)}
-              keyboardType="phone-pad"
               showClear
               inlineLabel={false}
+              autoCapitalize="words"
             />
           </Section>
           <Section withPadding>
@@ -131,7 +141,9 @@ export const Profile_EditProfileScreen = ({
               keyboardType="email-address"
               showClear
               errorText={
-                'Her har det skjedd noe kjemperart kjemperart kjemperart'
+                invalidEmail
+                  ? t(EditProfileTexts.personalia.email.formattingError)
+                  : undefined
               }
               inlineLabel={false}
             />
@@ -143,35 +155,47 @@ export const Profile_EditProfileScreen = ({
               {t(EditProfileTexts.personalia.phone.loggedIn(phoneNumber))}
             </ThemeText>
           </View>
-          {submitted && (
-            <>
-              <Text>{firstName}</Text>
-              <Text>{email}</Text>
-            </>
-          )}
+
           <Section withPadding withTopPadding>
             <Button
               mode="primary"
-              text={t(EditProfileTexts.save)}
+              text={t(EditProfileTexts.button.save)}
               onPress={onSubmit}
             />
+            {submitted && (
+              <>
+                <MessageBox
+                  type="valid"
+                  message={t(EditProfileTexts.profileUpdateSuccess)}
+                />
+                <Text>{firstName}</Text>
+                <Text>{surName}</Text>
+                <Text>{email}</Text>
+              </>
+            )}
           </Section>
           <View>
-            <ThemeText>{'About profile'}</ThemeText>
-            <ThemeText>{'Log in provider'}</ThemeText>
-            <ThemeText>{t(EditProfileTexts.otp(phoneNumber))}</ThemeText>
+            <ThemeText>{t(EditProfileTexts.profileInfo.profile)}</ThemeText>
+            <ThemeText>
+              {t(EditProfileTexts.profileInfo.loginProvider)}
+            </ThemeText>
+            <ThemeText>
+              {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
+            </ThemeText>
           </View>
           <View>
-            <ThemeText>{t(EditProfileTexts.customerNumber)}</ThemeText>
+            <ThemeText>
+              {t(EditProfileTexts.profileInfo.customerNumber)}
+            </ThemeText>
             <ThemeText>{customerNumber}</ThemeText>
           </View>
 
           <Section withPadding withTopPadding>
             <Button
               mode="primary"
-              interactiveColor={'interactive_destructive'}
+              interactiveColor="interactive_destructive"
               leftIcon={{svg: Delete}}
-              text={t(EditProfileTexts.deleteProfile)}
+              text={t(EditProfileTexts.button.deleteProfile)}
               onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}
             />
           </Section>

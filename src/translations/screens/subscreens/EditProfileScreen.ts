@@ -4,8 +4,13 @@ export const EditProfileTexts = {
   header: {
     title: _('Rediger Min profil', 'Edit My profile', ''),
   },
+  notProfile: _(
+    'Det virker ikke som du er logget inn',
+    'Looks like you are not logged in',
+    'Det verkar ikkje som du er logga inn',
+  ),
   personalia: {
-    header: _('Personalia', 'Personalia', ''),
+    header: _('Personalia', 'Personalia', 'Personalia'),
     firstName: {
       label: _('Fornavn', 'First name', ''),
       placeholder: _('Legg til fornavn', 'Add first name', ''),
@@ -26,16 +31,39 @@ export const EditProfileTexts = {
     email: {
       label: _('E-mail adresse', 'E-mail address', ''),
       placeholder: _('Legg til e-mail', 'Add e-mail address', ''),
+      formattingError: _(
+        'Feil formatering',
+        'Wrong formatting',
+        'Feil formatering',
+      ),
     },
   },
-  customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
-  otp: (phoneNumber: string | undefined) =>
-    _(
-      `Engangspassord på SMS til ${phoneNumber}`,
-      `One-time password on SMS til ${phoneNumber}`,
-      '',
+  profileInfo: {
+    customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
+    profile: _('Om profil', 'About profile', 'Om profil'),
+    loginProvider: _(
+      'Innlogingsleverandør',
+      'Log in provider',
+      'Innlogingsleverandør',
     ),
-
-  save: _('Lagre', 'Save', 'Lagre'),
-  deleteProfile: _('Slett Min profil', 'Delete My profile', 'Slett Min profil'),
+    otp: (phoneNumber: string | undefined) =>
+      _(
+        `Engangspassord på SMS til ${phoneNumber}`, // Is Engangspassord configurable?
+        `One-time password on SMS to ${phoneNumber}`,
+        '',
+      ),
+  },
+  button: {
+    save: _('Lagre', 'Save', 'Lagre'),
+    deleteProfile: _(
+      'Slett Min profil',
+      'Delete My profile',
+      'Slett Min profil',
+    ),
+  },
+  profileUpdateSuccess: _(
+    'Profil oppdatert.',
+    'Profile updated.',
+    'Profil oppdatert.',
+  ),
 };
