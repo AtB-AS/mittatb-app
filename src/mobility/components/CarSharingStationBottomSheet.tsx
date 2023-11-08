@@ -9,17 +9,14 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {useSystem} from '@atb/mobility/use-system';
 import {Button} from '@atb/components/button';
 import {
   CarSharingTexts,
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {getRentalAppUri} from '@atb/mobility/utils';
 import {StyleSheet} from '@atb/theme';
 import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {useTextForLanguage} from '@atb/translations/utils';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {WalkingDistance} from '@atb/components/walking-distance';
@@ -29,6 +26,7 @@ import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/statio
 import {CarImage} from '@atb/mobility/components/CarImage';
 import {InfoChip} from '@atb/components/info-chip';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {OperatorBenefits} from '@atb/mobility/components/OperatorBenefits';
 
 type Props = {
   stationId: string;
@@ -39,15 +37,17 @@ type Props = {
 export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
-  const {station, isLoading, error} = useCarSharingStation(stationId);
-  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
-  const rentalAppUri = getRentalAppUri(station);
-  const {openOperatorApp} = useOperatorApp({
+  const {
+    station,
+    isLoading,
+    error,
     operatorName,
+    brandLogoUrl,
     appStoreUri,
     rentalAppUri,
-  });
-  const stationName = useTextForLanguage(station?.name.translation) ?? '';
+    stationName,
+  } = useCarSharingStation(stationId);
+  const {openOperatorApp} = useOperatorApp();
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -74,6 +74,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                 style={style.walkingDistance}
                 distance={distance}
               />
+              <OperatorBenefits entity={station} style={style.benefits} />
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -132,7 +133,9 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                 <Button
                   style={style.operatorButton}
                   text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
-                  onPress={openOperatorApp}
+                  onPress={() =>
+                    openOperatorApp({operatorName, appStoreUri, rentalAppUri})
+                  }
                   mode="primary"
                   interactiveColor="interactive_0"
                 />
@@ -166,6 +169,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     availabilityChip: {
       flex: 1,
       alignItems: 'flex-end',
+    },
+    benefits: {
+      marginBottom: theme.spacings.medium,
     },
     carDetailsContainer: {
       display: 'flex',

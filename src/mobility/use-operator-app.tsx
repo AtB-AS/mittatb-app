@@ -4,16 +4,17 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import {useCallback} from 'react';
 import {useAnalytics} from '@atb/analytics';
 
-type AppMissingAlertArgs = {
+type OpenOperatorAppArgs = {
   operatorName: string;
   appStoreUri: string | undefined;
   rentalAppUri: string | undefined;
 };
-export const useOperatorApp = ({
-  operatorName,
-  appStoreUri,
-  rentalAppUri,
-}: AppMissingAlertArgs) => {
+type AppMissingAlertArgs = Pick<
+  OpenOperatorAppArgs,
+  'appStoreUri' | 'operatorName'
+>;
+
+export const useOperatorApp = () => {
   const analytics = useAnalytics();
   const {t} = useTranslation();
 
@@ -31,7 +32,10 @@ export const useOperatorApp = ({
     );
   };
 
-  const appMissingAlert = () => {
+  const appMissingAlert = ({
+    appStoreUri,
+    operatorName,
+  }: AppMissingAlertArgs) => {
     const buttons: AlertButton[] = [
       {
         text: t(MobilityTexts.appMissingAlert.buttons.cancel),
@@ -59,11 +63,16 @@ export const useOperatorApp = ({
     );
   };
 
-  const openOperatorApp = useCallback(async () => {
-    analytics.logEvent('Mobility', 'Open operator app', {operatorName});
-    if (!rentalAppUri) return;
-    await Linking.openURL(rentalAppUri).catch(() => appMissingAlert());
-  }, [rentalAppUri, operatorName, appStoreUri]);
+  const openOperatorApp = useCallback(
+    async ({operatorName, appStoreUri, rentalAppUri}: OpenOperatorAppArgs) => {
+      analytics.logEvent('Mobility', 'Open operator app', {operatorName});
+      if (!rentalAppUri) return;
+      await Linking.openURL(rentalAppUri).catch(() =>
+        appMissingAlert({appStoreUri, operatorName}),
+      );
+    },
+    [],
+  );
 
   return {
     appMissingAlert,
