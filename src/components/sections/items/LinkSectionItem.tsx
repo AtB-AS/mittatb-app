@@ -12,7 +12,7 @@ import {useSectionStyle} from '../use-section-style';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelInfo} from '@atb/components/label-info';
-import {LabelType} from '@atb-as/config-specs';
+import {LabelType} from '@atb/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = SectionItemProps<{
@@ -87,13 +87,6 @@ export function LinkSectionItem({
   );
 }
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   disabled: {opacity: 0.2},
-  flag: {
-    backgroundColor: theme.static.background.background_accent_3.background,
-    marginRight: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.small,
-    paddingVertical: theme.spacings.xSmall,
-    borderRadius: theme.border.radius.regular,
-  },
 }));

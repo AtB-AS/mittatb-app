@@ -1,21 +1,23 @@
 import React from 'react';
 import {
   FareContract,
-  isInspectableTravelRight,
   isPreActivatedTravelRight,
+  NormalTravelRight,
 } from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {FareContractInfo} from '../FareContractInfo';
+import {
+  FareContractInfoHeader,
+  FareContractInfoDetails,
+} from '../FareContractInfo';
 import {ValidityHeader} from '../ValidityHeader';
 import {ValidityLine} from '../ValidityLine';
-import {getValidityStatus} from '@atb/fare-contracts/utils';
 import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+  getValidityStatus,
+  mapToUserProfilesWithCount,
+} from '@atb/fare-contracts/utils';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
 import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -28,6 +30,12 @@ import {
 } from '@atb/global-messages';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {
+  findReferenceDataById,
+  PreassignedFareProduct,
+} from '@atb/configuration';
+import {Barcode} from './Barcode';
 
 type Props = {
   fareContract: FareContract;
@@ -42,33 +50,35 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
-  hasActiveTravelCard = false,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-  const {
-    deviceIsInspectable,
-    isError: mobileTokenError,
-    fallbackEnabled,
-  } = useMobileTokenContextState();
   const {findGlobalMessages} = useGlobalMessagesState();
 
   const firstTravelRight = fc.travelRights[0];
+  const {tariffZones, userProfiles} = useFirestoreConfiguration();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-    const isInspectable = isInspectableTravelRight(
-      firstTravelRight,
-      hasActiveTravelCard,
-      hasEnabledMobileToken,
-      deviceIsInspectable,
-      mobileTokenError,
-      fallbackEnabled,
-    );
 
     const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+
+    const {tariffZoneRefs} = firstTravelRight;
+    const firstZone = tariffZoneRefs?.[0];
+    const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+
+    const fromTariffZone = firstZone
+      ? findReferenceDataById(tariffZones, firstZone)
+      : undefined;
+    const toTariffZone = lastZone
+      ? findReferenceDataById(tariffZones, lastZone)
+      : undefined;
+    const userProfilesWithCount = mapToUserProfilesWithCount(
+      fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
+      userProfiles,
+    );
 
     const globalMessageRuleVariables = {
       fareProductType: preassignedFareProduct?.type ?? 'unknown',
@@ -90,7 +100,6 @@ export const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
             fareProductType={preassignedFareProduct?.type}
           />
           <ValidityLine
@@ -98,16 +107,31 @@ export const DetailsContent: React.FC<Props> = ({
             now={now}
             validFrom={validFrom}
             validTo={validTo}
-            isInspectable={isInspectable}
             fareProductType={preassignedFareProduct?.type}
           />
-          <FareContractInfo
-            travelRights={fc.travelRights.filter(isPreActivatedTravelRight)}
+          <FareContractInfoHeader
+            travelRight={firstTravelRight}
             status={validityStatus}
-            isInspectable={isInspectable}
-            testID={'details'}
-            fareContract={fc}
-            fareProductType={preassignedFareProduct?.type}
+            testID="details"
+            preassignedFareProduct={preassignedFareProduct}
+          />
+        </GenericSectionItem>
+        {deviceInspectionStatus === 'inspectable' && (
+          <GenericSectionItem>
+            <Barcode
+              validityStatus={validityStatus}
+              fc={fc}
+            />
+          </GenericSectionItem>
+        )}
+        <GenericSectionItem>
+          <FareContractInfoDetails
+            omitUserProfileCount={true}
+            fromTariffZone={fromTariffZone}
+            toTariffZone={toTariffZone}
+            userProfilesWithCount={userProfilesWithCount}
+            status={validityStatus}
+            preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>
         {globalMessageCount > 0 && (

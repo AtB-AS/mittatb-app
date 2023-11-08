@@ -55,7 +55,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
             lineColor,
             ...customStyle,
           }}
-        ></MapboxGL.LineLayer>
+         />
       </MapboxGL.ShapeSource>
 
       <MapboxGL.ShapeSource
@@ -71,7 +71,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
             circleRadius: 7.5,
             circleColor: lineColor,
           }}
-        ></MapboxGL.CircleLayer>
+         />
       </MapboxGL.ShapeSource>
     </View>
   );

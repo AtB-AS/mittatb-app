@@ -427,7 +427,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
             </View>
           )}
           {!tripPatterns.length && (
-            <View style={style.emptyResultsSpacer}></View>
+            <View style={style.emptyResultsSpacer} />
           )}
           {!error && isValidLocations && (
             <PressableOpacity
@@ -463,7 +463,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                       <ThemeIcon
                         colorType="secondary"
                         svg={ExpandMore}
-                        size={'normal'}
+                        size="normal"
                       />
                       <ThemeText color="secondary" testID="resultsLoaded">
                         {' '}
@@ -587,7 +587,7 @@ function computeNoResultReasons(
   from?: Location,
   to?: Location,
 ): string[] {
-  let reasons = [];
+  const reasons = [];
 
   if (!!from && !!to) {
     if (coordinatesAreEqual(from.coordinates, to.coordinates)) {

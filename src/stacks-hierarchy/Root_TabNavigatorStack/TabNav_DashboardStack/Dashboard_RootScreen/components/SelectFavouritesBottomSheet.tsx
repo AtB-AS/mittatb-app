@@ -8,48 +8,39 @@ import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
-import {
-  ScreenHeaderTexts,
-  TranslatedString,
-  useTranslation,
-} from '@atb/translations';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
-import {AnyMode, TransportationIconBox} from '@atb/components/icon-box';
-import {useFavorites} from '@atb/favorites';
-import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {StoredFavoriteDeparture, useFavorites} from '@atb/favorites';
 import {LegMode} from '@entur/sdk';
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
+import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
-  favouriteId: string;
-  active: boolean;
-  lineTransportationMode: AnyMode;
-  lineTransportationSubmode?: TransportSubmode;
-  lineIdentifier: string;
-  lineName: string | TranslatedString;
-  departureStation: string;
-  departureQuay?: string;
+  favorite: StoredFavoriteDeparture;
   testID?: string;
 };
 
 const SelectableFavouriteDeparture = ({
   handleSwitchFlip,
-  favouriteId,
-  active,
-  lineTransportationMode,
-  lineTransportationSubmode,
-  lineIdentifier,
-  lineName,
-  departureStation,
-  departureQuay,
+  favorite,
   testID,
 }: SelectableFavouriteDepartureData) => {
   const styles = useStyles();
   const {t} = useTranslation();
+
+  const active = !!favorite.visibleOnDashboard;
+  const departureQuay = favorite.quayPublicCode;
+  const lineIdentifier = favorite.lineLineNumber ?? '';
+  const lineTransportationMode = favorite.lineTransportationMode ?? LegMode.BUS;
+
+  const lineName =
+    formatDestinationDisplay(t, favorite.destinationDisplay) ??
+    t(SelectFavouriteDeparturesText.departures.allVariations);
 
   return (
     <View
@@ -59,17 +50,17 @@ const SelectableFavouriteDeparture = ({
         getTranslatedModeName(lineTransportationMode),
       )} ${lineIdentifier} ${lineName}, ${t(
         SelectFavouriteDeparturesText.accessibleText.from,
-      )} ${departureStation} ${departureQuay && departureQuay}`}
+      )} ${favorite.quayName} ${departureQuay && departureQuay}`}
       accessibilityRole="switch"
       accessibilityActions={[{name: 'activate'}]}
-      onAccessibilityAction={() => handleSwitchFlip(favouriteId, !active)}
+      onAccessibilityAction={() => handleSwitchFlip(favorite.id, !active)}
       accessibilityHint={t(SelectFavouriteDeparturesText.switch.a11yhint)}
       accessibilityState={{checked: active}}
     >
       <TransportationIconBox
         style={styles.lineModeIcon}
         mode={lineTransportationMode}
-        subMode={lineTransportationSubmode}
+        subMode={favorite.lineTransportationSubMode}
       />
       <View style={styles.selectableDepartureTextView}>
         <ThemeText type="body__primary" style={styles.lineIdentifierText}>
@@ -77,7 +68,7 @@ const SelectableFavouriteDeparture = ({
         </ThemeText>
 
         <ThemeText type="body__secondary" style={styles.secondaryText}>
-          {t(SelectFavouriteDeparturesText.departures.from)} {departureStation}
+          {t(SelectFavouriteDeparturesText.departures.from)} {favorite.quayName}
           {departureQuay && ' ' + departureQuay}
         </ThemeText>
       </View>
@@ -86,7 +77,7 @@ const SelectableFavouriteDeparture = ({
         <Toggle
           importantForAccessibility="no"
           value={active}
-          onValueChange={(value) => handleSwitchFlip(favouriteId, value)}
+          onValueChange={(value) => handleSwitchFlip(favorite.id, value)}
           testID={testID}
         />
       </View>
@@ -144,38 +135,16 @@ export const SelectFavouritesBottomSheet = ({
 
             <View>
               {updatedFavorites &&
-                updatedFavorites.map((favorite) => {
-                  return (
-                    <View key={favorite.id}>
-                      <SectionSeparator />
-                      <SelectableFavouriteDeparture
-                        handleSwitchFlip={handleSwitchFlip}
-                        favouriteId={favorite.id}
-                        active={!!favorite.visibleOnDashboard}
-                        departureStation={favorite.quayName}
-                        departureQuay={favorite.quayPublicCode}
-                        lineIdentifier={favorite.lineLineNumber ?? ''}
-                        lineName={
-                          favorite.lineName ??
-                          t(
-                            SelectFavouriteDeparturesText.departures
-                              .allVariations,
-                          )
-                        }
-                        lineTransportationMode={
-                          favorite.lineTransportationMode ?? LegMode.BUS
-                        }
-                        lineTransportationSubmode={
-                          favorite.lineTransportationSubMode
-                        }
-                        testID={
-                          'selectFavoriteToggle' +
-                          updatedFavorites.indexOf(favorite)
-                        }
-                      />
-                    </View>
-                  );
-                })}
+                updatedFavorites.map((favorite, i) => (
+                  <View key={favorite.id}>
+                    <SectionSeparator />
+                    <SelectableFavouriteDeparture
+                      handleSwitchFlip={handleSwitchFlip}
+                      favorite={favorite}
+                      testID={'selectFavoriteToggle' + i}
+                    />
+                  </View>
+                ))}
             </View>
           </>
         )}

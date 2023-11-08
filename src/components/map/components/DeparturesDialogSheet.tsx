@@ -105,7 +105,7 @@ export const DeparturesDialogSheet = ({
             showOnlyFavorites={false}
             setShowOnlyFavorites={(_) => {}}
             testID="departuresContentView"
-            mode={'Map'}
+            mode="Map"
             distance={distance}
             setTravelTarget={(target) => {
               stopPlaceGeoLocation &&

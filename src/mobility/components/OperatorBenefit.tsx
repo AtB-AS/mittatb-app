@@ -1,6 +1,6 @@
 import React from 'react';
 import {ViewStyle} from 'react-native';
-import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitType} from '@atb/configuration';
 import {MessageBox} from '@atb/components/message-box';
 import {getTextForLanguage} from '@atb/translations/utils';
 import {useTranslation} from '@atb/translations';
@@ -23,6 +23,6 @@ export const OperatorBenefit = ({isUserEligible, benefit, style}: Props) => {
   if (!text) return null;
 
   return (
-    <MessageBox style={style} type={'info'} message={text} isMarkdown={true} />
+    <MessageBox style={style} type="info" message={text} isMarkdown={true} />
   );
 };

@@ -11,15 +11,21 @@ import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
  * reader when loaded on screen. This will work both on component mount, and
  * when the screen gets back in focus while already on the stack.
  *
- * In some cases, like in a stack, it is necessary to use a timeout to let the screen render completely before giving focus.
+ * In some cases, like in a stack, it is necessary to use a timeout to let the
+ * screen render complete before giving focus.
  */
 export function useFocusOnLoad(
   setFocusOnLoad: boolean = true,
   timeOutMilliseconds?: number,
 ) {
   const focusRef = useRef(null);
-
   const navigation = useNavigationSafe();
+
+  useEffect(() => {
+    if (!setFocusOnLoad || !focusRef.current) return;
+    giveFocus(focusRef);
+  }, [setFocusOnLoad]);
+
   useEffect(() => {
     if (!navigation || !focusRef.current || !setFocusOnLoad) return;
 
@@ -27,7 +33,7 @@ export function useFocusOnLoad(
       giveFocus(focusRef, timeOutMilliseconds),
     );
     return () => unsubscribe();
-  }, [navigation, focusRef.current, setFocusOnLoad]);
+  }, [navigation, setFocusOnLoad, timeOutMilliseconds]);
 
   return focusRef;
 }

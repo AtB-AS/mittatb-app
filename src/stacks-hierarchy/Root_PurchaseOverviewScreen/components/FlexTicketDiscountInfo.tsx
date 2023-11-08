@@ -8,8 +8,10 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {UserProfileWithCountAndOffer} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
-import {getReferenceDataName} from '@atb/reference-data/utils';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {
+  useFirestoreConfiguration,
+  getReferenceDataName,
+} from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {StyleSheet} from '@atb/theme';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -96,12 +98,12 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                   <View style={styles.infoChips}>
                     <InfoChip
                       style={styles.infoChips_first}
-                      interactiveColor={'interactive_2'}
+                      interactiveColor="interactive_2"
                       text={discountText}
                     />
                     <InfoChip
                       text={priceText}
-                      interactiveColor={'interactive_2'}
+                      interactiveColor="interactive_2"
                     />
                   </View>
                 </View>
@@ -111,7 +113,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         {expanded && (
           <LinkSectionItem
             text={t(PurchaseOverviewTexts.flexDiscount.link)}
-            icon={'external-link'}
+            icon="external-link"
             onPress={() => Linking.openURL(flex_ticket_url)}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),

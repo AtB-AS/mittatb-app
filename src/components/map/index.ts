@@ -1,6 +1,7 @@
 export {BackArrow} from './components/BackArrow';
 export {PositionArrow} from './components/PositionArrow';
 export {shadows} from './components/shadows';
+export {SelectionPin} from './components/SelectionPin';
 export {MapViewConfig, MapCameraConfig} from './MapConfig';
 export {useControlPositionsStyle} from './hooks/use-control-styles';
 export {Map} from './Map';

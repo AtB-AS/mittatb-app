@@ -17,7 +17,7 @@ export const AnalyticsContext = createContext<PostHog | undefined>(undefined);
 
 export const AnalyticsContextProvider: React.FC = ({children}) => {
   const [client, setClient] = useState<PostHog>();
-  const {abtCustomerId, authenticationType} = useAuthState();
+  const {userId, authenticationType} = useAuthState();
   const appStatus = useAppStateStatus();
 
   const authTypeRef = useRef(authenticationType);
@@ -31,22 +31,22 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
         host: POSTHOG_HOST,
       }).then(setClient);
     }
-  }, []);
+  }, [client]);
 
   useEffect(() => {
-    if (abtCustomerId && client) {
-      client.identify(abtCustomerId, {
+    if (userId && client) {
+      client.identify(userId, {
         authenticationType: authTypeRef.current,
       });
       return () => {
         client?.reset();
       };
     }
-  }, [abtCustomerId, client]);
+  }, [userId, client]);
 
   useEffect(() => {
     client?.capture(`App status: ${appStatus}`);
-  }, [appStatus]);
+  }, [appStatus, client]);
 
   return (
     <AnalyticsContext.Provider value={client}>

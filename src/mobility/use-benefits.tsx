@@ -1,10 +1,7 @@
 import {useEffect, useState} from 'react';
 import {getBenefits, getValueCode} from './api/api';
 import {useOperators} from '@atb/mobility/use-operators';
-import {
-  OperatorBenefitIdType,
-  OperatorBenefitType,
-} from '@atb-as/config-specs/lib/mobility-operators';
+import {OperatorBenefitIdType, OperatorBenefitType} from '@atb/configuration';
 import {Linking} from 'react-native';
 
 export const useBenefits = (operatorId: string | undefined) => {

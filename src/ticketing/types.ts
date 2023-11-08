@@ -80,7 +80,7 @@ export type FareContract = {
   minimumSecurityLevel: number;
   travelRights: TravelRight[];
   qrCode: string;
-  paymentType?: string;
+  paymentType?: string[];
 };
 
 export enum FareContractState {
@@ -215,9 +215,7 @@ export type CustomerProfile = {
   firstName?: string;
   id?: string;
   surname?: string;
-  travelcard?: TravelCard;
   debug?: boolean;
-  enableMobileToken?: boolean;
 };
 
 export type TravelCard = {

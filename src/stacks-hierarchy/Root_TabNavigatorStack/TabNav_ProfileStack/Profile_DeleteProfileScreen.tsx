@@ -90,7 +90,7 @@ export const Profile_DeleteProfileScreen = ({
     >
       <MessageBox
         message={t(DeleteProfileTexts.deleteInfo)}
-        type={'info'}
+        type="info"
         style={style.contentMargin}
       />
 

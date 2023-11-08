@@ -14,21 +14,22 @@ import {isValidFareContract, ValidityStatus} from './utils';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export const ValidityHeader: React.FC<{
   status: ValidityStatus;
   now: number;
   validFrom: number;
   validTo: number;
-  isInspectable: boolean;
   fareProductType: string | undefined;
-}> = ({status, now, validFrom, validTo, isInspectable, fareProductType}) => {
+}> = ({status, now, validFrom, validTo, fareProductType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === fareProductType,
   );
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   const validityTime: string = validityTimeText(
     status,
@@ -46,7 +47,7 @@ export const ValidityHeader: React.FC<{
           fareProductTypeConfig && (
             <TransportModes
               modes={fareProductTypeConfig.transportModes}
-              iconSize={'small'}
+              iconSize="small"
               style={{flex: 2}}
             />
           )
@@ -57,7 +58,7 @@ export const ValidityHeader: React.FC<{
           style={styles.label}
           type="body__secondary"
           accessibilityLabel={
-            !isInspectable
+            deviceInspectionStatus !== 'inspectable'
               ? validityTime +
                 ', ' +
                 t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)
@@ -89,6 +90,8 @@ function validityTimeText(
   switch (status) {
     case 'refunded':
       return t(FareContractTexts.validityHeader.refunded);
+    case 'cancelled':
+      return t(FareContractTexts.validityHeader.cancelled);
     case 'upcoming': {
       const secondsUntilValid = (validFrom - now) / 1000;
       const durationText = toDurationText(secondsUntilValid);
@@ -120,7 +123,6 @@ function validityTimeText(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  iconContainer: {marginRight: theme.spacings.medium},
   validityHeader: {
     flex: 1,
     flexDirection: 'row',
@@ -132,15 +134,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
-  },
-  transportationMode: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  validityDashContainer: {
-    marginVertical: theme.spacings.medium,
-    marginHorizontal: -theme.spacings.medium,
-    flexDirection: 'row',
   },
   label: {
     flex: 3,

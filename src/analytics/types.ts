@@ -1,4 +1,5 @@
 export type AnalyticsEventContext =
+  | 'Contact'
   | 'Dashboard'
   | 'Departure details'
   | 'Favorites'
@@ -10,4 +11,5 @@ export type AnalyticsEventContext =
   | 'Ticketing'
   | 'Trip details'
   | 'Trip search'
-  | 'Ticket assistant';
+  | 'Ticket assistant'
+  | 'Parking violations';

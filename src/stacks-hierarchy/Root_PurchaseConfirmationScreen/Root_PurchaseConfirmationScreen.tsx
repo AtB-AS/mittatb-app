@@ -1,16 +1,14 @@
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
-import {useAuthState} from '@atb/auth';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
-import {getReferenceDataName} from '@atb/reference-data/utils';
+  getReferenceDataName,
+  TariffZone,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PaymentType, ReserveOffer} from '@atb/ticketing';
 import {
@@ -32,7 +30,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {getOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
+import {useOtherDeviceIsInspectableWarning} from '@atb/fare-contracts/utils';
 import {
   useOfferState,
   UserProfileWithCountAndOffer,
@@ -44,7 +42,6 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
 import {Info} from '@atb/assets/svg/color/icons/status';
-import {TariffZone} from '@atb/reference-data/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
@@ -92,30 +89,15 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {theme} = useTheme();
   const {t, language} = useTranslation();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const {user} = useAuthState();
   const {paymentTypes, vatPercent} = useFirestoreConfiguration();
   const [previousMethod, setPreviousMethod] = useState<
     PaymentMethod | undefined
   >(undefined);
-  const previousPaymentMethod = usePreviousPaymentMethod(user);
-  const {
-    deviceIsInspectable,
-    remoteTokens,
-    fallbackEnabled,
-    isError: mobileTokenError,
-  } = useMobileTokenContextState();
-  const tokensEnabled = useHasEnabledMobileToken();
+  const previousPaymentMethod = usePreviousPaymentMethod();
   const isShowValidTimeInfoEnabled = useShowValidTimeInfoEnabled();
   const analytics = useAnalytics();
 
-  const inspectableTokenWarningText = getOtherDeviceIsInspectableWarning(
-    tokensEnabled,
-    mobileTokenError,
-    fallbackEnabled,
-    t,
-    remoteTokens,
-    deviceIsInspectable,
-  );
+  const inspectableTokenWarningText = useOtherDeviceIsInspectableWarning();
 
   const {
     fareProductTypeConfig,
@@ -436,19 +418,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             </View>
           </GenericSectionItem>
         </Section>
-
-        <MessageBox
-          type="info"
-          message={
-            travelDate
-              ? t(
-                  PurchaseConfirmationTexts.infoText.validInFuture(
-                    formatToLongDateTime(travelDate, language),
-                  ),
-                )
-              : t(PurchaseConfirmationTexts.infoText.validNow)
-          }
-        />
         {inspectableTokenWarningText && (
           <MessageBox
             type="warning"
@@ -479,7 +448,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         ? Vipps
                         : Visa,
                   }}
-                  viewContainerStyle={styles.paymentButton}
                   onPress={() => {
                     analytics.logEvent(
                       'Ticketing',
@@ -531,7 +499,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   });
                   selectPaymentMethod();
                 }}
-                viewContainerStyle={styles.paymentButton}
                 testID="choosePaymentOptionButton"
               />
             )}
@@ -641,7 +608,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   warningMessage: {
-    marginTop: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
   },
   infoSection: {padding: theme.spacings.medium},
   userProfileItem: {
@@ -673,8 +640,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   smallTopMargin: {
     marginTop: theme.spacings.xSmall,
-  },
-  paymentButton: {
-    marginTop: theme.spacings.medium,
   },
 }));

@@ -64,7 +64,7 @@ export const InformationScreenComponent: React.FC<InformationProps> = ({
   const informationElements = informations.map((item, index) => {
     switch (item.type) {
       case 'heading':
-        return <Header text={item.text} key={index}></Header>;
+        return <Header text={item.text} key={index} />;
       case 'text':
         return <ThemeText key={index}>{item.text}</ThemeText>;
       case 'bullet-point':
@@ -75,9 +75,9 @@ export const InformationScreenComponent: React.FC<InformationProps> = ({
           >{`\u2022 ${item.text}`}</ThemeText>
         );
       case 'link':
-        return <Link link={item} key={index}></Link>;
+        return <Link link={item} key={index} />;
       case 'table':
-        return <Table table={item} key={index}></Table>;
+        return <Table table={item} key={index} />;
     }
   });
   return (
@@ -104,7 +104,7 @@ const Table = ({table}: {table: InformationTable}) => {
   const numberOfRows = table.data.length;
   const tableRows = table.data.map((row, index) => {
     const isLastRow = index === numberOfRows - 1;
-    return <Row isLastRow={isLastRow} row={row} key={index}></Row>;
+    return <Row isLastRow={isLastRow} row={row} key={index} />;
   });
   return <View style={styles.tableContainer}>{tableRows}</View>;
 };

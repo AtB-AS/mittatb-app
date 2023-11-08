@@ -39,14 +39,14 @@ export const Profile_PaymentOptionsScreen = ({
 }: PaymentOptionsProps) => {
   const style = useStyle();
   const {t} = useTranslation();
-  const {user} = useAuthState();
+  const {authenticationType} = useAuthState();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [storedCards, setStoredCards] = useState<RecurringPayment[]>([]);
   const [showError, setShowError] = useState<boolean>(false);
 
   async function getRecurringPaymentOptions(): Promise<RecurringPayment[]> {
-    if (!user || user.isAnonymous) return [];
+    if (authenticationType !== 'phone') return [];
     try {
       const recurringOptions = await listRecurringPayments();
       return recurringOptions.reverse();
@@ -128,13 +128,13 @@ export const Profile_PaymentOptionsScreen = ({
           leftButton={{type: 'back'}}
         />
       </View>
-      {showError && <GenericError />}
       <ScrollView
         style={style.contentContainer}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
         }
       >
+        {showError && <GenericError />}
         {storedCards.length > 0 && (
           <Section>
             {storedCards.map((sc) => (

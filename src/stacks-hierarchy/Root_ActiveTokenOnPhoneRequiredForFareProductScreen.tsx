@@ -11,13 +11,7 @@ import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {
-  getDeviceName,
-  isInspectable,
-  isMobileToken,
-} from '@atb/mobile-token/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {RemoteToken} from '@atb/mobile-token/types';
+import {Token, useMobileTokenContextState} from '@atb/mobile-token';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {MessageBox} from '@atb/components/message-box';
 import {Button} from '@atb/components/button';
@@ -38,9 +32,9 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
   const focusRef = useFocusOnLoad();
   const {nextScreen} = route.params;
 
-  const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
-  const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>();
-  const mobileTokens = remoteTokens?.filter(isMobileToken);
+  const {tokens, toggleToken} = useMobileTokenContextState();
+  const [selectedToken, setSelectedToken] = useState<Token>();
+  const mobileTokens = tokens.filter((t) => t.type === 'mobile');
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -49,7 +43,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
 
   const onSave = useCallback(async () => {
     if (selectedToken) {
-      if (isInspectable(selectedToken) && nextScreen) {
+      if (selectedToken.isInspectable && nextScreen) {
         navigation.navigate(nextScreen.screen, nextScreen.params as any);
         return;
       }
@@ -78,14 +72,14 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         >
           <View style={styles.textSpacing}>
             <ThemeText
-              type={'body__primary--big'}
+              type="body__primary--big"
               color={themeColor}
               style={styles.text}
             >
               {t(ActiveTokenRequiredTexts.ticketNotAvailable)}
             </ThemeText>
             <ThemeText
-              type={'body__primary--big--bold'}
+              type="body__primary--big--bold"
               color={themeColor}
               style={styles.text}
             >
@@ -95,7 +89,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         </View>
 
         <ThemeText
-          type={'body__primary'}
+          type="body__primary"
           color={themeColor}
           style={[styles.text, styles.textSpacing]}
         >
@@ -104,13 +98,12 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
 
         {mobileTokens?.length ? (
           <Section type="spacious" style={styles.selectDeviceSection}>
-            <RadioGroupSection<RemoteToken>
+            <RadioGroupSection<Token>
               items={mobileTokens}
-              keyExtractor={(rt) => rt.id}
-              itemToText={(rt) =>
-                (getDeviceName(rt) ||
-                  t(TravelTokenTexts.toggleToken.unnamedDevice)) +
-                (token?.tokenId === rt.id
+              keyExtractor={(token) => token.id}
+              itemToText={(token) =>
+                (token.name || t(TravelTokenTexts.toggleToken.unnamedDevice)) +
+                (token.isThisDevice
                   ? t(
                       TravelTokenTexts.toggleToken.radioBox.phone.selection
                         .thisDeviceSuffix,
@@ -126,7 +119,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           </Section>
         ) : (
           <MessageBox
-            type={'warning'}
+            type="warning"
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
             style={styles.errorMessageBox}
             isMarkdown={false}
@@ -142,7 +135,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         )}
 
         <ThemeText
-          type={'body__secondary'}
+          type="body__secondary"
           color={themeColor}
           style={[styles.text, styles.textSpacing]}
         >

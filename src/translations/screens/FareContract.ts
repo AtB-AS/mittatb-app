@@ -1,4 +1,4 @@
-import {TransportModeType, TransportSubmodeType} from '@atb-as/config-specs';
+import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
 import {TransportMode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
@@ -29,6 +29,7 @@ const FareContractTexts = {
     expired: (dateTime: string) =>
       _(`Utløpt ${dateTime}`, `Expired ${dateTime}`, `Utgått ${dateTime}`),
     refunded: _(`Refundert`, 'Refunded', `Refundert`),
+    cancelled: _(`Kansellert`, 'Cancelled', `Kansellert`),
     upcoming: (duration: string) =>
       _(
         `Blir gyldig om ${duration}`,
@@ -83,10 +84,21 @@ const FareContractTexts = {
       'Få kvittering tilsendt',
     ),
     barcodeA11yLabel: _(
-      'Barkode. Vis frem denne koden ved billettkontroll',
-      'Barcode. Show this code in case of inspection. ',
+      'Barkode. Vis frem denne koden ved billettkontroll.',
+      'Barcode. Show this code in case of inspection.',
       'Barkode. Vis denne koden ved billettkontroll.',
     ),
+    barcodeA11yLabelWithActivation: _(
+      'Barkode. Vis frem denne koden ved billettkontroll. Aktivér for å vise større barkode.',
+      'Barcode. Show this code in case of inspection. Activate for to show larger barcode.',
+      'Barkode. Vis denne koden ved billettkontroll. Aktivér for større barkode.',
+    ),
+    barcodeBottomSheetA11yLabel: _(
+      'Stor barkode. Vis frem denne koden ved billettkontroll. Aktivér for å lukke dialog med stor barkode.',
+      'Large barcode. Show this code in case of inspection. Activate to close dialog with small barcode',
+      'Stor barkode. Vis denne koden ved billettkontroll. Aktivér for å late att dialog med stor barkode.',
+    ),
+    bottomSheetTitle: _('Barkode', 'Barcode', 'Barkode'),
     barcodeErrors: {
       notInspectableDevice: {
         title: _('Barkode', 'Barcode', 'Barkode'),
@@ -200,15 +212,10 @@ const FareContractTexts = {
     zone: _('Sone', 'Zone', 'Sone'),
   },
   warning: {
-    unableToRetrieveToken: _(
+    errorWithToken: _(
       'Feil ved uthenting av t:kort / mobil',
       'Error retrieving t:card / phone',
       'Feil ved uthenting av t:kort / mobil',
-    ),
-    noInspectableTokenFound: _(
-      'Du må bruke billett på t:kort eller mobil',
-      'You must use a ticket on t:card or phone',
-      'Du må bruke billett på t:kort eller mobil',
     ),
     travelCardAstoken: _(
       'Bruk t:kort når du reiser',
@@ -276,11 +283,11 @@ const FareContractTexts = {
         return _('trikk', 'tram', 'trikk');
       case TransportMode.Water:
         if (subMode === 'highSpeedPassengerService') {
-          return _('hurtigbåt', 'passenger boat', 'hurtigbåt');
+          return _('hurtigbåt', 'express boat', 'hurtigbåt');
         } else if (subMode === 'highSpeedVehicleService') {
           // https://enturas.atlassian.net/wiki/spaces/PUBLIC/pages/825393529/Norwegian+submodes+and+their+definitions
           // -> "A high-speed boat service with car carrying capacity. The ship type is usually a catamaran."
-          return _('hurtigbåt', 'passenger boat', 'hurtigbåt');
+          return _('hurtigbåt', 'express boat', 'hurtigbåt');
         } else {
           return _('båt', 'boat', 'båt');
         }
@@ -319,15 +326,10 @@ export default orgSpecificTranslations(FareContractTexts, {
       },
     },
     warning: {
-      unableToRetrieveToken: _(
+      errorWithToken: _(
         'Feil ved uthenting av reisekort / mobil',
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
-      ),
-      noInspectableTokenFound: _(
-        'Du må bruke billett på reisekort eller mobil',
-        'You must use a ticket on travel card or phone',
-        'Du må bruke billett på reisekort eller mobil',
       ),
       travelCardAstoken: _(
         'Bruk reisekort når du reiser',
@@ -365,15 +367,10 @@ export default orgSpecificTranslations(FareContractTexts, {
       },
     },
     warning: {
-      unableToRetrieveToken: _(
+      errorWithToken: _(
         'Feil ved uthenting av reisekort / mobil',
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
-      ),
-      noInspectableTokenFound: _(
-        'Du må bruke billett på reisekort eller mobil',
-        'You must use a ticket on travel card or phone',
-        'Du må bruke billett på reisekort eller mobil',
       ),
       travelCardAstoken: _(
         'Bruk reisekort når du reiser',

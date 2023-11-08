@@ -1,18 +1,18 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {DetailsContent} from '@atb/fare-contracts';
 import {
   findReferenceDataById,
   isOfFareProductRef,
-} from '@atb/reference-data/utils';
+  useFirestoreConfiguration,
+} from '@atb/configuration';
+import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {DetailsContent} from '@atb/fare-contracts';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -20,7 +20,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
-  const {findFareContractByOrderId, customerProfile} = useTicketingState();
+  const {findFareContractByOrderId} = useTicketingState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
@@ -32,8 +32,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
     preassignedFareProducts,
     isOfFareProductRef(firstTravelRight) ? firstTravelRight.fareProductRef : '',
   );
-
-  const hasActiveTravelCard = !!customerProfile?.travelcard;
 
   const onReceiptNavigate = () =>
     fc &&
@@ -55,7 +53,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
             preassignedFareProduct={preassignedFareProduct}
             now={now}
             onReceiptNavigate={onReceiptNavigate}
-            hasActiveTravelCard={hasActiveTravelCard}
           />
         )}
       </ScrollView>

@@ -12,7 +12,7 @@ export type EstimatedCallWithQuayFragment = {
   forAlighting: boolean;
   forBoarding: boolean;
   realtime: boolean;
-  destinationDisplay?: {frontText?: string};
+  destinationDisplay?: {frontText?: string; via?: Array<string>};
   quay: {
     id: string;
     name: string;

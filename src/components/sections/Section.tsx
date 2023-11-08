@@ -45,7 +45,7 @@ export function Section({
         if (!React.isValidElement(child)) return child;
         if (child == null) return child;
 
-        let additionalProps: Partial<BaseSectionItemProps> = {
+        const additionalProps: Partial<BaseSectionItemProps> = {
           radius: toRadius(index, lastIndex, firstIndex),
           radiusSize: 'regular',
           type,

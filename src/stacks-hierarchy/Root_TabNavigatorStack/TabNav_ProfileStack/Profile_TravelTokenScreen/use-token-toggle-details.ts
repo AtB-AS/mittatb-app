@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 const useTokenToggleDetails = (shouldFetchTokenDetails: boolean) => {
   const [shouldShowLoader, setShouldShowLoader] = useState<boolean>(false);

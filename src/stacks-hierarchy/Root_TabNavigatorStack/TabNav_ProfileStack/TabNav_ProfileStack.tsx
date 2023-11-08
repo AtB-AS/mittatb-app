@@ -24,6 +24,7 @@ import {Profile_SelectTravelTokenScreen} from './Profile_SelectTravelTokenScreen
 import {Profile_FavoriteListScreen} from './Profile_FavoriteListScreen';
 import {Profile_SortFavoritesScreen} from './Profile_SortFavoritesScreen';
 import {Profile_EditProfileScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_EditProfileScreen';
+import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -96,6 +97,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_DesignSystemScreen"
         component={Profile_DesignSystemScreen}
+      />
+      <Stack.Screen
+        name="Profile_FareContractsScreen"
+        component={Profile_FareContractsScreen}
       />
       <Stack.Screen
         name="Profile_DebugInfoScreen"

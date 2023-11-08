@@ -57,7 +57,7 @@ export const EstimatedCallList = ({
         {
           ...departure.serviceJourney.line,
           lineNumber: departure.serviceJourney.line.publicCode,
-          lineName: departure.destinationDisplay?.frontText,
+          destinationDisplay: departure.destinationDisplay,
         },
         existingFavorite,
       ),
@@ -78,7 +78,7 @@ export const EstimatedCallList = ({
       const existingFavorite = getExistingFavorite({
         ...departure.serviceJourney.line,
         lineNumber: departure.serviceJourney.line.publicCode,
-        lineName: departure.destinationDisplay?.frontText,
+        destinationDisplay: departure.destinationDisplay,
       });
 
       return {

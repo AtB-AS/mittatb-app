@@ -1,23 +1,31 @@
 import {FareContractState, PreActivatedTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {FareContractInfo} from './FareContractInfo';
+import {
+  FareContractInfoHeader,
+  FareContractInfoDetails,
+} from './FareContractInfo';
 import {ValidityHeader} from './ValidityHeader';
 import {ValidityLine} from './ValidityLine';
-import {getValidityStatus} from '@atb/fare-contracts/utils';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {findReferenceDataById} from '@atb/reference-data/utils';
+import {
+  getValidityStatus,
+  mapToUserProfilesWithCount,
+} from '@atb/fare-contracts/utils';
+import {
+  useFirestoreConfiguration,
+  findReferenceDataById,
+} from '@atb/configuration';
 import {
   GenericSectionItem,
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type Props = {
   fareContractState: FareContractState;
   travelRights: PreActivatedTravelRight[];
   now: number;
-  isInspectable: boolean;
   hideDetails?: boolean;
   onPressDetails?: () => void;
   testID?: string;
@@ -27,35 +35,52 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   fareContractState,
   travelRights,
   now,
-  isInspectable,
   hideDetails,
   onPressDetails,
   testID,
 }) => {
   const {t} = useTranslation();
+  const {tariffZones, userProfiles, preassignedFareProducts} =
+    useFirestoreConfiguration();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   const firstTravelRight = travelRights[0];
-  const {startDateTime, endDateTime} = firstTravelRight;
+  const {startDateTime, endDateTime, tariffZoneRefs, fareProductRef} =
+    firstTravelRight;
+
   const validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    firstTravelRight.fareProductRef,
-  );
-
   const validityStatus = getValidityStatus(
     now,
     validFrom,
     validTo,
     fareContractState,
   );
+
+  const firstZone = tariffZoneRefs?.[0];
+  const lastZone = tariffZoneRefs?.slice(-1)?.[0];
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
+
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    fareProductRef,
+  );
+
+  const userProfilesWithCount = mapToUserProfilesWithCount(
+    travelRights.map((tr) => tr.userProfileRef),
+    userProfiles,
+  );
+
   return (
     <Section withBottomPadding testID={testID}>
       <GenericSectionItem>
         <ValidityHeader
           status={validityStatus}
-          isInspectable={isInspectable}
           now={now}
           validFrom={validFrom}
           validTo={validTo}
@@ -63,25 +88,32 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
         />
         <ValidityLine
           status={validityStatus}
-          isInspectable={isInspectable}
           now={now}
           validFrom={validFrom}
           validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
         />
-
-        <FareContractInfo
-          travelRights={travelRights}
+        <FareContractInfoHeader
+          travelRight={firstTravelRight}
           status={validityStatus}
-          isInspectable={isInspectable}
           testID={testID}
-          fareProductType={preassignedFareProduct?.type}
+          preassignedFareProduct={preassignedFareProduct}
+        />
+      </GenericSectionItem>
+      <GenericSectionItem>
+        <FareContractInfoDetails
+          fromTariffZone={fromTariffZone}
+          toTariffZone={toTariffZone}
+          userProfilesWithCount={userProfilesWithCount}
+          status={validityStatus}
+          preassignedFareProduct={preassignedFareProduct}
         />
       </GenericSectionItem>
       {!hideDetails && (
         <LinkSectionItem
           text={t(
-            validityStatus === 'valid' && isInspectable
+            validityStatus === 'valid' &&
+              deviceInspectionStatus === 'inspectable'
               ? FareContractTexts.detailsLink.valid
               : FareContractTexts.detailsLink.notValid,
           )}

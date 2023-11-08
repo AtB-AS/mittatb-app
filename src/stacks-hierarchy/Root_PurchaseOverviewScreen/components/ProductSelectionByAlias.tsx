@@ -4,14 +4,16 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {isProductSellableInApp} from '@atb/reference-data/utils';
 import {ThemeText} from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {PreassignedFareProduct} from '@atb/reference-data/types';
-import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {FareProductTypeConfig} from '@atb/configuration';
+import {
+  useFirestoreConfiguration,
+  PreassignedFareProduct,
+  isProductSellableInApp,
+  FareProductTypeConfig,
+} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
 import {useTicketingState} from '@atb/ticketing';
@@ -54,7 +56,7 @@ export function ProductSelectionByAlias({
         contentContainerStyle={styles.durationContentContainer}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        testID={'selectDurationScrollView'}
+        testID="selectDurationScrollView"
       >
         {selectableProducts.map((fp, i) => {
           const text = getTextForLanguage(fp.productAlias, language);

@@ -57,7 +57,13 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
         <View>
           <Button
             text={t(dictionary.retry)}
-            onPress={retry}
+            onPress={() => {
+              analytics.logEvent(
+                'Loading boundary',
+                'Retry app loading clicked',
+              );
+              retry();
+            }}
             testID="retryAuthButton"
           />
           <Button

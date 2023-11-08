@@ -8,10 +8,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
@@ -55,12 +52,16 @@ type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {privacy_policy_url, enable_ticketing} = useRemoteConfig();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t, language} = useTranslation();
-  const {authenticationType, signOut, user, customerNumber} = useAuthState();
+  const {
+    authenticationType,
+    signOut,
+    phoneNumber: authPhoneNumber,
+    customerNumber,
+  } = useAuthState();
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketingState();
@@ -82,7 +83,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const [isLoading, setIsLoading] = useIsLoading(false);
 
-  const phoneNumber = parsePhoneNumber(user?.phoneNumber ?? '');
+  const phoneNumber = parsePhoneNumber(authPhoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
@@ -249,7 +250,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
           ) : null}
 
-          {authenticationType === 'phone' && hasEnabledMobileToken && (
+          {authenticationType === 'phone' && (
             <LinkSectionItem
               text={
                 disable_travelcard
@@ -262,7 +263,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                         .travelToken.label,
                     )
               }
-              label={'new'}
               onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
               testID="travelTokenButton"
             />
@@ -348,7 +348,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
-            icon={'external-link'}
+            icon="external-link"
             accessibility={{
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,

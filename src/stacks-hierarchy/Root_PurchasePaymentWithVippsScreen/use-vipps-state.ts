@@ -68,7 +68,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
     vippsReducer,
     initialState,
   );
-  const {user, abtCustomerIdFull} = useAuthState();
+  const {userId, abtCustomerId} = useAuthState();
 
   const handleAxiosError = useCallback(
     function (err: AxiosError | unknown, errorContext: ErrorContext) {
@@ -95,11 +95,11 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
             retry: true,
           },
           scaExemption: false,
-          customerAccountId: abtCustomerIdFull!,
+          customerAccountId: abtCustomerId!,
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
-        if (user) {
-          savePreviousPaymentMethodByUser(user.uid, {
+        if (userId) {
+          savePreviousPaymentMethodByUser(userId, {
             savedType: 'normal',
             paymentType: PaymentType.Vipps,
           });

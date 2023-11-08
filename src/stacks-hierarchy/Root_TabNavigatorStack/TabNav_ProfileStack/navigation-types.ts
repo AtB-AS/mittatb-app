@@ -23,6 +23,7 @@ export type ProfileStackParams = {
   Profile_DefaultUserProfileScreen: undefined;
   Profile_EnrollmentScreen: undefined;
   Profile_DesignSystemScreen: undefined;
+  Profile_FareContractsScreen: undefined;
   Profile_DebugInfoScreen: undefined;
   Profile_TicketingInformationScreen: undefined;
   Profile_TermsInformationScreen: undefined;
