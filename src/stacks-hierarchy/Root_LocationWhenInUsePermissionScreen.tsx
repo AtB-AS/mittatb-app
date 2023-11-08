@@ -20,7 +20,11 @@ export const Root_LocationWhenInUsePermissionScreen = ({navigation}: Props) => {
     await requestLocationPermission();
     navigation.popToTop();
     completeLocationWhenInUsePermissionOnboarding();
-  }, [navigation, completeLocationWhenInUsePermissionOnboarding]);
+  }, [
+    navigation,
+    completeLocationWhenInUsePermissionOnboarding,
+    requestLocationPermission,
+  ]);
 
   return (
     <OnboardingScreen
