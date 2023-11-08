@@ -7,8 +7,15 @@ import React, {
   useState,
 } from 'react';
 import {useAuthState} from '@atb/auth';
-import {useTicketingState} from '@atb/ticketing';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {
+  BarcodeStatus,
+  DeviceInspectionStatus,
+  MobileTokenStatus,
+  RemoteToken,
+  Token,
+  TokenLimitResponse,
+} from './types';
 
 import {
   TokenEncodingInvalidRemoteTokenStateError,
@@ -19,26 +26,39 @@ import {
 import {v4 as uuid} from 'uuid';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
-import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
-import {RemoteToken, TokenLimitResponse} from './types';
+import {mobileTokenClient} from './mobileTokenClient';
 import {
   ActivatedToken,
   TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
-import {isInspectable} from '@atb/mobile-token/utils';
+import {getTravelCardId, isInspectable, isTravelCardToken} from './utils';
 
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
 import {updateMetadata} from '@atb/chat/metadata';
-import {tokenService} from '@atb/mobile-token/tokenService';
+import {tokenService} from './tokenService';
 
 type MobileTokenContextState = {
-  token?: ActivatedToken;
-  remoteTokens?: RemoteToken[];
-  deviceIsInspectable: boolean;
-  isLoading: boolean;
-  isTimedout: boolean;
-  isError: boolean;
+  tokens: Token[];
+  /**
+   * The technical status of the mobile token process. Note that 'success' means
+   * that a token was created for this mobile, but not necessarily that it is
+   * inspectable.
+   */
+  mobileTokenStatus: MobileTokenStatus;
+  /**
+   * A status which represents which type of barcode to show. This also takes into
+   * account the fallback settings for error and loading.
+   */
+  barcodeStatus: BarcodeStatus;
+  /**
+   * A simplified status representing whether this device is inspectable or not.
+   * The status 'inspectable' includes both working mobile token and static
+   * barcode because of fallbacks. The status 'not-inspectable' includes both
+   * situations where the current mobile token is not inspectable, or an error
+   * has occurred (without fallback).
+   */
+  deviceInspectionStatus: DeviceInspectionStatus;
   getSignedToken: () => Promise<string | undefined>;
   toggleToken: (
     tokenId: string,
@@ -46,13 +66,18 @@ type MobileTokenContextState = {
   ) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
-  fallbackActive: boolean;
-  // For debugging
-  createToken: () => void;
-  validateToken: () => void;
-  removeRemoteToken: (tokenId: string) => void;
-  renewToken: () => void;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
+  /**
+   * Low level debug details and functions of the mobile token process, for the
+   * debug screen
+   */
+  debug: {
+    token?: ActivatedToken;
+    createToken: () => void;
+    validateToken: () => void;
+    removeRemoteToken: (tokenId: string) => void;
+    renewToken: () => void;
+  };
 };
 
 const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
@@ -63,12 +88,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {userId, authStatus} = useAuthState();
 
   const {token_timeout_in_seconds} = useRemoteConfig();
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
-
-  const {
-    enable_token_fallback: fallbackOnErrorEnabled,
-    enable_token_fallback_on_timeout: fallbackOnTimeoutEnabled,
-  } = useRemoteConfig();
+  const mobileTokenEnabled = hasEnabledMobileToken();
 
   const wipeToken = useCallback(
     async (token: ActivatedToken | undefined, traceId: string) => {
@@ -82,16 +102,11 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const [token, setToken] = useState<ActivatedToken>();
   const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isTimedout, setTimeoutFlag] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [mobileTokenStatus, setMobileTokenStatus] =
+    useState<MobileTokenStatus>('disabled');
 
   const enabled =
-    hasEnabledMobileToken && userId && authStatus === 'authenticated';
-
-  const fallbackActive =
-    (isError && fallbackOnErrorEnabled) ||
-    (isTimedout && fallbackOnTimeoutEnabled);
+    mobileTokenEnabled && userId && authStatus === 'authenticated';
 
   /**
    * Load/create native token and handle the situations that can arise.
@@ -110,9 +125,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
    */
   const loadNativeToken = useCallback(
     async (traceId: string) => {
-      Bugsnag.leaveBreadcrumb(
-        `Loading mobile token state for user ${userId}`,
-      );
+      Bugsnag.leaveBreadcrumb(`Loading mobile token state for user ${userId}`);
 
       /*
        Check if there has been a user change.
@@ -193,8 +206,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       const cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        setTimeoutFlag(true);
-        setIsLoading(false);
+        setMobileTokenStatus('timeout');
 
         Bugsnag.notify(
           new Error(
@@ -210,8 +222,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         );
       }, token_timeout_in_seconds);
 
-      setIsLoading(true);
-      setIsError(false);
+      setMobileTokenStatus('loading');
       setToken(undefined);
       setRemoteTokens(undefined);
       let nativeToken: ActivatedToken;
@@ -240,8 +251,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           'AtB-Mobile-Token-Status': 'success',
           'AtB-Mobile-Token-Error-Correlation-Id': undefined,
         });
+
+        setMobileTokenStatus('success');
       } catch (err: any) {
-        setIsError(true);
+        setMobileTokenStatus('error');
         /*
          Errors that needs a certain action should already be handled. Just log
          to Bugsnag here.
@@ -261,9 +274,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       } finally {
         // We've finished with remote tokens. Cancel timeout notification.
         cancelTimeoutHandler();
-        setTimeoutFlag(false);
-
-        setIsLoading(false);
       }
     }
   }, [enabled, loadNativeToken, loadRemoteTokens, token_timeout_in_seconds]);
@@ -295,21 +305,12 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     return undefined;
   }, [token]);
 
-  /**
-   * Whether this device is inspectable or not. It is inspectable if:
-   * - A native token is found
-   * - A remote token is found matching the token id of the native token
-   * - The found remote token has the inspectable action
-   */
-  const deviceInspectable: boolean = useMemo(() => {
-    if (!token) return false;
-    if (!remoteTokens) return false;
-    const matchingRemoteToken = remoteTokens.find(
-      (r) => r.id === token.getTokenId(),
-    );
-    if (!matchingRemoteToken) return false;
-    return isInspectable(matchingRemoteToken);
-  }, [token, remoteTokens]);
+  const barcodeStatus = useBarcodeStatus(
+    mobileTokenStatus,
+    token,
+    remoteTokens,
+  );
+  const deviceInspectionStatus = getDeviceInspectionStatus(barcodeStatus);
 
   const toggleToken = useCallback(
     async (tokenId: string, bypassRestrictions: boolean) => {
@@ -336,37 +337,51 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     }
   }, []);
 
+  const tokens = useMemo(
+    () =>
+      remoteTokens?.map((rt): Token => {
+        return {
+          ...rt,
+          isThisDevice: rt.id === token?.tokenId,
+          isInspectable: isInspectable(rt),
+          type: isTravelCardToken(rt) ? 'travel-card' : 'mobile',
+          travelCardId: getTravelCardId(rt),
+        };
+      }) || [],
+    [remoteTokens, token],
+  );
+
   return (
     <MobileTokenContext.Provider
       value={{
-        token,
+        tokens,
         getSignedToken,
-        deviceIsInspectable: deviceInspectable,
-        remoteTokens,
+        mobileTokenStatus,
+        deviceInspectionStatus,
+        barcodeStatus,
         toggleToken,
-        isLoading,
-        isTimedout,
-        isError,
         retry: () => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
           load();
         },
-        createToken: () => mobileTokenClient.create(uuid()).then(setToken),
         wipeToken: () =>
           wipeToken(token, uuid()).then(() => setToken(undefined)),
-        fallbackActive,
-        validateToken: () =>
-          mobileTokenClient
-            .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])
-            .then((signed) => tokenService.validate(token!, signed, uuid())),
-        removeRemoteToken: async (tokenId) => {
-          const removed = await tokenService.removeToken(tokenId, uuid());
-          if (removed) {
-            setRemoteTokens(remoteTokens?.filter(({id}) => id !== tokenId));
-          }
-        },
-        renewToken: () => mobileTokenClient.renew(token!, uuid()),
         getTokenToggleDetails,
+        debug: {
+          token,
+          createToken: () => mobileTokenClient.create(uuid()).then(setToken),
+          validateToken: () =>
+            mobileTokenClient
+              .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])
+              .then((signed) => tokenService.validate(token!, signed, uuid())),
+          removeRemoteToken: async (tokenId) => {
+            const removed = await tokenService.removeToken(tokenId, uuid());
+            if (removed) {
+              setRemoteTokens(remoteTokens?.filter(({id}) => id !== tokenId));
+            }
+          },
+          renewToken: () => mobileTokenClient.renew(token!, uuid()),
+        },
       }}
     >
       {children}
@@ -374,16 +389,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useHasEnabledMobileToken() {
-  const {customerProfile} = useTicketingState();
-  const {enable_period_tickets} = useRemoteConfig();
-
-  if (Platform.OS !== 'android' && DeviceInfo.isEmulatorSync()) {
-    return false;
-  }
-
-  return customerProfile?.enableMobileToken || enable_period_tickets;
-}
+/** Not enabled on mobile token simulator */
+const hasEnabledMobileToken = () =>
+  Platform.OS === 'android' || !DeviceInfo.isEmulatorSync();
 
 export function useMobileTokenContextState() {
   const context = useContext(MobileTokenContext);
@@ -415,3 +423,61 @@ function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
     clearTimeout(timeoutId);
   };
 }
+
+const getDeviceInspectionStatus = (
+  barcodeStatus: BarcodeStatus,
+): DeviceInspectionStatus => {
+  switch (barcodeStatus) {
+    case 'loading':
+      return 'loading';
+    case 'staticQr':
+    case 'static':
+    case 'mobiletoken':
+      return 'inspectable';
+    case 'error':
+    case 'other':
+      return 'not-inspectable';
+  }
+};
+
+const useBarcodeStatus = (
+  status: MobileTokenStatus,
+  token?: ActivatedToken,
+  remoteTokens?: RemoteToken[],
+): BarcodeStatus => {
+  const {
+    enable_token_fallback,
+    enable_token_fallback_on_timeout,
+    use_trygg_overgang_qr_code,
+  } = useRemoteConfig();
+
+  if (use_trygg_overgang_qr_code) return 'staticQr';
+
+  switch (status) {
+    case 'disabled': // As of now, handle disabled as loading, as mobile token should never be disabled
+    case 'loading':
+      return 'loading';
+    case 'timeout':
+      return enable_token_fallback_on_timeout ? 'static' : 'loading';
+    case 'error':
+      return enable_token_fallback ? 'static' : 'error';
+    case 'success':
+      return deviceInspectable(token, remoteTokens) ? 'mobiletoken' : 'other';
+  }
+};
+
+/**
+ * Whether this device is inspectable or not. It is inspectable if:
+ * - A mobile token for this device exists
+ * - A remote token is found matching the id of the mobile token for this device
+ * - The found remote token has the inspectable action
+ */
+const deviceInspectable = (
+  token?: ActivatedToken,
+  remoteTokens?: RemoteToken[],
+): boolean => {
+  if (!token || !remoteTokens) return false;
+  const matchingRemoteToken = remoteTokens.find((r) => r.id === token.tokenId);
+  if (!matchingRemoteToken) return false;
+  return isInspectable(matchingRemoteToken);
+};

@@ -20,7 +20,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
   const [now, setNow] = useState<number>(Date.now());
   useInterval(() => setNow(Date.now()), 2500);
-  const {findFareContractByOrderId, customerProfile} = useTicketingState();
+  const {findFareContractByOrderId} = useTicketingState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
@@ -32,8 +32,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
     preassignedFareProducts,
     isOfFareProductRef(firstTravelRight) ? firstTravelRight.fareProductRef : '',
   );
-
-  const hasActiveTravelCard = !!customerProfile?.travelcard;
 
   const onReceiptNavigate = () =>
     fc &&
@@ -55,7 +53,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
             preassignedFareProduct={preassignedFareProduct}
             now={now}
             onReceiptNavigate={onReceiptNavigate}
-            hasActiveTravelCard={hasActiveTravelCard}
           />
         )}
       </ScrollView>

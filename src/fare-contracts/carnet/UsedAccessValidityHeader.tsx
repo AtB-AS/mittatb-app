@@ -12,13 +12,13 @@ import {View} from 'react-native';
 import {UsedAccessStatus} from './types';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type Props = {
   now: number;
   status: UsedAccessStatus;
   validFrom: number | undefined;
   validTo: number | undefined;
-  isInspectable: boolean;
 };
 
 export function UsedAccessValidityHeader(props: Props) {
@@ -29,6 +29,7 @@ export function UsedAccessValidityHeader(props: Props) {
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === 'carnet',
   );
+  const {deviceInspectionStatus} = useMobileTokenContextState();
 
   return (
     <View style={styles.validityHeader}>
@@ -44,7 +45,7 @@ export function UsedAccessValidityHeader(props: Props) {
           style={styles.label}
           type="body__secondary"
           accessibilityLabel={
-            !props.isInspectable
+            deviceInspectionStatus !== 'inspectable'
               ? usedAccessValidityText +
                 ', ' +
                 t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)

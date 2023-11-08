@@ -1,24 +1,20 @@
 import {FareContractState} from '@atb/ticketing';
 import {
-  UserProfile,
-  TariffZone,
   findReferenceDataById,
   getReferenceDataName,
+  TariffZone,
+  UserProfile,
 } from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {RemoteToken} from '@atb/mobile-token/types';
 import {
   FareContractTexts,
   Language,
-  TranslateFunction,
   TariffZonesTexts,
+  TranslateFunction,
+  useTranslation,
 } from '@atb/translations';
-import {
-  findInspectable,
-  getDeviceName,
-  isMobileToken,
-  isTravelCardToken,
-} from '@atb/mobile-token/utils';
+
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -27,6 +23,7 @@ export type ValidityStatus =
   | 'reserving'
   | 'unknown'
   | 'refunded'
+  | 'cancelled'
   | 'inactive'
   | 'rejected'
   | 'approved';
@@ -58,6 +55,7 @@ export function getValidityStatus(
   state: FareContractState,
 ): ValidityStatus {
   if (state === FareContractState.Refunded) return 'refunded';
+  if (state === FareContractState.Cancelled) return 'cancelled';
   return getRelativeValidity(now, validFrom, validTo);
 }
 
@@ -91,56 +89,62 @@ export const mapToUserProfilesWithCount = (
         'id' in userProfileWithCount,
     );
 
-export const getNonInspectableTokenWarning = (
-  isError: boolean,
-  fallbackActive: boolean,
-  t: TranslateFunction,
-  remoteTokens?: RemoteToken[],
-  isInspectable?: boolean,
-  fareProductType?: string,
-) => {
-  const inspectableToken = findInspectable(remoteTokens);
-  if (fallbackActive) return null;
-  if (fareProductType !== 'carnet') {
-    if (isError) return t(FareContractTexts.warning.unableToRetrieveToken);
-    if (!inspectableToken)
-      return t(FareContractTexts.warning.noInspectableTokenFound);
-    if (isTravelCardToken(inspectableToken))
-      return t(FareContractTexts.warning.travelCardAstoken);
-    if (isMobileToken(inspectableToken) && !isInspectable)
-      return t(
-        FareContractTexts.warning.anotherMobileAsToken(
-          getDeviceName(inspectableToken) ||
-            t(FareContractTexts.warning.unnamedDevice),
-        ),
-      );
-  } else {
-    if (!isTravelCardToken(inspectableToken)) {
-      return t(FareContractTexts.warning.carnetWarning);
-    } else {
-      return t(FareContractTexts.warning.travelCardAstoken);
-    }
+export const useNonInspectableTokenWarning = (fareProductType?: string) => {
+  const {t} = useTranslation();
+  const {barcodeStatus, tokens} = useMobileTokenContextState();
+  switch (barcodeStatus) {
+    case 'mobiletoken':
+    case 'static':
+    case 'staticQr':
+    case 'loading':
+      return undefined;
+    case 'error':
+      return t(FareContractTexts.warning.errorWithToken);
+    case 'other':
+      const inspectableToken = tokens.find((t) => t.isInspectable);
+      if (fareProductType === 'carnet') {
+        if (inspectableToken?.type !== 'travel-card') {
+          return t(FareContractTexts.warning.carnetWarning);
+        } else {
+          return t(FareContractTexts.warning.travelCardAstoken);
+        }
+      } else {
+        return inspectableToken?.type === 'travel-card'
+          ? t(FareContractTexts.warning.travelCardAstoken)
+          : t(
+              FareContractTexts.warning.anotherMobileAsToken(
+                inspectableToken?.name ||
+                  t(FareContractTexts.warning.unnamedDevice),
+              ),
+            );
+      }
   }
 };
 
-export const getOtherDeviceIsInspectableWarning = (
-  tokensEnabled: boolean,
-  fallbackActive: boolean,
-  t: TranslateFunction,
-  remoteTokens?: RemoteToken[],
-  deviceIsInspectable?: boolean,
-) => {
-  const shouldShowWarning =
-    tokensEnabled && !fallbackActive && !deviceIsInspectable;
-  if (!shouldShowWarning) return;
+export const useOtherDeviceIsInspectableWarning = () => {
+  const {t} = useTranslation();
+  const {barcodeStatus, tokens} = useMobileTokenContextState();
+  switch (barcodeStatus) {
+    case 'mobiletoken':
+    case 'static':
+    case 'staticQr':
+    case 'loading':
+      return undefined;
+    case 'error':
+      return t(FareContractTexts.warning.errorWithToken);
+    case 'other':
+      const inspectableToken = tokens.find((t) => t.isInspectable);
+      const deviceName =
+        inspectableToken?.name || t(FareContractTexts.warning.unnamedDevice);
 
-  const activeToken = findInspectable(remoteTokens);
-  const deviceName =
-    getDeviceName(activeToken) || t(FareContractTexts.warning.unnamedDevice);
-
-  return isTravelCardToken(activeToken)
-    ? t(FareContractTexts.warning.tcardIsInspectableWarning)
-    : t(FareContractTexts.warning.anotherPhoneIsInspectableWarning(deviceName));
+      return inspectableToken?.type === 'travel-card'
+        ? t(FareContractTexts.warning.tcardIsInspectableWarning)
+        : t(
+            FareContractTexts.warning.anotherPhoneIsInspectableWarning(
+              deviceName,
+            ),
+          );
+  }
 };
 
 export const isValidFareContract = (status: ValidityStatus) =>

@@ -14,14 +14,12 @@ type Props = {
   fareContract: FareContract;
   now: number;
   onReceiptNavigate: () => void;
-  isInspectable: boolean;
 };
 
 export const CarnetDetailedView: React.FC<Props> = ({
   fareContract: fc,
   now,
   onReceiptNavigate,
-  isInspectable,
 }) => {
   const {t} = useTranslation();
   const firstTravelRight = fc.travelRights[0];
@@ -30,7 +28,6 @@ export const CarnetDetailedView: React.FC<Props> = ({
       <Section withBottomPadding>
         <CarnetDetails
           now={now}
-          inspectable={isInspectable}
           travelRights={fc.travelRights.filter(isCarnetTravelRight)}
           fareContract={fc}
         />

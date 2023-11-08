@@ -39,18 +39,6 @@ export function isSingleTravelRight(
   return travelRight?.type === 'PreActivatedSingleTicket';
 }
 
-export function isInspectableTravelRight(
-  travelRight: TravelRight,
-  hasActiveTravelCard: boolean,
-  mobileTokenEnabled: boolean,
-  deviceIsInspectable: boolean,
-  fallbackActive: boolean,
-): boolean {
-  if (mobileTokenEnabled) {
-    return deviceIsInspectable || fallbackActive;
-  } else return !hasActiveTravelCard && isSingleTravelRight(travelRight);
-}
-
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {
   return (
     f.state === FareContractState.Activated ||

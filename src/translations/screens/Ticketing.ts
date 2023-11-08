@@ -242,6 +242,11 @@ const TicketingTexts = {
       'Refunded ticket',
       'Tilbakebetalt billett',
     ),
+    cancelled: _(
+      'Kansellert billett',
+      'Cancelled ticket',
+      'Kansellert billett',
+    ),
     expired: _('Utløpt billett', 'Expired ticket', 'Utgått billett'),
     rejected: _('Avvist billett', 'Rejected ticket', 'Avvist billett'),
     upcoming: _('Kommende billett', 'Upcoming ticket', 'Kommende billett'),

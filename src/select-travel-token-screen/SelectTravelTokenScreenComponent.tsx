@@ -2,15 +2,7 @@ import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {RadioBox} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {RemoteToken} from '@atb/mobile-token/types';
-import {
-  findInspectable,
-  getDeviceName,
-  isInspectable,
-  isMobileToken,
-  isTravelCardToken,
-} from '@atb/mobile-token/utils';
+import {Token, useMobileTokenContextState} from '@atb/mobile-token';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
@@ -19,8 +11,8 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {
-  TravelTokenTexts,
   getTextForLanguage,
+  TravelTokenTexts,
   useTranslation,
 } from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
@@ -30,9 +22,12 @@ import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useFirestoreConfiguration} from '@atb/configuration';
+import {
+  findReferenceDataById,
+  isOfFareProductRef,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
-import {findReferenceDataById, isOfFareProductRef} from '@atb/configuration';
 
 type Props = {onAfterSave: () => void};
 
@@ -45,14 +40,14 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {token, remoteTokens, toggleToken} = useMobileTokenContextState();
-  const inspectableToken = findInspectable(remoteTokens);
+  const {tokens, toggleToken} = useMobileTokenContextState();
+  const inspectableToken = tokens.find((t) => t.isInspectable);
 
-  const [selectedType, setSelectedType] = useState<'mobile' | 'travelCard'>(
-    isTravelCardToken(inspectableToken) ? 'travelCard' : 'mobile',
+  const [selectedType, setSelectedType] = useState<Token['type']>(
+    inspectableToken?.type || 'mobile',
   );
 
-  const [selectedToken, setSelectedToken] = useState<RemoteToken | undefined>(
+  const [selectedToken, setSelectedToken] = useState<Token | undefined>(
     inspectableToken,
   );
 
@@ -94,7 +89,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
   const onSave = useCallback(async () => {
     if (selectedToken) {
-      if (isInspectable(selectedToken)) {
+      if (selectedToken.isInspectable) {
         onAfterSave();
         return;
       }
@@ -108,15 +103,15 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     }
   }, [toggleToken, selectedToken]);
 
-  const travelCardToken = remoteTokens?.find(isTravelCardToken);
-  const mobileTokens = remoteTokens?.filter(isMobileToken);
+  const travelCardToken = tokens?.find((t) => t.type === 'travel-card');
+  const mobileTokens = tokens?.filter((t) => t.type === 'mobile');
 
   // Shows an error message if switching to a t:card,
   // but the current inspectable token is in the mobile AND
   // requires mobile token
   const requiresTokenOnMobile =
-    selectedType === 'travelCard' &&
-    isMobileToken(inspectableToken) &&
+    selectedType === 'travel-card' &&
+    inspectableToken?.type === 'mobile' &&
     !!fareProductConfigWhichRequiresTokenOnMobile;
 
   return (
@@ -145,12 +140,12 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               )}
               a11yHint={t(TravelTokenTexts.toggleToken.radioBox.tCard.a11yHint)}
               disabled={false}
-              selected={selectedType === 'travelCard'}
+              selected={selectedType === 'travel-card'}
               icon={<ThemedTokenTravelCard />}
               type="spacious"
               onPress={() => {
                 animateNextChange();
-                setSelectedType('travelCard');
+                setSelectedType('travel-card');
                 setSelectedToken(travelCardToken);
               }}
               style={styles.leftRadioBox}
@@ -170,7 +165,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             icon={<ThemedTokenPhone />}
             type="spacious"
             onPress={() => {
-              if (!isMobileToken(selectedToken)) {
+              if (selectedToken?.type !== 'mobile') {
                 animateNextChange();
                 setSelectedType('mobile');
                 setSelectedToken(mobileTokens?.[0]);
@@ -180,7 +175,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         </View>
 
-        {selectedType === 'travelCard' && !travelCardToken && (
+        {selectedType === 'travel-card' && !travelCardToken && (
           <MessageBox
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noTravelCard)}
@@ -202,7 +197,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             current inspectable token is travelCard AND we have active carnet
              fare contract */}
         {selectedType === 'mobile' &&
-          isTravelCardToken(inspectableToken) &&
+          inspectableToken?.type === 'travel-card' &&
           hasActiveCarnetFareContract && (
             <MessageBox
               type="warning"
@@ -232,13 +227,12 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         )}
         {selectedType === 'mobile' && mobileTokens?.length ? (
           <Section type="spacious" style={styles.selectDeviceSection}>
-            <RadioGroupSection<RemoteToken>
+            <RadioGroupSection<Token>
               items={mobileTokens}
-              keyExtractor={(rt) => rt.id}
-              itemToText={(rt) =>
-                (getDeviceName(rt) ||
-                  t(TravelTokenTexts.toggleToken.unnamedDevice)) +
-                (token?.tokenId === rt.id
+              keyExtractor={(token) => token.id}
+              itemToText={(token) =>
+                (token.name || t(TravelTokenTexts.toggleToken.unnamedDevice)) +
+                (token.isThisDevice
                   ? t(
                       TravelTokenTexts.toggleToken.radioBox.phone.selection
                         .thisDeviceSuffix,

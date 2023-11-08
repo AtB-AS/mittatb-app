@@ -38,7 +38,6 @@ export function Root_CarnetDetailsScreen({navigation, route}: Props) {
             fareContract={fc}
             now={now}
             onReceiptNavigate={onReceiptNavigate}
-            isInspectable={route?.params?.isInspectable}
           />
         )}
       </ScrollView>

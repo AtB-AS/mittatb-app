@@ -5,8 +5,8 @@ import {
   Token,
   TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
-import {logger} from '@atb/mobile-token/abtClientLogger';
-import {tokenService} from '@atb/mobile-token/tokenService';
+import {logger} from './abtClientLogger';
+import {tokenService} from './tokenService';
 
 const CONTEXT_ID = 'main';
 
