@@ -10,6 +10,7 @@ import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useTicketingState} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
+import {useMemo} from 'react';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -44,19 +45,27 @@ export function useOfferDefaults(
   const {
     preferences: {defaultUserTypeString},
   } = usePreferences();
-  const defaultPreSelectedUser: UserProfileTypeWithCount = {
-    userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
-    count: 1,
-  };
-  const preSelectedUsers = userProfilesWithCount?.map(
-    (up: UserProfileWithCount): UserProfileTypeWithCount => {
-      return {userTypeString: up.userTypeString, count: up.count};
-    },
-  );
+
+  const defaultSelection = useMemo(() => {
+    if (!userProfilesWithCount?.length) {
+      const defaultPreSelectedUser: UserProfileTypeWithCount = {
+        userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
+        count: 1,
+      };
+      return [defaultPreSelectedUser];
+    }
+
+    return userProfilesWithCount.map(
+      (up: UserProfileWithCount): UserProfileTypeWithCount => {
+        return {userTypeString: up.userTypeString, count: up.count};
+      },
+    );
+  }, [defaultUserTypeString, userProfiles, userProfilesWithCount]);
+
   const defaultSelectableTravellers = useTravellersWithPreselectedCounts(
     userProfiles,
     defaultPreassignedFareProduct,
-    preSelectedUsers ?? [defaultPreSelectedUser],
+    defaultSelection,
   );
 
   return {
@@ -89,21 +98,22 @@ const useTravellersWithPreselectedCounts = (
   userProfiles: UserProfile[],
   preassignedFareProduct: PreassignedFareProduct,
   defaultSelections: UserProfileTypeWithCount[],
-) => {
-  const mappedUserProfiles = userProfiles
-    .filter((u) =>
-      preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
-    )
-    .map((u) => ({
-      ...u,
-      count: getCountIfUserIsIncluded(u, defaultSelections),
-    }));
+) =>
+  useMemo(() => {
+    const mappedUserProfiles = userProfiles
+      .filter((u) =>
+        preassignedFareProduct.limitations.userProfileRefs.includes(u.id),
+      )
+      .map((u) => ({
+        ...u,
+        count: getCountIfUserIsIncluded(u, defaultSelections),
+      }));
 
-  if (
-    !mappedUserProfiles.some(({count}) => count) &&
-    mappedUserProfiles.length > 0 // how to handle if length 0?
-  ) {
-    mappedUserProfiles[0].count = 1;
-  }
-  return mappedUserProfiles;
-};
+    if (
+      !mappedUserProfiles.some(({count}) => count) &&
+      mappedUserProfiles.length > 0 // how to handle if length 0?
+    ) {
+      mappedUserProfiles[0].count = 1;
+    }
+    return mappedUserProfiles;
+  }, [userProfiles, preassignedFareProduct, defaultSelections]);
