@@ -10,15 +10,16 @@ import {
 } from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {useBenefits} from '@atb/mobility/use-benefits';
-import {getRentalAppUri, isUserEligibleForBenefit} from '@atb/mobility/utils';
+import {constructBenefitAppUrl, getRentalAppUri} from '@atb/mobility/utils';
 import {
   RentalUrisFragment,
   SystemFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import {useSystem} from '@atb/mobility/use-system';
 import {useValueCodeQuery} from '@atb/mobility/use-value-code-query';
+import {StyleSheet} from '@atb/theme';
+import {SvgXml} from 'react-native-svg';
 
 type Props<T> = {
   entity: T;
@@ -53,7 +54,7 @@ export function OperatorBenefits<
         <OperatorBenefit
           key={benefit.id}
           benefit={benefit}
-          isUserEligible={isUserEligibleForBenefit(benefit.id, userBenefits)}
+          isUserEligible={true}
           operatorId={operatorId}
           operatorName={operatorName}
           rentalAppUri={getRentalAppUri(entity)}
@@ -82,8 +83,8 @@ const OperatorBenefit = ({
   rentalAppUri,
 }: OperatorBenefitProps) => {
   const {language, t} = useTranslation();
-  const {openOperatorApp} = useOperatorApp();
   const {data: valueCode} = useValueCodeQuery(operatorId);
+  const style = useStyles();
 
   const heading = getTextForLanguage(
     isUserEligible ? benefit.headingWhenActive : benefit.headingWhenNotActive,
@@ -106,25 +107,57 @@ const OperatorBenefit = ({
   }
 
   const handleCallToAction = async () => {
-    if (isUserEligible && benefit.callToAction) {
-      await Linking.openURL(
-        insertValueCode(benefit.callToAction.url, valueCode),
-      );
-    } else {
-      await openOperatorApp({operatorName, appStoreUri, rentalAppUri});
+    let benefitUrl = benefit.callToAction.url;
+    if (rentalAppUri && benefitUrl.includes('{APP_URL}')) {
+      benefitUrl = constructBenefitAppUrl({
+        benefitUrl,
+        rentalAppUri,
+      });
     }
+    benefitUrl = insertValueCode(benefitUrl, valueCode);
+    await Linking.openURL(benefitUrl);
   };
 
   return (
     <Section>
       <GenericSectionItem>
-        <ThemeText type="body__primary--bold">{heading}</ThemeText>
-        <ThemeText>{text}</ThemeText>
+        <View style={style.benefitContainer}>
+          <View style={style.benefitImage}>
+            {isUserEligible && benefit.imageWhenActive && (
+              <SvgXml xml={benefit.imageWhenActive} />
+            )}
+            {!isUserEligible && benefit.imageWhenNotActive && (
+              <SvgXml xml={benefit.imageWhenNotActive} />
+            )}
+          </View>
+          <View style={style.benefitContent}>
+            <ThemeText type="body__primary--bold">{heading}</ThemeText>
+            <ThemeText>{text}</ThemeText>
+          </View>
+        </View>
       </GenericSectionItem>
-      <LinkSectionItem text={callToActionText} onPress={handleCallToAction} />
+      {isUserEligible && benefit.callToAction && (
+        <LinkSectionItem
+          text={callToActionText}
+          textType="body__secondary"
+          onPress={handleCallToAction}
+        />
+      )}
     </Section>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  benefitContainer: {
+    flexDirection: 'row',
+  },
+  benefitImage: {
+    marginRight: theme.spacings.medium,
+  },
+  benefitContent: {
+    flex: 1,
+  },
+}));
 
 const insertValueCode = (url: string, valueCode: string | null | undefined) => {
   if (!valueCode) return url;

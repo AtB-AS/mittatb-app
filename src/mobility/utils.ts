@@ -71,6 +71,25 @@ export const getRentalAppUri = <T extends {rentalUris?: RentalUrisFragment}>(
   t: T | undefined,
 ) => (Platform.OS === 'ios' ? t?.rentalUris?.ios : t?.rentalUris?.android);
 
+export const constructBenefitAppUrl = ({
+  benefitUrl,
+  rentalAppUri,
+}: {
+  benefitUrl: string;
+  rentalAppUri: string;
+}) => {
+  const [rentalBase, rentalParams] = rentalAppUri.split('?');
+  // eslint-disable-next-line prefer-const
+  let [benefitBase, benefitParams] = benefitUrl.split('?');
+
+  const urlBase = benefitBase.replace('{APP_URL}', rentalBase);
+  const urlParams = rentalParams
+    .split('&')
+    .concat(benefitParams.split('&'))
+    .join('&');
+  return `${urlBase}?${urlParams}`;
+};
+
 export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
   (plan.perKmPricing && plan.perMinPricing) ||
   (plan.perKmPricing && plan.perKmPricing.length > 1) ||
