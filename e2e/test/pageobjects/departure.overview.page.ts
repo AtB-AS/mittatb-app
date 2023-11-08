@@ -76,7 +76,7 @@ class DepartureOverviewPage {
    */
   async getLineName(quayIndex: number = 0, depIndex: number = 0) {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
-    const lineNameId = `//*[@resource-id="estimatedCallItemFrontText"]`;
+    const lineNameId = `//*[@resource-id="estimatedCallItemLineName"]`;
     return $(quayId).$$(lineNameId)[depIndex].getText();
   }
 

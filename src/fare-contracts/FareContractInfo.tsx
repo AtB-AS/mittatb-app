@@ -1,18 +1,16 @@
-import {ThemeText, screenReaderPause} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {
+  findReferenceDataById,
+  getReferenceDataName,
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-  findReferenceDataById,
-  getReferenceDataName,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
-  CustomerProfile,
   FareContract,
   flattenCarnetTravelRightAccesses,
   isCarnetTravelRight,
-  isInspectableTravelRight,
   NormalTravelRight,
   PreActivatedTravelRight,
   TravelRightDirection,
@@ -25,15 +23,14 @@ import {
 import React from 'react';
 import {View} from 'react-native';
 import {
-  getNonInspectableTokenWarning,
+  getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,
-  ValidityStatus,
-  userProfileCountAndName,
-  getValidityStatus,
   tariffZonesSummary,
+  useNonInspectableTokenWarning,
+  userProfileCountAndName,
+  ValidityStatus,
 } from '../fare-contracts/utils';
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
 import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
@@ -44,7 +41,6 @@ import {MessageBox} from '@atb/components/message-box';
 export type FareContractInfoProps = {
   travelRight: PreActivatedTravelRight;
   status: ValidityStatus;
-  isInspectable: boolean;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
 };
@@ -55,7 +51,6 @@ export type FareContractInfoDetailsProps = {
   toTariffZone?: TariffZone;
   userProfilesWithCount: UserProfileWithCount[];
   status: FareContractInfoProps['status'];
-  isInspectable: boolean;
   isCarnetFareContract?: boolean;
   omitUserProfileCount?: boolean;
   testID?: string;
@@ -67,7 +62,6 @@ export type FareContractInfoDetailsProps = {
 export const FareContractInfoHeader = ({
   travelRight,
   status,
-  isInspectable,
   testID,
   preassignedFareProduct,
 }: FareContractInfoProps) => {
@@ -82,16 +76,7 @@ export const FareContractInfoHeader = ({
   const productDescription = preassignedFareProduct
     ? getTextForLanguage(preassignedFareProduct.description, language)
     : undefined;
-  const {isError, remoteTokens, fallbackActive} = useMobileTokenContextState();
-  const {t} = useTranslation();
-  const warning = getNonInspectableTokenWarning(
-    isError,
-    fallbackActive,
-    t,
-    remoteTokens,
-    isInspectable,
-    preassignedFareProduct?.type,
-  );
+  const warning = useNonInspectableTokenWarning(preassignedFareProduct?.type);
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
 
   return (
@@ -172,15 +157,10 @@ export const FareContractInfoDetails = (
 export const getFareContractInfoDetails = (
   fareContract: FareContract,
   now: number,
-  customerProfile: CustomerProfile | undefined,
-  hasEnabledMobileToken: boolean,
-  deviceIsInspectable: boolean,
-  fallbackActive: boolean,
   tariffZones: TariffZone[],
   userProfiles: UserProfile[],
   preassignedFareProducts: PreassignedFareProduct[],
 ): FareContractInfoDetailsProps => {
-  const hasActiveTravelCard = !!customerProfile?.travelcard;
   const firstTravelRight = fareContract.travelRights?.[0] as NormalTravelRight;
   const {
     startDateTime,
@@ -188,13 +168,6 @@ export const getFareContractInfoDetails = (
     fareProductRef: productRef,
     tariffZoneRefs,
   } = firstTravelRight;
-  const isInspectable = isInspectableTravelRight(
-    firstTravelRight,
-    hasActiveTravelCard,
-    hasEnabledMobileToken,
-    deviceIsInspectable,
-    fallbackActive,
-  );
   const fareContractState = fareContract.state;
   let validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
@@ -242,7 +215,6 @@ export const getFareContractInfoDetails = (
     status: validityStatus,
     now: now,
     validTo: validTo,
-    isInspectable: isInspectable,
     isCarnetFareContract: isACarnetFareContract,
   };
 };

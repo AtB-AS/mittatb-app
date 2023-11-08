@@ -9,10 +9,7 @@ import {useAuthState} from '@atb/auth';
 import {useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
-import {
-  useHasEnabledMobileToken,
-  useMobileTokenContextState,
-} from '@atb/mobile-token/MobileTokenContext';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {usePreferences, UserPreferences} from '@atb/preferences';
 import {get, keys} from 'lodash';
 import {Button} from '@atb/components/button';
@@ -125,22 +122,16 @@ export const Profile_DebugInfoScreen = () => {
   }, [user]);
 
   const {
-    token,
-    remoteTokens,
+    tokens,
     retry,
-    createToken,
     wipeToken,
-    validateToken,
-    removeRemoteToken,
-    renewToken,
-    fallbackActive,
-    isLoading,
-    isError,
+    deviceInspectionStatus,
+    mobileTokenStatus,
+    barcodeStatus,
+    debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
   } = useMobileTokenContextState();
 
   const remoteConfig = useRemoteConfig();
-
-  const mobileTokenEnabled = useHasEnabledMobileToken();
 
   const [storedValues, setStoredValues] = useState<
     readonly KeyValuePair[] | null
@@ -561,74 +552,70 @@ export const Profile_DebugInfoScreen = () => {
             text="Mobile token state"
             showIconText={true}
             expandContent={
-              mobileTokenEnabled ? (
-                <View>
-                  {token && (
-                    <View>
-                      <ThemeText>{`Token id: ${token.getTokenId()}`}</ThemeText>
-                      <ThemeText>{`Token start: ${new Date(
-                        token.getValidityStart(),
-                      ).toISOString()}`}</ThemeText>
-                      <ThemeText>{`Token end: ${new Date(
-                        token.getValidityEnd(),
-                      ).toISOString()}`}</ThemeText>
+              <View>
+                {token && (
+                  <View>
+                    <ThemeText>{`Token id: ${token.getTokenId()}`}</ThemeText>
+                    <ThemeText>{`Token start: ${new Date(
+                      token.getValidityStart(),
+                    ).toISOString()}`}</ThemeText>
+                    <ThemeText>{`Token end: ${new Date(
+                      token.getValidityEnd(),
+                    ).toISOString()}`}</ThemeText>
+                  </View>
+                )}
+                <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
+                <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
+                <ThemeText>{`Barcode status: ${barcodeStatus}`}</ThemeText>
+                <Button
+                  style={style.button}
+                  text="Reload token(s)"
+                  onPress={retry}
+                />
+                <Button
+                  style={style.button}
+                  text="Create token"
+                  onPress={createToken}
+                />
+                {token && (
+                  <Button
+                    style={style.button}
+                    text="Wipe token"
+                    onPress={wipeToken}
+                  />
+                )}
+                {token && (
+                  <Button
+                    style={style.button}
+                    text="Validate token"
+                    onPress={validateToken}
+                  />
+                )}
+                {token && (
+                  <Button
+                    style={style.button}
+                    text="Renew token"
+                    onPress={renewToken}
+                  />
+                )}
+                <ExpandableSectionItem
+                  text="Remote tokens"
+                  showIconText={true}
+                  expandContent={tokens?.map((token) => (
+                    <View key={token.id} style={style.remoteToken}>
+                      {keys(token).map((k) => (
+                        <ThemeText key={token.id + k}>
+                          {k + ': ' + JSON.stringify(get(token, k))}
+                        </ThemeText>
+                      ))}
+                      <Button
+                        onPress={() => removeRemoteToken(token.id)}
+                        text="Remove"
+                      />
                     </View>
-                  )}
-                  <ThemeText>{`Fallback active: ${fallbackActive}`}</ThemeText>
-                  <ThemeText>{`Is loading: ${isLoading}`}</ThemeText>
-                  <ThemeText>{`Is error: ${isError}`}</ThemeText>
-                  <Button
-                    style={style.button}
-                    text="Reload token(s)"
-                    onPress={retry}
-                  />
-                  <Button
-                    style={style.button}
-                    text="Create token"
-                    onPress={createToken}
-                  />
-                  {token && (
-                    <Button
-                      style={style.button}
-                      text="Wipe token"
-                      onPress={wipeToken}
-                    />
-                  )}
-                  {token && (
-                    <Button
-                      style={style.button}
-                      text="Validate token"
-                      onPress={validateToken}
-                    />
-                  )}
-                  {token && (
-                    <Button
-                      style={style.button}
-                      text="Renew token"
-                      onPress={renewToken}
-                    />
-                  )}
-                  <ExpandableSectionItem
-                    text="Remote tokens"
-                    showIconText={true}
-                    expandContent={remoteTokens?.map((token) => (
-                      <View key={token.id} style={style.remoteToken}>
-                        {keys(token).map((k) => (
-                          <ThemeText key={token.id + k}>
-                            {k + ': ' + JSON.stringify(get(token, k))}
-                          </ThemeText>
-                        ))}
-                        <Button
-                          onPress={() => removeRemoteToken(token.id)}
-                          text="Remove"
-                        />
-                      </View>
-                    ))}
-                  />
-                </View>
-              ) : (
-                <ThemeText>Mobile token not enabled</ThemeText>
-              )
+                  ))}
+                />
+              </View>
             }
           />
         </Section>

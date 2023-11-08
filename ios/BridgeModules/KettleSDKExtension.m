@@ -24,11 +24,13 @@ static void InitializeKettle(NSDictionary *launchOptions) {
 @implementation KettleSDKExtension
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(initializeKettleSDK)
+RCT_EXPORT_METHOD(initializeKettleSDK:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
 {
 #ifdef KETTLE_API_KEY
   dispatch_async(dispatch_get_main_queue(), ^{
     InitializeKettle([AppDelegate sharedInstance].launchOptions);
+    resolve(@YES);
   });
 #endif
 }

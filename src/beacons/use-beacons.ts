@@ -111,10 +111,11 @@ export const useBeacons = () => {
     }
 
     if (granted) {
-      await storage.set(storeKey.beaconsConsent, "true");
       // Initialize beacons SDK after consent is granted
-      await initializeBeaconsSDK();
-      Kettle.grant(BEACONS_CONSENTS);
+      await initializeBeaconsSDK().then(async () => {
+        Kettle.grant(BEACONS_CONSENTS);
+        await storage.set(storeKey.beaconsConsent, "true");
+      });
     }
 
     return granted;
@@ -166,14 +167,14 @@ const requestAndroidPermissions = async () => {
   );
 
   if (locationStatus !== RESULTS.GRANTED) {
-    return false;
+    return true;
   }
 
   // Request motion permission
   const motionStatus = await request(PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION);
 
   if (motionStatus !== RESULTS.GRANTED) {
-    return false;
+    return true;
   }
 
   return true;

@@ -1,4 +1,3 @@
-import {useHasEnabledMobileToken} from '@atb/mobile-token/MobileTokenContext';
 import {useAuthState} from '@atb/auth';
 import {useAppState} from '@atb/AppContext';
 import {shouldOnboardMobileToken} from '@atb/api/utils';
@@ -9,7 +8,6 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {InteractionManager} from 'react-native';
 
 export const useGoToMobileTokenOnboardingWhenNecessary = () => {
-  const hasEnabledMobileToken = useHasEnabledMobileToken();
   const {authenticationType} = useAuthState();
   const {mobileTokenOnboarded, mobileTokenWithoutTravelcardOnboarded} =
     useAppState();
@@ -17,7 +15,6 @@ export const useGoToMobileTokenOnboardingWhenNecessary = () => {
   const navigation = useNavigation<RootNavigationProps>();
 
   const shouldOnboard = shouldOnboardMobileToken(
-    hasEnabledMobileToken,
     authenticationType,
     mobileTokenOnboarded,
     mobileTokenWithoutTravelcardOnboarded,

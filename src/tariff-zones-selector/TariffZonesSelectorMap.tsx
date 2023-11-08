@@ -11,7 +11,7 @@ import {
   PositionArrow,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
-import React, {useMemo, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
@@ -41,7 +41,7 @@ const TariffZonesSelectorMap = ({
 }: Props) => {
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
-  const {location: geolocation, getCurrentPosition} = useGeolocationState();
+  const {location: geolocation, getCurrentLocation} = useGeolocationState();
   const {t, language} = useTranslation();
   const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
@@ -51,13 +51,25 @@ const TariffZonesSelectorMap = ({
     flyToLocation({coordinates: event.coordinates, mapCameraRef});
     updateSelectedZones(feature.id as string);
   };
-
-  const startCoordinates = useMemo(() => {
-    const pos = getCurrentPosition();
-    return pos
-      ? [pos.coordinates.longitude, pos.coordinates.latitude]
-      : [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
-  }, [getCurrentPosition]);
+  const [startCoordinates, setStartCoordinates] = useState<number[] | null>(
+    null,
+  );
+  useEffect(() => {
+    const getStartLocation = async () => {
+      let startCoords = [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
+      try {
+        const currentLocation = await getCurrentLocation();
+        startCoords = [
+          currentLocation.coordinates.longitude,
+          currentLocation.coordinates.latitude,
+        ];
+      } catch (e) {
+        console.warn(e);
+      }
+      setStartCoordinates(startCoords);
+    };
+    getStartLocation();
+  }, [getCurrentLocation]);
 
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -119,6 +131,8 @@ const TariffZonesSelectorMap = ({
             </View>
           )}
         </>
+      ) : !startCoordinates ? (
+        <></>
       ) : (
         <>
           <MapboxGL.MapView

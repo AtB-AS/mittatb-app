@@ -1,5 +1,4 @@
-import {useMobileTokenContextState} from '@atb/mobile-token/MobileTokenContext';
-import {findInspectable} from '@atb/mobile-token/utils';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {InspectableTokenInfo} from './components/InspectableTokenInfo';
 import {NoTokenInfo} from './components/NoTokenInfo';
 import React from 'react';
@@ -10,14 +9,13 @@ type Props =
 export const MobileTokenOnboarding_CurrentTokenScreen = ({
   navigation,
 }: Props) => {
-  const {remoteTokens, isLoading, isError} = useMobileTokenContextState();
+  const {tokens, mobileTokenStatus} = useMobileTokenContextState();
 
   const close = () => navigation.pop();
 
-  if (isLoading) return <NoTokenInfo close={close} />;
-  if (isError) return <NoTokenInfo close={close} />;
+  if (mobileTokenStatus !== 'success') return <NoTokenInfo close={close} />;
 
-  const inspectableToken = findInspectable(remoteTokens);
+  const inspectableToken = tokens.find((t) => t.isInspectable);
 
   if (!inspectableToken) {
     return <NoTokenInfo close={close} />;

@@ -75,6 +75,7 @@ const GlobalMessage = ({
               }
               subtle={globalMessage.subtle}
               textColor={textColor}
+              testID="globalMessage"
             />
           );
         })}

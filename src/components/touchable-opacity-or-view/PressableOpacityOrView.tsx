@@ -6,18 +6,25 @@ export const PressableOpacityOrView = ({
   style,
   onClick,
   children,
+  testID,
   ...a11yProps
 }: {
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
   onClick?: () => void;
+  testID?: string;
 } & AccessibilityProps) => {
   return onClick ? (
-    <PressableOpacity onPress={onClick} style={style} {...a11yProps}>
+    <PressableOpacity
+      onPress={onClick}
+      style={style}
+      {...a11yProps}
+      testID={testID ? testID : 'messageBox'}
+    >
       {children}
     </PressableOpacity>
   ) : (
-    <View style={style} {...a11yProps}>
+    <View style={style} {...a11yProps} testID={testID ? testID : 'messageBox'}>
       {children}
     </View>
   );

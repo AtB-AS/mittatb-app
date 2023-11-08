@@ -12,11 +12,11 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectGroup} from './components/SelectGroup';
+import {useParkingViolations} from '@atb/parking-violations-reporting';
 import {
   NoLocationError,
-  PermissionRequiredError,
-  useParkingViolations,
-} from '@atb/parking-violations-reporting';
+  LocationPermissionRequiredError,
+} from '@atb/GeolocationContext';
 
 export type SelectViolationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsSelect'>;
@@ -100,7 +100,7 @@ type ErrorMessageProps = ViewProps & {error: unknown};
 const ErrorMessage = (props: ErrorMessageProps) => {
   const {t} = useTranslation();
 
-  if (props.error instanceof PermissionRequiredError) {
+  if (props.error instanceof LocationPermissionRequiredError) {
     return (
       <View {...props}>
         <MessageBox

@@ -34,13 +34,14 @@ export const Announcements = ({style: containerStyle}: Props) => {
   };
 
   return (
-    <View style={containerStyle}>
+    <View style={containerStyle} testID="announcements">
       <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
       <ScrollView>
         {announcements.map((a, i) => (
           <Section
             key={a.id}
             style={i < announcements.length - 1 && style.announcement}
+            testID="announcement"
           >
             <GenericClickableSectionItem
               accessible={false}
