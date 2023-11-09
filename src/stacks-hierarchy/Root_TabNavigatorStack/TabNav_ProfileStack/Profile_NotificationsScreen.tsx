@@ -18,16 +18,8 @@ export const Profile_NotificationsScreen = () => {
   const style = useStyles();
   const {t} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
-  const {
-    permissionStatus,
-    isLoading,
-    isUpdating,
-    isError,
-    config,
-    register,
-    checkPermissions,
-    updateConfig,
-  } = usePushNotifications();
+  const {status, config, register, checkPermissions, updateConfig} =
+    usePushNotifications();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -61,8 +53,8 @@ export const Profile_NotificationsScreen = () => {
         </View>
       )}
     >
-      {isLoading && <Processing message={t(dictionary.loading)} />}
-      {!isLoading && (
+      {status === 'loading' && <Processing message={t(dictionary.loading)} />}
+      {status !== 'loading' && (
         <View style={style.content}>
           <Section withPadding>
             <ToggleSectionItem
@@ -75,37 +67,34 @@ export const Profile_NotificationsScreen = () => {
                   .pushToggle.subText,
               )}
               value={
-                permissionStatus === 'granted' &&
-                isConfigEnabled(config?.modes, 'push')
+                status === 'granted' && isConfigEnabled(config?.modes, 'push')
               }
-              disabled={isUpdating}
+              disabled={status === 'updating' || status === 'denied'}
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
-          {!isError &&
-            isConfigEnabled(config?.modes, 'push') &&
-            permissionStatus === 'denied' && (
-              <MessageBox
-                style={style.messageBox}
-                type="info"
-                title={t(
+          {status !== 'error' && status === 'denied' && (
+            <MessageBox
+              style={style.messageBox}
+              type="info"
+              title={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .permissionRequired.title,
+              )}
+              message={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .permissionRequired.message,
+              )}
+              onPressConfig={{
+                text: t(
                   ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .permissionRequired.title,
-                )}
-                message={t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .permissionRequired.message,
-                )}
-                onPressConfig={{
-                  text: t(
-                    ProfileTexts.sections.settings.linkSectionItems
-                      .notifications.permissionRequired.action,
-                  ),
-                  action: () => Linking.openSettings(),
-                }}
-              />
-            )}
-          {isError && (
+                    .permissionRequired.action,
+                ),
+                action: () => Linking.openSettings(),
+              }}
+            />
+          )}
+          {status === 'error' && (
             <MessageBox
               style={style.messageBox}
               type="error"

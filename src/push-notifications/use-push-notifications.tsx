@@ -5,33 +5,32 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import {usePreferences} from '@atb/preferences';
+import {useLocaleContext} from '@atb/LocaleProvider';
 
-type PermissionStatus = 'granted' | 'denied' | 'undetermined';
+type NotificationsStatus =
+  | 'granted'
+  | 'denied'
+  | 'undetermined'
+  | 'loading'
+  | 'updating'
+  | 'error';
 
 export const usePushNotifications = () => {
-  const {
-    preferences: {language = 'nb'},
-  } = usePreferences();
-  const [permissionStatus, setPermissionStatus] =
-    useState<PermissionStatus>('undetermined');
-  const [isLoadingPermissionStatus, setIsLoadingPermissionStatus] =
-    useState<boolean>();
-  const [isError, setIsError] = useState(false);
+  const {language} = useLocaleContext();
+  const [status, setStatus] = useState<NotificationsStatus>('loading');
   const {mutation: registerMutation} = useRegister();
   const {query: configQuery, mutation: configMutation} = useConfig();
 
   const checkPermissions = useCallback(() => {
-    setIsLoadingPermissionStatus(true);
+    setStatus('loading');
     if (Platform.OS === 'ios') {
       messaging()
         .hasPermission()
-        .then((status) => setPermissionStatus(mapIosPermissionStatus(status)))
+        .then((status) => setStatus(mapIosPermissionStatus(status)))
         .catch((e) => {
-          setIsError(true);
+          setStatus('error');
           console.error(e);
-        })
-        .finally(() => setIsLoadingPermissionStatus(false));
+        });
     } else if (Platform.OS === 'android') {
       const platformVersion = Platform.Version; // Extracted outside promise to make typescript understand it's a number since Platform === 'android'
       PermissionsAndroid.check(
@@ -40,41 +39,33 @@ export const usePushNotifications = () => {
         .then((hasPermission) => {
           // On SDK versions < 33 permission is not required, yet check() will return 'false' for those devices.
           // However, getToken() will yield a device token for sdk < 33 even if check() returns 'false'.
-          setPermissionStatus(
+          setStatus(
             hasPermission || platformVersion < 33 ? 'granted' : 'denied',
           );
         })
         .catch((e) => {
-          setIsError(true);
+          setStatus('error');
           console.error(e);
-        })
-        .finally(() => setIsLoadingPermissionStatus(false));
+        });
     } else {
-      setIsLoadingPermissionStatus(false);
-      setIsError(true);
+      setStatus('error');
     }
-  }, [Platform, messaging, PermissionsAndroid]);
+  }, []);
 
-  const register = async () => {
+  const register = useCallback(async () => {
+    setStatus('updating');
     const permissionStatus = await requestUserPermission();
-    setPermissionStatus(permissionStatus);
     const token = await messaging().getToken();
     if (!token) {
-      setIsError(true);
+      setStatus('error');
       return;
     }
     registerMutation.mutate({token, language});
-  };
+    setStatus(permissionStatus);
+  }, [language, registerMutation]);
 
   return {
-    isError:
-      isError ||
-      registerMutation.isError ||
-      configQuery.isError ||
-      configMutation.isError,
-    isLoading: isLoadingPermissionStatus || configQuery.isInitialLoading,
-    isUpdating: registerMutation.isLoading || configMutation.isLoading,
-    permissionStatus,
+    status,
     config: configQuery.data,
     updateConfig: configMutation.mutate,
     checkPermissions,
@@ -82,7 +73,7 @@ export const usePushNotifications = () => {
   };
 };
 
-async function requestUserPermission(): Promise<PermissionStatus> {
+async function requestUserPermission(): Promise<NotificationsStatus> {
   if (Platform.OS === 'ios') {
     const authStatus = await messaging().requestPermission();
     return mapIosPermissionStatus(authStatus);
@@ -124,7 +115,5 @@ function mapAndroidPermissionStatus(
     case 'denied':
     case 'never_ask_again':
       return 'denied';
-    default:
-      return 'undetermined';
   }
 }
