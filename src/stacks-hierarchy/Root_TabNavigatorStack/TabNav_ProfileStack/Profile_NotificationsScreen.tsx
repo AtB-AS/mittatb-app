@@ -9,8 +9,7 @@ import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {MessageBox} from '@atb/components/message-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {isConfigEnabled} from '@atb/push-notifications/utils';
-import {usePushNotifications} from '@atb/push-notifications';
+import {usePushNotifications, isConfigEnabled} from '@atb/notifications';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

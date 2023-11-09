@@ -48,7 +48,7 @@ import {
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
 import {ClickableCopy} from './components/ClickableCopy';
-import {usePushNotificationsEnabled} from '@atb/push-notifications';
+import {usePushNotificationsEnabled} from '@atb/notifications';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();

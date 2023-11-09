@@ -1,9 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {
-  getConfig,
-  NotificationConfigUpdate,
-  updateConfig,
-} from '@atb/push-notifications/api';
+import {getConfig, NotificationConfigUpdate, updateConfig} from './api';
 
 export const useConfig = () => {
   const queryClient = useQueryClient();

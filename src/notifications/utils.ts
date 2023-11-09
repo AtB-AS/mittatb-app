@@ -1,4 +1,4 @@
-import {NotificationConfigValue} from '@atb/push-notifications/types';
+import {NotificationConfigValue} from './types';
 import {isDefined} from '@atb/utils/presence';
 
 export function isConfigEnabled<T extends NotificationConfigValue>(

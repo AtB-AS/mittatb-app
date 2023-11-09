@@ -5,7 +5,7 @@ import {
   NotificationConfig,
   NotificationConfigType,
   NotificationConfigValue,
-} from '@atb/push-notifications/types';
+} from '../types';
 import {Preference_Language} from '@atb/preferences';
 
 export const registerForPushNotifications = ({

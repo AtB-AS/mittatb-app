@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
-import {useRegister} from '@atb/push-notifications/use-register';
-import {useConfig} from '@atb/push-notifications/use-config';
+import {useRegister} from './use-register';
+import {useConfig} from './use-config';
 import {PermissionsAndroid, Platform} from 'react-native';
 import messaging, {
   FirebaseMessagingTypes,
