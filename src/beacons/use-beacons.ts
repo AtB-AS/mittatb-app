@@ -13,11 +13,12 @@ enum storeKey {
 
 const BEACONS_CONSENTS = [KettleConsents.SURVEYS, KettleConsents.ANALYTICS];
 
-type PermissionKey = 'bluetooth' | 'location' | 'motion';
+type PermissionKey = 'bluetooth' | 'locationWhenInUse' | 'locationAlways' | 'motion';
 
 const PERMISSIONS_MAP: Record<PermissionKey, Permission> = {
-  bluetooth: Platform.OS == 'ios' ? PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-  location: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+  bluetooth: Platform.OS == 'ios' ? PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL : PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
+  locationWhenInUse: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  locationAlways: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
   motion: Platform.OS == 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
 };
 
@@ -148,7 +149,7 @@ export const useBeacons = () => {
 const requestAndroidPermissions = async () => {
   // Request Bluetooth permission
   const bluetoothStatus = await request(
-    PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    PERMISSIONS_MAP.bluetooth,
   );
 
   if (bluetoothStatus !== RESULTS.GRANTED) {
@@ -156,14 +157,14 @@ const requestAndroidPermissions = async () => {
   }
 
   // NOTE: If the user already denied the location before, then do not continue asking for more permissions.
-  const requestedStatus = await check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
+  const requestedStatus = await check(PERMISSIONS_MAP.locationWhenInUse);
   if (requestedStatus !== RESULTS.GRANTED) {
     return true;
   }
 
   // Request location always or background location
   const locationStatus = await request(
-    PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+    PERMISSIONS_MAP.locationAlways,
   );
 
   if (locationStatus !== RESULTS.GRANTED) {
@@ -171,7 +172,7 @@ const requestAndroidPermissions = async () => {
   }
 
   // Request motion permission
-  const motionStatus = await request(PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION);
+  const motionStatus = await request(PERMISSIONS_MAP.motion);
 
   if (motionStatus !== RESULTS.GRANTED) {
     return true;
@@ -184,7 +185,8 @@ const checkPermissionStatuses = async () => {
   const statuses = await checkMultiple(Object.values(PERMISSIONS_MAP));
   const permissionStatuses: Record<PermissionKey, boolean> = {
     bluetooth: false,
-    location: false,
+    locationWhenInUse: false,
+    locationAlways: false,
     motion: false,
   };
   Object.keys(permissionStatuses).forEach((key) => {
@@ -200,7 +202,7 @@ const allowedPermissionForKettle = async () => {
   if (permissionStatuses.bluetooth) {
     kettleModulesArray.push(KettleModules.BLUETOOTH);
   }
-  if (permissionStatuses.location) {
+  if (permissionStatuses.locationWhenInUse || permissionStatuses.locationAlways) {
     kettleModulesArray.push(KettleModules.LOCATION);
   }
   if (permissionStatuses.motion) {

@@ -2,6 +2,7 @@ package no.mittatb;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -25,7 +26,7 @@ public class KettleSDKExtension extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void initializeKettleSDK() {
+    public void initializeKettleSDK(Promise promise) {
         if (BuildConfig.KETTLE_API_KEY != null && !BuildConfig.KETTLE_API_KEY.isEmpty()) {
             KettleConfig kettleConfig = new KettleConfig();
             if (BuildConfig.DEBUG) {
@@ -38,6 +39,7 @@ public class KettleSDKExtension extends ReactContextBaseJavaModule {
                 kettleConfig.setInProduction(true);
             }
             Kettle.initialize(kettleConfig, getReactApplicationContext());
+            promise.resolve(true);
         }
     }
 }
