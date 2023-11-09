@@ -45,7 +45,7 @@ describe('Travel search', () => {
 
       const startTime: string = await TravelsearchOverviewPage.getStartTime(0);
       const endTime: string = await TravelsearchOverviewPage.getEndTime(0);
-      const travelTime: number = await TravelsearchOverviewPage.getTravelTime(
+      const travelTime: string = await TravelsearchOverviewPage.getTravelTime(
         0,
       );
       const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
