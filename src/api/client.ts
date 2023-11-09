@@ -7,6 +7,7 @@ import {
   AppVersionHeaderName,
   FirebaseAuthIdHeaderName,
   InstallIdHeaderName,
+  PlatformVersionHeaderName,
   RequestIdHeaderName,
 } from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
@@ -86,6 +87,7 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
   }
 
   config.headers[AppVersionHeaderName] = APP_VERSION;
+  config.headers[PlatformVersionHeaderName] = Platform.Version;
 
   return config;
 }
