@@ -38,7 +38,7 @@ type GeolocationState = {
   location: GeoLocation | null;
   locationError: GeoError | null;
   getCurrentLocation: (
-    askForPermissionEvenIfBlocked?: boolean,
+    askForPermissionIfBlocked?: boolean,
   ) => Promise<GeoLocation>;
 };
 
@@ -265,13 +265,13 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
 
   const getCurrentLocation = useCallback(
     (
-      askForPermissionEvenIfBlocked: boolean | undefined = false,
+      askForPermissionIfBlocked: boolean | undefined = false,
     ): Promise<GeoLocation> => {
       return new Promise(async (resolve, reject) => {
         if (locationRef.current) {
           resolve(locationRef.current);
         } else {
-          if (state.status === 'blocked' && !askForPermissionEvenIfBlocked) {
+          if (state.status === 'blocked' && !askForPermissionIfBlocked) {
             reject(new NoLocationError());
           } else if (state.status !== 'granted') {
             const status = await requestLocationPermission();

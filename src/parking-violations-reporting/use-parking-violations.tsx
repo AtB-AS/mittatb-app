@@ -12,6 +12,7 @@ export const useParkingViolations = () => {
   const [error, setError] = useState<Error>();
   const [violations, setViolations] = useState<ParkingViolationType[]>([]);
   const [providers, setProviders] = useState<ViolationsReportingProvider[]>([]);
+  // todo: rename [position, setPosition] to [coordinates, setCoordinates], or [location, setLocation] with GeoLocation type
   const [position, setPosition] = useState<Coordinates>();
 
   const {getCurrentLocation} = useGeolocationState();
@@ -22,10 +23,7 @@ export const useParkingViolations = () => {
         const location = await getCurrentLocation(true);
         setError(undefined);
         setIsLoading(true);
-        setPosition({
-          latitude: location.coordinates.latitude,
-          longitude: location.coordinates.longitude,
-        });
+        setPosition(location.coordinates);
         const violationsReportingData = await initViolationsReporting({
           lat: location.coordinates.latitude.toString(),
           lng: location.coordinates.longitude.toString(),

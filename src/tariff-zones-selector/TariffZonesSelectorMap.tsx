@@ -1,6 +1,6 @@
 import {TariffZoneResultType, TariffZoneSelection} from './types';
 import {TariffZoneResults} from './TariffZoneResults';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
 import MapboxGL from '@rnmapbox/maps';
@@ -11,7 +11,7 @@ import {
   PositionArrow,
 } from '@atb/components/map';
 import hexToRgba from 'hex-to-rgba';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
@@ -22,9 +22,9 @@ import {
 } from '@atb/configuration';
 import {FeatureCollection, Polygon} from 'geojson';
 import turfCentroid from '@turf/centroid';
-import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
+import {useInitialCoordinates} from '@atb/utils/use-initial-coordinates';
 
 type Props = {
   selectedZones: TariffZoneSelection;
@@ -41,35 +41,19 @@ const TariffZonesSelectorMap = ({
 }: Props) => {
   const {tariffZones} = useFirestoreConfiguration();
   const styles = useMapStyles();
-  const {location: geolocation, getCurrentLocation} = useGeolocationState();
+
   const {t, language} = useTranslation();
   const {theme} = useTheme();
   const a11yContext = useAccessibilityContext();
+
+  const {location} = useGeolocationState();
+  const initialCoordinates = useInitialCoordinates();
 
   const selectFeature = (event: OnPressEvent) => {
     const feature = event.features[0];
     flyToLocation({coordinates: event.coordinates, mapCameraRef});
     updateSelectedZones(feature.id as string);
   };
-  const [startCoordinates, setStartCoordinates] = useState<number[] | null>(
-    null,
-  );
-  useEffect(() => {
-    const getStartLocation = async () => {
-      let startCoords = [FOCUS_ORIGIN.longitude, FOCUS_ORIGIN.latitude];
-      try {
-        const currentLocation = await getCurrentLocation();
-        startCoords = [
-          currentLocation.coordinates.longitude,
-          currentLocation.coordinates.latitude,
-        ];
-      } catch (e) {
-        console.warn(e);
-      }
-      setStartCoordinates(startCoords);
-    };
-    getStartLocation();
-  }, [getCurrentLocation]);
 
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -131,8 +115,10 @@ const TariffZonesSelectorMap = ({
             </View>
           )}
         </>
-      ) : !startCoordinates ? (
-        <></>
+      ) : !initialCoordinates ? (
+        <View style={styles.waitingForInitialCoords}>
+          <ActivityIndicator size="large" />
+        </View>
       ) : (
         <>
           <MapboxGL.MapView
@@ -196,20 +182,23 @@ const TariffZonesSelectorMap = ({
             <MapboxGL.Camera
               ref={mapCameraRef}
               zoomLevel={6}
-              centerCoordinate={startCoordinates}
+              centerCoordinate={[
+                initialCoordinates.longitude,
+                initialCoordinates.latitude,
+              ]}
               {...MapCameraConfig}
             />
             <MapboxGL.UserLocation />
           </MapboxGL.MapView>
 
           <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
-            {geolocation && (
+            {location && (
               <View>
                 <View style={styles.mapControls}>
                   <PositionArrow
                     onPress={() =>
                       flyToLocation({
-                        coordinates: geolocation?.coordinates,
+                        coordinates: location?.coordinates,
                         mapCameraRef,
                       })
                     }
@@ -268,5 +257,10 @@ const useMapStyles = StyleSheet.createThemeHook((theme) => ({
     position: 'absolute',
     bottom: theme.spacings.medium,
     right: theme.spacings.medium,
+  },
+  waitingForInitialCoords: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: theme.static.background.background_1.background,
   },
 }));
