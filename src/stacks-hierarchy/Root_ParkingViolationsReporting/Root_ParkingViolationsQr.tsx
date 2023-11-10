@@ -32,7 +32,7 @@ export const Root_ParkingViolationsQr = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
-  const {providers, position} = useParkingViolations();
+  const {providers, coordinates} = useParkingViolations();
   const {userId} = useAuthState();
 
   const providersList = useMemo(
@@ -72,8 +72,8 @@ export const Root_ParkingViolationsQr = ({
       appId: userId,
       image: base64data,
       imageType,
-      latitude: position?.latitude ?? 0,
-      longitude: position?.longitude ?? 0,
+      latitude: coordinates?.latitude ?? 0,
+      longitude: coordinates?.longitude ?? 0,
       providerId,
       qr: capturedQr,
       violations: params.selectedViolations.map((v) => v.code),
@@ -163,8 +163,8 @@ export const Root_ParkingViolationsQr = ({
       {isError && (
         <MessageBox
           style={style.error}
-          title={t(ParkingViolationTexts.error.sendReport.title)}
-          message={t(ParkingViolationTexts.error.sendReport.message)}
+          title={t(ParkingViolationTexts.issue.sendReport.title)}
+          message={t(ParkingViolationTexts.issue.sendReport.message)}
           type="error"
         />
       )}

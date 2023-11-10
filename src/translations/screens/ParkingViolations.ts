@@ -115,8 +115,8 @@ export const ParkingViolationTexts = {
       ),
     closeA11yHint: _('Fullført', 'Completed', 'Fullført'),
   },
-  error: {
-    loading: {
+  issue: {
+    general: {
       title: _('Oops!', 'Oops!', 'Oops!'),
       message: _(
         'Vi fikk ikke til å starte feilrapporteringen denne gangen.',

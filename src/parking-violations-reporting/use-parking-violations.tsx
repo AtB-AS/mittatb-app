@@ -7,43 +7,51 @@ import {
 } from '@atb/api/types/mobility';
 import {Coordinates} from '@entur/sdk';
 
+type ParkingViolationsState =
+  | 'loading'
+  | 'success'
+  | 'locationRequirementNotMet'
+  | 'violationsReportingDataError';
+
 export const useParkingViolations = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error>();
+  const [parkingViolationsState, setParkingViolationsState] =
+    useState<ParkingViolationsState>('loading');
+
   const [violations, setViolations] = useState<ParkingViolationType[]>([]);
   const [providers, setProviders] = useState<ViolationsReportingProvider[]>([]);
-  // todo: rename [position, setPosition] to [coordinates, setCoordinates], or [location, setLocation] with GeoLocation type
-  const [position, setPosition] = useState<Coordinates>();
+  const [coordinates, setCoordinates] = useState<Coordinates>();
 
-  const {getCurrentLocation} = useGeolocationState();
+  const {getCurrentCoordinates} = useGeolocationState();
 
   useEffect(() => {
     const getLocationAndInitReporting = async () => {
-      try {
-        const location = await getCurrentLocation(true);
-        setError(undefined);
-        setIsLoading(true);
-        setPosition(location.coordinates);
-        const violationsReportingData = await initViolationsReporting({
-          lat: location.coordinates.latitude.toString(),
-          lng: location.coordinates.longitude.toString(),
-        });
-        setViolations(violationsReportingData.violations);
-        setProviders(violationsReportingData.providers);
-      } catch (err) {
-        setError(err as Error);
-      } finally {
-        setIsLoading(false);
+      setParkingViolationsState('loading');
+      const coordinates = await getCurrentCoordinates(true);
+      setCoordinates(coordinates);
+      if (coordinates) {
+        try {
+          const violationsReportingData = await initViolationsReporting({
+            lat: coordinates.latitude.toString(),
+            lng: coordinates.longitude.toString(),
+          });
+          setViolations(violationsReportingData.violations);
+          setProviders(violationsReportingData.providers);
+          setParkingViolationsState('success');
+        } catch (err) {
+          console.warn(err);
+          setParkingViolationsState('violationsReportingDataError');
+        }
+      } else {
+        setParkingViolationsState('locationRequirementNotMet');
       }
     };
     getLocationAndInitReporting();
-  }, [getCurrentLocation]);
+  }, [getCurrentCoordinates]);
 
   return {
-    isLoading: isLoading && !error,
-    isError: !!error,
-    error,
-    position,
+    isLoading: parkingViolationsState === 'loading',
+    parkingViolationsState,
+    coordinates,
     violations,
     providers,
   };

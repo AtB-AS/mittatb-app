@@ -19,7 +19,7 @@ export const Root_ParkingViolationsPhoto = ({
   const {t} = useTranslation();
   const isFocused = useIsFocusedAndActive();
   const style = useStyles();
-  const {position, isLoading} = useParkingViolations();
+  const {coordinates, isLoading} = useParkingViolations();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
   const handlePhotoCapture = (file: PhotoFile) => {
@@ -32,7 +32,7 @@ export const Root_ParkingViolationsPhoto = ({
             photo: file.path,
           });
         }}
-        position={position}
+        coordinates={coordinates}
         file={file}
         close={closeBottomSheet}
       />
