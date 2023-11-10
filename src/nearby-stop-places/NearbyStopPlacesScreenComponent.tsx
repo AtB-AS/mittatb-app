@@ -17,6 +17,8 @@ import {StopPlacesMode} from './types';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
+import {EmptyState} from '@atb/components/empty-state';
 
 export type NearbyStopPlacesScreenParams = {
   location: Location | undefined;
@@ -51,6 +53,8 @@ export const NearbyStopPlacesScreenComponent = ({
   const currentLocation = geolocation || undefined;
   const hasLocationPermission = locationEnabled && status === 'granted';
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
+
+  const styles = useStyles();
 
   const {t} = useTranslation();
 
@@ -180,14 +184,31 @@ export const NearbyStopPlacesScreenComponent = ({
       )}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
-      <StopPlaces
-        header={getListDescription()}
-        stopPlaces={orderedStopPlaces}
-        navigateToPlace={onSelectStopPlace}
-        testID="nearbyStopsContainerView"
-        location={location}
-        isLoading={isLoading}
-      />
+      {hasLocationPermission || !!location ? (
+        <StopPlaces
+          header={getListDescription()}
+          stopPlaces={orderedStopPlaces}
+          navigateToPlace={onSelectStopPlace}
+          testID="nearbyStopsContainerView"
+          location={location}
+          isLoading={isLoading}
+        />
+      ) : (
+        <EmptyState
+          title={t(NearbyTexts.stateAnnouncements.noAccessToLocationTitle)}
+          details={t(NearbyTexts.stateAnnouncements.noAccessToLocation)}
+          illustrationComponent={
+            <ThemedOnBehalfOf
+              height={90}
+              style={styles.emptyStopPlacesIllustration}
+            />
+          }
+          buttonProps={{
+            onPress: requestPermission,
+            text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
+          }}
+        />
+      )}
     </FullScreenView>
   );
 };
@@ -274,5 +295,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   favoriteChips: {
     marginTop: theme.spacings.medium,
     paddingHorizontal: theme.spacings.medium,
+  },
+  emptyStopPlacesIllustration: {
+    marginBottom: theme.spacings.medium,
   },
 }));
