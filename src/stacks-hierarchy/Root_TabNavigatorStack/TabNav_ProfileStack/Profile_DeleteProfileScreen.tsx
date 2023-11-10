@@ -67,7 +67,7 @@ export const Profile_DeleteProfileScreen = ({
       );
     }
     setDeleteError(false);
-  }, [deleteError, setDeleteError]);
+  }, [deleteError, setDeleteError, t]);
 
   return (
     <View style={style.container}>

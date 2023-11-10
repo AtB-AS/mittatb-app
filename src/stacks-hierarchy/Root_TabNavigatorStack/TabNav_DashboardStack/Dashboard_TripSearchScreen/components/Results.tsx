@@ -64,7 +64,7 @@ export const Results: React.FC<Props> = ({
           break;
       }
     }
-  }, [errorType]);
+  }, [errorType, t]);
 
   if (showEmptyScreen) {
     return null;
