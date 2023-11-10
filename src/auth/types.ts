@@ -4,31 +4,20 @@ export type AuthenticationType = 'none' | 'anonymous' | 'phone';
 
 export type AuthStatus =
   | 'loading'
-  | 'creating-account'
+  | 'fetching-id-token'
   | 'authenticated'
-  | 'create-account-timeout';
+  | 'fetch-id-token-timeout';
 
 export type AuthReducerAction =
   | {
       type: 'SIGN_IN_INITIATED';
       confirmationHandler: FirebaseAuthTypes.ConfirmationResult;
     }
-  | {
-      type: 'SET_USER';
-      userId?: string;
-      phoneNumber?: string;
-      authenticationType: AuthenticationType;
-    }
-  | {
-      type: 'SET_CUSTOMER_DATA';
-      abtCustomerId: string | undefined;
-      customerNumber: number | undefined;
-    }
-  | {
-      type: 'SET_AUTH_STATUS';
-      authStatus: AuthStatus;
-      customerNumber?: number;
-    };
+  | {type: 'SET_USER'; user: FirebaseAuthTypes.User}
+  | {type: 'SET_ID_TOKEN'; idToken: FirebaseAuthTypes.IdTokenResult}
+  | {type: 'SET_FETCH_ID_TOKEN_TIMEOUT'}
+  | {type: 'RETRY_FETCH_ID_TOKEN'}
+  | {type: 'RESET_AUTH_STATUS'};
 
 export type ConfirmationErrorCode =
   | 'invalid_code'
