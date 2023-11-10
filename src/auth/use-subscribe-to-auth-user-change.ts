@@ -14,7 +14,7 @@ export const useSubscribeToAuthUserChange = (
   useEffect(() => {
     Bugsnag.leaveBreadcrumb('Subscribing to auth user changes');
     let signInInitiated = false;
-    const unsubscribe = auth().onIdTokenChanged((user) => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
         updateMetadata({
           'AtB-Firebase-Auth-Id': user?.uid,
