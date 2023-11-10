@@ -145,7 +145,7 @@ export const NearbyStopPlacesScreenComponent = ({
             ),
       );
     }
-  }, [updatingLocation, isLoading]);
+  }, [updatingLocation, isLoading, t]);
 
   function refresh() {
     onUpdateLocation(

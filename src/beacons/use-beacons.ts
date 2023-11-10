@@ -127,7 +127,7 @@ export const useBeacons = () => {
         buttonPositive,
       },
     };
-  }, []);
+  }, [t]);
 
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
