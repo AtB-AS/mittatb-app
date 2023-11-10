@@ -45,6 +45,7 @@ import {
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
 import {ClickableCopy} from './components/ClickableCopy';
+import {usePushNotificationsEnabled} from '@atb/notifications';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -86,6 +87,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
   const phoneNumber = parsePhoneNumber(authPhoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
+  const isPushNotificationsEnabled = usePushNotificationsEnabled();
 
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   async function selectFavourites() {
@@ -288,6 +290,16 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onPress={() => navigation.navigate('Profile_LanguageScreen')}
             testID="languageButton"
           />
+          {isPushNotificationsEnabled && (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_NotificationsScreen')}
+              testID="notificationsButton"
+            />
+          )}
         </Section>
         <Section withPadding>
           <GenericSectionItem>
