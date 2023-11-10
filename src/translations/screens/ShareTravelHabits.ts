@@ -48,7 +48,7 @@ const ShareTravelHabitsTexts = {
       message: _(
         "I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.",
         "In addition to displaying your location on maps and planning trips, we gain valuable insights into where you and other customers travel. This helps us improve our travel offerings.",
-        "I tillegg til å kunne vise di posisjon i kart og til å planleggje reiser, vil vi få verdifull læring om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet."
+        "I tillegg til å kunne vise posisjonen din i kart og til å planleggje reiser, vil vi få verdifull læring om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet."
       )
     },
     locationWhenInUser: {
