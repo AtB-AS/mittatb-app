@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {Linking} from 'react-native';
 import {useAnalytics} from '@atb/analytics';
 import {useTranslation} from '@atb/translations';
@@ -19,10 +19,6 @@ export const OperatorAppSwitchButton = ({
   const analytics = useAnalytics();
   const {t} = useTranslation();
   const {showAppMissingAlert} = useAppMissingAlert();
-
-  useEffect(() => {
-    console.log('Rendering OperatorAppSwitchButton');
-  }, []);
 
   const openOperatorApp = useCallback(async () => {
     analytics.logEvent('Mobility', 'Open operator app', {operatorName});
