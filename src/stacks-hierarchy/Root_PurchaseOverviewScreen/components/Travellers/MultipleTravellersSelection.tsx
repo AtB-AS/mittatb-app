@@ -10,7 +10,6 @@ import {
 } from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {usePreferences} from '@atb/preferences';
 import {CounterSectionItem, Section} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 
@@ -21,9 +20,6 @@ export function MultipleTravellersSelection({
   fareProductType,
 }: UserCountState) {
   const {t, language} = useTranslation();
-  const {
-    preferences: {hideTravellerDescriptions},
-  } = usePreferences();
 
   const travellersModified = useRef(false);
 
@@ -54,7 +50,6 @@ export function MultipleTravellersSelection({
           type="spacious"
           testID={'counterInput_' + u.userTypeString.toLowerCase()}
           color="interactive_2"
-          hideSubtext={hideTravellerDescriptions}
           subtext={[
             getTextForLanguage(u.alternativeDescriptions, language),
             t(

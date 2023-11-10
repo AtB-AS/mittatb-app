@@ -7,7 +7,6 @@ import {
   getTextForLanguage,
 } from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
-import {usePreferences} from '@atb/preferences';
 import {RadioGroupSection, Section} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 
@@ -19,9 +18,6 @@ export function SingleTravellerSelection({
 }: UserCountState) {
   const {t, language} = useTranslation();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
-  const {
-    preferences: {hideTravellerDescriptions},
-  } = usePreferences();
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {
@@ -56,7 +52,6 @@ export function SingleTravellerSelection({
         items={userProfilesWithCount}
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
-        hideSubtext={hideTravellerDescriptions}
         itemToSubtext={(u) =>
           travellerInfoByFareProductType(fareProductType, u)
         }
