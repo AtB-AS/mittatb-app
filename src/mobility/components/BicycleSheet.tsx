@@ -43,6 +43,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   } = useVehicle(id);
   const {
     operatorBenefit,
+    valueCode,
     isUserEligibleForBenefit,
     isLoading: isLoadingBenefit,
     isError: isBenefitError,
@@ -120,6 +121,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                 {operatorBenefit && isUserEligibleForBenefit ? (
                   <OperatorBenefitActionButton
                     benefit={operatorBenefit}
+                    valueCode={valueCode}
                     operatorName={operatorName}
                     appStoreUri={appStoreUri}
                     rentalAppUri={rentalAppUri}

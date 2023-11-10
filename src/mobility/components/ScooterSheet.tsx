@@ -51,6 +51,7 @@ export const ScooterSheet = ({
   } = useVehicle(id);
   const {
     operatorBenefit,
+    valueCode,
     isUserEligibleForBenefit,
     isLoading: isLoadingBenefit,
     isError: isBenefitError,
@@ -122,20 +123,22 @@ export const ScooterSheet = ({
               />
             </ScrollView>
             <View style={style.footer}>
-              {operatorBenefit && isUserEligibleForBenefit ? (
-                <OperatorBenefitActionButton
-                  benefit={operatorBenefit}
-                  operatorName={operatorName}
-                  appStoreUri={appStoreUri}
-                  rentalAppUri={rentalAppUri}
-                />
-              ) : (
-                <OperatorAppSwitchButton
-                  operatorName={operatorName}
-                  appStoreUri={appStoreUri}
-                  rentalAppUri={rentalAppUri}
-                />
-              )}
+              {rentalAppUri &&
+                (operatorBenefit && isUserEligibleForBenefit ? (
+                  <OperatorBenefitActionButton
+                    benefit={operatorBenefit}
+                    valueCode={valueCode}
+                    operatorName={operatorName}
+                    appStoreUri={appStoreUri}
+                    rentalAppUri={rentalAppUri}
+                  />
+                ) : (
+                  <OperatorAppSwitchButton
+                    operatorName={operatorName}
+                    appStoreUri={appStoreUri}
+                    rentalAppUri={rentalAppUri}
+                  />
+                ))}
               {isParkingViolationsReportingEnabled && (
                 <Button
                   text={t(MobilityTexts.reportParkingViolation)}

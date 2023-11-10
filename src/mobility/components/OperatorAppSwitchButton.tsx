@@ -5,6 +5,7 @@ import {useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {useAppMissingAlert} from '@atb/mobility/use-app-missing-alert';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = {
   operatorName: string;
@@ -34,6 +35,7 @@ export const OperatorAppSwitchButton = ({
       onPress={openOperatorApp}
       mode="primary"
       interactiveColor="interactive_0"
+      rightIcon={{svg: ExternalLink}}
     />
   );
 };

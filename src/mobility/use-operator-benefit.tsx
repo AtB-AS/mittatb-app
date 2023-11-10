@@ -1,9 +1,19 @@
 import {useOperators} from '@atb/mobility/use-operators';
 import {useUserBenefitsQuery} from '@atb/mobility/use-user-benefits-query';
+import {useValueCodeQuery} from '@atb/mobility/use-value-code-query';
 
 export const useOperatorBenefit = (operatorId: string | undefined) => {
   const operators = useOperators();
-  const {data: userBenefits, isError, isLoading} = useUserBenefitsQuery();
+  const {
+    data: userBenefits,
+    isLoading: isLoadingBenefit,
+    isError: isBenefitError,
+  } = useUserBenefitsQuery();
+  const {
+    data: valueCode,
+    isLoading: isLoadingValueCode,
+    isError: isValueCodeError,
+  } = useValueCodeQuery(operatorId);
 
   // The data model supports multiple benefits per operator.
   // Currently, there is no requirement for more than one benefit per operator,
@@ -15,9 +25,10 @@ export const useOperatorBenefit = (operatorId: string | undefined) => {
       : false;
 
   return {
-    isLoading,
-    isError,
+    isLoading: isLoadingBenefit || isLoadingValueCode,
+    isError: isBenefitError || isValueCodeError,
     operatorBenefit,
     isUserEligibleForBenefit,
+    valueCode: valueCode ?? undefined,
   };
 };

@@ -45,6 +45,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
   } = useBikeStation(stationId);
   const {
     operatorBenefit,
+    valueCode,
     isLoading: isLoadingBenefits,
     isError: isBenefitError,
     isUserEligibleForBenefit,
@@ -118,6 +119,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                 {operatorBenefit && isUserEligibleForBenefit ? (
                   <OperatorBenefitActionButton
                     benefit={operatorBenefit}
+                    valueCode={valueCode}
                     operatorName={operatorName}
                     appStoreUri={appStoreUri}
                     rentalAppUri={rentalAppUri}

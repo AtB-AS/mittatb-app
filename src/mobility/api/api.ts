@@ -21,7 +21,10 @@ export const getBenefitsForUser = (): Promise<UserBenefitsType[]> => {
     .then((response) => UserBenefits.array().parse(response.data ?? []));
 };
 
-export const getValueCode = (operatorId: string): Promise<string | null> => {
+export const getValueCode = (
+  operatorId: string | undefined,
+): Promise<string | null> => {
+  if (!operatorId) return Promise.resolve(null);
   return client
     .post(
       `/mobility/code/${operatorId}`,

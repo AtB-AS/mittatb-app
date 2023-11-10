@@ -48,6 +48,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   } = useCarSharingStation(stationId);
   const {
     operatorBenefit,
+    valueCode,
     isUserEligibleForBenefit,
     isLoading: isLoadingBenefit,
     isError: isBenefitError,
@@ -146,6 +147,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                 {operatorBenefit && isUserEligibleForBenefit ? (
                   <OperatorBenefitActionButton
                     benefit={operatorBenefit}
+                    valueCode={valueCode}
                     operatorName={operatorName}
                     appStoreUri={appStoreUri}
                     rentalAppUri={rentalAppUri}
