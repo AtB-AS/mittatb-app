@@ -90,16 +90,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
 
-  const wipeToken = useCallback(
-    async (token: ActivatedToken | undefined, traceId: string) => {
-      if (!token) return;
-      Bugsnag.leaveBreadcrumb('Wiping token with id ' + token.tokenId);
-      await tokenService.removeToken(token.getTokenId(), traceId);
-      await mobileTokenClient.clear();
-    },
-    [],
-  );
-
   const [token, setToken] = useState<ActivatedToken>();
   const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
   const [mobileTokenStatus, setMobileTokenStatus] =
@@ -107,97 +97,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const enabled =
     mobileTokenEnabled && userId && authStatus === 'authenticated';
-
-  /**
-   * Load/create native token and handle the situations that can arise.
-   *
-   * - First check if there has been a user change. If there has, then a new
-   *   token should always be created (skip to last step).
-   * - If no user change retrieve the token from the client-sdk. If necessary,
-   *   the token will be renewed while getting it.
-   * - If a token already exists it will be validated, and any exceptions thrown
-   *   will be handled accordingly.
-   * - A new token will be created if necessary.
-   *
-   * Note: This useEffect is large and complex. I tried simplifying it, but I
-   * found that breaking it up into smaller parts made it even more hard to
-   * follow what is happening.
-   */
-  const loadNativeToken = useCallback(
-    async (traceId: string) => {
-      Bugsnag.leaveBreadcrumb(`Loading mobile token state for user ${userId}`);
-
-      /*
-       Check if there has been a user change.
-       */
-      const lastUserId = await storage.get('@ATB_last_mobile_token_user');
-      const noUserChange = lastUserId === userId;
-
-      let token: ActivatedToken | undefined;
-      if (noUserChange) {
-        /*
-         Retrieve the token from the native layer
-         */
-        token = await mobileTokenClient.get(traceId);
-
-        if (token) {
-          /*
-           If native token exists then validate it. The validation request will
-           throw an error if validation fails, and these errors will be handled
-           as best possible.
-           */
-          try {
-            Bugsnag.leaveBreadcrumb(`Validating token ${token.getTokenId()}`);
-            const signedToken = await mobileTokenClient.encode(token, [
-              TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-            ]);
-            await tokenService.validate(token, signedToken, traceId);
-          } catch (err) {
-            if (
-              err instanceof TokenMustBeReplacedRemoteTokenStateError ||
-              err instanceof TokenNotFoundRemoteTokenStateError
-            ) {
-              token = undefined;
-            } else if (
-              err instanceof TokenEncodingInvalidRemoteTokenStateError
-            ) {
-              await wipeToken(token, traceId);
-              token = undefined;
-            } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
-              token = await mobileTokenClient.renew(token, traceId);
-            } else {
-              throw err;
-            }
-          }
-        }
-      }
-
-      if (!token) {
-        /*
-        If token is undefined, then create a new one. We can end up here if:
-        - No token previously created on this device.
-        - There has been a user change and the existing token has been wiped.
-        - There was a validation error which signaled that a new token should
-          be created.
-         */
-        Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
-        token = await mobileTokenClient.create(traceId);
-      }
-      await storage.set('@ATB_last_mobile_token_user', userId!);
-      return token;
-    },
-    [userId],
-  );
-
-  const loadRemoteTokens = useCallback(async (traceId: string) => {
-    const tokens = await tokenService.listTokens(traceId);
-    if (!tokens?.length) {
-      throw new Error(
-        'Empty remote tokens list. Should not happen as mobile token should already be initialized for this phone.',
-      );
-    }
-    return tokens;
-  }, []);
 
   const load = useCallback(async () => {
     if (enabled) {
@@ -233,9 +132,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       try {
         // Retry loading native token and remote tokens twice for improved stability
         try {
-          nativeToken = await loadNativeToken(traceId);
+          nativeToken = await loadNativeToken(userId, traceId);
         } catch (_) {
-          nativeToken = await loadNativeToken(traceId);
+          nativeToken = await loadNativeToken(userId, traceId);
         }
 
         try {
@@ -276,7 +175,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         cancelTimeoutHandler();
       }
     }
-  }, [enabled, loadNativeToken, loadRemoteTokens, token_timeout_in_seconds]);
+  }, [enabled, userId, token_timeout_in_seconds]);
 
   useEffect(() => {
     load();
@@ -303,7 +202,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       }
     }
     return undefined;
-  }, [token]);
+  }, [token, userId]);
 
   const barcodeStatus = useBarcodeStatus(
     mobileTokenStatus,
@@ -328,14 +227,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     },
     [],
   );
-
-  const getTokenToggleDetails = useCallback(async () => {
-    try {
-      return await tokenService.getTokenToggleDetails();
-    } catch (err) {
-      return undefined;
-    }
-  }, []);
 
   const tokens = useMemo(
     () =>
@@ -364,8 +255,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
           load();
         },
-        wipeToken: () =>
-          wipeToken(token, uuid()).then(() => setToken(undefined)),
+        wipeToken: useCallback(
+          () => wipeToken(token, uuid()).then(() => setToken(undefined)),
+          [token],
+        ),
         getTokenToggleDetails,
         debug: {
           token,
@@ -480,4 +373,108 @@ const deviceInspectable = (
   const matchingRemoteToken = remoteTokens.find((r) => r.id === token.tokenId);
   if (!matchingRemoteToken) return false;
   return isInspectable(matchingRemoteToken);
+};
+
+const loadRemoteTokens = async (traceId: string) => {
+  const tokens = await tokenService.listTokens(traceId);
+  if (!tokens?.length) {
+    throw new Error(
+      'Empty remote tokens list. Should not happen as mobile token should already be initialized for this phone.',
+    );
+  }
+  return tokens;
+};
+
+/**
+ * Load/create native token and handle the situations that can arise.
+ *
+ * - First check if there has been a user change. If there has, then a new
+ *   token should always be created (skip to last step).
+ * - If no user change retrieve the token from the client-sdk. If necessary,
+ *   the token will be renewed while getting it.
+ * - If a token already exists it will be validated, and any exceptions thrown
+ *   will be handled accordingly.
+ * - A new token will be created if necessary.
+ *
+ * Note: This useEffect is large and complex. I tried simplifying it, but I
+ * found that breaking it up into smaller parts made it even more hard to
+ * follow what is happening.
+ */
+const loadNativeToken = async (userId: string, traceId: string) => {
+  Bugsnag.leaveBreadcrumb(`Loading mobile token state for user ${userId}`);
+
+  /*
+  Check if there has been a user change.
+   */
+  const lastUserId = await storage.get('@ATB_last_mobile_token_user');
+  const noUserChange = lastUserId === userId;
+
+  let token: ActivatedToken | undefined;
+  if (noUserChange) {
+    /*
+    Retrieve the token from the native layer
+     */
+    token = await mobileTokenClient.get(traceId);
+
+    if (token) {
+      /*
+      If native token exists then validate it. The validation request will
+      throw an error if validation fails, and these errors will be handled
+      as best possible.
+       */
+      try {
+        Bugsnag.leaveBreadcrumb(`Validating token ${token.getTokenId()}`);
+        const signedToken = await mobileTokenClient.encode(token, [
+          TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
+        ]);
+        await tokenService.validate(token, signedToken, traceId);
+      } catch (err) {
+        if (
+          err instanceof TokenMustBeReplacedRemoteTokenStateError ||
+          err instanceof TokenNotFoundRemoteTokenStateError
+        ) {
+          token = undefined;
+        } else if (err instanceof TokenEncodingInvalidRemoteTokenStateError) {
+          await wipeToken(token, traceId);
+          token = undefined;
+        } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
+          token = await mobileTokenClient.renew(token, traceId);
+        } else {
+          throw err;
+        }
+      }
+    }
+  }
+
+  if (!token) {
+    /*
+    If token is undefined, then create a new one. We can end up here if:
+    - No token previously created on this device.
+    - There has been a user change and the existing token has been wiped.
+    - There was a validation error which signaled that a new token should
+      be created.
+     */
+    Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
+    token = await mobileTokenClient.create(traceId);
+  }
+  await storage.set('@ATB_last_mobile_token_user', userId!);
+  return token;
+};
+
+const wipeToken = async (
+  token: ActivatedToken | undefined,
+  traceId: string,
+) => {
+  if (!token) return;
+  Bugsnag.leaveBreadcrumb('Wiping token with id ' + token.tokenId);
+  await tokenService.removeToken(token.getTokenId(), traceId);
+  await mobileTokenClient.clear();
+};
+
+const getTokenToggleDetails = async () => {
+  try {
+    return await tokenService.getTokenToggleDetails();
+  } catch (err) {
+    return undefined;
+  }
 };
