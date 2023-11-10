@@ -75,7 +75,7 @@ module.exports = {
     'react-native/no-raw-text': [2, {skip: ['ThemeText']}],
 
     // Error on using curly braces for strings, e.g. field={'whatever'}
-    "react/jsx-curly-brace-presence": [2, 'never'],
+    'react/jsx-curly-brace-presence': [2, 'never'],
 
     // Warning on arrays with single elements in style prop, as the array is recreated on every render
     'react-native/no-single-element-style-arrays': 1,

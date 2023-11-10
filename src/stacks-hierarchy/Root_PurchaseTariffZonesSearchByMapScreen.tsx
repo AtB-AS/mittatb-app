@@ -37,17 +37,17 @@ export const Root_PurchaseTariffZonesSearchByMapScreen = ({
   const {t} = useTranslation();
 
   useEffect(() => {
-    setSelectedZones({
-      ...selectedZones,
+    setSelectedZones((prev) => ({
+      ...prev,
       from: fromTariffZone,
-    });
+    }));
   }, [fromTariffZone]);
 
   useEffect(() => {
-    setSelectedZones({
-      ...selectedZones,
+    setSelectedZones((prev) => ({
+      ...prev,
       to: toTariffZone,
-    });
+    }));
   }, [toTariffZone]);
 
   const onSave = () => {

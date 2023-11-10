@@ -27,6 +27,13 @@ describe('Onboarding', () => {
       // Location
       await OnboardingPage.denyLocation();
 
+      //NOTE! Will be temporarily until a new onboarding flow is in place
+      await ElementHelper.waitForElement(
+        'id',
+        'nextButtonNotificationOnboarding',
+      );
+      await OnboardingPage.nextButtonNotificationOnboarding.click();
+
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
       await ElementHelper.expectText(HeadingTexts.travelsearch);
     } catch (errMsg) {
