@@ -185,7 +185,6 @@ function getBluetoothPermission(): Permission {
       return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
     }
   }
-  // Default case for non-Android platforms, adjust as needed
   return PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL;
 }
 
