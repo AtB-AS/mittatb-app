@@ -182,7 +182,7 @@ export const NearbyStopPlacesScreenComponent = ({
       )}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
-      {hasLocationPermission || !!location ? (
+      {locationIsAvailable || !!location ? (
         <StopPlaces
           header={getListDescription()}
           stopPlaces={orderedStopPlaces}
@@ -202,7 +202,7 @@ export const NearbyStopPlacesScreenComponent = ({
             />
           }
           buttonProps={{
-            onPress: requestPermission,
+            onPress: requestLocationPermission,
             text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
           }}
         />
