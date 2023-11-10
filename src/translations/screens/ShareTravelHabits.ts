@@ -40,7 +40,7 @@ const ShareTravelHabitsTexts = {
       message: _(
         "Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.",
         "You give us permission to recognize buses and bus stops nearby. This enables us to analyze where you and other customers travel, and to send you relevant surveys. It will help us to be able to improve the travel offer.",
-        "Du gir oss løyve til å kjenna att bussar og buss-stopp i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å senda deg relevante undersøkingar. Det vil hjelpa oss til å kunne betra reisetilbodet."
+        "Du gir oss løyve til å kjenne att bussar og busshaldeplassar i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å sende deg relevante undersøkingar. Det vil hjelpe oss til å kunne betre reisetilbodet."
       )
     },
     locationAlways: {
