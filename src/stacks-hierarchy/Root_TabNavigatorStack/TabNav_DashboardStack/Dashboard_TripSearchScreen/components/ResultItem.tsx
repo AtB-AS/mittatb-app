@@ -156,7 +156,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   const [numberOfExpandedLegs, setNumberOfExpandedLegs] = useState(
     filteredLegs.length,
   );
-  const fadeInValue = useRef(new Animated.Value(0)).current;
+  const fadeInValueRef = useRef(new Animated.Value(0));
 
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
@@ -164,16 +164,14 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       if (legIconsContentWidth >= legIconsParentWidth) {
         setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
       } else {
-        fadeIn.start();
+        Animated.timing(fadeInValueRef.current, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true,
+        }).start();
       }
     }
   }, [legIconsParentWidth, legIconsContentWidth]);
-
-  const fadeIn = Animated.timing(fadeInValue, {
-    toValue: 1,
-    duration: 250,
-    useNativeDriver: true,
-  });
 
   if (filteredLegs.length < 1) return null;
 
@@ -216,7 +214,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         style={[
           styles.result,
           isInPast && styles.resultInPast,
-          {opacity: fadeInValue},
+          {opacity: fadeInValueRef.current},
         ]}
         {...props}
         accessible={false}

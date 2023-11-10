@@ -33,22 +33,18 @@ export const RecentFareContracts = ({
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
-  const filterRecentFareContracts = (
-    recentFareContracts: RecentFareContract[],
-  ) =>
-    recentFareContracts
-      .filter((rfc) =>
-        fareProductTypeConfigs.some(
-          (c) => c.type === rfc.preassignedFareProduct.type,
-        ),
-      )
-      .filter((rfc) =>
-        isProductSellableInApp(rfc.preassignedFareProduct, customerProfile),
-      );
-
   const memoizedRecentFareContracts = useMemo(
-    () => filterRecentFareContracts(recentFareContracts),
-    [recentFareContracts],
+    () =>
+      recentFareContracts
+        .filter((rfc) =>
+          fareProductTypeConfigs.some(
+            (c) => c.type === rfc.preassignedFareProduct.type,
+          ),
+        )
+        .filter((rfc) =>
+          isProductSellableInApp(rfc.preassignedFareProduct, customerProfile),
+        ),
+    [recentFareContracts, fareProductTypeConfigs, customerProfile],
   );
 
   return (

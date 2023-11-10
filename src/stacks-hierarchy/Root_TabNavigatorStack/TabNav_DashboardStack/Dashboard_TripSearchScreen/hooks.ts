@@ -19,10 +19,12 @@ export const useFindCityZoneInLocation = (
   cityZones?: CityZone[],
 ) => {
   return useMemo(() => {
-    if (location && cityZones) {
-      const {longitude, latitude} = location.coordinates;
+    if (location?.coordinates.latitude && cityZones) {
       return cityZones.find(({geometry}) =>
-        turfBooleanPointInPolygon([longitude, latitude], geometry),
+        turfBooleanPointInPolygon(
+          [location?.coordinates.longitude, location?.coordinates.latitude],
+          geometry,
+        ),
       );
     }
   }, [

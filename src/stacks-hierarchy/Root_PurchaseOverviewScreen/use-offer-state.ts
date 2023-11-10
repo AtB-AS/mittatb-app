@@ -217,6 +217,8 @@ export function useOfferState(
       offerEndpoint,
       zones,
       travelDate,
+      fromPlace,
+      toPlace,
     ],
   );
 
