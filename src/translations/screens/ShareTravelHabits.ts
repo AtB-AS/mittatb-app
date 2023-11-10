@@ -56,7 +56,7 @@ const ShareTravelHabitsTexts = {
       message: _(
         'Vi bruker posisjon til å vise din posisjon i kart og reisesøk, og til å finne holdeplasser og steder i nærheten.',
         'We use your location to display it on maps and in travel searches, and to find stops and places nearby.',
-        'Vi brukar posisjon til å vise di posisjon i kart og reisesøk, og til å finne haldeplassar og stader i nærleiken.'
+        'Vi brukar posisjon til å vise posisjonen din i kart og reisesøk, og til å finne haldeplassar og stader i nærleiken.'
       ),
     },
     motion: {
