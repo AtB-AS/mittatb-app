@@ -1,7 +1,7 @@
 import { storage } from '@atb/storage';
 import { useIsBeaconsEnabled } from './use-is-beacons-enabled';
 import { KETTLE_API_KEY } from '@env';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NativeModules, Platform, Rationale } from 'react-native';
 import { Kettle, KettleModules } from 'react-native-kettle-module';
 import { KettleConsents } from 'react-native-kettle-module';
@@ -103,7 +103,7 @@ export const useBeacons = () => {
     }
   }, [isBeaconsSupported]);
 
-  const getRationaleMessages = useCallback((): RationaleMessages => {
+  const getRationaleMessages = useMemo((): RationaleMessages => {
     const buttonPositive = t(dictionary.messageActions.positiveButton);
     return {
       bluetooth: {
@@ -137,7 +137,7 @@ export const useBeacons = () => {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
       granted = await NativeModules.BeaconsPermissions.request();
     } else {
-      granted = await requestAndroidPermissions(getRationaleMessages());
+      granted = await requestAndroidPermissions(getRationaleMessages);
     }
 
     if (granted) {
