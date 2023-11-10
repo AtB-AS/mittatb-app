@@ -18,10 +18,10 @@ type RationaleMessages = Record<PermissionKey, Rationale>;
 
 const BEACONS_CONSENTS = [KettleConsents.SURVEYS, KettleConsents.ANALYTICS];
 const BEACONS_PERMISSIONS: Record<PermissionKey, Permission> = {
-  bluetooth: Platform.OS == 'ios' ? PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL : PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-  locationWhenInUse: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-  locationAlways: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
-  motion: Platform.OS == 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
+  bluetooth: getBluetoothPermission(),
+  locationWhenInUse: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  locationAlways: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+  motion: Platform.OS === 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
 };
 
 export type KettleInfo = {
@@ -174,6 +174,20 @@ export const useBeacons = () => {
     isBeaconsSupported,
   };
 };
+
+function getBluetoothPermission(): Permission {
+  if (Platform.OS === 'android') {
+    if (Platform.Version >= 29) {
+      // Android 10 (API Level 29) and above
+      return PERMISSIONS.ANDROID.BLUETOOTH_SCAN;
+    } else {
+      // Below Android 10
+      return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+    }
+  }
+  // Default case for non-Android platforms, adjust as needed
+  return PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL;
+}
 
 const requestAndroidPermissions = async (rationaleMessages: RationaleMessages) => {
   // Request Bluetooth permission
