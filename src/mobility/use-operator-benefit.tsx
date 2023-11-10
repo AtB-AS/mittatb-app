@@ -1,6 +1,6 @@
 import {useOperators} from '@atb/mobility/use-operators';
-import {useUserBenefitsQuery} from '@atb/mobility/use-user-benefits-query';
-import {useValueCodeQuery} from '@atb/mobility/use-value-code-query';
+import {useUserBenefitsQuery} from '@atb/mobility/queries/use-user-benefits-query';
+import {useValueCodeQuery} from '@atb/mobility/queries/use-value-code-query';
 
 export const useOperatorBenefit = (operatorId: string | undefined) => {
   const operators = useOperators();

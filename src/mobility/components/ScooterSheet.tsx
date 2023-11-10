@@ -141,6 +141,7 @@ export const ScooterSheet = ({
                 ))}
               {isParkingViolationsReportingEnabled && (
                 <Button
+                  style={style.parkingViolationsButton}
                   text={t(MobilityTexts.reportParkingViolation)}
                   mode="secondary"
                   interactiveColor="interactive_2"
@@ -187,8 +188,8 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
     },
-    appSwitchButton: {
-      marginBottom: theme.spacings.medium,
+    parkingViolationsButton: {
+      marginTop: theme.spacings.medium,
     },
   };
 });
