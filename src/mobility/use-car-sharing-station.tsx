@@ -8,24 +8,25 @@ import {useTextForLanguage} from '@atb/translations/utils';
 export const useCarSharingStation = (id: string) => {
   const [station, setStation] = useState<CarStationFragment | undefined>();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error>();
+  const [isError, setIsError] = useState(false);
   const {appStoreUri, brandLogoUrl, operatorId, operatorName} =
     useSystem(station);
 
   useEffect(() => {
     setIsLoading(true);
+    setIsError(false);
     const abortCtrl = new AbortController();
     getCarStation(id, {signal: abortCtrl.signal})
       .then(setStation)
       .then(() => setIsLoading(false))
-      .catch(setError);
+      .catch(() => setIsError(true));
     return () => abortCtrl.abort();
   }, [id]);
 
   return {
     station,
     isLoading,
-    error,
+    isError,
     appStoreUri,
     brandLogoUrl,
     operatorId,

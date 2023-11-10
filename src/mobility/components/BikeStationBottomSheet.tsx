@@ -4,10 +4,7 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {
-  BicycleTexts,
-  MobilityTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
@@ -19,9 +16,10 @@ import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Button} from '@atb/components/button';
-import {useOperatorApp} from '@atb/mobility/use-operator-app';
-import {OperatorBenefits} from '@atb/mobility/components/OperatorBenefits';
+import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
+import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
+import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
 
 type Props = {
   stationId: string;
@@ -34,18 +32,26 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
   const {themeName} = useTheme();
   const style = useSheetStyle();
   const {
-    isLoading,
-    error,
+    isLoading: isLoadingStation,
+    isError: isLoadingError,
     station,
     brandLogoUrl,
     stationName,
+    operatorId,
     operatorName,
     appStoreUri,
     rentalAppUri,
     availableBikes,
   } = useBikeStation(stationId);
+  const {
+    operatorBenefit,
+    isLoading: isLoadingBenefits,
+    isError: isBenefitError,
+    isUserEligibleForBenefit,
+  } = useOperatorBenefit(operatorId);
 
-  const {openOperatorApp} = useOperatorApp();
+  const isLoading = isLoadingStation || isLoadingBenefits;
+  const isError = isLoadingError || isBenefitError;
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -65,14 +71,20 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
             <ActivityIndicator size="large" />
           </View>
         )}
-        {!isLoading && !error && station && (
+        {!isLoading && !isError && station && (
           <>
             <WalkingDistance
               style={style.walkingDistance}
               distance={distance}
             />
             <ScrollView style={style.container}>
-              <OperatorBenefits entity={station} style={style.benefit} />
+              {operatorBenefit && (
+                <OperatorBenefit
+                  style={style.operatorBenefit}
+                  benefit={operatorBenefit}
+                  isUserEligible={isUserEligibleForBenefit}
+                />
+              )}
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -103,19 +115,25 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
             </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
-                <Button
-                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
-                  onPress={() =>
-                    openOperatorApp({operatorName, appStoreUri, rentalAppUri})
-                  }
-                  mode="primary"
-                  interactiveColor="interactive_0"
-                />
+                {operatorBenefit && isUserEligibleForBenefit ? (
+                  <OperatorBenefitActionButton
+                    benefit={operatorBenefit}
+                    operatorName={operatorName}
+                    appStoreUri={appStoreUri}
+                    rentalAppUri={rentalAppUri}
+                  />
+                ) : (
+                  <OperatorAppSwitchButton
+                    operatorName={operatorName}
+                    appStoreUri={appStoreUri}
+                    rentalAppUri={rentalAppUri}
+                  />
+                )}
               </View>
             )}
           </>
         )}
-        {!isLoading && (!!error || !station) && (
+        {!isLoading && (isError || !station) && (
           <View style={style.errorMessage}>
             <MessageBox
               type="error"
@@ -138,7 +156,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
-    benefit: {
+    operatorBenefit: {
       marginBottom: theme.spacings.medium,
     },
     container: {

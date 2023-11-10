@@ -7,7 +7,7 @@ import {getRentalAppUri} from '@atb/mobility/utils';
 export const useVehicle = (id: string) => {
   const [vehicle, setVehicle] = useState<VehicleExtendedFragment | undefined>();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error>();
+  const [isError, setIsError] = useState(false);
   const {appStoreUri, brandLogoUrl, operatorId, operatorName} = useSystem(
     vehicle,
     vehicle?.system.operator.name,
@@ -15,18 +15,19 @@ export const useVehicle = (id: string) => {
 
   useEffect(() => {
     setIsLoading(true);
+    setIsError(false);
     const abortCtrl = new AbortController();
     getVehicle(id, {signal: abortCtrl.signal})
       .then(setVehicle)
       .then(() => setIsLoading(false))
-      .catch(setError);
+      .catch(() => setIsError(true));
     return () => abortCtrl.abort();
   }, [id]);
 
   return {
     vehicle,
     isLoading,
-    error,
+    isError,
     appStoreUri,
     brandLogoUrl,
     operatorId,
