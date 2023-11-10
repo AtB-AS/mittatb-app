@@ -55,7 +55,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         setSaveState({saving: false, error: true});
       }
     }
-  }, [toggleToken, selectedToken]);
+  }, [toggleToken, selectedToken, nextScreen, navigation]);
 
   return (
     <View style={styles.container}>

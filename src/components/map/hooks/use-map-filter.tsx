@@ -1,6 +1,7 @@
 import {MapFilter, MapFilterType} from '../types';
 import {storage} from '@atb/storage';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useCallback} from 'react';
 
 const STORAGE_KEY = '@ATB_user_map_filters';
 
@@ -10,17 +11,23 @@ const fallback: MapFilterType = {
 
 export const useUserMapFilters = () => {
   const {default_map_filter} = useRemoteConfig();
-  const getMapFilter = () =>
-    storage
-      .get(STORAGE_KEY)
-      .then((storedFilters) =>
-        storedFilters
-          ? parse(storedFilters) ?? fallback
-          : parse(default_map_filter) ?? fallback,
-      );
+  const getMapFilter = useCallback(
+    () =>
+      storage
+        .get(STORAGE_KEY)
+        .then((storedFilters) =>
+          storedFilters
+            ? parse(storedFilters) ?? fallback
+            : parse(default_map_filter) ?? fallback,
+        ),
+    [default_map_filter],
+  );
 
-  const setMapFilter = (filters: MapFilterType) =>
-    storage.set(STORAGE_KEY, JSON.stringify(filters));
+  const setMapFilter = useCallback(
+    (filters: MapFilterType) =>
+      storage.set(STORAGE_KEY, JSON.stringify(filters)),
+    [],
+  );
 
   return {
     getMapFilter,
