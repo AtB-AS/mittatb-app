@@ -6,7 +6,7 @@ import { NativeModules, Platform, Rationale } from 'react-native';
 import { Kettle, KettleModules } from 'react-native-kettle-module';
 import { KettleConsents } from 'react-native-kettle-module';
 import { PERMISSIONS, Permission, RESULTS, checkMultiple, request } from 'react-native-permissions';
-import { ShareTravelHabitsTexts, useTranslation } from '@atb/translations';
+import { ShareTravelHabitsTexts, dictionary, useTranslation } from '@atb/translations';
 
 enum storeKey {
   beaconsConsent = '@ATB_beacons_consent_granted',
@@ -104,7 +104,7 @@ export const useBeacons = () => {
   }, [isBeaconsSupported]);
 
   const getRationaleMessages = useCallback((): RationaleMessages => {
-    const buttonPositive = 'OK';
+    const buttonPositive = t(dictionary.messageActions.positiveButton);
     return {
       bluetooth: {
         title: t(ShareTravelHabitsTexts.permissions.bluethooth.title),
@@ -112,8 +112,8 @@ export const useBeacons = () => {
         buttonPositive,
       },
       locationWhenInUse: {
-        title: t(ShareTravelHabitsTexts.permissions.locationWhenInUser.title),
-        message: t(ShareTravelHabitsTexts.permissions.locationWhenInUser.message),
+        title: t(ShareTravelHabitsTexts.permissions.locationWhenInUse.title),
+        message: t(ShareTravelHabitsTexts.permissions.locationWhenInUse.message),
         buttonPositive,
       },
       locationAlways: {

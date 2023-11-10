@@ -51,7 +51,7 @@ const ShareTravelHabitsTexts = {
         "I tillegg til å kunne vise posisjonen din i kart og til å planleggje reiser, vil vi få verdifull læring om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet."
       )
     },
-    locationWhenInUser: {
+    locationWhenInUse: {
       title: _('Posisjon', 'Location', 'Posisjon'),
       message: _(
         'Vi bruker posisjon til å vise din posisjon i kart og reisesøk, og til å finne holdeplasser og steder i nærheten.',

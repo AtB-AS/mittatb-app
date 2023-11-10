@@ -108,6 +108,9 @@ const dictionary = {
     km: _('km', 'km', `km`),
     m: _('m', 'm', `m`),
   },
+  messageActions: {
+    positiveButton: _('OK', 'OK', `OK`),
+  },
   messageTypes: {
     info: _('Til info', 'Info', `Til info`),
     warning: _('Advarsel', 'Warning', `Åtvaring`),
