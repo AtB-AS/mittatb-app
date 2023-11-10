@@ -237,7 +237,7 @@ const allowedPermissionForKettle = async () => {
   if (permissionStatuses.bluetooth) {
     kettleModulesArray.push(KettleModules.BLUETOOTH);
   }
-  if (permissionStatuses.locationWhenInUse || permissionStatuses.locationAlways) {
+  if (permissionStatuses.locationAlways) {
     kettleModulesArray.push(KettleModules.LOCATION);
   }
   if (permissionStatuses.motion) {
