@@ -4,9 +4,12 @@ import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {
+  AppIdentifierHeaderName,
   AppVersionHeaderName,
   FirebaseAuthIdHeaderName,
   InstallIdHeaderName,
+  PlatformHeaderName,
+  PlatformVersionHeaderName,
   RequestIdHeaderName,
 } from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
@@ -86,6 +89,9 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
   }
 
   config.headers[AppVersionHeaderName] = APP_VERSION;
+  config.headers[PlatformHeaderName] = Platform.OS;
+  config.headers[PlatformVersionHeaderName] = Platform.Version;
+  config.headers[AppIdentifierHeaderName] = IOS_BUNDLE_IDENTIFIER;
 
   return config;
 }
@@ -97,8 +103,6 @@ async function requestIdTokenHandler(config: AxiosRequestConfig) {
     config.headers = {
       ...(config.headers || {}),
       Authorization: 'Bearer ' + idToken,
-      'atb-app-identifier': IOS_BUNDLE_IDENTIFIER,
-      'atb-app-platform': Platform.OS,
     };
   }
   return config;
