@@ -104,7 +104,7 @@ export const useBeacons = () => {
   }, [isBeaconsSupported]);
 
   const getRationaleMessages = useMemo((): RationaleMessages => {
-    const buttonPositive = t(dictionary.messageActions.positiveButton);
+    const buttonPositive: string = t(dictionary.messageActions.positiveButton);
     return {
       bluetooth: {
         title: t(ShareTravelHabitsTexts.permissions.bluethooth.title),
@@ -177,14 +177,19 @@ export const useBeacons = () => {
 
 function getBluetoothPermission(): Permission {
   if (Platform.OS === 'android') {
-    if (Platform.Version >= 29) {
-      // Android 10 (API Level 29) and above
-      return PERMISSIONS.ANDROID.BLUETOOTH_SCAN;
-    } else {
-      // Below Android 10
-      return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+    if (Platform.OS === 'android') {
+      // For Android 12 (API Level 31) and above
+      if (Platform.Version >= 31) {
+        // Requires BLUETOOTH_SCAN for scanning Bluetooth devices including beacons
+        return PERMISSIONS.ANDROID.BLUETOOTH_SCAN;
+      } else {
+        // For Android 23 (API Level 23) to Android 30 (API Level 30)
+        // Requires ACCESS_FINE_LOCATION for Bluetooth scanning and discovery
+        return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+      }
     }
   }
+
   return PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL;
 }
 
