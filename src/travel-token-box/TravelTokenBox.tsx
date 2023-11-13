@@ -32,8 +32,8 @@ export function TravelTokenBox({
   }
 
   const showTokensNotWorkingError =
-    deviceInspectionStatus !== 'inspectable' ||
-    (alwaysShowErrors && mobileTokenStatus !== 'success');
+    mobileTokenStatus === 'error' &&
+    (alwaysShowErrors || deviceInspectionStatus === 'not-inspectable');
   if (showTokensNotWorkingError) {
     return (
       <MessageBox
