@@ -12,10 +12,10 @@ import {
   TicketingTexts,
   useTranslation,
 } from '@atb/translations';
-import {useInterval} from '@atb/utils/use-interval';
-import React, {useState} from 'react';
+import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {SectionHeading} from './SectionHeading';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type Props = {
   onPressDetails?: (isCarnet: boolean, orderId: string) => void;
@@ -30,11 +30,12 @@ export const CompactFareContracts: React.FC<Props> = ({
 }) => {
   const itemStyle = useStyles();
 
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 1000);
-
+  const {now} = useMobileTokenContextState();
   const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContract(fareContracts);
+  const validFareContracts = filterValidRightNowFareContract(
+    fareContracts,
+    now,
+  );
 
   const {t} = useTranslation();
   const {tariffZones, userProfiles, preassignedFareProducts} =

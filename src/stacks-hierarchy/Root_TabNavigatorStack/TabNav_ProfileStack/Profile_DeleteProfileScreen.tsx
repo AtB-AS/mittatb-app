@@ -16,6 +16,7 @@ import {Alert, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
 import {LinkSectionItem, Section} from '@atb/components/sections';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type DeleteProfileScreenProps =
   ProfileScreenProps<'Profile_DeleteProfileScreen'>;
@@ -27,8 +28,9 @@ export const Profile_DeleteProfileScreen = ({
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthState();
   const {fareContracts} = useTicketingState();
+  const {now} = useMobileTokenContextState();
   const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts).length > 0;
+    filterActiveOrCanBeUsedFareContracts(fareContracts, now).length > 0;
 
   const [deleteError, setDeleteError] = useState<boolean>(false);
 

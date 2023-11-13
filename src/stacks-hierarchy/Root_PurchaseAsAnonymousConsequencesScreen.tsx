@@ -6,6 +6,7 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
@@ -15,8 +16,11 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   const {enable_vipps_login} = useRemoteConfig();
 
   const {fareContracts} = useTicketingState();
-  const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts);
+  const {now} = useMobileTokenContextState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+    now,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   return (

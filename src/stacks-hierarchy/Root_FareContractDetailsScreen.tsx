@@ -9,17 +9,16 @@ import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentati
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useInterval} from '@atb/utils/use-interval';
-import React, {useState} from 'react';
+import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 2500);
+  const {now} = useMobileTokenContextState();
   const {findFareContractByOrderId} = useTicketingState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const firstTravelRight = fc?.travelRights[0];

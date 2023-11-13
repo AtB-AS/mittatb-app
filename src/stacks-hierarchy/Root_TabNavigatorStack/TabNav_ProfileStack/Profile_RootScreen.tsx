@@ -67,8 +67,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketingState();
-  const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts);
+  const {now} = useMobileTokenContextState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+    now,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {configurableLinks} = useFirestoreConfiguration();
