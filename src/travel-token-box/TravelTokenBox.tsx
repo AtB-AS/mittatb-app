@@ -20,7 +20,8 @@ export function TravelTokenBox({
 }) {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceInspectionStatus, tokens} = useMobileTokenContextState();
+  const {deviceInspectionStatus, mobileTokenStatus, tokens, retry} =
+    useMobileTokenContextState();
 
   if (deviceInspectionStatus === 'loading') {
     return (
@@ -30,15 +31,39 @@ export function TravelTokenBox({
     );
   }
 
-  const errorMessages = ErrorMessages(alwaysShowErrors);
-  if (errorMessages) return errorMessages;
+  const showTokensNotWorkingError =
+    deviceInspectionStatus !== 'inspectable' ||
+    (alwaysShowErrors && mobileTokenStatus !== 'success');
+  if (showTokensNotWorkingError) {
+    return (
+      <MessageBox
+        type="warning"
+        title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
+        style={styles.errorMessage}
+        onPressConfig={{
+          action: retry,
+          text: t(dictionary.retry),
+        }}
+      />
+    );
+  }
 
   if (deviceInspectionStatus === 'inspectable' && !showIfThisDevice) {
     return null;
   }
 
   const inspectableToken = tokens.find((t) => t.isInspectable);
-  if (!inspectableToken) return null;
+  if (!inspectableToken)
+    return (
+      <MessageBox
+        type="warning"
+        isMarkdown={true}
+        title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
+        message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
+        style={styles.errorMessage}
+      />
+    );
 
   const a11yLabel =
     (inspectableToken.type === 'travel-card'
@@ -138,45 +163,6 @@ export const TravelDeviceTitle = ({
       </ThemeText>
     );
   }
-};
-
-const ErrorMessages = (alwaysShowErrors?: boolean) => {
-  const {t} = useTranslation();
-  const styles = useStyles();
-  const {mobileTokenStatus, retry, tokens, deviceInspectionStatus} =
-    useMobileTokenContextState();
-
-  if (mobileTokenStatus !== 'success') {
-    return deviceInspectionStatus === 'inspectable' &&
-      !alwaysShowErrors ? null : (
-      <MessageBox
-        type="warning"
-        title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
-        message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
-        style={styles.errorMessage}
-        onPressConfig={{
-          action: retry,
-          text: t(dictionary.retry),
-        }}
-      />
-    );
-  }
-
-  const inspectableToken = tokens.find((t) => t.isInspectable);
-
-  if (!inspectableToken) {
-    return (
-      <MessageBox
-        type="warning"
-        isMarkdown={true}
-        title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
-        message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
-        style={styles.errorMessage}
-      />
-    );
-  }
-
-  return null;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
