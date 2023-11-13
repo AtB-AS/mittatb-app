@@ -128,6 +128,7 @@ export const Profile_DebugInfoScreen = () => {
     mobileTokenStatus,
     barcodeStatus,
     debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
+    now,
   } = useMobileTokenContextState();
 
   const remoteConfig = useRemoteConfig();
@@ -562,6 +563,7 @@ export const Profile_DebugInfoScreen = () => {
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
                 <ThemeText>{`Barcode status: ${barcodeStatus}`}</ThemeText>
+                <ThemeText>{`Now: ${new Date(now).toISOString()}`}</ThemeText>
                 <Button
                   style={style.button}
                   text="Reload token(s)"
