@@ -9,17 +9,9 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {useSystem} from '@atb/mobility/use-system';
-import {Button} from '@atb/components/button';
-import {
-  CarSharingTexts,
-  MobilityTexts,
-} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {getRentalAppUri} from '@atb/mobility/utils';
+import {CarSharingTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {useOperatorApp} from '@atb/mobility/use-operator-app';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {useTextForLanguage} from '@atb/translations/utils';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {WalkingDistance} from '@atb/components/walking-distance';
@@ -29,6 +21,10 @@ import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/statio
 import {CarImage} from '@atb/mobility/components/CarImage';
 import {InfoChip} from '@atb/components/info-chip';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
+import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
+import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 
 type Props = {
   stationId: string;
@@ -39,15 +35,27 @@ type Props = {
 export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   const {t, language} = useTranslation();
   const style = useSheetStyle();
-  const {station, isLoading, error} = useCarSharingStation(stationId);
-  const {appStoreUri, brandLogoUrl, operatorName} = useSystem(station);
-  const rentalAppUri = getRentalAppUri(station);
-  const {openOperatorApp} = useOperatorApp({
+  const {
+    station,
+    isLoading: isLoadingStation,
+    isError: isLoadingError,
+    operatorId,
     operatorName,
+    brandLogoUrl,
     appStoreUri,
     rentalAppUri,
-  });
-  const stationName = useTextForLanguage(station?.name.translation) ?? '';
+    stationName,
+  } = useCarSharingStation(stationId);
+  const {
+    operatorBenefit,
+    valueCode,
+    isUserEligibleForBenefit,
+    isLoading: isLoadingBenefit,
+    isError: isBenefitError,
+  } = useOperatorBenefit(operatorId);
+
+  const isLoading = isLoadingStation || isLoadingBenefit;
+  const isError = isLoadingError || isBenefitError;
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -67,13 +75,20 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
             <ActivityIndicator size="large" />
           </View>
         )}
-        {!isLoading && !error && station && (
+        {!isLoading && !isError && station && (
           <>
             <ScrollView style={style.container}>
               <WalkingDistance
                 style={style.walkingDistance}
                 distance={distance}
               />
+              {operatorBenefit && (
+                <OperatorBenefit
+                  benefit={operatorBenefit}
+                  isUserEligible={isUserEligibleForBenefit}
+                  style={style.benefit}
+                />
+              )}
               <Section>
                 <GenericSectionItem>
                   <OperatorLogo
@@ -127,20 +142,28 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                 </Section>
               )}
             </ScrollView>
-            <View style={style.footer}>
-              {rentalAppUri && (
-                <Button
-                  style={style.operatorButton}
-                  text={t(MobilityTexts.operatorAppSwitchButton(operatorName))}
-                  onPress={openOperatorApp}
-                  mode="primary"
-                  interactiveColor="interactive_0"
-                />
-              )}
-            </View>
+            {rentalAppUri && (
+              <View style={style.footer}>
+                {operatorBenefit && isUserEligibleForBenefit ? (
+                  <OperatorBenefitActionButton
+                    benefit={operatorBenefit}
+                    valueCode={valueCode}
+                    operatorName={operatorName}
+                    appStoreUri={appStoreUri}
+                    rentalAppUri={rentalAppUri}
+                  />
+                ) : (
+                  <OperatorAppSwitchButton
+                    operatorName={operatorName}
+                    appStoreUri={appStoreUri}
+                    rentalAppUri={rentalAppUri}
+                  />
+                )}
+              </View>
+            )}
           </>
         )}
-        {!isLoading && (error || !station) && (
+        {!isLoading && (isError || !station) && (
           <View style={style.errorMessage}>
             <MessageBox
               type="error"
@@ -166,6 +189,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     availabilityChip: {
       flex: 1,
       alignItems: 'flex-end',
+    },
+    benefit: {
+      marginBottom: theme.spacings.medium,
     },
     carDetailsContainer: {
       display: 'flex',

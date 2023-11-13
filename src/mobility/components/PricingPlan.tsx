@@ -13,12 +13,12 @@ import {OperatorBenefitIdType} from '@atb/configuration';
 type PricingPlanProps = {
   operator: string;
   plan: PricingPlanFragment;
-  eligibleBenefits?: OperatorBenefitIdType[];
+  eligibleBenefit?: OperatorBenefitIdType | undefined;
 };
 export const PricingPlan = ({
   operator,
   plan,
-  eligibleBenefits,
+  eligibleBenefit,
 }: PricingPlanProps) => {
   const {t} = useTranslation();
   const seAppForPrices = (
@@ -34,7 +34,7 @@ export const PricingPlan = ({
         price={plan.price}
         pricingSegment={plan.perMinPricing[0]}
         unit="min"
-        eligibleBenefits={eligibleBenefits}
+        eligibleBenefit={eligibleBenefit}
       />
     );
   }
@@ -45,7 +45,7 @@ export const PricingPlan = ({
         price={plan.price}
         pricingSegment={plan.perKmPricing[0]}
         unit="km"
-        eligibleBenefits={eligibleBenefits}
+        eligibleBenefit={eligibleBenefit}
       />
     );
   }
@@ -57,14 +57,14 @@ type PriceInfoProps = {
   price: number;
   pricingSegment: PricingSegmentFragment;
   unit: 'min' | 'km';
-  eligibleBenefits?: OperatorBenefitIdType[];
+  eligibleBenefit?: OperatorBenefitIdType;
 };
 
 const PriceInfo = ({
   price,
   pricingSegment,
   unit,
-  eligibleBenefits,
+  eligibleBenefit,
 }: PriceInfoProps) => {
   const {t, language} = useTranslation();
 
@@ -83,7 +83,7 @@ const PriceInfo = ({
       primaryStat={`${formatPrice(pricingSegment, language)} kr/${unit}`}
       secondaryStat={t(ScooterTexts.pricingPlan.price(price))}
       secondaryStatStyle={
-        price > 0 && eligibleBenefits?.includes('free-unlock')
+        price > 0 && eligibleBenefit === 'free-unlock'
           ? {textDecorationLine: 'line-through'}
           : undefined
       }
