@@ -207,6 +207,7 @@ export const NearbyStopPlacesScreenComponent = ({
             onPress: requestPermission,
             text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
           }}
+          testID="noAccessToLocation"
         />
       )}
     </FullScreenView>
