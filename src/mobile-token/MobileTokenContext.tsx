@@ -23,6 +23,7 @@ import {
   TokenMustBeReplacedRemoteTokenStateError,
   TokenNotFoundRemoteTokenStateError,
 } from '@entur-private/abt-token-server-javascript-interface';
+import {clock, start} from '@entur-private/abt-time-react-native-lib';
 import {v4 as uuid} from 'uuid';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
@@ -37,6 +38,7 @@ import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
 import {updateMetadata} from '@atb/chat/metadata';
 import {tokenService} from './tokenService';
+import {useInterval} from '@atb/utils/use-interval';
 
 type MobileTokenContextState = {
   tokens: Token[];
@@ -78,6 +80,12 @@ type MobileTokenContextState = {
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
   };
+  /**
+   * The current time in milliseconds, updated every 2.5 seconds. This is based
+   * on server time when possible, and can be safely used for checking the
+   * validity of fare contracts.
+   */
+  now: number;
 };
 
 const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
@@ -242,6 +250,17 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     [remoteTokens, token],
   );
 
+  const [time, setTime] = useState(Date.now());
+  useInterval(() => clock.currentTimeMillis().then(setTime), 2500);
+  useEffect(() => {
+    start({
+      autoStart: true,
+      maxDelayInMilliSeconds: 1000,
+      parallelizationCount: 3,
+      host: 'time.google.com',
+    });
+  }, [start]);
+
   return (
     <MobileTokenContext.Provider
       value={{
@@ -275,6 +294,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           },
           renewToken: () => mobileTokenClient.renew(token!, uuid()),
         },
+        now: time,
       }}
     >
       {children}
