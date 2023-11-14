@@ -49,7 +49,7 @@ export const DeparturesWidget = ({
   const {location} = useGeolocationState();
   const {state, loadInitialDepartures, searchDate} = useFavoriteDepartureData();
 
-  useEffect(() => loadInitialDepartures(), [favoriteDepartures]);
+  useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
   const {
     open: openBottomSheet,

@@ -95,7 +95,7 @@ class TravelSearchOverviewPage {
     const searchResultId = `//*[@resource-id="tripSearchSearchResult${resultIndex}"]`;
     const durationId = `//*[@resource-id="resultDuration"]`;
     const duration = await $(searchResultId).$(durationId).getText();
-    return parseInt(duration.split(' ')[0]);
+    return duration.split(' ')[0];
   }
 }
 export default new TravelSearchOverviewPage();

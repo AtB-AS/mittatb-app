@@ -44,6 +44,20 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
   const [dismissedGlobalMessages, setDismissedGlobalMessages] = useState<
     GlobalMessageType[]
   >([]);
+  const setLatestDismissedGlobalMessages = useCallback(
+    async (globalMessages: GlobalMessageType[]) => {
+      const dismissedGlobalMessages = await getDismissedMessagesFromStore();
+      const currentlyActiveDismissedMessages = dismissedGlobalMessages
+        ? dismissedGlobalMessages.filter((dgm: GlobalMessageType) =>
+            isCurrentlyActive(dgm.id, globalMessages),
+          )
+        : [];
+      setDismissedMessagesInStore(currentlyActiveDismissedMessages);
+      setDismissedGlobalMessages(currentlyActiveDismissedMessages);
+    },
+    [],
+  );
+
   useEffect(
     () =>
       firestore()
@@ -64,7 +78,7 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
             console.warn(err);
           },
         ),
-    [],
+    [setLatestDismissedGlobalMessages],
   );
 
   const isCurrentlyActive = (
@@ -72,19 +86,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
     globalMessages: GlobalMessageType[],
   ) => {
     return globalMessages.map((gm) => gm.id).indexOf(dismissedMessageId) > -1;
-  };
-
-  const setLatestDismissedGlobalMessages = async (
-    globalMessages: GlobalMessageType[],
-  ) => {
-    const dismissedGlobalMessages = await getDismissedMessagesFromStore();
-    const currentlyActiveDismissedMessages = dismissedGlobalMessages
-      ? dismissedGlobalMessages.filter((dgm: GlobalMessageType) =>
-          isCurrentlyActive(dgm.id, globalMessages),
-        )
-      : [];
-    setDismissedMessagesInStore(currentlyActiveDismissedMessages);
-    setDismissedGlobalMessages(currentlyActiveDismissedMessages);
   };
 
   const addDismissedGlobalMessages = async (

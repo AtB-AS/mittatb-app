@@ -93,6 +93,43 @@ const ProfileTexts = {
         language: {
           label: _('Språk', 'Language', 'Språk'),
         },
+        notifications: {
+          label: _('Varslinger', 'Notifications', 'Varslingar'),
+          heading: _('Varslinger', 'Notifications', 'Varslingar'),
+          pushToggle: {
+            text: _('Push-varsel', 'Push notifications', 'Push-varsel'),
+            subText: _(
+              'Tillat at AtB sender varslinger til denne telefonen.',
+              'Allow AtB to send notifications to this phone.',
+              'Gi AtB løyve til å sende varslingar til denne telefonen.',
+            ),
+          },
+          permissionRequired: {
+            title: _(
+              'Tillatelse kreves',
+              'Permission required',
+              'Løyve krevjast',
+            ),
+            message: _(
+              'Skru på varslinger i telefoninnstillingene for å motta varslinger fra AtB.',
+              'Enable notifications in Settings to receive notifications from AtB.',
+              'Skru på varslingar i telefoninnstillingane for å få varslingar frå AtB.',
+            ),
+            action: _(
+              'Åpne telefoninnstillinger',
+              'Open Settings',
+              'Opne telefoninnstillingar',
+            ),
+          },
+          permissionError: {
+            title: _('Oops!', 'Whoops!', 'Oops!'),
+            message: _(
+              'Det har oppstått en feil. Prøv igjen senere 🤞',
+              'An error ocurred. Please try again later 🤞',
+              'Det har skjedd ein feil. Prøv igjen seinare 🤞',
+            ),
+          },
+        },
         enrollment: {
           label: _('Invitasjonskode', 'Invitation code', 'Invitasjonskode'),
         },

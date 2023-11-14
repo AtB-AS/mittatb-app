@@ -20,6 +20,22 @@ describe('Frontpage', () => {
   });
 
   /**
+   * Remove dismissible messages - mainly to avoid scrolling on the page
+   *  - Global messages
+   *  - Announcements
+   */
+  it('should remove messages', async () => {
+    try {
+      await FrontPagePage.removeGlobalMessages();
+      await AppHelper.pause(1000);
+      await FrontPagePage.removeAnnouncements();
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_frontpage_should_remove_messages');
+      throw errMsg;
+    }
+  });
+
+  /**
    * Add a favorite departure from the frontpage
    */
   it('should add favorite departure', async () => {
@@ -33,7 +49,7 @@ describe('Frontpage', () => {
 
       // Choose stop place
       await FrontPagePage.addFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'nearbyStopsContainerView');
+      await ElementHelper.waitForElement('id', 'noAccessToLocationEmptyStateView');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(stopPlace);
 

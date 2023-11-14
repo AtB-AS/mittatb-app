@@ -19,6 +19,14 @@ class OnboardingPage {
   }
 
   /**
+   * Next button on notifications screen
+   */
+  get nextButtonNotificationOnboarding() {
+    const reqId = `//*[@resource-id="nextButtonNotificationOnboarding"]`;
+    return $(reqId);
+  }
+
+  /**
    * Accept restrictions
    */
   get accRestrButton() {
@@ -54,6 +62,13 @@ class OnboardingPage {
       await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
       await this.accRestrButton.click();
       await this.denyLocation();
+      //NOTE! Will be temporarily until a new onboarding flow is in place
+      await AppHelper.pause(3000, true);
+      await ElementHelper.waitForElement(
+        'id',
+        'nextButtonNotificationOnboarding',
+      );
+      await this.nextButtonNotificationOnboarding.click();
     } catch (errMsg) {
       await AppHelper.screenshot(`error_${testName}_skipOnboarding`);
       throw errMsg;

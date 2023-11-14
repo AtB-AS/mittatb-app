@@ -1,20 +1,8 @@
-import {useTranslation} from '@atb/translations';
 import {Alert, AlertButton, Linking} from 'react-native';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {useCallback} from 'react';
-import {useAnalytics} from '@atb/analytics';
+import {useTranslation} from '@atb/translations';
 
-type AppMissingAlertArgs = {
-  operatorName: string;
-  appStoreUri: string | undefined;
-  rentalAppUri: string | undefined;
-};
-export const useOperatorApp = ({
-  operatorName,
-  appStoreUri,
-  rentalAppUri,
-}: AppMissingAlertArgs) => {
-  const analytics = useAnalytics();
+export const useAppMissingAlert = () => {
   const {t} = useTranslation();
 
   const appStoreOpenError = (operatorName: string) => {
@@ -31,7 +19,14 @@ export const useOperatorApp = ({
     );
   };
 
-  const appMissingAlert = () => {
+  type AppMissingAlertArgs = {
+    operatorName: string;
+    appStoreUri: string | undefined;
+  };
+  const showAppMissingAlert = ({
+    appStoreUri,
+    operatorName,
+  }: AppMissingAlertArgs) => {
     const buttons: AlertButton[] = [
       {
         text: t(MobilityTexts.appMissingAlert.buttons.cancel),
@@ -59,14 +54,5 @@ export const useOperatorApp = ({
     );
   };
 
-  const openOperatorApp = useCallback(async () => {
-    analytics.logEvent('Mobility', 'Open operator app', {operatorName});
-    if (!rentalAppUri) return;
-    await Linking.openURL(rentalAppUri).catch(() => appMissingAlert());
-  }, [rentalAppUri, operatorName, appStoreUri]);
-
-  return {
-    appMissingAlert,
-    openOperatorApp,
-  };
+  return {showAppMissingAlert};
 };

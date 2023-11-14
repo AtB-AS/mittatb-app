@@ -224,7 +224,7 @@ describe('useLoadingState', () => {
   it('Should not retry auth if auth status is loading', async () => {
     mockState = {
       isLoadingAppState: true,
-      authStatus: 'creating-account',
+      authStatus: 'fetching-id-token',
       firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));
@@ -235,7 +235,7 @@ describe('useLoadingState', () => {
   it('Should retry auth if auth status is not authenticated', async () => {
     mockState = {
       isLoadingAppState: false,
-      authStatus: 'creating-account',
+      authStatus: 'fetching-id-token',
       firestoreConfigStatus: 'success',
     };
     const hook = renderHook(() => useLoadingState(100));

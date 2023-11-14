@@ -28,5 +28,5 @@ export const useGoToMobileTokenOnboardingWhenNecessary = () => {
         navigation.navigate('Root_MobileTokenOnboardingStack'),
       );
     }
-  }, [shouldOnboard, isFocused]);
+  }, [shouldOnboard, isFocused, navigation]);
 };

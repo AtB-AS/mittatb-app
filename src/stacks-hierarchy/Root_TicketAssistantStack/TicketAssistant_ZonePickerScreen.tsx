@@ -42,6 +42,7 @@ export const TicketAssistant_ZonePickerScreen = ({
 
   const fromTariffZone = route.params?.fromTariffZone ?? defaultTariffZone;
   const toTariffZone = route.params?.toTariffZone ?? defaultTariffZone;
+
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,
     to: toTariffZone,
@@ -51,27 +52,26 @@ export const TicketAssistant_ZonePickerScreen = ({
   const {updateInputParams} = useTicketAssistantState();
 
   useEffect(() => {
-    setSelectedZones({
-      ...selectedZones,
+    setSelectedZones((currentSelectedZones) => ({
+      ...currentSelectedZones,
       from: fromTariffZone,
-    });
-  }, [fromTariffZone]);
-
-  useEffect(() => {
-    setSelectedZones({
-      ...selectedZones,
       to: toTariffZone,
-    });
-  }, [toTariffZone]);
-
-  const unsubscribe = navigation.addListener('blur', () => {
-    const zoneIds = [selectedZones.from.id, selectedZones.to.id];
-    updateInputParams({zones: zoneIds});
-  });
+    }));
+  }, [fromTariffZone, toTariffZone]);
 
   useEffect(() => {
-    return unsubscribe;
-  }, [navigation]);
+    const unsubscribe = navigation.addListener('blur', () => {
+      const zoneIds = [selectedZones.from.id, selectedZones.to.id];
+      updateInputParams({zones: zoneIds});
+    });
+
+    return () => unsubscribe();
+  }, [
+    navigation,
+    selectedZones.from.id,
+    selectedZones.to.id,
+    updateInputParams,
+  ]);
 
   const onVenueSearchClick = (
     callerRouteParam: keyof TicketAssistant_ZonePickerScreenParams,

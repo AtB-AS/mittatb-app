@@ -1,24 +1,27 @@
 import { storage } from '@atb/storage';
 import { useIsBeaconsEnabled } from './use-is-beacons-enabled';
 import { KETTLE_API_KEY } from '@env';
-import { useCallback, useEffect, useState } from 'react';
-import { NativeModules, Platform } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { NativeModules, Platform, Rationale } from 'react-native';
 import { Kettle, KettleModules } from 'react-native-kettle-module';
 import { KettleConsents } from 'react-native-kettle-module';
-import { PERMISSIONS, Permission, RESULTS, check, checkMultiple, request } from 'react-native-permissions';
+import { PERMISSIONS, Permission, RESULTS, checkMultiple, request } from 'react-native-permissions';
+import { ShareTravelHabitsTexts, dictionary, useTranslation } from '@atb/translations';
 
 enum storeKey {
   beaconsConsent = '@ATB_beacons_consent_granted',
 }
 
+type PermissionKey = 'bluetooth' | 'locationWhenInUse' | 'locationAlways' | 'motion';
+
+type RationaleMessages = Record<PermissionKey, Rationale>;
+
 const BEACONS_CONSENTS = [KettleConsents.SURVEYS, KettleConsents.ANALYTICS];
-
-type PermissionKey = 'bluetooth' | 'location' | 'motion';
-
-const PERMISSIONS_MAP: Record<PermissionKey, Permission> = {
-  bluetooth: Platform.OS == 'ios' ? PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-  location: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
-  motion: Platform.OS == 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
+const BEACONS_PERMISSIONS: Record<PermissionKey, Permission> = {
+  bluetooth: getBluetoothPermission(),
+  locationWhenInUse: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  locationAlways: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+  motion: Platform.OS === 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
 };
 
 export type KettleInfo = {
@@ -37,6 +40,7 @@ export const useBeacons = () => {
   const [isKettleSDKInitialized, setKettleSDKInitialized] = useState(false);
   // The app was compiled to support beacons and KEYTLE_API_KEY is set
   const isBeaconsSupported = (isBeaconsEnabled && debugOverrideReady) && !!KETTLE_API_KEY;
+  const { t } = useTranslation();
 
   const updateKettleInfo = useCallback(async () => {
     if (isBeaconsSupported && isKettleSDKInitialized) {
@@ -99,6 +103,32 @@ export const useBeacons = () => {
     }
   }, [isBeaconsSupported]);
 
+  const getRationaleMessages = useMemo((): RationaleMessages => {
+    const buttonPositive: string = t(dictionary.messageActions.positiveButton);
+    return {
+      bluetooth: {
+        title: t(ShareTravelHabitsTexts.permissions.bluethooth.title),
+        message: t(ShareTravelHabitsTexts.permissions.bluethooth.message),
+        buttonPositive,
+      },
+      locationWhenInUse: {
+        title: t(ShareTravelHabitsTexts.permissions.locationWhenInUse.title),
+        message: t(ShareTravelHabitsTexts.permissions.locationWhenInUse.message),
+        buttonPositive,
+      },
+      locationAlways: {
+        title: t(ShareTravelHabitsTexts.permissions.locationAlways.title),
+        message: t(ShareTravelHabitsTexts.permissions.locationAlways.message),
+        buttonPositive,
+      },
+      motion: {
+        title: t(ShareTravelHabitsTexts.permissions.motion.title),
+        message: t(ShareTravelHabitsTexts.permissions.motion.message),
+        buttonPositive,
+      },
+    };
+  }, [t]);
+
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
 
@@ -107,7 +137,7 @@ export const useBeacons = () => {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
       granted = await NativeModules.BeaconsPermissions.request();
     } else {
-      granted = await requestAndroidPermissions();
+      granted = await requestAndroidPermissions(getRationaleMessages);
     }
 
     if (granted) {
@@ -145,33 +175,55 @@ export const useBeacons = () => {
   };
 };
 
-const requestAndroidPermissions = async () => {
+function getBluetoothPermission(): Permission {
+  if (Platform.OS === 'android') {
+    // For Android 12 (API Level 31) and above
+    if (Platform.Version >= 31) {
+      // Requires BLUETOOTH_SCAN for scanning Bluetooth devices including beacons
+      return PERMISSIONS.ANDROID.BLUETOOTH_SCAN;
+    } else {
+      // For Android 23 (API Level 23) to Android 30 (API Level 30)
+      // Requires ACCESS_FINE_LOCATION for Bluetooth scanning and discovery
+      return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+    }
+  }
+
+  return PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL;
+}
+
+const requestAndroidPermissions = async (rationaleMessages: RationaleMessages) => {
   // Request Bluetooth permission
   const bluetoothStatus = await request(
-    PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+    BEACONS_PERMISSIONS.bluetooth,
+    rationaleMessages.bluetooth,
   );
 
   if (bluetoothStatus !== RESULTS.GRANTED) {
     return false;
   }
 
-  // NOTE: If the user already denied the location before, then do not continue asking for more permissions.
-  const requestedStatus = await check(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION);
-  if (requestedStatus !== RESULTS.GRANTED) {
+  // Request location when in use
+  const locationWhenInUseStatus = await request(
+    BEACONS_PERMISSIONS.locationWhenInUse,
+    rationaleMessages.locationWhenInUse,
+  );
+
+  if (locationWhenInUseStatus !== RESULTS.GRANTED) {
     return true;
   }
 
   // Request location always or background location
-  const locationStatus = await request(
-    PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+  const locationAlwaysStatus = await request(
+    BEACONS_PERMISSIONS.locationAlways,
+    rationaleMessages.locationAlways,
   );
 
-  if (locationStatus !== RESULTS.GRANTED) {
+  if (locationAlwaysStatus !== RESULTS.GRANTED) {
     return true;
   }
 
   // Request motion permission
-  const motionStatus = await request(PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION);
+  const motionStatus = await request(BEACONS_PERMISSIONS.motion, rationaleMessages.motion);
 
   if (motionStatus !== RESULTS.GRANTED) {
     return true;
@@ -181,15 +233,16 @@ const requestAndroidPermissions = async () => {
 };
 
 const checkPermissionStatuses = async () => {
-  const statuses = await checkMultiple(Object.values(PERMISSIONS_MAP));
+  const statuses = await checkMultiple(Object.values(BEACONS_PERMISSIONS));
   const permissionStatuses: Record<PermissionKey, boolean> = {
     bluetooth: false,
-    location: false,
+    locationWhenInUse: false,
+    locationAlways: false,
     motion: false,
   };
   Object.keys(permissionStatuses).forEach((key) => {
     const permissionKey = key as PermissionKey;
-    permissionStatuses[permissionKey] = statuses[PERMISSIONS_MAP[permissionKey]] === RESULTS.GRANTED;
+    permissionStatuses[permissionKey] = statuses[BEACONS_PERMISSIONS[permissionKey]] === RESULTS.GRANTED;
   });
   return permissionStatuses;
 };
@@ -200,7 +253,7 @@ const allowedPermissionForKettle = async () => {
   if (permissionStatuses.bluetooth) {
     kettleModulesArray.push(KettleModules.BLUETOOTH);
   }
-  if (permissionStatuses.location) {
+  if (permissionStatuses.locationAlways) {
     kettleModulesArray.push(KettleModules.LOCATION);
   }
   if (permissionStatuses.motion) {

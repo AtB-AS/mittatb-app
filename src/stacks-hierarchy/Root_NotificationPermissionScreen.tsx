@@ -61,7 +61,7 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
             interactiveColor="interactive_0"
             onPress={handleButtonPress}
             text={t(NotificationPermissionTexts.button)}
-            testID="nextButton"
+            testID="nextButtonNotificationOnboarding"
           />
         </View>
       </ScrollView>

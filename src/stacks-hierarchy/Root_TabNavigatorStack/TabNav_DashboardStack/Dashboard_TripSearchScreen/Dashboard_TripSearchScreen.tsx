@@ -122,7 +122,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         setSearchStateMessage('');
         break;
     }
-  }, [searchState]);
+  }, [searchState, t]);
 
   const setCurrentLocationAsFrom = useCallback(
     function setCurrentLocationAsFrom() {
@@ -426,9 +426,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               />
             </View>
           )}
-          {!tripPatterns.length && (
-            <View style={style.emptyResultsSpacer} />
-          )}
+          {!tripPatterns.length && <View style={style.emptyResultsSpacer} />}
           {!error && isValidLocations && (
             <PressableOpacity
               onPress={loadMore}

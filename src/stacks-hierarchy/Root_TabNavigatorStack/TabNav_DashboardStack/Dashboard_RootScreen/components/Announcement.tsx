@@ -60,6 +60,7 @@ export const Announcement = ({announcement, onDismiss}: Props) => {
           DashboardTexts.announcemens.announcement.closeA11yHint,
         )}
         onPress={() => onDismiss(announcement)}
+        testID="closeAnnouncement"
       >
         <ThemeIcon svg={Close} />
       </PressableOpacity>

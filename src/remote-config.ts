@@ -96,7 +96,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_loading_screen: true,
   enable_loading_error_screen: false,
-  token_timeout_in_seconds: 0,
+  token_timeout_in_seconds: 10,
   enable_beacons: false,
   delay_share_travel_habits_screen_by_sessions_count: 0,
   enable_parking_violations_reporting: false,

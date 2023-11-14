@@ -20,6 +20,7 @@ export type ProfileStackParams = {
   Profile_SelectTravelTokenScreen: undefined;
   Profile_AppearanceScreen: undefined;
   Profile_LanguageScreen: undefined;
+  Profile_NotificationsScreen: undefined;
   Profile_DefaultUserProfileScreen: undefined;
   Profile_EnrollmentScreen: undefined;
   Profile_DesignSystemScreen: undefined;

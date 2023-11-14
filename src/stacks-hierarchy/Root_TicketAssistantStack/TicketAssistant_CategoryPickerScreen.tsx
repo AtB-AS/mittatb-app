@@ -8,7 +8,7 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Button} from '@atb/components/button';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {DashboardBackground} from '@atb/assets/svg/color/images';
@@ -51,21 +51,26 @@ export const TicketAssistant_CategoryPickerScreen = ({
     defaultTravellerIndex > 0 ? defaultTravellerIndex : 0,
   );
 
-  function updateCategory(traveller: Traveller) {
-    updateInputParams({traveller: traveller});
-  }
-
-  const unsubscribe = navigation.addListener('blur', () => {
-    const traveller = selectableTravellers[currentlyOpen];
-    updateCategory({
-      id: traveller.userTypeString,
-      userType: traveller.userTypeString,
-    });
-  });
+  const updateCategory = useCallback(
+    (traveller: Traveller) => {
+      updateInputParams({traveller: traveller});
+    },
+    [updateInputParams],
+  );
 
   useEffect(() => {
-    return unsubscribe;
-  }, [navigation]);
+    const unsubscribe = navigation.addListener('blur', () => {
+      const traveller = selectableTravellers[currentlyOpen];
+      updateCategory({
+        id: traveller.userTypeString,
+        userType: traveller.userTypeString,
+      });
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigation, selectableTravellers, currentlyOpen, updateCategory]);
 
   function getAdditionalTitleText(userTypeString: string) {
     switch (userTypeString) {

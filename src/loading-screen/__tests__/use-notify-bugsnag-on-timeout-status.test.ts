@@ -99,13 +99,13 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       },
     );
     expect(mockBugsnagNotification).toEqual(undefined);
-    ref.current = {isLoadingAppState: true, authStatus: 'creating-account', firestoreConfigStatus: 'success'};
+    ref.current = {isLoadingAppState: true, authStatus: 'fetching-id-token', firestoreConfigStatus: 'success'};
     hook.rerender({status: 'timeout'});
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
-        authStatus: 'creating-account',
+        authStatus: 'fetching-id-token',
       }),
     ]);
   });
@@ -123,7 +123,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       }),
     ]);
     mockBugsnagNotification = undefined;
-    ref.current = {isLoadingAppState: true, authStatus: 'creating-account', firestoreConfigStatus: 'success'};
+    ref.current = {isLoadingAppState: true, authStatus: 'fetching-id-token', firestoreConfigStatus: 'success'};
     hook.rerender();
     expect(mockBugsnagNotification).toEqual(undefined);
   });

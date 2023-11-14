@@ -5,12 +5,12 @@ import {
   useFirestoreConfiguration,
   isProductSellableInApp,
 } from '@atb/configuration';
-import {useMemo} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useTicketingState} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
+import {useMemo} from 'react';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -45,19 +45,27 @@ export function useOfferDefaults(
   const {
     preferences: {defaultUserTypeString},
   } = usePreferences();
-  const defaultPreSelectedUser: UserProfileTypeWithCount = {
-    userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
-    count: 1,
-  };
-  const preSelectedUsers = userProfilesWithCount?.map(
-    (up: UserProfileWithCount): UserProfileTypeWithCount => {
-      return {userTypeString: up.userTypeString, count: up.count};
-    },
-  );
+
+  const defaultSelection = useMemo(() => {
+    if (!userProfilesWithCount?.length) {
+      const defaultPreSelectedUser: UserProfileTypeWithCount = {
+        userTypeString: defaultUserTypeString ?? userProfiles[0].userTypeString,
+        count: 1,
+      };
+      return [defaultPreSelectedUser];
+    }
+
+    return userProfilesWithCount.map(
+      (up: UserProfileWithCount): UserProfileTypeWithCount => {
+        return {userTypeString: up.userTypeString, count: up.count};
+      },
+    );
+  }, [defaultUserTypeString, userProfiles, userProfilesWithCount]);
+
   const defaultSelectableTravellers = useTravellersWithPreselectedCounts(
     userProfiles,
     defaultPreassignedFareProduct,
-    preSelectedUsers ?? [defaultPreSelectedUser],
+    defaultSelection,
   );
 
   return {
@@ -108,4 +116,4 @@ const useTravellersWithPreselectedCounts = (
       mappedUserProfiles[0].count = 1;
     }
     return mappedUserProfiles;
-  }, [userProfiles, preassignedFareProduct]);
+  }, [userProfiles, preassignedFareProduct, defaultSelections]);

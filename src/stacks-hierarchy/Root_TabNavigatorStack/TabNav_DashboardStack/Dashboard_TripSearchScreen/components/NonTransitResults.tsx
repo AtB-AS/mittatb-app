@@ -28,7 +28,12 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
   const style = useStyle();
 
   return (
-    <ScrollView horizontal={true} style={style.container}>
+    <ScrollView
+      horizontal={true}
+      style={style.scrollView}
+      contentContainerStyle={style.container}
+      showsHorizontalScrollIndicator={false}
+    >
       {tripPatterns.map((tripPattern) => {
         const {mode, modeText} = getMode(tripPattern, t);
         const durationShort = secondsToDurationShort(
@@ -75,9 +80,11 @@ const getMode = (
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
+  scrollView: {
     marginTop: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
+  },
+  container: {
+    paddingHorizontal: theme.spacings.medium,
   },
   tripMode: {
     marginRight: theme.spacings.small,

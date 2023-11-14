@@ -40,6 +40,6 @@ export function useControlPositionsStyle() {
         width: '100%',
       },
     }),
-    [bottom, top, bottomPaddingIfBottomSheetIsOpen],
+    [theme, bottom, top, bottomPaddingIfBottomSheetIsOpen],
   );
 }

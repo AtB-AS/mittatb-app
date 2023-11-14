@@ -1,4 +1,11 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {
   RecommendedTicketSummary,
@@ -23,14 +30,16 @@ const TicketAssistantContext = createContext<TicketAssistantState | undefined>(
 const TicketAssistantContextProvider: React.FC = ({children}) => {
   const {preassignedFareProducts, fareProductTypeConfigs} =
     useFirestoreConfiguration();
-  const preassignedFareProductsIds = preassignedFareProducts
-    .filter(
-      (product) =>
-        product.type === 'single' ||
-        product.type === 'period' ||
-        product.type === 'hour24',
-    )
-    .map((product) => product.id);
+  const preassignedFareProductsIds = useMemo(() => {
+    return preassignedFareProducts
+      .filter(
+        (product) =>
+          product.type === 'single' ||
+          product.type === 'period' ||
+          product.type === 'hour24',
+      )
+      .map((product) => product.id);
+  }, [preassignedFareProducts]);
 
   const [inputParams, setInputParams] = useState<InputParams>({
     frequency: undefined,
@@ -56,30 +65,39 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
+  const fetchData = useCallback(() => {
+    setError(false);
+    setLoading(true);
+    getRecommendedTicket(inputParams, preassignedFareProductsIds)
+      .then((r) => {
+        setRecommendedTicketSummary(
+          handleRecommendedTicketResponse(
+            r,
+            tariffZones,
+            userProfiles,
+            preassignedFareProducts,
+            fareProductTypeConfigs,
+            customerProfile,
+          ),
+        );
+      })
+      .catch(() => {
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [
+    customerProfile,
+    fareProductTypeConfigs,
+    inputParams,
+    preassignedFareProducts,
+    preassignedFareProductsIds,
+    tariffZones,
+    userProfiles,
+  ]);
+
   useEffect(() => {
-    const fetchData = () => {
-      setError(false);
-      setLoading(true);
-      getRecommendedTicket(inputParams, preassignedFareProductsIds)
-        .then((r) => {
-          setRecommendedTicketSummary(
-            handleRecommendedTicketResponse(
-              r,
-              tariffZones,
-              userProfiles,
-              preassignedFareProducts,
-              fareProductTypeConfigs,
-              customerProfile,
-            ),
-          );
-        })
-        .catch(() => {
-          setError(true);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
     if (
       inputParams.traveller &&
       inputParams.frequency &&
@@ -88,7 +106,7 @@ const TicketAssistantContextProvider: React.FC = ({children}) => {
     ) {
       fetchData();
     }
-  }, [inputParams]);
+  }, [fetchData, inputParams]);
 
   return (
     <TicketAssistantContext.Provider

@@ -1,3 +1,6 @@
+import ElementHelper from '../utils/element.helper';
+import AppHelper from '../utils/app.helper';
+
 class FrontPagePage {
   /**
    * Search from
@@ -98,6 +101,44 @@ class FrontPagePage {
   get noFavoriteInfo() {
     const noMsgId = `//*[@resource-id="noFavoriteWidget"]`;
     return $(noMsgId);
+  }
+
+  /**
+   * Remove dismissible global messages
+   */
+  async removeGlobalMessages() {
+    const closeId = `//*[@resource-id="globalMessageClose"]`;
+    // Check for n sec
+    const exists = await ElementHelper.isElementExisting(
+      'globalMessageClose',
+      5,
+    );
+    if (exists) {
+      const noGMs = await $$(closeId).length;
+      for (let i = 0; i < noGMs; i++) {
+        await $$(closeId)[0].click();
+        await AppHelper.pause(100);
+      }
+    }
+  }
+
+  /**
+   * Remove dismissible announcements
+   */
+  async removeAnnouncements() {
+    const closeId = `//*[@resource-id="closeAnnouncement"]`;
+    // Check for n sec
+    const exists = await ElementHelper.isElementExisting(
+      'closeAnnouncement',
+      2,
+    );
+    if (exists) {
+      const noAnnouncements = await $$(closeId).length;
+      for (let i = 0; i < noAnnouncements; i++) {
+        await $$(closeId)[0].click();
+        await AppHelper.pause(100);
+      }
+    }
   }
 }
 

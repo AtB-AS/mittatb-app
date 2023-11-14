@@ -40,7 +40,7 @@ export const Root_ParkingViolationsQr = ({
       ...providers,
       {name: t(ParkingViolationTexts.selectProvider.unknownProvider)},
     ],
-    [providers],
+    [providers, t],
   );
 
   useEffect(() => {
