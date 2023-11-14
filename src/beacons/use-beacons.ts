@@ -177,16 +177,14 @@ export const useBeacons = () => {
 
 function getBluetoothPermission(): Permission {
   if (Platform.OS === 'android') {
-    if (Platform.OS === 'android') {
-      // For Android 12 (API Level 31) and above
-      if (Platform.Version >= 31) {
-        // Requires BLUETOOTH_SCAN for scanning Bluetooth devices including beacons
-        return PERMISSIONS.ANDROID.BLUETOOTH_SCAN;
-      } else {
-        // For Android 23 (API Level 23) to Android 30 (API Level 30)
-        // Requires ACCESS_FINE_LOCATION for Bluetooth scanning and discovery
-        return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
-      }
+    // For Android 12 (API Level 31) and above
+    if (Platform.Version >= 31) {
+      // Requires BLUETOOTH_SCAN for scanning Bluetooth devices including beacons
+      return PERMISSIONS.ANDROID.BLUETOOTH_SCAN;
+    } else {
+      // For Android 23 (API Level 23) to Android 30 (API Level 30)
+      // Requires ACCESS_FINE_LOCATION for Bluetooth scanning and discovery
+      return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
     }
   }
 
