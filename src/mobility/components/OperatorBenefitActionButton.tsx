@@ -48,6 +48,7 @@ export const OperatorBenefitActionButton = ({
     await Linking.openURL(url).catch(() =>
       showAppMissingAlert({appStoreUri, operatorName}),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [operatorName, benefit, rentalAppUri, appStoreUri, valueCode]);
 
   return (

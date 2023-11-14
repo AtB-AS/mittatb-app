@@ -59,6 +59,7 @@ export function ExpandableSectionItem({
       animateNextChange();
       setExpanded(props.expanded ?? false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.expanded]);
 
   const onPress = () => {

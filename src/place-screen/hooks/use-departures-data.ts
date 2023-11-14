@@ -275,6 +275,7 @@ export function useDeparturesData(
       lastHardRefreshTime,
       lastRealtimeRefreshTime,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(quayIds), startTime, activeFavoriteDepartures, mode]);
 
   const loadRealTimeData = useCallback(() => {
@@ -289,18 +290,22 @@ export function useDeparturesData(
       favoriteDepartures: activeFavoriteDepartures,
       lastRealtimeRefreshTime,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(quayIds),
     queryStartTime,
     limitPerLine,
     limitPerQuay,
     timeRange,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(activeFavoriteDepartures),
   ]);
 
   useEffect(() => {
     loadDepartures();
     return () => timeout.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadDepartures]);
   useEffect(() => {
     if (!state.tick) return;
@@ -321,6 +326,7 @@ export function useDeparturesData(
     } else if (timeSinceLastRealtimeRefresh >= updateFrequencyInSeconds) {
       loadRealTimeData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.tick]);
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),

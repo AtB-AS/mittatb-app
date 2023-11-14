@@ -74,6 +74,7 @@ export function QuaySection({
       !!navigateToQuay &&
         !favoriteDepartures.find((favorite) => quay.id === favorite.quayId),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showOnlyFavorites]);
 
   const hasMoreItemsThanDisplayLimit =

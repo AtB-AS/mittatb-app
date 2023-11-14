@@ -27,6 +27,7 @@ export const OperatorAppSwitchButton = ({
     await Linking.openURL(rentalAppUri).catch(() =>
       showAppMissingAlert({appStoreUri, operatorName}),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [operatorName, appStoreUri, rentalAppUri]);
 
   return (

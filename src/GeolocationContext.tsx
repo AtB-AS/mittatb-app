@@ -255,6 +255,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
       }
     }
     checkPermission();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appStatus]);
 
   useEffect(() => {

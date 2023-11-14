@@ -144,9 +144,11 @@ export function useNearestStopsData(location?: Location) {
         type: 'LOAD_NEAREST_STOP_PLACES',
         location,
       }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [location?.id],
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(loadData, [location?.id]);
 
   return {
