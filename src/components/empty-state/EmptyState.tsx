@@ -12,6 +12,7 @@ export type EmptyStateProps = {
     onPress: () => void;
     text: string;
   };
+  testID?: string;
 };
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -19,11 +20,15 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   details,
   illustrationComponent,
   buttonProps,
+  testID,
 }) => {
   const styles = useStyles();
 
   return (
-    <View style={styles.emptyStateContainer}>
+    <View
+      style={styles.emptyStateContainer}
+      testID={testID ? `${testID}EmptyStateView` : 'emptyStateView'}
+    >
       {illustrationComponent}
       <ThemeText
         type="body__primary--bold"

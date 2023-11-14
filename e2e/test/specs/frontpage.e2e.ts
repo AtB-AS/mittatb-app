@@ -49,7 +49,7 @@ describe('Frontpage', () => {
 
       // Choose stop place
       await FrontPagePage.addFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'nearbyStopsContainerView');
+      await ElementHelper.waitForElement('id', 'noAccessToLocationEmptyStateView');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(stopPlace);
 
