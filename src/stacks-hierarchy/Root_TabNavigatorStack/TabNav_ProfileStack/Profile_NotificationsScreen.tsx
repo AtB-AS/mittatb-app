@@ -42,7 +42,7 @@ export const Profile_NotificationsScreen = () => {
         ),
       }}
       parallaxContent={(focusRef) => (
-        <View style={style.parallaxContent} ref={focusRef}>
+        <View style={style.parallaxContent} ref={focusRef} accessible={true}>
           <ThemeText color={themeColor} type="heading--medium">
             {t(
               ProfileTexts.sections.settings.linkSectionItems.notifications
