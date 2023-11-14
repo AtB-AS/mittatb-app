@@ -109,7 +109,7 @@ const dictionary = {
     m: _('m', 'm', `m`),
   },
   messageActions: {
-    positiveButton: _('OK', 'OK', `OK`),
+    positiveButton: _('OK', 'OK', 'OK'),
   },
   messageTypes: {
     info: _('Til info', 'Info', `Til info`),
