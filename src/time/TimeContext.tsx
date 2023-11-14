@@ -1,6 +1,6 @@
 import {useInterval} from '@atb/utils/use-interval';
-import {clock} from '@entur-private/abt-time-react-native-lib';
-import React, {createContext, useContext, useState} from 'react';
+import {clock, start} from '@entur-private/abt-time-react-native-lib';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 
 type TimeContextState = {
   /**
@@ -14,8 +14,24 @@ type TimeContextState = {
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
 export const TimeContextProvider: React.FC = ({children}) => {
+  const [clockIsRunning, setClockIsRunning] = useState(false);
   const [now, setNow] = useState(Date.now());
-  useInterval(() => clock.currentTimeMillis().then(setNow), 2500);
+
+  useEffect(() => {
+    start({
+      autoStart: true,
+      maxDelayInMilliSeconds: 1000,
+      parallelizationCount: 3,
+      host: 'time.google.com',
+    }).then(() => setClockIsRunning(true));
+  }, []);
+  useInterval(
+    () => clock.currentTimeMillis().then(setNow),
+    2500,
+    [],
+    clockIsRunning,
+    true,
+  );
 
   return (
     <TimeContext.Provider
