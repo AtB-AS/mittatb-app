@@ -71,6 +71,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
         navigation.navigate(afterLogin.screen, afterLogin.params as any);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticationType]);
 
   return (

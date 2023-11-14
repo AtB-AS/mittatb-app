@@ -9,5 +9,6 @@ export const useFinishOnboarding = () => {
   return useCallback(async () => {
     completeOnboarding();
     if (status !== 'granted') await requestPermission();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [completeOnboarding, requestPermission]);
 };

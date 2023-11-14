@@ -101,6 +101,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         searchTime: undefined,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [to, from, navigation]);
 
   const setCurrentLocationAsFrom = useCallback(
@@ -322,6 +323,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -384,6 +386,7 @@ function useUpdatedLocation(
         }
       }
     },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLocation, favorites],
   );
 

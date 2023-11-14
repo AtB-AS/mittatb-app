@@ -280,6 +280,7 @@ export function useFavoriteDepartureData(
         lastHardRefreshTime,
         lastRealtimeRefreshTime,
       }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(dashboardFavoriteDepartureIds), favoriteDepartures],
   );
 
@@ -297,6 +298,7 @@ export function useFavoriteDepartureData(
         favoriteDepartureIds: dashboardFavoriteLineIds,
         lastRealtimeRefreshTime,
       }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(dashboardFavoriteLineIds)],
   );
 
@@ -320,6 +322,7 @@ export function useFavoriteDepartureData(
     } else if (timeSinceLastRealtimeRefresh >= updateFrequencyInSeconds) {
       loadRealTimeData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.tick]);
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),

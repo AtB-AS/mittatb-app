@@ -74,6 +74,7 @@ export function useTerminalState(
         handleAxiosError(err, 'reservation');
       }
     },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [offers, handleAxiosError],
   );
 

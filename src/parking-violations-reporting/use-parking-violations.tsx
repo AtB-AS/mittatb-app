@@ -31,6 +31,7 @@ export const useParkingViolations = () => {
     requestPermission,
   } = useGeolocationState();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const requestLocationPermission = useCallback(requestPermission, []);
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export const useParkingViolations = () => {
       })
       .catch(setError)
       .finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locationPermissionStatus, getCurrentPosition, initViolationsReporting]);
 
   return {

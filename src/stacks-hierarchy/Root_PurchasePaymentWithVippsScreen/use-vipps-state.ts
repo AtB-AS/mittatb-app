@@ -109,6 +109,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
         handleAxiosError(err, 'reserve-offer');
       }
     },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [offers, dispatch, handleAxiosError],
   );
 
@@ -132,6 +133,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
         });
       }
     },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [reservation?.url],
   );
 
@@ -140,6 +142,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
       dismiss();
       openVipps();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, openVipps]);
 
   return {
