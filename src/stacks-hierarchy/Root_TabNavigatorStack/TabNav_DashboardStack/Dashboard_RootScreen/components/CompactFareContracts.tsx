@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {SectionHeading} from './SectionHeading';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useTimeContextState} from '@atb/time';
 
 type Props = {
   onPressDetails?: (isCarnet: boolean, orderId: string) => void;
@@ -30,7 +30,7 @@ export const CompactFareContracts: React.FC<Props> = ({
 }) => {
   const itemStyle = useStyles();
 
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const {fareContracts} = useTicketingState();
   const validFareContracts = filterValidRightNowFareContract(
     fareContracts,

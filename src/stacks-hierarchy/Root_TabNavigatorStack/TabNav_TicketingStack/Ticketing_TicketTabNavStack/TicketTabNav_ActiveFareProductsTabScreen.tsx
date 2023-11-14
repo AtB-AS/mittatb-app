@@ -8,7 +8,7 @@ import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
 import {useAnalytics} from '@atb/analytics';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useTimeContextState} from '@atb/time';
 
 export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   const {
@@ -17,7 +17,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
     isRefreshingFareContracts,
     resubscribeFirestoreListeners,
   } = useTicketingState();
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const analytics = useAnalytics();
 
   const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(

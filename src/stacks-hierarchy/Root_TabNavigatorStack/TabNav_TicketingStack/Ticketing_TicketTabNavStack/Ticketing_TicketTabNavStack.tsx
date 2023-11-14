@@ -16,7 +16,7 @@ import {View} from 'react-native';
 import {Route} from '@react-navigation/native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useTimeContextState} from '@atb/time';
 
 const TopTabNav = createMaterialTopTabNavigator<TicketTabNavStackParams>();
 
@@ -24,7 +24,7 @@ export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
   const {fareContracts} = useTicketingState();
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     now,

@@ -16,7 +16,7 @@ import {SimpleFareContract} from '@atb/fare-contracts';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useTimeContextState} from '@atb/time';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -32,7 +32,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const styles = useStyles();
   const focusRef = useFocusOnLoad();
   const {fareContracts} = useTicketingState();
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     now,

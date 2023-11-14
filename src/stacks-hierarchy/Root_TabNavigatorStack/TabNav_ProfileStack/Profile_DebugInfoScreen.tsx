@@ -52,6 +52,7 @@ import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-shar
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useAnnouncementsState} from '@atb/announcements';
 import {usePushNotificationsEnabledDebugOverride} from '@atb/notifications';
+import {useTimeContextState} from '@atb/time';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -128,8 +129,8 @@ export const Profile_DebugInfoScreen = () => {
     mobileTokenStatus,
     barcodeStatus,
     debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
-    now,
   } = useMobileTokenContextState();
+  const {now} = useTimeContextState();
 
   const remoteConfig = useRemoteConfig();
 

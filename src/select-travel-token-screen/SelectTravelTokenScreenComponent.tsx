@@ -28,6 +28,7 @@ import {
   useFirestoreConfiguration,
 } from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {useTimeContextState} from '@atb/time';
 
 type Props = {onAfterSave: () => void};
 
@@ -40,7 +41,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {tokens, toggleToken, now} = useMobileTokenContextState();
+  const {tokens, toggleToken} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(

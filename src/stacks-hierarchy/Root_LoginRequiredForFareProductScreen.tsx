@@ -18,7 +18,7 @@ import {useTextForLanguage} from '@atb/translations/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useTimeContextState} from '@atb/time';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -35,7 +35,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
   const focusRef = useFocusOnLoad();
 
   const {fareContracts} = useTicketingState();
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     now,

@@ -46,6 +46,7 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
+import {useTimeContextState} from '@atb/time';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -67,7 +68,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketingState();
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     now,

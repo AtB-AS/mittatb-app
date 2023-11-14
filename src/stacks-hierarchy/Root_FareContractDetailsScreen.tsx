@@ -12,13 +12,13 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useTimeContextState} from '@atb/time';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const {findFareContractByOrderId} = useTicketingState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const firstTravelRight = fc?.travelRights[0];

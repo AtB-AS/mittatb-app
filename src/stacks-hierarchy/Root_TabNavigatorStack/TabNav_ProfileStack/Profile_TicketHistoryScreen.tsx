@@ -6,7 +6,7 @@ import {filterExpiredFareContracts, useTicketingState} from '@atb/ticketing';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
-import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useTimeContextState} from '@atb/time';
 
 export const Profile_TicketHistoryScreen: React.FC = () => {
   const {
@@ -16,7 +16,7 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
     resubscribeFirestoreListeners,
   } = useTicketingState();
 
-  const {now} = useMobileTokenContextState();
+  const {now} = useTimeContextState();
   const expiredFareContracts = filterExpiredFareContracts(fareContracts, now);
 
   const styles = useStyles();

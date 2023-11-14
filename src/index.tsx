@@ -31,6 +31,7 @@ import {LogBox, Platform, UIManager} from 'react-native';
 import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
 import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
+import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from './announcements';
 
 configureAndStartBugsnag();
@@ -69,47 +70,49 @@ export const App = () => {
     <SafeAreaProvider>
       <ErrorBoundary type="full-screen">
         <AppContextProvider>
-          <PreferencesContextProvider>
-            <LocaleContextProvider>
-              <AuthContextProvider>
-                <AnalyticsContextProvider>
-                  <AccessibilityContextProvider>
-                    <ThemeContextProvider>
-                      <FavoritesContextProvider>
-                        <FiltersContextProvider>
-                          <SearchHistoryContextProvider>
-                            <RemoteConfigContextProvider>
-                              <FirestoreConfigurationContextProvider>
-                                <TicketingContextProvider>
-                                  <MobileTokenContextProvider>
-                                    <AppLanguageProvider>
-                                      <GeolocationContextProvider>
-                                        <GlobalMessagesContextProvider>
-                                          <AnnouncementsContextProvider>
-                                            <ReactQueryProvider>
-                                              <BottomSheetProvider>
-                                                <FeedbackQuestionsProvider>
-                                                  <RootStack />
-                                                </FeedbackQuestionsProvider>
-                                              </BottomSheetProvider>
-                                            </ReactQueryProvider>
-                                          </AnnouncementsContextProvider>
-                                        </GlobalMessagesContextProvider>
-                                      </GeolocationContextProvider>
-                                    </AppLanguageProvider>
-                                  </MobileTokenContextProvider>
-                                </TicketingContextProvider>
-                              </FirestoreConfigurationContextProvider>
-                            </RemoteConfigContextProvider>
-                          </SearchHistoryContextProvider>
-                        </FiltersContextProvider>
-                      </FavoritesContextProvider>
-                    </ThemeContextProvider>
-                  </AccessibilityContextProvider>
-                </AnalyticsContextProvider>
-              </AuthContextProvider>
-            </LocaleContextProvider>
-          </PreferencesContextProvider>
+          <TimeContextProvider>
+            <PreferencesContextProvider>
+              <LocaleContextProvider>
+                <AuthContextProvider>
+                  <AnalyticsContextProvider>
+                    <AccessibilityContextProvider>
+                      <ThemeContextProvider>
+                        <FavoritesContextProvider>
+                          <FiltersContextProvider>
+                            <SearchHistoryContextProvider>
+                              <RemoteConfigContextProvider>
+                                <FirestoreConfigurationContextProvider>
+                                  <TicketingContextProvider>
+                                    <MobileTokenContextProvider>
+                                      <AppLanguageProvider>
+                                        <GeolocationContextProvider>
+                                          <GlobalMessagesContextProvider>
+                                            <AnnouncementsContextProvider>
+                                              <ReactQueryProvider>
+                                                <BottomSheetProvider>
+                                                  <FeedbackQuestionsProvider>
+                                                    <RootStack />
+                                                  </FeedbackQuestionsProvider>
+                                                </BottomSheetProvider>
+                                              </ReactQueryProvider>
+                                            </AnnouncementsContextProvider>
+                                          </GlobalMessagesContextProvider>
+                                        </GeolocationContextProvider>
+                                      </AppLanguageProvider>
+                                    </MobileTokenContextProvider>
+                                  </TicketingContextProvider>
+                                </FirestoreConfigurationContextProvider>
+                              </RemoteConfigContextProvider>
+                            </SearchHistoryContextProvider>
+                          </FiltersContextProvider>
+                        </FavoritesContextProvider>
+                      </ThemeContextProvider>
+                    </AccessibilityContextProvider>
+                  </AnalyticsContextProvider>
+                </AuthContextProvider>
+              </LocaleContextProvider>
+            </PreferencesContextProvider>
+          </TimeContextProvider>
         </AppContextProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
