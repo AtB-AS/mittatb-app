@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {PermissionsAndroid, Platform, NativeModules} from 'react-native';
 import CameraTexts from '@atb/translations/components/Camera';
 import {useTranslation} from '@atb/translations';
@@ -8,7 +8,7 @@ export const usePermissions = () => {
   const {t} = useTranslation();
   const [isAuthorized, setIsAuthorized] = useState<boolean>();
 
-  const requestCameraPermissionAndroid = async () => {
+  const requestCameraPermissionAndroid = useCallback(async () => {
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -24,7 +24,7 @@ export const usePermissions = () => {
       console.warn(err);
       return false;
     }
-  };
+  }, [t]);
 
   const requestCameraPermissionIOS = async () => {
     let authStatus =
@@ -44,7 +44,7 @@ export const usePermissions = () => {
           : await requestCameraPermissionIOS();
       setIsAuthorized(authStatus);
     })();
-  }, []);
+  }, [requestCameraPermissionAndroid]);
 
   return {isAuthorized};
 };

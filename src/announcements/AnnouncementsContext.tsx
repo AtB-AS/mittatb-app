@@ -55,12 +55,12 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
         announcements.filter((a) => a.id !== dismissedAnnouncement.id),
       );
     },
-    [addDismissedAnnouncementInStore],
+    [],
   );
 
   const resetDismissedAnnouncements = useCallback(() => {
     setDismissedAnnouncementInStore([]);
-  }, [setDismissedAnnouncementInStore]);
+  }, []);
 
   return (
     <AnnouncementsContext.Provider

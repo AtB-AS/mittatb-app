@@ -38,6 +38,6 @@ export const useMapSelectionAnalytics = () => {
       },
       logEvent: analytics.logEvent,
     }),
-    [],
+    [analytics],
   );
 };
