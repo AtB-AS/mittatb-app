@@ -29,7 +29,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
     () => clock.currentTimeMillis().then(setNow),
     2500,
     [],
-    clockIsRunning,
+    !clockIsRunning,
     true,
   );
 
