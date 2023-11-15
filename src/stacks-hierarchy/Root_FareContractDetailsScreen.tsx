@@ -18,7 +18,7 @@ type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const {findFareContractByOrderId} = useTicketingState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const firstTravelRight = fc?.travelRights[0];
@@ -50,7 +50,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
           <DetailsContent
             fareContract={fc}
             preassignedFareProduct={preassignedFareProduct}
-            now={now}
+            now={serverNow}
             onReceiptNavigate={onReceiptNavigate}
           />
         )}

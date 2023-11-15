@@ -28,9 +28,9 @@ export const Profile_DeleteProfileScreen = ({
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthState();
   const {fareContracts} = useTicketingState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts, now).length > 0;
+    filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow).length > 0;
 
   const [deleteError, setDeleteError] = useState<boolean>(false);
 

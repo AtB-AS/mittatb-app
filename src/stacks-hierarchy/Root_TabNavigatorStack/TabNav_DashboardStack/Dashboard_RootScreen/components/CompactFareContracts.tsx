@@ -30,11 +30,11 @@ export const CompactFareContracts: React.FC<Props> = ({
 }) => {
   const itemStyle = useStyles();
 
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const {fareContracts} = useTicketingState();
   const validFareContracts = filterValidRightNowFareContract(
     fareContracts,
-    now,
+    serverNow,
   );
 
   const {t} = useTranslation();
@@ -56,7 +56,7 @@ export const CompactFareContracts: React.FC<Props> = ({
         validFareContracts.map((fareContract, index) => {
           const fareContractInfoDetailsProps = getFareContractInfoDetails(
             fareContract,
-            now,
+            serverNow,
             tariffZones,
             userProfiles,
             preassignedFareProducts,
@@ -71,7 +71,7 @@ export const CompactFareContracts: React.FC<Props> = ({
               }}
               key={fareContract.id}
               {...fareContractInfoDetailsProps}
-              now={now}
+              now={serverNow}
               onPressDetails={() => {
                 onPressDetails?.(
                   fareContractInfoDetailsProps.isCarnetFareContract ?? false,

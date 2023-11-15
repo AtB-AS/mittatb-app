@@ -16,10 +16,10 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   const {enable_vipps_login} = useRemoteConfig();
 
   const {fareContracts} = useTicketingState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
-    now,
+    serverNow,
   );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 

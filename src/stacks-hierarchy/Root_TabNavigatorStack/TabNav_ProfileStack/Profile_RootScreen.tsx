@@ -68,10 +68,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketingState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
-    now,
+    serverNow,
   );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 

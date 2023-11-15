@@ -16,8 +16,11 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
     resubscribeFirestoreListeners,
   } = useTicketingState();
 
-  const {now} = useTimeContextState();
-  const expiredFareContracts = filterExpiredFareContracts(fareContracts, now);
+  const {serverNow} = useTimeContextState();
+  const expiredFareContracts = filterExpiredFareContracts(
+    fareContracts,
+    serverNow,
+  );
 
   const styles = useStyles();
   const {t} = useTranslation();
@@ -32,7 +35,7 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         reservations={rejectedReservations}
         isRefreshing={isRefreshingFareContracts}
         refresh={resubscribeFirestoreListeners}
-        now={now}
+        now={serverNow}
         emptyStateTitleText={t(
           TicketingTexts.activeFareProductsAndReservationsTab
             .emptyTicketHistoryTitle,

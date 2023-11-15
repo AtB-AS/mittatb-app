@@ -133,7 +133,7 @@ export const Profile_DebugInfoScreen = () => {
     barcodeStatus,
     debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
   } = useMobileTokenContextState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
 
   const {register: registerForPushNotifications} = usePushNotifications();
   const [fcmToken, setFcmToken] = useState<string>();
@@ -578,7 +578,9 @@ export const Profile_DebugInfoScreen = () => {
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
                 <ThemeText>{`Barcode status: ${barcodeStatus}`}</ThemeText>
-                <ThemeText>{`Now: ${new Date(now).toISOString()}`}</ThemeText>
+                <ThemeText>{`Now: ${new Date(
+                  serverNow,
+                ).toISOString()}`}</ThemeText>
                 <Button
                   style={style.button}
                   text="Reload token(s)"

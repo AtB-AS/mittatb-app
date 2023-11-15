@@ -8,14 +8,14 @@ type TimeContextState = {
    * on server time when possible, and can be safely used for checking the
    * validity of fare contracts.
    */
-  now: number;
+  serverNow: number;
 };
 
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
 export const TimeContextProvider: React.FC = ({children}) => {
   const [clockIsRunning, setClockIsRunning] = useState(false);
-  const [now, setNow] = useState(Date.now());
+  const [serverNow, setServerNow] = useState(Date.now());
 
   useEffect(() => {
     start({
@@ -26,7 +26,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
     }).then(() => setClockIsRunning(true));
   }, []);
   useInterval(
-    () => clock.currentTimeMillis().then(setNow),
+    () => clock.currentTimeMillis().then(setServerNow),
     2500,
     [],
     !clockIsRunning,
@@ -36,7 +36,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
   return (
     <TimeContext.Provider
       value={{
-        now,
+        serverNow,
       }}
     >
       {children}

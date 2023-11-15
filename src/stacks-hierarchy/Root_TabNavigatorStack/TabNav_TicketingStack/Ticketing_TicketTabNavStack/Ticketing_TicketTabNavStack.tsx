@@ -24,10 +24,10 @@ export const Ticketing_TicketTabNavStack = () => {
   const {t} = useTranslation();
 
   const {fareContracts} = useTicketingState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
-    now,
+    serverNow,
   );
   const initialRoute: keyof TicketTabNavStackParams = activeFareContracts.length
     ? 'TicketTabNav_ActiveFareProductsTabScreen'

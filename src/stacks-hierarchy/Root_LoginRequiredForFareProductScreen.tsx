@@ -35,10 +35,10 @@ export const Root_LoginRequiredForFareProductScreen = ({
   const focusRef = useFocusOnLoad();
 
   const {fareContracts} = useTicketingState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
-    now,
+    serverNow,
   );
   const onNext = async () => {
     const hasActiveFareContracts = activeFareContracts.length > 0;

@@ -32,10 +32,10 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const styles = useStyles();
   const focusRef = useFocusOnLoad();
   const {fareContracts} = useTicketingState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
-    now,
+    serverNow,
   );
   const firstActiveFc = activeFareContracts[0];
 
@@ -81,7 +81,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           {firstActiveFc && (
             <SimpleFareContract
               fareContract={firstActiveFc}
-              now={now}
+              now={serverNow}
               hideDetails={true}
             />
           )}

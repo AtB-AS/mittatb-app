@@ -17,12 +17,12 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
     isRefreshingFareContracts,
     resubscribeFirestoreListeners,
   } = useTicketingState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const analytics = useAnalytics();
 
   const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
     fareContracts,
-    now,
+    serverNow,
   );
 
   const styles = useStyles();
@@ -41,7 +41,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
             activeFareContractsCount: activeFareContracts.length,
           });
         }}
-        now={now}
+        now={serverNow}
         showTokenInfo={true}
         emptyStateTitleText={t(
           TicketingTexts.activeFareProductsAndReservationsTab

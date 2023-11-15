@@ -42,7 +42,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     useFirestoreConfiguration();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
-  const {now} = useTimeContextState();
+  const {serverNow} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(
@@ -54,7 +54,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   );
 
   const activeFareContracts = flatMap(
-    filterActiveOrCanBeUsedFareContracts(fareContracts, now),
+    filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow),
     (i) => i.travelRights,
   );
 
