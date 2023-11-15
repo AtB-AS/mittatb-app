@@ -99,6 +99,7 @@ export const Results: React.FC<Props> = ({
               style={styles.emptySearchResultsIllustration}
             />
           }
+          testID="searchResults"
         />
       </View>
     );

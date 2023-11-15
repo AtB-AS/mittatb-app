@@ -10,7 +10,7 @@ export const useBeacons = () => {
   const initializeBeacons = useCallback(async () => {
     // This will set kettle if KETTLE_API_KEY is set on the native side
     await NativeModules.KettleSDKExtension.initializeKettleSDK();
-  }, [NativeModules]);
+  }, []);
 
   useEffect(() => {
     if (isBeaconsSupported) {

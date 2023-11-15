@@ -61,6 +61,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
             title={emptyStateTitleText}
             details={emptyStateDetailsText}
             illustrationComponent={<TicketTilted height={84} />}
+            testID="fareContracts"
           />
         )}
         {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (

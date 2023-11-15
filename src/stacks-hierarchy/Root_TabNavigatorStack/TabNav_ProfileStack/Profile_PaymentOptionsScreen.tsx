@@ -91,6 +91,7 @@ export const Profile_PaymentOptionsScreen = ({
       addPaymentMethodCallbackHandler,
     );
     return () => eventSubscription.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function handleRemovePayment(paymentOption: RecurringPayment) {

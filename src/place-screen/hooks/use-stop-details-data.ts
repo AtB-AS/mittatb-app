@@ -134,6 +134,7 @@ const reducer: ReducerWithSideEffects<
 export function useStopsDetailsData(locationIds?: Array<string>) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
   const timeout = useTimeoutRequest();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadDetails = () =>
     dispatch({
       type: 'LOAD_DETAILS',
@@ -145,6 +146,7 @@ export function useStopsDetailsData(locationIds?: Array<string>) {
     loadDetails();
 
     return () => timeout.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(locationIds)]);
 
   return {

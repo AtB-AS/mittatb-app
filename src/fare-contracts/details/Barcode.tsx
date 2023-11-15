@@ -195,7 +195,7 @@ const StaticAztec = ({fc}: {fc: FareContract}) => {
     if (fc.qrCode) {
       setAztecXml(renderAztec(fc.qrCode));
     }
-  }, [fc.qrCode, setAztecXml, renderAztec]);
+  }, [fc.qrCode, setAztecXml]);
 
   if (!aztecXml) return null;
 

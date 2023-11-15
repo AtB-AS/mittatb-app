@@ -58,6 +58,7 @@ export const StopPlaces = ({
               style={styles.emptyStopPlacesIllustration}
             />
           }
+          testID="nearbyLocations"
         />
       )}
     </ScrollView>

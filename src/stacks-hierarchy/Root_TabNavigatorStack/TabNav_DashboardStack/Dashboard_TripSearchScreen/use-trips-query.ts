@@ -172,6 +172,7 @@ export function useTripsQuery(
         cancelTokenSource.cancel('Unmounting use trips hook');
       };
     },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       fromLocation,
       toLocation,

@@ -53,7 +53,7 @@ export const LocationBar: React.FC<Props> = ({coordinates, onSelect}) => {
       CURRENT_LOCATION_THRESHOLD_METERS;
 
     return pinIsCloseToGeolocation ? geolocation : closestLocation;
-  }, [geolocation, closestLocation]);
+  }, [geolocation, closestLocation, coordinates]);
 
   return (
     <View style={styles.container}>

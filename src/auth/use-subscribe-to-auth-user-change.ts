@@ -13,20 +13,14 @@ export const useSubscribeToAuthUserChange = (
 
   useEffect(() => {
     Bugsnag.leaveBreadcrumb('Subscribing to auth user changes');
-    dispatch({type: 'SET_AUTH_STATUS', authStatus: 'loading'});
     let signInInitiated = false;
-    const unsubscribe = auth().onUserChanged((user) => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
         updateMetadata({
           'AtB-Firebase-Auth-Id': user?.uid,
           'AtB-Auth-Type': mapAuthenticationType(user),
         });
-        dispatch({
-          type: 'SET_USER',
-          userId: user?.uid,
-          phoneNumber: user?.phoneNumber || undefined,
-          authenticationType: mapAuthenticationType(user),
-        });
+        dispatch({type: 'SET_USER', user});
       } else if (!signInInitiated) {
         /*
         Sign in anonymously if the onUserChanged event fired immediately on

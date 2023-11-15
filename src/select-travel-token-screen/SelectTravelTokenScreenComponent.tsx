@@ -103,7 +103,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         setSaveState({saving: false, error: true});
       }
     }
-  }, [toggleToken, selectedToken]);
+  }, [selectedToken, toggleToken, onAfterSave]);
 
   const travelCardToken = tokens?.find((t) => t.type === 'travel-card');
   const mobileTokens = tokens?.filter((t) => t.type === 'mobile');

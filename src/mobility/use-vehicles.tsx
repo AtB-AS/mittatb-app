@@ -48,6 +48,7 @@ export const useVehicles: (
     getMapFilter().then((userFilter) => {
       setFilter(userFilter.mobility);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVehiclesEnabled]);
 
   useEffect(() => {
@@ -56,6 +57,7 @@ export const useVehicles: (
       reload('WITH_LOADING', abort);
       return () => abort.abort();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
   const loadVehicles = useCallback(
