@@ -62,6 +62,7 @@ export const usePushNotifications = () => {
     }
     registerMutation.mutate({token, language});
     setStatus(permissionStatus);
+    return token;
   }, [language, registerMutation]);
 
   return {
