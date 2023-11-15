@@ -75,12 +75,6 @@ export const Map = (props: MapProps) => {
     });
   };
 
-  const onFilterChange = (filter: MapFilterType) => {
-    analytics.logEvent('Map', 'Filter changed', {filter});
-    props.vehicles?.onFilterChange(filter.mobility);
-    props.stations?.onFilterChange(filter.mobility);
-  };
-
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -151,7 +145,7 @@ export const Map = (props: MapProps) => {
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
             <MapFilter
-              onFilterChanged={onFilterChange}
+              onPress={() => onMapClick({source: 'filters-button'})}
               isLoading={
                 (props.vehicles?.isLoading || props.stations?.isLoading) ??
                 false

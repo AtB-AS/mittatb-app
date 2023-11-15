@@ -54,6 +54,11 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
+      if (mapSelectionAction.source === 'filters-button') {
+        setCameraFocusMode(undefined);
+        return;
+      }
+
       if (mapSelectionAction.source === 'cluster-click') {
         setCameraFocusMode(undefined);
         return;
