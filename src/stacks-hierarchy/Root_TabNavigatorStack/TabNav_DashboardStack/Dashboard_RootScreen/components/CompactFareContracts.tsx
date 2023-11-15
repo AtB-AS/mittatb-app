@@ -12,10 +12,10 @@ import {
   TicketingTexts,
   useTranslation,
 } from '@atb/translations';
-import {useInterval} from '@atb/utils/use-interval';
-import React, {useState} from 'react';
+import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {SectionHeading} from './SectionHeading';
+import {useTimeContextState} from '@atb/time';
 
 type Props = {
   onPressDetails?: (isCarnet: boolean, orderId: string) => void;
@@ -30,11 +30,12 @@ export const CompactFareContracts: React.FC<Props> = ({
 }) => {
   const itemStyle = useStyles();
 
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 1000);
-
+  const {serverNow} = useTimeContextState();
   const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContract(fareContracts);
+  const validFareContracts = filterValidRightNowFareContract(
+    fareContracts,
+    serverNow,
+  );
 
   const {t} = useTranslation();
   const {tariffZones, userProfiles, preassignedFareProducts} =
@@ -55,7 +56,7 @@ export const CompactFareContracts: React.FC<Props> = ({
         validFareContracts.map((fareContract, index) => {
           const fareContractInfoDetailsProps = getFareContractInfoDetails(
             fareContract,
-            now,
+            serverNow,
             tariffZones,
             userProfiles,
             preassignedFareProducts,
@@ -70,7 +71,7 @@ export const CompactFareContracts: React.FC<Props> = ({
               }}
               key={fareContract.id}
               {...fareContractInfoDetailsProps}
-              now={now}
+              now={serverNow}
               onPressDetails={() => {
                 onPressDetails?.(
                   fareContractInfoDetailsProps.isCarnetFareContract ?? false,

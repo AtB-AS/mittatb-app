@@ -55,6 +55,7 @@ import {
   usePushNotifications,
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
+import {useTimeContextState} from '@atb/time';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -132,6 +133,7 @@ export const Profile_DebugInfoScreen = () => {
     barcodeStatus,
     debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
   } = useMobileTokenContextState();
+  const {serverNow} = useTimeContextState();
 
   const {register: registerForPushNotifications} = usePushNotifications();
   const [fcmToken, setFcmToken] = useState<string>();
@@ -576,6 +578,9 @@ export const Profile_DebugInfoScreen = () => {
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
                 <ThemeText>{`Barcode status: ${barcodeStatus}`}</ThemeText>
+                <ThemeText>{`Now: ${new Date(
+                  serverNow,
+                ).toISOString()}`}</ThemeText>
                 <Button
                   style={style.button}
                   text="Reload token(s)"
