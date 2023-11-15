@@ -29,12 +29,21 @@ export const EditProfileTexts = {
         ),
     },
     email: {
-      label: _('E-mail adresse', 'E-mail address', ''),
-      placeholder: _('Legg til e-mail', 'Add e-mail address', ''),
+      label: _('E-postadresse', 'E-mail address', 'E-postadresse'),
+      placeholder: _(
+        'Legg til e-post',
+        'Add e-mail address',
+        'Legg til e-post',
+      ),
       formattingError: _(
         'Feil formatering',
         'Wrong formatting',
         'Feil formatering',
+      ),
+      unavailableError: _(
+        'E-postadressen er allerede i bruk',
+        'The e-mail address is already in use',
+        'E-postadressen er allereie i bruk',
       ),
     },
   },
@@ -61,9 +70,12 @@ export const EditProfileTexts = {
       'Slett Min profil',
     ),
   },
-  profileUpdateSuccess: _(
-    'Profil oppdatert.',
-    'Profile updated.',
-    'Profil oppdatert.',
-  ),
+  profileUpdate: {
+    success: _('Profil oppdatert.', 'Profile updated.', 'Profil oppdatert.'),
+    error: _(
+      'En feil har skjedd. Profil ble ikke oppdatert.',
+      'En error occured. Profile was not updated.',
+      '',
+    ),
+  },
 };

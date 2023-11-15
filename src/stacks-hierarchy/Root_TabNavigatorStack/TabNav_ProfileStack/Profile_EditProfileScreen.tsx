@@ -1,7 +1,7 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 import {Text, View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfileScreen';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -12,7 +12,12 @@ import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import parsePhoneNumber from 'libphonenumber-js';
 import {MessageBox} from '@atb/components/message-box';
-
+import {emailAvailable, updateProfile} from '@atb/api/profile';
+type SubmissionStatus =
+  | 'INVALID_EMAIL'
+  | 'UNAVAILABLE_EMAIL'
+  | 'SUBMITTED'
+  | 'SUBMISSION_ERROR';
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 export const Profile_EditProfileScreen = ({
   navigation,
@@ -24,47 +29,44 @@ export const Profile_EditProfileScreen = ({
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [surName, setSurName] = useState('');
-  const [invalidEmail, setInvalidEmail] = useState(false);
-
-  const [submitted, setSubmitted] = useState(false);
-  useEffect(() => {
-    // No need to talk to firestore, instead we call get endpoint from back-end where we get: firstName, surName, email, phone
-    // firestore()
-    //   .collection('customers')
-    //   .doc(abtCustomerId)
-    //   .onSnapshot((snapshot) => {
-    // const data = snapshot.data();
-    // console.log('data: ' + data);
-    // const profile: CustomerProfile = data
-    //   ? {
-    //       email: data.email,
-    //       firstName: data.firstName,
-    //       surname: data.surname,
-    //       id: data.id,
-    //       phone: data.phone,
-    //       debug: data.debug,
-    //       enableMobileToken: data.enableMobileToken,
-    //       subAccountUids: data.subAccountUids,
-    //     }
-    //   : {};
-    // setCustomerProfile(profile);
-    // setEmail(data?.email);
-    // setFirstName(data?.firstName);
-    // });
-  }, []);
+  const [submissionStatus, setSubmissionStatus] = useState<
+    SubmissionStatus | undefined
+  >(undefined);
 
   const phoneNumber = parsePhoneNumber(
     '+4700000000',
     // user?.phoneNumber ?? '', // from get endpoint
   )?.formatInternational();
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (isValidEmail(email)) {
-      setSubmitted(true);
-      setInvalidEmail(false);
+      const {available} = await emailAvailable(email);
+      if (available) {
+        // or if the original email is the same as updated email
+        try {
+          await updateProfile({
+            firstName: firstName,
+            surname: surName,
+            email: email,
+          });
+          setSubmissionStatus('SUBMITTED');
+        } catch {
+          setSubmissionStatus('SUBMISSION_ERROR');
+        }
+      } else {
+        setSubmissionStatus('UNAVAILABLE_EMAIL');
+      }
     } else {
-      setInvalidEmail(true);
-      setSubmitted(false);
+      setSubmissionStatus('INVALID_EMAIL');
+    }
+  };
+
+  const getEmailErrorText = (): string | undefined => {
+    switch (submissionStatus) {
+      case 'INVALID_EMAIL':
+        return t(EditProfileTexts.personalia.email.formattingError);
+      case 'UNAVAILABLE_EMAIL':
+        return t(EditProfileTexts.personalia.email.unavailableError);
     }
   };
 
@@ -104,6 +106,8 @@ export const Profile_EditProfileScreen = ({
             </ThemeText>
           </View>
 
+          <ThemeText>{submissionStatus}</ThemeText>
+          {/*Remove above*/}
           <Section withPadding>
             <TextInputSectionItem
               value={firstName}
@@ -134,11 +138,7 @@ export const Profile_EditProfileScreen = ({
               placeholder={t(EditProfileTexts.personalia.email.placeholder)}
               keyboardType="email-address"
               showClear
-              errorText={
-                invalidEmail
-                  ? t(EditProfileTexts.personalia.email.formattingError)
-                  : undefined
-              }
+              errorText={getEmailErrorText()}
               inlineLabel={false}
             />
           </Section>
@@ -161,16 +161,22 @@ export const Profile_EditProfileScreen = ({
               text={t(EditProfileTexts.button.save)}
               onPress={onSubmit}
             />
-            {submitted && (
+            {submissionStatus === 'SUBMITTED' && (
               <>
                 <MessageBox
                   type="valid"
-                  message={t(EditProfileTexts.profileUpdateSuccess)}
+                  message={t(EditProfileTexts.profileUpdate.success)}
                 />
                 <Text>{firstName}</Text>
                 <Text>{surName}</Text>
                 <Text>{email}</Text>
               </>
+            )}
+            {submissionStatus === 'SUBMISSION_ERROR' && (
+              <MessageBox
+                type="error"
+                message={t(EditProfileTexts.profileUpdate.error)}
+              />
             )}
           </Section>
           <View style={{marginHorizontal: theme.spacings.xLarge}}>
