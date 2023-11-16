@@ -46,6 +46,7 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
+import {useAnalytics} from '@atb/analytics';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -58,6 +59,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t, language} = useTranslation();
+  const analytics = useAnalytics();
   const {
     authenticationType,
     signOut,
@@ -212,6 +214,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       .confirm,
                   ),
                   destructiveArrowFunction: async () => {
+                    Bugsnag.leaveBreadcrumb('User logging out');
+                    analytics.logEvent('Profile', 'User logging out');
                     setIsLoading(true);
                     try {
                       // On logout we delete the user's token
