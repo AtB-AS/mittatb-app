@@ -21,8 +21,7 @@ import {isFeaturePoint} from './utils';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
-  const {location: currentLocation, currentCoordinatesRef} =
-    useGeolocationState();
+  const {currentCoordinatesRef, getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
@@ -159,16 +158,17 @@ export const Map = (props: MapProps) => {
               }
             />
           )}
-          {currentLocation && (
-            <PositionArrow
-              onPress={() => {
+          <PositionArrow
+            onPress={async () => {
+              const coordinates = await getCurrentCoordinates(true);
+              if (coordinates) {
                 onMapClick({
                   source: 'my-position',
-                  coords: currentLocation.coordinates,
+                  coords: coordinates,
                 });
-              }}
-            />
-          )}
+              }
+            }}
+          />
         </View>
       </View>
     </View>
