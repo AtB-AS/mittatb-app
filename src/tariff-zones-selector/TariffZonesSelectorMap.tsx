@@ -3,7 +3,7 @@ import {TariffZoneResults} from './TariffZoneResults';
 import {View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
-import MapboxGL from '@rnmapbox/maps';
+import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {
   flyToLocation,
   MapCameraConfig,
@@ -185,7 +185,7 @@ const TariffZonesSelectorMap = ({
               centerCoordinate={startCoordinates}
               {...MapCameraConfig}
             />
-            <MapboxGL.UserLocation />
+            <MapboxGL.UserLocation renderMode={UserLocationRenderMode.Native} />
           </MapboxGL.MapView>
 
           <View style={[styles.bottomControls, {bottom: safeAreaBottom}]}>
