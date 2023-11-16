@@ -90,6 +90,7 @@ export const Root_LoginOptionsScreen = ({
     if (authorizationCode) {
       signInVippsUser(authorizationCode);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authorizationCode]);
 
   useEffect(() => {

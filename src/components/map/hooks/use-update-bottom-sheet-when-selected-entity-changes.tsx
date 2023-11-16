@@ -54,6 +54,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         analytics.logMapSelection(selectedFeature);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction]);
 
   useEffect(() => {
@@ -156,5 +157,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         closeBottomSheet();
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFeature, isFocused, distance, analytics]);
 };

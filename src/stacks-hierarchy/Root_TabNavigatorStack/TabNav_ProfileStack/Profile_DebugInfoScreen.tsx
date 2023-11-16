@@ -51,7 +51,11 @@ import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-vi
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useAnnouncementsState} from '@atb/announcements';
-import {usePushNotificationsEnabledDebugOverride} from '@atb/push-notifications';
+import {
+  usePushNotifications,
+  usePushNotificationsEnabledDebugOverride,
+} from '@atb/notifications';
+import {useTimeContextState} from '@atb/time';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -130,6 +134,10 @@ export const Profile_DebugInfoScreen = () => {
     barcodeStatus,
     debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
   } = useMobileTokenContextState();
+  const {serverNow} = useTimeContextState();
+
+  const {register: registerForPushNotifications} = usePushNotifications();
+  const [fcmToken, setFcmToken] = useState<string>();
 
   const remoteConfig = useRemoteConfig();
 
@@ -165,7 +173,6 @@ export const Profile_DebugInfoScreen = () => {
         leftButton={{type: 'back'}}
         rightButton={{type: 'chat'}}
       />
-
       <ScrollView testID="debugInfoScrollView">
         <Section withPadding withTopPadding>
           <ToggleSectionItem
@@ -182,6 +189,15 @@ export const Profile_DebugInfoScreen = () => {
               setPreference({debugShowSeconds});
             }}
           />
+          <LinkSectionItem
+            text="Register for push notifications"
+            onPress={() => registerForPushNotifications().then(setFcmToken)}
+          />
+          {fcmToken && (
+            <GenericSectionItem>
+              <ThemeText>{`FCM token: ${fcmToken}`}</ThemeText>
+            </GenericSectionItem>
+          )}
           <LinkSectionItem
             text="Restart onboarding"
             onPress={restartOnboarding}
@@ -567,6 +583,9 @@ export const Profile_DebugInfoScreen = () => {
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
                 <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
                 <ThemeText>{`Barcode status: ${barcodeStatus}`}</ThemeText>
+                <ThemeText>{`Now: ${new Date(
+                  serverNow,
+                ).toISOString()}`}</ThemeText>
                 <Button
                   style={style.button}
                   text="Reload token(s)"

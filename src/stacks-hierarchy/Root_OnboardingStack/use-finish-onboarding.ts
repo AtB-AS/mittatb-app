@@ -9,5 +9,5 @@ export const useFinishOnboarding = () => {
   return useCallback(async () => {
     completeOnboarding();
     if (status !== 'granted') await requestLocationPermission();
-  }, [completeOnboarding, requestLocationPermission]);
+  }, [completeOnboarding, requestLocationPermission, status]);
 };

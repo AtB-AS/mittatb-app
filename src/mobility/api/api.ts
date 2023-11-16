@@ -15,20 +15,28 @@ const UserBenefits = z
 
 export type UserBenefitsType = z.infer<typeof UserBenefits>;
 
-export const getBenefits = (): Promise<UserBenefitsType[]> => {
+export const getBenefitsForUser = (): Promise<UserBenefitsType[]> => {
   return client
     .get('/mobility/benefits', {authWithIdToken: true})
     .then((response) => UserBenefits.array().parse(response.data ?? []));
 };
 
 export const getValueCode = (
-  operatorId: string,
-): Promise<string | undefined> => {
+  operatorId: string | undefined,
+): Promise<string | null> => {
+  if (!operatorId) return Promise.resolve(null);
   return client
-    .post(`/mobility/code/${operatorId}`, {}, {authWithIdToken: true})
+    .post(
+      `/mobility/code/${operatorId}`,
+      {},
+      {
+        authWithIdToken: true,
+        skipErrorLogging: (error) => error.response?.status === 404,
+      },
+    )
     .then((response) => String(response.data.code))
     .catch((error) => {
-      if (getAxiosErrorMetadata(error).responseStatus === 404) return undefined;
+      if (getAxiosErrorMetadata(error).responseStatus === 404) return null;
       throw error;
     });
 };

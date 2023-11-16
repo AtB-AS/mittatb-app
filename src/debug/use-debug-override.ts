@@ -22,7 +22,7 @@ export const useDebugOverride = (
         setDebugOverride(val);
         setDebugOverrideReady(true);
       });
-  }, []);
+  }, [key]);
 
   const updateDebugOverride = (val?: boolean) => {
     storage.set(key, JSON.stringify(val === undefined ? null : val));

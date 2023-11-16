@@ -47,6 +47,7 @@ export function useGeocoder(
 
     textLookup();
     return () => source.cancel('Cancelling previous autocomplete');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coords?.latitude, coords?.longitude, text]);
 
   return state;

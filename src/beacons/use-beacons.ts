@@ -18,10 +18,10 @@ type RationaleMessages = Record<PermissionKey, Rationale>;
 
 const BEACONS_CONSENTS = [KettleConsents.SURVEYS, KettleConsents.ANALYTICS];
 const BEACONS_PERMISSIONS: Record<PermissionKey, Permission> = {
-  bluetooth: Platform.OS == 'ios' ? PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL : PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-  locationWhenInUse: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-  locationAlways: Platform.OS == 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
-  motion: Platform.OS == 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
+  bluetooth: getBluetoothPermission(),
+  locationWhenInUse: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+  locationAlways: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+  motion: Platform.OS === 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
 };
 
 export type KettleInfo = {
@@ -101,10 +101,11 @@ export const useBeacons = () => {
     if (isKettleSDKInitialized) {
       Kettle.deleteCollectedData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBeaconsSupported]);
 
   const getRationaleMessages = useMemo((): RationaleMessages => {
-    const buttonPositive = t(dictionary.messageActions.positiveButton);
+    const buttonPositive: string = t(dictionary.messageActions.positiveButton);
     return {
       bluetooth: {
         title: t(ShareTravelHabitsTexts.permissions.bluethooth.title),
@@ -127,7 +128,7 @@ export const useBeacons = () => {
         buttonPositive,
       },
     };
-  }, []);
+  }, [t]);
 
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
@@ -149,6 +150,7 @@ export const useBeacons = () => {
     }
 
     return granted;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBeaconsSupported, initializeBeaconsSDK]);
 
   useEffect(() => {
@@ -174,6 +176,22 @@ export const useBeacons = () => {
     isBeaconsSupported,
   };
 };
+
+function getBluetoothPermission(): Permission {
+  if (Platform.OS === 'android') {
+    // For Android 12 (API Level 31) and above
+    if (Platform.Version >= 31) {
+      // Requires BLUETOOTH_SCAN for scanning Bluetooth devices including beacons
+      return PERMISSIONS.ANDROID.BLUETOOTH_SCAN;
+    } else {
+      // For Android 23 (API Level 23) to Android 30 (API Level 30)
+      // Requires ACCESS_FINE_LOCATION for Bluetooth scanning and discovery
+      return PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION;
+    }
+  }
+
+  return PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL;
+}
 
 const requestAndroidPermissions = async (rationaleMessages: RationaleMessages) => {
   // Request Bluetooth permission

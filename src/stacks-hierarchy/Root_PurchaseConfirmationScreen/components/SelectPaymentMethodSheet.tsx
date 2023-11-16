@@ -146,6 +146,7 @@ export const SelectPaymentMethod: React.FC<Props> = ({
       setLoadingRecurringOptions(false);
     }
     run();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previousPaymentMethod]);
 
   return (
@@ -260,6 +261,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
     if (selected) {
       select();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [save]);
 
   function getPaymentTexts(option: SavedPaymentOption): {

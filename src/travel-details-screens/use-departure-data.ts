@@ -82,7 +82,7 @@ export function useDepartureData(
         notices,
       };
     },
-    [activeItem],
+    [activeItem, t],
   );
 
   const [data, , isLoading] = usePollableResource<DepartureData>(getService, {

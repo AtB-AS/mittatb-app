@@ -49,6 +49,7 @@ export function useReverseGeocoder(
     loadLocations();
 
     return () => timeoutRequest.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coords?.latitude, coords?.longitude]);
 
   return {

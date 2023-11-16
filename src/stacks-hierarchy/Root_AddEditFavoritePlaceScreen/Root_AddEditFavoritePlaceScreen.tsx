@@ -52,7 +52,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     if (errorMessage && location) {
       setErrorMessage(undefined);
     }
-  }, [location]);
+  }, [location, errorMessage]);
 
   // @TODO This must be fixed so that the emoji item it self is stored
   // in favorites, or some lookup to set selected item inside emoji panel.

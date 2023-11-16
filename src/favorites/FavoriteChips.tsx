@@ -168,7 +168,7 @@ function useCurrentLocationChip(
     if (recentlyAllowedGeo && location) {
       onSelectLocation(location);
     }
-  }, [recentlyAllowedGeo, location]);
+  }, [recentlyAllowedGeo, location, onSelectLocation]);
 
   return {onCurrentLocation};
 }

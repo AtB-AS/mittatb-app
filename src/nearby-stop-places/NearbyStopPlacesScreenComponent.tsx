@@ -84,6 +84,7 @@ export const NearbyStopPlacesScreenComponent = ({
     ) {
       onSelectStopPlace(location);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location?.id]);
 
   function setCurrentLocationAsFrom() {
@@ -143,7 +144,8 @@ export const NearbyStopPlacesScreenComponent = ({
             ),
       );
     }
-  }, [updatingLocation, isLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updatingLocation, isLoading, t]);
 
   function refresh() {
     onUpdateLocation(
@@ -205,6 +207,7 @@ export const NearbyStopPlacesScreenComponent = ({
             onPress: requestLocationPermission,
             text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
           }}
+          testID="noAccessToLocation"
         />
       )}
     </FullScreenView>

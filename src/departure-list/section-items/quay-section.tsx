@@ -58,6 +58,7 @@ export const QuaySection = React.memo(function QuaySection({
 
   const sorted = useMemo(
     () => sortAndLimit(quayGroup, limit),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [quayGroup, limit, lastUpdated],
   );
 

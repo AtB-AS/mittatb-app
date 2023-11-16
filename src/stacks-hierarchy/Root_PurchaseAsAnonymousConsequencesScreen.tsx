@@ -6,6 +6,7 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
+import {useTimeContextState} from '@atb/time';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
@@ -15,8 +16,11 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   const {enable_vipps_login} = useRemoteConfig();
 
   const {fareContracts} = useTicketingState();
-  const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts);
+  const {serverNow} = useTimeContextState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+    serverNow,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   return (

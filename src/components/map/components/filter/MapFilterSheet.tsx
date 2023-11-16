@@ -36,7 +36,7 @@ export const MapFilterSheet = ({
       setInitialFilter(f);
       setFilter(f);
     });
-  }, []);
+  }, [getMapFilter]);
 
   if (!initialFilter || !filter) {
     return (

@@ -168,7 +168,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       paymentTypes,
     );
     setPreviousMethod(prevMethod);
-  }, [previousPaymentMethod]);
+  }, [previousPaymentMethod, paymentTypes]);
 
   async function payWithVipps() {
     if (offerExpirationTime && totalPrice > 0) {

@@ -15,25 +15,22 @@ import {
   PhoneSignInErrorCode,
   VippsSignInErrorCode,
 } from '@atb/auth/types';
-import {useFetchCustomerDataAfterUserChanged} from './use-fetch-customer-data-after-user-changed';
 import {
   authConfirmCode,
   authSignInWithCustomToken,
   authSignInWithPhoneNumber,
 } from './auth-utils';
 import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
-import {useCheckIfAccountCreationFinished} from './use-check-if-account-creation-finished';
+import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
 import Bugsnag from '@bugsnag/react-native';
+import isEqual from 'lodash.isequal';
+import {mapAuthenticationType} from '@atb/auth/utils';
 
-type AuthReducerState = {
-  userId: string | undefined;
-  authenticationType: AuthenticationType;
-  phoneNumber: string | undefined;
-  confirmationHandler: FirebaseAuthTypes.ConfirmationResult | undefined;
-  /** Full abt customer id, which is the user id including prefix like "ABT:CustomerAccount:" */
-  abtCustomerId: string | undefined;
-  customerNumber: number | undefined;
+export type AuthReducerState = {
   authStatus: AuthStatus;
+  user?: FirebaseAuthTypes.User;
+  idToken?: FirebaseAuthTypes.IdTokenResult;
+  confirmationHandler?: FirebaseAuthTypes.ConfirmationResult;
 };
 
 type AuthReducer = (
@@ -44,73 +41,73 @@ type AuthReducer = (
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
     case 'SIGN_IN_INITIATED': {
-      return {
-        ...prevState,
-        confirmationHandler: action.confirmationHandler,
-      };
+      return {...prevState, confirmationHandler: action.confirmationHandler};
     }
     case 'SET_USER': {
-      const sameUser = prevState.userId === action.userId;
+      const sameUser = isEqual(action.user, prevState.user);
       if (sameUser) {
-        return {
-          ...prevState,
-          phoneNumber: action.phoneNumber,
-          authenticationType: action.authenticationType,
-        };
+        return prevState;
       } else {
-        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.userId});
-        return {
-          userId: action.userId,
-          phoneNumber: action.phoneNumber,
-          authenticationType: action.authenticationType,
-          confirmationHandler: undefined,
-          abtCustomerId: undefined,
-          customerNumber: undefined,
-          authStatus: 'loading',
-        };
+        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid});
+        return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
-    case 'SET_CUSTOMER_DATA': {
-      const authStatus = action.customerNumber
-        ? 'authenticated'
-        : 'creating-account';
-      Bugsnag.leaveBreadcrumb('Retrieved auth user data', {
-        abtCustomerId: action.abtCustomerId,
-        customerNumber: action.customerNumber,
+    case 'SET_ID_TOKEN': {
+      const tokenSub = action.idToken.claims['sub'];
+      if (tokenSub !== prevState.user?.uid) {
+        /*
+        This is a precaution against race conditions. It might be that there has
+        been a user change between the time when the async fetch id token
+        operation was triggered, and when the response was actually returned.
+         */
+        Bugsnag.leaveBreadcrumb(
+          'The fetched id token is not for the logged in user',
+          {
+            tokenSub,
+            userId: prevState.user?.uid,
+          },
+        );
+        return prevState;
+      }
+      const customerNumber = action.idToken.claims['customer_number'];
+      const authStatus = customerNumber ? 'authenticated' : 'creating-account';
+      Bugsnag.leaveBreadcrumb('Retrieved id token', {
+        customerNumber,
         authStatus,
       });
       return {
         ...prevState,
-        abtCustomerId: action.abtCustomerId,
-        customerNumber: action.customerNumber,
-        authStatus,
+        idToken: action.idToken,
+        authStatus: 'authenticated',
       };
     }
-    case 'SET_AUTH_STATUS': {
-      Bugsnag.leaveBreadcrumb('Updating auth status', {
-        authStatus: action.authStatus,
-        customerNumber: action.customerNumber,
-      });
-      return {
-        ...prevState,
-        authStatus: action.authStatus,
-        customerNumber: action.customerNumber,
-      };
+    case 'SET_FETCH_ID_TOKEN_TIMEOUT': {
+      Bugsnag.leaveBreadcrumb('Fetch id token with custom claims timeout');
+      return {...prevState, authStatus: 'fetch-id-token-timeout'};
+    }
+    case 'RETRY_FETCH_ID_TOKEN': {
+      Bugsnag.leaveBreadcrumb(
+        'Retry fetching id token with custom claims timeout',
+      );
+      return {...prevState, authStatus: 'fetching-id-token'};
+    }
+    case 'RESET_AUTH_STATUS': {
+      Bugsnag.leaveBreadcrumb('Auth status reset');
+      return {authStatus: 'loading'};
     }
   }
 };
 
 const initialReducerState: AuthReducerState = {
-  userId: undefined,
-  phoneNumber: undefined,
-  authenticationType: 'none',
-  confirmationHandler: undefined,
-  abtCustomerId: undefined,
-  customerNumber: undefined,
   authStatus: 'loading',
 };
 
 type AuthContextState = {
+  authStatus: AuthStatus;
+  userId?: string;
+  phoneNumber?: string;
+  customerNumber?: number;
+  abtCustomerId?: string;
   signInWithPhoneNumber: (
     number: string,
     forceResend?: boolean,
@@ -122,7 +119,7 @@ type AuthContextState = {
     token: string,
   ) => Promise<VippsSignInErrorCode | undefined>;
   retryAuth: () => void;
-} & Omit<AuthReducerState, 'confirmationHandler'>;
+};
 
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
 
@@ -130,15 +127,15 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
-  useFetchCustomerDataAfterUserChanged(state.userId, dispatch);
-  useCheckIfAccountCreationFinished(state.userId, state.authStatus, dispatch);
+  useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
 
   const retryAuth = useCallback(() => {
-    if (state.authStatus === 'create-account-timeout') {
-      dispatch({type: 'SET_AUTH_STATUS', authStatus: 'creating-account'});
+    if (state.authStatus === 'fetch-id-token-timeout') {
+      dispatch({type: 'RETRY_FETCH_ID_TOKEN'});
     } else if (state.authStatus === 'loading') {
+      dispatch({type: 'RESET_AUTH_STATUS'});
       resubscribe();
     }
   }, [state.authStatus, resubscribe]);
@@ -146,7 +143,11 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   return (
     <AuthContext.Provider
       value={{
-        ...state,
+        authStatus: state.authStatus,
+        userId: state.user?.uid,
+        phoneNumber: state.user?.phoneNumber || undefined,
+        customerNumber: state.idToken?.claims['customer_number'],
+        abtCustomerId: state.idToken?.claims['abt_id'],
         signInWithPhoneNumber: useCallback(
           async (phoneNumberWithPrefix: string, forceResend?: boolean) =>
             authSignInWithPhoneNumber(
@@ -163,7 +164,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         signOut: useCallback(async () => {
           await auth().signInAnonymously();
         }, []),
-        authenticationType: state.authenticationType,
+        authenticationType: mapAuthenticationType(state.user),
         signInWithCustomToken: useCallback(authSignInWithCustomToken, []),
         retryAuth,
       }}

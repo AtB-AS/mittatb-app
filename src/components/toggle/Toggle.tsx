@@ -5,7 +5,10 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {InteractiveColor} from '@atb/theme/colors';
 
-type Props = Pick<SwitchProps, 'value' | 'onValueChange' | 'testID'> & {
+type Props = Pick<
+  SwitchProps,
+  'value' | 'onValueChange' | 'testID' | 'disabled'
+> & {
   interactiveColor?: InteractiveColor;
 } & AccessibilityProps;
 
