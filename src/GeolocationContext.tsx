@@ -1,4 +1,5 @@
 import React, {
+  MutableRefObject,
   createContext,
   useCallback,
   useContext,
@@ -41,6 +42,7 @@ type GeolocationState = {
   getCurrentCoordinates: (
     askForPermissionIfBlocked?: boolean,
   ) => Promise<Coordinates | undefined>;
+  currentCoordinatesRef?: MutableRefObject<Coordinates | undefined>;
 };
 
 type GeolocationReducerAction =
@@ -120,6 +122,7 @@ const defaultState: GeolocationState = {
   location: null,
   locationError: null,
   getCurrentCoordinates: () => Promise.resolve(undefined),
+  currentCoordinatesRef: undefined,
 };
 
 export const GeolocationContextProvider: React.FC = ({children}) => {
@@ -130,7 +133,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const appStatus = useAppStateStatus();
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
-  const coordinatesRef = useRef<Coordinates | null>();
+  const currentCoordinatesRef = useRef<Coordinates | undefined>();
 
   const openSettingsAlert = useCallback(() => {
     Alert.alert(
@@ -149,7 +152,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
       ],
       {cancelable: true},
     );
-  }, []);
+  }, [t]);
 
   const requestGeolocationPermission =
     useCallback(async (): Promise<PermissionStatus> => {
@@ -197,7 +200,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
       dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled: true});
       return status;
     }
-  }, [requestGeolocationPermission]);
+  }, [requestGeolocationPermission, t]);
 
   async function handleLocationError(locationError: GeoError) {
     const status = await checkGeolocationPermission();
@@ -261,7 +264,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   }, [appStatus, state.status]);
 
   useEffect(() => {
-    coordinatesRef.current = state.location?.coordinates;
+    currentCoordinatesRef.current = state.location?.coordinates;
   }, [state.location?.coordinates]);
 
   const getCurrentCoordinates = useCallback(
@@ -269,8 +272,8 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
       askForPermissionIfBlocked: boolean | undefined = false,
     ): Promise<Coordinates | undefined> => {
       return new Promise(async (resolve) => {
-        if (coordinatesRef.current) {
-          resolve(coordinatesRef.current);
+        if (currentCoordinatesRef.current) {
+          resolve(currentCoordinatesRef.current);
         } else {
           if (state.status === 'blocked' && !askForPermissionIfBlocked) {
             resolve(undefined);
@@ -306,6 +309,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
         locationIsAvailable,
         requestLocationPermission,
         getCurrentCoordinates,
+        currentCoordinatesRef,
       }}
     >
       {children}

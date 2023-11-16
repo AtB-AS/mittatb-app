@@ -21,7 +21,8 @@ import {isFeaturePoint} from './utils';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
-  const {location: currentLocation, getCurrentPosition} = useGeolocationState();
+  const {location: currentLocation, currentCoordinatesRef} =
+    useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
@@ -32,8 +33,8 @@ export const Map = (props: MapProps) => {
     () =>
       initialLocation && initialLocation?.resultType !== 'geolocation'
         ? initialLocation.coordinates
-        : getCurrentPosition()?.coordinates || FOCUS_ORIGIN,
-    [getCurrentPosition, initialLocation],
+        : currentCoordinatesRef?.current || FOCUS_ORIGIN,
+    [currentCoordinatesRef, initialLocation],
   );
 
   const {mapLines, selectedCoordinates, onMapClick} =
