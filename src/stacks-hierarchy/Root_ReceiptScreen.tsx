@@ -19,6 +19,7 @@ import {useAnalytics} from '@atb/analytics';
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
 type MessageState =
+  | 'updating'
   | 'loading'
   | 'success'
   | 'error'
@@ -59,6 +60,14 @@ export function Root_ReceiptScreen({route}: Props) {
     }
   }
 
+  // resets the state when there are changes to email input field
+  function onTextChanged(text: string) {
+    if (state !== 'loading') {
+      setState(undefined);
+      setEmail(text);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -76,7 +85,7 @@ export function Root_ReceiptScreen({route}: Props) {
           <TextInputSectionItem
             label={t(FareContractTexts.receipt.inputLabel)}
             value={email}
-            onChangeText={setEmail}
+            onChangeText={onTextChanged}
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
