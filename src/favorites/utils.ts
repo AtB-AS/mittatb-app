@@ -3,8 +3,11 @@ import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_ty
 import {UserFavoriteDepartures, UserFavoriteDeparturesLegacy} from './types';
 import {StoredFavoriteDeparture} from '@atb/favorites';
 import {uniqBy} from 'lodash';
-import {EstimatedCall} from '@atb/api/types/departures';
-import {DepartureLineInfo} from '@atb/api/departures/types';
+
+import {
+  DepartureLineInfo,
+  EstimatedCallWithLineName,
+} from '@atb/api/departures/types';
 
 function mapLegacyLineNameToDestinationDisplay(
   legacyLineName: string | undefined,
@@ -49,9 +52,9 @@ export type DestinationDisplayMigrationPair = {
   destinationDisplay?: DestinationDisplay;
 };
 
-type ItemWithDestinationDisplayMigrationPairType =
+export type ItemWithDestinationDisplayMigrationPairType =
   | DepartureLineInfo
-  | EstimatedCall;
+  | EstimatedCallWithLineName;
 
 export function getUniqueDestinationDisplayMigrationPairs(
   itemsWithDestinationDisplayMigrationPair?: ItemWithDestinationDisplayMigrationPairType[],
