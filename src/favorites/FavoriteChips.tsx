@@ -146,22 +146,22 @@ const useStyles = StyleSheet.createThemeHook(() => ({
 function useCurrentLocationChip(
   onSelectLocation: (location: GeoLocation) => void,
 ) {
-  const {location, requestPermission} = useGeolocationState();
+  const {location, requestLocationPermission} = useGeolocationState();
 
-  const [recentlyAllowedGeo, setsetRecentlyAllowedGeo] = useState(false);
+  const [recentlyAllowedGeo, setRecentlyAllowedGeo] = useState(false);
 
   const onCurrentLocation = useCallback(
     async function () {
       if (location) {
         onSelectLocation(location);
       } else {
-        const status = await requestPermission();
+        const status = await requestLocationPermission();
         if (status === 'granted') {
-          setsetRecentlyAllowedGeo(true);
+          setRecentlyAllowedGeo(true);
         }
       }
     },
-    [location, onSelectLocation, requestPermission],
+    [location, onSelectLocation, requestLocationPermission],
   );
 
   useEffect(() => {

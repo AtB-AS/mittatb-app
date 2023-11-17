@@ -58,23 +58,18 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
 
-  const {
-    status,
-    locationEnabled,
-    location,
-    requestPermission: requestGeoPermission,
-  } = useGeolocationState();
+  const {locationIsAvailable, location, requestLocationPermission} =
+    useGeolocationState();
 
-  const hasLocationPermission = locationEnabled && status === 'granted';
   const currentLocation = location || undefined;
 
   useDoOnceWhen(
     () => setUpdatingLocation(true),
-    !Boolean(currentLocation) && hasLocationPermission,
+    !Boolean(currentLocation) && locationIsAvailable,
   );
   useDoOnceWhen(
     () => setUpdatingLocation(false),
-    Boolean(currentLocation) && hasLocationPermission,
+    Boolean(currentLocation) && locationIsAvailable,
   );
   useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
 
@@ -138,13 +133,13 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       if (currentLocation) {
         setCurrentLocationAsFrom();
       } else {
-        const status = await requestGeoPermission();
+        const status = await requestLocationPermission();
         if (status === 'granted') {
           setCurrentLocationAsFrom();
         }
       }
     },
-    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
+    [currentLocation, setCurrentLocationAsFrom, requestLocationPermission],
   );
 
   function swap() {

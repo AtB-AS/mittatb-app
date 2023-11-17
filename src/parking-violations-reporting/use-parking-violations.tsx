@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {initViolationsReporting} from '@atb/api/mobility';
 import {
@@ -7,72 +7,51 @@ import {
 } from '@atb/api/types/mobility';
 import {Coordinates} from '@entur/sdk';
 
-export class PermissionRequiredError extends Error {
-  constructor() {
-    super('Permission required');
-  }
-}
-export class NoLocationError extends Error {
-  constructor() {
-    super('Location missing');
-  }
-}
+type ParkingViolationsState =
+  | 'loading'
+  | 'success'
+  | 'locationRequirementNotMet'
+  | 'violationsReportingDataError';
 
 export const useParkingViolations = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error>();
+  const [parkingViolationsState, setParkingViolationsState] =
+    useState<ParkingViolationsState>('loading');
+
   const [violations, setViolations] = useState<ParkingViolationType[]>([]);
   const [providers, setProviders] = useState<ViolationsReportingProvider[]>([]);
-  const [position, setPosition] = useState<Coordinates>();
+  const [coordinates, setCoordinates] = useState<Coordinates>();
 
-  const {
-    getCurrentPosition,
-    status: locationPermissionStatus,
-    requestPermission,
-  } = useGeolocationState();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const requestLocationPermission = useCallback(requestPermission, []);
+  const {getCurrentCoordinates} = useGeolocationState();
 
   useEffect(() => {
-    if (locationPermissionStatus !== 'granted') {
-      requestLocationPermission().then((permission) => {
-        if (permission !== 'granted') setError(new PermissionRequiredError());
-      });
-    }
-  }, [locationPermissionStatus, requestLocationPermission]);
-
-  useEffect(() => {
-    if (locationPermissionStatus !== 'granted') return;
-    const position = getCurrentPosition();
-    if (!position) {
-      setError(new NoLocationError());
-      return;
-    }
-    setError(undefined);
-    setIsLoading(true);
-    setPosition({
-      latitude: position.coordinates.latitude,
-      longitude: position.coordinates.longitude,
-    });
-    initViolationsReporting({
-      lat: position.coordinates.latitude.toString(),
-      lng: position.coordinates.longitude.toString(),
-    })
-      .then((data) => {
-        setViolations(data.violations);
-        setProviders(data.providers);
-      })
-      .catch(setError)
-      .finally(() => setIsLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locationPermissionStatus, getCurrentPosition, initViolationsReporting]);
+    const getLocationAndInitReporting = async () => {
+      setParkingViolationsState('loading');
+      const coordinates = await getCurrentCoordinates(true);
+      setCoordinates(coordinates);
+      if (coordinates) {
+        try {
+          const violationsReportingData = await initViolationsReporting({
+            lat: coordinates.latitude.toString(),
+            lng: coordinates.longitude.toString(),
+          });
+          setViolations(violationsReportingData.violations);
+          setProviders(violationsReportingData.providers);
+          setParkingViolationsState('success');
+        } catch (err) {
+          console.warn(err);
+          setParkingViolationsState('violationsReportingDataError');
+        }
+      } else {
+        setParkingViolationsState('locationRequirementNotMet');
+      }
+    };
+    getLocationAndInitReporting();
+  }, [getCurrentCoordinates]);
 
   return {
-    isLoading: isLoading && !error,
-    isError: !!error,
-    error,
-    position,
+    isLoading: parkingViolationsState === 'loading',
+    parkingViolationsState,
+    coordinates,
     violations,
     providers,
   };

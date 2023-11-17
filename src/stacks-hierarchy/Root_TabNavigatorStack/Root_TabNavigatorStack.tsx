@@ -38,6 +38,8 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
+import {usePushNotificationsEnabled} from '@atb/notifications';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -48,9 +50,15 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const {onboarded, notificationPermissionOnboarded} = useAppState();
+  const {
+    onboarded,
+    notificationPermissionOnboarded,
+    locationWhenInUsePermissionOnboarded,
+  } = useAppState();
 
   const pushNotificationsEnabled = usePushNotificationsEnabled();
+
+  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
 
   useGoToMobileTokenOnboardingWhenNecessary();
   const {serverNow} = useTimeContextState();
@@ -67,6 +75,15 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
+    } else {
+      if (
+        !locationWhenInUsePermissionOnboarded &&
+        locationWhenInUsePermissionStatus === 'denied'
+      ) {
+        InteractionManager.runAfterInteractions(() =>
+          navigation.navigate('Root_LocationWhenInUsePermissionScreen'),
+        );
+      }
     }
 
     if (
@@ -84,6 +101,8 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     navigation,
     notificationPermissionOnboarded,
     pushNotificationsEnabled,
+    locationWhenInUsePermissionOnboarded,
+    locationWhenInUsePermissionStatus,
     validFareContracts.length,
     notificationStatus,
   ]);
