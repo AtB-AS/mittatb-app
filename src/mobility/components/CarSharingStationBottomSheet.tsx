@@ -1,7 +1,5 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {
-  getTextForLanguage,
-  Language,
   ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
@@ -14,7 +12,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {WalkingDistance} from '@atb/components/walking-distance';
@@ -273,16 +271,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
   };
 });
 
-const isAnyAvailable = (
-  vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
-): boolean => {
-  const count =
-    vehicleTypesAvailable
-      ?.map((v) => v.count)
-      .reduce((sum, count) => sum + count, 0) ?? 0;
-  return count > 0;
-};
-
 const totalAvailableCars = (
   vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
 ): number => {
@@ -292,14 +280,3 @@ const totalAvailableCars = (
       .reduce((sum, count) => sum + count, 0) ?? 0
   );
 };
-
-const byName =
-  (language: Language) =>
-  (a: CarAvailabilityFragment, b: CarAvailabilityFragment) =>
-    (
-      getTextForLanguage(a.vehicleType.name?.translation, language) ?? ''
-    ).localeCompare(
-      getTextForLanguage(b.vehicleType.name?.translation, language) ?? '',
-    ) ?? 0;
-
-const isAvailable = (c: CarAvailabilityFragment) => c.count > 0;

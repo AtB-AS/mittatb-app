@@ -9,7 +9,7 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
 import {WalkingDistance} from '@atb/components/walking-distance';
@@ -34,7 +34,6 @@ type Props = {
 
 export const BikeStationSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
-  const {themeName} = useTheme();
   const style = useSheetStyle();
   const {
     isLoading: isLoadingStation,

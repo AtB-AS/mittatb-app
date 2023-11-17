@@ -12,14 +12,13 @@ type Props = {
   iconStyle?: StyleProp<ViewStyle>;
 };
 export const WalkingDistance = ({style, iconStyle, distance}: Props) => {
-  const sheetStyles = useSheetStyle();
   const humanizedDistance = useHumanizeDistance(distance);
   const {theme} = useTheme();
 
   if (!humanizedDistance) return null;
 
   return (
-    <View style={[style, sheetStyles.distanceLabel]}>
+    <View style={[style, {flexDirection: 'row', justifyContent: 'center'}]}>
       <ThemeIcon
         style={iconStyle}
         svg={Walk}
@@ -31,10 +30,3 @@ export const WalkingDistance = ({style, iconStyle, distance}: Props) => {
     </View>
   );
 };
-
-const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
-  distanceLabel: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-}));

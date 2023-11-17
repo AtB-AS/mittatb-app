@@ -11,7 +11,7 @@ export const MobilityStats = ({top, bottom}: MobilityStatsProps) => {
   return (
     <View style={style.vehicleStats}>
       <View style={[style.vehicleStat, style.vehicleStat__first]}>{top}</View>
-      <View style={[style.vehicleStat]}>{bottom}</View>
+      <View style={style.vehicleStat}>{bottom}</View>
     </View>
   );
 };
