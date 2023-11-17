@@ -1,4 +1,4 @@
-import {MapProps, MapSelectionActionType} from '../types';
+import {MapFilterType, MapProps, MapSelectionActionType} from '../types';
 import React, {RefObject, useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
@@ -19,6 +19,7 @@ import {
 import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {MapFilterSheet} from '../components/filter/MapFilterSheet';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -54,13 +55,27 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         analytics.logMapSelection(selectedFeature);
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapSelectionAction]);
+  }, [mapSelectionAction, analytics, mapViewRef]);
 
   useEffect(() => {
     (async function () {
       if (!isFocused) return;
       if (mapProps.selectionMode !== 'ExploreEntities') return;
+
+      if (mapSelectionAction?.source === 'filters-button') {
+        openBottomSheet(() => (
+          <MapFilterSheet
+            onFilterChanged={(filter: MapFilterType) => {
+              analytics.logEvent('Map', 'Filter changed', {filter});
+              mapProps.vehicles?.onFilterChange(filter.mobility);
+              mapProps.stations?.onFilterChange(filter.mobility);
+            }}
+            close={closeWithCallback}
+          />
+        ));
+        return;
+      }
+
       if (!selectedFeature) {
         closeBottomSheet();
         return;
@@ -158,5 +173,5 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFeature, isFocused, distance, analytics]);
+  }, [mapSelectionAction, selectedFeature, isFocused, distance, analytics]);
 };

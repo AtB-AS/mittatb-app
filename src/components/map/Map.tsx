@@ -1,5 +1,4 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useAnalytics} from '@atb/analytics';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
@@ -16,7 +15,7 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {MapFilterType, MapProps, MapRegion} from './types';
+import {MapProps, MapRegion} from './types';
 import {isFeaturePoint} from './utils';
 
 export const Map = (props: MapProps) => {
@@ -26,7 +25,6 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-  const analytics = useAnalytics();
 
   const startingCoordinates = useMemo(
     () =>
@@ -73,12 +71,6 @@ export const Map = (props: MapProps) => {
       zoomLevel: state.properties.zoom,
       center: state.properties.center,
     });
-  };
-
-  const onFilterChange = (filter: MapFilterType) => {
-    analytics.logEvent('Map', 'Filter changed', {filter});
-    props.vehicles?.onFilterChange(filter.mobility);
-    props.stations?.onFilterChange(filter.mobility);
   };
 
   return (
@@ -154,7 +146,7 @@ export const Map = (props: MapProps) => {
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
             <MapFilter
-              onFilterChanged={onFilterChange}
+              onPress={() => onMapClick({source: 'filters-button'})}
               isLoading={
                 (props.vehicles?.isLoading || props.stations?.isLoading) ??
                 false
