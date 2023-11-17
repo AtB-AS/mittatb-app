@@ -2,8 +2,9 @@ import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_ty
 
 import {UserFavoriteDepartures, UserFavoriteDeparturesLegacy} from './types';
 import {StoredFavoriteDeparture} from '@atb/favorites';
-import {StopPlaceGroup} from '@atb/api/departures/types';
-import {flatten, uniqBy} from 'lodash';
+import {uniqBy} from 'lodash';
+import {EstimatedCall} from '@atb/api/types/departures';
+import {DepartureLineInfo} from '@atb/api/departures/types';
 
 function mapLegacyLineNameToDestinationDisplay(
   legacyLineName: string | undefined,
@@ -48,24 +49,24 @@ export type DestinationDisplayMigrationPair = {
   destinationDisplay?: DestinationDisplay;
 };
 
-const getUniqueDestinationDisplayMigrationPairs = (
-  stopPlaceGroups: StopPlaceGroup[],
-): DestinationDisplayMigrationPair[] => {
-  const nestedDestinationDisplayMigrationPairs = stopPlaceGroups.map(
-    (stopPlaceGroup) =>
-      stopPlaceGroup?.quays.map((quay) =>
-        quay.group.map((groupItem) => ({
-          lineName: groupItem?.lineInfo?.lineName,
-          destinationDisplay: groupItem?.lineInfo?.destinationDisplay,
-        })),
-      ),
-  );
-  // flatten 3d array to 1d and ensure unique migration pairs
+type ItemWithDestinationDisplayMigrationPairType =
+  | DepartureLineInfo
+  | EstimatedCall;
+
+export function getUniqueDestinationDisplayMigrationPairs(
+  itemsWithDestinationDisplayMigrationPair?: ItemWithDestinationDisplayMigrationPairType[],
+) {
+  const destinationDisplayMigrationPairs =
+    itemsWithDestinationDisplayMigrationPair?.map((iwddmp) => ({
+      lineName: iwddmp?.lineName,
+      destinationDisplay: iwddmp?.destinationDisplay,
+    }));
   return uniqBy(
-    flatten(flatten(nestedDestinationDisplayMigrationPairs)),
-    (pair) => pair.lineName,
+    destinationDisplayMigrationPairs,
+    (destinationDisplayMigrationPair) =>
+      destinationDisplayMigrationPair?.lineName,
   );
-};
+}
 
 export const shouldDestinationDisplayBeMigrated = (
   destinationDisplay: DestinationDisplay | undefined,
@@ -93,14 +94,11 @@ export const shouldDestinationDisplayBeMigrated = (
 
 export const getUpToDateFavoriteDepartures = (
   storedFavoriteDepartures: StoredFavoriteDeparture[],
-  stopPlaceGroups: StopPlaceGroup[],
+  destinationDisplayMigrationPairs: DestinationDisplayMigrationPair[],
 ): {
   upToDateFavoriteDepartures: StoredFavoriteDeparture[];
   aFavoriteDepartureWasUpdated: boolean;
 } => {
-  const destinationDisplayMigrationPairs =
-    getUniqueDestinationDisplayMigrationPairs(stopPlaceGroups);
-
   let aFavoriteDepartureWasUpdated = false;
   const upToDateFavoriteDepartures = storedFavoriteDepartures.map(
     (storedFavoriteDeparture) => {
