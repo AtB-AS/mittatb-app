@@ -11,18 +11,15 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 export const WalkingDistance = ({style, distance}: Props) => {
+  const sheetStyles = useSheetStyle();
   const humanizedDistance = useHumanizeDistance(distance);
   const {theme} = useTheme();
-  const sheetStyle = useSheetStyle();
 
   if (!humanizedDistance) return null;
 
   return (
-    <View style={[style, sheetStyle.distanceLabel]}>
-      <ThemeIcon
-        svg={Walk}
-        fill={theme.text.colors.secondary}
-      />
+    <View style={[style, sheetStyles.distanceLabel]}>
+      <ThemeIcon svg={Walk} fill={theme.text.colors.secondary} />
       <ThemeText type="body__secondary" color="secondary">
         {humanizedDistance}
       </ThemeText>
