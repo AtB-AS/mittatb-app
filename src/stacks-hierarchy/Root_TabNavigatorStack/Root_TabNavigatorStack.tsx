@@ -70,27 +70,27 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {status: notificationStatus} = usePushNotifications();
 
   useEffect(() => {
+    const shouldShowLocationOnboarding =
+      !locationWhenInUsePermissionOnboarded &&
+      locationWhenInUsePermissionStatus === 'denied';
+
     if (!onboarded) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
     } else {
-      if (
-        !locationWhenInUsePermissionOnboarded &&
-        locationWhenInUsePermissionStatus === 'denied'
-      ) {
+      if (shouldShowLocationOnboarding) {
         InteractionManager.runAfterInteractions(() =>
           navigation.navigate('Root_LocationWhenInUsePermissionScreen'),
         );
       }
     }
-
     if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
       validFareContracts.length > 0 &&
       notificationStatus !== 'granted' &&
-      locationWhenInUsePermissionOnboarded
+      !shouldShowLocationOnboarding
     ) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
