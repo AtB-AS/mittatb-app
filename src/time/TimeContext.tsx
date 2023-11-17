@@ -13,10 +13,13 @@ type TimeContextState = {
 
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
+// The number of milliseconds the device time is ahead of server time.
+let serverDiff = 0;
+
 /**
- * The number of milliseconds the device time is ahead of server time.
+ * Returns the current time in milliseconds.
  */
-export let serverDiff = 0;
+export const getServerNow = () => Date.now() - serverDiff;
 
 export const TimeContextProvider: React.FC = ({children}) => {
   const [clockIsRunning, setClockIsRunning] = useState(false);

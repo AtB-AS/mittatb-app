@@ -1,5 +1,5 @@
 export {
   TimeContextProvider,
   useTimeContextState,
-  serverDiff,
+  getServerNow,
 } from './TimeContext';
