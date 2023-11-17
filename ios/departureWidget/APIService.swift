@@ -63,7 +63,11 @@ class APIService {
             return
         }
 
+        guard let installId = Manifest.data?.installId else {
+         return
+        }
         request.setValue("application/JSON", forHTTPHeaderField: "Content-Type")
+        request.setValue(installId, forHTTPHeaderField: "atb-install-id")
         request.httpBody = data
 
         let decoder = JSONDecoder()
