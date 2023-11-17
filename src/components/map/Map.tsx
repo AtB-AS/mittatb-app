@@ -3,7 +3,7 @@ import {useAnalytics} from '@atb/analytics';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
-import MapboxGL from '@rnmapbox/maps';
+import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
@@ -118,7 +118,10 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
           {mapLines && <MapRoute lines={mapLines} />}
-          <MapboxGL.UserLocation showsUserHeadingIndicator />
+          <MapboxGL.UserLocation
+              showsUserHeadingIndicator
+              renderMode={UserLocationRenderMode.Native}
+          />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}

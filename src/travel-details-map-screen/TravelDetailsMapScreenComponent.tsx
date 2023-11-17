@@ -25,7 +25,7 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {secondsBetween} from '@atb/utils/date';
 import {useInterval} from '@atb/utils/use-interval';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
-import MapboxGL from '@rnmapbox/maps';
+import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {Feature, Point, Position} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, View} from 'react-native';
@@ -177,7 +177,10 @@ export const TravelDetailsMapScreenComponent = ({
           centerCoordinate={vehicleWithPosition ? centerPosition : undefined}
           animationDuration={0}
         />
-        <MapboxGL.UserLocation showsUserHeadingIndicator />
+        <MapboxGL.UserLocation
+          showsUserHeadingIndicator
+          renderMode={UserLocationRenderMode.Native}
+        />
         <MapRoute lines={features} />
         {toPlace && (
           <MapLabel
