@@ -45,14 +45,9 @@ enum AppEndPoint: String {
         guard let url = url else {
             return nil
         }
-        guard let installId = Manifest.data?.installId else {
-          return nil
-        }
 
         var request = URLRequest(url: url)
         request.httpMethod = method
-        request.setValue(installId, forHTTPHeaderField: "atb-install-id")
-
 
         return request
     }
@@ -68,8 +63,11 @@ class APIService {
             return
         }
 
-       
+        guard let installId = Manifest.data?.installId else {
+         return
+        }
         request.setValue("application/JSON", forHTTPHeaderField: "Content-Type")
+        request.setValue(installId, forHTTPHeaderField: "atb-install-id")
         request.httpBody = data
 
         let decoder = JSONDecoder()
