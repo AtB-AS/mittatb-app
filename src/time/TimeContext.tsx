@@ -1,12 +1,6 @@
 import {useInterval} from '@atb/utils/use-interval';
 import {clock, start} from '@entur-private/abt-time-react-native-lib';
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 
 type TimeContextState = {
   /**
@@ -15,25 +9,18 @@ type TimeContextState = {
    * validity of fare contracts.
    */
   serverNow: number;
-  /**
-   * Returns server time in milliseconds, based on the difference between
-   * the previous serverNow and device time.
-   */
-  getServerNow: () => number;
 };
 
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
+/**
+ * The number of milliseconds the device time is ahead of server time.
+ */
+export let serverDiff = 0;
+
 export const TimeContextProvider: React.FC = ({children}) => {
   const [clockIsRunning, setClockIsRunning] = useState(false);
   const [serverNow, setServerNow] = useState(Date.now());
-
-  // The number of milliseconds the local clock is ahead of the server clock.
-  const [clientServerDiff, setClientServerDiff] = useState<number>();
-
-  const getServerNow = useCallback(() => {
-    return Date.now() - (clientServerDiff || 0);
-  }, [clientServerDiff]);
 
   useEffect(() => {
     start({
@@ -46,7 +33,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
   useInterval(
     () =>
       clock.currentTimeMillis().then((ms) => {
-        setClientServerDiff(Date.now() - ms);
+        serverDiff = Date.now() - ms;
         setServerNow(ms);
       }),
     2500,
@@ -59,7 +46,6 @@ export const TimeContextProvider: React.FC = ({children}) => {
     <TimeContext.Provider
       value={{
         serverNow,
-        getServerNow,
       }}
     >
       {children}
