@@ -29,7 +29,15 @@ import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
-import {usePushNotificationsEnabled} from '@atb/notifications';
+import {
+  usePushNotifications,
+  usePushNotificationsEnabled,
+} from '@atb/notifications';
+import {
+  filterValidRightNowFareContract,
+  useTicketingState,
+} from '@atb/ticketing';
+import {useTimeContextState} from '@atb/time';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -45,13 +53,28 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const pushNotificationsEnabled = usePushNotificationsEnabled();
 
   useGoToMobileTokenOnboardingWhenNecessary();
+  const {serverNow} = useTimeContextState();
+
+  const {fareContracts} = useTicketingState();
+  const validFareContracts = filterValidRightNowFareContract(
+    fareContracts,
+    serverNow,
+  );
+  const {status: notificationStatus} = usePushNotifications();
 
   useEffect(() => {
     if (!onboarded) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
-    } else if (!notificationPermissionOnboarded && pushNotificationsEnabled) {
+    }
+
+    if (
+      !notificationPermissionOnboarded &&
+      pushNotificationsEnabled &&
+      validFareContracts.length > 0 &&
+      notificationStatus !== 'granted'
+    ) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
       );
@@ -61,6 +84,8 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     navigation,
     notificationPermissionOnboarded,
     pushNotificationsEnabled,
+    validFareContracts.length,
+    notificationStatus,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
