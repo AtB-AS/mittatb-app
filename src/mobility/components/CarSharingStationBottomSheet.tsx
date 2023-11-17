@@ -12,10 +12,9 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
-import {WalkingDistance} from '@atb/components/walking-distance';
 import {ThemeText} from '@atb/components/text';
 import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
 import {CarImage} from '@atb/mobility/components/CarImage';
@@ -27,6 +26,7 @@ import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
+import { MobilityDistance } from '@atb/mobility/components/MobilityDistance';
 
 type Props = {
   stationId: string;
@@ -81,7 +81,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
         )}
         {!isLoading && !isError && station && (
           <>
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -101,7 +101,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <WalkingDistance distance={distance} />
+                    <MobilityDistance distance={distance} />
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -165,7 +165,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                   </View>
                 </GenericSectionItem>
               </Section>
-            </View>
+            </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (

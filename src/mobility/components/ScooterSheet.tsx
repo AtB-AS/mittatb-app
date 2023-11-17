@@ -14,7 +14,7 @@ import {PricingPlan} from '@atb/mobility/components/PricingPlan';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {formatRange} from '@atb/mobility/utils';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
@@ -85,7 +85,7 @@ export const ScooterSheet = ({
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -138,7 +138,7 @@ export const ScooterSheet = ({
                   </View>
                 </GenericSectionItem>
               </Section>
-            </View>
+            </ScrollView>
             <View style={style.footer}>
               {rentalAppUri &&
                 (operatorBenefit && isUserEligibleForBenefit ? (

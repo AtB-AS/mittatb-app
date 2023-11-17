@@ -15,7 +15,7 @@ import {PricingPlan} from '@atb/mobility/components/PricingPlan';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {formatRange} from '@atb/mobility/utils';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
@@ -75,7 +75,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   style={style.operatorBenefit}
@@ -132,7 +132,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                   </View>
                 </GenericSectionItem>
               </Section>
-            </View>
+            </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (

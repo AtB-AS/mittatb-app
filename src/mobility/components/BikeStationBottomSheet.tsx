@@ -9,10 +9,9 @@ import {
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, View} from 'react-native';
+import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
-import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
@@ -24,7 +23,8 @@ import {Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {CityBike} from '@atb/assets/svg/color/images/mobility';
 import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
-import { Parking } from '@atb/assets/svg/mono-icons/places';
+import {Parking} from '@atb/assets/svg/mono-icons/places';
+import { MobilityDistance } from './MobilityDistance';
 
 type Props = {
   stationId: string;
@@ -78,7 +78,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
         )}
         {!isLoading && !isError && station && (
           <>
-            <View style={style.container}>
+            <ScrollView style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   style={style.operatorBenefit}
@@ -96,8 +96,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <WalkingDistance
-                      iconStyle={style.walkingDistanceIcon}
+                    <MobilityDistance
                       distance={distance}
                     />
                   </View>
@@ -140,7 +139,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                   </View>
                 </GenericSectionItem>
               </Section>
-            </View>
+            </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (
