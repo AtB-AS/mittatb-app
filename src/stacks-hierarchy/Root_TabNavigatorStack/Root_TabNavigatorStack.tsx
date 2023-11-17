@@ -38,7 +38,6 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
-import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useGeolocationState} from '@atb/GeolocationContext';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
@@ -90,7 +89,8 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
       validFareContracts.length > 0 &&
-      notificationStatus !== 'granted'
+      notificationStatus !== 'granted' &&
+      locationWhenInUsePermissionOnboarded
     ) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
