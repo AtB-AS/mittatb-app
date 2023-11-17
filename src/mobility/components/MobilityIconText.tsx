@@ -3,7 +3,7 @@ import {SvgProps} from 'react-native-svg';
 import {View} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {useTheme} from '@atb/theme';
 
 type Props = {
   svg?(props: SvgProps): JSX.Element;
@@ -25,7 +25,7 @@ export const MobilityIconText = ({svg, text}: Props) => {
           fill={theme.text.colors.secondary}
         />
       )}
-      <ThemeText type={'body__secondary--bold'} color={'secondary'}>
+      <ThemeText type='body__secondary--bold' color='secondary'>
         {text}
       </ThemeText>
     </View>

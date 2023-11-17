@@ -8,7 +8,7 @@ import {
   BicycleTexts,
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ActivityIndicator, View} from 'react-native';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';

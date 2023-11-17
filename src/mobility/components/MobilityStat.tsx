@@ -23,7 +23,7 @@ export const MobilityStat = ({
       <ThemeText
         type="body__secondary"
         style={secondaryStatStyle}
-        color={'secondary'}
+        color='secondary'
       >
         {secondaryStat}
       </ThemeText>
