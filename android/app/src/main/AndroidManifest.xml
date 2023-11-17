@@ -31,5 +31,7 @@
             </intent-filter>
         </activity>
         <provider android:name="com.kogenta.kettle.core.api.KettleInitializer" android:authorities="${applicationId}.KettleInitializer" tools:node="remove" />
+        <receiver android:name="com.kogenta.kettle.core.api.StartupBroadcastReceiver" tools:node="remove"/>
+        <receiver android:name="com.kogenta.kettle.core.broadcast.BootBroadcastReceiver" tools:node="remove"/>
     </application>
 </manifest>
