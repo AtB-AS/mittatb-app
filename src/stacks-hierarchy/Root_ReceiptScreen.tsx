@@ -19,7 +19,6 @@ import {useAnalytics} from '@atb/analytics';
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
 type MessageState =
-  | 'updating'
   | 'loading'
   | 'success'
   | 'error'
@@ -62,6 +61,7 @@ export function Root_ReceiptScreen({route}: Props) {
 
   // resets the state when there are changes to email input field
   function onTextChanged(text: string) {
+    // do not do anything when the state is loading, otherwise it will cause unwanted issues
     if (state !== 'loading') {
       setState(undefined);
       setEmail(text);
