@@ -43,15 +43,13 @@ export const NearbyStopPlacesScreenComponent = ({
   onAddFavorite,
 }: Props) => {
   const {
-    status,
+    locationIsAvailable,
     location: geolocation,
-    locationEnabled,
-    requestPermission,
+    requestLocationPermission,
   } = useGeolocationState();
 
-  const requestGeoPermission = requestPermission;
   const currentLocation = geolocation || undefined;
-  const hasLocationPermission = locationEnabled && status === 'granted';
+
   const [loadAnnouncement, setLoadAnnouncement] = useState<string>('');
 
   const styles = useStyles();
@@ -65,7 +63,7 @@ export const NearbyStopPlacesScreenComponent = ({
     Boolean(currentLocation) && screenHasFocus,
   );
 
-  const updatingLocation = !location && hasLocationPermission;
+  const updatingLocation = !location && locationIsAvailable;
 
   const {state} = useNearestStopsData(location);
 
@@ -109,7 +107,7 @@ export const NearbyStopPlacesScreenComponent = ({
     if (currentLocation) {
       setCurrentLocationAsFrom();
     } else {
-      const status = await requestGeoPermission();
+      const status = await requestLocationPermission();
       if (status === 'granted') {
         setCurrentLocationAsFrom();
       }
@@ -186,7 +184,7 @@ export const NearbyStopPlacesScreenComponent = ({
       )}
     >
       <ScreenReaderAnnouncement message={loadAnnouncement} />
-      {hasLocationPermission || !!location ? (
+      {locationIsAvailable || !!location ? (
         <StopPlaces
           header={getListDescription()}
           stopPlaces={orderedStopPlaces}
@@ -206,7 +204,7 @@ export const NearbyStopPlacesScreenComponent = ({
             />
           }
           buttonProps={{
-            onPress: requestPermission,
+            onPress: requestLocationPermission,
             text: t(NearbyTexts.stateAnnouncements.sharePositionButton.title),
           }}
           testID="noAccessToLocation"

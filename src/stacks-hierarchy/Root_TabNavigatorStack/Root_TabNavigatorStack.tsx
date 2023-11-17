@@ -30,6 +30,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {usePushNotificationsEnabled} from '@atb/notifications';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -40,9 +41,15 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const {onboarded, notificationPermissionOnboarded} = useAppState();
+  const {
+    onboarded,
+    notificationPermissionOnboarded,
+    locationWhenInUsePermissionOnboarded,
+  } = useAppState();
 
   const pushNotificationsEnabled = usePushNotificationsEnabled();
+
+  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
 
   useGoToMobileTokenOnboardingWhenNecessary();
 
@@ -51,16 +58,23 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
-    } else if (!notificationPermissionOnboarded && pushNotificationsEnabled) {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_NotificationPermissionScreen'),
-      );
+    } else {
+      if (
+        !locationWhenInUsePermissionOnboarded &&
+        locationWhenInUsePermissionStatus === 'denied'
+      ) {
+        InteractionManager.runAfterInteractions(() =>
+          navigation.navigate('Root_LocationWhenInUsePermissionScreen'),
+        );
+      }
     }
   }, [
     onboarded,
     navigation,
     notificationPermissionOnboarded,
     pushNotificationsEnabled,
+    locationWhenInUsePermissionOnboarded,
+    locationWhenInUsePermissionStatus,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
