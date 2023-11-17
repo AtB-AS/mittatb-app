@@ -72,7 +72,7 @@ export const ParkAndRideBottomSheet = ({
         setFocusOnLoad={false}
       />
       <ScrollView>
-        <WalkingDistance distance={distance} />
+        <WalkingDistance distance={distance} style={style.walkingDistance} />
         <View style={style.buttonsContainer}>
           <View style={style.travelButton}>
             <Button
@@ -140,6 +140,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     travelToButtonPadding: {
       marginLeft: theme.spacings.medium / 2,
+    },
+    walkingDistance: {
+      paddingBottom: theme.spacings.medium,
     },
   };
 });

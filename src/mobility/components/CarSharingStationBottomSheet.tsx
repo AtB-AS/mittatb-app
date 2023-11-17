@@ -9,22 +9,26 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {CarSharingTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {StyleSheet} from '@atb/theme';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {
+  CarSharingTexts,
+  MobilityTexts,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {ActivityIndicator, ScrollView, Text, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {CarName} from '@atb/mobility/components/CarName';
 import {ThemeText} from '@atb/components/text';
 import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
 import {CarImage} from '@atb/mobility/components/CarImage';
-import {InfoChip} from '@atb/components/info-chip';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
 import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
 
 type Props = {
   stationId: string;
@@ -33,8 +37,10 @@ type Props = {
 };
 
 export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
-  const {t, language} = useTranslation();
+  const {t} = useTranslation();
   const style = useSheetStyle();
+  const {theme} = useTheme();
+
   const {
     station,
     isLoading: isLoadingStation,
@@ -65,7 +71,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        title={stationName}
+        title={t(MobilityTexts.formFactor(FormFactor.Car))}
         color="background_1"
         setFocusOnLoad={false}
       />
@@ -77,11 +83,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
         )}
         {!isLoading && !isError && station && (
           <>
-            <ScrollView style={style.container}>
-              <WalkingDistance
-                style={style.walkingDistance}
-                distance={distance}
-              />
+            <View style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -93,55 +95,79 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                 <GenericSectionItem>
                   <OperatorLogo
                     operatorName={operatorName}
+                    maxHeight={20}
+                    maxWidth={20}
                     logoUrl={brandLogoUrl}
                   />
+                  <View style={style.stationText}>
+                    <ThemeText type="body__secondary" color="secondary">
+                      {stationName}
+                    </ThemeText>
+                    <WalkingDistance distance={distance} />
+                  </View>
                 </GenericSectionItem>
-              </Section>
-              {isAnyAvailable(station.vehicleTypesAvailable) &&
-                station.vehicleTypesAvailable
-                  ?.filter(isAvailable)
-                  .sort(byName(language))
-                  .map((vehicle, i) => (
-                    <Section key={'vehicle' + i} style={style.carSection}>
-                      <GenericSectionItem>
-                        <View style={style.carDetailsContainer}>
-                          <View style={style.carImage}>
+                <GenericSectionItem>
+                  <View style={style.carSection}>
+                    <View>
+                      <View style={style.availableCarSection}>
+                        <ThemeIcon
+                          style={style.icon}
+                          svg={Car}
+                          fill={theme.text.colors.secondary}
+                        />
+                        <ThemeText
+                          type="body__secondary--bold"
+                          color="secondary"
+                        >
+                          {t(
+                            CarSharingTexts.stations.carsAvailable(
+                              totalAvailableCars(station.vehicleTypesAvailable),
+                              station.capacity,
+                            ),
+                          )}
+                        </ThemeText>
+                      </View>
+                      <ThemeText type="body__secondary" color="secondary">
+                        {t(CarSharingTexts.stations.carsAvailableLabel)}
+                      </ThemeText>
+                    </View>
+                    <View style={style.carDetailsContainer}>
+                      {station.vehicleTypesAvailable
+                        ?.slice(station.capacity > 2 ? -1 : -2)
+                        .map((vehicle, i) => (
+                          <View
+                            key={i}
+                            style={[
+                              style.carImage,
+                              i === station.capacity - 1
+                                ? style.carImageLast
+                                : {},
+                            ]}
+                          >
                             <CarImage uri={vehicle.vehicleType.vehicleImage} />
                           </View>
-                          <View style={style.carDetails}>
-                            <CarName vehicleType={vehicle.vehicleType} />
-                            <ThemeText type="body__secondary">
-                              {t(
-                                CarSharingTexts.propultionType(
-                                  vehicle.vehicleType.propulsionType,
-                                ),
-                              )}
-                            </ThemeText>
-                            <View style={style.availabilityChip}>
-                              <InfoChip
-                                text={t(
-                                  CarSharingTexts.stations.carsAvailable(
-                                    vehicle.count,
-                                  ),
-                                )}
-                                interactiveColor="interactive_0"
-                              />
-                            </View>
-                          </View>
+                        ))}
+                      {station.capacity > 2 && (
+                        <View
+                          style={{
+                            height: 40,
+                            width: 40,
+                            borderRadius: 8,
+                            backgroundColor: '#d8d8d8',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <ThemeText style={{justifyContent: 'center'}}>
+                            +{station.capacity - 1}
+                          </ThemeText>
                         </View>
-                      </GenericSectionItem>
-                    </Section>
-                  ))}
-              {!isAnyAvailable(station.vehicleTypesAvailable) && (
-                <Section withTopPadding withBottomPadding>
-                  <View style={style.noCarsAvailable}>
-                    <ThemeText type="body__secondary">
-                      {t(CarSharingTexts.stations.noCarsAvailable)}
-                    </ThemeText>
+                      )}
+                    </View>
                   </View>
-                </Section>
-              )}
-            </ScrollView>
+                </GenericSectionItem>
+              </Section>
+            </View>
             {rentalAppUri && (
               <View style={style.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (
@@ -190,28 +216,37 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       flex: 1,
       alignItems: 'flex-end',
     },
+    availableCarSection: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
     benefit: {
       marginBottom: theme.spacings.medium,
     },
     carDetailsContainer: {
       display: 'flex',
-      flex: 1,
       flexDirection: 'row',
     },
     carSection: {
-      marginTop: theme.spacings.medium,
+      display: 'flex',
+      flexDirection: 'row',
+      flex: 1,
+      justifyContent: 'space-between',
     },
     carImage: {
       flexShrink: 1,
       flexGrow: 0,
-      marginRight: theme.spacings.medium,
+      marginRight: theme.spacings.xSmall,
+    },
+    carImageLast: {
+      marginRight: 0,
     },
     carDetails: {
       flex: 4,
     },
     container: {
       marginHorizontal: theme.spacings.medium,
-      //marginBottom: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
@@ -220,6 +255,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
     },
+    icon: {
+      marginEnd: theme.spacings.xSmall,
+    },
     noCarsAvailable: {
       flex: 1,
       alignItems: 'center',
@@ -227,20 +265,32 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     operatorButton: {
       marginTop: theme.spacings.medium,
     },
-    walkingDistance: {
-      marginBottom: theme.spacings.medium,
+    stationText: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginTop: theme.spacings.xSmall,
     },
   };
 });
 
 const isAnyAvailable = (
   vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
-) => {
+): boolean => {
   const count =
     vehicleTypesAvailable
       ?.map((v) => v.count)
       .reduce((sum, count) => sum + count, 0) ?? 0;
   return count > 0;
+};
+
+const totalAvailableCars = (
+  vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
+): number => {
+  return (
+    vehicleTypesAvailable
+      ?.map((v) => v.count)
+      .reduce((sum, count) => sum + count, 0) ?? 0
+  );
 };
 
 const byName =

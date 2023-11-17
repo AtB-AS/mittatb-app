@@ -9,14 +9,12 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
 import {formatRange} from '@atb/mobility/utils';
-import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {useVehicle} from '@atb/mobility/use-vehicle';
-import {ActivityIndicator, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Image, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
@@ -26,6 +24,10 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
 import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Scooter} from '@atb/assets/svg/color/images/mobility';
+import {MobilityStats} from '@atb/mobility/components/MobilityStats';
+import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 
 type Props = {
   vehicleId: VehicleId;
@@ -71,6 +73,7 @@ export const ScooterSheet = ({
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
+        title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
         color="background_1"
         setFocusOnLoad={false}
       />
@@ -82,7 +85,7 @@ export const ScooterSheet = ({
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <ScrollView style={style.container}>
+            <View style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
@@ -95,33 +98,47 @@ export const ScooterSheet = ({
                   <OperatorLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    maxHeight={20}
+                    maxWidth={20}
                   />
                 </GenericSectionItem>
-              </Section>
-              <VehicleStats
-                left={
-                  <VehicleStat
-                    svg={Battery}
-                    primaryStat={vehicle.currentFuelPercent + '%'}
-                    secondaryStat={formatRange(
-                      vehicle.currentRangeMeters,
-                      language,
+                <GenericSectionItem>
+                  <View style={style.content}>
+                    <MobilityStats
+                      top={
+                        <MobilityStat
+                          svg={Battery}
+                          primaryStat={vehicle.currentFuelPercent + '%'}
+                          secondaryStat={formatRange(
+                            vehicle.currentRangeMeters,
+                            language,
+                          )}
+                        />
+                      }
+                      bottom={
+                        <PricingPlan
+                          operator={operatorName}
+                          plan={vehicle.pricingPlan}
+                          eligibleBenefit={
+                            operatorBenefit && isUserEligibleForBenefit
+                              ? operatorBenefit.id
+                              : undefined
+                          }
+                        />
+                      }
+                    />
+                    {brandLogoUrl ? (
+                      <OperatorLogo
+                        operatorName={operatorName}
+                        logoUrl={brandLogoUrl}
+                      />
+                    ) : (
+                      <Scooter />
                     )}
-                  />
-                }
-                right={
-                  <PricingPlan
-                    operator={operatorName}
-                    plan={vehicle.pricingPlan}
-                    eligibleBenefit={
-                      operatorBenefit && isUserEligibleForBenefit
-                        ? operatorBenefit.id
-                        : undefined
-                    }
-                  />
-                }
-              />
-            </ScrollView>
+                  </View>
+                </GenericSectionItem>
+              </Section>
+            </View>
             <View style={style.footer}>
               {rentalAppUri &&
                 (operatorBenefit && isUserEligibleForBenefit ? (
@@ -180,6 +197,11 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     container: {
       paddingHorizontal: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
+    },
+    content: {
+      flexDirection: 'row',
+      alignContent: 'center',
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,

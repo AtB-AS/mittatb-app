@@ -1,6 +1,5 @@
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {View, ViewStyle} from 'react-native';
-import {SvgXml} from 'react-native-svg';
+import {Image, ImageStyle, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -37,14 +36,18 @@ export const OperatorBenefit = ({
       <Section>
         <GenericSectionItem>
           <View style={style.benefitContainer}>
-            <View style={style.benefitImage}>
               {isUserEligible && benefit.imageWhenActive && (
-                <SvgXml xml={benefit.imageWhenActive} />
+                <Image
+                  style={style.benefitImage as ImageStyle}
+                  source={{uri: benefit.imageWhenActive}}
+                />
               )}
               {!isUserEligible && benefit.imageWhenNotActive && (
-                <SvgXml xml={benefit.imageWhenNotActive} />
+                <Image
+                  style={style.benefitImage as ImageStyle}
+                  source={{uri: benefit.imageWhenNotActive}}
+                />
               )}
-            </View>
             <View style={style.benefitContent}>
               <ThemeText type="body__primary--bold">{heading}</ThemeText>
               <ThemeText>{text}</ThemeText>
@@ -60,11 +63,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   benefitContainer: {
     flexDirection: 'row',
   },
-  benefitImage: {
-    marginRight: theme.spacings.medium,
-    justifyContent: 'center',
-  },
   benefitContent: {
+    flex: 4,
+  },
+  benefitImage: {
     flex: 1,
+    resizeMode: 'contain',
+    marginRight: theme.spacings.medium,
   },
 }));

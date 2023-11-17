@@ -4,13 +4,11 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
-import {BicycleTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  BicycleTexts,
+  MobilityTexts,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
-import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
-import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
-import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
-import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
 import {MessageBox} from '@atb/components/message-box';
@@ -20,6 +18,13 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
 import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {ThemeText} from '@atb/components/text';
+import {Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {CityBike} from '@atb/assets/svg/color/images/mobility';
+import {MobilityStats} from '@atb/mobility/components/MobilityStats';
+import {MobilityStat} from '@atb/mobility/components/MobilityStat';
+import { Parking } from '@atb/assets/svg/mono-icons/places';
 
 type Props = {
   stationId: string;
@@ -62,7 +67,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        title={stationName ?? ''}
+        title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
         color="background_1"
         setFocusOnLoad={false}
       />
@@ -74,11 +79,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
         )}
         {!isLoading && !isError && station && (
           <>
-            <WalkingDistance
-              style={style.walkingDistance}
-              distance={distance}
-            />
-            <ScrollView style={style.container}>
+            <View style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   style={style.operatorBenefit}
@@ -92,28 +93,55 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
                   />
+                  <View style={style.stationText}>
+                    <ThemeText type="body__secondary" color="secondary">
+                      {stationName}
+                    </ThemeText>
+                    <WalkingDistance
+                      iconStyle={style.walkingDistanceIcon}
+                      distance={distance}
+                    />
+                  </View>
+                </GenericSectionItem>
+                <GenericSectionItem>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <MobilityStats
+                      top={
+                        <MobilityStat
+                          svg={Bicycle}
+                          primaryStat={availableBikes}
+                          secondaryStat={t(
+                            BicycleTexts.stations.numBikesAvailable,
+                          )}
+                        />
+                      }
+                      bottom={
+                        <MobilityStat
+                          svg={Parking}
+                          primaryStat={
+                            station.numDocksAvailable ??
+                            t(BicycleTexts.stations.unknownDocksAvailable)
+                          }
+                          secondaryStat={t(
+                            BicycleTexts.stations.numDocksAvailable,
+                          )}
+                        />
+                      }
+                    />
+                    {brandLogoUrl ? (
+                      <OperatorLogo
+                        operatorName={operatorName}
+                        logoUrl={brandLogoUrl}
+                        maxHeight={20}
+                        maxWidth={20}
+                      />
+                    ) : (
+                      <CityBike />
+                    )}
+                  </View>
                 </GenericSectionItem>
               </Section>
-              <VehicleStats
-                left={
-                  <VehicleStat
-                    svg={Bicycle}
-                    primaryStat={availableBikes}
-                    secondaryStat={t(BicycleTexts.stations.numBikesAvailable)}
-                  />
-                }
-                right={
-                  <VehicleStat
-                    svg={themeName === 'dark' ? ParkingDark : ParkingLight}
-                    primaryStat={
-                      station.numDocksAvailable ??
-                      t(BicycleTexts.stations.unknownDocksAvailable)
-                    }
-                    secondaryStat={t(BicycleTexts.stations.numDocksAvailable)}
-                  />
-                }
-              />
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={style.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (
@@ -162,11 +190,17 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: theme.spacings.medium,
     },
     container: {
-      paddingHorizontal: theme.spacings.medium,
+      marginHorizontal: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
     },
     stationName: {
       flex: 1,
       alignItems: 'center',
+    },
+    stationText: {
+      display: 'flex',
+      flexDirection: 'row',
+      marginTop: theme.spacings.xSmall,
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
@@ -175,8 +209,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
     },
-    walkingDistance: {
-      marginBottom: theme.spacings.medium,
+    walkingDistanceIcon: {
+      marginStart: theme.spacings.small,
+      marginEnd: theme.spacings.small,
     },
   };
 });

@@ -9,8 +9,9 @@ import {StyleSheet, useTheme} from '@atb/theme';
 type Props = {
   distance: number | undefined;
   style?: StyleProp<ViewStyle>;
+  iconStyle?: StyleProp<ViewStyle>;
 };
-export const WalkingDistance = ({style, distance}: Props) => {
+export const WalkingDistance = ({style, iconStyle, distance}: Props) => {
   const sheetStyles = useSheetStyle();
   const humanizedDistance = useHumanizeDistance(distance);
   const {theme} = useTheme();
@@ -19,7 +20,11 @@ export const WalkingDistance = ({style, distance}: Props) => {
 
   return (
     <View style={[style, sheetStyles.distanceLabel]}>
-      <ThemeIcon svg={Walk} fill={theme.text.colors.secondary} />
+      <ThemeIcon
+        style={iconStyle}
+        svg={Walk}
+        fill={theme.text.colors.secondary}
+      />
       <ThemeText type="body__secondary" color="secondary">
         {humanizedDistance}
       </ThemeText>
@@ -31,6 +36,5 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   distanceLabel: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingBottom: theme.spacings.medium,
   },
 }));

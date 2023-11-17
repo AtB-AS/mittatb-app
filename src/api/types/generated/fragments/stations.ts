@@ -15,6 +15,7 @@ export type StationBasicFragment = {
   id: string;
   lat: number;
   lon: number;
+  capacity: number;
   vehicleTypesAvailable?: Array<VehicleTypeAvailabilityBasicFragment>;
 };
 

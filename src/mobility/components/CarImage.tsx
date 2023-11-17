@@ -9,7 +9,13 @@ type Props = {
 export const CarImage = ({uri}: Props) => {
   return uri ? (
     <Image
-      style={{height: 75, width: 100, resizeMode: 'contain'}}
+      style={{
+        height: 40,
+        width: 40,
+        resizeMode: 'contain',
+        borderRadius: 8,
+        backgroundColor: '#d8d8d8',
+      }}
       source={{uri}}
     />
   ) : (
@@ -21,10 +27,10 @@ const DefaultCarImage = () => {
   return (
     <View
       style={{
-        height: 75,
-        width: 100,
+        height: 40,
+        width: 40,
         backgroundColor: '#d8d8d8',
-        borderRadius: 5,
+        borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',
       }}

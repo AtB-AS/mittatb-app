@@ -12,7 +12,7 @@ export const MobilityTexts = {
       case FormFactor.Scooter:
         return _('Sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel');
       case FormFactor.Bicycle:
-        return _('Sykkel', 'Bicycle', 'Sykkel');
+        return _('Bysykkel', 'Bicycle', 'Bysykkel');
       case FormFactor.Car:
         return _('Bildeling', 'Car sharing', 'Bildeling');
       default:
@@ -104,12 +104,12 @@ export const ScooterTexts = {
 
 export const BicycleTexts = {
   stations: {
-    numBikesAvailable: _(
-      'Tilgjengelige sykler',
-      'Available bikes',
-      'Tilgjengelege syklar',
+    numBikesAvailable: _('ledige sykler', 'available bikes', 'ledige syklar'),
+    numDocksAvailable: _(
+      'ledige sykkelplasser',
+      'available docks',
+      'ledige sykkelplassar',
     ),
-    numDocksAvailable: _('Ledige plasser', 'Available docks', 'Ledige plassar'),
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
   },
   humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
@@ -122,8 +122,13 @@ export const BicycleTexts = {
 
 export const CarSharingTexts = {
   stations: {
-    carsAvailable: (amount: number) =>
-      _(`${amount} ledig`, `${amount} available`, `${amount} ledig`),
+    carsAvailable: (amount: number, capacity: number) =>
+      _(
+        `${amount} av ${capacity}`,
+        `${amount} of ${capacity}`,
+        `${amount} av ${capacity}`,
+      ),
+    carsAvailableLabel: _('ledige biler', 'available cars', 'ledige bilar'),
     noCarsAvailable: _(
       'Ingen ledige biler',
       'No available cars',

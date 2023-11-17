@@ -7,6 +7,7 @@ import {StyleSheet} from '@atb/theme';
 import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {
   BicycleTexts,
+  MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {VehicleStat} from '@atb/mobility/components/VehicleStat';
@@ -23,6 +24,10 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
 import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {MobilityStats} from '@atb/mobility/components//MobilityStats';
+import {MobilityStat} from '@atb/mobility/components//MobilityStat';
+import {CityBike} from '@atb/assets/svg/color/images/mobility';
 
 type Props = {
   vehicleId: VehicleId;
@@ -60,6 +65,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
+        title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
         color="background_1"
         setFocusOnLoad={false}
       />
@@ -71,7 +77,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <ScrollView style={style.container}>
+            <View style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   style={style.operatorBenefit}
@@ -86,36 +92,49 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                     logoUrl={brandLogoUrl}
                   />
                 </GenericSectionItem>
+                <GenericSectionItem>
+                  <View style={style.content}>
+                    <MobilityStats
+                      top={
+                        (vehicle.vehicleType.propulsionType === 'ELECTRIC' ||
+                          vehicle.vehicleType.propulsionType ===
+                            'ELECTRIC_ASSIST') &&
+                        vehicle.currentFuelPercent ? (
+                          <MobilityStat
+                            svg={Battery}
+                            primaryStat={vehicle.currentFuelPercent + '%'}
+                            secondaryStat={formatRange(
+                              vehicle.currentRangeMeters,
+                              language,
+                            )}
+                          />
+                        ) : (
+                          <MobilityStat
+                            svg={Bicycle}
+                            primaryStat=""
+                            secondaryStat={t(BicycleTexts.humanPoweredBike)}
+                          />
+                        )
+                      }
+                      bottom={
+                        <PricingPlan
+                          operator={operatorName}
+                          plan={vehicle.pricingPlan}
+                        />
+                      }
+                    />
+                    {brandLogoUrl ? (
+                      <OperatorLogo
+                        operatorName={operatorName}
+                        logoUrl={brandLogoUrl}
+                      />
+                    ) : (
+                      <CityBike />
+                    )}
+                  </View>
+                </GenericSectionItem>
               </Section>
-              <VehicleStats
-                left={
-                  (vehicle.vehicleType.propulsionType === 'ELECTRIC' ||
-                    vehicle.vehicleType.propulsionType === 'ELECTRIC_ASSIST') &&
-                  vehicle.currentFuelPercent ? (
-                    <VehicleStat
-                      svg={Battery}
-                      primaryStat={vehicle.currentFuelPercent + '%'}
-                      secondaryStat={formatRange(
-                        vehicle.currentRangeMeters,
-                        language,
-                      )}
-                    />
-                  ) : (
-                    <VehicleStat
-                      svg={Bicycle}
-                      primaryStat=""
-                      secondaryStat={t(BicycleTexts.humanPoweredBike)}
-                    />
-                  )
-                }
-                right={
-                  <PricingPlan
-                    operator={operatorName}
-                    plan={vehicle.pricingPlan}
-                  />
-                }
-              />
-            </ScrollView>
+            </View>
             {rentalAppUri && (
               <View style={style.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (
@@ -162,6 +181,11 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     container: {
       paddingHorizontal: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
+    },
+    content: {
+      flexDirection: 'row',
+      alignContent: 'center',
     },
     operatorBenefit: {
       marginBottom: theme.spacings.medium,
