@@ -139,6 +139,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                         carPreview(station.vehicleTypesAvailable).map(
                           (vehicle, i) => (
                             <View
+                              key={vehicle.vehicleType.id}
                               style={[
                                 style.carImage,
                                 i === station.capacity - 1
