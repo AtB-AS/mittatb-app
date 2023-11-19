@@ -2,7 +2,7 @@ import {Image, ImageStyle, View} from 'react-native';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {StyleSheet, useStyle, useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 
 type Props = {
@@ -44,7 +44,7 @@ const PlusContainer = ({plus}: Props) => {
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+const useSheetStyle = StyleSheet.createThemeHook(() => {
   return {
     container: {
       height: 40,
