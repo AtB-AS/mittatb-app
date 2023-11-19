@@ -24,7 +24,7 @@ import {CityBike} from '@atb/assets/svg/color/images/mobility';
 import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
-import { MobilityDistance } from './MobilityDistance';
+import {MobilityDistance} from '@atb/mobility/components/MobilityDistance';
 
 type Props = {
   stationId: string;
@@ -96,9 +96,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <MobilityDistance
-                      distance={distance}
-                    />
+                    <MobilityDistance distance={distance} />
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>

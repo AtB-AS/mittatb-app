@@ -1,41 +1,63 @@
-import {Image, View} from 'react-native';
+import {Image, ImageStyle, View} from 'react-native';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
+import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {StyleSheet, useStyle, useTheme} from '@atb/theme';
+import {ThemeText} from '@atb/components/text';
 
 type Props = {
-  uri: string | undefined;
+  uri?: string | undefined;
+  plus?: number | undefined;
 };
-export const CarImage = ({uri}: Props) => {
+
+export const CarImage = ({uri, plus}: Props) => {
+  const style = useSheetStyle();
+
   return uri ? (
     <Image
-      style={{
-        height: 40,
-        width: 40,
-        resizeMode: 'contain',
-        borderRadius: 8,
-        backgroundColor: '#d8d8d8',
-      }}
+      style={[style.container as ImageStyle, style.image as ImageStyle]}
       source={{uri}}
     />
+  ) : plus ? (
+    <PlusContainer plus={plus} />
   ) : (
     <DefaultCarImage />
   );
 };
 
 const DefaultCarImage = () => {
+  const {theme} = useTheme();
+  const style = useSheetStyle();
   return (
-    <View
-      style={{
-        height: 40,
-        width: 40,
-        backgroundColor: '#d8d8d8',
-        borderRadius: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <ThemeIcon size="large" fill="#A9AEB1" svg={Car} />
+    <View style={[style.container, style.defaultImage]}>
+      <ThemeIcon size="large" fill={theme.text.colors.secondary} svg={Car} />
     </View>
   );
 };
+
+const PlusContainer = ({plus}: Props) => {
+  const style = useSheetStyle();
+  return (
+    <View style={[style.container, style.defaultImage]}>
+      <ThemeText style={style.defaultImage}>+{plus}</ThemeText>
+    </View>
+  );
+};
+
+const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+  return {
+    container: {
+      height: 40,
+      width: 40,
+      borderRadius: 8,
+      backgroundColor: '#d8d8d8',
+    },
+    image: {
+      resizeMode: 'cover',
+    },
+    defaultImage: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  };
+});

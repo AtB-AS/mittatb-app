@@ -1,8 +1,5 @@
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -26,7 +23,7 @@ import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
-import { MobilityDistance } from '@atb/mobility/components/MobilityDistance';
+import {MobilityDistance} from '@atb/mobility/components/MobilityDistance';
 
 type Props = {
   stationId: string;
@@ -60,6 +57,14 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
 
   const isLoading = isLoadingStation || isLoadingBenefit;
   const isError = isLoadingError || isBenefitError;
+
+  const previewCarIconCount = station ? station.capacity : 0;
+
+  function carPreview(
+    vehicleTypesAvailable: CarAvailabilityFragment[],
+  ): CarAvailabilityFragment[] {
+    return vehicleTypesAvailable.slice(previewCarIconCount > 2 ? -1 : -2);
+  }
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -130,36 +135,25 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
                       </ThemeText>
                     </View>
                     <View style={style.carDetailsContainer}>
-                      {station.vehicleTypesAvailable
-                        ?.slice(station.capacity > 2 ? -1 : -2)
-                        .map((vehicle, i) => (
-                          <View
-                            key={i}
-                            style={[
-                              style.carImage,
-                              i === station.capacity - 1
-                                ? style.carImageLast
-                                : {},
-                            ]}
-                          >
-                            <CarImage uri={vehicle.vehicleType.vehicleImage} />
-                          </View>
-                        ))}
+                      {station.vehicleTypesAvailable &&
+                        carPreview(station.vehicleTypesAvailable).map(
+                          (vehicle, i) => (
+                            <View
+                              style={[
+                                style.carImage,
+                                i === station.capacity - 1
+                                  ? style.carImageLast
+                                  : {},
+                              ]}
+                            >
+                              <CarImage
+                                uri={vehicle.vehicleType.vehicleImage}
+                              />
+                            </View>
+                          ),
+                        )}
                       {station.capacity > 2 && (
-                        <View
-                          style={{
-                            height: 40,
-                            width: 40,
-                            borderRadius: 8,
-                            backgroundColor: '#d8d8d8',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <ThemeText style={{justifyContent: 'center'}}>
-                            +{station.capacity - 1}
-                          </ThemeText>
-                        </View>
+                        <CarImage plus={station.capacity-1} />
                       )}
                     </View>
                   </View>
