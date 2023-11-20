@@ -60,6 +60,20 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
 
   const previewCarIconCount = station ? station.capacity : 0;
 
+  /** 
+   *  carPreview function
+   * 
+   *  this function returns an array of vehicles that is shown
+   *  on the bottom sheet for car station mobility.
+   * 
+   *  Case can be accessed in Figma link below 
+   *  https://www.figma.com/file/zdZwvobgpEWSagKt0tderx/App?node-id=20471-12079
+   * 
+   *  Case on version 1.44 : 
+   *  - If the station capacity is 2 or less : show car image(s)
+   *  - If the station capacity is 3 or more : show 1 car image and the plus text
+   */
+
   function carPreview(
     vehicleTypesAvailable: CarAvailabilityFragment[],
   ): CarAvailabilityFragment[] {
