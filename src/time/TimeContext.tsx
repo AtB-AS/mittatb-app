@@ -13,6 +13,14 @@ type TimeContextState = {
 
 const TimeContext = createContext<TimeContextState | undefined>(undefined);
 
+// The number of milliseconds the device time is ahead of server time.
+let serverDiff = 0;
+
+/**
+ * Returns the current time in milliseconds.
+ */
+export const getServerNow = () => Date.now() - serverDiff;
+
 export const TimeContextProvider: React.FC = ({children}) => {
   const [clockIsRunning, setClockIsRunning] = useState(false);
   const [serverNow, setServerNow] = useState(Date.now());
@@ -26,7 +34,11 @@ export const TimeContextProvider: React.FC = ({children}) => {
     }).then(() => setClockIsRunning(true));
   }, []);
   useInterval(
-    () => clock.currentTimeMillis().then(setServerNow),
+    () =>
+      clock.currentTimeMillis().then((ms) => {
+        serverDiff = Date.now() - ms;
+        setServerNow(ms);
+      }),
     2500,
     [],
     !clockIsRunning,
