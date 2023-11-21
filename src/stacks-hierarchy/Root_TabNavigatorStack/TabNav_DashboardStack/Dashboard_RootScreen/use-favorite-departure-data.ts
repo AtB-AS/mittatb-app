@@ -25,6 +25,9 @@ import {updateStopsWithRealtime} from '@atb/departure-list/utils';
 import {SearchTime} from '@atb/journey-date-picker';
 import {animateNextChange} from '@atb/utils/animation';
 
+import {flatten} from 'lodash';
+import {DepartureLineInfo} from '@atb/api/departures/types';
+
 const DEFAULT_NUMBER_OF_DEPARTURES_PER_LINE_TO_SHOW = 7;
 
 // Used to re-trigger full refresh after N minutes.
@@ -264,7 +267,8 @@ export function useFavoriteDepartureData(
     lastRefreshTime: new Date(),
   });
   const isFocused = useIsFocused();
-  const {favoriteDepartures, migrateFavoriteDepartures} = useFavorites();
+  const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
+    useFavorites();
   const dashboardFavoriteDepartures = favoriteDepartures.filter(
     (f) => f.visibleOnDashboard,
   );
@@ -280,13 +284,26 @@ export function useFavoriteDepartureData(
         lastHardRefreshTime,
         lastRealtimeRefreshTime,
       }),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(dashboardFavoriteDepartureIds), favoriteDepartures],
   );
 
   useEffect(() => {
-    migrateFavoriteDepartures(state.data || []);
-  }, [state.data, migrateFavoriteDepartures]);
+    const stopPlaceGroups = state.data;
+    if (!stopPlaceGroups?.length) return;
+
+    const departureLineInfos = flatten(
+      flatten(
+        stopPlaceGroups.map((stopPlaceGroup) =>
+          stopPlaceGroup?.quays.map((quay) =>
+            quay.group?.map((groupItem) => groupItem.lineInfo),
+          ),
+        ),
+      ),
+    ).filter((departureLineInfo) => !!departureLineInfo) as DepartureLineInfo[];
+
+    potentiallyMigrateFavoriteDepartures(departureLineInfos);
+  }, [state.data, potentiallyMigrateFavoriteDepartures]);
 
   const dashboardFavoriteLineIds = dashboardFavoriteDepartures.map(
     (f) => f.lineId,
@@ -298,7 +315,7 @@ export function useFavoriteDepartureData(
         favoriteDepartureIds: dashboardFavoriteLineIds,
         lastRealtimeRefreshTime,
       }),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(dashboardFavoriteLineIds)],
   );
 

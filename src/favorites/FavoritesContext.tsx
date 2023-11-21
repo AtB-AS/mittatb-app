@@ -13,10 +13,11 @@ import {
 import {RCTWidgetUpdater} from '../widget-updater';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 import {
+  ItemWithDestinationDisplayMigrationPairType,
   getFavoriteDeparturesWithDestinationDisplay,
+  getUniqueDestinationDisplayMigrationPairs,
   getUpToDateFavoriteDepartures,
 } from './utils';
-import {StopPlaceGroup} from '@atb/api/departures/types';
 
 type FavoriteContextState = {
   favorites: UserFavorites;
@@ -24,7 +25,9 @@ type FavoriteContextState = {
   addFavoriteLocation(location: LocationFavorite): Promise<void>;
   removeFavoriteLocation(id: string): Promise<void>;
   setFavoriteDepartures(favorite: UserFavoriteDepartures): Promise<void>;
-  migrateFavoriteDepartures(stopPlaceGroups: StopPlaceGroup[]): Promise<void>;
+  potentiallyMigrateFavoriteDepartures(
+    itemsWithDestinationDisplayMigrationPair?: ItemWithDestinationDisplayMigrationPairType[],
+  ): Promise<void>;
   setDashboardFavorite(id: string, value: boolean): Promise<void>;
   updateFavoriteLocation(favorite: StoredLocationFavorite): Promise<void>;
   setFavoriteLocations(favorites: UserFavorites): Promise<void>;
@@ -112,11 +115,21 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       await departures.setFavorites(favorites);
       RCTWidgetUpdater.refreshWidgets();
     },
-    async migrateFavoriteDepartures(stopPlaceGroups) {
-      if (!stopPlaceGroups.length) return;
+    async potentiallyMigrateFavoriteDepartures(
+      itemsWithDestinationDisplayMigrationPair,
+    ) {
+      if (!itemsWithDestinationDisplayMigrationPair?.length) return;
+
+      const destinationDisplayMigrationPairs =
+        getUniqueDestinationDisplayMigrationPairs(
+          itemsWithDestinationDisplayMigrationPair,
+        );
 
       const {upToDateFavoriteDepartures, aFavoriteDepartureWasUpdated} =
-        getUpToDateFavoriteDepartures(favoriteDepartures, stopPlaceGroups);
+        getUpToDateFavoriteDepartures(
+          favoriteDepartures,
+          destinationDisplayMigrationPairs,
+        );
 
       if (aFavoriteDepartureWasUpdated) {
         setFavoriteDeparturesState(upToDateFavoriteDepartures);

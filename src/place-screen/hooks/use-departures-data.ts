@@ -246,7 +246,8 @@ export function useDeparturesData(
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
-  const {favoriteDepartures} = useFavorites();
+  const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
+    useFavorites();
   const [queryStartTime, setQueryStartTime] = useState<string | undefined>();
   const [timeRange, setTimeRange] = useState<number | undefined>();
   const lastHardRefreshTime = useRef<Date>(new Date());
@@ -336,6 +337,11 @@ export function useDeparturesData(
     // Trigger immediately on focus only if the view is already initialized
     !!state.tick,
   );
+
+  useEffect(() => {
+    const estimatedCalls = state.data;
+    estimatedCalls && potentiallyMigrateFavoriteDepartures(estimatedCalls);
+  }, [state.data, potentiallyMigrateFavoriteDepartures]);
 
   return {
     state,
