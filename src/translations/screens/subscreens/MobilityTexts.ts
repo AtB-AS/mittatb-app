@@ -12,7 +12,7 @@ export const MobilityTexts = {
       case FormFactor.Scooter:
         return _('Sparkesykkel', 'Electric scooter', 'Elektrisk sparkesykkel');
       case FormFactor.Bicycle:
-        return _('Bysykkel', 'Bicycle', 'Bysykkel');
+        return _('Sykkel', 'Bicycle', 'Sykkel');
       case FormFactor.Car:
         return _('Bildeling', 'Car sharing', 'Bildeling');
       default:

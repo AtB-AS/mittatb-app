@@ -14,7 +14,6 @@ import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
 import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
-import {CarImage} from '@atb/mobility/components/CarImage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
@@ -24,6 +23,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {MobilityDistance} from '@atb/mobility/components/MobilityDistance';
+import {CarPreviews} from './CarPreviews';
 
 type Props = {
   stationId: string;
@@ -31,7 +31,11 @@ type Props = {
   close: () => void;
 };
 
-export const CarSharingStationBottomSheet = ({stationId, distance, close}: Props) => {
+export const CarSharingStationBottomSheet = ({
+  stationId,
+  distance,
+  close,
+}: Props) => {
   const {t} = useTranslation();
   const style = useSheetStyle();
   const {theme} = useTheme();
@@ -57,28 +61,6 @@ export const CarSharingStationBottomSheet = ({stationId, distance, close}: Props
 
   const isLoading = isLoadingStation || isLoadingBenefit;
   const isError = isLoadingError || isBenefitError;
-
-  const previewCarIconCount = station ? station.capacity : 0;
-
-  /** 
-   *  carPreview function
-   * 
-   *  this function returns an array of vehicles that is shown
-   *  on the bottom sheet for car station mobility.
-   * 
-   *  Case can be accessed in Figma link below 
-   *  https://www.figma.com/file/zdZwvobgpEWSagKt0tderx/App?node-id=20471-12079
-   * 
-   *  Case on version 1.44 : 
-   *  - If the station capacity is 2 or less : show car image(s)
-   *  - If the station capacity is 3 or more : show 1 car image and the plus text
-   */
-
-  function carPreview(
-    vehicleTypesAvailable: CarAvailabilityFragment[],
-  ): CarAvailabilityFragment[] {
-    return vehicleTypesAvailable.slice(previewCarIconCount > 2 ? -1 : -2);
-  }
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -148,29 +130,12 @@ export const CarSharingStationBottomSheet = ({stationId, distance, close}: Props
                         {t(CarSharingTexts.stations.carsAvailableLabel)}
                       </ThemeText>
                     </View>
-                    <View style={style.carDetailsContainer}>
-                      {station.vehicleTypesAvailable &&
-                        carPreview(station.vehicleTypesAvailable).map(
-                          (vehicle, i) => (
-                            <View
-                              key={vehicle.vehicleType.id}
-                              style={[
-                                style.carImage,
-                                i === station.capacity - 1
-                                  ? style.carImageLast
-                                  : {},
-                              ]}
-                            >
-                              <CarImage
-                                uri={vehicle.vehicleType.vehicleImage}
-                              />
-                            </View>
-                          ),
-                        )}
-                      {station.capacity > 2 && (
-                        <CarImage plus={station.capacity-1} />
-                      )}
-                    </View>
+                    {station.vehicleTypesAvailable && (
+                      <CarPreviews
+                        stationCapacity={station.capacity}
+                        vehicleTypesAvailable={station.vehicleTypesAvailable}
+                      />
+                    )}
                   </View>
                 </GenericSectionItem>
               </Section>
@@ -230,23 +195,11 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     benefit: {
       marginBottom: theme.spacings.medium,
     },
-    carDetailsContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-    },
     carSection: {
       display: 'flex',
       flexDirection: 'row',
       flex: 1,
       justifyContent: 'space-between',
-    },
-    carImage: {
-      flexShrink: 1,
-      flexGrow: 0,
-      marginRight: theme.spacings.xSmall,
-    },
-    carImageLast: {
-      marginRight: 0,
     },
     carDetails: {
       flex: 4,
