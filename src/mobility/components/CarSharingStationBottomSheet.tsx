@@ -31,7 +31,7 @@ type Props = {
   close: () => void;
 };
 
-export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
+export const CarSharingStationBottomSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const style = useSheetStyle();
   const {theme} = useTheme();

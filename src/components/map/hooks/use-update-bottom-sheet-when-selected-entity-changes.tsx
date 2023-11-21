@@ -8,7 +8,7 @@ import {Feature, Point} from 'geojson';
 import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
 import {
   BikeStationSheet,
-  CarSharingStationSheet,
+  CarSharingStationBottomSheet,
   isBicycle,
   isBikeStation,
   isCarStation,
@@ -117,7 +117,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       } else if (isCarStation(selectedFeature)) {
         openBottomSheet(
           () => (
-            <CarSharingStationSheet
+            <CarSharingStationBottomSheet
               stationId={selectedFeature.properties.id}
               distance={distance}
               close={closeWithCallback}
