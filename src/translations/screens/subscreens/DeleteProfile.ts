@@ -8,7 +8,7 @@ const DeleteProfileTexts = {
   deleteInfo: _(
     'Når du sletter Min Profil vil alle dine lagrede data slettes. Du mister også tilgang på billett- og kjøpshistorikk, kvitteringer og dine innstillinger.',
     'When you delete My Profile, all your stored data will be deleted. You will also lose access to recent tickets, receipts and settings',
-    'Dersom du sletter Min profil vil alle dine lagra data bli sletta. Du mistar òg tilgang til billett- og kjøpshistorikk, kvitteringar og innstillingane dine.',
+    'Dersom du slettar Min Profil vil alle dine lagra data bli sletta. Du mistar òg tilgang til billett- og kjøpshistorikk, kvitteringar og innstillingane dine.',
   ),
   buttonA11ytext: (customerNumber: string | undefined) =>
     _(
