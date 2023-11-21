@@ -105,7 +105,7 @@ export const ScooterSheet = ({
                 <GenericSectionItem>
                   <View style={style.content}>
                     <MobilityStats
-                      top={
+                      first={
                         <MobilityStat
                           svg={Battery}
                           primaryStat={vehicle.currentFuelPercent + '%'}
@@ -115,7 +115,7 @@ export const ScooterSheet = ({
                           )}
                         />
                       }
-                      bottom={
+                      second={
                         <PricingPlan
                           operator={operatorName}
                           plan={vehicle.pricingPlan}

@@ -32,7 +32,7 @@ type Props = {
   close: () => void;
 };
 
-export const BikeStationSheet = ({stationId, distance, close}: Props) => {
+export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const style = useSheetStyle();
   const {
@@ -102,7 +102,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                 <GenericSectionItem>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <MobilityStats
-                      top={
+                      first={
                         <MobilityStat
                           svg={Bicycle}
                           primaryStat={availableBikes}
@@ -111,7 +111,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                           )}
                         />
                       }
-                      bottom={
+                      second={
                         <MobilityStat
                           svg={Parking}
                           primaryStat={

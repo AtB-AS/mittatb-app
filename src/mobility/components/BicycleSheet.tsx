@@ -93,7 +93,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                 <GenericSectionItem>
                   <View style={style.content}>
                     <MobilityStats
-                      top={
+                      first={
                         (vehicle.vehicleType.propulsionType === 'ELECTRIC' ||
                           vehicle.vehicleType.propulsionType ===
                             'ELECTRIC_ASSIST') &&
@@ -114,7 +114,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                           />
                         )
                       }
-                      bottom={
+                      second={
                         <PricingPlan
                           operator={operatorName}
                           plan={vehicle.pricingPlan}

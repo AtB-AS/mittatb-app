@@ -3,15 +3,15 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 
 type MobilityStatsProps = {
-  top: JSX.Element;
-  bottom: JSX.Element;
+  first: JSX.Element;
+  second: JSX.Element;
 };
-export const MobilityStats = ({top, bottom}: MobilityStatsProps) => {
+export const MobilityStats = ({first, second}: MobilityStatsProps) => {
   const style = useStyles();
   return (
     <View style={style.vehicleStats}>
-      <View style={[style.vehicleStat, style.vehicleStat__first]}>{top}</View>
-      <View style={style.vehicleStat}>{bottom}</View>
+      <View style={[style.vehicleStat, style.vehicleStat__first]}>{first}</View>
+      <View style={style.vehicleStat}>{second}</View>
     </View>
   );
 };

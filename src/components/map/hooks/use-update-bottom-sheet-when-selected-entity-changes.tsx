@@ -7,7 +7,7 @@ import MapboxGL from '@rnmapbox/maps';
 import {Feature, Point} from 'geojson';
 import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
 import {
-  BikeStationSheet,
+  BikeStationBottomSheet,
   CarSharingStationBottomSheet,
   isBicycle,
   isBikeStation,
@@ -106,7 +106,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       } else if (isBikeStation(selectedFeature)) {
         openBottomSheet(
           () => (
-            <BikeStationSheet
+            <BikeStationBottomSheet
               stationId={selectedFeature.properties.id}
               distance={distance}
               close={closeWithCallback}
