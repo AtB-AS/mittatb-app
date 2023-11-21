@@ -21,40 +21,41 @@ const AnonymousPurchases = {
   },
   consequences: {
     title: _(
-      'Når du kjøper anonymt...',
-      'When you buy anonymously...',
-      'Når du kjøper anonymt...',
+      'Begrensninger ved billettkjøp når du ikke logger inn',
+      'Restrictions on anonymous ticket purchases',
+      'Begrensningar ved billettkjøp når du ikkje loggar inn',
     ),
     messages: [
       _(
-        'mister du tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon',
-        'you lose access to previous tickets if you change phones',
-        'mistar du tilgangen til tidlegare kjøpte billettar om du byter eller mistar telefonen din',
+        'Du mister tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon.',
+        'You lose access to previously purchased tickets if you lose or get a new phone.',
+        'Du mistar tilgongen til tidlegare kjøpte billettar om du mistar eller får ny telefon.',
       ),
       _(
-        'har du tilgang på kvitteringer etter kjøp i en begrenset periode',
-        'you only have access to receipts for a limited time',
-        'har du tilgang på kvitteringar i ein avgrensa periode',
+        'Kvitteringer etter kjøp er bare tilgjengelig i en begrenset periode.',
+        'Receipts after purchase are available for a limited time only.',
+        'Kvitteringar etter kjøp er berre tilgjengeleg i ein begrensa periode.',
       ),
       _(
-        'har du selv ansvar for å ta vare på ordre-ID hvis du skulle ha behov for hjelp vedrørende et billettkjøp',
-        'you must save the order ID if you need help regarding a ticket purchase',
-        'har du sjølv ansvaret for å ta vare på ordre-ID om du treng hjelp vedrørande eit billettkjøp',
+        'Du har selv ansvar for å ta vare på ordre-ID hvis du trenger hjelp med billettkjøp.',
+        'You are responsible for taking care of your order ID if you need help with ticket purchases.',
+        'Du har sjølv ansvar for å ta vare på ordre-ID om du treng hjelp med billettkjøp.',
       ),
     ],
     button: {
       accept: {
         label: _(
-          'Jeg godtar begrensningene',
-          'I accept the restrictions',
-          'Eg godtar avgrensingane',
+          'Aksepter begrensninger',
+          'Accept limitations',
+          'Aksepter avgrensingane',
         ),
         a11yHint: _(
-          'Aktiver for å godta begrensningene',
+          'Aktiver for å akseptere begrensningene',
           'Activate to accept the restrictions',
-          'Aktiver for å godta avgrensingane',
+          'Aktiver for å akseptere avgrensingane',
         ),
       },
+      // todo: remove this (login)
       login: {
         label: _('Jeg vil logge inn', 'I want to log in', 'Eg vil logge inn'),
         a11yHint: _(
