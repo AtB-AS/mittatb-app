@@ -3,18 +3,17 @@ import Foundation
 enum AppEndPoint: String {
     case departureFavourites, quayCoordinates
 
-    private var API_BASE_URL: String {
+    private var apiBaseUrl: String {
         guard let hostUrl = Bundle.main.object(forInfoDictionaryKey: "ApiBaseUrl") as? String else {
              fatalError("Not able to read ApiBaseUrl")
         }
         return  hostUrl
      }
 
-
     private var path: String? {
         switch self {
         case .departureFavourites:
-            var urlComponents = URLComponents(string: "\(API_BASE_URL)bff/v2/departure-favorites")
+            var urlComponents = URLComponents(string: "\(apiBaseUrl)bff/v2/departure-favorites")
             urlComponents?.queryItems = [
                 /* Fetching a large number of departures to be able to give the widgetManager a better
                  estimate of the future rerenders needed */
@@ -25,7 +24,7 @@ enum AppEndPoint: String {
 
             return urlComponents?.string
         case .quayCoordinates:
-            return "\(API_BASE_URL)bff/v2/quays-coordinates"
+            return "\(apiBaseUrl)bff/v2/quays-coordinates"
         }
     }
 
