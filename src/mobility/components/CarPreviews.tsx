@@ -19,9 +19,12 @@ type Props = {
  *  Case on version 1.44 :
  *  - If the station capacity is 2 or less : show car image(s)
  *  - If the station capacity is 3 or more : show 1 car image and the plus text
+ *
+ *  @param stationCapacity: Station capacity
+ *  @param vehicleTypesAvailable: Types of available cars, array of CarAvailabilityFragment
+ *  @returns array of vehicle types to show
  */
-
-function calculatePreviewCount(
+function createPreviewArray(
   stationCapacity: number,
   vehicleTypesAvailable: CarAvailabilityFragment[],
 ): CarAvailabilityFragment[] {
@@ -34,10 +37,11 @@ export const CarPreviews = ({
 }: Props) => {
   const style = useSheetStyle();
 
-  const carPreview = calculatePreviewCount(
+  const previewArray = createPreviewArray(
     stationCapacity,
     vehicleTypesAvailable,
-  ).map((vehicle, i) => (
+  );
+  const carPreview = previewArray.map((vehicle, i) => (
     <View
       key={vehicle.vehicleType.id}
       style={[
@@ -46,6 +50,15 @@ export const CarPreviews = ({
       ]}
     >
       <CarImage uri={vehicle.vehicleType.vehicleImage} />
+      {previewArray.length === 1 && vehicle.count == 2 && (
+        /** 
+         * show duplicate image if only 1 vehicle type is available
+         * and there are more than 1 of that specific vehicle type.
+         */
+        <View style={style.duplicateImage}>
+            <CarImage uri={vehicle.vehicleType.vehicleImage}/>
+        </View>
+      )}
     </View>
   ));
 
@@ -79,10 +92,14 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     carImage: {
       flexShrink: 1,
       flexGrow: 0,
+      flexDirection: 'row',
       marginRight: theme.spacings.xSmall,
     },
     carImageLast: {
       marginRight: 0,
+    },
+    duplicateImage: {
+      marginLeft: theme.spacings.xSmall, 
     },
     moreCarsContainer: {
       height: 40,
