@@ -36,20 +36,22 @@ export const OperatorBenefit = ({
       <Section>
         <GenericSectionItem>
           <View style={style.benefitContainer}>
-              {isUserEligible && benefit.imageWhenActive && (
-                <Image
-                  style={style.benefitImage as ImageStyle}
-                  source={{uri: benefit.imageWhenActive}}
-                />
-              )}
-              {!isUserEligible && benefit.imageWhenNotActive && (
-                <Image
-                  style={style.benefitImage as ImageStyle}
-                  source={{uri: benefit.imageWhenNotActive}}
-                />
-              )}
+            {isUserEligible && benefit.imageWhenActive && (
+              <Image
+                style={style.benefitImage as ImageStyle}
+                source={{uri: benefit.imageWhenActive}}
+              />
+            )}
+            {!isUserEligible && benefit.imageWhenNotActive && (
+              <Image
+                style={style.benefitImage as ImageStyle}
+                source={{uri: benefit.imageWhenNotActive}}
+              />
+            )}
             <View style={style.benefitContent}>
-              <ThemeText type="body__primary--bold">{heading}</ThemeText>
+              {heading && (
+                <ThemeText type="body__primary--bold">{heading}</ThemeText>
+              )}
               <ThemeText>{text}</ThemeText>
             </View>
           </View>
