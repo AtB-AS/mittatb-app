@@ -29,6 +29,9 @@ import {
 } from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
+import {TokenToggleInfoComponent} from '@atb/token-toggle-info';
+import {useIsFocused} from '@react-navigation/native';
+import {useTokenToggleDetails} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/use-token-toggle-details';
 
 type Props = {onAfterSave: () => void};
 
@@ -41,7 +44,15 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {tokens, toggleToken} = useMobileTokenContextState();
+  const {tokens, deviceInspectionStatus, toggleToken} =
+    useMobileTokenContextState();
+  const screenHasFocus = useIsFocused();
+  const shouldFetchTokenDetails =
+    screenHasFocus && deviceInspectionStatus !== 'loading';
+  const {shouldShowLoader, toggleLimit} = useTokenToggleDetails(
+    shouldFetchTokenDetails,
+  );
+
   const {serverNow} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
@@ -255,6 +266,14 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             type="error"
             message={t(TravelTokenTexts.toggleToken.errorMessage)}
             style={styles.errorMessageBox}
+          />
+        )}
+
+        {toggleLimit !== undefined && (
+          <TokenToggleInfoComponent
+            shouldShowLoader={shouldShowLoader}
+            componentType="plain"
+            toggleLimit={toggleLimit}
           />
         )}
 
