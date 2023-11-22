@@ -3,7 +3,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
+import {OperatorNameAndLogo} from '@atb/mobility/components/OperatorNameAndLogo';
 import {
   BicycleTexts,
   MobilityTexts,
@@ -88,9 +88,10 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
               )}
               <Section>
                 <GenericSectionItem>
-                  <OperatorLogo
+                  <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    isSmallLogo={true}
                   />
                   <View style={style.stationText}>
                     <ThemeText type="body__secondary" color="secondary">
@@ -124,16 +125,12 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                         />
                       }
                     />
-                    {brandLogoUrl ? (
-                      <OperatorLogo
-                        operatorName={operatorName}
-                        logoUrl={brandLogoUrl}
-                        maxHeight={20}
-                        maxWidth={20}
-                      />
-                    ) : (
-                      <CityBike />
-                    )}
+                    <OperatorNameAndLogo
+                      operatorName={operatorName}
+                      logoUrl={brandLogoUrl}
+                      isSmallLogo={false}
+                      fallback={<CityBike />}
+                    />
                   </View>
                 </GenericSectionItem>
               </Section>

@@ -3,7 +3,7 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
+import {OperatorNameAndLogo} from '@atb/mobility/components/OperatorNameAndLogo';
 import {
   CarSharingTexts,
   MobilityTexts,
@@ -92,11 +92,10 @@ export const CarSharingStationBottomSheet = ({
               )}
               <Section>
                 <GenericSectionItem>
-                  <OperatorLogo
+                  <OperatorNameAndLogo
                     operatorName={operatorName}
-                    maxHeight={20}
-                    maxWidth={20}
                     logoUrl={brandLogoUrl}
+                    isSmallLogo={true}
                   />
                   <View style={style.stationText}>
                     <ThemeText type="body__secondary" color="secondary">

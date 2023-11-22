@@ -12,7 +12,7 @@ import {
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
-import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
+import {OperatorNameAndLogo} from '@atb/mobility/components/OperatorNameAndLogo';
 import {formatRange} from '@atb/mobility/utils';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
@@ -85,9 +85,10 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
               )}
               <Section>
                 <GenericSectionItem>
-                  <OperatorLogo
+                  <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    isSmallLogo={true}
                   />
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -121,14 +122,12 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                         />
                       }
                     />
-                    {brandLogoUrl ? (
-                      <OperatorLogo
-                        operatorName={operatorName}
-                        logoUrl={brandLogoUrl}
-                      />
-                    ) : (
-                      <CityBike />
-                    )}
+                    <OperatorNameAndLogo
+                      operatorName={operatorName}
+                      logoUrl={brandLogoUrl}
+                      isSmallLogo={false}
+                      fallback={<CityBike />}
+                    />
                   </View>
                 </GenericSectionItem>
               </Section>
