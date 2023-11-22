@@ -5,7 +5,7 @@ import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {StyleSheet, useTheme} from '@atb/theme';
 
 type Props = {
-  uri?: string | undefined;
+  uri: string | undefined;
 };
 
 export const CarImage = ({uri}: Props) => {
