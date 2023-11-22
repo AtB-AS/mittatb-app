@@ -15,9 +15,7 @@ import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useIsFocused} from '@react-navigation/native';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {giveFocus} from '@atb/utils/use-focus-on-load';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
-import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 
 export type ToolTipProps = {
   from: RefObject<View> | ReactNode;
@@ -68,12 +66,12 @@ export const ToolTip = ({
       <View
         accessible={true}
         accessibilityLabel={`${heading}. ${text}`}
-        accessibilityRole={'button'}
+        accessibilityRole="button"
         onAccessibilityTap={onRequestClose}
         ref={contentRef}
       >
         <View style={style.heading}>
-          <ThemeText accessibilityLabel={heading} type={'body__primary--bold'}>
+          <ThemeText accessibilityLabel={heading} type="body__primary--bold">
             {heading}
           </ThemeText>
           <TouchableOpacity

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {shadows} from '../shadows';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalytics} from '@atb/analytics';
+import {useToolTipContext} from '@atb/components/popover';
 
 type MapFilterProps = {
   onPress: () => void;
@@ -11,10 +12,19 @@ type MapFilterProps = {
 };
 export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
   const style = useStyle();
+  const buttonRef = useRef(null);
   const analytics = useAnalytics();
+  const {addToolTip} = useToolTipContext();
+
+  useEffect(() => {
+    if (buttonRef) {
+      addToolTip({from: buttonRef, oneTimeKey: 'map-filter'});
+    }
+  }, [addToolTip, buttonRef]);
 
   return (
     <Button
+      ref={buttonRef}
       style={style.filterButton}
       type="inline"
       compact={true}

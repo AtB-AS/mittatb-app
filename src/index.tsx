@@ -33,6 +33,7 @@ import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from './announcements';
+import {ToolTipContextProvider} from '@atb/components/popover/ToolTipContext';
 
 configureAndStartBugsnag();
 
@@ -89,11 +90,13 @@ export const App = () => {
                                           <GlobalMessagesContextProvider>
                                             <AnnouncementsContextProvider>
                                               <ReactQueryProvider>
-                                                <BottomSheetProvider>
-                                                  <FeedbackQuestionsProvider>
-                                                    <RootStack />
-                                                  </FeedbackQuestionsProvider>
-                                                </BottomSheetProvider>
+                                                <ToolTipContextProvider>
+                                                  <BottomSheetProvider>
+                                                    <FeedbackQuestionsProvider>
+                                                      <RootStack />
+                                                    </FeedbackQuestionsProvider>
+                                                  </BottomSheetProvider>
+                                                </ToolTipContextProvider>
                                               </ReactQueryProvider>
                                             </AnnouncementsContextProvider>
                                           </GlobalMessagesContextProvider>

@@ -1,13 +1,21 @@
-import {ToolTipProps, ToolTip} from './ToolTip';
+import {ToolTip} from './ToolTip';
 import {storage, StorageModelKeysEnum} from '@atb/storage';
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {ToolTipKey} from './types';
+import {useTranslation} from '@atb/translations';
+import OneTimeToolTipTexts from '@atb/translations/components/OneTimeToolTip';
 
-type Props = ToolTipProps & {oneTimeKey: string};
+export type Props = {
+  from: React.RefObject<JSX.Element | null>;
+  oneTimeKey: ToolTipKey;
+  enabled: boolean;
+};
 
 export const OneTimeToolTip = (props: Props) => {
   const [toolTips, setToolTips] = useState<string[]>();
   const isVisible =
-    props.isOpen && toolTips && !toolTips.includes(props.oneTimeKey);
+    props.enabled && toolTips && !toolTips.includes(props.oneTimeKey);
+  const {t} = useTranslation();
 
   useEffect(() => {
     getSeenToolTips().then(setToolTips);
@@ -29,14 +37,13 @@ export const OneTimeToolTip = (props: Props) => {
       storage.set(StorageModelKeysEnum.OneTimeToolTip, JSON.stringify(newSeen));
       setToolTips(newSeen);
     });
-    if (props.onClose) props.onClose();
   };
 
   return (
     <ToolTip
       {...props}
-      heading={props.heading}
-      text={props.text}
+      heading={t(OneTimeToolTipTexts[props.oneTimeKey].heading)}
+      text={t(OneTimeToolTipTexts[props.oneTimeKey].text)}
       isOpen={isVisible}
       onClose={setToolTipsRead}
     />
