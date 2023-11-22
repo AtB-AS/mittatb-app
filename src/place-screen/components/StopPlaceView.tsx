@@ -131,7 +131,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
           )}
           {mode === 'Map' ? (
             <>
-              <WalkingDistance distance={props.distance} />
+              <WalkingDistance distance={props.distance} isMobility={false} />
               <View style={styles.buttonsContainer}>
                 <View style={styles.travelButton}>
                   <Button

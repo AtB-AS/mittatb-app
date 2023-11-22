@@ -22,8 +22,8 @@ import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {MobilityDistance} from '@atb/mobility/components/MobilityDistance';
 import {CarPreviews} from './CarPreviews';
+import {WalkingDistance} from '@atb/components/walking-distance';
 
 type Props = {
   stationId: string;
@@ -101,7 +101,7 @@ export const CarSharingStationBottomSheet = ({
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <MobilityDistance distance={distance} />
+                    <WalkingDistance distance={distance} isMobility={true} />
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -234,10 +234,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
 
 const totalAvailableCars = (
   vehicleTypesAvailable: CarAvailabilityFragment[] | undefined,
-): number => {
-  return (
-    vehicleTypesAvailable
-      ?.map((v) => v.count)
-      .reduce((sum, count) => sum + count, 0) ?? 0
-  );
-};
+) =>
+  vehicleTypesAvailable
+    ?.map((v) => v.count)
+    .reduce((sum, count) => sum + count, 0) ?? 0;

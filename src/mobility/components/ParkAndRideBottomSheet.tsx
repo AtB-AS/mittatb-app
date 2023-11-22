@@ -72,7 +72,7 @@ export const ParkAndRideBottomSheet = ({
         setFocusOnLoad={false}
       />
       <ScrollView>
-        <WalkingDistance distance={distance} />
+        <WalkingDistance distance={distance} isMobility={false} />
         <View style={style.buttonsContainer}>
           <View style={style.travelButton}>
             <Button
