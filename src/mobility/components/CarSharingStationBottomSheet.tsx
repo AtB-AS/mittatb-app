@@ -95,7 +95,6 @@ export const CarSharingStationBottomSheet = ({
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
-                    isSmallLogo={true}
                   />
                   <View style={style.stationText}>
                     <ThemeText type="body__secondary" color="secondary">

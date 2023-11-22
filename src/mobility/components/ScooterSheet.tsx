@@ -98,7 +98,6 @@ export const ScooterSheet = ({
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
-                    isSmallLogo={true}
                   />
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -129,7 +128,7 @@ export const ScooterSheet = ({
                     <OperatorNameAndLogo
                       operatorName={operatorName}
                       logoUrl={brandLogoUrl}
-                      isSmallLogo={false}
+                      logoSize='large'
                       fallback={<Scooter />}
                     />
                   </View>

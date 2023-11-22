@@ -91,7 +91,6 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
-                    isSmallLogo={true}
                   />
                   <View style={style.stationText}>
                     <ThemeText type="body__secondary" color="secondary">
@@ -128,7 +127,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                     <OperatorNameAndLogo
                       operatorName={operatorName}
                       logoUrl={brandLogoUrl}
-                      isSmallLogo={false}
+                      logoSize='large'
                       fallback={<CityBike />}
                     />
                   </View>

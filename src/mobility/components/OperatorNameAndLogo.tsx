@@ -12,8 +12,7 @@ import {StyleSheet} from '@atb/theme';
  * Please see figma page below for reference
  * https://www.figma.com/file/zdZwvobgpEWSagKt0tderx/App?node-id=20467-42962
  */
-const LARGE_LOGO_MAX_HEIGHT_WIDTH = 50;
-const SMALL_LOGO_MAX_HEIGHT_WIDTH = 20;
+const LOGO_SIZES = {"small": 20, "large": 50}
 
 /**
  * @param operatorName will only be displayed on small logo
@@ -21,7 +20,7 @@ const SMALL_LOGO_MAX_HEIGHT_WIDTH = 20;
  * @param logoUrl logo to be displayed, can be SVG or PNG, 
  *                if SVG, show using <SvgCssUri>, otherwise use <Image> 
  * 
- * @param isSmallLogo determines small or large logo (see Figma)
+ * @param logoSize determines small or large logo (see Figma)
  * 
  * @param fallback logo to be used when the logo URL is null
  * 
@@ -29,26 +28,24 @@ const SMALL_LOGO_MAX_HEIGHT_WIDTH = 20;
 type OperatorNameAndLogoProps = {
   operatorName: string;
   logoUrl: string | undefined;
-  isSmallLogo: boolean;
+  logoSize?: "small" | "large";
   fallback?: JSX.Element
 };
 
 export const OperatorNameAndLogo = ({
   operatorName,
   logoUrl,
-  isSmallLogo,
+  logoSize = "small",
   fallback
 }: OperatorNameAndLogoProps) => {
   const {enable_vehicle_operator_logo} = useRemoteConfig();
   const isSvg = (url: string) => url.endsWith('.svg');
   const style = useSheetStyle();
 
-  const logoHeight = isSmallLogo ? SMALL_LOGO_MAX_HEIGHT_WIDTH : LARGE_LOGO_MAX_HEIGHT_WIDTH;
-  const logoWidth = isSmallLogo ? SMALL_LOGO_MAX_HEIGHT_WIDTH : LARGE_LOGO_MAX_HEIGHT_WIDTH;
-  const logoContainerStyle = isSmallLogo ? style.logoContainerSmall : style.logoContainerLarge;
+  const logoContainerStyle = logoSize === 'small' ? style.logoContainerSmall : style.logoContainerLarge;
 
   // don't show operator name if it is a large logo
-  const logoOperatorName = isSmallLogo ? operatorName : undefined
+  const logoOperatorName = logoSize === 'small' ? operatorName : undefined
 
   return (
     <View style={logoContainerStyle}>
@@ -57,14 +54,14 @@ export const OperatorNameAndLogo = ({
         (isSvg(logoUrl) ? (
           <SvgCssUri
             style={style.logo}
-            height={logoHeight}
-            width={logoWidth}
+            height={LOGO_SIZES[logoSize]}
+            width={LOGO_SIZES[logoSize]}
             uri={logoUrl}
           />
         ) : (
           <Image
             source={{uri: logoUrl}}
-            style={{height: logoHeight, width: logoWidth}}
+            style={{height: LOGO_SIZES[logoSize], width: LOGO_SIZES[logoSize]}}
             resizeMode="contain"
           />
         )) : fallback }

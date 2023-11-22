@@ -88,7 +88,6 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
-                    isSmallLogo={true}
                   />
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -125,7 +124,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                     <OperatorNameAndLogo
                       operatorName={operatorName}
                       logoUrl={brandLogoUrl}
-                      isSmallLogo={false}
+                      logoSize='large'
                       fallback={<CityBike />}
                     />
                   </View>
