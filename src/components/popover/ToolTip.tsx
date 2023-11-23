@@ -15,14 +15,13 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
-export const TOOLTIP_ANIMATION_DURATION = 200;
-
 export type ToolTipProps = {
   from: React.RefObject<JSX.Element | null>;
   heading?: string;
   text: string;
   isOpen?: boolean;
   onClose?: () => void;
+  animationDuration?: number;
 };
 export const ToolTip = ({
   from,
@@ -30,6 +29,7 @@ export const ToolTip = ({
   onClose,
   heading,
   text,
+  animationDuration = 200,
 }: ToolTipProps) => {
   const style = useStyles();
   const insets = useSafeAreaInsets();
@@ -38,7 +38,7 @@ export const ToolTip = ({
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const shouldShow = isOpen && !isScreenReaderEnabled;
 
-  const onRequestClose = () => {
+  const handleClose = () => {
     if (onClose) onClose();
   };
 
@@ -46,8 +46,9 @@ export const ToolTip = ({
     <Popover
       from={from}
       isVisible={shouldShow}
-      onCloseComplete={onRequestClose}
-      animationConfig={{duration: TOOLTIP_ANIMATION_DURATION}}
+      onCloseComplete={handleClose}
+      onRequestClose={handleClose}
+      animationConfig={{duration: animationDuration}}
       popoverStyle={style.popover}
       displayAreaInsets={insets}
       verticalOffset={
@@ -58,7 +59,7 @@ export const ToolTip = ({
         accessible={true}
         accessibilityLabel={`${heading}. ${text}`}
         accessibilityRole="button"
-        onAccessibilityTap={onRequestClose}
+        onAccessibilityTap={handleClose}
         ref={contentRef}
       >
         <View style={style.heading}>
@@ -66,7 +67,7 @@ export const ToolTip = ({
             {heading}
           </ThemeText>
           <TouchableOpacity
-            onPress={onRequestClose}
+            onPress={handleClose}
             accessibilityLabel={t(ScreenHeaderTexts.headerButton.close.text)}
           >
             <ThemeIcon style={style.closeIcon} svg={Close} />

@@ -1,1 +1,5 @@
-export type ToolTipKey = 'map-filter' | 'travel-search-filter';
+export type ToolTipKey =
+  | 'map-filter'
+  | 'map-filter-test'
+  | 'on-behalf-of'
+  | 'recent-fare-contract';
