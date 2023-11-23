@@ -5,7 +5,7 @@ import {
 } from '@react-native-firebase/messaging';
 import {useNavigation} from '@react-navigation/native';
 import {useCallback, useEffect} from 'react';
-import {NotificationPayload, NotificationPayloadType} from './types';
+import {PushNotificationPayloadType, PushNotificationData} from './types';
 import Bugsnag from '@bugsnag/react-native';
 
 export function useOnPushNotificationOpened() {
@@ -13,14 +13,16 @@ export function useOnPushNotificationOpened() {
 
   const onMessage = useCallback(
     (message: FirebaseMessagingTypes.RemoteMessage) => {
-      const isKnownType = Object.values(NotificationPayloadType).includes(
-        message.data?.type as NotificationPayloadType,
-      );
-      if (!isKnownType) return;
-
-      const messageData = message.data as NotificationPayload;
+      const payload = PushNotificationData.safeParse(message.data);
+      if (!payload.success) {
+        Bugsnag.leaveBreadcrumb(
+          `App was opended with unhandled notification type ${message.data?.type}`,
+        );
+        return;
+      }
+      const messageData = payload.data;
       switch (messageData.type) {
-        case NotificationPayloadType.fareContractExpiry:
+        case PushNotificationPayloadType.fareContractExpiry:
           navigate('Root_TabNavigatorStack', {
             screen: 'TabNav_TicketingStack',
             params: {
@@ -30,11 +32,6 @@ export function useOnPushNotificationOpened() {
               },
             },
           });
-          return;
-        default:
-          Bugsnag.leaveBreadcrumb(
-            `App was opened with unhandled notification type: ${messageData.type}`,
-          );
           return;
       }
     },

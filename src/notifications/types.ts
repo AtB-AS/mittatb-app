@@ -1,3 +1,5 @@
+import {z} from 'zod';
+
 export type NotificationConfigType = 'mode' | 'group';
 
 export interface NotificationConfigValue {
@@ -18,11 +20,13 @@ export type NotificationConfig = {
   groups: NotificationConfigGroup[];
 };
 
-export type NotificationPayload = {
-  type: NotificationPayloadType.fareContractExpiry;
-  fareContractId: string;
-};
-
-export enum NotificationPayloadType {
+export enum PushNotificationPayloadType {
   fareContractExpiry = 'FARE_CONTRACT_EXPIRY',
 }
+
+// Can be updated to z.union when we add more types:
+// `z.union([z.object({type: a}), z.object({type: b})])`
+export const PushNotificationData = z.object({
+  type: z.literal(PushNotificationPayloadType.fareContractExpiry),
+  fareContractId: z.string(),
+});
