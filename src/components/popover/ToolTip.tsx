@@ -1,7 +1,6 @@
 import Popover from 'react-native-popover-view';
-import React, {ReactNode, RefObject, useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {
-  AccessibilityInfo,
   Dimensions,
   Platform,
   StatusBar,
@@ -13,12 +12,13 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useIsFocused} from '@react-navigation/native';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
+export const TOOLTIP_ANIMATION_DURATION = 200;
+
 export type ToolTipProps = {
-  from: RefObject<View> | ReactNode;
+  from: React.RefObject<JSX.Element | null>;
   heading?: string;
   text: string;
   isOpen?: boolean;
@@ -33,30 +33,21 @@ export const ToolTip = ({
 }: ToolTipProps) => {
   const style = useStyles();
   const insets = useSafeAreaInsets();
-  const isFocused = useIsFocused();
   const {t} = useTranslation();
   const contentRef = useRef(null);
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const shouldShow = isOpen && !isScreenReaderEnabled;
 
-  useEffect(() => {
-    console.log('screen reader', isScreenReaderEnabled, 'isOpen', isOpen);
-    if (isOpen && isScreenReaderEnabled) {
-      AccessibilityInfo.announceForAccessibility(`${heading}. ${text}`);
-    }
-  }, [isOpen, isScreenReaderEnabled]);
-
   const onRequestClose = () => {
     if (onClose) onClose();
   };
-
-  if (!isFocused) return null;
 
   return (
     <Popover
       from={from}
       isVisible={shouldShow}
-      onRequestClose={onRequestClose}
+      onCloseComplete={onRequestClose}
+      animationConfig={{duration: TOOLTIP_ANIMATION_DURATION}}
       popoverStyle={style.popover}
       displayAreaInsets={insets}
       verticalOffset={

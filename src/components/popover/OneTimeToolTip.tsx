@@ -9,6 +9,7 @@ export type Props = {
   from: React.RefObject<JSX.Element | null>;
   oneTimeKey: ToolTipKey;
   enabled: boolean;
+  onClose: () => void;
 };
 
 export const OneTimeToolTip = (props: Props) => {
@@ -36,6 +37,7 @@ export const OneTimeToolTip = (props: Props) => {
         .concat(props.oneTimeKey);
       storage.set(StorageModelKeysEnum.OneTimeToolTip, JSON.stringify(newSeen));
       setToolTips(newSeen);
+      props.onClose();
     });
   };
 

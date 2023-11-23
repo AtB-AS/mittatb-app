@@ -12,7 +12,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React, {useRef} from 'react';
+import React from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
@@ -58,8 +58,6 @@ import {
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeacons} from '@atb/beacons/use-beacons';
-import {OneTimeToolTip} from '@atb/components/popover';
-import {useToolTipContext} from '@atb/components/popover/ToolTipContext';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -75,8 +73,6 @@ export const RootStack = () => {
 
   useBeacons();
   useTestIds();
-  const statusBar = useRef();
-  const {current} = useToolTipContext();
 
   if (isLoading) {
     return null;
@@ -404,13 +400,6 @@ export const RootStack = () => {
                 />
               </Stack.Group>
             </Stack.Navigator>
-            {current && current.oneTimeKey && (
-              <OneTimeToolTip
-                from={current.from}
-                oneTimeKey={current.oneTimeKey}
-                enabled={true}
-              />
-            )}
           </NavigationContainer>
         </LoadingScreenBoundary>
       </Host>

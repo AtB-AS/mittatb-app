@@ -1,5 +1,7 @@
 import React, {createContext, useCallback, useContext, useState} from 'react';
 import {ToolTipKey} from './types';
+import {OneTimeToolTip} from './OneTimeToolTip';
+import {TOOLTIP_ANIMATION_DURATION} from './ToolTip';
 
 type ToolTip = {
   from: React.RefObject<JSX.Element | null>;
@@ -9,23 +11,48 @@ type ToolTip = {
 export type ToolTipContextType = {
   current: ToolTip | undefined;
   addToolTip: (toolTip: ToolTip) => void;
+  onToolTipClose: (oneTimeKey: ToolTipKey) => void;
 };
 
 const ToolTipContext = createContext<ToolTipContextType>({
   current: undefined,
   addToolTip: () => {},
+  onToolTipClose: () => {},
 });
 
 export const ToolTipContextProvider: React.FC = ({children}) => {
-  const [current, setCurrent] = useState<ToolTip>();
+  // Queue of tooltips to display
+  const [toolTips, setToolTips] = useState<ToolTip[]>([]);
 
   const addToolTip = useCallback((toolTip: ToolTip) => {
-    console.log('Setting current tooltip: ', toolTip);
-    setCurrent(toolTip);
+    setToolTips((val) => [...val, toolTip]);
+  }, []);
+
+  const onToolTipClose = useCallback(() => {
+    // Remove the first tooltip from the queue after the close animation has finished.
+    setTimeout(
+      () =>
+        setToolTips((val) => {
+          const [_, ...rest] = val;
+          return rest;
+        }),
+      TOOLTIP_ANIMATION_DURATION,
+    );
   }, []);
 
   return (
-    <ToolTipContext.Provider value={{current, addToolTip}}>
+    <ToolTipContext.Provider
+      value={{current: toolTips[0], addToolTip, onToolTipClose}}
+    >
+      {toolTips[0] && toolTips[0].oneTimeKey && (
+        <OneTimeToolTip
+          key={toolTips[0].oneTimeKey}
+          from={toolTips[0].from}
+          oneTimeKey={toolTips[0].oneTimeKey}
+          enabled={true}
+          onClose={onToolTipClose}
+        />
+      )}
       {children}
     </ToolTipContext.Provider>
   );
