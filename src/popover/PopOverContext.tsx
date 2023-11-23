@@ -27,20 +27,20 @@ export const PopOverContextProvider: React.FC = ({children}) => {
   const {t} = useTranslation();
   const current = popOvers[0];
 
-  const addToolTip = useCallback(
-    (toolTip: PopOverType) => {
-      if (!isSeen(toolTip.oneTimeKey)) {
+  const addPopOver = useCallback(
+    (popOver: PopOverType) => {
+      if (!isSeen(popOver.oneTimeKey)) {
         // Setting a timeout before adding the popover to allow potential page transitions
-        // or similar animations to complete before the tool tip is displayed.
+        // or similar animations to complete before the popover is displayed.
         setTimeout(() => {
-          setPopOvers((val) => [...val, toolTip]);
+          setPopOvers((val) => [...val, popOver]);
         }, 500);
       }
     },
     [isSeen],
   );
 
-  const onToolTipClose = useCallback(
+  const onClose = useCallback(
     async (oneTimeKey: PopOverKey) => {
       await setPopOverSeen(oneTimeKey);
       // Remove the first popover from the queue after the close animation has finished.
@@ -57,7 +57,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
   );
 
   return (
-    <PopOverContext.Provider value={{addPopOver: addToolTip}}>
+    <PopOverContext.Provider value={{addPopOver}}>
       {current && (
         <PopOver
           key={current.oneTimeKey}
@@ -66,7 +66,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
           heading={t(OneTimePopOverTexts[current.oneTimeKey].heading)}
           text={t(OneTimePopOverTexts[current.oneTimeKey].text)}
           animationDuration={POPOVER_ANIMATION_DURATION}
-          onClose={() => onToolTipClose(current.oneTimeKey)}
+          onClose={() => onClose(current.oneTimeKey)}
         />
       )}
       {children}
