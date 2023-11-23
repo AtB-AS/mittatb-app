@@ -62,6 +62,18 @@ index 4bfa945..62872e3 100644
  // clang-format off
  RCT_EXPORT_METHOD(multiGet:(NSArray<NSString *> *)keys
                    callback:(RCTResponseSenderBlock)callback)
+diff --git a/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts b/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
+index 03bef6b..6b73491 100644
+--- a/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
++++ b/node_modules/@react-native-async-storage/async-storage/lib/typescript/types.d.ts
+@@ -28,6 +28,7 @@ export type AsyncStorageHook = {
+  * See https://react-native-async-storage.github.io/async-storage/docs/api
+  */
+ export type AsyncStorageStatic = {
++    setAppGroupName: (groupName?: string, callback?: Callback) => Promise<void>;
+     /**
+      * Fetches an item for a `key` and invokes a callback upon completion.
+      *
 diff --git a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts b/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
 index d7cbaf9..00b8c32 100644
 --- a/node_modules/@react-native-async-storage/async-storage/src/AsyncStorage.native.ts
