@@ -33,7 +33,7 @@ import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from './announcements';
-import {ToolTipContextProvider} from '@atb/components/popover/ToolTipContext';
+import {ToolTipContextProvider} from '@atb/components/popover';
 
 configureAndStartBugsnag();
 
