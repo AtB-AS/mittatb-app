@@ -1,6 +1,6 @@
 import React, {createContext, useCallback, useContext, useState} from 'react';
 import {PopOverKey} from './types';
-import {PopOver} from './PopOver';
+import {PopOver} from '@atb/components/popover';
 import {useOneTimePopover} from './use-one-time-popover';
 import OneTimePopOverTexts from '@atb/translations/components/OneTimePopOver';
 import {useTranslation} from '@atb/translations';
