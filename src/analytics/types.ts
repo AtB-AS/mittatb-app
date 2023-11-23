@@ -7,9 +7,10 @@ export type AnalyticsEventContext =
   | 'Loading boundary'
   | 'Map'
   | 'Mobility'
+  | 'Parking violations'
+  | 'Profile'
   | 'Receipt'
+  | 'Ticket assistant'
   | 'Ticketing'
   | 'Trip details'
-  | 'Trip search'
-  | 'Ticket assistant'
-  | 'Parking violations';
+  | 'Trip search';

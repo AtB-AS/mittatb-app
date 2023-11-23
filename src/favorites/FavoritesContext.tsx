@@ -1,4 +1,10 @@
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {departures, places, StoredType} from './storage';
 import {
   FavoriteDeparture,
@@ -66,6 +72,32 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
     populateFavorites();
   }, []);
 
+  const potentiallyMigrateFavoriteDepartures = useCallback(
+    async (
+      itemsWithDestinationDisplayMigrationPair?: ItemWithDestinationDisplayMigrationPairType[],
+    ) => {
+      if (!itemsWithDestinationDisplayMigrationPair?.length) return;
+
+      const destinationDisplayMigrationPairs =
+        getUniqueDestinationDisplayMigrationPairs(
+          itemsWithDestinationDisplayMigrationPair,
+        );
+
+      const {upToDateFavoriteDepartures, aFavoriteDepartureWasUpdated} =
+        getUpToDateFavoriteDepartures(
+          favoriteDepartures,
+          destinationDisplayMigrationPairs,
+        );
+
+      if (aFavoriteDepartureWasUpdated) {
+        setFavoriteDeparturesState(upToDateFavoriteDepartures);
+        await departures.setFavorites(upToDateFavoriteDepartures);
+        RCTWidgetUpdater.refreshWidgets();
+      }
+    },
+    [favoriteDepartures],
+  );
+
   const contextValue: FavoriteContextState = {
     favorites,
     favoriteDepartures,
@@ -115,28 +147,7 @@ export const FavoritesContextProvider: React.FC = ({children}) => {
       await departures.setFavorites(favorites);
       RCTWidgetUpdater.refreshWidgets();
     },
-    async potentiallyMigrateFavoriteDepartures(
-      itemsWithDestinationDisplayMigrationPair,
-    ) {
-      if (!itemsWithDestinationDisplayMigrationPair?.length) return;
-
-      const destinationDisplayMigrationPairs =
-        getUniqueDestinationDisplayMigrationPairs(
-          itemsWithDestinationDisplayMigrationPair,
-        );
-
-      const {upToDateFavoriteDepartures, aFavoriteDepartureWasUpdated} =
-        getUpToDateFavoriteDepartures(
-          favoriteDepartures,
-          destinationDisplayMigrationPairs,
-        );
-
-      if (aFavoriteDepartureWasUpdated) {
-        setFavoriteDeparturesState(upToDateFavoriteDepartures);
-        await departures.setFavorites(upToDateFavoriteDepartures);
-        RCTWidgetUpdater.refreshWidgets();
-      }
-    },
+    potentiallyMigrateFavoriteDepartures,
     async setDashboardFavorite(id: string, value: boolean) {
       const updatedFavorites = favoriteDepartures.map((f) =>
         f.id == id ? {...f, visibleOnDashboard: value} : f,
