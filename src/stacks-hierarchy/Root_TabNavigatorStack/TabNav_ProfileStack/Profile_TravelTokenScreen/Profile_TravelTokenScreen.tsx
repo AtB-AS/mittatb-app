@@ -10,7 +10,7 @@ import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_Pr
 import {ChangeTokenAction} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/ChangeTokenAction';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useIsFocused} from '@react-navigation/native';
-import {useTokenToggleDetails} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/use-token-toggle-details';
+import {useTokenToggleDetails} from '@atb/utils/use-token-toggle-details';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
@@ -21,7 +21,8 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const {deviceInspectionStatus} = useMobileTokenContextState();
   const screenHasFocus = useIsFocused();
   const {disable_travelcard} = useRemoteConfig();
-  const shouldFetchTokenDetails = screenHasFocus && deviceInspectionStatus !== 'loading';
+  const shouldFetchTokenDetails =
+    screenHasFocus && deviceInspectionStatus !== 'loading';
   const {shouldShowLoader, toggleLimit, maxToggleLimit} = useTokenToggleDetails(
     shouldFetchTokenDetails,
   );

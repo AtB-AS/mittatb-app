@@ -35,7 +35,7 @@ const ChangeTokenAction = ({
             ? t(TravelTokenTexts.travelToken.changeTokenWithoutTravelcardButton)
             : t(TravelTokenTexts.travelToken.changeTokenButton)
         }
-        disabled={mobileTokenStatus !== 'success' || toggleLimit !== 0}
+        disabled={mobileTokenStatus !== 'success' || toggleLimit === 0}
         onPress={onChange}
         testID="switchTokenButton"
         icon={<ThemeIcon svg={Swap} />}

@@ -31,7 +31,7 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
 import {TokenToggleInfoComponent} from '@atb/token-toggle-info';
 import {useIsFocused} from '@react-navigation/native';
-import {useTokenToggleDetails} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/use-token-toggle-details';
+import {useTokenToggleDetails} from '@atb/utils/use-token-toggle-details';
 
 type Props = {onAfterSave: () => void};
 
@@ -274,6 +274,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             shouldShowLoader={shouldShowLoader}
             componentType="plain"
             toggleLimit={toggleLimit}
+            textColor="background_accent_0"
           />
         )}
 

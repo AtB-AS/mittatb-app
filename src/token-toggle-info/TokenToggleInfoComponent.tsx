@@ -10,17 +10,20 @@ import {
   formatToVerboseFullDate,
 } from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
+import {StaticColor} from '@atb/theme/colors';
 
 type ComponentProps = {
   toggleLimit: number;
   shouldShowLoader?: boolean;
   componentType: 'plain' | 'sectioned';
+  textColor?: StaticColor;
 };
 
 export const TokenToggleInfoComponent = ({
   toggleLimit,
   shouldShowLoader,
   componentType,
+  textColor,
 }: ComponentProps) => {
   const style = useStyles();
 
@@ -32,6 +35,7 @@ export const TokenToggleInfoComponent = ({
     containerStyle:
       componentType === 'plain' ? style.container : style.sectionedContainer,
     toggleLimit: toggleLimit,
+    textColor: textColor,
   });
 
   return shouldShowLoader ? loader : content;
@@ -67,9 +71,10 @@ const Loader = (style?: ViewStyle) => <ActivityIndicator style={style} />;
 type ContentProps = {
   containerStyle?: ViewStyle;
   toggleLimit: number;
+  textColor?: StaticColor;
 };
 
-const Content = ({containerStyle, toggleLimit}: ContentProps) => {
+const Content = ({containerStyle, toggleLimit, textColor}: ContentProps) => {
   const {t, language} = useTranslation();
   const style = useStyles();
   const now = new Date();
@@ -127,6 +132,7 @@ const Content = ({containerStyle, toggleLimit}: ContentProps) => {
           toggleLimit,
           countRenewalDateA11yLabel,
         )}
+        color={textColor}
         accessible={true}
       >
         {getToggleInfo(toggleLimit, countRenewalDate)}
