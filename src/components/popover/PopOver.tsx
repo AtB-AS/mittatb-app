@@ -1,4 +1,4 @@
-import Popover from 'react-native-popover-view';
+import RNPopover from 'react-native-popover-view';
 import React, {useRef} from 'react';
 import {
   Dimensions,
@@ -15,7 +15,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
-export type ToolTipProps = {
+export type PopOverProps = {
   from: React.RefObject<JSX.Element | null>;
   heading?: string;
   text: string;
@@ -23,14 +23,14 @@ export type ToolTipProps = {
   onClose?: () => void;
   animationDuration?: number;
 };
-export const ToolTip = ({
+export const PopOver = ({
   from,
   isOpen,
   onClose,
   heading,
   text,
   animationDuration = 200,
-}: ToolTipProps) => {
+}: PopOverProps) => {
   const style = useStyles();
   const insets = useSafeAreaInsets();
   const {t} = useTranslation();
@@ -43,7 +43,7 @@ export const ToolTip = ({
   };
 
   return (
-    <Popover
+    <RNPopover
       from={from}
       isVisible={shouldShow}
       onCloseComplete={handleClose}
@@ -75,7 +75,7 @@ export const ToolTip = ({
         </View>
         <ThemeText accessibilityLabel={text}>{text}</ThemeText>
       </View>
-    </Popover>
+    </RNPopover>
   );
 };
 

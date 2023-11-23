@@ -21,7 +21,7 @@ export enum StorageModelKeysEnum {
   EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
   EnableParkingViolationsReportingDebugOverride = '@ATB_enable_parking_violations_debug_override',
   EnablePushNotificationsDebugOverride = '@ATB_enable_push_notifications_debug_override',
-  OneTimeToolTip = '@ATB_one_time_tool_tips_seen',
+  OneTimePopOver = '@ATB_one_time_popovers_seen',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
@@ -41,7 +41,7 @@ export type StorageModel = {
   '@ATB_feedback_display_stats': string;
   '@ATB_last_mobile_token_user': string;
   '@ATB_user_map_filters': string;
-  '@ATB_one_time_tool_tips_seen': string;
+  '@ATB_one_time_popovers_seen': string;
 };
 
 export type StorageModelTypes = keyof StorageModel | StorageModelKeysTypes;

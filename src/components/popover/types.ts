@@ -1,1 +1,1 @@
-export type ToolTipKey = 'example-tooltip';
+export type PopOverKey = 'example-popover';
