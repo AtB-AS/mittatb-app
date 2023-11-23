@@ -7,21 +7,9 @@ type ToolTipText = {
 };
 
 const OneTimeToolTipTexts: {[key in ToolTipKey]: ToolTipText} = {
-  'map-filter': {
-    heading: _('Map filter 1', '', ''),
-    text: _('Test test', '', ''),
-  },
-  'map-filter-test': {
-    heading: _('Map filter 2', '', ''),
-    text: _('Test test', '', ''),
-  },
-  'recent-fare-contract': {
-    heading: _('Recent fare contract', '', ''),
-    text: _('Test test', '', ''),
-  },
-  'on-behalf-of': {
-    heading: _('Nyhet!', '', ''),
-    text: _('Du kan nå kjøpe en billett og sende den til andre', '', ''),
+  'example-tooltip': {
+    heading: _('', 'Example', ''),
+    text: _('', 'This is an example of how to add tool tips.', ''),
   },
 };
 
