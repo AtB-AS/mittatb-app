@@ -17,3 +17,12 @@ export type NotificationConfig = {
   modes: NotificationConfigMode[];
   groups: NotificationConfigGroup[];
 };
+
+export type NotificationPayload = {
+  type: NotificationPayloadType.fareContractExpiry;
+  fareContractId: string;
+};
+
+export enum NotificationPayloadType {
+  fareContractExpiry = 'FARE_CONTRACT_EXPIRY',
+}

@@ -32,6 +32,7 @@ import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-s
 import {
   usePushNotifications,
   usePushNotificationsEnabled,
+  useOnPushNotificationOpened,
 } from '@atb/notifications';
 import {
   filterValidRightNowFareContract,
@@ -68,6 +69,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     serverNow,
   );
   const {status: notificationStatus} = usePushNotifications();
+  useOnPushNotificationOpened();
 
   useEffect(() => {
     const shouldShowLocationOnboarding =
