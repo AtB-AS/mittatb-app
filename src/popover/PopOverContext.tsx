@@ -7,13 +7,13 @@ import {useTranslation} from '@atb/translations';
 
 export const POPOVER_ANIMATION_DURATION = 200;
 
-type PopOver = {
+type PopOverType = {
   target: React.RefObject<JSX.Element | null>;
   oneTimeKey: PopOverKey;
 };
 
 export type PopOverContextType = {
-  addPopOver: (popOver: PopOver) => void;
+  addPopOver: (popOver: PopOverType) => void;
 };
 
 const PopOverContext = createContext<PopOverContextType>({
@@ -22,13 +22,13 @@ const PopOverContext = createContext<PopOverContextType>({
 
 export const PopOverContextProvider: React.FC = ({children}) => {
   // Queue of popovers to display
-  const [popOvers, setPopOvers] = useState<PopOver[]>([]);
+  const [popOvers, setPopOvers] = useState<PopOverType[]>([]);
   const {isSeen, setPopOverSeen} = useOneTimePopover();
   const {t} = useTranslation();
   const current = popOvers[0];
 
   const addToolTip = useCallback(
-    (toolTip: PopOver) => {
+    (toolTip: PopOverType) => {
       if (!isSeen(toolTip.oneTimeKey)) {
         // Setting a timeout before adding the popover to allow potential page transitions
         // or similar animations to complete before the tool tip is displayed.
