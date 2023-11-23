@@ -41,7 +41,7 @@
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
     "@miblanchard/react-native-slider": "^2.3.1",
-    "@react-native-async-storage/async-storage": "^1.19.3",
+    "@react-native-async-storage/async-storage": "^1.19.8",
     "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-native-community/datetimepicker": "6.7.2",
     "@react-native-firebase/analytics": "~18.5.0",
