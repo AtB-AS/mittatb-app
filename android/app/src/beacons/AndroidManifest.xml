@@ -37,7 +37,7 @@
             android:authorities="${applicationId}.KettleInitializer"
             android:enabled="true"
             android:exported="false"
-            tools:node="merge" />
+            tools:node="remove" />
         <receiver
             android:name="com.kogenta.kettle.core.bluetooth.broadcast.BeaconBroadcastReceiver"
             android:enabled="true"
