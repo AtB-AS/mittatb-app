@@ -81,7 +81,6 @@ const BenefitImage = ({
   eligible,
   style,
 }: BenefitImageProps): JSX.Element => {
-  const styles = useStyles();
 
   return (
     <View style={style}>
