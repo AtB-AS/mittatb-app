@@ -11,59 +11,52 @@ import {
 } from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
+import {useMobileTokenContextState} from '@atb/mobile-token';
+import {useIsFocused} from '@react-navigation/native';
+import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
 
-type ComponentProps = {
-  toggleLimit: number;
-  shouldShowLoader?: boolean;
+type TokenToggleInfoProps = {
   style?: StyleProp<ViewStyle>;
   textColor?: StaticColor;
 };
 
 export const TokenToggleInfoComponent = ({
-  toggleLimit,
-  shouldShowLoader,
   style,
   textColor,
-}: ComponentProps) => {
+}: TokenToggleInfoProps) => {
+  const styles = useStyles();
+  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const screenHasFocus = useIsFocused();
+  const shouldFetchTokenDetails =
+    screenHasFocus && deviceInspectionStatus !== 'loading';
+  const {shouldShowLoader, toggleLimit} = useTokenToggleDetails(
+    shouldFetchTokenDetails,
+  );
+
+  const limit = toggleLimit ?? 0;
+
   return shouldShowLoader ? (
-    <ActivityIndicator />
+    <ActivityIndicator style={[styles.loader, style]} />
   ) : (
-    <Content toggleLimit={toggleLimit} textColor={textColor} style={style} />
+    <TokenToggleContent
+      toggleLimit={limit}
+      textColor={textColor}
+      style={style}
+    />
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flexDirection: 'row',
-    marginTop: theme.spacings.small,
-    marginBottom: theme.spacings.large,
-  },
-  content: {
-    marginLeft: theme.spacings.xSmall,
-    flex: 1,
-  },
-  loader: {
-    alignSelf: 'center',
-    flex: 1,
-    marginTop: theme.spacings.small,
-    marginBottom: theme.spacings.large,
-  },
-  sectionedContainer: {
-    flexDirection: 'row',
-  },
-  sectionedLoader: {
-    alignSelf: 'center',
-    flex: 1,
-  },
-}));
-
-type ContentProps = {
+type TokenToggleContentProps = {
   style?: StyleProp<ViewStyle>;
   toggleLimit: number;
   textColor?: StaticColor;
 };
 
-const Content = ({style, toggleLimit, textColor}: ContentProps) => {
+const TokenToggleContent = ({
+  style,
+  toggleLimit,
+  textColor,
+}: TokenToggleContentProps) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const now = new Date();
@@ -129,3 +122,14 @@ const getToggleInfoIcon = (toggleLimit: number) => {
       return Info;
   }
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  content: {
+    marginLeft: theme.spacings.xSmall,
+    flex: 1,
+  },
+  loader: {
+    alignSelf: 'center',
+    flex: 1,
+  },
+}));

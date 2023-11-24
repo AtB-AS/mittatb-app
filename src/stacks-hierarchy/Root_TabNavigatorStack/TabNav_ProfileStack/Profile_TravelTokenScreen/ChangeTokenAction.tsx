@@ -15,11 +15,9 @@ import {TokenToggleInfoComponent} from '@atb/token-toggle-info';
 const ChangeTokenAction = ({
   onChange,
   toggleLimit,
-  shouldShowLoader,
 }: {
   onChange: () => void;
   toggleLimit?: number;
-  shouldShowLoader?: boolean;
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -43,11 +41,7 @@ const ChangeTokenAction = ({
 
       {toggleLimit !== undefined && (
         <GenericSectionItem>
-          <TokenToggleInfoComponent
-            shouldShowLoader={shouldShowLoader}
-            style={styles.tokenInfoView}
-            toggleLimit={toggleLimit}
-          />
+          <TokenToggleInfoComponent style={styles.tokenInfoView} />
         </GenericSectionItem>
       )}
     </Section>

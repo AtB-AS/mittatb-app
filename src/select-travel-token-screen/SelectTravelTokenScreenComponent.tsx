@@ -30,7 +30,6 @@ import {
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
 import {TokenToggleInfoComponent} from '@atb/token-toggle-info';
-import {useIsFocused} from '@react-navigation/native';
 import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
 
 type Props = {onAfterSave: () => void};
@@ -44,14 +43,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {tokens, deviceInspectionStatus, toggleToken} =
-    useMobileTokenContextState();
-  const screenHasFocus = useIsFocused();
-  const shouldFetchTokenDetails =
-    screenHasFocus && deviceInspectionStatus !== 'loading';
-  const {shouldShowLoader, toggleLimit} = useTokenToggleDetails(
-    shouldFetchTokenDetails,
-  );
+  const {tokens, toggleToken} = useMobileTokenContextState();
+  const {toggleLimit} = useTokenToggleDetails(true);
 
   const {serverNow} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
@@ -271,9 +264,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
 
         {toggleLimit !== undefined && (
           <TokenToggleInfoComponent
-            shouldShowLoader={shouldShowLoader}
             style={styles.tokenInfo}
-            toggleLimit={toggleLimit}
             textColor="background_accent_0"
           />
         )}
