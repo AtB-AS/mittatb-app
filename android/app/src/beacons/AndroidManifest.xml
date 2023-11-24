@@ -18,4 +18,62 @@
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" tools:node="merge"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" tools:node="merge"/>
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" tools:node="merge"/>
+    <!-- Kogenta SDK remove receivers / services -->
+    <service
+        android:name="com.kogenta.kettle.core.mmi.service.SensorService"
+        android:foregroundServiceType="location"
+        android:launchMode="singleInstance"
+        android:enabled="true"
+        android:exported="false"
+        tools:node="merge" />
+    <service
+        android:name="com.kogenta.kettle.core.manager.compatibility.MotionService"
+        android:enabled="true"
+        android:exported="false"
+        tools:node="merge"/>
+    <provider
+        android:name="com.kogenta.kettle.core.api.KettleInitializer"
+        android:authorities="${applicationId}.KettleInitializer"
+        android:enabled="true"
+        android:exported="false"
+        tools:node="merge" />
+    <receiver
+        android:name="com.kogenta.kettle.core.bluetooth.broadcast.BeaconBroadcastReceiver"
+        android:enabled="true"
+        android:exported="false"
+        tools:node="merge">
+        <intent-filter>
+            <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" tools:node="merge"/>
+        </intent-filter>
+    </receiver>
+    <receiver
+        android:name="com.kogenta.kettle.core.broadcast.BootBroadcastReceiver"
+        android:enabled="true"
+        android:exported="false"
+        tools:node="merge">
+        <intent-filter>
+            <action android:name="com.kogenta.kettle.BootBroadcastReceiver.SHUTDOWN" tools:node="merge"/>
+            <action android:name="com.kogenta.kettle.BootBroadcastReceiver.WAKEUP" tools:node="merge"/>
+        </intent-filter>
+    </receiver>
+    <receiver
+        android:name="com.kogenta.kettle.core.broadcast.LocationMotionBroadcastReceiver"
+        android:enabled="true"
+        android:exported="false"
+        tools:node="merge">
+        <intent-filter>
+            <action android:name="com.kogenta.kettle.ActivityBroadcastReceiver" tools:node="merge"/>
+            <action android:name="com.kogenta.kettle.LocationBroadcastReceiver" tools:node="merge"/>
+            <action android:name="com.kogenta.kettle.BatchLocationBroadcastReceiver" tools:node="merge"/>
+        </intent-filter>
+    </receiver>
+    <receiver
+        android:name="com.kogenta.kettle.core.api.StartupBroadcastReceiver"
+        android:enabled="true"
+        android:exported="false"
+        tools:node="merge">
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" tools:node="merge"/>
+        </intent-filter>
+    </receiver>
 </manifest>
