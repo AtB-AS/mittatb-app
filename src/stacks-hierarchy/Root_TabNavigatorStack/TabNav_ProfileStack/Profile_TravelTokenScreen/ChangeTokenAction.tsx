@@ -45,7 +45,7 @@ const ChangeTokenAction = ({
         <GenericSectionItem>
           <TokenToggleInfoComponent
             shouldShowLoader={shouldShowLoader}
-            componentType="sectioned"
+            style={styles.tokenInfoView}
             toggleLimit={toggleLimit}
           />
         </GenericSectionItem>

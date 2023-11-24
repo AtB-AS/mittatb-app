@@ -31,7 +31,7 @@ import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
 import {TokenToggleInfoComponent} from '@atb/token-toggle-info';
 import {useIsFocused} from '@react-navigation/native';
-import {useTokenToggleDetails} from '@atb/utils/use-token-toggle-details';
+import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
 
 type Props = {onAfterSave: () => void};
 
@@ -272,7 +272,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {toggleLimit !== undefined && (
           <TokenToggleInfoComponent
             shouldShowLoader={shouldShowLoader}
-            componentType="plain"
+            style={styles.tokenInfo}
             toggleLimit={toggleLimit}
             textColor="background_accent_0"
           />
@@ -300,6 +300,11 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.static.background.background_accent_0.background,
     flex: 1,
+  },
+  tokenInfo: {
+    flexDirection: 'row',
+    marginTop: theme.spacings.small,
+    marginBottom: theme.spacings.large,
   },
   scrollView: {
     padding: theme.spacings.medium,

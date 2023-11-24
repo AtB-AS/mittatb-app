@@ -2,7 +2,7 @@ import Warning from '@atb/assets/svg/color/icons/status/Warning';
 import Info from '@atb/assets/svg/color/icons/status/Info';
 import Error from '@atb/assets/svg/color/icons/status/Error';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import {ActivityIndicator, View, ViewStyle} from 'react-native';
+import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {ThemeText} from '@atb/components/text';
 import {
@@ -15,30 +15,21 @@ import {StaticColor} from '@atb/theme/colors';
 type ComponentProps = {
   toggleLimit: number;
   shouldShowLoader?: boolean;
-  componentType: 'plain' | 'sectioned';
+  style?: StyleProp<ViewStyle>;
   textColor?: StaticColor;
 };
 
 export const TokenToggleInfoComponent = ({
   toggleLimit,
   shouldShowLoader,
-  componentType,
+  style,
   textColor,
 }: ComponentProps) => {
-  const style = useStyles();
-
-  const loader = Loader(
-    componentType === 'plain' ? style.loader : style.sectionedLoader,
+  return shouldShowLoader ? (
+    <ActivityIndicator />
+  ) : (
+    <Content toggleLimit={toggleLimit} textColor={textColor} style={style} />
   );
-
-  const content = Content({
-    containerStyle:
-      componentType === 'plain' ? style.container : style.sectionedContainer,
-    toggleLimit: toggleLimit,
-    textColor: textColor,
-  });
-
-  return shouldShowLoader ? loader : content;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
@@ -66,17 +57,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-const Loader = (style?: ViewStyle) => <ActivityIndicator style={style} />;
-
 type ContentProps = {
-  containerStyle?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   toggleLimit: number;
   textColor?: StaticColor;
 };
 
-const Content = ({containerStyle, toggleLimit, textColor}: ContentProps) => {
+const Content = ({style, toggleLimit, textColor}: ContentProps) => {
   const {t, language} = useTranslation();
-  const style = useStyles();
+  const styles = useStyles();
   const now = new Date();
   const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
@@ -89,17 +78,6 @@ const Content = ({containerStyle, toggleLimit, textColor}: ContentProps) => {
     nextMonthStartDate,
     language,
   );
-
-  const getToggleInfoIcon = (toggleLimit: number) => {
-    switch (toggleLimit) {
-      case 0:
-        return Error;
-      case 1:
-        return Warning;
-      default:
-        return Info;
-    }
-  };
 
   const getToggleInfo = (toggleLimit: number, countRenewalDate: string) => {
     switch (toggleLimit) {
@@ -124,10 +102,10 @@ const Content = ({containerStyle, toggleLimit, textColor}: ContentProps) => {
   };
 
   return (
-    <View style={containerStyle}>
+    <View style={style}>
       <ThemeIcon svg={getToggleInfoIcon(toggleLimit)} />
       <ThemeText
-        style={style.content}
+        style={styles.content}
         accessibilityLabel={getToggleInfo(
           toggleLimit,
           countRenewalDateA11yLabel,
@@ -139,4 +117,15 @@ const Content = ({containerStyle, toggleLimit, textColor}: ContentProps) => {
       </ThemeText>
     </View>
   );
+};
+
+const getToggleInfoIcon = (toggleLimit: number) => {
+  switch (toggleLimit) {
+    case 0:
+      return Error;
+    case 1:
+      return Warning;
+    default:
+      return Info;
+  }
 };
