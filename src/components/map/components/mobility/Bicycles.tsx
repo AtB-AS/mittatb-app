@@ -8,16 +8,18 @@ import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
 
 type Props = {
   bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+  selectedId: string | number | undefined;
   onClusterClick: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
   ) => void;
 };
 
-export const Bicycles = ({bicycles, onClusterClick}: Props) => {
+export const Bicycles = ({bicycles, selectedId, onClusterClick}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
   const bicycleColor = useTransportationColor(Mode.Bicycle);
+  const selectedBike = selectedId ?? 'nothing';
 
   return (
     <>
@@ -77,10 +79,28 @@ export const Bicycles = ({bicycles, onClusterClick}: Props) => {
       >
         <MapboxGL.SymbolLayer
           id="bicycleIcon"
-          filter={['!', ['has', 'point_count']]}
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['!=', ['get', 'id'], selectedBike],
+          ]}
           minZoomLevel={13.5}
           style={{
             iconImage: 'BikePin',
+            iconSize: 0.85,
+            iconAllowOverlap: true,
+          }}
+        />
+        <MapboxGL.SymbolLayer
+          id="bicycleIconSelected"
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['==', ['get', 'id'], selectedBike],
+          ]}
+          minZoomLevel={13.5}
+          style={{
+            iconImage: 'BikePinSelected',
             iconSize: 0.85,
             iconAllowOverlap: true,
           }}

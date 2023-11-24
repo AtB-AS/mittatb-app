@@ -12,6 +12,7 @@ type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
   mapViewRef: RefObject<MapboxGL.MapView>;
   vehicles: VehicleFeatures;
+  selectedId: string | number | undefined;
   onClusterClick: (feature: Feature<Point, Cluster>) => void;
 };
 
@@ -19,6 +20,7 @@ export const Vehicles = ({
   mapCameraRef,
   mapViewRef,
   vehicles,
+  selectedId,
   onClusterClick,
 }: Props) => {
   const handleClusterClick = async (
@@ -49,10 +51,12 @@ export const Vehicles = ({
     <>
       <Scooters
         scooters={vehicles.scooters}
+        selectedId={selectedId}
         onClusterClick={handleClusterClick}
       />
       <Bicycles
         bicycles={vehicles.bicycles}
+        selectedId={selectedId}
         onClusterClick={handleClusterClick}
       />
     </>

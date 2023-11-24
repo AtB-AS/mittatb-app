@@ -41,6 +41,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
 
   const closeWithCallback = () => {
     closeBottomSheet();
+    setSelectedFeature(undefined);
     closeCallback();
   };
 
@@ -174,4 +175,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction, selectedFeature, isFocused, distance, analytics]);
+
+  return {selectedFeature};
 };

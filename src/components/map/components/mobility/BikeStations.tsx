@@ -7,13 +7,14 @@ import {StationsWithCount} from './Stations';
 
 type Props = {
   stations: StationsWithCount;
+  selectedId: string | number | undefined;
   onClusterClick: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
   ) => void;
 };
 
-export const BikeStations = ({stations, onClusterClick}: Props) => {
+export const BikeStations = ({stations, selectedId, onClusterClick}: Props) => {
   const stationBackgroundColor = useTransportationColor(Mode.Bicycle);
   const stationTextColor = useTransportationColor(
     Mode.Bicycle,
@@ -24,12 +25,13 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
   const symbolStyling = {
     textAnchor: 'center',
     textOffset: [0.75, 0],
-    textColor: stationBackgroundColor,
     textSize: 12,
-    iconImage: 'BikeChip',
     iconAllowOverlap: true,
     iconSize: 0.85,
   };
+
+  // Filter expressions don't like undefined as value
+  const selectedStationId = selectedId ?? 'nothing';
 
   return (
     <>
@@ -40,12 +42,33 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
         cluster
       >
         <MapboxGL.SymbolLayer
-          id="bikeStationPin"
-          filter={['!', ['has', 'point_count']]}
+          id="bikeStationPinSelected"
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['==', ['get', 'id'], selectedStationId],
+          ]}
           minZoomLevel={13}
           style={{
             ...symbolStyling,
             textField: ['get', 'count'],
+            iconImage: 'BikeChipSelected',
+            textColor: stationTextColor,
+          }}
+        />
+        <MapboxGL.SymbolLayer
+          id="bikeStationPin"
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['!=', ['get', 'id'], selectedStationId],
+          ]}
+          minZoomLevel={13}
+          style={{
+            ...symbolStyling,
+            textField: ['get', 'count'],
+            iconImage: 'BikeChip',
+            textColor: stationBackgroundColor,
           }}
         />
       </MapboxGL.ShapeSource>

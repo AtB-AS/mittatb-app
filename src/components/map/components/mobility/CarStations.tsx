@@ -7,13 +7,14 @@ import {StationsWithCount} from './Stations';
 
 type Props = {
   stations: StationsWithCount;
+  selectedId: string | number | undefined;
   onClusterClick: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
   ) => void;
 };
 
-export const CarStations = ({stations, onClusterClick}: Props) => {
+export const CarStations = ({stations, selectedId, onClusterClick}: Props) => {
   const stationBackgroundColor = useTransportationColor(Mode.Car);
   const stationTextColor = useTransportationColor(Mode.Car, undefined, 'text');
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
@@ -21,13 +22,13 @@ export const CarStations = ({stations, onClusterClick}: Props) => {
   const symbolStyling = {
     textAnchor: 'center',
     textOffset: [0.75, 0],
-    textColor: stationBackgroundColor,
     textSize: 12,
     textAllowOverlap: true,
-    iconImage: 'CarChip',
-    iconAllowOverlap: true,
     iconSize: 0.85,
   };
+
+  // Filter expressions don't like undefined as value
+  const selectedStationId = selectedId ?? 'nothing';
 
   return (
     <>
@@ -39,11 +40,32 @@ export const CarStations = ({stations, onClusterClick}: Props) => {
       >
         <MapboxGL.SymbolLayer
           id="carStationPin"
-          filter={['!', ['has', 'point_count']]}
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['!=', ['get', 'id'], selectedStationId],
+          ]}
           minZoomLevel={12}
           style={{
             ...symbolStyling,
             textField: ['get', 'count'],
+            textColor: stationBackgroundColor,
+            iconImage: 'CarChip',
+          }}
+        />
+        <MapboxGL.SymbolLayer
+          id="carStationPinSelected"
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['==', ['get', 'id'], selectedStationId],
+          ]}
+          minZoomLevel={12}
+          style={{
+            ...symbolStyling,
+            textField: ['get', 'count'],
+            textColor: stationTextColor,
+            iconImage: 'CarChipSelected',
           }}
         />
       </MapboxGL.ShapeSource>

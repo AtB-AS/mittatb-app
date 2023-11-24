@@ -17,6 +17,7 @@ import {CarStations} from './CarStations';
 
 type Props = {
   stations: StationFeatures;
+  selectedId: string | number | undefined;
   mapCameraRef: RefObject<Camera>;
   onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };
@@ -26,7 +27,12 @@ export type StationsWithCount = FeatureCollection<
   StationBasicFragment & {count: number}
 >;
 
-export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
+export const Stations = ({
+  stations,
+  selectedId,
+  onClusterClick,
+  mapCameraRef,
+}: Props) => {
   const bikeStations = stationsWithCount(stations.bicycles, FormFactor.Bicycle);
   const carStations = stationsWithCount(stations.cars, FormFactor.Car);
 
@@ -52,9 +58,14 @@ export const Stations = ({stations, onClusterClick, mapCameraRef}: Props) => {
     <>
       <BikeStations
         stations={bikeStations}
+        selectedId={selectedId}
         onClusterClick={handleClusterClick}
       />
-      <CarStations stations={carStations} onClusterClick={handleClusterClick} />
+      <CarStations
+        stations={carStations}
+        selectedId={selectedId}
+        onClusterClick={handleClusterClick}
+      />
     </>
   );
 };

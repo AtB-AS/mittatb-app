@@ -34,7 +34,7 @@ export const Map = (props: MapProps) => {
     [currentCoordinatesRef, initialLocation],
   );
 
-  const {mapLines, selectedCoordinates, onMapClick} =
+  const {mapLines, selectedCoordinates, selectedFeature, onMapClick} =
     useMapSelectionChangeEffect(
       props,
       mapViewRef,
@@ -111,8 +111,8 @@ export const Map = (props: MapProps) => {
           />
           {mapLines && <MapRoute lines={mapLines} />}
           <MapboxGL.UserLocation
-              showsUserHeadingIndicator
-              renderMode={UserLocationRenderMode.Native}
+            showsUserHeadingIndicator
+            renderMode={UserLocationRenderMode.Native}
           />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
@@ -120,6 +120,7 @@ export const Map = (props: MapProps) => {
           {props.vehicles && (
             <Vehicles
               vehicles={props.vehicles.vehicles}
+              selectedId={selectedFeature?.properties?.id}
               mapCameraRef={mapCameraRef}
               mapViewRef={mapViewRef}
               onClusterClick={(feature) => {
@@ -132,6 +133,7 @@ export const Map = (props: MapProps) => {
           )}
           {props.stations && (
             <Stations
+              selectedId={selectedFeature?.properties?.id}
               stations={props.stations.stations}
               mapCameraRef={mapCameraRef}
               onClusterClick={(feature) => {

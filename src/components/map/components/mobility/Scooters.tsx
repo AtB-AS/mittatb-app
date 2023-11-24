@@ -8,16 +8,29 @@ import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
 
 type Props = {
   scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+  selectedId: string | number | undefined;
   onClusterClick: (
     e: OnPressEvent,
     clustersSource: RefObject<ShapeSource>,
   ) => void;
 };
 
-export const Scooters = ({scooters, onClusterClick}: Props) => {
+export const Scooters = ({scooters, selectedId, onClusterClick}: Props) => {
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);
   const vehiclesSource = useRef<MapboxGL.ShapeSource>(null);
   const scooterColor = useTransportationColor(Mode.Scooter);
+  const textColor = useTransportationColor(Mode.Scooter, undefined, 'text');
+
+  // Filter expressions don't like undefined as value
+  const selectedScooter = selectedId ?? 'nothing';
+  const symbolStyling = {
+    textField: ['concat', ['get', 'currentFuelPercent'], '%'],
+    textAnchor: 'center',
+    textOffset: [0.7, -0.25],
+    textSize: 11,
+    iconSize: 0.85,
+    iconAllowOverlap: true,
+  };
 
   return (
     <>
@@ -79,17 +92,30 @@ export const Scooters = ({scooters, onClusterClick}: Props) => {
       >
         <MapboxGL.SymbolLayer
           id="scooterIcon"
-          filter={['!', ['has', 'point_count']]}
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['!=', ['get', 'id'], selectedScooter],
+          ]}
           minZoomLevel={13.5}
           style={{
-            textField: ['concat', ['get', 'currentFuelPercent'], '%'],
-            textAnchor: 'center',
-            textOffset: [0.7, -0.25],
+            ...symbolStyling,
             textColor: scooterColor,
-            textSize: 11,
             iconImage: 'ScooterChip',
-            iconSize: 0.85,
-            iconAllowOverlap: true,
+          }}
+        />
+        <MapboxGL.SymbolLayer
+          id="scooterIconSelected"
+          filter={[
+            'all',
+            ['!', ['has', 'point_count']],
+            ['==', ['get', 'id'], selectedScooter],
+          ]}
+          minZoomLevel={13.5}
+          style={{
+            ...symbolStyling,
+            textColor: textColor,
+            iconImage: 'ScooterChipSelected',
           }}
         />
       </MapboxGL.ShapeSource>
