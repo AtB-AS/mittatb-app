@@ -1,5 +1,5 @@
 import RNPopover from 'react-native-popover-view';
-import React, {useRef} from 'react';
+import React from 'react';
 import {
   Dimensions,
   Platform,
@@ -12,8 +12,6 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 export type PopOverProps = {
   from: React.RefObject<JSX.Element | null>;
@@ -33,10 +31,6 @@ export const PopOver = ({
 }: PopOverProps) => {
   const style = useStyles();
   const insets = useSafeAreaInsets();
-  const {t} = useTranslation();
-  const contentRef = useRef(null);
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const shouldShow = isOpen && !isScreenReaderEnabled;
 
   const handleClose = () => {
     if (onClose) onClose();
@@ -45,7 +39,7 @@ export const PopOver = ({
   return (
     <RNPopover
       from={from}
-      isVisible={shouldShow}
+      isVisible={isOpen}
       onCloseComplete={handleClose}
       onRequestClose={handleClose}
       animationConfig={{duration: animationDuration}}
@@ -55,26 +49,13 @@ export const PopOver = ({
         Platform.OS === 'android' ? -(StatusBar.currentHeight ?? 0) : 0
       }
     >
-      <View
-        accessible={true}
-        accessibilityLabel={`${heading}. ${text}`}
-        accessibilityRole="button"
-        onAccessibilityTap={handleClose}
-        ref={contentRef}
-      >
-        <View style={style.heading}>
-          <ThemeText accessibilityLabel={heading} type="body__primary--bold">
-            {heading}
-          </ThemeText>
-          <TouchableOpacity
-            onPress={handleClose}
-            accessibilityLabel={t(ScreenHeaderTexts.headerButton.close.text)}
-          >
-            <ThemeIcon style={style.closeIcon} svg={Close} />
-          </TouchableOpacity>
-        </View>
-        <ThemeText accessibilityLabel={text}>{text}</ThemeText>
+      <View style={style.heading}>
+        <ThemeText type="body__primary--bold">{heading}</ThemeText>
+        <TouchableOpacity onPress={handleClose}>
+          <ThemeIcon style={style.closeIcon} svg={Close} />
+        </TouchableOpacity>
       </View>
+      <ThemeText>{text}</ThemeText>
     </RNPopover>
   );
 };

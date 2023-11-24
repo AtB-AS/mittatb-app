@@ -4,6 +4,7 @@ import {PopOver} from '@atb/components/popover';
 import {useOneTimePopover} from './use-one-time-popover';
 import OneTimePopOverTexts from '@atb/translations/components/OneTimePopOver';
 import {useTranslation} from '@atb/translations';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 export const POPOVER_ANIMATION_DURATION = 200;
 
@@ -25,6 +26,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
   const [popOvers, setPopOvers] = useState<PopOverType[]>([]);
   const {isSeen, setPopOverSeen} = useOneTimePopover();
   const {t} = useTranslation();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const current = popOvers[0];
 
   const addPopOver = useCallback(
@@ -58,7 +60,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
 
   return (
     <PopOverContext.Provider value={{addPopOver}}>
-      {current && (
+      {!isScreenReaderEnabled && current && (
         <PopOver
           key={current.oneTimeKey}
           from={current.target}
