@@ -17,7 +17,7 @@ import {CarStations} from './CarStations';
 
 type Props = {
   stations: StationFeatures;
-  selectedId: string | number | undefined;
+  selectedId?: string | number | undefined;
   mapCameraRef: RefObject<Camera>;
   onClusterClick?: (feature: Feature<Point, Cluster>) => void;
 };

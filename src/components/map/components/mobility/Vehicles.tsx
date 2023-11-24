@@ -12,7 +12,7 @@ type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;
   mapViewRef: RefObject<MapboxGL.MapView>;
   vehicles: VehicleFeatures;
-  selectedId: string | number | undefined;
+  selectedId?: string | number | undefined;
   onClusterClick: (feature: Feature<Point, Cluster>) => void;
 };
 
