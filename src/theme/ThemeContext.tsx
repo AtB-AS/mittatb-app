@@ -17,7 +17,7 @@ interface ThemeContextValue {
   updateAndroidFontOverride(override: boolean): void;
 }
 
-const ThemeContext = createContext<ThemeContextValue>({
+export const ThemeContext = createContext<ThemeContextValue>({
   theme: themes.light,
   themeName: 'light',
 
