@@ -90,6 +90,7 @@ export const ScooterSheet = ({
                 <OperatorBenefit
                   benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit}
+                  formFactor={FormFactor.Scooter}
                   style={style.benefit}
                 />
               )}

@@ -87,6 +87,7 @@ export const CarSharingStationBottomSheet = ({
                 <OperatorBenefit
                   benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit}
+                  formFactor={FormFactor.Car}
                   style={style.benefit}
                 />
               )}

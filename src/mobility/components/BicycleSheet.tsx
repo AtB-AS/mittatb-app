@@ -78,9 +78,10 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
             <ScrollView style={style.container}>
               {operatorBenefit && (
                 <OperatorBenefit
-                  style={style.operatorBenefit}
                   benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit}
+                  formFactor={FormFactor.Bicycle}
+                  style={style.operatorBenefit}
                 />
               )}
               <Section>

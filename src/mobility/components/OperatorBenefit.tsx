@@ -1,19 +1,28 @@
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {Image, ImageStyle, View, ViewStyle} from 'react-native';
+import {View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Check} from '@atb/assets/svg/color/icons/status';
+import {
+  BundlingCarSharing,
+  BundlingCityBike,
+} from '@atb/assets/svg/color/images/mobility';
 
 type Props = {
   benefit: OperatorBenefitType;
   isUserEligible: boolean;
+  formFactor: FormFactor;
   style?: ViewStyle;
 };
+
 export const OperatorBenefit = ({
   benefit,
   isUserEligible,
+  formFactor,
   style: containerStyle,
 }: Props) => {
   const style = useStyles();
@@ -36,18 +45,7 @@ export const OperatorBenefit = ({
       <Section>
         <GenericSectionItem>
           <View style={style.benefitContainer}>
-            {isUserEligible && benefit.imageWhenActive && (
-              <Image
-                style={style.benefitImage as ImageStyle}
-                source={{uri: benefit.imageWhenActive}}
-              />
-            )}
-            {!isUserEligible && benefit.imageWhenNotActive && (
-              <Image
-                style={style.benefitImage as ImageStyle}
-                source={{uri: benefit.imageWhenNotActive}}
-              />
-            )}
+            <BenefitImage eligible={isUserEligible} formFactor={formFactor} />
             <View style={style.benefitContent}>
               {heading && (
                 <ThemeText type="body__primary--bold">{heading}</ThemeText>
@@ -61,16 +59,71 @@ export const OperatorBenefit = ({
   );
 };
 
+const BenefitImageAsset = ({formFactor} : {formFactor: FormFactor}) => {
+  switch (formFactor) {
+    case FormFactor.Car:
+      return <BundlingCarSharing />;
+    case FormFactor.Bicycle:
+      return <BundlingCityBike />;
+    default:
+      return <View />;
+  }
+}
+
+type BenefitImageProps = {
+  formFactor: FormFactor;
+  eligible: boolean;
+  style?: ViewStyle;
+};
+
+const BenefitImage = ({
+  formFactor,
+  eligible,
+  style,
+}: BenefitImageProps): JSX.Element => {
+  const styles = useStyles();
+
+  return (
+    <View style={style}>
+      <>
+        <BenefitImageAsset formFactor={formFactor} />
+        {eligible && (<BenfitEligibilityIndicator />)}
+      </>
+    </View>
+  );
+};
+
+const BenfitEligibilityIndicator = () => {
+  const styles = useStyles();
+
+  return (
+    <View style={styles.indicator}>
+      <Check width={24} height={24} />
+    </View>
+  );
+};
+
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   benefitContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   benefitContent: {
     flex: 4,
+    marginStart: theme.spacings.medium,
   },
   benefitImage: {
     flex: 1,
     resizeMode: 'contain',
     marginRight: theme.spacings.medium,
+  },
+  indicator: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    borderRadius: theme.border.radius.circle,
+    zIndex: 10,
+    overflow: 'hidden',
   },
 }));
