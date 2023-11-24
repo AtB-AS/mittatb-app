@@ -1,7 +1,7 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 import {Text, View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfileScreen';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -19,13 +19,28 @@ type SubmissionStatus =
   | 'SUBMITTED'
   | 'SUBMISSION_ERROR';
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
+type CustomerProfile = {
+  email?: string;
+  firstName?: string;
+  surname?: string;
+  phoneNumber: string;
+};
+
+const initUser: CustomerProfile = {
+  email: 'hei@hai.no',
+  phoneNumber: '+4712345678',
+  firstName: 'Test',
+  surname: 'Testesen',
+};
+
 export const Profile_EditProfileScreen = ({
   navigation,
 }: EditProfileScreenProps) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
   const {authenticationType, customerNumber} = useAuthState();
-  // const [customerProfile, setCustomerProfile] = useState<CustomerProfile>();
+  const [customerProfile, setCustomerProfile] =
+    useState<CustomerProfile>(initUser);
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [surName, setSurName] = useState('');
@@ -33,8 +48,14 @@ export const Profile_EditProfileScreen = ({
     SubmissionStatus | undefined
   >(undefined);
 
+  useEffect(() => {
+    if (customerProfile.email) setEmail(customerProfile.email);
+    if (customerProfile.firstName) setFirstName(customerProfile.firstName);
+    if (customerProfile.surname) setSurName(customerProfile.surname);
+  }, []);
+
   const phoneNumber = parsePhoneNumber(
-    '+4700000000',
+    customerProfile?.phoneNumber,
     // user?.phoneNumber ?? '', // from get endpoint
   )?.formatInternational();
 
@@ -195,6 +216,7 @@ export const Profile_EditProfileScreen = ({
               style={{marginBottom: theme.spacings.large}}
             >
               {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
+              {/*  What text to show when logged in with Vipps ? --> Webshop it's the same */}
             </ThemeText>
             <ThemeText>
               {t(EditProfileTexts.profileInfo.customerNumber)}

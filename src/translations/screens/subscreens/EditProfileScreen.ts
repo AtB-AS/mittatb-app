@@ -73,8 +73,8 @@ export const EditProfileTexts = {
   profileUpdate: {
     success: _('Profil oppdatert.', 'Profile updated.', 'Profil oppdatert.'),
     error: _(
-      'En feil har skjedd. Profil ble ikke oppdatert.',
-      'En error occured. Profile was not updated.',
+      'Vi fikk ikke til å oppdatere din profil. Vennligst prøv igjen',
+      'We could not update you profile. Please try again.',
       '',
     ),
   },
