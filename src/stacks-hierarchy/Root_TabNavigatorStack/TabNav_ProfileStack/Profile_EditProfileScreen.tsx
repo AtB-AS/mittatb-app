@@ -1,17 +1,18 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
-import {ActivityIndicator, Text, View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfileScreen';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageBox} from '@atb/components/message-box';
 import {emailAvailable, getProfile, updateProfile} from '@atb/api';
+
 type SubmissionStatus =
   | 'INVALID_EMAIL'
   | 'UNAVAILABLE_EMAIL'
@@ -29,8 +30,8 @@ type CustomerProfile = {
 export const Profile_EditProfileScreen = ({
   navigation,
 }: EditProfileScreenProps) => {
+  const styles = useStyles();
   const {t} = useTranslation();
-  const {theme} = useTheme();
   const {authenticationType, customerNumber} = useAuthState();
   const [customerProfile, setCustomerProfile] = useState<CustomerProfile>();
   const [email, setEmail] = useState('');
@@ -41,14 +42,26 @@ export const Profile_EditProfileScreen = ({
   >(undefined);
   const [profileState, setProfileState] = useState<ProfileState | undefined>();
 
+  const prepopulatePersonalia = (
+    response: string,
+    set: React.Dispatch<React.SetStateAction<string>>,
+  ) => {
+    if (response === '_') {
+      set('');
+    } else if (response) {
+      set(response);
+    }
+  };
   const fetchProfile = useCallback(async () => {
     try {
       setProfileState('loading');
       const response = await getProfile();
       setCustomerProfile(response);
-      if (response.email) setEmail(response.email);
-      if (response.firstName) setFirstName(response.firstName);
-      if (response.surname) setSurName(response.surname);
+
+      prepopulatePersonalia(response.email, setEmail);
+      prepopulatePersonalia(response.firstName, setFirstName);
+      prepopulatePersonalia(response.surname, setSurName);
+
       setProfileState('success');
     } catch {
       setProfileState('error');
@@ -57,7 +70,7 @@ export const Profile_EditProfileScreen = ({
 
   useEffect(() => {
     fetchProfile();
-  }, [fetchProfile, submissionStatus]);
+  }, [fetchProfile]);
 
   //
   // const phoneNumber = parsePhoneNumber(
@@ -76,6 +89,7 @@ export const Profile_EditProfileScreen = ({
             surname: surName,
             email: email,
           });
+          fetchProfile();
           setSubmissionStatus('SUBMITTED');
         } catch {
           setSubmissionStatus('SUBMISSION_ERROR');
@@ -104,7 +118,7 @@ export const Profile_EditProfileScreen = ({
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={() => (
-        <View style={{marginHorizontal: theme.spacings.medium}}>
+        <View style={styles.parallaxContent}>
           <ThemeText
             type="heading--medium"
             color="background_accent_0"
@@ -121,25 +135,17 @@ export const Profile_EditProfileScreen = ({
         </View>
       ) : (
         <>
-          <View
-            style={{
-              marginHorizontal: theme.spacings.xLarge,
-              marginBottom: theme.spacings.medium,
-              marginTop: theme.spacings.xLarge,
-            }}
-          >
+          <View style={styles.personalia}>
             <ThemeText accessibilityRole="header" color="secondary">
               {t(EditProfileTexts.personalia.header)}
             </ThemeText>
           </View>
 
-          <ThemeText>{submissionStatus}</ThemeText>
-          {/*Remove above*/}
           {profileState === 'loading' && <ActivityIndicator size="large" />}
           {profileState === 'error' && (
             <MessageBox
               type="error"
-              message="Vi får ikke hentet konto-opplysningene dine akkurat nå. Prøv igjen senere."
+              message={t(EditProfileTexts.personalia.error)}
             />
           )}
           {profileState === 'success' && customerProfile && (
@@ -183,12 +189,7 @@ export const Profile_EditProfileScreen = ({
                 />
               </Section>
 
-              <View
-                style={{
-                  marginHorizontal: theme.spacings.xLarge,
-                  marginTop: theme.spacings.medium,
-                }}
-              >
+              <View style={styles.phone}>
                 <ThemeText>
                   {t(EditProfileTexts.personalia.phone.header)}
                 </ThemeText>
@@ -207,17 +208,13 @@ export const Profile_EditProfileScreen = ({
                   mode="primary"
                   text={t(EditProfileTexts.button.save)}
                   onPress={onSubmit}
+                  style={styles.submit}
                 />
                 {submissionStatus === 'SUBMITTED' && (
-                  <>
-                    <MessageBox
-                      type="valid"
-                      message={t(EditProfileTexts.profileUpdate.success)}
-                    />
-                    <Text>{firstName}</Text>
-                    <Text>{surName}</Text>
-                    <Text>{email}</Text>
-                  </>
+                  <MessageBox
+                    type="valid"
+                    message={t(EditProfileTexts.profileUpdate.success)}
+                  />
                 )}
                 {submissionStatus === 'SUBMISSION_ERROR' && (
                   <MessageBox
@@ -226,11 +223,8 @@ export const Profile_EditProfileScreen = ({
                   />
                 )}
               </Section>
-              <View style={{marginHorizontal: theme.spacings.xLarge}}>
-                <ThemeText
-                  style={{marginVertical: theme.spacings.large}}
-                  color="secondary"
-                >
+              <View style={styles.profileContainer}>
+                <ThemeText style={styles.profileText} color="secondary">
                   {t(EditProfileTexts.profileInfo.profile)}
                 </ThemeText>
                 <ThemeText>
@@ -239,7 +233,7 @@ export const Profile_EditProfileScreen = ({
                 <ThemeText
                   type="body__secondary"
                   color="secondary"
-                  style={{marginBottom: theme.spacings.large}}
+                  style={styles.profilePhone}
                 >
                   {/*{t(EditProfileTexts.profileInfo.otp(phoneNumber))}*/}
                   {t(EditProfileTexts.profileInfo.otp(customerProfile.phone))}
@@ -276,3 +270,21 @@ function isValidEmail(email: string) {
   // More validation is done on the server
   return /^\S+@\S+\.\S+$/.test(email);
 }
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  personalia: {
+    marginHorizontal: theme.spacings.xLarge,
+    marginBottom: theme.spacings.medium,
+    marginTop: theme.spacings.xLarge,
+  },
+  parallaxContent: {marginHorizontal: theme.spacings.medium},
+  phone: {
+    marginHorizontal: theme.spacings.xLarge,
+    marginTop: theme.spacings.medium,
+  },
+  submit: {
+    marginBottom: theme.spacings.medium,
+  },
+  profileContainer: {marginHorizontal: theme.spacings.xLarge},
+  profileText: {marginVertical: theme.spacings.large},
+  profilePhone: {marginBottom: theme.spacings.large},
+}));

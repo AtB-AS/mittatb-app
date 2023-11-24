@@ -46,6 +46,11 @@ export const EditProfileTexts = {
         'E-postadressen er allereie i bruk',
       ),
     },
+    error: _(
+      'Vi får ikke hentet profil informasjonen dine akkurat nå. Prøv igjen senere.',
+      'We are not able to retrieve your profile information at the moment. Please try again later',
+      '',
+    ),
   },
   profileInfo: {
     customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
