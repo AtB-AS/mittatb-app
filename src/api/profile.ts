@@ -1,7 +1,8 @@
-import {client} from '@atb/api/client';
+import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
+import Bugsnag from '@bugsnag/react-native';
 
-export type CustomerProfileUpdate = Partial<{
+type CustomerProfileUpdate = Partial<{
   firstName: string;
   surname: string;
   email: string;
@@ -9,7 +10,7 @@ export type CustomerProfileUpdate = Partial<{
 }>;
 
 export const getProfile = async () => {
-  const url = '/webshop/v1/profile/get'; // ??
+  const url = '/profile/v1';
   const response = await client.get(url, {
     authWithIdToken: true,
   });
@@ -17,7 +18,7 @@ export const getProfile = async () => {
 };
 
 export const updateProfile = async (profile: CustomerProfileUpdate) => {
-  const url = '/webshop/v1/profile'; // change to /webshop/v1/profile/update?
+  const url = '/profile/v1';
   const response = await client.patch(url, profile, {
     authWithIdToken: true,
   });
@@ -29,7 +30,27 @@ export const emailAvailable = async (
   email: string,
   opts?: AxiosRequestConfig,
 ): Promise<EmailAvailableResponse> => {
-  const url = `/webshop/v1/available-email?email=${encodeURIComponent(email)}`; // https://github.com/AtB-AS/webshop2/blob/3fdbec83f9cb7368b519c3efd98531dc23dc777b/src/server-api-service/unauth-client.ts
+  const url = `/profile/v1/available-email?email=${encodeURIComponent(email)}`; // https://github.com/AtB-AS/webshop2/blob/3fdbec83f9cb7368b519c3efd98531dc23dc777b/src/server-api-service/unauth-client.ts
   const response = await client.get<EmailAvailableResponse>(url, opts);
   return response.data;
 };
+
+export async function deleteProfile(opts?: AxiosRequestConfig) {
+  const url = '/profile/v1';
+  const query = {expirationDate: new Date().toISOString()};
+  const deleteOK = await client
+    .delete(url, {
+      ...opts,
+      authWithIdToken: true,
+      data: query,
+    })
+    .then(() => {
+      return true;
+    })
+    .catch((error) => {
+      Bugsnag.notify(error);
+      return false;
+    });
+
+  return deleteOK;
+}

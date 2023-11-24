@@ -1,4 +1,4 @@
-import {deleteProfile} from '@atb/api/delete_profile';
+import {deleteProfile} from '@atb/api/profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthState} from '@atb/auth';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
