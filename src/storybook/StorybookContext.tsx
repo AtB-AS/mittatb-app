@@ -37,7 +37,6 @@ export const StorybookContextProvider = ({children}: {children: ReactNode}) => {
       {isEnabled ? (
         <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
           <StatusBar
-            // barStyle={theme.statusBarStyle}
             translucent={true}
             backgroundColor="white"
           />
