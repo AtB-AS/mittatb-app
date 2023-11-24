@@ -33,6 +33,7 @@ export const Root_LocationWhenInUsePermissionScreen = ({navigation}: Props) => {
       description={t(LocationWhenInUsePermissionTexts.description)}
       buttonText={t(LocationWhenInUsePermissionTexts.button)}
       buttonOnPress={buttonOnPress}
+      testID="locationWhenInUsePermission"
     />
   );
 };

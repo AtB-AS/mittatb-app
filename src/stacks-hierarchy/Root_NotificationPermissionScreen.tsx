@@ -28,6 +28,7 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
       description={t(NotificationPermissionTexts.description)}
       buttonText={t(NotificationPermissionTexts.button)}
       buttonOnPress={buttonOnPress}
+      testID="notificationPermission"
     />
   );
 };

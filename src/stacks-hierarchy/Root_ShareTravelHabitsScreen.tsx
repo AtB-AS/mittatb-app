@@ -71,6 +71,7 @@ export const Root_ShareTravelHabitsScreen = ({
       footerDescription={t(ShareTravelHabitsTexts.bluetoothInfo)}
       buttonText={t(ShareTravelHabitsTexts.choosePermissions)}
       buttonOnPress={choosePermissions}
+      testID="shareTravelHabits"
     />
   );
 };
