@@ -246,7 +246,8 @@ export function useDeparturesData(
   tickRateInSeconds: number = 10,
 ) {
   const [state, dispatch] = useReducerWithSideEffects(reducer, initialState);
-  const {favoriteDepartures} = useFavorites();
+  const {favoriteDepartures, potentiallyMigrateFavoriteDepartures} =
+    useFavorites();
   const [queryStartTime, setQueryStartTime] = useState<string | undefined>();
   const [timeRange, setTimeRange] = useState<number | undefined>();
   const lastHardRefreshTime = useRef<Date>(new Date());
@@ -275,6 +276,7 @@ export function useDeparturesData(
       lastHardRefreshTime,
       lastRealtimeRefreshTime,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(quayIds), startTime, activeFavoriteDepartures, mode]);
 
   const loadRealTimeData = useCallback(() => {
@@ -289,18 +291,22 @@ export function useDeparturesData(
       favoriteDepartures: activeFavoriteDepartures,
       lastRealtimeRefreshTime,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(quayIds),
     queryStartTime,
     limitPerLine,
     limitPerQuay,
     timeRange,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     JSON.stringify(activeFavoriteDepartures),
   ]);
 
   useEffect(() => {
     loadDepartures();
     return () => timeout.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadDepartures]);
   useEffect(() => {
     if (!state.tick) return;
@@ -321,6 +327,7 @@ export function useDeparturesData(
     } else if (timeSinceLastRealtimeRefresh >= updateFrequencyInSeconds) {
       loadRealTimeData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.tick]);
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
@@ -330,6 +337,11 @@ export function useDeparturesData(
     // Trigger immediately on focus only if the view is already initialized
     !!state.tick,
   );
+
+  useEffect(() => {
+    const estimatedCalls = state.data;
+    estimatedCalls && potentiallyMigrateFavoriteDepartures(estimatedCalls);
+  }, [state.data, potentiallyMigrateFavoriteDepartures]);
 
   return {
     state,

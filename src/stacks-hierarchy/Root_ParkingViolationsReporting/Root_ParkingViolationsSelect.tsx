@@ -1,10 +1,10 @@
 import {useState} from 'react';
-import {Linking, View, ViewProps} from 'react-native';
+import {Linking, View} from 'react-native';
 import {SvgXml} from 'react-native-svg';
 import {ScrollView} from 'react-native-gesture-handler';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageBox, OnPressConfig} from '@atb/components/message-box';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationType} from '@atb/api/types/mobility';
@@ -12,11 +12,8 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 import {ScreenContainer} from './components/ScreenContainer';
 import {SelectGroup} from './components/SelectGroup';
-import {
-  NoLocationError,
-  PermissionRequiredError,
-  useParkingViolations,
-} from '@atb/parking-violations-reporting';
+import {useParkingViolations} from '@atb/parking-violations-reporting';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
 export type SelectViolationScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsSelect'>;
@@ -29,10 +26,15 @@ export const Root_ParkingViolationsSelect = ({
   const style = useStyles();
   const {t} = useTranslation();
   const {theme} = useTheme();
-  const {isLoading, isError, error, violations} = useParkingViolations();
+  const {parkingViolationsState, isLoading, violations} =
+    useParkingViolations();
   const [selectedViolations, setSelectedViolations] = useState<
     ParkingViolationType[]
   >([]);
+  const {locationIsAvailable, location} = useGeolocationState();
+
+  const preReqs =
+    locationIsAvailable && location && parkingViolationsState === 'success';
 
   return (
     <ScreenContainer
@@ -41,7 +43,7 @@ export const Root_ParkingViolationsSelect = ({
       secondaryText={t(ParkingViolationTexts.selectViolation.description)}
       buttons={
         <Button
-          disabled={isError}
+          disabled={!preReqs}
           onPress={() => {
             navigation.navigate('Root_ParkingViolationsPhoto', {
               selectedViolations,
@@ -52,8 +54,9 @@ export const Root_ParkingViolationsSelect = ({
       }
       isLoading={isLoading}
     >
-      {isError && <ErrorMessage style={style.error} error={error} />}
-      {!isError && (
+      {!preReqs ? (
+        <IssueMessageBox />
+      ) : (
         <ScrollView style={style.container}>
           <SelectGroup
             mode="checkbox"
@@ -96,42 +99,40 @@ export const Root_ParkingViolationsSelect = ({
   );
 };
 
-type ErrorMessageProps = ViewProps & {error: unknown};
-const ErrorMessage = (props: ErrorMessageProps) => {
-  const {t} = useTranslation();
+type ViolationsReportingIssue = 'general' | 'positionNotGranted' | 'noLocation';
 
-  if (props.error instanceof PermissionRequiredError) {
-    return (
-      <View {...props}>
-        <MessageBox
-          title={t(ParkingViolationTexts.error.positionNotGranted.title)}
-          message={t(ParkingViolationTexts.error.positionNotGranted.message)}
-          onPressConfig={{
-            text: t(ParkingViolationTexts.error.positionNotGranted.action),
-            action: () => Linking.openSettings(),
-          }}
-          type="warning"
-        />
-      </View>
-    );
+const IssueMessageBox = () => {
+  const {t} = useTranslation();
+  const style = useStyles();
+
+  const {status: locationPermissionStatus, location} = useGeolocationState();
+
+  let titleAndMessageTexts: ViolationsReportingIssue = 'general';
+  let type: Statuses = 'error';
+  let onPressConfig: OnPressConfig | undefined = undefined;
+
+  if (
+    locationPermissionStatus === 'denied' ||
+    locationPermissionStatus === 'blocked'
+  ) {
+    titleAndMessageTexts = 'positionNotGranted';
+    type = 'warning';
+    onPressConfig = {
+      text: t(ParkingViolationTexts.issue.positionNotGranted.action),
+      action: () => Linking.openSettings(),
+    };
   }
-  if (props.error instanceof NoLocationError) {
-    return (
-      <View {...props}>
-        <MessageBox
-          title={t(ParkingViolationTexts.error.noLocation.title)}
-          message={t(ParkingViolationTexts.error.noLocation.message)}
-          type="warning"
-        />
-      </View>
-    );
+  if (locationPermissionStatus === 'granted' && !location) {
+    titleAndMessageTexts = 'noLocation';
+    type = 'warning';
   }
   return (
-    <View {...props}>
+    <View style={style.issueMessageBoxContainer}>
       <MessageBox
-        title={t(ParkingViolationTexts.error.loading.title)}
-        message={t(ParkingViolationTexts.error.loading.message)}
-        type="error"
+        title={t(ParkingViolationTexts.issue[titleAndMessageTexts].title)}
+        message={t(ParkingViolationTexts.issue[titleAndMessageTexts].message)}
+        type={type}
+        onPressConfig={onPressConfig}
       />
     </View>
   );
@@ -156,7 +157,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   itemDescription: {
     flexShrink: 1,
   },
-  error: {
+  issueMessageBoxContainer: {
     paddingHorizontal: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },

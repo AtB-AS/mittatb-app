@@ -29,7 +29,17 @@ import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
-import {usePushNotificationsEnabled} from '@atb/notifications';
+import {
+  usePushNotifications,
+  usePushNotificationsEnabled,
+  useOnPushNotificationOpened,
+} from '@atb/notifications';
+import {
+  filterValidRightNowFareContract,
+  useTicketingState,
+} from '@atb/ticketing';
+import {useTimeContextState} from '@atb/time';
+import {useGeolocationState} from '@atb/GeolocationContext';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -40,18 +50,50 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const {onboarded, notificationPermissionOnboarded} = useAppState();
+  const {
+    onboarded,
+    notificationPermissionOnboarded,
+    locationWhenInUsePermissionOnboarded,
+  } = useAppState();
 
   const pushNotificationsEnabled = usePushNotificationsEnabled();
 
+  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
+
   useGoToMobileTokenOnboardingWhenNecessary();
+  const {serverNow} = useTimeContextState();
+
+  const {fareContracts} = useTicketingState();
+  const validFareContracts = filterValidRightNowFareContract(
+    fareContracts,
+    serverNow,
+  );
+  const {status: notificationStatus} = usePushNotifications();
+  useOnPushNotificationOpened();
 
   useEffect(() => {
+    const shouldShowLocationOnboarding =
+      !locationWhenInUsePermissionOnboarded &&
+      locationWhenInUsePermissionStatus === 'denied';
+
     if (!onboarded) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_OnboardingStack'),
       );
-    } else if (!notificationPermissionOnboarded && pushNotificationsEnabled) {
+    } else {
+      if (shouldShowLocationOnboarding) {
+        InteractionManager.runAfterInteractions(() =>
+          navigation.navigate('Root_LocationWhenInUsePermissionScreen'),
+        );
+      }
+    }
+    if (
+      !notificationPermissionOnboarded &&
+      pushNotificationsEnabled &&
+      validFareContracts.length > 0 &&
+      notificationStatus !== 'granted' &&
+      !shouldShowLocationOnboarding
+    ) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
       );
@@ -61,6 +103,10 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     navigation,
     notificationPermissionOnboarded,
     pushNotificationsEnabled,
+    locationWhenInUsePermissionOnboarded,
+    locationWhenInUsePermissionStatus,
+    validFareContracts.length,
+    notificationStatus,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {

@@ -33,6 +33,7 @@ export function useChatUnreadCount() {
         callback,
       );
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enable_intercom]);
 
   return count;

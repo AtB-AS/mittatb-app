@@ -73,8 +73,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const analytics = useAnalytics();
   const isFocused = useIsFocusedAndActive();
 
-  const {location, requestPermission: requestGeoPermission} =
-    useGeolocationState();
+  const {location, requestLocationPermission} = useGeolocationState();
 
   const currentLocation = location || undefined;
 
@@ -122,6 +121,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
         setSearchStateMessage('');
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchState, t]);
 
   const setCurrentLocationAsFrom = useCallback(
@@ -158,13 +158,13 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
       if (currentLocation) {
         setCurrentLocationAsFrom();
       } else {
-        const status = await requestGeoPermission();
+        const status = await requestLocationPermission();
         if (status === 'granted') {
           setCurrentLocationAsFrom();
         }
       }
     },
-    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
+    [currentLocation, setCurrentLocationAsFrom, requestLocationPermission],
   );
 
   const onPressed = useCallback(
@@ -222,6 +222,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     (tripPatterns.length > 0 || searchState === 'search-empty-result') &&
     nonTransitTrips.length > 0;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(refresh, [from, to]);
 
   return (
@@ -485,6 +486,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -551,6 +553,7 @@ function useUpdatedLocation(
         }
       }
     },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLocation, favorites],
   );
 

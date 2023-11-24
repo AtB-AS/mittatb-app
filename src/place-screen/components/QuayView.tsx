@@ -75,6 +75,7 @@ export function QuayView({
   // value to false
   useEffect(() => {
     if (!placeHasFavorites) setShowOnlyFavorites(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [favoriteDepartures]);
 
   return (

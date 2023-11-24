@@ -96,6 +96,7 @@ export const Feedback = ({
 
   useEffect(() => {
     incrementCounterAndSetDisplayStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -105,6 +106,7 @@ export const Feedback = ({
       setSelectedOpinion(Opinions.NotClickedYet);
       setSubmitted(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [metadata]);
 
   const toggleSelectedAlternativeId = useCallback(

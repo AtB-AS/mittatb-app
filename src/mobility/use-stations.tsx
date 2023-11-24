@@ -48,6 +48,7 @@ export const useStations: (
         setFilter(userFilter.mobility ?? {});
       });
     }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
 
   useEffect(() => {

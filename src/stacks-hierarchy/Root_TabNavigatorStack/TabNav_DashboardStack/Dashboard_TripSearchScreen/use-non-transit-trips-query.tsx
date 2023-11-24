@@ -48,6 +48,7 @@ export const useNonTransitTripsQuery = (
       !toLocation ||
       !isValidTripLocations(fromLocation, toLocation)
     ) {
+      setNonTransitTrips([]);
       setSearchState('search-empty-result');
       return;
     }

@@ -119,7 +119,8 @@ export type MapSelectionActionType =
   | {
       source: 'my-position';
       coords: Coordinates;
-    };
+    }
+  | {source: 'filters-button'};
 
 export type CameraFocusModeType =
   | {

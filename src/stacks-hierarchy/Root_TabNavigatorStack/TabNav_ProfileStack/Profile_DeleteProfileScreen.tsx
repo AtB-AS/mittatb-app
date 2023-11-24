@@ -16,6 +16,7 @@ import {ThemeText} from '@atb/components/text';
 import {MessageBox} from '@atb/components/message-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {useTimeContextState} from '@atb/time';
 
 type DeleteProfileScreenProps =
   ProfileScreenProps<'Profile_DeleteProfileScreen'>;
@@ -27,8 +28,9 @@ export const Profile_DeleteProfileScreen = ({
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthState();
   const {fareContracts} = useTicketingState();
+  const {serverNow} = useTimeContextState();
   const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts).length > 0;
+    filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow).length > 0;
 
   const [deleteError, setDeleteError] = useState<boolean>(false);
 

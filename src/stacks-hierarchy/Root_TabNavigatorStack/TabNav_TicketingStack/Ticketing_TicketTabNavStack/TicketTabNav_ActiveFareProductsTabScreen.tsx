@@ -3,13 +3,12 @@ import {
   filterAndSortActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-
-import {useInterval} from '@atb/utils/use-interval';
-import React, {useState} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
 import {useAnalytics} from '@atb/analytics';
+import {useTimeContextState} from '@atb/time';
 
 export const TicketTabNav_ActiveFareProductsTabScreen = () => {
   const {
@@ -18,12 +17,13 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
     isRefreshingFareContracts,
     resubscribeFirestoreListeners,
   } = useTicketingState();
-  const activeFareContracts =
-    filterAndSortActiveOrCanBeUsedFareContracts(fareContracts);
+  const {serverNow} = useTimeContextState();
   const analytics = useAnalytics();
 
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 2500);
+  const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
+    fareContracts,
+    serverNow,
+  );
 
   const styles = useStyles();
   const {t} = useTranslation();
@@ -41,7 +41,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = () => {
             activeFareContractsCount: activeFareContracts.length,
           });
         }}
-        now={now}
+        now={serverNow}
         showTokenInfo={true}
         emptyStateTitleText={t(
           TicketingTexts.activeFareProductsAndReservationsTab

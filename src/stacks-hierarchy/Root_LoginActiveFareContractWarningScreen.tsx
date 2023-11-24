@@ -16,6 +16,7 @@ import {SimpleFareContract} from '@atb/fare-contracts';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useTimeContextState} from '@atb/time';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -31,10 +32,12 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const styles = useStyles();
   const focusRef = useFocusOnLoad();
   const {fareContracts} = useTicketingState();
-  const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts);
+  const {serverNow} = useTimeContextState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+    serverNow,
+  );
   const firstActiveFc = activeFareContracts[0];
-  const now = Date.now();
 
   const onNext = async () => {
     navigation.navigate(
@@ -78,7 +81,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           {firstActiveFc && (
             <SimpleFareContract
               fareContract={firstActiveFc}
-              now={now}
+              now={serverNow}
               hideDetails={true}
             />
           )}

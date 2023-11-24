@@ -9,15 +9,15 @@ import {StyleProp, View, ViewStyle} from 'react-native';
 import {useRef} from 'react';
 
 type Props = {
-  userPosition: Coordinates | undefined;
+  userCoordinates: Coordinates | undefined;
   style?: StyleProp<ViewStyle>;
 };
-export const UserPositionMap = ({userPosition, style}: Props) => {
+export const UserCoordinatesMap = ({userCoordinates, style}: Props) => {
   const cameraRef = useRef<MapboxGL.Camera>(null);
 
   return (
     <View style={[{flex: 1}, style]}>
-      {userPosition && (
+      {userCoordinates && (
         <MapboxGL.MapView
           {...MapViewConfig}
           compassEnabled={false}
@@ -29,12 +29,15 @@ export const UserPositionMap = ({userPosition, style}: Props) => {
           <MapboxGL.Camera
             {...MapCameraConfig}
             defaultSettings={{
-              centerCoordinate: [userPosition.longitude, userPosition.latitude],
+              centerCoordinate: [
+                userCoordinates.longitude,
+                userCoordinates.latitude,
+              ],
               zoomLevel: 16,
             }}
             ref={cameraRef}
           />
-          <SelectionPin coordinates={userPosition} />
+          <SelectionPin coordinates={userCoordinates} />
         </MapboxGL.MapView>
       )}
     </View>

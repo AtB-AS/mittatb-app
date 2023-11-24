@@ -5,6 +5,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
+import {DeparturesQuery} from '../types/generated/DeparturesQuery';
 
 type Notice = {text?: string};
 
@@ -18,6 +19,16 @@ export type DepartureLineInfo = {
   quayId: string;
   notices: Notice[];
   lineId: string;
+};
+
+export type EstimatedCallWithLineName =
+  DeparturesQuery['quays'][0]['estimatedCalls'][0] & {
+    lineName?: string;
+  };
+export type DeparturesWithLineName = DeparturesQuery & {
+  quays: (DeparturesQuery['quays'][0] & {
+    estimatedCalls: EstimatedCallWithLineName[];
+  })[];
 };
 
 export type DepartureTime = {

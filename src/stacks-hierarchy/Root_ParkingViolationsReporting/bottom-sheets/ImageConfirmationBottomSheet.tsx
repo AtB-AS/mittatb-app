@@ -8,19 +8,19 @@ import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Coordinates} from '@atb/utils/coordinates';
-import {UserPositionMap} from '../components/UserPositionMap';
+import {UserCoordinatesMap} from '../components/UserCoordinatesMap';
 import {ParkingViolationTexts} from '@atb/translations/screens/ParkingViolations';
 
 type Props = {
   file: PhotoFile;
-  position: Coordinates | undefined;
+  coordinates: Coordinates | undefined;
   onConfirm: () => void;
   close: () => void;
 };
 
 export const ImageConfirmationBottomSheet = ({
   file,
-  position,
+  coordinates,
   onConfirm,
   close,
 }: Props) => {
@@ -50,9 +50,9 @@ export const ImageConfirmationBottomSheet = ({
             />
           </View>
           <View style={styles.fullHeight}>
-            <UserPositionMap
+            <UserCoordinatesMap
               style={styles.fullHeight}
-              userPosition={position}
+              userCoordinates={coordinates}
             />
           </View>
         </View>

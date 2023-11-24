@@ -2,13 +2,13 @@ import {Onboarding2} from '@atb/assets/svg/color/images';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useFinishOnboarding} from '@atb/stacks-hierarchy/Root_OnboardingStack/use-finish-onboarding';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {OnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import {OnboardingScreenProps} from './navigation-types';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -21,7 +21,7 @@ export const Onboarding_IntercomInfoScreen = ({
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
-  const finishOnboarding = useFinishOnboarding();
+  const {completeOnboarding} = useAppState();
   const {enable_ticketing} = useRemoteConfig();
 
   return (
@@ -50,7 +50,7 @@ export const Onboarding_IntercomInfoScreen = ({
               ? navigation.navigate(
                   'Onboarding_AnonymousPurchaseConsequencesScreen',
                 )
-              : finishOnboarding()
+              : completeOnboarding()
           }
           text={t(OnboardingTexts.intercom.mainButton)}
           testID="nextButtonIntercomOnboarding"

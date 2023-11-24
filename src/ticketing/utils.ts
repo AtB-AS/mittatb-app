@@ -48,28 +48,36 @@ function isOrWillBeActivatedFareContract(f: FareContract): boolean {
 
 function isValidPreActivatedTravelRight(
   travelRight: PreActivatedTravelRight,
+  now: number,
 ): boolean {
-  return travelRight.endDateTime.toMillis() > Date.now();
+  return travelRight.endDateTime.toMillis() > now;
 }
 
-function hasValidCarnetTravelRight(travelRights: CarnetTravelRight[]): boolean {
+function hasValidCarnetTravelRight(
+  travelRights: CarnetTravelRight[],
+  now: number,
+): boolean {
   const {usedAccesses} = flattenCarnetTravelRightAccesses(travelRights);
   const [lastUsedAccess] = usedAccesses?.slice(-1);
   const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
-  return Date.now() < validTo;
+  return now < validTo;
 }
 
-export function isValidRightNowFareContract(f: FareContract): boolean {
+export function isValidRightNowFareContract(
+  f: FareContract,
+  now: number,
+): boolean {
   if (!isOrWillBeActivatedFareContract(f)) {
     return false;
   }
 
   const firstTravelRight = f.travelRights?.[0];
   if (isPreActivatedTravelRight(firstTravelRight)) {
-    return isValidPreActivatedTravelRight(firstTravelRight);
+    return isValidPreActivatedTravelRight(firstTravelRight, now);
   } else if (isCarnetTravelRight(firstTravelRight)) {
     return hasValidCarnetTravelRight(
       f.travelRights.filter(isCarnetTravelRight),
+      now,
     );
   }
 
@@ -122,14 +130,17 @@ export function flattenCarnetTravelRightAccesses(
   };
 }
 
-function isActiveFareContractNowOrCanBeUsed(f: FareContract): boolean {
+function isActiveFareContractNowOrCanBeUsed(
+  f: FareContract,
+  now: number,
+): boolean {
   if (!isOrWillBeActivatedFareContract(f)) {
     return false;
   }
 
   const firstTravelRight = f.travelRights?.[0];
   if (isPreActivatedTravelRight(firstTravelRight)) {
-    return isValidPreActivatedTravelRight(firstTravelRight);
+    return isValidPreActivatedTravelRight(firstTravelRight, now);
   } else if (isCarnetTravelRight(firstTravelRight)) {
     return hasActiveOrUsableCarnetTravelRight(
       f.travelRights.filter(isCarnetTravelRight),
@@ -141,31 +152,37 @@ function isActiveFareContractNowOrCanBeUsed(f: FareContract): boolean {
 
 export const filterActiveOrCanBeUsedFareContracts = (
   fareContracts: FareContract[],
+  now: number,
 ) => {
-  return fareContracts.filter(isActiveFareContractNowOrCanBeUsed);
+  return fareContracts.filter((f) =>
+    isActiveFareContractNowOrCanBeUsed(f, now),
+  );
 };
 
 export const filterAndSortActiveOrCanBeUsedFareContracts = (
   fareContracts: FareContract[],
+  now: number,
 ) => {
-  return filterActiveOrCanBeUsedFareContracts(fareContracts).sort(function (
-    a,
-    b,
-  ): number {
-    const isA = isValidRightNowFareContract(a);
-    const isB = isValidRightNowFareContract(b);
+  return filterActiveOrCanBeUsedFareContracts(fareContracts, now).sort(
+    function (a, b): number {
+      const isA = isValidRightNowFareContract(a, now);
+      const isB = isValidRightNowFareContract(b, now);
 
-    if (isA === isB) return 0;
-    if (isA) return -1;
-    return 1;
-  });
+      if (isA === isB) return 0;
+      if (isA) return -1;
+      return 1;
+    },
+  );
 };
 
-export const filterExpiredFareContracts = (fareContracts: FareContract[]) => {
+export const filterExpiredFareContracts = (
+  fareContracts: FareContract[],
+  now: number,
+) => {
   const isRefunded = (f: FareContract) =>
     f.state === FareContractState.Refunded;
   const isExpiredOrRefunded = (f: FareContract) =>
-    !isActiveFareContractNowOrCanBeUsed(f) || isRefunded(f);
+    !isActiveFareContractNowOrCanBeUsed(f, now) || isRefunded(f);
   return fareContracts.filter(isExpiredOrRefunded);
 };
 
@@ -174,6 +191,7 @@ export const filterRejectedReservations = (reservations: Reservation[]) =>
 
 export const filterValidRightNowFareContract = (
   fareContracts: FareContract[],
+  now: number,
 ) => {
   return fareContracts.filter((f: FareContract): boolean => {
     if (f.state !== FareContractState.Activated) return false;
@@ -181,7 +199,6 @@ export const filterValidRightNowFareContract = (
     const travelRights = f.travelRights;
     if (travelRights.length < 1) return false;
 
-    const now = Date.now();
     const firstTravelRight = travelRights?.[0];
 
     const carnetTravelRights = travelRights.filter(isCarnetTravelRight);

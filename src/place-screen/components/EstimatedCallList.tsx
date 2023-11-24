@@ -61,6 +61,7 @@ export const EstimatedCallList = ({
         },
         existingFavorite,
       ),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -71,6 +72,7 @@ export const EstimatedCallList = ({
       departure.aimedDepartureTime,
       departure.quay.id,
     );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const listData: EstimatedCallItemProps[] = departures.map(

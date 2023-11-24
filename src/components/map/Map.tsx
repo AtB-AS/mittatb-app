@@ -1,9 +1,8 @@
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useAnalytics} from '@atb/analytics';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
-import MapboxGL from '@rnmapbox/maps';
+import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
@@ -16,24 +15,23 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {MapFilterType, MapProps, MapRegion} from './types';
+import {MapProps, MapRegion} from './types';
 import {isFeaturePoint} from './utils';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
-  const {location: currentLocation, getCurrentPosition} = useGeolocationState();
+  const {currentCoordinatesRef, getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-  const analytics = useAnalytics();
 
   const startingCoordinates = useMemo(
     () =>
       initialLocation && initialLocation?.resultType !== 'geolocation'
         ? initialLocation.coordinates
-        : getCurrentPosition()?.coordinates || FOCUS_ORIGIN,
-    [getCurrentPosition, initialLocation],
+        : currentCoordinatesRef?.current || FOCUS_ORIGIN,
+    [currentCoordinatesRef, initialLocation],
   );
 
   const {mapLines, selectedCoordinates, onMapClick} =
@@ -75,12 +73,6 @@ export const Map = (props: MapProps) => {
     });
   };
 
-  const onFilterChange = (filter: MapFilterType) => {
-    analytics.logEvent('Map', 'Filter changed', {filter});
-    props.vehicles?.onFilterChange(filter.mobility);
-    props.stations?.onFilterChange(filter.mobility);
-  };
-
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -118,7 +110,10 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
           {mapLines && <MapRoute lines={mapLines} />}
-          <MapboxGL.UserLocation showsUserHeadingIndicator />
+          <MapboxGL.UserLocation
+              showsUserHeadingIndicator
+              renderMode={UserLocationRenderMode.Native}
+          />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}
@@ -151,23 +146,24 @@ export const Map = (props: MapProps) => {
         <View style={controlStyles.controlsContainer}>
           {(props.vehicles || props.stations) && (
             <MapFilter
-              onFilterChanged={onFilterChange}
+              onPress={() => onMapClick({source: 'filters-button'})}
               isLoading={
                 (props.vehicles?.isLoading || props.stations?.isLoading) ??
                 false
               }
             />
           )}
-          {currentLocation && (
-            <PositionArrow
-              onPress={() => {
+          <PositionArrow
+            onPress={async () => {
+              const coordinates = await getCurrentCoordinates(true);
+              if (coordinates) {
                 onMapClick({
                   source: 'my-position',
-                  coords: currentLocation.coordinates,
+                  coords: coordinates,
                 });
-              }}
-            />
-          )}
+              }
+            }}
+          />
         </View>
       </View>
     </View>

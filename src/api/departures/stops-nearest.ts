@@ -7,6 +7,7 @@ import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery'
 import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
 import {stringifyUrl} from 'query-string/base';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
+import {DeparturesWithLineName} from './types';
 
 export type StopsNearestQuery = CursoredQuery<{
   latitude: number;
@@ -55,7 +56,7 @@ export async function getDepartures(
   query: DeparturesVariables,
   favorites?: UserFavoriteDepartures,
   opts?: AxiosRequestConfig,
-): Promise<DeparturesQuery> {
+): Promise<DeparturesWithLineName> {
   const queryString = stringifyWithDate(query);
   const url = `${BASE_URL}/departures?${queryString}`;
   return requestDepartures(url, {favorites}, opts);

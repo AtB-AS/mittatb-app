@@ -59,6 +59,15 @@ export function Root_ReceiptScreen({route}: Props) {
     }
   }
 
+  // resets the state when there are changes to email input field
+  function onTextChanged(text: string) {
+    // do not do anything when the state is loading, otherwise it will cause unwanted issues
+    if (state !== 'loading') {
+      setState(undefined);
+      setEmail(text);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -76,7 +85,7 @@ export function Root_ReceiptScreen({route}: Props) {
           <TextInputSectionItem
             label={t(FareContractTexts.receipt.inputLabel)}
             value={email}
-            onChangeText={setEmail}
+            onChangeText={onTextChanged}
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"

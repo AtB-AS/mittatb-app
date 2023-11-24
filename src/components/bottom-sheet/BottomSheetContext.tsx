@@ -120,6 +120,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
         </AnimatedBottomSheet>
       </>
     ),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [isOpen, close, animatedOffset, safeAreaBottom],
   );
 

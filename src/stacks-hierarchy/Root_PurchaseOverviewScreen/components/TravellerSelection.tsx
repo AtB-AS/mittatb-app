@@ -63,6 +63,7 @@ export function TravellerSelection({
       selectableUserProfiles.find((i) => i.id === u.id),
     );
     setTravellerSelection(filteredSelection);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fareProductType, selectionMode, userProfilesState]);
 
   if (selectionMode === 'none') {

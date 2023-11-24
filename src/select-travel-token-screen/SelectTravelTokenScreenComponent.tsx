@@ -28,6 +28,7 @@ import {
   useFirestoreConfiguration,
 } from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
+import {useTimeContextState} from '@atb/time';
 
 type Props = {onAfterSave: () => void};
 
@@ -41,6 +42,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     useFirestoreConfiguration();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
+  const {serverNow} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
   const [selectedType, setSelectedType] = useState<Token['type']>(
@@ -52,7 +54,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   );
 
   const activeFareContracts = flatMap(
-    filterActiveOrCanBeUsedFareContracts(fareContracts),
+    filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow),
     (i) => i.travelRights,
   );
 

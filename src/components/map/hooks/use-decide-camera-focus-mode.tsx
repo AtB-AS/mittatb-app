@@ -54,6 +54,11 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
+      if (mapSelectionAction.source === 'filters-button') {
+        setCameraFocusMode(undefined);
+        return;
+      }
+
       if (mapSelectionAction.source === 'cluster-click') {
         setCameraFocusMode(undefined);
         return;
@@ -78,6 +83,7 @@ export const useDecideCameraFocusMode = (
         }
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction]);
   return cameraFocusMode;
 };

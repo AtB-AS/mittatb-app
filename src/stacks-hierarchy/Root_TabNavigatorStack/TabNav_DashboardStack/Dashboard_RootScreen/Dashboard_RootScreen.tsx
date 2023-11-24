@@ -58,23 +58,18 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
   const [updatingLocation, setUpdatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
 
-  const {
-    status,
-    locationEnabled,
-    location,
-    requestPermission: requestGeoPermission,
-  } = useGeolocationState();
+  const {locationIsAvailable, location, requestLocationPermission} =
+    useGeolocationState();
 
-  const hasLocationPermission = locationEnabled && status === 'granted';
   const currentLocation = location || undefined;
 
   useDoOnceWhen(
     () => setUpdatingLocation(true),
-    !Boolean(currentLocation) && hasLocationPermission,
+    !Boolean(currentLocation) && locationIsAvailable,
   );
   useDoOnceWhen(
     () => setUpdatingLocation(false),
-    Boolean(currentLocation) && hasLocationPermission,
+    Boolean(currentLocation) && locationIsAvailable,
   );
   useDoOnceWhen(setCurrentLocationAsFromIfEmpty, Boolean(currentLocation));
 
@@ -101,6 +96,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         searchTime: undefined,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [to, from, navigation]);
 
   const setCurrentLocationAsFrom = useCallback(
@@ -132,19 +128,16 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
       includeJourneyHistory: true,
     });
 
-  const setCurrentLocationOrRequest = useCallback(
-    async function setCurrentLocationOrRequest() {
-      if (currentLocation) {
+  const setCurrentLocationOrRequest = useCallback(async () => {
+    if (currentLocation) {
+      setCurrentLocationAsFrom();
+    } else {
+      const status = await requestLocationPermission();
+      if (status === 'granted') {
         setCurrentLocationAsFrom();
-      } else {
-        const status = await requestGeoPermission();
-        if (status === 'granted') {
-          setCurrentLocationAsFrom();
-        }
       }
-    },
-    [currentLocation, setCurrentLocationAsFrom, requestGeoPermission],
-  );
+    }
+  }, [currentLocation, setCurrentLocationAsFrom, requestLocationPermission]);
 
   function swap() {
     log('swap', {
@@ -322,6 +315,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -384,6 +378,7 @@ function useUpdatedLocation(
         }
       }
     },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLocation, favorites],
   );
 

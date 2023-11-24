@@ -45,6 +45,8 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
+import {useAnalytics} from '@atb/analytics';
+import {useTimeContextState} from '@atb/time';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -57,6 +59,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const style = useProfileHomeStyle();
   const {clearHistory} = useSearchHistory();
   const {t, language} = useTranslation();
+  const analytics = useAnalytics();
   const {
     authenticationType,
     signOut,
@@ -66,8 +69,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const config = useLocalConfig();
 
   const {fareContracts, customerProfile} = useTicketingState();
-  const activeFareContracts =
-    filterActiveOrCanBeUsedFareContracts(fareContracts);
+  const {serverNow} = useTimeContextState();
+  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
+    fareContracts,
+    serverNow,
+  );
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {configurableLinks} = useFirestoreConfiguration();
@@ -214,6 +220,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       .confirm,
                   ),
                   destructiveArrowFunction: async () => {
+                    Bugsnag.leaveBreadcrumb('User logging out');
+                    analytics.logEvent('Profile', 'User logging out');
                     setIsLoading(true);
                     try {
                       // On logout we delete the user's token

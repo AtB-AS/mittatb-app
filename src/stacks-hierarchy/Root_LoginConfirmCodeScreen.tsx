@@ -20,7 +20,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useFinishOnboarding} from '@atb/stacks-hierarchy/Root_OnboardingStack/use-finish-onboarding';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -39,7 +39,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   >();
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
-  const finishOnboarding = useFinishOnboarding();
+  const {completeOnboarding} = useAppState();
 
   const onLogin = async () => {
     setIsLoading(true);
@@ -48,7 +48,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
       setError(errorCode);
       setIsLoading(false);
     }
-    finishOnboarding();
+    completeOnboarding();
   };
 
   const onResendCode = async () => {
@@ -71,6 +71,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
         navigation.navigate(afterLogin.screen, afterLogin.params as any);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticationType]);
 
   return (

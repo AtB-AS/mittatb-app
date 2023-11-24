@@ -101,6 +101,7 @@ export const useBeacons = () => {
     if (isKettleSDKInitialized) {
       Kettle.deleteCollectedData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBeaconsSupported]);
 
   const getRationaleMessages = useMemo((): RationaleMessages => {
@@ -149,6 +150,7 @@ export const useBeacons = () => {
     }
 
     return granted;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBeaconsSupported, initializeBeaconsSDK]);
 
   useEffect(() => {

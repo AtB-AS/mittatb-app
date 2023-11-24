@@ -1,8 +1,8 @@
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useFinishOnboarding} from '@atb/stacks-hierarchy/Root_OnboardingStack/use-finish-onboarding';
 import React from 'react';
 import {AnonymousPurchaseConsequencesScreenComponent} from '@atb/anonymous-purchase-consequences-screen';
 import {OnboardingScreenProps} from './navigation-types';
+import {useAppState} from '@atb/AppContext';
 
 type Props =
   OnboardingScreenProps<'Onboarding_AnonymousPurchaseConsequencesScreen'>;
@@ -10,7 +10,7 @@ type Props =
 export const Onboarding_AnonymousPurchaseConsequencesScreen = ({
   navigation,
 }: Props) => {
-  const finishOnboarding = useFinishOnboarding();
+  const {completeOnboarding} = useAppState();
   const {enable_vipps_login} = useRemoteConfig();
 
   return (
@@ -25,7 +25,7 @@ export const Onboarding_AnonymousPurchaseConsequencesScreen = ({
         );
       }}
       onPressContinueWithoutLogin={() => {
-        finishOnboarding();
+        completeOnboarding();
         navigation.popToTop();
       }}
       showHeader={false}

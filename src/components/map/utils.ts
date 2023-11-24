@@ -18,7 +18,7 @@ import {
   ParkingType,
 } from './types';
 import distance from '@turf/distance';
-import {isBicycle, isScooter} from '@atb/mobility/utils';
+import {isStation} from '@atb/mobility/utils';
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
@@ -59,11 +59,14 @@ export const findEntityAtClick = async (
     mapViewRef,
     ['==', ['geometry-type'], 'Point'],
   );
-  return renderedFeatures?.filter(isFeaturePoint)[0];
+  return renderedFeatures?.filter(isFeaturePoint)?.filter(hasProperties)[0];
 };
 
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
   f.geometry.type === 'Point';
+
+export const hasProperties = (f: Feature) =>
+  Object.keys(f.properties || {}).length > 0;
 
 export const isClusterFeature = (
   feature: Feature,
@@ -91,10 +94,17 @@ export const mapPositionToCoordinates = (p: Position): Coordinates => ({
 
 export const getCoordinatesFromMapSelectionAction = (
   sc: MapSelectionActionType,
-) =>
-  sc.source === 'my-position'
-    ? sc.coords
-    : mapPositionToCoordinates(sc.feature.geometry.coordinates);
+) => {
+  switch (sc.source) {
+    case 'my-position':
+      return sc.coords;
+    case 'map-click':
+    case 'cluster-click':
+      return mapPositionToCoordinates(sc.feature.geometry.coordinates);
+    case 'filters-button':
+      return undefined;
+  }
+};
 
 export const getFeaturesAtClick = async (
   clickedFeature: Feature<Point>,
@@ -179,7 +189,7 @@ export const getVisibleRange = (visibleBounds: Position[]) => {
 };
 
 export const shouldShowMapLines = (entityFeature: Feature<Point>) =>
-  !isScooter(entityFeature) && !isBicycle(entityFeature);
+  isStation(entityFeature) || isStopPlace(entityFeature);
 
 export const shouldZoomToFeature = (entityFeature: Feature<Point>) =>
-  !isScooter(entityFeature) && !isBicycle(entityFeature);
+  isStation(entityFeature) || isStopPlace(entityFeature);

@@ -9,6 +9,7 @@ on:
       - '**/tsc.yml'
       - '**.lock'
       - 'package.json'
+      - 'patches/**'
 
 jobs:
   tsc:

@@ -7,15 +7,17 @@ private enum K {
 }
 
 enum ManifestError: Error {
-    case invalidType, keyValueNotFound, decodingData
+    case invalidType, keyValueNotFound, decodingData, missingInstallId
 }
 
 struct Manifest: Codable {
     enum CodingKeys: String, CodingKey {
         case favouriteDepartures = "@ATB_user_departures"
+        case installId = "install_id"
     }
 
     let favouriteDepartures: [FavouriteDeparture]?
+    let installId: String
 
     static var data: Manifest? {
         buildManifest()
@@ -55,6 +57,9 @@ struct Manifest: Codable {
             debugPrint("Error decoding data with error: \(error)")
             throw ManifestError.decodingData
         }
+      
+      let installIdData = try container.decode(String.self, forKey: .installId)
+      installId = installIdData
     }
 
     private static func buildManifest() -> Manifest? {
