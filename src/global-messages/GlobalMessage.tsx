@@ -9,7 +9,7 @@ import {
 } from '@atb/global-messages/types';
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
-import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
+import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from './rules';
 import {StaticColor} from '@atb/theme/colors';
 
