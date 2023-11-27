@@ -30,7 +30,7 @@ export const emailAvailable = async (
   email: string,
   opts?: AxiosRequestConfig,
 ): Promise<EmailAvailableResponse> => {
-  const url = `/profile/v1/available-email?email=${encodeURIComponent(email)}`; // https://github.com/AtB-AS/webshop2/blob/3fdbec83f9cb7368b519c3efd98531dc23dc777b/src/server-api-service/unauth-client.ts
+  const url = `/profile/v1/available-email?email=${encodeURIComponent(email)}`;
   const response = await client.get<EmailAvailableResponse>(url, opts);
   return response.data;
 };

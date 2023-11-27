@@ -186,7 +186,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               testID="loginButton"
             />
           )}
-          {authenticationType === 'phone' && ( // check for phone login still valid?
+          {authenticationType === 'phone' && (
             <LinkSectionItem
               text={t(
                 ProfileTexts.sections.account.linkSectionItems.editProfile

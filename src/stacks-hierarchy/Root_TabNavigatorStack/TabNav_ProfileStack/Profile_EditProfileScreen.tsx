@@ -12,14 +12,17 @@ import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageBox} from '@atb/components/message-box';
 import {emailAvailable, getProfile, updateProfile} from '@atb/api';
+import parsePhoneNumber from 'libphonenumber-js';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
-type SubmissionStatus =
-  | 'INVALID_EMAIL'
-  | 'UNAVAILABLE_EMAIL'
-  | 'SUBMITTED'
-  | 'SUBMISSION_ERROR';
-type ProfileState = 'loading' | 'success' | 'error';
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
+type SubmissionStatus =
+  | 'loading'
+  | 'invalid-email'
+  | 'unavailable-email'
+  | 'submitted'
+  | 'submission-error';
+type ProfileState = 'loading' | 'success' | 'error';
 type CustomerProfile = {
   email: string;
   firstName: string;
@@ -32,35 +35,84 @@ export const Profile_EditProfileScreen = ({
 }: EditProfileScreenProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {authenticationType, customerNumber} = useAuthState();
+  const {
+    authenticationType,
+    customerNumber,
+    phoneNumber: authPhoneNumber,
+  } = useAuthState();
+
   const [customerProfile, setCustomerProfile] = useState<CustomerProfile>();
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [surName, setSurName] = useState('');
+  const [surname, setSurname] = useState('');
   const [submissionStatus, setSubmissionStatus] = useState<
     SubmissionStatus | undefined
   >(undefined);
-  const [profileState, setProfileState] = useState<ProfileState | undefined>();
+  const [profileState, setProfileState] = useState<ProfileState>();
 
-  const prepopulatePersonalia = (
+  const isLoadingOrSubmittingProfile =
+    submissionStatus === 'loading' || profileState === 'loading';
+
+  const phoneNumber = parsePhoneNumber(
+    authPhoneNumber ?? '',
+  )?.formatInternational();
+
+  const onSubmit = async () => {
+    setSubmissionStatus('loading');
+
+    if (isValidEmail(email)) {
+      const {available} = await emailAvailable(email);
+      if (available || customerProfile?.email === email) {
+        try {
+          await updateProfile({
+            firstName,
+            surname,
+            email,
+          });
+          await fetchProfile();
+          setSubmissionStatus('submitted');
+        } catch {
+          setSubmissionStatus('submission-error');
+        }
+      } else {
+        setSubmissionStatus('unavailable-email');
+      }
+    } else {
+      setSubmissionStatus('invalid-email');
+    }
+  };
+
+  const getEmailErrorText = (
+    status: SubmissionStatus | undefined,
+  ): string | undefined => {
+    switch (status) {
+      case 'invalid-email':
+        return t(EditProfileTexts.personalia.email.formattingError);
+      case 'unavailable-email':
+        return t(EditProfileTexts.personalia.email.unavailableError);
+    }
+  };
+
+  const prefillPersonalia = (
     response: string,
     set: React.Dispatch<React.SetStateAction<string>>,
   ) => {
+    // Receiving "_" from Entur when firstName or surname are not set on user profile, instead setting them to ""
     if (response === '_') {
       set('');
     } else if (response) {
       set(response);
     }
   };
+
   const fetchProfile = useCallback(async () => {
     try {
-      setProfileState('loading');
       const response = await getProfile();
       setCustomerProfile(response);
 
-      prepopulatePersonalia(response.email, setEmail);
-      prepopulatePersonalia(response.firstName, setFirstName);
-      prepopulatePersonalia(response.surname, setSurName);
+      prefillPersonalia(response.email, setEmail);
+      prefillPersonalia(response.firstName, setFirstName);
+      prefillPersonalia(response.surname, setSurname);
 
       setProfileState('success');
     } catch {
@@ -69,47 +121,12 @@ export const Profile_EditProfileScreen = ({
   }, []);
 
   useEffect(() => {
-    fetchProfile();
+    const getProfileData = async () => {
+      setProfileState('loading');
+      await fetchProfile();
+    };
+    getProfileData();
   }, [fetchProfile]);
-
-  //
-  // const phoneNumber = parsePhoneNumber(
-  //   customerProfile?.phone,
-  //   // user?.phoneNumber ?? '', // from get endpoint
-  // )?.formatInternational();
-  // console.log(phoneNumber);
-
-  const onSubmit = async () => {
-    if (isValidEmail(email)) {
-      const {available} = await emailAvailable(email);
-      if (available || customerProfile?.email === email) {
-        try {
-          await updateProfile({
-            firstName: firstName,
-            surname: surName,
-            email: email,
-          });
-          fetchProfile();
-          setSubmissionStatus('SUBMITTED');
-        } catch {
-          setSubmissionStatus('SUBMISSION_ERROR');
-        }
-      } else {
-        setSubmissionStatus('UNAVAILABLE_EMAIL');
-      }
-    } else {
-      setSubmissionStatus('INVALID_EMAIL');
-    }
-  };
-
-  const getEmailErrorText = (): string | undefined => {
-    switch (submissionStatus) {
-      case 'INVALID_EMAIL':
-        return t(EditProfileTexts.personalia.email.formattingError);
-      case 'UNAVAILABLE_EMAIL':
-        return t(EditProfileTexts.personalia.email.unavailableError);
-    }
-  };
 
   return (
     <FullScreenView
@@ -130,28 +147,27 @@ export const Profile_EditProfileScreen = ({
       )}
     >
       {authenticationType !== 'phone' ? (
-        <View>
+        <View style={styles.noAccount}>
           <ThemeText>{t(EditProfileTexts.notProfile)}</ThemeText>
         </View>
       ) : (
         <>
           <View style={styles.personalia}>
+            {profileState === 'loading' && <ActivityIndicator size="large" />}
             <ThemeText accessibilityRole="header" color="secondary">
               {t(EditProfileTexts.personalia.header)}
             </ThemeText>
           </View>
-
-          {profileState === 'loading' && <ActivityIndicator size="large" />}
-          {profileState === 'error' && (
+          {profileState === 'error' ? (
             <MessageBox
               type="error"
               message={t(EditProfileTexts.personalia.error)}
             />
-          )}
-          {profileState === 'success' && customerProfile && (
+          ) : (
             <>
               <Section withPadding>
                 <TextInputSectionItem
+                  editable={!isLoadingOrSubmittingProfile}
                   value={firstName}
                   onChangeText={setFirstName}
                   label={t(EditProfileTexts.personalia.firstName.label)}
@@ -165,8 +181,9 @@ export const Profile_EditProfileScreen = ({
               </Section>
               <Section withPadding>
                 <TextInputSectionItem
-                  value={surName}
-                  onChangeText={setSurName}
+                  editable={!isLoadingOrSubmittingProfile}
+                  value={surname}
+                  onChangeText={setSurname}
                   label={t(EditProfileTexts.personalia.surname.label)}
                   placeholder={t(
                     EditProfileTexts.personalia.surname.placeholder,
@@ -178,13 +195,14 @@ export const Profile_EditProfileScreen = ({
               </Section>
               <Section withPadding>
                 <TextInputSectionItem
+                  editable={!isLoadingOrSubmittingProfile}
                   value={email}
                   onChangeText={setEmail}
                   label={t(EditProfileTexts.personalia.email.label)}
                   placeholder={t(EditProfileTexts.personalia.email.placeholder)}
                   keyboardType="email-address"
                   showClear
-                  errorText={getEmailErrorText()}
+                  errorText={getEmailErrorText(submissionStatus)}
                   inlineLabel={false}
                 />
               </Section>
@@ -194,12 +212,7 @@ export const Profile_EditProfileScreen = ({
                   {t(EditProfileTexts.personalia.phone.header)}
                 </ThemeText>
                 <ThemeText type="body__secondary" color="secondary">
-                  {/*{t(EditProfileTexts.personalia.phone.loggedIn(phoneNumber))}*/}
-                  {t(
-                    EditProfileTexts.personalia.phone.loggedIn(
-                      customerProfile.phone,
-                    ),
-                  )}
+                  {t(EditProfileTexts.personalia.phone.loggedIn(phoneNumber))}
                 </ThemeText>
               </View>
 
@@ -209,14 +222,23 @@ export const Profile_EditProfileScreen = ({
                   text={t(EditProfileTexts.button.save)}
                   onPress={onSubmit}
                   style={styles.submit}
+                  disabled={isLoadingOrSubmittingProfile}
+                  rightIcon={
+                    submissionStatus === 'loading'
+                      ? {
+                          svg: ArrowRight,
+                          loading: submissionStatus === 'loading',
+                        }
+                      : undefined
+                  }
                 />
-                {submissionStatus === 'SUBMITTED' && (
+                {submissionStatus === 'submitted' && (
                   <MessageBox
                     type="valid"
                     message={t(EditProfileTexts.profileUpdate.success)}
                   />
                 )}
-                {submissionStatus === 'SUBMISSION_ERROR' && (
+                {submissionStatus === 'submission-error' && (
                   <MessageBox
                     type="error"
                     message={t(EditProfileTexts.profileUpdate.error)}
@@ -235,10 +257,7 @@ export const Profile_EditProfileScreen = ({
                   color="secondary"
                   style={styles.profilePhone}
                 >
-                  {/*{t(EditProfileTexts.profileInfo.otp(phoneNumber))}*/}
-                  {t(EditProfileTexts.profileInfo.otp(customerProfile.phone))}
-
-                  {/*  What text to show when logged in with Vipps ? --> Webshop it's the same */}
+                  {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
                 </ThemeText>
                 <ThemeText>
                   {t(EditProfileTexts.profileInfo.customerNumber)}
@@ -249,7 +268,6 @@ export const Profile_EditProfileScreen = ({
               </View>
             </>
           )}
-
           <Section withPadding withTopPadding withBottomPadding>
             <Button
               mode="primary"
@@ -270,11 +288,15 @@ function isValidEmail(email: string) {
   // More validation is done on the server
   return /^\S+@\S+\.\S+$/.test(email);
 }
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   personalia: {
     marginHorizontal: theme.spacings.xLarge,
     marginBottom: theme.spacings.medium,
     marginTop: theme.spacings.xLarge,
+  },
+  noAccount: {
+    margin: theme.spacings.xLarge,
   },
   parallaxContent: {marginHorizontal: theme.spacings.medium},
   phone: {

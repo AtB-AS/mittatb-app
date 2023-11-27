@@ -5,9 +5,9 @@ export const EditProfileTexts = {
     title: _('Rediger Min profil', 'Edit My profile', ''),
   },
   notProfile: _(
-    'Det virker ikke som du er logget inn',
-    'Looks like you are not logged in',
-    'Det verkar ikkje som du er logga inn',
+    'Det virker ikke som du er logget inn. Vennligst opprett en profil og logg inn.',
+    'Looks like you are not logged in. Please create a profile and log in.',
+    'Det verkar ikkje som du er logga inn. Ver venleg, lag ein profil og logg inn.',
   ),
   personalia: {
     header: _('Personalia', 'Personalia', 'Personalia'),
