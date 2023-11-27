@@ -4509,7 +4509,7 @@
     unbzip2-stream "1.4.3"
     yargs "17.7.1"
 
-"@react-native-async-storage/async-storage@^1.19.7":
+"@react-native-async-storage/async-storage@^1.19.8":
   version "1.19.8"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.19.8.tgz#a29fc4f4aa5c85805f8b3edea84e19f797c59fdd"
   integrity sha512-O25eaSbmH+LEmOobkpwf43bAGIkqE9YGzfWcirTszI90xk4ItaDWpgJsQx9LeAbeAKzVkn1h+Nq5Bo6I6q2oFA==

@@ -27,7 +27,7 @@
     "test:android:local:dev": "IS_LOCAL=true wdio ./e2e/conf/android.conf.local.dev.ts",
     "test:android:local:appcenter": "IS_LOCAL=true wdio ./e2e/conf/android.conf.local.appcenter.ts",
     "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"yarn test:android:local:dev --spec e2e/test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1",
-    "storybook-generate": "sb-rn-get-stories",
+    "storybook-generate": "sb-rn-get-stories"
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
@@ -42,7 +42,7 @@
     "@leile/lobo-t": "^1.0.5",
     "@mapbox/polyline": "^1.1.1",
     "@miblanchard/react-native-slider": "^2.3.1",
-    "@react-native-async-storage/async-storage": "^1.19.7",
+    "@react-native-async-storage/async-storage": "^1.19.8",
     "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-native-community/datetimepicker": "^7.6.1",
     "@react-native-firebase/analytics": "~18.5.0",
