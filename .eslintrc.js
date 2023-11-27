@@ -118,7 +118,12 @@ module.exports = {
   overrides: [
     // Allow 'export default' from these paths
     {
-      files: ['src/assets/svg/**', 'types/*', 'src/translations/**'],
+      files: [
+        'src/assets/svg/**',
+        'types/*',
+        'src/translations/**',
+        'src/storybook/stories/**',
+      ],
       rules: {
         'no-restricted-exports': [
           'error',

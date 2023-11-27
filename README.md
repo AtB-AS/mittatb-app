@@ -161,6 +161,11 @@ Specific notes on QA:
 ### Debugging
 - [Debugging](./docs/Debugging.md)
 
+## Storybook
+Storybook for the app can be enabled in the developer menu in 'My profile'.
+
+When adding or removing stories, the command `yarn storybook-generate` must be used to update the references in the `storybook.requires.js` file.
+
 ## Using with other organizations
 
 See documentation on setting up other environments.
