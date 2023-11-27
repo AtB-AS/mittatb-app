@@ -28,7 +28,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
   const {isPopOverSeen, setPopOverSeen} = useOneTimePopover();
   const {t} = useTranslation();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const current = popOvers[0];
+  const currentPopOver = popOvers[0];
 
   const addPopOver = useCallback(
     (popOver: PopOverType) => {
@@ -61,15 +61,15 @@ export const PopOverContextProvider: React.FC = ({children}) => {
 
   return (
     <PopOverContext.Provider value={{addPopOver}}>
-      {!isScreenReaderEnabled && current && (
+      {!isScreenReaderEnabled && currentPopOver && (
         <PopOver
-          key={current.oneTimeKey}
-          from={current.target}
-          isOpen={!isPopOverSeen(current.oneTimeKey)}
-          heading={t(OneTimePopOverTexts[current.oneTimeKey].heading)}
-          text={t(OneTimePopOverTexts[current.oneTimeKey].text)}
+          key={currentPopOver.oneTimeKey}
+          from={currentPopOver.target}
+          isOpen={!isPopOverSeen(currentPopOver.oneTimeKey)}
+          heading={t(OneTimePopOverTexts[currentPopOver.oneTimeKey].heading)}
+          text={t(OneTimePopOverTexts[currentPopOver.oneTimeKey].text)}
           animationDuration={POPOVER_ANIMATION_DURATION}
-          onClose={() => onClose(current.oneTimeKey)}
+          onClose={() => onClose(currentPopOver.oneTimeKey)}
         />
       )}
       {children}
