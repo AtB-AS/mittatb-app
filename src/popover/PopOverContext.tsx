@@ -5,6 +5,7 @@ import {useOneTimePopover} from './use-one-time-popover';
 import OneTimePopOverTexts from '@atb/translations/components/OneTimePopOver';
 import {useTranslation} from '@atb/translations';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {InteractionManager} from 'react-native';
 
 export const POPOVER_ANIMATION_DURATION = 200;
 
@@ -32,11 +33,11 @@ export const PopOverContextProvider: React.FC = ({children}) => {
   const addPopOver = useCallback(
     (popOver: PopOverType) => {
       if (!isSeen(popOver.oneTimeKey)) {
-        // Setting a timeout before adding the popover to allow potential page transitions
+        // Run after interactions to allow potential page transitions
         // or similar animations to complete before the popover is displayed.
-        setTimeout(() => {
-          setPopOvers((val) => [...val, popOver]);
-        }, 500);
+        InteractionManager.runAfterInteractions(() =>
+          setPopOvers((val) => [...val, popOver]),
+        );
       }
     },
     [isSeen],
