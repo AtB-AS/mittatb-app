@@ -1,17 +1,11 @@
 import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
 import Bugsnag from '@bugsnag/react-native';
-
-type CustomerProfileUpdate = Partial<{
-  firstName: string;
-  surname: string;
-  email: string;
-  phone: string;
-}>;
+import {CustomerProfile, CustomerProfileUpdate} from '@atb/api/types/profile';
 
 export const getProfile = async () => {
   const url = '/profile/v1';
-  const response = await client.get(url, {
+  const response = await client.get<CustomerProfile>(url, {
     authWithIdToken: true,
   });
   return response.data;

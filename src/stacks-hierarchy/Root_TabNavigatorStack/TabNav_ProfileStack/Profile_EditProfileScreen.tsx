@@ -14,6 +14,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {emailAvailable, getProfile, updateProfile} from '@atb/api';
 import parsePhoneNumber from 'libphonenumber-js';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {CustomerProfile} from '@atb/api/types/profile';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 type SubmissionStatus =
@@ -23,12 +24,6 @@ type SubmissionStatus =
   | 'submitted'
   | 'submission-error';
 type ProfileState = 'loading' | 'success' | 'error';
-type CustomerProfile = {
-  email: string;
-  firstName: string;
-  surname: string;
-  phone: string;
-};
 
 export const Profile_EditProfileScreen = ({
   navigation,
