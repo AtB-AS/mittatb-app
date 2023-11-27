@@ -8,13 +8,13 @@ import {
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import type {IconColor} from './types';
 import {
   NotificationIndicator,
   NotificationIndicatorProps,
 } from './NotificationIndicator';
-import {LoadingSpinner} from '@atb/components/loading';
+import React from 'react';
 
 export type ThemeIconProps = {
   svg(props: SvgProps): JSX.Element;
@@ -55,7 +55,7 @@ export const ThemeIcon = ({
   return (
     <View style={style}>
       {loading ? (
-        <LoadingSpinner />
+        <ActivityIndicator size="small" />
       ) : (
         <>
           {svg(settings)}

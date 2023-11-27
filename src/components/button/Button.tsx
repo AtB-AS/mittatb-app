@@ -3,6 +3,7 @@ import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Easing,
   PressableProps,
@@ -59,6 +60,7 @@ export type ButtonProps = {
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
 } & ButtonTypeAwareProps &
   PressableProps;
@@ -77,6 +79,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       text,
       disabled,
       active,
+      loading = false,
       compact = false,
       style,
       viewContainerStyle,
@@ -188,6 +191,11 @@ export const Button = React.forwardRef<any, ButtonProps>(
           {rightIcon && (
             <View style={rightStyling}>
               <ThemeIcon fill={textColor} {...rightIcon} />
+            </View>
+          )}
+          {!rightIcon && loading && (
+            <View style={rightStyling}>
+              <ActivityIndicator size="small" />
             </View>
           )}
         </PressableOpacity>
