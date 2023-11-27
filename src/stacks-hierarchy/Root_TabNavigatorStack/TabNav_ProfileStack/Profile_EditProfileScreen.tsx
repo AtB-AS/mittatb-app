@@ -15,6 +15,7 @@ import {emailAvailable, getProfile, updateProfile} from '@atb/api';
 import parsePhoneNumber from 'libphonenumber-js';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {CustomerProfile} from '@atb/api/types/profile';
+import {numberToAccessibilityString} from '@atb/utils/accessibility';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 type SubmissionStatus =
@@ -254,12 +255,22 @@ export const Profile_EditProfileScreen = ({
                 >
                   {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
                 </ThemeText>
-                <ThemeText>
-                  {t(EditProfileTexts.profileInfo.customerNumber)}
-                </ThemeText>
-                <ThemeText type="body__secondary" color="secondary">
-                  {customerNumber}
-                </ThemeText>
+                {customerNumber && (
+                  <>
+                    <ThemeText>
+                      {t(EditProfileTexts.profileInfo.customerNumber)}
+                    </ThemeText>
+                    <ThemeText
+                      type="body__secondary"
+                      color="secondary"
+                      accessibilityLabel={numberToAccessibilityString(
+                        customerNumber,
+                      )}
+                    >
+                      {customerNumber}
+                    </ThemeText>
+                  </>
+                )}
               </View>
             </>
           )}
