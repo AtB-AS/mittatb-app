@@ -1,6 +1,9 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {AnnouncementRaw, AnnouncementType} from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
+import {APP_VERSION} from '@env';
+import {AppPlatformType} from '@atb/global-messages/types';
+import {Platform} from 'react-native';
 
 export const mapToAnnouncements = (
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<AnnouncementRaw>[],
@@ -26,15 +29,23 @@ export const mapToAnnouncement = (
   const body = mapToLanguageAndTexts(result.body);
   const mainImage = result.mainImage;
   const isDismissable = result.isDismissable;
+  const appVersionMin = result.appVersionMin;
+  const appVersionMax = result.appVersionMax;
+  const platforms = result.appPlatforms;
   const startDate = mapToMillis(result.startDate);
   const endDate = mapToMillis(result.endDate);
 
+  if (!result.active) return;
   if (!summary) return;
   if (!fullTitle) return;
   if (!body) return;
+  if (!isAppPlatformValid(platforms)) return;
+  if (appVersionMin && appVersionMin > APP_VERSION) return;
+  if (appVersionMax && appVersionMax < APP_VERSION) return;
 
   return {
     id,
+    active: result.active,
     summaryTitle,
     summary,
     summaryImage,
@@ -55,3 +66,10 @@ export const mapToMillis = (
   if (!timestamp.toMillis) return;
   return timestamp.toMillis();
 };
+
+function isAppPlatformValid(platforms: AppPlatformType[]) {
+  if (!platforms) return true;
+  return !!platforms.find(
+    (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
+  );
+}
