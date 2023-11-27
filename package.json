@@ -28,7 +28,6 @@
     "test:android:local:appcenter": "IS_LOCAL=true wdio ./e2e/conf/android.conf.local.appcenter.ts",
     "test:android:local:perfMeasure": "flashlight test --bundleId no.mittatb.debug --testCommand \"yarn test:android:local:dev --spec e2e/test/flashlight/performanceMeasures.e2e.ts\" --resultsTitle performanceMeasures --iterationCount 1 --maxRetries 1",
     "storybook-generate": "sb-rn-get-stories",
-    "storybook-watch": "sb-rn-watcher"
   },
   "dependencies": {
     "@adrianso/react-native-device-brightness": "^1.2.7",
