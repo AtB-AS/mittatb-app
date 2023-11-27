@@ -11,6 +11,8 @@ import {DashboardTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {useAnalytics} from '@atb/analytics';
 import {AnnouncementType} from '@atb/announcements/types';
+import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
+import {useNow} from '@atb/utils/use-now';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -22,6 +24,7 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const {t} = useTranslation();
   const style = useStyle();
   const analytics = useAnalytics();
+  const now = useNow(10000);
 
   if (announcements.length === 0) return null;
 
@@ -37,30 +40,32 @@ export const Announcements = ({style: containerStyle}: Props) => {
     <View style={containerStyle} testID="announcements">
       <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
       <ScrollView>
-        {announcements.map((a, i) => (
-          <Section
-            key={a.id}
-            style={i < announcements.length - 1 && style.announcement}
-            testID="announcement"
-          >
-            <GenericClickableSectionItem
-              accessible={false}
-              onPress={() =>
-                openBottomSheet(() => (
-                  <AnnouncementSheet
-                    announcement={a}
-                    close={closeBottomSheet}
-                  />
-                ))
-              }
+        {announcements
+          .filter((a) => isWithinTimeRange(a, now))
+          .map((a, i) => (
+            <Section
+              key={a.id}
+              style={i < announcements.length - 1 && style.announcement}
+              testID="announcement"
             >
-              <Announcement
-                announcement={a}
-                onDismiss={() => handleDismiss(a)}
-              />
-            </GenericClickableSectionItem>
-          </Section>
-        ))}
+              <GenericClickableSectionItem
+                accessible={false}
+                onPress={() =>
+                  openBottomSheet(() => (
+                    <AnnouncementSheet
+                      announcement={a}
+                      close={closeBottomSheet}
+                    />
+                  ))
+                }
+              >
+                <Announcement
+                  announcement={a}
+                  onDismiss={() => handleDismiss(a)}
+                />
+              </GenericClickableSectionItem>
+            </Section>
+          ))}
       </ScrollView>
     </View>
   );
