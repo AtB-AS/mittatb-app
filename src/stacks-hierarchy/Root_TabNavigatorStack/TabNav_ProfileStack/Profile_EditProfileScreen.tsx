@@ -83,9 +83,9 @@ export const Profile_EditProfileScreen = ({
   ): string | undefined => {
     switch (status) {
       case 'invalid-email':
-        return t(EditProfileTexts.personalia.email.formattingError);
+        return t(EditProfileTexts.personalDetails.email.formattingError);
       case 'unavailable-email':
-        return t(EditProfileTexts.personalia.email.unavailableError);
+        return t(EditProfileTexts.personalDetails.email.unavailableError);
     }
   };
 
@@ -148,16 +148,16 @@ export const Profile_EditProfileScreen = ({
         </View>
       ) : (
         <>
-          <View style={styles.personalia}>
+          <View style={styles.personalDetails}>
             {profileState === 'loading' && <ActivityIndicator size="large" />}
             <ThemeText accessibilityRole="header" color="secondary">
-              {t(EditProfileTexts.personalia.header)}
+              {t(EditProfileTexts.personalDetails.header)}
             </ThemeText>
           </View>
           {profileState === 'error' ? (
             <MessageBox
               type="error"
-              message={t(EditProfileTexts.personalia.error)}
+              message={t(EditProfileTexts.personalDetails.error)}
             />
           ) : (
             <>
@@ -166,9 +166,9 @@ export const Profile_EditProfileScreen = ({
                   editable={!isLoadingOrSubmittingProfile}
                   value={firstName}
                   onChangeText={setFirstName}
-                  label={t(EditProfileTexts.personalia.firstName.label)}
+                  label={t(EditProfileTexts.personalDetails.firstName.label)}
                   placeholder={t(
-                    EditProfileTexts.personalia.firstName.placeholder,
+                    EditProfileTexts.personalDetails.firstName.placeholder,
                   )}
                   showClear
                   inlineLabel={false}
@@ -180,9 +180,9 @@ export const Profile_EditProfileScreen = ({
                   editable={!isLoadingOrSubmittingProfile}
                   value={surname}
                   onChangeText={setSurname}
-                  label={t(EditProfileTexts.personalia.surname.label)}
+                  label={t(EditProfileTexts.personalDetails.surname.label)}
                   placeholder={t(
-                    EditProfileTexts.personalia.surname.placeholder,
+                    EditProfileTexts.personalDetails.surname.placeholder,
                   )}
                   showClear
                   inlineLabel={false}
@@ -194,8 +194,10 @@ export const Profile_EditProfileScreen = ({
                   editable={!isLoadingOrSubmittingProfile}
                   value={email}
                   onChangeText={setEmail}
-                  label={t(EditProfileTexts.personalia.email.label)}
-                  placeholder={t(EditProfileTexts.personalia.email.placeholder)}
+                  label={t(EditProfileTexts.personalDetails.email.label)}
+                  placeholder={t(
+                    EditProfileTexts.personalDetails.email.placeholder,
+                  )}
                   keyboardType="email-address"
                   showClear
                   errorText={getEmailErrorText(submissionStatus)}
@@ -205,10 +207,14 @@ export const Profile_EditProfileScreen = ({
 
               <View style={styles.phone}>
                 <ThemeText>
-                  {t(EditProfileTexts.personalia.phone.header)}
+                  {t(EditProfileTexts.personalDetails.phone.header)}
                 </ThemeText>
                 <ThemeText type="body__secondary" color="secondary">
-                  {t(EditProfileTexts.personalia.phone.loggedIn(phoneNumber))}
+                  {t(
+                    EditProfileTexts.personalDetails.phone.loggedIn(
+                      phoneNumber,
+                    ),
+                  )}
                 </ThemeText>
               </View>
 
@@ -296,7 +302,7 @@ function isValidEmail(email: string) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  personalia: {
+  personalDetails: {
     marginHorizontal: theme.spacings.xLarge,
     marginBottom: theme.spacings.medium,
     marginTop: theme.spacings.xLarge,
