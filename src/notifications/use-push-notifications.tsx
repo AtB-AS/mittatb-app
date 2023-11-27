@@ -53,23 +53,31 @@ export const usePushNotifications = () => {
   }, []);
 
   const register = useCallback(async () => {
+    const token = await messaging().getToken();
+    if (!token) return;
+    registerMutation.mutate({token, language: language});
+    return token;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [language, registerMutation.mutate]);
+
+  const requestPermissions = useCallback(async () => {
     setStatus('updating');
     const permissionStatus = await requestUserPermission();
-    const token = await messaging().getToken();
+    const token = await register();
     if (!token) {
       setStatus('error');
       return;
     }
-    registerMutation.mutate({token, language});
     setStatus(permissionStatus);
     return token;
-  }, [language, registerMutation]);
+  }, [register]);
 
   return {
     status,
     config: configQuery.data,
     updateConfig: configMutation.mutate,
     checkPermissions,
+    requestPermissions,
     register,
   };
 };

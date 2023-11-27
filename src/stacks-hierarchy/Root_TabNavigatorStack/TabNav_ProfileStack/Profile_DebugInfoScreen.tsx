@@ -136,7 +136,8 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
-  const {register: registerForPushNotifications} = usePushNotifications();
+  const {requestPermissions: registerForPushNotifications} =
+    usePushNotifications();
   const [fcmToken, setFcmToken] = useState<string>();
 
   const remoteConfig = useRemoteConfig();
