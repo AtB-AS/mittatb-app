@@ -19,6 +19,7 @@ export const usePushNotifications = () => {
   const {language} = useLocaleContext();
   const [status, setStatus] = useState<NotificationsStatus>('loading');
   const {mutation: registerMutation} = useRegister();
+  const mutateRegister = registerMutation.mutate;
   const {query: configQuery, mutation: configMutation} = useConfig();
 
   const checkPermissions = useCallback(() => {
@@ -55,10 +56,9 @@ export const usePushNotifications = () => {
   const register = useCallback(async () => {
     const token = await messaging().getToken();
     if (!token) return;
-    registerMutation.mutate({token, language: language});
+    mutateRegister({token, language: language});
     return token;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language, registerMutation.mutate]);
+  }, [language, mutateRegister]);
 
   const requestPermissions = useCallback(async () => {
     setStatus('updating');
