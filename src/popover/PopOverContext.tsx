@@ -25,14 +25,14 @@ const PopOverContext = createContext<PopOverContextType>({
 export const PopOverContextProvider: React.FC = ({children}) => {
   // Queue of popovers to display
   const [popOvers, setPopOvers] = useState<PopOverType[]>([]);
-  const {isSeen, setPopOverSeen} = useOneTimePopover();
+  const {isPopOverSeen, setPopOverSeen} = useOneTimePopover();
   const {t} = useTranslation();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
   const current = popOvers[0];
 
   const addPopOver = useCallback(
     (popOver: PopOverType) => {
-      if (!isSeen(popOver.oneTimeKey)) {
+      if (!isPopOverSeen(popOver.oneTimeKey)) {
         // Run after interactions to allow potential page transitions
         // or similar animations to complete before the popover is displayed.
         InteractionManager.runAfterInteractions(() =>
@@ -40,7 +40,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
         );
       }
     },
-    [isSeen],
+    [isPopOverSeen],
   );
 
   const onClose = useCallback(
@@ -65,7 +65,7 @@ export const PopOverContextProvider: React.FC = ({children}) => {
         <PopOver
           key={current.oneTimeKey}
           from={current.target}
-          isOpen={!isSeen(current.oneTimeKey)}
+          isOpen={!isPopOverSeen(current.oneTimeKey)}
           heading={t(OneTimePopOverTexts[current.oneTimeKey].heading)}
           text={t(OneTimePopOverTexts[current.oneTimeKey].text)}
           animationDuration={POPOVER_ANIMATION_DURATION}

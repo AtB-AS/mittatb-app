@@ -17,7 +17,7 @@ export const useOneTimePopover = () => {
       .get(StorageModelKeysEnum.OneTimePopOver)
       .then((stored) => JSON.parse(stored ?? '[]') as string[]);
 
-  const isSeen = useCallback(
+  const isPopOverSeen = useCallback(
     (oneTimeKey: PopOverKey) => seenPopovers?.includes(oneTimeKey),
     [seenPopovers],
   );
@@ -35,5 +35,5 @@ export const useOneTimePopover = () => {
     [],
   );
 
-  return {setPopOverSeen, isSeen};
+  return {setPopOverSeen, isPopOverSeen};
 };
