@@ -69,15 +69,16 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     serverNow,
   );
 
-  const {register, status: notificationStatus} = usePushNotifications();
+  const {register: registerForNotifications, status: notificationStatus} =
+    usePushNotifications();
   useOnPushNotificationOpened();
 
   // Register notification language when the app starts, in case the user have
   // changed language since last time the app was opened. This useEffect will
   // also trigger when language is changed manually in the app.
   useEffect(() => {
-    register();
-  }, [register]);
+    registerForNotifications();
+  }, [registerForNotifications]);
 
   useEffect(() => {
     const shouldShowLocationOnboarding =
