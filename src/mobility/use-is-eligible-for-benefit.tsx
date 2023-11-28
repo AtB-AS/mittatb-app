@@ -4,7 +4,11 @@ import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 export const useIsEligibleForBenefit = (
   operatorBenefit: OperatorBenefitType | undefined,
 ) => {
-  const {data: userBenefits, isLoading, isError} = useUserBenefitsQuery();
+  const {
+    data: userBenefits,
+    isLoading,
+    isError,
+  } = useUserBenefitsQuery(!!operatorBenefit);
 
   const isUserEligibleForBenefit =
     userBenefits && operatorBenefit?.id
