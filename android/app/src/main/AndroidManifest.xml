@@ -30,8 +30,63 @@
                 <data android:scheme="@string/app_scheme" />
             </intent-filter>
         </activity>
-        <provider android:name="com.kogenta.kettle.core.api.KettleInitializer" android:authorities="${applicationId}.KettleInitializer" tools:node="remove" />
-        <receiver android:name="com.kogenta.kettle.core.api.StartupBroadcastReceiver" tools:node="remove"/>
-        <receiver android:name="com.kogenta.kettle.core.broadcast.BootBroadcastReceiver" tools:node="remove"/>
+        <!-- Kogenta SDK remove receivers / services -->
+        <service
+            android:name="com.kogenta.kettle.core.mmi.service.SensorService"
+            android:foregroundServiceType="location"
+            android:launchMode="singleInstance"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="remove" />
+        <service
+            android:name="com.kogenta.kettle.core.manager.compatibility.MotionService"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="remove"/>
+        <provider
+            android:name="com.kogenta.kettle.core.api.KettleInitializer"
+            android:authorities="${applicationId}.KettleInitializer"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="remove" />
+        <receiver
+            android:name="com.kogenta.kettle.core.bluetooth.broadcast.BeaconBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="remove">
+            <intent-filter>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" tools:node="remove"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kogenta.kettle.core.broadcast.BootBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="remove">
+            <intent-filter>
+                <action android:name="com.kogenta.kettle.BootBroadcastReceiver.SHUTDOWN" tools:node="remove"/>
+                <action android:name="com.kogenta.kettle.BootBroadcastReceiver.WAKEUP" tools:node="remove"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kogenta.kettle.core.broadcast.LocationMotionBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="remove">
+            <intent-filter>
+                <action android:name="com.kogenta.kettle.ActivityBroadcastReceiver" tools:node="remove"/>
+                <action android:name="com.kogenta.kettle.LocationBroadcastReceiver" tools:node="remove"/>
+                <action android:name="com.kogenta.kettle.BatchLocationBroadcastReceiver" tools:node="remove"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.kogenta.kettle.core.api.StartupBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"
+            tools:node="remove">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" tools:node="remove"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

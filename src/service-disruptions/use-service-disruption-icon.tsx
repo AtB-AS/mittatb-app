@@ -8,7 +8,7 @@ import {
   GlobalMessageContextEnum,
   useGlobalMessagesState,
 } from '@atb/global-messages';
-import {isWithinTimeRange} from '@atb/global-messages/is-within-time-range';
+import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {ServiceDisruptionSheet} from '@atb/service-disruptions/ServiceDisruptionSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';

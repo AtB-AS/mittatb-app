@@ -1,5 +1,6 @@
 import {LanguageAndTextType} from '@atb/configuration';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {AppPlatformType} from '@atb/global-messages/types';
 
 export type AnnouncementId = string;
 
@@ -13,13 +14,16 @@ export type AnnouncementRaw = {
   body: LanguageAndTextType[];
   mainImage?: string;
   isDismissable?: boolean;
+  appPlatforms: AppPlatformType[];
+  appVersionMin: string;
+  appVersionMax: string;
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
 };
 
 export type AnnouncementType = Omit<
   AnnouncementRaw,
-  'active' | 'startDate' | 'endDate'
+  'appPlatforms' | 'appVersionMin' | 'appVersionMax' | 'startDate' | 'endDate'
 > & {
   startDate?: number;
   endDate?: number;

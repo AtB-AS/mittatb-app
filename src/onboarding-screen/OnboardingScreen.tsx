@@ -22,6 +22,7 @@ export type OnboardingScreenParams = {
   footerDescription?: string;
   buttonText: string;
   buttonOnPress: () => void;
+  testID?: string;
 };
 
 export const OnboardingScreen = ({
@@ -32,6 +33,7 @@ export const OnboardingScreen = ({
   footerDescription,
   buttonText,
   buttonOnPress,
+  testID,
 }: OnboardingScreenParams) => {
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad(true, 200);
@@ -89,7 +91,7 @@ export const OnboardingScreen = ({
           interactiveColor="interactive_0"
           onPress={buttonOnPress}
           text={buttonText}
-          testID="nextButton"
+          testID={testID ? `${testID}Button` : 'nextButton'}
         />
       </View>
     </SafeAreaView>

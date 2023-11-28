@@ -27,6 +27,14 @@ class OnboardingPage {
   }
 
   /**
+   * Next button on location screen
+   */
+  get nextButtonLocationOnboarding() {
+    const reqId = `//*[@resource-id="locationWhenInUsePermissionButton"]`;
+    return $(reqId);
+  }
+
+  /**
    * Accept restrictions
    */
   get accRestrButton() {
@@ -61,14 +69,21 @@ class OnboardingPage {
       await this.nextButtonIntercomOnboarding.click();
       await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
       await this.accRestrButton.click();
+      await ElementHelper.waitForElement(
+        'id',
+        'locationWhenInUsePermissionButton',
+      );
+      await this.nextButtonLocationOnboarding.click();
       await this.denyLocation();
-      //NOTE! Will be temporarily until a new onboarding flow is in place
+      //NOTE! Temporarily disabled
+      /*
       await AppHelper.pause(3000, true);
       await ElementHelper.waitForElement(
         'id',
         'nextButtonNotificationOnboarding',
       );
       await this.nextButtonNotificationOnboarding.click();
+       */
     } catch (errMsg) {
       await AppHelper.screenshot(`error_${testName}_skipOnboarding`);
       throw errMsg;
