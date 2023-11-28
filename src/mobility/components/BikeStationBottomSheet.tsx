@@ -97,7 +97,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <WalkingDistance distance={distance} isMobility={true} />
+                    <WalkingDistance distance={distance}/>
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -193,7 +193,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     stationText: {
       display: 'flex',
       flexDirection: 'row',
-      marginTop: theme.spacings.xSmall,
+      marginTop: theme.spacings.small,
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
@@ -201,10 +201,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
-    },
-    walkingDistanceIcon: {
-      marginStart: theme.spacings.small,
-      marginEnd: theme.spacings.small,
     },
   };
 });

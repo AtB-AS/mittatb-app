@@ -9,22 +9,18 @@ import {StyleSheet, useTheme} from '@atb/theme';
 type Props = {
   distance: number | undefined;
   style?: StyleProp<ViewStyle>;
-  isMobility: boolean;
 };
 
-export const WalkingDistance = ({style, distance, isMobility}: Props) => {
+export const WalkingDistance = ({style, distance}: Props) => {
   const sheetStyles = useSheetStyle();
   const humanizedDistance = useHumanizeDistance(distance);
   const {theme} = useTheme();
 
-  const labelStyle = isMobility ? sheetStyles.mobilityLabel : sheetStyles.distanceLabel;
-  const iconStyle = isMobility ? sheetStyles.icon : {}
-
   if (!humanizedDistance) return null;
 
   return (
-    <View style={[style, labelStyle]}>
-      <ThemeIcon svg={Walk} fill={theme.text.colors.secondary} style={iconStyle}/>
+    <View style={[style, sheetStyles.distanceLabel]}>
+      <ThemeIcon svg={Walk} fill={theme.text.colors.secondary} style={sheetStyles.icon}/>
       <ThemeText type="body__secondary" color="secondary">
         {humanizedDistance}
       </ThemeText>
@@ -34,11 +30,6 @@ export const WalkingDistance = ({style, distance, isMobility}: Props) => {
 
 const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
   distanceLabel: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingBottom: theme.spacings.medium,
-  },
-  mobilityLabel: {
     flexDirection: 'row',
     justifyContent: 'center',
   },

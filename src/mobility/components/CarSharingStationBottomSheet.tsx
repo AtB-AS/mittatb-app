@@ -101,7 +101,7 @@ export const CarSharingStationBottomSheet = ({
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <WalkingDistance distance={distance} isMobility={true} />
+                    <WalkingDistance distance={distance}/>
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -215,7 +215,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginHorizontal: theme.spacings.medium,
     },
     icon: {
-      marginEnd: theme.spacings.xSmall,
+      marginEnd: theme.spacings.small,
     },
     noCarsAvailable: {
       flex: 1,
@@ -227,7 +227,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     stationText: {
       display: 'flex',
       flexDirection: 'row',
-      marginTop: theme.spacings.xSmall,
+      marginTop: theme.spacings.small,
     },
   };
 });
