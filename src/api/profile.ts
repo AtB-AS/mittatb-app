@@ -1,7 +1,11 @@
 import {client} from './client';
 import {AxiosRequestConfig} from 'axios';
 import Bugsnag from '@bugsnag/react-native';
-import {CustomerProfile, CustomerProfileUpdate} from '@atb/api/types/profile';
+import {
+  CustomerProfile,
+  CustomerProfileUpdate,
+  EmailAvailableResponse,
+} from '@atb/api/types/profile';
 
 export const getProfile = async () => {
   const url = '/profile/v1';
@@ -18,7 +22,6 @@ export const updateProfile = async (profile: CustomerProfileUpdate) => {
   });
   return response.data;
 };
-type EmailAvailableResponse = {available: boolean};
 
 export const emailAvailable = async (
   email: string,

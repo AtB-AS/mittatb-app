@@ -89,26 +89,16 @@ export const Profile_EditProfileScreen = ({
     }
   };
 
-  const prefillPersonalia = (
-    response: string,
-    set: React.Dispatch<React.SetStateAction<string>>,
-  ) => {
-    // Receiving "_" from Entur when firstName or surname are not set on user profile, instead setting them to ""
-    if (response === '_') {
-      set('');
-    } else if (response) {
-      set(response);
-    }
-  };
-
   const fetchProfile = useCallback(async () => {
     try {
       const response = await getProfile();
       setCustomerProfile(response);
 
-      prefillPersonalia(response.email, setEmail);
-      prefillPersonalia(response.firstName, setFirstName);
-      prefillPersonalia(response.surname, setSurname);
+      // Receiving "_" from Entur when firstName or surname are not set on user profile, instead setting them to ""
+      const nonUnderscoreString = (str: string) => (str === '_' ? '' : str);
+      setEmail(nonUnderscoreString(response.email));
+      setFirstName(nonUnderscoreString(response.firstName));
+      setSurname(nonUnderscoreString(response.surname));
 
       setProfileState('success');
     } catch {
@@ -155,10 +145,12 @@ export const Profile_EditProfileScreen = ({
             </ThemeText>
           </View>
           {profileState === 'error' ? (
-            <MessageBox
-              type="error"
-              message={t(EditProfileTexts.personalDetails.error)}
-            />
+            <Section withPadding>
+              <MessageBox
+                type="info"
+                message={t(EditProfileTexts.personalDetails.error)}
+              />
+            </Section>
           ) : (
             <>
               <Section withPadding>
@@ -247,39 +239,39 @@ export const Profile_EditProfileScreen = ({
                   />
                 )}
               </Section>
-              <View style={styles.profileContainer}>
-                <ThemeText style={styles.profileText} color="secondary">
-                  {t(EditProfileTexts.profileInfo.profile)}
-                </ThemeText>
+            </>
+          )}
+          <View style={styles.profileContainer}>
+            <ThemeText style={styles.profileText} color="secondary">
+              {t(EditProfileTexts.profileInfo.profile)}
+            </ThemeText>
+            <ThemeText>
+              {t(EditProfileTexts.profileInfo.loginProvider)}
+            </ThemeText>
+            <ThemeText
+              type="body__secondary"
+              color="secondary"
+              style={styles.profilePhone}
+            >
+              {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
+            </ThemeText>
+            {customerNumber && (
+              <>
                 <ThemeText>
-                  {t(EditProfileTexts.profileInfo.loginProvider)}
+                  {t(EditProfileTexts.profileInfo.customerNumber)}
                 </ThemeText>
                 <ThemeText
                   type="body__secondary"
                   color="secondary"
-                  style={styles.profilePhone}
+                  accessibilityLabel={numberToAccessibilityString(
+                    customerNumber,
+                  )}
                 >
-                  {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
+                  {customerNumber}
                 </ThemeText>
-                {customerNumber && (
-                  <>
-                    <ThemeText>
-                      {t(EditProfileTexts.profileInfo.customerNumber)}
-                    </ThemeText>
-                    <ThemeText
-                      type="body__secondary"
-                      color="secondary"
-                      accessibilityLabel={numberToAccessibilityString(
-                        customerNumber,
-                      )}
-                    >
-                      {customerNumber}
-                    </ThemeText>
-                  </>
-                )}
-              </View>
-            </>
-          )}
+              </>
+            )}
+          </View>
           <Section withPadding withTopPadding withBottomPadding>
             <Button
               mode="primary"

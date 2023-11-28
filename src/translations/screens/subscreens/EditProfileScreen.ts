@@ -43,13 +43,13 @@ export const EditProfileTexts = {
       unavailableError: _(
         'E-postadressen er allerede i bruk',
         'The e-mail address is already in use',
-        'E-postadressen er allereie i bruk',
+        'E-postadressa er allereie i bruk',
       ),
     },
     error: _(
-      'Vi får ikke hentet profilinformasjonen din akkurat nå. Prøv igjen senere.',
+      'Vi får ikke hentet profilinformasjonen din akkurat nå. Vennligst prøv igjen senere.',
       'We are not able to retrieve your profile information at the moment. Please try again later',
-      'Vi får ikkje henta profilinformasjonen din akkurat no. Ver venleg og prøv igjen.',
+      'Vi får ikkje henta profilinformasjonen din akkurat no. Ver venleg og prøv igjen seinare.',
     ),
   },
   profileInfo: {

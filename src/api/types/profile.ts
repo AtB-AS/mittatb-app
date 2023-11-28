@@ -1,3 +1,5 @@
+export type EmailAvailableResponse = {available: boolean};
+
 export type CustomerProfileUpdate = Partial<{
   firstName: string;
   surname: string;
