@@ -24,7 +24,8 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
         analytics.logEvent('Map', 'Filter button clicked');
         onPress();
       }}
-      leftIcon={{svg: Filter, loading: isLoading}}
+      loading={isLoading}
+      rightIcon={{svg: Filter}}
     />
   );
 };
