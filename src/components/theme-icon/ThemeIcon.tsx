@@ -55,7 +55,7 @@ export const ThemeIcon = ({
   return (
     <View style={style}>
       {loading ? (
-        <ActivityIndicator size="small" />
+        <ActivityIndicator size="small" color={fillToUse} />
       ) : (
         <>
           {svg(settings)}

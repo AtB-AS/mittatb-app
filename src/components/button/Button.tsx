@@ -195,7 +195,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
           )}
           {!rightIcon && loading && (
             <View style={rightStyling}>
-              <ActivityIndicator size="small" />
+              <ActivityIndicator size="small" color={styleText.color} />
             </View>
           )}
         </PressableOpacity>

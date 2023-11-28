@@ -1078,6 +1078,14 @@ export const Profile_DesignSystemScreen = ({
                   rightIcon={{svg: Delete}}
                   style={{margin: 4}}
                 />
+                <Button
+                  text="Loading button"
+                  onPress={presser}
+                  mode="primary"
+                  interactiveColor="interactive_0"
+                  loading={true}
+                  style={{margin: 4}}
+                />
                 <View
                   style={{
                     flexDirection: 'row',
