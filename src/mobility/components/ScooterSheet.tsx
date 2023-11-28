@@ -24,8 +24,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
-import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 
 type Props = {
   vehicleId: VehicleId;
@@ -41,24 +40,15 @@ export const ScooterSheet = ({
   const style = useSheetStyle();
   const {
     vehicle,
-    isLoading: isLoadingVehicle,
-    isError: isLoadingError,
+    isLoading,
+    isError,
     operatorId,
     operatorName,
     brandLogoUrl,
     rentalAppUri,
     appStoreUri,
   } = useVehicle(id);
-  const {
-    operatorBenefit,
-    valueCode,
-    isUserEligibleForBenefit,
-    isLoading: isLoadingBenefit,
-    isError: isBenefitError,
-  } = useOperatorBenefit(operatorId);
-
-  const isLoading = isLoadingVehicle || isLoadingBenefit;
-  const isError = isLoadingError || isBenefitError;
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   const [isParkingViolationsReportingEnabled] =
     useParkingViolationsReportingEnabled();
@@ -86,7 +76,6 @@ export const ScooterSheet = ({
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
-                  isUserEligible={isUserEligibleForBenefit}
                   style={style.benefit}
                 />
               )}
@@ -113,32 +102,21 @@ export const ScooterSheet = ({
                   <PricingPlan
                     operator={operatorName}
                     plan={vehicle.pricingPlan}
-                    eligibleBenefit={
-                      operatorBenefit && isUserEligibleForBenefit
-                        ? operatorBenefit.id
-                        : undefined
-                    }
+                    benefit={operatorBenefit}
                   />
                 }
               />
             </ScrollView>
             <View style={style.footer}>
-              {rentalAppUri &&
-                (operatorBenefit && isUserEligibleForBenefit ? (
-                  <OperatorBenefitActionButton
-                    benefit={operatorBenefit}
-                    valueCode={valueCode}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ) : (
-                  <OperatorAppSwitchButton
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ))}
+              {rentalAppUri && (
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  operatorName={operatorName}
+                  benefit={operatorBenefit}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
+              )}
               {isParkingViolationsReportingEnabled && (
                 <Button
                   style={style.parkingViolationsButton}

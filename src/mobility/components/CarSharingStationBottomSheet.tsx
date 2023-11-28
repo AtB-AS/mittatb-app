@@ -22,8 +22,7 @@ import {CarImage} from '@atb/mobility/components/CarImage';
 import {InfoChip} from '@atb/components/info-chip';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
-import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
-import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 
 type Props = {
@@ -37,8 +36,8 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
   const style = useSheetStyle();
   const {
     station,
-    isLoading: isLoadingStation,
-    isError: isLoadingError,
+    isLoading,
+    isError,
     operatorId,
     operatorName,
     brandLogoUrl,
@@ -46,16 +45,7 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
     rentalAppUri,
     stationName,
   } = useCarSharingStation(stationId);
-  const {
-    operatorBenefit,
-    valueCode,
-    isUserEligibleForBenefit,
-    isLoading: isLoadingBenefit,
-    isError: isBenefitError,
-  } = useOperatorBenefit(operatorId);
-
-  const isLoading = isLoadingStation || isLoadingBenefit;
-  const isError = isLoadingError || isBenefitError;
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -85,7 +75,6 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
-                  isUserEligible={isUserEligibleForBenefit}
                   style={style.benefit}
                 />
               )}
@@ -144,21 +133,13 @@ export const CarSharingStationSheet = ({stationId, distance, close}: Props) => {
             </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
-                {operatorBenefit && isUserEligibleForBenefit ? (
-                  <OperatorBenefitActionButton
-                    benefit={operatorBenefit}
-                    valueCode={valueCode}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ) : (
-                  <OperatorAppSwitchButton
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                )}
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  benefit={operatorBenefit}
+                  operatorName={operatorName}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
               </View>
             )}
           </>

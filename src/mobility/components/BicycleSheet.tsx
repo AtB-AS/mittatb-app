@@ -20,8 +20,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
-import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
-import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 
 type Props = {
@@ -33,24 +32,15 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   const style = useSheetStyle();
   const {
     vehicle,
-    isLoading: isLoadingVehicle,
-    isError: isLoadingError,
+    isLoading,
+    isError,
     operatorId,
     operatorName,
     brandLogoUrl,
     rentalAppUri,
     appStoreUri,
   } = useVehicle(id);
-  const {
-    operatorBenefit,
-    valueCode,
-    isUserEligibleForBenefit,
-    isLoading: isLoadingBenefit,
-    isError: isBenefitError,
-  } = useOperatorBenefit(operatorId);
-
-  const isLoading = isLoadingVehicle || isLoadingBenefit;
-  const isError = isLoadingError || isBenefitError;
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -76,7 +66,6 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                 <OperatorBenefit
                   style={style.operatorBenefit}
                   benefit={operatorBenefit}
-                  isUserEligible={isUserEligibleForBenefit}
                 />
               )}
               <Section>
@@ -118,21 +107,13 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
             </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
-                {operatorBenefit && isUserEligibleForBenefit ? (
-                  <OperatorBenefitActionButton
-                    benefit={operatorBenefit}
-                    valueCode={valueCode}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ) : (
-                  <OperatorAppSwitchButton
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                )}
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  operatorName={operatorName}
+                  benefit={operatorBenefit}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
               </View>
             )}
           </>

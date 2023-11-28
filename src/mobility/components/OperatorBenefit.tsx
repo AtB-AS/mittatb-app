@@ -6,27 +6,29 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 
 type Props = {
   benefit: OperatorBenefitType;
-  isUserEligible: boolean;
   style?: ViewStyle;
 };
-export const OperatorBenefit = ({
-  benefit,
-  isUserEligible,
-  style: containerStyle,
-}: Props) => {
+export const OperatorBenefit = ({benefit, style: containerStyle}: Props) => {
   const style = useStyles();
   const {language} = useTranslation();
+  const {isUserEligibleForBenefit, isLoading, isError} =
+    useIsEligibleForBenefit(benefit);
+
+  if (isLoading || isError) return null;
 
   const heading = getTextForLanguage(
-    isUserEligible ? benefit.headingWhenActive : benefit.headingWhenNotActive,
+    isUserEligibleForBenefit
+      ? benefit.headingWhenActive
+      : benefit.headingWhenNotActive,
     language,
   );
   const text =
     getTextForLanguage(
-      isUserEligible
+      isUserEligibleForBenefit
         ? benefit.descriptionWhenActive
         : benefit.descriptionWhenNotActive,
       language,
@@ -38,10 +40,10 @@ export const OperatorBenefit = ({
         <GenericSectionItem>
           <View style={style.benefitContainer}>
             <View style={style.benefitImage}>
-              {isUserEligible && benefit.imageWhenActive && (
+              {isUserEligibleForBenefit && benefit.imageWhenActive && (
                 <SvgXml xml={benefit.imageWhenActive} />
               )}
-              {!isUserEligible && benefit.imageWhenNotActive && (
+              {!isUserEligibleForBenefit && benefit.imageWhenNotActive && (
                 <SvgXml xml={benefit.imageWhenNotActive} />
               )}
             </View>

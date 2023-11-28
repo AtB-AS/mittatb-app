@@ -18,8 +18,7 @@ import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
-import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 
 type Props = {
   stationId: string;
@@ -32,8 +31,8 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
   const {themeName} = useTheme();
   const style = useSheetStyle();
   const {
-    isLoading: isLoadingStation,
-    isError: isLoadingError,
+    isLoading,
+    isError,
     station,
     brandLogoUrl,
     stationName,
@@ -43,16 +42,7 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
     rentalAppUri,
     availableBikes,
   } = useBikeStation(stationId);
-  const {
-    operatorBenefit,
-    valueCode,
-    isLoading: isLoadingBenefits,
-    isError: isBenefitError,
-    isUserEligibleForBenefit,
-  } = useOperatorBenefit(operatorId);
-
-  const isLoading = isLoadingStation || isLoadingBenefits;
-  const isError = isLoadingError || isBenefitError;
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -83,7 +73,6 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
                 <OperatorBenefit
                   style={style.operatorBenefit}
                   benefit={operatorBenefit}
-                  isUserEligible={isUserEligibleForBenefit}
                 />
               )}
               <Section>
@@ -116,21 +105,13 @@ export const BikeStationSheet = ({stationId, distance, close}: Props) => {
             </ScrollView>
             {rentalAppUri && (
               <View style={style.footer}>
-                {operatorBenefit && isUserEligibleForBenefit ? (
-                  <OperatorBenefitActionButton
-                    benefit={operatorBenefit}
-                    valueCode={valueCode}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ) : (
-                  <OperatorAppSwitchButton
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                )}
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  operatorName={operatorName}
+                  benefit={operatorBenefit}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
               </View>
             )}
           </>
