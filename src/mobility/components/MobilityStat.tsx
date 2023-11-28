@@ -1,12 +1,13 @@
 import React from 'react';
 import {SvgProps} from 'react-native-svg';
-import {TextStyle, View} from 'react-native';
+import {StyleProp, TextStyle, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type MobilityStatProps = {
   svg?(props: SvgProps): JSX.Element;
+  style?: StyleProp<ViewStyle>;
   primaryStat: string | number;
   secondaryStat?: string | number;
   secondaryStatStyle?: TextStyle;
@@ -14,11 +15,12 @@ export type MobilityStatProps = {
 
 export const MobilityStat = ({
   svg,
+  style,
   primaryStat,
   secondaryStat,
   secondaryStatStyle,
 }: MobilityStatProps) => (
-  <View style={{alignItems: 'flex-start'}}>
+  <View style={style}>
     <StatWithIcon svg={svg} text={String(primaryStat)} />
     {secondaryStat && (
       <ThemeText
@@ -38,24 +40,35 @@ type StatWithIconProps = {
 };
 
 export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
+  const styles = useSheetStyle();
   const {theme} = useTheme();
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View style={styles.statWithIcon}>
       {svg && (
         <ThemeIcon
-          style={
-            (text ?? '').length > 0
-              ? {marginRight: theme.spacings.small}
-              : undefined
-          }
           svg={svg}
           color={theme.text.colors.secondary}
           fill={theme.text.colors.secondary}
+          style={styles.statIcon}
         />
       )}
-      <ThemeText type="body__secondary--bold" color="secondary">
+      <ThemeText
+        type="body__secondary--bold"
+        color="secondary"
+      >
         {text}
       </ThemeText>
     </View>
   );
 };
+
+const useSheetStyle = StyleSheet.createThemeHook((theme) => {
+  return {
+    statWithIcon: {
+      flexDirection: 'row',
+    },
+    statIcon: {
+      marginRight: theme.spacings.small,
+    },
+  };
+});

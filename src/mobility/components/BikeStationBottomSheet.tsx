@@ -34,7 +34,7 @@ type Props = {
 
 export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
-  const style = useSheetStyle();
+  const styles = useSheetStyle();
   const {
     isLoading: isLoadingStation,
     isError: isLoadingError,
@@ -59,7 +59,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
   const isError = isLoadingError || isBenefitError;
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
+    <BottomSheetContainer maxHeightValue={0.6}>
       <ScreenHeaderWithoutNavigation
         leftButton={{
           type: 'close',
@@ -72,19 +72,19 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
       />
       <>
         {isLoading && (
-          <View style={style.activityIndicator}>
+          <View style={styles.activityIndicator}>
             <ActivityIndicator size="large" />
           </View>
         )}
         {!isLoading && !isError && station && (
           <>
-            <ScrollView style={style.container}>
+            <ScrollView style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit}
                   formFactor={FormFactor.Bicycle}
-                  style={style.operatorBenefit}
+                  style={styles.operatorBenefit}
                 />
               )}
               <Section>
@@ -93,7 +93,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
                   />
-                  <View style={style.stationText}>
+                  <View style={styles.stationText}>
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
@@ -101,7 +101,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={styles.mobilityStatContainer}>
                     <MobilityStats
                       first={
                         <MobilityStat
@@ -136,7 +136,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
               </Section>
             </ScrollView>
             {rentalAppUri && (
-              <View style={style.footer}>
+              <View style={styles.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (
                   <OperatorBenefitActionButton
                     benefit={operatorBenefit}
@@ -157,7 +157,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
           </>
         )}
         {!isLoading && (isError || !station) && (
-          <View style={style.errorMessage}>
+          <View style={styles.errorMessage}>
             <MessageBox
               type="error"
               message={t(BicycleTexts.loadingFailed)}
@@ -201,6 +201,10 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
+    },
+    mobilityStatContainer: {
+      flexDirection: 'row', 
+      alignItems: 'center',
     },
   };
 });

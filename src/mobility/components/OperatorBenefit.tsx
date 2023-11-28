@@ -23,9 +23,9 @@ export const OperatorBenefit = ({
   benefit,
   isUserEligible,
   formFactor,
-  style: containerStyle,
+  style,
 }: Props) => {
-  const style = useStyles();
+  const styles = useStyles();
   const {language} = useTranslation();
 
   const heading = getTextForLanguage(
@@ -41,12 +41,12 @@ export const OperatorBenefit = ({
     ) ?? '';
 
   return (
-    <View style={containerStyle}>
+    <View style={style}>
       <Section>
         <GenericSectionItem>
-          <View style={style.benefitContainer}>
-            <BenefitImage eligible={isUserEligible} formFactor={formFactor} />
-            <View style={style.benefitContent}>
+          <View style={styles.benefitContainer}>
+            <BenefitImage eligible={isUserEligible} formFactor={formFactor}/>
+            <View style={styles.benefitContent}>
               {heading && (
                 <ThemeText type="body__primary--bold">{heading}</ThemeText>
               )}
@@ -60,13 +60,14 @@ export const OperatorBenefit = ({
 };
 
 const BenefitImageAsset = ({formFactor} : {formFactor: FormFactor}) => {
+  const styles = useStyles();
   switch (formFactor) {
     case FormFactor.Car:
-      return <BundlingCarSharing />;
+      return <BundlingCarSharing style={styles.benefitImage}/>;
     case FormFactor.Bicycle:
-      return <BundlingCityBike />;
+      return <BundlingCityBike style={styles.benefitImage}/>;
     default:
-      return <View />;
+      return null;
   }
 }
 
@@ -110,19 +111,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   benefitContent: {
     flex: 4,
-    marginStart: theme.spacings.medium,
   },
   benefitImage: {
-    flex: 1,
-    resizeMode: 'contain',
-    marginRight: theme.spacings.medium,
+    marginEnd: theme.spacings.medium,
+    marginStart: theme.spacings.small,
   },
   indicator: {
     position: 'absolute',
-    right: 0,
-    top: 0,
-    borderRadius: theme.border.radius.circle,
-    zIndex: 10,
-    overflow: 'hidden',
+    right: theme.spacings.medium,
   },
 }));
