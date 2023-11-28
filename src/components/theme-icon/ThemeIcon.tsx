@@ -8,7 +8,7 @@ import {
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {ActivityIndicator, View} from 'react-native';
+import {View} from 'react-native';
 import type {IconColor} from './types';
 import {
   NotificationIndicator,
@@ -21,7 +21,6 @@ export type ThemeIconProps = {
   colorType?: IconColor;
   size?: keyof Theme['icon']['size'];
   notification?: Omit<NotificationIndicatorProps, 'iconSize'>;
-  loading?: boolean;
   allowFontScaling?: boolean;
 } & SvgProps;
 
@@ -32,7 +31,6 @@ export const ThemeIcon = ({
   fill,
   notification,
   style,
-  loading,
   allowFontScaling = true,
   ...props
 }: ThemeIconProps): JSX.Element => {
@@ -54,16 +52,12 @@ export const ThemeIcon = ({
 
   return (
     <View style={style}>
-      {loading ? (
-        <ActivityIndicator size="small" color={fillToUse} />
-      ) : (
-        <>
-          {svg(settings)}
-          {notification && (
-            <NotificationIndicator {...notification} iconSize={size} />
-          )}
-        </>
-      )}
+      <>
+        {svg(settings)}
+        {notification && (
+          <NotificationIndicator {...notification} iconSize={size} />
+        )}
+      </>
     </View>
   );
 };
