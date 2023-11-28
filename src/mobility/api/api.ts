@@ -17,7 +17,10 @@ export type UserBenefitsType = z.infer<typeof UserBenefits>;
 
 export const getBenefitsForUser = (): Promise<UserBenefitsType[]> => {
   return client
-    .get('/mobility/benefits', {authWithIdToken: true})
+    .get('/mobility/benefits', {
+      authWithIdToken: true,
+      skipErrorLogging: (error) => error.response?.status === 404,
+    })
     .then((response) => UserBenefits.array().parse(response.data ?? []))
     .catch((error) => {
       if (getAxiosErrorMetadata(error).responseStatus === 404) return [];
