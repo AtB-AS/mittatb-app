@@ -24,7 +24,7 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
+import {OperatorActionButton} from './OperatorActionButton';
 
 type Props = {
   vehicleId: VehicleId;

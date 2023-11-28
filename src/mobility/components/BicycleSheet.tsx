@@ -20,7 +20,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
-import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
+import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 
 type Props = {

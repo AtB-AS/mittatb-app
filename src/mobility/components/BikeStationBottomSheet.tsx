@@ -18,7 +18,7 @@ import {WalkingDistance} from '@atb/components/walking-distance';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
+import {OperatorActionButton} from './OperatorActionButton';
 
 type Props = {
   stationId: string;

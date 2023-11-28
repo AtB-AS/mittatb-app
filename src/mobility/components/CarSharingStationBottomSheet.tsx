@@ -22,7 +22,7 @@ import {CarImage} from '@atb/mobility/components/CarImage';
 import {InfoChip} from '@atb/components/info-chip';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
-import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
+import {OperatorActionButton} from './OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 
 type Props = {
