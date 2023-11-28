@@ -1265,7 +1265,7 @@ PODS:
   - react-native-intercom (21.1.1):
     - Intercom (~> 10)
     - React
-  - react-native-kettle-module (1.1.2):
+  - react-native-kettle-module (1.1.3):
     - KettleKit (= 1.1.0)
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -1863,7 +1863,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-intercom: fb708ee880fd1d102c232e9e3b5d27c5ebe7bd8d
-  react-native-kettle-module: c632d70bdbce40dad959245279ce9acb8e598bee
+  react-native-kettle-module: dddba15221c8cd715fc7fd9c3ff0c4bb37e90821
   react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
