@@ -1,11 +1,12 @@
-import {useCallback, useState} from 'react';
-import {useRegister} from './use-register';
-import {useConfig} from './use-config';
-import {PermissionsAndroid, Platform} from 'react-native';
+import {useLocaleContext} from '@atb/LocaleProvider';
+import Bugsnag from '@bugsnag/react-native';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import {useLocaleContext} from '@atb/LocaleProvider';
+import {useCallback, useState} from 'react';
+import {PermissionsAndroid, Platform} from 'react-native';
+import {useConfig} from './use-config';
+import {useRegister} from './use-register';
 
 type NotificationsStatus =
   | 'granted'
@@ -54,10 +55,14 @@ export const usePushNotifications = () => {
   }, []);
 
   const register = useCallback(async () => {
-    const token = await messaging().getToken();
-    if (!token) return;
-    mutateRegister({token, language: language});
-    return token;
+    try {
+      const token = await messaging().getToken();
+      if (!token) return;
+      mutateRegister({token, language: language});
+      return token;
+    } catch (e) {
+      Bugsnag.notify(`Failed to register for push notifications: ${e}`);
+    }
   }, [language, mutateRegister]);
 
   const requestPermissions = useCallback(async () => {
