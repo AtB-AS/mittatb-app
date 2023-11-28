@@ -26,6 +26,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {MobilityStats} from '@atb/mobility/components//MobilityStats';
 import {MobilityStat} from '@atb/mobility/components//MobilityStat';
 import {CityBike} from '@atb/assets/svg/color/images/mobility';
+import {BrandingImage} from './BrandingImage';
 
 type Props = {
   vehicleId: VehicleId;
@@ -33,7 +34,7 @@ type Props = {
 };
 export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   const {t, language} = useTranslation();
-  const style = useSheetStyle();
+  const styles = useSheetStyle();
   const {
     vehicle,
     isLoading: isLoadingVehicle,
@@ -69,19 +70,19 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
       />
       <>
         {isLoading && (
-          <View style={style.activityIndicator}>
+          <View style={styles.activityIndicator}>
             <ActivityIndicator size="large" />
           </View>
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <ScrollView style={style.container}>
+            <ScrollView style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit}
                   formFactor={FormFactor.Bicycle}
-                  style={style.operatorBenefit}
+                  style={styles.operatorBenefit}
                 />
               )}
               <Section>
@@ -89,10 +90,11 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    style={styles.operatorNameAndLogo}
                   />
                 </GenericSectionItem>
                 <GenericSectionItem>
-                  <View style={style.content}>
+                  <View style={styles.content}>
                     <MobilityStats
                       first={
                         (vehicle.vehicleType.propulsionType === 'ELECTRIC' ||
@@ -122,10 +124,8 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                         />
                       }
                     />
-                    <OperatorNameAndLogo
-                      operatorName={operatorName}
+                    <BrandingImage
                       logoUrl={brandLogoUrl}
-                      logoSize='large'
                       fallback={<CityBike />}
                     />
                   </View>
@@ -133,7 +133,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
               </Section>
             </ScrollView>
             {rentalAppUri && (
-              <View style={style.footer}>
+              <View style={styles.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (
                   <OperatorBenefitActionButton
                     benefit={operatorBenefit}
@@ -154,7 +154,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
           </>
         )}
         {!isLoading && (isError || !vehicle) && (
-          <View style={style.errorMessage}>
+          <View style={styles.errorMessage}>
             <MessageBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
@@ -193,6 +193,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
       marginHorizontal: theme.spacings.medium,
+    },
+    operatorNameAndLogo: {
+      flexDirection: 'row',
     },
   };
 });

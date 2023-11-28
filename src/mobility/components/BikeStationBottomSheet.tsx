@@ -25,6 +25,7 @@ import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {WalkingDistance} from '@atb/components/walking-distance';
+import {BrandingImage} from './BrandingImage';
 
 type Props = {
   stationId: string;
@@ -92,12 +93,13 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    style={styles.operatorNameAndLogo}
                   />
                   <View style={styles.stationText}>
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <WalkingDistance distance={distance}/>
+                    <WalkingDistance distance={distance} />
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>
@@ -125,10 +127,8 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                         />
                       }
                     />
-                    <OperatorNameAndLogo
-                      operatorName={operatorName}
+                    <BrandingImage
                       logoUrl={brandLogoUrl}
-                      logoSize='large'
                       fallback={<CityBike />}
                     />
                   </View>
@@ -203,8 +203,11 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginHorizontal: theme.spacings.medium,
     },
     mobilityStatContainer: {
-      flexDirection: 'row', 
+      flexDirection: 'row',
       alignItems: 'center',
+    },
+    operatorNameAndLogo: {
+      flexDirection: 'row',
     },
   };
 });

@@ -1,36 +1,24 @@
-import React from 'react';
-import {Image, ImageStyle, StyleProp, View, ViewStyle} from 'react-native';
-import {ThemeText} from '@atb/components/text';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {SvgCssUri} from 'react-native-svg';
 import {StyleSheet} from '@atb/theme';
+import {Image, StyleProp, View, ViewStyle} from 'react-native';
+import {SvgCssUri} from 'react-native-svg';
 
-const LOGO_SIZE = 20;
+const LOGO_SIZE = 50;
 
-/**
- * @param operatorName operator name
- *
- * @param logoUrl logo to be displayed, can be SVG or PNG,
- *                if SVG, show using <SvgCssUri>, otherwise use <Image>
- *
- * @param fallback logo to be used when the logo URL is null
- *
- */
-type OperatorNameAndLogoProps = {
-  operatorName: string;
+type BrandingImageProps = {
   logoUrl: string | undefined;
   fallback?: JSX.Element;
   style?: StyleProp<ViewStyle>;
 };
 
-export const OperatorNameAndLogo = ({
-  operatorName,
+export const BrandingImage = ({
   logoUrl,
+  fallback,
   style,
-}: OperatorNameAndLogoProps) => {
+}: BrandingImageProps) => {
+  const styles = useSheetStyle();
   const {enable_vehicle_operator_logo} = useRemoteConfig();
   const isSvg = (url: string) => url.endsWith('.svg');
-  const styles = useSheetStyle();
 
   return (
     <View style={style}>
@@ -45,14 +33,14 @@ export const OperatorNameAndLogo = ({
         ) : (
           <Image
             source={{uri: logoUrl}}
-            width={LOGO_SIZE}
             height={LOGO_SIZE}
-            style={styles.logo as ImageStyle}
+            width={LOGO_SIZE}
             resizeMode="contain"
           />
         )
-      ) : null}
-      <ThemeText type="body__primary--bold">{operatorName}</ThemeText>
+      ) : (
+        fallback
+      )}
     </View>
   );
 };

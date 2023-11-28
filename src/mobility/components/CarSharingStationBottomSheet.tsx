@@ -37,7 +37,7 @@ export const CarSharingStationBottomSheet = ({
   close,
 }: Props) => {
   const {t} = useTranslation();
-  const style = useSheetStyle();
+  const styles = useSheetStyle();
   const {theme} = useTheme();
 
   const {
@@ -76,19 +76,19 @@ export const CarSharingStationBottomSheet = ({
       />
       <>
         {isLoading && (
-          <View style={style.activityIndicator}>
+          <View style={styles.activityIndicator}>
             <ActivityIndicator size="large" />
           </View>
         )}
         {!isLoading && !isError && station && (
           <>
-            <ScrollView style={style.container}>
+            <ScrollView style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit}
                   formFactor={FormFactor.Car}
-                  style={style.benefit}
+                  style={styles.operatorBenefit}
                 />
               )}
               <Section>
@@ -96,20 +96,21 @@ export const CarSharingStationBottomSheet = ({
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    style={styles.operatorNameAndLogo}
                   />
-                  <View style={style.stationText}>
+                  <View style={styles.stationText}>
                     <ThemeText type="body__secondary" color="secondary">
                       {stationName}
                     </ThemeText>
-                    <WalkingDistance distance={distance}/>
+                    <WalkingDistance distance={distance} />
                   </View>
                 </GenericSectionItem>
                 <GenericSectionItem>
-                  <View style={style.carSection}>
+                  <View style={styles.carSection}>
                     <View>
-                      <View style={style.availableCarSection}>
+                      <View style={styles.availableCarSection}>
                         <ThemeIcon
-                          style={style.icon}
+                          style={styles.icon}
                           svg={Car}
                           fill={theme.text.colors.secondary}
                         />
@@ -140,7 +141,7 @@ export const CarSharingStationBottomSheet = ({
               </Section>
             </ScrollView>
             {rentalAppUri && (
-              <View style={style.footer}>
+              <View style={styles.footer}>
                 {operatorBenefit && isUserEligibleForBenefit ? (
                   <OperatorBenefitActionButton
                     benefit={operatorBenefit}
@@ -161,7 +162,7 @@ export const CarSharingStationBottomSheet = ({
           </>
         )}
         {!isLoading && (isError || !station) && (
-          <View style={style.errorMessage}>
+          <View style={styles.errorMessage}>
             <MessageBox
               type="error"
               message={t(CarSharingTexts.loadingFailed)}
@@ -183,15 +184,11 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
-    availabilityChip: {
-      flex: 1,
-      alignItems: 'flex-end',
-    },
     availableCarSection: {
       display: 'flex',
       flexDirection: 'row',
     },
-    benefit: {
+    operatorBenefit: {
       marginBottom: theme.spacings.medium,
     },
     carSection: {
@@ -199,9 +196,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       flex: 1,
       justifyContent: 'space-between',
-    },
-    carDetails: {
-      flex: 4,
     },
     container: {
       marginHorizontal: theme.spacings.medium,
@@ -217,12 +211,8 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     icon: {
       marginEnd: theme.spacings.small,
     },
-    noCarsAvailable: {
-      flex: 1,
-      alignItems: 'center',
-    },
-    operatorButton: {
-      marginTop: theme.spacings.medium,
+    operatorNameAndLogo: {
+      flexDirection: 'row',
     },
     stationText: {
       display: 'flex',

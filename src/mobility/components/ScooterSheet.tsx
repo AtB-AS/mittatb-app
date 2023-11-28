@@ -28,6 +28,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Scooter} from '@atb/assets/svg/color/images/mobility';
 import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
+import {BrandingImage} from './BrandingImage';
 
 type Props = {
   vehicleId: VehicleId;
@@ -40,7 +41,7 @@ export const ScooterSheet = ({
   onReportParkingViolation,
 }: Props) => {
   const {t, language} = useTranslation();
-  const style = useSheetStyle();
+  const styles = useSheetStyle();
   const {
     vehicle,
     isLoading: isLoadingVehicle,
@@ -79,19 +80,19 @@ export const ScooterSheet = ({
       />
       <>
         {isLoading && (
-          <View style={style.activityIndicator}>
+          <View style={styles.activityIndicator}>
             <ActivityIndicator size="large" />
           </View>
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <ScrollView style={style.container}>
+            <ScrollView style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
                   isUserEligible={isUserEligibleForBenefit}
                   formFactor={FormFactor.Scooter}
-                  style={style.benefit}
+                  style={styles.operatorBenefit}
                 />
               )}
               <Section>
@@ -99,10 +100,11 @@ export const ScooterSheet = ({
                   <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    style={styles.operatorNameAndLogo}
                   />
                 </GenericSectionItem>
                 <GenericSectionItem>
-                  <View style={style.content}>
+                  <View style={styles.content}>
                     <MobilityStats
                       first={
                         <MobilityStat
@@ -126,17 +128,15 @@ export const ScooterSheet = ({
                         />
                       }
                     />
-                    <OperatorNameAndLogo
-                      operatorName={operatorName}
+                    <BrandingImage
                       logoUrl={brandLogoUrl}
-                      logoSize='large'
                       fallback={<Scooter />}
                     />
                   </View>
                 </GenericSectionItem>
               </Section>
             </ScrollView>
-            <View style={style.footer}>
+            <View style={styles.footer}>
               {rentalAppUri &&
                 (operatorBenefit && isUserEligibleForBenefit ? (
                   <OperatorBenefitActionButton
@@ -155,7 +155,7 @@ export const ScooterSheet = ({
                 ))}
               {isParkingViolationsReportingEnabled && (
                 <Button
-                  style={style.parkingViolationsButton}
+                  style={styles.parkingViolationsButton}
                   text={t(MobilityTexts.reportParkingViolation)}
                   mode="secondary"
                   interactiveColor="interactive_2"
@@ -167,7 +167,7 @@ export const ScooterSheet = ({
           </>
         )}
         {!isLoading && (isError || !vehicle) && (
-          <View style={style.errorMessage}>
+          <View style={styles.errorMessage}>
             <MessageBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
@@ -189,7 +189,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
-    benefit: {
+    operatorBenefit: {
       marginBottom: theme.spacings.medium,
     },
     container: {
@@ -209,6 +209,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     parkingViolationsButton: {
       marginTop: theme.spacings.medium,
+    },
+    operatorNameAndLogo: {
+      flexDirection: 'row',
     },
   };
 });

@@ -9,28 +9,6 @@ type Props = {
   vehicleTypesAvailable: Array<CarAvailabilityFragment>;
 };
 
-/**
- *  This function returns an array of vehicles that is shown
- *  on the bottom sheet for car station mobility.
- *
- *  Case can be accessed in Figma link below
- *  https://www.figma.com/file/zdZwvobgpEWSagKt0tderx/App?node-id=20471-12079
- *
- *  Case on version 1.44 :
- *  - If the station capacity is 2 or less : show car image(s)
- *  - If the station capacity is 3 or more : show 1 car image and the plus text
- *
- *  @param stationCapacity: Station capacity
- *  @param vehicleTypesAvailable: Types of available cars, array of CarAvailabilityFragment
- *  @returns array of vehicle types to show
- */
-function createPreviewArray(
-  stationCapacity: number,
-  vehicleTypesAvailable: CarAvailabilityFragment[],
-): CarAvailabilityFragment[] {
-  return vehicleTypesAvailable.slice(stationCapacity == 2 ? -2 : -1);
-}
-
 export const CarPreviews = ({
   stationCapacity,
   vehicleTypesAvailable,
@@ -51,12 +29,12 @@ export const CarPreviews = ({
     >
       <CarImage uri={vehicle.vehicleType.vehicleImage} />
       {previewArray.length === 1 && vehicle.count == 2 && (
-        /** 
+        /**
          * show duplicate image if only 1 vehicle type is available
          * and there are more than 1 of that specific vehicle type.
          */
         <View style={style.duplicateImage}>
-            <CarImage uri={vehicle.vehicleType.vehicleImage}/>
+          <CarImage uri={vehicle.vehicleType.vehicleImage} />
         </View>
       )}
     </View>
@@ -93,13 +71,13 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       flexShrink: 1,
       flexGrow: 0,
       flexDirection: 'row',
-      marginRight: theme.spacings.xSmall,
+      marginRight: theme.spacings.small,
     },
     carImageLast: {
       marginRight: 0,
     },
     duplicateImage: {
-      marginLeft: theme.spacings.xSmall, 
+      marginLeft: theme.spacings.small,
     },
     moreCarsContainer: {
       height: 40,
@@ -111,3 +89,25 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
   };
 });
+
+/**
+ *  This function returns an array of vehicles that is shown
+ *  on the bottom sheet for car station mobility.
+ *
+ *  Case can be accessed in Figma link below
+ *  https://www.figma.com/file/zdZwvobgpEWSagKt0tderx/App?node-id=20471-12079
+ *
+ *  Case on version 1.44 :
+ *  - If the station capacity is 2 or less : show car image(s)
+ *  - If the station capacity is 3 or more : show 1 car image and the plus text
+ *
+ *  @param stationCapacity: Station capacity
+ *  @param vehicleTypesAvailable: Types of available cars, array of CarAvailabilityFragment
+ *  @returns array of vehicle types to show
+ */
+function createPreviewArray(
+  stationCapacity: number,
+  vehicleTypesAvailable: CarAvailabilityFragment[],
+): CarAvailabilityFragment[] {
+  return vehicleTypesAvailable.slice(stationCapacity == 2 ? -2 : -1);
+}
