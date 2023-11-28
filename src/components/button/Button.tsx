@@ -46,7 +46,6 @@ type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
   notification?: ThemeIconProps['notification'];
-  loading?: boolean;
 };
 
 export type ButtonProps = {
@@ -188,14 +187,13 @@ export const Button = React.forwardRef<any, ButtonProps>(
               </ThemeText>
             </View>
           )}
-          {rightIcon && (
+          {(rightIcon || loading) && (
             <View style={rightStyling}>
-              <ThemeIcon fill={textColor} {...rightIcon} />
-            </View>
-          )}
-          {!rightIcon && loading && (
-            <View style={rightStyling}>
-              <ActivityIndicator size="small" color={styleText.color} />
+              {loading ? (
+                <ActivityIndicator size="small" color={styleText.color} />
+              ) : (
+                rightIcon && <ThemeIcon fill={textColor} {...rightIcon} />
+              )}
             </View>
           )}
         </PressableOpacity>
