@@ -29,7 +29,7 @@ import {
 } from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
-import {TokenToggleInfoComponent} from '@atb/token-toggle-info';
+import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
 
 type Props = {onAfterSave: () => void};
@@ -263,7 +263,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         )}
 
         {toggleLimit !== undefined && (
-          <TokenToggleInfoComponent
+          <TokenToggleInfo
             style={styles.tokenInfo}
             textColor="background_accent_0"
           />

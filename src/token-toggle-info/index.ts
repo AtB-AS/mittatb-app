@@ -1,1 +1,1 @@
-export {TokenToggleInfoComponent} from './TokenToggleInfoComponent'
+export {TokenToggleInfo} from './TokenToggleInfo'
