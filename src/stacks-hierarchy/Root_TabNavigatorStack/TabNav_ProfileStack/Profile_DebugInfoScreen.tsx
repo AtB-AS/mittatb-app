@@ -273,6 +273,10 @@ export const Profile_DebugInfoScreen = () => {
               storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
             }
           />
+          <LinkSectionItem
+            text="Reset one time popovers"
+            onPress={() => storage.remove(StorageModelKeysEnum.OneTimePopOver)}
+          />
         </Section>
         <Section withPadding withTopPadding>
           <HeaderSectionItem
