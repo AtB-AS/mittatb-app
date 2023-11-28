@@ -47,6 +47,7 @@ import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
+import {useStorybookContext} from '@atb/storybook/StorybookContext';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -74,6 +75,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     fareContracts,
     serverNow,
   );
+  const {setEnabled: setStorybookEnabled} = useStorybookContext();
+
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {configurableLinks} = useFirestoreConfiguration();
@@ -530,6 +533,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               text="Design system"
               testID="designSystemButton"
               onPress={() => navigation.navigate('Profile_DesignSystemScreen')}
+            />
+            <LinkSectionItem
+              text="Storybook"
+              onPress={() => setStorybookEnabled(true)}
             />
             <LinkSectionItem
               text="Debug"

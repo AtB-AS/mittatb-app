@@ -136,7 +136,8 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
-  const {register: registerForPushNotifications} = usePushNotifications();
+  const {requestPermissions: registerForPushNotifications} =
+    usePushNotifications();
   const [fcmToken, setFcmToken] = useState<string>();
 
   const remoteConfig = useRemoteConfig();
@@ -272,6 +273,10 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() =>
               storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
             }
+          />
+          <LinkSectionItem
+            text="Reset one time popovers"
+            onPress={() => storage.remove(StorageModelKeysEnum.OneTimePopOver)}
           />
         </Section>
         <Section withPadding withTopPadding>

@@ -21,12 +21,12 @@ export type NotificationConfig = {
 };
 
 export enum PushNotificationPayloadType {
-  fareContractExpiry = 'FARE_CONTRACT_EXPIRY',
+  activeFareContracts = 'ACTIVE_FARE_CONTRACTS',
 }
 
 // Can be updated to z.union when we add more types:
 // `z.union([z.object({type: a}), z.object({type: b})])`
 export const PushNotificationData = z.object({
-  type: z.literal(PushNotificationPayloadType.fareContractExpiry),
+  type: z.literal(PushNotificationPayloadType.activeFareContracts),
   fareContractId: z.string(),
 });

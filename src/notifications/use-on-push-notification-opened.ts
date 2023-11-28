@@ -22,7 +22,7 @@ export function useOnPushNotificationOpened() {
       }
       const messageData = payload.data;
       switch (messageData.type) {
-        case PushNotificationPayloadType.fareContractExpiry:
+        case PushNotificationPayloadType.activeFareContracts:
           navigate('Root_TabNavigatorStack', {
             screen: 'TabNav_TicketingStack',
             params: {
