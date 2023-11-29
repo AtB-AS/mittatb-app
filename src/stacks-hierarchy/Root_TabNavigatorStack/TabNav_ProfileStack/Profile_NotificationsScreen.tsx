@@ -17,8 +17,13 @@ export const Profile_NotificationsScreen = () => {
   const style = useStyles();
   const {t} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
-  const {status, config, requestPermissions, checkPermissions, updateConfig} =
-    useNotifications();
+  const {
+    permissionStatus,
+    config,
+    requestPermissions,
+    checkPermissions,
+    updateConfig,
+  } = useNotifications();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -52,8 +57,10 @@ export const Profile_NotificationsScreen = () => {
         </View>
       )}
     >
-      {status === 'loading' && <Processing message={t(dictionary.loading)} />}
-      {status !== 'loading' && (
+      {permissionStatus === 'loading' && (
+        <Processing message={t(dictionary.loading)} />
+      )}
+      {permissionStatus !== 'loading' && (
         <View style={style.content}>
           <Section withPadding>
             <ToggleSectionItem
@@ -66,13 +73,16 @@ export const Profile_NotificationsScreen = () => {
                   .pushToggle.subText,
               )}
               value={
-                status === 'granted' && isConfigEnabled(config?.modes, 'push')
+                permissionStatus === 'granted' &&
+                isConfigEnabled(config?.modes, 'push')
               }
-              disabled={status === 'updating' || status === 'denied'}
+              disabled={
+                permissionStatus === 'updating' || permissionStatus === 'denied'
+              }
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
-          {status !== 'error' && status === 'denied' && (
+          {permissionStatus !== 'error' && permissionStatus === 'denied' && (
             <MessageBox
               style={style.messageBox}
               type="info"
@@ -93,7 +103,7 @@ export const Profile_NotificationsScreen = () => {
               }}
             />
           )}
-          {status === 'error' && (
+          {permissionStatus === 'error' && (
             <MessageBox
               style={style.messageBox}
               type="error"

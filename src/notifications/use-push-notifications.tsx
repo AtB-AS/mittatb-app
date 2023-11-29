@@ -10,7 +10,7 @@ import {NotificationConfig} from './types';
 import {useConfig} from './use-config';
 import {useRegister} from './use-register';
 
-type NotificationsStatus =
+type PermissionStatus =
   | 'granted'
   | 'denied'
   | 'undetermined'
@@ -19,9 +19,9 @@ type NotificationsStatus =
   | 'error';
 
 type NotificationContextState = {
-  status: NotificationsStatus;
   config: NotificationConfig | undefined;
   updateConfig: (config: NotificationConfigUpdate) => void;
+  permissionStatus: PermissionStatus;
   checkPermissions: () => void;
   requestPermissions: () => Promise<void>;
   register: () => Promise<string | undefined>;
@@ -34,7 +34,7 @@ const NotificationContext = createContext<NotificationContextState | undefined>(
 
 export const NotificationContextProvider: React.FC = ({children}) => {
   const {language} = useLocaleContext();
-  const [status, setStatus] = useState<NotificationsStatus>('loading');
+  const [permissionStatus, setStatus] = useState<PermissionStatus>('loading');
   const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
   const mutateRegister = registerMutation.mutate;
@@ -97,7 +97,7 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   return (
     <NotificationContext.Provider
       value={{
-        status,
+        permissionStatus,
         config: configQuery.data,
         updateConfig: configMutation.mutate,
         checkPermissions,
@@ -121,7 +121,7 @@ export function useNotifications() {
   return context;
 }
 
-async function requestUserPermission(): Promise<NotificationsStatus> {
+async function requestUserPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     const authStatus = await messaging().requestPermission();
     return mapIosPermissionStatus(authStatus);

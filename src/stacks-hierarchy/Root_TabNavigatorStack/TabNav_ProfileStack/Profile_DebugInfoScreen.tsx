@@ -138,10 +138,10 @@ export const Profile_DebugInfoScreen = () => {
 
   const {
     fcmToken,
-    status: notificationStatus,
+    permissionStatus: pushNotificationPermissionStatus,
     register: registerNotifications,
-    requestPermissions: requestNotificationPermissions,
-    checkPermissions: checkNotificationPermissions,
+    requestPermissions: requestPushNotificationPermissions,
+    checkPermissions: checkPushNotificationPermissions,
   } = useNotifications();
 
   const remoteConfig = useRemoteConfig();
@@ -521,15 +521,17 @@ export const Profile_DebugInfoScreen = () => {
             showIconText={true}
             expandContent={
               <>
-                <ThemeText>Notification status: {notificationStatus}</ThemeText>
+                <ThemeText>
+                  Notification status: {pushNotificationPermissionStatus}
+                </ThemeText>
                 <Button
                   style={style.button}
-                  onPress={requestNotificationPermissions}
+                  onPress={requestPushNotificationPermissions}
                   text="Request permissions"
                 />
                 <Button
                   style={style.button}
-                  onPress={checkNotificationPermissions}
+                  onPress={checkPushNotificationPermissions}
                   text="Check permissions"
                 />
                 <Button
