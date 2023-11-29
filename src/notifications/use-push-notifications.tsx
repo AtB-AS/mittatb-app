@@ -23,7 +23,7 @@ type NotificationContextState = {
   config: NotificationConfig | undefined;
   updateConfig: (config: NotificationConfigUpdate) => void;
   checkPermissions: () => void;
-  requestPermissions: () => Promise<string | undefined>;
+  requestPermissions: () => Promise<void>;
   register: () => Promise<string | undefined>;
   fcmToken: string | undefined;
 };
@@ -92,7 +92,6 @@ export const NotificationContextProvider: React.FC = ({children}) => {
       return;
     }
     setStatus(permissionStatus);
-    return token;
   }, [register]);
 
   return (
