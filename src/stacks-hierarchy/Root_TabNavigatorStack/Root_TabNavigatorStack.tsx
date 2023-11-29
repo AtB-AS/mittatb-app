@@ -32,7 +32,7 @@ import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-s
 import {
   usePushNotificationsEnabled,
   useOnPushNotificationOpened,
-  useNotificationContextState,
+  useNotifications,
 } from '@atb/notifications';
 import {
   filterValidRightNowFareContract,
@@ -70,7 +70,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   );
 
   const {register: registerForNotifications, status: notificationStatus} =
-    useNotificationContextState();
+    useNotifications();
   useOnPushNotificationOpened();
 
   // Register notification language when the app starts, in case the user have

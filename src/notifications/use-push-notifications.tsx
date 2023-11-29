@@ -111,7 +111,7 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useNotificationContextState() {
+export function useNotifications() {
   const context = useContext(NotificationContext);
   if (context === undefined) {
     throw new Error(

@@ -52,7 +52,7 @@ import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-shar
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useAnnouncementsState} from '@atb/announcements';
 import {
-  useNotificationContextState,
+  useNotifications,
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
@@ -142,7 +142,7 @@ export const Profile_DebugInfoScreen = () => {
     register: registerNotifications,
     requestPermissions: requestNotificationPermissions,
     checkPermissions: checkNotificationPermissions,
-  } = useNotificationContextState();
+  } = useNotifications();
 
   const remoteConfig = useRemoteConfig();
 
