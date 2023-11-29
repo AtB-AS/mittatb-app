@@ -32,6 +32,7 @@ import {
   mapToHarborConnectionOverride,
   mapToMobilityOperators,
   mapToTransportModeFilterOptions,
+  mapToTravelSearchPreferences,
 } from './converters';
 import {LanguageAndTextType} from '@atb/translations';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
@@ -422,6 +423,9 @@ function getTravelSearchFiltersFromSnapshot(
 
   const transportModeOptions = travelSearchFiltersDoc?.get('transportModes');
   const flexibleTransport = travelSearchFiltersDoc?.get('flexibleTransport');
+  const travelSearchPreferences = travelSearchFiltersDoc?.get(
+    'travelSearchPreferences',
+  );
 
   const mappedTransportModes =
     mapToTransportModeFilterOptions(transportModeOptions);
@@ -429,10 +433,15 @@ function getTravelSearchFiltersFromSnapshot(
   const mappedFlexibleTransport =
     mapToFlexibleTransportOption(flexibleTransport);
 
+  const mappedTravelSearchPreferences = mapToTravelSearchPreferences(
+    travelSearchPreferences,
+  );
+
   if (mappedTransportModes) {
     return {
       transportModes: mappedTransportModes,
       flexibleTransport: mappedFlexibleTransport,
+      travelSearchPreferences: mappedTravelSearchPreferences,
     };
   }
 

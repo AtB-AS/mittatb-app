@@ -11,6 +11,7 @@ import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
 import {isDefined} from '@atb/utils/presence';
+import {TravelSearchPreference} from '@atb-as/config-specs';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -100,6 +101,14 @@ const mapToTransportModeFilterOption = (
     return;
   }
   return typeConfigPotential.data;
+};
+
+export const mapToTravelSearchPreferences = (preferences: any) => {
+  const parseResult = TravelSearchPreference.array().safeParse(preferences);
+  if (!parseResult.success) {
+    return;
+  }
+  return parseResult.data;
 };
 
 export function mapLanguageAndTextType(text?: any) {
