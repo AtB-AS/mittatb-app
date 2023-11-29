@@ -52,7 +52,7 @@ import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-shar
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useAnnouncementsState} from '@atb/announcements';
 import {
-  usePushNotifications,
+  useNotificationContextState,
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
@@ -136,9 +136,13 @@ export const Profile_DebugInfoScreen = () => {
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
-  const {requestPermissions: registerForPushNotifications} =
-    usePushNotifications();
-  const [fcmToken, setFcmToken] = useState<string>();
+  const {
+    fcmToken,
+    status: notificationStatus,
+    register: registerNotifications,
+    requestPermissions: requestNotificationPermissions,
+    checkPermissions: checkNotificationPermissions,
+  } = useNotificationContextState();
 
   const remoteConfig = useRemoteConfig();
 
@@ -190,15 +194,6 @@ export const Profile_DebugInfoScreen = () => {
               setPreference({debugShowSeconds});
             }}
           />
-          <LinkSectionItem
-            text="Register for push notifications"
-            onPress={() => registerForPushNotifications().then(setFcmToken)}
-          />
-          {fcmToken && (
-            <GenericSectionItem>
-              <ThemeText>{`FCM token: ${fcmToken}`}</ThemeText>
-            </GenericSectionItem>
-          )}
           <LinkSectionItem
             text="Restart onboarding"
             onPress={restartOnboarding}
@@ -516,6 +511,34 @@ export const Profile_DebugInfoScreen = () => {
                   ))}
                 </View>
               )
+            }
+          />
+        </Section>
+
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
+            text="Notifications"
+            showIconText={true}
+            expandContent={
+              <>
+                <ThemeText>Notification status: {notificationStatus}</ThemeText>
+                <Button
+                  style={style.button}
+                  onPress={requestNotificationPermissions}
+                  text="Request permissions"
+                />
+                <Button
+                  style={style.button}
+                  onPress={checkNotificationPermissions}
+                  text="Check permissions"
+                />
+                <Button
+                  style={style.button}
+                  onPress={registerNotifications}
+                  text="Register"
+                />
+                <ThemeText>FCM Token: {fcmToken}</ThemeText>
+              </>
             }
           />
         </Section>
