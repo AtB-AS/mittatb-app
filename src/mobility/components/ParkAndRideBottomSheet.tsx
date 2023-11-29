@@ -44,7 +44,7 @@ export const ParkAndRideBottomSheet = ({
 }: Props) => {
   const {t} = useTranslation();
   const {themeName} = useTheme();
-  const style = useSheetStyle();
+  const styles = useSheetStyle();
   const heading = `${t(ParkAndRideTexts.title)} ${name}`;
 
   const [longitude, latitude] = feature.geometry.coordinates;
@@ -72,28 +72,28 @@ export const ParkAndRideBottomSheet = ({
         setFocusOnLoad={false}
       />
       <ScrollView>
-        <WalkingDistance distance={distance} />
-        <View style={style.buttonsContainer}>
-          <View style={style.travelButton}>
+        <WalkingDistance distance={distance} style={styles.walkingDistance} />
+        <View style={styles.buttonsContainer}>
+          <View style={styles.travelButton}>
             <Button
               text={t(DeparturesDialogSheetTexts.travelFrom.title)}
               onPress={() =>
                 navigateToTripSearch(searchLocation, 'fromLocation')
               }
               mode="primary"
-              style={style.travelFromButtonPadding}
+              style={styles.travelFromButtonPadding}
             />
           </View>
-          <View style={style.travelButton}>
+          <View style={styles.travelButton}>
             <Button
               text={t(DeparturesDialogSheetTexts.travelTo.title)}
               onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
               mode="primary"
-              style={style.travelToButtonPadding}
+              style={styles.travelToButtonPadding}
             />
           </View>
         </View>
-        <View style={style.container}>
+        <View style={styles.container}>
           <MessageBox type="info" message={t(ParkAndRideTexts.disclaimer)} />
           <VehicleStats
             left={
@@ -141,5 +141,8 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     travelToButtonPadding: {
       marginLeft: theme.spacings.medium / 2,
     },
+    walkingDistance: {
+      paddingBottom: theme.spacings.medium
+    }
   };
 });

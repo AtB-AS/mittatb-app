@@ -4,7 +4,7 @@ import {
   PricingSegmentFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
+import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
@@ -22,7 +22,7 @@ export const PricingPlan = ({
 }: PricingPlanProps) => {
   const {t} = useTranslation();
   const seAppForPrices = (
-    <VehicleStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
+    <MobilityStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
   );
   if (hasMultiplePricingPlans(plan)) {
     return seAppForPrices;
@@ -79,7 +79,7 @@ const PriceInfo = ({
   };
 
   return (
-    <VehicleStat
+    <MobilityStat
       primaryStat={`${formatPrice(pricingSegment, language)} kr/${unit}`}
       secondaryStat={t(ScooterTexts.pricingPlan.price(price))}
       secondaryStatStyle={

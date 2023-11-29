@@ -131,7 +131,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
           )}
           {mode === 'Map' ? (
             <>
-              <WalkingDistance distance={props.distance} />
+              <WalkingDistance distance={props.distance} style={styles.walkingDistance}/>
               <View style={styles.buttonsContainer}>
                 <View style={styles.travelButton}>
                   <Button
@@ -282,5 +282,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
+  },
+  walkingDistance: {
+    paddingBottom: theme.spacings.medium,
   },
 }));

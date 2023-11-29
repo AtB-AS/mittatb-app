@@ -15,6 +15,7 @@ export type StationBasicFragment = {
   id: string;
   lat: number;
   lon: number;
+  capacity: number;
   vehicleTypesAvailable?: Array<VehicleTypeAvailabilityBasicFragment>;
 };
 
@@ -27,6 +28,7 @@ export type BikeStationFragment = {
 } & StationBasicFragment;
 
 export type CarVehicleTypeFragment = {
+  id: string,
   formFactor: Types.FormFactor;
   propulsionType: Types.PropulsionType;
   maxRangeMeters?: number;
