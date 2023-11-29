@@ -20,7 +20,7 @@ type TokenToggleInfoProps = {
   textColor?: StaticColor;
 };
 
-export const TokenToggleInfoComponent = ({
+export const TokenToggleInfo = ({
   style,
   textColor,
 }: TokenToggleInfoProps) => {

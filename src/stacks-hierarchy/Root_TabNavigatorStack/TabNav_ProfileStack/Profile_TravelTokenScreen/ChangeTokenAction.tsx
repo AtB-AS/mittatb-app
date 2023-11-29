@@ -10,7 +10,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {TokenToggleInfoComponent} from '@atb/token-toggle-info';
+import {TokenToggleInfo} from '@atb/token-toggle-info';
 
 const ChangeTokenAction = ({
   onChange,
@@ -41,7 +41,7 @@ const ChangeTokenAction = ({
 
       {toggleLimit !== undefined && (
         <GenericSectionItem>
-          <TokenToggleInfoComponent style={styles.tokenInfoView} />
+          <TokenToggleInfo style={styles.tokenInfoView} />
         </GenericSectionItem>
       )}
     </Section>
