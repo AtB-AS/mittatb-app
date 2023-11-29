@@ -9,7 +9,7 @@ import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {MessageBox} from '@atb/components/message-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {usePushNotifications, isConfigEnabled} from '@atb/notifications';
+import {useNotificationContextState, isConfigEnabled} from '@atb/notifications';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -18,7 +18,7 @@ export const Profile_NotificationsScreen = () => {
   const {t} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
   const {status, config, requestPermissions, checkPermissions, updateConfig} =
-    usePushNotifications();
+    useNotificationContextState();
 
   useEffect(() => {
     if (isFocusedAndActive) {

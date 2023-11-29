@@ -30,9 +30,9 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {
-  usePushNotifications,
   usePushNotificationsEnabled,
   useOnPushNotificationOpened,
+  useNotificationContextState,
 } from '@atb/notifications';
 import {
   filterValidRightNowFareContract,
@@ -70,7 +70,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   );
 
   const {register: registerForNotifications, status: notificationStatus} =
-    usePushNotifications();
+    useNotificationContextState();
   useOnPushNotificationOpened();
 
   // Register notification language when the app starts, in case the user have

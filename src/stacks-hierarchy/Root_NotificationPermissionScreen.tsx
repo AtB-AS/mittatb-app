@@ -6,7 +6,7 @@ import {PushNotification} from '@atb/assets/svg/color/images';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useAppState} from '@atb/AppContext';
 import {OnboardingScreen} from '@atb/onboarding-screen';
-import {usePushNotifications} from '@atb/notifications';
+import {useNotificationContextState} from '@atb/notifications';
 
 type Props = RootStackScreenProps<'Root_NotificationPermissionScreen'>;
 
@@ -14,7 +14,7 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
 
   const {completeNotificationPermissionOnboarding} = useAppState();
-  const {requestPermissions} = usePushNotifications();
+  const {requestPermissions} = useNotificationContextState();
   const buttonOnPress = useCallback(async () => {
     await requestPermissions();
     navigation.popToTop();
