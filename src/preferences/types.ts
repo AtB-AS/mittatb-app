@@ -13,6 +13,7 @@ export type Preference_ScreenAlternatives =
 export type Preference_Language = (typeof appLanguages)[number];
 
 export type TripSearchPreferences = {
+  transferSlack?: number;
   transferPenalty?: number;
   waitReluctance?: number;
   walkReluctance?: number;

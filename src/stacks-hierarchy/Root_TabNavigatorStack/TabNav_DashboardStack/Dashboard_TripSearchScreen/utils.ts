@@ -56,6 +56,7 @@ export function createQuery(
     cursor,
     when: searchTime?.date,
     arriveBy,
+    transferSlack: tripSearchPreferences?.transferSlack,
     transferPenalty: tripSearchPreferences?.transferPenalty,
     waitReluctance: tripSearchPreferences?.waitReluctance,
     walkReluctance: tripSearchPreferences?.walkReluctance,
@@ -78,6 +79,19 @@ export function createQuery(
         transportModeToEnum(tm.modes),
       ),
     };
+  }
+
+  if (travelSearchFiltersSelection?.travelSearchPreferences) {
+    travelSearchFiltersSelection.travelSearchPreferences.forEach(
+      (preference) => {
+        const value = preference.options.find(
+          (o) => o.id === preference.selectedOption,
+        )?.value;
+        if (value) {
+          query[preference.type] = value;
+        }
+      },
+    );
   }
   return query;
 }
