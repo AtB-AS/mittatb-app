@@ -19,9 +19,6 @@ import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
-export function timeout(ms: any) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 export const Profile_EditProfileScreen = ({
   navigation,
 }: EditProfileScreenProps) => {
