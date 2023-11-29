@@ -1,7 +1,7 @@
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 import {ActivityIndicator, View} from 'react-native';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from '@atb/translations';
 import {EditProfileTexts} from '@atb/translations/screens/subscreens/EditProfileScreen';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -11,21 +11,17 @@ import {useAuthState} from '@atb/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {MessageBox} from '@atb/components/message-box';
-import {emailAvailable, getProfile, updateProfile} from '@atb/api';
 import parsePhoneNumber from 'libphonenumber-js';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {CustomerProfile} from '@atb/api/types/profile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
+import {isValidEmail} from '@atb/utils/validation';
+import {CustomerProfile} from '@atb/api/types/profile';
+import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
-type SubmissionStatus =
-  | 'loading'
-  | 'invalid-email'
-  | 'unavailable-email'
-  | 'submitted'
-  | 'submission-error';
-type ProfileState = 'loading' | 'success' | 'error';
 
+export function timeout(ms: any) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 export const Profile_EditProfileScreen = ({
   navigation,
 }: EditProfileScreenProps) => {
@@ -36,83 +32,60 @@ export const Profile_EditProfileScreen = ({
     customerNumber,
     phoneNumber: authPhoneNumber,
   } = useAuthState();
+  const {
+    data: customerProfile,
+    isLoading: isLoadingGetProfile,
+    isError: isErrorGetProfile,
+    refetch: refetchProfile,
+  } = useProfileQuery();
+  const {
+    mutate: updateProfile,
+    isLoading: isLoadingUpdateProfile,
+    isError: isErrorUpdateProfile,
+    isSuccess: isSuccessUpdateProfile,
+    error: errorUpdate,
+  } = useProfileUpdateMutation();
 
-  const [customerProfile, setCustomerProfile] = useState<CustomerProfile>();
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [surname, setSurname] = useState('');
-  const [submissionStatus, setSubmissionStatus] = useState<
-    SubmissionStatus | undefined
-  >(undefined);
-  const [profileState, setProfileState] = useState<ProfileState>();
+  const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
 
   const isLoadingOrSubmittingProfile =
-    submissionStatus === 'loading' || profileState === 'loading';
+    isLoadingUpdateProfile || isLoadingGetProfile;
 
   const phoneNumber = parsePhoneNumber(
     authPhoneNumber ?? '',
   )?.formatInternational();
 
   const onSubmit = async () => {
-    setSubmissionStatus('loading');
-
     if (isValidEmail(email)) {
-      const {available} = await emailAvailable(email);
-      if (available || customerProfile?.email === email) {
-        try {
-          await updateProfile({
-            firstName,
-            surname,
-            email,
-          });
-          await fetchProfile();
-          setSubmissionStatus('submitted');
-        } catch {
-          setSubmissionStatus('submission-error');
-        }
-      } else {
-        setSubmissionStatus('unavailable-email');
-      }
+      await updateProfile({firstName, surname, email});
+      await refetchProfile();
     } else {
-      setSubmissionStatus('invalid-email');
+      setInvalidEmail(true);
     }
   };
 
-  const getEmailErrorText = (
-    status: SubmissionStatus | undefined,
-  ): string | undefined => {
-    switch (status) {
-      case 'invalid-email':
-        return t(EditProfileTexts.personalDetails.email.formattingError);
-      case 'unavailable-email':
-        return t(EditProfileTexts.personalDetails.email.unavailableError);
+  const getEmailErrorText = (invalidEmail: boolean): string | undefined => {
+    const erroorStatus: any = errorUpdate;
+    if (erroorStatus?.status === 602) {
+      return t(EditProfileTexts.personalDetails.email.unavailableError);
+    } else if (invalidEmail) {
+      return t(EditProfileTexts.personalDetails.email.formattingError);
     }
   };
-
-  const fetchProfile = useCallback(async () => {
-    try {
-      const response = await getProfile();
-      setCustomerProfile(response);
-
-      // Receiving "_" from Entur when firstName or surname are not set on user profile, instead setting them to ""
-      const nonUnderscoreString = (str: string) => (str === '_' ? '' : str);
-      setEmail(nonUnderscoreString(response.email));
-      setFirstName(nonUnderscoreString(response.firstName));
-      setSurname(nonUnderscoreString(response.surname));
-
-      setProfileState('success');
-    } catch {
-      setProfileState('error');
-    }
-  }, []);
 
   useEffect(() => {
-    const getProfileData = async () => {
-      setProfileState('loading');
-      await fetchProfile();
-    };
-    getProfileData();
-  }, [fetchProfile]);
+    if (customerProfile) {
+      const profile: CustomerProfile = customerProfile;
+
+      const nonUnderscoreString = (str: string) => (str === '_' ? '' : str);
+      setEmail(nonUnderscoreString(profile.email));
+      setFirstName(nonUnderscoreString(profile.firstName));
+      setSurname(nonUnderscoreString(profile.surname));
+    }
+  }, [customerProfile]);
 
   return (
     <FullScreenView
@@ -134,23 +107,23 @@ export const Profile_EditProfileScreen = ({
     >
       {authenticationType !== 'phone' ? (
         <View style={styles.noAccount}>
-          <ThemeText>{t(EditProfileTexts.notProfile)}</ThemeText>
+          <MessageBox type="info" message={t(EditProfileTexts.notProfile)} />
         </View>
       ) : (
         <>
           <View style={styles.personalDetails}>
-            {profileState === 'loading' && <ActivityIndicator size="large" />}
+            {isLoadingGetProfile && <ActivityIndicator size="large" />}
             <ThemeText accessibilityRole="header" color="secondary">
               {t(EditProfileTexts.personalDetails.header)}
             </ThemeText>
           </View>
-          {profileState === 'error' ? (
-            <Section withPadding>
+          {isErrorGetProfile ? (
+            <View style={styles.profileError}>
               <MessageBox
                 type="info"
                 message={t(EditProfileTexts.personalDetails.error)}
               />
-            </Section>
+            </View>
           ) : (
             <>
               <Section withPadding>
@@ -181,7 +154,7 @@ export const Profile_EditProfileScreen = ({
                   autoCapitalize="words"
                 />
               </Section>
-              <Section withPadding>
+              <Section withPadding withBottomPadding>
                 <TextInputSectionItem
                   editable={!isLoadingOrSubmittingProfile}
                   value={email}
@@ -192,7 +165,7 @@ export const Profile_EditProfileScreen = ({
                   )}
                   keyboardType="email-address"
                   showClear
-                  errorText={getEmailErrorText(submissionStatus)}
+                  errorText={getEmailErrorText(invalidEmail)}
                   inlineLabel={false}
                 />
               </Section>
@@ -210,39 +183,34 @@ export const Profile_EditProfileScreen = ({
                 </ThemeText>
               </View>
 
-              <Section withPadding withTopPadding>
+              <View style={styles.submitSection}>
                 <Button
                   mode="primary"
                   text={t(EditProfileTexts.button.save)}
                   onPress={onSubmit}
-                  style={styles.submit}
+                  style={styles.submitContent}
                   disabled={isLoadingOrSubmittingProfile}
-                  rightIcon={
-                    submissionStatus === 'loading'
-                      ? {
-                          svg: ArrowRight,
-                          loading: submissionStatus === 'loading',
-                        }
-                      : undefined
-                  }
+                  loading={isLoadingUpdateProfile}
                 />
-                {submissionStatus === 'submitted' && (
+                {isSuccessUpdateProfile && (
                   <MessageBox
                     type="valid"
                     message={t(EditProfileTexts.profileUpdate.success)}
+                    style={styles.submitContent}
                   />
                 )}
-                {submissionStatus === 'submission-error' && (
+                {isErrorUpdateProfile && (
                   <MessageBox
+                    style={styles.submitContent}
                     type="error"
                     message={t(EditProfileTexts.profileUpdate.error)}
                   />
                 )}
-              </Section>
+              </View>
             </>
           )}
           <View style={styles.profileContainer}>
-            <ThemeText style={styles.profileText} color="secondary">
+            <ThemeText color="secondary" style={styles.profileItem}>
               {t(EditProfileTexts.profileInfo.profile)}
             </ThemeText>
             <ThemeText>
@@ -251,7 +219,7 @@ export const Profile_EditProfileScreen = ({
             <ThemeText
               type="body__secondary"
               color="secondary"
-              style={styles.profilePhone}
+              style={styles.profileItem}
             >
               {t(EditProfileTexts.profileInfo.otp(phoneNumber))}
             </ThemeText>
@@ -266,13 +234,14 @@ export const Profile_EditProfileScreen = ({
                   accessibilityLabel={numberToAccessibilityString(
                     customerNumber,
                   )}
+                  style={styles.profileItem}
                 >
                   {customerNumber}
                 </ThemeText>
               </>
             )}
           </View>
-          <Section withPadding withTopPadding withBottomPadding>
+          <View style={styles.deleteProfile}>
             <Button
               mode="primary"
               interactiveColor="interactive_destructive"
@@ -280,18 +249,12 @@ export const Profile_EditProfileScreen = ({
               text={t(EditProfileTexts.button.deleteProfile)}
               onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}
             />
-          </Section>
+          </View>
         </>
       )}
     </FullScreenView>
   );
 };
-
-function isValidEmail(email: string) {
-  // Just a really simple check to avoid the most obvious wrong ones.
-  // More validation is done on the server
-  return /^\S+@\S+\.\S+$/.test(email);
-}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   personalDetails: {
@@ -300,17 +263,30 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.xLarge,
   },
   noAccount: {
-    margin: theme.spacings.xLarge,
+    marginHorizontal: theme.spacings.medium,
+    marginVertical: theme.spacings.xLarge,
   },
   parallaxContent: {marginHorizontal: theme.spacings.medium},
+  profileError: {
+    marginHorizontal: theme.spacings.medium,
+  },
   phone: {
     marginHorizontal: theme.spacings.xLarge,
-    marginTop: theme.spacings.medium,
-  },
-  submit: {
     marginBottom: theme.spacings.medium,
   },
-  profileContainer: {marginHorizontal: theme.spacings.xLarge},
-  profileText: {marginVertical: theme.spacings.large},
-  profilePhone: {marginBottom: theme.spacings.large},
+  submitSection: {
+    margin: theme.spacings.medium,
+  },
+  submitContent: {
+    marginBottom: theme.spacings.medium,
+  },
+  profileContainer: {
+    marginHorizontal: theme.spacings.xLarge,
+    marginBottom: theme.spacings.medium,
+  },
+  profileItem: {marginBottom: theme.spacings.large},
+  deleteProfile: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.xLarge,
+  },
 }));
