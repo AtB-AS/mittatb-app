@@ -9,12 +9,10 @@ import {
   MobilityTexts,
   ScooterTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PricingPlan} from '@atb/mobility/components/PricingPlan';
-import {OperatorLogo} from '@atb/mobility/components/OperatorLogo';
+import {OperatorNameAndLogo} from '@atb/mobility/components/OperatorNameAndLogo';
 import {formatRange} from '@atb/mobility/utils';
-import {VehicleStats} from '@atb/mobility/components/VehicleStats';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
@@ -24,7 +22,12 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {OperatorActionButton} from './OperatorActionButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Scooter} from '@atb/assets/svg/color/images/mobility';
+import {MobilityStats} from '@atb/mobility/components/MobilityStats';
+import {MobilityStat} from '@atb/mobility/components/MobilityStat';
+import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 
 type Props = {
   vehicleId: VehicleId;
@@ -37,7 +40,7 @@ export const ScooterSheet = ({
   onReportParkingViolation,
 }: Props) => {
   const {t, language} = useTranslation();
-  const style = useSheetStyle();
+  const styles = useSheetStyle();
   const {
     vehicle,
     isLoading,
@@ -61,53 +64,64 @@ export const ScooterSheet = ({
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
+        title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
         color="background_1"
         setFocusOnLoad={false}
       />
       <>
         {isLoading && (
-          <View style={style.activityIndicator}>
+          <View style={styles.activityIndicator}>
             <ActivityIndicator size="large" />
           </View>
         )}
         {!isLoading && !isError && vehicle && (
           <>
-            <ScrollView style={style.container}>
+            <ScrollView style={styles.container}>
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
-                  style={style.benefit}
+                  formFactor={FormFactor.Scooter}
+                  style={styles.operatorBenefit}
                 />
               )}
               <Section>
                 <GenericSectionItem>
-                  <OperatorLogo
+                  <OperatorNameAndLogo
                     operatorName={operatorName}
                     logoUrl={brandLogoUrl}
+                    style={styles.operatorNameAndLogo}
                   />
                 </GenericSectionItem>
+                <GenericSectionItem>
+                  <View style={styles.content}>
+                    <MobilityStats
+                      first={
+                        <MobilityStat
+                          svg={Battery}
+                          primaryStat={vehicle.currentFuelPercent + '%'}
+                          secondaryStat={formatRange(
+                            vehicle.currentRangeMeters,
+                            language,
+                          )}
+                        />
+                      }
+                      second={
+                        <PricingPlan
+                          operator={operatorName}
+                          plan={vehicle.pricingPlan}
+                          benefit={operatorBenefit}
+                        />
+                      }
+                    />
+                    <BrandingImage
+                      logoUrl={brandLogoUrl}
+                      fallback={<Scooter />}
+                    />
+                  </View>
+                </GenericSectionItem>
               </Section>
-              <VehicleStats
-                left={
-                  <VehicleStat
-                    svg={Battery}
-                    primaryStat={vehicle.currentFuelPercent + '%'}
-                    secondaryStat={formatRange(
-                      vehicle.currentRangeMeters,
-                      language,
-                    )}
-                  />
-                }
-                right={
-                  <PricingPlan
-                    operator={operatorName}
-                    plan={vehicle.pricingPlan}
-                    benefit={operatorBenefit}
-                  />
-                }
-              />
             </ScrollView>
-            <View style={style.footer}>
+            <View style={styles.footer}>
               {rentalAppUri && (
                 <OperatorActionButton
                   operatorId={operatorId}
@@ -119,7 +133,7 @@ export const ScooterSheet = ({
               )}
               {isParkingViolationsReportingEnabled && (
                 <Button
-                  style={style.parkingViolationsButton}
+                  style={styles.parkingViolationsButton}
                   text={t(MobilityTexts.reportParkingViolation)}
                   mode="secondary"
                   interactiveColor="interactive_2"
@@ -131,7 +145,7 @@ export const ScooterSheet = ({
           </>
         )}
         {!isLoading && (isError || !vehicle) && (
-          <View style={style.errorMessage}>
+          <View style={styles.errorMessage}>
             <MessageBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
@@ -153,11 +167,16 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
-    benefit: {
+    operatorBenefit: {
       marginBottom: theme.spacings.medium,
     },
     container: {
       paddingHorizontal: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
+    },
+    content: {
+      flexDirection: 'row',
+      alignContent: 'center',
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
@@ -168,6 +187,9 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     parkingViolationsButton: {
       marginTop: theme.spacings.medium,
+    },
+    operatorNameAndLogo: {
+      flexDirection: 'row',
     },
   };
 });

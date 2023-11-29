@@ -17,7 +17,7 @@ export const Profile_NotificationsScreen = () => {
   const style = useStyles();
   const {t} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
-  const {status, config, register, checkPermissions, updateConfig} =
+  const {status, config, requestPermissions, checkPermissions, updateConfig} =
     usePushNotifications();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const Profile_NotificationsScreen = () => {
 
   const handlePushNotificationToggle = async (enabled: boolean) => {
     if (enabled) {
-      await register();
+      await requestPermissions();
     }
     updateConfig({config_type: 'mode', id: 'push', enabled});
   };

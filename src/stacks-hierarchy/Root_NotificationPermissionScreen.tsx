@@ -14,12 +14,16 @@ export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
 
   const {completeNotificationPermissionOnboarding} = useAppState();
-  const {register} = usePushNotifications();
+  const {requestPermissions} = usePushNotifications();
   const buttonOnPress = useCallback(async () => {
-    await register();
+    await requestPermissions();
     navigation.popToTop();
     completeNotificationPermissionOnboarding();
-  }, [register, navigation, completeNotificationPermissionOnboarding]);
+  }, [
+    requestPermissions,
+    navigation,
+    completeNotificationPermissionOnboarding,
+  ]);
 
   return (
     <OnboardingScreen

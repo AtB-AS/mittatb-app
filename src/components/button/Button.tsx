@@ -3,6 +3,7 @@ import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Easing,
   PressableProps,
@@ -45,7 +46,6 @@ type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
   notification?: ThemeIconProps['notification'];
-  loading?: boolean;
 };
 
 export type ButtonProps = {
@@ -59,6 +59,7 @@ export type ButtonProps = {
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
 } & ButtonTypeAwareProps &
   PressableProps;
@@ -77,6 +78,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       text,
       disabled,
       active,
+      loading = false,
       compact = false,
       style,
       viewContainerStyle,
@@ -185,9 +187,13 @@ export const Button = React.forwardRef<any, ButtonProps>(
               </ThemeText>
             </View>
           )}
-          {rightIcon && (
+          {(rightIcon || loading) && (
             <View style={rightStyling}>
-              <ThemeIcon fill={textColor} {...rightIcon} />
+              {loading ? (
+                <ActivityIndicator size="small" color={styleText.color} />
+              ) : (
+                rightIcon && <ThemeIcon fill={textColor} {...rightIcon} />
+              )}
             </View>
           )}
         </PressableOpacity>
