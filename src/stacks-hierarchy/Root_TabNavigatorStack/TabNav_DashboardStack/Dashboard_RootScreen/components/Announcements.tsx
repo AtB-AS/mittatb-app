@@ -26,7 +26,11 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const analytics = useAnalytics();
   const now = useNow(10000);
 
-  if (announcements.length === 0) return null;
+  const filteredAnnouncements = announcements.filter((a) =>
+    isWithinTimeRange(a, now),
+  );
+
+  if (filteredAnnouncements.length === 0) return null;
 
   const handleDismiss = (announcement: AnnouncementType) => {
     animateNextChange();
@@ -40,32 +44,30 @@ export const Announcements = ({style: containerStyle}: Props) => {
     <View style={containerStyle} testID="announcements">
       <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
       <ScrollView>
-        {announcements
-          .filter((a) => isWithinTimeRange(a, now))
-          .map((a, i) => (
-            <Section
-              key={a.id}
-              style={i < announcements.length - 1 && style.announcement}
-              testID="announcement"
+        {filteredAnnouncements.map((a, i) => (
+          <Section
+            key={a.id}
+            style={i < filteredAnnouncements.length - 1 && style.announcement}
+            testID="announcement"
+          >
+            <GenericClickableSectionItem
+              accessible={false}
+              onPress={() =>
+                openBottomSheet(() => (
+                  <AnnouncementSheet
+                    announcement={a}
+                    close={closeBottomSheet}
+                  />
+                ))
+              }
             >
-              <GenericClickableSectionItem
-                accessible={false}
-                onPress={() =>
-                  openBottomSheet(() => (
-                    <AnnouncementSheet
-                      announcement={a}
-                      close={closeBottomSheet}
-                    />
-                  ))
-                }
-              >
-                <Announcement
-                  announcement={a}
-                  onDismiss={() => handleDismiss(a)}
-                />
-              </GenericClickableSectionItem>
-            </Section>
-          ))}
+              <Announcement
+                announcement={a}
+                onDismiss={() => handleDismiss(a)}
+              />
+            </GenericClickableSectionItem>
+          </Section>
+        ))}
       </ScrollView>
     </View>
   );
