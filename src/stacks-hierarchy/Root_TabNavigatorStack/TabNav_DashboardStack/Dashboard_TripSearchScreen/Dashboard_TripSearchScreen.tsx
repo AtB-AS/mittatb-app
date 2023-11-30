@@ -74,7 +74,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const analytics = useAnalytics();
   const isFocused = useIsFocusedAndActive();
   const {addPopOver} = usePopOver();
-  const filterButtonWrapper = useRef(null);
+  const filterButtonWrapperRef = useRef(null);
 
   const {location, requestLocationPermission} = useGeolocationState();
 
@@ -348,7 +348,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 viewContainerStyle={style.searchTimeButton}
               />
               {filtersState.enabled && (
-                <View ref={filterButtonWrapper}>
+                <View ref={filterButtonWrapperRef}>
                   <Button
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
@@ -407,7 +407,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                         filtersState.disableFlexibleTransport();
                       addPopOver({
                         oneTimeKey: 'trip-search-flexible-transport-dismissed',
-                        target: filterButtonWrapper,
+                        target: filterButtonWrapperRef,
                       });
                       analytics.logEvent(
                         'Flexible transport',
