@@ -12,6 +12,8 @@ import {isValidTripLocations} from '@atb/utils/location';
 import {useNonTransitTripSearchEnabled} from './use-non-transit-trip-search-enabled';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
+import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 
 export const useNonTransitTripsQuery = (
   fromLocation: Location | undefined,
@@ -20,6 +22,7 @@ export const useNonTransitTripsQuery = (
     option: 'now',
     date: new Date().toISOString(),
   },
+  filtersSelection: TravelSearchFiltersSelectionType | undefined,
 ) => {
   const [nonTransitTrips, setNonTransitTrips] = useState<TripPatternFragment[]>(
     [],
@@ -68,6 +71,7 @@ export const useNonTransitTripsQuery = (
       searchInput,
       arriveBy,
       tripSearchPreferences,
+      filtersSelection,
       [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
     );
 
@@ -97,6 +101,7 @@ export const useNonTransitTripsQuery = (
     toLocation,
     searchTime,
     tripSearchPreferences,
+    filtersSelection,
   ]);
 
   return {
@@ -111,6 +116,7 @@ export function createNonTransitQuery(
   {searchTime}: SearchInput,
   arriveBy: boolean,
   tripSearchPreferences: TripSearchPreferences | undefined,
+  filtersSelection: TravelSearchFiltersSelectionType | undefined,
   directModes: StreetMode[],
 ): NonTransitTripsQueryVariables {
   const from = {
@@ -127,13 +133,28 @@ export function createNonTransitQuery(
         ? toLocation.id
         : undefined,
   };
+  const walkSpeed =
+    getPreferenceFromFilter(
+      'walkSpeed',
+      filtersSelection?.travelSearchPreferences,
+    ) ?? tripSearchPreferences?.walkSpeed;
 
   return {
     from,
     to,
     when: searchTime?.date,
     arriveBy,
-    walkSpeed: tripSearchPreferences?.walkSpeed,
+    walkSpeed,
     directModes,
   };
 }
+
+const getPreferenceFromFilter = (
+  type: keyof TripSearchPreferences,
+  filters: TravelSearchPreferenceWithSelectionType[] | undefined,
+) => {
+  const filterOfType = filters?.find((f) => f.type === type);
+  if (!filterOfType) return;
+  return filterOfType.options.find((o) => o.id === filterOfType.selectedOption)
+    ?.value;
+};

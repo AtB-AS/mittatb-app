@@ -88,7 +88,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
-  const {nonTransitTrips} = useNonTransitTripsQuery(from, to, searchTime);
+  const {nonTransitTrips} = useNonTransitTripsQuery(
+    from,
+    to,
+    searchTime,
+    filtersState?.filtersSelection,
+  );
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;
@@ -486,7 +491,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -553,7 +558,7 @@ function useUpdatedLocation(
         }
       }
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLocation, favorites],
   );
 
