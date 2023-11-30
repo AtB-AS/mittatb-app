@@ -30,9 +30,9 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {InteractionManager} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {
-  usePushNotifications,
   usePushNotificationsEnabled,
   useOnPushNotificationOpened,
+  useNotifications,
 } from '@atb/notifications';
 import {
   filterValidRightNowFareContract,
@@ -69,8 +69,10 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     serverNow,
   );
 
-  const {register: registerForNotifications, status: notificationStatus} =
-    usePushNotifications();
+  const {
+    register: registerForNotifications,
+    permissionStatus: pushNotificationPermissionStatus,
+  } = useNotifications();
   useOnPushNotificationOpened();
 
   // Register notification language when the app starts, in case the user have
@@ -100,7 +102,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
       validFareContracts.length > 0 &&
-      notificationStatus !== 'granted' &&
+      pushNotificationPermissionStatus !== 'granted' &&
       !shouldShowLocationOnboarding
     ) {
       InteractionManager.runAfterInteractions(() =>
@@ -115,7 +117,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     locationWhenInUsePermissionOnboarded,
     locationWhenInUsePermissionStatus,
     validFareContracts.length,
-    notificationStatus,
+    pushNotificationPermissionStatus,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {

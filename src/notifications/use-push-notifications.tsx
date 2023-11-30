@@ -3,12 +3,14 @@ import Bugsnag from '@bugsnag/react-native';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import {useCallback, useState} from 'react';
+import {createContext, useCallback, useContext, useState} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
+import {NotificationConfigUpdate} from './api';
+import {NotificationConfig} from './types';
 import {useConfig} from './use-config';
 import {useRegister} from './use-register';
 
-type NotificationsStatus =
+type PermissionStatus =
   | 'granted'
   | 'denied'
   | 'undetermined'
@@ -16,9 +18,24 @@ type NotificationsStatus =
   | 'updating'
   | 'error';
 
-export const usePushNotifications = () => {
+type NotificationContextState = {
+  config: NotificationConfig | undefined;
+  updateConfig: (config: NotificationConfigUpdate) => void;
+  permissionStatus: PermissionStatus;
+  checkPermissions: () => void;
+  requestPermissions: () => Promise<void>;
+  register: () => Promise<string | undefined>;
+  fcmToken: string | undefined;
+};
+
+const NotificationContext = createContext<NotificationContextState | undefined>(
+  undefined,
+);
+
+export const NotificationContextProvider: React.FC = ({children}) => {
   const {language} = useLocaleContext();
-  const [status, setStatus] = useState<NotificationsStatus>('loading');
+  const [permissionStatus, setStatus] = useState<PermissionStatus>('loading');
+  const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
   const mutateRegister = registerMutation.mutate;
   const {query: configQuery, mutation: configMutation} = useConfig();
@@ -58,7 +75,8 @@ export const usePushNotifications = () => {
     try {
       const token = await messaging().getToken();
       if (!token) return;
-      mutateRegister({token, language: language});
+      setFcmToken(token);
+      mutateRegister({token, language});
       return token;
     } catch (e) {
       Bugsnag.notify(`Failed to register for push notifications: ${e}`);
@@ -74,20 +92,36 @@ export const usePushNotifications = () => {
       return;
     }
     setStatus(permissionStatus);
-    return token;
   }, [register]);
 
-  return {
-    status,
-    config: configQuery.data,
-    updateConfig: configMutation.mutate,
-    checkPermissions,
-    requestPermissions,
-    register,
-  };
+  return (
+    <NotificationContext.Provider
+      value={{
+        permissionStatus,
+        config: configQuery.data,
+        updateConfig: configMutation.mutate,
+        checkPermissions,
+        requestPermissions,
+        register,
+        fcmToken,
+      }}
+    >
+      {children}
+    </NotificationContext.Provider>
+  );
 };
 
-async function requestUserPermission(): Promise<NotificationsStatus> {
+export function useNotifications() {
+  const context = useContext(NotificationContext);
+  if (context === undefined) {
+    throw new Error(
+      'useNotificationContextState must be used within a NotificationContextProvider',
+    );
+  }
+  return context;
+}
+
+async function requestUserPermission(): Promise<PermissionStatus> {
   if (Platform.OS === 'ios') {
     const authStatus = await messaging().requestPermission();
     return mapIosPermissionStatus(authStatus);
