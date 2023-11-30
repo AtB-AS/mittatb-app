@@ -4,7 +4,7 @@ export const EditProfileTexts = {
   header: {
     title: _('Rediger Min profil', 'Edit My profile', 'Rediger Min profil'),
   },
-  notProfile: _(
+  noProfile: _(
     'Det virker ikke som du er logget inn. Vennligst opprett en profil og logg inn.',
     'Looks like you are not logged in. Please create a profile and log in.',
     'Det verkar ikkje som du er logga inn. Ver venleg, lag ein profil og logg inn.',
@@ -47,9 +47,9 @@ export const EditProfileTexts = {
       ),
     },
     error: _(
-      'Vi får ikke hentet profilinformasjonen din akkurat nå. Vennligst prøv igjen senere.',
-      'We are not able to retrieve your profile information at the moment. Please try again later',
-      'Vi får ikkje henta profilinformasjonen din akkurat no. Ver venleg og prøv igjen seinare.',
+      'Vi fikk ikke hentet profilinformasjonen din akkurat nå.',
+      'We were not able to retrieve your profile information.',
+      'Vi fekk ikkje henta profilinformasjonen din akkurat no.',
     ),
   },
   profileInfo: {

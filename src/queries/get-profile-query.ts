@@ -6,5 +6,4 @@ export const useProfileQuery = () => {
     queryKey: ['getProfile'],
     queryFn: getProfile,
   });
-  // check if we need stale time
 };
