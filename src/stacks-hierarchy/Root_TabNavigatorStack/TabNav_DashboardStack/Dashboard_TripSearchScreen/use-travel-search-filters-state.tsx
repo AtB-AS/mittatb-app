@@ -8,8 +8,6 @@ import {
   TravelSearchFiltersSelectionType,
 } from '@atb/travel-search-filters';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
-import {usePreferences} from '@atb/preferences';
-import {TravelSearchPreferenceOption} from '@atb-as/config-specs/lib/travel-search-filters';
 
 type TravelSearchFiltersState =
   | {
@@ -31,9 +29,6 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const {open, close, onOpenFocusRef, onCloseFocusRef} = useBottomSheet();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const {filters, setFilters} = useFilters();
-  const {
-    preferences: {tripSearchPreferences: userTripSearchPreferences},
-  } = usePreferences();
 
   const transportModeFilterOptionsFromFirestore =
     travelSearchFilters?.transportModes;
@@ -57,11 +52,7 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const defaultTravelSearchPreferences: TravelSearchPreferenceWithSelectionType[] =
     travelSearchPreferencesFromFirestore?.map((preference) => ({
       ...preference,
-      selectedOption:
-        getSelectedOptionFromUserPreferences(
-          preference.options,
-          userTripSearchPreferences?.[preference.type],
-        ) ?? preference.defaultOption,
+      selectedOption: preference.defaultOption,
     })) ?? [];
 
   const initialTransportModeSelection =
@@ -123,8 +114,3 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     onCloseFocusRef,
   };
 };
-
-const getSelectedOptionFromUserPreferences = (
-  options: TravelSearchPreferenceOption[],
-  valueFromUserPreferences: number | undefined,
-) => options.find((o) => o.value === valueFromUserPreferences)?.id;
