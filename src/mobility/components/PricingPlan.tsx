@@ -9,18 +9,17 @@ import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
 import {OperatorBenefitIdType} from '@atb/configuration';
+import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 
 type PricingPlanProps = {
   operator: string;
   plan: PricingPlanFragment;
-  eligibleBenefit?: OperatorBenefitIdType | undefined;
+  benefit?: OperatorBenefitType | undefined;
 };
-export const PricingPlan = ({
-  operator,
-  plan,
-  eligibleBenefit,
-}: PricingPlanProps) => {
+export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
   const {t} = useTranslation();
+  const {isUserEligibleForBenefit} = useIsEligibleForBenefit(benefit);
   const seAppForPrices = (
     <MobilityStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
   );
@@ -34,7 +33,7 @@ export const PricingPlan = ({
         price={plan.price}
         pricingSegment={plan.perMinPricing[0]}
         unit="min"
-        eligibleBenefit={eligibleBenefit}
+        eligibleBenefit={isUserEligibleForBenefit ? benefit?.id : undefined}
       />
     );
   }
@@ -45,7 +44,7 @@ export const PricingPlan = ({
         price={plan.price}
         pricingSegment={plan.perKmPricing[0]}
         unit="km"
-        eligibleBenefit={eligibleBenefit}
+        eligibleBenefit={isUserEligibleForBenefit ? benefit?.id : undefined}
       />
     );
   }

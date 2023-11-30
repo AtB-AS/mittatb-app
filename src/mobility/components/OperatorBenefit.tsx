@@ -5,6 +5,7 @@ import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Check} from '@atb/assets/svg/color/icons/status';
 import {
@@ -14,27 +15,31 @@ import {
 
 type Props = {
   benefit: OperatorBenefitType;
-  isUserEligible: boolean;
   formFactor: FormFactor;
   style?: ViewStyle;
 };
 
 export const OperatorBenefit = ({
   benefit,
-  isUserEligible,
   formFactor,
   style,
 }: Props) => {
   const styles = useStyles();
   const {language} = useTranslation();
+  const {isUserEligibleForBenefit, isLoading, isError} =
+    useIsEligibleForBenefit(benefit);
+
+  if (isLoading || isError) return null;
 
   const heading = getTextForLanguage(
-    isUserEligible ? benefit.headingWhenActive : benefit.headingWhenNotActive,
+    isUserEligibleForBenefit
+      ? benefit.headingWhenActive
+      : benefit.headingWhenNotActive,
     language,
   );
   const text =
     getTextForLanguage(
-      isUserEligible
+      isUserEligibleForBenefit
         ? benefit.descriptionWhenActive
         : benefit.descriptionWhenNotActive,
       language,
@@ -45,7 +50,7 @@ export const OperatorBenefit = ({
       <Section>
         <GenericSectionItem>
           <View style={styles.benefitContainer}>
-            <BenefitImage eligible={isUserEligible} formFactor={formFactor}/>
+            <BenefitImage eligible={isUserEligibleForBenefit} formFactor={formFactor}/>
             <View style={styles.benefitContent}>
               {heading && (
                 <ThemeText type="body__primary--bold">{heading}</ThemeText>

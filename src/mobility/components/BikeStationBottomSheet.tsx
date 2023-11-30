@@ -15,8 +15,7 @@ import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
-import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
-import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeText} from '@atb/components/text';
 import {Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
@@ -25,7 +24,7 @@ import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {BrandingImage} from './BrandingImage';
+import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 
 type Props = {
   stationId: string;
@@ -37,8 +36,8 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
   const {
-    isLoading: isLoadingStation,
-    isError: isLoadingError,
+    isLoading,
+    isError,
     station,
     brandLogoUrl,
     stationName,
@@ -48,16 +47,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
     rentalAppUri,
     availableBikes,
   } = useBikeStation(stationId);
-  const {
-    operatorBenefit,
-    valueCode,
-    isLoading: isLoadingBenefits,
-    isError: isBenefitError,
-    isUserEligibleForBenefit,
-  } = useOperatorBenefit(operatorId);
-
-  const isLoading = isLoadingStation || isLoadingBenefits;
-  const isError = isLoadingError || isBenefitError;
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
     <BottomSheetContainer maxHeightValue={0.6}>
@@ -83,7 +73,6 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
-                  isUserEligible={isUserEligibleForBenefit}
                   formFactor={FormFactor.Bicycle}
                   style={styles.operatorBenefit}
                 />
@@ -137,21 +126,13 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
             </ScrollView>
             {rentalAppUri && (
               <View style={styles.footer}>
-                {operatorBenefit && isUserEligibleForBenefit ? (
-                  <OperatorBenefitActionButton
-                    benefit={operatorBenefit}
-                    valueCode={valueCode}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ) : (
-                  <OperatorAppSwitchButton
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                )}
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  operatorName={operatorName}
+                  benefit={operatorBenefit}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
               </View>
             )}
           </>
