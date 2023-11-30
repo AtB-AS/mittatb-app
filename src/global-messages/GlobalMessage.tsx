@@ -10,7 +10,7 @@ import {
 import {getTextForLanguage} from '@atb/translations';
 import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
-import {RuleVariables} from './rules';
+import {RuleVariables} from '../rule-engine/rules';
 import {StaticColor} from '@atb/theme/colors';
 
 type Props = {

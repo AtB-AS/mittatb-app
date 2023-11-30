@@ -1,16 +1,16 @@
-import {Statuses} from '@atb-as/theme';
-import {isArray} from 'lodash';
-import {APP_VERSION} from '@env';
-import {Platform} from 'react-native';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import { Statuses } from '@atb-as/theme';
+import { isArray } from 'lodash';
+import { APP_VERSION } from '@env';
+import { Platform } from 'react-native';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import {
   AppPlatformType,
   GlobalMessageContextEnum,
   GlobalMessageRaw,
   GlobalMessageType,
 } from '@atb/global-messages/types';
-import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
-import {Rule, RuleOperator} from './rules';
+import { mapToLanguageAndTexts } from '@atb/utils/map-to-language-and-texts';
+import { mapToRules } from '@atb/rule-engine';
 export function mapToGlobalMessages(
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<GlobalMessageRaw>[],
 ): GlobalMessageType[] {
@@ -99,24 +99,4 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
 function mapToContext(data: any): GlobalMessageContextEnum | undefined {
   if (!Object.values(GlobalMessageContextEnum).includes(data)) return;
   return data as GlobalMessageContextEnum;
-}
-
-function mapToRules(data: any): Rule[] {
-  if (!isArray(data)) return [];
-  return data.map((rule: any) => mapToRule(rule)).filter(Boolean) as Rule[];
-}
-
-function mapToRule(data: any): Rule | undefined {
-  if (typeof data !== 'object') return;
-
-  const {variable, operator, value, groupId} = data;
-  if (typeof variable !== 'string') return;
-  if (!(operator in RuleOperator)) return;
-  if (
-    !(['string', 'number', 'boolean'].includes(typeof value) || value === null)
-  )
-    return;
-  if (groupId !== undefined && typeof groupId !== 'string') return;
-
-  return {variable, operator, value, groupId};
 }

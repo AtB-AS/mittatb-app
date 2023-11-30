@@ -1,6 +1,7 @@
-import {LanguageAndTextType} from '@atb/configuration';
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {AppPlatformType} from '@atb/global-messages/types';
+import { LanguageAndTextType } from '@atb/configuration';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { AppPlatformType } from '@atb/global-messages/types';
+import { Rule } from '@atb/rule-engine/rules';
 
 export type AnnouncementId = string;
 
@@ -19,6 +20,7 @@ export type AnnouncementRaw = {
   appVersionMax: string;
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
+  rules?: Rule[];
 };
 
 export type AnnouncementType = Omit<

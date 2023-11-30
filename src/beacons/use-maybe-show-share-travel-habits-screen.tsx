@@ -3,16 +3,9 @@ import {storage} from '@atb/storage';
 
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-
-import {
-  getHasBluetoothPermission,
-  getHasLocationAlwaysAllowPermission,
-  getHasLocationWhenInUsePermission,
-  getHasMotionAndFitnessActivityPermission,
-} from '@atb/utils/permissions';
-import {useIsBeaconsEnabled} from './use-is-beacons-enabled';
 import {useHasSeenShareTravelHabitsScreen} from './use-has-seen-share-travel-habits-screen';
 import {useAppState} from '@atb/AppContext';
+import {useBeacons} from './use-beacons';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count';
@@ -25,25 +18,23 @@ export const useMaybeShowShareTravelHabitsScreen = (
   } = useRemoteConfig();
   const sessionCountRef = useRef(0);
   const isInitializedRef = useRef(false);
+  const {isBeaconsSupported, kettleInfo} = useBeacons();
 
   const appStatus = useAppStateStatus();
 
   const {onboarded} = useAppState();
-  const [isBeaconsEnabled, isBeaconsEnabledDebugOverrideReady] =
-    useIsBeaconsEnabled();
   const [hasSeenShareTravelHabitsScreen] = useHasSeenShareTravelHabitsScreen();
   const enabled =
     onboarded &&
-    isBeaconsEnabledDebugOverrideReady &&
-    isBeaconsEnabled &&
+    isBeaconsSupported &&
     hasSeenShareTravelHabitsScreen !== null &&
     !hasSeenShareTravelHabitsScreen;
 
   const maybeShowShareTravelHabitsScreen = useCallback(async () => {
-    if (await shouldShowShareTravelHabitsScreen()) {
+    if (!kettleInfo?.isBeaconsOnboarded) {
       showShareTravelHabitsScreen();
     }
-  }, [showShareTravelHabitsScreen]);
+  }, [kettleInfo, showShareTravelHabitsScreen]);
 
   const updateCount = useCallback(
     async (newCount: number) => {
@@ -72,25 +63,4 @@ export const useMaybeShowShareTravelHabitsScreen = (
       updateCount(sessionCountRef.current + 1);
     }
   }, [enabled, appStatus, updateCount]);
-};
-
-const shouldShowShareTravelHabitsScreen = async () => {
-  const hasLocationWhenInUsePermission =
-    await getHasLocationWhenInUsePermission();
-  const hasLocationAlwaysAllowPermission =
-    await getHasLocationAlwaysAllowPermission();
-  const hasMotionAndFitnessActivityPermission =
-    await getHasMotionAndFitnessActivityPermission();
-  const hasBluetoothPermission = await getHasBluetoothPermission();
-
-  const allPrerequisitePermissionsGranted = hasLocationWhenInUsePermission;
-
-  const allPermissionsToRequestAlreadyGranted =
-    hasBluetoothPermission &&
-    hasLocationAlwaysAllowPermission &&
-    hasMotionAndFitnessActivityPermission;
-
-  return (
-    allPrerequisitePermissionsGranted && !allPermissionsToRequestAlreadyGranted
-  );
 };
