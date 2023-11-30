@@ -13,7 +13,8 @@ import {useAnalytics} from '@atb/analytics';
 import {AnnouncementType} from '@atb/announcements/types';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
-import { useBeacons } from '@atb/beacons/use-beacons';
+import {useBeacons} from '@atb/beacons/use-beacons';
+import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -26,10 +27,12 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const style = useStyle();
   const analytics = useAnalytics();
   const now = useNow(10000);
-  const {kettleInfo} = useBeacons()
+  const {kettleInfo} = useBeacons();
+  const [hasSeenShareTravelHabitsScreen, _] = useHasSeenShareTravelHabitsScreen();
 
   const ruleVariables = {
     isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
+    hasSeenShareTravelHabitsScreen
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
