@@ -48,6 +48,7 @@ export const PopOver = ({
       verticalOffset={
         Platform.OS === 'android' ? -(StatusBar.currentHeight ?? 0) : 0
       }
+      backgroundStyle={style.backdrop}
     >
       <View style={style.heading}>
         <ThemeText type="body__primary--bold">{heading}</ThemeText>
@@ -75,5 +76,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: theme.spacings.small,
+  },
+  backdrop: {
+    backgroundColor: theme.static.background.background_accent_1.background,
+    opacity: 0.5,
   },
 }));
