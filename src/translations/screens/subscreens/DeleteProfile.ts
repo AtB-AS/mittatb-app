@@ -74,7 +74,7 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
       title: _('Slett min bruker', 'Delete my user', 'Slett min brukar'),
     },
     deleteInfo: _(
-      'Når du sletter din bruker vil alle dine lagrede data slettes. Du mister også tilgang på billett- og kjøpshistorikk, kvitteringer og dine innstillinger.',
+      'Når du sletter brukeren din vil alle dine lagrede data slettes. Du mister også tilgang på billett- og kjøpshistorikk, kvitteringer og dine innstillinger.',
       'When you delete your user, all your stored data will be deleted. You will also lose access to recent tickets, receipts and settings',
       'Dersom du slettar brukaren din vil alle dine lagra data bli sletta. Du mistar òg tilgang til billett- og kjøpshistorikk, kvitteringar og innstillingane dine.',
     ),
