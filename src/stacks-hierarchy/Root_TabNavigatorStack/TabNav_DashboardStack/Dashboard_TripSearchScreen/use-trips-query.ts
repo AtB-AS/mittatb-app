@@ -5,7 +5,6 @@ import {TripPattern} from '@atb/api/types/trips';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {Location} from '@atb/favorites';
 import {DateString, SearchTime} from '@atb/journey-date-picker';
-import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {SearchStateType} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
@@ -46,9 +45,6 @@ export function useTripsQuery(
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
   const {addJourneySearchEntry} = useSearchHistory();
-  const {
-    preferences: {tripSearchPreferences},
-  } = usePreferences();
   const analytics = useAnalytics();
 
   const {
@@ -119,7 +115,6 @@ export function useTripsQuery(
                 arriveBy,
                 searchInput,
                 cancelTokenSource,
-                tripSearchPreferences,
                 filtersSelection,
                 journeySearchModes,
               );
@@ -172,7 +167,7 @@ export function useTripsQuery(
         cancelTokenSource.cancel('Unmounting use trips hook');
       };
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       fromLocation,
       toLocation,
@@ -206,7 +201,6 @@ async function doSearch(
   arriveBy: boolean,
   searchTime: SearchInput,
   cancelToken: CancelTokenSource,
-  tripSearchPreferences: TripSearchPreferences | undefined,
   travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
   journeySearchModes: Modes,
 ) {
@@ -215,7 +209,6 @@ async function doSearch(
     toLocation,
     searchTime,
     arriveBy,
-    tripSearchPreferences,
     travelSearchFiltersSelection,
     journeySearchModes,
   );
@@ -226,6 +219,7 @@ async function doSearch(
     arriveBy: query.arriveBy,
     when: query.when || '',
     cursor: query.cursor || '',
+    transferSlack: query.transferSlack || '',
     transferPenalty: query.transferPenalty || '',
     waitReluctance: query.waitReluctance || '',
     walkReluctance: query.walkReluctance || '',

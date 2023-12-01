@@ -6,7 +6,6 @@ import {SearchStateType} from '../types';
 import {CancelTokenSource} from 'axios';
 import {nonTransitTripSearch} from '@atb/api/trips';
 import {sanitizeSearchTime, SearchInput} from './utils';
-import {TripSearchPreferences, usePreferences} from '@atb/preferences';
 import {CancelToken} from '@atb/api';
 import {isValidTripLocations} from '@atb/utils/location';
 import {useNonTransitTripSearchEnabled} from './use-non-transit-trip-search-enabled';
@@ -14,6 +13,7 @@ import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
 
 export const useNonTransitTripsQuery = (
   fromLocation: Location | undefined,
@@ -29,9 +29,6 @@ export const useNonTransitTripsQuery = (
   );
   const [searchState, setSearchState] = useState<SearchStateType>('idle');
   const cancelTokenRef = useRef<CancelTokenSource>();
-  const {
-    preferences: {tripSearchPreferences},
-  } = usePreferences();
   const [
     isNonTransitTripSearchEnabled,
     nonTransitTripSearchDebugOverrideReady,
@@ -70,7 +67,6 @@ export const useNonTransitTripsQuery = (
       toLocation,
       searchInput,
       arriveBy,
-      tripSearchPreferences,
       filtersSelection,
       [StreetMode.Foot, StreetMode.BikeRental, StreetMode.Bicycle],
     );
@@ -100,7 +96,6 @@ export const useNonTransitTripsQuery = (
     fromLocation,
     toLocation,
     searchTime,
-    tripSearchPreferences,
     filtersSelection,
   ]);
 
@@ -115,7 +110,6 @@ export function createNonTransitQuery(
   toLocation: Location,
   {searchTime}: SearchInput,
   arriveBy: boolean,
-  tripSearchPreferences: TripSearchPreferences | undefined,
   filtersSelection: TravelSearchFiltersSelectionType | undefined,
   directModes: StreetMode[],
 ): NonTransitTripsQueryVariables {
@@ -133,11 +127,10 @@ export function createNonTransitQuery(
         ? toLocation.id
         : undefined,
   };
-  const walkSpeed =
-    getPreferenceFromFilter(
-      'walkSpeed',
-      filtersSelection?.travelSearchPreferences,
-    ) ?? tripSearchPreferences?.walkSpeed;
+  const walkSpeed = getPreferenceFromFilter(
+    'walkSpeed',
+    filtersSelection?.travelSearchPreferences,
+  );
 
   return {
     from,
@@ -150,7 +143,7 @@ export function createNonTransitQuery(
 }
 
 const getPreferenceFromFilter = (
-  type: keyof TripSearchPreferences,
+  type: TravelSearchPreferenceParameterType,
   filters: TravelSearchPreferenceWithSelectionType[] | undefined,
 ) => {
   const filterOfType = filters?.find((f) => f.type === type);

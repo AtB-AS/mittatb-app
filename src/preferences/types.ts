@@ -12,14 +12,6 @@ export type Preference_ScreenAlternatives =
 
 export type Preference_Language = (typeof appLanguages)[number];
 
-export type TripSearchPreferences = {
-  transferSlack?: number;
-  transferPenalty?: number;
-  waitReluctance?: number;
-  walkReluctance?: number;
-  walkSpeed?: number;
-};
-
 export type UserPreferences = {
   startScreen?: Preference_ScreenAlternatives;
   colorScheme?: ColorSchemeName;
@@ -30,7 +22,6 @@ export type UserPreferences = {
   defaultUserTypeString?: string;
   departuresShowOnlyFavorites?: boolean;
   showTestIds?: boolean;
-  tripSearchPreferences?: TripSearchPreferences;
   hideProductDescriptions?: boolean;
   debugShowSeconds?: boolean;
 };

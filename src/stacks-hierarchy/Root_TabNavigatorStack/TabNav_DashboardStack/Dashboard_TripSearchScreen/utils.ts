@@ -1,5 +1,4 @@
 import {Location} from '@atb/favorites';
-import {TripSearchPreferences} from '@atb/preferences';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {
   Modes,
@@ -31,7 +30,6 @@ export function createQuery(
   toLocation: Location,
   {searchTime, cursor}: SearchInput,
   arriveBy: boolean,
-  tripSearchPreferences: TripSearchPreferences | undefined,
   travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
   journeySearchModes?: Modes,
 ): TripsQueryVariables {
@@ -50,17 +48,12 @@ export function createQuery(
         : undefined,
   };
 
-  const query = {
+  const query: TripsQueryVariables = {
     from,
     to,
     cursor,
     when: searchTime?.date,
     arriveBy,
-    transferSlack: tripSearchPreferences?.transferSlack,
-    transferPenalty: tripSearchPreferences?.transferPenalty,
-    waitReluctance: tripSearchPreferences?.waitReluctance,
-    walkReluctance: tripSearchPreferences?.walkReluctance,
-    walkSpeed: tripSearchPreferences?.walkSpeed,
     modes: journeySearchModes,
   };
 
