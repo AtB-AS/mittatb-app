@@ -5,7 +5,6 @@ import {StackScreenProps} from '@react-navigation/stack';
 export type OnboardingStackParams = {
   Onboarding_WelcomeScreen: undefined;
   Onboarding_IntercomInfoScreen: undefined;
-  Onboarding_AnonymousPurchaseConsequencesScreen: undefined;
   Onboarding_GoodToKnowScreen: undefined;
   Onboarding_AlsoGoodToKnowScreen: undefined;
 };

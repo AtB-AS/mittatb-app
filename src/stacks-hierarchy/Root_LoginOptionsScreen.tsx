@@ -19,8 +19,11 @@ import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {parseUrl} from 'query-string/base';
-import {LinkSectionItem, Section} from '@atb/components/sections';
+
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+import {Button} from '@atb/components/button';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -131,7 +134,6 @@ export const Root_LoginOptionsScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
@@ -159,25 +161,53 @@ export const Root_LoginOptionsScreen = ({
         <ThemeText style={styles.description} color={themeColor}>
           {t(LoginTexts.logInOptions.selectLoginMethod)}
         </ThemeText>
+        <Button
+          interactiveColor="interactive_0"
+          mode="primary"
+          style={styles.loginOptionButton}
+          onPress={() =>
+            navigation.navigate('Root_LoginPhoneInputScreen', {
+              afterLogin: afterLogin,
+            })
+          }
+          text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
+          accessibilityHint={t(
+            LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
+          )}
+          disabled={isLoading}
+          rightIcon={{svg: ArrowRight}}
+          testID="chooseLoginPhone"
+        />
         <VippsLoginButton
           onPress={authenticateUserByVipps}
           disabled={isLoading}
+          containerStyle={styles.loginOptionButton}
         />
-        <ThemeText style={styles.description} color={themeColor}>
-          {t(LoginTexts.logInOptions.or)}
-        </ThemeText>
-        <Section>
-          <LinkSectionItem
-            text={t(LoginTexts.logInOptions.options.phoneAndCode)}
-            onPress={() => {
-              navigation.navigate('Root_LoginPhoneInputScreen', {
-                afterLogin: afterLogin,
-              });
-            }}
-            disabled={isLoading}
-            testID="chooseLoginPhone"
-          />
-        </Section>
+        <Button
+          interactiveColor="interactive_0"
+          mode="secondary"
+          style={styles.loginOptionButton}
+          onPress={() =>
+            navigation.navigate('Root_PurchaseAsAnonymousConsequencesScreen')
+          }
+          text={t(LoginTexts.logInOptions.options.anonymous.label)}
+          accessibilityHint={t(
+            LoginTexts.logInOptions.options.anonymous.a11yLabel,
+          )}
+          disabled={isLoading}
+          rightIcon={{svg: ArrowRight}}
+          testID="useAppAnonymously"
+        />
+
+        <View style={styles.termsOfUseContainer}>
+          <PressableOpacity
+            onPress={() => navigation.navigate('Root_TermsInformationScreen')}
+          >
+            <ThemeText color={themeColor} style={styles.termsOfUseText}>
+              {t(LoginTexts.logInOptions.termsOfUse)}
+            </ThemeText>
+          </PressableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -212,6 +242,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     errorMessage: {
       marginBottom: theme.spacings.medium,
+    },
+    loginOptionButton: {
+      marginVertical: theme.spacings.medium / 2,
+    },
+    termsOfUseContainer: {
+      marginVertical: theme.spacings.xLarge - theme.spacings.medium,
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    termsOfUseText: {
+      padding: theme.spacings.medium / 2,
     },
   };
 });
