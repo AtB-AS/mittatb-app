@@ -105,6 +105,10 @@ type Root_ParkingViolationsConfirmationParams = {
   providerName: string | undefined;
 };
 
+type Root_PurchaseAsAnonymousConsequencesScreenParams = {
+  showLoginButton: boolean | undefined;
+};
+
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
@@ -122,7 +126,7 @@ export type RootStackParamList = {
   Root_PurchaseTariffZonesSearchByMapScreen: Root_PurchaseTariffZonesSearchByMapScreenParams;
   Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
   Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
-  Root_PurchaseAsAnonymousConsequencesScreen: undefined;
+  Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
   Root_PurchasePaymentWithCreditCardScreen: PaymentParams & {
     paymentMethod: CardPaymentMethod;
   };

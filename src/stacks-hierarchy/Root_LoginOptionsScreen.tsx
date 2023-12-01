@@ -188,7 +188,9 @@ export const Root_LoginOptionsScreen = ({
           mode="secondary"
           style={styles.loginOptionButton}
           onPress={() =>
-            navigation.navigate('Root_PurchaseAsAnonymousConsequencesScreen')
+            navigation.push('Root_PurchaseAsAnonymousConsequencesScreen', {
+              showLoginButton: false,
+            })
           }
           text={t(LoginTexts.logInOptions.options.anonymous.label)}
           accessibilityHint={t(

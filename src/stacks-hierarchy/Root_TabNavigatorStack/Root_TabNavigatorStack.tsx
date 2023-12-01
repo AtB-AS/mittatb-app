@@ -76,7 +76,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
 
     if (!onboarded) {
       InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_OnboardingStack'),
+        navigation.navigate('Root_LoginOptionsScreen', {}),
       );
     } else {
       if (shouldShowLocationOnboarding) {

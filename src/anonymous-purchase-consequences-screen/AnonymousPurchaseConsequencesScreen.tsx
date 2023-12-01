@@ -20,10 +20,12 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = {
   onPressContinueWithoutLogin: () => void;
+  onPressLogin?: () => void;
 };
 
 export const AnonymousPurchaseConsequencesScreen = ({
   onPressContinueWithoutLogin,
+  onPressLogin,
 }: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -34,7 +36,10 @@ export const AnonymousPurchaseConsequencesScreen = ({
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader leftButton={{type: 'back'}} setFocusOnLoad={false} />
+      <FullScreenHeader
+        leftButton={{type: onPressLogin ? 'cancel' : 'back'}}
+        setFocusOnLoad={false}
+      />
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         ref={focusRef}
@@ -62,16 +67,29 @@ export const AnonymousPurchaseConsequencesScreen = ({
         </View>
       </ScrollView>
       <FullScreenFooter>
+        {onPressLogin && (
+          <Button
+            interactiveColor="interactive_0"
+            mode="primary"
+            onPress={onPressLogin}
+            style={styles.button}
+            text={t(AnonymousPurchasesTexts.consequences.button.login.label)}
+            accessibilityHint={t(
+              AnonymousPurchasesTexts.consequences.button.login.a11yHint,
+            )}
+            testID="loginButton"
+          />
+        )}
         <Button
           interactiveColor="interactive_0"
-          mode="primary"
+          mode={onPressLogin ? 'secondary' : 'primary'}
           onPress={onPressContinueWithoutLogin}
-          style={styles.acceptConsequencesButton}
+          style={styles.button}
           text={t(AnonymousPurchasesTexts.consequences.button.accept.label)}
           accessibilityHint={t(
             AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
           )}
-          rightIcon={{svg: ArrowRight}}
+          rightIcon={onPressLogin ? undefined : {svg: ArrowRight}}
           testID="acceptConsequencesButton"
         />
       </FullScreenFooter>
@@ -97,7 +115,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     fontWeight: '700',
   },
-  acceptConsequencesButton: {
+  button: {
     marginHorizontal: theme.spacings.medium,
     marginTop: theme.spacings.medium,
   },

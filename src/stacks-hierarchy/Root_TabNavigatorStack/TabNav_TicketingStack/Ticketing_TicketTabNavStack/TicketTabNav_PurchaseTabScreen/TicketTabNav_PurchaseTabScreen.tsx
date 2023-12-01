@@ -173,7 +173,12 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         {authenticationType !== 'phone' && (
           <AnonymousPurchaseWarning
             onPress={() =>
-              navigation.navigate('Root_PurchaseAsAnonymousConsequencesScreen')
+              navigation.navigate(
+                'Root_PurchaseAsAnonymousConsequencesScreen',
+                {
+                  showLoginButton: true,
+                },
+              )
             }
           />
         )}

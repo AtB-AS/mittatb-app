@@ -45,13 +45,13 @@ export const Onboarding_IntercomInfoScreen = ({
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() =>
-            enable_ticketing
-              ? navigation.navigate(
-                  'Onboarding_AnonymousPurchaseConsequencesScreen',
-                )
-              : completeOnboarding()
-          }
+          onPress={() => {
+            // enable_ticketing
+            //   ? navigation.navigate(
+            //       'Onboarding_AnonymousPurchaseConsequencesScreen',
+            //     )
+            //   : completeOnboarding()
+          }}
           text={t(OnboardingTexts.intercom.mainButton)}
           testID="nextButtonIntercomOnboarding"
         />
