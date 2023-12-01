@@ -149,8 +149,6 @@ export const useBeacons = () => {
       await initializeBeaconsSDK().then(async () => {
         Kettle.grant(BEACONS_CONSENTS);
         await storage.set(storeKey.beaconsConsent, "true");
-
-        
       });
       updateKettleInfo();
       await startBeacons();
