@@ -55,6 +55,7 @@ import {
   Root_ParkingViolationsSelect,
   Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
+import {Root_TermsInformationScreen} from './Root_TermsInformationScreen';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeacons} from '@atb/beacons/use-beacons';
@@ -239,6 +240,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_OnboardingStack"
                   component={Root_OnboardingStack}
+                />
+                <Stack.Screen
+                  name="Root_TermsInformationScreen"
+                  component={Root_TermsInformationScreen}
                 />
                 <Stack.Screen
                   name="Root_LocationSearchByTextScreen"
