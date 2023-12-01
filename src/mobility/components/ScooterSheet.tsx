@@ -176,7 +176,8 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     content: {
       flexDirection: 'row',
-      alignContent: 'center',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,

@@ -19,10 +19,10 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
 import {CarPreviews} from '@atb/mobility/components/CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
+import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 
 type Props = {
   stationId: string;
@@ -96,29 +96,18 @@ export const CarSharingStationBottomSheet = ({
                 </GenericSectionItem>
                 <GenericSectionItem>
                   <View style={styles.carSection}>
-                    <View>
-                      <View style={styles.availableCarSection}>
-                        <ThemeIcon
-                          style={styles.icon}
-                          svg={Car}
-                          fill={theme.text.colors.secondary}
-                        />
-                        <ThemeText
-                          type="body__secondary--bold"
-                          color="secondary"
-                        >
-                          {t(
-                            CarSharingTexts.stations.carsAvailable(
-                              totalAvailableCars(station.vehicleTypesAvailable),
-                              station.capacity,
-                            ),
-                          )}
-                        </ThemeText>
-                      </View>
-                      <ThemeText type="body__secondary" color="secondary">
-                        {t(CarSharingTexts.stations.carsAvailableLabel)}
-                      </ThemeText>
-                    </View>
+                    <MobilityStat
+                      svg={Car}
+                      primaryStat={t(
+                        CarSharingTexts.stations.carsAvailable(
+                          totalAvailableCars(station.vehicleTypesAvailable),
+                          station.capacity,
+                        ),
+                      )}
+                      secondaryStat={t(
+                        CarSharingTexts.stations.carsAvailableLabel,
+                      )}
+                    />
                     {station.vehicleTypesAvailable && (
                       <CarPreviews
                         stationCapacity={station.capacity}
@@ -165,10 +154,6 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     activityIndicator: {
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
-    availableCarSection: {
-      display: 'flex',
-      flexDirection: 'row',
-    },
     operatorBenefit: {
       marginBottom: theme.spacings.medium,
     },
@@ -176,6 +161,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       display: 'flex',
       flexDirection: 'row',
       flex: 1,
+      alignItems: 'center',
       justifyContent: 'space-between',
     },
     container: {

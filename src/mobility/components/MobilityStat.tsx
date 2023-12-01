@@ -15,24 +15,27 @@ export type MobilityStatProps = {
 
 export const MobilityStat = ({
   svg,
-  style,
+  style: externalStyle,
   primaryStat,
   secondaryStat,
   secondaryStatStyle,
-}: MobilityStatProps) => (
-  <View style={style}>
-    <StatWithIcon svg={svg} text={String(primaryStat)} />
-    {secondaryStat && (
-      <ThemeText
-        type="body__secondary"
-        style={secondaryStatStyle}
-        color="secondary"
-      >
-        {secondaryStat}
-      </ThemeText>
-    )}
-  </View>
-);
+}: MobilityStatProps) => {
+  const styles = useSheetStyle();
+  return (
+    <View style={[styles.container, externalStyle]}>
+      <StatWithIcon svg={svg} text={String(primaryStat)} />
+      {secondaryStat && (
+        <ThemeText
+          type="body__secondary"
+          style={secondaryStatStyle}
+          color="secondary"
+        >
+          {secondaryStat}
+        </ThemeText>
+      )}
+    </View>
+  );
+};
 
 type StatWithIconProps = {
   svg?(props: SvgProps): JSX.Element;
@@ -52,23 +55,22 @@ export const StatWithIcon = ({svg, text}: StatWithIconProps) => {
           style={styles.statIcon}
         />
       )}
-      <ThemeText
-        type="body__secondary--bold"
-        color="secondary"
-      >
+      <ThemeText type="body__secondary--bold" color="secondary">
         {text}
       </ThemeText>
     </View>
   );
 };
 
-const useSheetStyle = StyleSheet.createThemeHook((theme) => {
-  return {
-    statWithIcon: {
-      flexDirection: 'row',
-    },
-    statIcon: {
-      marginRight: theme.spacings.small,
-    },
-  };
-});
+const useSheetStyle = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flexDirection: 'row',
+    gap: theme.spacings.xSmall,
+  },
+  statWithIcon: {
+    flexDirection: 'row',
+  },
+  statIcon: {
+    marginRight: theme.spacings.small,
+  },
+}));
