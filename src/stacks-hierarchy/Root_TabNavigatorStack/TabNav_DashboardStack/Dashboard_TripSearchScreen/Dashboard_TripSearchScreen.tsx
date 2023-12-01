@@ -37,7 +37,7 @@ import {
 import Bugsnag from '@bugsnag/react-native';
 import {TFunc} from '@leile/lobo-t';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {ActivityIndicator, Platform, RefreshControl, View} from 'react-native';
 import {DashboardScreenProps} from '../navigation-types';
 import {SearchForLocations} from '../types';
@@ -53,6 +53,7 @@ import {useNonTransitTripsQuery} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/NonTransitResults';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {usePopOver} from '@atb/popover';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -72,6 +73,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   const [updatingLocation] = useState<boolean>(false);
   const analytics = useAnalytics();
   const isFocused = useIsFocusedAndActive();
+  const {addPopOver} = usePopOver();
+  const filterButtonWrapperRef = useRef(null);
 
   const {location, requestLocationPermission} = useGeolocationState();
 
@@ -345,24 +348,29 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 viewContainerStyle={style.searchTimeButton}
               />
               {filtersState.enabled && (
-                <Button
-                  text={t(TripSearchTexts.filterButton.text)}
-                  accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                  interactiveColor="interactive_0"
-                  mode="secondary"
-                  type="inline"
-                  compact={true}
-                  onPress={filtersState.openBottomSheet}
-                  testID="dashboardDateTimePicker"
-                  rightIcon={{
-                    svg: Filter,
-                    notification: filtersState.anyFiltersApplied
-                      ? {color: 'valid', backgroundColor: 'background_accent_0'}
-                      : undefined,
-                  }}
-                  viewContainerStyle={style.filterButton}
-                  ref={filtersState.onCloseFocusRef}
-                />
+                <View ref={filterButtonWrapperRef}>
+                  <Button
+                    text={t(TripSearchTexts.filterButton.text)}
+                    accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
+                    interactiveColor="interactive_0"
+                    mode="secondary"
+                    type="inline"
+                    compact={true}
+                    onPress={filtersState.openBottomSheet}
+                    testID="dashboardDateTimePicker"
+                    rightIcon={{
+                      svg: Filter,
+                      notification: filtersState.anyFiltersApplied
+                        ? {
+                            color: 'valid',
+                            backgroundColor: 'background_accent_0',
+                          }
+                        : undefined,
+                    }}
+                    viewContainerStyle={style.filterButton}
+                    ref={filtersState.onCloseFocusRef}
+                  />
+                </View>
               )}
             </View>
           </View>
@@ -397,6 +405,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     onDismiss={() => {
                       filtersState.enabled &&
                         filtersState.disableFlexibleTransport();
+                      addPopOver({
+                        oneTimeKey: 'trip-search-flexible-transport-dismissed',
+                        target: filterButtonWrapperRef,
+                      });
                       analytics.logEvent(
                         'Flexible transport',
                         'Message box dismissed',
@@ -486,7 +498,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -553,7 +565,7 @@ function useUpdatedLocation(
         }
       }
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLocation, favorites],
   );
 

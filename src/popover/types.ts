@@ -1,1 +1,1 @@
-export type PopOverKey = 'example-popover';
+export type PopOverKey = 'trip-search-flexible-transport-dismissed';
