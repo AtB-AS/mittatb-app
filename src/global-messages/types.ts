@@ -1,7 +1,7 @@
 import {Statuses} from '@atb/theme';
 import {LanguageAndTextType} from '@atb/translations';
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {Rule} from './rules';
+import {Rule} from '../rule-engine/rules';
 
 export type AppPlatformType = 'ios' | 'android';
 
@@ -31,7 +31,7 @@ export type GlobalMessageRaw = {
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
   rules?: Rule[];
-};
+}
 
 export type GlobalMessageType = Omit<
   GlobalMessageRaw,

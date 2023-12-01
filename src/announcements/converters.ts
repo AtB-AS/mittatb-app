@@ -1,9 +1,10 @@
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {AnnouncementRaw, AnnouncementType} from './types';
-import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
-import {APP_VERSION} from '@env';
-import {AppPlatformType} from '@atb/global-messages/types';
-import {Platform} from 'react-native';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { AnnouncementRaw, AnnouncementType } from './types';
+import { mapToLanguageAndTexts } from '@atb/utils/map-to-language-and-texts';
+import { APP_VERSION } from '@env';
+import { AppPlatformType } from '@atb/global-messages/types';
+import { Platform } from 'react-native';
+import { mapToRules } from '@atb/rule-engine';
 
 export const mapToAnnouncements = (
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<AnnouncementRaw>[],
@@ -34,6 +35,7 @@ export const mapToAnnouncement = (
   const platforms = result.appPlatforms;
   const startDate = mapToMillis(result.startDate);
   const endDate = mapToMillis(result.endDate);
+  const rules = mapToRules(result.rules);
 
   if (!result.active) return;
   if (!summary) return;
@@ -55,6 +57,7 @@ export const mapToAnnouncement = (
     isDismissable,
     startDate,
     endDate,
+    rules,
   };
 };
 
