@@ -9,7 +9,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {flatMap} from '@atb/utils/array';
-import {TravelSearchTransportModes} from '@atb-as/config-specs';
+import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {SearchTime} from '@atb/journey-date-picker';
 import {defaultJourneyModes} from './hooks';
@@ -97,7 +97,7 @@ export function createQuery(
 }
 
 function transportModeToEnum(
-  modes: TravelSearchTransportModes[],
+  modes: TravelSearchTransportModesType[],
 ): TransportModes[] {
   return modes.map((internal) => {
     return {

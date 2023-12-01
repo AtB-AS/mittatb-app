@@ -11,7 +11,11 @@ import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
 import {isArray} from 'lodash';
 import {isDefined} from '@atb/utils/presence';
-import {TravelSearchPreference} from '@atb-as/config-specs';
+import {
+  FlexibleTransportOption,
+  TransportModeFilterOption,
+  TravelSearchPreference,
+} from '@atb-as/config-specs';
 
 export function mapToFareProductTypeConfigs(
   config: any,
@@ -66,7 +70,7 @@ export const mapToFlexibleTransportOption = (
   filter: any,
 ): FlexibleTransportOptionType | undefined => {
   const safeParseReturnObject =
-    filter && FlexibleTransportOptionType.safeParse(filter);
+    filter && FlexibleTransportOption.safeParse(filter);
 
   if (!safeParseReturnObject) {
     return undefined;
@@ -95,7 +99,7 @@ export const mapToTransportModeFilterOptions = (
 const mapToTransportModeFilterOption = (
   filter: any,
 ): TransportModeFilterOptionType | undefined => {
-  const typeConfigPotential = TransportModeFilterOptionType.safeParse(filter);
+  const typeConfigPotential = TransportModeFilterOption.safeParse(filter);
 
   if (!typeConfigPotential.success) {
     return;
