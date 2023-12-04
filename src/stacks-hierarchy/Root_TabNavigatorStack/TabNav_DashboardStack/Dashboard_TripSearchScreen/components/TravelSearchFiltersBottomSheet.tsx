@@ -13,7 +13,12 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/icon-box';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
-import {useFilters} from '@atb/travel-search-filters';
+import {
+  FlexibleTransportOptionTypeWithSelectionType,
+  TransportModeFilterOptionWithSelectionType,
+  TravelSearchFiltersSelectionType,
+  useFilters,
+} from '@atb/travel-search-filters';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
 import {
@@ -23,11 +28,8 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
-import {
-  FlexibleTransportOptionTypeWithSelectionType,
-  TransportModeFilterOptionWithSelectionType,
-  TravelSearchFiltersSelectionType,
-} from '@atb/travel-search-filters';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -50,14 +52,21 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     TransportModeFilterOptionWithSelectionType[] | undefined
   >(filtersSelection.transportModes);
 
-  const [selectedFlexibleTransportOption, setFlexibleTranportFilter] = useState<
-    FlexibleTransportOptionTypeWithSelectionType | undefined
-  >(filtersSelection.flexibleTransport);
+  const [selectedFlexibleTransportOption, setSelectedFlexibleTransportOption] =
+    useState<FlexibleTransportOptionTypeWithSelectionType | undefined>(
+      filtersSelection.flexibleTransport,
+    );
+
+  const [selectedTravelSearchPreferences, setSelectedTravelSearchPreferences] =
+    useState<TravelSearchPreferenceWithSelectionType[]>(
+      filtersSelection.travelSearchPreferences ?? [],
+    );
 
   const save = () => {
     const selectedFilters = {
       transportModes: selectedModeOptions,
       flexibleTransport: selectedFlexibleTransportOption,
+      travelSearchPreferences: selectedTravelSearchPreferences,
     };
     onSave(selectedFilters);
     if (saveFilters) {
@@ -150,7 +159,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               label={selectedFlexibleTransportOption.label}
               value={selectedFlexibleTransportOption?.enabled}
               onValueChange={(checked) => {
-                setFlexibleTranportFilter({
+                setSelectedFlexibleTransportOption({
                   ...selectedFlexibleTransportOption,
                   enabled: checked,
                 });
@@ -158,6 +167,23 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
             />
           </Section>
         )}
+
+        {selectedTravelSearchPreferences.map((preference) => (
+          <TravelSearchPreference
+            key={preference.type}
+            style={styles.travelSearchPreference}
+            preference={preference}
+            onPreferenceChange={(changedPreference) =>
+              setSelectedTravelSearchPreferences((previousPreferences) =>
+                previousPreferences.map((pref) =>
+                  pref.type === changedPreference.type
+                    ? changedPreference
+                    : pref,
+                ),
+              )
+            }
+          />
+        ))}
 
         <Section style={styles.sectionContainer}>
           <GenericClickableSectionItem
@@ -204,6 +230,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.medium,
   },
   sectionContainer: {
+    marginTop: theme.spacings.medium,
+  },
+  travelSearchPreference: {
     marginTop: theme.spacings.medium,
   },
   saveOptionSection: {

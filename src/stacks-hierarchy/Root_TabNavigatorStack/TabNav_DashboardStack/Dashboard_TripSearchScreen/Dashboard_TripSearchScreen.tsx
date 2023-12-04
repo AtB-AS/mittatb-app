@@ -91,7 +91,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
     useFlexibleTransportEnabled();
   const {tripPatterns, timeOfLastSearch, loadMore, searchState, error} =
     useTripsQuery(from, to, searchTime, filtersState?.filtersSelection);
-  const {nonTransitTrips} = useNonTransitTripsQuery(from, to, searchTime);
+  const {nonTransitTrips} = useNonTransitTripsQuery(
+    from,
+    to,
+    searchTime,
+    filtersState?.filtersSelection,
+  );
 
   const isSearching = searchState === 'searching';
   const showEmptyScreen = !tripPatterns && !isSearching && !error;

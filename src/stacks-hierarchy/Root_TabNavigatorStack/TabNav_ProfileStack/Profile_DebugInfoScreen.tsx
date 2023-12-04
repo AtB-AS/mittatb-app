@@ -44,7 +44,6 @@ import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_T
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
-import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {useBeacons} from '@atb/beacons/use-beacons';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
@@ -162,14 +161,7 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {showTestIds, tripSearchPreferences, debugShowSeconds} = preferences;
-
-  const tripSearchDefaults = {
-    transferPenalty: 10,
-    waitReluctance: 1.5,
-    walkReluctance: 1.5,
-    walkSpeed: 1.3,
-  };
+  const {showTestIds, debugShowSeconds} = preferences;
 
   return (
     <View style={style.container}>
@@ -388,77 +380,6 @@ export const Profile_DebugInfoScreen = () => {
               override={pushNotificationsEnabledDebugOverride}
             />
           </GenericSectionItem>
-        </Section>
-
-        <Section withPadding withTopPadding>
-          <ExpandableSectionItem
-            text="Trip search parameters"
-            showIconText={true}
-            expandContent={
-              <View>
-                <ThemeText type="body__secondary" color="secondary">
-                  Press labels to reset to default
-                </ThemeText>
-                <LabeledSlider
-                  max={50}
-                  label="transferPenalty"
-                  defaultValue={tripSearchDefaults.transferPenalty}
-                  initialValue={tripSearchPreferences?.transferPenalty}
-                  step={1}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        transferPenalty: n,
-                      },
-                    });
-                  }}
-                />
-                <LabeledSlider
-                  max={5}
-                  label="waitReluctance"
-                  defaultValue={tripSearchDefaults.waitReluctance}
-                  initialValue={tripSearchPreferences?.waitReluctance}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        waitReluctance: n,
-                      },
-                    });
-                  }}
-                />
-                <LabeledSlider
-                  max={5}
-                  label="walkReluctance"
-                  defaultValue={tripSearchDefaults.walkReluctance}
-                  initialValue={tripSearchPreferences?.walkReluctance}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        walkReluctance: n,
-                      },
-                    });
-                  }}
-                />
-                <LabeledSlider
-                  max={5}
-                  label="walkSpeed"
-                  defaultValue={tripSearchDefaults.walkSpeed}
-                  initialValue={tripSearchPreferences?.walkSpeed}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        walkSpeed: n,
-                      },
-                    });
-                  }}
-                />
-              </View>
-            }
-          />
         </Section>
 
         <Section withPadding withTopPadding>
@@ -851,52 +772,6 @@ function MapEntry({title, value}: {title: string; value: any}) {
       </View>
     );
   }
-}
-//TODO gå inn i mapValue() over og sett testID på verdien av userId -> deretter test på denne i account.e2e.ts
-function LabeledSlider({
-  label,
-  min = 0,
-  max,
-  step = 0.1,
-  defaultValue,
-  initialValue,
-  onSetValue,
-}: {
-  label: string;
-  min?: number;
-  max: number;
-  step?: number;
-  defaultValue?: number;
-  initialValue?: number;
-  onSetValue: (n: number) => void;
-}): JSX.Element {
-  const [pref, setPref] = useState(initialValue || defaultValue);
-
-  return (
-    <GenericSectionItem>
-      <ThemeText
-        onPress={
-          defaultValue
-            ? () => {
-                onSetValue(defaultValue);
-                setPref(defaultValue);
-              }
-            : undefined
-        }
-      >
-        {label}: {pref?.toFixed(1)}
-      </ThemeText>
-      <Slider
-        containerStyle={{width: '100%'}}
-        minimumValue={min}
-        maximumValue={max}
-        step={step}
-        value={pref}
-        onValueChange={setPref}
-        onSlidingComplete={onSetValue}
-      />
-    </GenericSectionItem>
-  );
 }
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
