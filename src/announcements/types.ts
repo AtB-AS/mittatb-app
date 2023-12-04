@@ -5,6 +5,11 @@ import { Rule } from '@atb/rule-engine/rules';
 
 export type AnnouncementId = string;
 
+export type OpenUrl = {
+  title?: LanguageAndTextType[];
+  link?: string;
+};
+
 export type AnnouncementRaw = {
   id: AnnouncementId;
   active: boolean;
@@ -21,6 +26,7 @@ export type AnnouncementRaw = {
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
   rules?: Rule[];
+  openUrl?: OpenUrl;
 };
 
 export type AnnouncementType = Omit<

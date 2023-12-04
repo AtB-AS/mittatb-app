@@ -1,4 +1,4 @@
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsState} from '@atb/announcements';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -15,6 +15,7 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {useBeacons} from '@atb/beacons/use-beacons';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
+import Bugsnag from '@bugsnag/react-native';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -28,11 +29,12 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const analytics = useAnalytics();
   const now = useNow(10000);
   const {kettleInfo} = useBeacons();
-  const [hasSeenShareTravelHabitsScreen, _] = useHasSeenShareTravelHabitsScreen();
+  const [hasSeenShareTravelHabitsScreen, _] =
+    useHasSeenShareTravelHabitsScreen();
 
   const ruleVariables = {
     isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
-    hasSeenShareTravelHabitsScreen
+    hasSeenShareTravelHabitsScreen,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
@@ -61,14 +63,22 @@ export const Announcements = ({style: containerStyle}: Props) => {
           >
             <GenericClickableSectionItem
               accessible={false}
-              onPress={() =>
-                openBottomSheet(() => (
-                  <AnnouncementSheet
-                    announcement={a}
-                    close={closeBottomSheet}
-                  />
-                ))
-              }
+              onPress={async () => {
+                if (a.openUrl?.link !== undefined) {
+                  try {
+                    await Linking.openURL(a.openUrl.link);
+                  } catch (err: any) {
+                    Bugsnag.notify(err);
+                  }
+                } else {
+                  openBottomSheet(() => (
+                    <AnnouncementSheet
+                      announcement={a}
+                      close={closeBottomSheet}
+                    />
+                  ));
+                }
+              }}
             >
               <Announcement
                 announcement={a}
