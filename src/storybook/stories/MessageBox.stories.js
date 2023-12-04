@@ -14,10 +14,6 @@ const MessageBoxMeta = {
       control: 'select',
       options: ['light', 'dark'],
     },
-    type: {
-      control: 'select',
-      options: Object.keys(themes['light'].static.status),
-    },
     onDismiss: {
       label: 'dismissible',
       mapping: {
@@ -46,7 +42,6 @@ const MessageBoxMeta = {
     },
   },
   args: {
-    type: 'info',
     theme: 'light',
     message: 'The message body.',
     title: 'The message title',
@@ -67,9 +62,13 @@ const MessageBoxMeta = {
           backgroundColor:
             getStaticColor(args.theme, args.textColor)?.background ||
             getStaticColor(args.theme, 'background_0').background,
+          gap: 12,
         }}
       >
-        <Story />
+        <Story args={{...args, type: 'info'}} />
+        <Story args={{...args, type: 'valid'}} />
+        <Story args={{...args, type: 'warning'}} />
+        <Story args={{...args, type: 'error'}} />
       </View>
     ),
   ],
@@ -77,18 +76,27 @@ const MessageBoxMeta = {
 
 export default MessageBoxMeta;
 
-export const Info = {args: {type: 'info'}};
-export const Valid = {args: {type: 'valid'}};
-export const Warning = {args: {type: 'warning'}};
-export const Error = {args: {type: 'error'}};
+export const Standard = {};
+export const Minimal = {args: {title: undefined, noStatusIcon: true}};
+export const Maximal = {
+  args: {
+    onDismiss: ON_DISMISS,
+    onPressConfig: ON_PRESS_CONFIG,
+    isMarkdown: true,
+    message: 'Message **with** markdown _enabled_.',
+  },
+};
 
-export const InfoSubtle = {args: {type: 'info', subtle: true}};
-export const ValidSubtle = {args: {type: 'valid', subtle: true}};
-export const WarningSubtle = {args: {type: 'warning', subtle: true}};
-export const ErrorSubtle = {args: {type: 'error', subtle: true}};
-export const NoTitle = {args: {title: undefined}};
-export const NoIcon = {args: {noStatusIcon: true}};
-export const WithMarkdown = {args: {isMarkdown: true, message: "A **message** with *markdown*."}};
-
-export const Pressable = {args: {onPressConfig: ON_PRESS_CONFIG}};
-export const Dismissible = {args: {onDismiss: ON_DISMISS}};
+export const SubtleStandard = {args: {subtle: true, title: undefined}};
+export const SubtleMinimal = {
+  args: {subtle: true, title: undefined, noStatusIcon: true},
+};
+export const SubtleMaximal = {
+  args: {
+    subtle: true,
+    onDismiss: ON_DISMISS,
+    onPressConfig: ON_PRESS_CONFIG,
+    isMarkdown: true,
+    message: 'Message **with** markdown _enabled_.',
+  },
+};
