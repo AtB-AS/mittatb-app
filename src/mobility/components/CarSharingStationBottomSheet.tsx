@@ -16,13 +16,12 @@ import {ThemeText} from '@atb/components/text';
 import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
-import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
-import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {CarPreviews} from './CarPreviews';
+import {CarPreviews} from '@atb/mobility/components/CarPreviews';
 import {WalkingDistance} from '@atb/components/walking-distance';
 
 type Props = {
@@ -42,8 +41,8 @@ export const CarSharingStationBottomSheet = ({
 
   const {
     station,
-    isLoading: isLoadingStation,
-    isError: isLoadingError,
+    isLoading,
+    isError,
     operatorId,
     operatorName,
     brandLogoUrl,
@@ -51,16 +50,7 @@ export const CarSharingStationBottomSheet = ({
     rentalAppUri,
     stationName,
   } = useCarSharingStation(stationId);
-  const {
-    operatorBenefit,
-    valueCode,
-    isUserEligibleForBenefit,
-    isLoading: isLoadingBenefit,
-    isError: isBenefitError,
-  } = useOperatorBenefit(operatorId);
-
-  const isLoading = isLoadingStation || isLoadingBenefit;
-  const isError = isLoadingError || isBenefitError;
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -86,7 +76,6 @@ export const CarSharingStationBottomSheet = ({
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
-                  isUserEligible={isUserEligibleForBenefit}
                   formFactor={FormFactor.Car}
                   style={styles.operatorBenefit}
                 />
@@ -142,21 +131,13 @@ export const CarSharingStationBottomSheet = ({
             </ScrollView>
             {rentalAppUri && (
               <View style={styles.footer}>
-                {operatorBenefit && isUserEligibleForBenefit ? (
-                  <OperatorBenefitActionButton
-                    benefit={operatorBenefit}
-                    valueCode={valueCode}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ) : (
-                  <OperatorAppSwitchButton
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                )}
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  benefit={operatorBenefit}
+                  operatorName={operatorName}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
               </View>
             )}
           </>

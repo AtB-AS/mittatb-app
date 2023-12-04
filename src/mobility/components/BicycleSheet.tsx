@@ -19,14 +19,13 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
-import {OperatorBenefitActionButton} from '@atb/mobility/components/OperatorBenefitActionButton';
-import {OperatorAppSwitchButton} from '@atb/mobility/components/OperatorAppSwitchButton';
+import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {MobilityStats} from '@atb/mobility/components//MobilityStats';
 import {MobilityStat} from '@atb/mobility/components//MobilityStat';
 import {CityBike} from '@atb/assets/svg/color/images/mobility';
-import {BrandingImage} from './BrandingImage';
+import {BrandingImage} from '@atb/mobility/components/BrandingImage';
 
 type Props = {
   vehicleId: VehicleId;
@@ -37,24 +36,15 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   const styles = useSheetStyle();
   const {
     vehicle,
-    isLoading: isLoadingVehicle,
-    isError: isLoadingError,
+    isLoading,
+    isError,
     operatorId,
     operatorName,
     brandLogoUrl,
     rentalAppUri,
     appStoreUri,
   } = useVehicle(id);
-  const {
-    operatorBenefit,
-    valueCode,
-    isUserEligibleForBenefit,
-    isLoading: isLoadingBenefit,
-    isError: isBenefitError,
-  } = useOperatorBenefit(operatorId);
-
-  const isLoading = isLoadingVehicle || isLoadingBenefit;
-  const isError = isLoadingError || isBenefitError;
+  const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
     <BottomSheetContainer maxHeightValue={0.5}>
@@ -80,7 +70,6 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
               {operatorBenefit && (
                 <OperatorBenefit
                   benefit={operatorBenefit}
-                  isUserEligible={isUserEligibleForBenefit}
                   formFactor={FormFactor.Bicycle}
                   style={styles.operatorBenefit}
                 />
@@ -134,21 +123,13 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
             </ScrollView>
             {rentalAppUri && (
               <View style={styles.footer}>
-                {operatorBenefit && isUserEligibleForBenefit ? (
-                  <OperatorBenefitActionButton
-                    benefit={operatorBenefit}
-                    valueCode={valueCode}
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                ) : (
-                  <OperatorAppSwitchButton
-                    operatorName={operatorName}
-                    appStoreUri={appStoreUri}
-                    rentalAppUri={rentalAppUri}
-                  />
-                )}
+                <OperatorActionButton
+                  operatorId={operatorId}
+                  operatorName={operatorName}
+                  benefit={operatorBenefit}
+                  appStoreUri={appStoreUri}
+                  rentalAppUri={rentalAppUri}
+                />
               </View>
             )}
           </>

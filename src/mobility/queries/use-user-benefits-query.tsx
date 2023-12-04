@@ -7,10 +7,11 @@ import {getBenefitsForUser} from '@atb/mobility/api/api';
 // ticket that is eligible for benefits.
 const ONE_MINUTE = 1000 * 60;
 
-export const useUserBenefitsQuery = () =>
+export const useUserBenefitsQuery = (enabled: boolean) =>
   useQuery({
     queryKey: ['mobilityUserBenefits'],
     queryFn: getBenefitsForUser,
     staleTime: ONE_MINUTE,
     cacheTime: ONE_MINUTE,
+    enabled,
   });

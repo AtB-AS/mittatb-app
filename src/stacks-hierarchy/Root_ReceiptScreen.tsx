@@ -9,7 +9,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {validateEmail} from '@atb/utils/validation';
+import {isValidEmail} from '@atb/utils/validation';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
@@ -36,7 +36,7 @@ export function Root_ReceiptScreen({route}: Props) {
   const analytics = useAnalytics();
 
   async function onSend() {
-    if (validateEmail(email.trim())) {
+    if (isValidEmail(email.trim())) {
       try {
         setState('loading');
         setReference(undefined);

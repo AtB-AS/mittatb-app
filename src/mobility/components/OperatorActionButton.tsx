@@ -6,34 +6,46 @@ import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {Linking} from 'react-native';
+import {ActivityIndicator, Linking} from 'react-native';
+import {useValueCodeQuery} from '@atb/mobility/queries/use-value-code-query';
+import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 
 type Props = {
-  benefit: OperatorBenefitType;
-  valueCode: string | undefined;
+  operatorId: string | undefined;
   operatorName: string;
+  benefit: OperatorBenefitType | undefined;
   appStoreUri: string | undefined;
   rentalAppUri: string;
 };
-export const OperatorBenefitActionButton = ({
-  benefit,
-  valueCode,
+export const OperatorActionButton = ({
+  operatorId,
   operatorName,
+  benefit,
   appStoreUri,
   rentalAppUri,
 }: Props) => {
   const analytics = useAnalytics();
   const {t, language} = useTranslation();
   const {showAppMissingAlert} = useAppMissingAlert();
+  const {isUserEligibleForBenefit, isLoading: isLoadingEligible} =
+    useIsEligibleForBenefit(benefit);
+  const {data: valueCode, isLoading: isLoadingValueCode} = useValueCodeQuery(
+    isUserEligibleForBenefit ? operatorId : undefined,
+  );
 
-  const buttonText =
-    getTextForLanguage(benefit.callToAction.name, language) ??
-    t(MobilityTexts.operatorAppSwitchButton(operatorName));
+  const buttonText = benefit?.callToAction?.name
+    ? getTextForLanguage(benefit.callToAction.name, language) ??
+      t(MobilityTexts.operatorAppSwitchButton(operatorName))
+    : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
   const handleCallToAction = useCallback(async () => {
-    analytics.logEvent('Mobility', 'Claim bundled benefit', {operatorName});
+    analytics.logEvent('Mobility', 'Open operator app', {
+      operatorName,
+      benefit,
+      isUserEligibleForBenefit,
+    });
     let url = rentalAppUri;
-    if (benefit.callToAction.url) {
+    if (benefit?.callToAction.url) {
       // Benefit urls can contain variables to be re replaced runtime, e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}'
       url = replaceTokens(benefit.callToAction.url, {
         APP_URL: rentalAppUri,
@@ -51,6 +63,10 @@ export const OperatorBenefitActionButton = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [operatorName, benefit, rentalAppUri, appStoreUri, valueCode]);
 
+  if (isLoadingEligible || isLoadingValueCode) {
+    return <ActivityIndicator />;
+  }
+
   return (
     <Button
       text={buttonText}
@@ -64,7 +80,7 @@ export const OperatorBenefitActionButton = ({
 
 function replaceTokens(
   template: string,
-  tokens: {[key: string]: string | undefined},
+  tokens: {[key: string]: string | null | undefined},
 ) {
   return template.replace(
     /\{\s*([^}\s]+)\s*\}/g,

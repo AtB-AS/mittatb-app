@@ -35,6 +35,7 @@ import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from './announcements';
 import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
+import {NotificationContextProvider} from './notifications';
 
 configureAndStartBugsnag();
 
@@ -92,13 +93,15 @@ export const App = () => {
                                             <GlobalMessagesContextProvider>
                                               <AnnouncementsContextProvider>
                                                 <ReactQueryProvider>
-                                                  <PopOverContextProvider>
-                                                    <BottomSheetProvider>
-                                                      <FeedbackQuestionsProvider>
-                                                        <RootStack />
-                                                      </FeedbackQuestionsProvider>
-                                                    </BottomSheetProvider>
-                                                  </PopOverContextProvider>
+                                                  <NotificationContextProvider>
+                                                    <PopOverContextProvider>
+                                                      <BottomSheetProvider>
+                                                        <FeedbackQuestionsProvider>
+                                                          <RootStack />
+                                                        </FeedbackQuestionsProvider>
+                                                      </BottomSheetProvider>
+                                                    </PopOverContextProvider>
+                                                  </NotificationContextProvider>
                                                 </ReactQueryProvider>
                                               </AnnouncementsContextProvider>
                                             </GlobalMessagesContextProvider>
