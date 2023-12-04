@@ -17,6 +17,12 @@ import axiosBetterStacktrace from 'axios-better-stacktrace';
 import auth from '@react-native-firebase/auth';
 import {Platform} from 'react-native';
 
+type InternalUpstreamServerError = {
+  errorCode: 602;
+  shortNorwegian: string;
+  shortEnglish: string;
+};
+
 export const client = createClient(API_BASE_URL);
 
 const RETRY_COUNT = 3;
@@ -116,6 +122,11 @@ function responseIdTokenHandler(error: AxiosError) {
   throw error;
 }
 
+function isInternalUpstreamServerError(
+  e: any,
+): e is InternalUpstreamServerError {
+  return 'errorCode' in e && 'shortNorwegian' in e;
+}
 function responseErrorHandler(error: AxiosError) {
   if (shouldSkipLogging(error)) {
     return Promise.reject(error);
@@ -135,6 +146,11 @@ function responseErrorHandler(error: AxiosError) {
     case 'network-error':
     case 'timeout':
       break;
+  }
+  const variable: any = error?.response?.data;
+  const upstreamError = JSON.parse(variable.upstreamError);
+  if (isInternalUpstreamServerError(upstreamError)) {
+    return Promise.reject({...error, status: upstreamError.errorCode});
   }
 
   return Promise.reject(error);
