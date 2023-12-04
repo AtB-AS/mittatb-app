@@ -4,6 +4,7 @@ import {Profile_AppearanceScreen} from './Profile_AppearanceScreen';
 import {Profile_RootScreen} from './Profile_RootScreen';
 import {Profile_TicketHistoryScreen} from './Profile_TicketHistoryScreen';
 import {Profile_LanguageScreen} from './Profile_LanguageScreen';
+import {Profile_PrivacyScreen} from './Profile_PrivacyScreen';
 import {Profile_EnrollmentScreen} from './Profile_EnrollmentScreen';
 import {Profile_SelectStartScreenScreen} from './Profile_SelectStartScreenScreen';
 import {Profile_DesignSystemScreen} from './Profile_DesignSystemScreen';
@@ -86,6 +87,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_LanguageScreen"
         component={Profile_LanguageScreen}
+      />
+      <Stack.Screen
+        name="Profile_PrivacyScreen"
+        component={Profile_PrivacyScreen}
       />
       <Stack.Screen
         name="Profile_NotificationsScreen"
