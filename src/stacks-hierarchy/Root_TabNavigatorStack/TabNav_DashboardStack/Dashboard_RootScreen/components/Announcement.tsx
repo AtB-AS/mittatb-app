@@ -47,7 +47,7 @@ export const Announcement = ({announcement, onDismiss}: Props) => {
               language,
             )}
           </ThemeText>
-          <ThemeText isMarkdown={true}>
+          <ThemeText>
             {getTextForLanguage(announcement.summary, language)}
           </ThemeText>
           {announcement.openUrl?.title && (
