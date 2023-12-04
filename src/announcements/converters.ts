@@ -36,6 +36,7 @@ export const mapToAnnouncement = (
   const startDate = mapToMillis(result.startDate);
   const endDate = mapToMillis(result.endDate);
   const rules = mapToRules(result.rules);
+  const openBottomSheet = result.openBottomSheet ?? true;
 
   if (!result.active) return;
   if (!summary) return;
@@ -58,6 +59,7 @@ export const mapToAnnouncement = (
     startDate,
     endDate,
     rules,
+    openBottomSheet,
   };
 };
 

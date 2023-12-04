@@ -21,6 +21,7 @@ export type AnnouncementRaw = {
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
   rules?: Rule[];
+  openBottomSheet?: boolean;
 };
 
 export type AnnouncementType = Omit<

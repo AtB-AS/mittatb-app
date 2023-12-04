@@ -47,7 +47,7 @@ export const Announcement = ({announcement, onDismiss}: Props) => {
               language,
             )}
           </ThemeText>
-          <ThemeText>
+          <ThemeText isMarkdown={true}>
             {getTextForLanguage(announcement.summary, language)}
           </ThemeText>
         </View>

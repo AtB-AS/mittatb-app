@@ -28,11 +28,12 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const analytics = useAnalytics();
   const now = useNow(10000);
   const {kettleInfo} = useBeacons();
-  const [hasSeenShareTravelHabitsScreen, _] = useHasSeenShareTravelHabitsScreen();
+  const [hasSeenShareTravelHabitsScreen, _] =
+    useHasSeenShareTravelHabitsScreen();
 
   const ruleVariables = {
     isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
-    hasSeenShareTravelHabitsScreen
+    hasSeenShareTravelHabitsScreen,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
@@ -61,6 +62,7 @@ export const Announcements = ({style: containerStyle}: Props) => {
           >
             <GenericClickableSectionItem
               accessible={false}
+              disabled={!a.openBottomSheet}
               onPress={() =>
                 openBottomSheet(() => (
                   <AnnouncementSheet
