@@ -44,7 +44,7 @@ export const AnnouncementSheet = ({announcement, close}: Props) => {
             />
           </View>
         )}
-        <ThemeText isMarkdown={true}>
+        <ThemeText>
           {getTextForLanguage(announcement.body, language)}
         </ThemeText>
       </ScrollView>

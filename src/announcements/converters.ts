@@ -1,5 +1,5 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { AnnouncementRaw, AnnouncementType } from './types';
+import { AnnouncementRaw, AnnouncementType, OpenUrl } from './types';
 import { mapToLanguageAndTexts } from '@atb/utils/map-to-language-and-texts';
 import { APP_VERSION } from '@env';
 import { AppPlatformType } from '@atb/global-messages/types';
@@ -36,7 +36,7 @@ export const mapToAnnouncement = (
   const startDate = mapToMillis(result.startDate);
   const endDate = mapToMillis(result.endDate);
   const rules = mapToRules(result.rules);
-  const openBottomSheet = result.openBottomSheet ?? true;
+  const openUrl = mapToOpenUrl(result.openUrl);
 
   if (!result.active) return;
   if (!summary) return;
@@ -59,7 +59,7 @@ export const mapToAnnouncement = (
     startDate,
     endDate,
     rules,
-    openBottomSheet,
+    openUrl,
   };
 };
 
@@ -77,4 +77,13 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
   return !!platforms.find(
     (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
   );
+}
+
+function mapToOpenUrl(data: any): OpenUrl | undefined {
+  if (typeof data !== 'object') return;
+  const { title, link } = data;
+  return {
+    title: mapToLanguageAndTexts(title),
+    link,
+  }
 }
