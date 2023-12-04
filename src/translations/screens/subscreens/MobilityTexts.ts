@@ -79,7 +79,7 @@ export const MobilityTexts = {
   range: (range: string) =>
     _(
       `omtrent ${range} rekkevidde`,
-      `approximately  ${range} range`,
+      `approximately ${range} range`,
       `omlag ${range} rekkjevidde`,
     ),
 };
