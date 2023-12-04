@@ -71,6 +71,7 @@ export type Root_LoginActiveFareContractWarningScreenParams = {
 
 export type Root_LoginOptionsScreenParams = {
   afterLogin?: AfterLoginScreenType;
+  showGoBack?: boolean;
 };
 
 export type Root_LoginPhoneInputScreenParams = {

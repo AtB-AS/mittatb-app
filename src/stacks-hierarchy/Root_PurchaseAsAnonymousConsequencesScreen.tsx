@@ -32,6 +32,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
       screen = 'Root_LoginActiveFareContractWarningScreen';
     } else if (enable_vipps_login) {
       screen = 'Root_LoginOptionsScreen';
+      return navigation.navigate(screen, {showGoBack: true});
     }
     return navigation.navigate(screen, {});
   };

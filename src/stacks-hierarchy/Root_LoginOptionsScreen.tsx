@@ -32,7 +32,7 @@ type Props = RootStackScreenProps<'Root_LoginOptionsScreen'>;
 export const Root_LoginOptionsScreen = ({
   navigation,
   route: {
-    params: {afterLogin},
+    params: {afterLogin, showGoBack},
   },
 }: Props) => {
   const {t} = useTranslation();
@@ -135,6 +135,7 @@ export const Root_LoginOptionsScreen = ({
     <View style={styles.container}>
       <FullScreenHeader
         setFocusOnLoad={false}
+        leftButton={showGoBack ? {type: 'back'} : undefined}
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
       />

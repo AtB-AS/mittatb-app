@@ -39,6 +39,7 @@ import {
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -48,7 +49,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-
+  const {enable_extended_onboarding} = useRemoteConfig();
   const {
     onboarded,
     notificationPermissionOnboarded,
@@ -75,9 +76,13 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       locationWhenInUsePermissionStatus === 'denied';
 
     if (!onboarded) {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_LoginOptionsScreen', {}),
-      );
+      InteractionManager.runAfterInteractions(() => {
+        if (enable_extended_onboarding) {
+          navigation.navigate('Root_OnboardingStack');
+        } else {
+          navigation.navigate('Root_LoginOptionsScreen', {});
+        }
+      });
     } else {
       if (shouldShowLocationOnboarding) {
         InteractionManager.runAfterInteractions(() =>
@@ -105,6 +110,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     locationWhenInUsePermissionStatus,
     validFareContracts.length,
     notificationStatus,
+    enable_extended_onboarding,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
