@@ -77,6 +77,8 @@ export const Profile_EditProfileScreen = ({
   useEffect(() => {
     if (customerProfile) {
       const profile: CustomerProfile = customerProfile;
+
+      // Receiving "_" from Entur when firstName or surname are not set on user profile, instead setting them to ""
       const nonUnderscoreString = (str: string) => (str === '_' ? '' : str);
       setFirstName(nonUnderscoreString(profile.firstName));
       setSurname(nonUnderscoreString(profile.surname));

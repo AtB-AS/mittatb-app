@@ -1,6 +1,7 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {CustomerProfileUpdate} from '@atb/api/types/profile';
 import {updateProfile} from '@atb/api';
+import {getProfileQueryKey} from '@atb/queries/get-profile-query';
 
 export const useProfileUpdateMutation = () => {
   const queryClient = useQueryClient();
@@ -11,7 +12,7 @@ export const useProfileUpdateMutation = () => {
       return updateProfile(profile);
     },
     onSuccess: () => {
-      return queryClient.invalidateQueries({queryKey: ['getProfile']});
+      return queryClient.invalidateQueries({queryKey: [getProfileQueryKey]});
     },
   });
 };
