@@ -8,7 +8,7 @@ import {
   CarSharingTexts,
   MobilityTexts,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {MessageBox} from '@atb/components/message-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
@@ -37,7 +37,6 @@ export const CarSharingStationBottomSheet = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
-  const {theme} = useTheme();
 
   const {
     station,
