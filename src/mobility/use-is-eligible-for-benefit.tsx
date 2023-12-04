@@ -6,7 +6,7 @@ export const useIsEligibleForBenefit = (
 ) => {
   const {
     data: userBenefits,
-    isLoading,
+    isInitialLoading: isLoading,
     isError,
   } = useUserBenefitsQuery(!!operatorBenefit);
 
