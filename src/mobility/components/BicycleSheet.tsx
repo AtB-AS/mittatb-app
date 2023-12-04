@@ -93,9 +93,13 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                           <MobilityStat
                             svg={Battery}
                             primaryStat={vehicle.currentFuelPercent + '%'}
-                            secondaryStat={formatRange(
-                              vehicle.currentRangeMeters,
-                              language,
+                            secondaryStat={t(
+                              MobilityTexts.range(
+                                formatRange(
+                                  vehicle.currentRangeMeters,
+                                  language,
+                                ),
+                              ),
                             )}
                           />
                         ) : (
