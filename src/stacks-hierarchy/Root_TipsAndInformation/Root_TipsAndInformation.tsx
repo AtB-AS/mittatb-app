@@ -8,7 +8,6 @@ import {
 } from '@atb/translations';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import firestore from '@react-native-firebase/firestore';
 import {
@@ -19,6 +18,10 @@ import {mapToTips} from '@atb/stacks-hierarchy/Root_TipsAndInformation/converter
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {sortTipsByTitle} from '@atb/stacks-hierarchy/Root_TipsAndInformation/sort-tips-by-title';
+
+import {StaticColorByType} from '@atb/theme/colors';
+
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = RootStackScreenProps<'Root_TipsAndInformation'>;
 
@@ -53,7 +56,7 @@ export const Root_TipsAndInformation = ({}: Props) => {
 
   return (
     <View style={[styles.container, {paddingBottom: safeAreaBottom}]}>
-      <FullScreenHeader leftButton={{type: 'close'}} />
+      <FullScreenHeader leftButton={{type: 'close'}} color={themeColor} />
 
       <ScrollView>
         <ThemeText
@@ -105,7 +108,7 @@ export const Root_TipsAndInformation = ({}: Props) => {
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   expandedContent: {
     color: theme.text.colors.secondary,
@@ -116,7 +119,7 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   contentContainer: {
     marginTop: theme.spacings.small,
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   title: {
     width: '100%',

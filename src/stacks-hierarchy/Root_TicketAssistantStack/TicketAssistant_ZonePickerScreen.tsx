@@ -1,6 +1,6 @@
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {themeColor} from '@atb/stacks-hierarchy/Root_OnboardingStack/Onboarding_WelcomeScreen';
+
 import React, {useEffect, useState} from 'react';
 import {
   TicketAssistant_ZonePickerScreenParams,
@@ -24,6 +24,9 @@ import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {useDefaultTariffZone} from '../utils';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {TICKET_ASSISTANT_SUMMARY_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
+import {StaticColorByType} from '@atb/theme/colors';
+
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = TicketAssistantScreenProps<'TicketAssistant_ZonePickerScreen'>;
 export const TicketAssistant_ZonePickerScreen = ({
