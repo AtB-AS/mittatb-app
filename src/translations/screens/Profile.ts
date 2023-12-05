@@ -93,6 +93,9 @@ const ProfileTexts = {
         language: {
           label: _('Språk', 'Language', 'Språk'),
         },
+        privacy: {
+          label: _('Personvern', 'Privacy', 'Personvern'),
+        },
         notifications: {
           label: _('Varslinger', 'Notifications', 'Varslingar'),
           heading: _('Varslinger', 'Notifications', 'Varslingar'),
