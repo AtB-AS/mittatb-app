@@ -21,7 +21,7 @@ import {useTestIds} from './use-test-ids';
 import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
-import {Root_MobileTokenOnboardingStack} from './Root_MobileTokenOnboarding';
+
 import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
 import {Root_ConsiderTravelTokenChangeScreen} from './Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
@@ -328,10 +328,6 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_ReceiptScreen"
                   component={Root_ReceiptScreen}
-                />
-                <Stack.Screen
-                  name="Root_MobileTokenOnboardingStack"
-                  component={Root_MobileTokenOnboardingStack}
                 />
                 <Stack.Screen
                   name="Root_AddEditFavoritePlaceScreen"

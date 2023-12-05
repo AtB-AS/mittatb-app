@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
-import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/stacks-hierarchy/Root_MobileTokenOnboarding/utils';
+import {useGoToMobileTokenOnboardingWhenNecessary} from '../utils';
 import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
 import {useTheme} from '@atb/theme';
