@@ -168,7 +168,12 @@ export const RootStack = () => {
                 screens: {
                   Root_TabNavigatorStack: {
                     screens: {
-                      TabNav_ProfileStack: 'profile',
+                      TabNav_ProfileStack: {
+                        screens: {
+                          Profile_RootScreen: 'profile',
+                          Profile_PrivacyScreen: 'privacy',
+                        },
+                      },
                       TabNav_TicketingStack: {
                         screens: {
                           Ticketing_RootScreen: {
