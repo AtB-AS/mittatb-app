@@ -96,6 +96,8 @@ const ProfileTexts = {
         notifications: {
           label: _('Varslinger', 'Notifications', 'Varslingar'),
           heading: _('Varslinger', 'Notifications', 'Varslingar'),
+          modesHeading: _('Type varsel', 'Notification type', 'Type varsel'),
+          groupsHeading: _('Varslinger', 'Notifications', 'Varslingar'),
           pushToggle: {
             text: _('Push-varsel', 'Push notifications', 'Push-varsel'),
             subText: _(

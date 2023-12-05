@@ -1,6 +1,10 @@
 import React, {useEffect} from 'react';
 import {FullScreenView} from '@atb/components/screen-view';
-import {Section, ToggleSectionItem} from '@atb/components/sections';
+import {
+  HeaderSectionItem,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -10,6 +14,8 @@ import {MessageBox} from '@atb/components/message-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useNotifications, isConfigEnabled} from '@atb/notifications';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {NotificationConfigGroup} from '@atb/notifications/types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -24,6 +30,7 @@ export const Profile_NotificationsScreen = () => {
     checkPermissions,
     updateConfig,
   } = useNotifications();
+  const {notificationConfig} = useFirestoreConfiguration();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -36,6 +43,9 @@ export const Profile_NotificationsScreen = () => {
       await requestPermissions();
     }
     updateConfig({config_type: 'mode', id: 'push', enabled});
+  };
+  const handleGroupToggle = async (id: string, enabled: boolean) => {
+    updateConfig({config_type: 'group', id, enabled});
   };
 
   return (
@@ -63,6 +73,12 @@ export const Profile_NotificationsScreen = () => {
       {permissionStatus !== 'loading' && (
         <View style={style.content}>
           <Section withPadding>
+            <HeaderSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .modesHeading,
+              )}
+            />
             <ToggleSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications
@@ -81,6 +97,29 @@ export const Profile_NotificationsScreen = () => {
               }
               onValueChange={handlePushNotificationToggle}
             />
+          </Section>
+          <Section withPadding>
+            <HeaderSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .groupsHeading,
+              )}
+            />
+            {notificationConfig?.groups.map((group) => (
+              <ToggleSectionItem
+                key={group.id}
+                text={group.toggleTitle[0].value ?? ''}
+                subtext={group.toggleDescription[0].value ?? ''}
+                value={isConfigEnabled(
+                  config?.groups,
+                  group.id as NotificationConfigGroup['id'],
+                )}
+                disabled={permissionStatus !== 'granted'}
+                onValueChange={(enabled) =>
+                  handleGroupToggle(group.id, enabled)
+                }
+              />
+            ))}
           </Section>
           {permissionStatus !== 'error' && permissionStatus === 'denied' && (
             <MessageBox
