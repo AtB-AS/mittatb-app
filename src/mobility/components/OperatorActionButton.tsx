@@ -33,10 +33,11 @@ export const OperatorActionButton = ({
     isUserEligibleForBenefit ? operatorId : undefined,
   );
 
-  const buttonText = benefit?.callToAction?.name
-    ? getTextForLanguage(benefit.callToAction.name, language) ??
-      t(MobilityTexts.operatorAppSwitchButton(operatorName))
-    : t(MobilityTexts.operatorAppSwitchButton(operatorName));
+  const buttonText =
+    isUserEligibleForBenefit && benefit?.callToAction?.name
+      ? getTextForLanguage(benefit.callToAction.name, language) ??
+        t(MobilityTexts.operatorAppSwitchButton(operatorName))
+      : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
   const handleCallToAction = useCallback(async () => {
     analytics.logEvent('Mobility', 'Open operator app', {
@@ -45,7 +46,7 @@ export const OperatorActionButton = ({
       isUserEligibleForBenefit,
     });
     let url = rentalAppUri;
-    if (benefit?.callToAction.url) {
+    if (isUserEligibleForBenefit && benefit?.callToAction.url) {
       // Benefit urls can contain variables to be re replaced runtime, e.g. '{APP_URL}?voucherCode={VOUCHER_CODE}'
       url = replaceTokens(benefit.callToAction.url, {
         APP_URL: rentalAppUri,
