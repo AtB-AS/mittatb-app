@@ -51,7 +51,7 @@ const PrivacySettingsTexts = {
         ),
         alert: {
             cancel: _('Avbryt', 'Cancel', 'Avbryt'),
-            confirm: _('Tøm innsamlet data', 'Clear collected data', 'Tøm innsamlet data'),
+            confirm: _('Tøm innsamlet data', 'Clear collected data', 'Tøm innsamla data'),
         },
     },
 };
