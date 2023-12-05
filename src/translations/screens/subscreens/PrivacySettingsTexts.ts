@@ -37,7 +37,7 @@ const PrivacySettingsTexts = {
         label: _(
             'Tøm innsamlet data',
             'Clear collected data',
-            'Tøm innsamlet data',
+            'Tøm innsamla data',
         ),
         a11yHint: _(
             'Aktivér for å tømme innsamlet data',
