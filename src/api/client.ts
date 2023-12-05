@@ -148,11 +148,12 @@ function responseErrorHandler(error: AxiosError) {
       break;
   }
   const variable: any = error?.response?.data;
-  const upstreamError = JSON.parse(variable.upstreamError);
-  if (isInternalUpstreamServerError(upstreamError)) {
-    return Promise.reject({...error, status: upstreamError.errorCode});
+  if (variable?.upstreamError) {
+    const upstreamError = JSON.parse(variable.upstreamError);
+    if (isInternalUpstreamServerError(upstreamError)) {
+      return Promise.reject({...error, status: upstreamError.errorCode});
+    }
   }
-
   return Promise.reject(error);
 }
 
