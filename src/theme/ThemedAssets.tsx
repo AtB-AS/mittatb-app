@@ -13,6 +13,8 @@ import {Scooter as ScooterLight} from '@atb/assets/svg/color/images/mobility/lig
 import {Scooter as ScooterDark} from '@atb/assets/svg/color/images/mobility/dark';
 import {CityBike as CityBikeLight} from '@atb/assets/svg/color/images/mobility/light';
 import {CityBike as CityBikeDark} from '@atb/assets/svg/color/images/mobility/dark';
+import {ParkAndRide as ParkAndRideLight} from '@atb/assets/svg/color/images/mobility/light';
+import {ParkAndRide as ParkAndRideDark} from '@atb/assets/svg/color/images/mobility/dark';
 import {useTheme} from '@atb/theme/ThemeContext';
 
 export const ThemedTokenTravelCard = () => {
@@ -56,4 +58,10 @@ export const ThemedCityBike = () => {
   const {themeName} = useTheme();
   const CityBike = themeName === 'dark' ? CityBikeDark : CityBikeLight;
   return <CityBike />;
+};
+
+export const ThemedParkAndRide = () => {
+  const {themeName} = useTheme();
+  const ParkAndRide = themeName === 'dark' ? ParkAndRideDark : ParkAndRideLight;
+  return <ParkAndRide />;
 };

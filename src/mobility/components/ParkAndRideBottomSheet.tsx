@@ -24,6 +24,7 @@ import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
 
 type Props = {
   name: string | undefined;
@@ -103,25 +104,28 @@ export const ParkAndRideBottomSheet = ({
               </View>
             </GenericSectionItem>
             <GenericSectionItem>
-              <MobilityStats
-                first={
-                  <MobilityStat
-                    svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
-                    primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
-                  />
-                }
-                second={
-                  <MobilityStat
-                    svg={Parking}
-                    primaryStat={capacity ?? ''}
-                    secondaryStat={
-                      capacity
-                        ? t(ParkAndRideTexts.capacity)
-                        : t(ParkAndRideTexts.unknownCapacity)
-                    }
-                  />
-                }
-              />
+              <View style={styles.mobilityStatContainer}>
+                <MobilityStats
+                  first={
+                    <MobilityStat
+                      svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
+                      primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+                    />
+                  }
+                  second={
+                    <MobilityStat
+                      svg={Parking}
+                      primaryStat={capacity ?? ''}
+                      secondaryStat={
+                        capacity
+                          ? t(ParkAndRideTexts.capacity)
+                          : t(ParkAndRideTexts.unknownCapacity)
+                      }
+                    />
+                  }
+                />
+                <ThemedParkAndRide />
+              </View>
               <MessageBox
                 style={styles.disclaimer}
                 type="info"
@@ -158,6 +162,10 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     parkingName: {
       flexDirection: 'row',
+    },
+    mobilityStatContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     disclaimer: {
       marginTop: theme.spacings.medium,
