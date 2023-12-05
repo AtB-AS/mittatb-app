@@ -1,6 +1,6 @@
 import React from 'react';
 import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
-import {ThemeText} from '@atb/components/text';
+import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {
   NavigationIcon,
   isNavigationIcon,
@@ -61,6 +61,9 @@ export function LinkSectionItem({
       accessibilityRole="link"
       onPress={disabled ? undefined : onPress}
       disabled={disabled}
+      accessibilityLabel={
+        label ? `${text} ${screenReaderPause} ${label}` : text
+      }
       accessibilityState={{disabled}}
       style={[topContainer, {backgroundColor: themeColor.background}]}
       testID={testID}
