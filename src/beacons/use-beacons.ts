@@ -99,10 +99,10 @@ export const useBeacons = () => {
     updateKettleInfo();
   }, [isBeaconsSupported, isKettleSDKInitialized, updateKettleInfo]);
 
-  const deleteCollectedData = useCallback(() => {
+  const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
     if (isKettleSDKInitialized) {
-      Kettle.deleteCollectedData();
+      await Kettle.deleteCollectedData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBeaconsSupported]);

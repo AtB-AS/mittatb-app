@@ -1,31 +1,59 @@
 import { translation as _ } from '../../commons';
 const PrivacySettingsTexts = {
     sections: {
-        other: {
-            items: {
-                deleteData: {
-                    title: _('Tøm innsamlet data', 'Delete collected data', 'Tøm innsamlet data'),
-                },
-                controlPanel: {
-                    title: _('Kontrollpanel for datainnsamling', 'Control panel for data collection', 'Kontrollpanel for datainnsamling'),
-                    subTitle: _('Du kan se og laste ned data som blir samlet  om dine reisevaner. Det gjelder også data om busser og holdeplasser du er i nærheten av.', 'You can view and download data that is collected about your travel habits. This also applies to data about buses and bus stops you are near.', 'Du kan sjå og laste ned data som blir samla om dine reisevanar. Det gjeld også data om bussar og holdeplassar du er i nærleiken av.'),
-                }
+        items: {
+            clarCollectedData: {
+                title: _('Tøm innsamlet data', 'Clear collected data', 'Tøm innsamlet data'),
+            },
+            controlPanel: {
+                title: _('Kontrollpanel for datainnsamling', 'Control panel for data collection', 'Kontrollpanel for datainnsamling'),
+                subTitle: _(
+                    'Du kan se og laste ned data som blir samlet  om dine reisevaner. Det gjelder også data om busser og holdeplasser du er i nærheten av.',
+                    'You can view and download data that is collected about your travel habits. This also applies to data about buses and stops you are close to.',
+                    'Du kan se og laste ned data som blir samlet  om dine reisevaner. Det gjelder også data om busser og holdeplasser du er i nærheten av.'
+                ),
+                a11yHint: _(
+                    'Aktivér for å gå til kontrollpanel for datainnsamling (ekstern side)',
+                    'Activate to control panel for data collection (external content)',
+                    'Aktiver for å gå til kontrollpanel for datainnsamling (ekstern side)',
+                ),
             }
         },
         consents: {
             title: _('Samtykke', 'Consent', 'Samtykke'),
             items: {
-                collectBusAndStopData: {
-                    title: _('Samle buss og holdeplassdata', 'Collect bus and stop data', 'Samle buss og holdeplassdata'),
+                CollectTravelHabits: {
+                    title: _('Samle reisevaner', 'Collect travel habits', 'Samle reisevaner'),
                     subText: _(
-                        'Du gir oss samtykke til å samle og analysere hvilke busser og bussholdeplasser du er i nærheten av ved hjelp av Bluetooth. Dataen brukes til å forbedre reisetilbudet i Trøndelag, og lar oss sende deg undersøkelser som er relevante for deg.',
-                        'You give us consent to collect and analyze which buses and bus stops you are near using Bluetooth. The data is used to improve the travel offer in Trøndelag, and allows us to send you surveys that are relevant to you.',
-                        'Du gir oss samtykke til å samle og analysere hvilke busser og bussholdeplasser du er i nærheten av ved hjelp av Bluetooth. Dataen brukes til å forbedre reisetilbudet i Trøndelag, og lar oss sende deg undersøkelser som er relevante for deg.',
+                        'Du gir oss samtykke til å samle og analysere dine reisevaner ved hjelp av Bluetooth, din posisjon, bevegelses- og treningsaktivitet. Vi kan for eksempel samle data om holdeplasser i nærheten, busser du tar, hvor du reiser og om du går, sykler eller reiser med bil. Dataen brukes til å forbedre reisetilbudet ditt i Trøndelag, Samtykket lar oss sende deg undersøkelser som er relevante for deg.',
+                        'You give us consent to collect and analyze your travel habits using Bluetooth, your location, movement and exercise activity. For example, we may collect data about nearby stops, buses you take, where you travel and whether you walk, cycle or travel by car. The data is used to improve your travel offer in Trøndelag. The consent allows us to send you surveys that are relevant to you.',
+                        'Du gir oss samtykke til å samle og analysere dine reisevaner ved hjelp av Bluetooth, din posisjon, bevegelses- og treningsaktivitet. Vi kan for eksempel samle data om holdeplasser i nærheten, busser du tar, hvor du reiser og om du går, sykler eller reiser med bil. Dataen brukes til å forbedre reisetilbudet ditt i Trøndelag, Samtykket lar oss sende deg undersøkelser som er relevante for deg.',
                     ),
                 },
             },
         },
-    }
+    },
+    clearCollectedData: {
+        label: _(
+            'Tøm innsamlet data',
+            'Clear collected data',
+            'Tøm innsamlet data',
+        ),
+        a11yHint: _(
+            'Aktivér for å tøm innsamlet data',
+            'Activate to clear collected data',
+            'Klikk for å tøm innsamla data',
+        ),
+        confirmTitle: _(
+            'Er du sikker på at du vil slette innsamlet data?',
+            'Are you sure you want to delete collected data?',
+            'Er du sikker på at du vil slette innsamla data?',
+        ),
+        alert: {
+            cancel: _('Avbryt', 'Cancel', 'Avbryt'),
+            confirm: _('Tøm innsamlet data', 'Clear collected data', 'Tøm innsamlet data'),
+        },
+    },
 };
 
 export default PrivacySettingsTexts;

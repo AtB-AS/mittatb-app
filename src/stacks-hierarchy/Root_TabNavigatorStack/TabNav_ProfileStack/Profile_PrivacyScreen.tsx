@@ -30,6 +30,10 @@ export const Profile_PrivacyScreen = () => {
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
+  const [isCleaningCollectedData, setIsCleaningCollectedData] =
+    React.useState<boolean>(false);
+  const [isCleaningHistorydData, setIsCleaningHistoryData] =
+    React.useState<boolean>(false);
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -44,12 +48,12 @@ export const Profile_PrivacyScreen = () => {
             />
             <ToggleSectionItem
               text={t(
-                PrivacySettingsTexts.sections.consents.items
-                  .collectBusAndStopData.title,
+                PrivacySettingsTexts.sections.consents.items.CollectTravelHabits
+                  .title,
               )}
               subtext={t(
-                PrivacySettingsTexts.sections.consents.items
-                  .collectBusAndStopData.subText,
+                PrivacySettingsTexts.sections.consents.items.CollectTravelHabits
+                  .subText,
               )}
               value={kettleInfo?.isBeaconsOnboarded}
               onValueChange={(checked) => {
@@ -59,12 +63,12 @@ export const Profile_PrivacyScreen = () => {
                   revokeBeacons();
                 }
               }}
-              testID="toggleCollectBusAndStopData"
+              testID="toggleCollectData"
             />
           </Section>
         )}
         <Section withPadding withTopPadding>
-        <LinkSectionItem
+          <LinkSectionItem
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
@@ -80,30 +84,27 @@ export const Profile_PrivacyScreen = () => {
             }}
           />
         </Section>
-        <Section withPadding>
-          {isBeaconsSupported && (
+
+        {isBeaconsSupported && kettleInfo?.privacyDashboardUrl && (
+          <Section withPadding>
             <LinkSectionItem
-              text={t(
-                PrivacySettingsTexts.sections.other.items.controlPanel.title,
-              )}
+              text={t(PrivacySettingsTexts.sections.items.controlPanel.title)}
               subtitle={t(
-                PrivacySettingsTexts.sections.other.items.controlPanel.subTitle,
+                PrivacySettingsTexts.sections.items.controlPanel.subTitle,
               )}
               icon="external-link"
               accessibility={{
                 accessibilityHint: t(
-                  ProfileTexts.sections.privacy.linkSectionItems.privacy
-                    .a11yHint,
+                  PrivacySettingsTexts.sections.items.controlPanel.a11yHint,
                 ),
               }}
               testID="privacyButton"
               onPress={async () => {
-                kettleInfo?.privacyDashboardUrl &&
-                  (await Linking.openURL(kettleInfo.privacyDashboardUrl));
+                await Linking.openURL(kettleInfo.privacyDashboardUrl!);
               }}
             />
-          )}
-        </Section>
+          </Section>
+        )}
 
         <Section withPadding withTopPadding>
           <Button
@@ -112,6 +113,8 @@ export const Profile_PrivacyScreen = () => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
             )}
+            loading={isCleaningHistorydData}
+            disabled={isCleaningHistorydData}
             onPress={() =>
               destructiveAlert({
                 alertTitleString: t(
@@ -127,7 +130,9 @@ export const Profile_PrivacyScreen = () => {
                     .alert.confirm,
                 ),
                 destructiveArrowFunction: async () => {
+                  setIsCleaningHistoryData(true);
                   await clearHistory();
+                  setIsCleaningHistoryData(false);
                 },
               })
             }
@@ -138,11 +143,26 @@ export const Profile_PrivacyScreen = () => {
               style={style.spacing}
               leftIcon={{svg: Delete}}
               interactiveColor="interactive_destructive"
-              text={t(
-                PrivacySettingsTexts.sections.other.items.deleteData.title,
-              )}
-              onPress={() => {
-                deleteCollectedData();
+              text={t(PrivacySettingsTexts.clearCollectedData.label)}
+              loading={isCleaningCollectedData}
+              disabled={isCleaningCollectedData}
+              onPress={async () => {
+                destructiveAlert({
+                  alertTitleString: t(
+                    PrivacySettingsTexts.clearCollectedData.confirmTitle,
+                  ),
+                  cancelAlertString: t(
+                    PrivacySettingsTexts.clearCollectedData.alert.cancel,
+                  ),
+                  confirmAlertString: t(
+                    PrivacySettingsTexts.clearCollectedData.alert.confirm,
+                  ),
+                  destructiveArrowFunction: async () => {
+                    setIsCleaningCollectedData(true);
+                    await deleteCollectedData();
+                    setIsCleaningCollectedData(false);
+                  },
+                });
               }}
               testID="deleteLocalSearchData"
             />
