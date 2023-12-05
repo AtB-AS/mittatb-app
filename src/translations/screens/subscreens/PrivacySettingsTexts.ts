@@ -8,7 +8,7 @@ const PrivacySettingsTexts = {
             controlPanel: {
                 title: _('Kontrollpanel for datainnsamling', 'Control panel for data collection', 'Kontrollpanel for datainnsamling'),
                 subTitle: _(
-                    'Du kan se og laste ned data som blir samlet  om dine reisevaner. Det gjelder også data om busser og holdeplasser du er i nærheten av.',
+                    'Du kan se og laste ned data som blir samlet om dine reisevaner. Det gjelder også data om busser og holdeplasser du er i nærheten av.',
                     'You can view and download data that is collected about your travel habits. This also applies to data about buses and stops you are close to.',
                     'Du kan se og laste ned data som blir samlet  om dine reisevaner. Det gjelder også data om busser og holdeplasser du er i nærheten av.'
                 ),
