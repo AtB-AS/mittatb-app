@@ -30,7 +30,6 @@ export const Profile_PrivacyScreen = () => {
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
-
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -65,10 +64,7 @@ export const Profile_PrivacyScreen = () => {
           </Section>
         )}
         <Section withPadding withTopPadding>
-          <HeaderSectionItem
-            text={t(PrivacySettingsTexts.sections.other.title)}
-          />
-          <LinkSectionItem
+        <LinkSectionItem
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
             )}
@@ -83,6 +79,8 @@ export const Profile_PrivacyScreen = () => {
               await Linking.openURL(privacy_policy_url);
             }}
           />
+        </Section>
+        <Section withPadding>
           {isBeaconsSupported && (
             <LinkSectionItem
               text={t(
@@ -107,7 +105,7 @@ export const Profile_PrivacyScreen = () => {
           )}
         </Section>
 
-        <Section withPadding>
+        <Section withPadding withTopPadding>
           <Button
             leftIcon={{svg: Delete}}
             interactiveColor="interactive_destructive"
