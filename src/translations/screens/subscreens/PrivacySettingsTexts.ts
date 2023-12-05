@@ -23,7 +23,7 @@ const PrivacySettingsTexts = {
             title: _('Samtykke', 'Consent', 'Samtykke'),
             items: {
                 CollectTravelHabits: {
-                    title: _('Samle reisevaner', 'Collect travel habits', 'Samle reisevaner'),
+                    title: _('Samle reisevaner', 'Collect travel habits', 'Samle reisevanar'),
                     subText: _(
                         'Du gir oss samtykke til å samle og analysere dine reisevaner ved hjelp av Bluetooth, din posisjon, bevegelses- og treningsaktivitet. Vi kan for eksempel samle data om holdeplasser i nærheten, busser du tar, hvor du reiser og om du går, sykler eller reiser med bil. Dataene brukes til å forbedre reisetilbudet ditt i Trøndelag. Samtykket lar oss sende deg undersøkelser som er relevante for deg.',
                         'You give us consent to collect and analyze your travel habits using Bluetooth, your location, movement and exercise activity. For example, we may collect data about nearby stops, buses you take, where you travel and whether you walk, cycle or travel by car. The data is used to improve your travel offer in Trøndelag. The consent allows us to send you surveys that are relevant to you.',
