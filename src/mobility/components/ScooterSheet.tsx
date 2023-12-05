@@ -3,7 +3,7 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {
   MobilityTexts,
@@ -24,10 +24,10 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {Scooter} from '@atb/assets/svg/color/images/mobility';
 import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
+import {ThemedScooter} from '@atb/theme/ThemedAssets';
 
 type Props = {
   vehicleId: VehicleId;
@@ -40,6 +40,7 @@ export const ScooterSheet = ({
   onReportParkingViolation,
 }: Props) => {
   const {t, language} = useTranslation();
+  const {themeName} = useTheme();
   const styles = useSheetStyle();
   const {
     vehicle,
@@ -116,7 +117,7 @@ export const ScooterSheet = ({
                     />
                     <BrandingImage
                       logoUrl={brandLogoUrl}
-                      fallback={<Scooter />}
+                      fallback={<ThemedScooter />}
                     />
                   </View>
                 </GenericSectionItem>
