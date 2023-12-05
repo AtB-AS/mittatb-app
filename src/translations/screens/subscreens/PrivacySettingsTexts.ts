@@ -2,7 +2,6 @@ import { translation as _ } from '../../commons';
 const PrivacySettingsTexts = {
     sections: {
         other: {
-            title: _('Annet', 'Other', 'Annet'),
             items: {
                 deleteData: {
                     title: _('Tøm innsamlet data', 'Delete collected data', 'Tøm innsamlet data'),
@@ -14,7 +13,7 @@ const PrivacySettingsTexts = {
             }
         },
         consents: {
-            title: _('Samtykker', 'Consents', 'Samtykker'),
+            title: _('Samtykke', 'Consent', 'Samtykke'),
             items: {
                 collectBusAndStopData: {
                     title: _('Samle buss og holdeplassdata', 'Collect bus and stop data', 'Samle buss og holdeplassdata'),
