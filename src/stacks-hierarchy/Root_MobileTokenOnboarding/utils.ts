@@ -25,7 +25,7 @@ export const useGoToMobileTokenOnboardingWhenNecessary = () => {
   useEffect(() => {
     if (shouldOnboard && isFocused) {
       InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_MobileTokenOnboardingStack'),
+        navigation.navigate('Root_ConsiderTravelTokenChangeScreen'),
       );
     }
   }, [shouldOnboard, isFocused, navigation]);

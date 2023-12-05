@@ -22,6 +22,8 @@ import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
 import {Root_MobileTokenOnboardingStack} from './Root_MobileTokenOnboarding';
+import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
+import {Root_ConsiderTravelTokenChangeScreen} from './Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
@@ -244,6 +246,14 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_TermsInformationScreen"
                   component={Root_TermsInformationScreen}
+                />
+                <Stack.Screen
+                  name="Root_ConsiderTravelTokenChangeScreen"
+                  component={Root_ConsiderTravelTokenChangeScreen}
+                />
+                <Stack.Screen
+                  name="Root_SelectTravelTokenScreen"
+                  component={Root_SelectTravelTokenScreen}
                 />
                 <Stack.Screen
                   name="Root_LocationSearchByTextScreen"

@@ -114,6 +114,8 @@ export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
   Root_TermsInformationScreen: undefined;
+  Root_ConsiderTravelTokenChangeScreen: undefined;
+  Root_SelectTravelTokenScreen: undefined;
   Root_TipsAndInformation: undefined;
   Root_TicketAssistantStack: undefined;
   Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
