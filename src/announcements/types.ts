@@ -6,8 +6,9 @@ import { Rule } from '@atb/rule-engine/rules';
 export type AnnouncementId = string;
 
 export type OpenUrl = {
-  title?: LanguageAndTextType[];
-  link?: string;
+  title: LanguageAndTextType[];
+  link: string;
+  linkType: 'external' | 'deeplink';
 };
 
 export type AnnouncementRaw = {

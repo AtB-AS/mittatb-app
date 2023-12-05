@@ -5,71 +5,129 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {Image, View} from 'react-native';
+import {Image, Linking, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {insets} from '@atb/utils/insets';
+import {
+  GenericClickableSectionItem,
+  LinkSectionItem,
+  Section,
+} from '@atb/components/sections';
+import Bugsnag from '@bugsnag/react-native';
+import {AnnouncementSheet} from './AnnouncementSheet';
+import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {animateNextChange} from '@atb/utils/animation';
+import {useAnalytics} from '@atb/analytics';
+import {useAnnouncementsState} from '@atb/announcements';
 
 type Props = {
   announcement: AnnouncementType;
-  onDismiss: (announcement: AnnouncementType) => void;
+  withBottomPadding: boolean;
 };
 
-export const Announcement = ({announcement, onDismiss}: Props) => {
+export const Announcement = ({announcement, withBottomPadding}: Props) => {
   const style = useStyle();
   const {t} = useTranslation();
   const {language} = useTranslation();
   const {theme} = useTheme();
+  const analytics = useAnalytics();
+  const {dismissAnnouncement} = useAnnouncementsState();
+  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+
+  const handleDismiss = (announcement: AnnouncementType) => {
+    animateNextChange();
+    dismissAnnouncement(announcement);
+    analytics.logEvent('Dashboard', 'Announcement dismissed', {
+      id: announcement.id,
+    });
+  };
+
+  const isOpenUrlEnabled = announcement.openUrl?.link !== undefined;
+  const openUrlLink = announcement.openUrl?.link;
 
   return (
-    <View style={style.container}>
-      <View
-        style={style.content}
-        accessible={true}
-        accessibilityRole="button"
-        accessibilityHint={t(DashboardTexts.announcemens.button.accessibility)}
-      >
-        {announcement.summaryImage && (
-          <View style={style.imageContainer}>
-            <Image
-              height={50}
-              width={50}
-              source={{uri: announcement.summaryImage}}
+    <Section
+      withBottomPadding={withBottomPadding}
+      key={announcement.id}
+      testID="announcement"
+    >
+      <GenericClickableSectionItem
+        accessible={false}
+        disabled={isOpenUrlEnabled}
+        onPress={async () => {
+          openBottomSheet(() => (
+            <AnnouncementSheet
+              announcement={announcement}
+              close={closeBottomSheet}
             />
-          </View>
-        )}
-        <View style={style.textContainer}>
-          <ThemeText type="body__primary--bold">
-            {getTextForLanguage(
-              announcement.summaryTitle ?? announcement.fullTitle,
-              language,
-            )}
-          </ThemeText>
-          <ThemeText>
-            {getTextForLanguage(announcement.summary, language)}
-          </ThemeText>
-          {announcement.openUrl?.title && (
-            <ThemeText type="body__primary--underline" style={style.spacing}>
-              {getTextForLanguage(announcement.openUrl.title, language)}
-            </ThemeText>
-          )}
-        </View>
-      </View>
-      <PressableOpacity
-        style={style.close}
-        role="button"
-        hitSlop={insets.all(theme.spacings.medium)}
-        accessibilityHint={t(
-          DashboardTexts.announcemens.announcement.closeA11yHint,
-        )}
-        onPress={() => onDismiss(announcement)}
-        testID="closeAnnouncement"
+          ));
+        }}
       >
-        <ThemeIcon svg={Close} />
-      </PressableOpacity>
-    </View>
+        <View style={style.container}>
+          <View
+            style={style.content}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityHint={t(
+              DashboardTexts.announcemens.button.accessibility,
+            )}
+          >
+            {announcement.summaryImage && (
+              <View style={style.imageContainer}>
+                <Image
+                  height={50}
+                  width={50}
+                  source={{uri: announcement.summaryImage}}
+                />
+              </View>
+            )}
+            <View style={style.textContainer}>
+              <ThemeText type="body__primary--bold">
+                {getTextForLanguage(
+                  announcement.summaryTitle ?? announcement.fullTitle,
+                  language,
+                )}
+              </ThemeText>
+              <ThemeText>
+                {getTextForLanguage(announcement.summary, language)}
+              </ThemeText>
+            </View>
+          </View>
+          <PressableOpacity
+            style={style.close}
+            role="button"
+            hitSlop={insets.all(theme.spacings.medium)}
+            accessibilityHint={t(
+              DashboardTexts.announcemens.announcement.closeA11yHint,
+            )}
+            onPress={() => handleDismiss(announcement)}
+            testID="closeAnnouncement"
+          >
+            <ThemeIcon svg={Close} />
+          </PressableOpacity>
+        </View>
+      </GenericClickableSectionItem>
+      {announcement.openUrl && (
+        <LinkSectionItem
+          text={getTextForLanguage(announcement.openUrl.title, language) ?? ''}
+          icon={
+            announcement.openUrl.linkType === 'external'
+              ? 'external-link'
+              : 'arrow-right'
+          }
+          onPress={async () => {
+            try {
+              openUrlLink && (await Linking.openURL(openUrlLink));
+            } catch (err: any) {
+              Bugsnag.notify(err);
+            }
+          }}
+        />
+      )}
+    </Section>
   );
 };
 

@@ -81,9 +81,14 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
 
 function mapToOpenUrl(data: any): OpenUrl | undefined {
   if (typeof data !== 'object') return;
-  const { title, link } = data;
+  const { title, link, linkType } = data;
+  if (!title || !link || !linkType) return;
+  if (!['external', 'deeplink'].includes(linkType)) return;
+  const titleWithLanguage = mapToLanguageAndTexts(title);
+  if (!titleWithLanguage) return;
   return {
-    title: mapToLanguageAndTexts(title),
+    title: titleWithLanguage,
     link,
+    linkType,
   }
 }

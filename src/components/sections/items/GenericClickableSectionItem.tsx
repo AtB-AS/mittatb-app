@@ -8,6 +8,7 @@ type Props = PropsWithChildren<
   SectionItemProps<
     {
       onPress?(): void;
+      disabled?: boolean;
     } & AccessibilityProps
   >
 >;
