@@ -32,8 +32,6 @@ export const Profile_PrivacyScreen = () => {
   const {clearHistory} = useSearchHistory();
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
-  const [isCleaningHistoryData, setIsCleaningHistoryData] =
-    React.useState<boolean>(false);
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -113,8 +111,6 @@ export const Profile_PrivacyScreen = () => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
             )}
-            loading={isCleaningHistoryData}
-            disabled={isCleaningHistoryData}
             onPress={() =>
               destructiveAlert({
                 alertTitleString: t(
@@ -130,9 +126,7 @@ export const Profile_PrivacyScreen = () => {
                     .alert.confirm,
                 ),
                 destructiveArrowFunction: async () => {
-                  setIsCleaningHistoryData(true);
                   await clearHistory();
-                  setIsCleaningHistoryData(false);
                 },
               })
             }
