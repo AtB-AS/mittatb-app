@@ -3,7 +3,7 @@ import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {
   MobilityTexts,
@@ -40,7 +40,6 @@ export const ScooterSheet = ({
   onReportParkingViolation,
 }: Props) => {
   const {t, language} = useTranslation();
-  const {themeName} = useTheme();
   const styles = useSheetStyle();
   const {
     vehicle,
