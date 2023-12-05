@@ -14,7 +14,7 @@ const PrivacySettingsTexts = {
                 ),
                 a11yHint: _(
                     'Aktivér for å gå til kontrollpanel for datainnsamling (ekstern side)',
-                    'Activate to control panel for data collection (external content)',
+                    'Activate to go to control panel for data collection (external content)',
                     'Aktiver for å gå til kontrollpanel for datainnsamling (ekstern side)',
                 ),
             }
