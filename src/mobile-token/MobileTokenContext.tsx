@@ -4,7 +4,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useReducer,
 } from 'react';
 import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -37,6 +37,7 @@ import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
 import {updateMetadata} from '@atb/chat/metadata';
 import {tokenService} from './tokenService';
+import {tokenReducer} from '@atb/mobile-token/tokenReducer';
 
 type MobileTokenContextState = {
   tokens: Token[];
@@ -72,8 +73,7 @@ type MobileTokenContextState = {
    * debug screen
    */
   debug: {
-    token?: ActivatedToken;
-    createToken: () => void;
+    nativeToken?: ActivatedToken;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
@@ -86,14 +86,10 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 
 export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {userId, authStatus} = useAuthState();
+  const [state, dispatch] = useReducer(tokenReducer, {status: 'none'});
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
-
-  const [token, setToken] = useState<ActivatedToken>();
-  const [remoteTokens, setRemoteTokens] = useState<RemoteToken[]>();
-  const [mobileTokenStatus, setMobileTokenStatus] =
-    useState<MobileTokenStatus>('disabled');
 
   const enabled =
     mobileTokenEnabled && userId && authStatus === 'authenticated';
@@ -105,7 +101,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       const cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        setMobileTokenStatus('timeout');
+        dispatch({type: 'TIMEOUT'});
 
         Bugsnag.notify(
           new Error(
@@ -121,9 +117,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         );
       }, token_timeout_in_seconds);
 
-      setMobileTokenStatus('loading');
-      setToken(undefined);
-      setRemoteTokens(undefined);
+      dispatch({type: 'LOADING'});
       let nativeToken: ActivatedToken;
       let remoteTokens: RemoteToken[];
 
@@ -143,17 +137,15 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           remoteTokens = await loadRemoteTokens(traceId);
         }
 
-        setToken(nativeToken);
-        setRemoteTokens(remoteTokens);
         updateMetadata({
           'AtB-Mobile-Token-Id': nativeToken.tokenId,
           'AtB-Mobile-Token-Status': 'success',
           'AtB-Mobile-Token-Error-Correlation-Id': undefined,
         });
 
-        setMobileTokenStatus('success');
+        dispatch({type: 'SUCCESS', nativeToken, remoteTokens});
       } catch (err: any) {
-        setMobileTokenStatus('error');
+        dispatch({type: 'ERROR'});
         /*
          Errors that needs a certain action should already be handled. Just log
          to Bugsnag here.
@@ -187,6 +179,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
    * requests to Entur.
    */
   const getSignedToken = useCallback(async () => {
+    const token = state.nativeToken;
     if (token) {
       try {
         return await mobileTokenClient.encode(token);
@@ -202,12 +195,12 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       }
     }
     return undefined;
-  }, [token, userId]);
+  }, [state.nativeToken, userId]);
 
   const barcodeStatus = useBarcodeStatus(
-    mobileTokenStatus,
-    token,
-    remoteTokens,
+    state.status,
+    state.nativeToken,
+    state.remoteTokens,
   );
   const deviceInspectionStatus = getDeviceInspectionStatus(barcodeStatus);
 
@@ -219,7 +212,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           uuid(),
           bypassRestrictions,
         );
-        setRemoteTokens(updatedTokens);
+        dispatch({type: 'UPDATE_REMOTE_TOKENS', remoteTokens: updatedTokens});
         return true;
       } catch (err) {
         return false;
@@ -230,16 +223,16 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const tokens = useMemo(
     () =>
-      remoteTokens?.map((rt): Token => {
+      state.remoteTokens?.map((rt): Token => {
         return {
           ...rt,
-          isThisDevice: rt.id === token?.tokenId,
+          isThisDevice: rt.id === state.nativeToken?.tokenId,
           isInspectable: isInspectable(rt),
           type: isTravelCardToken(rt) ? 'travel-card' : 'mobile',
           travelCardId: getTravelCardId(rt),
         };
       }) || [],
-    [remoteTokens, token],
+    [state.remoteTokens, state.nativeToken],
   );
 
   return (
@@ -247,7 +240,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       value={{
         tokens,
         getSignedToken,
-        mobileTokenStatus,
+        mobileTokenStatus: state.status,
         deviceInspectionStatus,
         barcodeStatus,
         toggleToken,
@@ -256,24 +249,34 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           load();
         },
         wipeToken: useCallback(
-          () => wipeToken(token, uuid()).then(() => setToken(undefined)),
-          [token],
+          () =>
+            wipeToken(state.nativeToken, uuid()).then(() =>
+              dispatch({type: 'CLEAR_TOKENS'}),
+            ),
+          [state.nativeToken],
         ),
         getTokenToggleDetails,
         debug: {
-          token,
-          createToken: () => mobileTokenClient.create(uuid()).then(setToken),
+          nativeToken: state.nativeToken,
           validateToken: () =>
             mobileTokenClient
-              .encode(token!, [TokenAction.TOKEN_ACTION_GET_FARECONTRACTS])
-              .then((signed) => tokenService.validate(token!, signed, uuid())),
+              .encode(state.nativeToken!, [
+                TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
+              ])
+              .then((signed) =>
+                tokenService.validate(state.nativeToken!, signed, uuid()),
+              ),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
             if (removed) {
-              setRemoteTokens(remoteTokens?.filter(({id}) => id !== tokenId));
+              dispatch({
+                type: 'UPDATE_REMOTE_TOKENS',
+                remoteTokens:
+                  state.remoteTokens?.filter(({id}) => id !== tokenId) || [],
+              });
             }
           },
-          renewToken: () => mobileTokenClient.renew(token!, uuid()),
+          renewToken: () => mobileTokenClient.renew(state.nativeToken!, uuid()),
         },
       }}
     >
@@ -335,7 +338,7 @@ const getDeviceInspectionStatus = (
 
 const useBarcodeStatus = (
   status: MobileTokenStatus,
-  token?: ActivatedToken,
+  nativeToken?: ActivatedToken,
   remoteTokens?: RemoteToken[],
 ): BarcodeStatus => {
   const {
@@ -347,7 +350,7 @@ const useBarcodeStatus = (
   if (use_trygg_overgang_qr_code) return 'staticQr';
 
   switch (status) {
-    case 'disabled': // As of now, handle disabled as loading, as mobile token should never be disabled
+    case 'none': // Handle as loading, as 'none' should only be temporary before starting the process
     case 'loading':
       return 'loading';
     case 'timeout':
@@ -355,7 +358,9 @@ const useBarcodeStatus = (
     case 'error':
       return enable_token_fallback ? 'static' : 'error';
     case 'success':
-      return deviceInspectable(token, remoteTokens) ? 'mobiletoken' : 'other';
+      return deviceInspectable(nativeToken, remoteTokens)
+        ? 'mobiletoken'
+        : 'other';
   }
 };
 
