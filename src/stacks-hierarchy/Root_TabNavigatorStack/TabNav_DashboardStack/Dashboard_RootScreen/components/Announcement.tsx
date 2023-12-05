@@ -70,10 +70,12 @@ export const Announcement = ({announcement, withBottomPadding}: Props) => {
           <View
             style={style.content}
             accessible={true}
-            accessibilityRole="button"
-            accessibilityHint={t(
-              DashboardTexts.announcemens.button.accessibility,
-            )}
+            accessibilityRole={!isOpenUrlEnabled ? 'button' : undefined}
+            accessibilityHint={
+              !isOpenUrlEnabled
+                ? t(DashboardTexts.announcemens.button.accessibility)
+                : undefined
+            }
           >
             {announcement.summaryImage && (
               <View style={style.imageContainer}>
@@ -118,6 +120,13 @@ export const Announcement = ({announcement, withBottomPadding}: Props) => {
               ? 'external-link'
               : 'arrow-right'
           }
+          accessibility={{
+            accessibilityHint: t(
+              DashboardTexts.announcemens.openUrl[
+                announcement.openUrl.linkType
+              ],
+            ),
+          }}
           onPress={async () => {
             try {
               openUrlLink && (await Linking.openURL(openUrlLink));
