@@ -3,7 +3,7 @@ const PrivacySettingsTexts = {
     sections: {
         items: {
             clarCollectedData: {
-                title: _('Tøm innsamlet data', 'Clear collected data', 'Tøm innsamlet data'),
+                title: _('Tøm innsamlet data', 'Clear collected data', 'Tøm innsamla data'),
             },
             controlPanel: {
                 title: _('Kontrollpanel for datainnsamling', 'Control panel for data collection', 'Kontrollpanel for datainnsamling'),
