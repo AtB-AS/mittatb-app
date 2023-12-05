@@ -78,8 +78,12 @@ export const Profile_DeleteProfileScreen = ({
         title: t(DeleteProfileTexts.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
-      parallaxContent={() => (
-        <View style={{marginHorizontal: theme.spacings.medium}}>
+      parallaxContent={(focusRef) => (
+        <View
+          style={{marginHorizontal: theme.spacings.medium}}
+          accessible={true}
+          ref={focusRef}
+        >
           <ThemeText
             type="heading--medium"
             color="background_accent_0"
