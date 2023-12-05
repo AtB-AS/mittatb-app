@@ -40,9 +40,9 @@ const PrivacySettingsTexts = {
             'Tøm innsamlet data',
         ),
         a11yHint: _(
-            'Aktivér for å tøm innsamlet data',
+            'Aktivér for å tømme innsamlet data',
             'Activate to clear collected data',
-            'Klikk for å tøm innsamla data',
+            'Aktivér for å tømme innsamla data',
         ),
         confirmTitle: _(
             'Er du sikker på at du vil slette innsamlet data?',
