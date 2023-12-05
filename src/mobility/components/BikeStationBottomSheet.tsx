@@ -99,7 +99,9 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                           svg={Bicycle}
                           primaryStat={availableBikes}
                           secondaryStat={t(
-                            BicycleTexts.stations.numBikesAvailable,
+                            BicycleTexts.stations.numBikesAvailable(
+                              availableBikes,
+                            ),
                           )}
                         />
                       }
@@ -111,7 +113,9 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                             t(BicycleTexts.stations.unknownDocksAvailable)
                           }
                           secondaryStat={t(
-                            BicycleTexts.stations.numDocksAvailable,
+                            BicycleTexts.stations.numDocksAvailable(
+                              station.numDocksAvailable,
+                            ),
                           )}
                         />
                       }

@@ -99,9 +99,10 @@ export const ScooterSheet = ({
                         <MobilityStat
                           svg={Battery}
                           primaryStat={vehicle.currentFuelPercent + '%'}
-                          secondaryStat={formatRange(
-                            vehicle.currentRangeMeters,
-                            language,
+                          secondaryStat={t(
+                            MobilityTexts.range(
+                              formatRange(vehicle.currentRangeMeters, language),
+                            ),
                           )}
                         />
                       }
@@ -176,7 +177,8 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     content: {
       flexDirection: 'row',
-      alignContent: 'center',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
