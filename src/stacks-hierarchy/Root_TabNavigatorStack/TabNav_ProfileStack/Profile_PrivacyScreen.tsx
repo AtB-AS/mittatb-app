@@ -32,7 +32,7 @@ export const Profile_PrivacyScreen = () => {
   const {clearHistory} = useSearchHistory();
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
-  const [isCleaningHistorydData, setIsCleaningHistoryData] =
+  const [isCleaningHistoryData, setIsCleaningHistoryData] =
     React.useState<boolean>(false);
   return (
     <View style={style.container}>
@@ -113,8 +113,8 @@ export const Profile_PrivacyScreen = () => {
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
             )}
-            loading={isCleaningHistorydData}
-            disabled={isCleaningHistorydData}
+            loading={isCleaningHistoryData}
+            disabled={isCleaningHistoryData}
             onPress={() =>
               destructiveAlert({
                 alertTitleString: t(
