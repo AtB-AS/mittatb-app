@@ -20,6 +20,14 @@ const DashboardTexts = {
     announcement: {
       closeA11yHint: _('Lukk melding', 'Close announcement', 'Lukk melding'),
     },
+    openUrl: {
+      external: _(
+        `Aktiver for å lese meir på ekstern side`,
+        `Activate to read more (external content)`,
+        `Aktiver for å lese meir på ekstern side`,
+      ),
+      deeplink: _('Aktiver for å opne lenke', 'Activate to open link', 'Aktiver for å opne lenke'),
+    },
   },
 };
 
