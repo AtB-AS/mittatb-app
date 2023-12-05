@@ -72,7 +72,7 @@ export const Profile_NotificationsScreen = () => {
       )}
       {permissionStatus !== 'loading' && (
         <View style={style.content}>
-          <Section withPadding>
+          <Section>
             <HeaderSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications
@@ -98,7 +98,40 @@ export const Profile_NotificationsScreen = () => {
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
-          <Section withPadding>
+          {permissionStatus !== 'error' && permissionStatus === 'denied' && (
+            <MessageBox
+              type="info"
+              title={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .permissionRequired.title,
+              )}
+              message={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .permissionRequired.message,
+              )}
+              onPressConfig={{
+                text: t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .permissionRequired.action,
+                ),
+                action: () => Linking.openSettings(),
+              }}
+            />
+          )}
+          {permissionStatus === 'error' && (
+            <MessageBox
+              type="error"
+              title={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .permissionError.title,
+              )}
+              message={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .permissionError.message,
+              )}
+            />
+          )}
+          <Section>
             <HeaderSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications
@@ -121,41 +154,6 @@ export const Profile_NotificationsScreen = () => {
               />
             ))}
           </Section>
-          {permissionStatus !== 'error' && permissionStatus === 'denied' && (
-            <MessageBox
-              style={style.messageBox}
-              type="info"
-              title={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionRequired.title,
-              )}
-              message={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionRequired.message,
-              )}
-              onPressConfig={{
-                text: t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .permissionRequired.action,
-                ),
-                action: () => Linking.openSettings(),
-              }}
-            />
-          )}
-          {permissionStatus === 'error' && (
-            <MessageBox
-              style={style.messageBox}
-              type="error"
-              title={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionError.title,
-              )}
-              message={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionError.message,
-              )}
-            />
-          )}
         </View>
       )}
     </FullScreenView>
@@ -167,9 +165,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginHorizontal: theme.spacings.medium,
   },
   content: {
-    marginTop: theme.spacings.medium,
-  },
-  messageBox: {
     margin: theme.spacings.medium,
+    rowGap: theme.spacings.medium,
   },
 }));
