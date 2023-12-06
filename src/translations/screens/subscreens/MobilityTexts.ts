@@ -76,6 +76,12 @@ export const MobilityTexts = {
     'Report as wrongly parked',
     'Rapporter som feilparkert',
   ),
+  range: (range: string) =>
+    _(
+      `omtrent ${range} rekkevidde`,
+      `approximately ${range} range`,
+      `omlag ${range} rekkjevidde`,
+    ),
 };
 
 export const ScooterTexts = {
@@ -104,12 +110,16 @@ export const ScooterTexts = {
 
 export const BicycleTexts = {
   stations: {
-    numBikesAvailable: _(
-      'Tilgjengelige sykler',
-      'Available bikes',
-      'Tilgjengelege syklar',
-    ),
-    numDocksAvailable: _('Ledige plasser', 'Available docks', 'Ledige plassar'),
+    numBikesAvailable: (amount: number) =>
+      amount === 1
+        ? _('ledig sykkel', 'available bike', 'ledig sykkel')
+        : _('ledige sykler', 'available bikes', 'ledige syklar'),
+    numDocksAvailable: (amount: number | undefined) => {
+      if (amount === undefined) return _('', '', '');
+      return amount === 1
+        ? _('ledig sykkelplass', 'available dock', 'ledig sykkelplass')
+        : _('ledige sykkelplasser', 'available docks', 'ledige sykkelplassar');
+    },
     unknownDocksAvailable: _('Ukjent antall', 'Unknown', 'Ukjent antal'),
   },
   humanPoweredBike: _('Sykkel', 'Bicycle', 'Sykkel'),
@@ -122,8 +132,13 @@ export const BicycleTexts = {
 
 export const CarSharingTexts = {
   stations: {
-    carsAvailable: (amount: number) =>
-      _(`${amount} ledig`, `${amount} available`, `${amount} ledig`),
+    carsAvailable: (amount: number, capacity: number) =>
+      _(
+        `${amount} av ${capacity}`,
+        `${amount} of ${capacity}`,
+        `${amount} av ${capacity}`,
+      ),
+    carsAvailableLabel: _('biler ledig', 'cars available', 'bilar ledige'),
     noCarsAvailable: _(
       'Ingen ledige biler',
       'No available cars',

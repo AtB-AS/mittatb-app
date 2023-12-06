@@ -1,4 +1,3 @@
-import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
@@ -12,7 +11,6 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
-import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -23,7 +21,6 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
-import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
@@ -46,7 +43,9 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {InfoTag} from '@atb/components/info-tag';
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
+import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
+import {useStorybookContext} from '@atb/storybook/StorybookContext';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -54,11 +53,11 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {privacy_policy_url, enable_ticketing} = useRemoteConfig();
+  const {enable_ticketing} = useRemoteConfig();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
-  const {clearHistory} = useSearchHistory();
   const {t, language} = useTranslation();
+  const analytics = useAnalytics();
   const {
     authenticationType,
     signOut,
@@ -73,6 +72,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     fareContracts,
     serverNow,
   );
+  const {setEnabled: setStorybookEnabled} = useStorybookContext();
+
   const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {configurableLinks} = useFirestoreConfiguration();
@@ -187,8 +188,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           )}
           {authenticationType === 'phone' && (
             <LinkSectionItem
-              text={t(DeleteProfileTexts.header.title)}
-              onPress={() => navigation.navigate('Profile_DeleteProfileScreen')}
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.editProfile
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
             />
           )}
           {authenticationType === 'phone' && (
@@ -216,6 +220,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       .confirm,
                   ),
                   destructiveArrowFunction: async () => {
+                    Bugsnag.leaveBreadcrumb('User logging out');
+                    analytics.logEvent('Profile', 'User logging out');
                     setIsLoading(true);
                     try {
                       // On logout we delete the user's token
@@ -294,6 +300,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onPress={() => navigation.navigate('Profile_LanguageScreen')}
             testID="languageButton"
           />
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.privacy.label,
+            )}
+            label="new"
+            onPress={() => navigation.navigate('Profile_PrivacyScreen')}
+            testID="privacyButton"
+          />
           {isPushNotificationsEnabled && (
             <LinkSectionItem
               text={t(
@@ -353,54 +367,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             testID="favoriteDeparturesButton"
             onPress={() =>
               navigation.navigate('Profile_FavoriteDeparturesScreen')
-            }
-          />
-        </Section>
-        <Section withPadding>
-          <HeaderSectionItem text={t(ProfileTexts.sections.privacy.heading)} />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
-            )}
-            icon="external-link"
-            accessibility={{
-              accessibilityHint: t(
-                ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,
-              ),
-            }}
-            testID="privacyButton"
-            onPress={() => Linking.openURL(privacy_policy_url)}
-          />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
-            )}
-            icon={<ThemeIcon svg={Delete} />}
-            accessibility={{
-              accessibilityHint: t(
-                ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                  .a11yHint,
-              ),
-            }}
-            testID="clearHistoryButton"
-            onPress={() =>
-              destructiveAlert({
-                alertTitleString: t(
-                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                    .confirmTitle,
-                ),
-                cancelAlertString: t(
-                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                    .alert.cancel,
-                ),
-                confirmAlertString: t(
-                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                    .alert.confirm,
-                ),
-                destructiveArrowFunction: async () => {
-                  await clearHistory();
-                },
-              })
             }
           />
         </Section>
@@ -524,6 +490,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               text="Design system"
               testID="designSystemButton"
               onPress={() => navigation.navigate('Profile_DesignSystemScreen')}
+            />
+            <LinkSectionItem
+              text="Storybook"
+              onPress={() => setStorybookEnabled(true)}
             />
             <LinkSectionItem
               text="Debug"

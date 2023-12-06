@@ -23,6 +23,7 @@ function cleanQuery(query: TripsQueryVariables) {
     when: query.when,
     arriveBy: query.arriveBy,
     cursor: query.cursor,
+    transferSlack: query.transferSlack,
     transferPenalty: query.transferPenalty,
     waitReluctance: query.waitReluctance,
     walkReluctance: query.walkReluctance,

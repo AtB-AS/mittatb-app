@@ -8,9 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../navigation-types';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';
 import {ChangeTokenAction} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/ChangeTokenAction';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {useIsFocused} from '@react-navigation/native';
-import {useTokenToggleDetails} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/use-token-toggle-details';
+import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
@@ -18,13 +16,8 @@ type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
 export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {deviceInspectionStatus} = useMobileTokenContextState();
-  const screenHasFocus = useIsFocused();
   const {disable_travelcard} = useRemoteConfig();
-  const shouldFetchTokenDetails = screenHasFocus && deviceInspectionStatus !== 'loading';
-  const {shouldShowLoader, toggleLimit, maxToggleLimit} = useTokenToggleDetails(
-    shouldFetchTokenDetails,
-  );
+  const {toggleLimit, maxToggleLimit} = useTokenToggleDetails(true);
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -42,7 +35,6 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
             navigation.navigate('Profile_SelectTravelTokenScreen')
           }
           toggleLimit={toggleLimit}
-          shouldShowLoader={shouldShowLoader}
         />
         <FaqSection toggleMaxLimit={maxToggleLimit} />
       </ScrollView>

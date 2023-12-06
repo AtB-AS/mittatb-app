@@ -30,6 +30,8 @@ import {
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
+import {TokenToggleInfo} from '@atb/token-toggle-info';
+import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
 
 type Props = {onAfterSave: () => void};
 
@@ -43,6 +45,8 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     useFirestoreConfiguration();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
+  const {toggleLimit} = useTokenToggleDetails(true);
+
   const {serverNow} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
 
@@ -251,6 +255,13 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         )}
 
+        {toggleLimit !== undefined && (
+          <TokenToggleInfo
+            style={styles.tokenInfo}
+            textColor="background_accent_0"
+          />
+        )}
+
         {saveState.saving ? (
           <ActivityIndicator size="large" />
         ) : (
@@ -273,6 +284,11 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.static.background.background_accent_0.background,
     flex: 1,
+  },
+  tokenInfo: {
+    flexDirection: 'row',
+    marginTop: theme.spacings.small,
+    marginBottom: theme.spacings.large,
   },
   scrollView: {
     padding: theme.spacings.medium,

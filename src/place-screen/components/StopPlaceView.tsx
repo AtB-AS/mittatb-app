@@ -16,6 +16,7 @@ import {ThemeText} from '@atb/components/text';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {WalkingDistance} from '@atb/components/walking-distance';
+import {useAnalytics} from '@atb/analytics';
 
 const NUMBER_OF_DEPARTURES_PER_QUAY_TO_SHOW = 5;
 const NUMBER_OF_DEPARTURES_IN_BUFFER = 5;
@@ -70,6 +71,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
   const styles = useStyles();
   const {favoriteDepartures} = useFavorites();
   const {t} = useTranslation();
+  const analytics = useAnalytics();
   const searchStartTime =
     searchTime?.option !== 'now' ? searchTime.date : undefined;
   const {state, forceRefresh} = useDeparturesData(
@@ -131,15 +133,23 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
           )}
           {mode === 'Map' ? (
             <>
-              <WalkingDistance distance={props.distance} />
+              <WalkingDistance
+                distance={props.distance}
+                style={styles.walkingDistance}
+              />
               <View style={styles.buttonsContainer}>
                 <View style={styles.travelButton}>
                   <Button
                     text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-                    onPress={() =>
+                    onPress={() => {
+                      analytics.logEvent(
+                        'Map',
+                        'Stop place travelFrom button clicked',
+                        {id: stopPlace.id},
+                      );
                       props.setTravelTarget &&
-                      props.setTravelTarget('fromLocation')
-                    }
+                        props.setTravelTarget('fromLocation');
+                    }}
                     mode="primary"
                     style={styles.travelFromButtonPadding}
                   />
@@ -147,10 +157,15 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
                 <View style={styles.travelButton}>
                   <Button
                     text={t(DeparturesDialogSheetTexts.travelTo.title)}
-                    onPress={() =>
+                    onPress={() => {
+                      analytics.logEvent(
+                        'Map',
+                        'Stop place travelTo button clicked',
+                        {id: stopPlace.id},
+                      );
                       props.setTravelTarget &&
-                      props.setTravelTarget('toLocation')
-                    }
+                        props.setTravelTarget('toLocation');
+                    }}
                     mode="primary"
                     style={styles.travelToButtonPadding}
                   />
@@ -282,5 +297,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   title: {
     marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
+  },
+  walkingDistance: {
+    paddingBottom: theme.spacings.medium,
   },
 }));

@@ -21,6 +21,7 @@ export type OnboardingScreenParams = {
   footerDescription?: string;
   buttonText: string;
   buttonOnPress: () => void;
+  testID?: string;
 };
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -33,6 +34,7 @@ export const OnboardingScreen = ({
   footerDescription,
   buttonText,
   buttonOnPress,
+  testID,
 }: OnboardingScreenParams) => {
   const styles = useThemeStyles();
 
@@ -41,6 +43,7 @@ export const OnboardingScreen = ({
       footerButton={{
         onPress: buttonOnPress,
         text: buttonText,
+        testID: testID ? `${testID}Button` : 'nextButton',
       }}
       footerDescription={footerDescription}
     >

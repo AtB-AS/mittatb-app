@@ -78,7 +78,8 @@ export const useBeacons = () => {
       const permissions = await allowedPermissionForKettle();
       Kettle.start(permissions);
     }
-  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo]);
+    updateKettleInfo();
+  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, updateKettleInfo]);
 
   const stopBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
@@ -86,7 +87,8 @@ export const useBeacons = () => {
       const permissions = await allowedPermissionForKettle();
       Kettle.stop(permissions);
     }
-  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo]);
+    updateKettleInfo();
+  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, updateKettleInfo]);
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
@@ -94,12 +96,13 @@ export const useBeacons = () => {
       Kettle.revoke(BEACONS_CONSENTS);
       await storage.set(storeKey.beaconsConsent, "false");
     }
-  }, [isBeaconsSupported, isKettleSDKInitialized]);
+    updateKettleInfo();
+  }, [isBeaconsSupported, isKettleSDKInitialized, updateKettleInfo]);
 
-  const deleteCollectedData = useCallback(() => {
+  const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
     if (isKettleSDKInitialized) {
-      Kettle.deleteCollectedData();
+      await Kettle.deleteCollectedData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBeaconsSupported]);
@@ -147,15 +150,13 @@ export const useBeacons = () => {
         Kettle.grant(BEACONS_CONSENTS);
         await storage.set(storeKey.beaconsConsent, "true");
       });
+      updateKettleInfo();
+      await startBeacons();
     }
 
     return granted;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBeaconsSupported, initializeBeaconsSDK]);
-
-  useEffect(() => {
-    if (isBeaconsSupported && isKettleSDKInitialized) updateKettleInfo();
-  }, [isBeaconsSupported, isKettleSDKInitialized, kettleInfo, updateKettleInfo]);
+  }, [isBeaconsSupported, initializeBeaconsSDK, updateKettleInfo]);
 
   useEffect(() => {
     async function checkIsBeaconsReadyToBeInitialized() {
@@ -165,6 +166,10 @@ export const useBeacons = () => {
     }
     checkIsBeaconsReadyToBeInitialized();
   }, [isBeaconsSupported, initializeBeaconsSDK]);
+
+  useEffect(() => {
+    updateKettleInfo();
+  }, [updateKettleInfo]);
 
   return {
     onboardForBeacons,

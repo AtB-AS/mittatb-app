@@ -9,10 +9,7 @@ import {RootStackScreenProps} from './navigation-types';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {
-  PermissionType,
-  checkAndRequestPermission,
-} from '@atb/utils/permissions';
+import {useBeacons} from '@atb/beacons/use-beacons';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {OnboardingScreen} from '@atb/onboarding-screen';
 
@@ -31,20 +28,10 @@ export const Root_ShareTravelHabitsScreen = ({
   useEffect(() => {
     setAndStoreHasSeenShareTravelHabitsScreen(true);
   }, [setAndStoreHasSeenShareTravelHabitsScreen]);
+  const {onboardForBeacons} = useBeacons();
 
   const choosePermissions = async () => {
-    const bluetoothPermissionGranted = await checkAndRequestPermission(
-      PermissionType.Bluetooth,
-    );
-    if (bluetoothPermissionGranted) {
-      const locationAlwaysAllowPermissionGranted =
-        await checkAndRequestPermission(PermissionType.LocationAlwaysAllow);
-      if (locationAlwaysAllowPermissionGranted) {
-        await checkAndRequestPermission(
-          PermissionType.MotionAndFitnessActivity,
-        );
-      }
-    }
+    const _ = await onboardForBeacons();
     navigation.goBack();
   };
 
@@ -71,6 +58,7 @@ export const Root_ShareTravelHabitsScreen = ({
       footerDescription={t(ShareTravelHabitsTexts.bluetoothInfo)}
       buttonText={t(ShareTravelHabitsTexts.choosePermissions)}
       buttonOnPress={choosePermissions}
+      testID="shareTravelHabits"
     />
   );
 };

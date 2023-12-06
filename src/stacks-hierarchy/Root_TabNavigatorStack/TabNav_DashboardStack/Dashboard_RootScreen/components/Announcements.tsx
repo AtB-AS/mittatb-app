@@ -1,4 +1,4 @@
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsState} from '@atb/announcements';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {GenericClickableSectionItem, Section} from '@atb/components/sections';
@@ -11,19 +11,37 @@ import {DashboardTexts, useTranslation} from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {useAnalytics} from '@atb/analytics';
 import {AnnouncementType} from '@atb/announcements/types';
+import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
+import {useNow} from '@atb/utils/use-now';
+import {useBeacons} from '@atb/beacons/use-beacons';
+import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
+import Bugsnag from '@bugsnag/react-native';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
 export const Announcements = ({style: containerStyle}: Props) => {
-  const {announcements, dismissAnnouncement} = useAnnouncementsState();
+  const {findAnnouncements, dismissAnnouncement} = useAnnouncementsState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const style = useStyle();
   const analytics = useAnalytics();
+  const now = useNow(10000);
+  const {kettleInfo} = useBeacons();
+  const [hasSeenShareTravelHabitsScreen, _] =
+    useHasSeenShareTravelHabitsScreen();
 
-  if (announcements.length === 0) return null;
+  const ruleVariables = {
+    isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
+    hasSeenShareTravelHabitsScreen,
+  };
+
+  const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>
+    isWithinTimeRange(a, now),
+  );
+
+  if (filteredAnnouncements.length === 0) return null;
 
   const handleDismiss = (announcement: AnnouncementType) => {
     animateNextChange();
@@ -37,22 +55,30 @@ export const Announcements = ({style: containerStyle}: Props) => {
     <View style={containerStyle} testID="announcements">
       <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
       <ScrollView>
-        {announcements.map((a, i) => (
+        {filteredAnnouncements.map((a, i) => (
           <Section
             key={a.id}
-            style={i < announcements.length - 1 && style.announcement}
+            style={i < filteredAnnouncements.length - 1 && style.announcement}
             testID="announcement"
           >
             <GenericClickableSectionItem
               accessible={false}
-              onPress={() =>
-                openBottomSheet(() => (
-                  <AnnouncementSheet
-                    announcement={a}
-                    close={closeBottomSheet}
-                  />
-                ))
-              }
+              onPress={async () => {
+                if (a.openUrl?.link !== undefined) {
+                  try {
+                    await Linking.openURL(a.openUrl.link);
+                  } catch (err: any) {
+                    Bugsnag.notify(err);
+                  }
+                } else {
+                  openBottomSheet(() => (
+                    <AnnouncementSheet
+                      announcement={a}
+                      close={closeBottomSheet}
+                    />
+                  ));
+                }
+              }}
             >
               <Announcement
                 announcement={a}

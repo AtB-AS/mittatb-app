@@ -7,6 +7,7 @@ import {
   FlexibleTransportOptionTypeWithSelectionType,
   TravelSearchFiltersSelectionType,
 } from '@atb/travel-search-filters';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 
 type TravelSearchFiltersState =
   | {
@@ -33,6 +34,8 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
     travelSearchFilters?.transportModes;
   const flexibleTransportFilterOptionFromFirestore =
     travelSearchFilters?.flexibleTransport;
+  const travelSearchPreferencesFromFirestore =
+    travelSearchFilters?.travelSearchPreferences;
 
   const defaultTransportModeFilterOptions =
     transportModeFilterOptionsFromFirestore?.map((option) => ({
@@ -46,16 +49,26 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
       enabled: true,
     } as FlexibleTransportOptionTypeWithSelectionType);
 
+  const defaultTravelSearchPreferences: TravelSearchPreferenceWithSelectionType[] =
+    travelSearchPreferencesFromFirestore?.map((preference) => ({
+      ...preference,
+      selectedOption: preference.defaultOption,
+    })) ?? [];
+
   const initialTransportModeSelection =
     filters?.transportModes ?? defaultTransportModeFilterOptions;
 
   const initialFlexibleTransportFilterOption =
     filters?.flexibleTransport ?? defaultFlexibleTransportFilterOption;
 
+  const initialTravelSearchPreferences =
+    filters?.travelSearchPreferences ?? defaultTravelSearchPreferences;
+
   const [filtersSelection, setFiltersSelection] =
     useState<TravelSearchFiltersSelectionType>({
       transportModes: initialTransportModeSelection,
       flexibleTransport: initialFlexibleTransportFilterOption,
+      travelSearchPreferences: initialTravelSearchPreferences,
     });
 
   if (!travelSearchFilters?.transportModes) return {enabled: false};

@@ -1,5 +1,4 @@
 import {Location} from '@atb/favorites';
-import {TripSearchPreferences} from '@atb/preferences';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {
   Modes,
@@ -9,7 +8,7 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {TripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
 import {flatMap} from '@atb/utils/array';
-import {TravelSearchTransportModes} from '@atb-as/config-specs';
+import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {SearchTime} from '@atb/journey-date-picker';
 import {defaultJourneyModes} from './hooks';
@@ -31,7 +30,6 @@ export function createQuery(
   toLocation: Location,
   {searchTime, cursor}: SearchInput,
   arriveBy: boolean,
-  tripSearchPreferences: TripSearchPreferences | undefined,
   travelSearchFiltersSelection: TravelSearchFiltersSelectionType | undefined,
   journeySearchModes?: Modes,
 ): TripsQueryVariables {
@@ -50,16 +48,12 @@ export function createQuery(
         : undefined,
   };
 
-  const query = {
+  const query: TripsQueryVariables = {
     from,
     to,
     cursor,
     when: searchTime?.date,
     arriveBy,
-    transferPenalty: tripSearchPreferences?.transferPenalty,
-    waitReluctance: tripSearchPreferences?.waitReluctance,
-    walkReluctance: tripSearchPreferences?.walkReluctance,
-    walkSpeed: tripSearchPreferences?.walkSpeed,
     modes: journeySearchModes,
   };
 
@@ -79,11 +73,24 @@ export function createQuery(
       ),
     };
   }
+
+  if (travelSearchFiltersSelection?.travelSearchPreferences) {
+    travelSearchFiltersSelection.travelSearchPreferences.forEach(
+      (preference) => {
+        const value = preference.options.find(
+          (o) => o.id === preference.selectedOption,
+        )?.value;
+        if (value) {
+          query[preference.type] = value;
+        }
+      },
+    );
+  }
   return query;
 }
 
 function transportModeToEnum(
-  modes: TravelSearchTransportModes[],
+  modes: TravelSearchTransportModesType[],
 ): TransportModes[] {
   return modes.map((internal) => {
     return {

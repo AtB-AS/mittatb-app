@@ -4,6 +4,7 @@ import {Profile_AppearanceScreen} from './Profile_AppearanceScreen';
 import {Profile_RootScreen} from './Profile_RootScreen';
 import {Profile_TicketHistoryScreen} from './Profile_TicketHistoryScreen';
 import {Profile_LanguageScreen} from './Profile_LanguageScreen';
+import {Profile_PrivacyScreen} from './Profile_PrivacyScreen';
 import {Profile_EnrollmentScreen} from './Profile_EnrollmentScreen';
 import {Profile_SelectStartScreenScreen} from './Profile_SelectStartScreenScreen';
 import {Profile_DesignSystemScreen} from './Profile_DesignSystemScreen';
@@ -23,6 +24,7 @@ import {Profile_TravelTokenScreen} from './Profile_TravelTokenScreen';
 import {Profile_SelectTravelTokenScreen} from './Profile_SelectTravelTokenScreen';
 import {Profile_FavoriteListScreen} from './Profile_FavoriteListScreen';
 import {Profile_SortFavoritesScreen} from './Profile_SortFavoritesScreen';
+import {Profile_EditProfileScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_EditProfileScreen';
 import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 import {Profile_NotificationsScreen} from './Profile_NotificationsScreen';
 
@@ -49,6 +51,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_DeleteProfileScreen"
         component={Profile_DeleteProfileScreen}
+      />
+      <Stack.Screen
+        name="Profile_EditProfileScreen"
+        component={Profile_EditProfileScreen}
       />
       <Stack.Screen
         name="Profile_FavoriteListScreen"
@@ -81,6 +87,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_LanguageScreen"
         component={Profile_LanguageScreen}
+      />
+      <Stack.Screen
+        name="Profile_PrivacyScreen"
+        component={Profile_PrivacyScreen}
       />
       <Stack.Screen
         name="Profile_NotificationsScreen"

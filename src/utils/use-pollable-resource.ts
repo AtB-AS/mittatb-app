@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useInterval} from './use-interval';
 import {useIsLoading} from './use-is-loading';
-import {usePrevious} from '@atb/utils/use-previous';
 import {useIsFocusedAndActive} from './use-is-focused-and-active';
 
 type PollableResourceOptions<T> = {
@@ -31,8 +30,6 @@ type LoadingState = 'NO_LOADING' | 'WITH_LOADING';
 export const usePollableResource = <T, E extends Error = Error>(
   callback: (
     signal?: AbortSignal,
-    previousState?: T,
-    isInitialLoad?: boolean,
   ) => Promise<T>,
   opts: PollableResourceOptions<T>,
 ): [
@@ -50,8 +47,6 @@ export const usePollableResource = <T, E extends Error = Error>(
   const abortControllerRef = useRef<AbortController>();
   const pollTime = pollingTimeInSeconds * 1000;
 
-  const prevState = usePrevious(state);
-
   const reload = useCallback(
     function reload(
       loading: LoadingState = 'WITH_LOADING',
@@ -60,7 +55,7 @@ export const usePollableResource = <T, E extends Error = Error>(
       if (loading === 'WITH_LOADING') {
         setIsLoading(true);
       }
-      callback(abortController?.signal, prevState, loading === 'WITH_LOADING')
+      callback(abortController?.signal)
         .then((newState) => {
           setState(newState);
           setError(undefined);
@@ -75,7 +70,7 @@ export const usePollableResource = <T, E extends Error = Error>(
           }
         });
     },
-    [callback, prevState, setIsLoading],
+    [callback, setIsLoading],
   );
 
   useEffect(() => {

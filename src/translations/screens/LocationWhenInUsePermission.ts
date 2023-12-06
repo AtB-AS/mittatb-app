@@ -3,7 +3,7 @@ import {translation as _} from '../commons';
 const LocationWhenInUsePermissionTexts = {
   title: _(
     'Gjør kart og søk enklere',
-    'Make maps and searches easier',
+    'Make map and search easier',
     'Gjer kart og søk enklare',
   ),
   description: _(

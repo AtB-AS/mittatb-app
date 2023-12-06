@@ -11,6 +11,7 @@ export type ProfileStackParams = {
   Profile_PaymentOptionsScreen: undefined;
   Profile_TicketHistoryScreen: undefined;
   Profile_DeleteProfileScreen: undefined;
+  Profile_EditProfileScreen: undefined;
   Profile_FavoriteListScreen: undefined;
   Profile_SortFavoritesScreen: undefined;
   Profile_FavoriteDeparturesScreen: undefined;
@@ -19,6 +20,7 @@ export type ProfileStackParams = {
   Profile_SelectTravelTokenScreen: undefined;
   Profile_AppearanceScreen: undefined;
   Profile_LanguageScreen: undefined;
+  Profile_PrivacyScreen: undefined;
   Profile_NotificationsScreen: undefined;
   Profile_DefaultUserProfileScreen: undefined;
   Profile_EnrollmentScreen: undefined;

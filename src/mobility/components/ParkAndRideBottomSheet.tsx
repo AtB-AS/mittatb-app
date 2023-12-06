@@ -3,16 +3,11 @@ import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {VehicleStats} from '@atb/mobility/components/VehicleStats';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
+import {StyleSheet} from '@atb/theme';
 import {Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {ParkAndRideTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {Parking as ParkingDark} from '@atb/assets/svg/color/icons/vehicles/dark';
-import {Parking as ParkingLight} from '@atb/assets/svg/color/icons/vehicles/light';
 import {ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Car} from '@atb/assets/svg/mono-icons/transportation';
 import {
   NavigateToTripSearchCallback,
   ParkingType,
@@ -23,6 +18,13 @@ import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesD
 import {Feature, Point} from 'geojson';
 import {SearchLocation} from '@atb/favorites';
 import {MessageBox} from '@atb/components/message-box';
+import {GenericSectionItem, Section} from '@atb/components/sections';
+import {ThemeText} from '@atb/components/text';
+import {MobilityStats} from '@atb/mobility/components/MobilityStats';
+import {MobilityStat} from '@atb/mobility/components/MobilityStat';
+import {Parking} from '@atb/assets/svg/mono-icons/places';
+import {Car} from '@atb/assets/svg/mono-icons/transportation-entur';
+import {ThemedParkAndRide} from '@atb/theme/ThemedAssets';
 
 type Props = {
   name: string | undefined;
@@ -43,8 +45,7 @@ export const ParkAndRideBottomSheet = ({
   navigateToTripSearch,
 }: Props) => {
   const {t} = useTranslation();
-  const {themeName} = useTheme();
-  const style = useSheetStyle();
+  const styles = useSheetStyle();
   const heading = `${t(ParkAndRideTexts.title)} ${name}`;
 
   const [longitude, latitude] = feature.geometry.coordinates;
@@ -67,55 +68,72 @@ export const ParkAndRideBottomSheet = ({
           onPress: close,
           text: t(ScreenHeaderTexts.headerButton.close.text),
         }}
-        title={heading}
+        title={t(ParkAndRideTexts.title)}
         color="background_1"
         setFocusOnLoad={false}
       />
       <ScrollView>
-        <WalkingDistance distance={distance} />
-        <View style={style.buttonsContainer}>
-          <View style={style.travelButton}>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.travelButton}>
             <Button
               text={t(DeparturesDialogSheetTexts.travelFrom.title)}
               onPress={() =>
                 navigateToTripSearch(searchLocation, 'fromLocation')
               }
               mode="primary"
-              style={style.travelFromButtonPadding}
+              style={styles.travelFromButtonPadding}
             />
           </View>
-          <View style={style.travelButton}>
+          <View style={styles.travelButton}>
             <Button
               text={t(DeparturesDialogSheetTexts.travelTo.title)}
               onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
               mode="primary"
-              style={style.travelToButtonPadding}
+              style={styles.travelToButtonPadding}
             />
           </View>
         </View>
-        <View style={style.container}>
-          <MessageBox type="info" message={t(ParkAndRideTexts.disclaimer)} />
-          <VehicleStats
-            left={
-              <VehicleStat
-                svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
-                primaryStat=""
-                secondaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+        <ScrollView style={styles.container}>
+          <Section>
+            <GenericSectionItem>
+              <View style={styles.parkingName}>
+                <ThemeText type="body__secondary" color="secondary">
+                  {heading}
+                </ThemeText>
+                <WalkingDistance distance={distance} />
+              </View>
+            </GenericSectionItem>
+            <GenericSectionItem>
+              <View style={styles.mobilityStatContainer}>
+                <MobilityStats
+                  first={
+                    <MobilityStat
+                      svg={parkingFor === 'pedalCycle' ? Bicycle : Car}
+                      primaryStat={t(ParkAndRideTexts.parkingFor(parkingFor))}
+                    />
+                  }
+                  second={
+                    <MobilityStat
+                      svg={Parking}
+                      primaryStat={capacity ?? ''}
+                      secondaryStat={
+                        capacity
+                          ? t(ParkAndRideTexts.capacity)
+                          : t(ParkAndRideTexts.unknownCapacity)
+                      }
+                    />
+                  }
+                />
+                <ThemedParkAndRide />
+              </View>
+              <MessageBox
+                style={styles.disclaimer}
+                type="info"
+                message={t(ParkAndRideTexts.disclaimer)}
               />
-            }
-            right={
-              <VehicleStat
-                svg={themeName === 'dark' ? ParkingDark : ParkingLight}
-                primaryStat={capacity ?? ''}
-                secondaryStat={
-                  capacity
-                    ? t(ParkAndRideTexts.capacity)
-                    : t(ParkAndRideTexts.unknownCapacity)
-                }
-              />
-            }
-          />
-        </View>
+            </GenericSectionItem>
+          </Section>
+        </ScrollView>
       </ScrollView>
     </BottomSheetContainer>
   );
@@ -129,7 +147,8 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       marginBottom: Math.max(bottom, theme.spacings.medium),
     },
     buttonsContainer: {
-      padding: theme.spacings.medium,
+      paddingHorizontal: theme.spacings.medium,
+      marginBottom: theme.spacings.large,
       flexDirection: 'row',
     },
     travelButton: {
@@ -140,6 +159,16 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     travelToButtonPadding: {
       marginLeft: theme.spacings.medium / 2,
+    },
+    parkingName: {
+      flexDirection: 'row',
+    },
+    mobilityStatContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    disclaimer: {
+      marginTop: theme.spacings.medium,
     },
   };
 });

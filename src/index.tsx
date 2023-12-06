@@ -33,6 +33,9 @@ import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
 import {AnnouncementsContextProvider} from './announcements';
+import {PopOverContextProvider} from '@atb/popover';
+import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
+import {NotificationContextProvider} from './notifications';
 
 configureAndStartBugsnag();
 
@@ -68,53 +71,59 @@ export const App = () => {
 
   return (
     <SafeAreaProvider>
-      <ErrorBoundary type="full-screen">
-        <AppContextProvider>
-          <TimeContextProvider>
-            <PreferencesContextProvider>
-              <LocaleContextProvider>
-                <AuthContextProvider>
-                  <AnalyticsContextProvider>
-                    <AccessibilityContextProvider>
-                      <ThemeContextProvider>
-                        <FavoritesContextProvider>
-                          <FiltersContextProvider>
-                            <SearchHistoryContextProvider>
-                              <RemoteConfigContextProvider>
-                                <FirestoreConfigurationContextProvider>
-                                  <TicketingContextProvider>
-                                    <MobileTokenContextProvider>
-                                      <AppLanguageProvider>
-                                        <GeolocationContextProvider>
-                                          <GlobalMessagesContextProvider>
-                                            <AnnouncementsContextProvider>
-                                              <ReactQueryProvider>
-                                                <BottomSheetProvider>
-                                                  <FeedbackQuestionsProvider>
-                                                    <RootStack />
-                                                  </FeedbackQuestionsProvider>
-                                                </BottomSheetProvider>
-                                              </ReactQueryProvider>
-                                            </AnnouncementsContextProvider>
-                                          </GlobalMessagesContextProvider>
-                                        </GeolocationContextProvider>
-                                      </AppLanguageProvider>
-                                    </MobileTokenContextProvider>
-                                  </TicketingContextProvider>
-                                </FirestoreConfigurationContextProvider>
-                              </RemoteConfigContextProvider>
-                            </SearchHistoryContextProvider>
-                          </FiltersContextProvider>
-                        </FavoritesContextProvider>
-                      </ThemeContextProvider>
-                    </AccessibilityContextProvider>
-                  </AnalyticsContextProvider>
-                </AuthContextProvider>
-              </LocaleContextProvider>
-            </PreferencesContextProvider>
-          </TimeContextProvider>
-        </AppContextProvider>
-      </ErrorBoundary>
+      <StorybookContextProvider>
+        <ErrorBoundary type="full-screen">
+          <AppContextProvider>
+            <TimeContextProvider>
+              <PreferencesContextProvider>
+                <LocaleContextProvider>
+                  <AuthContextProvider>
+                    <AnalyticsContextProvider>
+                      <AccessibilityContextProvider>
+                        <ThemeContextProvider>
+                          <FavoritesContextProvider>
+                            <FiltersContextProvider>
+                              <SearchHistoryContextProvider>
+                                <RemoteConfigContextProvider>
+                                  <FirestoreConfigurationContextProvider>
+                                    <TicketingContextProvider>
+                                      <MobileTokenContextProvider>
+                                        <AppLanguageProvider>
+                                          <GeolocationContextProvider>
+                                            <GlobalMessagesContextProvider>
+                                              <AnnouncementsContextProvider>
+                                                <ReactQueryProvider>
+                                                  <NotificationContextProvider>
+                                                    <PopOverContextProvider>
+                                                      <BottomSheetProvider>
+                                                        <FeedbackQuestionsProvider>
+                                                          <RootStack />
+                                                        </FeedbackQuestionsProvider>
+                                                      </BottomSheetProvider>
+                                                    </PopOverContextProvider>
+                                                  </NotificationContextProvider>
+                                                </ReactQueryProvider>
+                                              </AnnouncementsContextProvider>
+                                            </GlobalMessagesContextProvider>
+                                          </GeolocationContextProvider>
+                                        </AppLanguageProvider>
+                                      </MobileTokenContextProvider>
+                                    </TicketingContextProvider>
+                                  </FirestoreConfigurationContextProvider>
+                                </RemoteConfigContextProvider>
+                              </SearchHistoryContextProvider>
+                            </FiltersContextProvider>
+                          </FavoritesContextProvider>
+                        </ThemeContextProvider>
+                      </AccessibilityContextProvider>
+                    </AnalyticsContextProvider>
+                  </AuthContextProvider>
+                </LocaleContextProvider>
+              </PreferencesContextProvider>
+            </TimeContextProvider>
+          </AppContextProvider>
+        </ErrorBoundary>
+      </StorybookContextProvider>
     </SafeAreaProvider>
   );
 };

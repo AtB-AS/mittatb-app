@@ -13,15 +13,16 @@ import {
   getDismissedAnnouncementsFromStore,
   setDismissedAnnouncementInStore,
 } from '@atb/announcements/storage';
+import {RuleVariables, checkRules} from '@atb/rule-engine';
 
 type AnnouncementsContextState = {
-  announcements: AnnouncementType[];
+  findAnnouncements: (ruleVariables?: RuleVariables) => AnnouncementType[];
   dismissAnnouncement: (announcement: AnnouncementType) => void;
   resetDismissedAnnouncements: () => void;
 };
 
 const AnnouncementsContext = createContext<AnnouncementsContextState>({
-  announcements: [],
+  findAnnouncements: () => [],
   dismissAnnouncement: (_: AnnouncementType) => {},
   resetDismissedAnnouncements: () => {},
 });
@@ -62,10 +63,24 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
     setDismissedAnnouncementInStore([]);
   }, []);
 
+  const findAnnouncements = useCallback(
+    (ruleVariables: RuleVariables = {}) => {
+      return announcements.filter((announcement) => {
+        if (announcement.rules?.length) {
+          const passRules = checkRules(announcement.rules, ruleVariables);
+          if (!passRules) return false;
+        }
+
+        return true;
+      });
+    },
+    [announcements],
+  );
+
   return (
     <AnnouncementsContext.Provider
       value={{
-        announcements,
+        findAnnouncements,
         dismissAnnouncement,
         resetDismissedAnnouncements,
       }}

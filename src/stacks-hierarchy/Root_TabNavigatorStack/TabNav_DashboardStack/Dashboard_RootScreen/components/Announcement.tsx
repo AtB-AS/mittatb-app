@@ -50,6 +50,11 @@ export const Announcement = ({announcement, onDismiss}: Props) => {
           <ThemeText>
             {getTextForLanguage(announcement.summary, language)}
           </ThemeText>
+          {announcement.openUrl?.title && (
+            <ThemeText type="body__primary--underline" style={style.spacing}>
+              {getTextForLanguage(announcement.openUrl.title, language)}
+            </ThemeText>
+          )}
         </View>
       </View>
       <PressableOpacity
@@ -85,6 +90,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   textContainer: {
     flex: 1,
+  },
+  spacing: {
+    marginTop: theme.spacings.medium,
   },
   close: {
     flexGrow: 0,

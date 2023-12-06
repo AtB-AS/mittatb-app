@@ -1,10 +1,7 @@
-import {deleteProfile} from '@atb/api/delete_profile';
+import {deleteProfile} from '@atb/api/profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthState} from '@atb/auth';
-import {MessageBox} from '@atb/components/message-box';
-import {FullScreenHeader} from '@atb/components/screen-header';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
@@ -13,9 +10,12 @@ import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import React, {useEffect, useState} from 'react';
 import {Alert, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ThemeText} from '@atb/components/text';
+import {MessageBox} from '@atb/components/message-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
+import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContextState} from '@atb/time';
 
 type DeleteProfileScreenProps =
@@ -70,45 +70,59 @@ export const Profile_DeleteProfileScreen = ({
     }
     setDeleteError(false);
   }, [deleteError, setDeleteError, t]);
+  const {theme} = useTheme();
 
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(DeleteProfileTexts.header.title)}
-        leftButton={{type: 'back'}}
+    <FullScreenView
+      headerProps={{
+        title: t(DeleteProfileTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <View
+          style={{marginHorizontal: theme.spacings.medium}}
+          accessible={true}
+          ref={focusRef}
+        >
+          <ThemeText
+            type="heading--medium"
+            color="background_accent_0"
+            style={{flexShrink: 1}}
+          >
+            {t(DeleteProfileTexts.header.title)}
+          </ThemeText>
+        </View>
+      )}
+    >
+      <MessageBox
+        message={t(DeleteProfileTexts.deleteInfo)}
+        type="info"
+        style={style.contentMargin}
       />
 
-      <ScrollView>
+      {activeFareContracts && (
         <MessageBox
-          message={t(DeleteProfileTexts.deleteInfo)}
-          type="info"
-          style={style.contentMargin}
+          message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
+          type="warning"
+          style={{...style.contentMargin, marginTop: 0}}
         />
+      )}
 
-        {activeFareContracts && (
-          <MessageBox
-            message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
-            type="warning"
-            style={{...style.contentMargin, marginTop: 0}}
-          />
-        )}
-
-        <Section withPadding>
-          <LinkSectionItem
-            subtitle={`${customerNumber}`}
-            text={t(DeleteProfileTexts.customerNumber)}
-            accessibility={{
-              accessibilityLabel: t(
-                DeleteProfileTexts.buttonA11ytext(customerNumber?.toString()),
-              ),
-            }}
-            onPress={() => doDeleteProfile()}
-            disabled={activeFareContracts}
-            icon={<ThemeIcon svg={Delete} colorType="error" />}
-          />
-        </Section>
-      </ScrollView>
-    </View>
+      <Section withPadding>
+        <LinkSectionItem
+          subtitle={`${customerNumber}`}
+          text={t(DeleteProfileTexts.customerNumber)}
+          accessibility={{
+            accessibilityLabel: t(
+              DeleteProfileTexts.buttonA11ytext(customerNumber?.toString()),
+            ),
+          }}
+          onPress={() => doDeleteProfile()}
+          disabled={activeFareContracts}
+          icon={<ThemeIcon svg={Delete} colorType="error" />}
+        />
+      </Section>
+    </FullScreenView>
   );
 };
 

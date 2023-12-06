@@ -9,7 +9,7 @@ import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
 import {MessageBox} from '@atb/components/message-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
-import {usePushNotifications, isConfigEnabled} from '@atb/notifications';
+import {useNotifications, isConfigEnabled} from '@atb/notifications';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -17,8 +17,13 @@ export const Profile_NotificationsScreen = () => {
   const style = useStyles();
   const {t} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
-  const {status, config, register, checkPermissions, updateConfig} =
-    usePushNotifications();
+  const {
+    permissionStatus,
+    config,
+    requestPermissions,
+    checkPermissions,
+    updateConfig,
+  } = useNotifications();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -28,7 +33,7 @@ export const Profile_NotificationsScreen = () => {
 
   const handlePushNotificationToggle = async (enabled: boolean) => {
     if (enabled) {
-      await register();
+      await requestPermissions();
     }
     updateConfig({config_type: 'mode', id: 'push', enabled});
   };
@@ -52,8 +57,10 @@ export const Profile_NotificationsScreen = () => {
         </View>
       )}
     >
-      {status === 'loading' && <Processing message={t(dictionary.loading)} />}
-      {status !== 'loading' && (
+      {permissionStatus === 'loading' && (
+        <Processing message={t(dictionary.loading)} />
+      )}
+      {permissionStatus !== 'loading' && (
         <View style={style.content}>
           <Section withPadding>
             <ToggleSectionItem
@@ -66,13 +73,16 @@ export const Profile_NotificationsScreen = () => {
                   .pushToggle.subText,
               )}
               value={
-                status === 'granted' && isConfigEnabled(config?.modes, 'push')
+                permissionStatus === 'granted' &&
+                isConfigEnabled(config?.modes, 'push')
               }
-              disabled={status === 'updating' || status === 'denied'}
+              disabled={
+                permissionStatus === 'updating' || permissionStatus === 'denied'
+              }
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
-          {status !== 'error' && status === 'denied' && (
+          {permissionStatus !== 'error' && permissionStatus === 'denied' && (
             <MessageBox
               style={style.messageBox}
               type="info"
@@ -93,7 +103,7 @@ export const Profile_NotificationsScreen = () => {
               }}
             />
           )}
-          {status === 'error' && (
+          {permissionStatus === 'error' && (
             <MessageBox
               style={style.messageBox}
               type="error"

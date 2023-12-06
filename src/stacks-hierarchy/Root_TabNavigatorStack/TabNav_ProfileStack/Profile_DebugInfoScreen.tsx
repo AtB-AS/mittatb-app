@@ -44,7 +44,6 @@ import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_T
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
-import {Slider} from '@atb/components/slider';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {useBeacons} from '@atb/beacons/use-beacons';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
@@ -52,7 +51,7 @@ import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-shar
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useAnnouncementsState} from '@atb/announcements';
 import {
-  usePushNotifications,
+  useNotifications,
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
@@ -132,12 +131,22 @@ export const Profile_DebugInfoScreen = () => {
     deviceInspectionStatus,
     mobileTokenStatus,
     barcodeStatus,
-    debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
+    debug: {
+      nativeToken,
+      validateToken,
+      removeRemoteToken,
+      renewToken,
+    },
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
-  const {register: registerForPushNotifications} = usePushNotifications();
-  const [fcmToken, setFcmToken] = useState<string>();
+  const {
+    fcmToken,
+    permissionStatus: pushNotificationPermissionStatus,
+    register: registerNotifications,
+    requestPermissions: requestPushNotificationPermissions,
+    checkPermissions: checkPushNotificationPermissions,
+  } = useNotifications();
 
   const remoteConfig = useRemoteConfig();
 
@@ -157,14 +166,7 @@ export const Profile_DebugInfoScreen = () => {
   }
 
   const {setPreference, preferences} = usePreferences();
-  const {showTestIds, tripSearchPreferences, debugShowSeconds} = preferences;
-
-  const tripSearchDefaults = {
-    transferPenalty: 10,
-    waitReluctance: 1.5,
-    walkReluctance: 1.5,
-    walkSpeed: 1.3,
-  };
+  const {showTestIds, debugShowSeconds} = preferences;
 
   return (
     <View style={style.container}>
@@ -189,15 +191,6 @@ export const Profile_DebugInfoScreen = () => {
               setPreference({debugShowSeconds});
             }}
           />
-          <LinkSectionItem
-            text="Register for push notifications"
-            onPress={() => registerForPushNotifications().then(setFcmToken)}
-          />
-          {fcmToken && (
-            <GenericSectionItem>
-              <ThemeText>{`FCM token: ${fcmToken}`}</ThemeText>
-            </GenericSectionItem>
-          )}
           <LinkSectionItem
             text="Restart onboarding"
             onPress={restartOnboarding}
@@ -272,6 +265,10 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() =>
               storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
             }
+          />
+          <LinkSectionItem
+            text="Reset one time popovers"
+            onPress={() => storage.remove(StorageModelKeysEnum.OneTimePopOver)}
           />
         </Section>
         <Section withPadding withTopPadding>
@@ -392,77 +389,6 @@ export const Profile_DebugInfoScreen = () => {
 
         <Section withPadding withTopPadding>
           <ExpandableSectionItem
-            text="Trip search parameters"
-            showIconText={true}
-            expandContent={
-              <View>
-                <ThemeText type="body__secondary" color="secondary">
-                  Press labels to reset to default
-                </ThemeText>
-                <LabeledSlider
-                  max={50}
-                  label="transferPenalty"
-                  defaultValue={tripSearchDefaults.transferPenalty}
-                  initialValue={tripSearchPreferences?.transferPenalty}
-                  step={1}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        transferPenalty: n,
-                      },
-                    });
-                  }}
-                />
-                <LabeledSlider
-                  max={5}
-                  label="waitReluctance"
-                  defaultValue={tripSearchDefaults.waitReluctance}
-                  initialValue={tripSearchPreferences?.waitReluctance}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        waitReluctance: n,
-                      },
-                    });
-                  }}
-                />
-                <LabeledSlider
-                  max={5}
-                  label="walkReluctance"
-                  defaultValue={tripSearchDefaults.walkReluctance}
-                  initialValue={tripSearchPreferences?.walkReluctance}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        walkReluctance: n,
-                      },
-                    });
-                  }}
-                />
-                <LabeledSlider
-                  max={5}
-                  label="walkSpeed"
-                  defaultValue={tripSearchDefaults.walkSpeed}
-                  initialValue={tripSearchPreferences?.walkSpeed}
-                  onSetValue={(n: number) => {
-                    setPreference({
-                      tripSearchPreferences: {
-                        ...tripSearchPreferences,
-                        walkSpeed: n,
-                      },
-                    });
-                  }}
-                />
-              </View>
-            }
-          />
-        </Section>
-
-        <Section withPadding withTopPadding>
-          <ExpandableSectionItem
             text="Firebase Auth user info"
             showIconText={true}
             expandContent={
@@ -511,6 +437,36 @@ export const Profile_DebugInfoScreen = () => {
                   ))}
                 </View>
               )
+            }
+          />
+        </Section>
+
+        <Section withPadding withTopPadding>
+          <ExpandableSectionItem
+            text="Notifications"
+            showIconText={true}
+            expandContent={
+              <>
+                <ThemeText>
+                  Notification status: {pushNotificationPermissionStatus}
+                </ThemeText>
+                <Button
+                  style={style.button}
+                  onPress={requestPushNotificationPermissions}
+                  text="Request permissions"
+                />
+                <Button
+                  style={style.button}
+                  onPress={checkPushNotificationPermissions}
+                  text="Check permissions"
+                />
+                <Button
+                  style={style.button}
+                  onPress={registerNotifications}
+                  text="Register"
+                />
+                <ThemeText>FCM Token: {fcmToken}</ThemeText>
+              </>
             }
           />
         </Section>
@@ -569,14 +525,14 @@ export const Profile_DebugInfoScreen = () => {
             showIconText={true}
             expandContent={
               <View>
-                {token && (
+                {nativeToken && (
                   <View>
-                    <ThemeText>{`Token id: ${token.getTokenId()}`}</ThemeText>
+                    <ThemeText>{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
                     <ThemeText>{`Token start: ${new Date(
-                      token.getValidityStart(),
+                      nativeToken.getValidityStart(),
                     ).toISOString()}`}</ThemeText>
                     <ThemeText>{`Token end: ${new Date(
-                      token.getValidityEnd(),
+                      nativeToken.getValidityEnd(),
                     ).toISOString()}`}</ThemeText>
                   </View>
                 )}
@@ -591,26 +547,21 @@ export const Profile_DebugInfoScreen = () => {
                   text="Reload token(s)"
                   onPress={retry}
                 />
-                <Button
-                  style={style.button}
-                  text="Create token"
-                  onPress={createToken}
-                />
-                {token && (
+                {nativeToken && (
                   <Button
                     style={style.button}
                     text="Wipe token"
                     onPress={wipeToken}
                   />
                 )}
-                {token && (
+                {nativeToken && (
                   <Button
                     style={style.button}
                     text="Validate token"
                     onPress={validateToken}
                   />
                 )}
-                {token && (
+                {nativeToken && (
                   <Button
                     style={style.button}
                     text="Renew token"
@@ -821,52 +772,6 @@ function MapEntry({title, value}: {title: string; value: any}) {
       </View>
     );
   }
-}
-//TODO gå inn i mapValue() over og sett testID på verdien av userId -> deretter test på denne i account.e2e.ts
-function LabeledSlider({
-  label,
-  min = 0,
-  max,
-  step = 0.1,
-  defaultValue,
-  initialValue,
-  onSetValue,
-}: {
-  label: string;
-  min?: number;
-  max: number;
-  step?: number;
-  defaultValue?: number;
-  initialValue?: number;
-  onSetValue: (n: number) => void;
-}): JSX.Element {
-  const [pref, setPref] = useState(initialValue || defaultValue);
-
-  return (
-    <GenericSectionItem>
-      <ThemeText
-        onPress={
-          defaultValue
-            ? () => {
-                onSetValue(defaultValue);
-                setPref(defaultValue);
-              }
-            : undefined
-        }
-      >
-        {label}: {pref?.toFixed(1)}
-      </ThemeText>
-      <Slider
-        containerStyle={{width: '100%'}}
-        minimumValue={min}
-        maximumValue={max}
-        step={step}
-        value={pref}
-        onValueChange={setPref}
-        onSlidingComplete={onSetValue}
-      />
-    </GenericSectionItem>
-  );
 }
 
 const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({

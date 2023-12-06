@@ -4,25 +4,24 @@ import {
   PricingSegmentFragment,
 } from '@atb/api/types/generated/fragments/mobility-shared';
 import {ScooterTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
-import {VehicleStat} from '@atb/mobility/components/VehicleStat';
+import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {Language, useTranslation} from '@atb/translations';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {hasMultiplePricingPlans} from '@atb/mobility/utils';
 import {OperatorBenefitIdType} from '@atb/configuration';
+import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
+import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 
 type PricingPlanProps = {
   operator: string;
   plan: PricingPlanFragment;
-  eligibleBenefit?: OperatorBenefitIdType | undefined;
+  benefit?: OperatorBenefitType | undefined;
 };
-export const PricingPlan = ({
-  operator,
-  plan,
-  eligibleBenefit,
-}: PricingPlanProps) => {
+export const PricingPlan = ({operator, plan, benefit}: PricingPlanProps) => {
   const {t} = useTranslation();
+  const {isUserEligibleForBenefit} = useIsEligibleForBenefit(benefit);
   const seAppForPrices = (
-    <VehicleStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
+    <MobilityStat primaryStat={t(ScooterTexts.seeAppForPrices(operator))} />
   );
   if (hasMultiplePricingPlans(plan)) {
     return seAppForPrices;
@@ -34,7 +33,7 @@ export const PricingPlan = ({
         price={plan.price}
         pricingSegment={plan.perMinPricing[0]}
         unit="min"
-        eligibleBenefit={eligibleBenefit}
+        eligibleBenefit={isUserEligibleForBenefit ? benefit?.id : undefined}
       />
     );
   }
@@ -45,7 +44,7 @@ export const PricingPlan = ({
         price={plan.price}
         pricingSegment={plan.perKmPricing[0]}
         unit="km"
-        eligibleBenefit={eligibleBenefit}
+        eligibleBenefit={isUserEligibleForBenefit ? benefit?.id : undefined}
       />
     );
   }
@@ -79,8 +78,8 @@ const PriceInfo = ({
   };
 
   return (
-    <VehicleStat
-      primaryStat={`${formatPrice(pricingSegment, language)} kr/${unit}`}
+    <MobilityStat
+      primaryStat={`${formatPrice(pricingSegment, language)} kr per ${unit}`}
       secondaryStat={t(ScooterTexts.pricingPlan.price(price))}
       secondaryStatStyle={
         price > 0 && eligibleBenefit === 'free-unlock'

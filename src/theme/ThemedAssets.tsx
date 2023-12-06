@@ -9,6 +9,12 @@ import {NoFavouriteDeparture as LightNoFavouriteDeparture} from '@atb/assets/svg
 import {NoFavouriteDeparture as DarkNoFavouriteDeparture} from '@atb/assets/svg/color/images/dark';
 import {OnBehalfOf as LightOnBehalfOf} from '@atb/assets/svg/color/images/light';
 import {OnBehalfOf as DarkOnBehalfOf} from '@atb/assets/svg/color/images/dark';
+import {Scooter as ScooterLight} from '@atb/assets/svg/color/images/mobility/light';
+import {Scooter as ScooterDark} from '@atb/assets/svg/color/images/mobility/dark';
+import {CityBike as CityBikeLight} from '@atb/assets/svg/color/images/mobility/light';
+import {CityBike as CityBikeDark} from '@atb/assets/svg/color/images/mobility/dark';
+import {ParkAndRide as ParkAndRideLight} from '@atb/assets/svg/color/images/mobility/light';
+import {ParkAndRide as ParkAndRideDark} from '@atb/assets/svg/color/images/mobility/dark';
 import {useTheme} from '@atb/theme/ThemeContext';
 
 export const ThemedTokenTravelCard = () => {
@@ -40,4 +46,23 @@ export const ThemedOnBehalfOf = ({...props}) => {
   const {themeName} = useTheme();
   const OnBehalfOf = themeName === 'dark' ? DarkOnBehalfOf : LightOnBehalfOf;
   return <OnBehalfOf {...props} />;
+};
+
+export const ThemedScooter = () => {
+  const {themeName} = useTheme();
+  const Scooter = themeName === 'dark' ? ScooterDark : ScooterLight;
+  return <Scooter />;
+};
+
+export const ThemedCityBike = () => {
+  const {themeName} = useTheme();
+  const CityBike = themeName === 'dark' ? CityBikeDark : CityBikeLight;
+  return <CityBike />;
+};
+
+
+export const ThemedParkAndRide = () => {
+  const {themeName} = useTheme();
+  const ParkAndRide = themeName === 'dark' ? ParkAndRideDark : ParkAndRideLight;
+  return <ParkAndRide />;
 };

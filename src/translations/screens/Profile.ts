@@ -35,6 +35,13 @@ const ProfileTexts = {
         paymentOptions: {
           label: _('Betalingsmåter', 'Payment options', 'Betalingsmåtar'),
         },
+        editProfile: {
+          label: _(
+            'Rediger Min profil',
+            'Edit My profile',
+            'Rediger Min profil',
+          ),
+        },
       },
       infoItems: {
         customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
@@ -85,6 +92,9 @@ const ProfileTexts = {
         },
         language: {
           label: _('Språk', 'Language', 'Språk'),
+        },
+        privacy: {
+          label: _('Personvern', 'Privacy', 'Personvern'),
         },
         notifications: {
           label: _('Varslinger', 'Notifications', 'Varslingar'),
