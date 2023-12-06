@@ -11,8 +11,6 @@ import {
 } from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {useIsFocused} from '@react-navigation/native';
 import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
 
 type TokenToggleInfoProps = {
@@ -20,22 +18,15 @@ type TokenToggleInfoProps = {
   textColor?: StaticColor;
 };
 
-export const TokenToggleInfo = ({
-  style,
-  textColor,
-}: TokenToggleInfoProps) => {
+export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
   const styles = useStyles();
-  const {deviceInspectionStatus} = useMobileTokenContextState();
-  const screenHasFocus = useIsFocused();
-  const shouldFetchTokenDetails =
-    screenHasFocus && deviceInspectionStatus !== 'loading';
-  const {shouldShowLoader, toggleLimit} = useTokenToggleDetails(
-    shouldFetchTokenDetails,
-  );
+  const {data: tokenToggleDetails, isLoading} = useTokenToggleDetails();
 
-  const limit = toggleLimit ?? 0;
+  const limit = tokenToggleDetails?.toggleLimit ?? 0;
 
-  return shouldShowLoader ? (
+  console.log('Toggle limit inside TokenToggleInfo is ' + limit);
+
+  return isLoading ? (
     <ActivityIndicator style={[styles.loader, style]} />
   ) : (
     <TokenToggleContent

@@ -17,7 +17,8 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {disable_travelcard} = useRemoteConfig();
-  const {toggleLimit, maxToggleLimit} = useTokenToggleDetails(true);
+  const {data: tokenToggleDetails} = useTokenToggleDetails();
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -34,9 +35,8 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
           onChange={() =>
             navigation.navigate('Profile_SelectTravelTokenScreen')
           }
-          toggleLimit={toggleLimit}
         />
-        <FaqSection toggleMaxLimit={maxToggleLimit} />
+        <FaqSection toggleMaxLimit={tokenToggleDetails?.maxToggleLimit} />
       </ScrollView>
     </View>
   );
