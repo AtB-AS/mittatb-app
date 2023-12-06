@@ -19,14 +19,18 @@ export const registerForPushNotifications = ({
     .post(
       `/notification/v1/register`,
       {
-        app_id: getBundleId(),
-        app_version: getVersion(),
-        platform: Platform.OS,
-        platform_version: String(Platform.Version),
         language,
         token,
       },
-      {authWithIdToken: true},
+      {
+        authWithIdToken: true,
+        headers: {
+          'atb-app-identifier': getBundleId(),
+          'atb-app-version': getVersion(),
+          'atb-app-platform': Platform.OS,
+          'atb-app-platform-version': String(Platform.Version),
+        },
+      },
     )
     .then((response) => {
       return response.status === 200;
