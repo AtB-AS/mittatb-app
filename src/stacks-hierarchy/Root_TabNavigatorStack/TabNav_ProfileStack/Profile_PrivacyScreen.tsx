@@ -54,11 +54,11 @@ export const Profile_PrivacyScreen = () => {
                   .subText,
               )}
               value={kettleInfo?.isBeaconsOnboarded}
-              onValueChange={(checked) => {
+              onValueChange={async (checked) => {
                 if (checked) {
-                  onboardForBeacons();
+                  await onboardForBeacons();
                 } else {
-                  revokeBeacons();
+                  await revokeBeacons();
                 }
               }}
               testID="toggleCollectData"
