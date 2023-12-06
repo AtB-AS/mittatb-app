@@ -79,8 +79,8 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   // changed language since last time the app was opened. This useEffect will
   // also trigger when language is changed manually in the app.
   useEffect(() => {
-    registerForNotifications();
-  }, [registerForNotifications]);
+    if (pushNotificationsEnabled) registerForNotifications();
+  }, [registerForNotifications, pushNotificationsEnabled]);
 
   useEffect(() => {
     const shouldShowLocationOnboarding =
