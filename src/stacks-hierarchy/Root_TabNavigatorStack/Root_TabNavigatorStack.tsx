@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
-import {useGoToMobileTokenOnboardingWhenNecessary} from '../utils';
+
 import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
 import {useTheme} from '@atb/theme';
@@ -20,106 +20,22 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
-import {useAppState} from '@atb/AppContext';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {InteractionManager} from 'react-native';
-import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
-import {
-  usePushNotifications,
-  usePushNotificationsEnabled,
-} from '@atb/notifications';
-import {
-  filterValidRightNowFareContract,
-  useTicketingState,
-} from '@atb/ticketing';
-import {useTimeContextState} from '@atb/time';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
-type Props = RootStackScreenProps<'Root_TabNavigatorStack'>;
-export const Root_TabNavigatorStack = ({navigation}: Props) => {
+export const Root_TabNavigatorStack = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-  const {enable_extended_onboarding} = useRemoteConfig();
-  const {
-    onboarded,
-    notificationPermissionOnboarded,
-    locationWhenInUsePermissionOnboarded,
-  } = useAppState();
 
-  const pushNotificationsEnabled = usePushNotificationsEnabled();
-
-  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
-
-  useGoToMobileTokenOnboardingWhenNecessary();
-  const {serverNow} = useTimeContextState();
-
-  const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContract(
-    fareContracts,
-    serverNow,
-  );
-  const {status: notificationStatus} = usePushNotifications();
-
-  useEffect(() => {
-    const shouldShowLocationOnboarding =
-      !locationWhenInUsePermissionOnboarded &&
-      locationWhenInUsePermissionStatus === 'denied';
-
-    if (!onboarded) {
-      InteractionManager.runAfterInteractions(() => {
-        if (enable_extended_onboarding) {
-          navigation.navigate('Root_OnboardingStack');
-        } else {
-          navigation.navigate('Root_LoginOptionsScreen', {});
-        }
-      });
-    } else {
-      if (shouldShowLocationOnboarding) {
-        InteractionManager.runAfterInteractions(() =>
-          navigation.navigate('Root_LocationWhenInUsePermissionScreen'),
-        );
-      }
-    }
-    if (
-      !notificationPermissionOnboarded &&
-      pushNotificationsEnabled &&
-      validFareContracts.length > 0 &&
-      notificationStatus !== 'granted' &&
-      !shouldShowLocationOnboarding
-    ) {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_NotificationPermissionScreen'),
-      );
-    }
-  }, [
-    onboarded,
-    navigation,
-    notificationPermissionOnboarded,
-    pushNotificationsEnabled,
-    locationWhenInUsePermissionOnboarded,
-    locationWhenInUsePermissionStatus,
-    validFareContracts.length,
-    notificationStatus,
-    enable_extended_onboarding,
-  ]);
-
-  const showShareTravelHabitsScreen = useCallback(() => {
-    InteractionManager.runAfterInteractions(() =>
-      navigation.navigate('Root_ShareTravelHabitsScreen'),
-    );
-  }, [navigation]);
-
-  useMaybeShowShareTravelHabitsScreen(showShareTravelHabitsScreen);
+  useOnboardingNavigationFlow();
 
   return (
     <Tab.Navigator
