@@ -1,6 +1,4 @@
 import {client} from '@atb/api';
-import {Platform} from 'react-native';
-import {getBundleId, getVersion} from 'react-native-device-info';
 import {
   NotificationConfig,
   NotificationConfigType,
@@ -22,15 +20,7 @@ export const registerForPushNotifications = ({
         language,
         token,
       },
-      {
-        authWithIdToken: true,
-        headers: {
-          'atb-app-identifier': getBundleId(),
-          'atb-app-version': getVersion(),
-          'atb-app-platform': Platform.OS,
-          'atb-app-platform-version': String(Platform.Version),
-        },
-      },
+      {authWithIdToken: true},
     )
     .then((response) => {
       return response.status === 200;
