@@ -5,7 +5,8 @@ import {shouldOnboardMobileToken} from '@atb/api/utils';
 import {useAuthState} from '@atb/auth';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {
-  usePushNotifications,
+  useOnPushNotificationOpened,
+  useNotifications,
   usePushNotificationsEnabled,
 } from '@atb/notifications';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
@@ -22,9 +23,20 @@ import {InteractionManager} from 'react-native';
 export const useOnboardingNavigationFlow = () => {
   const navigation = useNavigation<RootNavigationProps>();
 
-  const isFocused = useIsFocused();
-
   const pushNotificationsEnabled = usePushNotificationsEnabled();
+  const {
+    register: registerForNotifications,
+    permissionStatus: pushNotificationPermissionStatus,
+  } = useNotifications();
+  useOnPushNotificationOpened();
+
+  // Register notification language when the app starts, in case the user have
+  // changed language since last time the app was opened. This useEffect will
+  // also trigger when language is changed manually in the app.
+  useEffect(() => {
+    registerForNotifications();
+  }, [registerForNotifications]);
+
   const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
   const {enable_extended_onboarding} = useRemoteConfig();
   const {
@@ -40,7 +52,6 @@ export const useOnboardingNavigationFlow = () => {
     fareContracts,
     serverNow,
   );
-  const {status: notificationStatus} = usePushNotifications();
 
   const goToScreen = useCallback(
     (screenName, params?) => {
@@ -58,8 +69,7 @@ export const useOnboardingNavigationFlow = () => {
   useGoToMobileTokenOnboardingWhenNecessary();
 
   useEffect(() => {
-    if (!isFocused) return; // only show onboarding screens from Root_TabNavigatorStack path
-
+    if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
     const shouldShowLocationOnboarding =
       !locationWhenInUsePermissionOnboarded &&
       locationWhenInUsePermissionStatus === 'denied';
@@ -78,7 +88,7 @@ export const useOnboardingNavigationFlow = () => {
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
       validFareContracts.length > 0 &&
-      notificationStatus !== 'granted' &&
+      pushNotificationPermissionStatus !== 'granted' &&
       !shouldShowLocationOnboarding
     ) {
       goToScreen('Root_NotificationPermissionScreen');
@@ -91,10 +101,9 @@ export const useOnboardingNavigationFlow = () => {
     locationWhenInUsePermissionOnboarded,
     locationWhenInUsePermissionStatus,
     validFareContracts.length,
-    notificationStatus,
+    pushNotificationPermissionStatus,
     enable_extended_onboarding,
     goToScreen,
-    isFocused,
   ]);
 };
 
