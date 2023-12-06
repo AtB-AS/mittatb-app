@@ -119,8 +119,10 @@ export function TravelTokenBox({
 
 export const TravelDeviceTitle = ({
   inspectableToken,
+  includeTravelCardTitle = true,
 }: {
   inspectableToken: Token;
+  includeTravelCardTitle?: boolean;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -129,13 +131,15 @@ export const TravelDeviceTitle = ({
     const travelCardId = inspectableToken.travelCardId;
     return (
       <View style={styles.travelCardTitleContainer}>
-        <ThemeText
-          type="heading__title"
-          color="background_accent_3"
-          style={styles.title}
-        >
-          {t(TravelTokenBoxTexts.tcard.title)}
-        </ThemeText>
+        {includeTravelCardTitle && (
+          <ThemeText
+            type="heading__title"
+            color="background_accent_3"
+            style={styles.title}
+          >
+            {t(TravelTokenBoxTexts.tcard.title)}
+          </ThemeText>
+        )}
         <ThemeText color="background_accent_3" style={styles.transparent}>
           {' XXXX XX'}
         </ThemeText>

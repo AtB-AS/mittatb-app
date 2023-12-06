@@ -11,7 +11,7 @@ const ConsiderTravelTokenChangeTexts = {
     'Your tickets will always be safely stored on this user account.',
     'Billettane dine vil alltid ligge trygt lagra på denne brukarkontoen.',
   ),
-  activeTokenInfoBox: {
+  activeTravelTokenInfoBox: {
     title: (isTravelCard: boolean) =>
       _(
         `Dine billetter er tilgjengelige fra ${

@@ -23,7 +23,7 @@ import {parse} from 'search-params';
 import type {NavigationState, PartialState} from '@react-navigation/routers';
 
 import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
-import {Root_ConsiderTravelTokenChangeScreen} from './Root_ConsiderTravelTokenChangeScreen';
+import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';

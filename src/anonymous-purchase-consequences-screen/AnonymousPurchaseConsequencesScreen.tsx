@@ -1,7 +1,6 @@
 import {Support} from '@atb/assets/svg/mono-icons/actions';
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {Receipt} from '@atb/assets/svg/mono-icons/ticketing';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
@@ -9,12 +8,9 @@ import {Consequence} from './components/Consequence';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
-import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {FullScreenFooter} from '@atb/components/screen-footer';
+import {OnboardingFrame} from '@atb/onboarding-frame';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -30,70 +26,52 @@ export const AnonymousPurchaseConsequencesScreen = ({
   const styles = useStyle();
   const {t} = useTranslation();
   const {themeName} = useTheme();
-  const focusRef = useFocusOnLoad();
 
   const fillColor = getStaticColor(themeName, themeColor).text;
 
+  const loginButton = {
+    onPress: onPressLogin || (() => {}),
+    text: t(AnonymousPurchasesTexts.consequences.button.login.label),
+    accessibilityHint: t(
+      AnonymousPurchasesTexts.consequences.button.login.a11yHint,
+    ),
+  };
+
+  const continueWithoutLoginButton = {
+    onPress: onPressContinueWithoutLogin,
+    text: t(AnonymousPurchasesTexts.consequences.button.accept.label),
+    accessibilityHint: t(
+      AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
+    ),
+    rightIcon: onPressLogin ? undefined : {svg: ArrowRight},
+  };
+
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        leftButton={{type: onPressLogin ? 'cancel' : 'back'}}
-        setFocusOnLoad={false}
+    <OnboardingFrame
+      fullScreenHeaderProps={{
+        leftButton: {type: onPressLogin ? 'cancel' : 'back'},
+      }}
+      footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
+      secondaryFooterButton={
+        onPressLogin ? continueWithoutLoginButton : undefined
+      }
+    >
+      <ThemeText type="heading--big" color={themeColor} style={styles.header}>
+        {t(AnonymousPurchasesTexts.consequences.title)}
+      </ThemeText>
+      <Consequence
+        value={t(AnonymousPurchasesTexts.consequences.messages[0])}
+        icon={<ThemeIcon svg={Phone} fill={fillColor} size="large" />}
       />
-      <ScrollView
-        contentContainerStyle={styles.contentContainer}
-        ref={focusRef}
-      >
-        <View style={styles.mainContent}>
-          <ThemeText
-            type="heading--big"
-            color={themeColor}
-            style={styles.header}
-          >
-            {t(AnonymousPurchasesTexts.consequences.title)}
-          </ThemeText>
-          <Consequence
-            value={t(AnonymousPurchasesTexts.consequences.messages[0])}
-            icon={<ThemeIcon svg={Phone} fill={fillColor} size="large" />}
-          />
-          <Consequence
-            value={t(AnonymousPurchasesTexts.consequences.messages[1])}
-            icon={<ThemeIcon svg={Receipt} fill={fillColor} size="large" />}
-          />
-          <Consequence
-            value={t(AnonymousPurchasesTexts.consequences.messages[2])}
-            icon={<ThemeIcon svg={Support} fill={fillColor} size="large" />}
-          />
-        </View>
-      </ScrollView>
-      <FullScreenFooter>
-        {onPressLogin && (
-          <Button
-            interactiveColor="interactive_0"
-            mode="primary"
-            onPress={onPressLogin}
-            style={styles.button}
-            text={t(AnonymousPurchasesTexts.consequences.button.login.label)}
-            accessibilityHint={t(
-              AnonymousPurchasesTexts.consequences.button.login.a11yHint,
-            )}
-            testID="loginButton"
-          />
-        )}
-        <Button
-          interactiveColor="interactive_0"
-          mode={onPressLogin ? 'secondary' : 'primary'}
-          onPress={onPressContinueWithoutLogin}
-          style={styles.button}
-          text={t(AnonymousPurchasesTexts.consequences.button.accept.label)}
-          accessibilityHint={t(
-            AnonymousPurchasesTexts.consequences.button.accept.a11yHint,
-          )}
-          rightIcon={onPressLogin ? undefined : {svg: ArrowRight}}
-          testID="acceptConsequencesButton"
-        />
-      </FullScreenFooter>
-    </View>
+      <Consequence
+        value={t(AnonymousPurchasesTexts.consequences.messages[1])}
+        icon={<ThemeIcon svg={Receipt} fill={fillColor} size="large" />}
+      />
+      <Consequence
+        value={t(AnonymousPurchasesTexts.consequences.messages[2])}
+        icon={<ThemeIcon svg={Support} fill={fillColor} size="large" />}
+      />
+    </OnboardingFrame>
   );
 };
 
