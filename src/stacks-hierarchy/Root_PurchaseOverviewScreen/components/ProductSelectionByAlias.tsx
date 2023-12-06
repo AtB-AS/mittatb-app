@@ -4,7 +4,6 @@ import {
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
-import {ThemeText} from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {ScrollView, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -17,6 +16,7 @@ import {
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
 import {useTicketingState} from '@atb/ticketing';
+import {SectionHeading} from '@atb/components/section-heading';
 
 type Props = {
   color: InteractiveColor;
@@ -48,9 +48,9 @@ export function ProductSelectionByAlias({
 
   return (
     <View style={style}>
-      <ThemeText type="body__secondary" color="secondary">
-        {title || t(PurchaseOverviewTexts.productSelection.title)}
-      </ThemeText>
+      <SectionHeading
+        text={title || t(PurchaseOverviewTexts.productSelection.title)}
+      />
       <ScrollView
         style={styles.durationScrollView}
         contentContainerStyle={styles.durationContentContainer}
@@ -79,7 +79,6 @@ export function ProductSelectionByAlias({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   durationScrollView: {
-    marginTop: theme.spacings.medium,
     marginLeft: -theme.spacings.medium,
     marginRight: -theme.spacings.medium,
   },

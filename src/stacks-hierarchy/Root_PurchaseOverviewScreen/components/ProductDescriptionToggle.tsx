@@ -51,7 +51,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginBottom: theme.spacings.medium,
+      marginTop: theme.spacings.medium,
+      marginHorizontal: theme.spacings.medium,
       alignItems: 'center',
     },
     switchAndLabel: {

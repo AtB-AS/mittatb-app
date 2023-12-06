@@ -15,6 +15,7 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
+import {SectionHeading} from '@atb/components/section-heading';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -120,13 +121,13 @@ export function TravellerSelection({
 
   return (
     <View style={style}>
-      <View style={styles.sectionTitleContainer}>
-        <ThemeText type="body__secondary" color="secondary">
-          {selectionMode == 'multiple'
+      <SectionHeading
+        text={
+          selectionMode == 'multiple'
             ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
-            : t(PurchaseOverviewTexts.travellerSelection.title_single)}
-        </ThemeText>
-      </View>
+            : t(PurchaseOverviewTexts.travellerSelection.title_single)
+        }
+      />
       <Section {...accessibility}>
         <GenericClickableSectionItem
           onPress={travellerSelectionOnPress}
@@ -166,12 +167,6 @@ export function TravellerSelection({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   multipleTravellersDetails: {
     marginTop: theme.spacings.small,
-  },
-  sectionTitleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacings.medium,
-    alignItems: 'center',
   },
   sectionContentContainer: {
     display: 'flex',
