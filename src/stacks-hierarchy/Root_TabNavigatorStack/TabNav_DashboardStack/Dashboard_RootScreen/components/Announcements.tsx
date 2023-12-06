@@ -6,6 +6,7 @@ import {SectionHeading} from './SectionHeading';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
+import {StyleSheet} from '@atb/theme';
 import {useBeacons} from '@atb/beacons/use-beacons';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 type Props = {
@@ -19,6 +20,7 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const {kettleInfo} = useBeacons();
   const [hasSeenShareTravelHabitsScreen, _] =
     useHasSeenShareTravelHabitsScreen();
+  const style = useStyle();
 
   const ruleVariables = {
     isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
@@ -38,10 +40,18 @@ export const Announcements = ({style: containerStyle}: Props) => {
         {filteredAnnouncements.map((a, i) => (
           <Announcement
             announcement={a}
-            withBottomPadding={i < filteredAnnouncements.length - 1}
+            style={i < filteredAnnouncements.length - 1 && style.announcement}
           />
         ))}
       </ScrollView>
     </View>
   );
 };
+
+const useStyle = StyleSheet.createThemeHook((theme) => {
+  return {
+    announcement: {
+      marginBottom: theme.spacings.medium,
+    },
+  };
+});

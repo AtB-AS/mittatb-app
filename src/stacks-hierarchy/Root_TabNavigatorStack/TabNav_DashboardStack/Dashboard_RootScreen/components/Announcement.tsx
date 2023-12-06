@@ -5,7 +5,7 @@ import {
   getTextForLanguage,
   useTranslation,
 } from '@atb/translations';
-import {Image, Linking, View} from 'react-native';
+import {Image, Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
@@ -25,11 +25,11 @@ import {useAnnouncementsState} from '@atb/announcements';
 
 type Props = {
   announcement: AnnouncementType;
-  withBottomPadding: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
-export const Announcement = ({announcement, withBottomPadding}: Props) => {
-  const style = useStyle();
+export const Announcement = ({announcement, style}: Props) => {
+  const styles = useStyle();
   const {t} = useTranslation();
   const {language} = useTranslation();
   const {theme} = useTheme();
@@ -49,11 +49,7 @@ export const Announcement = ({announcement, withBottomPadding}: Props) => {
   const openUrlLink = announcement.openUrl?.link;
 
   return (
-    <Section
-      withBottomPadding={withBottomPadding}
-      key={announcement.id}
-      testID="announcement"
-    >
+    <Section style={style} key={announcement.id} testID="announcement">
       <GenericClickableSectionItem
         accessible={false}
         disabled={isOpenUrlEnabled}
@@ -66,9 +62,9 @@ export const Announcement = ({announcement, withBottomPadding}: Props) => {
           ));
         }}
       >
-        <View style={style.container}>
+        <View style={styles.container}>
           <View
-            style={style.content}
+            style={styles.content}
             accessible={true}
             accessibilityRole={!isOpenUrlEnabled ? 'button' : undefined}
             accessibilityHint={
@@ -78,7 +74,7 @@ export const Announcement = ({announcement, withBottomPadding}: Props) => {
             }
           >
             {announcement.summaryImage && (
-              <View style={style.imageContainer}>
+              <View style={styles.imageContainer}>
                 <Image
                   height={50}
                   width={50}
@@ -86,7 +82,7 @@ export const Announcement = ({announcement, withBottomPadding}: Props) => {
                 />
               </View>
             )}
-            <View style={style.textContainer}>
+            <View style={styles.textContainer}>
               <ThemeText type="body__primary--bold">
                 {getTextForLanguage(
                   announcement.summaryTitle ?? announcement.fullTitle,
@@ -99,7 +95,7 @@ export const Announcement = ({announcement, withBottomPadding}: Props) => {
             </View>
           </View>
           <PressableOpacity
-            style={style.close}
+            style={styles.close}
             role="button"
             hitSlop={insets.all(theme.spacings.medium)}
             accessibilityHint={t(
