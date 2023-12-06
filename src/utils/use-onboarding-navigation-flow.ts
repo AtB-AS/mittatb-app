@@ -62,10 +62,7 @@ export const useOnboardingNavigationFlow = () => {
     [navigation],
   );
 
-  // todo: how to ensure Root_LocationWhenInUsePermissionScreen is shown before Root_ShareTravelHabitsScreen when runAfterSessionsCount is 0?
-  useMaybeShowShareTravelHabitsScreen(() =>
-    goToScreen('Root_ShareTravelHabitsScreen'),
-  );
+  useMaybeShowShareTravelHabitsScreen(); // todo: how to ensure Root_LocationWhenInUsePermissionScreen is shown before Root_ShareTravelHabitsScreen when runAfterSessionsCount is 0?
   useGoToMobileTokenOnboardingWhenNecessary();
 
   useEffect(() => {
@@ -82,14 +79,11 @@ export const useOnboardingNavigationFlow = () => {
       }
     } else if (shouldShowLocationOnboarding) {
       goToScreen('Root_LocationWhenInUsePermissionScreen');
-    }
-
-    if (
+    } else if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
       validFareContracts.length > 0 &&
-      pushNotificationPermissionStatus !== 'granted' &&
-      !shouldShowLocationOnboarding
+      pushNotificationPermissionStatus !== 'granted'
     ) {
       goToScreen('Root_NotificationPermissionScreen');
     }

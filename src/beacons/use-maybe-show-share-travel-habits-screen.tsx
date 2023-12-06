@@ -6,13 +6,16 @@ import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {useHasSeenShareTravelHabitsScreen} from './use-has-seen-share-travel-habits-screen';
 import {useAppState} from '@atb/AppContext';
 import {useBeacons} from './use-beacons';
+import {useNavigation} from '@react-navigation/native';
+import {InteractionManager} from 'react-native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count';
 
-export const useMaybeShowShareTravelHabitsScreen = (
-  showShareTravelHabitsScreen: () => void,
-) => {
+export const useMaybeShowShareTravelHabitsScreen = () => {
+  const navigation = useNavigation<RootNavigationProps>();
+
   const {
     delay_share_travel_habits_screen_by_sessions_count: runAfterSessionsCount,
   } = useRemoteConfig();
@@ -32,9 +35,11 @@ export const useMaybeShowShareTravelHabitsScreen = (
 
   const maybeShowShareTravelHabitsScreen = useCallback(async () => {
     if (!kettleInfo?.isBeaconsOnboarded) {
-      showShareTravelHabitsScreen();
+      InteractionManager.runAfterInteractions(() =>
+        navigation.navigate('Root_ShareTravelHabitsScreen'),
+      );
     }
-  }, [kettleInfo, showShareTravelHabitsScreen]);
+  }, [kettleInfo, navigation]);
 
   const updateCount = useCallback(
     async (newCount: number) => {
