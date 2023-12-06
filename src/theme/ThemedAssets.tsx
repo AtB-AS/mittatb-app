@@ -60,6 +60,7 @@ export const ThemedCityBike = () => {
   return <CityBike />;
 };
 
+
 export const ThemedParkAndRide = () => {
   const {themeName} = useTheme();
   const ParkAndRide = themeName === 'dark' ? ParkAndRideDark : ParkAndRideLight;
