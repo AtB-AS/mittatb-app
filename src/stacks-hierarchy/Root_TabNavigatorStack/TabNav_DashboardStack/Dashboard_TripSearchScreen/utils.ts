@@ -80,7 +80,7 @@ export function createQuery(
         const value = preference.options.find(
           (o) => o.id === preference.selectedOption,
         )?.value;
-        if (value) {
+        if (value !== null && value !== undefined) {
           query[preference.type] = value;
         }
       },
