@@ -11,7 +11,7 @@ import {
 } from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
-import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
+import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 
 type TokenToggleInfoProps = {
   style?: StyleProp<ViewStyle>;
@@ -20,9 +20,9 @@ type TokenToggleInfoProps = {
 
 export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
   const styles = useStyles();
-  const {toggleLimit, isLoading} = useTokenToggleDetails();
+  const {data, isLoading} = useTokenToggleDetailsQuery();
 
-  const limit = toggleLimit ?? 0;
+  const limit = data?.toggleLimit ?? 0;
 
   return isLoading ? (
     <ActivityIndicator style={[styles.loader, style]} />

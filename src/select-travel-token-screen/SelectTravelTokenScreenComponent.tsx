@@ -30,7 +30,7 @@ import {
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
-import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
+import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 
 type Props = {onAfterSave: () => void};
 
@@ -44,7 +44,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     useFirestoreConfiguration();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
-  const {toggleLimit} = useTokenToggleDetails();
+  const {data} = useTokenToggleDetailsQuery();
 
   const {serverNow} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
@@ -262,7 +262,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         )}
 
-        {toggleLimit !== undefined && (
+        {data?.toggleLimit !== undefined && (
           <TokenToggleInfo
             style={styles.tokenInfo}
             textColor="background_accent_0"
