@@ -55,7 +55,7 @@ export const Profile_PrivacyScreen = () => {
                   .subText,
               )}
               value={kettleInfo?.isBeaconsOnboarded}
-              onValueChange={async (checked) => {
+              onValueChange={(checked) => {
                 if (checked) {
                   onboardForBeacons();
                 } else {
