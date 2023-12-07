@@ -27,7 +27,6 @@ export const Profile_PrivacyScreen = () => {
     deleteCollectedData,
     isBeaconsSupported,
   } = useBeaconsState();
-  const showBeaconsInfo = isBeaconsSupported;
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
@@ -40,7 +39,7 @@ export const Profile_PrivacyScreen = () => {
         leftButton={{type: 'back'}}
       />
       <ScrollView>
-        {showBeaconsInfo && (
+        {isBeaconsSupported && (
           <Section withPadding withTopPadding>
             <HeaderSectionItem
               text={t(PrivacySettingsTexts.sections.consents.title)}
@@ -84,7 +83,7 @@ export const Profile_PrivacyScreen = () => {
           />
         </Section>
 
-        {showBeaconsInfo && kettleInfo?.privacyDashboardUrl && (
+        {isBeaconsSupported && kettleInfo?.privacyDashboardUrl && (
           <Section withPadding>
             <LinkSectionItem
               text={t(PrivacySettingsTexts.sections.items.controlPanel.title)}
@@ -133,7 +132,7 @@ export const Profile_PrivacyScreen = () => {
             }
             testID="deleteLocalSearchData"
           />
-          {showBeaconsInfo && (
+          {isBeaconsSupported && (
             <Button
               style={style.spacing}
               leftIcon={{svg: Delete}}
