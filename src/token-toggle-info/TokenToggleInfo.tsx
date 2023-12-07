@@ -20,9 +20,9 @@ type TokenToggleInfoProps = {
 
 export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
   const styles = useStyles();
-  const {data: tokenToggleDetails, isLoading} = useTokenToggleDetails();
+  const {toggleLimit, isLoading} = useTokenToggleDetails();
 
-  const limit = tokenToggleDetails?.toggleLimit ?? 0;
+  const limit = toggleLimit ?? 0;
 
   return isLoading ? (
     <ActivityIndicator style={[styles.loader, style]} />

@@ -44,7 +44,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     useFirestoreConfiguration();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
-  const {data: tokenToggleDetails} = useTokenToggleDetails();
+  const {toggleLimit} = useTokenToggleDetails();
 
   const {serverNow} = useTimeContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
@@ -262,7 +262,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         )}
 
-        {tokenToggleDetails?.toggleLimit !== undefined && (
+        {toggleLimit !== undefined && (
           <TokenToggleInfo
             style={styles.tokenInfo}
             textColor="background_accent_0"

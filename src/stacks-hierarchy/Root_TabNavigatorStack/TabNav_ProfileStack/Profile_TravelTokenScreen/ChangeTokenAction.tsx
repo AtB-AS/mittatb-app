@@ -18,7 +18,7 @@ const ChangeTokenAction = ({onChange}: {onChange: () => void}) => {
   const styles = useStyles();
   const {mobileTokenStatus} = useMobileTokenContextState();
   const {disable_travelcard} = useRemoteConfig();
-  const {data: tokenToggleDetails} = useTokenToggleDetails();
+  const {toggleLimit} = useTokenToggleDetails();
 
   return (
     <Section style={styles.changeTokenButton}>
@@ -29,16 +29,13 @@ const ChangeTokenAction = ({onChange}: {onChange: () => void}) => {
             ? t(TravelTokenTexts.travelToken.changeTokenWithoutTravelcardButton)
             : t(TravelTokenTexts.travelToken.changeTokenButton)
         }
-        disabled={
-          mobileTokenStatus !== 'success' ||
-          tokenToggleDetails?.toggleLimit === 0
-        }
+        disabled={mobileTokenStatus !== 'success' || toggleLimit === 0}
         onPress={onChange}
         testID="switchTokenButton"
         icon={<ThemeIcon svg={Swap} />}
       />
 
-      {tokenToggleDetails?.toggleLimit !== undefined && (
+      {toggleLimit !== undefined && (
         <GenericSectionItem>
           <TokenToggleInfo style={styles.tokenInfoView} />
         </GenericSectionItem>
