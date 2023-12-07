@@ -24,10 +24,10 @@ import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButton';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {Scooter} from '@atb/assets/svg/color/images/mobility';
 import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
+import {ThemedScooter} from '@atb/theme/ThemedAssets';
 
 type Props = {
   vehicleId: VehicleId;
@@ -99,9 +99,10 @@ export const ScooterSheet = ({
                         <MobilityStat
                           svg={Battery}
                           primaryStat={vehicle.currentFuelPercent + '%'}
-                          secondaryStat={formatRange(
-                            vehicle.currentRangeMeters,
-                            language,
+                          secondaryStat={t(
+                            MobilityTexts.range(
+                              formatRange(vehicle.currentRangeMeters, language),
+                            ),
                           )}
                         />
                       }
@@ -115,7 +116,7 @@ export const ScooterSheet = ({
                     />
                     <BrandingImage
                       logoUrl={brandLogoUrl}
-                      fallback={<Scooter />}
+                      fallback={<ThemedScooter />}
                     />
                   </View>
                 </GenericSectionItem>
@@ -176,7 +177,8 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     content: {
       flexDirection: 'row',
-      alignContent: 'center',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,

@@ -79,7 +79,7 @@ const PriceInfo = ({
 
   return (
     <MobilityStat
-      primaryStat={`${formatPrice(pricingSegment, language)} kr/${unit}`}
+      primaryStat={`${formatPrice(pricingSegment, language)} kr per ${unit}`}
       secondaryStat={t(ScooterTexts.pricingPlan.price(price))}
       secondaryStatStyle={
         price > 0 && eligibleBenefit === 'free-unlock'

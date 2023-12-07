@@ -24,8 +24,8 @@ import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {MobilityStats} from '@atb/mobility/components//MobilityStats';
 import {MobilityStat} from '@atb/mobility/components//MobilityStat';
-import {CityBike} from '@atb/assets/svg/color/images/mobility';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
+import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 
 type Props = {
   vehicleId: VehicleId;
@@ -93,9 +93,13 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                           <MobilityStat
                             svg={Battery}
                             primaryStat={vehicle.currentFuelPercent + '%'}
-                            secondaryStat={formatRange(
-                              vehicle.currentRangeMeters,
-                              language,
+                            secondaryStat={t(
+                              MobilityTexts.range(
+                                formatRange(
+                                  vehicle.currentRangeMeters,
+                                  language,
+                                ),
+                              ),
                             )}
                           />
                         ) : (
@@ -115,7 +119,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
                     />
                     <BrandingImage
                       logoUrl={brandLogoUrl}
-                      fallback={<CityBike />}
+                      fallback={<ThemedCityBike />}
                     />
                   </View>
                 </GenericSectionItem>
