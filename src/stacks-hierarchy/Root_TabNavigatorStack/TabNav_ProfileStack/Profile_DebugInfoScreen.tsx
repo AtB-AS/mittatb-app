@@ -45,7 +45,6 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-screen-enabled';
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
-import {useBeacons} from '@atb/beacons/use-beacons';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
@@ -55,6 +54,7 @@ import {
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
+import { useBeaconsState } from '@atb/beacons/BeaconsContext';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -72,13 +72,11 @@ export const Profile_DebugInfoScreen = () => {
   } = useAppState();
   const {
     onboardForBeacons,
-    startBeacons,
-    stopBeacons,
     revokeBeacons,
     deleteCollectedData,
     kettleInfo,
     isBeaconsSupported,
-  } = useBeacons();
+  } = useBeaconsState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId} = useAuthState();
   const user = auth().currentUser;
@@ -618,27 +616,6 @@ export const Profile_DebugInfoScreen = () => {
                     }
                     style={style.button}
                     text="Onboard"
-                  />
-                  <Button
-                    interactiveColor="interactive_0"
-                    onPress={async () => {
-                      await startBeacons();
-                    }}
-                    style={style.button}
-                    disabled={
-                      kettleInfo?.isKettleStarted ||
-                      !kettleInfo?.isBeaconsOnboarded
-                    }
-                    text="Start"
-                  />
-                  <Button
-                    interactiveColor="interactive_0"
-                    onPress={async () => {
-                      await stopBeacons();
-                    }}
-                    style={style.button}
-                    disabled={!kettleInfo?.isKettleStarted}
-                    text="Stop"
                   />
                   <Button
                     interactiveColor="interactive_0"

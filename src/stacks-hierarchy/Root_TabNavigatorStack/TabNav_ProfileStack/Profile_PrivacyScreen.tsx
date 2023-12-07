@@ -11,12 +11,12 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
-import {useBeacons} from '@atb/beacons/use-beacons';
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {destructiveAlert} from './utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
@@ -26,7 +26,8 @@ export const Profile_PrivacyScreen = () => {
     revokeBeacons,
     deleteCollectedData,
     isBeaconsSupported,
-  } = useBeacons();
+  } = useBeaconsState();
+  const showBeaconsInfo = isBeaconsSupported;
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
@@ -39,7 +40,7 @@ export const Profile_PrivacyScreen = () => {
         leftButton={{type: 'back'}}
       />
       <ScrollView>
-        {isBeaconsSupported && (
+        {showBeaconsInfo && (
           <Section withPadding withTopPadding>
             <HeaderSectionItem
               text={t(PrivacySettingsTexts.sections.consents.title)}
@@ -56,9 +57,9 @@ export const Profile_PrivacyScreen = () => {
               value={kettleInfo?.isBeaconsOnboarded}
               onValueChange={async (checked) => {
                 if (checked) {
-                  await onboardForBeacons();
+                  onboardForBeacons();
                 } else {
-                  await revokeBeacons();
+                  revokeBeacons();
                 }
               }}
               testID="toggleCollectData"
@@ -83,7 +84,7 @@ export const Profile_PrivacyScreen = () => {
           />
         </Section>
 
-        {isBeaconsSupported && kettleInfo?.privacyDashboardUrl && (
+        {showBeaconsInfo && kettleInfo?.privacyDashboardUrl && (
           <Section withPadding>
             <LinkSectionItem
               text={t(PrivacySettingsTexts.sections.items.controlPanel.title)}
@@ -132,7 +133,7 @@ export const Profile_PrivacyScreen = () => {
             }
             testID="deleteLocalSearchData"
           />
-          {isBeaconsSupported && (
+          {showBeaconsInfo && (
             <Button
               style={style.spacing}
               leftIcon={{svg: Delete}}
@@ -153,7 +154,7 @@ export const Profile_PrivacyScreen = () => {
                   ),
                   destructiveArrowFunction: async () => {
                     setIsCleaningCollectedData(true);
-                    await deleteCollectedData();
+                    deleteCollectedData();
                     setIsCleaningCollectedData(false);
                   },
                 });

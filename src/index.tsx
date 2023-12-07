@@ -36,6 +36,7 @@ import {AnnouncementsContextProvider} from './announcements';
 import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from './notifications';
+import {BeaconsContextProvider} from './beacons/BeaconsContext';
 
 configureAndStartBugsnag();
 
@@ -97,7 +98,9 @@ export const App = () => {
                                                     <PopOverContextProvider>
                                                       <BottomSheetProvider>
                                                         <FeedbackQuestionsProvider>
-                                                          <RootStack />
+                                                          <BeaconsContextProvider>
+                                                            <RootStack />
+                                                          </BeaconsContextProvider>
                                                         </FeedbackQuestionsProvider>
                                                       </BottomSheetProvider>
                                                     </PopOverContextProvider>
