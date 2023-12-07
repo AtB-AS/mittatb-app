@@ -19,11 +19,7 @@ type Props = {
   style?: ViewStyle;
 };
 
-export const OperatorBenefit = ({
-  benefit,
-  formFactor,
-  style,
-}: Props) => {
+export const OperatorBenefit = ({benefit, formFactor, style}: Props) => {
   const styles = useStyles();
   const {language} = useTranslation();
   const {isUserEligibleForBenefit, isLoading, isError} =
@@ -50,12 +46,17 @@ export const OperatorBenefit = ({
       <Section>
         <GenericSectionItem>
           <View style={styles.benefitContainer}>
-            <BenefitImage eligible={isUserEligibleForBenefit} formFactor={formFactor}/>
+            <BenefitImage
+              eligible={isUserEligibleForBenefit}
+              formFactor={formFactor}
+            />
             <View style={styles.benefitContent}>
               {heading && (
                 <ThemeText type="body__primary--bold">{heading}</ThemeText>
               )}
-              <ThemeText>{text}</ThemeText>
+              <ThemeText type="body__secondary" color="secondary">
+                {text}
+              </ThemeText>
             </View>
           </View>
         </GenericSectionItem>
@@ -64,17 +65,17 @@ export const OperatorBenefit = ({
   );
 };
 
-const BenefitImageAsset = ({formFactor} : {formFactor: FormFactor}) => {
+const BenefitImageAsset = ({formFactor}: {formFactor: FormFactor}) => {
   const styles = useStyles();
   switch (formFactor) {
     case FormFactor.Car:
-      return <BundlingCarSharing style={styles.benefitImage}/>;
+      return <BundlingCarSharing style={styles.benefitImage} />;
     case FormFactor.Bicycle:
-      return <BundlingCityBike style={styles.benefitImage}/>;
+      return <BundlingCityBike style={styles.benefitImage} />;
     default:
       return null;
   }
-}
+};
 
 type BenefitImageProps = {
   formFactor: FormFactor;
@@ -87,12 +88,11 @@ const BenefitImage = ({
   eligible,
   style,
 }: BenefitImageProps): JSX.Element => {
-
   return (
     <View style={style}>
       <>
         <BenefitImageAsset formFactor={formFactor} />
-        {eligible && (<BenfitEligibilityIndicator />)}
+        {eligible && <BenfitEligibilityIndicator />}
       </>
     </View>
   );
@@ -107,7 +107,6 @@ const BenfitEligibilityIndicator = () => {
     </View>
   );
 };
-
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   benefitContainer: {

@@ -92,8 +92,8 @@ export const Profile_EditProfileScreen = ({
         title: t(EditProfileTexts.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
-      parallaxContent={() => (
-        <View style={styles.parallaxContent}>
+      parallaxContent={(focusRef) => (
+        <View style={styles.parallaxContent} ref={focusRef} accessible={true}>
           <ThemeText
             type="heading--medium"
             color="background_accent_0"
@@ -163,7 +163,10 @@ export const Profile_EditProfileScreen = ({
                 <TextInputSectionItem
                   editable={!isLoadingOrSubmittingProfile}
                   value={email}
-                  onChangeText={setEmail}
+                  onChangeText={(value) => {
+                    setEmail(value);
+                    setInvalidEmail(false);
+                  }}
                   label={t(EditProfileTexts.personalDetails.email.label)}
                   placeholder={t(
                     EditProfileTexts.personalDetails.email.placeholder,

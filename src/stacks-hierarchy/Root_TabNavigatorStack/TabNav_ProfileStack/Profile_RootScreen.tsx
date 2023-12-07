@@ -1,4 +1,3 @@
-import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {LogIn, LogOut} from '@atb/assets/svg/mono-icons/profile';
 import {useAuthState} from '@atb/auth';
@@ -12,7 +11,6 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
-import {useSearchHistory} from '@atb/search-history';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -55,10 +53,9 @@ const version = getVersion();
 type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
-  const {privacy_policy_url, enable_ticketing} = useRemoteConfig();
+  const {enable_ticketing} = useRemoteConfig();
   const {wipeToken} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
-  const {clearHistory} = useSearchHistory();
   const {t, language} = useTranslation();
   const analytics = useAnalytics();
   const {
@@ -303,6 +300,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onPress={() => navigation.navigate('Profile_LanguageScreen')}
             testID="languageButton"
           />
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.privacy.label,
+            )}
+            label="new"
+            onPress={() => navigation.navigate('Profile_PrivacyScreen')}
+            testID="privacyButton"
+          />
           {isPushNotificationsEnabled && (
             <LinkSectionItem
               text={t(
@@ -362,54 +367,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             testID="favoriteDeparturesButton"
             onPress={() =>
               navigation.navigate('Profile_FavoriteDeparturesScreen')
-            }
-          />
-        </Section>
-        <Section withPadding>
-          <HeaderSectionItem text={t(ProfileTexts.sections.privacy.heading)} />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
-            )}
-            icon="external-link"
-            accessibility={{
-              accessibilityHint: t(
-                ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,
-              ),
-            }}
-            testID="privacyButton"
-            onPress={() => Linking.openURL(privacy_policy_url)}
-          />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.privacy.linkSectionItems.clearHistory.label,
-            )}
-            icon={<ThemeIcon svg={Delete} />}
-            accessibility={{
-              accessibilityHint: t(
-                ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                  .a11yHint,
-              ),
-            }}
-            testID="clearHistoryButton"
-            onPress={() =>
-              destructiveAlert({
-                alertTitleString: t(
-                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                    .confirmTitle,
-                ),
-                cancelAlertString: t(
-                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                    .alert.cancel,
-                ),
-                confirmAlertString: t(
-                  ProfileTexts.sections.privacy.linkSectionItems.clearHistory
-                    .alert.confirm,
-                ),
-                destructiveArrowFunction: async () => {
-                  await clearHistory();
-                },
-              })
             }
           />
         </Section>

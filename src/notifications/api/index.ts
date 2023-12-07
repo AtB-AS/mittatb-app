@@ -1,6 +1,4 @@
 import {client} from '@atb/api';
-import {Platform} from 'react-native';
-import {getBundleId, getVersion} from 'react-native-device-info';
 import {
   NotificationConfig,
   NotificationConfigType,
@@ -19,10 +17,6 @@ export const registerForPushNotifications = ({
     .post(
       `/notification/v1/register`,
       {
-        app_id: getBundleId(),
-        app_version: getVersion(),
-        platform: Platform.OS,
-        platform_version: String(Platform.Version),
         language,
         token,
       },

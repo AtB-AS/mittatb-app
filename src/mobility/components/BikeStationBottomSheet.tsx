@@ -19,12 +19,12 @@ import {OperatorActionButton} from '@atb/mobility/components/OperatorActionButto
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {ThemeText} from '@atb/components/text';
 import {Bicycle} from '@atb/assets/svg/mono-icons/transportation-entur';
-import {CityBike} from '@atb/assets/svg/color/images/mobility';
 import {MobilityStats} from '@atb/mobility/components/MobilityStats';
 import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 import {Parking} from '@atb/assets/svg/mono-icons/places';
 import {WalkingDistance} from '@atb/components/walking-distance';
 import {BrandingImage} from '@atb/mobility/components/BrandingImage';
+import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 
 type Props = {
   stationId: string;
@@ -99,7 +99,9 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                           svg={Bicycle}
                           primaryStat={availableBikes}
                           secondaryStat={t(
-                            BicycleTexts.stations.numBikesAvailable,
+                            BicycleTexts.stations.numBikesAvailable(
+                              availableBikes,
+                            ),
                           )}
                         />
                       }
@@ -111,14 +113,16 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
                             t(BicycleTexts.stations.unknownDocksAvailable)
                           }
                           secondaryStat={t(
-                            BicycleTexts.stations.numDocksAvailable,
+                            BicycleTexts.stations.numDocksAvailable(
+                              station.numDocksAvailable,
+                            ),
                           )}
                         />
                       }
                     />
                     <BrandingImage
                       logoUrl={brandLogoUrl}
-                      fallback={<CityBike />}
+                      fallback={<ThemedCityBike />}
                     />
                   </View>
                 </GenericSectionItem>

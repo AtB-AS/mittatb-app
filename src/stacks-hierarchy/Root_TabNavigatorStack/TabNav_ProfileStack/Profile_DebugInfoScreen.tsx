@@ -131,7 +131,12 @@ export const Profile_DebugInfoScreen = () => {
     deviceInspectionStatus,
     mobileTokenStatus,
     barcodeStatus,
-    debug: {token, createToken, validateToken, removeRemoteToken, renewToken},
+    debug: {
+      nativeToken,
+      validateToken,
+      removeRemoteToken,
+      renewToken,
+    },
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
@@ -520,14 +525,14 @@ export const Profile_DebugInfoScreen = () => {
             showIconText={true}
             expandContent={
               <View>
-                {token && (
+                {nativeToken && (
                   <View>
-                    <ThemeText>{`Token id: ${token.getTokenId()}`}</ThemeText>
+                    <ThemeText>{`Token id: ${nativeToken.getTokenId()}`}</ThemeText>
                     <ThemeText>{`Token start: ${new Date(
-                      token.getValidityStart(),
+                      nativeToken.getValidityStart(),
                     ).toISOString()}`}</ThemeText>
                     <ThemeText>{`Token end: ${new Date(
-                      token.getValidityEnd(),
+                      nativeToken.getValidityEnd(),
                     ).toISOString()}`}</ThemeText>
                   </View>
                 )}
@@ -542,26 +547,21 @@ export const Profile_DebugInfoScreen = () => {
                   text="Reload token(s)"
                   onPress={retry}
                 />
-                <Button
-                  style={style.button}
-                  text="Create token"
-                  onPress={createToken}
-                />
-                {token && (
+                {nativeToken && (
                   <Button
                     style={style.button}
                     text="Wipe token"
                     onPress={wipeToken}
                   />
                 )}
-                {token && (
+                {nativeToken && (
                   <Button
                     style={style.button}
                     text="Validate token"
                     onPress={validateToken}
                   />
                 )}
-                {token && (
+                {nativeToken && (
                   <Button
                     style={style.button}
                     text="Renew token"
