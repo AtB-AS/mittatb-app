@@ -11,31 +11,20 @@ import {
 } from '@atb/utils/date';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {useIsFocused} from '@react-navigation/native';
-import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
+import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 
 type TokenToggleInfoProps = {
   style?: StyleProp<ViewStyle>;
   textColor?: StaticColor;
 };
 
-export const TokenToggleInfo = ({
-  style,
-  textColor,
-}: TokenToggleInfoProps) => {
+export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
   const styles = useStyles();
-  const {deviceInspectionStatus} = useMobileTokenContextState();
-  const screenHasFocus = useIsFocused();
-  const shouldFetchTokenDetails =
-    screenHasFocus && deviceInspectionStatus !== 'loading';
-  const {shouldShowLoader, toggleLimit} = useTokenToggleDetails(
-    shouldFetchTokenDetails,
-  );
+  const {data, isLoading} = useTokenToggleDetailsQuery();
 
-  const limit = toggleLimit ?? 0;
+  const limit = data?.toggleLimit ?? 0;
 
-  return shouldShowLoader ? (
+  return isLoading ? (
     <ActivityIndicator style={[styles.loader, style]} />
   ) : (
     <TokenToggleContent

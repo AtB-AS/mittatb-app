@@ -8,7 +8,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from '../navigation-types';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';
 import {ChangeTokenAction} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/ChangeTokenAction';
-import {useTokenToggleDetails} from '@atb/mobile-token/use-token-toggle-details';
+import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
@@ -17,7 +17,8 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {disable_travelcard} = useRemoteConfig();
-  const {toggleLimit, maxToggleLimit} = useTokenToggleDetails(true);
+  const {data} = useTokenToggleDetailsQuery();
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -34,9 +35,8 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
           onChange={() =>
             navigation.navigate('Profile_SelectTravelTokenScreen')
           }
-          toggleLimit={toggleLimit}
         />
-        <FaqSection toggleMaxLimit={maxToggleLimit} />
+        <FaqSection toggleMaxLimit={data?.maxToggleLimit} />
       </ScrollView>
     </View>
   );
