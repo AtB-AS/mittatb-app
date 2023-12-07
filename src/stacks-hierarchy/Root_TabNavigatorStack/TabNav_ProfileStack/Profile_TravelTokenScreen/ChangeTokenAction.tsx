@@ -20,7 +20,6 @@ const ChangeTokenAction = ({onChange}: {onChange: () => void}) => {
   const {disable_travelcard} = useRemoteConfig();
   const {data: tokenToggleDetails} = useTokenToggleDetails();
 
-  console.log('Toggle limit is ' + tokenToggleDetails?.toggleLimit);
   return (
     <Section style={styles.changeTokenButton}>
       <LinkSectionItem

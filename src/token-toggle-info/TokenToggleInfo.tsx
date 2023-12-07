@@ -24,8 +24,6 @@ export const TokenToggleInfo = ({style, textColor}: TokenToggleInfoProps) => {
 
   const limit = tokenToggleDetails?.toggleLimit ?? 0;
 
-  console.log('Toggle limit inside TokenToggleInfo is ' + limit);
-
   return isLoading ? (
     <ActivityIndicator style={[styles.loader, style]} />
   ) : (
