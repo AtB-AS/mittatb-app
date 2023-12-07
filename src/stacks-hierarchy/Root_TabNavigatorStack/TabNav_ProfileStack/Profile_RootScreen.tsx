@@ -35,17 +35,16 @@ import {destructiveAlert} from './utils';
 import {useIsLoading} from '@atb/utils/use-is-loading';
 import {
   GenericSectionItem,
-  HeaderSectionItem,
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
-import {InfoTag} from '@atb/components/info-tag';
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
+import {SectionHeading} from '@atb/components/section-heading';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -115,416 +114,425 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
         rightButton={{type: 'chat'}}
       />
 
-      <ScrollView
-        contentContainerStyle={style.scrollView}
-        testID="profileHomeScrollView"
-      >
-        <Section withPadding>
-          <HeaderSectionItem text={t(ProfileTexts.sections.account.heading)} />
-          {authenticationType === 'phone' && (
-            <GenericSectionItem>
-              <ThemeText style={style.customerNumberHeading}>
-                {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
-              </ThemeText>
-              <ThemeText type="body__secondary" color="secondary">
-                {phoneNumber?.formatInternational()}
-              </ThemeText>
-            </GenericSectionItem>
-          )}
-          {customerNumber && (
-            <GenericSectionItem>
-              <ThemeText style={style.customerNumberHeading}>
-                {t(ProfileTexts.sections.account.infoItems.customerNumber)}
-              </ThemeText>
-              <ThemeText
-                type="body__secondary"
-                color="secondary"
-                accessibilityLabel={numberToAccessibilityString(customerNumber)}
-              >
-                {customerNumber}
-              </ThemeText>
-            </GenericSectionItem>
-          )}
+      <ScrollView testID="profileHomeScrollView">
+        <View style={style.contentContainer}>
+          <SectionHeading text={t(ProfileTexts.sections.account.heading)} />
+          <Section>
+            {authenticationType === 'phone' && (
+              <GenericSectionItem>
+                <ThemeText style={style.customerNumberHeading}>
+                  {t(ProfileTexts.sections.account.infoItems.phoneNumber)}
+                </ThemeText>
+                <ThemeText type="body__secondary" color="secondary">
+                  {phoneNumber?.formatInternational()}
+                </ThemeText>
+              </GenericSectionItem>
+            )}
+            {customerNumber && (
+              <GenericSectionItem>
+                <ThemeText style={style.customerNumberHeading}>
+                  {t(ProfileTexts.sections.account.infoItems.customerNumber)}
+                </ThemeText>
+                <ThemeText
+                  type="body__secondary"
+                  color="secondary"
+                  accessibilityLabel={numberToAccessibilityString(
+                    customerNumber,
+                  )}
+                >
+                  {customerNumber}
+                </ThemeText>
+              </GenericSectionItem>
+            )}
 
-          {authenticationType == 'phone' && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.account.linkSectionItems.paymentOptions
-                  .label,
-              )}
-              onPress={() =>
-                navigation.navigate('Profile_PaymentOptionsScreen')
-              }
-            />
-          )}
-
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.account.linkSectionItems.ticketHistory
-                .label,
-            )}
-            onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
-            testID="ticketHistoryButton"
-          />
-          {authenticationType !== 'phone' && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.account.linkSectionItems.login.label,
-              )}
-              onPress={() => {
-                let screen: keyof RootStackParamList =
-                  'Root_LoginPhoneInputScreen';
-                if (hasActiveFareContracts) {
-                  screen = 'Root_LoginActiveFareContractWarningScreen';
-                } else if (enable_vipps_login) {
-                  screen = 'Root_LoginOptionsScreen';
-                }
-
-                return navigation.navigate(screen, {});
-              }}
-              icon={<ThemeIcon svg={LogIn} />}
-              testID="loginButton"
-            />
-          )}
-          {authenticationType === 'phone' && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.account.linkSectionItems.editProfile
-                  .label,
-              )}
-              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
-            />
-          )}
-          {authenticationType === 'phone' && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.account.linkSectionItems.logout.label,
-              )}
-              icon={<ThemeIcon svg={LogOut} />}
-              onPress={() =>
-                destructiveAlert({
-                  alertTitleString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout
-                      .confirmTitle,
-                  ),
-                  alertMessageString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout
-                      .confirmMessage,
-                  ),
-                  cancelAlertString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout.alert
-                      .cancel,
-                  ),
-                  confirmAlertString: t(
-                    ProfileTexts.sections.account.linkSectionItems.logout.alert
-                      .confirm,
-                  ),
-                  destructiveArrowFunction: async () => {
-                    Bugsnag.leaveBreadcrumb('User logging out');
-                    analytics.logEvent('Profile', 'User logging out');
-                    setIsLoading(true);
-                    try {
-                      // On logout we delete the user's token
-                      await wipeToken();
-                    } catch (err: any) {
-                      Bugsnag.notify(err);
-                    }
-
-                    try {
-                      await signOut();
-                    } catch (err: any) {
-                      Bugsnag.notify(err);
-                    } finally {
-                      setIsLoading(false);
-                    }
-                  },
-                })
-              }
-              testID="logoutButton"
-            />
-          )}
-        </Section>
-
-        <Section withPadding>
-          <HeaderSectionItem text={t(ProfileTexts.sections.settings.heading)} />
-          {enable_ticketing ? (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.userProfile
-                  .label,
-              )}
-              onPress={() =>
-                navigation.navigate('Profile_DefaultUserProfileScreen')
-              }
-              testID="defaultTravellerButton"
-            />
-          ) : null}
-
-          {authenticationType === 'phone' && (
-            <LinkSectionItem
-              text={
-                disable_travelcard
-                  ? t(
-                      ProfileTexts.sections.settings.linkSectionItems
-                        .travelToken.labelWithoutTravelcard,
-                    )
-                  : t(
-                      ProfileTexts.sections.settings.linkSectionItems
-                        .travelToken.label,
-                    )
-              }
-              onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
-              testID="travelTokenButton"
-            />
-          )}
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.settings.linkSectionItems.appearance.label,
-            )}
-            onPress={() => navigation.navigate('Profile_AppearanceScreen')}
-            testID="appearanceButton"
-          />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.settings.linkSectionItems.startScreen.label,
-            )}
-            onPress={() =>
-              navigation.navigate('Profile_SelectStartScreenScreen')
-            }
-            testID="startScreenButton"
-          />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.settings.linkSectionItems.language.label,
-            )}
-            onPress={() => navigation.navigate('Profile_LanguageScreen')}
-            testID="languageButton"
-          />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.settings.linkSectionItems.privacy.label,
-            )}
-            label="new"
-            onPress={() => navigation.navigate('Profile_PrivacyScreen')}
-            testID="privacyButton"
-          />
-          {isPushNotificationsEnabled && (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .label,
-              )}
-              onPress={() => navigation.navigate('Profile_NotificationsScreen')}
-              testID="notificationsButton"
-            />
-          )}
-        </Section>
-        <Section withPadding>
-          <GenericSectionItem>
-            <View style={style.betaSectionHeader}>
-              <ThemeText type="heading__component">
-                {t(ProfileTexts.sections.newFeatures.heading)}
-              </ThemeText>
-              <InfoTag mode="beta" style={style.betaTag} />
-            </View>
-          </GenericSectionItem>
-
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.settings.linkSectionItems.enrollment.label,
-            )}
-            onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
-            testID="invitationCodeButton"
-          />
-        </Section>
-        <Section withPadding>
-          <HeaderSectionItem
-            text={t(ProfileTexts.sections.favorites.heading)}
-          />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.favorites.linkSectionItems.places.label,
-            )}
-            accessibility={{
-              accessibilityHint: t(
-                ProfileTexts.sections.favorites.linkSectionItems.places
-                  .a11yHint,
-              ),
-            }}
-            testID="favoriteLocationsButton"
-            onPress={() => navigation.navigate('Profile_FavoriteListScreen')}
-          />
-          <LinkSectionItem
-            text={t(
-              ProfileTexts.sections.favorites.linkSectionItems.departures.label,
-            )}
-            accessibility={{
-              accessibilityHint: t(
-                ProfileTexts.sections.favorites.linkSectionItems.departures
-                  .a11yHint,
-              ),
-            }}
-            testID="favoriteDeparturesButton"
-            onPress={() =>
-              navigation.navigate('Profile_FavoriteDeparturesScreen')
-            }
-          />
-        </Section>
-        {enable_ticketing && (
-          <Section withPadding>
-            <HeaderSectionItem
-              text={t(ProfileTexts.sections.information.heading)}
-            />
-            {APP_ORG === 'atb' ? (
+            {authenticationType == 'phone' && (
               <LinkSectionItem
                 text={t(
-                  ProfileTexts.sections.information.linkSectionItems.ticketing
+                  ProfileTexts.sections.account.linkSectionItems.paymentOptions
                     .label,
                 )}
-                testID="ticketingInfoButton"
                 onPress={() =>
-                  navigation.navigate('Profile_TicketingInformationScreen')
+                  navigation.navigate('Profile_PaymentOptionsScreen')
                 }
               />
-            ) : (
-              ticketingInfoUrl && (
-                <LinkSectionItem
-                  icon={<ThemeIcon svg={ExternalLink} />}
-                  text={t(
-                    ProfileTexts.sections.information.linkSectionItems.ticketing
-                      .label,
-                  )}
-                  testID="ticketingInfoButton"
-                  onPress={() => Linking.openURL(ticketingInfoUrl)}
-                />
-              )
             )}
 
-            {APP_ORG === 'atb' ? (
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.account.linkSectionItems.ticketHistory
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
+              testID="ticketHistoryButton"
+            />
+            {authenticationType !== 'phone' && (
               <LinkSectionItem
                 text={t(
-                  ProfileTexts.sections.information.linkSectionItems.terms
-                    .label,
+                  ProfileTexts.sections.account.linkSectionItems.login.label,
                 )}
-                testID="termsInfoButton"
-                onPress={() =>
-                  navigation.navigate('Profile_TermsInformationScreen')
-                }
+                onPress={() => {
+                  let screen: keyof RootStackParamList =
+                    'Root_LoginPhoneInputScreen';
+                  if (hasActiveFareContracts) {
+                    screen = 'Root_LoginActiveFareContractWarningScreen';
+                  } else if (enable_vipps_login) {
+                    screen = 'Root_LoginOptionsScreen';
+                  }
+
+                  return navigation.navigate(screen, {});
+                }}
+                icon={<ThemeIcon svg={LogIn} />}
+                testID="loginButton"
               />
-            ) : (
-              termsInfoUrl && (
-                <LinkSectionItem
-                  icon={<ThemeIcon svg={ExternalLink} />}
-                  text={t(
-                    ProfileTexts.sections.information.linkSectionItems.terms
-                      .label,
-                  )}
-                  testID="termsInfoButton"
-                  onPress={() => Linking.openURL(termsInfoUrl)}
-                />
-              )
             )}
-
-            {APP_ORG === 'atb' ? (
+            {authenticationType === 'phone' && (
               <LinkSectionItem
                 text={t(
-                  ProfileTexts.sections.information.linkSectionItems.inspection
+                  ProfileTexts.sections.account.linkSectionItems.editProfile
                     .label,
                 )}
-                testID="inspectionInfoButton"
-                onPress={() =>
-                  navigation.navigate(
-                    APP_ORG === 'atb'
-                      ? 'Profile_TicketInspectionInformationScreen'
-                      : 'Profile_GenericWebsiteInformationScreen',
-                  )
-                }
+                onPress={() => navigation.navigate('Profile_EditProfileScreen')}
               />
-            ) : (
-              inspectionInfoUrl && (
-                <LinkSectionItem
-                  icon={<ThemeIcon svg={ExternalLink} />}
-                  text={t(
-                    ProfileTexts.sections.information.linkSectionItems
-                      .inspection.label,
-                  )}
-                  testID="inspectionInfoButton"
-                  onPress={() => Linking.openURL(inspectionInfoUrl)}
-                />
-              )
             )}
-
-            {refundInfoUrl && (
+            {authenticationType === 'phone' && (
               <LinkSectionItem
-                icon={<ThemeIcon svg={ExternalLink} />}
                 text={t(
-                  ProfileTexts.sections.information.linkSectionItems.refund
-                    .label,
+                  ProfileTexts.sections.account.linkSectionItems.logout.label,
                 )}
-                testID="refundInfoButton"
-                onPress={() => Linking.openURL(refundInfoUrl)}
+                icon={<ThemeIcon svg={LogOut} />}
+                onPress={() =>
+                  destructiveAlert({
+                    alertTitleString: t(
+                      ProfileTexts.sections.account.linkSectionItems.logout
+                        .confirmTitle,
+                    ),
+                    alertMessageString: t(
+                      ProfileTexts.sections.account.linkSectionItems.logout
+                        .confirmMessage,
+                    ),
+                    cancelAlertString: t(
+                      ProfileTexts.sections.account.linkSectionItems.logout
+                        .alert.cancel,
+                    ),
+                    confirmAlertString: t(
+                      ProfileTexts.sections.account.linkSectionItems.logout
+                        .alert.confirm,
+                    ),
+                    destructiveArrowFunction: async () => {
+                      Bugsnag.leaveBreadcrumb('User logging out');
+                      analytics.logEvent('Profile', 'User logging out');
+                      setIsLoading(true);
+                      try {
+                        // On logout we delete the user's token
+                        await wipeToken();
+                      } catch (err: any) {
+                        Bugsnag.notify(err);
+                      }
+
+                      try {
+                        await signOut();
+                      } catch (err: any) {
+                        Bugsnag.notify(err);
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    },
+                  })
+                }
+                testID="logoutButton"
               />
             )}
           </Section>
-        )}
-        {(!!JSON.parse(IS_QA_ENV || 'false') ||
-          __DEV__ ||
-          customerProfile?.debug) && (
-          <Section withPadding>
-            <HeaderSectionItem text="Developer menu" />
+
+          <SectionHeading text={t(ProfileTexts.sections.settings.heading)} />
+          <Section>
+            {enable_ticketing ? (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.settings.linkSectionItems.userProfile
+                    .label,
+                )}
+                onPress={() =>
+                  navigation.navigate('Profile_DefaultUserProfileScreen')
+                }
+                testID="defaultTravellerButton"
+              />
+            ) : null}
+
+            {authenticationType === 'phone' && (
+              <LinkSectionItem
+                text={
+                  disable_travelcard
+                    ? t(
+                        ProfileTexts.sections.settings.linkSectionItems
+                          .travelToken.labelWithoutTravelcard,
+                      )
+                    : t(
+                        ProfileTexts.sections.settings.linkSectionItems
+                          .travelToken.label,
+                      )
+                }
+                onPress={() => navigation.navigate('Profile_TravelTokenScreen')}
+                testID="travelTokenButton"
+              />
+            )}
             <LinkSectionItem
               text={t(
-                ProfileTexts.sections.favorites.linkSectionItems
-                  .frontpageFavourites.label,
+                ProfileTexts.sections.settings.linkSectionItems.appearance
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_AppearanceScreen')}
+              testID="appearanceButton"
+            />
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.startScreen
+                  .label,
+              )}
+              onPress={() =>
+                navigation.navigate('Profile_SelectStartScreenScreen')
+              }
+              testID="startScreenButton"
+            />
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.language.label,
+              )}
+              onPress={() => navigation.navigate('Profile_LanguageScreen')}
+              testID="languageButton"
+            />
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.privacy.label,
+              )}
+              label="new"
+              onPress={() => navigation.navigate('Profile_PrivacyScreen')}
+              testID="privacyButton"
+            />
+            {isPushNotificationsEnabled && (
+              <LinkSectionItem
+                text={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .label,
+                )}
+                onPress={() =>
+                  navigation.navigate('Profile_NotificationsScreen')
+                }
+                testID="notificationsButton"
+              />
+            )}
+          </Section>
+
+          <SectionHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
+          <Section>
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.enrollment
+                  .label,
+              )}
+              onPress={() => navigation.navigate('Profile_EnrollmentScreen')}
+              testID="invitationCodeButton"
+            />
+          </Section>
+
+          <SectionHeading text={t(ProfileTexts.sections.favorites.heading)} />
+          <Section>
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.favorites.linkSectionItems.places.label,
               )}
               accessibility={{
                 accessibilityHint: t(
-                  ProfileTexts.sections.favorites.linkSectionItems
-                    .frontpageFavourites.a11yHint,
+                  ProfileTexts.sections.favorites.linkSectionItems.places
+                    .a11yHint,
+                ),
+              }}
+              testID="favoriteLocationsButton"
+              onPress={() => navigation.navigate('Profile_FavoriteListScreen')}
+            />
+            <LinkSectionItem
+              text={t(
+                ProfileTexts.sections.favorites.linkSectionItems.departures
+                  .label,
+              )}
+              accessibility={{
+                accessibilityHint: t(
+                  ProfileTexts.sections.favorites.linkSectionItems.departures
+                    .a11yHint,
                 ),
               }}
               testID="favoriteDeparturesButton"
-              onPress={selectFavourites}
-            />
-            <LinkSectionItem
-              text="Design system"
-              testID="designSystemButton"
-              onPress={() => navigation.navigate('Profile_DesignSystemScreen')}
-            />
-            <LinkSectionItem
-              text="Storybook"
-              onPress={() => setStorybookEnabled(true)}
-            />
-            <LinkSectionItem
-              text="Debug"
-              testID="debugButton"
-              onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
+              onPress={() =>
+                navigation.navigate('Profile_FavoriteDeparturesScreen')
+              }
             />
           </Section>
-        )}
-        <View style={style.debugInfoContainer}>
-          <ThemeText>
-            v{version} ({buildNumber})
-          </ThemeText>
-          {config?.installId && (
-            <ClickableCopy
-              successElement={
-                <>
-                  <ScreenReaderAnnouncement
-                    message={t(ProfileTexts.installId.wasCopiedAlert)}
+          {enable_ticketing && (
+            <>
+              <SectionHeading
+                text={t(ProfileTexts.sections.information.heading)}
+              />
+              <Section>
+                {APP_ORG === 'atb' ? (
+                  <LinkSectionItem
+                    text={t(
+                      ProfileTexts.sections.information.linkSectionItems
+                        .ticketing.label,
+                    )}
+                    testID="ticketingInfoButton"
+                    onPress={() =>
+                      navigation.navigate('Profile_TicketingInformationScreen')
+                    }
                   />
-                  <ThemeText>
-                    ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
-                  </ThemeText>
-                </>
-              }
-              copyContent={config.installId}
-            >
-              <ThemeText accessibilityHint={t(ProfileTexts.installId.a11yHint)}>
-                {t(ProfileTexts.installId.label)}: {config.installId}
-              </ThemeText>
-            </ClickableCopy>
+                ) : (
+                  ticketingInfoUrl && (
+                    <LinkSectionItem
+                      icon={<ThemeIcon svg={ExternalLink} />}
+                      text={t(
+                        ProfileTexts.sections.information.linkSectionItems
+                          .ticketing.label,
+                      )}
+                      testID="ticketingInfoButton"
+                      onPress={() => Linking.openURL(ticketingInfoUrl)}
+                    />
+                  )
+                )}
+
+                {APP_ORG === 'atb' ? (
+                  <LinkSectionItem
+                    text={t(
+                      ProfileTexts.sections.information.linkSectionItems.terms
+                        .label,
+                    )}
+                    testID="termsInfoButton"
+                    onPress={() =>
+                      navigation.navigate('Profile_TermsInformationScreen')
+                    }
+                  />
+                ) : (
+                  termsInfoUrl && (
+                    <LinkSectionItem
+                      icon={<ThemeIcon svg={ExternalLink} />}
+                      text={t(
+                        ProfileTexts.sections.information.linkSectionItems.terms
+                          .label,
+                      )}
+                      testID="termsInfoButton"
+                      onPress={() => Linking.openURL(termsInfoUrl)}
+                    />
+                  )
+                )}
+
+                {APP_ORG === 'atb' ? (
+                  <LinkSectionItem
+                    text={t(
+                      ProfileTexts.sections.information.linkSectionItems
+                        .inspection.label,
+                    )}
+                    testID="inspectionInfoButton"
+                    onPress={() =>
+                      navigation.navigate(
+                        APP_ORG === 'atb'
+                          ? 'Profile_TicketInspectionInformationScreen'
+                          : 'Profile_GenericWebsiteInformationScreen',
+                      )
+                    }
+                  />
+                ) : (
+                  inspectionInfoUrl && (
+                    <LinkSectionItem
+                      icon={<ThemeIcon svg={ExternalLink} />}
+                      text={t(
+                        ProfileTexts.sections.information.linkSectionItems
+                          .inspection.label,
+                      )}
+                      testID="inspectionInfoButton"
+                      onPress={() => Linking.openURL(inspectionInfoUrl)}
+                    />
+                  )
+                )}
+
+                {refundInfoUrl && (
+                  <LinkSectionItem
+                    icon={<ThemeIcon svg={ExternalLink} />}
+                    text={t(
+                      ProfileTexts.sections.information.linkSectionItems.refund
+                        .label,
+                    )}
+                    testID="refundInfoButton"
+                    onPress={() => Linking.openURL(refundInfoUrl)}
+                  />
+                )}
+              </Section>
+            </>
           )}
+          {(!!JSON.parse(IS_QA_ENV || 'false') ||
+            __DEV__ ||
+            customerProfile?.debug) && (
+            <>
+              <SectionHeading text="Developer menu" />
+              <Section>
+                <LinkSectionItem
+                  text={t(
+                    ProfileTexts.sections.favorites.linkSectionItems
+                      .frontpageFavourites.label,
+                  )}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.favorites.linkSectionItems
+                        .frontpageFavourites.a11yHint,
+                    ),
+                  }}
+                  testID="favoriteDeparturesButton"
+                  onPress={selectFavourites}
+                />
+                <LinkSectionItem
+                  text="Design system"
+                  testID="designSystemButton"
+                  onPress={() =>
+                    navigation.navigate('Profile_DesignSystemScreen')
+                  }
+                />
+                <LinkSectionItem
+                  text="Storybook"
+                  onPress={() => setStorybookEnabled(true)}
+                />
+                <LinkSectionItem
+                  text="Debug"
+                  testID="debugButton"
+                  onPress={() => navigation.navigate('Profile_DebugInfoScreen')}
+                />
+              </Section>
+            </>
+          )}
+          <View style={style.debugInfoContainer}>
+            <ThemeText type="body__secondary" color="secondary">
+              v{version} ({buildNumber})
+            </ThemeText>
+            {config?.installId && (
+              <ClickableCopy
+                successElement={
+                  <>
+                    <ScreenReaderAnnouncement
+                      message={t(ProfileTexts.installId.wasCopiedAlert)}
+                    />
+                    <ThemeText type="body__secondary" color="secondary">
+                      ✅ {t(ProfileTexts.installId.wasCopiedAlert)}
+                    </ThemeText>
+                  </>
+                }
+                copyContent={config.installId}
+              >
+                <ThemeText
+                  accessibilityHint={t(ProfileTexts.installId.a11yHint)}
+                  type="body__secondary"
+                  color="secondary"
+                >
+                  {t(ProfileTexts.installId.label)}: {config.installId}
+                </ThemeText>
+              </ClickableCopy>
+            )}
+          </View>
         </View>
       </ScrollView>
       {isLoading && <ActivityIndicatorOverlay />}
@@ -537,18 +545,15 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
+  contentContainer: {
+    rowGap: theme.spacings.small,
+    margin: theme.spacings.medium,
+  },
   customerNumberHeading: {
     marginBottom: theme.spacings.xSmall,
   },
-  betaTag: {
-    marginHorizontal: theme.spacings.small,
-  },
-  scrollView: {
-    paddingVertical: theme.spacings.medium,
-  },
   debugInfoContainer: {
     alignItems: 'center',
-    marginVertical: theme.spacings.medium,
   },
   betaSectionHeader: {
     flexDirection: 'row',
