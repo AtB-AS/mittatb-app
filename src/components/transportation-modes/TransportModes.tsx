@@ -15,6 +15,7 @@ import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {TextColor, TextNames} from '@atb-as/theme';
 import _ from 'lodash';
+import {StaticColor} from '@atb/theme/colors';
 
 const modesDisplayLimit: number = 2;
 
@@ -57,6 +58,16 @@ export const getTransportModeText = (
   );
 };
 
+type Props = {
+  modes: TransportModePair[];
+  iconSize?: keyof Theme['icon']['size'];
+  disabled?: boolean;
+  textType?: TextNames;
+  textColor?: TextColor | StaticColor;
+  style?: ViewStyle;
+  customTransportModeText?: string;
+};
+
 export const TransportModes = ({
   modes,
   iconSize,
@@ -65,16 +76,8 @@ export const TransportModes = ({
   textColor,
   style,
   customTransportModeText,
-}: {
-  modes: TransportModePair[];
-  iconSize?: keyof Theme['icon']['size'];
-  disabled?: boolean;
-  textType?: TextNames;
-  textColor?: TextColor;
-  style?: ViewStyle;
-  customTransportModeText?: string;
-}) => {
-  const styles = useStyles();
+}: Props) => {
+  const styles = useStyles({iconSize})();
   const {t} = useTranslation();
 
   const modesCount: number = modes.length;
@@ -112,6 +115,7 @@ export const TransportModes = ({
         />
       )}
       <ThemeText
+        style={styles.transportModeText}
         type={textType ?? 'label__uppercase'}
         color={textColor ?? 'secondary'}
         accessibilityLabel={t(
@@ -129,13 +133,18 @@ export const TransportModes = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  transportationMode: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
-  transportationIcon: {
-    marginRight: theme.spacings.xSmall,
-  },
-}));
+const useStyles = ({iconSize}: Pick<Props, 'iconSize'>) =>
+  StyleSheet.createThemeHook((theme) => ({
+    transportationMode: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'nowrap',
+    },
+    transportationIcon: {
+      marginRight:
+        iconSize === 'small' ? theme.spacings.xSmall : theme.spacings.small,
+    },
+    transportModeText: {
+      flexShrink: 1,
+    },
+  }));
