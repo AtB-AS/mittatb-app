@@ -10,14 +10,14 @@ import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {Location} from '@atb/favorites';
 
 export const StopPlaces = ({
-  header,
+  headerText,
   stopPlaces,
   navigateToPlace,
   testID,
   location,
   isLoading,
 }: {
-  header?: string;
+  headerText?: string;
   stopPlaces: NearestStopPlaceNode[];
   navigateToPlace: (place: StopPlace) => void;
   testID?: string;
@@ -29,7 +29,7 @@ export const StopPlaces = ({
   const noStopPlacesFound = stopPlaces.length === 0 && location && !isLoading;
   return (
     <ScrollView testID={testID} contentContainerStyle={styles.container}>
-      {header && !noStopPlacesFound && <ContentHeading text={header} />}
+      {headerText && !noStopPlacesFound && <ContentHeading text={headerText} />}
       {stopPlaces.map((node: NearestStopPlaceNode) => (
         <StopPlaceItem
           key={node.place.id}
