@@ -107,6 +107,7 @@ const ProfileTexts = {
               'Gi AtB løyve til å sende varslingar til denne telefonen.',
             ),
           },
+          button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
           permissionRequired: {
             title: _(
               'Tillatelse kreves',

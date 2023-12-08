@@ -10,10 +10,17 @@ import {MessageBox} from '@atb/components/message-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useNotifications, isConfigEnabled} from '@atb/notifications';
+import {Button} from '@atb/components/button';
+import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
+import {useProfileQuery} from '@atb/queries';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+type NotificationsScreenProps =
+  ProfileScreenProps<'Profile_NotificationsScreen'>;
 
-export const Profile_NotificationsScreen = () => {
+export const Profile_NotificationsScreen = ({
+  navigation,
+}: NotificationsScreenProps) => {
   const style = useStyles();
   const {t} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
@@ -24,6 +31,8 @@ export const Profile_NotificationsScreen = () => {
     checkPermissions,
     updateConfig,
   } = useNotifications();
+
+  const {data, isLoading: loadingProfile} = useProfileQuery();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -57,7 +66,7 @@ export const Profile_NotificationsScreen = () => {
         </View>
       )}
     >
-      {permissionStatus === 'loading' && (
+      {(permissionStatus === 'loading' || loadingProfile) && (
         <Processing message={t(dictionary.loading)} />
       )}
       {permissionStatus !== 'loading' && (
@@ -82,6 +91,19 @@ export const Profile_NotificationsScreen = () => {
               onValueChange={handlePushNotificationToggle}
             />
           </Section>
+          {data?.email === '' && (
+            <View style={style.button}>
+              <Button
+                onPress={() => navigation.navigate('Profile_EditProfileScreen')}
+                text={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .button,
+                )}
+                mode="secondary"
+              />
+            </View>
+          )}
+
           {permissionStatus !== 'error' && permissionStatus === 'denied' && (
             <MessageBox
               style={style.messageBox}
@@ -129,6 +151,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     marginTop: theme.spacings.medium,
+  },
+  button: {
+    marginHorizontal: theme.spacings.medium,
   },
   messageBox: {
     margin: theme.spacings.medium,
