@@ -54,10 +54,7 @@ const PurchaseOverviewTexts = {
   },
   stopPlaces: {
     harborSelection: {
-      select: {
-        text: _('Velg kaier', 'Select harbors', 'Vel kaier'),
-        a11yLabel: _('Velg kaier', 'Select harbors', 'Vel kaier'),
-      },
+      select: _('Velg kaier', 'Select harbors', 'Vel kaier'),
       noneSelected: {
         text: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),
         a11yLabel: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),

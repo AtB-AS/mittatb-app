@@ -186,7 +186,7 @@ export const NearbyStopPlacesScreenComponent = ({
       <ScreenReaderAnnouncement message={loadAnnouncement} />
       {locationIsAvailable || !!location ? (
         <StopPlaces
-          header={getListDescription()}
+          headerText={getListDescription()}
           stopPlaces={orderedStopPlaces}
           navigateToPlace={onSelectStopPlace}
           testID="nearbyStopsContainerView"
