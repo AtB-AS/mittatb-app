@@ -109,6 +109,20 @@ const ProfileTexts = {
               'Gi AtB løyve til å sende varslingar til denne telefonen.',
             ),
           },
+          emailToggle: {
+            text: _('E-post', 'E-mail', 'E-post'),
+            subText: (email: string) =>
+              _(
+                `Tillat at AtB sender varslinger til ${email}`,
+                `Allow AtB to send notifications to ${email}`,
+                `Gi AtB løyve til å sende varslingar til ${email}`,
+              ),
+            noEmailPlaceholder: _(
+              'Legg til e-post i min profil for å benytte e-postvarsel.',
+              'Add e-mail to my profile to use e-mail notifications.',
+              'Legg til e-post i min profil for å bruke e-postvarsel.',
+            ),
+          },
           permissionRequired: {
             title: _(
               'Tillatelse kreves',

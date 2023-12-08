@@ -1,10 +1,6 @@
 import React, {useEffect} from 'react';
 import {FullScreenView} from '@atb/components/screen-view';
-import {
-  HeaderSectionItem,
-  Section,
-  ToggleSectionItem,
-} from '@atb/components/sections';
+import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -16,6 +12,8 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useNotifications, isConfigEnabled} from '@atb/notifications';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {NotificationConfigGroup} from '@atb/notifications/types';
+import {ContentHeading} from '@atb/components/content-heading';
+import {useProfileQuery} from '@atb/queries';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -37,16 +35,21 @@ export const Profile_NotificationsScreen = () => {
       checkPermissions();
     }
   }, [isFocusedAndActive, checkPermissions]);
+  const mailEnabled = isConfigEnabled(config?.modes, 'mail');
+  const pushEnabled =
+    isConfigEnabled(config?.modes, 'push') && permissionStatus === 'granted';
+  const anyModeEnabled = mailEnabled || pushEnabled;
 
-  const handlePushNotificationToggle = async (enabled: boolean) => {
-    if (enabled) {
+  const handleModeToggle = async (id: string, enabled: boolean) => {
+    if (id === 'push' && enabled) {
       await requestPermissions();
     }
-    updateConfig({config_type: 'mode', id: 'push', enabled});
+    updateConfig({config_type: 'mode', id, enabled});
   };
   const handleGroupToggle = async (id: string, enabled: boolean) => {
     updateConfig({config_type: 'group', id, enabled});
   };
+  const {data, isLoading} = useProfileQuery();
 
   return (
     <FullScreenView
@@ -72,13 +75,38 @@ export const Profile_NotificationsScreen = () => {
       )}
       {permissionStatus !== 'loading' && (
         <View style={style.content}>
+          <ContentHeading
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.notifications
+                .modesHeading,
+            )}
+          />
           <Section>
-            <HeaderSectionItem
+            <ToggleSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .modesHeading,
+                  .emailToggle.text,
               )}
+              subtext={
+                isLoading
+                  ? undefined
+                  : t(
+                      data?.email
+                        ? ProfileTexts.sections.settings.linkSectionItems.notifications.emailToggle.subText(
+                            data.email,
+                          )
+                        : ProfileTexts.sections.settings.linkSectionItems
+                            .notifications.emailToggle.noEmailPlaceholder,
+                    )
+              }
+              value={
+                permissionStatus === 'granted' &&
+                isConfigEnabled(config?.modes, 'mail')
+              }
+              onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
+          </Section>
+          <Section>
             <ToggleSectionItem
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications
@@ -95,7 +123,7 @@ export const Profile_NotificationsScreen = () => {
               disabled={
                 permissionStatus === 'updating' || permissionStatus === 'denied'
               }
-              onValueChange={handlePushNotificationToggle}
+              onValueChange={(enabled) => handleModeToggle('push', enabled)}
             />
           </Section>
           {permissionStatus !== 'error' && permissionStatus === 'denied' && (
@@ -131,13 +159,13 @@ export const Profile_NotificationsScreen = () => {
               )}
             />
           )}
+          <ContentHeading
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.notifications
+                .groupsHeading,
+            )}
+          />
           <Section>
-            <HeaderSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .groupsHeading,
-              )}
-            />
             {notificationConfig?.groups.map((group) => (
               <ToggleSectionItem
                 key={group.id}
@@ -147,7 +175,7 @@ export const Profile_NotificationsScreen = () => {
                   config?.groups,
                   group.id as NotificationConfigGroup['id'],
                 )}
-                disabled={permissionStatus !== 'granted'}
+                disabled={!anyModeEnabled}
                 onValueChange={(enabled) =>
                   handleGroupToggle(group.id, enabled)
                 }
