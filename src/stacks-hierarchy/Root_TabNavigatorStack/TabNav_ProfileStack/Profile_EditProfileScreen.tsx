@@ -56,7 +56,7 @@ export const Profile_EditProfileScreen = ({
   )?.formatInternational();
 
   const onSubmit = async () => {
-    if (isValidEmail(email)) {
+    if (isValidEmail(email) || email === '') {
       updateProfile({firstName, surname, email});
     } else {
       setInvalidEmail(true);
