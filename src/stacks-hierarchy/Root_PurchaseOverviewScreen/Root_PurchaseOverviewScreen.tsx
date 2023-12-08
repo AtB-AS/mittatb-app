@@ -1,5 +1,4 @@
 import {MessageBox} from '@atb/components/message-box';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
@@ -25,6 +24,7 @@ import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {isAfter} from '@atb/utils/date';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -138,177 +138,177 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         setFocusOnLoad={!params.onFocusElement}
       />
 
-      <ScrollView
-        testID="ticketingScrollView"
-        contentContainerStyle={styles.contentContainer}
-      >
-        {params.mode === 'TravelSearch' && (
-          <MessageBox
-            style={styles.travelSearchInfo}
-            type="valid"
-            message={t(PurchaseOverviewTexts.travelSearchInfo)}
-          />
-        )}
-        {error &&
-          (isEmptyOffer ? (
+      <ScrollView testID="ticketingScrollView">
+        <View style={styles.contentContainer}>
+          {params.mode === 'TravelSearch' && (
             <MessageBox
-              type="info"
-              message={t(
-                PurchaseOverviewTexts.errorMessageBox.productUnavailable(
-                  getReferenceDataName(preassignedFareProduct, language),
-                ),
-              )}
-              style={styles.selectionComponent}
+              style={styles.travelSearchInfo}
+              type="valid"
+              message={t(PurchaseOverviewTexts.travelSearchInfo)}
+            />
+          )}
+          {error &&
+            (isEmptyOffer ? (
+              <MessageBox
+                type="info"
+                message={t(
+                  PurchaseOverviewTexts.errorMessageBox.productUnavailable(
+                    getReferenceDataName(preassignedFareProduct, language),
+                  ),
+                )}
+                style={styles.selectionComponent}
+              />
+            ) : (
+              <MessageBox
+                type="error"
+                title={t(PurchaseOverviewTexts.errorMessageBox.title)}
+                message={t(PurchaseOverviewTexts.errorMessageBox.message)}
+                onPressConfig={{
+                  action: refreshOffer,
+                  text: t(dictionary.retry),
+                }}
+                style={styles.selectionComponent}
+              />
+            ))}
+
+          <ProductSelection
+            preassignedFareProduct={preassignedFareProduct}
+            fareProductTypeConfig={params.fareProductTypeConfig}
+            setSelectedProduct={onSelectPreassignedFareProduct}
+            style={styles.selectionComponent}
+          />
+
+          <TravellerSelection
+            setTravellerSelection={setTravellerSelection}
+            fareProductType={preassignedFareProduct.type}
+            selectionMode={travellerSelectionMode}
+            selectableUserProfiles={selectableTravellers}
+            style={styles.selectionComponent}
+          />
+          <FromToSelection
+            fareProductTypeConfig={params.fareProductTypeConfig}
+            fromPlace={fromPlace}
+            toPlace={toPlace}
+            preassignedFareProduct={preassignedFareProduct}
+            style={styles.selectionComponent}
+            onSelect={(params) => {
+              navigation.setParams({onFocusElement: undefined});
+              navigation.push(
+                zoneSelectionMode === 'multiple-stop-harbor'
+                  ? 'Root_PurchaseHarborSearchScreen'
+                  : 'Root_PurchaseTariffZonesSearchByMapScreen',
+                params,
+              );
+            }}
+            ref={focusRefs}
+          />
+
+          <StartTimeSelection
+            selectionMode={timeSelectionMode}
+            color="interactive_2"
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            validFromTime={travelDate}
+            maximumDate={maximumDateObjectIfExisting}
+            style={styles.selectionComponent}
+            showActivationDateWarning={showActivationDateWarning}
+            setShowActivationDateWarning={setShowActivationDateWarning}
+          />
+
+          <FlexTicketDiscountInfo
+            userProfiles={userProfilesWithCountAndOffer}
+            style={styles.selectionComponent}
+          />
+
+          {isFree ? (
+            <MessageBox
+              type="valid"
+              message={t(PurchaseOverviewTexts.summary.free)}
+              style={styles.messages}
             />
           ) : (
-            <MessageBox
-              type="error"
-              title={t(PurchaseOverviewTexts.errorMessageBox.title)}
-              message={t(PurchaseOverviewTexts.errorMessageBox.message)}
-              onPressConfig={{
-                action: refreshOffer,
-                text: t(dictionary.retry),
-              }}
-              style={styles.selectionComponent}
-            />
-          ))}
+            <View style={styles.messages}>
+              <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
+              <GlobalMessage
+                globalMessageContext={
+                  GlobalMessageContextEnum.appPurchaseOverview
+                }
+                textColor="background_0"
+                ruleVariables={{
+                  preassignedFareProductType: preassignedFareProduct.type,
+                  fromTariffZone: fromPlace.id,
+                  toTariffZone: toPlace.id,
+                }}
+              />
+            </View>
+          )}
 
-        <ProductSelection
-          preassignedFareProduct={preassignedFareProduct}
-          fareProductTypeConfig={params.fareProductTypeConfig}
-          setSelectedProduct={onSelectPreassignedFareProduct}
-          style={styles.selectionComponent}
-        />
-
-        <TravellerSelection
-          setTravellerSelection={setTravellerSelection}
-          fareProductType={preassignedFareProduct.type}
-          selectionMode={travellerSelectionMode}
-          selectableUserProfiles={selectableTravellers}
-          style={styles.selectionComponent}
-        />
-        <FromToSelection
-          fareProductTypeConfig={params.fareProductTypeConfig}
-          fromPlace={fromPlace}
-          toPlace={toPlace}
-          preassignedFareProduct={preassignedFareProduct}
-          style={styles.selectionComponent}
-          onSelect={(params) => {
-            navigation.setParams({onFocusElement: undefined});
-            navigation.push(
-              zoneSelectionMode === 'multiple-stop-harbor'
-                ? 'Root_PurchaseHarborSearchScreen'
-                : 'Root_PurchaseTariffZonesSearchByMapScreen',
-              params,
-            );
-          }}
-          ref={focusRefs}
-        />
-
-        <StartTimeSelection
-          selectionMode={timeSelectionMode}
-          color="interactive_2"
-          travelDate={travelDate}
-          setTravelDate={setTravelDate}
-          validFromTime={travelDate}
-          maximumDate={maximumDateObjectIfExisting}
-          style={styles.selectionComponent}
-          showActivationDateWarning={showActivationDateWarning}
-          setShowActivationDateWarning={setShowActivationDateWarning}
-        />
-
-        <FlexTicketDiscountInfo
-          userProfiles={userProfilesWithCountAndOffer}
-          style={styles.selectionComponent}
-        />
-
-        {isFree ? (
-          <MessageBox
-            type="valid"
-            message={t(PurchaseOverviewTexts.summary.free)}
-            style={styles.messages}
+          <Summary
+            isLoading={isSearchingOffer}
+            isFree={isFree}
+            isError={!!error || !hasSelection}
+            price={totalPrice}
+            userProfilesWithCount={travellerSelection}
+            onPressBuy={() => {
+              analytics.logEvent('Ticketing', 'Purchase summary clicked', {
+                fareProduct: params.fareProductTypeConfig.name,
+                tariffZone: {from: fromPlace.id, to: toPlace.id},
+                userProfilesWithCount: travellerSelection.map((t) => ({
+                  userType: t.userTypeString,
+                  count: t.count,
+                })),
+                preassignedFareProduct: {
+                  id: preassignedFareProduct.id,
+                  name: preassignedFareProduct.name.value,
+                },
+                travelDate,
+                mode: params.mode,
+              });
+              navigation.navigate('Root_PurchaseConfirmationScreen', {
+                fareProductTypeConfig: params.fareProductTypeConfig,
+                fromPlace: fromPlace,
+                toPlace: toPlace,
+                userProfilesWithCount: travellerSelection,
+                preassignedFareProduct,
+                travelDate,
+                headerLeftButton: {type: 'back'},
+                mode: params.mode,
+              });
+            }}
+            style={styles.summary}
           />
-        ) : (
-          <View style={styles.messages}>
-            <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
-            <GlobalMessage
-              globalMessageContext={
-                GlobalMessageContextEnum.appPurchaseOverview
-              }
-              textColor="background_0"
-              ruleVariables={{
-                preassignedFareProductType: preassignedFareProduct.type,
-                fromTariffZone: fromPlace.id,
-                toTariffZone: toPlace.id,
-              }}
-            />
-          </View>
-        )}
-
-        <Summary
-          isLoading={isSearchingOffer}
-          isFree={isFree}
-          isError={!!error || !hasSelection}
-          price={totalPrice}
-          userProfilesWithCount={travellerSelection}
-          onPressBuy={() => {
-            analytics.logEvent('Ticketing', 'Purchase summary clicked', {
-              fareProduct: params.fareProductTypeConfig.name,
-              tariffZone: {from: fromPlace.id, to: toPlace.id},
-              userProfilesWithCount: travellerSelection.map((t) => ({
-                userType: t.userTypeString,
-                count: t.count,
-              })),
-              preassignedFareProduct: {
-                id: preassignedFareProduct.id,
-                name: preassignedFareProduct.name.value,
-              },
-              travelDate,
-              mode: params.mode,
-            });
-            navigation.navigate('Root_PurchaseConfirmationScreen', {
-              fareProductTypeConfig: params.fareProductTypeConfig,
-              fromPlace: fromPlace,
-              toPlace: toPlace,
-              userProfilesWithCount: travellerSelection,
-              preassignedFareProduct,
-              travelDate,
-              headerLeftButton: {type: 'back'},
-              mode: params.mode,
-            });
-          }}
-          style={styles.summary}
-        />
-        <FullScreenFooter>
-          <View />
-        </FullScreenFooter>
+        </View>
       </ScrollView>
     </View>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
-  },
-  contentContainer: {
-    rowGap: theme.spacings.medium,
-    margin: theme.spacings.medium,
-  },
-  messages: {
-    rowGap: theme.spacings.medium,
-    marginTop: theme.spacings.medium,
-  },
-  selectionComponent: {
-    rowGap: theme.spacings.medium,
-  },
-  summary: {
-    marginVertical: theme.spacings.medium,
-  },
-  travelSearchInfo: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    container: {
+      flex: 1,
+      backgroundColor: theme.static.background.background_1.background,
+    },
+    contentContainer: {
+      rowGap: theme.spacings.medium,
+      margin: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+    },
+    messages: {
+      rowGap: theme.spacings.medium,
+      marginTop: theme.spacings.medium,
+    },
+    selectionComponent: {
+      rowGap: theme.spacings.medium,
+    },
+    summary: {
+      marginVertical: theme.spacings.medium,
+    },
+    travelSearchInfo: {
+      marginHorizontal: theme.spacings.medium,
+      marginTop: theme.spacings.xLarge,
+      marginBottom: theme.spacings.medium,
+    },
+  };
+});
