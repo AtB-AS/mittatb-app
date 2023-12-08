@@ -1,9 +1,7 @@
 import React from 'react';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {ThemeText} from '@atb/components/text';
 import {InteractiveColor} from '@atb/theme/colors';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet} from '@atb/theme';
 import {
   formatToShortDateTimeWithoutYear,
   formatToVerboseDateTime,
@@ -12,6 +10,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {TravelDateSheet} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
 import {RadioSegments} from '@atb/components/radio';
 import {TimeSelectionMode} from '@atb/configuration';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type StartTimeSelectionProps = {
   color: InteractiveColor;
@@ -42,7 +41,6 @@ export function StartTimeSelection({
     close: closeBottomSheet,
     onOpenFocusRef,
   } = useBottomSheet();
-  const styles = useStyles();
 
   const openTravelDateSheet = () => {
     openBottomSheet(() => (
@@ -73,12 +71,9 @@ export function StartTimeSelection({
 
   return (
     <View style={style}>
-      <ThemeText type="body__secondary" color="secondary">
-        {t(PurchaseOverviewTexts.startTime.title)}
-      </ThemeText>
+      <ContentHeading text={t(PurchaseOverviewTexts.startTime.title)} />
       <RadioSegments
         color={color}
-        style={styles.radioSegments}
         activeIndex={!!validFromTime ? 1 : 0}
         options={[
           {
@@ -98,9 +93,3 @@ export function StartTimeSelection({
     </View>
   );
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  radioSegments: {
-    marginTop: theme.spacings.medium,
-  },
-}));

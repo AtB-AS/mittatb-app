@@ -23,6 +23,7 @@ import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -70,16 +71,12 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
 
     return (
       <View style={style}>
-        <ThemeText
-          type="body__secondary"
-          color="secondary"
-          style={styles.sectionText}
+        <ContentHeading
+          text={t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
           accessibilityLabel={t(
             PurchaseOverviewTexts.zones.title[selectionMode].a11yLabel,
           )}
-        >
-          {t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
-        </ThemeText>
+        />
         <Section {...accessibility}>
           <GenericClickableSectionItem
             ref={zonesRef}
