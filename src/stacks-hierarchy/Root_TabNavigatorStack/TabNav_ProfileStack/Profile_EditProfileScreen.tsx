@@ -175,6 +175,7 @@ export const Profile_EditProfileScreen = ({
                   showClear={!isLoadingOrSubmittingProfile}
                   errorText={getEmailErrorText(invalidEmail, errorUpdate)}
                   inlineLabel={false}
+                  autoCapitalize="none"
                 />
               </Section>
 
