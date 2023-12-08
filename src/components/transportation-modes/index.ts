@@ -1,2 +1,3 @@
 export {getTransportModeText, TransportModes} from './TransportModes';
-export type {TransportModePair} from './TransportModes';
+export {TransportModesWithText} from './TransportModesWithText';
+export type {TransportModePair} from './types';
