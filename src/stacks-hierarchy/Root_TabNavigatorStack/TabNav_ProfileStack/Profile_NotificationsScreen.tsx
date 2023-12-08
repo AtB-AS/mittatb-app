@@ -99,10 +99,7 @@ export const Profile_NotificationsScreen = () => {
                             .notifications.emailToggle.noEmailPlaceholder,
                     )
               }
-              value={
-                permissionStatus === 'granted' &&
-                isConfigEnabled(config?.modes, 'mail')
-              }
+              value={isConfigEnabled(config?.modes, 'mail')}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
           </Section>
@@ -116,10 +113,7 @@ export const Profile_NotificationsScreen = () => {
                 ProfileTexts.sections.settings.linkSectionItems.notifications
                   .pushToggle.subText,
               )}
-              value={
-                permissionStatus === 'granted' &&
-                isConfigEnabled(config?.modes, 'push')
-              }
+              value={isConfigEnabled(config?.modes, 'push')}
               disabled={
                 permissionStatus === 'updating' || permissionStatus === 'denied'
               }
