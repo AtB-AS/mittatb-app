@@ -6,7 +6,6 @@ import {DashboardStackParams} from './navigation-types';
 import {Dashboard_NearbyStopPlacesScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_NearbyStopPlacesScreen';
 import {Dashboard_DepartureDetailsScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_DepartureDetailsScreen';
 import {Dashboard_TravelDetailsMapScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TravelDetailsMapScreen';
-import {Dashboard_QuayDeparturesScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_QuayDeparturesScreen';
 import {Dashboard_PlaceScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_PlaceScreen';
 import {Dashboard_FavoriteDeparturesScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_FavoriteDeparturesScreen';
 import {Dashboard_TripDetailsScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripDetailsScreen';
@@ -63,10 +62,6 @@ export const TabNav_DashboardStack = () => {
       <Stack.Screen
         name="Dashboard_PlaceScreen"
         component={Dashboard_PlaceScreen}
-      />
-      <Stack.Screen
-        name="Dashboard_QuayDeparturesScreen"
-        component={Dashboard_QuayDeparturesScreen}
       />
       <Stack.Screen
         name="Dashboard_FavoriteDeparturesScreen"
