@@ -32,7 +32,7 @@ const AnnouncementsContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection<AnnouncementRaw>('announcements')
+      .collection<AnnouncementRaw>('announcements_v2')
       .where('active', '==', true)
       .onSnapshot(
         async (snapshot) => {
