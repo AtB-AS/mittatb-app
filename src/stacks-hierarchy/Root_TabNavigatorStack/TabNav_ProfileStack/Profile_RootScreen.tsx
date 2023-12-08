@@ -44,7 +44,7 @@ import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
-import {SectionHeading} from '@atb/components/section-heading';
+import {ContentHeading} from '@atb/components/content-heading';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -116,7 +116,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
 
       <ScrollView testID="profileHomeScrollView">
         <View style={style.contentContainer}>
-          <SectionHeading text={t(ProfileTexts.sections.account.heading)} />
+          <ContentHeading text={t(ProfileTexts.sections.account.heading)} />
           <Section>
             {authenticationType === 'phone' && (
               <GenericSectionItem>
@@ -244,7 +244,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
           </Section>
 
-          <SectionHeading text={t(ProfileTexts.sections.settings.heading)} />
+          <ContentHeading text={t(ProfileTexts.sections.settings.heading)} />
           <Section>
             {enable_ticketing ? (
               <LinkSectionItem
@@ -323,7 +323,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             )}
           </Section>
 
-          <SectionHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
+          <ContentHeading text={t(ProfileTexts.sections.newFeatures.heading)} />
           <Section>
             <LinkSectionItem
               text={t(
@@ -335,7 +335,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             />
           </Section>
 
-          <SectionHeading text={t(ProfileTexts.sections.favorites.heading)} />
+          <ContentHeading text={t(ProfileTexts.sections.favorites.heading)} />
           <Section>
             <LinkSectionItem
               text={t(
@@ -369,7 +369,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           </Section>
           {enable_ticketing && (
             <>
-              <SectionHeading
+              <ContentHeading
                 text={t(ProfileTexts.sections.information.heading)}
               />
               <Section>
@@ -470,7 +470,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             __DEV__ ||
             customerProfile?.debug) && (
             <>
-              <SectionHeading text="Developer menu" />
+              <ContentHeading text="Developer menu" />
               <Section>
                 <LinkSectionItem
                   text={t(

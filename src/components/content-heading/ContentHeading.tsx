@@ -4,17 +4,17 @@ import {View} from 'react-native';
 import {ThemeText} from '../text';
 import {ContrastColor, StaticColor, TextColor} from '@atb/theme/colors';
 
-type SectionHeaderProps = {
+type ContentHeadingProps = {
   text: string;
   color?: TextColor | StaticColor | ContrastColor;
   accessibilityLabel?: string;
 };
 
-export function SectionHeading({
+export function ContentHeading({
   text,
   color = 'secondary',
   accessibilityLabel,
-}: SectionHeaderProps): JSX.Element {
+}: ContentHeadingProps): JSX.Element {
   const styles = useStyles();
 
   return (

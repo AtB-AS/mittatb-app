@@ -21,7 +21,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {SectionHeading} from '@atb/components/section-heading';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
@@ -42,7 +42,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
 
   return (
     <View style={style}>
-      <SectionHeading text={t(PurchaseOverviewTexts.flexDiscount.heading)} />
+      <ContentHeading text={t(PurchaseOverviewTexts.flexDiscount.heading)} />
       <Section>
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}

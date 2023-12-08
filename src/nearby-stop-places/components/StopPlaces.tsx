@@ -1,4 +1,4 @@
-import {SectionHeading} from '@atb/components/section-heading';
+import {ContentHeading} from '@atb/components/content-heading';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {StopPlaceItem} from './StopPlaceItem';
 import React from 'react';
@@ -29,7 +29,7 @@ export const StopPlaces = ({
   const noStopPlacesFound = stopPlaces.length === 0 && location && !isLoading;
   return (
     <ScrollView testID={testID} contentContainerStyle={styles.container}>
-      {header && !noStopPlacesFound && <SectionHeading text={header} />}
+      {header && !noStopPlacesFound && <ContentHeading text={header} />}
       {stopPlaces.map((node: NearestStopPlaceNode) => (
         <StopPlaceItem
           key={node.place.id}

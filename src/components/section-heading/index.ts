@@ -1,1 +1,0 @@
-export {SectionHeading} from './SectionHeading';

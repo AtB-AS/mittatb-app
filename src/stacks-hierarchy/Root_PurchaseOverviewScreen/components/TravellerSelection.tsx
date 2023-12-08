@@ -15,7 +15,7 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {SectionHeading} from '@atb/components/section-heading';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -121,7 +121,7 @@ export function TravellerSelection({
 
   return (
     <View style={style}>
-      <SectionHeading
+      <ContentHeading
         text={
           selectionMode == 'multiple'
             ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)

@@ -16,7 +16,7 @@ import {
 import {useTextForLanguage} from '@atb/translations/utils';
 import {ProductAliasChip} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductAliasChip';
 import {useTicketingState} from '@atb/ticketing';
-import {SectionHeading} from '@atb/components/section-heading';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type Props = {
   color: InteractiveColor;
@@ -48,7 +48,7 @@ export function ProductSelectionByAlias({
 
   return (
     <View style={style}>
-      <SectionHeading
+      <ContentHeading
         text={title || t(PurchaseOverviewTexts.productSelection.title)}
       />
       <ScrollView

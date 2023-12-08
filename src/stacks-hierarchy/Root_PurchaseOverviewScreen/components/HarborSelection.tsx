@@ -9,7 +9,7 @@ import {PreassignedFareProduct} from '@atb/configuration';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
-import {SectionHeading} from '@atb/components/section-heading';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type StopPlaceSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -43,7 +43,7 @@ export const HarborSelection = forwardRef<
 
     return (
       <View style={style} accessible={false}>
-        <SectionHeading
+        <ContentHeading
           text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
         />
         <Section accessible={false}>
