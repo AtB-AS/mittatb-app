@@ -5,7 +5,12 @@ import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StaticColorByType} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
-import {dictionary, ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  getTextForLanguage,
+  ProfileTexts,
+  useTranslation,
+} from '@atb/translations';
 import {MessageBox} from '@atb/components/message-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
@@ -19,7 +24,7 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export const Profile_NotificationsScreen = () => {
   const style = useStyles();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
   const {
     permissionStatus,
@@ -160,21 +165,26 @@ export const Profile_NotificationsScreen = () => {
             )}
           />
           <Section>
-            {notificationConfig?.groups.map((group) => (
-              <ToggleSectionItem
-                key={group.id}
-                text={group.toggleTitle[0].value ?? ''}
-                subtext={group.toggleDescription[0].value ?? ''}
-                value={isConfigEnabled(
-                  config?.groups,
-                  group.id as NotificationConfigGroup['id'],
-                )}
-                disabled={!anyModeEnabled}
-                onValueChange={(enabled) =>
-                  handleGroupToggle(group.id, enabled)
-                }
-              />
-            ))}
+            {notificationConfig?.groups
+              .filter((g) => getTextForLanguage(g.toggleTitle, language))
+              .map((group) => (
+                <ToggleSectionItem
+                  key={group.id}
+                  text={getTextForLanguage(group.toggleTitle, language) ?? ''}
+                  subtext={getTextForLanguage(
+                    group.toggleDescription,
+                    language,
+                  )}
+                  value={isConfigEnabled(
+                    config?.groups,
+                    group.id as NotificationConfigGroup['id'],
+                  )}
+                  disabled={!anyModeEnabled}
+                  onValueChange={(enabled) =>
+                    handleGroupToggle(group.id, enabled)
+                  }
+                />
+              ))}
           </Section>
         </View>
       )}
