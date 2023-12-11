@@ -172,6 +172,7 @@ export const Profile_EditProfileScreen = ({
                     EditProfileTexts.personalDetails.email.placeholder,
                   )}
                   keyboardType="email-address"
+                  autoComplete="email"
                   showClear={!isLoadingOrSubmittingProfile}
                   errorText={getEmailErrorText(invalidEmail, errorUpdate)}
                   inlineLabel={false}
