@@ -5,11 +5,11 @@ import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useMemo} from 'react';
-import {RefreshControl, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {View} from 'react-native';
 import {useAnalytics} from '@atb/analytics';
 import {TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
+import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
