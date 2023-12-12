@@ -13,6 +13,7 @@ import {isArray} from 'lodash';
 import {isDefined} from '@atb/utils/presence';
 import {
   FlexibleTransportOption,
+  NotificationConfig,
   TransportModeFilterOption,
   TravelSearchPreference,
 } from '@atb-as/config-specs';
@@ -149,4 +150,14 @@ export function mapToHarborConnectionOverride(overrides?: any) {
       return parseResult.data;
     })
     .filter(isDefined);
+}
+
+export function mapToNotificationConfig(config?: any) {
+  if (!config) return;
+  if (!(typeof config === 'object')) return;
+  const parseResult = NotificationConfig.safeParse(config);
+  if (!parseResult.success) {
+    return;
+  }
+  return parseResult.data;
 }

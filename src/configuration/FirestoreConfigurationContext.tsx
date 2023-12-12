@@ -23,6 +23,7 @@ import {
   UserProfile,
   MobilityOperatorType,
   FirestoreConfigStatus,
+  NotificationConfigType,
 } from './types';
 import {
   mapLanguageAndTextType,
@@ -31,6 +32,7 @@ import {
   mapToFlexibleTransportOption,
   mapToHarborConnectionOverride,
   mapToMobilityOperators,
+  mapToNotificationConfig,
   mapToTransportModeFilterOptions,
   mapToTravelSearchPreferences,
 } from './converters';
@@ -59,6 +61,7 @@ type ConfigurationContextState = {
   mobilityOperators: MobilityOperatorType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
   firestoreConfigStatus: FirestoreConfigStatus;
+  notificationConfig: NotificationConfigType | undefined;
   resubscribeFirestoreConfig: () => void;
 };
 
@@ -95,6 +98,9 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
     HarborConnectionOverrideType[]
   >([]);
+  const [notificationConfig, setNotificationConfig] = useState<
+    NotificationConfigType | undefined
+  >();
   const [firestoreConfigStatus, setFirestoreConfigStatus] =
     useState<FirestoreConfigStatus>('loading');
   const {resubscribe, resubscribeToggle} = useResubscribeToggle();
@@ -179,6 +185,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setHarborConnectionOverrides(harborConnectionOverrides);
           }
           setFirestoreConfigStatus(!snapshot.empty ? 'success' : 'loading');
+
+          const notificationConfig =
+            getNotificationConfigFromSnapshot(snapshot);
+          if (notificationConfig) {
+            setNotificationConfig(notificationConfig);
+          }
         },
         (error) => {
           Bugsnag.leaveBreadcrumb(
@@ -205,6 +217,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     setConfigurableLinks(undefined);
     setMobilityOperators([]);
     setHarborConnectionOverrides([]);
+    setNotificationConfig(undefined);
   };
 
   useEffect(() => {
@@ -231,6 +244,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       configurableLinks,
       mobilityOperators,
       harborConnectionOverrides,
+      notificationConfig,
       firestoreConfigStatus,
     };
   }, [
@@ -248,6 +262,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     configurableLinks,
     mobilityOperators,
     harborConnectionOverrides,
+    notificationConfig,
     firestoreConfigStatus,
   ]);
 
@@ -503,4 +518,13 @@ function getHarborConnectionOverridesFromSnapshot(
     (doc) => doc.id == 'harborConnectionOverrides',
   );
   return mapToHarborConnectionOverride(overrides?.get('overrides'));
+}
+
+function getNotificationConfigFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): NotificationConfigType | undefined {
+  const notificationConfig = snapshot.docs.find(
+    (doc) => doc.id == 'notificationConfig',
+  );
+  return mapToNotificationConfig(notificationConfig?.data());
 }
