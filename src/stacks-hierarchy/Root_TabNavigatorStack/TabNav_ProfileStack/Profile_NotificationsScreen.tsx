@@ -110,10 +110,22 @@ export const Profile_NotificationsScreen = ({
                             .notifications.emailToggle.noEmailPlaceholder,
                     )
               }
+              disabled={data?.email === ''}
               value={isConfigEnabled(config?.modes, 'mail')}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
           </Section>
+          {data?.email === '' && (
+            <Button
+              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .button,
+              )}
+              interactiveColor="interactive_2"
+              mode="secondary"
+            />
+          )}
           <Section>
             <ToggleSectionItem
               text={t(
@@ -131,18 +143,6 @@ export const Profile_NotificationsScreen = ({
               onValueChange={(enabled) => handleModeToggle('push', enabled)}
             />
           </Section>
-          {data?.email === '' && (
-            <View style={style.button}>
-              <Button
-                onPress={() => navigation.navigate('Profile_EditProfileScreen')}
-                text={t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .button,
-                )}
-                mode="secondary"
-              />
-            </View>
-          )}
 
           {permissionStatus !== 'error' && permissionStatus === 'denied' && (
             <MessageBox
@@ -213,9 +213,6 @@ export const Profile_NotificationsScreen = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   parallaxContent: {
-    marginHorizontal: theme.spacings.medium,
-  },
-  button: {
     marginHorizontal: theme.spacings.medium,
   },
   content: {
