@@ -2,9 +2,9 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {FareProductTypeConfig} from '@atb/configuration';
 import React, {forwardRef} from 'react';
-import {TransportationIconBox} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
+import {TransportationIconBoxList} from '@atb/components/icon-box';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -17,14 +17,10 @@ export const FareProductHeader = forwardRef<View, Props>(
 
     return (
       <View style={[style, styles.header]} ref={ref} accessible={true}>
-        {fareProductTypeConfig.transportModes.map(({mode, subMode}) => (
-          <TransportationIconBox
-            key={mode + subMode}
-            mode={mode}
-            subMode={subMode}
-            style={styles.icon}
-          />
-        ))}
+        <TransportationIconBoxList
+          modes={fareProductTypeConfig.transportModes}
+          iconSize="normal"
+        />
         <ThemeText
           type="heading--medium"
           color="background_accent_0"
