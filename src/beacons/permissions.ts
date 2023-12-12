@@ -33,7 +33,7 @@ function getBluetoothPermission(): Permission {
 // This function checks if the required permissions are granted for Android
 // If not, it requests the permissions and returns false
 // If the permissions are granted, it returns true
-export const isRequiredBeaconsPermissionsGrantedForAndroid = async (rationaleMessages: RationaleMessages) => {
+export const requestAndroidBeaconPermissions = async (rationaleMessages: RationaleMessages) => {
     // Request Bluetooth permission
     const bluetoothStatus = await request(
         BEACONS_PERMISSIONS.bluetooth,
