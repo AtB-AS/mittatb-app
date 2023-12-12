@@ -9,6 +9,7 @@ import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark'
 import {Map} from '@atb/assets/svg/mono-icons/map';
 import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
+import {TransportationIconBox} from '@atb/components/icon-box';
 import {useRealtimeMapEnabled} from '@atb/components/map';
 import {MessageBox} from '@atb/components/message-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -47,7 +48,6 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {TransportModesWithText} from '@atb/components/transportation-modes';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -144,13 +144,22 @@ export const DepartureDetailsScreenComponent = ({
         }}
         parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
           <View style={styles.parallaxContent}>
-            <TransportModesWithText
-              modes={mode ? [{mode, subMode}] : []}
-              text={title ?? t(DepartureDetailsTexts.header.notFound)}
-              textType="heading--medium"
-              textColor="background_accent_0"
-              ref={focusRef}
-            />
+            <View style={styles.headerTitle} ref={focusRef} accessible={true}>
+              {mode && (
+                <TransportationIconBox
+                  mode={mode}
+                  subMode={subMode}
+                  style={styles.headerTitleIcon}
+                />
+              )}
+              <ThemeText
+                type="heading--medium"
+                color="background_accent_0"
+                style={{flexShrink: 1}}
+              >
+                {title ?? t(DepartureDetailsTexts.header.notFound)}
+              </ThemeText>
+            </View>
             {shouldShowMapButton || realtimeText ? (
               <View style={styles.headerSubSection}>
                 {realtimeText && <LastPassedStop realtimeText={realtimeText} />}
@@ -553,9 +562,16 @@ const useStopsStyle = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
   },
+  headerTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   parallaxContent: {marginHorizontal: theme.spacings.medium},
   date: {
     alignItems: 'center',
+  },
+  headerTitleIcon: {
+    marginRight: theme.spacings.small,
   },
   headerSubSection: {
     marginTop: theme.spacings.medium,

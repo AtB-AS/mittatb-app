@@ -2,7 +2,9 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {FareProductTypeConfig} from '@atb/configuration';
 import React, {forwardRef} from 'react';
-import {TransportModesWithText} from '@atb/components/transportation-modes';
+import {TransportationIconBox} from '@atb/components/icon-box';
+import {ThemeText} from '@atb/components/text';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -11,19 +13,34 @@ type Props = {
 export const FareProductHeader = forwardRef<View, Props>(
   ({fareProductTypeConfig, style}: Props, ref) => {
     const {language} = useTranslation();
+    const styles = useStyle();
 
     return (
-      <View style={style}>
-        <TransportModesWithText
-          ref={ref}
-          modes={fareProductTypeConfig.transportModes}
-          iconSize="normal"
-          textType="heading--medium"
-          textColor="background_accent_0"
-          accessibilityRole="header"
-          text={getTextForLanguage(fareProductTypeConfig.name, language) ?? ''}
-        />
+      <View style={[style, styles.header]} ref={ref} accessible={true}>
+        {fareProductTypeConfig.transportModes.map(({mode, subMode}) => (
+          <TransportationIconBox
+            mode={mode}
+            subMode={subMode}
+            style={styles.icon}
+          />
+        ))}
+        <ThemeText
+          type="heading--medium"
+          color="background_accent_0"
+          style={{flexShrink: 1}}
+        >
+          {getTextForLanguage(fareProductTypeConfig.name, language) ?? ''}
+        </ThemeText>
       </View>
     );
   },
 );
+const useStyle = StyleSheet.createThemeHook((theme) => ({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: theme.spacings.small,
+  },
+}));
