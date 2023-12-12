@@ -42,34 +42,27 @@ export const requestAndroidBeaconPermissions = async (rationaleMessages: Rationa
         rationaleMessages.bluetooth,
     );
 
-    if (bluetoothStatus !== RESULTS.GRANTED) {
-        return permissionRequiredForBeaconsGranted;
-    } else {
+    if (bluetoothStatus === RESULTS.GRANTED) {
         permissionRequiredForBeaconsGranted = true;
+        // Request location when in use
+        const locationWhenInUseStatus = await request(
+            BEACONS_PERMISSIONS.locationWhenInUse,
+            rationaleMessages.locationWhenInUse,
+        );
+
+        if (locationWhenInUseStatus === RESULTS.GRANTED) {
+            // Request location always or background location
+            const locationAlwaysStatus = await request(
+                BEACONS_PERMISSIONS.locationAlways,
+                rationaleMessages.locationAlways,
+            );
+
+            if (locationAlwaysStatus === RESULTS.GRANTED) {
+                // Request motion permission
+                await request(BEACONS_PERMISSIONS.motion, rationaleMessages.motion);
+            }
+        }
     }
-
-    // Request location when in use
-    const locationWhenInUseStatus = await request(
-        BEACONS_PERMISSIONS.locationWhenInUse,
-        rationaleMessages.locationWhenInUse,
-    );
-
-    if (locationWhenInUseStatus !== RESULTS.GRANTED) {
-        return permissionRequiredForBeaconsGranted;
-    }
-
-    // Request location always or background location
-    const locationAlwaysStatus = await request(
-        BEACONS_PERMISSIONS.locationAlways,
-        rationaleMessages.locationAlways,
-    );
-
-    if (locationAlwaysStatus !== RESULTS.GRANTED) {
-        return permissionRequiredForBeaconsGranted;
-    }
-
-    // Request motion permission
-    await request(BEACONS_PERMISSIONS.motion, rationaleMessages.motion);
 
     return permissionRequiredForBeaconsGranted;
 };
