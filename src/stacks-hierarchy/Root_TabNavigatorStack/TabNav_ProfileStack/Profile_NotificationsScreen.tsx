@@ -60,8 +60,9 @@ export const Profile_NotificationsScreen = ({
   const handleGroupToggle = async (id: string, enabled: boolean) => {
     updateConfig({config_type: 'group', id, enabled});
   };
-  const {data, isLoading} = useProfileQuery();
+  const {data, isLoading, isSuccess} = useProfileQuery();
 
+  const hasNoEmail = isSuccess && data.email === '';
   return (
     <FullScreenView
       headerProps={{
@@ -110,12 +111,12 @@ export const Profile_NotificationsScreen = ({
                             .notifications.emailToggle.noEmailPlaceholder,
                     )
               }
-              disabled={data?.email === ''}
+              disabled={hasNoEmail}
               value={isConfigEnabled(config?.modes, 'mail')}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
           </Section>
-          {data?.email === '' && (
+          {hasNoEmail && (
             <Button
               onPress={() => navigation.navigate('Profile_EditProfileScreen')}
               text={t(
