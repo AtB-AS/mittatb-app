@@ -34,6 +34,8 @@ function getBluetoothPermission(): Permission {
 // If not, it requests the permissions and returns false
 // If the permissions are granted, it returns true
 export const requestAndroidBeaconPermissions = async (rationaleMessages: RationaleMessages) => {
+    let permissionRequiredForBeaconsGranted = false;
+
     // Request Bluetooth permission
     const bluetoothStatus = await request(
         BEACONS_PERMISSIONS.bluetooth,
@@ -41,7 +43,9 @@ export const requestAndroidBeaconPermissions = async (rationaleMessages: Rationa
     );
 
     if (bluetoothStatus !== RESULTS.GRANTED) {
-        return false;
+        return permissionRequiredForBeaconsGranted;
+    } else {
+        permissionRequiredForBeaconsGranted = true;
     }
 
     // Request location when in use
@@ -51,7 +55,7 @@ export const requestAndroidBeaconPermissions = async (rationaleMessages: Rationa
     );
 
     if (locationWhenInUseStatus !== RESULTS.GRANTED) {
-        return true;
+        return permissionRequiredForBeaconsGranted;
     }
 
     // Request location always or background location
@@ -61,17 +65,13 @@ export const requestAndroidBeaconPermissions = async (rationaleMessages: Rationa
     );
 
     if (locationAlwaysStatus !== RESULTS.GRANTED) {
-        return true;
+        return permissionRequiredForBeaconsGranted;
     }
 
     // Request motion permission
-    const motionStatus = await request(BEACONS_PERMISSIONS.motion, rationaleMessages.motion);
+    await request(BEACONS_PERMISSIONS.motion, rationaleMessages.motion);
 
-    if (motionStatus !== RESULTS.GRANTED) {
-        return true;
-    }
-
-    return true;
+    return permissionRequiredForBeaconsGranted;
 };
 
 const checkPermissionStatuses = async () => {
