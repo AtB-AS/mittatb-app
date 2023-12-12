@@ -99,12 +99,28 @@ const ProfileTexts = {
         notifications: {
           label: _('Varslinger', 'Notifications', 'Varslingar'),
           heading: _('Varslinger', 'Notifications', 'Varslingar'),
+          modesHeading: _('Type varsel', 'Notification type', 'Type varsel'),
+          groupsHeading: _('Varslinger', 'Notifications', 'Varslingar'),
           pushToggle: {
             text: _('Push-varsel', 'Push notifications', 'Push-varsel'),
             subText: _(
               'Tillat at AtB sender varslinger til denne telefonen.',
               'Allow AtB to send notifications to this phone.',
               'Gi AtB løyve til å sende varslingar til denne telefonen.',
+            ),
+          },
+          emailToggle: {
+            text: _('E-post', 'E-mail', 'E-post'),
+            subText: (email: string) =>
+              _(
+                `Tillat at AtB sender varslinger til ${email}`,
+                `Allow AtB to send notifications to ${email}`,
+                `Gi AtB løyve til å sende varslingar til ${email}`,
+              ),
+            noEmailPlaceholder: _(
+              'Legg til e-post i min profil for å benytte e-postvarsel.',
+              'Add e-mail to my profile to use e-mail notifications.',
+              'Legg til e-post i min profil for å bruke e-postvarsel.',
             ),
           },
           button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
