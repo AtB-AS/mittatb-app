@@ -1,9 +1,6 @@
 import {
   DepartureGroup,
   DepartureTime,
-  QuayInfo,
-  QuaySectionMode,
-  StopPlaceInfo,
 } from '@atb/api/departures/types';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
@@ -42,28 +39,18 @@ import {
   filterNotices,
   formatDestinationDisplay,
 } from '@atb/travel-details-screens/utils';
-import {
-  FavouriteDepartureToggle,
-  useOnMarkFavouriteDepartures,
-} from '@atb/favorites';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
-  stop: StopPlaceInfo;
-  quay: QuayInfo;
   searchDate: string;
-  mode: QuaySectionMode;
   onPressDeparture: QuaySectionProps['onPressDeparture'];
 }>;
 export function LineItem({
   group,
-  stop,
-  quay,
   searchDate,
   testID,
-  mode,
   onPressDeparture,
   ...props
 }: LineItemProps) {
@@ -72,19 +59,9 @@ export function LineItem({
   const styles = useItemStyles();
   const {t, language} = useTranslation();
 
-  const {
-    onMarkFavourite,
-    getExistingFavorite,
-    toggleFavouriteAccessibilityLabel,
-  } = useOnMarkFavouriteDepartures(quay, stop);
-
   if (hasNoDeparturesOnGroup(group)) {
     return null;
   }
-  const favouriteDepartureLine = {
-    ...group.lineInfo,
-    id: group.lineInfo?.lineId ?? '',
-  };
 
   const title = `${group.lineInfo?.lineNumber} ${formatDestinationDisplay(
     t,
@@ -101,7 +78,6 @@ export function LineItem({
 
   // we know we have a departure as we've checked hasNoDeparturesOnGroup
   const nextValids = group.departures.filter(isValidDeparture);
-  const existing = getExistingFavorite(favouriteDepartureLine);
 
   return (
     <View style={[topContainer, {padding: 0}]} testID={testID}>
@@ -132,17 +108,6 @@ export function LineItem({
             {title}
           </ThemeText>
         </PressableOpacity>
-        {mode === 'departures' && (
-          <FavouriteDepartureToggle
-            existingFavorite={existing}
-            onMarkFavourite={() =>
-              onMarkFavourite(favouriteDepartureLine, existing)
-            }
-            toggleFavouriteAccessibilityLabel={toggleFavouriteAccessibilityLabel(
-              favouriteDepartureLine,
-            )}
-          />
-        )}
       </View>
       <ScrollView
         horizontal

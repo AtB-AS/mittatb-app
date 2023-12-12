@@ -1,4 +1,4 @@
-import {DepartureGroupMetadata} from '@atb/api/departures/departure-group';
+import {DepartureGroupMetadata} from '@atb/api/departures/types';
 import {
   DepartureGroup,
   DepartureTime,
@@ -138,13 +138,6 @@ export function updateDeparturesWithRealtimeV2(
     });
 }
 
-export function hasNoQuaysWithDepartures(departures: StopPlaceGroup[] | null) {
-  return (
-    departures !== null &&
-    (departures.length === 0 ||
-      departures.every((deps) => hasNoGroupsWithDepartures(deps.quays)))
-  );
-}
 export function hasNoGroupsWithDepartures(departures: QuayGroup[]) {
   return departures.every((q) => q.group.every(hasNoDeparturesOnGroup));
 }
