@@ -30,18 +30,26 @@ type BeaconsContextState = {
   isKettleSDKInitialized: boolean;
   isBeaconsSupported: boolean;
   kettleInfo?: KettleInfo;
-  onboardForBeacons: () => void;
-  revokeBeacons: () => void;
-  deleteCollectedData: () => void;
+  onboardForBeacons: () => Promise<boolean>;
+  revokeBeacons: () => Promise<void>;
+  deleteCollectedData: () => Promise<void>;
 };
 
 const defaultState = {
   isKettleSDKInitialized: false,
   isBeaconsSupported: false,
   kettleInfo: undefined,
-  onboardForBeacons: () => {},
-  revokeBeacons: () => {},
-  deleteCollectedData: () => {},
+  onboardForBeacons: () => {
+    return new Promise<boolean>(() => {
+      return false;
+    });
+  },
+  revokeBeacons: () => {
+    return new Promise<void>(() => {});
+  },
+  deleteCollectedData: () => {
+    return new Promise<void>(() => {});
+  },
 };
 
 enum storeKey {
