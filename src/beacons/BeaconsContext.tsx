@@ -12,7 +12,7 @@ import {NativeModules, Platform} from 'react-native';
 import {
   BEACONS_CONSENTS,
   allowedPermissionForKettle,
-  isRequiredBeaconsPermissionsGrantedForAndroid,
+  requestAndroidBeaconPermissions,
 } from './permissions';
 import {useBeaconsMessages} from './use-beacons-messages';
 import {storage} from '@atb/storage';
@@ -93,7 +93,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
       granted = await NativeModules.BeaconsPermissions.request();
     } else {
-      granted = await isRequiredBeaconsPermissionsGrantedForAndroid(
+      granted = await requestAndroidBeaconPermissions(
         getRationaleMessages,
       );
     }
