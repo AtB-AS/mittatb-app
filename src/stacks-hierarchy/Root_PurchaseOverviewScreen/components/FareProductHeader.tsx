@@ -19,6 +19,7 @@ export const FareProductHeader = forwardRef<View, Props>(
       <View style={[style, styles.header]} ref={ref} accessible={true}>
         {fareProductTypeConfig.transportModes.map(({mode, subMode}) => (
           <TransportationIconBox
+            key={mode + subMode}
             mode={mode}
             subMode={subMode}
             style={styles.icon}
