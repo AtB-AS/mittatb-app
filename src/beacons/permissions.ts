@@ -71,7 +71,7 @@ export const requestAndroidPermissions = async (rationaleMessages: RationaleMess
     return true;
 };
 
-export const checkPermissionStatuses = async () => {
+const checkPermissionStatuses = async () => {
     const statuses = await checkMultiple(Object.values(BEACONS_PERMISSIONS));
     const permissionStatuses: Record<PermissionKey, boolean> = {
         bluetooth: false,
