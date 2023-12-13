@@ -80,6 +80,7 @@ android {
         applicationId appApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        compileSdkVersion rootProject.ext.targetSdkVersion
         versionName appVersionName
         multiDexEnabled true
 
