@@ -108,6 +108,10 @@ android {
         store {
             initWith buildTypes.release
             matchingFallbacks = ['release']
+            minifyEnabled enableProguardInReleaseBuilds
+            shrinkResources true
+            debuggable false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         staging {
             initWith buildTypes.release
