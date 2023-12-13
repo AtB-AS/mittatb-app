@@ -29,7 +29,7 @@ type MessageState =
 export function Root_ReceiptScreen({route}: Props) {
   const {orderId, orderVersion} = route.params;
   const styles = useStyles();
-  const {data, isSuccess, isLoading} = useProfileQuery();
+  const {data: customerProfile, status: profileStatus} = useProfileQuery();
   const [email, setEmail] = useState('');
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
@@ -38,10 +38,10 @@ export function Root_ReceiptScreen({route}: Props) {
   const analytics = useAnalytics();
 
   useEffect(() => {
-    if (isSuccess) {
-      setEmail(data.email);
+    if (profileStatus === 'success') {
+      setEmail(customerProfile.email);
     }
-  }, [data, isSuccess]);
+  }, [customerProfile, profileStatus]);
 
   async function onSend() {
     if (isValidEmail(email.trim())) {
@@ -90,7 +90,7 @@ export function Root_ReceiptScreen({route}: Props) {
           />
         </View>
         <Section withTopPadding withBottomPadding>
-          {isLoading ? (
+          {profileStatus === 'loading' ? (
             <ActivityIndicator />
           ) : (
             <TextInputSectionItem
