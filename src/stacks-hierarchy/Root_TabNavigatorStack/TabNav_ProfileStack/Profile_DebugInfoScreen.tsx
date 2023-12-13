@@ -55,10 +55,7 @@ import {
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
-import {
-  useOnBehalfOf,
-  useOnBehalfOfEnabledDebugOverride,
-} from '@atb/on-behalf-of';
+import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -168,7 +165,6 @@ export const Profile_DebugInfoScreen = () => {
   const {setPreference, preferences} = usePreferences();
   const {showTestIds, debugShowSeconds} = preferences;
 
-  const showTest = useOnBehalfOf();
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -393,8 +389,6 @@ export const Profile_DebugInfoScreen = () => {
             />
           </GenericSectionItem>
         </Section>
-
-        {showTest && <ThemeText>Hello there</ThemeText>}
 
         <Section withPadding withTopPadding>
           <ExpandableSectionItem
