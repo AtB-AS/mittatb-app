@@ -123,6 +123,7 @@ const ProfileTexts = {
               'Legg til e-post i min profil for å bruke e-postvarsel.',
             ),
           },
+          button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
           permissionRequired: {
             title: _(
               'Tillatelse kreves',

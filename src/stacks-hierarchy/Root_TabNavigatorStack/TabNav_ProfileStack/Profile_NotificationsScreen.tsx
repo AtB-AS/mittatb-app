@@ -19,10 +19,16 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {NotificationConfigGroup} from '@atb/notifications/types';
 import {ContentHeading} from '@atb/components/content-heading';
 import {useProfileQuery} from '@atb/queries';
+import {Button} from '@atb/components/button';
+import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+type NotificationsScreenProps =
+  ProfileScreenProps<'Profile_NotificationsScreen'>;
 
-export const Profile_NotificationsScreen = () => {
+export const Profile_NotificationsScreen = ({
+  navigation,
+}: NotificationsScreenProps) => {
   const style = useStyles();
   const {t, language} = useTranslation();
   const isFocusedAndActive = useIsFocusedAndActive();
@@ -54,8 +60,9 @@ export const Profile_NotificationsScreen = () => {
   const handleGroupToggle = async (id: string, enabled: boolean) => {
     updateConfig({config_type: 'group', id, enabled});
   };
-  const {data, isLoading} = useProfileQuery();
+  const {data, isLoading, isSuccess} = useProfileQuery();
 
+  const hasNoEmail = isSuccess && data.email === '';
   return (
     <FullScreenView
       headerProps={{
@@ -75,7 +82,7 @@ export const Profile_NotificationsScreen = () => {
         </View>
       )}
     >
-      {permissionStatus === 'loading' && (
+      {(permissionStatus === 'loading' || isLoading) && (
         <Processing message={t(dictionary.loading)} />
       )}
       {permissionStatus !== 'loading' && (
@@ -104,10 +111,22 @@ export const Profile_NotificationsScreen = () => {
                             .notifications.emailToggle.noEmailPlaceholder,
                     )
               }
+              disabled={hasNoEmail}
               value={isConfigEnabled(config?.modes, 'mail')}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
           </Section>
+          {hasNoEmail && (
+            <Button
+              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
+              text={t(
+                ProfileTexts.sections.settings.linkSectionItems.notifications
+                  .button,
+              )}
+              interactiveColor="interactive_2"
+              mode="secondary"
+            />
+          )}
           <Section>
             <ToggleSectionItem
               text={t(
@@ -125,6 +144,7 @@ export const Profile_NotificationsScreen = () => {
               onValueChange={(enabled) => handleModeToggle('push', enabled)}
             />
           </Section>
+
           {permissionStatus !== 'error' && permissionStatus === 'denied' && (
             <MessageBox
               type="info"
