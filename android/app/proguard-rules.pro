@@ -12,3 +12,11 @@
 -keep class com.facebook.jni.** { *; }
 -keep class com.swmansion.reanimated.** { *; }
 -keep class com.facebook.react.turbomodule.** { *; }
+
+-keep public class com.horcrux.svg.** {*;}
+
+-keep class com.kogenta.kettle.core.model.** { *; }
+-keep class com.kogenta.kettle.common.model.** { *; }
+
+-keepattributes LineNumberTable,SourceFile
+-renamesourcefileattribute SourceFile
