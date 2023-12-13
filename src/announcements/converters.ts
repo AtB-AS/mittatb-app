@@ -1,5 +1,5 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { AnnouncementRaw, AnnouncementType, OpenUrl } from './types';
+import { AnnouncementRaw, AnnouncementType, ActionButton } from './types';
 import { mapToLanguageAndTexts } from '@atb/utils/map-to-language-and-texts';
 import { APP_VERSION } from '@env';
 import { AppPlatformType } from '@atb/global-messages/types';
@@ -36,7 +36,7 @@ export const mapToAnnouncement = (
   const startDate = mapToMillis(result.startDate);
   const endDate = mapToMillis(result.endDate);
   const rules = mapToRules(result.rules);
-  const openUrl = mapToOpenUrl(result.openUrl);
+  const actionButton = mapActionButton(result.actionButton);
 
   if (!result.active) return;
   if (!summary) return;
@@ -59,7 +59,7 @@ export const mapToAnnouncement = (
     startDate,
     endDate,
     rules,
-    openUrl,
+    actionButton,
   };
 };
 
@@ -79,16 +79,16 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
   );
 }
 
-function mapToOpenUrl(data: any): OpenUrl | undefined {
+function mapActionButton(data: any): ActionButton | undefined {
   if (typeof data !== 'object') return;
-  const { title, link, linkType } = data;
-  if (!title || !link || !linkType) return;
-  if (!['external', 'deeplink'].includes(linkType)) return;
-  const titleWithLanguage = mapToLanguageAndTexts(title);
-  if (!titleWithLanguage) return;
+  const { label, url, actionType } = data;
+  if (!label || !actionType) return;
+  if (!['external', 'deeplink', 'bottom_sheet'].includes(actionType)) return;
+  const labelWithLanguage = mapToLanguageAndTexts(label);
+  if (!labelWithLanguage) return;
   return {
-    title: titleWithLanguage,
-    link,
-    linkType,
+    label: labelWithLanguage,
+    url,
+    actionType,
   }
 }

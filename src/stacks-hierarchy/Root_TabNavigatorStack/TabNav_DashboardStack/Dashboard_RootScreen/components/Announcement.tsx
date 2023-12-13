@@ -12,16 +12,16 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {insets} from '@atb/utils/insets';
 import {
-  GenericClickableSectionItem,
+  GenericSectionItem,
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import Bugsnag from '@bugsnag/react-native';
 import {AnnouncementSheet} from './AnnouncementSheet';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {animateNextChange} from '@atb/utils/animation';
 import {useAnalytics} from '@atb/analytics';
 import {useAnnouncementsState} from '@atb/announcements';
+import Bugsnag from '@bugsnag/react-native';
 
 type Props = {
   announcement: AnnouncementType;
@@ -45,30 +45,16 @@ export const Announcement = ({announcement, style}: Props) => {
     });
   };
 
-  const isOpenUrlEnabled = announcement.openUrl?.link !== undefined;
-  const openUrlLink = announcement.openUrl?.link;
-
   return (
     <Section style={style} key={announcement.id} testID="announcement">
-      <GenericClickableSectionItem
-        accessible={false}
-        disabled={isOpenUrlEnabled}
-        onPress={async () => {
-          openBottomSheet(() => (
-            <AnnouncementSheet
-              announcement={announcement}
-              close={closeBottomSheet}
-            />
-          ));
-        }}
-      >
+      <GenericSectionItem>
         <View style={styles.container}>
           <View
             style={styles.content}
             accessible={true}
-            accessibilityRole={!isOpenUrlEnabled ? 'button' : undefined}
+            accessibilityRole={announcement.actionButton ? 'button' : undefined}
             accessibilityHint={
-              !isOpenUrlEnabled
+              announcement.actionButton !== undefined
                 ? t(DashboardTexts.announcemens.button.accessibility)
                 : undefined
             }
@@ -89,7 +75,7 @@ export const Announcement = ({announcement, style}: Props) => {
                   language,
                 )}
               </ThemeText>
-              <ThemeText>
+              <ThemeText style={styles.summary}>
                 {getTextForLanguage(announcement.summary, language)}
               </ThemeText>
             </View>
@@ -107,31 +93,45 @@ export const Announcement = ({announcement, style}: Props) => {
             <ThemeIcon svg={Close} />
           </PressableOpacity>
         </View>
-      </GenericClickableSectionItem>
-      {announcement.openUrl && (
-        <LinkSectionItem
-          text={getTextForLanguage(announcement.openUrl.title, language) ?? ''}
-          icon={
-            announcement.openUrl.linkType === 'external'
-              ? 'external-link'
-              : 'arrow-right'
-          }
-          accessibility={{
-            accessibilityHint: t(
-              DashboardTexts.announcemens.openUrl[
-                announcement.openUrl.linkType
-              ],
-            ),
-          }}
-          onPress={async () => {
-            try {
-              openUrlLink && (await Linking.openURL(openUrlLink));
-            } catch (err: any) {
-              Bugsnag.notify(err);
+      </GenericSectionItem>
+      {announcement.actionButton?.actionType &&
+        announcement.actionButton?.label && (
+          <LinkSectionItem
+            text={
+              getTextForLanguage(announcement.actionButton.label, language) ??
+              ''
             }
-          }}
-        />
-      )}
+            icon={
+              announcement.actionButton?.actionType === 'external'
+                ? 'external-link'
+                : 'arrow-right'
+            }
+            accessibility={{
+              accessibilityHint: t(
+                DashboardTexts.announcemens.buttonAction[
+                  announcement.actionButton.actionType
+                ],
+              ),
+            }}
+            onPress={async () => {
+              if (announcement.actionButton?.actionType === 'bottom_sheet') {
+                openBottomSheet(() => (
+                  <AnnouncementSheet
+                    announcement={announcement}
+                    close={closeBottomSheet}
+                  />
+                ));
+              } else {
+                const actionButtonURL = announcement.actionButton?.url;
+                try {
+                  actionButtonURL && (await Linking.openURL(actionButtonURL));
+                } catch (err: any) {
+                  Bugsnag.notify(err);
+                }
+              }
+            }}
+          />
+        )}
     </Section>
   );
 };
@@ -156,6 +156,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   spacing: {
     marginTop: theme.spacings.medium,
+  },
+  summary: {
+    marginTop: theme.spacings.xSmall,
   },
   close: {
     flexGrow: 0,

@@ -5,10 +5,10 @@ import { Rule } from '@atb/rule-engine/rules';
 
 export type AnnouncementId = string;
 
-export type OpenUrl = {
-  title: LanguageAndTextType[];
-  link: string;
-  linkType: 'external' | 'deeplink';
+export type ActionButton = {
+  label: LanguageAndTextType[];
+  url?: string;
+  actionType: 'external' | 'deeplink' | 'bottom_sheet';
 };
 
 export type AnnouncementRaw = {
@@ -27,7 +27,7 @@ export type AnnouncementRaw = {
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
   rules?: Rule[];
-  openUrl?: OpenUrl;
+  actionButton?: ActionButton;
 };
 
 export type AnnouncementType = Omit<

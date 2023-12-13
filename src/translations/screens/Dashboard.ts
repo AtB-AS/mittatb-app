@@ -1,4 +1,4 @@
-import {translation as _} from '../commons';
+import { translation as _ } from '../commons';
 
 const DashboardTexts = {
   header: {
@@ -20,13 +20,18 @@ const DashboardTexts = {
     announcement: {
       closeA11yHint: _('Lukk melding', 'Close announcement', 'Lukk melding'),
     },
-    openUrl: {
+    buttonAction: {
       external: _(
-        `Aktiver for å lese meir på ekstern side`,
+        `Aktiver for å lese mer på ekstern side`,
         `Activate to read more (external content)`,
         `Aktiver for å lese meir på ekstern side`,
       ),
       deeplink: _('Aktiver for å opne lenke', 'Activate to open link', 'Aktiver for å opne lenke'),
+      bottom_sheet: _(
+        `Aktiver for å lese mer i appen`,
+        `Activate to read more (in app)`,
+        `Aktiver for å lese meir i appen`,
+      ),
     },
   },
 };
