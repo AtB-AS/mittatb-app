@@ -10,11 +10,12 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {isValidEmail} from '@atb/utils/validation';
-import React, {useState} from 'react';
-import {View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
+import {useProfileQuery} from '@atb/queries';
 
 type Props = RootStackScreenProps<'Root_ReceiptScreen'>;
 
@@ -28,12 +29,19 @@ type MessageState =
 export function Root_ReceiptScreen({route}: Props) {
   const {orderId, orderVersion} = route.params;
   const styles = useStyles();
+  const {data: customerProfile, status: profileStatus} = useProfileQuery();
   const [email, setEmail] = useState('');
   const [reference, setReference] = useState<string | undefined>(undefined);
   const [state, setState] = useState<MessageState>(undefined);
   const {t} = useTranslation();
   const a11yContext = useAccessibilityContext();
   const analytics = useAnalytics();
+
+  useEffect(() => {
+    if (profileStatus === 'success') {
+      setEmail(customerProfile.email);
+    }
+  }, [customerProfile, profileStatus]);
 
   async function onSend() {
     if (isValidEmail(email.trim())) {
@@ -82,16 +90,20 @@ export function Root_ReceiptScreen({route}: Props) {
           />
         </View>
         <Section withTopPadding withBottomPadding>
-          <TextInputSectionItem
-            label={t(FareContractTexts.receipt.inputLabel)}
-            value={email}
-            onChangeText={onTextChanged}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
-            autoCorrect={false}
-            autoFocus={!a11yContext.isScreenReaderEnabled}
-          />
+          {profileStatus === 'loading' ? (
+            <ActivityIndicator />
+          ) : (
+            <TextInputSectionItem
+              label={t(FareContractTexts.receipt.inputLabel)}
+              value={email}
+              onChangeText={onTextChanged}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect={false}
+              autoFocus={!a11yContext.isScreenReaderEnabled}
+            />
+          )}
         </Section>
         <Button
           text={t(FareContractTexts.receipt.sendButton)}
