@@ -48,6 +48,7 @@ export type RemoteConfig = {
   delay_share_travel_habits_screen_by_sessions_count: number;
   enable_parking_violations_reporting: boolean;
   enable_push_notifications: boolean;
+  enable_on_behalf_of: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -101,6 +102,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   delay_share_travel_habits_screen_by_sessions_count: 0,
   enable_parking_violations_reporting: false,
   enable_push_notifications: false,
+  enable_on_behalf_of: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -273,6 +275,10 @@ export function getConfig(): RemoteConfig {
     values['enable_push_notifications']?.asBoolean() ??
     defaultRemoteConfig.enable_push_notifications;
 
+  const enable_on_behalf_of =
+    values['enable_on_behalf_of']?.asBoolean() ??
+    defaultRemoteConfig.enable_on_behalf_of;
+
   return {
     enable_ticketing,
     enable_intercom,
@@ -320,6 +326,7 @@ export function getConfig(): RemoteConfig {
     delay_share_travel_habits_screen_by_sessions_count,
     enable_parking_violations_reporting,
     enable_push_notifications,
+    enable_on_behalf_of,
   };
 }
 

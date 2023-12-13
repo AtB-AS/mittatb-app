@@ -21,6 +21,7 @@ export enum StorageModelKeysEnum {
   EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
   EnableParkingViolationsReportingDebugOverride = '@ATB_enable_parking_violations_debug_override',
   EnablePushNotificationsDebugOverride = '@ATB_enable_push_notifications_debug_override',
+  EnableOnBehalfOfDebugOverride = '@ATB_enable_on_behalf_of_debug_override',
   OneTimePopOver = '@ATB_one_time_popovers_seen',
 }
 
