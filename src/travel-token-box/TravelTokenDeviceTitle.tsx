@@ -17,20 +17,29 @@ export const TravelTokenDeviceTitle = ({
 
   if (inspectableToken.type === 'travel-card') {
     const travelCardId = inspectableToken.travelCardId;
+    const prefixX = ' XXXX XX';
+    const travelCardIdOuttake =
+      travelCardId?.substring(0, 2) + ' ' + travelCardId?.substring(2);
+    const postfixX = 'X';
+    const a11yLabel = prefixX + travelCardIdOuttake + postfixX;
     return (
-      <View style={styles.travelCardTitleContainer}>
+      <View
+        style={styles.travelCardTitleContainer}
+        accessible
+        accessibilityLabel={a11yLabel}
+      >
         <ThemeText color={themeTextColor} style={styles.transparent}>
-          {' XXXX XX'}
+          {prefixX}
         </ThemeText>
         <ThemeText
           type="heading__title"
           color={themeTextColor}
           testID="travelCardNumber"
         >
-          {travelCardId?.substring(0, 2) + ' ' + travelCardId?.substring(2)}
+          {travelCardIdOuttake}
         </ThemeText>
         <ThemeText color={themeTextColor} style={styles.transparent}>
-          X
+          {postfixX}
         </ThemeText>
       </View>
     );

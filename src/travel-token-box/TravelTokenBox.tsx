@@ -81,7 +81,7 @@ export function TravelTokenBox({
   const isTravelCard = inspectableToken.type === 'travel-card';
 
   return (
-    <View style={styles.container} accessible={true} testID="travelTokenBox">
+    <View style={styles.container} testID="travelTokenBox">
       <View style={styles.content}>
         {isTravelCard ? (
           <ThemedTokenTravelCard
