@@ -60,7 +60,7 @@ export const FareProductHeader = forwardRef<View, Props>(
               numberOfLines={1}
             >
               {getTextForLanguage(
-                preassignedFareProduct.description ?? [],
+                preassignedFareProduct.productDescription ?? [],
                 language,
               )?.replaceAll('\n', ' ')}
             </ThemeText>

@@ -49,7 +49,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </View>
             <ThemeText type="body__secondary" isMarkdown={true}>
               {getTextForLanguage(
-                preassignedFareProduct.description ?? [],
+                preassignedFareProduct.productDescription ?? [],
                 language,
               )}
             </ThemeText>
