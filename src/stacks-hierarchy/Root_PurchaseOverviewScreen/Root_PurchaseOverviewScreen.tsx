@@ -116,6 +116,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const isEmptyOffer = error?.type === 'empty-offers';
 
+  const handleTicketInfoButtonPress = () => {
+    navigation.navigate('Root_TicketInformationScreen', {
+      fareProductTypeConfig: params.fareProductTypeConfig,
+      preassignedFareProduct,
+    });
+  };
+
   useEffect(() => {
     if (params?.refreshOffer) {
       refreshOffer();
@@ -143,6 +150,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ref={focusRef}
           style={styles.header}
           fareProductTypeConfig={params.fareProductTypeConfig}
+          preassignedFareProduct={preassignedFareProduct}
+          onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
       )}
     >
