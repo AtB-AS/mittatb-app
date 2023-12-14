@@ -247,6 +247,17 @@ const PurchaseOverviewTexts = {
       'Aktiver for å lese meir om rabatt på fleksibel billett på ekstern side',
     ),
   },
+  ticketInformation: {
+    button: _('Om billetten', 'About the ticket', 'Om billetten'),
+    informationDetails: {
+      title: _('Om billetten', 'About the ticket', 'Om billetten'),
+      descriptionHeading: _(
+        'Billettbeskrivelse',
+        'Ticket description',
+        'Billettbeskriving',
+      ),
+    },
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {

@@ -57,7 +57,8 @@ import {
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import { useBeaconsState } from '@atb/beacons/BeaconsContext';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -305,6 +306,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_FareContractDetailsScreen"
                   component={Root_FareContractDetailsScreen}
+                />
+                <Stack.Screen
+                  name="Root_TicketInformationScreen"
+                  component={Root_TicketInformationScreen}
                 />
                 <Stack.Screen
                   name="Root_CarnetDetailsScreen"
