@@ -186,7 +186,6 @@ class BeaconsPermissions: NSObject {
   private func releasePermissionObjects() {
     bluetoothPermission = nil
     whenInUsePermission = nil
-    alwaysPermission = nil
     motionPermission = nil
   }
 
