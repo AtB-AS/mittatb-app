@@ -17,16 +17,16 @@ import {ParkAndRide as ParkAndRideLight} from '@atb/assets/svg/color/images/mobi
 import {ParkAndRide as ParkAndRideDark} from '@atb/assets/svg/color/images/mobility/dark';
 import {useTheme} from '@atb/theme/ThemeContext';
 
-export const ThemedTokenTravelCard = () => {
+export const ThemedTokenTravelCard = ({...props}) => {
   const {themeName} = useTheme();
   const TravelCard = themeName === 'dark' ? DarkTravelCard : LightTravelCard;
-  return <TravelCard />;
+  return <TravelCard {...props} />;
 };
 
-export const ThemedTokenPhone = () => {
+export const ThemedTokenPhone = ({...props}) => {
   const {themeName} = useTheme();
   const Phone = themeName === 'dark' ? DarkPhone : LightPhone;
-  return <Phone />;
+  return <Phone {...props} />;
 };
 
 export const ThemedMapImage = () => {
@@ -59,7 +59,6 @@ export const ThemedCityBike = () => {
   const CityBike = themeName === 'dark' ? CityBikeDark : CityBikeLight;
   return <CityBike />;
 };
-
 
 export const ThemedParkAndRide = () => {
   const {themeName} = useTheme();

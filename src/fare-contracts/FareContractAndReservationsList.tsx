@@ -54,7 +54,10 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
         }
       >
         {showTokenInfo && (
-          <TravelTokenBox showIfThisDevice={false} showHowToChangeHint={true} />
+          <TravelTokenBox
+            showIfThisDevice={false}
+            interactiveColor="interactive_2"
+          />
         )}
         {!fareContractsAndReservationsSorted.length && (
           <EmptyState

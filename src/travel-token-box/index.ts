@@ -1,1 +1,1 @@
-export {TravelTokenBox, TravelDeviceTitle} from './TravelTokenBox';
+export {TravelTokenBox} from './TravelTokenBox';

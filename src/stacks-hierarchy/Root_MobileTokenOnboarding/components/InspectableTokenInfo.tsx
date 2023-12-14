@@ -51,7 +51,11 @@ export function InspectableTokenInfo({
               </ThemeText>
             </View>
             <View style={styles.illustration}>
-              <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+              <TravelTokenBox
+                showIfThisDevice={true}
+                alwaysShowErrors={true}
+                interactiveColor="interactive_1"
+              />
             </View>
             <ThemeText
               style={styles.description}
