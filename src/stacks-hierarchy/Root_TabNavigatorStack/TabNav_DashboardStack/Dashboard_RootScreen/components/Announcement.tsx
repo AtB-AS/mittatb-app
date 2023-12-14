@@ -37,7 +37,7 @@ export const Announcement = ({announcement, style}: Props) => {
   const {dismissAnnouncement} = useAnnouncementsState();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
 
-  const handleDismiss = (announcement: AnnouncementType) => {
+  const handleDismiss = () => {
     animateNextChange();
     dismissAnnouncement(announcement);
     analytics.logEvent('Dashboard', 'Announcement dismissed', {
@@ -87,7 +87,7 @@ export const Announcement = ({announcement, style}: Props) => {
             accessibilityHint={t(
               DashboardTexts.announcemens.announcement.closeA11yHint,
             )}
-            onPress={() => handleDismiss(announcement)}
+            onPress={() => handleDismiss()}
             testID="closeAnnouncement"
           >
             <ThemeIcon svg={Close} />
