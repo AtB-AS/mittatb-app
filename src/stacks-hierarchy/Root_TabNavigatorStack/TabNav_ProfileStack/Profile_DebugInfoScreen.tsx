@@ -56,6 +56,7 @@ import {
 import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
+import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -116,6 +117,8 @@ export const Profile_DebugInfoScreen = () => {
   const pushNotificationsEnabledDebugOverride =
     usePushNotificationsEnabledDebugOverride();
   const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
+  const ticketInformationEnabledDebugOverride =
+    useTicketInformationEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -384,6 +387,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable onBehalfOf"
               override={onBehalfOfEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable ticket information"
+              override={ticketInformationEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
