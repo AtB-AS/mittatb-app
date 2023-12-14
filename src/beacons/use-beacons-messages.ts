@@ -8,7 +8,7 @@ export type RationaleMessages = Record<PermissionKey, Rationale>;
 export const useBeaconsMessages = () => {
     const { t } = useTranslation();
 
-    const getRationaleMessages = useMemo((): RationaleMessages => {
+    const rationaleMessages = useMemo((): RationaleMessages => {
         const buttonPositive: string = t(dictionary.messageActions.positiveButton);
         return {
             bluetooth: {
@@ -35,6 +35,6 @@ export const useBeaconsMessages = () => {
     }, [t]);
 
     return {
-        getRationaleMessages
+        rationaleMessages
     }
 };

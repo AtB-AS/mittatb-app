@@ -36,7 +36,6 @@ type BeaconsContextState = {
 };
 
 const defaultState = {
-  isKettleSDKInitialized: false,
   isBeaconsSupported: false,
   kettleInfo: undefined,
   onboardForBeacons: () => {
@@ -62,7 +61,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const [isBeaconsEnabled, debugOverrideReady] = useIsBeaconsEnabled();
   const isBeaconsSupported =
     isBeaconsEnabled && debugOverrideReady && !!KETTLE_API_KEY;
-  const {getRationaleMessages} = useBeaconsMessages();
+  const {rationaleMessages} = useBeaconsMessages();
   const isInitializedRef = useRef(false);
   const [kettleInfo, setKettleInfo] = useState<KettleInfo>();
 
@@ -76,7 +75,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
       granted = await NativeModules.BeaconsPermissions.request();
     } else {
-      granted = await requestAndroidBeaconPermissions(getRationaleMessages);
+      granted = await requestAndroidBeaconPermissions(rationaleMessages);
     }
 
     if (granted) {
@@ -87,7 +86,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     }
 
     return granted;
-  }, [isBeaconsSupported, getRationaleMessages]);
+  }, [isBeaconsSupported, rationaleMessages]);
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
@@ -160,7 +159,6 @@ const getKettleInfo = async (): Promise<KettleInfo> => {
     privacyTermsUrl,
   };
 };
-
 
 export function useBeaconsState() {
   const context = useContext(BeaconsContext);
