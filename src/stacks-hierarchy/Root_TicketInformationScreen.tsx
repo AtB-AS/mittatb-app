@@ -30,31 +30,35 @@ export const Root_TicketInformationScreen = (props: Props) => {
       }}
     >
       <ScrollView style={styles.container}>
-        <SectionHeading>
-          {t(
-            PurchaseOverviewTexts.ticketInformation.informationDetails
-              .descriptionHeading,
-          )}
-        </SectionHeading>
-        <Section>
-          <GenericSectionItem>
-            <View style={styles.descriptionHeading}>
-              <TransportationIconBoxList
-                iconSize="small"
-                modes={fareProductTypeConfig.transportModes}
-              />
-              <ThemeText type="body__primary--bold">
-                {getTextForLanguage(fareProductTypeConfig.name, language)}
-              </ThemeText>
-            </View>
-            <ThemeText type="body__secondary" isMarkdown={true}>
-              {getTextForLanguage(
-                preassignedFareProduct.productDescription ?? [],
-                language,
+        {preassignedFareProduct.productDescription && (
+          <>
+            <SectionHeading>
+              {t(
+                PurchaseOverviewTexts.ticketInformation.informationDetails
+                  .descriptionHeading,
               )}
-            </ThemeText>
-          </GenericSectionItem>
-        </Section>
+            </SectionHeading>
+            <Section>
+              <GenericSectionItem>
+                <View style={styles.descriptionHeading}>
+                  <TransportationIconBoxList
+                    iconSize="small"
+                    modes={fareProductTypeConfig.transportModes}
+                  />
+                  <ThemeText type="body__primary--bold">
+                    {getTextForLanguage(fareProductTypeConfig.name, language)}
+                  </ThemeText>
+                </View>
+                <ThemeText type="body__secondary" isMarkdown={true}>
+                  {getTextForLanguage(
+                    preassignedFareProduct.productDescription,
+                    language,
+                  )}
+                </ThemeText>
+              </GenericSectionItem>
+            </Section>
+          </>
+        )}
       </ScrollView>
     </FullScreenView>
   );
