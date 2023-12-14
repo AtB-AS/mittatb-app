@@ -28,9 +28,9 @@ const DashboardTexts = {
       ),
       deeplink: _('Aktiver for å åpne lenke', 'Activate to open link', 'Aktiver for å opne lenke'),
       bottom_sheet: _(
-        `Aktiver for å lese mer i appen`,
-        `Activate to read more (in app)`,
-        `Aktiver for å lese meir i appen`,
+        `Aktiver for å lese mer`,
+        `Activate to read more`,
+        `Aktiver for å lese meir`,
       ),
     },
   },
