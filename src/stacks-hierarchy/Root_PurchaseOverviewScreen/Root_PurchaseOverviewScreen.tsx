@@ -1,5 +1,4 @@
 import {MessageBox} from '@atb/components/message-box';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -25,6 +24,8 @@ import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {isAfter} from '@atb/utils/date';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {FullScreenView} from '@atb/components/screen-view';
+import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -127,17 +128,24 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const focusRefs = useFocusRefs(params.onFocusElement);
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={getTextForLanguage(params.fareProductTypeConfig.name, language)}
-        leftButton={{
+    <FullScreenView
+      headerProps={{
+        title: getTextForLanguage(params.fareProductTypeConfig.name, language),
+        leftButton: {
           type: 'cancel',
           onPress: closeModal,
-        }}
-        globalMessageContext={GlobalMessageContextEnum.appTicketing}
-        setFocusOnLoad={!params.onFocusElement}
-      />
-
+        },
+        setFocusOnLoad: false,
+        globalMessageContext: GlobalMessageContextEnum.appTicketing,
+      }}
+      parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+        <FareProductHeader
+          ref={params.onFocusElement ? undefined : focusRef}
+          style={styles.header}
+          fareProductTypeConfig={params.fareProductTypeConfig}
+        />
+      )}
+    >
       <ScrollView testID="ticketingScrollView">
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
@@ -279,16 +287,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
         </View>
       </ScrollView>
-    </View>
+    </FullScreenView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
-    container: {
-      flex: 1,
-      backgroundColor: theme.static.background.background_1.background,
+    header: {
+      marginHorizontal: theme.spacings.medium,
     },
     contentContainer: {
       rowGap: theme.spacings.medium,
