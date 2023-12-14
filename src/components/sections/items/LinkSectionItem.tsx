@@ -55,6 +55,8 @@ export function LinkSectionItem({
   const accessibilityWithOverrides = disabled
     ? {...accessibility, accessibilityHint: undefined}
     : accessibility;
+  const accessibilityLabel =
+    text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
   return (
     <PressableOpacity
       accessible
@@ -62,7 +64,7 @@ export function LinkSectionItem({
       onPress={disabled ? undefined : onPress}
       disabled={disabled}
       accessibilityLabel={
-        label ? `${text} ${screenReaderPause} ${label}` : text
+        label ? `${accessibilityLabel} ${label}` : accessibilityLabel
       }
       accessibilityState={{disabled}}
       style={[topContainer, {backgroundColor: themeColor.background}]}

@@ -56,7 +56,7 @@ export const Profile_EditProfileScreen = ({
   )?.formatInternational();
 
   const onSubmit = async () => {
-    if (isValidEmail(email)) {
+    if (isValidEmail(email) || email === '') {
       updateProfile({firstName, surname, email});
     } else {
       setInvalidEmail(true);
@@ -172,9 +172,11 @@ export const Profile_EditProfileScreen = ({
                     EditProfileTexts.personalDetails.email.placeholder,
                   )}
                   keyboardType="email-address"
+                  autoComplete="email"
                   showClear={!isLoadingOrSubmittingProfile}
                   errorText={getEmailErrorText(invalidEmail, errorUpdate)}
                   inlineLabel={false}
+                  autoCapitalize="none"
                 />
               </Section>
 

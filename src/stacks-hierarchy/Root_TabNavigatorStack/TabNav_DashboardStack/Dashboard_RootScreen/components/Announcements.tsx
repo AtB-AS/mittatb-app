@@ -7,8 +7,9 @@ import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {StyleSheet} from '@atb/theme';
-import {useBeacons} from '@atb/beacons/use-beacons';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+
 type Props = {
   style?: StyleProp<ViewStyle>;
 };
@@ -17,7 +18,7 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const {findAnnouncements} = useAnnouncementsState();
   const {t} = useTranslation();
   const now = useNow(10000);
-  const {kettleInfo} = useBeacons();
+  const {kettleInfo} = useBeaconsState();
   const [hasSeenShareTravelHabitsScreen, _] =
     useHasSeenShareTravelHabitsScreen();
   const style = useStyle();

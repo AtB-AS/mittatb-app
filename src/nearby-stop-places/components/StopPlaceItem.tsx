@@ -61,7 +61,7 @@ export const StopPlaceItem = ({
     .join(',');
 
   return (
-    <Section withPadding>
+    <Section>
       <GenericClickableSectionItem
         onPress={() => onPress(place)}
         accessibilityLabel={a11yLabel}

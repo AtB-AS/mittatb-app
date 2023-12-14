@@ -115,10 +115,8 @@ export const DeparturesWidget = ({
             <QuaySection
               key={quay.quay.id}
               quayGroup={quay}
-              stop={stopPlaceGroup.stopPlace}
               searchDate={searchDate}
               locationOrStopPlace={location || undefined}
-              mode="frontpage"
               onPressDeparture={onPressDeparture}
               testID="stopPlace"
             />

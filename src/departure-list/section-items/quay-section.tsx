@@ -1,18 +1,13 @@
-import {
-  QuayGroup,
-  QuaySectionMode,
-  StopPlaceInfo,
-} from '@atb/api/departures/types';
+import {QuayGroup} from '@atb/api/departures/types';
 import {Section} from '@atb/components/sections';
 import {useTheme} from '@atb/theme';
-import {DeparturesTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import haversineDistance from 'haversine-distance';
 import sortBy from 'lodash.sortby';
 import React, {Fragment, useEffect, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {hasNoGroupsWithDepartures, isValidDeparture} from '../utils';
 import {LineItem} from './line';
-import {MoreItem} from './more';
 import {QuayHeaderItem} from './quay-header';
 import {Location} from '@atb/favorites';
 import {StopPlace} from '@atb/api/types/trips';
@@ -23,13 +18,11 @@ const LIMIT_SIZE = 5;
 
 export type QuaySectionProps = {
   quayGroup: QuayGroup;
-  stop: StopPlaceInfo;
   locationOrStopPlace?: Location | StopPlace;
   lastUpdated?: Date;
   hidden?: Date;
   searchDate: string;
   testID?: string;
-  mode?: QuaySectionMode;
   onPressDeparture: (
     items: ServiceJourneyDeparture[],
     activeIndex: number,
@@ -38,12 +31,10 @@ export type QuaySectionProps = {
 
 export const QuaySection = React.memo(function QuaySection({
   quayGroup,
-  stop,
   locationOrStopPlace,
   lastUpdated,
   searchDate,
   testID,
-  mode = 'departures',
   onPressDeparture,
 }: QuaySectionProps) {
   const [limit, setLimit] = useState(LIMIT_SIZE);
@@ -54,11 +45,9 @@ export const QuaySection = React.memo(function QuaySection({
     setLimit(LIMIT_SIZE);
   }, [quayGroup.quay.id]);
 
-  const hasMoreItems = quayGroup.group.length > limit;
-
   const sorted = useMemo(
     () => sortAndLimit(quayGroup, limit),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [quayGroup, limit, lastUpdated],
   );
 
@@ -79,8 +68,6 @@ export const QuaySection = React.memo(function QuaySection({
         {sorted.map((group, i) => (
           <LineItem
             group={group}
-            stop={stop}
-            quay={quayGroup.quay}
             key={
               group.lineInfo?.lineId +
               String(
@@ -89,16 +76,9 @@ export const QuaySection = React.memo(function QuaySection({
             }
             searchDate={searchDate}
             testID={'lineItem' + i}
-            mode={mode}
             onPressDeparture={onPressDeparture}
           />
         ))}
-        {hasMoreItems && mode !== 'frontpage' && (
-          <MoreItem
-            onPress={() => setLimit(limit + LIMIT_SIZE)}
-            text={t(DeparturesTexts.results.quayResult.showMoreToggler.text)}
-          />
-        )}
       </Section>
       <View style={{marginBottom: theme.spacings.medium}} />
     </Fragment>
