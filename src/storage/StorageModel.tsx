@@ -22,6 +22,7 @@ export enum StorageModelKeysEnum {
   EnableParkingViolationsReportingDebugOverride = '@ATB_enable_parking_violations_debug_override',
   EnablePushNotificationsDebugOverride = '@ATB_enable_push_notifications_debug_override',
   OneTimePopOver = '@ATB_one_time_popovers_seen',
+  EnableTicketInformationDebugOverride = '@ATB_enable_ticket_information_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

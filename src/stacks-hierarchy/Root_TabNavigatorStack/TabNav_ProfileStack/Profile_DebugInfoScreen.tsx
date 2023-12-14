@@ -55,6 +55,7 @@ import {
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
+import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -116,6 +117,8 @@ export const Profile_DebugInfoScreen = () => {
   const {resetDismissedAnnouncements} = useAnnouncementsState();
   const pushNotificationsEnabledDebugOverride =
     usePushNotificationsEnabledDebugOverride();
+  const ticketInformationEnabledDebugOverride =
+    useTicketInformationEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -131,12 +134,7 @@ export const Profile_DebugInfoScreen = () => {
     deviceInspectionStatus,
     mobileTokenStatus,
     barcodeStatus,
-    debug: {
-      nativeToken,
-      validateToken,
-      removeRemoteToken,
-      renewToken,
-    },
+    debug: {nativeToken, validateToken, removeRemoteToken, renewToken},
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
@@ -383,6 +381,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable push notifications"
               override={pushNotificationsEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable ticket information"
+              override={ticketInformationEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
