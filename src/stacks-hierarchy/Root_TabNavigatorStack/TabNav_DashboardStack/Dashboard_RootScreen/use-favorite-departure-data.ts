@@ -14,7 +14,7 @@ import {
 import {
   DepartureFavoritesQuery,
   DepartureGroupMetadata,
-} from '@atb/api/departures/departure-group';
+} from '@atb/api/departures/types';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
 import {useFavorites} from '@atb/favorites';
 import {UserFavoriteDepartures} from '@atb/favorites';

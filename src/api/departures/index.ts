@@ -2,13 +2,10 @@ import {AxiosRequestConfig} from 'axios';
 import {build} from 'search-params';
 import {
   FavoriteDeparture,
-  Location,
   UserFavoriteDepartures,
 } from '@atb/favorites';
 import {
-  DeparturesMetadata,
   DeparturesRealtimeData,
-  PaginationInput,
 } from '@atb/sdk';
 import {flatMap} from '@atb/utils/array';
 import {onlyUniques} from '@atb/utils/only-uniques';
@@ -17,26 +14,8 @@ import {
   DepartureFavoritesQuery,
   DepartureGroupMetadata,
   DepartureRealtimeQuery,
-} from './departure-group';
-import {StopPlaceGroup} from './types';
-
-export type DeparturesInputQuery = {
-  numberOfDepartures: number; // Number of departures to fetch per quay.
-  startTime: string;
-};
-export type DepartureQuery = Partial<PaginationInput> & DeparturesInputQuery;
-
-export async function getDepartures(
-  location: Location,
-  query: DepartureQuery,
-  opts?: AxiosRequestConfig,
-): Promise<DeparturesMetadata> {
-  const {numberOfDepartures, pageOffset = 0, pageSize = 2} = query;
-  const startTime = query.startTime;
-  const url = `bff/v1/departures-from-location-paging?limit=${numberOfDepartures}&pageSize=${pageSize}&pageOffset=${pageOffset}&startTime=${startTime}`;
-  const response = await client.post<DeparturesMetadata>(url, location, opts);
-  return response.data;
-}
+  StopPlaceGroup,
+} from './types';
 
 type StopPlaceGroupRealtimeParams = {
   startTime: string;
@@ -123,5 +102,3 @@ async function post<T>(
 
   return response.data;
 }
-
-export {getDepartureGroups} from './departure-group';

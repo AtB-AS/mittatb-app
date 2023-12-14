@@ -1,4 +1,4 @@
-import {ThemeText} from '@atb/components/text';
+import {ContentHeading} from '@atb/components/content-heading';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {StopPlaceItem} from './StopPlaceItem';
 import React from 'react';
@@ -10,14 +10,14 @@ import {ThemedOnBehalfOf} from '@atb/theme/ThemedAssets';
 import {Location} from '@atb/favorites';
 
 export const StopPlaces = ({
-  header,
+  headerText,
   stopPlaces,
   navigateToPlace,
   testID,
   location,
   isLoading,
 }: {
-  header?: string;
+  headerText?: string;
   stopPlaces: NearestStopPlaceNode[];
   navigateToPlace: (place: StopPlace) => void;
   testID?: string;
@@ -28,16 +28,8 @@ export const StopPlaces = ({
   const styles = useStyles();
   const noStopPlacesFound = stopPlaces.length === 0 && location && !isLoading;
   return (
-    <ScrollView style={styles.container} testID={testID}>
-      {header && !noStopPlacesFound && (
-        <ThemeText
-          style={styles.header}
-          type="body__secondary"
-          color="secondary"
-        >
-          {header}
-        </ThemeText>
-      )}
+    <ScrollView testID={testID} contentContainerStyle={styles.container}>
+      {headerText && !noStopPlacesFound && <ContentHeading text={headerText} />}
       {stopPlaces.map((node: NearestStopPlaceNode) => (
         <StopPlaceItem
           key={node.place.id}
@@ -67,11 +59,8 @@ export const StopPlaces = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    paddingVertical: theme.spacings.medium,
-  },
-  header: {
-    paddingVertical: theme.spacings.medium,
-    paddingHorizontal: theme.spacings.medium * 2,
+    rowGap: theme.spacings.small,
+    margin: theme.spacings.medium,
   },
   noStopMessage: {
     marginHorizontal: theme.spacings.large,

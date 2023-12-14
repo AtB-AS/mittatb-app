@@ -54,7 +54,8 @@ import {
   usePushNotificationsEnabledDebugOverride,
 } from '@atb/notifications';
 import {useTimeContextState} from '@atb/time';
-import { useBeaconsState } from '@atb/beacons/BeaconsContext';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -114,6 +115,7 @@ export const Profile_DebugInfoScreen = () => {
   const {resetDismissedAnnouncements} = useAnnouncementsState();
   const pushNotificationsEnabledDebugOverride =
     usePushNotificationsEnabledDebugOverride();
+  const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -129,12 +131,7 @@ export const Profile_DebugInfoScreen = () => {
     deviceInspectionStatus,
     mobileTokenStatus,
     barcodeStatus,
-    debug: {
-      nativeToken,
-      validateToken,
-      removeRemoteToken,
-      renewToken,
-    },
+    debug: {nativeToken, validateToken, removeRemoteToken, renewToken},
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
@@ -381,6 +378,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable push notifications"
               override={pushNotificationsEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable onBehalfOf"
+              override={onBehalfOfEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>

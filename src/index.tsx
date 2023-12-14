@@ -88,12 +88,12 @@ export const App = () => {
                                 <RemoteConfigContextProvider>
                                   <FirestoreConfigurationContextProvider>
                                     <TicketingContextProvider>
-                                      <MobileTokenContextProvider>
-                                        <AppLanguageProvider>
-                                          <GeolocationContextProvider>
-                                            <GlobalMessagesContextProvider>
-                                              <AnnouncementsContextProvider>
-                                                <ReactQueryProvider>
+                                      <ReactQueryProvider>
+                                        <MobileTokenContextProvider>
+                                          <AppLanguageProvider>
+                                            <GeolocationContextProvider>
+                                              <GlobalMessagesContextProvider>
+                                                <AnnouncementsContextProvider>
                                                   <NotificationContextProvider>
                                                     <PopOverContextProvider>
                                                       <BottomSheetProvider>
@@ -105,12 +105,12 @@ export const App = () => {
                                                       </BottomSheetProvider>
                                                     </PopOverContextProvider>
                                                   </NotificationContextProvider>
-                                                </ReactQueryProvider>
-                                              </AnnouncementsContextProvider>
-                                            </GlobalMessagesContextProvider>
-                                          </GeolocationContextProvider>
-                                        </AppLanguageProvider>
-                                      </MobileTokenContextProvider>
+                                                </AnnouncementsContextProvider>
+                                              </GlobalMessagesContextProvider>
+                                            </GeolocationContextProvider>
+                                          </AppLanguageProvider>
+                                        </MobileTokenContextProvider>
+                                      </ReactQueryProvider>
                                     </TicketingContextProvider>
                                   </FirestoreConfigurationContextProvider>
                                 </RemoteConfigContextProvider>

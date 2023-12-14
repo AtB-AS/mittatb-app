@@ -11,18 +11,14 @@ import {
 } from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
+import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 
-const ChangeTokenAction = ({
-  onChange,
-  toggleLimit,
-}: {
-  onChange: () => void;
-  toggleLimit?: number;
-}) => {
+const ChangeTokenAction = ({onChange}: {onChange: () => void}) => {
   const {t} = useTranslation();
   const styles = useStyles();
   const {mobileTokenStatus} = useMobileTokenContextState();
   const {disable_travelcard} = useRemoteConfig();
+  const {data} = useTokenToggleDetailsQuery();
 
   return (
     <Section style={styles.changeTokenButton}>
@@ -33,13 +29,13 @@ const ChangeTokenAction = ({
             ? t(TravelTokenTexts.travelToken.changeTokenWithoutTravelcardButton)
             : t(TravelTokenTexts.travelToken.changeTokenButton)
         }
-        disabled={mobileTokenStatus !== 'success' || toggleLimit === 0}
+        disabled={mobileTokenStatus !== 'success' || data?.toggleLimit === 0}
         onPress={onChange}
         testID="switchTokenButton"
         icon={<ThemeIcon svg={Swap} />}
       />
 
-      {toggleLimit !== undefined && (
+      {data?.toggleLimit !== undefined && (
         <GenericSectionItem>
           <TokenToggleInfo style={styles.tokenInfoView} />
         </GenericSectionItem>

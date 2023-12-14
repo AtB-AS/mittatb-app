@@ -9,6 +9,7 @@ import {PreassignedFareProduct} from '@atb/configuration';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type StopPlaceSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -34,7 +35,6 @@ export const HarborSelection = forwardRef<
     }: StopPlaceSelectionProps,
     ref,
   ) => {
-    const styles = useStyles();
     const {t} = useTranslation();
 
     const fromHarborRef = useRef<TouchableOpacity>(null);
@@ -43,17 +43,9 @@ export const HarborSelection = forwardRef<
 
     return (
       <View style={style} accessible={false}>
-        <ThemeText
-          type="body__secondary"
-          color="secondary"
-          style={styles.sectionText}
-          accessibilityLabel={t(
-            PurchaseOverviewTexts.stopPlaces.harborSelection.select.a11yLabel,
-          )}
-        >
-          {t(PurchaseOverviewTexts.stopPlaces.harborSelection.select.text)}
-        </ThemeText>
-
+        <ContentHeading
+          text={t(PurchaseOverviewTexts.stopPlaces.harborSelection.select)}
+        />
         <Section accessible={false}>
           <HarborSelectionItem
             fromOrTo="from"
@@ -159,9 +151,6 @@ const HarborLabel = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  sectionText: {
-    marginBottom: theme.spacings.medium,
-  },
   sectionContent: {
     flexDirection: 'row',
   },

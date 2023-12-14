@@ -38,6 +38,8 @@ import {Platform} from 'react-native';
 import {updateMetadata} from '@atb/chat/metadata';
 import {tokenService} from './tokenService';
 import {tokenReducer} from '@atb/mobile-token/tokenReducer';
+import {useQueryClient} from '@tanstack/react-query';
+import {GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY} from '@atb/mobile-token/use-token-toggle-details';
 
 type MobileTokenContextState = {
   tokens: Token[];
@@ -87,6 +89,7 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {userId, authStatus} = useAuthState();
   const [state, dispatch] = useReducer(tokenReducer, {status: 'none'});
+  const queryClient = useQueryClient();
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
@@ -212,13 +215,14 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           uuid(),
           bypassRestrictions,
         );
+        queryClient.invalidateQueries([GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY]);
         dispatch({type: 'UPDATE_REMOTE_TOKENS', remoteTokens: updatedTokens});
         return true;
       } catch (err) {
         return false;
       }
     },
-    [],
+    [queryClient],
   );
 
   const tokens = useMemo(
