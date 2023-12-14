@@ -14,6 +14,7 @@ import {StyleSheet} from '@atb/theme';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
+import {useIsTicketInformationEnabled} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -33,6 +34,7 @@ export const FareProductHeader = forwardRef<View, Props>(
   ) => {
     const {t, language} = useTranslation();
     const styles = useStyle();
+    const [isTicketInformationEnabled] = useIsTicketInformationEnabled();
 
     return (
       <View style={style}>
@@ -49,26 +51,28 @@ export const FareProductHeader = forwardRef<View, Props>(
             {getTextForLanguage(fareProductTypeConfig.name, language) ?? ''}
           </ThemeText>
         </View>
-        <View style={styles.headerSubSection}>
-          <ThemeText
-            type="body__secondary"
-            color="background_accent_0"
-            style={styles.ticketDescription}
-            numberOfLines={1}
-          >
-            {getTextForLanguage(
-              preassignedFareProduct.description ?? [],
-              language,
-            )?.replaceAll('\n', ' ')}
-          </ThemeText>
-          <Button
-            type="pill"
-            leftIcon={{svg: Info}}
-            interactiveColor="interactive_1"
-            text={t(PurchaseOverviewTexts.ticketInformation.button)}
-            onPress={onTicketInfoButtonPress}
-          />
-        </View>
+        {isTicketInformationEnabled && (
+          <View style={styles.headerSubSection}>
+            <ThemeText
+              type="body__secondary"
+              color="background_accent_0"
+              style={styles.ticketDescription}
+              numberOfLines={1}
+            >
+              {getTextForLanguage(
+                preassignedFareProduct.description ?? [],
+                language,
+              )?.replaceAll('\n', ' ')}
+            </ThemeText>
+            <Button
+              type="pill"
+              leftIcon={{svg: Info}}
+              interactiveColor="interactive_1"
+              text={t(PurchaseOverviewTexts.ticketInformation.button)}
+              onPress={onTicketInfoButtonPress}
+            />
+          </View>
+        )}
       </View>
     );
   },
