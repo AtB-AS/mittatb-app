@@ -5,7 +5,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import {useHasSeenShareTravelHabitsScreen} from './use-has-seen-share-travel-habits-screen';
 import {useAppState} from '@atb/AppContext';
-import {useBeacons} from './use-beacons';
+import {useBeaconsState} from './BeaconsContext';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count';
@@ -18,7 +18,7 @@ export const useMaybeShowShareTravelHabitsScreen = (
   } = useRemoteConfig();
   const sessionCountRef = useRef(0);
   const isInitializedRef = useRef(false);
-  const {isBeaconsSupported, kettleInfo} = useBeacons();
+  const {isBeaconsSupported, kettleInfo} = useBeaconsState();
 
   const appStatus = useAppStateStatus();
 

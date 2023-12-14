@@ -11,12 +11,12 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
-import {useBeacons} from '@atb/beacons/use-beacons';
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {destructiveAlert} from './utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
@@ -26,7 +26,7 @@ export const Profile_PrivacyScreen = () => {
     revokeBeacons,
     deleteCollectedData,
     isBeaconsSupported,
-  } = useBeacons();
+  } = useBeaconsState();
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
@@ -54,11 +54,11 @@ export const Profile_PrivacyScreen = () => {
                   .subText,
               )}
               value={kettleInfo?.isBeaconsOnboarded}
-              onValueChange={(checked) => {
+              onValueChange={async (checked) => {
                 if (checked) {
-                  onboardForBeacons();
+                  await onboardForBeacons();
                 } else {
-                  revokeBeacons();
+                  await revokeBeacons();
                 }
               }}
               testID="toggleCollectData"
