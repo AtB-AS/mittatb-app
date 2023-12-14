@@ -135,6 +135,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           type: 'cancel',
           onPress: closeModal,
         },
+        setFocusOnLoad: false,
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
       parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
