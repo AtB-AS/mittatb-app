@@ -43,14 +43,6 @@ const ShareTravelHabitsTexts = {
         "Du gir oss løyve til å kjenne att bussar og busshaldeplassar i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å sende deg relevante undersøkingar. Det vil hjelpe oss til å kunne betre reisetilbodet."
       )
     },
-    locationAlways: {
-      title: _('Posisjon', 'Location', 'Posisjon'),
-      message: _(
-        "I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.",
-        "In addition to displaying your location on maps and planning trips, we gain valuable insights into where you and other customers travel. This helps us improve our travel offerings.",
-        "I tillegg til å kunne vise posisjonen din i kart og til å planleggje reiser, vil vi få verdifull læring om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet."
-      )
-    },
     locationWhenInUse: {
       title: _('Posisjon', 'Location', 'Posisjon'),
       message: _(

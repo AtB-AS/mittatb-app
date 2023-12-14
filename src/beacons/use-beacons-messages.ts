@@ -21,11 +21,6 @@ export const useBeaconsMessages = () => {
                 message: t(ShareTravelHabitsTexts.permissions.locationWhenInUse.message),
                 buttonPositive,
             },
-            locationAlways: {
-                title: t(ShareTravelHabitsTexts.permissions.locationAlways.title),
-                message: t(ShareTravelHabitsTexts.permissions.locationAlways.message),
-                buttonPositive,
-            },
             motion: {
                 title: t(ShareTravelHabitsTexts.permissions.motion.title),
                 message: t(ShareTravelHabitsTexts.permissions.motion.message),

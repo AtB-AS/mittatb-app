@@ -12,7 +12,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" tools:node="merge"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:node="merge"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" tools:node="merge"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" tools:node="remove"/>
 
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" tools:node="merge"/>
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" tools:node="merge"/>

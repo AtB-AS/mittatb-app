@@ -4,13 +4,12 @@ import { KettleConsents } from 'react-native-kettle-module';
 import { PERMISSIONS, Permission, RESULTS, checkMultiple, request } from 'react-native-permissions';
 import { RationaleMessages } from './use-beacons-messages';
 
-export type PermissionKey = 'bluetooth' | 'locationWhenInUse' | 'locationAlways' | 'motion';
+export type PermissionKey = 'bluetooth' | 'locationWhenInUse' | 'motion';
 
 export const BEACONS_CONSENTS = [KettleConsents.SURVEYS, KettleConsents.ANALYTICS];
 const BEACONS_PERMISSIONS: Record<PermissionKey, Permission> = {
     bluetooth: getBluetoothPermission(),
     locationWhenInUse: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-    locationAlways: Platform.OS === 'ios' ? PERMISSIONS.IOS.LOCATION_ALWAYS : PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
     motion: Platform.OS === 'ios' ? PERMISSIONS.IOS.MOTION : PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION,
 };
 
@@ -51,16 +50,8 @@ export const requestAndroidBeaconPermissions = async (rationaleMessages: Rationa
         );
 
         if (locationWhenInUseStatus === RESULTS.GRANTED) {
-            // Request location always or background location
-            const locationAlwaysStatus = await request(
-                BEACONS_PERMISSIONS.locationAlways,
-                rationaleMessages.locationAlways,
-            );
-
-            if (locationAlwaysStatus === RESULTS.GRANTED) {
-                // Request motion permission
-                await request(BEACONS_PERMISSIONS.motion, rationaleMessages.motion);
-            }
+            // Request motion permission
+            await request(BEACONS_PERMISSIONS.motion, rationaleMessages.motion);
         }
     }
 
@@ -72,7 +63,6 @@ const checkPermissionStatuses = async () => {
     const permissionStatuses: Record<PermissionKey, boolean> = {
         bluetooth: false,
         locationWhenInUse: false,
-        locationAlways: false,
         motion: false,
     };
     Object.keys(permissionStatuses).forEach((key) => {
@@ -88,7 +78,7 @@ export const allowedPermissionForKettle = async () => {
     if (permissionStatuses.bluetooth) {
         kettleModulesArray.push(KettleModules.BLUETOOTH);
     }
-    if (permissionStatuses.locationAlways) {
+    if (permissionStatuses.locationWhenInUse) {
         kettleModulesArray.push(KettleModules.LOCATION);
     }
     if (permissionStatuses.motion) {
