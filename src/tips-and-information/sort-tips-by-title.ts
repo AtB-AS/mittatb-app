@@ -1,4 +1,4 @@
-import {TipType} from '@atb/stacks-hierarchy/Root_TipsAndInformation/types';
+import {TipType} from '@atb/tips-and-information/types';
 import {getTextForLanguage, Language} from '@atb/translations';
 
 export function sortTipsByTitle(tips: TipType[], language: Language) {

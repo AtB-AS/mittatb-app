@@ -11,12 +11,18 @@ import {StyleSheet} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {SectionHeading} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SectionHeading';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
+import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-and-information-enabled';
+
+import React from 'react';
+import {TipsAndInformation} from '@atb/tips-and-information';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
 export const Root_TicketInformationScreen = (props: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
+  const showTipsAndInformation = useTipsAndInformationEnabled();
+
   const fareProductTypeConfig = props.route.params.fareProductTypeConfig;
   const preassignedFareProduct = props.route.params.preassignedFareProduct;
 
@@ -55,6 +61,18 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </ThemeText>
           </GenericSectionItem>
         </Section>
+
+        {showTipsAndInformation && (
+          <View style={styles.tipsAndInformation}>
+            <SectionHeading>
+              {t(
+                PurchaseOverviewTexts.ticketInformation.informationDetails
+                  .tipsInformation,
+              )}
+            </SectionHeading>
+            <TipsAndInformation />
+          </View>
+        )}
       </ScrollView>
     </FullScreenView>
   );
@@ -69,5 +87,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: theme.spacings.medium,
+  },
+  tipsAndInformation: {
+    marginTop: theme.spacings.medium,
   },
 }));
