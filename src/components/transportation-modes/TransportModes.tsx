@@ -1,9 +1,4 @@
 import {TransportModeType, TransportSubmodeType} from '@atb/configuration';
-import {
-  CounterIconBox,
-  TransportationIconBox,
-  getTransportModeSvg,
-} from '@atb/components/icon-box';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
@@ -15,6 +10,7 @@ import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {TextColor, TextNames} from '@atb-as/theme';
 import _ from 'lodash';
+import {TransportationIconBoxList} from '@atb/components/icon-box';
 
 const modesDisplayLimit: number = 2;
 
@@ -28,15 +24,6 @@ const removeDuplicateStringsFilter = (
   i: number,
   arr: string[],
 ): boolean => arr.indexOf(val) === i;
-
-const removeDuplicatesByIconNameFilter = (
-  val: TransportModePair,
-  i: number,
-  arr: TransportModePair[],
-): boolean =>
-  arr
-    .map((m) => getTransportModeSvg(m.mode, m.subMode).name)
-    .indexOf(getTransportModeSvg(val.mode, val.subMode).name) === i;
 
 export const getTransportModeText = (
   modes: TransportModePair[],
@@ -77,11 +64,6 @@ export const TransportModes = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const modesCount: number = modes.length;
-  const modesToDisplay = modes
-    .slice(0, modesDisplayLimit)
-    .filter(removeDuplicatesByIconNameFilter);
-
   const transportModeText: string = getTransportModeText(
     modes,
     t,
@@ -90,27 +72,12 @@ export const TransportModes = ({
 
   return (
     <View style={[styles.transportationMode, style]}>
-      {modesToDisplay.map(({mode, subMode}) => (
-        <TransportationIconBox
-          style={styles.transportationIcon}
-          key={mode + subMode}
-          mode={mode}
-          subMode={subMode}
-          size={iconSize}
-          disabled={disabled}
-        />
-      ))}
-      {modesCount > modesDisplayLimit && (
-        <CounterIconBox
-          count={modesCount - modesDisplayLimit}
-          size="small"
-          accessibilityLabel={t(
-            FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
-              modesCount,
-            ),
-          )}
-        />
-      )}
+      <TransportationIconBoxList
+        modes={modes}
+        modesDisplayLimit={2}
+        iconSize={iconSize}
+        disabled={disabled}
+      />
       <ThemeText
         type={textType ?? 'label__uppercase'}
         color={textColor ?? 'secondary'}
