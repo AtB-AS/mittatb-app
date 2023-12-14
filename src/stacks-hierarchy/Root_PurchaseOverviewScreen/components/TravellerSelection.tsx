@@ -16,6 +16,8 @@ import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/content-heading';
+import {LabelInfo} from '@atb/components/label-info';
+import {useOnBehalfOf} from '@atb/on-behalf-of';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -25,6 +27,8 @@ type TravellerSelectionProps = {
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
+  setOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
+  isOnBehalfOfToggle: boolean;
 };
 
 export function TravellerSelection({
@@ -33,6 +37,8 @@ export function TravellerSelection({
   selectableUserProfiles,
   selectionMode,
   fareProductType,
+  setOnBehalfOfToggle,
+  isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -41,6 +47,8 @@ export function TravellerSelection({
     close: closeBottomSheet,
     onCloseFocusRef,
   } = useBottomSheet();
+
+  const isOnBehalfOfEnabled = useOnBehalfOf();
 
   const [userProfilesState, setUserProfilesState] = useState<
     UserProfileWithCount[]
@@ -107,6 +115,8 @@ export function TravellerSelection({
         selectionMode={selectionMode}
         fareProductType={fareProductType}
         selectableUserProfilesWithCountInit={userProfilesState}
+        setOnBehalfOfToggle={setOnBehalfOfToggle}
+        isOnBehalfOfToggle={isOnBehalfOfToggle}
         close={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
         ) => {
@@ -155,6 +165,9 @@ export function TravellerSelection({
                 </ThemeText>
               )}
             </View>
+
+            {/* remove new label when requested */}
+            {isOnBehalfOfEnabled && <LabelInfo label="new" />}
 
             <ThemeIcon svg={Edit} size="normal" />
           </View>

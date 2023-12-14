@@ -18,12 +18,16 @@ type TravellerSelectionSheetProps = {
   fareProductType: string;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
   close: (chosenSelectableUserProfiles?: UserProfileWithCount[]) => void;
+  setOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
+  isOnBehalfOfToggle: boolean;
 };
 export const TravellerSelectionSheet = ({
   selectionMode,
   fareProductType,
   selectableUserProfilesWithCountInit,
   close,
+  setOnBehalfOfToggle,
+  isOnBehalfOfToggle,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
@@ -55,12 +59,16 @@ export const TravellerSelectionSheet = ({
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
+            setOnBehalfOfToggle={setOnBehalfOfToggle}
+            isOnBehalfOfToggle={isOnBehalfOfToggle}
           />
         ) : (
           <SingleTravellerSelection
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
+            setOnBehalfOfToggle={setOnBehalfOfToggle}
+            isOnBehalfOfToggle={isOnBehalfOfToggle}
           />
         )}
       </ScrollView>

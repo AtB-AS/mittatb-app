@@ -10,18 +10,32 @@ import {
 } from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
 import {useScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {CounterSectionItem, Section} from '@atb/components/sections';
+import {
+  CounterSectionItem,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
+import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {HoldingHands} from '@atb/assets/svg/color/images';
+import {View} from 'react-native';
+import {StyleSheet} from '@atb/theme';
+import {OnBehalfOfProps} from './types';
 
 export function MultipleTravellersSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
   fareProductType,
-}: UserCountState) {
+  setOnBehalfOfToggle,
+  isOnBehalfOfToggle,
+}: UserCountState & OnBehalfOfProps) {
   const {t, language} = useTranslation();
+  const styles = useStyles();
 
   const travellersModified = useRef(false);
+
+  const isOnBehalfOfEnabled = useOnBehalfOf();
 
   const addTraveller = (userTypeString: string) => {
     travellersModified.current = true;
@@ -39,29 +53,46 @@ export function MultipleTravellersSelection({
   );
 
   return (
-    <Section>
-      {userProfilesWithCount.map((u) => (
-        <CounterSectionItem
-          key={u.userTypeString}
-          text={getReferenceDataName(u, language)}
-          count={u.count}
-          addCount={() => addTraveller(u.userTypeString)}
-          removeCount={() => removeTraveller(u.userTypeString)}
-          type="spacious"
-          testID={'counterInput_' + u.userTypeString.toLowerCase()}
-          color="interactive_2"
-          subtext={[
-            getTextForLanguage(u.alternativeDescriptions, language),
-            t(
-              TicketTravellerTexts.information(
-                u.userTypeString,
-                fareProductType,
+    <View>
+      <Section>
+        {userProfilesWithCount.map((u) => (
+          <CounterSectionItem
+            key={u.userTypeString}
+            text={getReferenceDataName(u, language)}
+            count={u.count}
+            addCount={() => addTraveller(u.userTypeString)}
+            removeCount={() => removeTraveller(u.userTypeString)}
+            type="spacious"
+            testID={'counterInput_' + u.userTypeString.toLowerCase()}
+            color="interactive_2"
+            subtext={[
+              getTextForLanguage(u.alternativeDescriptions, language),
+              t(
+                TicketTravellerTexts.information(
+                  u.userTypeString,
+                  fareProductType,
+                ),
               ),
-            ),
-          ].join(' ')}
-        />
-      ))}
-    </Section>
+            ].join(' ')}
+          />
+        ))}
+      </Section>
+      {isOnBehalfOfEnabled && (
+        <Section style={styles.onBehalfOfContainer}>
+          <ToggleSectionItem
+            leftImage={HoldingHands}
+            text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+            subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
+            value={isOnBehalfOfToggle}
+            label="new"
+            textType="body__primary--bold"
+            onValueChange={(checked) => {
+              setOnBehalfOfToggle(checked);
+            }}
+          />
+        </Section>
+      )}
+    </View>
   );
 }
 
@@ -103,3 +134,11 @@ function createTravellersText(
     );
   }
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  return {
+    onBehalfOfContainer: {
+      marginTop: theme.spacings.medium,
+    },
+  };
+});
