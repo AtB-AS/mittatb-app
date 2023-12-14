@@ -135,12 +135,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           type: 'cancel',
           onPress: closeModal,
         },
-        setFocusOnLoad: !params.onFocusElement,
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
       parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
         <FareProductHeader
-          ref={focusRef}
+          ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
           fareProductTypeConfig={params.fareProductTypeConfig}
         />
