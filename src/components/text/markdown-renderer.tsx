@@ -68,6 +68,12 @@ function renderToken(token: marked.Token, index: number): React.ReactElement {
           {token.text}
         </Text>
       );
+    case 'list':
+      return (
+        <Text key={index}>
+          {token.items.map((item) => `\u2022 ${item.text}\n`)}
+        </Text>
+      );
 
     default:
       console.warn(
