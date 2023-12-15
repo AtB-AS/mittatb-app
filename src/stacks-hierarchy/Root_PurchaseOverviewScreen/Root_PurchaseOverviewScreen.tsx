@@ -69,6 +69,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
+
+  const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
+
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
@@ -192,6 +195,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectionMode={travellerSelectionMode}
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
+            setIsOnBehalfOfToggle={setIsOnBehalfOfToggle}
+            isOnBehalfOfToggle={isOnBehalfOfToggle}
           />
           <FromToSelection
             fareProductTypeConfig={params.fareProductTypeConfig}

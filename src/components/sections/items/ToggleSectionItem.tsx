@@ -2,15 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {AccessibilityProps, View} from 'react-native';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
-import {SvgProps} from 'react-native-svg';
 import {LabelType} from '@atb/configuration';
 import {LabelInfo} from '@atb/components/label-info';
+import {SvgProps} from 'react-native-svg';
 
 type Props = SectionItemProps<{
   text: string;
@@ -18,7 +17,7 @@ type Props = SectionItemProps<{
   label?: LabelType;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
-  leftIcon?: (props: SvgProps) => JSX.Element;
+  leftImage?: (props: SvgProps) => JSX.Element;
   interactiveColor?: InteractiveColor;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
@@ -29,7 +28,7 @@ export function ToggleSectionItem({
   subtext,
   label,
   onValueChange,
-  leftIcon,
+  leftImage: LeftImage,
   value = false,
   accessibility,
   testID,
@@ -67,37 +66,44 @@ export function ToggleSectionItem({
       onAccessibilityAction={() => onChange(!checked)}
       {...accessibility}
     >
-      <View style={sectionStyle.spaceBetween}>
-        {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
-        <View style={styles.textContainer}>
-          <ThemeText type={textType}>{text}</ThemeText>
+      <View style={{flexDirection: 'row'}}>
+        <View style={styles.leftImageContainer}>{LeftImage && <LeftImage />}</View>
+        <View style={{flexDirection: 'column', flex: 1}}>
+          <View style={sectionStyle.spaceBetween}>
+            <View style={styles.textContainer}>
+              <ThemeText type={textType}>{text}</ThemeText>
+            </View>
+            {label && <LabelInfo label={label} />}
+            <Toggle
+              importantForAccessibility="no-hide-descendants"
+              accessible={false}
+              value={checked}
+              onValueChange={onChange}
+              testID={testID}
+              interactiveColor={interactiveColor}
+              disabled={disabled}
+            />
+          </View>
+          {subtext && (
+            <ThemeText
+              type="body__secondary"
+              color="secondary"
+              style={styles.subtext}
+            >
+              {subtext}
+            </ThemeText>
+          )}
         </View>
-        {label && <LabelInfo label={label} />}
-        <Toggle
-          importantForAccessibility="no-hide-descendants"
-          accessible={false}
-          value={checked}
-          onValueChange={onChange}
-          testID={testID}
-          interactiveColor={interactiveColor}
-          disabled={disabled}
-        />
       </View>
-      {subtext && (
-        <ThemeText
-          type="body__secondary"
-          color="secondary"
-          style={styles.subtext}
-        >
-          {subtext}
-        </ThemeText>
-      )}
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
-  leftIcon: {marginRight: theme.spacings.small},
+  leftImageContainer: {
+    marginRight: theme.spacings.small,
+    justifyContent: 'center',
+  },
   textContainer: {flex: 1, marginRight: theme.spacings.small},
   subtext: {marginTop: theme.spacings.xSmall},
 }));
