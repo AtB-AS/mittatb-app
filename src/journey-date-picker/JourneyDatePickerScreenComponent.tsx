@@ -95,7 +95,7 @@ export const JourneyDatePickerScreenComponent = ({
           interactiveColor="interactive_0"
           text={t(JourneyDatePickerTexts.searchButton.text)}
           testID="searchButton"
-         />
+        />
       </ScrollView>
     </View>
   );
@@ -147,8 +147,7 @@ export function useSearchTimeValue<
     if (route.params?.[callerRouteParam]) {
       setSearchTime(route.params?.[callerRouteParam]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [route.params?.[callerRouteParam]]);
+  }, [callerRouteParam, route.params]);
 
   return searchTime;
 }
