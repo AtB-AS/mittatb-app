@@ -15,6 +15,8 @@ import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-a
 
 import React from 'react';
 import {TipsAndInformation} from '@atb/tips-and-information';
+import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
+import {BenefitImage} from '@atb/mobility/components/BenefitImage';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -22,6 +24,9 @@ export const Root_TicketInformationScreen = (props: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
   const showTipsAndInformation = useTipsAndInformationEnabled();
+  const {isLoading, benefits} = useOperatorBenefitsForFareProduct(
+    props.route.params.preassignedFareProduct.id,
+  );
 
   const fareProductTypeConfig = props.route.params.fareProductTypeConfig;
   const preassignedFareProduct = props.route.params.preassignedFareProduct;
@@ -36,7 +41,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
       }}
     >
       <ScrollView style={styles.container}>
-        {preassignedFareProduct.productDescription && (
+        {(preassignedFareProduct.productDescription || benefits.length > 0) && (
           <>
             <SectionHeading>
               {t(
@@ -62,9 +67,28 @@ export const Root_TicketInformationScreen = (props: Props) => {
                   )}
                 </ThemeText>
               </GenericSectionItem>
+              {!isLoading &&
+                benefits.length > 0 &&
+                benefits.map((b) => (
+                  <GenericSectionItem key={b.formFactor + b.ticketDescription}>
+                    <View style={styles.mobilityBenefit}>
+                      <BenefitImage
+                        formFactor={b.formFactor}
+                        eligible={false}
+                      />
+                      <ThemeText
+                        type="body__secondary"
+                        style={styles.mobilityBenefitText}
+                      >
+                        {getTextForLanguage(b.ticketDescription, language)}
+                      </ThemeText>
+                    </View>
+                  </GenericSectionItem>
+                ))}
             </Section>
           </>
         )}
+
         {showTipsAndInformation && (
           <View style={styles.tipsAndInformation}>
             <SectionHeading>
@@ -93,5 +117,13 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   tipsAndInformation: {
     marginTop: theme.spacings.medium,
+  },
+  mobilityBenefit: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: theme.spacings.medium,
+  },
+  mobilityBenefitText: {
+    flexShrink: 1,
   },
 }));

@@ -9,8 +9,10 @@ export type FirestoreConfigStatus = 'loading' | 'success';
 
 export type DistributionChannel = 'web' | 'app' | 'debug-web' | 'debug-app';
 
+export type PreassignedFareProductId = string;
+
 export type PreassignedFareProduct = {
-  id: string;
+  id: PreassignedFareProductId;
   name: LanguageAndTextType;
   version: string;
   description?: LanguageAndTextType[];

@@ -34,6 +34,7 @@ export const useOperators = () => {
   );
 
   return {
+    mobilityOperators,
     byFormFactor,
     byId,
   };
