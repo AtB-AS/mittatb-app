@@ -68,7 +68,6 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const updateKettleInfo = () => getKettleInfo().then(setKettleInfo);
 
   const initializeKettleSDK = useCallback(async () => {
-    if (!isBeaconsSupported) return;
     const permissions = await allowedPermissionForKettle();
     if (!isInitializedRef.current) {
       if (permissions.length > 0) {
@@ -77,7 +76,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       }
     }
     return permissions;
-  }, [isBeaconsSupported]);
+  }, []);
 
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
@@ -126,7 +125,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     (async function () {
       if (!isBeaconsSupported) return;
 
-      if (isInitializedRef.current && isOnboardedButNotStarted) {
+      if (isOnboardedButNotStarted) {
         const permissions = await initializeKettleSDK();
         Kettle.start(permissions);
       }
