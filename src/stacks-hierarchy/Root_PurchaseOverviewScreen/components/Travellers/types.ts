@@ -1,4 +1,4 @@
 export type TravelerOnBehalfOfProps = {
-  setTravelerOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
+  setIsTravelerOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
   isTravelerOnBehalfOfToggle: boolean;
 };

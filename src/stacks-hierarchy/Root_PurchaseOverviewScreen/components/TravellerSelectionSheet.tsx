@@ -34,7 +34,7 @@ export const TravellerSelectionSheet = ({
   const style = useStyle();
 
   const userCountState = useUserCountState(selectableUserProfilesWithCountInit);
-  const [travelerOnBehalfOfToggle, setTravelerOnBehalfOfToggle] =
+  const [isTravelerOnBehalfOfToggle, setIsTravelerOnBehalfOfToggle] =
     useState<boolean>(isOnBehalfOfToggle);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>
@@ -62,16 +62,16 @@ export const TravellerSelectionSheet = ({
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
-            setTravelerOnBehalfOfToggle={setTravelerOnBehalfOfToggle}
-            isTravelerOnBehalfOfToggle={travelerOnBehalfOfToggle}
+            setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}
+            isTravelerOnBehalfOfToggle={isTravelerOnBehalfOfToggle}
           />
         ) : (
           <SingleTravellerSelection
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
-            setTravelerOnBehalfOfToggle={setTravelerOnBehalfOfToggle}
-            isTravelerOnBehalfOfToggle={travelerOnBehalfOfToggle}
+            setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}
+            isTravelerOnBehalfOfToggle={isTravelerOnBehalfOfToggle}
           />
         )}
       </ScrollView>
@@ -80,7 +80,7 @@ export const TravellerSelectionSheet = ({
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
           disabled={totalTravellersCount < 1}
           onPress={() =>
-            close(selectableUserProfilesWithCount, travelerOnBehalfOfToggle)
+            close(selectableUserProfilesWithCount, isTravelerOnBehalfOfToggle)
           }
           rightIcon={{svg: Confirm}}
         />

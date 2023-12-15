@@ -24,7 +24,7 @@ export function SingleTravellerSelection({
   addCount,
   removeCount,
   fareProductType,
-  setTravelerOnBehalfOfToggle,
+  setIsTravelerOnBehalfOfToggle,
   isTravelerOnBehalfOfToggle,
 }: UserCountState & TravelerOnBehalfOfProps) {
   const {t, language} = useTranslation();
@@ -88,7 +88,7 @@ export function SingleTravellerSelection({
             label="new"
             textType="body__primary--bold"
             onValueChange={(checked) => {
-              setTravelerOnBehalfOfToggle(checked);
+              setIsTravelerOnBehalfOfToggle(checked);
             }}
           />
         </Section>
