@@ -67,6 +67,19 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const updateKettleInfo = () => getKettleInfo().then(setKettleInfo);
 
+  const initializeKettleSDK = useCallback(async () => {
+    if (!isBeaconsSupported) return;
+    const permissions = await allowedPermissionForKettle();
+    if (!isInitializedRef.current) {
+      if (permissions.length > 0) {
+        console.log('Initializing Kettle SDK');
+        await NativeModules.KettleSDKExtension.initializeKettleSDK();
+        isInitializedRef.current = true;
+      }
+    }
+    return permissions;
+  }, [isBeaconsSupported]);
+
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
 
@@ -80,13 +93,14 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
     if (granted) {
       // Initialize beacons SDK after consent is granted
+      await initializeKettleSDK();
       Kettle.grant(BEACONS_CONSENTS);
       await storage.set(storeKey.beaconsConsent, 'true');
       await updateKettleInfo();
     }
 
     return granted;
-  }, [isBeaconsSupported, rationaleMessages]);
+  }, [isBeaconsSupported, rationaleMessages, initializeKettleSDK]);
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
@@ -108,25 +122,21 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const isOnboardedButNotStarted =
     !kettleInfo?.isKettleStarted && kettleInfo?.isBeaconsOnboarded;
+
   useEffect(() => {
     (async function () {
       if (!isBeaconsSupported) return;
 
-      const permissions = await allowedPermissionForKettle();
-      if (!isInitializedRef.current) {
-        if (permissions.length > 0) {
-          await NativeModules.KettleSDKExtension.initializeKettleSDK();
-          isInitializedRef.current = true;
-        }
-      }
-
       if (isInitializedRef.current && isOnboardedButNotStarted) {
+        const permissions = await initializeKettleSDK();
         Kettle.start(permissions);
       }
 
-      await updateKettleInfo();
+      if (isInitializedRef.current) {
+        await updateKettleInfo();
+      }
     })();
-  }, [isBeaconsSupported, isOnboardedButNotStarted]);
+  }, [isBeaconsSupported, isOnboardedButNotStarted, initializeKettleSDK]);
 
   return (
     <BeaconsContext.Provider
