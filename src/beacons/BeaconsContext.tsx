@@ -72,7 +72,6 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     const permissions = await allowedPermissionForKettle();
     if (!isInitializedRef.current) {
       if (permissions.length > 0) {
-        console.log('Initializing Kettle SDK');
         await NativeModules.KettleSDKExtension.initializeKettleSDK();
         isInitializedRef.current = true;
       }
