@@ -115,13 +115,18 @@ export function TravellerSelection({
         selectionMode={selectionMode}
         fareProductType={fareProductType}
         selectableUserProfilesWithCountInit={userProfilesState}
-        setOnBehalfOfToggle={setOnBehalfOfToggle}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
         close={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
+          onBehalfOfToggle?: boolean,
         ) => {
           if (chosenSelectableUserProfilesWithCounts !== undefined) {
             setUserProfilesState(chosenSelectableUserProfilesWithCounts);
+          }
+          if (onBehalfOfToggle !== undefined) {
+            setOnBehalfOfToggle(onBehalfOfToggle);
+          } else {
+            setOnBehalfOfToggle(isOnBehalfOfToggle);
           }
           closeBottomSheet();
         }}
