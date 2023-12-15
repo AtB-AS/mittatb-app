@@ -9,8 +9,8 @@ import {
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {SectionHeading} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SectionHeading';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -32,12 +32,13 @@ export const Root_TicketInformationScreen = (props: Props) => {
       <ScrollView style={styles.container}>
         {preassignedFareProduct.productDescription && (
           <>
-            <SectionHeading>
-              {t(
+            <ContentHeading
+              color="background_accent_0"
+              text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .descriptionHeading,
               )}
-            </SectionHeading>
+            />
             <Section>
               <GenericSectionItem>
                 <View style={styles.descriptionHeading}>
