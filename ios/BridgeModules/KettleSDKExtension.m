@@ -42,7 +42,7 @@ RCT_EXPORT_METHOD(initializeKettleSDK:(RCTPromiseResolveBlock)resolve
 
 + (BOOL)requiresMainQueueSetup
 {
-    return YES;
+  return YES;
 }
 
 @end
