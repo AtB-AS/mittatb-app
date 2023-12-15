@@ -85,7 +85,7 @@ export function TravelTokenBox({
       <View style={styles.content}>
         {isTravelCard ? (
           <ThemedTokenTravelCard
-            style={{maxWidth: 100}}
+            style={{maxWidth: 90}}
             testID={inspectableToken.type + 'Icon'}
           />
         ) : (
@@ -93,11 +93,18 @@ export function TravelTokenBox({
         )}
         <View style={styles.activeTravelTokenInfo}>
           <ThemeText
-            type="body__primary"
+            type="body__primary--bold"
             color={themeTextColor}
             style={styles.travelTokenBoxTitle}
           >
-            {t(TravelTokenBoxTexts[isTravelCard ? 'tcard' : 'mobile'].title)}
+            {t(TravelTokenBoxTexts.title) +
+              t(
+                isTravelCard
+                  ? TravelTokenBoxTexts.tcardName
+                  : inspectableToken?.isThisDevice
+                  ? TravelTokenBoxTexts.thisDeviceSuffix
+                  : TravelTokenBoxTexts.otherDeviceSuffix,
+              )}
           </ThemeText>
           {inspectableToken && (
             <TravelTokenDeviceTitle

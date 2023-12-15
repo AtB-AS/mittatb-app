@@ -28,17 +28,25 @@ export const TravelTokenDeviceTitle = ({
         accessible
         accessibilityLabel={a11yLabel}
       >
-        <ThemeText color={themeTextColor} style={styles.transparent}>
+        <ThemeText
+          type="body__secondary"
+          color={themeTextColor}
+          style={styles.transparent}
+        >
           {prefixX}
         </ThemeText>
         <ThemeText
-          type="heading__title"
+          type="body__secondary--bold"
           color={themeTextColor}
           testID="travelCardNumber"
         >
           {travelCardIdOuttake}
         </ThemeText>
-        <ThemeText color={themeTextColor} style={styles.transparent}>
+        <ThemeText
+          type="body__secondary"
+          color={themeTextColor}
+          style={styles.transparent}
+        >
           {postfixX}
         </ThemeText>
       </View>
@@ -46,22 +54,13 @@ export const TravelTokenDeviceTitle = ({
   } else {
     return (
       <ThemeText
-        type="heading__title"
+        type="body__secondary"
         color={themeTextColor}
         style={styles.tokenName}
         testID="mobileTokenName"
       >
-        {(inspectableToken?.name ||
-          t(TravelTokenTexts.toggleToken.unnamedDevice)) +
-          (inspectableToken?.isThisDevice
-            ? t(
-                TravelTokenTexts.toggleToken.radioBox.phone.selection
-                  .thisDeviceSuffix,
-              )
-            : t(
-                TravelTokenTexts.toggleToken.radioBox.phone.selection
-                  .otherDeviceSuffix,
-              ))}
+        {inspectableToken?.name ||
+          t(TravelTokenTexts.toggleToken.unnamedDevice)}
       </ThemeText>
     );
   }

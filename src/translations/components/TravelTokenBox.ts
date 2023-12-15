@@ -2,26 +2,14 @@ import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const TravelTokenBoxTexts = {
-  tcard: {
-    title: _(
-      'Dine billetter er tilgjengelige fra t:kort',
-      'Your tickets are available from t:card',
-      'Billettane dine er tilgjengelege frå t:kort',
-    ),
-    a11yLabel: _(
-      'Du bruker nå t:kort. Ta med deg t:kortet når du er ute og reiser.',
-      'You are using t:card. Bring your t:card when you are travelling',
-      'Du bruker no t:kort. Ta med deg t:kortet når du er ute og reiser.',
-    ),
-  },
-  mobile: {
-    title: _(
-      'Dine billetter er tilgjengelige fra mobil:',
-      'Your tickets are available from phone:',
-      'Billettane dine er tilgjengelege frå mobil:',
-    ),
-    unnamedDevice: _('Enhet uten navn', 'Unnamed device', 'Eining utan namn'),
-  },
+  title: _(
+    'Dine billetter er tilgjengelige fra ',
+    'Your tickets are available from ',
+    'Billettane dine er tilgjengelege frå ',
+  ),
+  thisDeviceSuffix: _('denne enheten', 'this device', 'denne eininga'),
+  otherDeviceSuffix: _('en annen enhet', 'another device', 'ei anna eining'),
+  tcardName: _('t:kort', 't:card', 't:kort'),
   errorMessages: {
     tokensNotLoadedTitle: _(
       'Klarer ikke hente informasjon om t:kort / mobil.',
@@ -49,13 +37,7 @@ const TravelTokenBoxTexts = {
 
 export default orgSpecificTranslations(TravelTokenBoxTexts, {
   nfk: {
-    tcard: {
-      title: _(
-        'Dine billetter er tilgjengelige fra reisekort',
-        'Your tickets are available from travelcard',
-        'Billettane dine er tilgjengelege frå reisekort',
-      ),
-    },
+    tcardName: _('reisekort', 'travelcard', 'reisekort'),
     errorMessages: {
       tokensNotLoadedTitle: _(
         'Klarer ikke hente informasjon om reisekort / mobil.',
@@ -75,13 +57,7 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
     },
   },
   fram: {
-    tcard: {
-      title: _(
-        'Dine billetter er tilgjengelige fra reisekort',
-        'Your tickets are available from travelcard',
-        'Billettane dine er tilgjengelege frå reisekort',
-      ),
-    },
+    tcardName: _('reisekort', 'travelcard', 'reisekort'),
     errorMessages: {
       tokensNotLoadedTitle: _(
         'Klarer ikke hente informasjon om reisekort / mobil.',
