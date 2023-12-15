@@ -27,7 +27,7 @@ type TravellerSelectionProps = {
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
-  setOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
+  setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
   isOnBehalfOfToggle: boolean;
 };
 
@@ -37,7 +37,7 @@ export function TravellerSelection({
   selectableUserProfiles,
   selectionMode,
   fareProductType,
-  setOnBehalfOfToggle,
+  setIsOnBehalfOfToggle,
   isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
@@ -124,9 +124,7 @@ export function TravellerSelection({
             setUserProfilesState(chosenSelectableUserProfilesWithCounts);
           }
           if (onBehalfOfToggle !== undefined) {
-            setOnBehalfOfToggle(onBehalfOfToggle);
-          } else {
-            setOnBehalfOfToggle(isOnBehalfOfToggle);
+            setIsOnBehalfOfToggle(onBehalfOfToggle);
           }
           closeBottomSheet();
         }}

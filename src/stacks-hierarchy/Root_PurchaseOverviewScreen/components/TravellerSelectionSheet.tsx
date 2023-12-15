@@ -62,16 +62,16 @@ export const TravellerSelectionSheet = ({
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
-            setOnBehalfOfToggle={setTravelerOnBehalfOfToggle}
-            isOnBehalfOfToggle={travelerOnBehalfOfToggle}
+            setTravelerOnBehalfOfToggle={setTravelerOnBehalfOfToggle}
+            isTravelerOnBehalfOfToggle={travelerOnBehalfOfToggle}
           />
         ) : (
           <SingleTravellerSelection
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
-            setOnBehalfOfToggle={setTravelerOnBehalfOfToggle}
-            isOnBehalfOfToggle={travelerOnBehalfOfToggle}
+            setTravelerOnBehalfOfToggle={setTravelerOnBehalfOfToggle}
+            isTravelerOnBehalfOfToggle={travelerOnBehalfOfToggle}
           />
         )}
       </ScrollView>

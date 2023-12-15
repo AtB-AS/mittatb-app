@@ -17,16 +17,16 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
-import {OnBehalfOfProps} from './types';
+import {TravelerOnBehalfOfProps} from './types';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
   fareProductType,
-  setOnBehalfOfToggle,
-  isOnBehalfOfToggle,
-}: UserCountState & OnBehalfOfProps) {
+  setTravelerOnBehalfOfToggle,
+  isTravelerOnBehalfOfToggle,
+}: UserCountState & TravelerOnBehalfOfProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
@@ -84,11 +84,11 @@ export function SingleTravellerSelection({
             leftImage={HoldingHands}
             text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
             subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
-            value={isOnBehalfOfToggle}
+            value={isTravelerOnBehalfOfToggle}
             label="new"
             textType="body__primary--bold"
             onValueChange={(checked) => {
-              setOnBehalfOfToggle(checked);
+              setTravelerOnBehalfOfToggle(checked);
             }}
           />
         </Section>
