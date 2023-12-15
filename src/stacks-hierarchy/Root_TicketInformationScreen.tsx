@@ -28,6 +28,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
         ),
         leftButton: {type: 'close'},
       }}
+      contentColor="background_accent_0"
     >
       <ScrollView style={styles.container}>
         {preassignedFareProduct.productDescription && (
@@ -67,7 +68,6 @@ export const Root_TicketInformationScreen = (props: Props) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_accent_0.background,
     padding: theme.spacings.medium,
   },
   descriptionHeading: {
