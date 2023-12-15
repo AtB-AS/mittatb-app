@@ -81,10 +81,6 @@
 	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre reisetilbudet.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Vi bruker posisjon til å vise din posisjon i kart og reisesøk, og til å finne holdeplasser og steder i nærheten.</string>
 	<key>NSMotionUsageDescription</key>
