@@ -11,14 +11,22 @@ import {StyleSheet} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/content-heading';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
 export const Root_TicketInformationScreen = (props: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
-  const fareProductTypeConfig = props.route.params.fareProductTypeConfig;
-  const preassignedFareProduct = props.route.params.preassignedFareProduct;
+  const {preassignedFareProducts, fareProductTypeConfigs} =
+    useFirestoreConfiguration();
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (f) => f.type === props.route.params.fareProductTypeConfigType,
+  );
+  const preassignedFareProduct = preassignedFareProducts.find(
+    (p) => p.id === props.route.params.preassignedFareProductId,
+  );
 
   return (
     <FullScreenView
@@ -31,7 +39,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
       contentColor="background_accent_0"
     >
       <ScrollView style={styles.container}>
-        {preassignedFareProduct.productDescription && (
+        {preassignedFareProduct?.productDescription && (
           <>
             <ContentHeading
               color="background_accent_0"
@@ -42,15 +50,17 @@ export const Root_TicketInformationScreen = (props: Props) => {
             />
             <Section>
               <GenericSectionItem>
-                <View style={styles.descriptionHeading}>
-                  <TransportationIconBoxList
-                    iconSize="small"
-                    modes={fareProductTypeConfig.transportModes}
-                  />
-                  <ThemeText type="body__primary--bold">
-                    {getTextForLanguage(fareProductTypeConfig.name, language)}
-                  </ThemeText>
-                </View>
+                {fareProductTypeConfig && (
+                  <View style={styles.descriptionHeading}>
+                    <TransportationIconBoxList
+                      iconSize="small"
+                      modes={fareProductTypeConfig?.transportModes}
+                    />
+                    <ThemeText type="body__primary--bold">
+                      {getTextForLanguage(fareProductTypeConfig.name, language)}
+                    </ThemeText>
+                  </View>
+                )}
                 <ThemeText type="body__secondary" isMarkdown={true}>
                   {getTextForLanguage(
                     preassignedFareProduct.productDescription,

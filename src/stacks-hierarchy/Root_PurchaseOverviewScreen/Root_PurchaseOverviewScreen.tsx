@@ -118,8 +118,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const handleTicketInfoButtonPress = () => {
     navigation.navigate('Root_TicketInformationScreen', {
-      fareProductTypeConfig: params.fareProductTypeConfig,
-      preassignedFareProduct,
+      fareProductTypeConfigType: params.fareProductTypeConfig.type,
+      preassignedFareProductId: preassignedFareProduct?.id,
     });
   };
 
