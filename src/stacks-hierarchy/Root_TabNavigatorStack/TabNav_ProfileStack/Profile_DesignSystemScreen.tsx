@@ -246,7 +246,7 @@ export const Profile_DesignSystemScreen = ({
         </Section>
 
         <Section withPadding withTopPadding>
-          <HeaderSectionItem text="Messages" />
+          <HeaderSectionItem text="Message Info Box" />
 
           <GenericSectionItem>
             <MessageInfoBox type="info" message="This is a message" />
@@ -341,18 +341,56 @@ export const Profile_DesignSystemScreen = ({
               message="This is a message without status icon"
             />
           </GenericSectionItem>
+        </Section>
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem text="Message Info Text" />
+
           <GenericSectionItem>
             <MessageInfoText
-              type="valid"
+              type="info"
               isMarkdown={true}
-              message="This is a valid **markdown** message with no background"
+              message="This is a message text"
               textColor="background_0"
             />
           </GenericSectionItem>
           <GenericSectionItem>
             <MessageInfoText
               type="warning"
-              message="This is a warning message with no background"
+              isMarkdown={true}
+              message="This is a warning text"
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageInfoText
+              type="error"
+              isMarkdown={true}
+              message="This is a error text"
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageInfoText
+              type="valid"
+              isMarkdown={true}
+              message="This is a valid text"
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageInfoText
+              type="valid"
+              isMarkdown={true}
+              iconSide="right"
+              message="This is a text with right sided icon"
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageInfoText
+              type="valid"
+              isMarkdown={true}
+              message="This is a valid **markdown** message"
               textColor="background_0"
             />
           </GenericSectionItem>
