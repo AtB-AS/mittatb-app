@@ -365,7 +365,7 @@ export const Profile_DesignSystemScreen = ({
             <MessageInfoText
               type="error"
               isMarkdown={true}
-              message="This is a error text"
+              message="This is an error text"
               textColor="background_0"
             />
           </GenericSectionItem>
