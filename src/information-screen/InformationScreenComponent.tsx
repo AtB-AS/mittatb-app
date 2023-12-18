@@ -85,7 +85,7 @@ export const InformationScreenComponent: React.FC<InformationProps> = ({
     <FullScreenView
       headerProps={{
         title,
-        leftButton: {type: 'back', withIcon: true},
+        leftButton: {type: 'close'},
       }}
       parallaxContent={(focusRef) => (
         <ScreenHeading text={title} ref={focusRef} />

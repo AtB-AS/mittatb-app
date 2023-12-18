@@ -342,6 +342,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_PurchaseAsAnonymousConsequencesScreen"
                   component={Root_PurchaseAsAnonymousConsequencesScreen}
+                  options={({route: {params}}) => ({
+                    ...(params?.transitionPreset ??
+                      TransitionPresets.SlideFromRightIOS),
+                  })}
                 />
                 <Stack.Screen
                   name="Root_FareContractDetailsScreen"
@@ -389,6 +393,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_LoginPhoneInputScreen"
                   component={Root_LoginPhoneInputScreen}
+                  options={({route: {params}}) => ({
+                    ...(params?.transitionPreset ??
+                      TransitionPresets.SlideFromRightIOS),
+                  })}
                 />
                 <Stack.Screen
                   name="Root_LoginConfirmCodeScreen"

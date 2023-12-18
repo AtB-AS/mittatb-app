@@ -1,5 +1,5 @@
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackScreenProps, TransitionPreset} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {Location, SearchLocation, StoredLocationFavorite} from '@atb/favorites';
 import {Root_LocationSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
@@ -82,6 +82,7 @@ export type Root_LoginOptionsScreenParams = {
 
 export type Root_LoginPhoneInputScreenParams = {
   afterLogin?: AfterLoginScreenType;
+  transitionPreset?: TransitionPreset;
 };
 
 export type Root_LoginConfirmCodeScreenParams = {
@@ -114,6 +115,7 @@ type Root_ParkingViolationsConfirmationParams = {
 
 type Root_PurchaseAsAnonymousConsequencesScreenParams = {
   showLoginButton: boolean | undefined;
+  transitionPreset?: TransitionPreset;
 };
 
 export type RootStackParamList = {

@@ -8,6 +8,7 @@ import {
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
 import {useAppState} from '@atb/AppContext';
+import {TransitionPresets} from '@react-navigation/stack';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
@@ -43,6 +44,12 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
       onPressContinueWithoutLogin={() => {
         !onboarded && completeOnboarding();
         navigation.popToTop();
+      }}
+      leftButton={{
+        type:
+          params?.transitionPreset === TransitionPresets.ModalSlideFromBottomIOS
+            ? 'close'
+            : 'back',
       }}
     />
   );

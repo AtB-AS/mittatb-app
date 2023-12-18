@@ -11,17 +11,22 @@ import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {OnboardingFullScreenView} from '@atb/onboarding-screen';
+import {LeftButtonProps} from '@atb/components/screen-header';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
+
+const consequencesIcons = [Phone, Receipt, Support];
 
 type Props = {
   onPressContinueWithoutLogin: () => void;
   onPressLogin?: () => void;
+  leftButton: LeftButtonProps;
 };
 
 export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
   onPressLogin,
+  leftButton,
 }: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -45,9 +50,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 
   return (
     <OnboardingFullScreenView
-      fullScreenHeaderProps={{
-        leftButton: {type: onPressLogin ? 'cancel' : 'back'},
-      }}
+      fullScreenHeaderProps={{leftButton}}
       footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
       secondaryFooterButton={
         onPressLogin ? continueWithoutLoginButton : undefined
@@ -56,18 +59,25 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       <ThemeText type="heading--big" color={themeColor} style={styles.header}>
         {t(AnonymousPurchasesTexts.consequences.title)}
       </ThemeText>
-      <Consequence
-        value={t(AnonymousPurchasesTexts.consequences.messages[0])}
-        icon={<ThemeIcon svg={Phone} colorType={themeColor} size="large" />}
-      />
-      <Consequence
-        value={t(AnonymousPurchasesTexts.consequences.messages[1])}
-        icon={<ThemeIcon svg={Receipt} colorType={themeColor} size="large" />}
-      />
-      <Consequence
-        value={t(AnonymousPurchasesTexts.consequences.messages[2])}
-        icon={<ThemeIcon svg={Support} colorType={themeColor} size="large" />}
-      />
+
+      {
+        // eslint-disable-next-line rulesdir/translations-warning
+        AnonymousPurchasesTexts.consequences.messages.map(
+          (consequenceMessage, i) => (
+            <Consequence
+              key={t(consequenceMessage)}
+              value={t(consequenceMessage)}
+              icon={
+                <ThemeIcon
+                  svg={consequencesIcons[i]}
+                  colorType={themeColor}
+                  size="large"
+                />
+              }
+            />
+          ),
+        )
+      }
     </OnboardingFullScreenView>
   );
 };

@@ -167,9 +167,7 @@ export const Root_LoginOptionsScreen = ({
           mode="primary"
           style={styles.loginOptionButton}
           onPress={() =>
-            navigation.navigate('Root_LoginPhoneInputScreen', {
-              afterLogin: afterLogin,
-            })
+            navigation.navigate('Root_LoginPhoneInputScreen', {afterLogin})
           }
           text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
           accessibilityHint={t(
