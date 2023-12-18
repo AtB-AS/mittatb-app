@@ -1,16 +1,22 @@
+import {PhoneSignInErrorCode} from '@atb/auth';
 import {Button} from '@atb/components/button';
+import {MessageBox} from '@atb/components/message-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
-import {LoginTexts, PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import { OnBehalfOfTexts } from '@atb/translations/screens/subscreens/OnBehalfOf';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
+import {
+  LoginTexts,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
+import {OnBehalfOfTexts} from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import phone from 'phone';
 import {useState} from 'react';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {ActivityIndicator, KeyboardAvoidingView, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketReceiverScreen'>;
@@ -23,10 +29,12 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   const styles = useStyles();
 
   const {t} = useTranslation();
+  const {themeName} = useTheme();
 
   const [prefix, setPrefix] = useState('47');
   const [phoneNumber, setPhoneNumber] = useState('');
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<PhoneSignInErrorCode>();
   const focusRef = useFocusOnLoad();
 
   const phoneValidationParams = {
@@ -49,6 +57,40 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
     userProfilesWithCount,
     travelDate,
   } = params;
+
+  const onNext = async () => {
+    setIsSubmitting(true);
+    const phoneValidation = phone(
+      '+' + prefix + phoneNumber,
+      phoneValidationParams,
+    );
+    if (!phoneValidation.phoneNumber) {
+      setIsSubmitting(false);
+      setError('invalid_phone');
+      return;
+    }
+    
+    // TODO: replace promise with proper API call
+    const errorCode = await new Promise(r => setTimeout(r, 1000)); 
+    if (!errorCode) {
+      setError(undefined);
+      setIsSubmitting(false);
+      navigation.navigate('Root_PurchaseConfirmationScreen', {
+        fareProductTypeConfig: params.fareProductTypeConfig,
+        fromPlace: fromPlace,
+        toPlace: toPlace,
+        userProfilesWithCount: userProfilesWithCount,
+        preassignedFareProduct,
+        travelDate,
+        headerLeftButton: {type: 'back'},
+        mode: params.mode,
+        phoneNumber: `+${prefix}${phoneNumber}`,
+      });
+    } else {
+      setIsSubmitting(false);
+      // setError(errorCode);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -96,26 +138,35 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               textContentType="telephoneNumber"
             />
           </Section>
-          <Button
-            style={styles.submitButton}
-            interactiveColor="interactive_0"
-            onPress={() => {
-              navigation.navigate('Root_PurchaseConfirmationScreen', {
-                fareProductTypeConfig: params.fareProductTypeConfig,
-                fromPlace: fromPlace,
-                toPlace: toPlace,
-                userProfilesWithCount: userProfilesWithCount,
-                preassignedFareProduct,
-                travelDate,
-                headerLeftButton: {type: 'back'},
-                mode: params.mode,
-                phoneNumber: phoneNumber,
-              });
-            }}
-            text={t(PurchaseOverviewTexts.summary.button)}
-            disabled={!isValidPhoneNumber(phoneNumber)}
-            testID="toPaymentButton"
-          />
+
+          <View style={styles.buttonView}>
+            {isSubmitting && (
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                size="large"
+                color={getStaticColor(themeName, themeColor).text}
+              />
+            )}
+
+            {error && !isSubmitting && (
+              <MessageBox
+                style={styles.errorMessage}
+                type="error"
+                message={t(LoginTexts.phoneInput.errors[error])}
+              />
+            )}
+
+            {!isSubmitting && (
+              <Button
+                style={styles.submitButton}
+                interactiveColor="interactive_0"
+                onPress={onNext}
+                text={t(PurchaseOverviewTexts.summary.button)}
+                disabled={!isValidPhoneNumber(phoneNumber)}
+                testID="toPaymentButton"
+              />
+            )}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -148,6 +199,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.xLarge,
+  },
+  activityIndicator: {
+    marginVertical: theme.spacings.large,
+  },
+  errorMessage: {
+    marginBottom: theme.spacings.medium,
+  },
+  buttonView: {
+    marginTop: theme.spacings.medium,
   },
   submitButton: {
     marginTop: theme.spacings.medium,
