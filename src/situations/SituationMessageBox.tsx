@@ -1,6 +1,6 @@
 import {
   MessageInfoBox,
-  MessageBoxProps,
+  MessageInfoBoxProps,
 } from '@atb/components/message-info-box';
 import React from 'react';
 import {getMessageTypeForSituation, getSituationSummary} from './utils';
@@ -10,8 +10,8 @@ import {useSituationBottomSheet} from './use-situation-bottom-sheet';
 
 export type Props = {
   situation: SituationType;
-  noStatusIcon?: MessageBoxProps['noStatusIcon'];
-  style?: MessageBoxProps['style'];
+  noStatusIcon?: MessageInfoBoxProps['noStatusIcon'];
+  style?: MessageInfoBoxProps['style'];
 };
 
 export const SituationMessageBox = ({
