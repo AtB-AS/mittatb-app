@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
   GlobalMessageContextEnum,
@@ -12,6 +12,7 @@ import {useNow} from '@atb/utils/use-now';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from '../rule-engine/rules';
 import {StaticColor} from '@atb/theme/colors';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum;
@@ -61,22 +62,33 @@ const GlobalMessage = ({
           const message = getTextForLanguage(globalMessage.body, language);
           if (!message) return null;
           return (
-            <MessageBox
-              key={globalMessage.id}
-              style={style}
-              title={getTextForLanguage(globalMessage.title ?? [], language)}
-              message={message}
-              type={globalMessage.type}
-              isMarkdown={true}
-              onDismiss={
-                globalMessage.isDismissable && !includeDismissed
-                  ? () => dismissGlobalMessage(globalMessage)
-                  : undefined
-              }
-              subtle={globalMessage.subtle}
-              textColor={textColor}
-              testID="globalMessage"
-            />
+            <>
+              {globalMessage.subtle ? (
+                <MessageInfoText
+                  type={globalMessage.type}
+                  message={message}
+                  textColor={textColor}
+                />
+              ) : (
+                <MessageInfoBox
+                  key={globalMessage.id}
+                  style={style}
+                  title={getTextForLanguage(
+                    globalMessage.title ?? [],
+                    language,
+                  )}
+                  message={message}
+                  type={globalMessage.type}
+                  isMarkdown={true}
+                  onDismiss={
+                    globalMessage.isDismissable && !includeDismissed
+                      ? () => dismissGlobalMessage(globalMessage)
+                      : undefined
+                  }
+                  testID="globalMessage"
+                />
+              )}
+            </>
           );
         })}
     </>

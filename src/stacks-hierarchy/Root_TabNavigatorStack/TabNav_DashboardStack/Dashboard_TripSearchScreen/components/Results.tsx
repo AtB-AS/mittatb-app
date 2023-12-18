@@ -1,7 +1,7 @@
 import {ErrorType} from '@atb/api/utils';
 import {DayLabel} from './DayLabel';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 import {StyleSheet} from '@atb/theme';
 import {
@@ -74,7 +74,7 @@ export const Results: React.FC<Props> = ({
     return (
       <View style={styles.errorContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
-        <MessageBox
+        <MessageInfoBox
           type="warning"
           message={errorMessage}
           style={styles.messageBoxContainer}

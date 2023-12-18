@@ -118,10 +118,7 @@ export const DetailsContent: React.FC<Props> = ({
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' && (
           <GenericSectionItem>
-            <Barcode
-              validityStatus={validityStatus}
-              fc={fc}
-            />
+            <Barcode validityStatus={validityStatus} fc={fc} />
           </GenericSectionItem>
         )}
         <GenericSectionItem>
@@ -141,7 +138,7 @@ export const DetailsContent: React.FC<Props> = ({
                 globalMessageContext={
                   GlobalMessageContextEnum.appFareContractDetails
                 }
-                textColor="background_0"
+                textColor="background_1"
                 ruleVariables={globalMessageRuleVariables}
                 style={styles.globalMessages}
               />

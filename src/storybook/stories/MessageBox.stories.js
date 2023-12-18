@@ -1,14 +1,14 @@
 import React from 'react';
 import {View} from 'react-native';
 import {getStaticColor, themes} from '@atb/theme/colors';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 const ON_PRESS_CONFIG = {action: () => {}, text: 'Press me!'};
 const ON_DISMISS = () => {};
 
 const MessageBoxMeta = {
   title: 'MessageBox',
-  component: MessageBox,
+  component: MessageInfoBox,
   argTypes: {
     theme: {
       control: 'select',

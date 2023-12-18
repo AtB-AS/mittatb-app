@@ -1,4 +1,7 @@
-import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
+import {
+  MessageInfoBox,
+  MessageBoxProps,
+} from '@atb/components/message-info-box';
 import React from 'react';
 import {getMessageTypeForSituation, getSituationSummary} from './utils';
 import {dictionary, useTranslation} from '@atb/translations';
@@ -26,7 +29,7 @@ export const SituationMessageBox = ({
   if (!text) return null;
 
   return (
-    <MessageBox
+    <MessageInfoBox
       type={messageType}
       noStatusIcon={noStatusIcon}
       style={style}

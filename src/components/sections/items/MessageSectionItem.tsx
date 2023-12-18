@@ -8,7 +8,7 @@ import {Statuses} from '@atb-as/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {MessageBoxProps} from '@atb/components/message-box';
+import {MessageBoxProps} from '@atb/components/message-info-box';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
 type Props = SectionItemProps<{

@@ -11,7 +11,7 @@ import {ExpandLess, ExpandMore} from '@atb/assets/svg/mono-icons/navigation';
 import {Button} from '@atb/components/button';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {useRealtimeMapEnabled} from '@atb/components/map';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
@@ -217,7 +217,7 @@ export const DepartureDetailsScreenComponent = ({
                 isTripCancelled={activeItem?.isTripCancelled}
               />
             ) : (
-              <MessageBox
+              <MessageInfoBox
                 type="error"
                 message={t(DepartureDetailsTexts.messages.noActiveItem)}
               />
@@ -242,7 +242,7 @@ export const DepartureDetailsScreenComponent = ({
           {notices.map(
             (notice) =>
               notice.text && (
-                <MessageBox
+                <MessageInfoBox
                   type="info"
                   message={notice.text}
                   style={styles.messageBox}

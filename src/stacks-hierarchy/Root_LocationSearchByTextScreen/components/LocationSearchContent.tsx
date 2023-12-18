@@ -11,7 +11,7 @@ import {Keyboard, View} from 'react-native';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {FavoriteChips, ChipTypeGroup, useFavorites} from '@atb/favorites';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {JourneyHistory} from './JourneyHistory';
 import {LocationResults} from './LocationResults';
@@ -144,7 +144,7 @@ export function LocationSearchContent({
       </View>
       {error && (
         <View style={styles.withMargin}>
-          <MessageBox type="warning" message={errorMessage} />
+          <MessageInfoBox type="warning" message={errorMessage} />
         </View>
       )}
       <ScrollView
@@ -186,7 +186,7 @@ export function LocationSearchContent({
               locations != null &&
               !isSearching && (
                 <View style={[styles.contentBlock, styles.marginTop]}>
-                  <MessageBox
+                  <MessageInfoBox
                     type="info"
                     message={t(LocationSearchTexts.messages.emptyResult)}
                   />

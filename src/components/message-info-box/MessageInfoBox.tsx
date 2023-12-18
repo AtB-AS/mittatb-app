@@ -10,7 +10,6 @@ import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {insets} from '@atb/utils/insets';
 import {screenReaderPause} from '@atb/components/text';
-import {StaticColor} from '@atb/theme/colors';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 /**
@@ -27,7 +26,7 @@ export type OnPressConfig = {
   text: string;
 } & ({action: () => void} | {url: string});
 
-export type MessageBoxProps = {
+export type MessageInfoBoxProps = {
   type: Statuses;
   title?: string;
   message: string;
@@ -36,13 +35,9 @@ export type MessageBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
-  subtle?: boolean;
-  /** Text color to use when `subtle` is true. */
-  textColor?: StaticColor;
   testID?: string;
 };
-
-export const MessageBox = ({
+export const MessageInfoBox = ({
   noStatusIcon,
   type,
   style,
@@ -51,17 +46,13 @@ export const MessageBox = ({
   isMarkdown = false,
   onPressConfig,
   onDismiss,
-  subtle,
-  textColor,
   testID,
-}: MessageBoxProps) => {
+}: MessageInfoBoxProps) => {
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const color = subtle ? textColor : type;
-  const iconColorProps = subtle
-    ? {colorType: textColor}
-    : {fill: theme.static.status[type].text};
+  const color = type;
+  const iconColorProps = {fill: theme.static.status[type].text};
   const backgroundColorStyle = {
     backgroundColor: theme.static.status[type].background,
   };
@@ -81,8 +72,8 @@ export const MessageBox = ({
       onClick={onPress}
       style={[
         styles.container,
-        !subtle && styles.withBackground,
-        !subtle && backgroundColorStyle,
+        styles.withBackground,
+        backgroundColorStyle,
         style,
       ]}
       accessible={false}
@@ -91,7 +82,7 @@ export const MessageBox = ({
       {!noStatusIcon && (
         <ThemeIcon
           style={styles.icon}
-          svg={messageTypeToIcon(type, !!subtle)}
+          svg={messageTypeToIcon(type, false)}
           {...iconColorProps}
         />
       )}
@@ -109,18 +100,14 @@ export const MessageBox = ({
       >
         {title && (
           <ThemeText
-            type={subtle ? 'body__secondary--bold' : 'body__primary--bold'}
+            type="body__primary--bold"
             color={color}
             style={styles.title}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText
-          color={color}
-          type={subtle ? 'body__secondary' : 'body__primary'}
-          isMarkdown={isMarkdown}
-        >
+        <ThemeText color={color} type="body__primary" isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
         {onPressConfig?.text && (

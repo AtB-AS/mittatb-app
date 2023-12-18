@@ -36,7 +36,7 @@ import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 export type FareContractInfoProps = {
   travelRight: PreActivatedTravelRight;
@@ -107,7 +107,7 @@ export const FareContractInfoHeader = ({
         />
       )}
       {status === 'valid' && warning && (
-        <MessageBox message={warning} type="warning" subtle={true} />
+        <MessageInfoText message={warning} type="warning" />
       )}
     </View>
   );
