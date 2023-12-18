@@ -15,6 +15,7 @@ import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {Button} from '@atb/components/button';
 import {Info} from '@atb/assets/svg/mono-icons/status';
 import {useIsTicketInformationEnabled} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
+import {stripMarkdown} from '@atb/components/text';
 
 type Props = {
   fareProductTypeConfig: FareProductTypeConfig;
@@ -35,6 +36,13 @@ export const FareProductHeader = forwardRef<View, Props>(
     const {t, language} = useTranslation();
     const styles = useStyle();
     const [isTicketInformationEnabled] = useIsTicketInformationEnabled();
+
+    const productDescription = stripMarkdown(
+      getTextForLanguage(
+        preassignedFareProduct.productDescription ?? [],
+        language,
+      ) ?? '',
+    );
 
     return (
       <View style={style}>
@@ -59,10 +67,7 @@ export const FareProductHeader = forwardRef<View, Props>(
               style={styles.ticketDescription}
               numberOfLines={1}
             >
-              {getTextForLanguage(
-                preassignedFareProduct.productDescription ?? [],
-                language,
-              )?.replaceAll('\n', ' ')}
+              {productDescription}
             </ThemeText>
             <Button
               type="pill"
