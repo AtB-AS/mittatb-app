@@ -117,10 +117,16 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const isEmptyOffer = error?.type === 'empty-offers';
 
   const handleTicketInfoButtonPress = () => {
-    navigation.navigate('Root_TicketInformationScreen', {
+    const parameters = {
       fareProductTypeConfigType: params.fareProductTypeConfig.type,
       preassignedFareProductId: preassignedFareProduct?.id,
-    });
+    };
+    analytics.logEvent(
+      'Ticketing',
+      'Ticket information button clicked',
+      parameters,
+    );
+    navigation.navigate('Root_TicketInformationScreen', parameters);
   };
 
   useEffect(() => {
