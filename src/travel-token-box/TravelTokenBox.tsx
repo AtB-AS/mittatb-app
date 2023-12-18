@@ -11,6 +11,8 @@ import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Button} from '@atb/components/button';
 import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 export function TravelTokenBox({
   showIfThisDevice,
@@ -32,9 +34,9 @@ export function TravelTokenBox({
     interactiveColor,
   ).default;
 
-  // placeholder for onboarding PR
-  //const navigation = useNavigation<RootNavigationProps>();
-  const onPressChangeButton = () => {}; //navigation.navigate('Root_SelectTravelTokenScreen')
+  const navigation = useNavigation<RootNavigationProps>();
+  const onPressChangeButton = () =>
+    navigation.navigate('Root_SelectTravelTokenScreen');
 
   if (deviceInspectionStatus === 'loading') {
     return (
