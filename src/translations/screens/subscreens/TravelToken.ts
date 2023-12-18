@@ -245,11 +245,6 @@ const SelectTravelTokenTexts = {
             ' (this device)',
             ' (denne eininga)',
           ),
-          otherDeviceSuffix: _(
-            ' (annen enhet)',
-            ' (other device)',
-            ' (anna eining)',
-          ),
         },
       },
     },

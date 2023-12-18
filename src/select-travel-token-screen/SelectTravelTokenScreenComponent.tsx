@@ -270,7 +270,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               onPress={onSave}
               text={t(TravelTokenTexts.toggleToken.saveButton)}
               interactiveColor="interactive_0"
-              disabled={!selectedToken}
+              disabled={!selectedToken || (toggleLimit ?? 0) < 1}
               testID="confirmSelectionButton"
             />
           )

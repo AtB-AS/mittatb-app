@@ -44,7 +44,7 @@ export function NoTravelTokenInfo({close}: {close: () => void}): JSX.Element {
           : t(MobileTokenOnboardingTexts.error.description)}
       </ThemeText>
       <View style={styles.illustration}>
-        <CrashSmall width="185px" height="185px" />
+        <CrashSmall />
       </View>
     </OnboardingFrame>
   );

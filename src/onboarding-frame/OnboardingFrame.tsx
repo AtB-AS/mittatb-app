@@ -2,7 +2,8 @@ import {StyleSheet} from '@atb/theme';
 import React, {PropsWithChildren} from 'react';
 
 import {Button, ButtonProps} from '@atb/components/button';
-import {View, ScrollView} from 'react-native';
+import {View} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {

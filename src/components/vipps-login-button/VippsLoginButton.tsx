@@ -1,13 +1,13 @@
 import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
 import {View, ViewStyle} from 'react-native';
-import {StyleSheet, Theme} from '@atb/theme';
-import vippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
+import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import VippsLogo from '@atb/assets/svg/color/icons/ticketing/VippsLogo';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 const VIPPS_BACKGROUND_COLOR = '#FF5B24';
+
 export const VippsLoginButton = ({
   onPress,
   disabled,
@@ -18,7 +18,9 @@ export const VippsLoginButton = ({
   containerStyle: ViewStyle;
 }) => {
   const {t} = useTranslation();
-  const styles = useStyle();
+  const {theme} = useTheme();
+
+  const styles = useStyles();
 
   return (
     <PressableOpacity
@@ -32,17 +34,20 @@ export const VippsLoginButton = ({
           containerStyle,
         ]}
       >
-        <ThemeText type="body__primary--bold" style={styles.label}>
+        <ThemeText
+          type="body__primary--bold"
+          style={styles.label}
+          color={theme.interactive.interactive_0.default}
+        >
           {t(LoginTexts.logInOptions.options.vipps.label)}
         </ThemeText>
-        <ThemeIcon svg={vippsLogo} size="large" style={styles.icon} />
+        <VippsLogo style={styles.vippsLogo} />
       </View>
     </PressableOpacity>
   );
 };
 
-const vippsIconExtraScale = 0.9;
-const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
     flexDirection: 'row',
@@ -53,12 +58,12 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   disabledOpacity: {
     opacity: 0.2,
   },
-  icon: {
-    minHeight: '30%',
-    marginLeft: theme.icon.size.large * (vippsIconExtraScale / 2),
-    transform: [{scale: 1 + vippsIconExtraScale}],
-    alignSelf: 'center',
+  vippsLogo: {
+    marginLeft: theme.spacings.small,
     marginTop: theme.spacings.xSmall,
+    alignSelf: 'center',
   },
-  label: {color: 'white', paddingVertical: theme.spacings.medium},
+  label: {
+    paddingVertical: theme.spacings.medium,
+  },
 }));
