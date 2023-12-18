@@ -65,9 +65,12 @@ const GlobalMessage = ({
             <>
               {globalMessage.subtle ? (
                 <MessageInfoText
+                  key={globalMessage.id}
                   type={globalMessage.type}
                   message={message}
                   textColor={textColor}
+                  isMarkdown={true}
+                  testID="globalMessage"
                 />
               ) : (
                 <MessageInfoBox
