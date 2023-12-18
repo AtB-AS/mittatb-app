@@ -71,7 +71,7 @@ export const Profile_PaymentOptionsScreen = ({
           if (responseCode === 'OK') {
             await authorizeRecurringPayment(paymentId);
             await refreshCards();
-          } else if (responseCode === 'CANCEL') {
+          } else if (responseCode === 'Cancel') {
             await cancelRecurringPayment(paymentId);
           }
         } catch (error: any) {

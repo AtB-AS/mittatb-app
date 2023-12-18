@@ -54,10 +54,7 @@ const PurchaseOverviewTexts = {
   },
   stopPlaces: {
     harborSelection: {
-      select: {
-        text: _('Velg kaier', 'Select harbors', 'Vel kaier'),
-        a11yLabel: _('Velg kaier', 'Select harbors', 'Vel kaier'),
-      },
+      select: _('Velg kaier', 'Select harbors', 'Vel kaier'),
       noneSelected: {
         text: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),
         a11yLabel: _('Ingen kai valgt', 'No harbor selected', 'Inga kai valt'),
@@ -250,6 +247,14 @@ const PurchaseOverviewTexts = {
       'Aktiver for å lese meir om rabatt på fleksibel billett på ekstern side',
     ),
   },
+  onBehalfOf: {
+    sectionTitle: _('Kjøp til andre', 'Buy for others', 'Kjøp til andre'),
+    sectionSubText: _(
+      'Den du kjøper billett til, må være innlogget i AtB-appen for å få billetten.',
+      'The person you buy a ticket for, must be logged in to the AtB app to get the ticket.',
+      'Den du kjøper billett til, må vere logga inn i AtB-appen for å få billetten.',
+    ),
+  }
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {

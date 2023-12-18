@@ -84,6 +84,7 @@ export const EstimatedCallItem = memo(
     const {destinationDisplay} = departure;
     const lineName = formatDestinationDisplay(t, destinationDisplay);
 
+    const showAsCancelled = departure.cancellation && mode !== 'Favourite';
     return (
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
@@ -96,7 +97,14 @@ export const EstimatedCallItem = memo(
           <View style={styles.estimatedCallItem}>
             <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
-              <ThemeText style={styles.lineName} testID={`${testID}LineName`}>
+              <ThemeText
+                type={
+                  showAsCancelled ? 'body__primary--strike' : 'body__primary'
+                }
+                color={showAsCancelled ? 'secondary' : 'primary'}
+                style={styles.lineName}
+                testID={`${testID}LineName`}
+              >
                 {lineName}
               </ThemeText>
             </View>
@@ -156,7 +164,7 @@ const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
   return (
     <View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        {departure.realtime && (
+        {departure.realtime && !departure.cancellation && (
           <ThemeIcon
             style={styles.realtimeIcon}
             svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
@@ -164,8 +172,12 @@ const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
           />
         )}
         <ThemeText
-          type="body__primary--bold"
-          style={departure.cancellation && styles.strikethrough}
+          type={
+            departure.cancellation
+              ? 'body__primary--strike'
+              : 'body__primary--bold'
+          }
+          color={departure.cancellation ? 'secondary' : 'primary'}
         >
           {formatToClockOrRelativeMinutes(
             departure.expectedDepartureTime,
@@ -334,7 +346,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     color: theme.static.background.background_accent_3.text,
     textAlign: 'center',
   },
-  strikethrough: {textDecorationLine: 'line-through'},
   realtimeAndText: {flexDirection: 'row', alignItems: 'center'},
   realtime: {flexDirection: 'row', alignItems: 'center'},
   aimedTime: {textAlign: 'right'},

@@ -9,9 +9,9 @@ import {RootStackScreenProps} from './navigation-types';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useBeacons} from '@atb/beacons/use-beacons';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {OnboardingScreen} from '@atb/onboarding-screen';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 
 export type SearchStopPlaceProps =
   RootStackScreenProps<'Root_ShareTravelHabitsScreen'>;
@@ -28,10 +28,10 @@ export const Root_ShareTravelHabitsScreen = ({
   useEffect(() => {
     setAndStoreHasSeenShareTravelHabitsScreen(true);
   }, [setAndStoreHasSeenShareTravelHabitsScreen]);
-  const {onboardForBeacons} = useBeacons();
+  const {onboardForBeacons} = useBeaconsState();
 
   const choosePermissions = async () => {
-    const _ = await onboardForBeacons();
+    onboardForBeacons();
     navigation.goBack();
   };
 

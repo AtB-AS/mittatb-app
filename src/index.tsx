@@ -36,6 +36,7 @@ import {AnnouncementsContextProvider} from './announcements';
 import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from './notifications';
+import {BeaconsContextProvider} from './beacons/BeaconsContext';
 
 configureAndStartBugsnag();
 
@@ -87,27 +88,29 @@ export const App = () => {
                                 <RemoteConfigContextProvider>
                                   <FirestoreConfigurationContextProvider>
                                     <TicketingContextProvider>
-                                      <MobileTokenContextProvider>
-                                        <AppLanguageProvider>
-                                          <GeolocationContextProvider>
-                                            <GlobalMessagesContextProvider>
-                                              <AnnouncementsContextProvider>
-                                                <ReactQueryProvider>
+                                      <ReactQueryProvider>
+                                        <MobileTokenContextProvider>
+                                          <AppLanguageProvider>
+                                            <GeolocationContextProvider>
+                                              <GlobalMessagesContextProvider>
+                                                <AnnouncementsContextProvider>
                                                   <NotificationContextProvider>
                                                     <PopOverContextProvider>
                                                       <BottomSheetProvider>
                                                         <FeedbackQuestionsProvider>
-                                                          <RootStack />
+                                                          <BeaconsContextProvider>
+                                                            <RootStack />
+                                                          </BeaconsContextProvider>
                                                         </FeedbackQuestionsProvider>
                                                       </BottomSheetProvider>
                                                     </PopOverContextProvider>
                                                   </NotificationContextProvider>
-                                                </ReactQueryProvider>
-                                              </AnnouncementsContextProvider>
-                                            </GlobalMessagesContextProvider>
-                                          </GeolocationContextProvider>
-                                        </AppLanguageProvider>
-                                      </MobileTokenContextProvider>
+                                                </AnnouncementsContextProvider>
+                                              </GlobalMessagesContextProvider>
+                                            </GeolocationContextProvider>
+                                          </AppLanguageProvider>
+                                        </MobileTokenContextProvider>
+                                      </ReactQueryProvider>
                                     </TicketingContextProvider>
                                   </FirestoreConfigurationContextProvider>
                                 </RemoteConfigContextProvider>

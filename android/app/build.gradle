@@ -4,8 +4,7 @@ apply plugin: "com.facebook.react"
 
 apply plugin: "kotlin-android"
 
-apply from: "../../node_modules/@bugsnag/react-native/bugsnag-react-native.gradle"
-
+apply plugin: "com.bugsnag.android.gradle"
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
@@ -151,11 +150,11 @@ android {
 
 dependencies {
 
-    implementation 'com.facebook.soloader:soloader:0.9.0+'
+    implementation 'com.facebook.soloader:soloader:0.10.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"
 
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 

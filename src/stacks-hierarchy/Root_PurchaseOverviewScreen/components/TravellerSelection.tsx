@@ -15,6 +15,9 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
+import {ContentHeading} from '@atb/components/content-heading';
+import {LabelInfo} from '@atb/components/label-info';
+import {useOnBehalfOf} from '@atb/on-behalf-of';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -24,6 +27,8 @@ type TravellerSelectionProps = {
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
+  setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
+  isOnBehalfOfToggle: boolean;
 };
 
 export function TravellerSelection({
@@ -32,6 +37,8 @@ export function TravellerSelection({
   selectableUserProfiles,
   selectionMode,
   fareProductType,
+  setIsOnBehalfOfToggle,
+  isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -40,6 +47,8 @@ export function TravellerSelection({
     close: closeBottomSheet,
     onCloseFocusRef,
   } = useBottomSheet();
+
+  const isOnBehalfOfEnabled = useOnBehalfOf();
 
   const [userProfilesState, setUserProfilesState] = useState<
     UserProfileWithCount[]
@@ -106,11 +115,16 @@ export function TravellerSelection({
         selectionMode={selectionMode}
         fareProductType={fareProductType}
         selectableUserProfilesWithCountInit={userProfilesState}
+        isOnBehalfOfToggle={isOnBehalfOfToggle}
         close={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
+          onBehalfOfToggle?: boolean,
         ) => {
           if (chosenSelectableUserProfilesWithCounts !== undefined) {
             setUserProfilesState(chosenSelectableUserProfilesWithCounts);
+          }
+          if (onBehalfOfToggle !== undefined) {
+            setIsOnBehalfOfToggle(onBehalfOfToggle);
           }
           closeBottomSheet();
         }}
@@ -120,13 +134,13 @@ export function TravellerSelection({
 
   return (
     <View style={style}>
-      <View style={styles.sectionTitleContainer}>
-        <ThemeText type="body__secondary" color="secondary">
-          {selectionMode == 'multiple'
+      <ContentHeading
+        text={
+          selectionMode == 'multiple'
             ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
-            : t(PurchaseOverviewTexts.travellerSelection.title_single)}
-        </ThemeText>
-      </View>
+            : t(PurchaseOverviewTexts.travellerSelection.title_single)
+        }
+      />
       <Section {...accessibility}>
         <GenericClickableSectionItem
           onPress={travellerSelectionOnPress}
@@ -155,6 +169,9 @@ export function TravellerSelection({
               )}
             </View>
 
+            {/* remove new label when requested */}
+            {isOnBehalfOfEnabled && <LabelInfo label="new" />}
+
             <ThemeIcon svg={Edit} size="normal" />
           </View>
         </GenericClickableSectionItem>
@@ -166,12 +183,6 @@ export function TravellerSelection({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   multipleTravellersDetails: {
     marginTop: theme.spacings.small,
-  },
-  sectionTitleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: theme.spacings.medium,
-    alignItems: 'center',
   },
   sectionContentContainer: {
     display: 'flex',

@@ -1,6 +1,4 @@
 import {MessageBox} from '@atb/components/message-box';
-import {FullScreenFooter} from '@atb/components/screen-footer';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -25,6 +23,9 @@ import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {isAfter} from '@atb/utils/date';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {FullScreenView} from '@atb/components/screen-view';
+import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -68,6 +69,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
+
+  const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
+
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
@@ -127,26 +131,33 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const focusRefs = useFocusRefs(params.onFocusElement);
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={getTextForLanguage(params.fareProductTypeConfig.name, language)}
-        leftButton={{
+    <FullScreenView
+      headerProps={{
+        title: getTextForLanguage(params.fareProductTypeConfig.name, language),
+        leftButton: {
           type: 'cancel',
           onPress: closeModal,
-        }}
-        globalMessageContext={GlobalMessageContextEnum.appTicketing}
-        setFocusOnLoad={!params.onFocusElement}
-      />
-
+        },
+        setFocusOnLoad: false,
+        globalMessageContext: GlobalMessageContextEnum.appTicketing,
+      }}
+      parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+        <FareProductHeader
+          ref={params.onFocusElement ? undefined : focusRef}
+          style={styles.header}
+          fareProductTypeConfig={params.fareProductTypeConfig}
+        />
+      )}
+    >
       <ScrollView testID="ticketingScrollView">
-        {params.mode === 'TravelSearch' && (
-          <MessageBox
-            style={styles.travelSearchInfo}
-            type="valid"
-            message={t(PurchaseOverviewTexts.travelSearchInfo)}
-          />
-        )}
-        <View style={styles.selectionLinks}>
+        <View style={styles.contentContainer}>
+          {params.mode === 'TravelSearch' && (
+            <MessageBox
+              style={styles.travelSearchInfo}
+              type="valid"
+              message={t(PurchaseOverviewTexts.travelSearchInfo)}
+            />
+          )}
           {error &&
             (isEmptyOffer ? (
               <MessageBox
@@ -184,6 +195,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectionMode={travellerSelectionMode}
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
+            setIsOnBehalfOfToggle={setIsOnBehalfOfToggle}
+            isOnBehalfOfToggle={isOnBehalfOfToggle}
           />
           <FromToSelection
             fareProductTypeConfig={params.fareProductTypeConfig}
@@ -219,33 +232,30 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             userProfiles={userProfilesWithCountAndOffer}
             style={styles.selectionComponent}
           />
-        </View>
 
-        {isFree ? (
-          <MessageBox
-            type="valid"
-            message={t(PurchaseOverviewTexts.summary.free)}
-            style={styles.messages}
-          />
-        ) : (
-          <>
-            <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
-            <GlobalMessage
-              globalMessageContext={
-                GlobalMessageContextEnum.appPurchaseOverview
-              }
-              textColor="background_0"
-              ruleVariables={{
-                preassignedFareProductType: preassignedFareProduct.type,
-                fromTariffZone: fromPlace.id,
-                toTariffZone: toPlace.id,
-              }}
+          {isFree ? (
+            <MessageBox
+              type="valid"
+              message={t(PurchaseOverviewTexts.summary.free)}
               style={styles.messages}
             />
-          </>
-        )}
+          ) : (
+            <View style={styles.messages}>
+              <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
+              <GlobalMessage
+                globalMessageContext={
+                  GlobalMessageContextEnum.appPurchaseOverview
+                }
+                textColor="background_0"
+                ruleVariables={{
+                  preassignedFareProductType: preassignedFareProduct.type,
+                  fromTariffZone: fromPlace.id,
+                  toTariffZone: toPlace.id,
+                }}
+              />
+            </View>
+          )}
 
-        <FullScreenFooter>
           <Summary
             isLoading={isSearchingOffer}
             isFree={isFree}
@@ -280,33 +290,37 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             }}
             style={styles.summary}
           />
-        </FullScreenFooter>
+        </View>
       </ScrollView>
-    </View>
+    </FullScreenView>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.static.background.background_1.background,
-  },
-  messages: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.medium,
-  },
-  selectionComponent: {
-    marginVertical: theme.spacings.medium,
-  },
-  selectionLinks: {
-    margin: theme.spacings.medium,
-  },
-  summary: {
-    marginTop: theme.spacings.medium,
-  },
-  travelSearchInfo: {
-    marginHorizontal: theme.spacings.medium,
-    marginTop: theme.spacings.xLarge,
-    marginBottom: theme.spacings.medium,
-  },
-}));
+const useStyles = StyleSheet.createThemeHook((theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    header: {
+      marginHorizontal: theme.spacings.medium,
+    },
+    contentContainer: {
+      rowGap: theme.spacings.medium,
+      margin: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+    },
+    messages: {
+      rowGap: theme.spacings.medium,
+      marginTop: theme.spacings.medium,
+    },
+    selectionComponent: {
+      rowGap: theme.spacings.medium,
+    },
+    summary: {
+      marginVertical: theme.spacings.medium,
+    },
+    travelSearchInfo: {
+      marginHorizontal: theme.spacings.medium,
+      marginTop: theme.spacings.xLarge,
+      marginBottom: theme.spacings.medium,
+    },
+  };
+});

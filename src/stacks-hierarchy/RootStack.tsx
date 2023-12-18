@@ -60,7 +60,7 @@ import {
 import {Root_TermsInformationScreen} from './Root_TermsInformationScreen';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import {useBeacons} from '@atb/beacons/use-beacons';
+import { useBeaconsState } from '@atb/beacons/BeaconsContext';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -74,7 +74,7 @@ export const RootStack = () => {
   const navRef = useNavigationContainerRef<RootStackParamList>();
   useFlipper(navRef);
 
-  useBeacons();
+  useBeaconsState();
   useTestIds();
 
   if (isLoading) {
@@ -187,6 +187,31 @@ export const RootStack = () => {
                 },
               },
               getStateFromPath(path, config) {
+                if (path.includes('privacy')) {
+                  return {
+                    routes: [
+                      {
+                        name: 'Root_TabNavigatorStack',
+                        state: {
+                          routes: [
+                            {
+                              name: 'TabNav_ProfileStack',
+                              state: {
+                                routes: [
+                                  {name: 'Profile_RootScreen'},
+                                  {
+                                    name: 'Profile_PrivacyScreen',
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  } as ResultState;
+                }
+
                 // If the path is not from the widget, behave as usual
                 if (!path.includes('widget')) {
                   return getStateFromPath(path, config);
