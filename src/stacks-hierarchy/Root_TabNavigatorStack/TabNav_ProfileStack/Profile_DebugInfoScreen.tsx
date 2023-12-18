@@ -463,7 +463,11 @@ export const Profile_DebugInfoScreen = () => {
                 />
                 <Button
                   style={style.button}
-                  onPress={registerNotifications}
+                  onPress={() =>
+                    registerNotifications(
+                      pushNotificationPermissionStatus === 'granted',
+                    )
+                  }
                   text="Register"
                 />
                 <ThemeText>FCM Token: {fcmToken}</ThemeText>

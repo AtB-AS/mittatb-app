@@ -9,9 +9,11 @@ import {Preference_Language} from '@atb/preferences';
 export const registerForPushNotifications = ({
   token,
   language,
+  enabled,
 }: {
   token: string;
   language: Preference_Language;
+  enabled: boolean;
 }) =>
   client
     .post(
@@ -19,6 +21,7 @@ export const registerForPushNotifications = ({
       {
         language,
         token,
+        enabled,
       },
       {authWithIdToken: true},
     )
