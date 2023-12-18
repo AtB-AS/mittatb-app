@@ -63,6 +63,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     gap: theme.spacings.small,
   },
   text: {
-    flex: 1,
+    flexShrink: 1,
   },
 }));
