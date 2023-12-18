@@ -185,6 +185,31 @@ export const RootStack = () => {
                 },
               },
               getStateFromPath(path, config) {
+                if (path.includes('privacy')) {
+                  return {
+                    routes: [
+                      {
+                        name: 'Root_TabNavigatorStack',
+                        state: {
+                          routes: [
+                            {
+                              name: 'TabNav_ProfileStack',
+                              state: {
+                                routes: [
+                                  {name: 'Profile_RootScreen'},
+                                  {
+                                    name: 'Profile_PrivacyScreen',
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  } as ResultState;
+                }
+
                 // If the path is not from the widget, behave as usual
                 if (!path.includes('widget')) {
                   return getStateFromPath(path, config);

@@ -243,7 +243,7 @@ const SelectTravelTokenTexts = {
           thisDeviceSuffix: _(
             ' (denne enheten)',
             ' (this device)',
-            ` (denne eininga)`,
+            ' (denne eininga)',
           ),
         },
       },

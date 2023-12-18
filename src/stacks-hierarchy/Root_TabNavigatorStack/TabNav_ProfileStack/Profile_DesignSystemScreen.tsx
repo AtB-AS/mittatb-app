@@ -1219,7 +1219,7 @@ export const Profile_DesignSystemScreen = ({
           />
           <ToggleSectionItem
             text="Some short text"
-            leftIcon={Bus}
+            leftImage={Bus}
             onValueChange={() => {}}
           />
           <ActionSectionItem

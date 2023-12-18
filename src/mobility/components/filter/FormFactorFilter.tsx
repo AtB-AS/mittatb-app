@@ -52,7 +52,7 @@ export const FormFactorFilter = ({
           <ToggleSectionItem
             key={operator.id}
             text={operator.name}
-            leftIcon={icon}
+            leftImage={icon}
             value={isChecked(operator.id)}
             onValueChange={onOperatorToggle(operator.id)}
           />
