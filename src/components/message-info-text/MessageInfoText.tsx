@@ -12,7 +12,7 @@ export type MessageInfoTextProps = {
   message: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
-  iconSide?: 'right' | 'left';
+  iconPosition?: 'right' | 'left';
   textColor?: StaticColor;
   isMarkdown?: boolean;
 };
@@ -21,7 +21,7 @@ export const MessageInfoText = ({
   type,
   style,
   message,
-  iconSide = 'left',
+  iconPosition = 'left',
   testID,
   textColor,
   isMarkdown = false,
@@ -37,7 +37,7 @@ export const MessageInfoText = ({
       testID={testID}
       accessibilityLabel={message}
     >
-      {iconSide == 'left' && (
+      {iconPosition == 'left' && (
         <ThemeIcon svg={messageTypeToIcon(type, true)} {...iconColorProps} />
       )}
 
@@ -50,7 +50,7 @@ export const MessageInfoText = ({
         {message}
       </ThemeText>
 
-      {iconSide == 'right' && (
+      {iconPosition == 'right' && (
         <ThemeIcon svg={messageTypeToIcon(type, true)} {...iconColorProps} />
       )}
     </PressableOpacityOrView>

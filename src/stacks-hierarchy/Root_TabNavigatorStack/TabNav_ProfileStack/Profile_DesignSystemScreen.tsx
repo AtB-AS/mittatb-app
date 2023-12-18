@@ -381,7 +381,7 @@ export const Profile_DesignSystemScreen = ({
             <MessageInfoText
               type="valid"
               isMarkdown={true}
-              iconSide="right"
+              iconPosition="right"
               message="This is a text with right sided icon"
               textColor="background_0"
             />
