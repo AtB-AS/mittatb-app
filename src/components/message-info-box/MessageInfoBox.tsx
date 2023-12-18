@@ -51,7 +51,6 @@ export const MessageInfoBox = ({
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const color = type;
   const iconColorProps = {fill: theme.static.status[type].text};
   const backgroundColorStyle = {
     backgroundColor: theme.static.status[type].background,
@@ -101,18 +100,18 @@ export const MessageInfoBox = ({
         {title && (
           <ThemeText
             type="body__primary--bold"
-            color={color}
+            color={type}
             style={styles.title}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={color} type="body__primary" isMarkdown={isMarkdown}>
+        <ThemeText color={type} type="body__primary" isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={color}
+            color={type}
             style={styles.linkText}
             type="body__primary--underline"
           >
