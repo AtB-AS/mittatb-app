@@ -59,6 +59,7 @@ import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_Noti
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
+import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -427,6 +428,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_LocationWhenInUsePermissionScreen"
                   component={Root_LocationWhenInUsePermissionScreen}
+                />
+                <Stack.Screen
+                  name="Root_ChooseTicketReceiverScreen"
+                  component={Root_ChooseTicketReceiverScreen}
                 />
               </Stack.Group>
             </Stack.Navigator>

@@ -170,7 +170,9 @@ export function TravellerSelection({
             </View>
 
             {/* remove new label when requested */}
-            {isOnBehalfOfEnabled && <LabelInfo label="new" />}
+            {isOnBehalfOfEnabled && (
+                <LabelInfo label="new" />
+            )}
 
             <ThemeIcon svg={Edit} size="normal" />
           </View>

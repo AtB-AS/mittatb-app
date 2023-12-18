@@ -292,16 +292,27 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 travelDate,
                 mode: params.mode,
               });
-              navigation.navigate('Root_PurchaseConfirmationScreen', {
-                fareProductTypeConfig: params.fareProductTypeConfig,
-                fromPlace: fromPlace,
-                toPlace: toPlace,
-                userProfilesWithCount: travellerSelection,
-                preassignedFareProduct,
-                travelDate,
-                headerLeftButton: {type: 'back'},
-                mode: params.mode,
-              });
+              isOnBehalfOfToggle ?
+                navigation.navigate('Root_ChooseTicketReceiverScreen', {
+                  fareProductTypeConfig: params.fareProductTypeConfig,
+                  fromPlace: fromPlace,
+                  toPlace: toPlace,
+                  userProfilesWithCount: travellerSelection,
+                  preassignedFareProduct,
+                  travelDate,
+                  headerLeftButton: {type: 'back'},
+                  mode: params.mode,
+                }) :
+                navigation.navigate('Root_PurchaseConfirmationScreen', {
+                  fareProductTypeConfig: params.fareProductTypeConfig,
+                  fromPlace: fromPlace,
+                  toPlace: toPlace,
+                  userProfilesWithCount: travellerSelection,
+                  preassignedFareProduct,
+                  travelDate,
+                  headerLeftButton: {type: 'back'},
+                  mode: params.mode,
+                });
             }}
             style={styles.summary}
           />
