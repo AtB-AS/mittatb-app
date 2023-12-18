@@ -2,38 +2,14 @@ import {translation as _} from '../commons';
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const TravelTokenBoxTexts = {
-  tcard: {
-    title: _('t:kort', 't:card', 't:kort'),
-    description: _(
-      'Ta med deg t:kortet når du er ute og reiser.',
-      'Remember to bring your t:card when you travel.',
-      'Ta med deg t:kortet når du er ute og reiser.',
-    ),
-    a11yLabel: _(
-      'Du bruker nå t:kort. Ta med deg t:kortet når du er ute og reiser.',
-      'You are using t:card. Bring your t:card when you are travelling',
-      'Du bruker no t:kort. Ta med deg t:kortet når du er ute og reiser.',
-    ),
-  },
-  mobile: {
-    description: _(
-      'Ta med deg mobilen når du er ute og reiser.',
-      'Remember to bring your phone while travelling.',
-      'Ta med deg mobilen når du er ute og reiser.',
-    ),
-    a11yLabel: (deviceName: string) =>
-      _(
-        `Du bruker nå mobilen ${deviceName}. Ta med deg mobilen når du er ute og reiser.`,
-        `You are now using the phone ${deviceName}. Bring your phone when you are travelling`,
-        `Du bruker no mobilen ${deviceName}. Ta med deg mobilen når du er ute og reiser.`,
-      ),
-    unnamedDevice: _('Enhet uten navn', 'Unnamed device', 'Eining utan namn'),
-  },
-  howToChange: _(
-    'Du kan bytte hvor du bruker billetten din fra **Min profil**.',
-    'Switch where you are using your ticket at **My profile** ',
-    'Du kan bytte kor du brukar billetten din frå **Mi profil**.',
+  title: _(
+    'Dine billetter er tilgjengelige fra ',
+    'Your tickets are available from ',
+    'Billettane dine er tilgjengelege frå ',
   ),
+  thisDeviceSuffix: _('denne enheten', 'this device', 'denne eininga'),
+  otherDeviceSuffix: _('en annen enhet', 'another device', 'ei anna eining'),
+  tcardName: _('t:kort', 't:card', 't:kort'),
   errorMessages: {
     tokensNotLoadedTitle: _(
       'Klarer ikke hente informasjon om t:kort / mobil.',
@@ -56,24 +32,12 @@ const TravelTokenBoxTexts = {
       `Billettar må brukast på enten eit t:kort eller ein mobil, og det ser ikkje ut som du har valt ein av dei.\n\nGå til **Mi profil, Bytt mellom t:kort / mobil** for å velje.`,
     ),
   },
+  change: _('Endre', 'Change', 'Endre'),
 };
 
 export default orgSpecificTranslations(TravelTokenBoxTexts, {
   nfk: {
-    tcard: {
-      title: _('Reisekort', 'Travelcard', 'Reisekort'),
-      description: _(
-        `Ta med deg reisekortet når du er ute og reiser`,
-        `Remember to bring your travel card when you travel`,
-        `Ta med deg reisekortet når du er ute og reiser`,
-      ),
-
-      a11yLabel: _(
-        'Du bruker nå reisekort. Ta med deg reisekortet når du er ute og reiser',
-        'You are using travel card. Remember to bring your travel card when you travel',
-        'Du bruker no reisekort. Ta med deg reisekortet når du er ute og reiser',
-      ),
-    },
+    tcardName: _('reisekort', 'travelcard', 'reisekort'),
     errorMessages: {
       tokensNotLoadedTitle: _(
         'Klarer ikke hente informasjon om reisekort / mobil.',
@@ -93,20 +57,7 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
     },
   },
   fram: {
-    tcard: {
-      title: _('Reisekort', 'Travelcard', 'Reisekort'),
-      description: _(
-        `Ta med deg reisekortet når du er ute og reiser`,
-        `Remember to bring your travel card when you travel`,
-        `Ta med deg reisekortet når du er ute og reiser`,
-      ),
-
-      a11yLabel: _(
-        'Du bruker nå reisekort. Ta med deg reisekortet når du er ute og reiser',
-        'You are using travel card. Remember to bring your travel card when you travel',
-        'Du bruker no reisekort. Ta med deg reisekortet når du er ute og reiser',
-      ),
-    },
+    tcardName: _('reisekort', 'travelcard', 'reisekort'),
     errorMessages: {
       tokensNotLoadedTitle: _(
         'Klarer ikke hente informasjon om reisekort / mobil.',
@@ -121,7 +72,7 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
       noInspectableToken: _(
         'Billetter må brukes på enten et reisekort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min bruker, Bytt mellom reisekort / mobil** for å velge.',
         `Tickets must be used on either a travel card or a phone, and it looks like you haven't chosen one. Go to **My user, switch between travel card / phone** to select`,
-        'Billettar må brukast på enten eit reisekort eller ein mobil, og det ser ikkje ut som du har valgt ein av dei.\n\nGå til **Min brukar, Bytt mellom reisekort / mobil** for å velge.',
+        'Billettar må brukast på enten eit reisekort eller ein mobil, og det ser ikkje ut som du har valgt ein av dei.\n\nGå til **Min brukar, Bytt mellom reisekort / mobil** for å velje.',
       ),
     },
   },
