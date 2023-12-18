@@ -77,7 +77,7 @@ export const AnonymousPurchaseConsequencesScreen = ({
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_accent_0.background,
+    backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
   },
   contentContainer: {
