@@ -12,8 +12,8 @@ import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
 import {ContentHeading} from '@atb/components/content-heading';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {useTipsAndInformationEnabled} from "@atb/tips-and-information/use-tips-and-information-enabled";
-import {TipsAndInformation} from "@atb/tips-and-information";
+import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-and-information-enabled';
+import {TipsAndInformation} from '@atb/tips-and-information';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -78,11 +78,11 @@ export const Root_TicketInformationScreen = (props: Props) => {
           <View style={styles.tipsAndInformation}>
             <ContentHeading
               color="background_accent_0"
-              text=
-              {t(
+              text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .tipsInformation,
-              )}/>
+              )}
+            />
             <TipsAndInformation />
           </View>
         )}
