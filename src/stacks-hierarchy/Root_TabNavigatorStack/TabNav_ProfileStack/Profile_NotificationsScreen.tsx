@@ -21,6 +21,7 @@ import {ContentHeading} from '@atb/components/content-heading';
 import {useProfileQuery} from '@atb/queries';
 import {Button} from '@atb/components/button';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
+import {useAuthState} from '@atb/auth';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 type NotificationsScreenProps =
@@ -50,7 +51,7 @@ export const Profile_NotificationsScreen = ({
   const pushEnabled =
     isConfigEnabled(config?.modes, 'push') && permissionStatus === 'granted';
   const anyModeEnabled = mailEnabled || pushEnabled;
-
+  const {authenticationType} = useAuthState();
   const handleModeToggle = async (id: string, enabled: boolean) => {
     if (id === 'push' && enabled) {
       await requestPermissions();
@@ -93,40 +94,47 @@ export const Profile_NotificationsScreen = ({
                 .modesHeading,
             )}
           />
-          <Section>
-            <ToggleSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .emailToggle.text,
+          {authenticationType === 'phone' && (
+            <>
+              <Section>
+                <ToggleSectionItem
+                  text={t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.emailToggle.text,
+                  )}
+                  subtext={
+                    isLoading
+                      ? undefined
+                      : t(
+                          data?.email
+                            ? ProfileTexts.sections.settings.linkSectionItems.notifications.emailToggle.subText(
+                                data.email,
+                              )
+                            : ProfileTexts.sections.settings.linkSectionItems
+                                .notifications.emailToggle.noEmailPlaceholder,
+                        )
+                  }
+                  disabled={hasNoEmail}
+                  value={isConfigEnabled(config?.modes, 'mail')}
+                  onValueChange={(enabled) => handleModeToggle('mail', enabled)}
+                />
+              </Section>
+              {hasNoEmail && (
+                <Button
+                  onPress={() =>
+                    navigation.navigate('Profile_EditProfileScreen')
+                  }
+                  text={t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.button,
+                  )}
+                  interactiveColor="interactive_2"
+                  mode="secondary"
+                />
               )}
-              subtext={
-                isLoading
-                  ? undefined
-                  : t(
-                      data?.email
-                        ? ProfileTexts.sections.settings.linkSectionItems.notifications.emailToggle.subText(
-                            data.email,
-                          )
-                        : ProfileTexts.sections.settings.linkSectionItems
-                            .notifications.emailToggle.noEmailPlaceholder,
-                    )
-              }
-              disabled={hasNoEmail}
-              value={isConfigEnabled(config?.modes, 'mail')}
-              onValueChange={(enabled) => handleModeToggle('mail', enabled)}
-            />
-          </Section>
-          {hasNoEmail && (
-            <Button
-              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .button,
-              )}
-              interactiveColor="interactive_2"
-              mode="secondary"
-            />
+            </>
           )}
+
           <Section>
             <ToggleSectionItem
               text={t(
