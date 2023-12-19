@@ -50,14 +50,6 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
     return validationResult.isValid;
   };
 
-  const {
-    fromPlace,
-    toPlace,
-    preassignedFareProduct,
-    userProfilesWithCount,
-    travelDate,
-  } = params;
-
   const onNext = async () => {
     setIsSubmitting(true);
     const phoneValidation = phone(
@@ -76,14 +68,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
       setError(undefined);
       setIsSubmitting(false);
       navigation.navigate('Root_PurchaseConfirmationScreen', {
-        fareProductTypeConfig: params.fareProductTypeConfig,
-        fromPlace: fromPlace,
-        toPlace: toPlace,
-        userProfilesWithCount: userProfilesWithCount,
-        preassignedFareProduct,
-        travelDate,
-        headerLeftButton: {type: 'back'},
-        mode: params.mode,
+        ...params.rootPurchaseConfirmationScreenParams,
         phoneNumber: `+${prefix}${phoneNumber}`,
       });
     } else {

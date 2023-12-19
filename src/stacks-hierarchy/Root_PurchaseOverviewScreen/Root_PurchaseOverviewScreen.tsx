@@ -26,6 +26,7 @@ import {isAfter} from '@atb/utils/date';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
+import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -107,6 +108,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     travellerSelection,
     travelDate,
   );
+
+  const rootPurchaseConfirmationScreenParams : Root_PurchaseConfirmationScreenParams = {
+    fareProductTypeConfig: params.fareProductTypeConfig,
+    fromPlace: fromPlace,
+    toPlace: toPlace,
+    userProfilesWithCount: travellerSelection,
+    preassignedFareProduct,
+    travelDate,
+    headerLeftButton: {type: 'back'},
+    mode: params.mode,
+  };
 
   const maximumDateObjectIfExisting = preassignedFareProduct.limitations
     ?.latestActivationDate
@@ -292,27 +304,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 travelDate,
                 mode: params.mode,
               });
-              isOnBehalfOfToggle ?
-                navigation.navigate('Root_ChooseTicketReceiverScreen', {
-                  fareProductTypeConfig: params.fareProductTypeConfig,
-                  fromPlace: fromPlace,
-                  toPlace: toPlace,
-                  userProfilesWithCount: travellerSelection,
-                  preassignedFareProduct,
-                  travelDate,
-                  headerLeftButton: {type: 'back'},
-                  mode: params.mode,
-                }) :
-                navigation.navigate('Root_PurchaseConfirmationScreen', {
-                  fareProductTypeConfig: params.fareProductTypeConfig,
-                  fromPlace: fromPlace,
-                  toPlace: toPlace,
-                  userProfilesWithCount: travellerSelection,
-                  preassignedFareProduct,
-                  travelDate,
-                  headerLeftButton: {type: 'back'},
-                  mode: params.mode,
-                });
+              isOnBehalfOfToggle
+                ? navigation.navigate('Root_ChooseTicketReceiverScreen', 
+                    {rootPurchaseConfirmationScreenParams}
+                  )
+                : navigation.navigate('Root_PurchaseConfirmationScreen', 
+                    rootPurchaseConfirmationScreenParams
+                  );
             }}
             style={styles.summary}
           />

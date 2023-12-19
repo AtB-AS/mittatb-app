@@ -1,16 +1,5 @@
-import {FareProductTypeConfig} from '@atb/configuration';
-import {PreassignedFareProduct, TariffZone} from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/fare-contracts';
-import {LeftButtonProps} from '@atb/components/screen-header';
-import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
+import {Root_PurchaseConfirmationScreenParams} from '../Root_PurchaseConfirmationScreen';
 
 export type Root_ChooseTicketReceiverScreenParams = {
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
-  fromPlace: TariffZone | StopPlaceFragment;
-  toPlace: TariffZone | StopPlaceFragment;
-  userProfilesWithCount: UserProfileWithCount[];
-  travelDate?: string;
-  headerLeftButton: LeftButtonProps;
-  mode?: 'TravelSearch' | 'Ticket';
+  rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams;
 };
