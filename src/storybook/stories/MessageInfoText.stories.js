@@ -15,7 +15,7 @@ const MessageInfoTextMeta = {
   args: {
     theme: 'light',
     message: 'The message body.',
-    iconSide: 'left',
+    iconPosition: 'left',
     isMarkdown: false,
   },
   decorators: [
@@ -44,7 +44,9 @@ const MessageInfoTextMeta = {
 export default MessageInfoTextMeta;
 
 export const LeftIcon = {};
-export const RightIcon = {args: {iconSide: 'right'}};
+export const RightIcon = {
+  args: {message: 'Right sided icon', iconPosition: 'right'},
+};
 export const WithMarkdown = {
   args: {
     isMarkdown: true,
