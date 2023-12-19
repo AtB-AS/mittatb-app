@@ -45,6 +45,11 @@ export const EditProfileTexts = {
         'The e-mail address is already in use',
         'E-postadressa er allereie i bruk',
       ),
+      disabledWithRemoteConfig: _(
+        'Appen støtter foreløpig ikke lagring av e-postadresser. Kvitteringer kan du få tilsendt på e-post fra Billetthistorikk-visningen.',
+        'This app currently does not support saving of email adresses. Receipts may be requested sent to your email from the Ticket history view.',
+        'Appen stetter førebels ikkje lagring av e-postadresser. Kvitteringar kan du få tilsendt på e-post frå Billetthistorikk-visninga.',
+      ),
     },
     error: _(
       'Vi fikk ikke hentet profilinformasjonen din akkurat nå.',

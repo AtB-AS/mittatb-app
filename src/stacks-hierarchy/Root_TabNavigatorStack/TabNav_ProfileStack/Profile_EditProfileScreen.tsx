@@ -161,7 +161,19 @@ export const Profile_EditProfileScreen = ({
                   autoCapitalize="words"
                 />
               </Section>
-              {!disable_email_field_in_profile_page && (
+              {disable_email_field_in_profile_page ? (
+                <View style={styles.phone}>
+                  <ThemeText>
+                    {t(EditProfileTexts.personalDetails.email.label)}
+                  </ThemeText>
+                  <ThemeText type="body__secondary" color="secondary">
+                    {t(
+                      EditProfileTexts.personalDetails.email
+                        .disabledWithRemoteConfig,
+                    )}
+                  </ThemeText>
+                </View>
+              ) : (
                 <Section withPadding withBottomPadding>
                   <TextInputSectionItem
                     editable={!isLoadingOrSubmittingProfile}
