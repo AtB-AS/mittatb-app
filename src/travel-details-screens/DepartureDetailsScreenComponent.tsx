@@ -162,7 +162,9 @@ export const DepartureDetailsScreenComponent = ({
             </View>
             {shouldShowMapButton || realtimeText ? (
               <View style={styles.headerSubSection}>
-                {realtimeText && <LastPassedStop realtimeText={realtimeText} />}
+                {realtimeText && !activeItem.isTripCancelled && (
+                  <LastPassedStop realtimeText={realtimeText} />
+                )}
                 {shouldShowMapButton ? (
                   <Button
                     type="pill"
