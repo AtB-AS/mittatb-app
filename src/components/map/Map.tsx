@@ -5,7 +5,7 @@ import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
 import {Feature} from 'geojson';
-import React, {useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
@@ -17,6 +17,7 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {MapProps, MapRegion} from './types';
 import {isFeaturePoint} from './utils';
+import {useDebounce} from '@atb/utils/use-debounce';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -25,6 +26,8 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+  const [mapState, setMapState] = useState<MapState>();
+  const debouncedState = useDebounce(mapState, 500);
 
   const startingCoordinates = useMemo(
     () =>
@@ -73,6 +76,24 @@ export const Map = (props: MapProps) => {
     });
   };
 
+  useEffect(() => {
+    if (debouncedState) {
+      loadMobility({
+        visibleBounds: [
+          debouncedState.properties.bounds.ne,
+          debouncedState.properties.bounds.sw,
+        ],
+        zoomLevel: debouncedState.properties.zoom,
+        center: debouncedState.properties.center,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedState]);
+
+  const onCameraChanged = (state: MapState) => {
+    setMapState(state);
+  };
+
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -90,6 +111,7 @@ export const Map = (props: MapProps) => {
           pitchEnabled={false}
           onDidFinishLoadingMap={onDidFinishLoadingMap}
           onMapIdle={onMapIdle}
+          onCameraChanged={onCameraChanged}
           onPress={async (feature: Feature) => {
             if (isFeaturePoint(feature)) {
               onMapClick({
