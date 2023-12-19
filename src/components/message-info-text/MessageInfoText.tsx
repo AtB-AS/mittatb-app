@@ -1,10 +1,9 @@
 import React from 'react';
-import {StyleProp, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {Statuses, StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 import {StaticColor} from '@atb/theme/colors';
 
 export type MessageInfoTextProps = {
@@ -31,13 +30,13 @@ export const MessageInfoText = ({
   const iconColorProps = {colorType: textColor};
 
   return (
-    <PressableOpacityOrView
+    <View
       style={[styles.container, style]}
       accessible={true}
       testID={testID}
       accessibilityLabel={message}
     >
-      {iconPosition == 'left' && (
+      {iconPosition === 'left' && (
         <ThemeIcon svg={messageTypeToIcon(type, true)} {...iconColorProps} />
       )}
 
@@ -50,10 +49,10 @@ export const MessageInfoText = ({
         {message}
       </ThemeText>
 
-      {iconPosition == 'right' && (
+      {iconPosition === 'right' && (
         <ThemeIcon svg={messageTypeToIcon(type, true)} {...iconColorProps} />
       )}
-    </PressableOpacityOrView>
+    </View>
   );
 };
 
