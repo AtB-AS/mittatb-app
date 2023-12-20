@@ -5,22 +5,19 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
+import {BottomSheetTexts, useTranslation} from '@atb/translations';
 
 type BottomSheetHeaderWithoutNavigationProps = {
-  shouldHaveLeftButton?: boolean;
   title?: string;
-  titleA11yLabel?: string;
   closeBottomSheet?: () => void;
 };
 
 export const BottomSheetHeader = ({
-  shouldHaveLeftButton = false,
   title,
-  titleA11yLabel,
   closeBottomSheet,
 }: BottomSheetHeaderWithoutNavigationProps) => {
   const styles = useStyle();
-  const themeColor = 'background_accent_4';
+  const {t} = useTranslation();
 
   const {close: closeBottomSheetDefault, onOpenFocusRef} = useBottomSheet();
 
@@ -39,32 +36,16 @@ export const BottomSheetHeader = ({
 
   return (
     <View style={styles.container}>
-      {shouldHaveLeftButton ? (
-        <TouchableOpacity
-          hitSlop={hitSlop}
-          style={styles.button}
-          activeOpacity={0.7}
-        >
-          <View style={styles.iconWrapper}>
-            <ThemeIcon svg={Close} />
-          </View>
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.placeholderButton} />
-      )}
+      <View style={styles.placeholderButton} />
       <View
-        accessibilityLabel={titleA11yLabel}
+        accessibilityLabel={title}
         accessible={true}
         importantForAccessibility="yes"
         accessibilityRole="header"
         style={styles.headerTitle}
         ref={onOpenFocusRef}
       >
-        <ThemeText
-          accessible={false}
-          type="body__primary--bold"
-          color={themeColor}
-        >
+        <ThemeText accessible={false} type="body__primary--bold">
           {title}
         </ThemeText>
       </View>
@@ -73,6 +54,10 @@ export const BottomSheetHeader = ({
         hitSlop={hitSlop}
         style={styles.button}
         activeOpacity={0.7}
+        accessible={true}
+        accessibilityLabel={t(BottomSheetTexts.closeButton.a11yLabel)}
+        accessibilityHint={t(BottomSheetTexts.closeButton.a11yHint)}
+        accessibilityRole="button"
       >
         <View style={styles.iconWrapper}>
           <ThemeIcon svg={Close} />
