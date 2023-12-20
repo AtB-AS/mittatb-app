@@ -1,10 +1,10 @@
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { AnnouncementRaw, AnnouncementType, ActionButton } from './types';
-import { mapToLanguageAndTexts } from '@atb/utils/map-to-language-and-texts';
-import { APP_VERSION } from '@env';
-import { AppPlatformType } from '@atb/global-messages/types';
-import { Platform } from 'react-native';
-import { mapToRules } from '@atb/rule-engine';
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {AnnouncementRaw, AnnouncementType, ActionButton} from './types';
+import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
+import {APP_VERSION} from '@env';
+import {AppPlatformType} from '@atb/global-messages/types';
+import {Platform} from 'react-native';
+import {mapToRules} from '@atb/rule-engine';
 
 export const mapToAnnouncements = (
   result: FirebaseFirestoreTypes.QueryDocumentSnapshot<AnnouncementRaw>[],
@@ -38,7 +38,6 @@ export const mapToAnnouncement = (
   const rules = mapToRules(result.rules);
   const actionButton = mapActionButton(result.actionButton);
 
-  if (!result.active) return;
   if (!summary) return;
   if (!fullTitle) return;
   if (!body) return;
@@ -80,8 +79,7 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
 }
 
 function mapActionButton(data: any): ActionButton | undefined {
-  if (typeof data !== 'object') return;
-  const { label, url, actionType } = data;
+  const {label = [], url, actionType = 'bottom_sheet'} = data ?? {};
   if (!label || !actionType) return;
   if (!['external', 'deeplink', 'bottom_sheet'].includes(actionType)) return;
   const labelWithLanguage = mapToLanguageAndTexts(label);
@@ -90,5 +88,5 @@ function mapActionButton(data: any): ActionButton | undefined {
     label: labelWithLanguage,
     url,
     actionType,
-  }
+  };
 }

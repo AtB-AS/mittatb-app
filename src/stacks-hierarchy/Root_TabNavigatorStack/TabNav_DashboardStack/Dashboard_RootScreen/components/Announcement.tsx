@@ -45,6 +45,11 @@ export const Announcement = ({announcement, style}: Props) => {
     });
   };
 
+  const summaryTitle = getTextForLanguage(
+    announcement.summaryTitle ?? announcement.fullTitle,
+    language,
+  );
+
   return (
     <Section style={style} key={announcement.id} testID="announcement">
       <GenericSectionItem>
@@ -69,12 +74,7 @@ export const Announcement = ({announcement, style}: Props) => {
               </View>
             )}
             <View style={styles.textContainer}>
-              <ThemeText type="body__primary--bold">
-                {getTextForLanguage(
-                  announcement.summaryTitle ?? announcement.fullTitle,
-                  language,
-                )}
-              </ThemeText>
+              <ThemeText type="body__primary--bold">{summaryTitle}</ThemeText>
               <ThemeText style={styles.summary}>
                 {getTextForLanguage(announcement.summary, language)}
               </ThemeText>
@@ -94,44 +94,48 @@ export const Announcement = ({announcement, style}: Props) => {
           </PressableOpacity>
         </View>
       </GenericSectionItem>
-      {announcement.actionButton?.actionType &&
-        announcement.actionButton?.label && (
-          <LinkSectionItem
-            text={
-              getTextForLanguage(announcement.actionButton.label, language) ??
-              ''
-            }
-            icon={
-              announcement.actionButton?.actionType === 'external'
-                ? 'external-link'
-                : 'arrow-right'
-            }
-            accessibility={{
-              accessibilityHint: t(
-                DashboardTexts.announcemens.buttonAction[
-                  announcement.actionButton.actionType
-                ],
+      {announcement.actionButton?.actionType && (
+        <LinkSectionItem
+          text={
+            getTextForLanguage(announcement.actionButton.label, language) ??
+            t(
+              DashboardTexts.announcemens.buttonAction.defaultLabel(
+                summaryTitle,
               ),
-            }}
-            onPress={async () => {
-              if (announcement.actionButton?.actionType === 'bottom_sheet') {
-                openBottomSheet(() => (
-                  <AnnouncementSheet
-                    announcement={announcement}
-                    close={closeBottomSheet}
-                  />
-                ));
-              } else {
-                const actionButtonURL = announcement.actionButton?.url;
-                try {
-                  actionButtonURL && (await Linking.openURL(actionButtonURL));
-                } catch (err: any) {
-                  Bugsnag.notify(err);
-                }
+            )
+          }
+          textType="body__secondary"
+          icon={
+            announcement.actionButton?.actionType === 'external'
+              ? 'external-link'
+              : 'arrow-right'
+          }
+          accessibility={{
+            accessibilityHint: t(
+              DashboardTexts.announcemens.buttonAction.a11yHint[
+                announcement.actionButton.actionType
+              ],
+            ),
+          }}
+          onPress={async () => {
+            if (announcement.actionButton?.actionType === 'bottom_sheet') {
+              openBottomSheet(() => (
+                <AnnouncementSheet
+                  announcement={announcement}
+                  close={closeBottomSheet}
+                />
+              ));
+            } else {
+              const actionButtonURL = announcement.actionButton?.url;
+              try {
+                actionButtonURL && (await Linking.openURL(actionButtonURL));
+              } catch (err: any) {
+                Bugsnag.notify(err);
               }
-            }}
-          />
-        )}
+            }
+          }}
+        />
+      )}
     </Section>
   );
 };
