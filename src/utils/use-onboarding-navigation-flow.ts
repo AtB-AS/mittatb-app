@@ -1,49 +1,51 @@
 import {useAppState} from '@atb/AppContext';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {shouldOnboardMobileToken} from '@atb/api/utils';
+
 import {useAuthState} from '@atb/auth';
-import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
+import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {
-  useOnPushNotificationOpened,
   useNotifications,
   usePushNotificationsEnabled,
 } from '@atb/notifications';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
 
 import {
   useTicketingState,
   filterValidRightNowFareContract,
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {useEffect, useCallback} from 'react';
+import {useNavigation, StackActions} from '@react-navigation/native';
+
+import {useCallback, useEffect, useState} from 'react';
 import {InteractionManager} from 'react-native';
+
+type ScreenProps =
+  | {
+      screenName?: keyof RootStackParamList;
+      params?: any;
+    }
+  | undefined;
+export type GoToScreenType = (screenName: any, params?: any) => void;
 
 export const useOnboardingNavigationFlow = () => {
   const navigation = useNavigation<RootNavigationProps>();
-
-  const pushNotificationsEnabled = usePushNotificationsEnabled();
-  const {
-    register: registerForNotifications,
-    permissionStatus: pushNotificationPermissionStatus,
-  } = useNotifications();
-  useOnPushNotificationOpened();
-
-  // Register notification language when the app starts, in case the user have
-  // changed language since last time the app was opened. This useEffect will
-  // also trigger when language is changed manually in the app.
-  useEffect(() => {
-    registerForNotifications();
-  }, [registerForNotifications]);
-
-  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
   const {enable_extended_onboarding} = useRemoteConfig();
   const {
-    onboarded,
+    onboarded: loginOnboardingCompleted,
     notificationPermissionOnboarded,
     locationWhenInUsePermissionOnboarded,
   } = useAppState();
+
+  const shouldShowTravelTokenOnboarding = useShouldShowTravelTokenOnboarding();
+
+  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
+  const shouldShowLocationOnboarding =
+    !locationWhenInUsePermissionOnboarded &&
+    locationWhenInUsePermissionStatus === 'denied';
+
+  const shouldShowShareTravelHabitsScreen =
+    useShouldShowShareTravelHabitsScreen();
 
   const {serverNow} = useTimeContextState();
 
@@ -53,74 +55,129 @@ export const useOnboardingNavigationFlow = () => {
     serverNow,
   );
 
+  const pushNotificationsEnabled = usePushNotificationsEnabled();
+  const {permissionStatus: pushNotificationPermissionStatus} =
+    useNotifications();
+
+  const shouldShowNotificationPermissionScreen =
+    !notificationPermissionOnboarded &&
+    pushNotificationsEnabled &&
+    validFareContracts.length > 0 &&
+    pushNotificationPermissionStatus !== 'granted';
+
+  const getNextOnboardingScreen = useCallback(
+    (comingFromScreenName?: keyof RootStackParamList): ScreenProps => {
+      let screenName: keyof RootStackParamList | undefined = undefined;
+      let params = undefined;
+      if (!loginOnboardingCompleted) {
+        if (enable_extended_onboarding) {
+          screenName = 'Root_OnboardingStack';
+        } else {
+          screenName = 'Root_LoginOptionsScreen';
+          params = {};
+        }
+      } else {
+        const orderedOnboardingScreensAfterLogin: {
+          shouldShow: boolean;
+          screenName: keyof RootStackParamList;
+          params?: any;
+        }[] = [
+          {
+            shouldShow: shouldShowTravelTokenOnboarding,
+            screenName: 'Root_ConsiderTravelTokenChangeScreen',
+          },
+          {
+            shouldShow: shouldShowLocationOnboarding,
+            screenName: 'Root_LocationWhenInUsePermissionScreen',
+          },
+          {
+            shouldShow: shouldShowShareTravelHabitsScreen,
+            screenName: 'Root_ShareTravelHabitsScreen',
+          },
+          {
+            shouldShow: shouldShowNotificationPermissionScreen,
+            screenName: 'Root_NotificationPermissionScreen',
+          },
+        ];
+        for (const onboardingScreen of orderedOnboardingScreensAfterLogin) {
+          if (
+            onboardingScreen.shouldShow &&
+            onboardingScreen.screenName !== comingFromScreenName
+          ) {
+            screenName = onboardingScreen.screenName;
+            params = onboardingScreen?.params;
+            break;
+          }
+        }
+      }
+      return {
+        screenName,
+        params,
+      };
+    },
+    [
+      loginOnboardingCompleted,
+      enable_extended_onboarding,
+      shouldShowTravelTokenOnboarding,
+      shouldShowLocationOnboarding,
+      shouldShowShareTravelHabitsScreen,
+      shouldShowNotificationPermissionScreen,
+    ],
+  );
+
   const goToScreen = useCallback(
-    (screenName, params?) => {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate(screenName, params),
-      );
+    (replace, screenName, params?) => {
+      InteractionManager.runAfterInteractions(() => {
+        if (replace) {
+          navigation.dispatch(StackActions.replace(screenName, params));
+        } else {
+          navigation.navigate(screenName, params);
+        }
+      });
     },
     [navigation],
   );
 
-  useMaybeShowShareTravelHabitsScreen(); // todo: how to ensure Root_LocationWhenInUsePermissionScreen is shown before Root_ShareTravelHabitsScreen when runAfterSessionsCount is 0?
-  useGoToMobileTokenOnboardingWhenNecessary();
+  const continueFromOnboardingScreen = useCallback(
+    (comingFromScreenName?: keyof RootStackParamList) => {
+      const nextOnboardingScreen =
+        getNextOnboardingScreen(comingFromScreenName);
+      if (nextOnboardingScreen?.screenName) {
+        goToScreen(
+          true,
+          nextOnboardingScreen.screenName,
+          nextOnboardingScreen.params,
+        );
+      } else {
+        navigation.goBack();
+      }
+    },
+    [getNextOnboardingScreen, goToScreen, navigation],
+  );
+
+  const [nextOnboardingScreen, setNextOnboardingScreen] =
+    useState<ScreenProps>();
 
   useEffect(() => {
-    if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
-    const shouldShowLocationOnboarding =
-      !locationWhenInUsePermissionOnboarded &&
-      locationWhenInUsePermissionStatus === 'denied';
+    setNextOnboardingScreen(getNextOnboardingScreen());
+  }, [getNextOnboardingScreen]);
 
-    if (!onboarded) {
-      if (enable_extended_onboarding) {
-        goToScreen('Root_OnboardingStack');
-      } else {
-        goToScreen('Root_LoginOptionsScreen', {});
-      }
-    } else if (shouldShowLocationOnboarding) {
-      goToScreen('Root_LocationWhenInUsePermissionScreen');
-    } else if (
-      !notificationPermissionOnboarded &&
-      pushNotificationsEnabled &&
-      validFareContracts.length > 0 &&
-      pushNotificationPermissionStatus !== 'granted'
-    ) {
-      goToScreen('Root_NotificationPermissionScreen');
-    }
-  }, [
-    onboarded,
-    navigation,
-    notificationPermissionOnboarded,
-    pushNotificationsEnabled,
-    locationWhenInUsePermissionOnboarded,
-    locationWhenInUsePermissionStatus,
-    validFareContracts.length,
-    pushNotificationPermissionStatus,
-    enable_extended_onboarding,
+  return {
+    nextOnboardingScreen,
     goToScreen,
-  ]);
+    continueFromOnboardingScreen,
+  };
 };
 
-const useGoToMobileTokenOnboardingWhenNecessary = () => {
+const useShouldShowTravelTokenOnboarding = () => {
   const {authenticationType} = useAuthState();
   const {mobileTokenOnboarded, mobileTokenWithoutTravelcardOnboarded} =
     useAppState();
   const {disable_travelcard} = useRemoteConfig();
-  const navigation = useNavigation<RootNavigationProps>();
 
-  const shouldOnboard = shouldOnboardMobileToken(
-    authenticationType,
-    mobileTokenOnboarded,
-    mobileTokenWithoutTravelcardOnboarded,
-    disable_travelcard,
+  return (
+    authenticationType === 'phone' &&
+    ((!mobileTokenOnboarded && !disable_travelcard) ||
+      (!mobileTokenWithoutTravelcardOnboarded && disable_travelcard))
   );
-
-  const isFocused = useIsFocused();
-  useEffect(() => {
-    if (shouldOnboard && isFocused) {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_ConsiderTravelTokenChangeScreen'),
-      );
-    }
-  }, [shouldOnboard, isFocused, navigation]);
 };

@@ -5,23 +5,20 @@ import {
 } from '@atb/translations';
 import React, {useEffect} from 'react';
 
-import {RootStackScreenProps} from './navigation-types';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {OnboardingScreen} from '@atb/onboarding-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 
-export type SearchStopPlaceProps =
-  RootStackScreenProps<'Root_ShareTravelHabitsScreen'>;
-
-export const Root_ShareTravelHabitsScreen = ({
-  navigation,
-}: SearchStopPlaceProps) => {
+export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
 
   const {configurableLinks} = useFirestoreConfiguration();
+
+  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
 
   const [_, setAndStoreHasSeenShareTravelHabitsScreen] =
     useHasSeenShareTravelHabitsScreen();
@@ -32,7 +29,7 @@ export const Root_ShareTravelHabitsScreen = ({
 
   const choosePermissions = async () => {
     onboardForBeacons();
-    navigation.goBack();
+    continueFromOnboardingScreen('Root_ShareTravelHabitsScreen');
   };
 
   return (

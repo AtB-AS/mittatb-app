@@ -14,6 +14,7 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
 import {OnboardingFrame} from '@atb/onboarding-frame';
 import {TravelTokenBox} from '@atb/travel-token-box';
+import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 
 type Props = RootStackScreenProps<'Root_ConsiderTravelTokenChangeScreen'>;
 
@@ -33,6 +34,8 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   const NoTokenView = <NoTravelTokenInfo close={navigation.pop} />;
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
 
+  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+
   if (mobileTokenStatus !== 'success') return NoTokenView;
 
   const inspectableToken = tokens.find((token) => token.isInspectable);
@@ -45,7 +48,8 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
           disable_travelcard
             ? completeMobileTokenWithoutTravelcardOnboarding()
             : completeMobileTokenOnboarding();
-          navigation.goBack();
+
+          continueFromOnboardingScreen('Root_ConsiderTravelTokenChangeScreen');
         },
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
       }}

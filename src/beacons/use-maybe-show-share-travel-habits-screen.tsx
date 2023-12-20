@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useRef} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {storage} from '@atb/storage';
 
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -7,20 +7,16 @@ import {useHasSeenShareTravelHabitsScreen} from './use-has-seen-share-travel-hab
 import {useAppState} from '@atb/AppContext';
 
 import {useBeaconsState} from './BeaconsContext';
-import {useNavigation} from '@react-navigation/native';
-import {InteractionManager} from 'react-native';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count';
 
-export const useMaybeShowShareTravelHabitsScreen = () => {
-  const navigation = useNavigation<RootNavigationProps>();
-
+export const useShouldShowShareTravelHabitsScreen = () => {
   const {
     delay_share_travel_habits_screen_by_sessions_count: runAfterSessionsCount,
   } = useRemoteConfig();
   const sessionCountRef = useRef(0);
+  const [sessionCount, setSessionCount] = useState(0);
   const isInitializedRef = useRef(false);
   const {isBeaconsSupported, kettleInfo} = useBeaconsState();
 
@@ -34,24 +30,16 @@ export const useMaybeShowShareTravelHabitsScreen = () => {
     hasSeenShareTravelHabitsScreen !== null &&
     !hasSeenShareTravelHabitsScreen;
 
-  const maybeShowShareTravelHabitsScreen = useCallback(async () => {
-    if (!kettleInfo?.isBeaconsOnboarded) {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_ShareTravelHabitsScreen'),
-      );
-    }
-  }, [kettleInfo, navigation]);
+  const shouldShowShareTravelHabitsScreen =
+    enabled &&
+    !kettleInfo?.isBeaconsOnboarded &&
+    sessionCount > runAfterSessionsCount;
 
-  const updateCount = useCallback(
-    async (newCount: number) => {
-      storage.set(shareTravelHabitsSessionCountKey, JSON.stringify(newCount));
-      sessionCountRef.current = newCount;
-      if (newCount === runAfterSessionsCount + 1) {
-        maybeShowShareTravelHabitsScreen();
-      }
-    },
-    [runAfterSessionsCount, maybeShowShareTravelHabitsScreen],
-  );
+  const updateCount = useCallback(async (newCount: number) => {
+    storage.set(shareTravelHabitsSessionCountKey, JSON.stringify(newCount));
+    sessionCountRef.current = newCount;
+    setSessionCount(newCount);
+  }, []);
 
   useEffect(() => {
     if (!enabled) return;
@@ -69,4 +57,6 @@ export const useMaybeShowShareTravelHabitsScreen = () => {
       updateCount(sessionCountRef.current + 1);
     }
   }, [enabled, appStatus, updateCount]);
+
+  return shouldShowShareTravelHabitsScreen;
 };
