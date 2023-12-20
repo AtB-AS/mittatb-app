@@ -36,6 +36,7 @@ export type RemoteConfig = {
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
+  disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
   live_vehicle_stale_threshold: number;
   enable_extended_onboarding: boolean;
@@ -91,6 +92,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_trygg_overgang_qr_code: false,
   live_vehicle_stale_threshold: 15,
   enable_extended_onboarding: false,
+  disable_email_field_in_profile_page: false,
   disable_travelcard: false,
   enable_non_transit_trip_search: true,
   enable_show_valid_time_info: true,
@@ -138,6 +140,8 @@ export function getConfig(): RemoteConfig {
   const tripsSearch_max_number_of_chained_searches =
     values['tripsSearch_max_number_of_chained_searches']?.asNumber() ??
     defaultRemoteConfig.tripsSearch_max_number_of_chained_searches;
+  const disable_email_field_in_profile_page =
+    values['disable_email_field_in_profile_page']?.asBoolean() ?? false;
 
   const privacy_policy_url =
     values['privacy_policy_url']?.asString() ??
@@ -308,6 +312,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
+    disable_email_field_in_profile_page,
     disable_travelcard,
     live_vehicle_stale_threshold,
     enable_extended_onboarding,

@@ -16,6 +16,7 @@ import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {isValidEmail} from '@atb/utils/validation';
 import {CustomerProfile} from '@atb/api/types/profile';
 import {useProfileQuery, useProfileUpdateMutation} from '@atb/queries';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type EditProfileScreenProps = ProfileScreenProps<'Profile_EditProfileScreen'>;
 
@@ -43,6 +44,7 @@ export const Profile_EditProfileScreen = ({
     refetch: refetchProfile,
     isRefetching: isRefetchingProfile,
   } = useProfileQuery();
+  const {disable_email_field_in_profile_page} = useRemoteConfig();
 
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -159,25 +161,38 @@ export const Profile_EditProfileScreen = ({
                   autoCapitalize="words"
                 />
               </Section>
-              <Section withPadding withBottomPadding>
-                <TextInputSectionItem
-                  editable={!isLoadingOrSubmittingProfile}
-                  value={email}
-                  onChangeText={(value) => {
-                    setEmail(value);
-                    setInvalidEmail(false);
-                  }}
-                  label={t(EditProfileTexts.personalDetails.email.label)}
-                  placeholder={t(
-                    EditProfileTexts.personalDetails.email.placeholder,
-                  )}
-                  keyboardType="email-address"
-                  showClear={!isLoadingOrSubmittingProfile}
-                  errorText={getEmailErrorText(invalidEmail, errorUpdate)}
-                  inlineLabel={false}
-                />
-              </Section>
-
+              {disable_email_field_in_profile_page ? (
+                <View style={styles.phone}>
+                  <ThemeText>
+                    {t(EditProfileTexts.personalDetails.email.label)}
+                  </ThemeText>
+                  <ThemeText type="body__secondary" color="secondary">
+                    {t(
+                      EditProfileTexts.personalDetails.email
+                        .disabledWithRemoteConfig,
+                    )}
+                  </ThemeText>
+                </View>
+              ) : (
+                <Section withPadding withBottomPadding>
+                  <TextInputSectionItem
+                    editable={!isLoadingOrSubmittingProfile}
+                    value={email}
+                    onChangeText={(value) => {
+                      setEmail(value);
+                      setInvalidEmail(false);
+                    }}
+                    label={t(EditProfileTexts.personalDetails.email.label)}
+                    placeholder={t(
+                      EditProfileTexts.personalDetails.email.placeholder,
+                    )}
+                    keyboardType="email-address"
+                    showClear={!isLoadingOrSubmittingProfile}
+                    errorText={getEmailErrorText(invalidEmail, errorUpdate)}
+                    inlineLabel={false}
+                  />
+                </Section>
+              )}
               <View style={styles.phone}>
                 <ThemeText>
                   {t(EditProfileTexts.personalDetails.phone.header)}

@@ -45,6 +45,11 @@ export const EditProfileTexts = {
         'The e-mail address is already in use',
         'E-postadressa er allereie i bruk',
       ),
+      disabledWithRemoteConfig: _(
+        'Appen støtter foreløpig ikke lagring av e-postadresse.',
+        'The app currently does not support saving your email address',
+        'Appen stettar førebels ikkje lagring av e-postadresse.',
+      ),
     },
     error: _(
       'Vi fikk ikke hentet profilinformasjonen din akkurat nå.',
