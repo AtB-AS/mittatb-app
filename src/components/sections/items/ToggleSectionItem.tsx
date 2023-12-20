@@ -10,6 +10,7 @@ import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/configuration';
 import {LabelInfo} from '@atb/components/label-info';
 import {SvgProps} from 'react-native-svg';
+import {SectionTexts, useTranslation} from '@atb/translations';
 
 type Props = SectionItemProps<{
   text: string;
@@ -40,6 +41,7 @@ export function ToggleSectionItem({
   const {topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useStyles();
+  const {t} = useTranslation();
 
   /*
    Need to maintain a internal copy of the checked state for the accessibility
@@ -52,6 +54,7 @@ export function ToggleSectionItem({
   const [checked, setChecked] = useState(value);
   useEffect(() => setChecked(value), [value]);
   const onChange = (v: boolean) => {
+    if (disabled) return;
     setChecked(v);
     setTimeout(() => onValueChange(v), 0);
   };
@@ -61,13 +64,18 @@ export function ToggleSectionItem({
       style={topContainer}
       accessible={true}
       accessibilityRole="switch"
-      accessibilityState={{checked: checked}}
+      accessibilityState={{checked: checked, disabled: disabled}}
       accessibilityActions={[{name: 'activate'}]}
       onAccessibilityAction={() => onChange(!checked)}
+      accessibilityHint={
+        disabled ? t(SectionTexts.toggleInput.disabled) : undefined
+      }
       {...accessibility}
     >
       <View style={{flexDirection: 'row'}}>
-        <View style={styles.leftImageContainer}>{LeftImage && <LeftImage />}</View>
+        <View style={styles.leftImageContainer}>
+          {LeftImage && <LeftImage />}
+        </View>
         <View style={{flexDirection: 'column', flex: 1}}>
           <View style={sectionStyle.spaceBetween}>
             <View style={styles.textContainer}>
