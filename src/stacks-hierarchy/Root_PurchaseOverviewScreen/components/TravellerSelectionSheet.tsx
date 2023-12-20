@@ -1,5 +1,4 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
 import {ScrollView} from 'react-native';
@@ -46,16 +45,11 @@ export const TravellerSelectionSheet = ({
   );
 
   return (
-    <BottomSheetContainer maxHeightValue={0.9}>
-      <ScreenHeaderWithoutNavigation
-        title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
-        color="background_1"
-        leftButton={{
-          text: t(PurchaseOverviewTexts.travellerSelectionSheet.close),
-          type: 'cancel',
-          onPress: () => close(),
-        }}
-      />
+    <BottomSheetContainer
+      bottomSheetTitle={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
+      closeBottomSheet={close}
+      maxHeightValue={0.9}
+    >
       <ScrollView style={style.container}>
         {selectionMode === 'multiple' ? (
           <MultipleTravellersSelection

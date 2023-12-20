@@ -1,5 +1,4 @@
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
@@ -61,17 +60,11 @@ export const ParkAndRideBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(ParkAndRideTexts.title)}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      bottomSheetTitle={t(ParkAndRideTexts.title)}
+      closeBottomSheet={close}
+      maxHeightValue={0.5}
+    >
       <ScrollView>
         <View style={styles.buttonsContainer}>
           <View style={styles.travelButton}>

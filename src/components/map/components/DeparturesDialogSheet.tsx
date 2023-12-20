@@ -2,13 +2,7 @@ import {StyleSheet} from '@atb/theme';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '../../screen-header';
-import {
-  DeparturesTexts,
-  dictionary,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {
   SearchTime,
   StopPlaceView,
@@ -157,16 +151,12 @@ export const DeparturesDialogSheet = ({
     undefined;
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5} fullHeight>
-      <ScreenHeaderWithoutNavigation
-        title={stopPlaceFeature.properties?.name ?? stopPlace?.name}
-        color="background_1"
-        leftButton={{
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-          type: 'close',
-          onPress: close,
-        }}
-      />
+    <BottomSheetContainer
+      bottomSheetTitle={stopPlaceFeature.properties?.name ?? stopPlace?.name}
+      maxHeightValue={0.5}
+      closeBottomSheet={close}
+      fullHeight
+    >
       <View style={styles.departuresContainer}>
         <StopPlaceViewOrError />
       </View>

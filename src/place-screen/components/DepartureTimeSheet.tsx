@@ -2,18 +2,13 @@ import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {
   DateInputSectionItem,
   Section,
   TimeInputSectionItem,
 } from '@atb/components/sections';
 import {StyleSheet} from '@atb/theme';
-import {
-  DeparturesTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {
   dateWithReplacedTime,
   formatLocaleTime,
@@ -54,18 +49,10 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
     const keyboardHeight = useKeyboardHeight();
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          title={t(DeparturesTexts.dateInput.header)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
-
+      <BottomSheetContainer
+        bottomSheetTitle={t(DeparturesTexts.dateInput.header)}
+        closeBottomSheet={close}
+      >
         <ScrollView
           contentContainerStyle={styles.contentContainer}
           style={{paddingBottom: keyboardHeight}}

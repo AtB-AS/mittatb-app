@@ -6,11 +6,7 @@ import {
   TimeInputSectionItem,
 } from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-import {
-  ScreenHeaderTexts,
-  TravelDateTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TravelDateTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {MessageBox} from '@atb/components/message-box';
 import {
@@ -20,7 +16,6 @@ import {
   isAfter,
 } from '@atb/utils/date';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
@@ -85,19 +80,10 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
     const keyboardHeight = useKeyboardHeight();
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          title={t(TravelDateTexts.header.title)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-            testID: 'cancelButton',
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
-
+      <BottomSheetContainer
+        bottomSheetTitle={t(TravelDateTexts.header.title)}
+        closeBottomSheet={close}
+      >
         <ScrollView
           contentContainerStyle={styles.contentContainer}
           ref={focusRef}

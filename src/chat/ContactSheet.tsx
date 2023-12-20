@@ -1,14 +1,9 @@
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet} from '@atb/theme';
-import {
-  ContactSheetTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {ContactSheetTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {AccessibilityProps, Linking, View} from 'react-native';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
@@ -39,17 +34,10 @@ export const ContactSheet = forwardRef<View, Props>(
     const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          title={t(ContactSheetTexts.header.title)}
-          leftButton={{
-            type: 'close',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.close.text),
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
+      <BottomSheetContainer
+        bottomSheetTitle={t(ContactSheetTexts.header.title)}
+        closeBottomSheet={close}
+      >
         <FullScreenFooter>
           {showWebsiteFeedback ? (
             <ContactItem

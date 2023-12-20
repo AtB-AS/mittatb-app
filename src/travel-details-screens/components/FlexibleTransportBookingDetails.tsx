@@ -3,7 +3,6 @@ import {
   useTranslation,
   getTextForLanguage,
   TripDetailsTexts,
-  ScreenHeaderTexts,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
 import {View, TouchableOpacity, Linking, ScrollView} from 'react-native';
@@ -12,7 +11,6 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {getPublicCodeFromLeg, getLegBookingIsAvailable} from '../utils';
 import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
 import {useNow} from '@atb/utils/use-now';
@@ -54,22 +52,16 @@ export const FlexibleTransportBookingDetails: React.FC<
     safeAreaBottom > 0 ? safeAreaBottom : theme.spacings.medium;
 
   return (
-    <BottomSheetContainer fullHeight={true} maxHeightValue={0.83}>
-      <ScreenHeaderWithoutNavigation
-        title={t(
-          TripDetailsTexts.flexibleTransport.needsBookingWhatIsThisTitle(
-            publicCode,
-          ),
-        )}
-        color="background_1"
-        setFocusOnLoad={true}
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-      />
-
+    <BottomSheetContainer
+      bottomSheetTitle={t(
+        TripDetailsTexts.flexibleTransport.needsBookingWhatIsThisTitle(
+          publicCode,
+        ),
+      )}
+      closeBottomSheet={close}
+      fullHeight={true}
+      maxHeightValue={0.83}
+    >
       <View style={[style.scrollViewContainer, {marginBottom}]}>
         <ScrollView contentContainerStyle={{padding: theme.spacings.xLarge}}>
           <View style={style.messageBoxContainer}>

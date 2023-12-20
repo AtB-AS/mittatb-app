@@ -1,4 +1,3 @@
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -50,17 +49,11 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
-    <BottomSheetContainer maxHeightValue={0.6}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      maxHeightValue={0.6}
+      bottomSheetTitle={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      closeBottomSheet={close}
+    >
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>

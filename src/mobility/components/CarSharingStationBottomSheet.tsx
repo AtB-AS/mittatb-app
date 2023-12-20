@@ -1,4 +1,3 @@
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
@@ -52,17 +51,11 @@ export const CarSharingStationBottomSheet = ({
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(MobilityTexts.formFactor(FormFactor.Car))}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      bottomSheetTitle={t(MobilityTexts.formFactor(FormFactor.Car))}
+      closeBottomSheet={close}
+      maxHeightValue={0.5}
+    >
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>

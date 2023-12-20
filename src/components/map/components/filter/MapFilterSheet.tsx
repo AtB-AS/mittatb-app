@@ -1,11 +1,5 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {
-  MapTexts,
-  ScreenHeaderTexts,
-  TripSearchTexts,
-  useTranslation,
-} from '@atb/translations';
+import {MapTexts, TripSearchTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {MapFilterType, MobilityMapFilterType} from '../../types';
@@ -54,16 +48,11 @@ export const MapFilterSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.9}>
-      <ScreenHeaderWithoutNavigation
-        title={t(MapTexts.filters.bottomSheet.heading)}
-        color="background_1"
-        leftButton={{
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          type: 'cancel',
-          onPress: close,
-        }}
-      />
+    <BottomSheetContainer
+      bottomSheetTitle={t(MapTexts.filters.bottomSheet.heading)}
+      closeBottomSheet={close}
+      maxHeightValue={0.9}
+    >
       <ScrollView style={style.container}>
         <MobilityFilters
           filter={initialFilter.mobility}

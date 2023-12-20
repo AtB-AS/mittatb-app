@@ -2,11 +2,9 @@ import {ScrollView, View} from 'react-native';
 import React, {forwardRef, useState} from 'react';
 import {
   getTextForLanguage,
-  ScreenHeaderTexts,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
@@ -81,18 +79,11 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     isFlexibleTransportEnabledInRemoteConfig && selectedFlexibleTransportOption;
 
   return (
-    <BottomSheetContainer maxHeightValue={0.9}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'cancel',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          testID: 'cancelButton',
-        }}
-        title={t(TripSearchTexts.filters.bottomSheet.heading)}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      maxHeightValue={0.9}
+      bottomSheetTitle={t(TripSearchTexts.filters.bottomSheet.heading)}
+      closeBottomSheet={close}
+    >
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
         <Section>
           <HeaderSectionItem

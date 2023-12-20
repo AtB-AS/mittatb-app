@@ -1,11 +1,6 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {
-  ScreenHeaderTexts,
-  ServiceDisruptionsTexts,
-  useTranslation,
-} from '@atb/translations';
+import {ServiceDisruptionsTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -28,18 +23,11 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
     const style = useStyle();
 
     return (
-      <BottomSheetContainer testID="serviceDisruptionsBottomSheet">
-        <ScreenHeaderWithoutNavigation
-          title={t(ServiceDisruptionsTexts.header.title)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.close.text),
-            testID: 'cancelButton',
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
+      <BottomSheetContainer
+        bottomSheetTitle={t(ServiceDisruptionsTexts.header.title)}
+        closeBottomSheet={close}
+        testID="serviceDisruptionsBottomSheet"
+      >
         <FullScreenFooter>
           <GlobalMessage
             style={style.globalMessages}

@@ -1,7 +1,6 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
@@ -47,17 +46,11 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      bottomSheetTitle={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      closeBottomSheet={close}
+      maxHeightValue={0.5}
+    >
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>

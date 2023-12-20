@@ -1,9 +1,4 @@
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {
-  DeparturesTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -29,16 +24,11 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
     const styles = useStyles();
     const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
     return (
-      <BottomSheetContainer testID="chooseFavoriteBottomSheet">
-        <ScreenHeaderWithoutNavigation
-          title={t(DeparturesTexts.favoriteDialogSheet.title)}
-          color="background_1"
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          }}
-        />
+      <BottomSheetContainer
+        bottomSheetTitle={t(DeparturesTexts.favoriteDialogSheet.title)}
+        closeBottomSheet={close}
+        testID="chooseFavoriteBottomSheet"
+      >
         <View style={styles.text} ref={focusRef} accessible={true}>
           <ThemeText>
             {t(

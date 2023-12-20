@@ -1,9 +1,8 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {PhotoFile} from '@atb/components/camera';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -27,17 +26,10 @@ export const ImageConfirmationBottomSheet = ({
   const {t} = useTranslation();
   const styles = useStyles();
   return (
-    <BottomSheetContainer>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        color="background_1"
-        setFocusOnLoad={false}
-        title={t(ParkingViolationTexts.imageConfirmation.title)}
-      />
+    <BottomSheetContainer
+      bottomSheetTitle={t(ParkingViolationTexts.imageConfirmation.title)}
+      closeBottomSheet={close}
+    >
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.imageAndPosition}>
           <View style={styles.fullHeight}>

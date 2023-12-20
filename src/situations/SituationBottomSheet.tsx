@@ -1,9 +1,7 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {
   dictionary,
   getTextForLanguage,
-  ScreenHeaderTexts,
   SituationsTexts,
   useTranslation,
 } from '@atb/translations';
@@ -40,18 +38,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
     const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          leftButton={{
-            type: 'close',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.close.text),
-            testID: 'closeButton',
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
-
+      <BottomSheetContainer closeBottomSheet={close}>
         <ScrollView centerContent={true}>
           <View>
             <Section style={styles.section}>

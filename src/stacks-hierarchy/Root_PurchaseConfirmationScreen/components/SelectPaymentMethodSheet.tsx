@@ -2,18 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {
-  PurchaseConfirmationTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {PurchaseConfirmationTexts, useTranslation} from '@atb/translations';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText} from '@atb/components/text';
 import SelectPaymentMethodTexts from '@atb/translations/screens/subscreens/SelectPaymentMethodTexts';
 import {listRecurringPayments, PaymentType} from '@atb/ticketing';
 import {PaymentMethod, SavedPaymentOption} from '../../types';
 import {useAuthState} from '@atb/auth';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {PaymentBrand} from './PaymentBrand';
@@ -150,18 +145,12 @@ export const SelectPaymentMethod: React.FC<Props> = ({
   }, [previousPaymentMethod]);
 
   return (
-    <BottomSheetContainer fullHeight>
+    <BottomSheetContainer
+      bottomSheetTitle={t(SelectPaymentMethodTexts.header.text)}
+      closeBottomSheet={close}
+      fullHeight
+    >
       <View style={{flex: 1}}>
-        <ScreenHeaderWithoutNavigation
-          title={t(SelectPaymentMethodTexts.header.text)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
         <View style={{flexShrink: 1, flexGrow: 1}}>
           <ScrollView style={styles.paymentOptions}>
             {defaultPaymentOptions.map((option, index) => {
