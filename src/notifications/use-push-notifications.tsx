@@ -9,6 +9,7 @@ import {NotificationConfigUpdate} from './api';
 import {NotificationConfig} from './types';
 import {useConfig} from './use-config';
 import {useRegister} from './use-register';
+import {getLanguageAndTextEnum} from '@atb/translations/utils';
 
 type PermissionStatus =
   | 'granted'
@@ -76,7 +77,7 @@ export const NotificationContextProvider: React.FC = ({children}) => {
       const token = await messaging().getToken();
       if (!token) return;
       setFcmToken(token);
-      mutateRegister({token, language});
+      mutateRegister({token, language: getLanguageAndTextEnum(language)});
       return token;
     } catch (e) {
       Bugsnag.notify(`Failed to register for push notifications: ${e}`);
