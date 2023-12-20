@@ -17,6 +17,7 @@ import {
 } from './permissions';
 import {useBeaconsMessages} from './use-beacons-messages';
 import {storage} from '@atb/storage';
+import {parseBoolean} from '@atb/utils/parse-boolean';
 
 type KettleInfo = {
   isKettleStarted: boolean;
@@ -140,9 +141,9 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     (async function () {
       if (!isBeaconsSupported) return;
       const consentGranted =
-        (await storage.get(storeKey.beaconsConsent)) ?? 'false';
+        parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
-      if (consentGranted === 'true') {
+      if (consentGranted) {
         const permissions = await initializeKettleSDK();
         Kettle.start(permissions);
       }
@@ -175,13 +176,13 @@ const getKettleInfo = async (): Promise<KettleInfo> => {
   const identifier = await Kettle.getIdentifier();
   const consents = await Kettle.getGrantedConsents();
   const consentGranted =
-    (await storage.get(storeKey.beaconsConsent)) ?? 'false';
+    parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
   return {
     isKettleStarted: status,
     kettleIdentifier: identifier,
     kettleConsents: consents,
-    isBeaconsOnboarded: consentGranted === 'true',
+    isBeaconsOnboarded: consentGranted,
   };
 };
 
