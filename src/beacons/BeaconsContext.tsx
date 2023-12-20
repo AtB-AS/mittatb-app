@@ -136,14 +136,13 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     }
   }, [isBeaconsSupported]);
 
-  const isOnboardedButNotStarted =
-    !kettleInfo?.isKettleStarted && kettleInfo?.isBeaconsOnboarded;
-
   useEffect(() => {
     (async function () {
       if (!isBeaconsSupported) return;
+      const consentGranted =
+        (await storage.get(storeKey.beaconsConsent)) ?? 'false';
 
-      if (isOnboardedButNotStarted) {
+      if (consentGranted === 'true') {
         const permissions = await initializeKettleSDK();
         Kettle.start(permissions);
       }
@@ -152,7 +151,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         await updateKettleInfo();
       }
     })();
-  }, [isBeaconsSupported, isOnboardedButNotStarted, initializeKettleSDK]);
+  }, [isBeaconsSupported, initializeKettleSDK]);
 
   return (
     <BeaconsContext.Provider
@@ -175,12 +174,14 @@ const getKettleInfo = async (): Promise<KettleInfo> => {
   const status = await Kettle.isStarted();
   const identifier = await Kettle.getIdentifier();
   const consents = await Kettle.getGrantedConsents();
+  const consentGranted =
+    (await storage.get(storeKey.beaconsConsent)) ?? 'false';
 
   return {
     isKettleStarted: status,
     kettleIdentifier: identifier,
     kettleConsents: consents,
-    isBeaconsOnboarded: Object.keys(consents).length > 0,
+    isBeaconsOnboarded: consentGranted === 'true',
   };
 };
 
