@@ -8,8 +8,7 @@ import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import phone from 'phone';
-import { ArrowRight } from '@atb/assets/svg/mono-icons/navigation';
-import { SvgProps } from 'react-native-svg';
+import {SvgProps} from 'react-native-svg';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -26,12 +25,12 @@ type Props = {
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export const PhoneInput = ({
-  style, 
+  style,
   submitButtonText,
   submitButtonTestId,
   onNextPromise,
   onNextAction,
-  rightIcon
+  rightIcon,
 }: Props) => {
   const styles = useStyles();
 

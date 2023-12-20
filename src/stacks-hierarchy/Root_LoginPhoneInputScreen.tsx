@@ -9,7 +9,7 @@ import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StaticColorByType} from '@atb/theme/colors';
 import {PhoneInput} from '@atb/components/phone-input';
-import { ArrowRight } from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
