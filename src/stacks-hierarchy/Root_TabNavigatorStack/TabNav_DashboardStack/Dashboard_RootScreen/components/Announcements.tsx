@@ -36,21 +36,26 @@ export const Announcements = ({style: containerStyle}: Props) => {
 
   return (
     <View style={containerStyle} testID="announcements">
-      <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
-      <ScrollView horizontal={filteredAnnouncements.length > 1}>
-        {filteredAnnouncements.map((a) => (
-          <Announcement
-            key={a.id}
-            announcement={a}
-            style={filteredAnnouncements.length > 1 && style.announcement}
-          />
-        ))}
-      </ScrollView>
+      <View style={style.contentWrapper}>
+        <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
+        <ScrollView horizontal={filteredAnnouncements.length > 1}>
+          {filteredAnnouncements.map((a) => (
+            <Announcement
+              key={a.id}
+              announcement={a}
+              style={filteredAnnouncements.length > 1 && style.announcement}
+            />
+          ))}
+        </ScrollView>
+      </View>
     </View>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  contentWrapper: {
+    marginHorizontal: theme.spacings.medium,
+  },
   announcement: {
     width: Dimensions.get('window').width * 0.9 - 2 * theme.spacings.medium,
     marginRight: theme.spacings.medium,

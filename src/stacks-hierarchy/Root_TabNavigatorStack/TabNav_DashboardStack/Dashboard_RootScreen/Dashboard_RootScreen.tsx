@@ -250,15 +250,14 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
           />
         </View>
 
-        <Announcements style={style.contentSection} />
+        <Announcements
+          style={[style.contentSection, style.contentSection__horizontalScroll]}
+        />
 
         {enable_ticketing && (
           <CompactFareContracts
             style={style.contentSection}
-            onPressDetails={(
-              isCarnet: boolean,
-              orderId: string,
-            ) => {
+            onPressDetails={(isCarnet: boolean, orderId: string) => {
               if (isCarnet) {
                 return navigation.navigate({
                   name: 'Root_CarnetDetailsScreen',
@@ -315,7 +314,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -378,7 +377,7 @@ function useUpdatedLocation(
         }
       }
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLocation, favorites],
   );
 
@@ -428,6 +427,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   contentSection: {
     marginTop: theme.spacings.large,
     marginHorizontal: theme.spacings.medium,
+  },
+  contentSection__horizontalScroll: {
+    marginHorizontal: 0,
   },
   contentSection__first: {
     marginTop: 0,
