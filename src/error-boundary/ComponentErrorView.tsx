@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type ErrorProps = {
   message: string;
@@ -12,7 +12,7 @@ export function ComponentErrorView({message}: ErrorProps) {
 
   return (
     <View style={styles.container}>
-      <MessageBox message={message} type="error" />
+      <MessageInfoBox message={message} type="error" />
     </View>
   );
 }

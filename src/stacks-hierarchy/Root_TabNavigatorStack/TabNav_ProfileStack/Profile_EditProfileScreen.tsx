@@ -10,7 +10,7 @@ import {StyleSheet} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
 import {Button} from '@atb/components/button';
 import Delete from '@atb/assets/svg/mono-icons/actions/Delete';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import parsePhoneNumber from 'libphonenumber-js';
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {isValidEmail} from '@atb/utils/validation';
@@ -106,7 +106,10 @@ export const Profile_EditProfileScreen = ({
     >
       {authenticationType !== 'phone' ? (
         <View style={styles.noAccount}>
-          <MessageBox type="error" message={t(EditProfileTexts.noProfile)} />
+          <MessageInfoBox
+            type="error"
+            message={t(EditProfileTexts.noProfile)}
+          />
         </View>
       ) : (
         <>
@@ -120,7 +123,7 @@ export const Profile_EditProfileScreen = ({
           </View>
           {isErrorGetProfile ? (
             <View style={styles.profileError}>
-              <MessageBox
+              <MessageInfoBox
                 type="error"
                 message={t(EditProfileTexts.personalDetails.error)}
                 onPressConfig={{
@@ -203,14 +206,14 @@ export const Profile_EditProfileScreen = ({
                   loading={isLoadingUpdateProfile}
                 />
                 {isSuccessUpdateProfile && (
-                  <MessageBox
+                  <MessageInfoBox
                     type="valid"
                     message={t(EditProfileTexts.profileUpdate.success)}
                     style={styles.submitContent}
                   />
                 )}
                 {isErrorUpdateProfile && (
-                  <MessageBox
+                  <MessageInfoBox
                     style={styles.submitContent}
                     type="error"
                     message={t(EditProfileTexts.profileUpdate.error)}

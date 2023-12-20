@@ -9,7 +9,7 @@ import {ScreenContainer} from './components/ScreenContainer';
 import {SelectProviderBottomSheet} from './bottom-sheets/SelectProviderBottomSheet';
 import {VehicleLookupConfirmationBottomSheet} from './bottom-sheets/VehicleLookupBottomSheet';
 import {lookupVehicleByQr, sendViolationsReport} from '@atb/api/mobility';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
   blobToBase64,
   useParkingViolations,
@@ -161,7 +161,7 @@ export const Root_ParkingViolationsQr = ({
       isLoading={isLoading}
     >
       {isError && (
-        <MessageBox
+        <MessageInfoBox
           style={style.error}
           title={t(ParkingViolationTexts.issue.sendReport.title)}
           message={t(ParkingViolationTexts.issue.sendReport.message)}

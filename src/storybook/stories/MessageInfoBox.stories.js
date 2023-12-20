@@ -1,14 +1,14 @@
 import React from 'react';
 import {View} from 'react-native';
-import {getStaticColor, themes} from '@atb/theme/colors';
-import {MessageBox} from '@atb/components/message-box';
+import {getStaticColor} from '@atb/theme/colors';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 const ON_PRESS_CONFIG = {action: () => {}, text: 'Press me!'};
 const ON_DISMISS = () => {};
 
-const MessageBoxMeta = {
-  title: 'MessageBox',
-  component: MessageBox,
+const MessageInfoBoxMeta = {
+  title: 'MessageInfoBox',
+  component: MessageInfoBox,
   argTypes: {
     theme: {
       control: 'select',
@@ -21,16 +21,6 @@ const MessageBoxMeta = {
         false: undefined,
       },
       control: 'boolean',
-    },
-    subtle: {control: 'boolean'},
-    textColor: {
-      label: 'textColor (if subtle)',
-      if: {arg: 'subtle'},
-      control: 'select',
-      options: [
-        ...Object.keys(themes['light'].static.background),
-        ...Object.keys(themes['light'].static.status),
-      ],
     },
     onPressConfig: {
       label: 'pressable',
@@ -48,8 +38,6 @@ const MessageBoxMeta = {
     onPressConfig: undefined,
     noStatusIcon: false,
     isMarkdown: false,
-    subtle: false,
-    textColor: undefined,
   },
   decorators: [
     (Story, {args}) => (
@@ -74,26 +62,12 @@ const MessageBoxMeta = {
   ],
 };
 
-export default MessageBoxMeta;
+export default MessageInfoBoxMeta;
 
 export const Standard = {};
 export const Minimal = {args: {title: undefined, noStatusIcon: true}};
 export const Maximal = {
   args: {
-    onDismiss: ON_DISMISS,
-    onPressConfig: ON_PRESS_CONFIG,
-    isMarkdown: true,
-    message: 'Message **with** markdown _enabled_.',
-  },
-};
-
-export const SubtleStandard = {args: {subtle: true, title: undefined}};
-export const SubtleMinimal = {
-  args: {subtle: true, title: undefined, noStatusIcon: true},
-};
-export const SubtleMaximal = {
-  args: {
-    subtle: true,
     onDismiss: ON_DISMISS,
     onPressConfig: ON_PRESS_CONFIG,
     isMarkdown: true,

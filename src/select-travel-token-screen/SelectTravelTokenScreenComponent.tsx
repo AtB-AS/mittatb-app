@@ -1,5 +1,5 @@
 import {Button} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioBox} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {Token, useMobileTokenContextState} from '@atb/mobile-token';
@@ -182,7 +182,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         </View>
 
         {selectedType === 'travel-card' && !travelCardToken && (
-          <MessageBox
+          <MessageInfoBox
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noTravelCard)}
             style={styles.errorMessageBox}
@@ -191,7 +191,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         )}
 
         {selectedType === 'mobile' && !mobileTokens?.length && (
-          <MessageBox
+          <MessageInfoBox
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
             style={styles.errorMessageBox}
@@ -205,7 +205,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         {selectedType === 'mobile' &&
           inspectableToken?.type === 'travel-card' &&
           hasActiveCarnetFareContract && (
-            <MessageBox
+            <MessageInfoBox
               type="warning"
               message={t(TravelTokenTexts.toggleToken.hasCarnet)}
               style={styles.errorMessageBox}
@@ -214,7 +214,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           )}
 
         {requiresTokenOnMobile && (
-          <MessageBox
+          <MessageInfoBox
             type="error"
             title={t(
               TravelTokenTexts.toggleToken.notAllowedToUseTravelCardError.title,
@@ -255,7 +255,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         ) : null}
 
         {saveState.error && (
-          <MessageBox
+          <MessageInfoBox
             type="error"
             message={t(TravelTokenTexts.toggleToken.errorMessage)}
             style={styles.errorMessageBox}

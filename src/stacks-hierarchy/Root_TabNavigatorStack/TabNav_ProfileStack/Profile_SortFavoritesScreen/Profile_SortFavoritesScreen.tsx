@@ -1,6 +1,6 @@
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {Button} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {useFavorites} from '@atb/favorites';
@@ -37,7 +37,9 @@ export const Profile_SortFavoritesScreen = ({navigation}: Props) => {
         leftButton={{type: 'cancel'}}
       />
 
-      {error && <MessageBox type="error" message={error} style={style.error} />}
+      {error && (
+        <MessageInfoBox type="error" message={error} style={style.error} />
+      )}
 
       <SortableList data={sortedItems} onSort={setSortedItems} />
 
