@@ -10,18 +10,21 @@ type BottomSheetHeaderWithoutNavigationProps = {
   shouldHaveLeftButton?: boolean;
   title?: string;
   titleA11yLabel?: string;
+  closeBottomSheet?: () => void;
 };
 
 export const BottomSheetHeader = ({
   shouldHaveLeftButton = false,
   title,
   titleA11yLabel,
+  closeBottomSheet,
 }: BottomSheetHeaderWithoutNavigationProps) => {
   const styles = useStyle();
   const themeColor = 'background_accent_4';
 
-  const {close: closeBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {close: closeBottomSheetDefault, onOpenFocusRef} = useBottomSheet();
 
+  const handleClose = closeBottomSheet ?? closeBottomSheetDefault;
   // Calculate hitSlop values
   const iconSize = 28;
   const desiredHitboxSize = 48;
@@ -66,7 +69,7 @@ export const BottomSheetHeader = ({
         </ThemeText>
       </View>
       <TouchableOpacity
-        onPress={closeBottomSheet}
+        onPress={handleClose}
         hitSlop={hitSlop}
         style={styles.button}
         activeOpacity={0.7}
