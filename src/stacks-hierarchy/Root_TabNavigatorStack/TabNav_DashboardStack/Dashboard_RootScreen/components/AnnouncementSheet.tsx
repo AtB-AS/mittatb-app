@@ -14,7 +14,7 @@ type Props = {
 };
 
 export const AnnouncementSheet = ({announcement, close}: Props) => {
-  const {t, language} = useTranslation();
+  const {language} = useTranslation();
   const style = useStyle();
 
   return (
