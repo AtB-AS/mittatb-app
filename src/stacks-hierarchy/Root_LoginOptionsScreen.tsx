@@ -5,7 +5,7 @@ import {
 } from '@atb/api/vipps-login/api';
 import {useAuthState} from '@atb/auth';
 import {VippsSignInErrorCode} from '@atb/auth';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {VippsLoginButton} from '@atb/components/vipps-login-button';
@@ -150,7 +150,7 @@ export const Root_LoginOptionsScreen = ({
           <ActivityIndicator style={styles.activityIndicator} size="large" />
         )}
         {error && error !== 'access_denied' && (
-          <MessageBox
+          <MessageInfoBox
             style={styles.errorMessage}
             type="error"
             message={t(LoginTexts.vipps.errors[error])}

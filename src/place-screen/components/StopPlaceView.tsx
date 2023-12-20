@@ -9,7 +9,7 @@ import {QuaySection} from './QuaySection';
 import {FavoriteToggle} from './FavoriteToggle';
 import {DateSelection} from './DateSelection';
 import {StopPlacesMode} from '@atb/nearby-stop-places/types';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
@@ -121,7 +121,7 @@ export const StopPlaceView = (props: StopPlaceViewProps) => {
                 !showTimeNavigation ? styles.marginBottom : undefined,
               ]}
             >
-              <MessageBox
+              <MessageInfoBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
                 onPressConfig={{

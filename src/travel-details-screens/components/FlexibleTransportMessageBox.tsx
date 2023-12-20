@@ -4,7 +4,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {MessageBox, OnPressConfig} from '@atb/components/message-box';
+import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
 import {
   secondsToMinutesLong,
   formatToShortDateTimeWithRelativeDayNames,
@@ -58,7 +58,7 @@ export const FlexibleTransportMessageBox: React.FC<
   );
 
   return (
-    <MessageBox
+    <MessageInfoBox
       type={requiresBookingUrgently ? 'warning' : 'info'}
       noStatusIcon={!showStatusIcon}
       message={t(

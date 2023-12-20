@@ -1,7 +1,7 @@
 import {MasterCard, Vipps, Visa} from '@atb/assets/svg/color/icons/ticketing';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {
@@ -325,7 +325,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       <ScrollView style={styles.infoSection}>
         <View>
           {error && (
-            <MessageBox
+            <MessageInfoBox
               type="error"
               title={t(PurchaseConfirmationTexts.errorMessageBox.title)}
               message={t(PurchaseConfirmationTexts.errorMessageBox.message)}
@@ -419,7 +419,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           </GenericSectionItem>
         </Section>
         {inspectableTokenWarningText && (
-          <MessageBox
+          <MessageInfoBox
             type="warning"
             message={inspectableTokenWarningText}
             style={styles.warningMessage}

@@ -53,16 +53,7 @@ export const Announcement = ({announcement, style}: Props) => {
   return (
     <Section style={style} key={announcement.id} testID="announcement">
       <GenericSectionItem style={styles.sectionItem}>
-        <View
-          style={styles.content}
-          accessible={true}
-          accessibilityRole={announcement.actionButton ? 'button' : undefined}
-          accessibilityHint={
-            announcement.actionButton !== undefined
-              ? t(DashboardTexts.announcemens.button.accessibility)
-              : undefined
-          }
-        >
+        <View style={styles.content}>
           {announcement.summaryImage && (
             <View style={styles.imageContainer}>
               <Image

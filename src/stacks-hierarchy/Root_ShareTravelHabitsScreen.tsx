@@ -31,7 +31,7 @@ export const Root_ShareTravelHabitsScreen = ({
   const {onboardForBeacons} = useBeaconsState();
 
   const choosePermissions = async () => {
-    onboardForBeacons();
+    await onboardForBeacons();
     navigation.goBack();
   };
 

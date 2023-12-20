@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -139,7 +139,7 @@ export const Root_LoginPhoneInputScreen = ({
             )}
 
             {error && !isSubmitting && (
-              <MessageBox
+              <MessageInfoBox
                 style={styles.errorMessage}
                 type="error"
                 message={t(LoginTexts.phoneInput.errors[error])}

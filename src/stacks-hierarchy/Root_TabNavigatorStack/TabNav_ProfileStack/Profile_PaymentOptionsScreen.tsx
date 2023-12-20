@@ -1,7 +1,7 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {useAuthState} from '@atb/auth';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {
@@ -229,7 +229,7 @@ const NoCardsInfo = () => {
   const {t} = useTranslation();
   return (
     <View accessibilityLiveRegion="polite">
-      <MessageBox
+      <MessageInfoBox
         type="info"
         message={t(PaymentOptionsTexts.noStoredCards)}
         style={style.messageStyle}
@@ -243,7 +243,7 @@ const GenericError = () => {
   const {t} = useTranslation();
   return (
     <View accessibilityLiveRegion="polite">
-      <MessageBox
+      <MessageInfoBox
         type="error"
         message={t(PaymentOptionsTexts.genericError)}
         style={style.messageStyle}

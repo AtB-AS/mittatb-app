@@ -15,7 +15,7 @@ import {OperatorNameAndLogo} from '@atb/mobility/components/OperatorNameAndLogo'
 import {formatRange} from '@atb/mobility/utils';
 import {useVehicle} from '@atb/mobility/use-vehicle';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -147,7 +147,7 @@ export const ScooterSheet = ({
         )}
         {!isLoading && (isError || !vehicle) && (
           <View style={styles.errorMessage}>
-            <MessageBox
+            <MessageInfoBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
               onPressConfig={{
