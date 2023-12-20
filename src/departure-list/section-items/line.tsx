@@ -313,6 +313,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   strikethrough: {
     textDecorationLine: 'line-through',
+    fontWeight: 'normal',
   },
   departure: {
     backgroundColor: theme.static.background.background_1.background,
