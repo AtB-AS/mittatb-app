@@ -1,24 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
-import {PhoneSignInErrorCode} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import phone from 'phone';
-import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  View,
-} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
-import {PhoneInputSectionItem, Section} from '@atb/components/sections';
-import {MessageInfoBox} from '@atb/components/message-info-box';
-import {Button} from '@atb/components/button';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
+import {StaticColorByType} from '@atb/theme/colors';
+import {PhoneInput} from '@atb/components/phone-input';
+import { ArrowRight } from '@atb/assets/svg/mono-icons/navigation';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -32,58 +23,8 @@ export const Root_LoginPhoneInputScreen = ({
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  const {themeName} = useTheme();
   const {signInWithPhoneNumber} = useAuthState();
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [prefix, setPrefix] = useState('47');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<PhoneSignInErrorCode>();
   const focusRef = useFocusOnLoad();
-
-  const phoneValidationParams = {
-    strictDetection: true,
-    validateMobilePrefix: false,
-  };
-
-  const isValidPhoneNumber = (number: string) => {
-    const validationResult = phone(
-      '+' + prefix + number,
-      phoneValidationParams,
-    );
-    return validationResult.isValid;
-  };
-
-  React.useEffect(
-    () =>
-      navigation.addListener('focus', () => {
-        setIsSubmitting(false);
-      }),
-    [navigation],
-  );
-
-  const onNext = async () => {
-    setIsSubmitting(true);
-    const phoneValidation = phone(
-      '+' + prefix + phoneNumber,
-      phoneValidationParams,
-    );
-    if (!phoneValidation.phoneNumber) {
-      setIsSubmitting(false);
-      setError('invalid_phone');
-      return;
-    }
-    const errorCode = await signInWithPhoneNumber(phoneValidation.phoneNumber);
-    if (!errorCode) {
-      setError(undefined);
-      navigation.navigate('Root_LoginConfirmCodeScreen', {
-        afterLogin,
-        phoneNumber: phoneValidation.phoneNumber,
-      });
-    } else {
-      setIsSubmitting(false);
-      setError(errorCode);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -115,49 +56,18 @@ export const Root_LoginPhoneInputScreen = ({
               {t(LoginTexts.phoneInput.description)}
             </ThemeText>
           </View>
-          <Section>
-            <PhoneInputSectionItem
-              label={t(LoginTexts.phoneInput.input.heading)}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              prefix={prefix}
-              onChangePrefix={setPrefix}
-              showClear={true}
-              keyboardType="number-pad"
-              placeholder={t(LoginTexts.phoneInput.input.placeholder)}
-              autoFocus={true}
-              textContentType="telephoneNumber"
-            />
-          </Section>
-          <View style={styles.buttonView}>
-            {isSubmitting && (
-              <ActivityIndicator
-                style={styles.activityIndicator}
-                size="large"
-                color={getStaticColor(themeName, themeColor).text}
-              />
-            )}
-
-            {error && !isSubmitting && (
-              <MessageInfoBox
-                style={styles.errorMessage}
-                type="error"
-                message={t(LoginTexts.phoneInput.errors[error])}
-              />
-            )}
-
-            {!isSubmitting && (
-              <Button
-                style={styles.submitButton}
-                interactiveColor="interactive_0"
-                onPress={onNext}
-                text={t(LoginTexts.phoneInput.mainButton)}
-                disabled={!isValidPhoneNumber(phoneNumber)}
-                rightIcon={{svg: ArrowRight}}
-                testID="sendCodeButton"
-              />
-            )}
-          </View>
+          <PhoneInput
+            submitButtonText={t(LoginTexts.phoneInput.mainButton)}
+            submitButtonTestId="sendCodeButton"
+            onNextPromise={signInWithPhoneNumber}
+            onNextAction={(number) => {
+              navigation.navigate('Root_LoginConfirmCodeScreen', {
+                afterLogin,
+                phoneNumber: number,
+              });
+            }}
+            rightIcon={ArrowRight}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

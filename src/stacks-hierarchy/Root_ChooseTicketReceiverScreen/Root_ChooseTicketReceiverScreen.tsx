@@ -1,22 +1,13 @@
-import {PhoneSignInErrorCode} from '@atb/auth';
-import {Button} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {PhoneInput} from '@atb/components/phone-input';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
-import {
-  LoginTexts,
-  PurchaseOverviewTexts,
-  useTranslation,
-} from '@atb/translations';
+import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
+import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {OnBehalfOfTexts} from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import phone from 'phone';
-import {useState} from 'react';
-import {ActivityIndicator, KeyboardAvoidingView, View} from 'react-native';
+import {KeyboardAvoidingView, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketReceiverScreen'>;
@@ -29,53 +20,8 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   const styles = useStyles();
 
   const {t} = useTranslation();
-  const {themeName} = useTheme();
 
-  const [prefix, setPrefix] = useState('47');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<PhoneSignInErrorCode>();
   const focusRef = useFocusOnLoad();
-
-  const phoneValidationParams = {
-    strictDetection: true,
-    validateMobilePrefix: false,
-  };
-
-  const isValidPhoneNumber = (number: string) => {
-    const validationResult = phone(
-      '+' + prefix + number,
-      phoneValidationParams,
-    );
-    return validationResult.isValid;
-  };
-
-  const onNext = async () => {
-    setIsSubmitting(true);
-    const phoneValidation = phone(
-      '+' + prefix + phoneNumber,
-      phoneValidationParams,
-    );
-    if (!phoneValidation.phoneNumber) {
-      setIsSubmitting(false);
-      setError('invalid_phone');
-      return;
-    }
-    
-    // TODO: replace promise with proper API call
-    const errorCode = await new Promise(r => setTimeout(r, 1000)); 
-    if (!errorCode) {
-      setError(undefined);
-      setIsSubmitting(false);
-      navigation.navigate('Root_PurchaseConfirmationScreen', {
-        ...params.rootPurchaseConfirmationScreenParams,
-        phoneNumber: `+${prefix}${phoneNumber}`,
-      });
-    } else {
-      setIsSubmitting(false);
-      // setError(errorCode);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -109,49 +55,18 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               {t(OnBehalfOfTexts.chooseReceiver.subtitle)}
             </ThemeText>
           </View>
-          <Section>
-            <PhoneInputSectionItem
-              label={t(LoginTexts.phoneInput.input.heading)}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              prefix={prefix}
-              onChangePrefix={setPrefix}
-              showClear={true}
-              keyboardType="number-pad"
-              placeholder={t(LoginTexts.phoneInput.input.placeholder)}
-              autoFocus={true}
-              textContentType="telephoneNumber"
-            />
-          </Section>
-
-          <View style={styles.buttonView}>
-            {isSubmitting && (
-              <ActivityIndicator
-                style={styles.activityIndicator}
-                size="large"
-                color={getStaticColor(themeName, themeColor).text}
-              />
-            )}
-
-            {error && !isSubmitting && (
-              <MessageBox
-                style={styles.errorMessage}
-                type="error"
-                message={t(LoginTexts.phoneInput.errors[error])}
-              />
-            )}
-
-            {!isSubmitting && (
-              <Button
-                style={styles.submitButton}
-                interactiveColor="interactive_0"
-                onPress={onNext}
-                text={t(PurchaseOverviewTexts.summary.button)}
-                disabled={!isValidPhoneNumber(phoneNumber)}
-                testID="toPaymentButton"
-              />
-            )}
-          </View>
+          <PhoneInput
+            submitButtonText={t(PurchaseOverviewTexts.summary.button)}
+            submitButtonTestId="toPaymentButton"
+            // TODO: this is just a placeholder, update when API is ready
+            onNextPromise={() => new Promise((r) => setTimeout(r, 1000))}
+            onNextAction={(number) => {
+              navigation.navigate('Root_PurchaseConfirmationScreen', {
+                ...params.rootPurchaseConfirmationScreenParams,
+                phoneNumber: number,
+              });
+            }}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
