@@ -8,7 +8,7 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useStopsDetailsData} from './hooks/use-stop-details-data';
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
@@ -75,7 +75,7 @@ export const PlaceScreenComponent = ({
     return (
       <View style={styles.container}>
         <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
-        <MessageBox
+        <MessageInfoBox
           style={styles.messageBox}
           type="error"
           message={t(DeparturesTexts.message.resultNotFound)}

@@ -49,5 +49,16 @@ export const useTextForLanguage = (
   return getTextForLanguage(texts, language);
 };
 
+export const getLanguageAndTextEnum = (language: Language) => {
+  switch (language) {
+    case Language.English:
+      return LanguageAndTextLanguagesEnum.eng;
+    case Language.Norwegian:
+      return LanguageAndTextLanguagesEnum.nob;
+    case Language.Nynorsk:
+      return LanguageAndTextLanguagesEnum.nno;
+  }
+};
+
 const getLanguage = (lv: LanguageAndTextType) =>
   'lang' in lv ? lv.lang : lv.language;

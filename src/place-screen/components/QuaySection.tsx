@@ -35,6 +35,7 @@ export type QuaySectionProps = {
     serviceDate: string,
     date?: string,
     fromQuayId?: string,
+    isCancelled?: boolean,
   ) => void;
   stopPlace: StopPlace;
   showOnlyFavorites: boolean;

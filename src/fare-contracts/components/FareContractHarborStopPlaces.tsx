@@ -5,7 +5,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {dictionary, FareContractTexts, useTranslation} from '@atb/translations';
 
 import {ArrowUpDown} from '@atb/assets/svg/mono-icons/navigation';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useHarbors} from '@atb/harbors';
 
 export function FareContractHarborStopPlaces({
@@ -27,7 +27,7 @@ export function FareContractHarborStopPlaces({
     return <ActivityIndicator style={styles.loading} />;
   if (harborsQuery.isError)
     return (
-      <MessageBox
+      <MessageInfoBox
         style={styles.errorMessage}
         type="warning"
         message={t(FareContractTexts.details.harbors.error)}

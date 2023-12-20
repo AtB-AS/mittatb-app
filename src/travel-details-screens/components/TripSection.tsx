@@ -6,7 +6,7 @@ import {
   screenReaderPause,
   ThemeText,
 } from '@atb/components/text';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
@@ -235,7 +235,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
         ))}
         {notices.map((notice) => (
           <TripRow key={notice.id} rowLabel={<ThemeIcon svg={Info} />}>
-            <MessageBox noStatusIcon={true} type="info" message={notice.text} />
+            <MessageInfoBox
+              noStatusIcon={true}
+              type="info"
+              message={notice.text}
+            />
           </TripRow>
         ))}
         {isFlexible && (
@@ -275,7 +279,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
           <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
-            <MessageBox
+            <MessageInfoBox
               type="warning"
               noStatusIcon={true}
               message={t(
@@ -351,7 +355,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             hasEnd={false}
           />
           <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
-            <MessageBox
+            <MessageInfoBox
               noStatusIcon={true}
               type="info"
               message={t(

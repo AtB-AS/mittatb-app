@@ -9,6 +9,7 @@ import {NotificationConfigUpdate} from './api';
 import {NotificationConfig} from './types';
 import {useConfig} from './use-config';
 import {useRegister} from './use-register';
+import {getLanguageAndTextEnum} from '@atb/translations/utils';
 
 type PermissionStatus =
   | 'granted'
@@ -48,7 +49,7 @@ export const NotificationContextProvider: React.FC = ({children}) => {
         setFcmToken(token);
         mutateRegister({
           token,
-          language,
+          language: getLanguageAndTextEnum(language),
           enabled,
         });
         return token;

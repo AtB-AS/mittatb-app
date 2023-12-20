@@ -41,7 +41,7 @@ import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -127,7 +127,7 @@ export const Trip: React.FC<TripProps> = ({
         </>
       )}
       {shortWaitTime && (
-        <MessageBox
+        <MessageInfoBox
           style={styles.messageBox}
           type="info"
           message={[
@@ -152,7 +152,7 @@ export const Trip: React.FC<TripProps> = ({
       {error && (
         <>
           <ScreenReaderAnnouncement message={translatedError(error, t)} />
-          <MessageBox
+          <MessageInfoBox
             style={styles.messageBox}
             type="warning"
             message={translatedError(error, t)}

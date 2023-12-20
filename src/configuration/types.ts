@@ -14,6 +14,7 @@ export type PreassignedFareProduct = {
   name: LanguageAndTextType;
   version: string;
   description?: LanguageAndTextType[];
+  productDescription?: LanguageAndTextType[];
   warningMessage?: LanguageAndTextType[];
   type: string;
   productAlias?: LanguageAndTextType[];

@@ -3,7 +3,7 @@ import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
@@ -148,7 +148,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
       <ScrollView style={css.innerContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
         {errorMessage && (
-          <MessageBox
+          <MessageInfoBox
             style={css.errorMessageBox}
             message={errorMessage}
             type="error"

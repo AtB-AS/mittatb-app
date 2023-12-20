@@ -8,14 +8,14 @@ import {Statuses} from '@atb-as/theme';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {dictionary, useTranslation} from '@atb/translations';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {MessageBoxProps} from '@atb/components/message-box';
+import {MessageInfoBoxProps} from '@atb/components/message-info-box';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
 type Props = SectionItemProps<{
   messageType: Statuses;
-  title?: MessageBoxProps['title'];
-  message: MessageBoxProps['message'];
-  onPressConfig?: MessageBoxProps['onPressConfig'];
+  title?: MessageInfoBoxProps['title'];
+  message: MessageInfoBoxProps['message'];
+  onPressConfig?: MessageInfoBoxProps['onPressConfig'];
 }>;
 
 export function MessageSectionItem({

@@ -59,6 +59,11 @@ type FareContractDetailsRouteParams = {
   orderId: string;
 };
 
+type TicketInformationScreenParams = {
+  fareProductTypeConfigType: string;
+  preassignedFareProductId: string | undefined;
+};
+
 type AfterLoginScreenType =
   | NextScreenParams<'Root_TabNavigatorStack'>
   | NextScreenParams<'Root_PurchaseOverviewScreen'>
@@ -131,6 +136,7 @@ export type RootStackParamList = {
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
   Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
+  Root_TicketInformationScreen: TicketInformationScreenParams;
 
   Root_LoginActiveFareContractWarningScreen: Root_LoginActiveFareContractWarningScreenParams;
   Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;

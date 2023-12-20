@@ -11,7 +11,7 @@ import {
   ProfileTexts,
   useTranslation,
 } from '@atb/translations';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Processing} from '@atb/components/loading';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useNotifications, isConfigEnabled} from '@atb/notifications';
@@ -146,7 +146,7 @@ export const Profile_NotificationsScreen = ({
           </Section>
 
           {permissionStatus !== 'error' && permissionStatus === 'denied' && (
-            <MessageBox
+            <MessageInfoBox
               type="info"
               title={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications
@@ -166,7 +166,7 @@ export const Profile_NotificationsScreen = ({
             />
           )}
           {permissionStatus === 'error' && (
-            <MessageBox
+            <MessageInfoBox
               type="error"
               title={t(
                 ProfileTexts.sections.settings.linkSectionItems.notifications

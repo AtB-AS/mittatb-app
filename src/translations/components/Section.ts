@@ -86,5 +86,8 @@ const SectionTexts = {
       'Alle linjevariasjonar',
     ),
   },
+  toggleInput: {
+    disabled: _('Deaktivert', 'Disabled', 'Deaktivert'),
+  },
 };
 export default SectionTexts;

@@ -56,6 +56,7 @@ import {
 import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
+import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -77,6 +78,8 @@ export const Profile_DebugInfoScreen = () => {
     deleteCollectedData,
     kettleInfo,
     isBeaconsSupported,
+    getPrivacyDashboardUrl,
+    getPrivacyTermsUrl,
   } = useBeaconsState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId} = useAuthState();
@@ -116,6 +119,8 @@ export const Profile_DebugInfoScreen = () => {
   const pushNotificationsEnabledDebugOverride =
     usePushNotificationsEnabledDebugOverride();
   const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
+  const ticketInformationEnabledDebugOverride =
+    useTicketInformationEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -386,6 +391,12 @@ export const Profile_DebugInfoScreen = () => {
               override={onBehalfOfEnabledDebugOverride}
             />
           </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable ticket information"
+              override={ticketInformationEnabledDebugOverride}
+            />
+          </GenericSectionItem>
         </Section>
 
         <Section withPadding withTopPadding>
@@ -645,8 +656,10 @@ export const Profile_DebugInfoScreen = () => {
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      kettleInfo?.privacyDashboardUrl &&
-                        Linking.openURL(kettleInfo.privacyDashboardUrl);
+                      const privacyDashboardUrl =
+                        await getPrivacyDashboardUrl();
+                      privacyDashboardUrl &&
+                        Linking.openURL(privacyDashboardUrl);
                     }}
                     style={style.button}
                     disabled={!kettleInfo?.isBeaconsOnboarded}
@@ -655,8 +668,8 @@ export const Profile_DebugInfoScreen = () => {
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      kettleInfo?.privacyTermsUrl &&
-                        Linking.openURL(kettleInfo.privacyTermsUrl);
+                      const privacyTermsUrl = await getPrivacyTermsUrl();
+                      privacyTermsUrl && Linking.openURL(privacyTermsUrl);
                     }}
                     style={style.button}
                     disabled={!kettleInfo?.isBeaconsOnboarded}

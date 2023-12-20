@@ -1,6 +1,9 @@
 import {useAccessibilityContext} from '@atb/AccessibilityContext';
 import {Button} from '@atb/components/button';
-import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
+import {
+  MessageInfoBox,
+  MessageInfoBoxProps,
+} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {sendReceipt} from '@atb/ticketing';
@@ -85,7 +88,7 @@ export function Root_ReceiptScreen({route}: Props) {
       />
       <View style={styles.content}>
         <View accessibilityLiveRegion="polite">
-          <MessageBox
+          <MessageInfoBox
             {...translateStateToMessage(state, t, email, reference)}
           />
         </View>
@@ -121,7 +124,7 @@ function translateStateToMessage(
   t: TranslateFunction,
   email: string,
   reference?: string,
-): Required<Pick<MessageBoxProps, 'type' | 'message'>> {
+): Required<Pick<MessageInfoBoxProps, 'type' | 'message'>> {
   switch (state) {
     case 'loading':
       return {
