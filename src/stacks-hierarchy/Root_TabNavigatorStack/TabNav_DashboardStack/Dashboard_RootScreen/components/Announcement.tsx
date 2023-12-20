@@ -53,45 +53,45 @@ export const Announcement = ({announcement, style}: Props) => {
   return (
     <Section style={style} key={announcement.id} testID="announcement">
       <GenericSectionItem style={styles.sectionItem}>
-        <View style={styles.container}>
-          <View
-            style={styles.content}
-            accessible={true}
-            accessibilityRole={announcement.actionButton ? 'button' : undefined}
-            accessibilityHint={
-              announcement.actionButton !== undefined
-                ? t(DashboardTexts.announcemens.button.accessibility)
-                : undefined
-            }
-          >
-            {announcement.summaryImage && (
-              <View style={styles.imageContainer}>
-                <Image
-                  height={50}
-                  width={50}
-                  source={{uri: announcement.summaryImage}}
-                />
-              </View>
-            )}
-            <View style={styles.textContainer}>
-              <ThemeText type="body__primary--bold">{summaryTitle}</ThemeText>
-              <ThemeText style={styles.summary}>
-                {getTextForLanguage(announcement.summary, language)}
-              </ThemeText>
+        <View
+          style={styles.content}
+          accessible={true}
+          accessibilityRole={announcement.actionButton ? 'button' : undefined}
+          accessibilityHint={
+            announcement.actionButton !== undefined
+              ? t(DashboardTexts.announcemens.button.accessibility)
+              : undefined
+          }
+        >
+          {announcement.summaryImage && (
+            <View style={styles.imageContainer}>
+              <Image
+                height={50}
+                width={50}
+                source={{uri: announcement.summaryImage}}
+              />
             </View>
+          )}
+          <View style={styles.textContainer}>
+            <View style={styles.summaryTitle}>
+              <ThemeText type="body__primary--bold">{summaryTitle}</ThemeText>
+              <PressableOpacity
+                style={styles.close}
+                role="button"
+                hitSlop={insets.all(theme.spacings.medium)}
+                accessibilityHint={t(
+                  DashboardTexts.announcemens.announcement.closeA11yHint,
+                )}
+                onPress={() => handleDismiss()}
+                testID="closeAnnouncement"
+              >
+                <ThemeIcon svg={Close} />
+              </PressableOpacity>
+            </View>
+            <ThemeText style={styles.summary}>
+              {getTextForLanguage(announcement.summary, language)}
+            </ThemeText>
           </View>
-          <PressableOpacity
-            style={styles.close}
-            role="button"
-            hitSlop={insets.all(theme.spacings.medium)}
-            accessibilityHint={t(
-              DashboardTexts.announcemens.announcement.closeA11yHint,
-            )}
-            onPress={() => handleDismiss()}
-            testID="closeAnnouncement"
-          >
-            <ThemeIcon svg={Close} />
-          </PressableOpacity>
         </View>
       </GenericSectionItem>
       {announcement.actionButton?.actionType && (
@@ -144,9 +144,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   sectionItem: {
     flexGrow: 1,
   },
-  container: {
-    flexDirection: 'row',
-  },
   content: {
     flex: 1,
     flexDirection: 'row',
@@ -161,8 +158,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   textContainer: {
     flex: 1,
   },
-  spacing: {
-    marginTop: theme.spacings.medium,
+  summaryTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   summary: {
     marginTop: theme.spacings.xSmall,
