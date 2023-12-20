@@ -1,4 +1,4 @@
-import {StyleProp, View, ViewStyle} from 'react-native';
+import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsState} from '@atb/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Announcement} from './Announcement';
@@ -37,11 +37,12 @@ export const Announcements = ({style: containerStyle}: Props) => {
   return (
     <View style={containerStyle} testID="announcements">
       <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
-      <ScrollView>
-        {filteredAnnouncements.map((a, i) => (
+      <ScrollView horizontal={filteredAnnouncements.length > 1}>
+        {filteredAnnouncements.map((a) => (
           <Announcement
+            key={a.id}
             announcement={a}
-            style={i < filteredAnnouncements.length - 1 && style.announcement}
+            style={filteredAnnouncements.length > 1 && style.announcement}
           />
         ))}
       </ScrollView>
@@ -49,10 +50,9 @@ export const Announcements = ({style: containerStyle}: Props) => {
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => {
-  return {
-    announcement: {
-      marginBottom: theme.spacings.medium,
-    },
-  };
-});
+const useStyle = StyleSheet.createThemeHook((theme) => ({
+  announcement: {
+    width: Dimensions.get('window').width * 0.9 - 2 * theme.spacings.medium,
+    marginRight: theme.spacings.medium,
+  },
+}));

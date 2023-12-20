@@ -52,7 +52,7 @@ export const Announcement = ({announcement, style}: Props) => {
 
   return (
     <Section style={style} key={announcement.id} testID="announcement">
-      <GenericSectionItem>
+      <GenericSectionItem style={styles.sectionItem}>
         <View style={styles.container}>
           <View
             style={styles.content}
@@ -141,6 +141,9 @@ export const Announcement = ({announcement, style}: Props) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  sectionItem: {
+    flexGrow: 1,
+  },
   container: {
     flexDirection: 'row',
   },
