@@ -267,7 +267,7 @@ const PurchaseOverviewTexts = {
       tipsInformation: _(
         'Generelt om billetter',
         'About tickets in general',
-        'Generelt om bilettar',
+        'Generelt om billettar',
       ),
     },
   },
