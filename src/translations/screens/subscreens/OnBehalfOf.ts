@@ -16,7 +16,7 @@ export const OnBehalfOfTexts = {
     errorText: _(
       'Ingen konto tilknyttet dette telefonnummeret',
       'No account is associated with this phone number',
-      'Ingen konto knytte til dette telefonnummeret',
+      'Ingen konto knytta til dette telefonnummeret',
     ),
   },
 };
