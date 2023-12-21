@@ -21,10 +21,8 @@ export const BenefitImage = ({
 }: BenefitImageProps): JSX.Element => {
   return (
     <View style={style}>
-      <>
-        <BenefitImageAsset formFactor={formFactor} />
-        {eligible && <BenefitEligibilityIndicator />}
-      </>
+      <BenefitImageAsset formFactor={formFactor} />
+      {eligible && <BenefitEligibilityIndicator />}
     </View>
   );
 };
