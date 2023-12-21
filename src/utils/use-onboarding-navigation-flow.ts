@@ -31,39 +31,17 @@ export type GoToScreenType = (screenName: any, params?: any) => void;
 export const useOnboardingNavigationFlow = () => {
   const navigation = useNavigation<RootNavigationProps>();
   const {enable_extended_onboarding} = useRemoteConfig();
-  const {
-    onboarded: loginOnboardingCompleted,
-    notificationPermissionOnboarded,
-    locationWhenInUsePermissionOnboarded,
-  } = useAppState();
+  const {onboarded: loginOnboardingCompleted} = useAppState();
 
   const shouldShowTravelTokenOnboarding = useShouldShowTravelTokenOnboarding();
 
-  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
-  const shouldShowLocationOnboarding =
-    !locationWhenInUsePermissionOnboarded &&
-    locationWhenInUsePermissionStatus === 'denied';
+  const shouldShowLocationOnboarding = useShouldShowLocationOnboarding();
 
   const shouldShowShareTravelHabitsScreen =
     useShouldShowShareTravelHabitsScreen();
 
-  const {serverNow} = useTimeContextState();
-
-  const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContract(
-    fareContracts,
-    serverNow,
-  );
-
-  const pushNotificationsEnabled = usePushNotificationsEnabled();
-  const {permissionStatus: pushNotificationPermissionStatus} =
-    useNotifications();
-
   const shouldShowNotificationPermissionScreen =
-    !notificationPermissionOnboarded &&
-    pushNotificationsEnabled &&
-    validFareContracts.length > 0 &&
-    pushNotificationPermissionStatus !== 'granted';
+    useShouldShowNotificationPermissionScreen();
 
   const getNextOnboardingScreen = useCallback(
     (comingFromScreenName?: keyof RootStackParamList): ScreenProps => {
@@ -179,5 +157,37 @@ const useShouldShowTravelTokenOnboarding = () => {
     authenticationType === 'phone' &&
     ((!mobileTokenOnboarded && !disable_travelcard) ||
       (!mobileTokenWithoutTravelcardOnboarded && disable_travelcard))
+  );
+};
+
+const useShouldShowLocationOnboarding = () => {
+  const {locationWhenInUsePermissionOnboarded} = useAppState();
+  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
+
+  return (
+    !locationWhenInUsePermissionOnboarded &&
+    locationWhenInUsePermissionStatus === 'denied'
+  );
+};
+
+const useShouldShowNotificationPermissionScreen = () => {
+  const {notificationPermissionOnboarded} = useAppState();
+  const {serverNow} = useTimeContextState();
+
+  const {fareContracts} = useTicketingState();
+  const validFareContracts = filterValidRightNowFareContract(
+    fareContracts,
+    serverNow,
+  );
+
+  const pushNotificationsEnabled = usePushNotificationsEnabled();
+  const {permissionStatus: pushNotificationPermissionStatus} =
+    useNotifications();
+
+  return (
+    !notificationPermissionOnboarded &&
+    pushNotificationsEnabled &&
+    validFareContracts.length > 0 &&
+    pushNotificationPermissionStatus !== 'granted'
   );
 };
