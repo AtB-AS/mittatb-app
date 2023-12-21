@@ -20,13 +20,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {
-  AddEditFavoriteTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -196,22 +191,10 @@ export const EmojiSheet = forwardRef<ScrollView, Props>(
     };
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          title={t(AddEditFavoriteTexts.emojiSheet.title)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          }}
-          rightButton={{
-            type: 'custom',
-            text: t(AddEditFavoriteTexts.emojiSheet.rightButton),
-            onPress: () => onClick(null),
-          }}
-          color="background_1"
-          setFocusOnLoad={true}
-        />
+      <BottomSheetContainer
+        closeBottomSheet={close}
+        bottomSheetTitle={t(AddEditFavoriteTexts.emojiSheet.title)}
+      >
         <ScrollView ref={focusRef}>
           {CATEGORIES.map((category) => (
             <EmojiCategory
