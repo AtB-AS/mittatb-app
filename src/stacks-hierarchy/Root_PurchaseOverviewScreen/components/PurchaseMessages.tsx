@@ -1,7 +1,8 @@
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {useOtherDeviceIsInspectableWarning} from '../../../fare-contracts/utils';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 export type PurchaseWarningsProps = {
   requiresTokenOnMobile: boolean;
@@ -17,7 +18,7 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
   return (
     <>
       {inspectableTokenWarningText && (
-        <MessageBox
+        <MessageInfoBox
           type="warning"
           message={inspectableTokenWarningText}
           isMarkdown={true}
@@ -25,11 +26,10 @@ export const PurchaseMessages: React.FC<PurchaseWarningsProps> = ({
       )}
 
       {requiresTokenOnMobile && (
-        <MessageBox
+        <MessageInfoText
           type="info"
           message={t(PurchaseOverviewTexts.summary.messageRequiresMobile)}
           isMarkdown={true}
-          subtle={true}
         />
       )}
     </>

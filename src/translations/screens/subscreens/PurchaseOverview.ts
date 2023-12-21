@@ -254,7 +254,18 @@ const PurchaseOverviewTexts = {
       'The person you buy a ticket for, must be logged in to the AtB app to get the ticket.',
       'Den du kjøper billett til, må vere logga inn i AtB-appen for å få billetten.',
     ),
-  }
+  },
+  ticketInformation: {
+    button: _('Om billetten', 'About the ticket', 'Om billetten'),
+    informationDetails: {
+      title: _('Om billetten', 'About the ticket', 'Om billetten'),
+      descriptionHeading: _(
+        'Billettbeskrivelse',
+        'Ticket description',
+        'Billettbeskriving',
+      ),
+    },
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {

@@ -4,14 +4,14 @@ import {
   NotificationConfigType,
   NotificationConfigValue,
 } from '../types';
-import {Preference_Language} from '@atb/preferences';
+import {LanguageAndTextLanguagesEnum} from '@atb/translations/types';
 
 export const registerForPushNotifications = ({
   token,
   language,
 }: {
   token: string;
-  language: Preference_Language;
+  language: LanguageAndTextLanguagesEnum;
 }) =>
   client
     .post(

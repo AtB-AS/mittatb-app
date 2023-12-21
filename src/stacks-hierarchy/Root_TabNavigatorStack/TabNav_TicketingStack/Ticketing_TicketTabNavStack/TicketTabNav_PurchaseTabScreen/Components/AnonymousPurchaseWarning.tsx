@@ -1,4 +1,4 @@
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import AnonymousPurchases from '@atb/translations/screens/subscreens/AnonymousPurchases';
@@ -10,7 +10,7 @@ export const AnonymousPurchaseWarning = ({onPress}: {onPress: () => void}) => {
   const styles = useStyle();
   return (
     <View style={styles.warning}>
-      <MessageBox
+      <MessageInfoBox
         title={t(AnonymousPurchases.warning.title)}
         message={t(AnonymousPurchases.warning.message)}
         onPressConfig={{

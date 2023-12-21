@@ -1,4 +1,4 @@
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {useFirestoreConfiguration, TariffZone} from '@atb/configuration';
@@ -150,7 +150,7 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
       >
         {errorMessage && (
           <View style={styles.withMargin}>
-            <MessageBox type="warning" message={errorMessage} />
+            <MessageInfoBox type="warning" message={errorMessage} />
           </View>
         )}
         {showActivityIndicator && <ActivityIndicator />}
@@ -167,7 +167,7 @@ export const Root_PurchaseTariffZonesSearchByTextScreen: React.FC<Props> = ({
           />
         )}
         {showEmptyResultText && (
-          <MessageBox
+          <MessageInfoBox
             type="info"
             message={t(TariffZoneSearchTexts.messages.emptyResult)}
           />

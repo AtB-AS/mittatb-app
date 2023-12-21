@@ -6,7 +6,7 @@ import React from 'react';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {dictionary, useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {Button} from '@atb/components/button';
 import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
@@ -51,7 +51,7 @@ export function TravelTokenBox({
     (alwaysShowErrors || deviceInspectionStatus === 'not-inspectable');
   if (showTokensNotWorkingError) {
     return (
-      <MessageBox
+      <MessageInfoBox
         type="warning"
         title={t(TravelTokenBoxTexts.errorMessages.tokensNotLoadedTitle)}
         message={t(TravelTokenBoxTexts.errorMessages.tokensNotLoaded)}
@@ -71,7 +71,7 @@ export function TravelTokenBox({
   const inspectableToken = tokens.find((t) => t.isInspectable);
   if (!inspectableToken)
     return (
-      <MessageBox
+      <MessageInfoBox
         type="warning"
         isMarkdown={true}
         title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}

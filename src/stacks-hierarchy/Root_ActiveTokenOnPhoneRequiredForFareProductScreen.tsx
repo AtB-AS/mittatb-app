@@ -13,7 +13,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Token, useMobileTokenContextState} from '@atb/mobile-token';
 import {RadioGroupSection, Section} from '@atb/components/sections';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import MobileTokenOnboarding from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Ticketing from '@atb/translations/screens/Ticketing';
@@ -111,7 +111,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
             />
           </Section>
         ) : (
-          <MessageBox
+          <MessageInfoBox
             type="warning"
             message={t(TravelTokenTexts.toggleToken.noMobileToken)}
             style={styles.errorMessageBox}
@@ -120,7 +120,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         )}
 
         {saveState.error && (
-          <MessageBox
+          <MessageInfoBox
             type="error"
             message={t(TravelTokenTexts.toggleToken.errorMessage)}
             style={styles.errorMessageBox}

@@ -17,14 +17,13 @@ import {
 } from './permissions';
 import {useBeaconsMessages} from './use-beacons-messages';
 import {storage} from '@atb/storage';
+import {parseBoolean} from '@atb/utils/parse-boolean';
 
 type KettleInfo = {
   isKettleStarted: boolean;
   kettleIdentifier: string | null;
   kettleConsents: Record<string, boolean> | null;
   isBeaconsOnboarded: boolean;
-  privacyDashboardUrl?: string;
-  privacyTermsUrl?: string;
 };
 
 type BeaconsContextState = {
@@ -33,11 +32,19 @@ type BeaconsContextState = {
   onboardForBeacons: () => Promise<boolean>;
   revokeBeacons: () => Promise<void>;
   deleteCollectedData: () => Promise<void>;
+  getPrivacyDashboardUrl: () => Promise<string>;
+  getPrivacyTermsUrl: () => Promise<string>;
 };
 
 const defaultState = {
   isBeaconsSupported: false,
   kettleInfo: undefined,
+  getPrivacyDashboardUrl: () => {
+    return new Promise<string>(() => {});
+  },
+  getPrivacyTermsUrl: () => {
+    return new Promise<string>(() => {});
+  },
   onboardForBeacons: () => {
     return new Promise<boolean>(() => {
       return false;
@@ -67,6 +74,29 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const updateKettleInfo = () => getKettleInfo().then(setKettleInfo);
 
+  const initializeKettleSDK = useCallback(async () => {
+    const permissions = await allowedPermissionForKettle();
+    if (!isInitializedRef.current) {
+      if (permissions.length > 0) {
+        await NativeModules.KettleSDKExtension.initializeKettleSDK();
+        isInitializedRef.current = true;
+      }
+    }
+    return permissions;
+  }, []);
+
+  const getPrivacyDashboardUrl = useCallback(async () => {
+    if (!isInitializedRef.current) return;
+    const url = await Kettle.getPrivacyDashboardUrl();
+    return url;
+  }, []);
+
+  const getPrivacyTermsUrl = useCallback(async () => {
+    if (!isInitializedRef.current) return;
+    const url = await Kettle.getPrivacyTermsUrl();
+    return url;
+  }, []);
+
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
 
@@ -80,13 +110,14 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
     if (granted) {
       // Initialize beacons SDK after consent is granted
+      await initializeKettleSDK();
       Kettle.grant(BEACONS_CONSENTS);
       await storage.set(storeKey.beaconsConsent, 'true');
       await updateKettleInfo();
     }
 
     return granted;
-  }, [isBeaconsSupported, rationaleMessages]);
+  }, [isBeaconsSupported, rationaleMessages, initializeKettleSDK]);
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
@@ -106,27 +137,22 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     }
   }, [isBeaconsSupported]);
 
-  const isOnboardedButNotStarted =
-    !kettleInfo?.isKettleStarted && kettleInfo?.isBeaconsOnboarded;
   useEffect(() => {
     (async function () {
       if (!isBeaconsSupported) return;
+      const consentGranted =
+        parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
-      const permissions = await allowedPermissionForKettle();
-      if (!isInitializedRef.current) {
-        if (permissions.length > 0) {
-          await NativeModules.KettleSDKExtension.initializeKettleSDK();
-          isInitializedRef.current = true;
-        }
-      }
-
-      if (isInitializedRef.current && isOnboardedButNotStarted) {
+      if (consentGranted) {
+        const permissions = await initializeKettleSDK();
         Kettle.start(permissions);
       }
 
-      await updateKettleInfo();
+      if (isInitializedRef.current) {
+        await updateKettleInfo();
+      }
     })();
-  }, [isBeaconsSupported, isOnboardedButNotStarted]);
+  }, [isBeaconsSupported, initializeKettleSDK]);
 
   return (
     <BeaconsContext.Provider
@@ -136,6 +162,8 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         onboardForBeacons,
         revokeBeacons,
         deleteCollectedData,
+        getPrivacyDashboardUrl,
+        getPrivacyTermsUrl,
       }}
     >
       {children}
@@ -147,16 +175,14 @@ const getKettleInfo = async (): Promise<KettleInfo> => {
   const status = await Kettle.isStarted();
   const identifier = await Kettle.getIdentifier();
   const consents = await Kettle.getGrantedConsents();
-  const privacyDashboardUrl = await Kettle.getPrivacyDashboardUrl();
-  const privacyTermsUrl = await Kettle.getPrivacyTermsUrl();
+  const consentGranted =
+    parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
   return {
     isKettleStarted: status,
     kettleIdentifier: identifier,
     kettleConsents: consents,
-    isBeaconsOnboarded: Object.keys(consents).length > 0,
-    privacyDashboardUrl,
-    privacyTermsUrl,
+    isBeaconsOnboarded: consentGranted,
   };
 };
 

@@ -4,7 +4,7 @@ import {SvgXml} from 'react-native-svg';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {Button} from '@atb/components/button';
-import {MessageBox, OnPressConfig} from '@atb/components/message-box';
+import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {ParkingViolationType} from '@atb/api/types/mobility';
@@ -128,7 +128,7 @@ const IssueMessageBox = () => {
   }
   return (
     <View style={style.issueMessageBoxContainer}>
-      <MessageBox
+      <MessageInfoBox
         title={t(ParkingViolationTexts.issue[titleAndMessageTexts].title)}
         message={t(ParkingViolationTexts.issue[titleAndMessageTexts].message)}
         type={type}
