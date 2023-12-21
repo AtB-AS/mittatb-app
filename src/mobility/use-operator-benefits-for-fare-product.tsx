@@ -12,7 +12,7 @@ export type FormFactorTicketDescriptionPair = {
 };
 
 export const useOperatorBenefitsForFareProduct = (
-  productId: PreassignedFareProductId,
+  productId: PreassignedFareProductId | undefined,
 ) => {
   const {data, isLoading, isError} = useFareProductBenefitsQuery(productId);
   const {mobilityOperators} = useOperators();
