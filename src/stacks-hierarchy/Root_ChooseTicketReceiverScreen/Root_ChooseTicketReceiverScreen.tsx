@@ -59,10 +59,10 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
             submitButtonText={t(PurchaseOverviewTexts.summary.button)}
             submitButtonTestId="toPaymentButton"
             // TODO: this is just a placeholder, update when API is ready
-            onNextPromise={() => new Promise((r) => setTimeout(r, 1000))}
-            onNextAction={(number) => {
+            onSubmitPromise={() => new Promise((r) => setTimeout(r, 1000))}
+            onSubmitAction={(number) => {
               navigation.navigate('Root_PurchaseConfirmationScreen', {
-                ...params.rootPurchaseConfirmationScreenParams,
+                ...params,
                 phoneNumber: number,
               });
             }}

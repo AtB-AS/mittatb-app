@@ -1,5 +1,3 @@
 import {Root_PurchaseConfirmationScreenParams} from '../Root_PurchaseConfirmationScreen';
 
-export type Root_ChooseTicketReceiverScreenParams = {
-  rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams;
-};
+export type Root_ChooseTicketReceiverScreenParams = Omit<Root_PurchaseConfirmationScreenParams, 'phoneNumber'>;

@@ -59,8 +59,8 @@ export const Root_LoginPhoneInputScreen = ({
           <PhoneInput
             submitButtonText={t(LoginTexts.phoneInput.mainButton)}
             submitButtonTestId="sendCodeButton"
-            onNextPromise={signInWithPhoneNumber}
-            onNextAction={(number) => {
+            onSubmitPromise={signInWithPhoneNumber}
+            onSubmitAction={(number) => {
               navigation.navigate('Root_LoginConfirmCodeScreen', {
                 afterLogin,
                 phoneNumber: number,

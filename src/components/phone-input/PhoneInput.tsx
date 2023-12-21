@@ -14,11 +14,11 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   submitButtonText: string;
   submitButtonTestId: string;
-  onNextPromise: (
+  onSubmitPromise: (
     number: string,
     forceResend?: boolean,
   ) => Promise<PhoneSignInErrorCode | undefined>;
-  onNextAction: (number: string) => void;
+  onSubmitAction: (number: string) => void;
   rightIcon?: (props: SvgProps) => JSX.Element;
 };
 
@@ -28,8 +28,8 @@ export const PhoneInput = ({
   style,
   submitButtonText,
   submitButtonTestId,
-  onNextPromise,
-  onNextAction,
+  onSubmitPromise,
+  onSubmitAction,
   rightIcon,
 }: Props) => {
   const styles = useStyles();
@@ -62,11 +62,11 @@ export const PhoneInput = ({
       return;
     }
 
-    const errorCode = await onNextPromise(phoneValidation.phoneNumber);
+    const errorCode = await onSubmitPromise(phoneValidation.phoneNumber);
     if (!errorCode) {
       setError(undefined);
       setIsSubmitting(false);
-      onNextAction(phoneValidation.phoneNumber);
+      onSubmitAction(phoneValidation.phoneNumber);
     } else {
       setIsSubmitting(false);
       setError(errorCode);
