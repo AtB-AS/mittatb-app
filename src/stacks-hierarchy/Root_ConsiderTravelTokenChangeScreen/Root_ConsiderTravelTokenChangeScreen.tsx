@@ -15,6 +15,7 @@ import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
 import {OnboardingFrame} from '@atb/onboarding-frame';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {LoadingScreen} from '@atb/loading-screen';
 
 type Props = RootStackScreenProps<'Root_ConsiderTravelTokenChangeScreen'>;
 
@@ -35,6 +36,8 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
 
   const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+
+  if (mobileTokenStatus === 'loading') return <LoadingScreen />;
 
   if (mobileTokenStatus !== 'success') return NoTokenView;
 
