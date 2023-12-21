@@ -94,6 +94,12 @@ export const isInteractiveColor = (
 ): color is InteractiveColor => {
   return !!color && color in themes.light.interactive;
 };
+export const getInteractiveColor = (
+  mode: Mode,
+  interactiveColor: InteractiveColor,
+) => {
+  return themes[mode].interactive[interactiveColor];
+};
 
 /**
  * Static colors object structure:

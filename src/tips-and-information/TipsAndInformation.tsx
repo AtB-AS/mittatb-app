@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
+import {getTextForLanguage, Language, useTranslation} from '@atb/translations';
 import {ThemeText} from '@atb/components/text';
 import firestore from '@react-native-firebase/firestore';
 import {TipRaw, TipType} from '@atb/tips-and-information/types';
 import {mapToTips} from '@atb/tips-and-information/converters';
 import {ExpandableSectionItem, Section} from '@atb/components/sections';
-import {sortTipsByTitle} from '@atb/tips-and-information/sort-tips-by-title';
 
 export const TipsAndInformation = () => {
   const {language} = useTranslation();
@@ -18,25 +17,19 @@ export const TipsAndInformation = () => {
       firestore()
         .collection<TipRaw>('tipsAndInformation')
         .onSnapshot(
-          async (snapshot) => {
-            const newTips = mapToTips(snapshot.docs);
-            const sortedTips = sortTipsByTitle(newTips, language);
-            setTips(sortedTips);
+          (snapshot) => {
+            setTips(mapToTips(snapshot.docs));
           },
           (err) => {
             console.warn(err);
           },
         ),
-    /*
-    Resubscribing on language change? Doh. Note that we shouldn't have
-    translation logic in firestore subscription handlers.
-     */
-    [language],
+    [],
   );
 
   return (
     <Section>
-      {tips.map((tip, index) => {
+      {tips.sort(byTitle(language)).map((tip, index) => {
         const title = getTextForLanguage(tip.title, language);
         const emoji = tip.emoji;
         const description = getTextForLanguage(tip.description, language);
@@ -45,7 +38,7 @@ export const TipsAndInformation = () => {
 
         return (
           <ExpandableSectionItem
-            key={index}
+            key={title + description}
             textType="body__primary--bold"
             text={emoji + ' ' + title}
             showIconText={false}
@@ -67,4 +60,18 @@ export const TipsAndInformation = () => {
       })}
     </Section>
   );
+};
+
+const byTitle = (language: Language) => (a: TipType, b: TipType) => {
+  const titleA = getTextForLanguage(a.title, language);
+  const titleB = getTextForLanguage(b.title, language);
+  if (titleA === undefined && titleB === undefined) {
+    return 0;
+  }
+
+  if (titleA === undefined || titleB === undefined) {
+    return titleA === undefined ? -1 : 1;
+  }
+
+  return titleA.localeCompare(titleB);
 };

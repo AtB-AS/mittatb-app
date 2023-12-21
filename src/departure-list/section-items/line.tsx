@@ -1,7 +1,4 @@
-import {
-  DepartureGroup,
-  DepartureTime,
-} from '@atb/api/departures/types';
+import {DepartureGroup, DepartureTime} from '@atb/api/departures/types';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {Button} from '@atb/components/button';
 import {
@@ -236,11 +233,12 @@ function DepartureTimeItem({
     notices,
     departure.cancellation,
   );
-  const leftIcon = departure.realtime
-    ? themeName === 'dark'
-      ? RealtimeDark
-      : RealtimeLight
-    : undefined;
+  const leftIcon =
+    !departure.cancellation && departure.realtime
+      ? themeName === 'dark'
+        ? RealtimeDark
+        : RealtimeLight
+      : undefined;
 
   if (!isValidDeparture(departure)) {
     return null;
@@ -315,6 +313,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
   strikethrough: {
     textDecorationLine: 'line-through',
+    fontWeight: 'normal',
   },
   departure: {
     backgroundColor: theme.static.background.background_1.background,

@@ -120,7 +120,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
               <ToggleSectionItem
                 key={option.id}
                 text={text}
-                leftIcon={
+                leftImage={
                   getTransportModeSvg(
                     option.icon?.transportMode,
                     option.icon?.transportSubMode,

@@ -46,7 +46,13 @@ export function Toggle({
         false: theme.static.background.background_3.background,
       }}
       thumbColor="white"
-      style={Platform.OS === 'android' ? styles.android : styles.ios}
+      style={[
+        Platform.OS === 'android' ? styles.android : styles.ios,
+
+        // The disabled state is not shown visually on Android by default, so we
+        // need to style it manually.
+        Platform.OS === 'android' && props.disabled && styles.androidDisabled,
+      ]}
       {...props}
       testID={props.testID}
     />
@@ -61,6 +67,9 @@ const useStyles = StyleSheet.createThemeHook(() => {
   return {
     android: {
       transform: [{scale}],
+    },
+    androidDisabled: {
+      opacity: 0.5,
     },
     ios: {
       transform: [{scale: 0.7 * scale}],

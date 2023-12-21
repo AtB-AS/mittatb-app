@@ -1,6 +1,6 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgReorder from '@atb/assets/svg/mono-icons/actions/Reorder';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StoredLocationFavorite, useFavorites} from '@atb/favorites';
@@ -41,7 +41,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
 
       <ScrollView>
         {!items?.length && (
-          <MessageBox
+          <MessageInfoBox
             style={style.empty}
             message={t(FavoriteListTexts.noFavorites)}
             type="info"

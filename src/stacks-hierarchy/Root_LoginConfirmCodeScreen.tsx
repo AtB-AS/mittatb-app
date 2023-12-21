@@ -13,7 +13,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {Section, TextInputSectionItem} from '@atb/components/sections';
 import {loginConfirmCodeInputId} from '@atb/test-ids';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {StyleSheet, useTheme} from '@atb/theme';
@@ -128,7 +128,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
             )}
 
             {error && !isLoading && (
-              <MessageBox
+              <MessageInfoBox
                 style={styles.messageBox}
                 type="error"
                 message={t(LoginTexts.confirmCode.errors[error])}

@@ -31,7 +31,7 @@ export function FullScreenView(props: Props) {
   const {themeName} = useTheme();
   const themeColor = props.headerProps.color ?? 'background_accent_0';
   const backgroundColor = getStaticColor(themeName, themeColor).background;
-  const [opacity, setOpacity] = useState(0);
+  const [opacity, setOpacity] = useState(props.parallaxContent ? 0 : 1);
 
   const handleScroll = (scrollPercentage: number) => {
     if (scrollPercentage < 50) {

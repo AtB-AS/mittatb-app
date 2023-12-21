@@ -9,11 +9,10 @@ import {
 import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
-import {SectionHeading} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SectionHeading';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
+import {ContentHeading} from '@atb/components/content-heading';
+import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-and-information-enabled';
-
-import React from 'react';
 import {TipsAndInformation} from '@atb/tips-and-information';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {BenefitImage} from '@atb/mobility/components/BenefitImage';
@@ -23,13 +22,19 @@ type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 export const Root_TicketInformationScreen = (props: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
+  const {preassignedFareProducts, fareProductTypeConfigs} =
+    useFirestoreConfiguration();
   const showTipsAndInformation = useTipsAndInformationEnabled();
   const {isLoading, benefits} = useOperatorBenefitsForFareProduct(
-    props.route.params.preassignedFareProduct.id,
+    props.route.params.preassignedFareProductId,
   );
 
-  const fareProductTypeConfig = props.route.params.fareProductTypeConfig;
-  const preassignedFareProduct = props.route.params.preassignedFareProduct;
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (f) => f.type === props.route.params.fareProductTypeConfigType,
+  );
+  const preassignedFareProduct = preassignedFareProducts.find(
+    (p) => p.id === props.route.params.preassignedFareProductId,
+  );
 
   return (
     <FullScreenView
@@ -39,27 +44,31 @@ export const Root_TicketInformationScreen = (props: Props) => {
         ),
         leftButton: {type: 'close'},
       }}
+      contentColor="background_accent_0"
     >
       <ScrollView style={styles.container}>
-        {(preassignedFareProduct.productDescription || benefits.length > 0) && (
+        {preassignedFareProduct?.productDescription && (
           <>
-            <SectionHeading>
-              {t(
+            <ContentHeading
+              color="background_accent_0"
+              text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .descriptionHeading,
               )}
-            </SectionHeading>
+            />
             <Section>
               <GenericSectionItem>
-                <View style={styles.descriptionHeading}>
-                  <TransportationIconBoxList
-                    iconSize="small"
-                    modes={fareProductTypeConfig.transportModes}
-                  />
-                  <ThemeText type="body__primary--bold">
-                    {getTextForLanguage(fareProductTypeConfig.name, language)}
-                  </ThemeText>
-                </View>
+                {fareProductTypeConfig && (
+                  <View style={styles.descriptionHeading}>
+                    <TransportationIconBoxList
+                      iconSize="small"
+                      modes={fareProductTypeConfig?.transportModes}
+                    />
+                    <ThemeText type="body__primary--bold">
+                      {getTextForLanguage(fareProductTypeConfig.name, language)}
+                    </ThemeText>
+                  </View>
+                )}
                 <ThemeText type="body__secondary" isMarkdown={true}>
                   {getTextForLanguage(
                     preassignedFareProduct.productDescription,
@@ -88,15 +97,15 @@ export const Root_TicketInformationScreen = (props: Props) => {
             </Section>
           </>
         )}
-
         {showTipsAndInformation && (
           <View style={styles.tipsAndInformation}>
-            <SectionHeading>
-              {t(
+            <ContentHeading
+              color="background_accent_0"
+              text={t(
                 PurchaseOverviewTexts.ticketInformation.informationDetails
                   .tipsInformation,
               )}
-            </SectionHeading>
+            />
             <TipsAndInformation />
           </View>
         )}
@@ -107,7 +116,6 @@ export const Root_TicketInformationScreen = (props: Props) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_accent_0.background,
     padding: theme.spacings.medium,
   },
   descriptionHeading: {

@@ -78,6 +78,8 @@ export const Profile_DebugInfoScreen = () => {
     deleteCollectedData,
     kettleInfo,
     isBeaconsSupported,
+    getPrivacyDashboardUrl,
+    getPrivacyTermsUrl,
   } = useBeaconsState();
   const {resetDismissedGlobalMessages} = useGlobalMessagesState();
   const {userId} = useAuthState();
@@ -472,7 +474,11 @@ export const Profile_DebugInfoScreen = () => {
                 />
                 <Button
                   style={style.button}
-                  onPress={registerNotifications}
+                  onPress={() =>
+                    registerNotifications(
+                      pushNotificationPermissionStatus === 'granted',
+                    )
+                  }
                   text="Register"
                 />
                 <ThemeText>FCM Token: {fcmToken}</ThemeText>
@@ -650,8 +656,10 @@ export const Profile_DebugInfoScreen = () => {
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      kettleInfo?.privacyDashboardUrl &&
-                        Linking.openURL(kettleInfo.privacyDashboardUrl);
+                      const privacyDashboardUrl =
+                        await getPrivacyDashboardUrl();
+                      privacyDashboardUrl &&
+                        Linking.openURL(privacyDashboardUrl);
                     }}
                     style={style.button}
                     disabled={!kettleInfo?.isBeaconsOnboarded}
@@ -660,8 +668,8 @@ export const Profile_DebugInfoScreen = () => {
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      kettleInfo?.privacyTermsUrl &&
-                        Linking.openURL(kettleInfo.privacyTermsUrl);
+                      const privacyTermsUrl = await getPrivacyTermsUrl();
+                      privacyTermsUrl && Linking.openURL(privacyTermsUrl);
                     }}
                     style={style.button}
                     disabled={!kettleInfo?.isBeaconsOnboarded}

@@ -60,8 +60,8 @@ type FareContractDetailsRouteParams = {
 };
 
 type TicketInformationScreenParams = {
-  fareProductTypeConfig: FareProductTypeConfig;
-  preassignedFareProduct: PreassignedFareProduct;
+  fareProductTypeConfigType: string;
+  preassignedFareProductId: string | undefined;
 };
 
 type AfterLoginScreenType =

@@ -30,7 +30,11 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
         leftButton={{type: 'back'}}
       />
       <ScrollView style={styles.scrollView}>
-        <TravelTokenBox showIfThisDevice={true} alwaysShowErrors={true} />
+        <TravelTokenBox
+          showIfThisDevice={true}
+          alwaysShowErrors={true}
+          interactiveColor="interactive_0"
+        />
         <ChangeTokenAction
           onChange={() =>
             navigation.navigate('Profile_SelectTravelTokenScreen')

@@ -81,7 +81,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
       if (!TextUtils.isEmpty(bugsnagKey)) {
           Configuration config = new Configuration(bugsnagKey);
           String bugsnagReleaseStage = bundle.getString("com.bugsnag.android.RELEASE_STAGE");
-          if (!TextUtils.isEmpty(bugsnagKey)) {
+          if (!TextUtils.isEmpty(bugsnagReleaseStage)) {
               config.setReleaseStage(bugsnagReleaseStage);
           }
           Bugsnag.start(this, config);
