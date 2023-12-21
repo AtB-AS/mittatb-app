@@ -34,7 +34,7 @@ export function useOfferDefaults(
     .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
   const defaultPreassignedFareProduct =
-    preassignedFareProduct ?? selectableProducts[0];
+    preassignedFareProduct ?? selectableProducts[1];
 
   // Get default TariffZones
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
