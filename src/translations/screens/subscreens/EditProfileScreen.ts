@@ -47,8 +47,8 @@ export const EditProfileTexts = {
       ),
       disabledWithRemoteConfig: _(
         'Appen støtter foreløpig ikke lagring av e-postadresse.',
-        'The app currently does not support saving your email address',
-        'Appen stettar førebels ikkje lagring av e-postadresse.',
+        'The app currently does not support saving your e-mail address.',
+        'Appen støttar førebels ikkje lagring av e-postadresse.',
       ),
     },
     error: _(
