@@ -1,16 +1,22 @@
-import {TouchableOpacity, View} from 'react-native';
-import React from 'react';
-import {StyleSheet} from '@atb/theme';
+import {LayoutChangeEvent, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
 
 type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
   closeBottomSheet?: () => void;
 };
+
+// Define the interface for the size
+interface Size {
+  width: number;
+  height: number;
+}
 
 export const BottomSheetHeader = ({
   title,
@@ -18,6 +24,8 @@ export const BottomSheetHeader = ({
 }: BottomSheetHeaderWithoutNavigationProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
+
+  const {theme} = useTheme();
 
   const {close: closeBottomSheetDefault, onOpenFocusRef} = useBottomSheet();
 
@@ -33,10 +41,19 @@ export const BottomSheetHeader = ({
     left: hitSlopSize,
     right: hitSlopSize,
   };
+  const themeColor = 'interactive_3';
 
+  const {background: backgroundColor, text: textColor} =
+    theme.interactive[themeColor]['active'];
+
+  const [buttonSize, setButtonSize] = useState<Size>({width: 0, height: 0});
+  const onButtonLayout = (event: LayoutChangeEvent) => {
+    const {width, height} = event.nativeEvent.layout;
+    setButtonSize({width, height});
+  };
   return (
     <View style={styles.container}>
-      <View style={styles.placeholderButton} />
+      <View style={{width: buttonSize.width, height: buttonSize.height}} />
       <View
         accessibilityLabel={title}
         accessible={true}
@@ -51,25 +68,21 @@ export const BottomSheetHeader = ({
       </View>
       <TouchableOpacity
         onPress={handleClose}
+        onLayout={onButtonLayout}
         hitSlop={hitSlop}
-        style={styles.button}
-        activeOpacity={0.7}
+        style={[styles.button, {backgroundColor: backgroundColor}]}
         accessible={true}
         accessibilityLabel={t(BottomSheetTexts.closeButton.a11yLabel)}
         accessibilityHint={t(BottomSheetTexts.closeButton.a11yHint)}
         accessibilityRole="button"
       >
-        <View style={styles.iconWrapper}>
-          <ThemeIcon svg={Close} />
-        </View>
+        <ThemeIcon fill={textColor} svg={Close} size="normal" />
       </TouchableOpacity>
     </View>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => {
-  const iconSize = 28;
-
   return {
     container: {
       marginHorizontal: theme.spacings.medium,
@@ -81,18 +94,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
     button: {
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    placeholderButton: {
-      width: iconSize,
-      height: iconSize,
-    },
-    iconWrapper: {
-      width: iconSize,
-      height: iconSize,
-      borderRadius: iconSize / 2,
-      backgroundColor: theme.static.background.background_3.background, // Adjust the color as needed
-      justifyContent: 'center',
-      alignItems: 'center',
+      padding: theme.spacings.small,
+      borderRadius: 100,
     },
 
     headerTitle: {alignItems: 'center', flex: 1},
