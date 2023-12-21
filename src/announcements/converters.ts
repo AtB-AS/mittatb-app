@@ -78,12 +78,9 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
   );
 }
 
-function mapActionButton(data: any): ActionButton | undefined {
+function mapActionButton(data: any): ActionButton {
   const {label = [], url, actionType = 'bottom_sheet'} = data ?? {};
-  if (!label || !actionType) return;
-  if (!['external', 'deeplink', 'bottom_sheet'].includes(actionType)) return;
   const labelWithLanguage = mapToLanguageAndTexts(label);
-  if (!labelWithLanguage) return;
   return {
     label: labelWithLanguage,
     url,

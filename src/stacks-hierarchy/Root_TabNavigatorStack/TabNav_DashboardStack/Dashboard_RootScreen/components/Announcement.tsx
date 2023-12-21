@@ -109,7 +109,7 @@ export const Announcement = ({announcement, style}: Props) => {
             ),
           }}
           onPress={async () => {
-            if (announcement.actionButton?.actionType === 'bottom_sheet') {
+            if (announcement.actionButton.actionType === 'bottom_sheet') {
               openBottomSheet(() => (
                 <AnnouncementSheet
                   announcement={announcement}
@@ -117,7 +117,7 @@ export const Announcement = ({announcement, style}: Props) => {
                 />
               ));
             } else {
-              const actionButtonURL = announcement.actionButton?.url;
+              const actionButtonURL = announcement.actionButton.url;
               try {
                 actionButtonURL && (await Linking.openURL(actionButtonURL));
               } catch (err: any) {
