@@ -33,13 +33,13 @@ import {DirectionArrow} from './components/DirectionArrow';
 import {MapLabel} from './components/MapLabel';
 import {MapRoute} from './components/MapRoute';
 import {createMapLines, getMapBounds, pointOf} from './utils';
-import {
-  MapState,
-  RegionPayload,
-} from '@rnmapbox/maps/lib/typescript/components/MapView';
 import {useStations} from '@atb/mobility';
 import {Stations} from '@atb/components/map';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
+import {
+  MapState,
+  RegionPayload,
+} from '@rnmapbox/maps/lib/typescript/src/components/MapView';
 
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
