@@ -8,7 +8,7 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {TravelDateTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
   dateWithReplacedTime,
   formatLocaleTime,
@@ -19,6 +19,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = {
   travelDate?: string;
@@ -90,10 +91,9 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
           centerContent={true}
         >
           {maximumDate && (
-            <MessageBox
+            <MessageInfoText
               type="info"
               style={styles.messageBox}
-              subtle
               message={t(
                 TravelDateTexts.latestActivationDate.warning(
                   formatToVerboseFullDate(maximumDate, language),
@@ -111,7 +111,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
             <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
           {replicatedShowActivationDateWarning && (
-            <MessageBox
+            <MessageInfoBox
               style={styles.dateWarningMessageBox}
               type="warning"
               message={t(

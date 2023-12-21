@@ -9,7 +9,7 @@ import {
   useStopsDetailsData,
 } from '@atb/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
 import {useReverseGeocoder} from '@atb/geocoder';
 import {Location, SearchLocation} from '@atb/favorites';
@@ -111,7 +111,7 @@ export const DeparturesDialogSheet = ({
 
       return (
         <View style={styles.paddingHorizontal}>
-          <MessageBox
+          <MessageInfoBox
             type="info"
             message={t(DeparturesTexts.message.emptyResult)}
           />
@@ -122,7 +122,7 @@ export const DeparturesDialogSheet = ({
     if (!isLoading && didLoadingDataFail) {
       return (
         <View style={styles.paddingHorizontal}>
-          <MessageBox
+          <MessageInfoBox
             type="error"
             message={t(DeparturesTexts.message.resultFailed)}
             onPressConfig={{

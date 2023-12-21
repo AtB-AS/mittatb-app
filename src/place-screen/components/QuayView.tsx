@@ -10,7 +10,7 @@ import {QuaySection} from './QuaySection';
 import {useDeparturesData} from '../hooks/use-departures-data';
 import {hasFavorites} from './StopPlaceView';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -89,7 +89,7 @@ export function QuayView({
                 mode !== 'Departure' ? styles.marginBottom : undefined,
               ]}
             >
-              <MessageBox
+              <MessageInfoBox
                 type="error"
                 message={t(DeparturesTexts.message.resultFailed)}
                 onPressConfig={{

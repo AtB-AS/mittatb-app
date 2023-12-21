@@ -11,7 +11,7 @@ import HarborSearchTexts from '@atb/translations/screens/subscreens/HarborSearch
 import sortBy from 'lodash.sortby';
 import {GeoLocation} from '@atb/favorites';
 import haversine from 'haversine-distance';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {TFunc} from '@leile/lobo-t';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
@@ -51,7 +51,7 @@ export const HarborResults: React.FC<Props> = ({
     <>
       <View accessibilityRole="header" style={styles.subHeader}>
         {showEmptyResultText ? (
-          <MessageBox
+          <MessageInfoBox
             type="info"
             message={t(HarborSearchTexts.messages.emptyResult)}
           />

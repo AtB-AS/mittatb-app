@@ -36,7 +36,6 @@ import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Ro
 import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
-import {Root_TipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInformation';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_CarnetDetailsScreen} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
@@ -366,10 +365,6 @@ export const RootStack = () => {
                   options={{
                     ...TransitionPresets.SlideFromRightIOS,
                   }}
-                />
-                <Stack.Screen
-                  name="Root_TipsAndInformation"
-                  component={Root_TipsAndInformation}
                 />
                 <Stack.Screen
                   name="Root_LoginActiveFareContractWarningScreen"

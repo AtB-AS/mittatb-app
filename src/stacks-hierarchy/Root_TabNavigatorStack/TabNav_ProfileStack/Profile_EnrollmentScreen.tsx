@@ -3,7 +3,10 @@ import {ActivityIndicator, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
 import {EnrollmentTexts, useTranslation} from '@atb/translations';
-import {MessageBox, MessageBoxProps} from '@atb/components/message-box';
+import {
+  MessageInfoBox,
+  MessageInfoBoxProps,
+} from '@atb/components/message-info-box';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -18,7 +21,7 @@ export const Profile_EnrollmentScreen = () => {
 
   const {onEnroll, hasError, isLoading, isEnrolled} = useEnroll();
 
-  const messageType: MessageBoxProps['type'] = isEnrolled
+  const messageType: MessageInfoBoxProps['type'] = isEnrolled
     ? 'valid'
     : hasError
     ? 'warning'
@@ -33,7 +36,7 @@ export const Profile_EnrollmentScreen = () => {
       />
       <View style={styles.contentContainer}>
         <View style={styles.spacing}>
-          <MessageBox type={messageType} message={messageText} />
+          <MessageInfoBox type={messageType} message={messageText} />
         </View>
         {isEnrolled ? null : isLoading ? (
           <ActivityIndicator />
@@ -102,7 +105,7 @@ const useEnroll = () => {
   };
 };
 
-function useMessageText(type: MessageBoxProps['type']) {
+function useMessageText(type: MessageInfoBoxProps['type']) {
   const {t} = useTranslation();
   switch (type) {
     case 'valid':

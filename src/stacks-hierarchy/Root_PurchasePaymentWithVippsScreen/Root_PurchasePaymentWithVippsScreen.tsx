@@ -1,6 +1,6 @@
 import {ErrorType} from '@atb/api/utils';
 import {Button} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -64,7 +64,7 @@ export const Root_PurchasePaymentWithVippsScreen = ({
           ))}
         {!!error && (
           <>
-            <MessageBox
+            <MessageInfoBox
               message={translateError(error.context, error.type, t)}
               type="error"
               style={styles.messageBox}

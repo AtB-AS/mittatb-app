@@ -16,7 +16,7 @@ import {Button} from '@atb/components/button';
 import DeparturesDialogSheetTexts from '@atb/translations/components/DeparturesDialogSheet';
 import {Feature, Point} from 'geojson';
 import {SearchLocation} from '@atb/favorites';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {MobilityStats} from '@atb/mobility/components/MobilityStats';
@@ -119,7 +119,7 @@ export const ParkAndRideBottomSheet = ({
                 />
                 <ThemedParkAndRide />
               </View>
-              <MessageBox
+              <MessageInfoBox
                 style={styles.disclaimer}
                 type="info"
                 message={t(ParkAndRideTexts.disclaimer)}

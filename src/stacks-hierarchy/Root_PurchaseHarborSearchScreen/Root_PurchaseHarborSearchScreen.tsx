@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {TextInputSectionItem} from '@atb/components/sections';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useIsFocused} from '@react-navigation/native';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
@@ -102,7 +102,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
         {harborsQuery.isError && (
           <>
             <ScreenReaderAnnouncement message={t(HarborSearchTexts.error)} />
-            <MessageBox
+            <MessageInfoBox
               type="error"
               message={t(HarborSearchTexts.error)}
               onPressConfig={{

@@ -3,7 +3,7 @@ import {Add, Delete, Edit, Feedback} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import {Button, ButtonGroup} from '@atb/components/button';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioSegments} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
@@ -39,6 +39,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {ProfileScreenProps} from './navigation-types';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -245,14 +246,14 @@ export const Profile_DesignSystemScreen = ({
         </Section>
 
         <Section withPadding withTopPadding>
-          <HeaderSectionItem text="Messages" />
+          <HeaderSectionItem text="Message Info Box" />
 
           <GenericSectionItem>
-            <MessageBox type="info" message="This is a message" />
+            <MessageInfoBox type="info" message="This is a message" />
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               type="info"
               message="This is a message with title"
               title="Title"
@@ -260,7 +261,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               message="This is a warning"
               title="Title"
               type="warning"
@@ -268,7 +269,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               message="This is a success message"
               title="Title"
               type="valid"
@@ -276,7 +277,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               message="This is an error with retry link"
               title="Title"
               type="error"
@@ -288,7 +289,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               type="info"
               isMarkdown={true}
               title="Markdown"
@@ -297,7 +298,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               type="info"
               title="With dismiss"
               onDismiss={() => Alert.alert('Closed')}
@@ -306,7 +307,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               type="warning"
               title="With dismiss and action"
               onDismiss={() => Alert.alert('Closed')}
@@ -319,7 +320,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               type="error"
               title="With dismiss and link"
               onDismiss={() => Alert.alert('Closed')}
@@ -332,7 +333,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
 
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoBox
               type="valid"
               isMarkdown={true}
               title="Without icon"
@@ -340,41 +341,56 @@ export const Profile_DesignSystemScreen = ({
               message="This is a message without status icon"
             />
           </GenericSectionItem>
+        </Section>
+        <Section withPadding withTopPadding>
+          <HeaderSectionItem text="Message Info Text" />
+
           <GenericSectionItem>
-            <MessageBox
+            <MessageInfoText
+              type="info"
+              isMarkdown={true}
+              message="This is a message text"
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageInfoText
+              type="warning"
+              isMarkdown={true}
+              message="This is a warning text"
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageInfoText
+              type="error"
+              isMarkdown={true}
+              message="This is an error text"
+              textColor="background_0"
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <MessageInfoText
               type="valid"
               isMarkdown={true}
-              message="This is a valid **markdown** message with no background"
-              subtle={true}
+              message="This is a valid text"
               textColor="background_0"
             />
           </GenericSectionItem>
           <GenericSectionItem>
-            <MessageBox
-              type="info"
-              message="This is a dismissable info message with no background"
-              subtle={true}
-              onDismiss={() => Alert.alert('Dismissed')}
+            <MessageInfoText
+              type="valid"
+              isMarkdown={true}
+              iconPosition="right"
+              message="This is a text with right sided icon"
               textColor="background_0"
             />
           </GenericSectionItem>
           <GenericSectionItem>
-            <MessageBox
-              type="warning"
-              title="Warning"
-              message="This is a warning message with no background"
-              subtle={true}
-              textColor="background_0"
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <MessageBox
-              type="error"
-              title="Error with link"
-              message="This is a dismissable error message with no background"
-              subtle={true}
-              onDismiss={() => Alert.alert('Dismissed')}
-              onPressConfig={{url: 'https://atb.no', text: 'Go to atb.no'}}
+            <MessageInfoText
+              type="valid"
+              isMarkdown={true}
+              message="This is a valid **markdown** message"
               textColor="background_0"
             />
           </GenericSectionItem>

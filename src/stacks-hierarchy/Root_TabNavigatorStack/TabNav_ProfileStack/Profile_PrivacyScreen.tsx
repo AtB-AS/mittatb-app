@@ -26,6 +26,7 @@ export const Profile_PrivacyScreen = () => {
     revokeBeacons,
     deleteCollectedData,
     isBeaconsSupported,
+    getPrivacyDashboardUrl,
   } = useBeaconsState();
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
@@ -83,7 +84,7 @@ export const Profile_PrivacyScreen = () => {
           />
         </Section>
 
-        {isBeaconsSupported && kettleInfo?.privacyDashboardUrl && (
+        {isBeaconsSupported && kettleInfo?.isBeaconsOnboarded && (
           <Section withPadding>
             <LinkSectionItem
               text={t(PrivacySettingsTexts.sections.items.controlPanel.title)}
@@ -98,7 +99,9 @@ export const Profile_PrivacyScreen = () => {
               }}
               testID="privacyButton"
               onPress={async () => {
-                await Linking.openURL(kettleInfo.privacyDashboardUrl!);
+                const privacyDashboardUrl = await getPrivacyDashboardUrl();
+                privacyDashboardUrl &&
+                  (await Linking.openURL(privacyDashboardUrl));
               }}
             />
           </Section>
@@ -132,7 +135,7 @@ export const Profile_PrivacyScreen = () => {
             }
             testID="deleteLocalSearchData"
           />
-          {isBeaconsSupported && (
+          {isBeaconsSupported && kettleInfo?.isBeaconsOnboarded && (
             <Button
               style={style.spacing}
               leftIcon={{svg: Delete}}

@@ -9,7 +9,7 @@ import {
 } from '@atb/translations/screens/subscreens/MobilityTexts';
 import {StyleSheet} from '@atb/theme';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useCarSharingStation} from '@atb/mobility/use-car-sharing-station';
 import {ThemeText} from '@atb/components/text';
 import {CarAvailabilityFragment} from '@atb/api/types/generated/fragments/stations';
@@ -125,7 +125,7 @@ export const CarSharingStationBottomSheet = ({
         )}
         {!isLoading && (isError || !station) && (
           <View style={styles.errorMessage}>
-            <MessageBox
+            <MessageInfoBox
               type="error"
               message={t(CarSharingTexts.loadingFailed)}
               onPressConfig={{

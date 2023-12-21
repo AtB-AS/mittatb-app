@@ -10,7 +10,7 @@ import {
 import {StyleSheet} from '@atb/theme';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {useBikeStation} from '@atb/mobility/use-bike-station';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefit} from '@atb/mobility/use-operator-benefit';
 import {OperatorBenefit} from '@atb/mobility/components/OperatorBenefit';
@@ -136,7 +136,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
         )}
         {!isLoading && (isError || !station) && (
           <View style={styles.errorMessage}>
-            <MessageBox
+            <MessageInfoBox
               type="error"
               message={t(BicycleTexts.loadingFailed)}
               onPressConfig={{

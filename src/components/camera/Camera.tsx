@@ -4,7 +4,7 @@ import {useRef} from 'react';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {Camera as CameraKitCamera, CameraType} from 'react-native-camera-kit';
 import {Processing} from '../loading';
-import {MessageBox} from '../message-box';
+import {MessageInfoBox} from '../message-info-box';
 import {CaptureButton} from './CaptureButton';
 import {PhotoFile} from './types';
 import {usePermissions} from './use-permissions';
@@ -92,7 +92,7 @@ export const Camera = ({style = {}, zoom = 1, mode, onCapture}: Props) => {
   } else {
     return (
       <View style={styles.loadingIndicator}>
-        <MessageBox
+        <MessageInfoBox
           title={t(CameraTexts.permissionRequired.title)}
           message={t(CameraTexts.permissionRequired.message)}
           type="warning"

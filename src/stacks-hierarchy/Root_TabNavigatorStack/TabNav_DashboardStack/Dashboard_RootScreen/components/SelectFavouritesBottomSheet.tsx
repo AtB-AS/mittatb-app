@@ -13,7 +13,7 @@ import {TransportationIconBox} from '@atb/components/icon-box';
 import {StoredFavoriteDeparture, useFavorites} from '@atb/favorites';
 import {LegMode} from '@entur/sdk';
 import {SectionSeparator} from '@atb/components/sections';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
@@ -141,7 +141,7 @@ export const SelectFavouritesBottomSheet = ({
           </>
         )}
         {!favouriteItems.length && (
-          <MessageBox
+          <MessageInfoBox
             type="info"
             message={t(SelectFavouriteDeparturesText.noFavourites.text)}
           />
