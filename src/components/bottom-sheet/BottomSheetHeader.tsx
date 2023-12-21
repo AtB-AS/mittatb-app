@@ -26,23 +26,11 @@ export const BottomSheetHeader = ({
   const {t} = useTranslation();
 
   const {theme} = useTheme();
-
   const {close: closeBottomSheetDefault, onOpenFocusRef} = useBottomSheet();
 
   const handleClose = closeBottomSheet ?? closeBottomSheetDefault;
-  // Calculate hitSlop values
-  const iconSize = 28;
-  const desiredHitboxSize = 48;
-  const hitSlopSize = (desiredHitboxSize - iconSize) / 2;
 
-  const hitSlop = {
-    top: hitSlopSize,
-    bottom: hitSlopSize,
-    left: hitSlopSize,
-    right: hitSlopSize,
-  };
   const themeColor = 'interactive_3';
-
   const {background: backgroundColor, text: textColor} =
     theme.interactive[themeColor]['active'];
 
@@ -51,9 +39,24 @@ export const BottomSheetHeader = ({
     const {width, height} = event.nativeEvent.layout;
     setButtonSize({width, height});
   };
+
+  // Calculate hitSlop values
+  const desiredHitboxSize = 48;
+  const hitSlopSize = (desiredHitboxSize - buttonSize.height) / 2;
+
+  const hitSlop = {
+    top: hitSlopSize,
+    bottom: hitSlopSize,
+    left: hitSlopSize,
+    right: hitSlopSize,
+  };
+
   return (
     <View style={styles.container}>
-      <View style={{width: buttonSize.width, height: buttonSize.height}} />
+      {/*Placeholder to center the title correctly*/}
+      <View style={[styles.button, {opacity: 0}]}>
+        <ThemeIcon svg={Close} size="normal" />
+      </View>
       <View
         accessibilityLabel={title}
         accessible={true}
