@@ -109,7 +109,7 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
           {mapLines && <MapRoute lines={mapLines} />}
-          <LocationPuck puckBearing="heading" />
+          <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}
