@@ -3,7 +3,7 @@ import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
 import {ScrollView} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
@@ -17,18 +17,25 @@ type TravellerSelectionSheetProps = {
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
-  close: (chosenSelectableUserProfiles?: UserProfileWithCount[]) => void;
+  close: (
+    chosenSelectableUserProfiles?: UserProfileWithCount[],
+    onBehalfOfToggle?: boolean,
+  ) => void;
+  isOnBehalfOfToggle: boolean;
 };
 export const TravellerSelectionSheet = ({
   selectionMode,
   fareProductType,
   selectableUserProfilesWithCountInit,
   close,
+  isOnBehalfOfToggle,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
   const style = useStyle();
 
   const userCountState = useUserCountState(selectableUserProfilesWithCountInit);
+  const [isTravelerOnBehalfOfToggle, setIsTravelerOnBehalfOfToggle] =
+    useState<boolean>(isOnBehalfOfToggle);
   const selectableUserProfilesWithCount =
     userCountState.userProfilesWithCount.filter((a) =>
       selectableUserProfilesWithCountInit.some((b) => a.id === b.id),
@@ -55,12 +62,16 @@ export const TravellerSelectionSheet = ({
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
+            setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}
+            isTravelerOnBehalfOfToggle={isTravelerOnBehalfOfToggle}
           />
         ) : (
           <SingleTravellerSelection
             fareProductType={fareProductType}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
+            setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}
+            isTravelerOnBehalfOfToggle={isTravelerOnBehalfOfToggle}
           />
         )}
       </ScrollView>
@@ -68,7 +79,9 @@ export const TravellerSelectionSheet = ({
         <Button
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
           disabled={totalTravellersCount < 1}
-          onPress={() => close(selectableUserProfilesWithCount)}
+          onPress={() =>
+            close(selectableUserProfilesWithCount, isTravelerOnBehalfOfToggle)
+          }
           rightIcon={{svg: Confirm}}
         />
       </FullScreenFooter>

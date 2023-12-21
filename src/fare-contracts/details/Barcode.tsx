@@ -3,7 +3,7 @@ import {
   BottomSheetContainer,
   useBottomSheet,
 } from '@atb/components/bottom-sheet';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token';
@@ -134,7 +134,7 @@ const BarcodeError = () => {
 
   return (
     <GenericSectionItem>
-      <MessageBox
+      <MessageInfoBox
         type="error"
         title={t(FareContractTexts.details.barcodeErrors.generic.title)}
         message={t(FareContractTexts.details.barcodeErrors.generic.text)}
@@ -165,7 +165,7 @@ const DeviceNotInspectable = () => {
           ),
         );
   return (
-    <MessageBox
+    <MessageInfoBox
       type="warning"
       title={t(
         FareContractTexts.details.barcodeErrors.notInspectableDevice.title,

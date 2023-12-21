@@ -1,5 +1,5 @@
 import {TicketSplash} from '@atb/assets/svg/color/images';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
 import {UpgradeSplashTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -16,7 +16,7 @@ export const UpgradeSplash = () => {
       <View style={styles.bannerContainer}>
         <TicketSplash width={windowWidth} height={windowWidth / 2} />
       </View>
-      <MessageBox
+      <MessageInfoBox
         type="warning"
         title={t(UpgradeSplashTexts.title)}
         message={t(UpgradeSplashTexts.paragraph1)}

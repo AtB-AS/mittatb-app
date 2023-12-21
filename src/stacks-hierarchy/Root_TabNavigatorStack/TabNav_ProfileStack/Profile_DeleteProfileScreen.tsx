@@ -13,7 +13,7 @@ import {Alert, View} from 'react-native';
 import {ProfileScreenProps} from './navigation-types';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContextState} from '@atb/time';
@@ -104,14 +104,14 @@ export const Profile_DeleteProfileScreen = ({
         </View>
       )}
     >
-      <MessageBox
+      <MessageInfoBox
         message={t(DeleteProfileTexts.deleteInfo)}
         type="info"
         style={style.contentMargin}
       />
 
       {activeFareContracts && (
-        <MessageBox
+        <MessageInfoBox
           message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
           type="warning"
           style={{...style.contentMargin, marginTop: 0}}

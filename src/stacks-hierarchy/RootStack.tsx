@@ -36,7 +36,6 @@ import {Root_PurchasePaymentWithCreditCardScreen} from '@atb/stacks-hierarchy/Ro
 import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_PurchasePaymentWithVippsScreen';
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
-import {Root_TipsAndInformation} from '@atb/stacks-hierarchy/Root_TipsAndInformation';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
 import {Root_CarnetDetailsScreen} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
@@ -57,7 +56,8 @@ import {
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
-import { useBeaconsState } from '@atb/beacons/BeaconsContext';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -332,6 +332,10 @@ export const RootStack = () => {
                   component={Root_FareContractDetailsScreen}
                 />
                 <Stack.Screen
+                  name="Root_TicketInformationScreen"
+                  component={Root_TicketInformationScreen}
+                />
+                <Stack.Screen
                   name="Root_CarnetDetailsScreen"
                   component={Root_CarnetDetailsScreen}
                 />
@@ -361,10 +365,6 @@ export const RootStack = () => {
                   options={{
                     ...TransitionPresets.SlideFromRightIOS,
                   }}
-                />
-                <Stack.Screen
-                  name="Root_TipsAndInformation"
-                  component={Root_TipsAndInformation}
                 />
                 <Stack.Screen
                   name="Root_LoginActiveFareContractWarningScreen"

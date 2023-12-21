@@ -1,4 +1,4 @@
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getReferenceDataName, PreassignedFareProduct} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -69,6 +69,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   };
   const [travellerSelection, setTravellerSelection] =
     useState(selectableTravellers);
+
+  const [isOnBehalfOfToggle, setIsOnBehalfOfToggle] = useState<boolean>(false);
+
   const [travelDate, setTravelDate] = useState<string | undefined>(
     params.travelDate,
   );
@@ -116,6 +119,19 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const isEmptyOffer = error?.type === 'empty-offers';
 
+  const handleTicketInfoButtonPress = () => {
+    const parameters = {
+      fareProductTypeConfigType: params.fareProductTypeConfig.type,
+      preassignedFareProductId: preassignedFareProduct?.id,
+    };
+    analytics.logEvent(
+      'Ticketing',
+      'Ticket information button clicked',
+      parameters,
+    );
+    navigation.navigate('Root_TicketInformationScreen', parameters);
+  };
+
   useEffect(() => {
     if (params?.refreshOffer) {
       refreshOffer();
@@ -143,13 +159,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
           fareProductTypeConfig={params.fareProductTypeConfig}
+          preassignedFareProduct={preassignedFareProduct}
+          onTicketInfoButtonPress={handleTicketInfoButtonPress}
         />
       )}
     >
       <ScrollView testID="ticketingScrollView">
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
-            <MessageBox
+            <MessageInfoBox
               style={styles.travelSearchInfo}
               type="valid"
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
@@ -157,7 +175,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           )}
           {error &&
             (isEmptyOffer ? (
-              <MessageBox
+              <MessageInfoBox
                 type="info"
                 message={t(
                   PurchaseOverviewTexts.errorMessageBox.productUnavailable(
@@ -167,7 +185,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 style={styles.selectionComponent}
               />
             ) : (
-              <MessageBox
+              <MessageInfoBox
                 type="error"
                 title={t(PurchaseOverviewTexts.errorMessageBox.title)}
                 message={t(PurchaseOverviewTexts.errorMessageBox.message)}
@@ -192,6 +210,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             selectionMode={travellerSelectionMode}
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
+            setIsOnBehalfOfToggle={setIsOnBehalfOfToggle}
+            isOnBehalfOfToggle={isOnBehalfOfToggle}
           />
           <FromToSelection
             fareProductTypeConfig={params.fareProductTypeConfig}
@@ -229,7 +249,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
 
           {isFree ? (
-            <MessageBox
+            <MessageInfoBox
               type="valid"
               message={t(PurchaseOverviewTexts.summary.free)}
               style={styles.messages}

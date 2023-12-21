@@ -118,10 +118,7 @@ export const DetailsContent: React.FC<Props> = ({
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' && (
           <GenericSectionItem>
-            <Barcode
-              validityStatus={validityStatus}
-              fc={fc}
-            />
+            <Barcode validityStatus={validityStatus} fc={fc} />
           </GenericSectionItem>
         )}
         <GenericSectionItem>

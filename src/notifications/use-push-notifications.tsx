@@ -9,6 +9,7 @@ import {NotificationConfigUpdate} from './api';
 import {NotificationConfig} from './types';
 import {useConfig} from './use-config';
 import {useRegister} from './use-register';
+import {getLanguageAndTextEnum} from '@atb/translations/utils';
 
 type PermissionStatus =
   | 'granted'
@@ -24,7 +25,7 @@ type NotificationContextState = {
   permissionStatus: PermissionStatus;
   checkPermissions: () => void;
   requestPermissions: () => Promise<void>;
-  register: () => Promise<string | undefined>;
+  register: (enabled: boolean) => Promise<string | undefined>;
   fcmToken: string | undefined;
 };
 
@@ -40,12 +41,35 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const mutateRegister = registerMutation.mutate;
   const {query: configQuery, mutation: configMutation} = useConfig();
 
+  const register = useCallback(
+    async (enabled: boolean) => {
+      try {
+        const token = await messaging().getToken();
+        if (!token) return;
+        setFcmToken(token);
+        mutateRegister({
+          token,
+          language: getLanguageAndTextEnum(language),
+          enabled,
+        });
+        return token;
+      } catch (e) {
+        Bugsnag.notify(`Failed to register for push notifications: ${e}`);
+      }
+    },
+    [language, mutateRegister],
+  );
+
   const checkPermissions = useCallback(() => {
     setStatus('loading');
     if (Platform.OS === 'ios') {
       messaging()
         .hasPermission()
-        .then((status) => setStatus(mapIosPermissionStatus(status)))
+        .then((hasPermission) => {
+          const status = mapIosPermissionStatus(hasPermission);
+          setStatus(status);
+          register(status === 'granted');
+        })
         .catch((e) => {
           setStatus('error');
           console.error(e);
@@ -58,9 +82,10 @@ export const NotificationContextProvider: React.FC = ({children}) => {
         .then((hasPermission) => {
           // On SDK versions < 33 permission is not required, yet check() will return 'false' for those devices.
           // However, getToken() will yield a device token for sdk < 33 even if check() returns 'false'.
-          setStatus(
-            hasPermission || platformVersion < 33 ? 'granted' : 'denied',
-          );
+          const status =
+            hasPermission || platformVersion < 33 ? 'granted' : 'denied';
+          setStatus(status);
+          register(status === 'granted');
         })
         .catch((e) => {
           setStatus('error');
@@ -69,24 +94,12 @@ export const NotificationContextProvider: React.FC = ({children}) => {
     } else {
       setStatus('error');
     }
-  }, []);
-
-  const register = useCallback(async () => {
-    try {
-      const token = await messaging().getToken();
-      if (!token) return;
-      setFcmToken(token);
-      mutateRegister({token, language});
-      return token;
-    } catch (e) {
-      Bugsnag.notify(`Failed to register for push notifications: ${e}`);
-    }
-  }, [language, mutateRegister]);
+  }, [register]);
 
   const requestPermissions = useCallback(async () => {
     setStatus('updating');
     const permissionStatus = await requestUserPermission();
-    const token = await register();
+    const token = await register(permissionStatus === 'granted');
     if (!token) {
       setStatus('error');
       return;

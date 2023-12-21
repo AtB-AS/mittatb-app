@@ -255,10 +255,7 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         {enable_ticketing && (
           <CompactFareContracts
             style={style.contentSection}
-            onPressDetails={(
-              isCarnet: boolean,
-              orderId: string,
-            ) => {
+            onPressDetails={(isCarnet: boolean, orderId: string) => {
               if (isCarnet) {
                 return navigation.navigate({
                   name: 'Root_CarnetDetailsScreen',
@@ -315,7 +312,7 @@ function useLocations(
 
   const memoedCurrentLocation = useMemo<GeoLocation | undefined>(
     () => currentLocation,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       currentLocation?.coordinates.latitude,
       currentLocation?.coordinates.longitude,
@@ -378,7 +375,7 @@ function useUpdatedLocation(
         }
       }
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentLocation, favorites],
   );
 

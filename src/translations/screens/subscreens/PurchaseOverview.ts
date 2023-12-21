@@ -247,6 +247,30 @@ const PurchaseOverviewTexts = {
       'Aktiver for å lese meir om rabatt på fleksibel billett på ekstern side',
     ),
   },
+  onBehalfOf: {
+    sectionTitle: _('Kjøp til andre', 'Buy for others', 'Kjøp til andre'),
+    sectionSubText: _(
+      'Den du kjøper billett til, må være innlogget i AtB-appen for å få billetten.',
+      'The person you buy a ticket for, must be logged in to the AtB app to get the ticket.',
+      'Den du kjøper billett til, må vere logga inn i AtB-appen for å få billetten.',
+    ),
+  },
+  ticketInformation: {
+    button: _('Om billetten', 'About the ticket', 'Om billetten'),
+    informationDetails: {
+      title: _('Om billetten', 'About the ticket', 'Om billetten'),
+      descriptionHeading: _(
+        'Billettbeskrivelse',
+        'Ticket description',
+        'Billettbeskriving',
+      ),
+      tipsInformation: _(
+        'Generelt om billetter',
+        'About tickets in general',
+        'Generelt om billettar',
+      ),
+    },
+  },
 };
 
 export default orgSpecificTranslations(PurchaseOverviewTexts, {

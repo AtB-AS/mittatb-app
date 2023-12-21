@@ -25,7 +25,7 @@ import {useVehiclesInMapDebugOverride} from '@atb/mobility';
 import {DebugOverride} from './components/DebugOverride';
 import {useRealtimeMapDebugOverride} from '@atb/components/map';
 import {useTicketingAssistantDebugOverride} from '../../Root_TicketAssistantStack/use-ticketing-assistant-enabled';
-import {useTipsAndInformationDebugOverride} from '@atb/stacks-hierarchy/Root_TipsAndInformation/use-tips-and-information-enabled';
+import {useTipsAndInformationDebugOverride} from '@atb/tips-and-information/use-tips-and-information-enabled';
 import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabled';
 import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-enabled';
 import {useShowValidTimeInfoDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
@@ -56,6 +56,7 @@ import {
 import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
+import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -118,6 +119,8 @@ export const Profile_DebugInfoScreen = () => {
   const pushNotificationsEnabledDebugOverride =
     usePushNotificationsEnabledDebugOverride();
   const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
+  const ticketInformationEnabledDebugOverride =
+    useTicketInformationEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -388,6 +391,12 @@ export const Profile_DebugInfoScreen = () => {
               override={onBehalfOfEnabledDebugOverride}
             />
           </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable ticket information"
+              override={ticketInformationEnabledDebugOverride}
+            />
+          </GenericSectionItem>
         </Section>
 
         <Section withPadding withTopPadding>
@@ -465,7 +474,11 @@ export const Profile_DebugInfoScreen = () => {
                 />
                 <Button
                   style={style.button}
-                  onPress={registerNotifications}
+                  onPress={() =>
+                    registerNotifications(
+                      pushNotificationPermissionStatus === 'granted',
+                    )
+                  }
                   text="Register"
                 />
                 <ThemeText>FCM Token: {fcmToken}</ThemeText>

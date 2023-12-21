@@ -16,17 +16,18 @@ import {CityBike as CityBikeDark} from '@atb/assets/svg/color/images/mobility/da
 import {ParkAndRide as ParkAndRideLight} from '@atb/assets/svg/color/images/mobility/light';
 import {ParkAndRide as ParkAndRideDark} from '@atb/assets/svg/color/images/mobility/dark';
 import {useTheme} from '@atb/theme/ThemeContext';
+import {SvgProps} from 'react-native-svg';
 
-export const ThemedTokenTravelCard = () => {
+export const ThemedTokenTravelCard = ({...props}: SvgProps) => {
   const {themeName} = useTheme();
   const TravelCard = themeName === 'dark' ? DarkTravelCard : LightTravelCard;
-  return <TravelCard />;
+  return <TravelCard {...props} />;
 };
 
-export const ThemedTokenPhone = () => {
+export const ThemedTokenPhone = ({...props}: SvgProps) => {
   const {themeName} = useTheme();
   const Phone = themeName === 'dark' ? DarkPhone : LightPhone;
-  return <Phone />;
+  return <Phone {...props} />;
 };
 
 export const ThemedMapImage = () => {
@@ -42,7 +43,7 @@ export const ThemedNoFavouriteDepartureImage = () => {
   return <NoFavouriteDeparture />;
 };
 
-export const ThemedOnBehalfOf = ({...props}) => {
+export const ThemedOnBehalfOf = ({...props}: SvgProps) => {
   const {themeName} = useTheme();
   const OnBehalfOf = themeName === 'dark' ? DarkOnBehalfOf : LightOnBehalfOf;
   return <OnBehalfOf {...props} />;
@@ -59,7 +60,6 @@ export const ThemedCityBike = () => {
   const CityBike = themeName === 'dark' ? CityBikeDark : CityBikeLight;
   return <CityBike />;
 };
-
 
 export const ThemedParkAndRide = () => {
   const {themeName} = useTheme();

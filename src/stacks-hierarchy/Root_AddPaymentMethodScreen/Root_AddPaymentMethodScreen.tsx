@@ -4,12 +4,12 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useAddPaymentMethod} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/use-add-payment-method';
 import {dictionary, useTranslation} from '@atb/translations';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import AddPaymentMethodTexts from '@atb/translations/screens/subscreens/AddPaymentMethodTexts';
 import WebView from 'react-native-webview';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {Processing} from "@atb/components/loading";
+import {Processing} from '@atb/components/loading';
 
 type Props = RootStackScreenProps<'Root_AddPaymentMethodScreen'>;
 
@@ -46,7 +46,7 @@ export const Root_AddPaymentMethodScreen = ({navigation}: Props) => {
       )}
       {!!error && (
         <View style={styles.center}>
-          <MessageBox
+          <MessageInfoBox
             message={t(AddPaymentMethodTexts.genericError)}
             type="error"
             style={styles.messageBox}

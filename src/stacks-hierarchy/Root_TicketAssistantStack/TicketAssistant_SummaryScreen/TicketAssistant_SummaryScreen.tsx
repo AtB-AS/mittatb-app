@@ -12,7 +12,7 @@ import {TicketSummary} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Tic
 import {useAuthState} from '@atb/auth';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {useAnalytics} from '@atb/analytics';
-import {MessageBox} from '@atb/components/message-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type SummaryProps = TicketAssistantScreenProps<'TicketAssistant_SummaryScreen'>;
@@ -142,7 +142,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
 
             <TicketSummary />
             {doesTicketCoverEntirePeriod && (
-              <MessageBox
+              <MessageInfoBox
                 style={styles.infoBox}
                 type="info"
                 title={t(TicketAssistantTexts.summary.durationNotice.title)}
