@@ -18,6 +18,7 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/content-heading';
 import {LabelInfo} from '@atb/components/label-info';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -105,6 +106,9 @@ export function TravellerSelection({
       ) +
       ' ' +
       travellersDetailsText +
+      (isOnBehalfOfEnabled
+        ? screenReaderPause + t(LabelInfoTexts.labels['new'])
+        : '') +
       screenReaderPause,
     accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
   };
