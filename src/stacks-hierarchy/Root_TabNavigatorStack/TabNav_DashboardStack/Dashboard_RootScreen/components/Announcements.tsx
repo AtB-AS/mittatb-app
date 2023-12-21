@@ -7,8 +7,8 @@ import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {StyleSheet} from '@atb/theme';
-import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useAppState} from '@atb/AppContext';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -19,13 +19,13 @@ export const Announcements = ({style: containerStyle}: Props) => {
   const {t} = useTranslation();
   const now = useNow(10000);
   const {kettleInfo} = useBeaconsState();
-  const [hasSeenShareTravelHabitsScreen, _] =
-    useHasSeenShareTravelHabitsScreen();
+
+  const {shareTravelHabitsOnboarded} = useAppState();
   const style = useStyle();
 
   const ruleVariables = {
     isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
-    hasSeenShareTravelHabitsScreen,
+    shareTravelHabitsOnboarded,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>

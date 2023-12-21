@@ -47,7 +47,7 @@ import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
 import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
-import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
+
 import {useAnnouncementsState} from '@atb/announcements';
 import {
   useNotifications,
@@ -71,6 +71,7 @@ export const Profile_DebugInfoScreen = () => {
     restartOnboarding,
     restartNotificationPermissionOnboarding,
     restartLocationWhenInUsePermissionOnboarding,
+    restartShareTravelHabitsOnboarding,
   } = useAppState();
   const {
     onboardForBeacons,
@@ -261,10 +262,8 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
           />
           <LinkSectionItem
-            text="Reset has seen ShareTravelHabitsScreen"
-            onPress={() =>
-              storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
-            }
+            text="Restart ShareTravelHabits onboarding"
+            onPress={restartShareTravelHabitsOnboarding}
           />
           <LinkSectionItem
             text="Reset one time popovers"

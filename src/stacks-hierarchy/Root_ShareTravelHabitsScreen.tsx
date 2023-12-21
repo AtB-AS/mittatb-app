@@ -3,15 +3,15 @@ import {
   useTranslation,
   getTextForLanguage,
 } from '@atb/translations';
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {OnboardingScreen} from '@atb/onboarding-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useAppState} from '@atb/AppContext';
 
 export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
@@ -20,15 +20,13 @@ export const Root_ShareTravelHabitsScreen = () => {
 
   const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
 
-  const [_, setAndStoreHasSeenShareTravelHabitsScreen] =
-    useHasSeenShareTravelHabitsScreen();
-  useEffect(() => {
-    setAndStoreHasSeenShareTravelHabitsScreen(true);
-  }, [setAndStoreHasSeenShareTravelHabitsScreen]);
+  const {completeShareTravelHabitsOnboarding} = useAppState();
+
   const {onboardForBeacons} = useBeaconsState();
 
   const choosePermissions = async () => {
     await onboardForBeacons();
+    completeShareTravelHabitsOnboarding();
     continueFromOnboardingScreen('Root_ShareTravelHabitsScreen');
   };
 

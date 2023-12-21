@@ -28,7 +28,10 @@ type ScreenProps =
   | undefined;
 export type GoToScreenType = (screenName: any, params?: any) => void;
 
-export const useOnboardingNavigationFlow = () => {
+// note: useThisHookInstanceForSessionCounting should only be true for one instance
+export const useOnboardingNavigationFlow = (
+  useThisHookInstanceForSessionCounting = false,
+) => {
   const navigation = useNavigation<RootNavigationProps>();
   const {enable_extended_onboarding} = useRemoteConfig();
   const {onboarded: loginOnboardingCompleted} = useAppState();
@@ -38,7 +41,7 @@ export const useOnboardingNavigationFlow = () => {
   const shouldShowLocationOnboarding = useShouldShowLocationOnboarding();
 
   const shouldShowShareTravelHabitsScreen =
-    useShouldShowShareTravelHabitsScreen();
+    useShouldShowShareTravelHabitsScreen(useThisHookInstanceForSessionCounting);
 
   const shouldShowNotificationPermissionScreen =
     useShouldShowNotificationPermissionScreen();

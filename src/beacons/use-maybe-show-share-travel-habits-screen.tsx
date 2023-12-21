@@ -3,7 +3,7 @@ import {storage} from '@atb/storage';
 
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {useHasSeenShareTravelHabitsScreen} from './use-has-seen-share-travel-habits-screen';
+
 import {useAppState} from '@atb/AppContext';
 
 import {useBeaconsState} from './BeaconsContext';
@@ -11,7 +11,10 @@ import {useBeaconsState} from './BeaconsContext';
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count';
 
-export const useShouldShowShareTravelHabitsScreen = () => {
+// note: only one instance of this hook should be used to actually count the sessions
+export const useShouldShowShareTravelHabitsScreen = (
+  useThisHookInstanceForSessionCounting = false,
+) => {
   const {
     delay_share_travel_habits_screen_by_sessions_count: runAfterSessionsCount,
   } = useRemoteConfig();
@@ -22,24 +25,28 @@ export const useShouldShowShareTravelHabitsScreen = () => {
 
   const appStatus = useAppStateStatus();
 
-  const {onboarded} = useAppState();
-  const [hasSeenShareTravelHabitsScreen] = useHasSeenShareTravelHabitsScreen();
+  const {onboarded, shareTravelHabitsOnboarded} = useAppState();
   const enabled =
-    onboarded &&
-    isBeaconsSupported &&
-    hasSeenShareTravelHabitsScreen !== null &&
-    !hasSeenShareTravelHabitsScreen;
+    onboarded && isBeaconsSupported && !shareTravelHabitsOnboarded;
 
   const shouldShowShareTravelHabitsScreen =
     enabled &&
     !kettleInfo?.isBeaconsOnboarded &&
     sessionCount > runAfterSessionsCount;
 
-  const updateCount = useCallback(async (newCount: number) => {
-    storage.set(shareTravelHabitsSessionCountKey, JSON.stringify(newCount));
-    sessionCountRef.current = newCount;
-    setSessionCount(newCount);
-  }, []);
+  const updateCount = useCallback(
+    async (currentCount: number) => {
+      if (useThisHookInstanceForSessionCounting) {
+        const newCount = currentCount + 1;
+        storage.set(shareTravelHabitsSessionCountKey, JSON.stringify(newCount));
+        sessionCountRef.current = newCount;
+        setSessionCount(newCount);
+      } else {
+        setSessionCount(currentCount);
+      }
+    },
+    [useThisHookInstanceForSessionCounting],
+  );
 
   useEffect(() => {
     if (!enabled) return;
@@ -51,10 +58,10 @@ export const useShouldShowShareTravelHabitsScreen = () => {
         .then((countStr) => parseInt(countStr ?? '0'))
         .then((count) => {
           isInitializedRef.current = true;
-          updateCount(count + 1);
+          updateCount(count);
         });
     } else {
-      updateCount(sessionCountRef.current + 1);
+      updateCount(sessionCountRef.current);
     }
   }, [enabled, appStatus, updateCount]);
 

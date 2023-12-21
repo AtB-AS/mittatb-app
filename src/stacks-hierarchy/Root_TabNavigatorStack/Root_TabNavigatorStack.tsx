@@ -55,7 +55,7 @@ export const Root_TabNavigatorStack = () => {
   useOnPushNotificationOpened();
 
   const navigation = useNavigation<RootNavigationProps>();
-  const {nextOnboardingScreen, goToScreen} = useOnboardingNavigationFlow();
+  const {nextOnboardingScreen, goToScreen} = useOnboardingNavigationFlow(true);
 
   useEffect(() => {
     if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
