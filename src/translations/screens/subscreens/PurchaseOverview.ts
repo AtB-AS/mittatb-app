@@ -264,6 +264,11 @@ const PurchaseOverviewTexts = {
         'Ticket description',
         'Billettbeskriving',
       ),
+      tipsInformation: _(
+        'Generelt om billetter',
+        'About tickets in general',
+        'Generelt om billettar',
+      ),
     },
   },
 };
