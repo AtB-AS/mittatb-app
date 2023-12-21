@@ -9,9 +9,11 @@ import {LanguageAndTextLanguagesEnum} from '@atb/translations/types';
 export const registerForPushNotifications = ({
   token,
   language,
+  enabled,
 }: {
   token: string;
   language: LanguageAndTextLanguagesEnum;
+  enabled: boolean;
 }) =>
   client
     .post(
@@ -19,6 +21,7 @@ export const registerForPushNotifications = ({
       {
         language,
         token,
+        enabled,
       },
       {authWithIdToken: true},
     )
