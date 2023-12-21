@@ -14,6 +14,7 @@ import {ContentHeading} from '@atb/components/content-heading';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-and-information-enabled';
 import {TipsAndInformation} from '@atb/tips-and-information';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {BenefitImage} from '@atb/mobility/components/BenefitImage';
 
@@ -46,7 +47,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
       }}
       contentColor="background_accent_0"
     >
-      <ScrollView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         {preassignedFareProduct?.productDescription && (
           <>
             <ContentHeading
@@ -98,7 +99,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
           </>
         )}
         {showTipsAndInformation && (
-          <View style={styles.tipsAndInformation}>
+          <>
             <ContentHeading
               color="background_accent_0"
               text={t(
@@ -107,31 +108,34 @@ export const Root_TicketInformationScreen = (props: Props) => {
               )}
             />
             <TipsAndInformation />
-          </View>
+          </>
         )}
       </ScrollView>
     </FullScreenView>
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    padding: theme.spacings.medium,
-  },
-  descriptionHeading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: theme.spacings.medium,
-  },
-  tipsAndInformation: {
-    marginTop: theme.spacings.medium,
-  },
-  mobilityBenefit: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    columnGap: theme.spacings.medium,
-  },
-  mobilityBenefitText: {
-    flexShrink: 1,
-  },
-}));
+const useStyle = StyleSheet.createThemeHook((theme) => {
+  const {bottom} = useSafeAreaInsets();
+  return {
+    container: {
+      marginHorizontal: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacings.medium),
+      rowGap: theme.spacings.small,
+    },
+    descriptionHeading: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: theme.spacings.small,
+      flexShrink: 1,
+    },
+    mobilityBenefit: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      columnGap: theme.spacings.medium,
+    },
+    mobilityBenefitText: {
+      flexShrink: 1,
+    },
+  };
+});
