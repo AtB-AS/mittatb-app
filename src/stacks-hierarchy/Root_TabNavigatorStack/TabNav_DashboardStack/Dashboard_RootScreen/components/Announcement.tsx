@@ -65,7 +65,12 @@ export const Announcement = ({announcement, style}: Props) => {
           )}
           <View style={styles.textContainer}>
             <View style={styles.summaryTitle}>
-              <ThemeText type="body__primary--bold">{summaryTitle}</ThemeText>
+              <ThemeText
+                style={styles.summaryTitleText}
+                type="body__primary--bold"
+              >
+                {summaryTitle}
+              </ThemeText>
               <PressableOpacity
                 style={styles.close}
                 role="button"
@@ -152,6 +157,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   summaryTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  summaryTitleText: {
+    flexShrink: 1,
   },
   summary: {
     marginTop: theme.spacings.xSmall,
