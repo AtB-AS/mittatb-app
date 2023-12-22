@@ -1,5 +1,4 @@
 import {
-  HeaderSectionItem,
   LinkSectionItem,
   Section,
   ToggleSectionItem,
@@ -7,8 +6,6 @@ import {
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
 import {Button} from '@atb/components/button';
@@ -17,6 +14,8 @@ import {destructiveAlert} from './utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ContentHeading} from '@atb/components/content-heading';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
@@ -34,39 +33,42 @@ export const Profile_PrivacyScreen = () => {
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(ProfileTexts.sections.privacy.heading)}
-        leftButton={{type: 'back'}}
-      />
-      <ScrollView>
+    <FullScreenView
+      headerProps={{
+        title: t(ProfileTexts.sections.privacy.heading),
+        leftButton: {type: 'back'},
+      }}
+    >
+      <View style={style.content}>
         {isBeaconsSupported && (
-          <Section withPadding withTopPadding>
-            <HeaderSectionItem
+          <>
+            <ContentHeading
               text={t(PrivacySettingsTexts.sections.consents.title)}
             />
-            <ToggleSectionItem
-              text={t(
-                PrivacySettingsTexts.sections.consents.items.CollectTravelHabits
-                  .title,
-              )}
-              subtext={t(
-                PrivacySettingsTexts.sections.consents.items.CollectTravelHabits
-                  .subText,
-              )}
-              value={kettleInfo?.isBeaconsOnboarded}
-              onValueChange={async (checked) => {
-                if (checked) {
-                  await onboardForBeacons();
-                } else {
-                  await revokeBeacons();
-                }
-              }}
-              testID="toggleCollectData"
-            />
-          </Section>
+            <Section>
+              <ToggleSectionItem
+                text={t(
+                  PrivacySettingsTexts.sections.consents.items
+                    .CollectTravelHabits.title,
+                )}
+                subtext={t(
+                  PrivacySettingsTexts.sections.consents.items
+                    .CollectTravelHabits.subText,
+                )}
+                value={kettleInfo?.isBeaconsOnboarded}
+                onValueChange={async (checked) => {
+                  if (checked) {
+                    await onboardForBeacons();
+                  } else {
+                    await revokeBeacons();
+                  }
+                }}
+                testID="toggleCollectData"
+              />
+            </Section>
+          </>
         )}
-        <Section withPadding withTopPadding>
+        <Section style={isBeaconsSupported ? style.spacingTop : undefined}>
           <LinkSectionItem
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
@@ -84,8 +86,8 @@ export const Profile_PrivacyScreen = () => {
           />
         </Section>
 
-        {isBeaconsSupported && kettleInfo?.isBeaconsOnboarded && (
-          <Section withPadding>
+        {isBeaconsSupported && (
+          <Section style={style.spacingTop}>
             <LinkSectionItem
               text={t(PrivacySettingsTexts.sections.items.controlPanel.title)}
               subtitle={t(
@@ -107,7 +109,7 @@ export const Profile_PrivacyScreen = () => {
           </Section>
         )}
 
-        <Section withPadding withTopPadding>
+        <Section style={style.spacingTop}>
           <Button
             leftIcon={{svg: Delete}}
             interactiveColor="interactive_destructive"
@@ -135,9 +137,9 @@ export const Profile_PrivacyScreen = () => {
             }
             testID="deleteLocalSearchData"
           />
-          {isBeaconsSupported && kettleInfo?.isBeaconsOnboarded && (
+          {isBeaconsSupported && (
             <Button
-              style={style.spacing}
+              style={style.spacingTop}
               leftIcon={{svg: Delete}}
               interactiveColor="interactive_destructive"
               text={t(PrivacySettingsTexts.clearCollectedData.label)}
@@ -165,17 +167,17 @@ export const Profile_PrivacyScreen = () => {
             />
           )}
         </Section>
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
+  content: {
+    marginHorizontal: theme.spacings.medium,
+    rowGap: theme.spacings.small,
   },
-  spacing: {
+  spacingTop: {
     marginTop: theme.spacings.small,
   },
 }));
