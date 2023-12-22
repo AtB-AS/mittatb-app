@@ -81,8 +81,8 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   return (
     <BottomSheetContainer
       maxHeightValue={0.9}
-      bottomSheetTitle={t(TripSearchTexts.filters.bottomSheet.heading)}
-      closeBottomSheet={close}
+      title={t(TripSearchTexts.filters.bottomSheet.heading)}
+      close={close}
     >
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
         <Section>

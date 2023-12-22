@@ -146,8 +146,8 @@ export const SelectPaymentMethod: React.FC<Props> = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(SelectPaymentMethodTexts.header.text)}
-      closeBottomSheet={close}
+      title={t(SelectPaymentMethodTexts.header.text)}
+      close={close}
       fullHeight
     >
       <View style={{flex: 1}}>

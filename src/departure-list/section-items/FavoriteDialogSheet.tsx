@@ -25,8 +25,8 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
     const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
     return (
       <BottomSheetContainer
-        bottomSheetTitle={t(DeparturesTexts.favoriteDialogSheet.title)}
-        closeBottomSheet={close}
+        title={t(DeparturesTexts.favoriteDialogSheet.title)}
+        close={close}
         testID="chooseFavoriteBottomSheet"
       >
         <View style={styles.text} ref={focusRef} accessible={true}>

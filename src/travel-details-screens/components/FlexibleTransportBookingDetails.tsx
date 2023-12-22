@@ -53,12 +53,12 @@ export const FlexibleTransportBookingDetails: React.FC<
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(
+      title={t(
         TripDetailsTexts.flexibleTransport.needsBookingWhatIsThisTitle(
           publicCode,
         ),
       )}
-      closeBottomSheet={close}
+      close={close}
       fullHeight={true}
       maxHeightValue={0.83}
     >

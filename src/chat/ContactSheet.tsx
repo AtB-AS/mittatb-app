@@ -35,8 +35,8 @@ export const ContactSheet = forwardRef<View, Props>(
 
     return (
       <BottomSheetContainer
-        bottomSheetTitle={t(ContactSheetTexts.header.title)}
-        closeBottomSheet={close}
+        title={t(ContactSheetTexts.header.title)}
+        close={close}
       >
         <FullScreenFooter>
           {showWebsiteFeedback ? (

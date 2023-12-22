@@ -46,8 +46,8 @@ export const TravellerSelectionSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
-      closeBottomSheet={close}
+      title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
+      close={close}
       maxHeightValue={0.9}
     >
       <ScrollView style={style.container}>

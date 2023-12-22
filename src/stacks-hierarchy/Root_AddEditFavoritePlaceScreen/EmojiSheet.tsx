@@ -192,8 +192,8 @@ export const EmojiSheet = forwardRef<ScrollView, Props>(
 
     return (
       <BottomSheetContainer
-        closeBottomSheet={close}
-        bottomSheetTitle={t(AddEditFavoriteTexts.emojiSheet.title)}
+        close={close}
+        title={t(AddEditFavoriteTexts.emojiSheet.title)}
       >
         <ScrollView ref={focusRef}>
           {CATEGORIES.map((category) => (

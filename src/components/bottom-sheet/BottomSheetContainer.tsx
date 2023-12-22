@@ -7,8 +7,8 @@ export type BottomSheetContainerProps = {
   maxHeightValue?: number;
   fullHeight?: boolean;
   testID?: string;
-  bottomSheetTitle?: string;
-  closeBottomSheet?: () => void;
+  title?: string;
+  close?: () => void;
 };
 
 export function BottomSheetContainer({
@@ -16,18 +16,15 @@ export function BottomSheetContainer({
   maxHeightValue = 0.8,
   fullHeight,
   testID,
-  bottomSheetTitle,
-  closeBottomSheet,
+  title,
+  close,
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
   const maxHeight = windowHeight * maxHeightValue;
   const height = fullHeight ? maxHeight : 'auto';
   return (
     <View style={{maxHeight, height}} testID={testID}>
-      <BottomSheetHeader
-        closeBottomSheet={closeBottomSheet}
-        title={bottomSheetTitle}
-      />
+      <BottomSheetHeader closeBottomSheet={close} title={title} />
       {children}
     </View>
   );

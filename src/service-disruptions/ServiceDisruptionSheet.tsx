@@ -24,8 +24,8 @@ export const ServiceDisruptionSheet = forwardRef<View, Props>(
 
     return (
       <BottomSheetContainer
-        bottomSheetTitle={t(ServiceDisruptionsTexts.header.title)}
-        closeBottomSheet={close}
+        title={t(ServiceDisruptionsTexts.header.title)}
+        close={close}
         testID="serviceDisruptionsBottomSheet"
       >
         <FullScreenFooter>

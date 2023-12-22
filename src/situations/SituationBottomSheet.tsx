@@ -38,7 +38,7 @@ export const SituationBottomSheet = forwardRef<View, Props>(
     const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
 
     return (
-      <BottomSheetContainer closeBottomSheet={close}>
+      <BottomSheetContainer close={close}>
         <ScrollView centerContent={true}>
           <View>
             <Section style={styles.section}>

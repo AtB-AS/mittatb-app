@@ -61,8 +61,8 @@ export const ParkAndRideBottomSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(ParkAndRideTexts.title)}
-      closeBottomSheet={close}
+      title={t(ParkAndRideTexts.title)}
+      close={close}
       maxHeightValue={0.5}
     >
       <ScrollView>

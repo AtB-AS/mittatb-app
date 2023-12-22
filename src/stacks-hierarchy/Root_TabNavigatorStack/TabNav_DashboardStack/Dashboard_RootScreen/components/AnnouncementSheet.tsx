@@ -19,8 +19,8 @@ export const AnnouncementSheet = ({announcement, close}: Props) => {
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={getTextForLanguage(announcement.fullTitle, language)}
-      closeBottomSheet={close}
+      title={getTextForLanguage(announcement.fullTitle, language)}
+      close={close}
     >
       <ScrollView style={style.container}>
         {announcement.mainImage && (

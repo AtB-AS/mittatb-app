@@ -47,8 +47,8 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      closeBottomSheet={close}
+      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      close={close}
       maxHeightValue={0.5}
     >
       <>

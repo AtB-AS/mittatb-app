@@ -27,8 +27,8 @@ export const VehicleLookupConfirmationBottomSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(ParkingViolationTexts.vehicleLookup.title)}
-      closeBottomSheet={close}
+      title={t(ParkingViolationTexts.vehicleLookup.title)}
+      close={close}
     >
       <View style={styles.content}>
         <ProviderLogo provider={provider} />

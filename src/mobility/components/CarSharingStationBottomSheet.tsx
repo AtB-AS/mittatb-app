@@ -52,8 +52,8 @@ export const CarSharingStationBottomSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(MobilityTexts.formFactor(FormFactor.Car))}
-      closeBottomSheet={close}
+      title={t(MobilityTexts.formFactor(FormFactor.Car))}
+      close={close}
       maxHeightValue={0.5}
     >
       <>

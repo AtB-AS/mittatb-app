@@ -277,10 +277,10 @@ function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
   const onOpenBarcodePress = () => {
     openBottomSheet(() => (
       <BottomSheetContainer
-        bottomSheetTitle={t(FareContractTexts.details.bottomSheetTitle)}
+        title={t(FareContractTexts.details.bottomSheetTitle)}
         testID="barcodeBottomSheet"
         fullHeight
-        closeBottomSheet={closeBottomSheet}
+        close={closeBottomSheet}
       >
         <View style={styles.staticBottomContainer}>
           <View style={[styles.aztecCode, styles.staticQrCode]}>

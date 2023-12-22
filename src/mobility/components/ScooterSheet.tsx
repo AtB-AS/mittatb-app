@@ -57,9 +57,9 @@ export const ScooterSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
       maxHeightValue={0.5}
-      closeBottomSheet={close}
+      close={close}
     >
       <>
         {isLoading && (

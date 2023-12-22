@@ -82,8 +82,8 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
 
     return (
       <BottomSheetContainer
-        bottomSheetTitle={t(TravelDateTexts.header.title)}
-        closeBottomSheet={close}
+        title={t(TravelDateTexts.header.title)}
+        close={close}
       >
         <ScrollView
           contentContainerStyle={styles.contentContainer}

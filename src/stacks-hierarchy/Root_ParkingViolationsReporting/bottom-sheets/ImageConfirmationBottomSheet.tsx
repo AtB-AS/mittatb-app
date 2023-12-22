@@ -27,8 +27,8 @@ export const ImageConfirmationBottomSheet = ({
   const styles = useStyles();
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(ParkingViolationTexts.imageConfirmation.title)}
-      closeBottomSheet={close}
+      title={t(ParkingViolationTexts.imageConfirmation.title)}
+      close={close}
     >
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.imageAndPosition}>

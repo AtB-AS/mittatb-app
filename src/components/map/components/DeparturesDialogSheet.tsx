@@ -152,9 +152,9 @@ export const DeparturesDialogSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={stopPlaceFeature.properties?.name ?? stopPlace?.name}
+      title={stopPlaceFeature.properties?.name ?? stopPlace?.name}
       maxHeightValue={0.5}
-      closeBottomSheet={close}
+      close={close}
       fullHeight
     >
       <View style={styles.departuresContainer}>

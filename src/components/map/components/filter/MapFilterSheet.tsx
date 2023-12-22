@@ -49,8 +49,8 @@ export const MapFilterSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(MapTexts.filters.bottomSheet.heading)}
-      closeBottomSheet={close}
+      title={t(MapTexts.filters.bottomSheet.heading)}
+      close={close}
       maxHeightValue={0.9}
     >
       <ScrollView style={style.container}>

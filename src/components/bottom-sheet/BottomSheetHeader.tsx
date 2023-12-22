@@ -10,12 +10,12 @@ import {insets} from '@atb/utils/insets';
 
 type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
-  closeBottomSheet?: () => void;
+  close?: () => void;
 };
 
 export const BottomSheetHeader = ({
   title,
-  closeBottomSheet,
+  close,
 }: BottomSheetHeaderWithoutNavigationProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -23,7 +23,7 @@ export const BottomSheetHeader = ({
   const {theme} = useTheme();
   const {close: closeBottomSheetDefault, onOpenFocusRef} = useBottomSheet();
 
-  const handleClose = closeBottomSheet ?? closeBottomSheetDefault;
+  const handleClose = close ?? closeBottomSheetDefault;
 
   const themeColor = 'interactive_3';
   const {background: backgroundColor, text: textColor} =

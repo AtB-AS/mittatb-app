@@ -114,8 +114,8 @@ export const SelectFavouritesBottomSheet = ({
 
   return (
     <BottomSheetContainer
-      bottomSheetTitle={t(SelectFavouriteDeparturesText.header.text)}
-      closeBottomSheet={close}
+      title={t(SelectFavouriteDeparturesText.header.text)}
+      close={close}
       testID="selectFavoriteBottomSheet"
     >
       <ScrollView style={styles.flatListArea}>
