@@ -14,8 +14,8 @@ import {
 } from '@atb/translations';
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
-import {SectionHeading} from './SectionHeading';
 import {useTimeContextState} from '@atb/time';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type Props = {
   onPressDetails?: (isCarnet: boolean, orderId: string) => void;
@@ -42,10 +42,11 @@ export const CompactFareContracts: React.FC<Props> = ({
     useFirestoreConfiguration();
 
   return (
-    <View style={style}>
-      <SectionHeading accessibilityLabel={t(TicketingTexts.header.title)}>
-        {t(TicketingTexts.header.title)}
-      </SectionHeading>
+    <View style={[style, itemStyle.container]}>
+      <ContentHeading
+        color="background_accent_0"
+        text={t(TicketingTexts.header.title)}
+      />
       {validFareContracts.length == 0 ? (
         <Button
           text={t(DashboardTexts.buyButton)}
@@ -53,45 +54,41 @@ export const CompactFareContracts: React.FC<Props> = ({
           testID="buyTicketsButton"
         />
       ) : (
-        validFareContracts.map((fareContract, index) => {
-          const fareContractInfoDetailsProps = getFareContractInfoDetails(
-            fareContract,
-            serverNow,
-            tariffZones,
-            userProfiles,
-            preassignedFareProducts,
-          );
-          return (
-            <CompactFareContractInfo
-              style={{
-                ...itemStyle.fareContract,
-                ...(index === validFareContracts.length - 1
-                  ? itemStyle.fareContract__last
-                  : {}),
-              }}
-              key={fareContract.id}
-              {...fareContractInfoDetailsProps}
-              now={serverNow}
-              onPressDetails={() => {
-                onPressDetails?.(
-                  fareContractInfoDetailsProps.isCarnetFareContract ?? false,
-                  fareContract.orderId,
-                );
-              }}
-              testID={'fareContract' + index}
-            />
-          );
-        })
+        <View style={itemStyle.fareContracts}>
+          {validFareContracts.map((fareContract, index) => {
+            const fareContractInfoDetailsProps = getFareContractInfoDetails(
+              fareContract,
+              serverNow,
+              tariffZones,
+              userProfiles,
+              preassignedFareProducts,
+            );
+            return (
+              <CompactFareContractInfo
+                key={fareContract.id}
+                {...fareContractInfoDetailsProps}
+                now={serverNow}
+                onPressDetails={() => {
+                  onPressDetails?.(
+                    fareContractInfoDetailsProps.isCarnetFareContract ?? false,
+                    fareContract.orderId,
+                  );
+                }}
+                testID={'fareContract' + index}
+              />
+            );
+          })}
+        </View>
       )}
     </View>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  fareContract: {
-    marginBottom: theme.spacings.small,
+  container: {
+    rowGap: theme.spacings.small,
   },
-  fareContract__last: {
-    marginBottom: 0,
+  fareContracts: {
+    rowGap: theme.spacings.medium,
   },
 }));

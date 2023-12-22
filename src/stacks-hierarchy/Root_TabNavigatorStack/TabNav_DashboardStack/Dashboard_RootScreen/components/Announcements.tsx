@@ -2,26 +2,26 @@ import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsState} from '@atb/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Announcement} from './Announcement';
-import {SectionHeading} from './SectionHeading';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {StyleSheet} from '@atb/theme';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const Announcements = ({style: containerStyle}: Props) => {
+export const Announcements = ({style}: Props) => {
   const {findAnnouncements} = useAnnouncementsState();
   const {t} = useTranslation();
   const now = useNow(10000);
   const {kettleInfo} = useBeaconsState();
   const [hasSeenShareTravelHabitsScreen, _] =
     useHasSeenShareTravelHabitsScreen();
-  const style = useStyle();
+  const styles = useStyle();
 
   const ruleVariables = {
     isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
@@ -35,19 +35,22 @@ export const Announcements = ({style: containerStyle}: Props) => {
   if (filteredAnnouncements.length === 0) return null;
 
   return (
-    <View style={containerStyle} testID="announcements">
-      <View style={style.headerWrapper}>
-        <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
+    <View style={[style, styles.container]} testID="announcements">
+      <View style={styles.headerWrapper}>
+        <ContentHeading
+          color="background_accent_0"
+          text={t(DashboardTexts.announcemens.header)}
+        />
       </View>
       <ScrollView
-        contentContainerStyle={style.scrollView}
+        contentContainerStyle={styles.scrollView}
         horizontal={filteredAnnouncements.length > 1}
       >
         {filteredAnnouncements.map((a) => (
           <Announcement
             key={a.id}
             announcement={a}
-            style={filteredAnnouncements.length > 1 && style.announcement}
+            style={filteredAnnouncements.length > 1 && styles.announcement}
           />
         ))}
       </ScrollView>
@@ -56,6 +59,9 @@ export const Announcements = ({style: containerStyle}: Props) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    rowGap: theme.spacings.small,
+  },
   headerWrapper: {
     marginHorizontal: theme.spacings.medium,
   },

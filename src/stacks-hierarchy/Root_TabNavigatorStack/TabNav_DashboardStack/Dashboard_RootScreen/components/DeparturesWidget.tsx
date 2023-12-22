@@ -28,7 +28,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {SectionHeading} from './SectionHeading';
+import {ContentHeading} from '@atb/components/content-heading';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -76,8 +76,11 @@ export const DeparturesWidget = ({
 
   return (
     <View style={style}>
-      <SectionHeading>{t(DeparturesTexts.widget.heading)}</SectionHeading>
-
+      <ContentHeading
+        style={styles.heading}
+        color="background_accent_0"
+        text={t(DeparturesTexts.widget.heading)}
+      />
       {!favoriteDepartures.length && (
         <Section>
           <GenericSectionItem>
@@ -160,6 +163,9 @@ function compareStopsByDistance(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  heading: {
+    marginBottom: theme.spacings.small,
+  },
   noFavouritesView: {
     flexDirection: 'row',
     alignItems: 'center',
