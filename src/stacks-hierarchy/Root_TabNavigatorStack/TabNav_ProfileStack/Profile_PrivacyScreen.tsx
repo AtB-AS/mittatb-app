@@ -16,6 +16,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading} from '@atb/components/heading';
+import {PageHeading} from '@atb/components/heading/PageHeading';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
@@ -36,8 +37,14 @@ export const Profile_PrivacyScreen = () => {
     <FullScreenView
       headerProps={{
         title: t(ProfileTexts.sections.privacy.heading),
-        leftButton: {type: 'back'},
+        leftButton: {type: 'back', withIcon: true},
       }}
+      parallaxContent={(focusRef) => (
+        <PageHeading
+          ref={focusRef}
+          text={t(ProfileTexts.sections.privacy.heading)}
+        />
+      )}
     >
       <View style={style.content}>
         {isBeaconsSupported && (
