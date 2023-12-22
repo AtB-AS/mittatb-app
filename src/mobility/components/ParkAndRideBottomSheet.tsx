@@ -31,7 +31,7 @@ type Props = {
   distance: number | undefined;
   parkingFor: ParkingVehicleTypes;
   feature: Feature<Point, ParkingType>;
-  close: () => void;
+  onClose: () => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
 };
 export const ParkAndRideBottomSheet = ({
@@ -40,7 +40,7 @@ export const ParkAndRideBottomSheet = ({
   parkingFor,
   feature,
   distance,
-  close,
+  onClose,
   navigateToTripSearch,
 }: Props) => {
   const {t} = useTranslation();
@@ -62,7 +62,7 @@ export const ParkAndRideBottomSheet = ({
   return (
     <BottomSheetContainer
       title={t(ParkAndRideTexts.title)}
-      close={close}
+      onClose={onClose}
       maxHeightValue={0.5}
     >
       <ScrollView>

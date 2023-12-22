@@ -4,7 +4,10 @@ import {ContactSheetTexts, useTranslation} from '@atb/translations';
 import React, {forwardRef} from 'react';
 import {AccessibilityProps, Linking, View} from 'react-native';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {useChatUnreadCount} from './use-chat-unread-count';
 import Intercom from 'react-native-intercom';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -16,12 +19,11 @@ import {useAnalytics} from '@atb/analytics';
 import {useParkingViolationsReportingEnabled} from '@atb/parking-violations-reporting';
 
 type Props = {
-  close: () => void;
   onReportParkingViolation: () => void;
 };
 
 export const ContactSheet = forwardRef<View, Props>(
-  ({close, onReportParkingViolation}, focusRef) => {
+  ({onReportParkingViolation}, focusRef) => {
     const {t} = useTranslation();
     const unreadCount = useChatUnreadCount();
     const {customer_service_url, enable_intercom, customer_feedback_url} =
@@ -33,11 +35,10 @@ export const ContactSheet = forwardRef<View, Props>(
     const showWebsiteFeedback = !!customer_feedback_url;
     const showIntercomFeedback = enable_intercom && !showWebsiteFeedback;
 
+    const {close} = useBottomSheet();
+
     return (
-      <BottomSheetContainer
-        title={t(ContactSheetTexts.header.title)}
-        close={close}
-      >
+      <BottomSheetContainer title={t(ContactSheetTexts.header.title)}>
         <FullScreenFooter>
           {showWebsiteFeedback ? (
             <ContactItem

@@ -111,8 +111,8 @@ export const Map = (props: MapProps) => {
           />
           {mapLines && <MapRoute lines={mapLines} />}
           <MapboxGL.UserLocation
-              showsUserHeadingIndicator
-              renderMode={UserLocationRenderMode.Native}
+            showsUserHeadingIndicator
+            renderMode={UserLocationRenderMode.Native}
           />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />

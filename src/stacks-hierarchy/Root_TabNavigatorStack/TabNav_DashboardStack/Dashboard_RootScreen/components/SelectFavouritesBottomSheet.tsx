@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
@@ -85,12 +88,10 @@ const SelectableFavouriteDeparture = ({
 };
 
 type SelectFavouritesBottomSheetProps = {
-  close: () => void;
   onEditFavouriteDeparture: () => void;
 };
 
 export const SelectFavouritesBottomSheet = ({
-  close,
   onEditFavouriteDeparture,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
@@ -98,6 +99,7 @@ export const SelectFavouritesBottomSheet = ({
   const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
   const favouriteItems = favoriteDepartures ?? [];
   const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
+  const {close} = useBottomSheet();
 
   const handleSwitchFlip = (id: string, active: boolean) => {
     setUpdatedFavorites(
@@ -115,7 +117,6 @@ export const SelectFavouritesBottomSheet = ({
   return (
     <BottomSheetContainer
       title={t(SelectFavouriteDeparturesText.header.text)}
-      close={close}
       testID="selectFavoriteBottomSheet"
     >
       <ScrollView style={styles.flatListArea}>

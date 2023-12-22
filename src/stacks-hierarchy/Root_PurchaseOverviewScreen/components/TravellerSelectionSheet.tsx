@@ -16,9 +16,9 @@ type TravellerSelectionSheetProps = {
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
-  close: (
-    chosenSelectableUserProfiles?: UserProfileWithCount[],
-    onBehalfOfToggle?: boolean,
+  onConfirmSelection: (
+    chosenSelectableUserProfiles: UserProfileWithCount[],
+    onBehalfOfToggle: boolean,
   ) => void;
   isOnBehalfOfToggle: boolean;
 };
@@ -26,7 +26,7 @@ export const TravellerSelectionSheet = ({
   selectionMode,
   fareProductType,
   selectableUserProfilesWithCountInit,
-  close,
+  onConfirmSelection,
   isOnBehalfOfToggle,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
@@ -47,7 +47,6 @@ export const TravellerSelectionSheet = ({
   return (
     <BottomSheetContainer
       title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
-      close={close}
       maxHeightValue={0.9}
     >
       <ScrollView style={style.container}>
@@ -74,7 +73,10 @@ export const TravellerSelectionSheet = ({
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
           disabled={totalTravellersCount < 1}
           onPress={() =>
-            close(selectableUserProfilesWithCount, isTravelerOnBehalfOfToggle)
+            onConfirmSelection(
+              selectableUserProfilesWithCount,
+              isTravelerOnBehalfOfToggle,
+            )
           }
           rightIcon={{svg: Confirm}}
         />

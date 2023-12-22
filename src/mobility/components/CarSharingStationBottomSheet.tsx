@@ -1,4 +1,4 @@
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -26,13 +26,13 @@ import {MobilityStat} from '@atb/mobility/components/MobilityStat';
 type Props = {
   stationId: string;
   distance: number | undefined;
-  close: () => void;
+  onClose: () => void;
 };
 
 export const CarSharingStationBottomSheet = ({
   stationId,
   distance,
-  close,
+  onClose,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
@@ -53,7 +53,7 @@ export const CarSharingStationBottomSheet = ({
   return (
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Car))}
-      close={close}
+      onClose={onClose}
       maxHeightValue={0.5}
     >
       <>
@@ -128,10 +128,6 @@ export const CarSharingStationBottomSheet = ({
             <MessageInfoBox
               type="error"
               message={t(CarSharingTexts.loadingFailed)}
-              onPressConfig={{
-                action: close,
-                text: t(ScreenHeaderTexts.headerButton.close.text),
-              }}
             />
           </View>
         )}

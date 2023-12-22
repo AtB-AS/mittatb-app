@@ -93,12 +93,11 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_vipps_login} = useRemoteConfig();
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
 
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
     openBottomSheet(() => {
       return (
         <SelectFavouritesBottomSheet
-          close={closeBottomSheet}
           onEditFavouriteDeparture={() =>
             navigation.navigate('Profile_FavoriteDeparturesScreen')
           }

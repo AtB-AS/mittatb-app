@@ -51,7 +51,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
     return (
       <BottomSheetContainer
         title={t(DeparturesTexts.dateInput.header)}
-        close={close}
+        onClose={close}
       >
         <ScrollView
           contentContainerStyle={styles.contentContainer}

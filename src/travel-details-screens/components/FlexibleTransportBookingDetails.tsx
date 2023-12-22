@@ -19,18 +19,18 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {Dimensions} from 'react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import React from 'react';
 
 const {width, height} = Dimensions.get('window');
 const isSmallScreen = width < 320 || height < 568;
 
 type FlexibleTransportBookingDetailsProps = {
   leg: Leg;
-  close: () => void;
 };
 
 export const FlexibleTransportBookingDetails: React.FC<
   FlexibleTransportBookingDetailsProps
-> = ({leg, close}) => {
+> = ({leg}) => {
   const {t, language} = useTranslation();
   const style = useStyle();
   const {theme} = useTheme();
@@ -58,7 +58,6 @@ export const FlexibleTransportBookingDetails: React.FC<
           publicCode,
         ),
       )}
-      close={close}
       fullHeight={true}
       maxHeightValue={0.83}
     >

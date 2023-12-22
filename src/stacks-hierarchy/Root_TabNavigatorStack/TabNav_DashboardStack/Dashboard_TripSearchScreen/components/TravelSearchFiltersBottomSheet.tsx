@@ -9,7 +9,10 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/icon-box';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import {
   FlexibleTransportOptionTypeWithSelectionType,
@@ -32,13 +35,13 @@ import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
   {
-    close: () => void;
     filtersSelection: TravelSearchFiltersSelectionType;
     onSave: (t: TravelSearchFiltersSelectionType) => void;
   }
->(({close, filtersSelection, onSave}, focusRef) => {
+>(({filtersSelection, onSave}, focusRef) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {close} = useBottomSheet();
 
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
@@ -82,7 +85,6 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     <BottomSheetContainer
       maxHeightValue={0.9}
       title={t(TripSearchTexts.filters.bottomSheet.heading)}
-      close={close}
     >
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
         <Section>

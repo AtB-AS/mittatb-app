@@ -17,7 +17,7 @@ import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 type DeparturesDialogSheetProps = {
-  close: () => void;
+  onClose: () => void;
   distance: number | undefined;
   stopPlaceFeature: Feature<Point>;
   navigateToQuay: (stopPlace: StopPlace, quay: Quay) => void;
@@ -32,7 +32,7 @@ type DeparturesDialogSheetProps = {
 };
 
 export const DeparturesDialogSheet = ({
-  close,
+  onClose,
   distance,
   stopPlaceFeature,
   navigateToDetails,
@@ -154,7 +154,7 @@ export const DeparturesDialogSheet = ({
     <BottomSheetContainer
       title={stopPlaceFeature.properties?.name ?? stopPlace?.name}
       maxHeightValue={0.5}
-      close={close}
+      onClose={onClose}
       fullHeight
     >
       <View style={styles.departuresContainer}>

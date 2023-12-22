@@ -10,17 +10,15 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   announcement: AnnouncementType;
-  close: () => void;
 };
 
-export const AnnouncementSheet = ({announcement, close}: Props) => {
+export const AnnouncementSheet = ({announcement}: Props) => {
   const {language} = useTranslation();
   const style = useStyle();
 
   return (
     <BottomSheetContainer
       title={getTextForLanguage(announcement.fullTitle, language)}
-      close={close}
     >
       <ScrollView style={style.container}>
         {announcement.mainImage && (

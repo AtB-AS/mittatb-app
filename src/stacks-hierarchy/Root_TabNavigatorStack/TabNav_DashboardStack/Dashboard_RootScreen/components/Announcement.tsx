@@ -35,7 +35,7 @@ export const Announcement = ({announcement, style}: Props) => {
   const {theme} = useTheme();
   const analytics = useAnalytics();
   const {dismissAnnouncement} = useAnnouncementsState();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
 
   const handleDismiss = () => {
     animateNextChange();
@@ -107,10 +107,7 @@ export const Announcement = ({announcement, style}: Props) => {
             onPress={async () => {
               if (announcement.actionButton?.actionType === 'bottom_sheet') {
                 openBottomSheet(() => (
-                  <AnnouncementSheet
-                    announcement={announcement}
-                    close={closeBottomSheet}
-                  />
+                  <AnnouncementSheet announcement={announcement} />
                 ));
               } else {
                 const actionButtonURL = announcement.actionButton?.url;

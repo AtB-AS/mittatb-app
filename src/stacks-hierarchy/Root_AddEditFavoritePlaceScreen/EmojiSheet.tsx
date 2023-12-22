@@ -20,7 +20,10 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 
 // Polyfill for Android
@@ -178,11 +181,12 @@ type Props = Omit<EmojiCategory, 'category'> & {
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
   value: string | null;
-  close: () => void;
 };
 export const EmojiSheet = forwardRef<ScrollView, Props>(
-  ({value, onEmojiSelected, closeOnSelect, close, ...props}, focusRef) => {
+  ({value, onEmojiSelected, closeOnSelect, ...props}, focusRef) => {
     const {t} = useTranslation();
+
+    const {close} = useBottomSheet();
     const onClick = (emoji: string | null) => {
       onEmojiSelected(emoji);
       if (closeOnSelect) {
@@ -191,10 +195,7 @@ export const EmojiSheet = forwardRef<ScrollView, Props>(
     };
 
     return (
-      <BottomSheetContainer
-        close={close}
-        title={t(AddEditFavoriteTexts.emojiSheet.title)}
-      >
+      <BottomSheetContainer title={t(AddEditFavoriteTexts.emojiSheet.title)}>
         <ScrollView ref={focusRef}>
           {CATEGORIES.map((category) => (
             <EmojiCategory

@@ -19,7 +19,6 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   onSelect: (value: PaymentMethod) => void;
-  close: () => void;
   previousPaymentMethod?: SavedPaymentOption;
 };
 
@@ -71,7 +70,6 @@ const remotePaymentOptions: SavedPaymentOption[] = [];
 export const SelectPaymentMethod: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
-  close,
 }) => {
   const {t} = useTranslation();
 
@@ -147,7 +145,6 @@ export const SelectPaymentMethod: React.FC<Props> = ({
   return (
     <BottomSheetContainer
       title={t(SelectPaymentMethodTexts.header.text)}
-      close={close}
       fullHeight
     >
       <View style={{flex: 1}}>

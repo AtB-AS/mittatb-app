@@ -1,4 +1,4 @@
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -28,10 +28,14 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 type Props = {
   stationId: string;
   distance: number | undefined;
-  close: () => void;
+  onClose: () => void;
 };
 
-export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
+export const BikeStationBottomSheet = ({
+  stationId,
+  distance,
+  onClose,
+}: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
   const {
@@ -52,7 +56,7 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
     <BottomSheetContainer
       maxHeightValue={0.6}
       title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      close={close}
+      onClose={onClose}
     >
       <>
         {isLoading && (
@@ -139,10 +143,6 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
             <MessageInfoBox
               type="error"
               message={t(BicycleTexts.loadingFailed)}
-              onPressConfig={{
-                action: close,
-                text: t(ScreenHeaderTexts.headerButton.close.text),
-              }}
             />
           </View>
         )}
@@ -175,6 +175,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacings.medium),
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),

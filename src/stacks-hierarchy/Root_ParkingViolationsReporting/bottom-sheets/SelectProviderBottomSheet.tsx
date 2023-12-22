@@ -33,7 +33,7 @@ export const SelectProviderBottomSheet = ({
   return (
     <BottomSheetContainer
       title={t(ParkingViolationTexts.selectProvider.title)}
-      close={close}
+      onClose={close}
     >
       <>
         <ThemeText style={styles.content}>

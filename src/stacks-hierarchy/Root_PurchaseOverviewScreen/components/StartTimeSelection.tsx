@@ -36,16 +36,11 @@ export function StartTimeSelection({
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onOpenFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
 
   const openTravelDateSheet = () => {
     openBottomSheet(() => (
       <TravelDateSheet
-        close={closeBottomSheet}
         save={setTravelDate}
         travelDate={travelDate}
         maximumDate={maximumDate}

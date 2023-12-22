@@ -15,7 +15,10 @@ import {
   formatToVerboseFullDate,
   isAfter,
 } from '@atb/utils/date';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
@@ -23,7 +26,6 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = {
   travelDate?: string;
-  close: () => void;
   save: (dateString?: string) => void;
   maximumDate?: Date;
   showActivationDateWarning?: boolean;
@@ -34,7 +36,6 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
   (
     {
       travelDate,
-      close,
       save,
       maximumDate,
       showActivationDateWarning,
@@ -74,6 +75,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
       formatLocaleTime(defaultDate, language),
     );
 
+    const {close} = useBottomSheet();
     const onSave = () => {
       save(dateWithReplacedTime(dateString, timeString).toISOString());
       close();
@@ -81,10 +83,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
     const keyboardHeight = useKeyboardHeight();
 
     return (
-      <BottomSheetContainer
-        title={t(TravelDateTexts.header.title)}
-        close={close}
-      >
+      <BottomSheetContainer title={t(TravelDateTexts.header.title)}>
         <ScrollView
           contentContainerStyle={styles.contentContainer}
           ref={focusRef}

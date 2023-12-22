@@ -1,7 +1,7 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {
@@ -28,9 +28,9 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 
 type Props = {
   vehicleId: VehicleId;
-  close: () => void;
+  onClose: () => void;
 };
-export const BicycleSheet = ({vehicleId: id, close}: Props) => {
+export const BicycleSheet = ({vehicleId: id, onClose}: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
   const {
@@ -48,7 +48,7 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   return (
     <BottomSheetContainer
       title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-      close={close}
+      onClose={onClose}
       maxHeightValue={0.5}
     >
       <>
@@ -136,10 +136,6 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
             <MessageInfoBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
-              onPressConfig={{
-                action: close,
-                text: t(ScreenHeaderTexts.headerButton.close.text),
-              }}
             />
           </View>
         )}

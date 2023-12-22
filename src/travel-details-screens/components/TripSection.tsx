@@ -133,11 +133,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const atbAuthorityId = 'ATB:Authority:2';
   const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;
 
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
   function openBookingDetails() {
-    openBottomSheet(() => (
-      <FlexibleTransportBookingDetails leg={leg} close={closeBottomSheet} />
-    ));
+    openBottomSheet(() => <FlexibleTransportBookingDetails leg={leg} />);
   }
 
   const sectionOutput = (

@@ -241,7 +241,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             selectPaymentOption(option);
             closeBottomSheet();
           }}
-          close={closeBottomSheet}
           previousPaymentMethod={previousPaymentMethod}
         />
       );
