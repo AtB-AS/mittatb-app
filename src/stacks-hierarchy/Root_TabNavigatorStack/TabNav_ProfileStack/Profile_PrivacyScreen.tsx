@@ -6,8 +6,7 @@ import {
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {Linking} from 'react-native';
+import {Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
@@ -40,7 +39,7 @@ export const Profile_PrivacyScreen = () => {
         leftButton: {type: 'back'},
       }}
     >
-      <ScrollView contentContainerStyle={style.content}>
+      <View style={style.content}>
         {isBeaconsSupported && (
           <>
             <ContentHeading
@@ -87,7 +86,7 @@ export const Profile_PrivacyScreen = () => {
           />
         </Section>
 
-        {isBeaconsSupported && kettleInfo?.isBeaconsOnboarded && (
+        {isBeaconsSupported && (
           <Section style={style.spacingTop}>
             <LinkSectionItem
               text={t(PrivacySettingsTexts.sections.items.controlPanel.title)}
@@ -138,7 +137,7 @@ export const Profile_PrivacyScreen = () => {
             }
             testID="deleteLocalSearchData"
           />
-          {isBeaconsSupported && kettleInfo?.isBeaconsOnboarded && (
+          {isBeaconsSupported && (
             <Button
               style={style.spacingTop}
               leftIcon={{svg: Delete}}
@@ -168,7 +167,7 @@ export const Profile_PrivacyScreen = () => {
             />
           )}
         </Section>
-      </ScrollView>
+      </View>
     </FullScreenView>
   );
 };
