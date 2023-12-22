@@ -30,7 +30,7 @@ import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {FullScreenView} from '@atb/components/screen-view';
-import {PageHeading} from '@atb/components/heading';
+import {ScreenHeading} from '@atb/components/heading';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
@@ -130,7 +130,7 @@ export const Profile_PaymentOptionsScreen = ({
         <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
       }
       parallaxContent={() => (
-        <PageHeading text={t(PaymentOptionsTexts.header.title)} />
+        <ScreenHeading text={t(PaymentOptionsTexts.header.title)} />
       )}
     >
       <View style={style.content}>

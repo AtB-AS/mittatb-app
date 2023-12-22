@@ -5,7 +5,7 @@ import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
 import {useTimeContextState} from '@atb/time';
 import {FullScreenView} from '@atb/components/screen-view';
-import {PageHeading} from '@atb/components/heading';
+import {ScreenHeading} from '@atb/components/heading';
 
 export const Profile_TicketHistoryScreen: React.FC = () => {
   const {
@@ -29,7 +29,7 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={() => (
-        <PageHeading text={t(TicketHistoryTexts.header)} />
+        <ScreenHeading text={t(TicketHistoryTexts.header)} />
       )}
     >
       <FareContractAndReservationsList

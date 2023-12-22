@@ -10,7 +10,7 @@ import {
   UserProfile,
 } from '@atb/configuration';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ContentHeading, PageHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 
 export const Profile_DefaultUserProfileScreen = () => {
   const {
@@ -39,7 +39,7 @@ export const Profile_DefaultUserProfileScreen = () => {
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={() => (
-        <PageHeading text={t(UserProfileSettingsTexts.header.title)} />
+        <ScreenHeading text={t(UserProfileSettingsTexts.header.title)} />
       )}
     >
       <View style={styles.content}>

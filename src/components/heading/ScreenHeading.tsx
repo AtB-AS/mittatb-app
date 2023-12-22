@@ -10,7 +10,7 @@ type PageHeadingProps = {
   accessibilityLabel?: string;
 };
 
-export const PageHeading = forwardRef<any, PageHeadingProps>(
+export const ScreenHeading = forwardRef<any, PageHeadingProps>(
   (
     {text, color = 'background_accent_0', accessibilityLabel}: PageHeadingProps,
     ref,

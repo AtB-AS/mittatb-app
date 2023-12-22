@@ -15,7 +15,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ContentHeading, PageHeading} from '@atb/components/heading';
+import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
@@ -39,7 +39,7 @@ export const Profile_PrivacyScreen = () => {
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={(focusRef) => (
-        <PageHeading
+        <ScreenHeading
           ref={focusRef}
           text={t(ProfileTexts.sections.privacy.heading)}
         />
