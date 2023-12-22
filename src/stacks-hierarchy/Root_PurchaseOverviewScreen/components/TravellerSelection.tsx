@@ -95,6 +95,14 @@ export function TravellerSelection({
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
+  const newLabelAccessibility = isOnBehalfOfEnabled
+    ? screenReaderPause + t(LabelInfoTexts.labels['new'])
+    : '';
+
+  const sendingToOthersAccessibility = isOnBehalfOfToggle
+    ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
+    : '';
+
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: 'button',
@@ -106,9 +114,8 @@ export function TravellerSelection({
       ) +
       ' ' +
       travellersDetailsText +
-      (isOnBehalfOfEnabled
-        ? screenReaderPause + t(LabelInfoTexts.labels['new'])
-        : '') +
+      sendingToOthersAccessibility +
+      newLabelAccessibility +
       screenReaderPause,
     accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
   };
@@ -162,6 +169,12 @@ export function TravellerSelection({
                   : travellersDetailsText}
               </ThemeText>
 
+              {isOnBehalfOfToggle && (
+                <ThemeText type="body__secondary" color="secondary">
+                  {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+                </ThemeText>
+              )}
+
               {multipleTravellerCategoriesSelectedFrom && (
                 <ThemeText
                   type="body__secondary"
@@ -174,9 +187,7 @@ export function TravellerSelection({
             </View>
 
             {/* remove new label when requested */}
-            {isOnBehalfOfEnabled && (
-                <LabelInfo label="new" />
-            )}
+            {isOnBehalfOfEnabled && <LabelInfo label="new" />}
 
             <ThemeIcon svg={Edit} size="normal" />
           </View>
