@@ -1,6 +1,5 @@
 import React from 'react';
 import {useTranslation, TicketingTexts} from '@atb/translations';
-import {StyleSheet} from '@atb/theme';
 import {filterExpiredFareContracts, useTicketingState} from '@atb/ticketing';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
@@ -51,5 +50,3 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
     </FullScreenView>
   );
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({}));
