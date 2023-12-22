@@ -38,8 +38,11 @@ export const Profile_DefaultUserProfileScreen = () => {
         title: t(UserProfileSettingsTexts.header.title),
         leftButton: {type: 'back', withIcon: true},
       }}
-      parallaxContent={() => (
-        <ScreenHeading text={t(UserProfileSettingsTexts.header.title)} />
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(UserProfileSettingsTexts.header.title)}
+        />
       )}
     >
       <View style={styles.content}>

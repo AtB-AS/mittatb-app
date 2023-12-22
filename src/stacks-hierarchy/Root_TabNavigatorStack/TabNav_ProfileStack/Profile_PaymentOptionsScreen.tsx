@@ -129,8 +129,11 @@ export const Profile_PaymentOptionsScreen = ({
       refreshControl={
         <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
       }
-      parallaxContent={() => (
-        <ScreenHeading text={t(PaymentOptionsTexts.header.title)} />
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(PaymentOptionsTexts.header.title)}
+        />
       )}
     >
       <View style={style.content}>

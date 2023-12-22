@@ -28,8 +28,8 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         title: t(TicketHistoryTexts.header),
         leftButton: {type: 'back', withIcon: true},
       }}
-      parallaxContent={() => (
-        <ScreenHeading text={t(TicketHistoryTexts.header)} />
+      parallaxContent={(focusRef) => (
+        <ScreenHeading ref={focusRef} text={t(TicketHistoryTexts.header)} />
       )}
     >
       <FareContractAndReservationsList
