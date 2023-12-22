@@ -66,8 +66,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   scrollView: {
     paddingHorizontal: theme.spacings.medium,
-    columnGap: theme.spacings.medium,
-    rowGap: theme.spacings.medium,
+    gap: theme.spacings.medium,
   },
   announcement: {
     width: Dimensions.get('window').width * 0.9 - 2 * theme.spacings.medium,
