@@ -3,7 +3,6 @@ import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {useAuthState} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -27,10 +26,11 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 import {parseUrl} from 'query-string/base';
 import React, {useEffect, useState} from 'react';
 import {Linking, RefreshControl, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {animateNextChange} from '@atb/utils/animation';
+import {FullScreenView} from '@atb/components/screen-view';
+import {PageHeading} from '@atb/components/heading';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
@@ -121,20 +121,19 @@ export const Profile_PaymentOptionsScreen = ({
   };
 
   return (
-    <View style={style.container}>
-      <View>
-        <FullScreenHeader
-          style={{elevation: 1000, zIndex: 1000}}
-          title={t(PaymentOptionsTexts.header.title)}
-          leftButton={{type: 'back'}}
-        />
-      </View>
-      <ScrollView
-        style={style.contentContainer}
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
-        }
-      >
+    <FullScreenView
+      headerProps={{
+        title: t(PaymentOptionsTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
+      }
+      parallaxContent={() => (
+        <PageHeading text={t(PaymentOptionsTexts.header.title)} />
+      )}
+    >
+      <View style={style.content}>
         {showError && <GenericError />}
         {storedCards.length > 0 && (
           <Section>
@@ -146,15 +145,15 @@ export const Profile_PaymentOptionsScreen = ({
           </Section>
         )}
         {!isLoading && storedCards.length == 0 && <NoCardsInfo />}
-        <Section style={style.addPaymentMethod}>
+        <Section>
           <LinkSectionItem
             text={t(PaymentOptionsTexts.addPaymentMethod)}
             onPress={onAddRecurringPayment}
             icon={<ThemeIcon svg={Add} />}
           />
         </Section>
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 
@@ -253,13 +252,9 @@ const GenericError = () => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
-  },
-  contentContainer: {
+  content: {
     padding: theme.spacings.medium,
-    flex: 1,
+    rowGap: theme.spacings.medium,
   },
   card: {
     flex: 1,
@@ -279,8 +274,5 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   messageStyle: {
     marginBottom: theme.spacings.medium,
-  },
-  addPaymentMethod: {
-    marginTop: theme.spacings.medium,
   },
 }));
