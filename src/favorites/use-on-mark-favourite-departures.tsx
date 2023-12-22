@@ -30,11 +30,7 @@ export function useOnMarkFavouriteDepartures(
   const {addFavoriteDeparture, removeFavoriteDeparture, getFavoriteDeparture} =
     useFavorites();
   const {t} = useTranslation();
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onOpenFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const addFavorite = async (
     line: FavouriteDepartureLine,
     forSpecificDestination: boolean,
