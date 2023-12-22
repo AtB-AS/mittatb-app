@@ -2,8 +2,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
-import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
-import {MapState} from '@rnmapbox/maps/lib/typescript/components/MapView';
+import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
 import {Feature} from 'geojson';
 import React, {useMemo, useRef} from 'react';
 import {View} from 'react-native';
@@ -110,10 +109,7 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
           {mapLines && <MapRoute lines={mapLines} />}
-          <MapboxGL.UserLocation
-            showsUserHeadingIndicator
-            renderMode={UserLocationRenderMode.Native}
-          />
+          <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
             <SelectionPin coordinates={selectedCoordinates} id="selectionPin" />
           )}

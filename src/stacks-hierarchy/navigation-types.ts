@@ -13,6 +13,7 @@ import {PreassignedFareProduct} from '@atb/configuration';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
+import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
 
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
@@ -151,6 +152,8 @@ export type RootStackParamList = {
   Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
+
+  Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

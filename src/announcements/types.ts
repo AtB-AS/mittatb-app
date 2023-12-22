@@ -1,15 +1,22 @@
-import { LanguageAndTextType } from '@atb/configuration';
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { AppPlatformType } from '@atb/global-messages/types';
-import { Rule } from '@atb/rule-engine/rules';
+import {LanguageAndTextType} from '@atb/configuration';
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
+import {AppPlatformType} from '@atb/global-messages/types';
+import {Rule} from '@atb/rule-engine/rules';
 
 export type AnnouncementId = string;
 
-export type ActionButton = {
-  label: LanguageAndTextType[];
-  url?: string;
-  actionType: 'external' | 'deeplink' | 'bottom_sheet';
+export type BottomSheetActionButton = {
+  label?: LanguageAndTextType[];
+  actionType: 'bottom_sheet';
 };
+
+export type UrlActionButton = {
+  label?: LanguageAndTextType[];
+  url: string;
+  actionType: 'external' | 'deeplink';
+};
+
+export type ActionButton = BottomSheetActionButton | UrlActionButton;
 
 export type AnnouncementRaw = {
   id: AnnouncementId;
@@ -36,4 +43,5 @@ export type AnnouncementType = Omit<
 > & {
   startDate?: number;
   endDate?: number;
+  actionButton: ActionButton;
 };

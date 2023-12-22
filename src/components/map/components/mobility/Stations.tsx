@@ -7,7 +7,7 @@ import {
 } from '@atb/components/map';
 import {getAvailableVehicles} from '@atb/mobility/utils';
 import {Camera, ShapeSource} from '@rnmapbox/maps';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {Feature, FeatureCollection, Point} from 'geojson';
 import React, {RefObject} from 'react';
 import {Cluster} from '../../types';

@@ -107,6 +107,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userProfilesWithCount,
     travelDate,
     headerLeftButton,
+    phoneNumber,
   } = params;
 
   const {travellerSelectionMode, zoneSelectionMode} =
@@ -341,6 +342,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
+                {phoneNumber && (
+                  <ThemeText type="body__secondary" color="secondary" style={styles.sendingToText}>
+                    {t(PurchaseConfirmationTexts.sendingTo(phoneNumber))}
+                  </ThemeText>
+                )}
+
                 <SummaryText />
                 {!isSearchingOffer &&
                   validDurationSeconds &&
@@ -627,6 +634,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   paymentSummaryContainer: {
     marginVertical: theme.spacings.medium,
+  },
+  sendingToText: {
+    marginTop: theme.spacings.xSmall
   },
   totalPaymentContainer: {
     flexDirection: 'row',
