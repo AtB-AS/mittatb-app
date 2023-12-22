@@ -35,11 +35,10 @@ export const TicketAssistant_CategoryPickerScreen = ({
 
   const focusRef = useFocusOnLoad(true, 200);
 
-  const {fareProductTypeConfigs, preassignedFareProducts} =
-    useFirestoreConfiguration();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
   const offerDefaults = useOfferDefaults(
-    preassignedFareProducts[0],
+    undefined,
     fareProductTypeConfigs[0].type,
   );
   const {updateInputParams} = useTicketAssistantState();
