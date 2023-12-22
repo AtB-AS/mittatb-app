@@ -123,7 +123,6 @@ export function useOnMarkFavouriteDepartures(
             addFavorite={(forSpecificLineName: boolean) =>
               addFavorite(line, forSpecificLineName)
             }
-            close={closeBottomSheet}
             ref={onOpenFocusRef}
           />
         ) : (

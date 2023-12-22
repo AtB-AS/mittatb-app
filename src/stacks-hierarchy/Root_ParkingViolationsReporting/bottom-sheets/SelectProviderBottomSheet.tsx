@@ -13,14 +13,14 @@ import {SelectGroup} from '../components/SelectGroup';
 
 type Props = {
   providers: ViolationsReportingProvider[];
-  close: () => void;
+  onClose: () => void;
   onSelect: (provider: ViolationsReportingProvider) => void;
   qrScanFailed: boolean | undefined;
 };
 
 export const SelectProviderBottomSheet = ({
   providers,
-  close,
+  onClose,
   onSelect,
   qrScanFailed,
 }: Props) => {
@@ -33,7 +33,7 @@ export const SelectProviderBottomSheet = ({
   return (
     <BottomSheetContainer
       title={t(ParkingViolationTexts.selectProvider.title)}
-      onClose={close}
+      onClose={onClose}
     >
       <>
         <ThemeText style={styles.content}>

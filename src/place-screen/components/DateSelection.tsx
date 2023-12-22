@@ -65,20 +65,15 @@ export const DateSelection = ({
     setSearchTime(time);
   };
 
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onOpenFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
   const onLaterTimePress = () => {
     openBottomSheet(() => (
       <DepartureTimeSheet
         ref={onOpenFocusRef}
-        close={closeBottomSheet}
         initialTime={searchTime}
         setSearchTime={onSetSearchTime}
         allowTimeInPast={false}
-       />
+      />
     ));
   };
 
@@ -113,7 +108,7 @@ export const DateSelection = ({
         textContainerStyle={styles.nextPrevButtonTextContainer}
         viewContainerStyle={styles.nextPrevButtonContainer}
         testID="previousDayButton"
-       />
+      />
       <Button
         interactiveColor="interactive_2"
         onPress={onLaterTimePress}
@@ -131,7 +126,7 @@ export const DateSelection = ({
         style={styles.button}
         textStyle={styles.buttonText}
         testID="setDateButton"
-       />
+      />
       <Button
         interactiveColor="interactive_2"
         onPress={() => {
@@ -162,7 +157,7 @@ export const DateSelection = ({
         viewContainerStyle={styles.nextPrevButtonContainer}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
         testID="nextDayButton"
-       />
+      />
     </View>
   );
 };

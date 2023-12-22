@@ -1,5 +1,8 @@
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {
@@ -20,14 +23,13 @@ import {ScrollView, View} from 'react-native';
 import {SearchTime} from '../types';
 
 type Props = {
-  close: () => void;
   initialTime: SearchTime;
   setSearchTime: (time: SearchTime) => void;
   allowTimeInPast?: boolean;
 };
 
 export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
-  ({close, initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {
+  ({initialTime, setSearchTime, allowTimeInPast = true}, focusRef) => {
     const styles = useStyles();
     const {t, language} = useTranslation();
 
@@ -36,6 +38,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
       formatLocaleTime(initialTime.date, language),
     );
 
+    const {close} = useBottomSheet();
     const onSelect = () => {
       const calculatedTime = dateWithReplacedTime(date, time).toISOString();
       if (isInThePast(calculatedTime) && !allowTimeInPast) {
@@ -49,10 +52,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
     const keyboardHeight = useKeyboardHeight();
 
     return (
-      <BottomSheetContainer
-        title={t(DeparturesTexts.dateInput.header)}
-        onClose={close}
-      >
+      <BottomSheetContainer title={t(DeparturesTexts.dateInput.header)}>
         <ScrollView
           contentContainerStyle={styles.contentContainer}
           style={{paddingBottom: keyboardHeight}}

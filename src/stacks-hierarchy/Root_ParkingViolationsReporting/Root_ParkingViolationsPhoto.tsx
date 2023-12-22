@@ -34,7 +34,6 @@ export const Root_ParkingViolationsPhoto = ({
         }}
         coordinates={coordinates}
         file={file}
-        close={closeBottomSheet}
       />
     ));
   };

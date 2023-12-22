@@ -5,7 +5,10 @@ import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button, ButtonGroup} from '@atb/components/button';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import React, {forwardRef} from 'react';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import {DestinationDisplay} from '@atb/api/types/generated/journey_planner_v3_types';
@@ -15,18 +18,17 @@ type Props = {
   lineNumber: string;
   destinationDisplay: DestinationDisplay;
   addFavorite: (forSpecificLineName: boolean) => void;
-  close: () => void;
 };
 
 export const FavoriteDialogSheet = forwardRef<View, Props>(
-  ({lineNumber, destinationDisplay, addFavorite, close}, focusRef) => {
+  ({lineNumber, destinationDisplay, addFavorite}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
     const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
+    const {close} = useBottomSheet();
     return (
       <BottomSheetContainer
         title={t(DeparturesTexts.favoriteDialogSheet.title)}
-        onClose={close}
         testID="chooseFavoriteBottomSheet"
       >
         <View style={styles.text} ref={focusRef} accessible={true}>

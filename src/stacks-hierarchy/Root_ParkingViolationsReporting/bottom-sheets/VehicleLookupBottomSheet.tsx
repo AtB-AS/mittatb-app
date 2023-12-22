@@ -13,14 +13,14 @@ type Props = {
   provider: ViolationsReportingProvider;
   vehicleId: string | undefined;
   onReportSubmit: (providerId: number) => void;
-  close: () => void;
+  onClose: () => void;
 };
 
 export const VehicleLookupConfirmationBottomSheet = ({
   provider,
   vehicleId,
   onReportSubmit,
-  close,
+  onClose,
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -28,7 +28,7 @@ export const VehicleLookupConfirmationBottomSheet = ({
   return (
     <BottomSheetContainer
       title={t(ParkingViolationTexts.vehicleLookup.title)}
-      onClose={close}
+      onClose={onClose}
     >
       <View style={styles.content}>
         <ProviderLogo provider={provider} />
