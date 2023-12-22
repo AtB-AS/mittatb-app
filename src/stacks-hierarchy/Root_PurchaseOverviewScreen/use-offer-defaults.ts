@@ -34,15 +34,11 @@ export function useOfferDefaults(
     .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
 
-  // Find the index of the product with the specific ID in selectableProducts
-  const specificProductIndex = selectableProducts.findIndex(
-    (p) => p.id === 'ATB:PreassignedFareProduct:925469fb',
+  const defaultProduct = selectableProducts.find(
+    (p) => p.id === 'ATB:PreassignedFareProduct:925469fb', // 30day ticket
   );
   const defaultPreassignedFareProduct =
-    preassignedFareProduct ??
-    (specificProductIndex >= 0
-      ? selectableProducts[specificProductIndex]
-      : selectableProducts[0]);
+    preassignedFareProduct ?? defaultProduct ?? selectableProducts[0];
 
   // Get default TariffZones
   const defaultTariffZone = useDefaultTariffZone(tariffZones);
