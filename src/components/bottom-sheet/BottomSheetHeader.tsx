@@ -1,22 +1,17 @@
-import {LayoutChangeEvent, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import {TouchableOpacity, View} from 'react-native';
+import React from 'react';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {BottomSheetTexts, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {insets} from '@atb/utils/insets';
 
 type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
   closeBottomSheet?: () => void;
 };
-
-// Define the interface for the size
-interface Size {
-  width: number;
-  height: number;
-}
 
 export const BottomSheetHeader = ({
   title,
@@ -33,23 +28,6 @@ export const BottomSheetHeader = ({
   const themeColor = 'interactive_3';
   const {background: backgroundColor, text: textColor} =
     theme.interactive[themeColor]['active'];
-
-  const [buttonSize, setButtonSize] = useState<Size>({width: 0, height: 0});
-  const onButtonLayout = (event: LayoutChangeEvent) => {
-    const {width, height} = event.nativeEvent.layout;
-    setButtonSize({width, height});
-  };
-
-  // Calculate hitSlop values
-  const desiredHitboxSize = 48;
-  const hitSlopSize = (desiredHitboxSize - buttonSize.height) / 2;
-
-  const hitSlop = {
-    top: hitSlopSize,
-    bottom: hitSlopSize,
-    left: hitSlopSize,
-    right: hitSlopSize,
-  };
 
   return (
     <View style={styles.container}>
@@ -71,8 +49,7 @@ export const BottomSheetHeader = ({
       </View>
       <TouchableOpacity
         onPress={handleClose}
-        onLayout={onButtonLayout}
-        hitSlop={hitSlop}
+        hitSlop={insets.all(10)}
         style={[styles.button, {backgroundColor: backgroundColor}]}
         accessible={true}
         accessibilityLabel={t(BottomSheetTexts.closeButton.a11yLabel)}
