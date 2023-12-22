@@ -1,17 +1,16 @@
+import React from 'react';
+import {View} from 'react-native';
 import {RadioGroupSection} from '@atb/components/sections';
 import {usePreferences} from '@atb/preferences';
 import {StyleSheet, Theme} from '@atb/theme';
 import {UserProfileSettingsTexts, useTranslation} from '@atb/translations';
-import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
 import {
-  UserProfile,
-  useFirestoreConfiguration,
   getReferenceDataName,
+  useFirestoreConfiguration,
+  UserProfile,
 } from '@atb/configuration';
-import {ThemeText} from '@atb/components/text';
-import {View} from 'react-native';
-import {FullScreenHeader} from '@atb/components/screen-header';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ContentHeading, PageHeading} from '@atb/components/heading';
 
 export const Profile_DefaultUserProfileScreen = () => {
   const {
@@ -34,16 +33,17 @@ export const Profile_DefaultUserProfileScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={t(UserProfileSettingsTexts.header.title)}
-        leftButton={{type: 'back'}}
-      />
-      <ScrollView style={styles.scrollView}>
-        <ThemeText style={styles.description}>
-          {t(UserProfileSettingsTexts.description)}
-        </ThemeText>
-
+    <FullScreenView
+      headerProps={{
+        title: t(UserProfileSettingsTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={() => (
+        <PageHeading text={t(UserProfileSettingsTexts.header.title)} />
+      )}
+    >
+      <View style={styles.content}>
+        <ContentHeading text={t(UserProfileSettingsTexts.description)} />
         <RadioGroupSection<UserProfile>
           items={selectableUserProfiles}
           keyExtractor={(u) => u.id}
@@ -53,21 +53,14 @@ export const Profile_DefaultUserProfileScreen = () => {
             setPreference({defaultUserTypeString: u.userTypeString})
           }
         />
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
-  },
-  scrollView: {
+  content: {
     margin: theme.spacings.medium,
-  },
-  description: {
-    marginBottom: theme.spacings.medium,
-    padding: theme.spacings.medium,
+    rowGap: theme.spacings.small,
   },
 }));
