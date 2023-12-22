@@ -6,7 +6,7 @@ import {Scooters} from './Scooters';
 import {Bicycles} from './Bicycles';
 import {flyToLocation, isClusterFeature} from '@atb/components/map';
 import {mapPositionToCoordinates} from '../../utils';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
 type Props = {
   mapCameraRef: RefObject<MapboxGL.Camera>;

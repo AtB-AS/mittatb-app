@@ -1,7 +1,7 @@
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import React, {RefObject, useRef} from 'react';
 import {StationsWithCount} from './Stations';
 

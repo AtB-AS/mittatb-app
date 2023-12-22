@@ -4,7 +4,7 @@ import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles'
 import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 
 type Props = {
   scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
