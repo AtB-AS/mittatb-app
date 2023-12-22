@@ -250,7 +250,9 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
           />
         </View>
 
-        <Announcements style={style.contentSection} />
+        <Announcements
+          style={[style.contentSection, style.contentSection__horizontalScroll]}
+        />
 
         {enable_ticketing && (
           <CompactFareContracts
@@ -425,6 +427,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   contentSection: {
     marginTop: theme.spacings.large,
     marginHorizontal: theme.spacings.medium,
+  },
+  contentSection__horizontalScroll: {
+    marginHorizontal: 0,
   },
   contentSection__first: {
     marginTop: 0,

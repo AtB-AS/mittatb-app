@@ -45,91 +45,100 @@ export const Announcement = ({announcement, style}: Props) => {
     });
   };
 
+  const summaryTitle = getTextForLanguage(
+    announcement.summaryTitle ?? announcement.fullTitle,
+    language,
+  );
+
   return (
     <Section style={style} key={announcement.id} testID="announcement">
-      <GenericSectionItem>
-        <View style={styles.container}>
-          <View style={styles.content} accessible={true}>
-            {announcement.summaryImage && (
-              <View style={styles.imageContainer}>
-                <Image
-                  height={50}
-                  width={50}
-                  source={{uri: announcement.summaryImage}}
-                />
-              </View>
-            )}
-            <View style={styles.textContainer}>
-              <ThemeText type="body__primary--bold">
-                {getTextForLanguage(
-                  announcement.summaryTitle ?? announcement.fullTitle,
-                  language,
-                )}
-              </ThemeText>
-              <ThemeText style={styles.summary}>
-                {getTextForLanguage(announcement.summary, language)}
-              </ThemeText>
+      <GenericSectionItem style={styles.sectionItem}>
+        <View style={styles.content}>
+          {announcement.summaryImage && (
+            <View style={styles.imageContainer}>
+              <Image
+                height={50}
+                width={50}
+                source={{uri: announcement.summaryImage}}
+              />
             </View>
+          )}
+          <View style={styles.textContainer}>
+            <View style={styles.summaryTitle}>
+              <ThemeText
+                style={styles.summaryTitleText}
+                type="body__primary--bold"
+              >
+                {summaryTitle}
+              </ThemeText>
+              <PressableOpacity
+                style={styles.close}
+                role="button"
+                hitSlop={insets.all(theme.spacings.medium)}
+                accessibilityHint={t(
+                  DashboardTexts.announcemens.announcement.closeA11yHint,
+                )}
+                onPress={() => handleDismiss()}
+                testID="closeAnnouncement"
+              >
+                <ThemeIcon svg={Close} />
+              </PressableOpacity>
+            </View>
+            <ThemeText style={styles.summary}>
+              {getTextForLanguage(announcement.summary, language)}
+            </ThemeText>
           </View>
-          <PressableOpacity
-            style={styles.close}
-            role="button"
-            hitSlop={insets.all(theme.spacings.medium)}
-            accessibilityHint={t(
-              DashboardTexts.announcemens.announcement.closeA11yHint,
-            )}
-            onPress={() => handleDismiss()}
-            testID="closeAnnouncement"
-          >
-            <ThemeIcon svg={Close} />
-          </PressableOpacity>
         </View>
       </GenericSectionItem>
-      {announcement.actionButton?.actionType &&
-        announcement.actionButton?.label && (
-          <LinkSectionItem
-            text={
-              getTextForLanguage(announcement.actionButton.label, language) ??
-              ''
-            }
-            icon={
-              announcement.actionButton?.actionType === 'external'
-                ? 'external-link'
-                : 'arrow-right'
-            }
-            accessibility={{
-              accessibilityHint: t(
-                DashboardTexts.announcemens.buttonAction[
-                  announcement.actionButton.actionType
-                ],
+      {announcement.actionButton?.actionType && (
+        <LinkSectionItem
+          text={
+            getTextForLanguage(announcement.actionButton.label, language) ??
+            t(
+              DashboardTexts.announcemens.buttonAction.defaultLabel(
+                summaryTitle,
               ),
-            }}
-            onPress={async () => {
-              if (announcement.actionButton?.actionType === 'bottom_sheet') {
-                openBottomSheet(() => (
-                  <AnnouncementSheet
-                    announcement={announcement}
-                    close={closeBottomSheet}
-                  />
-                ));
-              } else {
-                const actionButtonURL = announcement.actionButton?.url;
-                try {
-                  actionButtonURL && (await Linking.openURL(actionButtonURL));
-                } catch (err: any) {
-                  Bugsnag.notify(err);
-                }
+            )
+          }
+          textType="body__secondary"
+          icon={
+            announcement.actionButton?.actionType === 'external'
+              ? 'external-link'
+              : 'arrow-right'
+          }
+          accessibility={{
+            accessibilityHint: t(
+              DashboardTexts.announcemens.buttonAction.a11yHint[
+                announcement.actionButton.actionType
+              ],
+            ),
+          }}
+          onPress={async () => {
+            if (announcement.actionButton.actionType === 'bottom_sheet') {
+              openBottomSheet(() => (
+                <AnnouncementSheet
+                  announcement={announcement}
+                  close={closeBottomSheet}
+                />
+              ));
+            } else {
+              const actionButtonURL = announcement.actionButton.url;
+              try {
+                actionButtonURL && (await Linking.openURL(actionButtonURL));
+              } catch (err: any) {
+                Bugsnag.notify(err);
               }
-            }}
-          />
-        )}
+            }
+          }}
+        />
+      )}
     </Section>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flexDirection: 'row',
+  sectionItem: {
+    flexGrow: 1,
   },
   content: {
     flex: 1,
@@ -145,8 +154,12 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   textContainer: {
     flex: 1,
   },
-  spacing: {
-    marginTop: theme.spacings.medium,
+  summaryTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  summaryTitleText: {
+    flexShrink: 1,
   },
   summary: {
     marginTop: theme.spacings.xSmall,
