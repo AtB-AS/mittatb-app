@@ -1,10 +1,10 @@
 import {Section, ToggleSectionItem} from '@atb/components/sections';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {useTheme} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {Platform, View} from 'react-native';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 export const Profile_AppearanceScreen = () => {
   const {
@@ -15,17 +15,22 @@ export const Profile_AppearanceScreen = () => {
     useAndroidSystemFont,
     updateAndroidFontOverride,
   } = useTheme();
-  const style = useProfileHomeStyle();
   const {t} = useTranslation();
 
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(AppearanceSettingsTexts.header.title)}
-        leftButton={{type: 'back'}}
-      />
-
-      <ScrollView>
+    <FullScreenView
+      headerProps={{
+        title: t(AppearanceSettingsTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(AppearanceSettingsTexts.header.title)}
+        />
+      )}
+    >
+      <View>
         <Section withTopPadding withPadding>
           <ToggleSectionItem
             text={t(AppearanceSettingsTexts.actions.usePhoneTheme)}
@@ -52,14 +57,7 @@ export const Profile_AppearanceScreen = () => {
             />
           </Section>
         )}
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
-
-const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
-  },
-}));
