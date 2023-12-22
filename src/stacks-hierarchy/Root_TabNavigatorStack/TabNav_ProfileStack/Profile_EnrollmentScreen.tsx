@@ -9,10 +9,11 @@ import {
 } from '@atb/components/message-info-box';
 import {TextInputSectionItem} from '@atb/components/sections';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {enrollIntoBetaGroups} from '@atb/api/enrollment';
 import analytics from '@react-native-firebase/analytics';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 export const Profile_EnrollmentScreen = () => {
   const styles = useStyles();
@@ -29,15 +30,17 @@ export const Profile_EnrollmentScreen = () => {
   const messageText = useMessageText(messageType);
 
   return (
-    <View style={styles.container}>
-      <FullScreenHeader
-        title={t(EnrollmentTexts.header)}
-        leftButton={{type: 'back'}}
-      />
+    <FullScreenView
+      headerProps={{
+        title: t(EnrollmentTexts.header),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading ref={focusRef} text={t(EnrollmentTexts.header)} />
+      )}
+    >
       <View style={styles.contentContainer}>
-        <View style={styles.spacing}>
-          <MessageInfoBox type={messageType} message={messageText} />
-        </View>
+        <MessageInfoBox type={messageType} message={messageText} />
         {isEnrolled ? null : isLoading ? (
           <ActivityIndicator />
         ) : (
@@ -54,13 +57,12 @@ export const Profile_EnrollmentScreen = () => {
               text={t(EnrollmentTexts.button)}
               leftIcon={{svg: Confirm}}
               disabled={isLoading || !inviteCode}
-              style={styles.button}
               interactiveColor="interactive_0"
             />
           </>
         )}
       </View>
-    </View>
+    </FullScreenView>
   );
 };
 
@@ -119,19 +121,8 @@ function useMessageText(type: MessageInfoBoxProps['type']) {
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
-  },
   contentContainer: {
     padding: theme.spacings.medium,
-    flex: 1,
-  },
-  input: {
-    marginTop: theme.spacings.medium,
-  },
-  button: {marginVertical: theme.spacings.medium},
-  spacing: {
-    marginBottom: theme.spacings.medium,
+    rowGap: theme.spacings.medium,
   },
 }));
