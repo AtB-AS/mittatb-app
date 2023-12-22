@@ -15,7 +15,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useSearchHistory} from '@atb/search-history';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {FullScreenView} from '@atb/components/screen-view';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();

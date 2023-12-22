@@ -17,7 +17,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useNotifications, isConfigEnabled} from '@atb/notifications';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {NotificationConfigGroup} from '@atb/notifications/types';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {Button} from '@atb/components/button';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';

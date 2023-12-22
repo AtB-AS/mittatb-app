@@ -44,7 +44,7 @@ import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();

@@ -15,7 +15,7 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 import {LabelInfo} from '@atb/components/label-info';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
