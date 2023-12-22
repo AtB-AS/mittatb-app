@@ -5,11 +5,11 @@ import {useTranslation} from '@atb/translations';
 import {useOperatorToggle} from './use-operator-toggle';
 import {useOperators} from '../../use-operators';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {ThemeText} from '@atb/components/text';
-import {useFilterStyle} from '@atb/mobility/components/filter/use-filter-style';
 import {View, ViewStyle} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 import {FormFactorFilterType} from '@atb/components/map';
+import {ContentHeading} from '@atb/components/content-heading';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   formFactor: FormFactor;
@@ -27,7 +27,7 @@ export const FormFactorFilter = ({
   style,
 }: Props) => {
   const {t} = useTranslation();
-  const filterStyle = useFilterStyle();
+  const styles = useStyle();
   const operators = useOperators().byFormFactor(formFactor);
   const {showAll, isChecked, onAllToggle, onOperatorToggle} = useOperatorToggle(
     operators,
@@ -36,10 +36,8 @@ export const FormFactorFilter = ({
   );
 
   return (
-    <View style={style}>
-      <ThemeText style={filterStyle.sectionHeader} type="body__secondary">
-        {t(MobilityTexts.formFactor(formFactor))}
-      </ThemeText>
+    <View style={[style, styles.container]}>
+      <ContentHeading text={t(MobilityTexts.formFactor(formFactor))} />
       <Section>
         {operators.length !== 1 && (
           <ToggleSectionItem
@@ -61,3 +59,9 @@ export const FormFactorFilter = ({
     </View>
   );
 };
+
+export const useStyle = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    rowGap: theme.spacings.small,
+  },
+}));
