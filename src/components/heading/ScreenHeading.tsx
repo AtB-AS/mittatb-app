@@ -4,15 +4,19 @@ import {View} from 'react-native';
 import {ThemeText} from '../text';
 import {ContrastColor, StaticColor, TextColor} from '@atb/theme/colors';
 
-type PageHeadingProps = {
+type ScreenHeadingProps = {
   text: string;
   color?: TextColor | StaticColor | ContrastColor;
   accessibilityLabel?: string;
 };
 
-export const ScreenHeading = forwardRef<any, PageHeadingProps>(
+export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
   (
-    {text, color = 'background_accent_0', accessibilityLabel}: PageHeadingProps,
+    {
+      text,
+      color = 'background_accent_0',
+      accessibilityLabel,
+    }: ScreenHeadingProps,
     ref,
   ) => {
     const styles = useStyles();
