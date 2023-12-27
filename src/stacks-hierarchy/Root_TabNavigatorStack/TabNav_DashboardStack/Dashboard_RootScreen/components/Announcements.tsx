@@ -8,6 +8,7 @@ import {useNow} from '@atb/utils/use-now';
 import {StyleSheet} from '@atb/theme';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ContentHeading} from '@atb/components/content-heading';
 
 type Props = {
@@ -22,6 +23,7 @@ export const Announcements = ({style}: Props) => {
   const [hasSeenShareTravelHabitsScreen, _] =
     useHasSeenShareTravelHabitsScreen();
   const styles = useStyle();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const ruleVariables = {
     isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
@@ -34,6 +36,9 @@ export const Announcements = ({style}: Props) => {
 
   if (filteredAnnouncements.length === 0) return null;
 
+  const showHorizontally =
+    !isScreenReaderEnabled && filteredAnnouncements.length > 1;
+
   return (
     <View style={[style, styles.container]} testID="announcements">
       <View style={styles.headerWrapper}>
@@ -44,13 +49,13 @@ export const Announcements = ({style}: Props) => {
       </View>
       <ScrollView
         contentContainerStyle={styles.scrollView}
-        horizontal={filteredAnnouncements.length > 1}
+        horizontal={showHorizontally}
       >
         {filteredAnnouncements.map((a) => (
           <Announcement
             key={a.id}
             announcement={a}
-            style={filteredAnnouncements.length > 1 && styles.announcement}
+            style={showHorizontally && styles.announcement}
           />
         ))}
       </ScrollView>
@@ -67,7 +72,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
   scrollView: {
     paddingHorizontal: theme.spacings.medium,
-    columnGap: theme.spacings.medium,
+    gap: theme.spacings.medium,
   },
   announcement: {
     width: Dimensions.get('window').width * 0.9 - 2 * theme.spacings.medium,
