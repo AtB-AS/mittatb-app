@@ -74,7 +74,7 @@ export const Profile_PrivacyScreen = () => {
             </Section>
           </>
         )}
-        <Section style={isBeaconsSupported ? style.spacingTop : undefined}>
+        <Section style={style.spacingTop}>
           <LinkSectionItem
             text={t(
               ProfileTexts.sections.privacy.linkSectionItems.privacy.label,
@@ -181,6 +181,7 @@ export const Profile_PrivacyScreen = () => {
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
     marginHorizontal: theme.spacings.medium,
+    marginTop: theme.spacings.small,
     rowGap: theme.spacings.small,
   },
   spacingTop: {

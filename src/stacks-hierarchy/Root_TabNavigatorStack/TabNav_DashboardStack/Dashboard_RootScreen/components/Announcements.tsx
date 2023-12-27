@@ -2,7 +2,6 @@ import {Dimensions, StyleProp, View, ViewStyle} from 'react-native';
 import {useAnnouncementsState} from '@atb/announcements';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Announcement} from './Announcement';
-import {SectionHeading} from './SectionHeading';
 import {DashboardTexts, useTranslation} from '@atb/translations';
 import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
@@ -10,19 +9,20 @@ import {StyleSheet} from '@atb/theme';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
-export const Announcements = ({style: containerStyle}: Props) => {
+export const Announcements = ({style}: Props) => {
   const {findAnnouncements} = useAnnouncementsState();
   const {t} = useTranslation();
   const now = useNow(10000);
   const {kettleInfo} = useBeaconsState();
   const [hasSeenShareTravelHabitsScreen, _] =
     useHasSeenShareTravelHabitsScreen();
-  const style = useStyle();
+  const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const ruleVariables = {
@@ -40,19 +40,22 @@ export const Announcements = ({style: containerStyle}: Props) => {
     !isScreenReaderEnabled && filteredAnnouncements.length > 1;
 
   return (
-    <View style={containerStyle} testID="announcements">
-      <View style={style.headerWrapper}>
-        <SectionHeading>{t(DashboardTexts.announcemens.header)}</SectionHeading>
+    <View style={[style, styles.container]} testID="announcements">
+      <View style={styles.headerWrapper}>
+        <ContentHeading
+          color="background_accent_0"
+          text={t(DashboardTexts.announcemens.header)}
+        />
       </View>
       <ScrollView
-        contentContainerStyle={style.scrollView}
+        contentContainerStyle={styles.scrollView}
         horizontal={showHorizontally}
       >
         {filteredAnnouncements.map((a) => (
           <Announcement
             key={a.id}
             announcement={a}
-            style={showHorizontally && style.announcement}
+            style={showHorizontally && styles.announcement}
           />
         ))}
       </ScrollView>
@@ -61,6 +64,9 @@ export const Announcements = ({style: containerStyle}: Props) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    rowGap: theme.spacings.small,
+  },
   headerWrapper: {
     marginHorizontal: theme.spacings.medium,
   },

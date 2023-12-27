@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {useIsCityBikesEnabled, useIsVehiclesEnabled} from '@atb/mobility';
 import {useIsCarSharingEnabled} from '@atb/mobility/use-car-sharing-enabled';
 import {StyleSheet} from '@atb/theme';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   Bicycle,
   Car,
@@ -11,6 +10,7 @@ import {
 } from '@atb/assets/svg/mono-icons/transportation-entur';
 import {FormFactorFilterType, MobilityMapFilterType} from '@atb/components/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {View} from 'react-native';
 
 type Props = {
   filter: MobilityMapFilterType;
@@ -18,7 +18,7 @@ type Props = {
 };
 
 export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
-  const style = useStyle();
+  const styles = useStyle();
   const isVehiclesEnabled = useIsVehiclesEnabled();
   const isCityBikesEnabled = useIsCityBikesEnabled();
   const isCarSharingEnabled = useIsCarSharingEnabled();
@@ -36,10 +36,9 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
     };
 
   return (
-    <>
+    <View style={styles.container}>
       {isVehiclesEnabled && (
         <FormFactorFilter
-          style={style.filterGroup}
           formFactor={FormFactor.Scooter}
           icon={Scooter}
           initialFilter={filter[FormFactor.Scooter]}
@@ -48,7 +47,6 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
       )}
       {isCityBikesEnabled && (
         <FormFactorFilter
-          style={style.filterGroup}
           formFactor={FormFactor.Bicycle}
           icon={Bicycle}
           initialFilter={filter[FormFactor.Bicycle]}
@@ -63,22 +61,12 @@ export const MobilityFilters = ({filter, onFilterChanged}: Props) => {
           onFilterChange={onFormFactorFilterChanged(FormFactor.Car)}
         />
       )}
-    </>
+    </View>
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme) => {
-  const {bottom} = useSafeAreaInsets();
-  return {
-    activityIndicator: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
-    },
-    container: {
-      marginHorizontal: theme.spacings.medium,
-      marginBottom: theme.spacings.medium,
-    },
-    filterGroup: {
-      marginBottom: theme.spacings.large,
-    },
-  };
-});
+const useStyle = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    rowGap: theme.spacings.small,
+  },
+}));

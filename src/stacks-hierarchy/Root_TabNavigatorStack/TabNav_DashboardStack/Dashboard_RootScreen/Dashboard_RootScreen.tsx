@@ -425,7 +425,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     margin: 0,
   },
   contentSection: {
-    marginTop: theme.spacings.large,
+    marginTop: theme.spacings.medium,
     marginHorizontal: theme.spacings.medium,
   },
   contentSection__horizontalScroll: {
