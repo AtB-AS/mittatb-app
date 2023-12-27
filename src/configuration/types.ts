@@ -52,6 +52,7 @@ export type TariffZone = {
   version: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
   isDefault?: boolean;
+  description: LanguageAndTextType[];
 };
 
 export type PointToPointValidity = {
