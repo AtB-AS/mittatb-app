@@ -61,8 +61,16 @@ export const OperatorActionButton = ({
     await Linking.openURL(url).catch(() =>
       showAppMissingAlert({appStoreUri, operatorName}),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [operatorName, benefit, rentalAppUri, appStoreUri, valueCode]);
+  }, [
+    analytics,
+    operatorName,
+    benefit,
+    isUserEligibleForBenefit,
+    rentalAppUri,
+    valueCode,
+    showAppMissingAlert,
+    appStoreUri,
+  ]);
 
   if (isLoadingEligible || isLoadingValueCode) {
     return <ActivityIndicator />;
