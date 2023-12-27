@@ -22,7 +22,7 @@ export const ScreenHeading = forwardRef<any, ScreenHeadingProps>(
     const styles = useStyles();
 
     return (
-      <View style={styles.container} ref={ref}>
+      <View style={styles.container} ref={ref} accessible role="heading">
         <ThemeText
           type="heading--medium"
           color={color}
