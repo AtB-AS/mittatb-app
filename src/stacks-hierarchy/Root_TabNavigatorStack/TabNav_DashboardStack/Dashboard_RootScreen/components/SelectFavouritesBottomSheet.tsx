@@ -14,7 +14,7 @@ import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {StoredFavoriteDeparture, useFavorites} from '@atb/favorites';
-import {LegMode} from '@entur/sdk';
+import {LegMode} from '@atb/sdk';
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';

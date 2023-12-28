@@ -1,4 +1,4 @@
-import {Situation as Situation_v1} from '@atb/sdk';
 import {SituationFragment} from '@atb/api/types/generated/fragments/situations';
+import {PtSituationElement} from '@atb/api/types/generated/journey_planner_v3_types';
 
-export type SituationType = Situation_v1 | SituationFragment;
+export type SituationType = PtSituationElement | SituationFragment;

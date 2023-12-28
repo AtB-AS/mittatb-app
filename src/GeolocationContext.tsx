@@ -26,7 +26,7 @@ import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
 import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
-import {Coordinates} from '@entur/sdk';
+import {Coordinates} from '@atb/sdk';
 
 const config: GeoOptions = {
   enableHighAccuracy: true,

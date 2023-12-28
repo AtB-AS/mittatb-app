@@ -25,7 +25,7 @@ import {
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
+import {TransportSubmode} from '@atb/sdk';
 import React from 'react';
 import {View} from 'react-native';
 import {
