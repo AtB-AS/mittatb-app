@@ -47,93 +47,26 @@ export const HeaderButton: React.FC<HeaderButtonProps> = (buttonProps) => {
     return null;
   }
 
-  const onPress = () => {
+  const {onPress, children, ...accessibilityProps} = iconButton;
+
+  const onPressWithLogEvent = () => {
     if (buttonProps.analyticsEventContext) {
       analytics.logEvent(
         buttonProps.analyticsEventContext,
         `Header button of type ${buttonProps.type} clicked`,
       );
     }
-    iconButton.onPress?.();
+    onPress?.();
   };
-
-  return <BaseHeaderButton {...iconButton} onPress={onPress} />;
-};
-
-export type HeaderButtonWithoutNavigationProps = {
-  text: string;
-  onPress: () => void;
-  type: ButtonModes;
-  analyticsEventContext?: HeaderButtonProps['analyticsEventContext'];
-  color?: StaticColor | TextColor;
-  testID?: string;
-} & AccessibilityProps;
-
-export const HeaderButtonWithoutNavigation = ({
-  text,
-  onPress,
-  type,
-  analyticsEventContext,
-  color,
-  ...accessibilityProps
-}: HeaderButtonWithoutNavigationProps) => {
-  const analytics = useAnalytics();
-  const onPressToUse = () => {
-    if (analyticsEventContext) {
-      analytics.logEvent(
-        analyticsEventContext,
-        `Header button of type ${type} clicked`,
-      );
-    }
-    onPress();
-  };
-
-  return (
-    <BaseHeaderButton onPress={onPressToUse} {...accessibilityProps}>
-      <ThemeText color={color}>{text}</ThemeText>
-    </BaseHeaderButton>
-  );
-};
-
-const BaseHeaderButton = ({
-  onPress,
-  children,
-  ...accessibilityProps
-}: IconButtonProps) => (
-  <PressableOpacity
-    onPress={onPress}
-    hitSlop={insets.all(12)}
-    accessibilityRole="button"
-    {...accessibilityProps}
-  >
-    {children}
-  </PressableOpacity>
-);
-
-export type LargeHeaderButtonProps = Omit<HeaderButtonProps, 'type' | 'text'>;
-export const LargeHeaderButton = (buttonProps: LargeHeaderButtonProps) => {
-  const navigation = useNavigation();
-  const {t} = useTranslation();
-  const {theme} = useTheme();
-  const {color, onPress, ...props} = buttonProps;
 
   return (
     <PressableOpacity
-      onPress={onPress || navigation.goBack}
-      accessibilityHint={t(ScreenHeaderTexts.headerButton.back.a11yHint)}
+      onPress={onPressWithLogEvent}
       hitSlop={insets.all(12)}
       accessibilityRole="button"
-      style={{flexDirection: 'row'}}
-      {...props}
+      {...accessibilityProps}
     >
-      <ThemeIcon
-        colorType={color}
-        svg={ArrowLeft}
-        style={{marginRight: theme.spacings.xSmall}}
-      />
-      <ThemeText color={color}>
-        {t(ScreenHeaderTexts.headerButton.back.text)}
-      </ThemeText>
+      {children}
     </PressableOpacity>
   );
 };
