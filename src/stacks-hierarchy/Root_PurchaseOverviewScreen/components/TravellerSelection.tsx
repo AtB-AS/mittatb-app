@@ -127,7 +127,7 @@ export function TravellerSelection({
         fareProductType={fareProductType}
         selectableUserProfilesWithCountInit={userProfilesState}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
-        close={(
+        onConfirmSelection={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
           onBehalfOfToggle?: boolean,
         ) => {

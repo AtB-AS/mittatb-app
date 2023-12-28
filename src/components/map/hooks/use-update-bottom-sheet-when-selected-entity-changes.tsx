@@ -70,7 +70,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               mapProps.vehicles?.onFilterChange(filter.mobility);
               mapProps.stations?.onFilterChange(filter.mobility);
             }}
-            close={closeWithCallback}
+            onClose={closeCallback}
           />
         ));
         return;
@@ -84,7 +84,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
         openBottomSheet(
           () => (
             <DeparturesDialogSheet
-              close={closeWithCallback}
+              onClose={closeCallback}
               distance={distance}
               stopPlaceFeature={selectedFeature}
               navigateToDetails={(...params) => {
@@ -109,7 +109,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             <BikeStationBottomSheet
               stationId={selectedFeature.properties.id}
               distance={distance}
-              close={closeWithCallback}
+              onClose={closeCallback}
             />
           ),
           false,
@@ -120,7 +120,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
             <CarSharingStationBottomSheet
               stationId={selectedFeature.properties.id}
               distance={distance}
-              close={closeWithCallback}
+              onClose={closeCallback}
             />
           ),
           false,
@@ -130,7 +130,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           return (
             <ScooterSheet
               vehicleId={selectedFeature.properties.id}
-              close={closeWithCallback}
+              onClose={closeCallback}
               onReportParkingViolation={() => {
                 closeWithCallback();
                 analytics.logEvent(
@@ -147,7 +147,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           return (
             <BicycleSheet
               vehicleId={selectedFeature.properties.id}
-              close={closeWithCallback}
+              onClose={closeCallback}
             />
           );
         }, false);
@@ -160,7 +160,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
               parkingFor={selectedFeature.properties.parkingVehicleTypes}
               feature={selectedFeature}
               distance={distance}
-              close={closeWithCallback}
+              onClose={closeCallback}
               navigateToTripSearch={(...params) => {
                 closeBottomSheet();
                 mapProps.navigateToTripSearch(...params);

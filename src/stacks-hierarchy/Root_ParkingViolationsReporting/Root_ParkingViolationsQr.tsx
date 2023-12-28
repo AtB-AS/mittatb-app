@@ -84,11 +84,13 @@ export const Root_ParkingViolationsQr = ({
           providerName: providers.find((p) => p.id === providerId)?.name,
         });
         enableScanning();
+        closeBottomSheet();
       })
       .catch((e) => {
         console.error(e);
         setIsError(true);
         enableScanning();
+        closeBottomSheet();
       });
   };
 
@@ -111,7 +113,7 @@ export const Root_ParkingViolationsQr = ({
             vehicleId={providerAndVehicleId.vehicle_id}
             provider={providerAndVehicleId.provider}
             onReportSubmit={submitReport}
-            close={enableScanning}
+            onClose={enableScanning}
           />
         ));
       } else {
@@ -128,7 +130,7 @@ export const Root_ParkingViolationsQr = ({
         onSelect={(provider) => {
           submitReport(provider.id);
         }}
-        close={enableScanning}
+        onClose={enableScanning}
       />
     ));
   };
@@ -141,7 +143,6 @@ export const Root_ParkingViolationsQr = ({
   const enableScanning = () => {
     setIsLoading(false);
     setCapturedQr(undefined);
-    closeBottomSheet();
   };
 
   return (

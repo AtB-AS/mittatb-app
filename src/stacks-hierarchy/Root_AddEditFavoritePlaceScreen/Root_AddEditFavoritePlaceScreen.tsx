@@ -100,7 +100,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     );
   };
 
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
 
   const openEmojiSheet = () => {
     openBottomSheet(() => (
@@ -124,7 +124,6 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             setEmoji(emoji);
           }
         }}
-        close={closeBottomSheet}
       />
     ));
   };
@@ -185,24 +184,37 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           />
         </Section>
 
-        <Section withPadding>
-          <ButtonSectionItem
-            onPress={openEmojiPopup}
-            accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
-            accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
-            label={t(AddEditFavoriteTexts.fields.icon.label)}
-            icon="expand-more"
-            type="inline"
-            value={
-              !emoji ? (
-                <ThemeIcon svg={Pin} />
-              ) : (
-                <ThemeText type="body__primary">{emoji}</ThemeText>
-              )
-            }
-            testID="iconButton"
-          />
-        </Section>
+        <View style={css.emojiContainer}>
+          <Section>
+            <ButtonSectionItem
+              onPress={openEmojiPopup}
+              accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
+              accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
+              label={t(AddEditFavoriteTexts.fields.icon.label)}
+              icon="expand-more"
+              type="inline"
+              value={
+                !emoji ? (
+                  <ThemeIcon svg={Pin} />
+                ) : (
+                  <ThemeText type="body__primary">{emoji}</ThemeText>
+                )
+              }
+              testID="iconButton"
+            />
+          </Section>
+          {emoji && (
+            <Button
+              text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
+              type="pill"
+              mode="tertiary"
+              interactiveColor="interactive_3"
+              onPress={() => {
+                setEmoji(undefined);
+              }}
+            />
+          )}
+        </View>
       </ScrollView>
 
       <FullScreenFooter avoidKeyboard={true}>
@@ -216,6 +228,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
               testID="deleteButton"
             />
           )}
+
           <Button
             interactiveColor="interactive_0"
             onPress={save}
@@ -232,6 +245,12 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_3.background,
+  },
+  emojiContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: theme.spacings.medium,
+    gap: theme.spacings.small,
   },
   innerContainer: {
     flex: 1,

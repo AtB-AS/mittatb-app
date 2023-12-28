@@ -35,7 +35,7 @@ export const Announcement = ({announcement, style}: Props) => {
   const {theme} = useTheme();
   const analytics = useAnalytics();
   const {dismissAnnouncement} = useAnnouncementsState();
-  const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
 
   const handleDismiss = () => {
     animateNextChange();
@@ -118,7 +118,6 @@ export const Announcement = ({announcement, style}: Props) => {
               openBottomSheet(() => (
                 <AnnouncementSheet
                   announcement={announcement}
-                  close={closeBottomSheet}
                 />
               ));
             } else {

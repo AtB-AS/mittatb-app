@@ -6,11 +6,7 @@ import {
   TimeInputSectionItem,
 } from '@atb/components/sections';
 import {ScrollView} from 'react-native-gesture-handler';
-import {
-  ScreenHeaderTexts,
-  TravelDateTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TravelDateTexts, useTranslation} from '@atb/translations';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {
@@ -19,8 +15,10 @@ import {
   formatToVerboseFullDate,
   isAfter,
 } from '@atb/utils/date';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {useKeyboardHeight} from '@atb/utils/use-keyboard-height';
 import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
@@ -28,7 +26,6 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 
 type Props = {
   travelDate?: string;
-  close: () => void;
   save: (dateString?: string) => void;
   maximumDate?: Date;
   showActivationDateWarning?: boolean;
@@ -39,7 +36,6 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
   (
     {
       travelDate,
-      close,
       save,
       maximumDate,
       showActivationDateWarning,
@@ -79,6 +75,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
       formatLocaleTime(defaultDate, language),
     );
 
+    const {close} = useBottomSheet();
     const onSave = () => {
       save(dateWithReplacedTime(dateString, timeString).toISOString());
       close();
@@ -86,19 +83,7 @@ export const TravelDateSheet = forwardRef<ScrollView, Props>(
     const keyboardHeight = useKeyboardHeight();
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          title={t(TravelDateTexts.header.title)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-            testID: 'cancelButton',
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
-
+      <BottomSheetContainer title={t(TravelDateTexts.header.title)}>
         <ScrollView
           contentContainerStyle={styles.contentContainer}
           ref={focusRef}

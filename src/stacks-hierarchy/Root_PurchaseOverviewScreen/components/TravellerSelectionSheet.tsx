@@ -1,5 +1,4 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
 import {ScrollView} from 'react-native';
@@ -17,9 +16,9 @@ type TravellerSelectionSheetProps = {
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
-  close: (
-    chosenSelectableUserProfiles?: UserProfileWithCount[],
-    onBehalfOfToggle?: boolean,
+  onConfirmSelection: (
+    chosenSelectableUserProfiles: UserProfileWithCount[],
+    onBehalfOfToggle: boolean,
   ) => void;
   isOnBehalfOfToggle: boolean;
 };
@@ -27,7 +26,7 @@ export const TravellerSelectionSheet = ({
   selectionMode,
   fareProductType,
   selectableUserProfilesWithCountInit,
-  close,
+  onConfirmSelection,
   isOnBehalfOfToggle,
 }: TravellerSelectionSheetProps) => {
   const {t} = useTranslation();
@@ -46,16 +45,10 @@ export const TravellerSelectionSheet = ({
   );
 
   return (
-    <BottomSheetContainer maxHeightValue={0.9}>
-      <ScreenHeaderWithoutNavigation
-        title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
-        color="background_1"
-        leftButton={{
-          text: t(PurchaseOverviewTexts.travellerSelectionSheet.close),
-          type: 'cancel',
-          onPress: () => close(),
-        }}
-      />
+    <BottomSheetContainer
+      title={t(PurchaseOverviewTexts.travellerSelectionSheet.title)}
+      maxHeightValue={0.9}
+    >
       <ScrollView style={style.container}>
         {selectionMode === 'multiple' ? (
           <MultipleTravellersSelection
@@ -80,7 +73,10 @@ export const TravellerSelectionSheet = ({
           text={t(PurchaseOverviewTexts.travellerSelectionSheet.confirm)}
           disabled={totalTravellersCount < 1}
           onPress={() =>
-            close(selectableUserProfilesWithCount, isTravelerOnBehalfOfToggle)
+            onConfirmSelection(
+              selectableUserProfilesWithCount,
+              isTravelerOnBehalfOfToggle,
+            )
           }
           rightIcon={{svg: Confirm}}
         />

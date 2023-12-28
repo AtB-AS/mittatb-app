@@ -1,40 +1,25 @@
 import React from 'react';
 import {AnnouncementType} from '@atb/announcements/types';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {
-  ScreenHeaderTexts,
-  getTextForLanguage,
-  useTranslation,
-} from '@atb/translations';
+import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {Image, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type Props = {
   announcement: AnnouncementType;
-  close: () => void;
 };
 
-export const AnnouncementSheet = ({announcement, close}: Props) => {
-  const {t, language} = useTranslation();
+export const AnnouncementSheet = ({announcement}: Props) => {
+  const {language} = useTranslation();
   const style = useStyle();
 
   return (
-    <BottomSheetContainer>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={getTextForLanguage(announcement.fullTitle, language)}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
-
+    <BottomSheetContainer
+      title={getTextForLanguage(announcement.fullTitle, language)}
+    >
       <ScrollView style={style.container}>
         {announcement.mainImage && (
           <View style={style.imageContainer}>

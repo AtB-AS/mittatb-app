@@ -4,16 +4,11 @@ import {
   useBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {FareContract} from '@atb/ticketing';
-import {
-  FareContractTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useInterval} from '@atb/utils/use-interval';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
@@ -281,17 +276,11 @@ function useStaticBarcodeBottomSheet(qrCodeSvg: string | undefined) {
 
   const onOpenBarcodePress = () => {
     openBottomSheet(() => (
-      <BottomSheetContainer testID="barcodeBottomSheet" fullHeight>
-        <ScreenHeaderWithoutNavigation
-          title={t(FareContractTexts.details.bottomSheetTitle)}
-          color="background_1"
-          leftButton={{
-            text: t(ScreenHeaderTexts.headerButton.close.text),
-            type: 'close',
-            onPress: closeBottomSheet,
-          }}
-        />
-
+      <BottomSheetContainer
+        title={t(FareContractTexts.details.bottomSheetTitle)}
+        testID="barcodeBottomSheet"
+        fullHeight
+      >
         <View style={styles.staticBottomContainer}>
           <View style={[styles.aztecCode, styles.staticQrCode]}>
             <PressableOpacity

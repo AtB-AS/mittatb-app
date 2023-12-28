@@ -26,7 +26,7 @@ type TravelSearchFiltersState =
  * selected filters, and a function for opening the bottom sheet.
  */
 export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
-  const {open, close, onOpenFocusRef, onCloseFocusRef} = useBottomSheet();
+  const {open, onOpenFocusRef, onCloseFocusRef} = useBottomSheet();
   const {travelSearchFilters} = useFirestoreConfiguration();
   const {filters, setFilters} = useFilters();
 
@@ -76,7 +76,6 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const openBottomSheet = () => {
     open(() => (
       <TravelSearchFiltersBottomSheet
-        close={close}
         ref={onOpenFocusRef}
         filtersSelection={filtersSelection}
         onSave={setFiltersSelection}
