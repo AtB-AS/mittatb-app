@@ -1,67 +1,7 @@
-// @TODO This should come from Common lib.
-
-export interface Place {
-  latitude: number;
-  longitude: number;
-  name?: string;
-  quay?: Quay;
-}
 
 export interface Coordinates {
   latitude: number;
   longitude: number;
-}
-
-export interface EstimatedCall {
-  actualArrivalTime?: string; // Only available AFTER arrival has taken place
-  actualDepartureTime?: string; // Only available AFTER departure has taken place
-  aimedArrivalTime: string;
-  aimedDepartureTime: string;
-  cancellation: boolean;
-  date: string;
-  expectedArrivalTime: string;
-  expectedDepartureTime: string;
-  forAlighting: boolean;
-  forBoarding: boolean;
-  quay?: Quay;
-  realtime: boolean;
-  requestStop: boolean;
-  situations: Array<Situation>;
-}
-export type IntermediateEstimatedCall = EstimatedCall;
-
-export type Departure = EstimatedCall;
-
-export type ReportType = 'general' | 'incident' | null;
-
-export type Situation = {
-  situationNumber?: string;
-  reportType?: ReportType;
-  summary: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  description: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  advice: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  validityPeriod?: {
-    startTime?: any;
-    endTime?: any;
-  };
-  infoLinks?: Array<{uri?: string; label?: string}>;
-};
-
-export interface Quay {
-  id: string;
-  name: string;
-  description: string;
-  publicCode: string;
-  situations: Array<Situation>;
 }
 
 export type RealtimeData = {
