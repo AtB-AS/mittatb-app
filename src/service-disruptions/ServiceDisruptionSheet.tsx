@@ -1,7 +1,7 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ServiceDisruptionsTexts, useTranslation} from '@atb/translations';
-import React, {forwardRef} from 'react';
+import React from 'react';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Section} from '@atb/components/sections';
@@ -11,7 +11,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 
-export const ServiceDisruptionSheet = forwardRef<View>(({}, focusRef) => {
+export const ServiceDisruptionSheet = () => {
   const {t} = useTranslation();
   const {service_disruption_url} = useRemoteConfig();
   const hasValidServiceDisruptionUrl = !!service_disruption_url;
@@ -33,7 +33,7 @@ export const ServiceDisruptionSheet = forwardRef<View>(({}, focusRef) => {
         {hasValidServiceDisruptionUrl && (
           <>
             <Section style={style.serviceDisruptionText}>
-              <View ref={focusRef} accessible>
+              <View>
                 <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
               </View>
             </Section>
@@ -53,7 +53,7 @@ export const ServiceDisruptionSheet = forwardRef<View>(({}, focusRef) => {
       </FullScreenFooter>
     </BottomSheetContainer>
   );
-});
+};
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   globalMessages: {

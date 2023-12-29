@@ -36,7 +36,7 @@ export function StartTimeSelection({
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
 
   const openTravelDateSheet = () => {
     openBottomSheet(() => (
@@ -44,7 +44,6 @@ export function StartTimeSelection({
         save={setTravelDate}
         travelDate={travelDate}
         maximumDate={maximumDate}
-        ref={onOpenFocusRef}
         showActivationDateWarning={showActivationDateWarning}
         setShowActivationDateWarning={setShowActivationDateWarning}
       />

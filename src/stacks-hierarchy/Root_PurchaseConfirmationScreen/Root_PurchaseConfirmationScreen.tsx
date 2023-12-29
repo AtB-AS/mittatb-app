@@ -35,7 +35,7 @@ import {
   useOfferState,
   UserProfileWithCountAndOffer,
 } from '../Root_PurchaseOverviewScreen/use-offer-state';
-import {SelectPaymentMethod} from './components/SelectPaymentMethodSheet';
+import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -237,7 +237,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   async function selectPaymentMethod() {
     openBottomSheet(() => {
       return (
-        <SelectPaymentMethod
+        <SelectPaymentMethodSheet
           onSelect={(option: PaymentMethod) => {
             selectPaymentOption(option);
             closeBottomSheet();

@@ -1,4 +1,4 @@
-import React, {forwardRef, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {
   DateInputSectionItem,
@@ -32,109 +32,103 @@ type Props = {
   setShowActivationDateWarning: (value: boolean) => void;
 };
 
-export const TravelDateSheet = forwardRef<ScrollView, Props>(
-  (
-    {
-      travelDate,
-      save,
-      maximumDate,
-      showActivationDateWarning,
-      setShowActivationDateWarning,
-    },
-    focusRef,
-  ) => {
-    const {t, language} = useTranslation();
-    const styles = useStyles();
+export const TravelDateSheet = ({
+  travelDate,
+  save,
+  maximumDate,
+  showActivationDateWarning,
+  setShowActivationDateWarning,
+}: Props) => {
+  const {t, language} = useTranslation();
+  const styles = useStyles();
 
-    const defaultDate = travelDate ?? new Date().toISOString();
-    const [dateString, setDate] = useState(defaultDate);
-    const [
-      replicatedShowActivationDateWarning,
-      setReplicatedShowActivationDateWarning,
-    ] = useState<boolean | undefined>(showActivationDateWarning);
+  const defaultDate = travelDate ?? new Date().toISOString();
+  const [dateString, setDate] = useState(defaultDate);
+  const [
+    replicatedShowActivationDateWarning,
+    setReplicatedShowActivationDateWarning,
+  ] = useState<boolean | undefined>(showActivationDateWarning);
 
-    const setInternalAndExternalWarningState = (value: boolean) => {
-      setShowActivationDateWarning(value);
-      setReplicatedShowActivationDateWarning(value);
-    };
+  const setInternalAndExternalWarningState = (value: boolean) => {
+    setShowActivationDateWarning(value);
+    setReplicatedShowActivationDateWarning(value);
+  };
 
-    const onSetDate = (date: string) => {
-      if (!maximumDate) setDate(date);
-      else {
-        if (isAfter(date, maximumDate)) {
-          setInternalAndExternalWarningState(true);
-        } else if (replicatedShowActivationDateWarning) {
-          setInternalAndExternalWarningState(false);
-        }
-
-        setDate(date);
+  const onSetDate = (date: string) => {
+    if (!maximumDate) setDate(date);
+    else {
+      if (isAfter(date, maximumDate)) {
+        setInternalAndExternalWarningState(true);
+      } else if (replicatedShowActivationDateWarning) {
+        setInternalAndExternalWarningState(false);
       }
-    };
 
-    const [timeString, setTime] = useState(() =>
-      formatLocaleTime(defaultDate, language),
-    );
+      setDate(date);
+    }
+  };
 
-    const {close} = useBottomSheet();
-    const onSave = () => {
-      save(dateWithReplacedTime(dateString, timeString).toISOString());
-      close();
-    };
-    const keyboardHeight = useKeyboardHeight();
+  const [timeString, setTime] = useState(() =>
+    formatLocaleTime(defaultDate, language),
+  );
 
-    return (
-      <BottomSheetContainer title={t(TravelDateTexts.header.title)}>
-        <ScrollView
-          contentContainerStyle={styles.contentContainer}
-          ref={focusRef}
-          centerContent={true}
-        >
-          {maximumDate && (
-            <MessageInfoText
-              type="info"
-              style={styles.messageBox}
-              message={t(
-                TravelDateTexts.latestActivationDate.warning(
-                  formatToVerboseFullDate(maximumDate, language),
-                ),
-              )}
-            />
-          )}
+  const {close} = useBottomSheet();
+  const onSave = () => {
+    save(dateWithReplacedTime(dateString, timeString).toISOString());
+    close();
+  };
+  const keyboardHeight = useKeyboardHeight();
 
-          <Section>
-            <DateInputSectionItem
-              value={dateString}
-              onChange={onSetDate}
-              maximumDate={maximumDate}
-            />
-            <TimeInputSectionItem value={timeString} onChange={setTime} />
-          </Section>
-          {replicatedShowActivationDateWarning && (
-            <MessageInfoBox
-              style={styles.dateWarningMessageBox}
-              type="warning"
-              message={t(
-                TravelDateTexts.latestActivationDate
-                  .selectedDateShouldBeEarlierWarning,
-              )}
-            />
-          )}
-        </ScrollView>
-        <FullScreenFooter>
-          <Button
-            onPress={onSave}
-            interactiveColor="interactive_0"
-            text={t(TravelDateTexts.primaryButton)}
-            style={[styles.saveButton, {marginBottom: keyboardHeight}]}
-            testID="confirmTimeButton"
-            rightIcon={{svg: SvgConfirm}}
-            disabled={replicatedShowActivationDateWarning}
+  return (
+    <BottomSheetContainer title={t(TravelDateTexts.header.title)}>
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        centerContent={true}
+      >
+        {maximumDate && (
+          <MessageInfoText
+            type="info"
+            style={styles.messageBox}
+            message={t(
+              TravelDateTexts.latestActivationDate.warning(
+                formatToVerboseFullDate(maximumDate, language),
+              ),
+            )}
           />
-        </FullScreenFooter>
-      </BottomSheetContainer>
-    );
-  },
-);
+        )}
+
+        <Section>
+          <DateInputSectionItem
+            value={dateString}
+            onChange={onSetDate}
+            maximumDate={maximumDate}
+          />
+          <TimeInputSectionItem value={timeString} onChange={setTime} />
+        </Section>
+        {replicatedShowActivationDateWarning && (
+          <MessageInfoBox
+            style={styles.dateWarningMessageBox}
+            type="warning"
+            message={t(
+              TravelDateTexts.latestActivationDate
+                .selectedDateShouldBeEarlierWarning,
+            )}
+          />
+        )}
+      </ScrollView>
+      <FullScreenFooter>
+        <Button
+          onPress={onSave}
+          interactiveColor="interactive_0"
+          text={t(TravelDateTexts.primaryButton)}
+          style={[styles.saveButton, {marginBottom: keyboardHeight}]}
+          testID="confirmTimeButton"
+          rightIcon={{svg: SvgConfirm}}
+          disabled={replicatedShowActivationDateWarning}
+        />
+      </FullScreenFooter>
+    </BottomSheetContainer>
+  );
+};
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {

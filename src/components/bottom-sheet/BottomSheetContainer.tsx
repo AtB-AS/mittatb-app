@@ -9,6 +9,7 @@ export type BottomSheetContainerProps = {
   testID?: string;
   title?: string;
   onClose?: () => void;
+  focusTitleOnLoad?: boolean;
 };
 
 export function BottomSheetContainer({
@@ -18,13 +19,18 @@ export function BottomSheetContainer({
   testID,
   title,
   onClose,
+  focusTitleOnLoad = true,
 }: BottomSheetContainerProps) {
   const {height: windowHeight} = useWindowDimensions();
   const maxHeight = windowHeight * maxHeightValue;
   const height = fullHeight ? maxHeight : 'auto';
   return (
     <View style={{maxHeight, height}} testID={testID}>
-      <BottomSheetHeader onClose={onClose} title={title} />
+      <BottomSheetHeader
+        onClose={onClose}
+        title={title}
+        focusTitleOnLoad={focusTitleOnLoad}
+      />
       {children}
     </View>
   );

@@ -30,6 +30,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
       <BottomSheetContainer
         title={t(DeparturesTexts.favoriteDialogSheet.title)}
         testID="chooseFavoriteBottomSheet"
+        focusTitleOnLoad={false}
       >
         <View style={styles.text} ref={focusRef} accessible={true}>
           <ThemeText>
