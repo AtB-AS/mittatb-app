@@ -33,7 +33,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
   const {t, language} = useTranslation();
   const a11yContext = useAccessibilityContext();
 
-  const focusRef = useFocusOnLoad(true, 200);
+  const focusRef = useFocusOnLoad();
 
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 

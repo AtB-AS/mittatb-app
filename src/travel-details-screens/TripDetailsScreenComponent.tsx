@@ -71,7 +71,7 @@ export const TripDetailsScreenComponent = ({
           title: t(TripDetailsTexts.header.title),
           color: themeColor,
         }}
-        parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+        parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
             <View accessible={true} ref={focusRef}>
               <ThemeText

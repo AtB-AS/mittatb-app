@@ -142,7 +142,7 @@ export const DepartureDetailsScreenComponent = ({
           leftButton: {type: 'back', withIcon: true},
           title: t(DepartureDetailsTexts.header.alternateTitle),
         }}
-        parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+        parallaxContent={(focusRef) => (
           <View style={styles.parallaxContent}>
             <View style={styles.headerTitle} ref={focusRef} accessible={true}>
               {mode && (

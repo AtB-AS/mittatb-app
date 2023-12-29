@@ -21,7 +21,7 @@ export const TicketAssistant_WelcomeScreen = ({
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
-  const focusRef = useFocusOnLoad(true, 200);
+  const focusRef = useFocusOnLoad();
 
   return (
     <ScrollView

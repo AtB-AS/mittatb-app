@@ -17,7 +17,7 @@ type TravelSearchFiltersState =
       anyFiltersApplied: boolean;
       resetTransportModes: () => void;
       disableFlexibleTransport: () => void;
-      onCloseFocusRef: React.RefObject<any>;
+      onCloseFocusRef: React.Ref<any>;
     }
   | {enabled: false; filtersSelection?: undefined};
 

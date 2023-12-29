@@ -166,7 +166,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         setFocusOnLoad: false,
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
-      parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+      parallaxContent={(focusRef) => (
         <FareProductHeader
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
@@ -305,10 +305,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 mode: params.mode,
               });
               isOnBehalfOfToggle
-                ? navigation.navigate('Root_ChooseTicketReceiverScreen', 
+                ? navigation.navigate('Root_ChooseTicketReceiverScreen',
                     rootPurchaseConfirmationScreenParams
                   )
-                : navigation.navigate('Root_PurchaseConfirmationScreen', 
+                : navigation.navigate('Root_PurchaseConfirmationScreen',
                     rootPurchaseConfirmationScreenParams
                   );
             }}
