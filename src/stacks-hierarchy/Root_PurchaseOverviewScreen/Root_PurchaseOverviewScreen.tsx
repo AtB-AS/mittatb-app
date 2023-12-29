@@ -109,16 +109,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     travelDate,
   );
 
-  const rootPurchaseConfirmationScreenParams : Root_PurchaseConfirmationScreenParams = {
-    fareProductTypeConfig: params.fareProductTypeConfig,
-    fromPlace: fromPlace,
-    toPlace: toPlace,
-    userProfilesWithCount: travellerSelection,
-    preassignedFareProduct,
-    travelDate,
-    headerLeftButton: {type: 'back'},
-    mode: params.mode,
-  };
+  const rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
+    {
+      fareProductTypeConfig: params.fareProductTypeConfig,
+      fromPlace: fromPlace,
+      toPlace: toPlace,
+      userProfilesWithCount: travellerSelection,
+      preassignedFareProduct,
+      travelDate,
+      headerLeftButton: {type: 'back'},
+      mode: params.mode,
+    };
 
   const maximumDateObjectIfExisting = preassignedFareProduct.limitations
     ?.latestActivationDate
@@ -180,7 +181,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox
-              style={styles.travelSearchInfo}
               type="valid"
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
@@ -305,11 +305,13 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 mode: params.mode,
               });
               isOnBehalfOfToggle
-                ? navigation.navigate('Root_ChooseTicketReceiverScreen', 
-                    rootPurchaseConfirmationScreenParams
+                ? navigation.navigate(
+                    'Root_ChooseTicketReceiverScreen',
+                    rootPurchaseConfirmationScreenParams,
                   )
-                : navigation.navigate('Root_PurchaseConfirmationScreen', 
-                    rootPurchaseConfirmationScreenParams
+                : navigation.navigate(
+                    'Root_PurchaseConfirmationScreen',
+                    rootPurchaseConfirmationScreenParams,
                   );
             }}
             style={styles.summary}
@@ -340,11 +342,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     summary: {
       marginVertical: theme.spacings.medium,
-    },
-    travelSearchInfo: {
-      marginHorizontal: theme.spacings.medium,
-      marginTop: theme.spacings.xLarge,
-      marginBottom: theme.spacings.medium,
     },
   };
 });
