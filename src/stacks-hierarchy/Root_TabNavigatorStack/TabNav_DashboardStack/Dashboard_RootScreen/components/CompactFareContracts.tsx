@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import {View, ViewStyle} from 'react-native';
 import {useTimeContextState} from '@atb/time';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = {
   onPressDetails?: (isCarnet: boolean, orderId: string) => void;

@@ -23,7 +23,7 @@ import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Root_PurchaseTariffZonesSearchByMapScreenParams} from '@atb/stacks-hierarchy/navigation-types';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 type ZonesSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;

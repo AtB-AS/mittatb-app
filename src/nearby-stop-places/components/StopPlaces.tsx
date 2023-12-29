@@ -1,4 +1,4 @@
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 import {NearestStopPlaceNode, StopPlace} from '@atb/api/types/departures';
 import {StopPlaceItem} from './StopPlaceItem';
 import React from 'react';

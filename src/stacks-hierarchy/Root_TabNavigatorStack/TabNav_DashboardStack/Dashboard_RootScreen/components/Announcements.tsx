@@ -9,7 +9,7 @@ import {StyleSheet} from '@atb/theme';
 import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = {
   style?: StyleProp<ViewStyle>;

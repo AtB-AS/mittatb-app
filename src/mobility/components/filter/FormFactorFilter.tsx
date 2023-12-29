@@ -8,7 +8,7 @@ import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {View, ViewStyle} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 import {FormFactorFilterType} from '@atb/components/map';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 import {StyleSheet} from '@atb/theme';
 
 type Props = {
