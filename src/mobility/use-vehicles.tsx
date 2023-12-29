@@ -44,6 +44,22 @@ export const useVehicles: (
   const isFocused = useIsFocused();
   const pollInterval = useVehiclesPollInterval();
 
+  useEffect(() => {
+    getMapFilter().then((userFilter) => {
+      setFilter(userFilter.mobility);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVehiclesEnabled]);
+
+  useEffect(() => {
+    if (isFocused) {
+      const abort = new AbortController();
+      reload('WITH_LOADING', abort);
+      return () => abort.abort();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused]);
+
   const loadVehicles = useCallback(
     async (signal) => {
       if (isVehiclesEnabled && area) {
@@ -88,20 +104,6 @@ export const useVehicles: (
     disabled: !isFocused,
     pollingTimeInSeconds: Math.round(pollInterval / 1000),
   });
-
-  useEffect(() => {
-    getMapFilter().then((userFilter) => {
-      setFilter(userFilter.mobility);
-    });
-  }, [getMapFilter, isVehiclesEnabled]);
-
-  useEffect(() => {
-    if (isFocused) {
-      const abort = new AbortController();
-      reload('WITH_LOADING', abort);
-      return () => abort.abort();
-    }
-  }, [isFocused, reload]);
 
   const updateRegion = async (region: MapRegion) => {
     setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
