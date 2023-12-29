@@ -68,7 +68,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
-    giveFocus(onCloseFocusRef.current); // iOS needs a timeout to ensure it reads out the updated state
+    giveFocus(onCloseFocusRef.current);
   };
 
   const open = (

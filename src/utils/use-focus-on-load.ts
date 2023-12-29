@@ -38,7 +38,7 @@ export const giveFocus = (node: any) => {
   if (node) {
     InteractionManager.runAfterInteractions(() => {
       setTimeout(() => {
-        const reactTag = node && findNodeHandle(node);
+        const reactTag = findNodeHandle(node);
         reactTag && AccessibilityInfo.setAccessibilityFocus(reactTag);
       }, 100);
     });
