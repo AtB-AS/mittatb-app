@@ -57,6 +57,7 @@ import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
+import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -121,6 +122,7 @@ export const Profile_DebugInfoScreen = () => {
   const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
   const ticketInformationEnabledDebugOverride =
     useTicketInformationEnabledDebugOverride();
+  const posthogEnabledDebugOverride = usePosthogEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -395,6 +397,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable ticket information"
               override={ticketInformationEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable PostHog"
+              override={posthogEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>

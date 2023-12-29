@@ -28,7 +28,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = {
   onEditFavouriteDeparture: () => void;

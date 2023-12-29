@@ -50,6 +50,7 @@ export type RemoteConfig = {
   enable_push_notifications: boolean;
   enable_on_behalf_of: boolean;
   enable_ticket_information: boolean;
+  enable_posthog: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -105,6 +106,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_push_notifications: false,
   enable_on_behalf_of: false,
   enable_ticket_information: false,
+  enable_posthog: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -264,8 +266,7 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.token_timeout_in_seconds;
 
   const enable_beacons =
-    values['enable_beacons']?.asBoolean() ??
-    defaultRemoteConfig.enable_beacons;
+    values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
 
   const delay_share_travel_habits_screen_by_sessions_count =
     values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
@@ -285,6 +286,9 @@ export function getConfig(): RemoteConfig {
   const enable_ticket_information =
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
+
+  const enable_posthog =
+    values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
 
   return {
     enable_ticketing,
@@ -335,6 +339,7 @@ export function getConfig(): RemoteConfig {
     enable_push_notifications,
     enable_ticket_information,
     enable_on_behalf_of,
+    enable_posthog,
   };
 }
 

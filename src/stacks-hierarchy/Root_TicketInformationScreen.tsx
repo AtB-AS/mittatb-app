@@ -10,7 +10,7 @@ import {ScrollView, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TransportationIconBoxList} from '@atb/components/icon-box';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-and-information-enabled';
 import {TipsAndInformation} from '@atb/tips-and-information';
