@@ -1,10 +1,11 @@
 import {Theme} from '@atb-as/theme';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme/StyleSheet';
 import React from 'react';
-import {Linking, ScrollView, View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 type InformationTable = {
   type: 'table';
@@ -81,12 +82,17 @@ export const InformationScreenComponent: React.FC<InformationProps> = ({
     }
   });
   return (
-    <View style={styles.container}>
-      <FullScreenHeader title={title} leftButton={{type: 'back'}} />
-      <ScrollView contentContainerStyle={styles.content}>
-        {informationElements}
-      </ScrollView>
-    </View>
+    <FullScreenView
+      headerProps={{
+        title,
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading text={title} ref={focusRef} />
+      )}
+    >
+      <View style={styles.content}>{informationElements}</View>
+    </FullScreenView>
   );
 };
 
@@ -181,10 +187,6 @@ const Cell = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
-  },
   content: {
     padding: theme.spacings.medium,
   },
