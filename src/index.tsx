@@ -79,13 +79,13 @@ export const App = () => {
               <PreferencesContextProvider>
                 <LocaleContextProvider>
                   <AuthContextProvider>
-                    <AnalyticsContextProvider>
-                      <AccessibilityContextProvider>
-                        <ThemeContextProvider>
-                          <FavoritesContextProvider>
-                            <FiltersContextProvider>
-                              <SearchHistoryContextProvider>
-                                <RemoteConfigContextProvider>
+                    <RemoteConfigContextProvider>
+                      <AnalyticsContextProvider>
+                        <AccessibilityContextProvider>
+                          <ThemeContextProvider>
+                            <FavoritesContextProvider>
+                              <FiltersContextProvider>
+                                <SearchHistoryContextProvider>
                                   <FirestoreConfigurationContextProvider>
                                     <TicketingContextProvider>
                                       <ReactQueryProvider>
@@ -113,13 +113,13 @@ export const App = () => {
                                       </ReactQueryProvider>
                                     </TicketingContextProvider>
                                   </FirestoreConfigurationContextProvider>
-                                </RemoteConfigContextProvider>
-                              </SearchHistoryContextProvider>
-                            </FiltersContextProvider>
-                          </FavoritesContextProvider>
-                        </ThemeContextProvider>
-                      </AccessibilityContextProvider>
-                    </AnalyticsContextProvider>
+                                </SearchHistoryContextProvider>
+                              </FiltersContextProvider>
+                            </FavoritesContextProvider>
+                          </ThemeContextProvider>
+                        </AccessibilityContextProvider>
+                      </AnalyticsContextProvider>
+                    </RemoteConfigContextProvider>
                   </AuthContextProvider>
                 </LocaleContextProvider>
               </PreferencesContextProvider>
