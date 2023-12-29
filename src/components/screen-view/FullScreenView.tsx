@@ -4,7 +4,7 @@ import {RefreshControlProps, ScrollView, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ScreenHeader, ScreenHeaderProps} from '../screen-header';
 import * as React from 'react';
-import {useState} from 'react';
+import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
@@ -14,9 +14,7 @@ type Props = {
    * JSX content that will be displayed between header and children, and will
    * disappear with a parallax effect when scrolling.
    */
-  parallaxContent?: (
-    focusRef?: React.MutableRefObject<null>,
-  ) => React.ReactNode;
+  parallaxContent?: (focusRef?: Ref<any>) => React.ReactNode;
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;

@@ -19,7 +19,7 @@ export const TicketAssistant_DurationScreen = ({navigation}: DurationProps) => {
   const {inputParams, updateInputParams} = useTicketAssistantState();
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const focusRef = useFocusOnLoad(true, 200);
+  const focusRef = useFocusOnLoad();
   const [duration, setDuration] = useState(daysInWeek);
 
   const updateDuration = useCallback(() => {

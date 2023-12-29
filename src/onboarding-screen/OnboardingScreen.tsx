@@ -36,7 +36,7 @@ export const OnboardingScreen = ({
   testID,
 }: OnboardingScreenParams) => {
   const styles = useThemeStyles();
-  const focusRef = useFocusOnLoad(true, 200);
+  const focusRef = useFocusOnLoad();
 
   return (
     <SafeAreaView style={styles.container}>

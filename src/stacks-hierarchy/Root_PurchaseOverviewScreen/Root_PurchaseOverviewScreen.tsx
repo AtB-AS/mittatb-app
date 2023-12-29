@@ -167,7 +167,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         setFocusOnLoad: false,
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
-      parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+      parallaxContent={(focusRef) => (
         <FareProductHeader
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
