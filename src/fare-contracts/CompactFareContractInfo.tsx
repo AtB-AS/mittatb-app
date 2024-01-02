@@ -137,15 +137,16 @@ export const useFareContractInfoTexts = (
 
   const {t, language} = useTranslation();
   const {deviceInspectionStatus} = useMobileTokenContextState();
+
+  const productName = preassignedFareProduct
+    ? getReferenceDataName(preassignedFareProduct, language)
+    : undefined;
+
   const tariffZoneSummary = useTariffZoneSummary(
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
   );
-
-  const productName = preassignedFareProduct
-    ? getReferenceDataName(preassignedFareProduct, language)
-    : undefined;
 
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
   const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
