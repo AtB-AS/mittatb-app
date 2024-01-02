@@ -17274,6 +17274,11 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+rn-flipper-async-storage-advanced@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/rn-flipper-async-storage-advanced/-/rn-flipper-async-storage-advanced-1.0.5.tgz#908467faf55ed64b6d2eceb95a15e030d99ecd4e"
+  integrity sha512-IW2qXGyf+wgZKNV01li02e7c/DR/NQGIdQZ5CKynhVtl0Od8tO4AS/mZtRjmPbRtqSSGTdOUBSJ4d2JsCVZUPw==
+
 run-applescript@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/run-applescript/-/run-applescript-5.0.0.tgz#e11e1c932e055d5c6b40d98374e0268d9b11899c"

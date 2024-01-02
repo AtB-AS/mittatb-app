@@ -37,6 +37,8 @@ import {PopOverContextProvider} from '@atb/popover';
 import {StorybookContextProvider} from '@atb/storybook/StorybookContext';
 import {NotificationContextProvider} from './notifications';
 import {BeaconsContextProvider} from './beacons/BeaconsContext';
+import FlipperAsyncStorage from 'rn-flipper-async-storage-advanced';
+import {IS_QA_OR_DEV} from '@atb/utils/is-qa-or-dev';
 
 configureAndStartBugsnag();
 
@@ -72,6 +74,7 @@ export const App = () => {
 
   return (
     <SafeAreaProvider>
+      {IS_QA_OR_DEV && <FlipperAsyncStorage />}
       <StorybookContextProvider>
         <ErrorBoundary type="full-screen">
           <AppContextProvider>
