@@ -14,7 +14,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
@@ -91,7 +91,7 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   const [aztecCodeError, setAztecCodeError] = useState(false);
   const [aztecXml, setAztecXml] = useState<string>();
 
-  const renderAztecCode = async () => {
+  const renderAztecCode = useCallback(async () => {
     const signedToken = await getSignedToken();
     if (!signedToken) {
       setAztecCodeError(true);
@@ -99,9 +99,9 @@ const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
       setAztecCodeError(false);
       setAztecXml(renderAztec(signedToken));
     }
-  };
+  }, [getSignedToken]);
 
-  useInterval(renderAztecCode, UPDATE_INTERVAL, [], false, true);
+  useInterval(renderAztecCode, [renderAztecCode], UPDATE_INTERVAL, false, true);
 
   if (aztecCodeError) {
     return <StaticAztec fc={fc} />;

@@ -199,8 +199,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       }
     },
     // 10000,
-    SIX_HOURS_MS,
     [state.nativeToken, userId],
+    SIX_HOURS_MS,
     false,
     true,
   );

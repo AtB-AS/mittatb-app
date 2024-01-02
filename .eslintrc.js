@@ -70,7 +70,7 @@ module.exports = {
     // - hooks outside of React components and custom hooks
     // - hooks inside loops, conditions, or nested functions
     'react-hooks/rules-of-hooks': 2,
-    'react-hooks/exhaustive-deps': 2,
+    'react-hooks/exhaustive-deps': [2, {additionalHooks: '(useInterval)'}],
 
     // Error on raw text that is not inside Text or ThemeText
     'react-native/no-raw-text': [2, {skip: ['ThemeText']}],

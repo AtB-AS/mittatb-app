@@ -1,20 +1,19 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {useTicketingState} from '@atb/ticketing';
-import {useTranslation, FareContractTexts} from '@atb/translations';
-import {useInterval} from '@atb/utils/use-interval';
-import React, {useState} from 'react';
+import {FareContractTexts, useTranslation} from '@atb/translations';
+import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {CarnetDetailedView} from '@atb/fare-contracts';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
+import {useNow} from '@atb/utils/use-now';
 
 type Props = RootStackScreenProps<'Root_CarnetDetailsScreen'>;
 
 export function Root_CarnetDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
-  const [now, setNow] = useState<number>(Date.now());
-  useInterval(() => setNow(Date.now()), 2500);
+  const now = useNow(2500);
   const {findFareContractByOrderId} = useTicketingState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
   const {t} = useTranslation();
