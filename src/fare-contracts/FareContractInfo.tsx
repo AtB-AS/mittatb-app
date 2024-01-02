@@ -5,6 +5,7 @@ import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
+  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -122,12 +123,21 @@ export const FareContractInfoDetails = (
     userProfilesWithCount,
     omitUserProfileCount,
     status,
+    fareProductType,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === fareProductType,
+  );
+
+  console.log('preassprod', fareProductTypeConfig);
   const tariffZoneSummary =
-    fromTariffZone && toTariffZone
+    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none'
+      ? undefined
+      : fromTariffZone && toTariffZone
       ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
       : undefined;
 
