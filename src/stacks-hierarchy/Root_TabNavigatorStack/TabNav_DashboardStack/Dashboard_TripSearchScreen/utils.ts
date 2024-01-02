@@ -12,6 +12,7 @@ import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {SearchTime} from '@atb/journey-date-picker';
 import {defaultJourneyModes} from './hooks';
+import {isDefined} from '@atb/utils/presence';
 
 export type TimeSearch = {
   searchTime: SearchTime;
@@ -80,7 +81,7 @@ export function createQuery(
         const value = preference.options.find(
           (o) => o.id === preference.selectedOption,
         )?.value;
-        if (value) {
+        if (isDefined(value)) {
           query[preference.type] = value;
         }
       },

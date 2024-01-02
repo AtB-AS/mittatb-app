@@ -8,16 +8,16 @@ static void InitializeKettle(NSDictionary *launchOptions) {
   NSString *apiKey = [NSString stringWithFormat:@"%@", KETTLE_API_KEY];
   if ([apiKey length] > 0) {
     KTLConfig* config = [KTLConfig KTLDefaultConfig];
-    
+
 #if DEBUG
     config.developmentApiKey = apiKey;
 #else
     config.productionApiKey = apiKey;
 #endif
-    
+
     config.developmentLogLevel = KTLLogLevelDebug;
     config.productionLogLevel = KTLLogLevelNone;
-    
+
     // Initialize Kettle
     [KTLKettle prepare:config launchOptions:launchOptions];
   }
