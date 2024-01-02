@@ -265,8 +265,8 @@ const LiveVehicleMarker = ({
       );
       setIsStale(live_vehicle_stale_threshold < secondsSinceUpdate);
     },
+    [vehicle.lastUpdated, live_vehicle_stale_threshold],
     1000,
-    [vehicle.lastUpdated],
     false,
     true,
   );

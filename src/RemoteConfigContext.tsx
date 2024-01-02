@@ -50,10 +50,11 @@ function isUserInfo(a: any): a is UserInfoErrorFromFirebase {
 
 const useRetryIntervalWithBackoff = (): [number, () => void] => {
   const [retryInterval, setRetryInterval] = useState(RETRY_INTERVAL_MS_START);
-  return [
-    retryInterval,
+  const incrementRetryInterval = useCallback(
     () => setRetryInterval((val) => Math.min(val * 2, RETRY_INTERVAL_MS_MAX)),
-  ];
+    [],
+  );
+  return [retryInterval, incrementRetryInterval];
 };
 
 export const RemoteConfigContextProvider: React.FC = ({children}) => {
@@ -95,8 +96,8 @@ export const RemoteConfigContextProvider: React.FC = ({children}) => {
       fetchConfig();
       incrementRetryInterval();
     },
+    [fetchConfig, incrementRetryInterval],
     retryInterval,
-    [fetchConfig],
     !fetchError,
   );
 

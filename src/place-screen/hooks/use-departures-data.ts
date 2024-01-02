@@ -331,8 +331,8 @@ export function useDeparturesData(
   }, [state.tick]);
   useInterval(
     () => dispatch({type: 'TICK_TICK'}),
+    [dispatch],
     tickRateInSeconds * 1000,
-    [isFocused],
     !isFocused || mode === 'Favourite',
     // Trigger immediately on focus only if the view is already initialized
     !!state.tick,

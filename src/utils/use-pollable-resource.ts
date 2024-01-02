@@ -91,8 +91,8 @@ export const usePollableResource = <T, E extends Error = Error>(
 
   useInterval(
     () => reload('NO_LOADING', abortControllerRef.current),
-    pollTime,
     [reload],
+    pollTime,
     opts.disabled || (pollOnFocus && !isFocused),
   );
 
