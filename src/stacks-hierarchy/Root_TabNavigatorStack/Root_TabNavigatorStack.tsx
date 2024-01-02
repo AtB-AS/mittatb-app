@@ -40,10 +40,8 @@ import {
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {
-  findReferenceDataById,
-  useFirestoreConfiguration,
-} from '@atb/configuration';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {hasValidFareContractWithActivatedNotification} from '@atb/notifications/utils';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -80,7 +78,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   } = useNotifications();
   useOnPushNotificationOpened();
 
-  // Check notificaiton status, and register notification language when the app
+  // Check notification status, and register notification language when the app
   // starts, in case the user have changed language since last time the app was
   // opened. This useEffect will also trigger when language is changed manually
   // in the app.
@@ -107,24 +105,6 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       }
     }
 
-    const hasValidFareContractWithActivatedNotification =
-      validFareContracts.some((fareContract) => {
-        const fareProductRef = fareContract.travelRights[0]?.fareProductRef;
-
-        if (!fareProductRef) {
-          return false;
-        }
-
-        const preassignedFareProduct = findReferenceDataById(
-          preassignedFareProducts,
-          fareProductRef,
-        );
-
-        return config?.groups.some(
-          (group) => group.id === preassignedFareProduct?.type && group.enabled,
-        );
-      });
-
     const notificationsNotGranted =
       pushNotificationPermissionStatus == 'undetermined' ||
       pushNotificationPermissionStatus == 'denied';
@@ -132,9 +112,13 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
-      hasValidFareContractWithActivatedNotification &&
       notificationsNotGranted &&
-      !shouldShowLocationOnboarding
+      !shouldShowLocationOnboarding &&
+      hasValidFareContractWithActivatedNotification(
+        validFareContracts,
+        preassignedFareProducts,
+        config,
+      )
     ) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
@@ -148,9 +132,9 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     locationWhenInUsePermissionOnboarded,
     locationWhenInUsePermissionStatus,
     pushNotificationPermissionStatus,
-    validFareContracts,
     preassignedFareProducts,
-    config?.groups,
+    config,
+    validFareContracts,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
