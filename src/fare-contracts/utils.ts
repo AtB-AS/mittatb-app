@@ -157,17 +157,16 @@ export const useTariffZoneSummary = (
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
+  if (!fromTariffZone || !toTariffZone) return undefined;
+
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === preassignedFareProduct?.type,
   );
-
   const zoneSelectionModeDisabledForProduct =
     fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
-
   if (zoneSelectionModeDisabledForProduct) return undefined;
-  return fromTariffZone && toTariffZone
-    ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
-    : undefined;
+
+  return tariffZonesSummary(fromTariffZone, toTariffZone, language, t);
 };
 
 export const isValidFareContract = (status: ValidityStatus) =>
