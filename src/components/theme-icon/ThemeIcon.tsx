@@ -1,6 +1,9 @@
 import {useTheme} from '@atb/theme';
 import {
-  getFill,
+  flatStaticColors,
+  isStaticColor,
+  isStatusColor,
+  Mode,
   Theme,
 } from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
@@ -59,3 +62,12 @@ export const ThemeIcon = ({
   );
 };
 
+function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
+  if (isStatusColor(colorType)) {
+    return theme.static.status[colorType].background;
+  } else if (isStaticColor(colorType)) {
+    return flatStaticColors[themeType][colorType].text;
+  } else {
+    return theme.text.colors[colorType ?? 'primary'];
+  }
+}

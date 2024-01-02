@@ -168,13 +168,3 @@ export const isStatusColor = (
 ): color is StaticColorByType<'status'> => {
   return !!color && color in themes.light.static.status;
 };
-
-export function getFill(theme: Theme, themeType: Mode, colorType?: StaticColor | TextColor): string {
-  if (isStatusColor(colorType)) {
-    return theme.static.status[colorType].background;
-  } else if (isStaticColor(colorType)) {
-    return flatStaticColors[themeType][colorType].text;
-  } else {
-    return theme.text.colors[colorType ?? 'primary'];
-  }
-}

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {AccessibilityProps, View} from 'react-native';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, Theme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
 import {useSectionStyle} from '../use-section-style';
 import {Toggle} from '@atb/components/toggle';
-import {InteractiveColor, TextNames, getFill} from '@atb/theme/colors';
+import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/configuration';
 import {LabelInfo} from '@atb/components/label-info';
 import {SvgProps} from 'react-native-svg';
@@ -42,7 +42,6 @@ export function ToggleSectionItem({
   const sectionStyle = useSectionStyle();
   const styles = useStyles();
   const {t} = useTranslation();
-  const {theme, themeName} = useTheme();
 
   /*
    Need to maintain a internal copy of the checked state for the accessibility
@@ -74,11 +73,9 @@ export function ToggleSectionItem({
       {...accessibility}
     >
       <View style={{flexDirection: 'row'}}>
-        {LeftImage && (
-          <View style={styles.leftImageContainer}>
-            <LeftImage fill={getFill(theme, themeName)} />
-          </View>
-        )}
+        <View style={styles.leftImageContainer}>
+          {LeftImage && <LeftImage />}
+        </View>
         <View style={{flexDirection: 'column', flex: 1}}>
           <View style={sectionStyle.spaceBetween}>
             <View style={styles.textContainer}>
