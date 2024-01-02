@@ -20,7 +20,7 @@ import {
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {addMinutes} from 'date-fns';
+import {addMinutes, parseISO} from 'date-fns';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -67,10 +67,15 @@ function getPreviousPaymentMethod(
         };
       }
     case 'recurring':
-      return {
-        paymentType: previousPaymentMethod.paymentType,
-        recurringPaymentId: previousPaymentMethod.recurringCard.id,
-      };
+      const notExpired =
+        parseISO(previousPaymentMethod.recurringCard.expires_at).getTime() >
+        Date.now();
+      return notExpired
+        ? {
+            paymentType: previousPaymentMethod.paymentType,
+            recurringPaymentId: previousPaymentMethod.recurringCard.id,
+          }
+        : undefined;
     case 'recurring-without-card':
       return {
         paymentType: previousPaymentMethod.paymentType,
