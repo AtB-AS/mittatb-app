@@ -61,6 +61,7 @@ export const FlexibleTransportBookingOptions: React.FC<
             )}
             onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
             style={style.bookByPhoneButton}
+            textContainerStyle={{alignItems: 'flex-start'}}
             type="pill"
             interactiveColor="interactive_3"
             leftIcon={{svg: Phone}}
