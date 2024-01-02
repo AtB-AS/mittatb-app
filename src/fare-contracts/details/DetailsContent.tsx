@@ -129,7 +129,6 @@ export const DetailsContent: React.FC<Props> = ({
             userProfilesWithCount={userProfilesWithCount}
             status={validityStatus}
             preassignedFareProduct={preassignedFareProduct}
-            fareProductType={preassignedFareProduct?.type}
           />
         </GenericSectionItem>
         {globalMessageCount > 0 && (
