@@ -40,6 +40,10 @@ import {
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {
+  findReferenceDataById,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -72,6 +76,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {
     permissionStatus: pushNotificationPermissionStatus,
     checkPermissions: checkPushNotificationPermissions,
+    config,
   } = useNotifications();
   useOnPushNotificationOpened();
 
@@ -83,6 +88,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     checkPushNotificationPermissions();
   }, [checkPushNotificationPermissions]);
 
+  const {preassignedFareProducts} = useFirestoreConfiguration();
   useEffect(() => {
     const shouldShowLocationOnboarding =
       !locationWhenInUsePermissionOnboarded &&
@@ -99,11 +105,34 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
         );
       }
     }
+
+    const hasValidFareContractWithActivatedNotification =
+      validFareContracts.some((fareContract) => {
+        const fareProductRef = fareContract.travelRights[0]?.fareProductRef;
+
+        if (!fareProductRef) {
+          return false;
+        }
+
+        const preassignedFareProduct = findReferenceDataById(
+          preassignedFareProducts,
+          fareProductRef,
+        );
+
+        return config?.groups.some(
+          (group) => group.id === preassignedFareProduct?.type && group.enabled,
+        );
+      });
+
+    const notificationsNotGranted =
+      pushNotificationPermissionStatus == 'undetermined' ||
+      pushNotificationPermissionStatus == 'denied';
+
     if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
-      validFareContracts.length > 0 &&
-      pushNotificationPermissionStatus !== 'granted' &&
+      hasValidFareContractWithActivatedNotification &&
+      notificationsNotGranted &&
       !shouldShowLocationOnboarding
     ) {
       InteractionManager.runAfterInteractions(() =>
@@ -119,6 +148,9 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     locationWhenInUsePermissionStatus,
     validFareContracts.length,
     pushNotificationPermissionStatus,
+    validFareContracts,
+    preassignedFareProducts,
+    config?.groups,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
