@@ -81,7 +81,7 @@ export function SingleTravellerSelection({
       {isOnBehalfOfEnabled && (
         <Section style={styles.onBehalfOfContainer}>
           <ToggleSectionItem
-            leftImage={HoldingHands}
+            leftImage={<HoldingHands/>}
             text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
             subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
             value={isTravelerOnBehalfOfToggle}
