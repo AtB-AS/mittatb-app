@@ -5,7 +5,6 @@ import {
   PreassignedFareProduct,
   TariffZone,
   UserProfile,
-  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {
@@ -27,9 +26,9 @@ import {
   getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,
-  tariffZonesSummary,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
+  useTariffZoneSummary,
   ValidityStatus,
 } from '../fare-contracts/utils';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
@@ -127,20 +126,12 @@ export const FareContractInfoDetails = (
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === preassignedFareProduct?.type,
+  const tariffZoneSummary = useTariffZoneSummary(
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
   );
-
-  const zoneSelectionModeDisabledForProduct =
-    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
-
-  const tariffZoneSummary = zoneSelectionModeDisabledForProduct
-    ? undefined
-    : fromTariffZone && toTariffZone
-    ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
-    : undefined;
 
   return (
     <View style={styles.container} accessible={true}>

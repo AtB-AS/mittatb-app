@@ -1,17 +1,14 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {
-  getReferenceDataName,
-  useFirestoreConfiguration,
-} from '@atb/configuration';
+import {getReferenceDataName} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   isValidFareContract,
-  tariffZonesSummary,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
+  useTariffZoneSummary,
 } from '@atb/fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {secondsToDuration} from '@atb/utils/date';
@@ -140,23 +137,14 @@ export const useFareContractInfoTexts = (
 
   const {t, language} = useTranslation();
   const {deviceInspectionStatus} = useMobileTokenContextState();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-
-  const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === preassignedFareProduct?.type,
+  const tariffZoneSummary = useTariffZoneSummary(
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
   );
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
-    : undefined;
-
-  const zoneSelectionModeDisabledForProduct =
-    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
-
-  const tariffZoneSummary = zoneSelectionModeDisabledForProduct
-    ? undefined
-    : fromTariffZone && toTariffZone
-    ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
     : undefined;
 
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;

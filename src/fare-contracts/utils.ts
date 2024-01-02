@@ -2,7 +2,9 @@ import {FareContractState} from '@atb/ticketing';
 import {
   findReferenceDataById,
   getReferenceDataName,
+  PreassignedFareProduct,
   TariffZone,
+  useFirestoreConfiguration,
   UserProfile,
 } from '@atb/configuration';
 import {UserProfileWithCount} from '@atb/fare-contracts';
@@ -145,6 +147,27 @@ export const useOtherDeviceIsInspectableWarning = () => {
             ),
           );
   }
+};
+
+export const useTariffZoneSummary = (
+  preassignedFareProduct?: PreassignedFareProduct,
+  fromTariffZone?: TariffZone,
+  toTariffZone?: TariffZone,
+) => {
+  const {t, language} = useTranslation();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
+
+  const zoneSelectionModeDisabledForProduct =
+    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
+
+  if (zoneSelectionModeDisabledForProduct) return undefined;
+  return fromTariffZone && toTariffZone
+    ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
+    : undefined;
 };
 
 export const isValidFareContract = (status: ValidityStatus) =>
