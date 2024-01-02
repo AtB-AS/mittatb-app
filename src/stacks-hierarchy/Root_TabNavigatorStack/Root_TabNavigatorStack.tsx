@@ -89,6 +89,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   }, [checkPushNotificationPermissions]);
 
   const {preassignedFareProducts} = useFirestoreConfiguration();
+
   useEffect(() => {
     const shouldShowLocationOnboarding =
       !locationWhenInUsePermissionOnboarded &&
@@ -146,7 +147,6 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     pushNotificationsEnabled,
     locationWhenInUsePermissionOnboarded,
     locationWhenInUsePermissionStatus,
-    validFareContracts.length,
     pushNotificationPermissionStatus,
     validFareContracts,
     preassignedFareProducts,
