@@ -14,6 +14,7 @@ export type PreassignedFareProductId = string;
 export type PreassignedFareProduct = {
   id: PreassignedFareProductId;
   name: LanguageAndTextType;
+  isDefault: boolean;
   version: string;
   description?: LanguageAndTextType[];
   productDescription?: LanguageAndTextType[];
