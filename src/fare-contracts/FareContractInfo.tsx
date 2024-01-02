@@ -123,23 +123,24 @@ export const FareContractInfoDetails = (
     userProfilesWithCount,
     omitUserProfileCount,
     status,
-    fareProductType,
+    preassignedFareProduct,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
-    (c) => c.type === fareProductType,
+    (c) => c.type === preassignedFareProduct?.type,
   );
 
-  console.log('preassprod', fareProductTypeConfig);
-  const tariffZoneSummary =
-    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none'
-      ? undefined
-      : fromTariffZone && toTariffZone
-      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
-      : undefined;
+  const zoneSelectionModeDisabledForProduct =
+    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
+
+  const tariffZoneSummary = zoneSelectionModeDisabledForProduct
+    ? undefined
+    : fromTariffZone && toTariffZone
+    ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
+    : undefined;
 
   return (
     <View style={styles.container} accessible={true}>

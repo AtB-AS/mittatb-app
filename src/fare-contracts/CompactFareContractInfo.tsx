@@ -1,5 +1,8 @@
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {getReferenceDataName} from '@atb/configuration';
+import {
+  getReferenceDataName,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
@@ -137,15 +140,24 @@ export const useFareContractInfoTexts = (
 
   const {t, language} = useTranslation();
   const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (c) => c.type === preassignedFareProduct?.type,
+  );
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
 
-  const tariffZoneSummary =
-    fromTariffZone && toTariffZone
-      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
-      : undefined;
+  const zoneSelectionModeDisabledForProduct =
+    fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
+
+  const tariffZoneSummary = zoneSelectionModeDisabledForProduct
+    ? undefined
+    : fromTariffZone && toTariffZone
+    ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
+    : undefined;
 
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
   const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);
