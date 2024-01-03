@@ -27,7 +27,7 @@ import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {InteractionManager} from 'react-native';
+import {InteractionManager, Platform} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {
   usePushNotificationsEnabled,
@@ -105,10 +105,15 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       }
     }
 
+    const notificationsNotGranted =
+      Platform.OS === 'ios'
+        ? pushNotificationPermissionStatus === 'undetermined'
+        : pushNotificationPermissionStatus === 'denied';
+
     if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
-      pushNotificationPermissionStatus == 'denied' &&
+      notificationsNotGranted &&
       !shouldShowLocationOnboarding &&
       hasFareContractWithActivatedNotification(
         validFareContracts,
