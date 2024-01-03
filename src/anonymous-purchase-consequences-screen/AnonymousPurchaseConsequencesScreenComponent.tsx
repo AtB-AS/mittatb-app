@@ -5,8 +5,8 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 
 import {Consequence} from './components/Consequence';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
@@ -25,9 +25,6 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 }: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
-
-  const fillColor = getStaticColor(themeName, themeColor).text;
 
   const loginButton = {
     onPress: onPressLogin || (() => {}),
@@ -61,15 +58,15 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       </ThemeText>
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[0])}
-        icon={<ThemeIcon svg={Phone} fill={fillColor} size="large" />}
+        icon={<ThemeIcon svg={Phone} colorType={themeColor} size="large" />}
       />
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[1])}
-        icon={<ThemeIcon svg={Receipt} fill={fillColor} size="large" />}
+        icon={<ThemeIcon svg={Receipt} colorType={themeColor} size="large" />}
       />
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[2])}
-        icon={<ThemeIcon svg={Support} fill={fillColor} size="large" />}
+        icon={<ThemeIcon svg={Support} colorType={themeColor} size="large" />}
       />
     </OnboardingFrame>
   );
