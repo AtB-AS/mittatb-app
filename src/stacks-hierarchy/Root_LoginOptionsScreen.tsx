@@ -182,7 +182,7 @@ export const Root_LoginOptionsScreen = ({
         <VippsLoginButton
           onPress={authenticateUserByVipps}
           disabled={isLoading}
-          containerStyle={styles.loginOptionButton}
+          style={styles.loginOptionButton}
         />
         <Button
           interactiveColor="interactive_0"

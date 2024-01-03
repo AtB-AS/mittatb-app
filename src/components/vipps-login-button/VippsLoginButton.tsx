@@ -11,11 +11,11 @@ const VIPPS_BACKGROUND_COLOR = '#FF5B24';
 export const VippsLoginButton = ({
   onPress,
   disabled,
-  containerStyle,
+  style,
 }: {
   onPress: () => {};
   disabled: boolean;
-  containerStyle: ViewStyle;
+  style: ViewStyle;
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
@@ -28,11 +28,7 @@ export const VippsLoginButton = ({
       onPress={onPress}
     >
       <View
-        style={[
-          styles.container,
-          disabled && styles.disabledOpacity,
-          containerStyle,
-        ]}
+        style={[styles.container, disabled && styles.disabledOpacity, style]}
       >
         <ThemeText
           type="body__primary--bold"
