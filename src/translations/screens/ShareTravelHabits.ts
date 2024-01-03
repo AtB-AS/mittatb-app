@@ -64,7 +64,7 @@ const ShareTravelHabitsTexts = {
       message: _(
         'Du gir oss lov til å bruke disse dataene for å lære mer om dine reisevaner. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.',
         'You give us permission to use this data to learn more about your travel habits. For example, we can see whether customers choose to cycle, walk or drive a car rather than take the bus. The data is used to improve our services to make them better for you.',
-        'Du gir oss løyve til å bruke disse dataene for å læra meir om dine reisevaner. Vi kan for eksempel se om kunder veljer å sykle, gå eller kjøre bil framan å busse. Det vil hjelpe oss til å kunne forbetre ditt reisetilbod.',
+        'Du gir oss løyve til å bruke desse dataene for å lære meir om reisevanane dine. Vi kan til dømes sjå om kundar vel å sykle, gå eller køyre bil heller enn å busse. Det vil hjelpe oss til å kunne forbetre reisetilbodet ditt.',
       ),
     },
   },
