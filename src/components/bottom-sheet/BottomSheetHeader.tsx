@@ -32,7 +32,7 @@ export const BottomSheetHeader = ({
 
   const themeColor = 'interactive_3';
   const {background: backgroundColor, text: textColor} =
-    theme.interactive[themeColor]['active'];
+    theme.interactive[themeColor]['default'];
 
   return (
     <View style={styles.container}>
