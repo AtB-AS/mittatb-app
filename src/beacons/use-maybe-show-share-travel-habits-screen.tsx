@@ -13,7 +13,7 @@ export const shareTravelHabitsSessionCountKey =
 
 // note: only one instance of this hook should be used to actually count the sessions
 export const useShouldShowShareTravelHabitsScreen = (
-  useThisHookInstanceForSessionCounting = false,
+  utilizeThisHookInstanceForSessionCounting = false,
 ) => {
   const {
     delay_share_travel_habits_screen_by_sessions_count: runAfterSessionsCount,
@@ -36,7 +36,7 @@ export const useShouldShowShareTravelHabitsScreen = (
 
   const updateCount = useCallback(
     async (currentCount: number) => {
-      if (useThisHookInstanceForSessionCounting) {
+      if (utilizeThisHookInstanceForSessionCounting) {
         const newCount = currentCount + 1;
         storage.set(shareTravelHabitsSessionCountKey, JSON.stringify(newCount));
         sessionCountRef.current = newCount;
@@ -45,7 +45,7 @@ export const useShouldShowShareTravelHabitsScreen = (
         setSessionCount(currentCount);
       }
     },
-    [useThisHookInstanceForSessionCounting],
+    [utilizeThisHookInstanceForSessionCounting],
   );
 
   useEffect(() => {
