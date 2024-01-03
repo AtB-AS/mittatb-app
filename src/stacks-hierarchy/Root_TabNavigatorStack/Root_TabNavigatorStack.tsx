@@ -41,7 +41,7 @@ import {
 import {useTimeContextState} from '@atb/time';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {hasValidFareContractWithActivatedNotification} from '@atb/notifications/utils';
+import {hasFareContractWithActivatedNotification} from '@atb/notifications/utils';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -74,7 +74,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {
     permissionStatus: pushNotificationPermissionStatus,
     checkPermissions: checkPushNotificationPermissions,
-    config,
+    config: notificationConfig,
   } = useNotifications();
   useOnPushNotificationOpened();
 
@@ -105,19 +105,15 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       }
     }
 
-    const notificationsNotGranted =
-      pushNotificationPermissionStatus == 'undetermined' ||
-      pushNotificationPermissionStatus == 'denied';
-
     if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
-      notificationsNotGranted &&
+      pushNotificationPermissionStatus == 'denied' &&
       !shouldShowLocationOnboarding &&
-      hasValidFareContractWithActivatedNotification(
+      hasFareContractWithActivatedNotification(
         validFareContracts,
         preassignedFareProducts,
-        config,
+        notificationConfig,
       )
     ) {
       InteractionManager.runAfterInteractions(() =>
@@ -133,7 +129,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     locationWhenInUsePermissionStatus,
     pushNotificationPermissionStatus,
     preassignedFareProducts,
-    config,
+    notificationConfig,
     validFareContracts,
   ]);
 

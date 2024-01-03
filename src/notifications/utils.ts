@@ -13,7 +13,7 @@ export function isConfigEnabled<T extends NotificationConfigValue>(
   return config?.filter(isDefined).find((v) => v.id === key)?.enabled ?? false;
 }
 
-export function hasValidFareContractWithActivatedNotification(
+export function hasFareContractWithActivatedNotification(
   validFareContracts: FareContract[],
   preassignedFareProducts: PreassignedFareProduct[],
   config?: NotificationConfig,
