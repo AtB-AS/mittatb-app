@@ -4,7 +4,7 @@
 
 "NSLocationWhenInUseUsageDescription" = "Vi brukar posisjon til å vise di posisjon i kart og reisesøk, og til å finne haldeplassar og stader i nærleiken.";
 
-"NSBluetoothAlwaysUsageDescription" = "Du gir oss løyve til å kjenne att bussar og busshaldeplassar i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å sende deg relevante undersøkingar. Det vil hjelpe oss til å kunne betre ditt reisetilbod.";
+"NSBluetoothAlwaysUsageDescription" = "Du gir oss løyve til å kjenne att bussar og busshaldeplassar i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å sende deg relevante undersøkingar. Det vil hjelpe oss til å kunne betre reisetilbodet ditt.";
 
 "NSBluetoothPeripheralUsageDescription" = "Du gir oss løyve til å kjenne att bussar og busshaldeplassar i nærleiken. Dette gjer at vi kan analysere kvar du og andre kundar reiser, og til å sende deg relevante undersøkingar. Det vil hjelpe oss til å kunne betre ditt reisetilbod.";
 
