@@ -1,6 +1,6 @@
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import React from 'react';
-import {AnonymousPurchaseConsequencesScreen} from '@atb/anonymous-purchase-consequences-screen';
+import {AnonymousPurchaseConsequencesScreenComponent} from '@atb/anonymous-purchase-consequences-screen';
 import {RootStackParamList, RootStackScreenProps} from './navigation-types';
 import {
   filterActiveOrCanBeUsedFareContracts,
@@ -38,7 +38,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   };
 
   return (
-    <AnonymousPurchaseConsequencesScreen
+    <AnonymousPurchaseConsequencesScreenComponent
       onPressLogin={params.showLoginButton ? onPressLogin : undefined}
       onPressContinueWithoutLogin={() => {
         !onboarded && completeOnboarding();

@@ -19,7 +19,7 @@ type Props = {
   onPressLogin?: () => void;
 };
 
-export const AnonymousPurchaseConsequencesScreen = ({
+export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
   onPressLogin,
 }: Props) => {

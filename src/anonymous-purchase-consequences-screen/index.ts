@@ -1,1 +1,1 @@
-export {AnonymousPurchaseConsequencesScreen} from './AnonymousPurchaseConsequencesScreen';
+export {AnonymousPurchaseConsequencesScreenComponent} from './AnonymousPurchaseConsequencesScreenComponent';
