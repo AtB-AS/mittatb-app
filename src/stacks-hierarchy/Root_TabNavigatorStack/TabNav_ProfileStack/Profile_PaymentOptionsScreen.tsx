@@ -37,7 +37,7 @@ type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 export const Profile_PaymentOptionsScreen = ({
   navigation,
 }: PaymentOptionsProps) => {
-  const style = useStyle();
+  const styles = useStyles();
   const {t} = useTranslation();
   const {authenticationType} = useAuthState();
 
@@ -136,7 +136,7 @@ export const Profile_PaymentOptionsScreen = ({
         />
       )}
     >
-      <View style={style.content}>
+      <View style={styles.content}>
         {showError && <GenericError />}
         {storedCards.length > 0 && (
           <Section>
@@ -166,7 +166,7 @@ const Card = (props: {
 }) => {
   const {card, removePaymentHandler} = props;
   const paymentName = getPaymentTypeName(card.payment_type);
-  const style = useStyle();
+  const style = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
   const fontScale = useFontScale();
@@ -227,41 +227,35 @@ const Card = (props: {
 };
 
 const NoCardsInfo = () => {
-  const style = useStyle();
   const {t} = useTranslation();
   return (
     <View accessibilityLiveRegion="polite">
       <MessageInfoBox
         type="info"
         message={t(PaymentOptionsTexts.noStoredCards)}
-        style={style.messageStyle}
       />
     </View>
   );
 };
 
 const GenericError = () => {
-  const style = useStyle();
   const {t} = useTranslation();
   return (
     <View accessibilityLiveRegion="polite">
       <MessageInfoBox
         type="error"
         message={t(PaymentOptionsTexts.genericError)}
-        style={style.messageStyle}
       />
     </View>
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
     padding: theme.spacings.medium,
     rowGap: theme.spacings.medium,
   },
-  card: {
-    flex: 1,
-  },
+  card: {flex: 1},
   cardTop: {
     flex: 1,
     flexDirection: 'row',
@@ -274,8 +268,5 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     flexGrow: 1,
     justifyContent: 'flex-end',
-  },
-  messageStyle: {
-    marginBottom: theme.spacings.medium,
   },
 }));
