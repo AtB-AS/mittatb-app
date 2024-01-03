@@ -36,11 +36,10 @@ export const OnboardingFrame = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader {...fullScreenHeaderProps} setFocusOnLoad={false} />
-      <ScrollView
-        contentContainerStyle={styles.contentContainer}
-        ref={focusRef}
-      >
-        <View style={styles.mainContent}>{children}</View>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <View ref={focusRef} style={styles.mainContent}>
+          {children}
+        </View>
       </ScrollView>
       <FullScreenFooter>
         {footerDescription && (
