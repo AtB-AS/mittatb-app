@@ -105,7 +105,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
       }
     }
 
-    const notificationsNotGranted =
+    const pushNotificationPermissionsNotGranted =
       Platform.OS === 'ios'
         ? pushNotificationPermissionStatus === 'undetermined'
         : pushNotificationPermissionStatus === 'denied';
@@ -113,7 +113,7 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
-      notificationsNotGranted &&
+      pushNotificationPermissionsNotGranted &&
       !shouldShowLocationOnboarding &&
       hasFareContractWithActivatedNotification(
         validFareContracts,
