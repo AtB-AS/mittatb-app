@@ -27,7 +27,7 @@ import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/
 import {dictionary, useTranslation} from '@atb/translations';
 import {useAppState} from '@atb/AppContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {InteractionManager} from 'react-native';
+import {InteractionManager, Platform} from 'react-native';
 import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {
   usePushNotificationsEnabled,
@@ -40,6 +40,8 @@ import {
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {hasFareContractWithActivatedNotification} from '@atb/notifications/utils';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -72,16 +74,19 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
   const {
     permissionStatus: pushNotificationPermissionStatus,
     checkPermissions: checkPushNotificationPermissions,
+    config: notificationConfig,
   } = useNotifications();
   useOnPushNotificationOpened();
 
-  // Check notificaiton status, and register notification language when the app
+  // Check notification status, and register notification language when the app
   // starts, in case the user have changed language since last time the app was
   // opened. This useEffect will also trigger when language is changed manually
   // in the app.
   useEffect(() => {
     if (pushNotificationsEnabled) checkPushNotificationPermissions();
   }, [pushNotificationsEnabled, checkPushNotificationPermissions]);
+
+  const {preassignedFareProducts} = useFirestoreConfiguration();
 
   useEffect(() => {
     const shouldShowLocationOnboarding =
@@ -99,12 +104,22 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
         );
       }
     }
+
+    const pushNotificationPermissionsNotGranted =
+      Platform.OS === 'ios'
+        ? pushNotificationPermissionStatus === 'undetermined'
+        : pushNotificationPermissionStatus === 'denied';
+
     if (
       !notificationPermissionOnboarded &&
       pushNotificationsEnabled &&
-      validFareContracts.length > 0 &&
-      pushNotificationPermissionStatus !== 'granted' &&
-      !shouldShowLocationOnboarding
+      pushNotificationPermissionsNotGranted &&
+      !shouldShowLocationOnboarding &&
+      hasFareContractWithActivatedNotification(
+        validFareContracts,
+        preassignedFareProducts,
+        notificationConfig,
+      )
     ) {
       InteractionManager.runAfterInteractions(() =>
         navigation.navigate('Root_NotificationPermissionScreen'),
@@ -117,8 +132,10 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     pushNotificationsEnabled,
     locationWhenInUsePermissionOnboarded,
     locationWhenInUsePermissionStatus,
-    validFareContracts.length,
     pushNotificationPermissionStatus,
+    preassignedFareProducts,
+    notificationConfig,
+    validFareContracts,
   ]);
 
   const showShareTravelHabitsScreen = useCallback(() => {
