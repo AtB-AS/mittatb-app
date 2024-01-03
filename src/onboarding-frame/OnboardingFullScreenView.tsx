@@ -5,7 +5,6 @@ import {Button, ButtonProps} from '@atb/components/button';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {ScreenHeaderProps} from '@atb/components/screen-header';
 import {StaticColorByType} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
@@ -28,7 +27,6 @@ export const OnboardingFullScreenView = ({
   footerDescription,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
-  const focusRef = useFocusOnLoad();
 
   return (
     <FullScreenView
@@ -71,9 +69,7 @@ export const OnboardingFullScreenView = ({
         </View>
       }
     >
-      <View ref={focusRef} style={styles.mainContent}>
-        {children}
-      </View>
+      <View style={styles.mainContent}>{children}</View>
     </FullScreenView>
   );
 };
