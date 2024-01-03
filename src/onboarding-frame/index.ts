@@ -1,1 +1,1 @@
-export {OnboardingFrame} from './OnboardingFrame';
+export {OnboardingFullScreenView} from './OnboardingFullScreenView';

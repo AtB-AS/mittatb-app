@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {StaticColorByType} from '@atb/theme/colors';
-import {OnboardingFrame} from '@atb/onboarding-frame';
+import {OnboardingFullScreenView} from '@atb/onboarding-frame';
 
 type DescriptionLink = {
   text: string;
@@ -39,7 +39,7 @@ export const OnboardingScreenComponent = ({
   const styles = useThemeStyles();
 
   return (
-    <OnboardingFrame
+    <OnboardingFullScreenView
       footerButton={{
         onPress: buttonOnPress,
         text: buttonText,
@@ -78,7 +78,7 @@ export const OnboardingScreenComponent = ({
           </ThemeText>
         </PressableOpacity>
       )}
-    </OnboardingFrame>
+    </OnboardingFullScreenView>
   );
 };
 

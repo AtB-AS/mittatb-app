@@ -10,7 +10,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OnboardingFrame} from '@atb/onboarding-frame';
+import {OnboardingFullScreenView} from '@atb/onboarding-frame';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -44,7 +44,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   };
 
   return (
-    <OnboardingFrame
+    <OnboardingFullScreenView
       fullScreenHeaderProps={{
         leftButton: {type: onPressLogin ? 'cancel' : 'back'},
       }}
@@ -68,7 +68,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
         value={t(AnonymousPurchasesTexts.consequences.messages[2])}
         icon={<ThemeIcon svg={Support} colorType={themeColor} size="large" />}
       />
-    </OnboardingFrame>
+    </OnboardingFullScreenView>
   );
 };
 

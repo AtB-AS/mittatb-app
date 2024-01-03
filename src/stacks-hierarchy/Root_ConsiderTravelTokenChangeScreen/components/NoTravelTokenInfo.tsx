@@ -10,7 +10,7 @@ import {CrashSmall} from '@atb/assets/svg/color/images';
 import {useAppState} from '@atb/AppContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-import {OnboardingFrame} from '@atb/onboarding-frame';
+import {OnboardingFullScreenView} from '@atb/onboarding-frame';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -24,7 +24,7 @@ export function NoTravelTokenInfo({close}: {close: () => void}): JSX.Element {
   const {disable_travelcard} = useRemoteConfig();
 
   return (
-    <OnboardingFrame
+    <OnboardingFullScreenView
       footerButton={{
         onPress: () => {
           disable_travelcard
@@ -46,7 +46,7 @@ export function NoTravelTokenInfo({close}: {close: () => void}): JSX.Element {
       <View style={styles.illustration}>
         <CrashSmall />
       </View>
-    </OnboardingFrame>
+    </OnboardingFullScreenView>
   );
 }
 

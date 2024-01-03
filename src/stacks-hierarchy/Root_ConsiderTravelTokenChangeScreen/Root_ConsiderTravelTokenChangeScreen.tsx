@@ -12,7 +12,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
-import {OnboardingFrame} from '@atb/onboarding-frame';
+import {OnboardingFullScreenView} from '@atb/onboarding-frame';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 import {LoadingScreen} from '@atb/loading-screen';
@@ -45,7 +45,7 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   if (!inspectableToken) return NoTokenView;
 
   return (
-    <OnboardingFrame
+    <OnboardingFullScreenView
       footerButton={{
         onPress: () => {
           disable_travelcard
@@ -72,7 +72,7 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
         alwaysShowErrors={true}
         interactiveColor="interactive_1"
       />
-    </OnboardingFrame>
+    </OnboardingFullScreenView>
   );
 };
 
