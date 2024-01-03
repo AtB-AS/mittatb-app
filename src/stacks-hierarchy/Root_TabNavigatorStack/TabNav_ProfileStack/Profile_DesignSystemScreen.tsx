@@ -1235,7 +1235,7 @@ export const Profile_DesignSystemScreen = ({
           />
           <ToggleSectionItem
             text="Some short text"
-            leftImage={Bus}
+            leftImage={<ThemeIcon svg={Bus}/>}
             onValueChange={() => {}}
           />
           <ActionSectionItem

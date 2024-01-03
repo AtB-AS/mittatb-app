@@ -10,6 +10,7 @@ import {SvgProps} from 'react-native-svg';
 import {FormFactorFilterType} from '@atb/components/map';
 import {ContentHeading} from '@atb/components/heading';
 import {StyleSheet} from '@atb/theme';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type Props = {
   formFactor: FormFactor;
@@ -50,7 +51,7 @@ export const FormFactorFilter = ({
           <ToggleSectionItem
             key={operator.id}
             text={operator.name}
-            leftImage={icon}
+            leftImage={<ThemeIcon svg={icon} />}
             value={isChecked(operator.id)}
             onValueChange={onOperatorToggle(operator.id)}
           />

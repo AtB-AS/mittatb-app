@@ -31,6 +31,7 @@ import {
 import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
 import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
@@ -114,10 +115,14 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 key={option.id}
                 text={text}
                 leftImage={
-                  getTransportModeSvg(
-                    option.icon?.transportMode,
-                    option.icon?.transportSubMode,
-                  ).svg
+                  <ThemeIcon
+                    svg={
+                      getTransportModeSvg(
+                        option.icon?.transportMode,
+                        option.icon?.transportSubMode,
+                      ).svg
+                    }
+                  />
                 }
                 subtext={description}
                 value={
