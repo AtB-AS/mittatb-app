@@ -118,7 +118,11 @@ export const DetailsContent: React.FC<Props> = ({
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' && (
           <GenericSectionItem
-            style={barcodeStatus === 'staticQr' ? styles.qrSection : undefined}
+            style={
+              barcodeStatus === 'staticQr'
+                ? styles.enlargedWhiteBarcodePaddingView
+                : undefined
+            }
           >
             <Barcode validityStatus={validityStatus} fc={fc} />
           </GenericSectionItem>
@@ -168,7 +172,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     rowGap: theme.spacings.medium,
   },
-  qrSection: {
+  enlargedWhiteBarcodePaddingView: {
     backgroundColor: '#ffffff',
     paddingVertical: theme.spacings.xLarge * 2,
   },
