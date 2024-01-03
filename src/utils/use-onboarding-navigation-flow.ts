@@ -3,7 +3,7 @@ import {useGeolocationState} from '@atb/GeolocationContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {useAuthState} from '@atb/auth';
-import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
+import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 import {
   useNotifications,
   usePushNotificationsEnabled,
