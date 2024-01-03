@@ -13,7 +13,7 @@ type DescriptionLink = {
   onPress: () => void;
 };
 
-export type OnboardingScreenParams = {
+type OnboardingScreenComponentParams = {
   illustration: JSX.Element;
   title: string;
   description: string;
@@ -26,7 +26,7 @@ export type OnboardingScreenParams = {
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const OnboardingScreen = ({
+export const OnboardingScreenComponent = ({
   illustration,
   title,
   description,
@@ -35,7 +35,7 @@ export const OnboardingScreen = ({
   buttonText,
   buttonOnPress,
   testID,
-}: OnboardingScreenParams) => {
+}: OnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
 
   return (

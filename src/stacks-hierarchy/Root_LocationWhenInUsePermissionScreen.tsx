@@ -4,7 +4,7 @@ import React, {useCallback} from 'react';
 import LocationWhenInUsePermissionTexts from '@atb/translations/screens/LocationWhenInUsePermission';
 import {MyLocation} from '@atb/assets/svg/color/images';
 import {useAppState} from '@atb/AppContext';
-import {OnboardingScreen} from '@atb/onboarding-screen';
+import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 
@@ -27,7 +27,7 @@ export const Root_LocationWhenInUsePermissionScreen = () => {
   ]);
 
   return (
-    <OnboardingScreen
+    <OnboardingScreenComponent
       illustration={<MyLocation height={220} />}
       title={t(LocationWhenInUsePermissionTexts.title)}
       description={t(LocationWhenInUsePermissionTexts.description)}
