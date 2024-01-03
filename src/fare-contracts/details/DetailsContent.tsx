@@ -57,8 +57,7 @@ export const DetailsContent: React.FC<Props> = ({
 
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
-  const {deviceInspectionStatus} = useMobileTokenContextState();
-  const [specialBarcodeViewStyle, setSpecialBarcodeViewStyle] = useState(false);
+  const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
@@ -119,13 +118,9 @@ export const DetailsContent: React.FC<Props> = ({
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' && (
           <GenericSectionItem
-            style={specialBarcodeViewStyle ? styles.qrSection : undefined}
+            style={barcodeStatus === 'staticQr' ? styles.qrSection : undefined}
           >
-            <Barcode
-              validityStatus={validityStatus}
-              fc={fc}
-              setSpecialBarcodeViewStyle={setSpecialBarcodeViewStyle}
-            />
+            <Barcode validityStatus={validityStatus} fc={fc} />
           </GenericSectionItem>
         )}
         <GenericSectionItem>
