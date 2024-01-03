@@ -4,7 +4,7 @@ import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractIn
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
 import {StyleSheet} from '@atb/theme';
 import {
-  filterValidRightNowFareContract,
+  filterValidRightNowFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
 import {
@@ -32,7 +32,7 @@ export const CompactFareContracts: React.FC<Props> = ({
 
   const {serverNow} = useTimeContextState();
   const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContract(
+  const validFareContracts = filterValidRightNowFareContracts(
     fareContracts,
     serverNow,
   );

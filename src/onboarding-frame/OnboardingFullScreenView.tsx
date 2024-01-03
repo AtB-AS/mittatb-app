@@ -28,7 +28,7 @@ export const OnboardingFullScreenView = ({
   footerDescription,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
-  const focusRef = useFocusOnLoad(true, 200);
+  const focusRef = useFocusOnLoad();
 
   return (
     <FullScreenView

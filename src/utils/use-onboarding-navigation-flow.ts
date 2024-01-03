@@ -8,17 +8,15 @@ import {
   useNotifications,
   usePushNotificationsEnabled,
 } from '@atb/notifications';
+import {useHasFareContractWithActivatedNotification} from '@atb/notifications/use-has-fare-contract-with-activated-notification';
 import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
 
-import {
-  useTicketingState,
-  filterValidRightNowFareContract,
-} from '@atb/ticketing';
-import {useTimeContextState} from '@atb/time';
+import {useValidRightNowFareContract} from '@atb/ticketing/use-valid-right-now-fare-contracts';
+
 import {useNavigation, StackActions} from '@react-navigation/native';
 
 import {useCallback, useEffect, useState} from 'react';
-import {InteractionManager} from 'react-native';
+import {InteractionManager, Platform} from 'react-native';
 
 type ScreenProps =
   | {
@@ -177,22 +175,26 @@ const useShouldShowLocationOnboarding = () => {
 
 const useShouldShowNotificationPermissionScreen = () => {
   const {notificationPermissionOnboarded} = useAppState();
-  const {serverNow} = useTimeContextState();
 
-  const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContract(
-    fareContracts,
-    serverNow,
-  );
+  const validFareContracts = useValidRightNowFareContract();
+
+  const hasFareContractWithActivatedNotification =
+    useHasFareContractWithActivatedNotification();
 
   const pushNotificationsEnabled = usePushNotificationsEnabled();
   const {permissionStatus: pushNotificationPermissionStatus} =
     useNotifications();
 
+  const pushNotificationPermissionsNotGranted =
+    Platform.OS === 'ios'
+      ? pushNotificationPermissionStatus === 'undetermined'
+      : pushNotificationPermissionStatus === 'denied';
+
   return (
     !notificationPermissionOnboarded &&
     pushNotificationsEnabled &&
+    pushNotificationPermissionsNotGranted &&
     validFareContracts.length > 0 &&
-    pushNotificationPermissionStatus !== 'granted'
+    hasFareContractWithActivatedNotification
   );
 };
