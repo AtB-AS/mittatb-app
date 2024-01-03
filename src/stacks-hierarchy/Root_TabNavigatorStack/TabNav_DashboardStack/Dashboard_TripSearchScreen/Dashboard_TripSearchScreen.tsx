@@ -353,7 +353,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 viewContainerStyle={style.searchTimeButton}
               />
               {filtersState.enabled && (
-                <View ref={filterButtonWrapperRef}>
+                <View ref={filterButtonWrapperRef} collapsable={false}>
                   <Button
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}

@@ -254,6 +254,11 @@ const PurchaseOverviewTexts = {
       'The person you buy a ticket for, must be logged in to the AtB app to get the ticket.',
       'Den du kjøper billett til, må vere logga inn i AtB-appen for å få billetten.',
     ),
+    sendToOthersText: _(
+      'Sendes til noen andre',
+      'Sending to someone else',
+      'Sendast til nokon andre'
+    ),
   },
   ticketInformation: {
     button: _('Om billetten', 'About the ticket', 'Om billetten'),

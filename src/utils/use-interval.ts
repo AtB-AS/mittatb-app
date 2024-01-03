@@ -10,8 +10,8 @@ type IntervalCallback = () => Promise<void> | void;
  */
 export function useInterval(
   callback: IntervalCallback,
+  deps: React.DependencyList,
   delay: number,
-  deps: React.DependencyList = [],
   disabled: boolean = false,
   triggerImmediately: boolean = false,
 ) {

@@ -3,7 +3,7 @@ import {Warning} from '@atb/assets/svg/color/icons/status';
 import {useTheme} from '@atb/theme';
 import {useTranslation} from '@atb/translations';
 import RailReplacementBusTexts from '@atb/translations/components/RailReplacementBusMessage';
-import {TransportSubmode} from '@entur/sdk/lib/journeyPlanner/types';
+import {TransportSubmode} from '@atb/sdk';
 import React from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 

@@ -1,4 +1,4 @@
-export {ScreenHeader, ScreenHeaderWithoutNavigation} from './ScreenHeader';
+export {ScreenHeader} from './ScreenHeader';
 export {FullScreenHeader} from './FullScreenHeader';
 export {AnimatedScreenHeader} from './AnimatedScreenHeader';
 export type {IconButtonProps} from './HeaderButton';

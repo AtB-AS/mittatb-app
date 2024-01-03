@@ -15,9 +15,10 @@ import {TravellerSelectionSheet} from './TravellerSelectionSheet';
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 import {LabelInfo} from '@atb/components/label-info';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -94,6 +95,14 @@ export function TravellerSelection({
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
+  const newLabelAccessibility = isOnBehalfOfEnabled
+    ? screenReaderPause + t(LabelInfoTexts.labels['new'])
+    : '';
+
+  const sendingToOthersAccessibility = isOnBehalfOfToggle
+    ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
+    : '';
+
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: 'button',
@@ -105,6 +114,8 @@ export function TravellerSelection({
       ) +
       ' ' +
       travellersDetailsText +
+      sendingToOthersAccessibility +
+      newLabelAccessibility +
       screenReaderPause,
     accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
   };
@@ -116,7 +127,7 @@ export function TravellerSelection({
         fareProductType={fareProductType}
         selectableUserProfilesWithCountInit={userProfilesState}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
-        close={(
+        onConfirmSelection={(
           chosenSelectableUserProfilesWithCounts?: UserProfileWithCount[],
           onBehalfOfToggle?: boolean,
         ) => {
@@ -157,6 +168,12 @@ export function TravellerSelection({
                     )
                   : travellersDetailsText}
               </ThemeText>
+
+              {isOnBehalfOfToggle && (
+                <ThemeText type="body__secondary" color="secondary">
+                  {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+                </ThemeText>
+              )}
 
               {multipleTravellerCategoriesSelectedFrom && (
                 <ThemeText

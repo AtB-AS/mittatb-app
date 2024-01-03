@@ -8,7 +8,7 @@ apply plugin: "com.bugsnag.android.gradle"
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 /**
  * The preferred build flavor of JavaScriptCore.
@@ -107,6 +107,10 @@ android {
         store {
             initWith buildTypes.release
             matchingFallbacks = ['release']
+            minifyEnabled enableProguardInReleaseBuilds
+            shrinkResources enableProguardInReleaseBuilds
+            debuggable false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         staging {
             initWith buildTypes.release

@@ -4,8 +4,6 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Alert, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {animateNextChange} from '@atb/utils/animation';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -14,6 +12,8 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 type Props = {onPressAddFavorite: () => void};
 
@@ -45,14 +45,20 @@ export const FavoriteDeparturesScreenComponent = ({
   };
 
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(FavoriteDeparturesTexts.header.title)}
-        leftButton={{type: 'back'}}
-      />
-
-      <ScrollView>
-        <Section withFullPadding testID="favoritesList">
+    <FullScreenView
+      headerProps={{
+        title: t(FavoriteDeparturesTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(FavoriteDeparturesTexts.header.title)}
+        />
+      )}
+    >
+      <View style={style.container}>
+        <Section testID="favoritesList">
           {favoriteDepartures.map((favorite) => (
             <FavoriteDepartureSectionItem
               key={favorite.id}
@@ -67,7 +73,7 @@ export const FavoriteDeparturesScreenComponent = ({
             />
           ))}
         </Section>
-        <Section withPadding>
+        <Section>
           <LinkSectionItem
             text={t(FavoriteDeparturesTexts.favoriteItemAdd.label)}
             onPress={onPressAddFavorite}
@@ -75,19 +81,13 @@ export const FavoriteDeparturesScreenComponent = ({
             icon={<ThemeIcon svg={Add} />}
           />
         </Section>
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_2.background,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-  },
-  empty: {
     margin: theme.spacings.medium,
+    rowGap: theme.spacings.medium,
   },
 }));

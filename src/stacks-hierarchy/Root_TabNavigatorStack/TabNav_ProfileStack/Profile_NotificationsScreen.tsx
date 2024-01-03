@@ -17,7 +17,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {useNotifications, isConfigEnabled} from '@atb/notifications';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {NotificationConfigGroup} from '@atb/notifications/types';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {Button} from '@atb/components/button';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
@@ -40,13 +40,16 @@ export const Profile_NotificationsScreen = ({
     updateConfig,
   } = useNotifications();
   const {notificationConfig} = useFirestoreConfiguration();
+  const profileQuery = useProfileQuery();
 
   useEffect(() => {
     if (isFocusedAndActive) {
       checkPermissions();
     }
   }, [isFocusedAndActive, checkPermissions]);
-  const mailEnabled = isConfigEnabled(config?.modes, 'mail');
+
+  const hasNoEmail = profileQuery.isSuccess && profileQuery.data.email === '';
+  const mailEnabled = isConfigEnabled(config?.modes, 'mail') && !hasNoEmail;
   const pushEnabled =
     isConfigEnabled(config?.modes, 'push') && permissionStatus === 'granted';
   const anyModeEnabled = mailEnabled || pushEnabled;
@@ -60,9 +63,6 @@ export const Profile_NotificationsScreen = ({
   const handleGroupToggle = async (id: string, enabled: boolean) => {
     updateConfig({config_type: 'group', id, enabled});
   };
-  const {data, isLoading, isSuccess} = useProfileQuery();
-
-  const hasNoEmail = isSuccess && data.email === '';
   return (
     <FullScreenView
       headerProps={{
@@ -82,7 +82,7 @@ export const Profile_NotificationsScreen = ({
         </View>
       )}
     >
-      {(permissionStatus === 'loading' || isLoading) && (
+      {(permissionStatus === 'loading' || profileQuery.isLoading) && (
         <Processing message={t(dictionary.loading)} />
       )}
       {permissionStatus !== 'loading' && (
@@ -100,19 +100,19 @@ export const Profile_NotificationsScreen = ({
                   .emailToggle.text,
               )}
               subtext={
-                isLoading
+                profileQuery.isLoading
                   ? undefined
                   : t(
-                      data?.email
+                      profileQuery.data?.email
                         ? ProfileTexts.sections.settings.linkSectionItems.notifications.emailToggle.subText(
-                            data.email,
+                            profileQuery.data.email,
                           )
                         : ProfileTexts.sections.settings.linkSectionItems
                             .notifications.emailToggle.noEmailPlaceholder,
                     )
               }
               disabled={hasNoEmail}
-              value={isConfigEnabled(config?.modes, 'mail')}
+              value={mailEnabled}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
           </Section>
@@ -137,7 +137,7 @@ export const Profile_NotificationsScreen = ({
                 ProfileTexts.sections.settings.linkSectionItems.notifications
                   .pushToggle.subText,
               )}
-              value={isConfigEnabled(config?.modes, 'push')}
+              value={pushEnabled}
               disabled={
                 permissionStatus === 'updating' || permissionStatus === 'denied'
               }

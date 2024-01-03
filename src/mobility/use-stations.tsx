@@ -48,8 +48,7 @@ export const useStations: (
         setFilter(userFilter.mobility ?? {});
       });
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
+  }, [getMapFilter, initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
 
   useEffect(() => {
     if (isCityBikesEnabled && isFocused && area) {

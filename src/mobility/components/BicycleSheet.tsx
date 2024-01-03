@@ -1,8 +1,7 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery, Bicycle} from '@atb/assets/svg/mono-icons/vehicles';
 import {
@@ -29,9 +28,9 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 
 type Props = {
   vehicleId: VehicleId;
-  close: () => void;
+  onClose: () => void;
 };
-export const BicycleSheet = ({vehicleId: id, close}: Props) => {
+export const BicycleSheet = ({vehicleId: id, onClose}: Props) => {
   const {t, language} = useTranslation();
   const styles = useSheetStyle();
   const {
@@ -47,17 +46,11 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      onClose={onClose}
+      maxHeightValue={0.5}
+    >
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>
@@ -143,10 +136,6 @@ export const BicycleSheet = ({vehicleId: id, close}: Props) => {
             <MessageInfoBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
-              onPressConfig={{
-                action: close,
-                text: t(ScreenHeaderTexts.headerButton.close.text),
-              }}
             />
           </View>
         )}

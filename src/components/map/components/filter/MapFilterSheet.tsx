@@ -1,11 +1,8 @@
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {
-  MapTexts,
-  ScreenHeaderTexts,
-  TripSearchTexts,
-  useTranslation,
-} from '@atb/translations';
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
+import {MapTexts, TripSearchTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {MapFilterType, MobilityMapFilterType} from '../../types';
@@ -18,11 +15,11 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MobilityFilters} from '@atb/mobility/components/filter/MobilityFilters';
 
 type MapFilterSheetProps = {
-  close: () => void;
+  onClose: () => void;
   onFilterChanged: (filter: MapFilterType) => void;
 };
 export const MapFilterSheet = ({
-  close,
+  onClose,
   onFilterChanged,
 }: MapFilterSheetProps) => {
   const {t} = useTranslation();
@@ -30,6 +27,7 @@ export const MapFilterSheet = ({
   const {getMapFilter, setMapFilter} = useUserMapFilters();
   const [initialFilter, setInitialFilter] = useState<MapFilterType>();
   const [filter, setFilter] = useState<MapFilterType>();
+  const {close: closeBottomSheet} = useBottomSheet();
 
   useEffect(() => {
     getMapFilter().then((f) => {
@@ -54,16 +52,11 @@ export const MapFilterSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.9}>
-      <ScreenHeaderWithoutNavigation
-        title={t(MapTexts.filters.bottomSheet.heading)}
-        color="background_1"
-        leftButton={{
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          type: 'cancel',
-          onPress: close,
-        }}
-      />
+    <BottomSheetContainer
+      title={t(MapTexts.filters.bottomSheet.heading)}
+      onClose={onClose}
+      maxHeightValue={0.9}
+    >
       <ScrollView style={style.container}>
         <MobilityFilters
           filter={initialFilter.mobility}
@@ -76,7 +69,8 @@ export const MapFilterSheet = ({
           onPress={() => {
             setMapFilter(filter);
             onFilterChanged(filter);
-            close();
+            onClose();
+            closeBottomSheet();
           }}
           rightIcon={{svg: Confirm}}
         />

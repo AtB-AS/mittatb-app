@@ -25,11 +25,7 @@ import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
-
-import {
-  useNotifications,
-  useOnPushNotificationOpened,
-} from '@atb/notifications';
+import {useOnPushNotificationOpened} from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
@@ -41,16 +37,6 @@ export const Root_TabNavigatorStack = () => {
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-
-  const {checkPermissions: checkPushNotificationPermissions} =
-    useNotifications();
-  // Check notificaiton status, and register notification language when the app
-  // starts, in case the user have changed language since last time the app was
-  // opened. This useEffect will also trigger when language is changed manually
-  // in the app.
-  useEffect(() => {
-    checkPushNotificationPermissions();
-  }, [checkPushNotificationPermissions]);
 
   useOnPushNotificationOpened();
 

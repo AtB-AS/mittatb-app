@@ -20,7 +20,7 @@ describe('useInterval', () => {
 
   it('should invoke with specified delay', async () => {
     const delay = 300;
-    renderHook(() => useInterval(callback, delay));
+    renderHook(() => useInterval(callback, [], delay));
     expect(callback).toHaveBeenCalledTimes(0);
 
     await advanceByTimer(delay);
@@ -31,7 +31,7 @@ describe('useInterval', () => {
 
   it('should invoke with specified delay and immediate if set', async () => {
     const delay = 300;
-    renderHook(() => useInterval(callback, delay, [], false, true));
+    renderHook(() => useInterval(callback, [], delay, false, true));
     expect(callback).toHaveBeenCalledTimes(1);
 
     // This is needed to make timers move passed by promises.
@@ -46,7 +46,7 @@ describe('useInterval', () => {
 
   it('should not have less than 100ms delay', async () => {
     const minimumDelay = 100;
-    renderHook(() => useInterval(callback, 0));
+    renderHook(() => useInterval(callback, [], 0));
 
     expect(setTimeout).toHaveBeenCalledTimes(1);
     expect(setTimeout).toHaveBeenLastCalledWith(
@@ -68,7 +68,7 @@ describe('useInterval', () => {
 
   it('should be able to disable useInterval', async () => {
     const hook = renderHook(
-      ({disabled}) => useInterval(callback, 200, [], disabled),
+      ({disabled}) => useInterval(callback, [], 200, disabled),
       {
         initialProps: {
           disabled: false,

@@ -24,6 +24,7 @@ export enum StorageModelKeysEnum {
   EnableOnBehalfOfDebugOverride = '@ATB_enable_on_behalf_of_debug_override',
   OneTimePopOver = '@ATB_one_time_popovers_seen',
   EnableTicketInformationDebugOverride = '@ATB_enable_ticket_information_debug_override',
+  EnablePosthogDebugOverride = '@ATB_enable_posthog_debug_override',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;

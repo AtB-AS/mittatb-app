@@ -1,177 +1,8 @@
-import {
-  Authority,
-  BikeRentalStation,
-  Coordinates,
-  DestinationDisplay,
-  Interchange,
-  LegMode,
-  Line,
-  Notice,
-  Operator,
-  PointsOnLink,
-  ReportType,
-  ServiceJourney,
-  StopPlace,
-  StopPlaceDetails,
-  TransportSubmode,
-} from '@entur/sdk';
-import {PointsOnLink as PointsOnLink_v2} from '@atb/api/types/generated/journey_planner_v3_types';
-import {Feature, LineString} from 'geojson';
 
-export * from '@entur/sdk';
-
-// @TODO This should come from Common lib.
-
-export interface Place {
+export interface Coordinates {
   latitude: number;
   longitude: number;
-  name?: string;
-  quay?: Quay;
-  bikeRentalStation?: BikeRentalStation;
 }
-
-export interface Leg {
-  aimedEndTime: string;
-  aimedStartTime: string;
-  authority?: Authority;
-  distance: number;
-  directDuration: number;
-  duration: number;
-  expectedEndTime: string;
-  expectedStartTime: string;
-  fromEstimatedCall?: EstimatedCall;
-  fromPlace: Place;
-  interchangeFrom?: Interchange;
-  interchangeTo?: Interchange;
-  intermediateEstimatedCalls: Array<IntermediateEstimatedCall>;
-  line?: Line;
-  mode: LegMode;
-  notices?: Array<Notice>;
-  operator?: Operator;
-  pointsOnLink: PointsOnLink;
-  realtime: boolean;
-  ride: boolean;
-  rentedBike?: boolean;
-  serviceJourney: ServiceJourney;
-  situations: Array<Situation>;
-  toEstimatedCall?: EstimatedCall;
-  toPlace: Place;
-  transportSubmode: TransportSubmode;
-}
-
-export interface TripPattern {
-  distance: number;
-  directDuration: number;
-  duration: number;
-  endTime: string;
-  id?: string;
-  legs: Array<Leg>;
-  startTime: string;
-  walkDistance: number;
-}
-
-export interface EstimatedCall {
-  actualArrivalTime?: string; // Only available AFTER arrival has taken place
-  actualDepartureTime?: string; // Only available AFTER departure has taken place
-  aimedArrivalTime: string;
-  aimedDepartureTime: string;
-  cancellation: boolean;
-  date: string;
-  destinationDisplay: DestinationDisplay;
-  expectedArrivalTime: string;
-  expectedDepartureTime: string;
-  forAlighting: boolean;
-  forBoarding: boolean;
-  notices?: Array<Notice>;
-  quay?: Quay;
-  realtime: boolean;
-  requestStop: boolean;
-  serviceJourney: ServiceJourney;
-  situations: Array<Situation>;
-}
-export type IntermediateEstimatedCall = EstimatedCall;
-
-export type Departure = EstimatedCall;
-
-export type Situation = {
-  situationNumber?: string;
-  reportType?: ReportType;
-  summary: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  description: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  advice: Array<{
-    language?: string;
-    value?: string;
-  }>;
-  validityPeriod?: {
-    startTime?: any;
-    endTime?: any;
-  };
-  infoLinks?: Array<{uri?: string; label?: string}>;
-};
-
-export interface Quay {
-  id: string;
-  name: string;
-  description: string;
-  publicCode: string;
-  situations: Array<Situation>;
-  stopPlace: StopPlace;
-}
-export type QuayWithDepartures = {quay: Quay; departures: Array<Departure>};
-export type DeparturesWithStop = {
-  stop: StopPlaceDetails;
-  quays: {
-    [quayId: string]: QuayWithDepartures;
-  };
-};
-
-export type ServiceJourneyWithDirection = ServiceJourney & {
-  directionType: 'inbound' | 'outbound' | 'clockwise' | 'anticlockwise';
-};
-
-export type EstimatedCallWithDirection = EstimatedCall & {
-  serviceJourney: ServiceJourneyWithDirection;
-};
-
-export type EstimatedQuay = Quay & {situations?: Situation[]} & {
-  estimatedCalls: EstimatedCallWithDirection[];
-};
-
-export type StopPlaceDetailsWithEstimatedCalls = StopPlaceDetails & {
-  quays?: EstimatedQuay[];
-};
-
-export type StopDepartures = {
-  stopPlaces: StopPlaceDetailsWithEstimatedCalls[];
-};
-
-export type PaginationInput = {
-  pageSize: number;
-  pageOffset: number;
-};
-
-export type Paginated<T extends any[] | []> =
-  | ({
-      hasNext: true;
-      nextPageOffset: number;
-
-      data: T;
-      totalResults: number;
-    } & PaginationInput)
-  | ({
-      hasNext: false;
-
-      data: T;
-      totalResults: number;
-    } & PaginationInput);
-
-export type DeparturesMetadata = Paginated<DeparturesWithStop[]>;
 
 export type RealtimeData = {
   serviceJourneyId: string;
@@ -189,11 +20,6 @@ export type DepartureRealtimeData = {
 
 export type DeparturesRealtimeData = {
   [quayId: string]: DepartureRealtimeData;
-};
-
-export type NextCursorData = {
-  nextCursor?: string;
-  hasNextPage: boolean;
 };
 
 export type CursoredData<T> = {
@@ -214,21 +40,245 @@ export type CursorInput = {
 
 export type CursoredQuery<T> = CursorInput & T;
 
-export type MapLeg = {
-  mode?: LegMode;
-  faded?: boolean;
-  transportSubmode?: TransportSubmode;
-  pointsOnLink: PointsOnLink | PointsOnLink_v2;
-};
-
-export interface MapLine extends Feature<LineString> {
-  travelType?: LegMode;
-  subMode?: TransportSubmode;
-  faded?: boolean;
+export enum LegMode {
+  AIR = "air",
+  BICYCLE = "bicycle",
+  BUS = "bus",
+  CABLEWAY = "cableway",
+  CAR = "car",
+  COACH = "coach",
+  FOOT = "foot",
+  FUNICULAR = "funicular",
+  LIFT = "lift",
+  METRO = "metro",
+  RAIL = "rail",
+  TRAM = "tram",
+  WATER = "water"
 }
 
-export type ServiceJourneyMapInfoData = {
-  mapLegs: MapLeg[];
-  start?: Coordinates;
-  stop?: Coordinates;
+export enum FeatureCategory {
+  ONSTREET_BUS = "onstreetBus",
+  ONSTREET_TRAM = "onstreetTram",
+  AIRPORT = "airport",
+  RAIL_STATION = "railStation",
+  METRO_STATION = "metroStation",
+  BUS_STATION = "busStation",
+  COACH_STATION = "coachStation",
+  TRAM_STATION = "tramStation",
+  HARBOUR_PORT = "harbourPort",
+  FERRY_PORT = "ferryPort",
+  FERRY_STOP = "ferryStop",
+  LIFT_STATION = "liftStation",
+  VEHICLE_RAIL_INTERCHANGE = "vehicleRailInterchange",
+  GROUP_OF_STOP_PLACES = "GroupOfStopPlaces",
+  POI = "poi",
+  VEGADRESSE = "Vegadresse",
+  STREET = "street",
+  TETTSTEDDEL = "tettsteddel",
+  BYDEL = "bydel",
+  OTHER = "other"
+}
+
+export declare type Feature = {
+  geometry: {
+      coordinates: [number, number];
+      type: 'Point';
+  };
+  properties: {
+      id: string;
+      name: string;
+      label?: string;
+      borough: string;
+      accuracy: 'point';
+      layer: 'venue' | 'address';
+      borough_gid: string;
+      category: FeatureCategory[];
+      country_gid: string;
+      county: string;
+      county_gid: string;
+      gid: string;
+      housenumber?: string;
+      locality: string;
+      locality_gid: string;
+      postalcode: string;
+      source: string;
+      source_id: string;
+      street: string;
+      tariff_zones?: string[];
+  };
 };
+
+export enum TransportSubmode {
+  AIRPORT_LINK_BUS = "airportLinkBus",
+  AIRPORT_LINK_RAIL = "airportLinkRail",
+  CITY_TRAM = "cityTram",
+  DOMESTIC_FLIGHT = "domesticFlight",
+  EXPRESS_BUS = "expressBus",
+  FUNICULAR = "funicular",
+  HELICOPTER_SERVICE = "helicopterService",
+  HIGH_SPEED_PASSENGER_SERVICE = "highSpeedPassengerService",
+  HIGH_SPEED_VEHICLE_SERVICE = "highSpeedVehicleService",
+  INTERNATIONAL = "international",
+  INTERNATIONAL_CAR_FERRY = "internationalCarFerry",
+  INTERNATIONAL_COACH = "internationalCoach",
+  INTERNATIONAL_FLIGHT = "internationalFlight",
+  INTERNATIONAL_PASSENGER_FERRY = "internationalPassengerFerry",
+  INTERREGIONAL_RAIL = "interregionalRail",
+  LOCAL = "local",
+  LOCAL_BUS = "localBus",
+  LOCAL_CAR_FERRY = "localCarFerry",
+  LOCAL_PASSENGER_FERRY = "localPassengerFerry",
+  LOCAL_TRAM = "localTram",
+  LONG_DISTANCE = "longDistance",
+  METRO = "metro",
+  NATIONAL_CAR_FERRY = "nationalCarFerry",
+  NATIONAL_COACH = "nationalCoach",
+  NIGHT_BUS = "nightBus",
+  NIGHT_RAIL = "nightRail",
+  RAIL_REPLACEMENT_BUS = "railReplacementBus",
+  REGIONAL_BUS = "regionalBus",
+  REGIONAL_CAR_FERRY = "regionalCarFerry",
+  REGIONAL_RAIL = "regionalRail",
+  SCHOOL_BUS = "schoolBus",
+  SHUTTLE_BUS = "shuttleBus",
+  SIGHTSEEING_BUS = "sightseeingBus",
+  SIGHTSEEING_SERVICE = "sightseeingService",
+  TELECABIN = "telecabin",
+  TOURIST_RAILWAY = "touristRailway"
+}
+
+export declare enum TransportSubmode {
+  SchengenAreaFlight = "SchengenAreaFlight",
+  AirportBoatLink = "airportBoatLink",
+  AirportLinkBus = "airportLinkBus",
+  AirportLinkRail = "airportLinkRail",
+  AirshipService = "airshipService",
+  AllFunicularServices = "allFunicularServices",
+  AllHireVehicles = "allHireVehicles",
+  AllTaxiServices = "allTaxiServices",
+  BikeTaxi = "bikeTaxi",
+  BlackCab = "blackCab",
+  CableCar = "cableCar",
+  CableFerry = "cableFerry",
+  CanalBarge = "canalBarge",
+  CarTransportRailService = "carTransportRailService",
+  ChairLift = "chairLift",
+  CharterTaxi = "charterTaxi",
+  CityTram = "cityTram",
+  CommunalTaxi = "communalTaxi",
+  CommuterCoach = "commuterCoach",
+  CrossCountryRail = "crossCountryRail",
+  DedicatedLaneBus = "dedicatedLaneBus",
+  DemandAndResponseBus = "demandAndResponseBus",
+  DomesticCharterFlight = "domesticCharterFlight",
+  DomesticFlight = "domesticFlight",
+  DomesticScheduledFlight = "domesticScheduledFlight",
+  DragLift = "dragLift",
+  ExpressBus = "expressBus",
+  Funicular = "funicular",
+  HelicopterService = "helicopterService",
+  HighFrequencyBus = "highFrequencyBus",
+  HighSpeedPassengerService = "highSpeedPassengerService",
+  HighSpeedRail = "highSpeedRail",
+  HighSpeedVehicleService = "highSpeedVehicleService",
+  HireCar = "hireCar",
+  HireCycle = "hireCycle",
+  HireMotorbike = "hireMotorbike",
+  HireVan = "hireVan",
+  IntercontinentalCharterFlight = "intercontinentalCharterFlight",
+  IntercontinentalFlight = "intercontinentalFlight",
+  International = "international",
+  InternationalCarFerry = "internationalCarFerry",
+  InternationalCharterFlight = "internationalCharterFlight",
+  InternationalCoach = "internationalCoach",
+  InternationalFlight = "internationalFlight",
+  InternationalPassengerFerry = "internationalPassengerFerry",
+  InterregionalRail = "interregionalRail",
+  Lift = "lift",
+  Local = "local",
+  LocalBus = "localBus",
+  LocalCarFerry = "localCarFerry",
+  LocalPassengerFerry = "localPassengerFerry",
+  LocalTram = "localTram",
+  LongDistance = "longDistance",
+  Metro = "metro",
+  MiniCab = "miniCab",
+  MobilityBus = "mobilityBus",
+  MobilityBusForRegisteredDisabled = "mobilityBusForRegisteredDisabled",
+  NationalCarFerry = "nationalCarFerry",
+  NationalCoach = "nationalCoach",
+  NationalPassengerFerry = "nationalPassengerFerry",
+  NightBus = "nightBus",
+  NightRail = "nightRail",
+  PostBoat = "postBoat",
+  PostBus = "postBus",
+  RackAndPinionRailway = "rackAndPinionRailway",
+  RailReplacementBus = "railReplacementBus",
+  RailShuttle = "railShuttle",
+  RailTaxi = "railTaxi",
+  RegionalBus = "regionalBus",
+  RegionalCarFerry = "regionalCarFerry",
+  RegionalCoach = "regionalCoach",
+  RegionalPassengerFerry = "regionalPassengerFerry",
+  RegionalRail = "regionalRail",
+  RegionalTram = "regionalTram",
+  ReplacementRailService = "replacementRailService",
+  RiverBus = "riverBus",
+  RoadFerryLink = "roadFerryLink",
+  RoundTripCharterFlight = "roundTripCharterFlight",
+  ScheduledFerry = "scheduledFerry",
+  SchoolAndPublicServiceBus = "schoolAndPublicServiceBus",
+  SchoolBoat = "schoolBoat",
+  SchoolBus = "schoolBus",
+  SchoolCoach = "schoolCoach",
+  ShortHaulInternationalFlight = "shortHaulInternationalFlight",
+  ShuttleBus = "shuttleBus",
+  ShuttleCoach = "shuttleCoach",
+  ShuttleFerryService = "shuttleFerryService",
+  ShuttleFlight = "shuttleFlight",
+  ShuttleTram = "shuttleTram",
+  SightseeingBus = "sightseeingBus",
+  SightseeingCoach = "sightseeingCoach",
+  SightseeingFlight = "sightseeingFlight",
+  SightseeingService = "sightseeingService",
+  SightseeingTram = "sightseeingTram",
+  SleeperRailService = "sleeperRailService",
+  SpecialCoach = "specialCoach",
+  SpecialNeedsBus = "specialNeedsBus",
+  SpecialTrain = "specialTrain",
+  StreetCableCar = "streetCableCar",
+  SuburbanRailway = "suburbanRailway",
+  Telecabin = "telecabin",
+  TelecabinLink = "telecabinLink",
+  TouristCoach = "touristCoach",
+  TouristRailway = "touristRailway",
+  TrainFerry = "trainFerry",
+  TrainTram = "trainTram",
+  Tube = "tube",
+  Undefined = "undefined",
+  UndefinedFunicular = "undefinedFunicular",
+  Unknown = "unknown",
+  UrbanRailway = "urbanRailway",
+  WaterTaxi = "waterTaxi"
+}
+
+export enum StreetMode {
+  /** Bike only. This can be used as access/egress, but transfers will still be walk only. */
+  Bicycle = "bicycle",
+  /** Bike to a bike parking area, then walk the rest of the way. Direct mode and access mode only. */
+  BikePark = "bike_park",
+  /** Walk to a bike rental point, bike to a bike rental drop-off point, and walk the rest of the way. This can include bike rental at fixed locations or free-floating services. */
+  BikeRental = "bike_rental",
+  /** Car only. Direct mode only. */
+  Car = "car",
+  /** Start in the car, drive to a parking area, and walk the rest of the way. Direct mode and access mode only. */
+  CarPark = "car_park",
+  /** Walk to a pickup point along the road, drive to a drop-off point along the road, and walk the rest of the way. This can include various taxi-services or kiss & ride. */
+  CarPickup = "car_pickup",
+  /** Walk to an eligible pickup area for flexible transportation, ride to an eligible drop-off area and then walk the rest of the way. */
+  Flexible = "flexible",
+  /** Walk only */
+  Foot = "foot",
+  /** Walk to a scooter rental point, ride a scooter to a scooter rental drop-off point, and walk the rest of the way. This can include scooter rental at fixed locations or free-floating services. */
+  ScooterRental = "scooter_rental"
+}

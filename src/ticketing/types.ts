@@ -34,6 +34,7 @@ export type TravelRight = {
     | 'PeriodBoatTicket'
     | 'UnknownTicket';
   direction: TravelRightDirection;
+  fareProductRef: string;
 };
 
 export type Timestamp = FirebaseFirestoreTypes.Timestamp;

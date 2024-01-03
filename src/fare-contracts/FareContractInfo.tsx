@@ -26,9 +26,9 @@ import {
   getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,
-  tariffZonesSummary,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
+  useTariffZoneSummary,
   ValidityStatus,
 } from '../fare-contracts/utils';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
@@ -122,14 +122,16 @@ export const FareContractInfoDetails = (
     userProfilesWithCount,
     omitUserProfileCount,
     status,
+    preassignedFareProduct,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
 
-  const tariffZoneSummary =
-    fromTariffZone && toTariffZone
-      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
-      : undefined;
+  const tariffZoneSummary = useTariffZoneSummary(
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+  );
 
   return (
     <View style={styles.container} accessible={true}>

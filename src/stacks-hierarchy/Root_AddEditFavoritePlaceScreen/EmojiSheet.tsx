@@ -20,13 +20,11 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {
-  AddEditFavoriteTexts,
-  ScreenHeaderTexts,
-  useTranslation,
-} from '@atb/translations';
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
+import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 
 // Polyfill for Android
 require('string.fromcodepoint');
@@ -183,11 +181,12 @@ type Props = Omit<EmojiCategory, 'category'> & {
   clearButtonStyle?: ViewStyle;
   clearButtonText?: string;
   value: string | null;
-  close: () => void;
 };
 export const EmojiSheet = forwardRef<ScrollView, Props>(
-  ({value, onEmojiSelected, closeOnSelect, close, ...props}, focusRef) => {
+  ({value, onEmojiSelected, closeOnSelect, ...props}, focusRef) => {
     const {t} = useTranslation();
+
+    const {close} = useBottomSheet();
     const onClick = (emoji: string | null) => {
       onEmojiSelected(emoji);
       if (closeOnSelect) {
@@ -196,22 +195,7 @@ export const EmojiSheet = forwardRef<ScrollView, Props>(
     };
 
     return (
-      <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          title={t(AddEditFavoriteTexts.emojiSheet.title)}
-          leftButton={{
-            type: 'cancel',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          }}
-          rightButton={{
-            type: 'custom',
-            text: t(AddEditFavoriteTexts.emojiSheet.rightButton),
-            onPress: () => onClick(null),
-          }}
-          color="background_1"
-          setFocusOnLoad={true}
-        />
+      <BottomSheetContainer title={t(AddEditFavoriteTexts.emojiSheet.title)}>
         <ScrollView ref={focusRef}>
           {CATEGORIES.map((category) => (
             <EmojiCategory

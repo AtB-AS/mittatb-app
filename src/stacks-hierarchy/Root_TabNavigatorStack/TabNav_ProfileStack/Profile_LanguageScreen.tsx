@@ -12,11 +12,11 @@ import {
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {View} from 'react-native';
 import {APP_ORG, IS_QA_ENV} from '@env';
 import {useTicketingState} from '@atb/ticketing';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 const identity = (s: string) => s;
 export const Profile_LanguageScreen = () => {
@@ -44,13 +44,20 @@ export const Profile_LanguageScreen = () => {
       : languagesExceptNynorsk;
 
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(LanguageSettingsTexts.header.title)}
-        leftButton={{type: 'back'}}
-      />
-      <ScrollView>
-        <Section withPadding withTopPadding>
+    <FullScreenView
+      headerProps={{
+        title: t(LanguageSettingsTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(LanguageSettingsTexts.header.title)}
+        />
+      )}
+    >
+      <View style={style.container}>
+        <Section>
           <ToggleSectionItem
             text={t(LanguageSettingsTexts.usePhoneSettings)}
             value={useSystemLanguage}
@@ -65,7 +72,6 @@ export const Profile_LanguageScreen = () => {
         </Section>
         {!useSystemLanguage && (
           <RadioGroupSection<Preference_Language>
-            withPadding
             items={selectableLanguages}
             keyExtractor={identity}
             itemToText={(item) => {
@@ -75,14 +81,14 @@ export const Profile_LanguageScreen = () => {
             onSelect={(language) => setPreference({language})}
           />
         )}
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 
 const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
+    margin: theme.spacings.medium,
+    rowGap: theme.spacings.small,
   },
 }));

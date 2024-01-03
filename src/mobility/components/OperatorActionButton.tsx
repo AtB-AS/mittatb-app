@@ -1,7 +1,7 @@
 import {useAnalytics} from '@atb/analytics';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useAppMissingAlert} from '@atb/mobility/use-app-missing-alert';
-import React, {useCallback} from 'react';
+import React from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
@@ -39,7 +39,7 @@ export const OperatorActionButton = ({
         t(MobilityTexts.operatorAppSwitchButton(operatorName))
       : t(MobilityTexts.operatorAppSwitchButton(operatorName));
 
-  const handleCallToAction = useCallback(async () => {
+  const handleCallToAction = async () => {
     analytics.logEvent('Mobility', 'Open operator app', {
       operatorName,
       benefit,
@@ -61,8 +61,7 @@ export const OperatorActionButton = ({
     await Linking.openURL(url).catch(() =>
       showAppMissingAlert({appStoreUri, operatorName}),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [operatorName, benefit, rentalAppUri, appStoreUri, valueCode]);
+  };
 
   if (isLoadingEligible || isLoadingValueCode) {
     return <ActivityIndicator />;

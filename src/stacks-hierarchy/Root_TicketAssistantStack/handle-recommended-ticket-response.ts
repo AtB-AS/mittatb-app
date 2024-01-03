@@ -5,8 +5,8 @@ import {
   UserProfile,
   FareProductTypeConfig,
   isProductSellableInApp,
+  TariffZone,
 } from '@atb/configuration';
-import {TariffZone} from '@entur/sdk/lib/nsr/types';
 import {
   RecommendedTicketSummary,
   RecommendedTicketResponse,

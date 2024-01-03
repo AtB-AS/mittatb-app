@@ -10,6 +10,8 @@ import {tokenService} from './tokenService';
 
 const CONTEXT_ID = 'main';
 
+const TWELVE_HOURS_MS = 1000 * 60 * 60 * 12;
+
 const abtClient = createClient({
   tokenContextIds: [CONTEXT_ID],
   attestation: {
@@ -33,4 +35,12 @@ export const mobileTokenClient = {
   clear: () => abtClient.clearToken(CONTEXT_ID),
   renew: (token: ActivatedToken, traceId: string) =>
     abtClient.renewToken(token, traceId),
+  /*
+  Check if token should be renewed. Will return true if either:
+   - Token is expired
+   - It is less than 12 hours until token expires
+   - More than 90 % of the token validity time has expired
+   */
+  shouldRenew: (token: ActivatedToken) =>
+    abtClient.shouldPreemptiveRenew(token, TWELVE_HOURS_MS, 90),
 };

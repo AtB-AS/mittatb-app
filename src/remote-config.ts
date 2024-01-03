@@ -36,6 +36,7 @@ export type RemoteConfig = {
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
+  disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
   live_vehicle_stale_threshold: number;
   enable_extended_onboarding: boolean;
@@ -50,6 +51,7 @@ export type RemoteConfig = {
   enable_push_notifications: boolean;
   enable_on_behalf_of: boolean;
   enable_ticket_information: boolean;
+  enable_posthog: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -93,6 +95,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   use_trygg_overgang_qr_code: false,
   live_vehicle_stale_threshold: 15,
   enable_extended_onboarding: false,
+  disable_email_field_in_profile_page: false,
   disable_travelcard: false,
   enable_non_transit_trip_search: true,
   enable_show_valid_time_info: true,
@@ -105,6 +108,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_push_notifications: false,
   enable_on_behalf_of: false,
   enable_ticket_information: false,
+  enable_posthog: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -142,6 +146,8 @@ export function getConfig(): RemoteConfig {
   const tripsSearch_max_number_of_chained_searches =
     values['tripsSearch_max_number_of_chained_searches']?.asNumber() ??
     defaultRemoteConfig.tripsSearch_max_number_of_chained_searches;
+  const disable_email_field_in_profile_page =
+    values['disable_email_field_in_profile_page']?.asBoolean() ?? false;
 
   const privacy_policy_url =
     values['privacy_policy_url']?.asString() ??
@@ -264,8 +270,7 @@ export function getConfig(): RemoteConfig {
     defaultRemoteConfig.token_timeout_in_seconds;
 
   const enable_beacons =
-    values['enable_beacons']?.asBoolean() ??
-    defaultRemoteConfig.enable_beacons;
+    values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
 
   const delay_share_travel_habits_screen_by_sessions_count =
     values['delay_share_travel_habits_screen_by_sessions_count']?.asNumber() ??
@@ -285,6 +290,9 @@ export function getConfig(): RemoteConfig {
   const enable_ticket_information =
     values['enable_ticket_information']?.asBoolean() ??
     defaultRemoteConfig.enable_ticket_information;
+
+  const enable_posthog =
+    values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
 
   return {
     enable_ticketing,
@@ -321,6 +329,7 @@ export function getConfig(): RemoteConfig {
     use_flexible_on_directMode,
     use_flexible_on_egressMode,
     use_trygg_overgang_qr_code,
+    disable_email_field_in_profile_page,
     disable_travelcard,
     live_vehicle_stale_threshold,
     enable_extended_onboarding,
@@ -335,6 +344,7 @@ export function getConfig(): RemoteConfig {
     enable_push_notifications,
     enable_ticket_information,
     enable_on_behalf_of,
+    enable_posthog,
   };
 }
 

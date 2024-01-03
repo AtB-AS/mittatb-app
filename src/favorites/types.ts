@@ -1,4 +1,4 @@
-import {Coordinates, FeatureCategory} from '@entur/sdk';
+import {Coordinates, FeatureCategory} from '@atb/sdk';
 import {StoredType} from './storage';
 import {
   DestinationDisplay,

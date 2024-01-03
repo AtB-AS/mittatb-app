@@ -217,13 +217,13 @@ async function doSearch(
     fromLocation: query.from,
     toLocation: query.to,
     arriveBy: query.arriveBy,
-    when: query.when || '',
-    cursor: query.cursor || '',
-    transferSlack: query.transferSlack || '',
-    transferPenalty: query.transferPenalty || '',
-    waitReluctance: query.waitReluctance || '',
-    walkReluctance: query.walkReluctance || '',
-    walkSpeed: query.walkSpeed || '',
+    when: query.when ?? '',
+    cursor: query.cursor ?? '',
+    transferSlack: query.transferSlack ?? '',
+    transferPenalty: query.transferPenalty ?? '',
+    waitReluctance: query.waitReluctance ?? '',
+    walkReluctance: query.walkReluctance ?? '',
+    walkSpeed: query.walkSpeed ?? '',
   });
 
   return tripsSearch(query, {

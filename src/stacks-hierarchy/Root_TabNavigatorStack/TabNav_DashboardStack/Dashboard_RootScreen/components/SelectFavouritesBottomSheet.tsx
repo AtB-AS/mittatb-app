@@ -1,18 +1,20 @@
 import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {Button, ButtonGroup} from '@atb/components/button';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet} from '@atb/theme';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {StoredFavoriteDeparture, useFavorites} from '@atb/favorites';
-import {LegMode} from '@entur/sdk';
+import {LegMode} from '@atb/sdk';
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
@@ -86,12 +88,10 @@ const SelectableFavouriteDeparture = ({
 };
 
 type SelectFavouritesBottomSheetProps = {
-  close: () => void;
   onEditFavouriteDeparture: () => void;
 };
 
 export const SelectFavouritesBottomSheet = ({
-  close,
   onEditFavouriteDeparture,
 }: SelectFavouritesBottomSheetProps) => {
   const styles = useStyles();
@@ -99,6 +99,7 @@ export const SelectFavouritesBottomSheet = ({
   const {favoriteDepartures, setFavoriteDepartures} = useFavorites();
   const favouriteItems = favoriteDepartures ?? [];
   const [updatedFavorites, setUpdatedFavorites] = useState(favoriteDepartures);
+  const {close} = useBottomSheet();
 
   const handleSwitchFlip = (id: string, active: boolean) => {
     setUpdatedFavorites(
@@ -114,18 +115,10 @@ export const SelectFavouritesBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer testID="selectFavoriteBottomSheet">
-      <ScreenHeaderWithoutNavigation
-        title={t(SelectFavouriteDeparturesText.header.text)}
-        leftButton={{
-          type: 'cancel',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-        }}
-        color="background_1"
-        setFocusOnLoad={true}
-      />
-
+    <BottomSheetContainer
+      title={t(SelectFavouriteDeparturesText.header.text)}
+      testID="selectFavoriteBottomSheet"
+    >
       <ScrollView style={styles.flatListArea}>
         {favoriteDepartures.length > 0 && (
           <>

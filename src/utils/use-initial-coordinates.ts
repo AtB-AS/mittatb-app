@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {FOCUS_ORIGIN} from '@atb/api/geocoder';
-import {Coordinates} from '@entur/sdk';
+import {Coordinates} from '@atb/sdk';
 
 /**
  * Custom hook to obtain initial geographic coordinates.

@@ -2,6 +2,7 @@ import {client} from '@atb/api';
 import {OperatorBenefitId} from '@atb-as/config-specs/lib/mobility-operators';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {z} from 'zod';
+import {PreassignedFareProductId} from '@atb/configuration/types';
 
 const UserBenefits = z
   .object({
@@ -46,4 +47,23 @@ export const getValueCode = (
       if (getAxiosErrorMetadata(error).responseStatus === 404) return null;
       throw error;
     });
+};
+
+const FareProductBenefit = z.object({
+  operator: z.string(),
+  benefits: OperatorBenefitId.array(),
+});
+
+export type FareProductBenefitType = z.infer<typeof FareProductBenefit>;
+
+export const getFareProductBenefits = (
+  _: PreassignedFareProductId,
+): Promise<FareProductBenefitType[]> => {
+  // TODO: Uncomment this when https://github.com/AtB-AS/team-platform/issues/487 is resolved
+  // return client
+  //   .get(`/mobilty/fare-product-benefits/${productId}`, {
+  //     authWithIdToken: true,
+  //   })
+  //   .then((response) => FareProductBenefit.array().parse(response.data ?? []));
+  return Promise.resolve([]);
 };

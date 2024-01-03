@@ -3,7 +3,6 @@ import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {useAuthState} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -27,17 +26,18 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 import {parseUrl} from 'query-string/base';
 import React, {useEffect, useState} from 'react';
 import {Linking, RefreshControl, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
 import {animateNextChange} from '@atb/utils/animation';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
 export const Profile_PaymentOptionsScreen = ({
   navigation,
 }: PaymentOptionsProps) => {
-  const style = useStyle();
+  const styles = useStyles();
   const {t} = useTranslation();
   const {authenticationType} = useAuthState();
 
@@ -121,20 +121,22 @@ export const Profile_PaymentOptionsScreen = ({
   };
 
   return (
-    <View style={style.container}>
-      <View>
-        <FullScreenHeader
-          style={{elevation: 1000, zIndex: 1000}}
-          title={t(PaymentOptionsTexts.header.title)}
-          leftButton={{type: 'back'}}
+    <FullScreenView
+      headerProps={{
+        title: t(PaymentOptionsTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
+      }
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(PaymentOptionsTexts.header.title)}
         />
-      </View>
-      <ScrollView
-        style={style.contentContainer}
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
-        }
-      >
+      )}
+    >
+      <View style={styles.content}>
         {showError && <GenericError />}
         {storedCards.length > 0 && (
           <Section>
@@ -146,15 +148,15 @@ export const Profile_PaymentOptionsScreen = ({
           </Section>
         )}
         {!isLoading && storedCards.length == 0 && <NoCardsInfo />}
-        <Section style={style.addPaymentMethod}>
+        <Section>
           <LinkSectionItem
             text={t(PaymentOptionsTexts.addPaymentMethod)}
             onPress={onAddRecurringPayment}
             icon={<ThemeIcon svg={Add} />}
           />
         </Section>
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 
@@ -164,7 +166,7 @@ const Card = (props: {
 }) => {
   const {card, removePaymentHandler} = props;
   const paymentName = getPaymentTypeName(card.payment_type);
-  const style = useStyle();
+  const style = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
   const fontScale = useFontScale();
@@ -225,45 +227,35 @@ const Card = (props: {
 };
 
 const NoCardsInfo = () => {
-  const style = useStyle();
   const {t} = useTranslation();
   return (
     <View accessibilityLiveRegion="polite">
       <MessageInfoBox
         type="info"
         message={t(PaymentOptionsTexts.noStoredCards)}
-        style={style.messageStyle}
       />
     </View>
   );
 };
 
 const GenericError = () => {
-  const style = useStyle();
   const {t} = useTranslation();
   return (
     <View accessibilityLiveRegion="polite">
       <MessageInfoBox
         type="error"
         message={t(PaymentOptionsTexts.genericError)}
-        style={style.messageStyle}
       />
     </View>
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
-  },
-  contentContainer: {
+const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+  content: {
     padding: theme.spacings.medium,
-    flex: 1,
+    rowGap: theme.spacings.medium,
   },
-  card: {
-    flex: 1,
-  },
+  card: {flex: 1},
   cardTop: {
     flex: 1,
     flexDirection: 'row',
@@ -276,11 +268,5 @@ const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     alignItems: 'center',
     flexGrow: 1,
     justifyContent: 'flex-end',
-  },
-  messageStyle: {
-    marginBottom: theme.spacings.medium,
-  },
-  addPaymentMethod: {
-    marginTop: theme.spacings.medium,
   },
 }));

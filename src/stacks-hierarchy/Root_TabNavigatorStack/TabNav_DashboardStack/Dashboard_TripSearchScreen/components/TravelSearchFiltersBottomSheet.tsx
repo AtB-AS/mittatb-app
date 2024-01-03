@@ -2,16 +2,17 @@ import {ScrollView, View} from 'react-native';
 import React, {forwardRef, useState} from 'react';
 import {
   getTextForLanguage,
-  ScreenHeaderTexts,
   TripSearchTexts,
   useTranslation,
 } from '@atb/translations';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {Button} from '@atb/components/button';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
 import {getTransportModeSvg} from '@atb/components/icon-box';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {StyleSheet} from '@atb/theme';
 import {
   FlexibleTransportOptionTypeWithSelectionType,
@@ -34,13 +35,13 @@ import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorSta
 export const TravelSearchFiltersBottomSheet = forwardRef<
   any,
   {
-    close: () => void;
     filtersSelection: TravelSearchFiltersSelectionType;
     onSave: (t: TravelSearchFiltersSelectionType) => void;
   }
->(({close, filtersSelection, onSave}, focusRef) => {
+>(({filtersSelection, onSave}, focusRef) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {close} = useBottomSheet();
 
   const {setFilters} = useFilters();
   const [saveFilters, setSaveFilters] = useState(false);
@@ -81,18 +82,10 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
     isFlexibleTransportEnabledInRemoteConfig && selectedFlexibleTransportOption;
 
   return (
-    <BottomSheetContainer maxHeightValue={0.9}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'cancel',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.cancel.text),
-          testID: 'cancelButton',
-        }}
-        title={t(TripSearchTexts.filters.bottomSheet.heading)}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      maxHeightValue={0.9}
+      title={t(TripSearchTexts.filters.bottomSheet.heading)}
+    >
       <ScrollView style={styles.filtersContainer} ref={focusRef}>
         <Section>
           <HeaderSectionItem

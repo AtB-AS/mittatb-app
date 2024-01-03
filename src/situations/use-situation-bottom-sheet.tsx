@@ -4,19 +4,11 @@ import {SituationBottomSheet} from './SituationBottomSheet';
 import {SituationType} from './types';
 
 export const useSituationBottomSheet = () => {
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onOpenFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
 
   const openSituation = (situation: SituationType) => {
     openBottomSheet(() => (
-      <SituationBottomSheet
-        situation={situation}
-        close={closeBottomSheet}
-        ref={onOpenFocusRef}
-      />
+      <SituationBottomSheet situation={situation} ref={onOpenFocusRef} />
     ));
   };
 
