@@ -8,6 +8,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Processing} from '@atb/components/loading';
 import {dictionary, useTranslation} from '@atb/translations';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 export const themeColor: StaticColorByType<'background'> =
   'background_accent_0';
@@ -29,6 +30,7 @@ export const ScreenContainer = (props: Props) => {
         leftButton: props.leftHeaderButton,
         rightButton: props.rightHeaderButton,
         color: 'background_accent_0',
+        setFocusOnLoad: false,
       }}
       contentColor={themeColor}
     >
@@ -50,13 +52,16 @@ const LoadingBody = () => {
 
 const ContentBody = ({title, secondaryText, buttons, children}: Props) => {
   const style = useStyles();
+  const focusRef = useFocusOnLoad();
   return (
     <>
       <View style={style.content}>
         <View style={style.header}>
-          <ThemeText color={themeColor} type="heading--medium">
-            {title}
-          </ThemeText>
+          <View ref={focusRef} accessible>
+            <ThemeText color={themeColor} type="heading--medium">
+              {title}
+            </ThemeText>
+          </View>
           {secondaryText && (
             <ThemeText style={style.secondaryText} color={themeColor}>
               {secondaryText}
