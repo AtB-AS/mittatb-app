@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   FareContract,
   isPreActivatedTravelRight,
@@ -58,6 +58,7 @@ export const DetailsContent: React.FC<Props> = ({
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus} = useMobileTokenContextState();
+  const [specialBarcodeViewStyle, setSpecialBarcodeViewStyle] = useState(false);
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
@@ -117,8 +118,14 @@ export const DetailsContent: React.FC<Props> = ({
           />
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' && (
-          <GenericSectionItem>
-            <Barcode validityStatus={validityStatus} fc={fc} />
+          <GenericSectionItem
+            style={specialBarcodeViewStyle ? styles.qrSection : undefined}
+          >
+            <Barcode
+              validityStatus={validityStatus}
+              fc={fc}
+              setSpecialBarcodeViewStyle={setSpecialBarcodeViewStyle}
+            />
           </GenericSectionItem>
         )}
         <GenericSectionItem>
@@ -165,5 +172,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   globalMessages: {
     flex: 1,
     rowGap: theme.spacings.medium,
+  },
+  qrSection: {
+    backgroundColor: '#ffffff',
+    paddingVertical: theme.spacings.xLarge * 2,
   },
 }));

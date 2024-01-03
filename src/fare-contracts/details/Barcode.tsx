@@ -23,9 +23,14 @@ import {GenericSectionItem} from '@atb/components/sections';
 type Props = {
   validityStatus: ValidityStatus;
   fc: FareContract;
+  setSpecialBarcodeViewStyle: (val: boolean) => void;
 };
 
-export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
+export function Barcode({
+  validityStatus,
+  fc,
+  setSpecialBarcodeViewStyle,
+}: Props): JSX.Element | null {
   const {barcodeStatus} = useMobileTokenContextState();
   useScreenBrightnessIncrease();
   if (validityStatus !== 'valid') return null;
@@ -36,6 +41,7 @@ export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
     case 'static':
       return <StaticAztec fc={fc} />;
     case 'staticQr':
+      setSpecialBarcodeViewStyle(true);
       return <StaticQrCode fc={fc} />;
     case 'mobiletoken':
       return <MobileTokenAztec fc={fc} />;
