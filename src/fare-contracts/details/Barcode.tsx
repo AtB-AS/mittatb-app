@@ -257,10 +257,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: 0,
     marginLeft: 'auto',
     marginRight: 'auto',
-    maxWidth: 300,
+    maxWidth: 250,
   },
   staticQrCodeSmall: {
-    maxWidth: 200,
+    maxWidth: 125,
   },
 }));
 
