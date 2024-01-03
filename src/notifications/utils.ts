@@ -14,12 +14,12 @@ export function isConfigEnabled<T extends NotificationConfigValue>(
 }
 
 export function hasFareContractWithActivatedNotification(
-  validFareContracts: FareContract[],
+  fareContracts: FareContract[],
   preassignedFareProducts: PreassignedFareProduct[],
   config?: NotificationConfig,
 ): boolean {
   if (!config) return false;
-  return validFareContracts.some((fareContract) => {
+  return fareContracts.some((fareContract) => {
     const fareProductRef = fareContract.travelRights[0]?.fareProductRef;
 
     if (!fareProductRef) {
