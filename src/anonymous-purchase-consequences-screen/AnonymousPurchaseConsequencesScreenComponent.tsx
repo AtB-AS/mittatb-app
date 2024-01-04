@@ -10,7 +10,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OnboardingFullScreenView} from '@atb/onboarding-frame';
+import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

@@ -12,7 +12,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
-import {OnboardingFullScreenView} from '@atb/onboarding-frame';
+import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 import {LoadingScreen} from '@atb/loading-screen';
