@@ -42,18 +42,19 @@ export function FullScreenView(props: Props) {
   };
 
   return (
-    <View
-      style={{
-        backgroundColor,
-        paddingTop: top,
-        flex: 1,
-      }}
-    >
-      <ScreenHeader
-        {...props.headerProps}
-        textOpacity={opacity}
-        setFocusOnLoad={!props.parallaxContent}
-      />
+    <>
+      <View
+        style={{
+          backgroundColor,
+          paddingTop: top,
+        }}
+      >
+        <ScreenHeader
+          {...props.headerProps}
+          textOpacity={opacity}
+          setFocusOnLoad={!props.parallaxContent}
+        />
+      </View>
 
       {hasParallaxContent(props) ? (
         <ChildrenWithParallaxScrollContent
@@ -67,8 +68,12 @@ export function FullScreenView(props: Props) {
           contentColor={props.contentColor}
         />
       )}
-      {props.footer && <FullScreenFooter>{props.footer}</FullScreenFooter>}
-    </View>
+      {props.footer && (
+        <FullScreenFooter footerColor={backgroundColor}>
+          {props.footer}
+        </FullScreenFooter>
+      )}
+    </>
   );
 }
 
