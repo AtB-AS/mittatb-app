@@ -8,7 +8,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
-import {Button} from '@atb/components/button';
+//import {Button} from '@atb/components/button'; // re-add when new onboarding ready
 import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
 
@@ -34,7 +34,7 @@ export function TravelTokenBox({
 
   // placeholder for onboarding PR
   //const navigation = useNavigation<RootNavigationProps>();
-  const onPressChangeButton = () => {}; //navigation.navigate('Root_SelectTravelTokenScreen')
+  //const onPressChangeButton = () => {}; //navigation.navigate('Root_SelectTravelTokenScreen')
 
   if (deviceInspectionStatus === 'loading') {
     return (
@@ -114,13 +114,14 @@ export function TravelTokenBox({
           )}
         </View>
       </View>
-      <Button
+      {/*todo: re-add this Button*/}
+      {/* <Button
         interactiveColor={interactiveColor}
         mode="secondary"
         onPress={onPressChangeButton}
         text={t(TravelTokenBoxTexts.change)}
         testID="continueWithoutChangingTravelTokenButton"
-      />
+      /> */}
     </View>
   );
 }
@@ -141,7 +142,7 @@ const useStyles = (interactiveColor: InteractiveColor) =>
       marginBottom: theme.spacings.medium,
     },
     content: {
-      marginBottom: theme.spacings.large,
+      //marginBottom: theme.spacings.large, // re-add when new onboarding ready
       display: 'flex',
       flexDirection: 'row',
     },
