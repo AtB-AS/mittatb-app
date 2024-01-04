@@ -232,7 +232,7 @@ export const Profile_DesignSystemScreen = ({
               <TransportationIconBox
                 style={style.transportationIcon}
                 mode={LegMode.BUS}
-                subMode={TransportSubmode.LOCAL_BUS}
+                subMode={TransportSubmode.LocalBus}
               />
               {Object.values(LegMode).map((mode) => (
                 <TransportationIconBox
