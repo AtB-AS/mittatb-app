@@ -26,6 +26,7 @@ const ButtonMeta = {
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
+    loading: {control: 'boolean'},
   },
   args: {
     theme: 'light',
@@ -80,13 +81,6 @@ const ButtonMeta = {
             ...args,
             mode: 'tertiary',
             rightIcon: {svg: Add},
-          }}
-        />
-        <Story
-          args={{
-            ...args,
-            mode: 'tertiary',
-            loading: true,
           }}
         />
       </View>
