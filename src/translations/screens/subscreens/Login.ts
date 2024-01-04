@@ -35,12 +35,12 @@ const LoginTexts = {
         label: _(
           'Fortsett uten å logge inn',
           'Use the app anonymously',
-          'Hald fram uten å logge inn',
+          'Hald fram utan å logge inn',
         ),
         a11yLabel: _(
           'Fortsett uten å logge inn',
           'Use the app anonymously',
-          'Hald fram uten å logge inn',
+          'Hald fram utan å logge inn',
         ),
       },
     },
