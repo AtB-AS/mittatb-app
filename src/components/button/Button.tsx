@@ -140,7 +140,10 @@ export const Button = React.forwardRef<any, ButtonProps>(
       rightIcon,
     );
 
-    const styleText: TextStyle = {color: textColor, width: '100%'};
+    const styleText: TextStyle = {
+      color: textColor,
+      width: isInline ? '100%' : undefined,
+    };
     const textContainer: TextStyle = {
       flex: isInline ? undefined : 1,
       alignItems: 'center',
