@@ -16,6 +16,7 @@ enum storeKey {
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
   notificationPermissionOnboarding = '@ATB_notification_permission_onboarded',
   locationWhenInUsePermissionOnboarded = '@ATB_location_when_in_use_permission_onboarded',
+  shareTravelHabitsOnboarded = '@ATB_SHARE_TRAVEL_HABITS_onboarded',
 }
 type AppState = {
   isLoading: boolean;
@@ -24,6 +25,7 @@ type AppState = {
   mobileTokenWithoutTravelcardOnboarded: boolean;
   notificationPermissionOnboarded: boolean;
   locationWhenInUsePermissionOnboarded: boolean;
+  shareTravelHabitsOnboarded: boolean;
 };
 
 type AppReducerAction =
@@ -34,6 +36,7 @@ type AppReducerAction =
       mobileTokenWithoutTravelcardOnboarded: boolean;
       notificationPermissionOnboarded: boolean;
       locationWhenInUsePermissionOnboarded: boolean;
+      shareTravelHabitsOnboarded: boolean;
     }
   | {type: 'COMPLETE_ONBOARDING'}
   | {type: 'RESTART_ONBOARDING'}
@@ -44,7 +47,9 @@ type AppReducerAction =
   | {type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'}
   | {type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'}
   | {type: 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'}
-  | {type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'};
+  | {type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'}
+  | {type: 'COMPLETE_SHARE_TRAVEL_HABITS_ONBOARDING'}
+  | {type: 'RESTART_SHARE_TRAVEL_HABITS_ONBOARDING'};
 
 type AppContextState = AppState & {
   completeOnboarding: () => void;
@@ -57,6 +62,8 @@ type AppContextState = AppState & {
   restartNotificationPermissionOnboarding: () => void;
   completeLocationWhenInUsePermissionOnboarding: () => void;
   restartLocationWhenInUsePermissionOnboarding: () => void;
+  completeShareTravelHabitsOnboarding: () => void;
+  restartShareTravelHabitsOnboarding: () => void;
 };
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
@@ -74,6 +81,7 @@ const appReducer: AppReducer = (prevState, action) => {
         mobileTokenWithoutTravelcardOnboarded,
         notificationPermissionOnboarded,
         locationWhenInUsePermissionOnboarded,
+        shareTravelHabitsOnboarded,
       } = action;
       return {
         ...prevState,
@@ -83,6 +91,7 @@ const appReducer: AppReducer = (prevState, action) => {
         mobileTokenWithoutTravelcardOnboarded,
         notificationPermissionOnboarded,
         locationWhenInUsePermissionOnboarded,
+        shareTravelHabitsOnboarded,
       };
     case 'COMPLETE_ONBOARDING':
       return {
@@ -138,6 +147,18 @@ const appReducer: AppReducer = (prevState, action) => {
         ...prevState,
         locationWhenInUsePermissionOnboarded: false,
       };
+
+    case 'COMPLETE_SHARE_TRAVEL_HABITS_ONBOARDING':
+      return {
+        ...prevState,
+        shareTravelHabitsOnboarded: true,
+      };
+
+    case 'RESTART_SHARE_TRAVEL_HABITS_ONBOARDING':
+      return {
+        ...prevState,
+        shareTravelHabitsOnboarded: false,
+      };
   }
 };
 
@@ -148,6 +169,7 @@ const defaultAppState: AppState = {
   mobileTokenWithoutTravelcardOnboarded: false,
   notificationPermissionOnboarded: false,
   locationWhenInUsePermissionOnboarded: false,
+  shareTravelHabitsOnboarded: false,
 };
 
 export const AppContextProvider: React.FC = ({children}) => {
@@ -190,6 +212,13 @@ export const AppContextProvider: React.FC = ({children}) => {
           ? false
           : JSON.parse(savedLocationWhenInUsePermissionOnboarded);
 
+      const savedShareTravelHabitsOnboarded = await storage.get(
+        storeKey.shareTravelHabitsOnboarded,
+      );
+      const shareTravelHabitsOnboarded = !savedShareTravelHabitsOnboarded
+        ? false
+        : JSON.parse(savedShareTravelHabitsOnboarded);
+
       if (onboarded) {
         registerChatUser();
       }
@@ -201,6 +230,7 @@ export const AppContextProvider: React.FC = ({children}) => {
         mobileTokenWithoutTravelcardOnboarded,
         notificationPermissionOnboarded,
         locationWhenInUsePermissionOnboarded,
+        shareTravelHabitsOnboarded,
       });
 
       RNBootSplash.hide({fade: true});
@@ -219,6 +249,8 @@ export const AppContextProvider: React.FC = ({children}) => {
     restartNotificationPermissionOnboarding,
     completeLocationWhenInUsePermissionOnboarding,
     restartLocationWhenInUsePermissionOnboarding,
+    completeShareTravelHabitsOnboarding,
+    restartShareTravelHabitsOnboarding,
   } = useMemo(
     () => ({
       completeOnboarding: async () => {
@@ -285,6 +317,21 @@ export const AppContextProvider: React.FC = ({children}) => {
         );
         dispatch({type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'});
       },
+
+      completeShareTravelHabitsOnboarding: async () => {
+        await storage.set(
+          storeKey.shareTravelHabitsOnboarded,
+          JSON.stringify(true),
+        );
+        dispatch({type: 'COMPLETE_SHARE_TRAVEL_HABITS_ONBOARDING'});
+      },
+      restartShareTravelHabitsOnboarding: async () => {
+        await storage.set(
+          storeKey.shareTravelHabitsOnboarded,
+          JSON.stringify(false),
+        );
+        dispatch({type: 'RESTART_SHARE_TRAVEL_HABITS_ONBOARDING'});
+      },
     }),
     [],
   );
@@ -303,6 +350,8 @@ export const AppContextProvider: React.FC = ({children}) => {
         restartNotificationPermissionOnboarding,
         completeLocationWhenInUsePermissionOnboarding,
         restartLocationWhenInUsePermissionOnboarding,
+        completeShareTravelHabitsOnboarding,
+        restartShareTravelHabitsOnboarding,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>

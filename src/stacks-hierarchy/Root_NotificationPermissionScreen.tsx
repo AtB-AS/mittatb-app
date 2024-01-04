@@ -3,30 +3,31 @@ import React, {useCallback} from 'react';
 
 import NotificationPermissionTexts from '@atb/translations/screens/NotificationPermission';
 import {PushNotification} from '@atb/assets/svg/color/images';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
+
 import {useAppState} from '@atb/AppContext';
-import {OnboardingScreen} from '@atb/onboarding-screen';
+import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useNotifications} from '@atb/notifications';
+import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 
-type Props = RootStackScreenProps<'Root_NotificationPermissionScreen'>;
-
-export const Root_NotificationPermissionScreen = ({navigation}: Props) => {
+export const Root_NotificationPermissionScreen = () => {
   const {t} = useTranslation();
+
+  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
 
   const {completeNotificationPermissionOnboarding} = useAppState();
   const {requestPermissions} = useNotifications();
   const buttonOnPress = useCallback(async () => {
     await requestPermissions();
-    navigation.popToTop();
     completeNotificationPermissionOnboarding();
+    continueFromOnboardingScreen('Root_NotificationPermissionScreen');
   }, [
     requestPermissions,
-    navigation,
     completeNotificationPermissionOnboarding,
+    continueFromOnboardingScreen,
   ]);
 
   return (
-    <OnboardingScreen
+    <OnboardingScreenComponent
       illustration={<PushNotification height={220} />}
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}

@@ -6,25 +6,31 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 type ScreenFooterProps = {
   children: React.ReactNode;
   avoidKeyboard?: boolean;
+  footerColor?: string;
 };
 
-export function FullScreenFooter({children, avoidKeyboard}: ScreenFooterProps) {
+export function FullScreenFooter({
+  children,
+  avoidKeyboard,
+  footerColor,
+}: ScreenFooterProps) {
   const styles = useStyles();
+  const containerStyle = {...styles.container, backgroundColor: footerColor};
 
   return avoidKeyboard ? (
-    <KeyboardAvoidingView behavior="padding" style={styles.view}>
+    <KeyboardAvoidingView behavior="padding" style={containerStyle}>
       {children}
     </KeyboardAvoidingView>
   ) : (
-    <View style={styles.view}>{children}</View>
+    <View style={containerStyle}>{children}</View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => {
   const {bottom} = useSafeAreaInsets();
   return {
-    view: {
-      marginBottom: Math.max(bottom, theme.spacings.medium),
+    container: {
+      paddingBottom: Math.max(bottom, theme.spacings.medium),
       paddingHorizontal: theme.spacings.medium,
     },
   };

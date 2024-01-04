@@ -7,6 +7,7 @@ import * as React from 'react';
 import {Ref, useState} from 'react';
 import {ParallaxScroll} from '@atb/components/parallax-scroll';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {FullScreenFooter} from '../screen-footer';
 
 type Props = {
   headerProps: ScreenHeaderProps;
@@ -17,6 +18,7 @@ type Props = {
   parallaxContent?: (focusRef?: Ref<any>) => React.ReactNode;
   handleScroll?: (scrollPercentage: number) => void;
   children?: React.ReactNode;
+  footer?: React.ReactNode;
   refreshControl?: React.ReactElement<RefreshControlProps>;
   contentColor?: StaticColor;
 };
@@ -65,6 +67,11 @@ export function FullScreenView(props: Props) {
           {...props}
           contentColor={props.contentColor}
         />
+      )}
+      {props.footer && (
+        <FullScreenFooter footerColor={backgroundColor}>
+          {props.footer}
+        </FullScreenFooter>
       )}
     </>
   );

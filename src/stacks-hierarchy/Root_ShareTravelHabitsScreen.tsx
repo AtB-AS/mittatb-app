@@ -3,40 +3,35 @@ import {
   useTranslation,
   getTextForLanguage,
 } from '@atb/translations';
-import React, {useEffect} from 'react';
+import React from 'react';
 
-import {RootStackScreenProps} from './navigation-types';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useHasSeenShareTravelHabitsScreen} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
-import {OnboardingScreen} from '@atb/onboarding-screen';
+import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
+import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useAppState} from '@atb/AppContext';
 
-export type SearchStopPlaceProps =
-  RootStackScreenProps<'Root_ShareTravelHabitsScreen'>;
-
-export const Root_ShareTravelHabitsScreen = ({
-  navigation,
-}: SearchStopPlaceProps) => {
+export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
 
   const {configurableLinks} = useFirestoreConfiguration();
 
-  const [_, setAndStoreHasSeenShareTravelHabitsScreen] =
-    useHasSeenShareTravelHabitsScreen();
-  useEffect(() => {
-    setAndStoreHasSeenShareTravelHabitsScreen(true);
-  }, [setAndStoreHasSeenShareTravelHabitsScreen]);
+  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+
+  const {completeShareTravelHabitsOnboarding} = useAppState();
+
   const {onboardForBeacons} = useBeaconsState();
 
   const choosePermissions = async () => {
     await onboardForBeacons();
-    navigation.goBack();
+    completeShareTravelHabitsOnboarding();
+    continueFromOnboardingScreen('Root_ShareTravelHabitsScreen');
   };
 
   return (
-    <OnboardingScreen
+    <OnboardingScreenComponent
       illustration={<Beacons height={132} />}
       title={t(ShareTravelHabitsTexts.title)}
       description={

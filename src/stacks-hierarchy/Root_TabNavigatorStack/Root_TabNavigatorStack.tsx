@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
-import {useGoToMobileTokenOnboardingWhenNecessary} from '@atb/stacks-hierarchy/Root_MobileTokenOnboarding/utils';
+
 import {TabNav_MapStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_MapStack';
 import {TabNav_TicketingStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack';
 import {useTheme} from '@atb/theme';
@@ -20,64 +20,31 @@ import {
 } from '@atb/utils/navigation';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {LabelPosition} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
-import {useAppState} from '@atb/AppContext';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {InteractionManager, Platform} from 'react-native';
-import {useMaybeShowShareTravelHabitsScreen} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
 import {
-  usePushNotificationsEnabled,
-  useOnPushNotificationOpened,
   useNotifications,
+  useOnPushNotificationOpened,
+  usePushNotificationsEnabled,
 } from '@atb/notifications';
-import {
-  filterValidRightNowFareContract,
-  useTicketingState,
-} from '@atb/ticketing';
-import {useTimeContextState} from '@atb/time';
-import {useGeolocationState} from '@atb/GeolocationContext';
-import {useFirestoreConfiguration} from '@atb/configuration';
-import {hasFareContractWithActivatedNotification} from '@atb/notifications/utils';
+import {useNavigation} from '@react-navigation/native';
+import {RootNavigationProps} from '../navigation-types';
+import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
-type Props = RootStackScreenProps<'Root_TabNavigatorStack'>;
-export const Root_TabNavigatorStack = ({navigation}: Props) => {
+export const Root_TabNavigatorStack = () => {
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const {
-    onboarded,
-    notificationPermissionOnboarded,
-    locationWhenInUsePermissionOnboarded,
-  } = useAppState();
-
   const pushNotificationsEnabled = usePushNotificationsEnabled();
-
-  const {status: locationWhenInUsePermissionStatus} = useGeolocationState();
-
-  useGoToMobileTokenOnboardingWhenNecessary();
-  const {serverNow} = useTimeContextState();
-
-  const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContract(
-    fareContracts,
-    serverNow,
-  );
-
-  const {
-    permissionStatus: pushNotificationPermissionStatus,
-    checkPermissions: checkPushNotificationPermissions,
-    config: notificationConfig,
-  } = useNotifications();
-  useOnPushNotificationOpened();
-
+  const {checkPermissions: checkPushNotificationPermissions} =
+    useNotifications();
   // Check notification status, and register notification language when the app
   // starts, in case the user have changed language since last time the app was
   // opened. This useEffect will also trigger when language is changed manually
@@ -86,65 +53,21 @@ export const Root_TabNavigatorStack = ({navigation}: Props) => {
     if (pushNotificationsEnabled) checkPushNotificationPermissions();
   }, [pushNotificationsEnabled, checkPushNotificationPermissions]);
 
-  const {preassignedFareProducts} = useFirestoreConfiguration();
+  useOnPushNotificationOpened();
+
+  const navigation = useNavigation<RootNavigationProps>();
+  const {nextOnboardingScreen, goToScreen} = useOnboardingNavigationFlow(true);
 
   useEffect(() => {
-    const shouldShowLocationOnboarding =
-      !locationWhenInUsePermissionOnboarded &&
-      locationWhenInUsePermissionStatus === 'denied';
+    if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
 
-    if (!onboarded) {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_OnboardingStack'),
+    nextOnboardingScreen?.screenName &&
+      goToScreen(
+        false,
+        nextOnboardingScreen.screenName,
+        nextOnboardingScreen.params,
       );
-    } else {
-      if (shouldShowLocationOnboarding) {
-        InteractionManager.runAfterInteractions(() =>
-          navigation.navigate('Root_LocationWhenInUsePermissionScreen'),
-        );
-      }
-    }
-
-    const pushNotificationPermissionsNotGranted =
-      Platform.OS === 'ios'
-        ? pushNotificationPermissionStatus === 'undetermined'
-        : pushNotificationPermissionStatus === 'denied';
-
-    if (
-      !notificationPermissionOnboarded &&
-      pushNotificationsEnabled &&
-      pushNotificationPermissionsNotGranted &&
-      !shouldShowLocationOnboarding &&
-      hasFareContractWithActivatedNotification(
-        validFareContracts,
-        preassignedFareProducts,
-        notificationConfig,
-      )
-    ) {
-      InteractionManager.runAfterInteractions(() =>
-        navigation.navigate('Root_NotificationPermissionScreen'),
-      );
-    }
-  }, [
-    onboarded,
-    navigation,
-    notificationPermissionOnboarded,
-    pushNotificationsEnabled,
-    locationWhenInUsePermissionOnboarded,
-    locationWhenInUsePermissionStatus,
-    pushNotificationPermissionStatus,
-    preassignedFareProducts,
-    notificationConfig,
-    validFareContracts,
-  ]);
-
-  const showShareTravelHabitsScreen = useCallback(() => {
-    InteractionManager.runAfterInteractions(() =>
-      navigation.navigate('Root_ShareTravelHabitsScreen'),
-    );
-  }, [navigation]);
-
-  useMaybeShowShareTravelHabitsScreen(showShareTravelHabitsScreen);
+  }, [nextOnboardingScreen, goToScreen, navigation]);
 
   return (
     <Tab.Navigator

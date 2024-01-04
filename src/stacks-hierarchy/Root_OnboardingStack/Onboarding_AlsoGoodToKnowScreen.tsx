@@ -41,7 +41,7 @@ export const Onboarding_AlsoGoodToKnowScreen = ({
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('Onboarding_IntercomInfoScreen')}
+          onPress={() => navigation.navigate('Root_LoginOptionsScreen', {})}
           text={t(OnboardingTexts.alsoGoodToKnow.mainButton)}
           testID="nextButtonAlsoGoodToKnowOnboarding"
         />

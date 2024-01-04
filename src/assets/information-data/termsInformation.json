@@ -33,6 +33,11 @@
             "text": "Takstregler",
             "type": "link",
             "link": "https://www.atb.no/takstregler/"
+        },
+        {
+            "text": "Personvernerklæring",
+            "type": "link",
+            "link": "https://beta.atb.no/private-policy"
         }
     ],
     "en": [
@@ -69,6 +74,11 @@
             "text": "Fare and discount guidelines",
             "type": "link",
             "link": "https://www.atb.no/en/fare-and-discount-guidelines/"
+        },
+        {
+            "text": "Privacy Statement",
+            "type": "link",
+            "link": "https://beta.atb.no/private-policy"
         }
     ],
     "nn": [
@@ -105,6 +115,11 @@
             "text": "Takstreglar",
             "type": "link",
             "link": "https://www.atb.no/takstregler/"
+        },
+        {
+            "text": "Personvernerklæring",
+            "type": "link",
+            "link": "https://beta.atb.no/private-policy"
         }
     ]
 }

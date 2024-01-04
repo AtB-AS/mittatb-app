@@ -9,7 +9,7 @@ import {PushNotificationPayloadType, PushNotificationData} from './types';
 import Bugsnag from '@bugsnag/react-native';
 
 export function useOnPushNotificationOpened() {
-  const {navigate} = useNavigation<RootNavigationProps>();
+  const navigation = useNavigation<RootNavigationProps>();
 
   const onMessage = useCallback(
     (message: FirebaseMessagingTypes.RemoteMessage) => {
@@ -20,10 +20,12 @@ export function useOnPushNotificationOpened() {
         );
         return;
       }
+      if (!navigation.isFocused()) return; // avoid navigating away from e.g. login or permission screens
+
       const messageData = payload.data;
       switch (messageData.type) {
         case PushNotificationPayloadType.activeFareContracts:
-          navigate('Root_TabNavigatorStack', {
+          navigation.navigate('Root_TabNavigatorStack', {
             screen: 'TabNav_TicketingStack',
             params: {
               screen: 'Ticketing_RootScreen',
@@ -35,7 +37,7 @@ export function useOnPushNotificationOpened() {
           return;
       }
     },
-    [navigate],
+    [navigation],
   );
 
   useEffect(() => {

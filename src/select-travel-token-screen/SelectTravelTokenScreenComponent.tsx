@@ -29,6 +29,7 @@ import {
 } from '@atb/configuration';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {useTimeContextState} from '@atb/time';
+import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 
@@ -236,15 +237,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             <RadioGroupSection<Token>
               items={mobileTokens}
               keyExtractor={(token) => token.id}
-              itemToText={(token) =>
-                (token.name || t(TravelTokenTexts.toggleToken.unnamedDevice)) +
-                (token.isThisDevice
-                  ? t(
-                      TravelTokenTexts.toggleToken.radioBox.phone.selection
-                        .thisDeviceSuffix,
-                    )
-                  : '')
-              }
+              itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
               selected={selectedToken}
               onSelect={setSelectedToken}
               headerText={t(
@@ -277,7 +270,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
               onPress={onSave}
               text={t(TravelTokenTexts.toggleToken.saveButton)}
               interactiveColor="interactive_0"
-              disabled={!selectedToken}
+              disabled={!selectedToken || (data?.toggleLimit ?? 0) < 1}
               testID="confirmSelectionButton"
             />
           )

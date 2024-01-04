@@ -40,14 +40,14 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const firstActiveFc = activeFareContracts[0];
 
   const onNext = async () => {
-    navigation.navigate(
-      enable_vipps_login
-        ? 'Root_LoginOptionsScreen'
-        : 'Root_LoginPhoneInputScreen',
-      {
+    if (enable_vipps_login) {
+      navigation.navigate('Root_LoginOptionsScreen', {
         afterLogin,
-      },
-    );
+        showGoBack: true,
+      });
+    } else {
+      navigation.navigate('Root_LoginPhoneInputScreen', {afterLogin});
+    }
   };
 
   return (
