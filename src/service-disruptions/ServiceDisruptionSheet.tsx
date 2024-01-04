@@ -33,9 +33,7 @@ export const ServiceDisruptionSheet = () => {
         {hasValidServiceDisruptionUrl && (
           <>
             <Section style={style.serviceDisruptionText}>
-              <View>
-                <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
-              </View>
+              <ThemeText>{t(ServiceDisruptionsTexts.body)}</ThemeText>
             </Section>
             <Button
               interactiveColor="interactive_2"
