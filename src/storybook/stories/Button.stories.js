@@ -35,7 +35,6 @@ const ButtonMeta = {
     (Story, {args}) => (
       <View
         style={{
-          alignItems: 'center',
           justifyContent: 'center',
           padding: 12,
           flex: 1,
@@ -87,6 +86,6 @@ const ButtonMeta = {
 
 export default ButtonMeta;
 
-export const Block = {args: {width: '100%'}};
+export const Block = {};
 export const Pill = {args: {type: 'pill'}};
 export const Inline = {args: {type: 'inline'}};
