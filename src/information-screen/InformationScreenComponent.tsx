@@ -6,6 +6,7 @@ import {Linking, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {LeftButtonProps} from '@atb/components/screen-header';
 
 type InformationTable = {
   type: 'table';
@@ -54,11 +55,13 @@ export type InformationElement =
 type InformationProps = {
   informations: InformationElement[];
   title: string;
+  leftButton?: LeftButtonProps;
 };
 
 export const InformationScreenComponent: React.FC<InformationProps> = ({
   title,
   informations,
+  leftButton = {type: 'back', withIcon: true},
 }) => {
   const styles = useStyles();
 
@@ -83,10 +86,7 @@ export const InformationScreenComponent: React.FC<InformationProps> = ({
   });
   return (
     <FullScreenView
-      headerProps={{
-        title,
-        leftButton: {type: 'close'},
-      }}
+      headerProps={{title, leftButton}}
       parallaxContent={(focusRef) => (
         <ScreenHeading text={title} ref={focusRef} />
       )}
