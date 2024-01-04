@@ -25,7 +25,6 @@ import {
 } from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {TransportSubmode} from '@atb/sdk';
 import React from 'react';
 import {View} from 'react-native';
 import {
@@ -58,7 +57,10 @@ import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
 import {FlexibleTransportBookingDetails} from './FlexibleTransportBookingDetails';
-import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
+import {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type TripSectionProps = {
   isLast?: boolean;

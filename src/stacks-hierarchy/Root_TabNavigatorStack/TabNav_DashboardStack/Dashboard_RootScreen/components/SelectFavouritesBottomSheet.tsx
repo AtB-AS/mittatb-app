@@ -14,12 +14,12 @@ import {useTranslation} from '@atb/translations';
 import SelectFavouriteDeparturesText from '@atb/translations/screens/subscreens/SelectFavouriteDeparturesTexts';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {StoredFavoriteDeparture, useFavorites} from '@atb/favorites';
-import {LegMode} from '@atb/sdk';
 import {SectionSeparator} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {getTranslatedModeName} from '@atb/utils/transportation-names';
 import SvgArrowRight from '@atb/assets/svg/mono-icons/navigation/ArrowRight';
 import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type SelectableFavouriteDepartureData = {
   handleSwitchFlip: (favouriteId: string, active: boolean) => void;
@@ -38,7 +38,7 @@ const SelectableFavouriteDeparture = ({
   const active = !!favorite.visibleOnDashboard;
   const departureQuay = favorite.quayPublicCode;
   const lineIdentifier = favorite.lineLineNumber ?? '';
-  const lineTransportationMode = favorite.lineTransportationMode ?? LegMode.BUS;
+  const lineTransportationMode = favorite.lineTransportationMode ?? Mode.Bus;
 
   const lineName =
     formatDestinationDisplay(t, favorite.destinationDisplay) ??
