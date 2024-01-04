@@ -9,7 +9,6 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {LegMode, TransportSubmode} from '@atb/sdk';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
   InteractiveColor,
@@ -40,6 +39,10 @@ import {
 } from '@atb/components/sections';
 import {ProfileScreenProps} from './navigation-types';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {
+  Mode,
+  TransportSubmode,
+} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -231,10 +234,10 @@ export const Profile_DesignSystemScreen = ({
             <View style={style.icons}>
               <TransportationIconBox
                 style={style.transportationIcon}
-                mode={LegMode.BUS}
+                mode={Mode.Bus}
                 subMode={TransportSubmode.LocalBus}
               />
-              {Object.values(LegMode).map((mode) => (
+              {Object.values(Mode).map((mode) => (
                 <TransportationIconBox
                   key={mode}
                   style={style.transportationIcon}
@@ -1235,7 +1238,7 @@ export const Profile_DesignSystemScreen = ({
           />
           <ToggleSectionItem
             text="Some short text"
-            leftImage={<ThemeIcon svg={Bus}/>}
+            leftImage={<ThemeIcon svg={Bus} />}
             onValueChange={() => {}}
           />
           <ActionSectionItem
