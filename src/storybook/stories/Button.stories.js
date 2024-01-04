@@ -18,10 +18,7 @@ const ButtonMeta = {
     },
     backgroundColor: {
       control: 'select',
-      options: [
-        ...Object.keys(themes['light'].static.background),
-        ...Object.keys(themes['light'].static.status),
-      ],
+      options: [...Object.keys(themes['light'].static.background)],
     },
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
