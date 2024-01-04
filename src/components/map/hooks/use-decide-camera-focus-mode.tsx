@@ -15,9 +15,9 @@ import {
   shouldZoomToFeature,
 } from '../utils';
 import {tripsSearch} from '@atb/api/trips';
-import {StreetMode} from '@atb/sdk';
 import MapboxGL from '@rnmapbox/maps';
 import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';
+import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
 
