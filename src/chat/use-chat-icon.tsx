@@ -18,7 +18,7 @@ export const useChatIcon = (
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
-  const {open: openBottomSheet, onOpenFocusRef} = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
 
@@ -28,7 +28,6 @@ export const useChatIcon = (
         onReportParkingViolation={() =>
           navigation.navigate('Root_ParkingViolationsSelect')
         }
-        ref={onOpenFocusRef}
       />
     ));
   };

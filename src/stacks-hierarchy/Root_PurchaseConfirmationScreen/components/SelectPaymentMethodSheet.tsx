@@ -67,7 +67,7 @@ function isRecurring(option: PaymentMethod): option is {
 
 const remotePaymentOptions: SavedPaymentOption[] = [];
 
-export const SelectPaymentMethod: React.FC<Props> = ({
+export const SelectPaymentMethodSheet: React.FC<Props> = ({
   onSelect,
   previousPaymentMethod,
 }) => {

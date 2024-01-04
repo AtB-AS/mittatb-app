@@ -11,11 +11,13 @@ import {insets} from '@atb/utils/insets';
 type BottomSheetHeaderWithoutNavigationProps = {
   title?: string;
   onClose?: () => void;
+  focusTitleOnLoad: boolean;
 };
 
 export const BottomSheetHeader = ({
   title,
   onClose,
+  focusTitleOnLoad,
 }: BottomSheetHeaderWithoutNavigationProps) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -46,7 +48,7 @@ export const BottomSheetHeader = ({
         importantForAccessibility="yes"
         accessibilityRole="header"
         style={styles.headerTitle}
-        ref={onOpenFocusRef}
+        ref={focusTitleOnLoad ? onOpenFocusRef : undefined}
       >
         <ThemeText accessible={false} type="body__primary--bold">
           {title}
