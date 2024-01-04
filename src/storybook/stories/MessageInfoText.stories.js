@@ -8,7 +8,7 @@ const MessageInfoTextMeta = {
   component: MessageInfoText,
   argTypes: {
     theme: {
-      control: 'select',
+      control: {type: 'radio'},
       options: ['light', 'dark'],
     },
   },
