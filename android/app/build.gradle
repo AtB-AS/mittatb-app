@@ -72,6 +72,7 @@ android {
 
     // Store the KETTLE_API_KEY in a constant
     def KETTLE_API_KEY_VALUE = System.getProperty("KETTLE_API_KEY") as String
+    def BUGSNAG_API_KEY_VALUE = System.getProperty("BUGSNAG_API_KEY") as String
 
     namespace "no.mittatb"
     defaultConfig {
@@ -91,7 +92,22 @@ android {
 
         // This is fetched inside Java / Kotlin code
         buildConfigField 'String', 'KETTLE_API_KEY', "\"$KETTLE_API_KEY_VALUE\""
+        manifestPlaceholders = [
+                bugsnagApiKey: BUGSNAG_API_KEY_VALUE
+        ]
     }
+
+    bugsnag {
+        variantFilter { variant ->
+            // disables plugin for all variants of the 'staging' productFlavor
+            def name = variant.name.toLowerCase()
+            if (name.contains("staging") || name.contains("debug")) {
+                enabled = false
+            }
+        }
+        uploadReactNativeMappings = true // enables upload of React Native source maps
+    }
+    
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
