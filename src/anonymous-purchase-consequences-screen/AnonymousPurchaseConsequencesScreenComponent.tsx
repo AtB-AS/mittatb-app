@@ -15,8 +15,6 @@ import {LeftButtonProps} from '@atb/components/screen-header';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-const consequencesIcons = [Phone, Receipt, Support];
-
 type Props = {
   onPressContinueWithoutLogin: () => void;
   onPressLogin?: () => void;
@@ -60,24 +58,18 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
         {t(AnonymousPurchasesTexts.consequences.title)}
       </ThemeText>
 
-      {
-        // eslint-disable-next-line rulesdir/translations-warning
-        AnonymousPurchasesTexts.consequences.messages.map(
-          (consequenceMessage, i) => (
-            <Consequence
-              key={t(consequenceMessage)}
-              value={t(consequenceMessage)}
-              icon={
-                <ThemeIcon
-                  svg={consequencesIcons[i]}
-                  colorType={themeColor}
-                  size="large"
-                />
-              }
-            />
-          ),
-        )
-      }
+      <Consequence
+        value={t(AnonymousPurchasesTexts.consequences.messages[0])}
+        icon={<ThemeIcon svg={Phone} colorType={themeColor} size="large" />}
+      />
+      <Consequence
+        value={t(AnonymousPurchasesTexts.consequences.messages[1])}
+        icon={<ThemeIcon svg={Receipt} colorType={themeColor} size="large" />}
+      />
+      <Consequence
+        value={t(AnonymousPurchasesTexts.consequences.messages[2])}
+        icon={<ThemeIcon svg={Support} colorType={themeColor} size="large" />}
+      />
     </OnboardingFullScreenView>
   );
 };
