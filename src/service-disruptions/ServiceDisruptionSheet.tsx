@@ -2,7 +2,7 @@ import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
 import {ServiceDisruptionsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {Linking} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {Section} from '@atb/components/sections';
 import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
