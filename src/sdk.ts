@@ -79,7 +79,7 @@ export enum FeatureCategory {
   OTHER = "other"
 }
 
-export declare type Feature = {
+export type Feature = {
   geometry: {
       coordinates: [number, number];
       type: 'Point';
@@ -108,7 +108,7 @@ export declare type Feature = {
   };
 };
 
-export declare enum TransportSubmode {
+export enum TransportSubmode {
   SchengenAreaFlight = "SchengenAreaFlight",
   AirportBoatLink = "airportBoatLink",
   AirportLinkBus = "airportLinkBus",
