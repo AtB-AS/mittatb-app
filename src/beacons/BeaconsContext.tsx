@@ -75,14 +75,13 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const updateKettleInfo = () => getKettleInfo().then(setKettleInfo);
 
   const initializeKettleSDK = useCallback(async () => {
-    const permissions = await allowedPermissionForKettle();
     if (!isInitializedRef.current) {
+      const permissions = await allowedPermissionForKettle();
       if (permissions.length > 0) {
         await NativeModules.KettleSDKExtension.initializeKettleSDK();
         isInitializedRef.current = true;
       }
     }
-    return permissions;
   }, []);
 
   const getPrivacyDashboardUrl = useCallback(async () => {
@@ -143,16 +142,18 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       const consentGranted =
         parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
-      if (consentGranted) {
-        const permissions = await initializeKettleSDK();
-        Kettle.start(permissions);
+      // Initialize beacons if consent is granted and not initialized
+      if (consentGranted && !isInitializedRef.current) {
+        await initializeKettleSDK();
       }
 
-      if (isInitializedRef.current) {
+      const permissions = await allowedPermissionForKettle();
+      if (consentGranted && permissions && !kettleInfo?.isKettleStarted) {
+        Kettle.start(permissions);
         await updateKettleInfo();
       }
     })();
-  }, [isBeaconsSupported, initializeKettleSDK]);
+  }, [isBeaconsSupported, initializeKettleSDK, kettleInfo]);
 
   return (
     <BeaconsContext.Provider
