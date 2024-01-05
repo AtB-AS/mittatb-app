@@ -39,8 +39,8 @@ export const Profile_DeleteProfileScreen = ({
 
   const handleDeleteProfile = async () => {
     try {
-      const delete_ok = await deleteProfile();
-      if (delete_ok) {
+      const deleteOK = await deleteProfile();
+      if (deleteOK) {
         await deleteCollectedData();
         await signOut();
         navigation.navigate('Profile_RootScreen');
@@ -48,7 +48,6 @@ export const Profile_DeleteProfileScreen = ({
         setDeleteError(true);
       }
     } catch (error) {
-      console.error('An error occurred during profile deletion:', error);
       setDeleteError(true);
     }
   };
