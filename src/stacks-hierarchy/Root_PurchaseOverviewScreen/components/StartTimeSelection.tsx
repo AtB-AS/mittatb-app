@@ -10,7 +10,7 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {TravelDateSheet} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/TravelDate/TravelDateSheet';
 import {RadioSegments} from '@atb/components/radio';
 import {TimeSelectionMode} from '@atb/configuration';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 type StartTimeSelectionProps = {
   color: InteractiveColor;
@@ -36,20 +36,14 @@ export function StartTimeSelection({
   style,
 }: StartTimeSelectionProps) {
   const {t, language} = useTranslation();
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onOpenFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
 
   const openTravelDateSheet = () => {
     openBottomSheet(() => (
       <TravelDateSheet
-        close={closeBottomSheet}
         save={setTravelDate}
         travelDate={travelDate}
         maximumDate={maximumDate}
-        ref={onOpenFocusRef}
         showActivationDateWarning={showActivationDateWarning}
         setShowActivationDateWarning={setShowActivationDateWarning}
       />

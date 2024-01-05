@@ -13,6 +13,7 @@ import {PreassignedFareProduct} from '@atb/configuration';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
+import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
 
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
@@ -76,6 +77,7 @@ export type Root_LoginActiveFareContractWarningScreenParams = {
 
 export type Root_LoginOptionsScreenParams = {
   afterLogin?: AfterLoginScreenType;
+  showGoBack?: boolean;
 };
 
 export type Root_LoginPhoneInputScreenParams = {
@@ -110,9 +112,16 @@ type Root_ParkingViolationsConfirmationParams = {
   providerName: string | undefined;
 };
 
+type Root_PurchaseAsAnonymousConsequencesScreenParams = {
+  showLoginButton: boolean | undefined;
+};
+
 export type RootStackParamList = {
   NotFound: undefined;
   Root_OnboardingStack: undefined;
+  Root_TermsInformationScreen: undefined;
+  Root_ConsiderTravelTokenChangeScreen: undefined;
+  Root_SelectTravelTokenScreen: undefined;
   Root_TicketAssistantStack: undefined;
   Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
   Root_LocationSearchByTextScreen: Root_LocationSearchByTextScreenParams;
@@ -125,13 +134,11 @@ export type RootStackParamList = {
   Root_PurchaseTariffZonesSearchByMapScreen: Root_PurchaseTariffZonesSearchByMapScreenParams;
   Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
   Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
-  Root_PurchaseAsAnonymousConsequencesScreen: undefined;
+  Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
   Root_PurchasePaymentWithCreditCardScreen: PaymentParams & {
     paymentMethod: CardPaymentMethod;
   };
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
-  Root_MobileTokenOnboardingStack: undefined;
-  Root_MobileTokenWithoutTravelcardOnboardingStack: undefined;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
   Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
@@ -151,6 +158,8 @@ export type RootStackParamList = {
   Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
+
+  Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
 };
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

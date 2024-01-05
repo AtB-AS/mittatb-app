@@ -4,16 +4,14 @@ import {
   preference_screenAlternatives,
   usePreferences,
 } from '@atb/preferences';
-import {StyleSheet, Theme} from '@atb/theme';
 import {
   SelectStartScreenTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {FullScreenHeader} from '@atb/components/screen-header';
-import {View} from 'react-native';
+import {FullScreenView} from '@atb/components/screen-view';
+import {ScreenHeading} from '@atb/components/heading';
 
 const identity = (s: string) => s;
 function toName(
@@ -35,35 +33,31 @@ export const Profile_SelectStartScreenScreen = () => {
     setPreference,
     preferences: {startScreen},
   } = usePreferences();
-  const style = useProfileHomeStyle();
   const {t} = useTranslation();
   const items = Array.from(preference_screenAlternatives);
 
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(SelectStartScreenTexts.header.title)}
-        leftButton={{type: 'back'}}
-      />
-
-      <ScrollView>
-        <RadioGroupSection<Preference_ScreenAlternatives>
-          withPadding
-          withTopPadding
-          items={items}
-          keyExtractor={identity}
-          itemToText={(alt) => toName(alt, t)}
-          selected={startScreen ?? items[0]}
-          onSelect={(startScreen) => setPreference({startScreen})}
+    <FullScreenView
+      headerProps={{
+        title: t(SelectStartScreenTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(SelectStartScreenTexts.header.title)}
         />
-      </ScrollView>
-    </View>
+      )}
+    >
+      <RadioGroupSection<Preference_ScreenAlternatives>
+        withPadding
+        withTopPadding
+        items={items}
+        keyExtractor={identity}
+        itemToText={(alt) => toName(alt, t)}
+        selected={startScreen ?? items[0]}
+        onSelect={(startScreen) => setPreference({startScreen})}
+      />
+    </FullScreenView>
   );
 };
-
-const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.static.background.background_1.background,
-    flex: 1,
-  },
-}));

@@ -6,9 +6,9 @@ import React from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 import {
   isValidFareContract,
-  tariffZonesSummary,
   useNonInspectableTokenWarning,
   userProfileCountAndName,
+  useTariffZoneSummary,
 } from '@atb/fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {secondsToDuration} from '@atb/utils/date';
@@ -142,10 +142,11 @@ export const useFareContractInfoTexts = (
     ? getReferenceDataName(preassignedFareProduct, language)
     : undefined;
 
-  const tariffZoneSummary =
-    fromTariffZone && toTariffZone
-      ? tariffZonesSummary(fromTariffZone, toTariffZone, language, t)
-      : undefined;
+  const tariffZoneSummary = useTariffZoneSummary(
+    preassignedFareProduct,
+    fromTariffZone,
+    toTariffZone,
+  );
 
   const secondsUntilValid = ((validTo || 0) - (now || 0)) / 1000;
   const conjunction = t(FareContractTexts.validityHeader.durationDelimiter);

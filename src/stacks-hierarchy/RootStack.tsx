@@ -21,7 +21,9 @@ import {useTestIds} from './use-test-ids';
 import {parse} from 'search-params';
 
 import type {NavigationState, PartialState} from '@react-navigation/routers';
-import {Root_MobileTokenOnboardingStack} from './Root_MobileTokenOnboarding';
+
+import {Root_SelectTravelTokenScreen} from './Root_SelectTravelTokenScreen';
+import {Root_ConsiderTravelTokenChangeScreen} from '@atb/stacks-hierarchy/Root_ConsiderTravelTokenChangeScreen';
 import {Root_AddEditFavoritePlaceScreen} from './Root_AddEditFavoritePlaceScreen';
 import {Root_SearchStopPlaceScreen} from './Root_SearchStopPlaceScreen';
 import {Root_ShareTravelHabitsScreen} from './Root_ShareTravelHabitsScreen';
@@ -54,10 +56,12 @@ import {
   Root_ParkingViolationsSelect,
   Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
+import {Root_TermsInformationScreen} from './Root_TermsInformationScreen';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
+import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -266,6 +270,18 @@ export const RootStack = () => {
                   component={Root_OnboardingStack}
                 />
                 <Stack.Screen
+                  name="Root_TermsInformationScreen"
+                  component={Root_TermsInformationScreen}
+                />
+                <Stack.Screen
+                  name="Root_ConsiderTravelTokenChangeScreen"
+                  component={Root_ConsiderTravelTokenChangeScreen}
+                />
+                <Stack.Screen
+                  name="Root_SelectTravelTokenScreen"
+                  component={Root_SelectTravelTokenScreen}
+                />
+                <Stack.Screen
                   name="Root_LocationSearchByTextScreen"
                   component={Root_LocationSearchByTextScreen}
                 />
@@ -344,10 +360,6 @@ export const RootStack = () => {
                   component={Root_ReceiptScreen}
                 />
                 <Stack.Screen
-                  name="Root_MobileTokenOnboardingStack"
-                  component={Root_MobileTokenOnboardingStack}
-                />
-                <Stack.Screen
                   name="Root_AddEditFavoritePlaceScreen"
                   component={Root_AddEditFavoritePlaceScreen}
                 />
@@ -422,6 +434,10 @@ export const RootStack = () => {
                 <Stack.Screen
                   name="Root_LocationWhenInUsePermissionScreen"
                   component={Root_LocationWhenInUsePermissionScreen}
+                />
+                <Stack.Screen
+                  name="Root_ChooseTicketReceiverScreen"
+                  component={Root_ChooseTicketReceiverScreen}
                 />
               </Stack.Group>
             </Stack.Navigator>

@@ -18,5 +18,6 @@ Description of some plugins that we use in Flipper, and what their use case is.
 - **[React DevTools plugin](https://react.dev/learn/react-developer-tools)**<br>*For inspecting React components, and profiling render performance*
 - **[React Navigation plugin](https://reactnavigation.org/docs/devtools/)**<br>*For debugging navigation events in React Navigation*
 - **[RN Perf monitor plugin](https://github.com/bamlab/react-native-flipper-performance-monitor)**<br>*For measuring FPS performance on native and UI layer*
+- **[Async Storage Advanced](https://github.com/lbaldy/flipper-plugin-async-storage-advanced)**<br>*For viewing and editing data in async storage*
 
 There are many other plugins for Flipper that may be used as well. Feel free to try them out and add doc here if they seem useful.

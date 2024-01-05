@@ -1,5 +1,4 @@
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {WalkingDistance} from '@atb/components/walking-distance';
@@ -32,7 +31,7 @@ type Props = {
   distance: number | undefined;
   parkingFor: ParkingVehicleTypes;
   feature: Feature<Point, ParkingType>;
-  close: () => void;
+  onClose: () => void;
   navigateToTripSearch: NavigateToTripSearchCallback;
 };
 export const ParkAndRideBottomSheet = ({
@@ -41,7 +40,7 @@ export const ParkAndRideBottomSheet = ({
   parkingFor,
   feature,
   distance,
-  close,
+  onClose,
   navigateToTripSearch,
 }: Props) => {
   const {t} = useTranslation();
@@ -61,17 +60,11 @@ export const ParkAndRideBottomSheet = ({
   };
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(ParkAndRideTexts.title)}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      title={t(ParkAndRideTexts.title)}
+      onClose={onClose}
+      maxHeightValue={0.5}
+    >
       <ScrollView>
         <View style={styles.buttonsContainer}>
           <View style={styles.travelButton}>

@@ -10,7 +10,7 @@ export function useFocusRefs(focusOnElementName: string | undefined) {
   const ref = useRef<FocusRefsType>(null);
 
   useEffect(
-    () => giveFocus(ref.current?.[focusOnElementName + 'Ref' || '']),
+    () => giveFocus(ref.current?.[focusOnElementName + 'Ref' || '']?.current),
     [focusOnElementName],
   );
 

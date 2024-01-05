@@ -16,12 +16,13 @@ export const getUniqueSituations = (situations: SituationType[] = []) => {
   const seenIds: string[] = [];
   const seenSituationNumbers: string[] = [];
   return situations.filter((s) => {
+    const situationNumber = s.situationNumber;
     if ('id' in s) {
       if (seenIds.includes(s.id)) return false;
       else seenIds.push(s.id);
-    } else if (s.situationNumber) {
-      if (seenSituationNumbers.includes(s.situationNumber)) return false;
-      else seenSituationNumbers.push(s.situationNumber);
+    } else if (situationNumber) {
+      if (seenSituationNumbers.includes(situationNumber)) return false;
+      else seenSituationNumbers.push(situationNumber);
     }
     return true;
   });

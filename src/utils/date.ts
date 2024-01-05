@@ -107,6 +107,19 @@ export function secondsBetween(
   return differenceInSeconds(parsedEnd, parsedStart);
 }
 
+/**
+ * Return minutes between start and end. If end is before start the returned
+ * value will be negative.
+ */
+export function minutesBetween(
+  start: string | Date,
+  end: string | Date,
+): number {
+  const parsedStart = parseIfNeeded(start);
+  const parsedEnd = parseIfNeeded(end);
+  return differenceInMinutes(parsedEnd, parsedStart);
+}
+
 export function formatToClock(
   isoDate: string | Date,
   language: Language,

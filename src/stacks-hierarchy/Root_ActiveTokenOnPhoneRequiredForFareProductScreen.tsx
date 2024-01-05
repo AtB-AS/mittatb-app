@@ -17,6 +17,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import MobileTokenOnboarding from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Ticketing from '@atb/translations/screens/Ticketing';
+import {getDeviceNameWithUnitInfo} from '@atb/select-travel-token-screen/utils';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -101,15 +102,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
             <RadioGroupSection<Token>
               items={mobileTokens}
               keyExtractor={(token) => token.id}
-              itemToText={(token) =>
-                (token.name || t(TravelTokenTexts.toggleToken.unnamedDevice)) +
-                (token.isThisDevice
-                  ? t(
-                      TravelTokenTexts.toggleToken.radioBox.phone.selection
-                        .thisDeviceSuffix,
-                    )
-                  : '')
-              }
+              itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
               selected={selectedToken}
               onSelect={setSelectedToken}
               headerText={t(

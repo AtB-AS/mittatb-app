@@ -9,7 +9,7 @@ import {PreassignedFareProduct} from '@atb/configuration';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {FocusRefsType} from '@atb/utils/use-focus-refs';
-import {ContentHeading} from '@atb/components/content-heading';
+import {ContentHeading} from '@atb/components/heading';
 
 type StopPlaceSelectionProps = {
   fareProductTypeConfig: FareProductTypeConfig;

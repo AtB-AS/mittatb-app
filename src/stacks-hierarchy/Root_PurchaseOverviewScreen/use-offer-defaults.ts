@@ -11,6 +11,7 @@ import {useTicketingState} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
 import {useMemo} from 'react';
+import {useDefaultPreassignedFareProduct} from '@atb/fare-contracts/utils';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -33,8 +34,10 @@ export function useOfferDefaults(
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
+  const defaultFareProduct =
+    useDefaultPreassignedFareProduct(selectableProducts);
   const defaultPreassignedFareProduct =
-    preassignedFareProduct ?? selectableProducts[0];
+    preassignedFareProduct ?? defaultFareProduct;
 
   // Get default TariffZones
   const defaultTariffZone = useDefaultTariffZone(tariffZones);

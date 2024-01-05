@@ -9,19 +9,38 @@ const LoginTexts = {
       'Select login method',
       'Vel innloggingsmetode',
     ),
-    or: _('Eller logg inn med', 'Or log in with', 'Eller logg inn med'),
+    termsOfUse: _('Vilkår for bruk', 'Terms of use', 'Vilkår for bruk'),
     options: {
-      phoneAndCode: _(
-        'Mobilnummer og engangskode',
-        'Mobile number and one-time code',
-        'Mobilnummer og eingongskode',
-      ),
-      vipps: {
-        label: _('Logg inn med ', 'Log in with ', 'Logg inn med '),
+      phoneAndCode: {
+        label: _(
+          'Engangskode på SMS',
+          'One-time code via SMS',
+          'Eingongskode på SMS',
+        ),
         a11yLabel: _(
-          'Logg inn med Vipps',
+          'Engangskode på SMS',
+          'One-time code via SMS',
+          'Eingongskode på SMS',
+        ),
+      },
+      vipps: {
+        label: _('Fortsett med ', 'Log in with ', 'Hald fram med '),
+        a11yLabel: _(
+          'Fortsett med Vipps',
           'Log in with Vipps',
-          'Logg inn med Vipps',
+          'Hald fram med Vipps',
+        ),
+      },
+      anonymous: {
+        label: _(
+          'Fortsett uten å logge inn',
+          'Use the app anonymously',
+          'Hald fram utan å logge inn',
+        ),
+        a11yLabel: _(
+          'Fortsett uten å logge inn',
+          'Use the app anonymously',
+          'Hald fram utan å logge inn',
         ),
       },
     },

@@ -189,7 +189,7 @@ export const filterExpiredFareContracts = (
 export const filterRejectedReservations = (reservations: Reservation[]) =>
   reservations.filter((f: Reservation) => f.paymentStatus === 'REJECT');
 
-export const filterValidRightNowFareContract = (
+export const filterValidRightNowFareContracts = (
   fareContracts: FareContract[],
   now: number,
 ) => {

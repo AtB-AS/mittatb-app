@@ -18,22 +18,16 @@ export const useChatIcon = (
 ): IconButtonProps | undefined => {
   const unreadCount = useChatUnreadCount();
   const styles = useStyles();
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onOpenFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet} = useBottomSheet();
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProps>();
 
   const openContactSheet = () => {
     openBottomSheet(() => (
       <ContactSheet
-        close={closeBottomSheet}
         onReportParkingViolation={() =>
           navigation.navigate('Root_ParkingViolationsSelect')
         }
-        ref={onOpenFocusRef}
       />
     ));
   };

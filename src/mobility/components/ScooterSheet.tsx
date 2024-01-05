@@ -1,8 +1,7 @@
 import {VehicleId} from '@atb/api/types/generated/fragments/vehicles';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {Battery} from '@atb/assets/svg/mono-icons/vehicles';
 import {
@@ -31,12 +30,12 @@ import {ThemedScooter} from '@atb/theme/ThemedAssets';
 
 type Props = {
   vehicleId: VehicleId;
-  close: () => void;
+  onClose: () => void;
   onReportParkingViolation: () => void;
 };
 export const ScooterSheet = ({
   vehicleId: id,
-  close,
+  onClose,
   onReportParkingViolation,
 }: Props) => {
   const {t, language} = useTranslation();
@@ -57,17 +56,11 @@ export const ScooterSheet = ({
     useParkingViolationsReportingEnabled();
 
   return (
-    <BottomSheetContainer maxHeightValue={0.5}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      title={t(MobilityTexts.formFactor(FormFactor.Scooter))}
+      maxHeightValue={0.5}
+      onClose={onClose}
+    >
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>
@@ -150,10 +143,6 @@ export const ScooterSheet = ({
             <MessageInfoBox
               type="error"
               message={t(ScooterTexts.loadingFailed)}
-              onPressConfig={{
-                action: close,
-                text: t(ScreenHeaderTexts.headerButton.close.text),
-              }}
             />
           </View>
         )}

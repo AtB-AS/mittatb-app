@@ -9,7 +9,6 @@ import {Toggle} from '@atb/components/toggle';
 import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelType} from '@atb/configuration';
 import {LabelInfo} from '@atb/components/label-info';
-import {SvgProps} from 'react-native-svg';
 import {SectionTexts, useTranslation} from '@atb/translations';
 
 type Props = SectionItemProps<{
@@ -18,7 +17,7 @@ type Props = SectionItemProps<{
   label?: LabelType;
   onValueChange: (checked: boolean) => void;
   value?: boolean;
-  leftImage?: (props: SvgProps) => JSX.Element;
+  leftImage?: JSX.Element;
   interactiveColor?: InteractiveColor;
   accessibility?: AccessibilityProps;
   textType?: TextNames;
@@ -29,7 +28,7 @@ export function ToggleSectionItem({
   subtext,
   label,
   onValueChange,
-  leftImage: LeftImage,
+  leftImage,
   value = false,
   accessibility,
   testID,
@@ -73,9 +72,11 @@ export function ToggleSectionItem({
       {...accessibility}
     >
       <View style={{flexDirection: 'row'}}>
-        <View style={styles.leftImageContainer}>
-          {LeftImage && <LeftImage />}
-        </View>
+        {leftImage && (
+          <View style={styles.leftImageContainer}>
+            {leftImage}
+          </View>
+        )}
         <View style={{flexDirection: 'column', flex: 1}}>
           <View style={sectionStyle.spaceBetween}>
             <View style={styles.textContainer}>

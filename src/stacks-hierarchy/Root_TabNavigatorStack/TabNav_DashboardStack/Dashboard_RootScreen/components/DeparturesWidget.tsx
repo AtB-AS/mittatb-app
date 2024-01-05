@@ -16,7 +16,7 @@ import {
   FavoriteDeparturesTexts,
   useTranslation,
 } from '@atb/translations';
-import {Coordinates} from '@entur/sdk';
+import {Coordinates} from '@atb/sdk';
 import haversineDistance from 'haversine-distance';
 import React, {useEffect} from 'react';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
@@ -28,7 +28,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {SectionHeading} from './SectionHeading';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -51,17 +51,12 @@ export const DeparturesWidget = ({
 
   useEffect(() => loadInitialDepartures(), [loadInitialDepartures]);
 
-  const {
-    open: openBottomSheet,
-    close: closeBottomSheet,
-    onCloseFocusRef,
-  } = useBottomSheet();
+  const {open: openBottomSheet, onCloseFocusRef} = useBottomSheet();
 
   async function openFrontpageFavouritesBottomSheet() {
     openBottomSheet(() => {
       return (
         <SelectFavouritesBottomSheet
-          close={closeBottomSheet}
           onEditFavouriteDeparture={onEditFavouriteDeparture}
         />
       );
@@ -76,8 +71,11 @@ export const DeparturesWidget = ({
 
   return (
     <View style={style}>
-      <SectionHeading>{t(DeparturesTexts.widget.heading)}</SectionHeading>
-
+      <ContentHeading
+        style={styles.heading}
+        color="background_accent_0"
+        text={t(DeparturesTexts.widget.heading)}
+      />
       {!favoriteDepartures.length && (
         <Section>
           <GenericSectionItem>
@@ -160,6 +158,9 @@ function compareStopsByDistance(
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  heading: {
+    marginBottom: theme.spacings.small,
+  },
   noFavouritesView: {
     flexDirection: 'row',
     alignItems: 'center',

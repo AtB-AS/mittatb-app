@@ -9,9 +9,12 @@ export type FirestoreConfigStatus = 'loading' | 'success';
 
 export type DistributionChannel = 'web' | 'app' | 'debug-web' | 'debug-app';
 
+export type PreassignedFareProductId = string;
+
 export type PreassignedFareProduct = {
-  id: string;
+  id: PreassignedFareProductId;
   name: LanguageAndTextType;
+  isDefault: boolean;
   version: string;
   description?: LanguageAndTextType[];
   productDescription?: LanguageAndTextType[];
@@ -50,6 +53,7 @@ export type TariffZone = {
   version: string;
   geometry: Omit<Polygon, 'type'> & {type: any};
   isDefault?: boolean;
+  description: LanguageAndTextType[];
 };
 
 export type PointToPointValidity = {

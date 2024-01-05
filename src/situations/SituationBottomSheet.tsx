@@ -1,9 +1,10 @@
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {
   dictionary,
   getTextForLanguage,
-  ScreenHeaderTexts,
   SituationsTexts,
   useTranslation,
 } from '@atb/translations';
@@ -26,11 +27,10 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
   situation: SituationType;
-  close: () => void;
 };
 
 export const SituationBottomSheet = forwardRef<View, Props>(
-  ({situation, close}, focusRef) => {
+  ({situation}, focusRef) => {
     const {t, language} = useTranslation();
     const styles = useStyles();
     const summary = getTextForLanguage(situation.summary, language);
@@ -38,20 +38,10 @@ export const SituationBottomSheet = forwardRef<View, Props>(
     const advice = getTextForLanguage(situation.advice, language);
     const infoLinks = filterInfoLinks(situation.infoLinks);
     const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
+    const {close} = useBottomSheet();
 
     return (
       <BottomSheetContainer>
-        <ScreenHeaderWithoutNavigation
-          leftButton={{
-            type: 'close',
-            onPress: close,
-            text: t(ScreenHeaderTexts.headerButton.close.text),
-            testID: 'closeButton',
-          }}
-          color="background_1"
-          setFocusOnLoad={false}
-        />
-
         <ScrollView centerContent={true}>
           <View>
             <Section style={styles.section}>

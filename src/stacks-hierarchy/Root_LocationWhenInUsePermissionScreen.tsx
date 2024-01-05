@@ -3,31 +3,31 @@ import React, {useCallback} from 'react';
 
 import LocationWhenInUsePermissionTexts from '@atb/translations/screens/LocationWhenInUsePermission';
 import {MyLocation} from '@atb/assets/svg/color/images';
-import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useAppState} from '@atb/AppContext';
-import {OnboardingScreen} from '@atb/onboarding-screen';
+import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useGeolocationState} from '@atb/GeolocationContext';
+import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 
-type Props = RootStackScreenProps<'Root_LocationWhenInUsePermissionScreen'>;
-
-export const Root_LocationWhenInUsePermissionScreen = ({navigation}: Props) => {
+export const Root_LocationWhenInUsePermissionScreen = () => {
   const {t} = useTranslation();
 
   const {completeLocationWhenInUsePermissionOnboarding} = useAppState();
   const {requestLocationPermission} = useGeolocationState();
 
+  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+
   const buttonOnPress = useCallback(async () => {
     await requestLocationPermission();
-    navigation.popToTop();
     completeLocationWhenInUsePermissionOnboarding();
+    continueFromOnboardingScreen('Root_LocationWhenInUsePermissionScreen');
   }, [
-    navigation,
     completeLocationWhenInUsePermissionOnboarding,
     requestLocationPermission,
+    continueFromOnboardingScreen,
   ]);
 
   return (
-    <OnboardingScreen
+    <OnboardingScreenComponent
       illustration={<MyLocation height={220} />}
       title={t(LocationWhenInUsePermissionTexts.title)}
       description={t(LocationWhenInUsePermissionTexts.description)}

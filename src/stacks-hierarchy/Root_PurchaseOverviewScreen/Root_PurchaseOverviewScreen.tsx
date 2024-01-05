@@ -26,6 +26,7 @@ import {isAfter} from '@atb/utils/date';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
+import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -108,6 +109,18 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     travelDate,
   );
 
+  const rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =
+    {
+      fareProductTypeConfig: params.fareProductTypeConfig,
+      fromPlace: fromPlace,
+      toPlace: toPlace,
+      userProfilesWithCount: travellerSelection,
+      preassignedFareProduct,
+      travelDate,
+      headerLeftButton: {type: 'back'},
+      mode: params.mode,
+    };
+
   const maximumDateObjectIfExisting = preassignedFareProduct.limitations
     ?.latestActivationDate
     ? new Date(preassignedFareProduct.limitations.latestActivationDate * 1000)
@@ -154,7 +167,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         setFocusOnLoad: false,
         globalMessageContext: GlobalMessageContextEnum.appTicketing,
       }}
-      parallaxContent={(focusRef?: React.MutableRefObject<null>) => (
+      parallaxContent={(focusRef) => (
         <FareProductHeader
           ref={params.onFocusElement ? undefined : focusRef}
           style={styles.header}
@@ -168,7 +181,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox
-              style={styles.travelSearchInfo}
               type="valid"
               message={t(PurchaseOverviewTexts.travelSearchInfo)}
             />
@@ -292,16 +304,15 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                 travelDate,
                 mode: params.mode,
               });
-              navigation.navigate('Root_PurchaseConfirmationScreen', {
-                fareProductTypeConfig: params.fareProductTypeConfig,
-                fromPlace: fromPlace,
-                toPlace: toPlace,
-                userProfilesWithCount: travellerSelection,
-                preassignedFareProduct,
-                travelDate,
-                headerLeftButton: {type: 'back'},
-                mode: params.mode,
-              });
+              isOnBehalfOfToggle
+                ? navigation.navigate(
+                    'Root_ChooseTicketReceiverScreen',
+                    rootPurchaseConfirmationScreenParams,
+                  )
+                : navigation.navigate(
+                    'Root_PurchaseConfirmationScreen',
+                    rootPurchaseConfirmationScreenParams,
+                  );
             }}
             style={styles.summary}
           />
@@ -331,11 +342,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     },
     summary: {
       marginVertical: theme.spacings.medium,
-    },
-    travelSearchInfo: {
-      marginHorizontal: theme.spacings.medium,
-      marginTop: theme.spacings.xLarge,
-      marginBottom: theme.spacings.medium,
     },
   };
 });

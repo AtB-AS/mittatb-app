@@ -61,6 +61,12 @@ const PurchaseConfirmationTexts = {
         `Billettvarigheit ${validTime} frå oppstart`,
       ),
   },
+  sendingTo: (phoneNumber: string) => 
+    _(
+      `Sendes til ${phoneNumber}`,
+      `Sending to ${phoneNumber}`,
+      `Sendes til ${phoneNumber}`,
+    ),
   totalCost: {
     title: _('Totalt', 'Total', 'Totalt'),
     label: (vatPercentString: string, vatAmountString: string) =>

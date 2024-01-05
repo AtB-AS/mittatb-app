@@ -24,7 +24,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
   const analytics = useAnalytics();
   const {loading, inputParams, recommendedTicketSummary, error} =
     useTicketAssistantState();
-  const focusRef = useFocusOnLoad(true, 200);
+  const focusRef = useFocusOnLoad();
   const durationDays = inputParams.duration
     ? inputParams.duration * 24 * 60 * 60 * 1000
     : 0;

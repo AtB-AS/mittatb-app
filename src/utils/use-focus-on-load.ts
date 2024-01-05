@@ -1,9 +1,5 @@
-import React, {useEffect, useRef} from 'react';
-import {
-  AccessibilityInfo,
-  InteractionManager,
-  findNodeHandle,
-} from 'react-native';
+import {Ref, RefCallback, useCallback, useEffect, useRef} from 'react';
+import {AccessibilityInfo, findNodeHandle, InteractionManager,} from 'react-native';
 import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
 
 /**
@@ -14,48 +10,37 @@ import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
  * In some cases, like in a stack, it is necessary to use a timeout to let the
  * screen render complete before giving focus.
  */
-export function useFocusOnLoad(
-  setFocusOnLoad: boolean = true,
-  timeOutMilliseconds?: number,
-) {
+export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
   const focusRef = useRef(null);
   const navigation = useNavigationSafe();
 
-  useEffect(() => {
-    if (!setFocusOnLoad || !focusRef.current) return;
-    giveFocus(focusRef);
-  }, [setFocusOnLoad]);
+  const focusCallbackRef: RefCallback<any> = useCallback(
+    (node) => {
+      if (setFocusOnLoad) giveFocus(node);
+      focusRef.current = node;
+    },
+    [setFocusOnLoad],
+  );
 
   useEffect(() => {
     if (!navigation || !focusRef.current || !setFocusOnLoad) return;
 
     const unsubscribe = navigation.addListener('focus', () =>
-      giveFocus(focusRef, timeOutMilliseconds),
+      giveFocus(focusRef.current),
     );
     return () => unsubscribe();
-  }, [navigation, setFocusOnLoad, timeOutMilliseconds]);
+  }, [navigation, setFocusOnLoad]);
 
-  return focusRef;
+  return focusCallbackRef;
 }
 
-export const giveFocus = (
-  focusRef: React.RefObject<any> | null | undefined,
-  timeoutMilliseconds?: number,
-) => {
-  if (focusRef === null || focusRef === undefined) {
-    return;
-  }
-  if (focusRef.current) {
+export const giveFocus = (node: any) => {
+  if (node) {
     InteractionManager.runAfterInteractions(() => {
-      const setFocus = () => {
-        const reactTag = findNodeHandle(focusRef.current);
+      setTimeout(() => {
+        const reactTag = findNodeHandle(node);
         reactTag && AccessibilityInfo.setAccessibilityFocus(reactTag);
-      };
-      if (timeoutMilliseconds) {
-        setTimeout(setFocus, timeoutMilliseconds);
-      } else {
-        setFocus();
-      }
+      }, 100);
     });
   }
 };

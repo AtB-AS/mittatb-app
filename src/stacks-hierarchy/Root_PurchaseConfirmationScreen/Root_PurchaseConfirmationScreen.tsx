@@ -20,7 +20,7 @@ import {
 } from '@atb/translations';
 import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {addMinutes} from 'date-fns';
+import {addMinutes, parseISO} from 'date-fns';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -35,7 +35,7 @@ import {
   useOfferState,
   UserProfileWithCountAndOffer,
 } from '../Root_PurchaseOverviewScreen/use-offer-state';
-import {SelectPaymentMethod} from './components/SelectPaymentMethodSheet';
+import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
 import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
@@ -67,10 +67,15 @@ function getPreviousPaymentMethod(
         };
       }
     case 'recurring':
-      return {
-        paymentType: previousPaymentMethod.paymentType,
-        recurringPaymentId: previousPaymentMethod.recurringCard.id,
-      };
+      const notExpired =
+        parseISO(previousPaymentMethod.recurringCard.expires_at).getTime() >
+        Date.now();
+      return notExpired
+        ? {
+            paymentType: previousPaymentMethod.paymentType,
+            recurringPaymentId: previousPaymentMethod.recurringCard.id,
+          }
+        : undefined;
     case 'recurring-without-card':
       return {
         paymentType: previousPaymentMethod.paymentType,
@@ -107,6 +112,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userProfilesWithCount,
     travelDate,
     headerLeftButton,
+    phoneNumber,
   } = params;
 
   const {travellerSelectionMode, zoneSelectionMode} =
@@ -236,12 +242,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   async function selectPaymentMethod() {
     openBottomSheet(() => {
       return (
-        <SelectPaymentMethod
+        <SelectPaymentMethodSheet
           onSelect={(option: PaymentMethod) => {
             selectPaymentOption(option);
             closeBottomSheet();
           }}
-          close={closeBottomSheet}
           previousPaymentMethod={previousPaymentMethod}
         />
       );
@@ -342,6 +347,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
+                {phoneNumber && (
+                  <ThemeText type="body__secondary" color="secondary" style={styles.sendingToText}>
+                    {t(PurchaseConfirmationTexts.sendingTo(phoneNumber))}
+                  </ThemeText>
+                )}
+
                 <SummaryText />
                 {!isSearchingOffer &&
                   validDurationSeconds &&
@@ -628,6 +639,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   paymentSummaryContainer: {
     marginVertical: theme.spacings.medium,
+  },
+  sendingToText: {
+    marginTop: theme.spacings.xSmall
   },
   totalPaymentContainer: {
     flexDirection: 'row',

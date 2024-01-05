@@ -1,5 +1,4 @@
-import {ScreenHeaderWithoutNavigation} from '@atb/components/screen-header';
-import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {GenericSectionItem, Section} from '@atb/components/sections';
@@ -29,10 +28,14 @@ import {ThemedCityBike} from '@atb/theme/ThemedAssets';
 type Props = {
   stationId: string;
   distance: number | undefined;
-  close: () => void;
+  onClose: () => void;
 };
 
-export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
+export const BikeStationBottomSheet = ({
+  stationId,
+  distance,
+  onClose,
+}: Props) => {
   const {t} = useTranslation();
   const styles = useSheetStyle();
   const {
@@ -50,17 +53,11 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
   const {operatorBenefit} = useOperatorBenefit(operatorId);
 
   return (
-    <BottomSheetContainer maxHeightValue={0.6}>
-      <ScreenHeaderWithoutNavigation
-        leftButton={{
-          type: 'close',
-          onPress: close,
-          text: t(ScreenHeaderTexts.headerButton.close.text),
-        }}
-        title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
-        color="background_1"
-        setFocusOnLoad={false}
-      />
+    <BottomSheetContainer
+      maxHeightValue={0.6}
+      title={t(MobilityTexts.formFactor(FormFactor.Bicycle))}
+      onClose={onClose}
+    >
       <>
         {isLoading && (
           <View style={styles.activityIndicator}>
@@ -146,10 +143,6 @@ export const BikeStationBottomSheet = ({stationId, distance, close}: Props) => {
             <MessageInfoBox
               type="error"
               message={t(BicycleTexts.loadingFailed)}
-              onPressConfig={{
-                action: close,
-                text: t(ScreenHeaderTexts.headerButton.close.text),
-              }}
             />
           </View>
         )}
@@ -182,6 +175,7 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
     },
     errorMessage: {
       marginHorizontal: theme.spacings.medium,
+      marginBottom: Math.max(bottom, theme.spacings.medium),
     },
     footer: {
       marginBottom: Math.max(bottom, theme.spacings.medium),

@@ -1,8 +1,8 @@
-import {Quay} from '../sdk';
 import {Quay as Quay_v2} from '../api/types/trips';
 import {dictionary, TranslatedString} from '../translations';
 import {AnyMode} from '@atb/components/icon-box';
 import {QuayFragment} from '@atb/api/types/generated/fragments/quays';
+import {Quay} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export function getTranslatedModeName(mode?: AnyMode): TranslatedString {
   const legModeNames = dictionary.travel.legModes;

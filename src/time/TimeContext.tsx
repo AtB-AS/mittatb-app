@@ -39,8 +39,8 @@ export const TimeContextProvider: React.FC = ({children}) => {
         serverDiff = Date.now() - ms;
         setServerNow(ms);
       }),
-    2500,
     [],
+    2500,
     !clockIsRunning,
     true,
   );

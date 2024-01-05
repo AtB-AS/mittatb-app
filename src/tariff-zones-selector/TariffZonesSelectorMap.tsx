@@ -23,7 +23,7 @@ import {
 import {FeatureCollection, Polygon} from 'geojson';
 import turfCentroid from '@turf/centroid';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/types/OnPressEvent';
+import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import {useInitialCoordinates} from '@atb/utils/use-initial-coordinates';
 
 type Props = {

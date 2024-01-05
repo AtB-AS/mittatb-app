@@ -28,7 +28,7 @@ export const TicketAssistant_FrequencyScreen = ({
   const [sliderValue, setSliderValue] = useState<number>(
     inputParams.frequency ?? DEFAULT_SLIDER_VALUE,
   );
-  const focusRef = useFocusOnLoad(true, 200);
+  const focusRef = useFocusOnLoad();
 
   const a11yContext = useAccessibilityContext();
 

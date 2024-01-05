@@ -1,20 +1,20 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgReorder from '@atb/assets/svg/mono-icons/actions/Reorder';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {StoredLocationFavorite, useFavorites} from '@atb/favorites';
 import {StyleSheet, Theme} from '@atb/theme';
 import {FavoriteListTexts, useTranslation} from '@atb/translations';
 import React from 'react';
-import {View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {ProfileScreenProps} from './navigation-types';
 import {
   FavoriteSectionItem,
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
+import {FullScreenView} from '@atb/components/screen-view';
+import {View} from 'react-native';
+import {ScreenHeading} from '@atb/components/heading';
 
 type Props = ProfileScreenProps<'Profile_FavoriteListScreen'>;
 
@@ -33,22 +33,27 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
   const onSortClick = () => navigation.push('Profile_SortFavoritesScreen');
 
   return (
-    <View style={style.container}>
-      <FullScreenHeader
-        title={t(FavoriteListTexts.header.title)}
-        leftButton={{type: 'back'}}
-      />
-
-      <ScrollView>
+    <FullScreenView
+      headerProps={{
+        title: t(FavoriteListTexts.header.title),
+        leftButton: {type: 'back', withIcon: true},
+      }}
+      parallaxContent={(focusRef) => (
+        <ScreenHeading
+          ref={focusRef}
+          text={t(FavoriteListTexts.header.title)}
+        />
+      )}
+    >
+      <View style={style.container}>
         {!items?.length && (
           <MessageInfoBox
-            style={style.empty}
             message={t(FavoriteListTexts.noFavorites)}
             type="info"
           />
         )}
 
-        <Section withTopPadding withPadding>
+        <Section>
           {items.map((favorite, i) => (
             <FavoriteSectionItem
               key={favorite.id}
@@ -62,7 +67,7 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
           ))}
         </Section>
 
-        <Section withPadding>
+        <Section>
           {!!items.length && (
             <LinkSectionItem
               text={t(FavoriteListTexts.buttons.changeOrder)}
@@ -78,19 +83,13 @@ export const Profile_FavoriteListScreen = ({navigation}: Props) => {
             testID="addFavoriteButton"
           />
         </Section>
-      </ScrollView>
-    </View>
+      </View>
+    </FullScreenView>
   );
 };
 const useProfileStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_2.background,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-  },
-  empty: {
-    margin: theme.spacings.medium,
+    padding: theme.spacings.medium,
+    rowGap: theme.spacings.medium,
   },
 }));

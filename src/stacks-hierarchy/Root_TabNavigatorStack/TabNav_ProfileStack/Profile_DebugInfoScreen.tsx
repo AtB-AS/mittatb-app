@@ -46,8 +46,8 @@ import {useLoadingScreenEnabledDebugOverride} from '@atb/loading-screen/use-load
 import {useLoadingErrorScreenEnabledDebugOverride} from '@atb/loading-screen/use-loading-error-screen-enabled';
 import {useBeaconsEnabledDebugOverride} from '@atb/beacons';
 import {useParkingViolationsReportingEnabledDebugOverride} from '@atb/parking-violations-reporting';
-import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-maybe-show-share-travel-habits-screen';
-import {hasSeenShareTravelHabitsScreenKey} from '@atb/beacons/use-has-seen-share-travel-habits-screen';
+import {shareTravelHabitsSessionCountKey} from '@atb/beacons/use-should-show-share-travel-habits-screen';
+
 import {useAnnouncementsState} from '@atb/announcements';
 import {
   useNotifications,
@@ -57,6 +57,7 @@ import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
+import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -71,6 +72,7 @@ export const Profile_DebugInfoScreen = () => {
     restartOnboarding,
     restartNotificationPermissionOnboarding,
     restartLocationWhenInUsePermissionOnboarding,
+    restartShareTravelHabitsOnboarding,
   } = useAppState();
   const {
     onboardForBeacons,
@@ -121,6 +123,7 @@ export const Profile_DebugInfoScreen = () => {
   const onBehalfOfEnabledDebugOverride = useOnBehalfOfEnabledDebugOverride();
   const ticketInformationEnabledDebugOverride =
     useTicketInformationEnabledDebugOverride();
+  const posthogEnabledDebugOverride = usePosthogEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -261,10 +264,8 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
           />
           <LinkSectionItem
-            text="Reset has seen ShareTravelHabitsScreen"
-            onPress={() =>
-              storage.set(hasSeenShareTravelHabitsScreenKey, 'false')
-            }
+            text="Restart ShareTravelHabits onboarding"
+            onPress={restartShareTravelHabitsOnboarding}
           />
           <LinkSectionItem
             text="Reset one time popovers"
@@ -395,6 +396,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable ticket information"
               override={ticketInformationEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable PostHog"
+              override={posthogEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>

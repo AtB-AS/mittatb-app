@@ -5,7 +5,11 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {getReferenceDataName, TariffZone} from '@atb/configuration';
 import {StyleSheet} from '@atb/theme';
-import {TariffZoneSearchTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  TariffZoneSearchTexts,
+  useTranslation,
+} from '@atb/translations';
 import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
@@ -55,6 +59,11 @@ export const TariffZoneResults: React.FC<Props> = ({tariffZones, onSelect}) => {
                   <ThemeText type="body__primary--bold">
                     {getReferenceDataName(tariffZone, language)}
                   </ThemeText>
+                  {tariffZone.description && (
+                    <ThemeText type="body__secondary">
+                      {getTextForLanguage(tariffZone.description, language)}
+                    </ThemeText>
+                  )}
                 </View>
                 {tariffZoneFromLocation?.id === tariffZone.id ? (
                   <View style={styles.currentLocationIcon}>
@@ -90,6 +99,7 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   nameContainer: {
     marginLeft: theme.spacings.large,
+    flex: 1,
   },
   currentLocationIcon: {
     marginLeft: theme.spacings.small,

@@ -40,6 +40,9 @@ import {tokenService} from './tokenService';
 import {tokenReducer} from '@atb/mobile-token/tokenReducer';
 import {useQueryClient} from '@tanstack/react-query';
 import {GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY} from '@atb/mobile-token/use-token-toggle-details';
+import {useInterval} from '@atb/utils/use-interval';
+
+const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
 
 type MobileTokenContextState = {
   tokens: Token[];
@@ -153,18 +156,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
          Errors that needs a certain action should already be handled. Just log
          to Bugsnag here.
          */
-        updateMetadata({
-          'AtB-Mobile-Token-Id': undefined,
-          'AtB-Mobile-Token-Status': 'error',
-          'AtB-Mobile-Token-Error-Correlation-Id': traceId,
-        });
-        Bugsnag.notify(err, (event) => {
-          event.addMetadata('token', {
-            userId,
-            traceId,
-            description: 'Error loading native and remote tokens',
-          });
-        });
+        logError(err, traceId, userId);
       } finally {
         // We've finished with remote tokens. Cancel timeout notification.
         cancelTimeoutHandler();
@@ -175,6 +167,43 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     load();
   }, [load]);
+
+  useInterval(
+    async function checkIfRenewNecessaryEverySixHours() {
+      const token = state.nativeToken;
+      if (!token) return;
+      Bugsnag.leaveBreadcrumb(
+        `Checking if token (id: ${token.tokenId}, validityEnd: ${token.validityEnd}) should be renewed`,
+      );
+
+      const traceId = uuid();
+      try {
+        const shouldRenew = await mobileTokenClient.shouldRenew(token);
+        if (shouldRenew) {
+          Bugsnag.leaveBreadcrumb(`Renewing token (id: ${token.tokenId})`);
+          const renewedToken = await mobileTokenClient.renew(token, traceId);
+          const updatedRemoteTokens = await loadRemoteTokens(traceId);
+
+          Bugsnag.leaveBreadcrumb(
+            `Token (new id: ${renewedToken.tokenId}) renewed successfully`,
+          );
+          dispatch({
+            type: 'SUCCESS',
+            nativeToken: renewedToken,
+            remoteTokens: updatedRemoteTokens,
+          });
+        }
+      } catch (err: any) {
+        dispatch({type: 'ERROR'});
+        logError(err, traceId, userId);
+      }
+    },
+    // 10000,
+    [state.nativeToken, userId],
+    SIX_HOURS_MS,
+    false,
+    true,
+  );
 
   /**
    * Retrieve the signed representation of the native token. This signed token
@@ -486,4 +515,19 @@ const getTokenToggleDetails = async () => {
   } catch (err) {
     return undefined;
   }
+};
+
+const logError = (err: Error, traceId: string, userId?: string) => {
+  updateMetadata({
+    'AtB-Mobile-Token-Id': undefined,
+    'AtB-Mobile-Token-Status': 'error',
+    'AtB-Mobile-Token-Error-Correlation-Id': traceId,
+  });
+  Bugsnag.notify(err, (event) => {
+    event.addMetadata('token', {
+      userId,
+      traceId,
+      description: 'Error loading native and remote tokens',
+    });
+  });
 };
