@@ -161,7 +161,10 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
     if (legIconsParentWidth && legIconsContentWidth) {
-      if (legIconsContentWidth >= legIconsParentWidth) {
+      if (
+        legIconsContentWidth >= legIconsParentWidth &&
+        numberOfExpandedLegs > 1
+      ) {
         setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
       } else {
         Animated.timing(fadeInValueRef.current, {
