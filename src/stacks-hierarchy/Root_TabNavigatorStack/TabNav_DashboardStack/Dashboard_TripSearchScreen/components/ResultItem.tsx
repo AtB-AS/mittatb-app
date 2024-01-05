@@ -174,7 +174,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         }).start();
       }
     }
-  }, [legIconsParentWidth, legIconsContentWidth]);
+  }, [legIconsParentWidth, legIconsContentWidth, numberOfExpandedLegs]);
 
   if (filteredLegs.length < 1) return null;
 
