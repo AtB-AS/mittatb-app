@@ -9,7 +9,7 @@ const ThemeTextMeta = {
   component: ThemeText,
   argTypes: {
     theme: {
-      control: 'select',
+      control: {type: 'radio'},
       options: ['light', 'dark'],
     },
     color: {

@@ -11,7 +11,7 @@ const MessageInfoBoxMeta = {
   component: MessageInfoBox,
   argTypes: {
     theme: {
-      control: 'select',
+      control: {type: 'radio'},
       options: ['light', 'dark'],
     },
     onDismiss: {
