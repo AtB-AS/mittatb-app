@@ -10,7 +10,6 @@ import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import React, {useEffect, useState} from 'react';
 import {Alert, View} from 'react-native';
-import {ProfileScreenProps} from './navigation-types';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
@@ -19,12 +18,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 
-type DeleteProfileScreenProps =
-  ProfileScreenProps<'Profile_DeleteProfileScreen'>;
-
-export const Profile_DeleteProfileScreen = ({
-  navigation,
-}: DeleteProfileScreenProps) => {
+export const Profile_DeleteProfileScreen = () => {
   const style = useStyle();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthState();
@@ -34,16 +28,15 @@ export const Profile_DeleteProfileScreen = ({
     filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow).length > 0;
 
   const [deleteError, setDeleteError] = useState<boolean>(false);
-
-  const {deleteCollectedData} = useBeaconsState();
+  const {deleteCollectedData, revokeBeacons} = useBeaconsState();
 
   const handleDeleteProfile = async () => {
     try {
       const deleteOK = await deleteProfile();
       if (deleteOK) {
+        await revokeBeacons();
         await deleteCollectedData();
         await signOut();
-        navigation.navigate('Profile_RootScreen');
       } else {
         setDeleteError(true);
       }
