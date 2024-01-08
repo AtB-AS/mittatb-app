@@ -51,10 +51,10 @@ import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
 import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
 import {
+  Root_ParkingViolationsConfirmation,
   Root_ParkingViolationsPhoto,
   Root_ParkingViolationsQr,
   Root_ParkingViolationsSelect,
-  Root_ParkingViolationsConfirmation,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 import {Root_TermsInformationScreen} from './Root_TermsInformationScreen';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
@@ -62,6 +62,7 @@ import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
+import {transitionOptions} from '@atb/stacks-hierarchy/navigation-utils';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -255,197 +256,245 @@ export const RootStack = () => {
                 headerShown: false,
               }}
             >
-              <Stack.Group
-                screenOptions={{
-                  presentation: 'modal',
-                  ...TransitionPresets.ModalSlideFromBottomIOS,
-                }}
-              >
+              <Stack.Group screenOptions={{presentation: 'modal'}}>
                 <Stack.Screen
                   name="Root_TabNavigatorStack"
                   component={Root_TabNavigatorStack}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_OnboardingStack"
                   component={Root_OnboardingStack}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_TermsInformationScreen"
                   component={Root_TermsInformationScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ConsiderTravelTokenChangeScreen"
                   component={Root_ConsiderTravelTokenChangeScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_SelectTravelTokenScreen"
                   component={Root_SelectTravelTokenScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_LocationSearchByTextScreen"
                   component={Root_LocationSearchByTextScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_LocationSearchByMapScreen"
                   component={Root_LocationSearchByMapScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                    headerShown: false,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_PurchaseOverviewScreen"
                   component={Root_PurchaseOverviewScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_PurchaseConfirmationScreen"
                   component={Root_PurchaseConfirmationScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_PurchaseTariffZonesSearchByMapScreen"
                   component={Root_PurchaseTariffZonesSearchByMapScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_PurchaseTariffZonesSearchByTextScreen"
                   component={Root_PurchaseTariffZonesSearchByTextScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_PurchaseHarborSearchScreen"
                   component={Root_PurchaseHarborSearchScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_PurchasePaymentWithCreditCardScreen"
                   component={Root_PurchasePaymentWithCreditCardScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_PurchasePaymentWithVippsScreen"
                   component={Root_PurchasePaymentWithVippsScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_PurchaseAsAnonymousConsequencesScreen"
                   component={Root_PurchaseAsAnonymousConsequencesScreen}
-                  options={({route: {params}}) => ({
-                    ...(params?.transitionPreset ??
-                      TransitionPresets.SlideFromRightIOS),
-                  })}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_FareContractDetailsScreen"
                   component={Root_FareContractDetailsScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_TicketInformationScreen"
                   component={Root_TicketInformationScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_CarnetDetailsScreen"
                   component={Root_CarnetDetailsScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ReceiptScreen"
                   component={Root_ReceiptScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_AddEditFavoritePlaceScreen"
                   component={Root_AddEditFavoritePlaceScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_SearchStopPlaceScreen"
                   component={Root_SearchStopPlaceScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ShareTravelHabitsScreen"
                   component={Root_ShareTravelHabitsScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_TicketAssistantStack"
                   component={Root_TicketAssistantStack}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_LoginActiveFareContractWarningScreen"
                   component={Root_LoginActiveFareContractWarningScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_LoginOptionsScreen"
                   component={Root_LoginOptionsScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_LoginPhoneInputScreen"
                   component={Root_LoginPhoneInputScreen}
-                  options={({route: {params}}) => ({
-                    ...(params?.transitionPreset ??
-                      TransitionPresets.SlideFromRightIOS),
-                  })}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_LoginConfirmCodeScreen"
                   component={Root_LoginConfirmCodeScreen}
-                  options={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                  }}
+                  options={transitionOptions()}
                 />
                 <Stack.Screen
                   name="Root_LoginRequiredForFareProductScreen"
                   component={Root_LoginRequiredForFareProductScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
                   component={
                     Root_ActiveTokenOnPhoneRequiredForFareProductScreen
                   }
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_AddPaymentMethodScreen"
                   component={Root_AddPaymentMethodScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ParkingViolationsSelect"
                   component={Root_ParkingViolationsSelect}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ParkingViolationsPhoto"
                   component={Root_ParkingViolationsPhoto}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ParkingViolationsQr"
                   component={Root_ParkingViolationsQr}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ParkingViolationsConfirmation"
                   component={Root_ParkingViolationsConfirmation}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_NotificationPermissionScreen"
                   component={Root_NotificationPermissionScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_LocationWhenInUsePermissionScreen"
                   component={Root_LocationWhenInUsePermissionScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
                 <Stack.Screen
                   name="Root_ChooseTicketReceiverScreen"
                   component={Root_ChooseTicketReceiverScreen}
+                  options={transitionOptions(
+                    TransitionPresets.ModalSlideFromBottomIOS,
+                  )}
                 />
               </Stack.Group>
             </Stack.Navigator>
