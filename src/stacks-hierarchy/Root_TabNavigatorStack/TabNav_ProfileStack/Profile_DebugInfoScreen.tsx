@@ -488,7 +488,7 @@ export const Profile_DebugInfoScreen = () => {
                   }
                   text="Register"
                 />
-                <ThemeText>FCM Token: {fcmToken}</ThemeText>
+                <ThemeText selectable={true}>FCM Token: {fcmToken}</ThemeText>
               </>
             }
           />
