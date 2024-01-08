@@ -172,7 +172,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       if (legIconsContentWidth >= legIconsParentWidth) {
         setNumberOfExpandedLegs((val) => {
           const newVal = Math.max(val - 1, 1);
-          if (newVal == val - 1) {
+          if (newVal === val) {
             fadeIn();
           }
           return newVal;
