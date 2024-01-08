@@ -16,6 +16,8 @@ import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 import {LoadingScreen} from '@atb/loading-screen';
+import {View} from 'react-native';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type Props = RootStackScreenProps<'Root_ConsiderTravelTokenChangeScreen'>;
 
@@ -24,6 +26,7 @@ const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad();
 
   const {disable_travelcard} = useRemoteConfig();
 
@@ -57,9 +60,11 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
       }}
     >
-      <ThemeText type="heading--big" color={themeColor} style={styles.header}>
-        {t(ConsiderTravelTokenChangeTexts.title)}
-      </ThemeText>
+      <View ref={focusRef} accessible>
+        <ThemeText type="heading--big" color={themeColor} style={styles.header}>
+          {t(ConsiderTravelTokenChangeTexts.title)}
+        </ThemeText>
+      </View>
       <ThemeText
         type="body__primary"
         color={themeColor}
