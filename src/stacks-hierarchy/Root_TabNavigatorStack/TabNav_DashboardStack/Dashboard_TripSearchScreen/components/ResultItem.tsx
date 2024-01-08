@@ -183,11 +183,6 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
     }
   }, [fadeIn, legIconsParentWidth, legIconsContentWidth]);
 
-  useEffect(() => {
-    if (numberOfExpandedLegs >= 1) {
-    }
-  }, [numberOfExpandedLegs]);
-
   if (filteredLegs.length < 1) return null;
 
   const lastLegIsFlexible = isLegFlexibleTransport(
