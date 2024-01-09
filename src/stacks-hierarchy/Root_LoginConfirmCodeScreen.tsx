@@ -20,7 +20,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useAppState} from '@atb/AppContext';
+import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -39,7 +39,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   >();
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
-  const {completeOnboarding} = useAppState();
+  const completeOnboardingAndEnterApp = useCompleteOnboardingAndEnterApp();
 
   const onLogin = async () => {
     setIsLoading(true);
@@ -48,7 +48,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
       setError(errorCode);
       setIsLoading(false);
     }
-    completeOnboarding();
+    completeOnboardingAndEnterApp();
   };
 
   const onResendCode = async () => {

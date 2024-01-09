@@ -31,7 +31,7 @@ export const useOnboardingNavigationFlow = (
   utilizeThisHookInstanceForSessionCounting = false,
 ) => {
   const navigation = useNavigation<RootNavigationProps>();
-  const {enable_extended_onboarding} = useRemoteConfig();
+
   const {onboarded: loginOnboardingCompleted} = useAppState();
 
   const shouldShowTravelTokenOnboarding = useShouldShowTravelTokenOnboarding();
@@ -47,17 +47,13 @@ export const useOnboardingNavigationFlow = (
     useShouldShowNotificationPermissionScreen();
 
   const getNextOnboardingScreen = useCallback(
-    (comingFromScreenName?: keyof RootStackParamList): ScreenProps => {
+    (
+      comingFromScreenName?: keyof RootStackParamList,
+      assumeLoginOnboardingCompleted?: Boolean,
+    ): ScreenProps => {
       let screenName: keyof RootStackParamList | undefined = undefined;
       let params = undefined;
-      if (!loginOnboardingCompleted) {
-        if (enable_extended_onboarding) {
-          screenName = 'Root_OnboardingStack';
-        } else {
-          screenName = 'Root_LoginOptionsScreen';
-          params = {};
-        }
-      } else {
+      if (loginOnboardingCompleted || assumeLoginOnboardingCompleted) {
         const orderedOnboardingScreensAfterLogin: {
           shouldShow: boolean;
           screenName: keyof RootStackParamList;
@@ -98,7 +94,6 @@ export const useOnboardingNavigationFlow = (
     },
     [
       loginOnboardingCompleted,
-      enable_extended_onboarding,
       shouldShowTravelTokenOnboarding,
       shouldShowLocationOnboarding,
       shouldShowShareTravelHabitsScreen,
@@ -145,6 +140,7 @@ export const useOnboardingNavigationFlow = (
 
   return {
     nextOnboardingScreen,
+    getNextOnboardingScreen,
     goToScreen,
     continueFromOnboardingScreen,
   };
