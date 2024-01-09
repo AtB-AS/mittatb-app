@@ -16,7 +16,7 @@ enum storeKey {
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
   notificationPermissionOnboarding = '@ATB_notification_permission_onboarded',
   locationWhenInUsePermissionOnboarded = '@ATB_location_when_in_use_permission_onboarded',
-  shareTravelHabitsOnboarded = '@ATB_share_travel_habits_onboarded_v2',
+  shareTravelHabitsOnboarded = '@ATB_share_travel_habits_onboarded',
 }
 type AppState = {
   isLoading: boolean;
