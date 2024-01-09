@@ -17,6 +17,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTimeContextState} from '@atb/time';
+import {TransitionPresets} from '@react-navigation/stack';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -46,7 +47,10 @@ export const Root_LoginActiveFareContractWarningScreen = ({
         showGoBack: true,
       });
     } else {
-      navigation.navigate('Root_LoginPhoneInputScreen', {afterLogin});
+      navigation.navigate('Root_LoginPhoneInputScreen', {
+        afterLogin,
+        transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
+      });
     }
   };
 
