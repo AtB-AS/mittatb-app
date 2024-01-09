@@ -57,12 +57,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       }
     >
       <View ref={focusRef} accessible>
-        <ThemeText
-          accessible
-          type="heading--big"
-          color={themeColor}
-          style={styles.header}
-        >
+        <ThemeText type="heading--big" color={themeColor} style={styles.header}>
           {t(AnonymousPurchasesTexts.consequences.title)}
         </ThemeText>
       </View>
