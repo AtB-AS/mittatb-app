@@ -60,9 +60,9 @@ type BeaconsContextState = {
   getPrivacyTermsUrl: () => Promise<string>;
 };
 
-const defaultState = {
+const defaultState: BeaconsContextState = {
   isBeaconsSupported: false,
-  kettleInfo: undefined,
+  beaconsInfo: undefined,
   getPrivacyDashboardUrl: () => {
     return new Promise<string>(() => {});
   },
