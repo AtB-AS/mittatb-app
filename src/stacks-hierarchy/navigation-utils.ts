@@ -1,10 +1,17 @@
-import {TransitionPresetParam} from '@atb/stacks-hierarchy/navigation-types';
-import {TransitionPreset, TransitionPresets} from '@react-navigation/stack';
+import {CustomScreenParams} from '@atb/stacks-hierarchy/navigation-types';
+import {
+  StackNavigationOptions,
+  TransitionPreset,
+} from '@react-navigation/stack';
 
-export const transitionOptions: (
-  defaultTransitionPreset?: TransitionPreset,
-) => (props: {route: {params?: TransitionPresetParam}}) => TransitionPreset =
-  (defaultTransitionPreset = TransitionPresets.SlideFromRightIOS) =>
+export const screenOptions: (
+  defaultTransitionPreset: TransitionPreset,
+  stackNavigationOptions?: StackNavigationOptions,
+) => (props: {
+  route: {params?: CustomScreenParams};
+}) => StackNavigationOptions =
+  (defaultTransitionPreset, stackNavigationOptions) =>
   ({route}) => ({
+    ...stackNavigationOptions,
     ...(route.params?.transitionPreset ?? defaultTransitionPreset),
   });

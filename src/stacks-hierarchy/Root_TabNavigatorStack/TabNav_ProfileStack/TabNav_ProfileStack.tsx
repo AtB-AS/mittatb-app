@@ -27,7 +27,7 @@ import {Profile_SortFavoritesScreen} from './Profile_SortFavoritesScreen';
 import {Profile_EditProfileScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_EditProfileScreen';
 import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 import {Profile_NotificationsScreen} from './Profile_NotificationsScreen';
-import {transitionOptions} from '@atb/stacks-hierarchy/navigation-utils';
+import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -35,140 +35,110 @@ export const TabNav_ProfileStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="Profile_RootScreen"
-      screenOptions={{
-        ...TransitionPresets.SlideFromRightIOS,
+      screenOptions={screenOptions(TransitionPresets.SlideFromRightIOS, {
         headerShown: false,
-      }}
+      })}
     >
-      <Stack.Screen
-        name="Profile_RootScreen"
-        component={Profile_RootScreen}
-        options={transitionOptions()}
-      />
+      <Stack.Screen name="Profile_RootScreen" component={Profile_RootScreen} />
       <Stack.Screen
         name="Profile_TicketHistoryScreen"
         component={Profile_TicketHistoryScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_PaymentOptionsScreen"
         component={Profile_PaymentOptionsScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_DeleteProfileScreen"
         component={Profile_DeleteProfileScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_EditProfileScreen"
         component={Profile_EditProfileScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_FavoriteListScreen"
         component={Profile_FavoriteListScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_SortFavoritesScreen"
         component={Profile_SortFavoritesScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_FavoriteDeparturesScreen"
         component={Profile_FavoriteDeparturesScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_SelectStartScreenScreen"
         component={Profile_SelectStartScreenScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_TravelTokenScreen"
         component={Profile_TravelTokenScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_SelectTravelTokenScreen"
         component={Profile_SelectTravelTokenScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_AppearanceScreen"
         component={Profile_AppearanceScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_LanguageScreen"
         component={Profile_LanguageScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_PrivacyScreen"
         component={Profile_PrivacyScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_NotificationsScreen"
         component={Profile_NotificationsScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_DefaultUserProfileScreen"
         component={Profile_DefaultUserProfileScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_EnrollmentScreen"
         component={Profile_EnrollmentScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_DesignSystemScreen"
         component={Profile_DesignSystemScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_FareContractsScreen"
         component={Profile_FareContractsScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_DebugInfoScreen"
         component={Profile_DebugInfoScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_TicketingInformationScreen"
         component={Profile_TicketingInformationScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_TermsInformationScreen"
         component={Profile_TermsInformationScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_TicketInspectionInformationScreen"
         component={Profile_TicketInspectionInformationScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_GenericWebsiteInformationScreen"
         component={Profile_GenericWebsiteInformationScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_NearbyStopPlacesScreen"
         component={Profile_NearbyStopPlacesScreen}
-        options={transitionOptions()}
       />
       <Stack.Screen
         name="Profile_PlaceScreen"
         component={Profile_PlaceScreen}
-        options={transitionOptions()}
       />
     </Stack.Navigator>
   );

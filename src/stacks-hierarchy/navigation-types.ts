@@ -173,11 +173,9 @@ export type RootStackProps = RootStackScreenProps<keyof RootStackParamList>;
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
 
-export type TransitionPresetParam = {
+export type CustomScreenParams = {
   transitionPreset?: TransitionPreset;
 };
 
-export type ScreenParams<T extends Record<string, any> | undefined> =
-  T extends undefined
-    ? undefined | Required<TransitionPresetParam>
-    : T & TransitionPresetParam;
+export type ScreenParams<T extends Record<string, any> | undefined> = T &
+  (CustomScreenParams | undefined);
