@@ -31,7 +31,7 @@ export const useShouldShowShareTravelHabitsScreen = (
 
   const shouldShowShareTravelHabitsScreen =
     enabled &&
-    !kettleInfo?.isBeaconsOnboarded &&
+    !kettleInfo?.isConsentGranted &&
     sessionCount > runAfterSessionsCount;
 
   const updateCount = useCallback(

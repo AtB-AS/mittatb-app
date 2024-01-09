@@ -12,7 +12,7 @@ import {Kettle} from 'react-native-kettle-module';
 import {NativeModules, Platform} from 'react-native';
 import {
   BEACONS_CONSENTS,
-  allowedPermissionForKettle,
+  allowedPermissionForBeacons,
   requestAndroidBeaconPermissions,
 } from './permissions';
 import {useBeaconsMessages} from './use-beacons-messages';
@@ -23,7 +23,7 @@ type KettleInfo = {
   isKettleStarted: boolean;
   kettleIdentifier: string | null;
   kettleConsents: Record<string, boolean> | null;
-  isBeaconsOnboarded: boolean;
+  isConsentGranted: boolean;
 };
 
 type BeaconsContextState = {
@@ -76,7 +76,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const initializeKettleSDK = useCallback(async () => {
     if (!isInitializedRef.current) {
-      const permissions = await allowedPermissionForKettle();
+      const permissions = await allowedPermissionForBeacons();
       if (permissions.length > 0) {
         await NativeModules.KettleSDKExtension.initializeKettleSDK();
         isInitializedRef.current = true;
@@ -121,7 +121,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
     if (isInitializedRef.current) {
-      const permissions = await allowedPermissionForKettle();
+      const permissions = await allowedPermissionForBeacons();
       Kettle.stop(permissions);
       Kettle.revoke(BEACONS_CONSENTS);
       await storage.set(storeKey.beaconsConsent, 'false');
@@ -147,7 +147,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         await initializeKettleSDK();
       }
 
-      const permissions = await allowedPermissionForKettle();
+      const permissions = await allowedPermissionForBeacons();
       if (consentGranted && permissions && !kettleInfo?.isKettleStarted) {
         Kettle.start(permissions);
         await updateKettleInfo();
@@ -176,14 +176,14 @@ const getKettleInfo = async (): Promise<KettleInfo> => {
   const status = await Kettle.isStarted();
   const identifier = await Kettle.getIdentifier();
   const consents = await Kettle.getGrantedConsents();
-  const consentGranted =
+  const isConsentGranted =
     parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
   return {
     isKettleStarted: status,
     kettleIdentifier: identifier,
     kettleConsents: consents,
-    isBeaconsOnboarded: consentGranted,
+    isConsentGranted,
   };
 };
 

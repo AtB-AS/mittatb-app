@@ -61,7 +61,7 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={kettleInfo?.isBeaconsOnboarded}
+                value={kettleInfo?.isConsentGranted}
                 onValueChange={async (checked) => {
                   if (checked) {
                     await onboardForBeacons();

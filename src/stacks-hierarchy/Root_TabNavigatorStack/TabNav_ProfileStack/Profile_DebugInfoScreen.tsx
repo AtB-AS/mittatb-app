@@ -636,7 +636,7 @@ export const Profile_DebugInfoScreen = () => {
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
                     }}
                     disabled={
-                      kettleInfo?.isBeaconsOnboarded &&
+                      kettleInfo?.isConsentGranted &&
                       !!kettleInfo?.kettleConsents
                     }
                     style={style.button}
@@ -648,7 +648,7 @@ export const Profile_DebugInfoScreen = () => {
                       await revokeBeacons();
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!kettleInfo?.isConsentGranted}
                     text="Revoke"
                   />
                   <Button
@@ -657,7 +657,7 @@ export const Profile_DebugInfoScreen = () => {
                       await deleteCollectedData();
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!kettleInfo?.isConsentGranted}
                     text="Delete Collected Data"
                   />
                   <Button
@@ -669,7 +669,7 @@ export const Profile_DebugInfoScreen = () => {
                         Linking.openURL(privacyDashboardUrl);
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!kettleInfo?.isConsentGranted}
                     text="Open Privacy Dashboard"
                   />
                   <Button
@@ -679,7 +679,7 @@ export const Profile_DebugInfoScreen = () => {
                       privacyTermsUrl && Linking.openURL(privacyTermsUrl);
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!kettleInfo?.isConsentGranted}
                     text="Open Privacy Terms"
                   />
                 </View>
