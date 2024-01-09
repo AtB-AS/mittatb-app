@@ -27,7 +27,7 @@ export const Announcements = ({style}: Props) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const ruleVariables = {
-    isBeaconsOnboarded: beaconsInfo?.isConsentGranted ?? false,
+    isBeaconsConsentGranted: beaconsInfo?.isConsentGranted ?? false,
     shareTravelHabitsOnboarded,
   };
 
