@@ -20,9 +20,33 @@ import {storage} from '@atb/storage';
 import {parseBoolean} from '@atb/utils/parse-boolean';
 
 type KettleInfo = {
+  /**
+   * If the SDK is currently running.
+   * https://developer.kogenta.com/docs/kettle/react-native/usage#retrieve-sdk-status
+   */
   isKettleStarted: boolean;
+
+  /**
+   * The internal Kettle ID for the user.
+   * https://developer.kogenta.com/docs/kettle/react-native/usage#kettle-identifier
+   */
   kettleIdentifier: string | null;
+
+  /**
+   * Identifiers for the users granted consents. See `KettleConsents` for
+   * definitions.
+   * https://developer.kogenta.com/docs/kettle/react-native/usage#consents
+   */
   kettleConsents: Record<string, boolean> | null;
+
+  /**
+   * Whether or not the user have granted the app permissions to one of the
+   * permission prompts. (At least bluetooth permissions)
+   *
+   * This is "our" state to know if the user have enabled beacons, not based on
+   * data from Kettle. This is because we don't want to start he SDK if the user
+   * have not accepted any prompts about data collection.
+   */
   isConsentGranted: boolean;
 };
 
