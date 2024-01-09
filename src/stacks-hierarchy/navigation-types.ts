@@ -177,5 +177,9 @@ export type CustomScreenParams = {
   transitionPreset?: TransitionPreset;
 };
 
+/**
+ * This type is meant to be used on every screen params in a stack param list, and
+ * it makes it possible to specify transition when navigating to another screen.
+ */
 export type ScreenParams<T extends Record<string, any> | undefined> = T &
   (CustomScreenParams | undefined);
