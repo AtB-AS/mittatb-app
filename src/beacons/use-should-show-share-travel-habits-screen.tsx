@@ -9,7 +9,7 @@ import {useAppState} from '@atb/AppContext';
 import {useBeaconsState} from './BeaconsContext';
 
 export const shareTravelHabitsSessionCountKey =
-  '@ATB_share_travel_habits_session_count';
+  '@ATB_share_travel_habits_session_count_v2';
 
 // note: only one instance of this hook should be used to actually count the sessions
 export const useShouldShowShareTravelHabitsScreen = (

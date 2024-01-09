@@ -47,6 +47,7 @@ try {
 
 const getStories = () => {
   return {
+    "./src/storybook/stories/Button.stories.js": require("../src/storybook/stories/Button.stories.js"),
     "./src/storybook/stories/MessageInfoBox.stories.js": require("../src/storybook/stories/MessageInfoBox.stories.js"),
     "./src/storybook/stories/MessageInfoText.stories.js": require("../src/storybook/stories/MessageInfoText.stories.js"),
     "./src/storybook/stories/ThemeText.stories.js": require("../src/storybook/stories/ThemeText.stories.js"),

@@ -9,7 +9,7 @@ const LoginTexts = {
       'Select login method',
       'Vel innloggingsmetode',
     ),
-    termsOfUse: _('Vilkår for bruk', 'Or log in with', 'Vilkår for bruk'),
+    termsOfUse: _('Vilkår for bruk', 'Terms of use', 'Vilkår for bruk'),
     options: {
       phoneAndCode: {
         label: _(

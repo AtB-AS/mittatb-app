@@ -48,6 +48,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {getShouldShowLiveVehicle} from '@atb/travel-details-screens/utils';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -91,8 +92,10 @@ export const DepartureDetailsScreenComponent = ({
   const realtimeMapEnabled = useRealtimeMapEnabled();
   const screenReaderEnabled = useIsScreenReaderEnabled();
 
-  const shouldShowLive =
-    !estimatedCallsWithMetadata.find((a) => !a.realtime) && realtimeMapEnabled;
+  const shouldShowLive = getShouldShowLiveVehicle(
+    estimatedCallsWithMetadata,
+    realtimeMapEnabled,
+  );
 
   const {vehiclePositions} = useGetServiceJourneyVehicles(
     shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
