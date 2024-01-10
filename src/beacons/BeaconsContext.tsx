@@ -32,7 +32,7 @@ type BeaconsContextState = {
   kettleInfo?: KettleInfo;
   onboardForBeacons: () => Promise<boolean>;
   revokeBeacons: () => Promise<void>;
-  deleteCollectedData: () => Promise<boolean | undefined>;
+  deleteCollectedData: () => Promise<void>;
   getPrivacyDashboardUrl: () => Promise<string>;
   getPrivacyTermsUrl: () => Promise<string>;
 };
@@ -55,9 +55,7 @@ const defaultState = {
     return new Promise<void>(() => {});
   },
   deleteCollectedData: () => {
-    return new Promise<boolean>(() => {
-      return false;
-    });
+    return new Promise<void>(() => {});
   },
 };
 
@@ -135,15 +133,9 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
     if (isInitializedRef.current) {
-      const deleteOK = await Kettle.deleteCollectedData()
-        .then(() => {
-          return true;
-        })
-        .catch((error) => {
-          Bugsnag.notify(error);
-          return false;
-        });
-      return deleteOK;
+      await Kettle.deleteCollectedData().catch((error) => {
+        Bugsnag.notify(error);
+      });
     }
   }, [isBeaconsSupported]);
 
