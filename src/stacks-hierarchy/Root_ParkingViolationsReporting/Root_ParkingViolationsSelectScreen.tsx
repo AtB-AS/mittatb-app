@@ -20,7 +20,7 @@ export type SelectViolationScreenProps =
 
 const ICON_SIZE = 50;
 
-export const Root_ParkingViolationsSelect = ({
+export const Root_ParkingViolationsSelectScreen = ({
   navigation,
 }: SelectViolationScreenProps) => {
   const style = useStyles();

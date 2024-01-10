@@ -12,7 +12,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 export type PhotoScreenProps =
   RootStackScreenProps<'Root_ParkingViolationsPhotoScreen'>;
 
-export const Root_ParkingViolationsPhoto = ({
+export const Root_ParkingViolationsPhotoScreen = ({
   navigation,
   route: {params},
 }: PhotoScreenProps) => {

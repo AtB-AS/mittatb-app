@@ -21,7 +21,7 @@ import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
 
-export const Root_ParkingViolationsQr = ({
+export const Root_ParkingViolationsQrScreen = ({
   navigation,
   route: {params},
 }: QrScreenProps) => {
