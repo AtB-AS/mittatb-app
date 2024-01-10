@@ -120,8 +120,8 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    if (isInitializedRef.current) {
-      const permissions = await allowedPermissionForKettle();
+    const permissions = await allowedPermissionForKettle();
+    if (isInitializedRef.current && permissions.length > 0) {
       Kettle.stop(permissions);
       Kettle.revoke(BEACONS_CONSENTS);
       await storage.set(storeKey.beaconsConsent, 'false');
@@ -138,7 +138,20 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     (async function () {
-      if (!isBeaconsSupported) return;
+      if (!isBeaconsSupported) {
+        // If beacons became unsupported, stop the SDK if it was initialized
+        // this case can happen when the `enable_beacons` remote config is set to false
+        // when the app is already onboarded for beacons.
+        if (isInitializedRef.current && kettleInfo?.isKettleStarted) {
+          const permissions = await allowedPermissionForKettle();
+          if (permissions.length > 0) {
+            Kettle.stop(permissions);
+            await updateKettleInfo();
+          }
+        }
+        // If beacons are not supported, stop the SDK if it was initialized
+        return;
+      }
       const consentGranted =
         parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
@@ -148,7 +161,11 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       }
 
       const permissions = await allowedPermissionForKettle();
-      if (consentGranted && permissions && !kettleInfo?.isKettleStarted) {
+      if (
+        consentGranted &&
+        permissions.length > 0 &&
+        !kettleInfo?.isKettleStarted
+      ) {
         Kettle.start(permissions);
         await updateKettleInfo();
       }
