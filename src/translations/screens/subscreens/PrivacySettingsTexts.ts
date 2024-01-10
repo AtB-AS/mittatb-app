@@ -68,9 +68,9 @@ const PrivacySettingsTexts = {
   },
   permissionsAlert: {
     title: _(
-      `“AtB” vil bruke Bluetooth, posisjonen din også appen ikke er åpen, bevegelses- og treningsaktivitet`,
+      `“AtB” vil bruke Bluetooth, posisjonen din også når appen ikke er åpen, bevegelses- og treningsaktivitet`,
       `“AtB” wants to use Bluetooth, your location when the app is closed, and motion and fitness activity`,
-      `“AtB” vil bruke Bluetooth, posisjonen din også appen ikkje er open, bevegelses- og treningsaktivitet`,
+      `“AtB” vil bruke Bluetooth, posisjonen din også når appen ikkje er open, bevegelses- og treningsaktivitet`,
     ),
     message: _(
       'Dette vil gi oss verdifull læring om hvor og hvordan kunder reiser. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.',
