@@ -66,6 +66,19 @@ const PrivacySettingsTexts = {
       ),
     },
   },
+  permissionsAlert: {
+    title: _(
+      `“AtB” vil bruke Bluetooth, posisjonen din også appen ikke er åpen, bevegelses- og treningsaktivitet`,
+      `“AtB” wants to use Bluetooth, your location when the app is closed, and motion and fitness activity`,
+      `“AtB” vil bruke Bluetooth, posisjonen din også appen ikkje er open, bevegelses- og treningsaktivitet`,
+    ),
+    message: _(
+      'Dette vil gi oss verdifull læring om hvor og hvordan kunder reiser. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.',
+      'This will give us valuable insights into where and how customers travel. For example, we can see if customers choose to travel by bike, walk or drive instead of taking the bus. It will help us improve our improve our services to make them better for you.',
+      'Dette vil gi oss verdifull læring om kor og korleis kundar reiser. Vi kan for eksempel sjå om kundar vel å sykle, gå eller køyre bil framfor å busse. Det vil hjelpe oss til å kunne forbetre reisetilbodet ditt.',
+    ),
+    action: _('Gå til innstillinger', 'Open settings', 'Gå til innstillingar'),
+  },
 };
 
 export default PrivacySettingsTexts;
