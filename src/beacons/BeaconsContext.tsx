@@ -131,14 +131,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    if (isInitializedRef.current) {
-      try {
-        await Kettle.deleteCollectedData();
-        return Promise.resolve();
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    }
+    if (isInitializedRef.current) return Kettle.deleteCollectedData();
   }, [isBeaconsSupported]);
 
   useEffect(() => {
