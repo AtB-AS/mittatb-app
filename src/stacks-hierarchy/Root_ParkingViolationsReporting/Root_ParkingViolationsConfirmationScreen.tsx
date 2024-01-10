@@ -11,9 +11,9 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useAnalytics} from '@atb/analytics';
 
 export type ConfirmationScreenProps =
-  RootStackScreenProps<'Root_ParkingViolationsConfirmation'>;
+  RootStackScreenProps<'Root_ParkingViolationsConfirmationScreen'>;
 
-export const Root_ParkingViolationsConfirmation = ({
+export const Root_ParkingViolationsConfirmationScreen = ({
   navigation,
   route: {params},
 }: ConfirmationScreenProps) => {
