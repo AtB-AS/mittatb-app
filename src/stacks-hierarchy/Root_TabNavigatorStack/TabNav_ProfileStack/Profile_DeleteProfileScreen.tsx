@@ -28,13 +28,12 @@ export const Profile_DeleteProfileScreen = () => {
     filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow).length > 0;
 
   const [deleteError, setDeleteError] = useState<boolean>(false);
-  const {deleteCollectedData, revokeBeacons} = useBeaconsState();
+  const {deleteCollectedData} = useBeaconsState();
 
   const handleDeleteProfile = async () => {
     try {
       const deleteOK = await deleteProfile();
       if (deleteOK) {
-        await revokeBeacons();
         await deleteCollectedData();
         await signOut();
       } else {
