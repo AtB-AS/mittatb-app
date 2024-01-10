@@ -137,7 +137,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
                   'Mobility',
                   'Report parking violation clicked',
                 );
-                navigation.navigate('Root_ParkingViolationsSelect');
+                navigation.navigate('Root_ParkingViolationsSelectScreen');
               }}
             />
           );

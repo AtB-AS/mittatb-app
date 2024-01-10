@@ -26,7 +26,7 @@ export const useChatIcon = (
     openBottomSheet(() => (
       <ContactSheet
         onReportParkingViolation={() =>
-          navigation.navigate('Root_ParkingViolationsSelect')
+          navigation.navigate('Root_ParkingViolationsSelectScreen')
         }
       />
     ));

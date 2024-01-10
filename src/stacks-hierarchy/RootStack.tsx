@@ -392,19 +392,19 @@ export const RootStack = () => {
                 component={Root_AddPaymentMethodScreen}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsSelect"
+                name="Root_ParkingViolationsSelectScreen"
                 component={Root_ParkingViolationsSelect}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsPhoto"
+                name="Root_ParkingViolationsPhotoScreen"
                 component={Root_ParkingViolationsPhoto}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsQr"
+                name="Root_ParkingViolationsQrScreen"
                 component={Root_ParkingViolationsQr}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsConfirmation"
+                name="Root_ParkingViolationsConfirmationScreen"
                 component={Root_ParkingViolationsConfirmation}
               />
               <Stack.Screen

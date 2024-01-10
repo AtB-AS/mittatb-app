@@ -5,14 +5,14 @@ import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
 import {DepartureDetailsScreenParams} from '@atb/travel-details-screens/DepartureDetailsScreenComponent';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
-import {ScreenParams} from "@atb/stacks-hierarchy/navigation-types";
+import {StackParams} from "@atb/stacks-hierarchy/navigation-types";
 
-export type DeparturesStackParams = {
-  Departures_DepartureDetailsScreen: ScreenParams<DepartureDetailsScreenParams>;
-  Departures_TravelDetailsMapScreen: ScreenParams<TravelDetailsMapScreenParams>;
-  Departures_PlaceScreen: ScreenParams<PlaceScreenParams>;
-  Departures_NearbyStopPlacesScreen: ScreenParams<NearbyStopPlacesScreenParams>;
-};
+export type DeparturesStackParams = StackParams<{
+  Departures_DepartureDetailsScreen: DepartureDetailsScreenParams;
+  Departures_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
+  Departures_PlaceScreen: PlaceScreenParams;
+  Departures_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
+}>;
 
 export type RootDeparturesScreenProps =
   TabNavigatorScreenProps<'TabNav_DeparturesStack'>;

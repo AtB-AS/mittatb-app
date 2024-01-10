@@ -16,7 +16,7 @@ import {useParkingViolations} from '@atb/parking-violations-reporting';
 import {useGeolocationState} from '@atb/GeolocationContext';
 
 export type SelectViolationScreenProps =
-  RootStackScreenProps<'Root_ParkingViolationsSelect'>;
+  RootStackScreenProps<'Root_ParkingViolationsSelectScreen'>;
 
 const ICON_SIZE = 50;
 
@@ -45,7 +45,7 @@ export const Root_ParkingViolationsSelect = ({
         <Button
           disabled={!preReqs}
           onPress={() => {
-            navigation.navigate('Root_ParkingViolationsPhoto', {
+            navigation.navigate('Root_ParkingViolationsPhotoScreen', {
               selectedViolations,
             });
           }}
