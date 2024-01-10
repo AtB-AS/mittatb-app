@@ -13,6 +13,7 @@ export const Root_TermsInformationScreen = () => {
     <InformationScreenComponent
       informations={data as InformationElement[]}
       title={t(InformationTexts.terms.title)}
+      leftButton={{type: 'close'}}
     />
   );
 };

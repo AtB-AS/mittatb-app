@@ -9,7 +9,7 @@ import {useAppState} from '@atb/AppContext';
 import {useBeaconsState} from './BeaconsContext';
 
 export const shareTravelHabitsSessionCountKey =
-  '@ATB_share_travel_habits_session_count';
+  '@ATB_share_travel_habits_session_count_v2';
 
 // note: only one instance of this hook should be used to actually count the sessions
 export const useShouldShowShareTravelHabitsScreen = (
@@ -21,7 +21,7 @@ export const useShouldShowShareTravelHabitsScreen = (
   const sessionCountRef = useRef(0);
   const [sessionCount, setSessionCount] = useState(0);
   const isInitializedRef = useRef(false);
-  const {isBeaconsSupported, kettleInfo} = useBeaconsState();
+  const {isBeaconsSupported, beaconsInfo} = useBeaconsState();
 
   const appStatus = useAppStateStatus();
 
@@ -31,7 +31,7 @@ export const useShouldShowShareTravelHabitsScreen = (
 
   const shouldShowShareTravelHabitsScreen =
     enabled &&
-    !kettleInfo?.isBeaconsOnboarded &&
+    !beaconsInfo?.isConsentGranted &&
     sessionCount > runAfterSessionsCount;
 
   const updateCount = useCallback(

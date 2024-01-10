@@ -1,6 +1,6 @@
 import {Dashboard_RootScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/Dashboard_RootScreen';
 import {Dashboard_TripSearchScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/Dashboard_TripSearchScreen';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {DashboardStackParams} from './navigation-types';
 import {Dashboard_NearbyStopPlacesScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_NearbyStopPlacesScreen';
@@ -10,6 +10,7 @@ import {Dashboard_PlaceScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStac
 import {Dashboard_FavoriteDeparturesScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_FavoriteDeparturesScreen';
 import {Dashboard_TripDetailsScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripDetailsScreen';
 import {Dashboard_JourneyDatePickerScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_JourneyDatePickerScreen';
+import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 
 const Stack = createStackNavigator<DashboardStackParams>();
 
@@ -17,7 +18,9 @@ export const TabNav_DashboardStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="Dashboard_RootScreen"
-      screenOptions={{headerShown: false}}
+      screenOptions={screenOptions(TransitionPresets.SlideFromRightIOS, {
+        headerShown: false,
+      })}
     >
       <Stack.Screen
         name="Dashboard_RootScreen"
@@ -26,30 +29,18 @@ export const TabNav_DashboardStack = () => {
       <Stack.Screen
         name="Dashboard_TripSearchScreen"
         component={Dashboard_TripSearchScreen}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
       />
       <Stack.Screen
         name="Dashboard_TripDetailsScreen"
         component={Dashboard_TripDetailsScreen}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
       />
       <Stack.Screen
         name="Dashboard_DepartureDetailsScreen"
         component={Dashboard_DepartureDetailsScreen}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
       />
       <Stack.Screen
         name="Dashboard_TravelDetailsMapScreen"
         component={Dashboard_TravelDetailsMapScreen}
-        options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}
       />
       <Stack.Screen
         name="Dashboard_JourneyDatePickerScreen"

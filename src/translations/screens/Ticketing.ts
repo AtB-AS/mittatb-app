@@ -47,8 +47,7 @@ const TicketingTexts = {
     },
   },
   activeFareProductsAndReservationsTab: {
-    label: _('Aktive', 'Active', 'Aktive'),
-    a11yLabel: _('Aktive billetter', 'Active tickets', 'Aktive billettar'),
+    label: _('Mine billetter', 'My tickets', 'Mine billettar'),
     noActiveTicketsTitle: _(
       'Ingen aktive billetter',
       'No active tickets',

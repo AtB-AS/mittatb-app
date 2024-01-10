@@ -1,6 +1,7 @@
 import {
   dateWithReplacedTime,
-  iso8601DurationToSeconds, minutesBetween,
+  iso8601DurationToSeconds,
+  minutesBetween,
   secondsBetween,
 } from '@atb/utils/date';
 import {Leg, TripPattern} from '@atb/api/types/trips';
@@ -17,7 +18,6 @@ import {
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {dictionary, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
-import {EstimatedCallWithMetadata} from "@atb/travel-details-screens/use-departure-data";
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -430,14 +430,14 @@ export function getIsTooLateToBookTripPattern(
 }
 
 export const getShouldShowLiveVehicle = (
-    estimatedCallsWithMetadata: EstimatedCallWithMetadata[],
-    realtimeMapEnabled: boolean,
+  estimatedCalls: Pick<EstimatedCall, 'aimedDepartureTime'>[],
+  realtimeMapEnabled: boolean,
 ): boolean => {
   if (!realtimeMapEnabled) return false;
 
   const aimedStartTime: string | undefined =
-      estimatedCallsWithMetadata[0]?.aimedDepartureTime;
+    estimatedCalls[0]?.aimedDepartureTime;
   return aimedStartTime
-      ? minutesBetween(aimedStartTime, new Date()) > -10
-      : false;
+    ? minutesBetween(aimedStartTime, new Date()) > -10
+    : false;
 };

@@ -20,7 +20,7 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
   const {
-    kettleInfo,
+    beaconsInfo,
     onboardForBeacons,
     revokeBeacons,
     deleteCollectedData,
@@ -61,7 +61,7 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={kettleInfo?.isBeaconsOnboarded}
+                value={beaconsInfo?.isConsentGranted}
                 onValueChange={async (checked) => {
                   if (checked) {
                     await onboardForBeacons();

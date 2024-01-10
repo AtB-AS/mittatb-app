@@ -36,7 +36,7 @@ import {
   LinkSectionItem,
   Section,
 } from '@atb/components/sections';
-import {RootStackParamList} from '@atb/stacks-hierarchy';
+
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
@@ -44,6 +44,7 @@ import {useTimeContextState} from '@atb/time';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
+import {TransitionPresets} from '@react-navigation/stack';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -166,15 +167,19 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 ProfileTexts.sections.account.linkSectionItems.login.label,
               )}
               onPress={() => {
-                let screen: keyof RootStackParamList =
-                  'Root_LoginPhoneInputScreen';
                 if (hasActiveFareContracts) {
-                  screen = 'Root_LoginActiveFareContractWarningScreen';
+                  navigation.navigate(
+                    'Root_LoginActiveFareContractWarningScreen',
+                    {},
+                  );
                 } else if (enable_vipps_login) {
-                  screen = 'Root_LoginOptionsScreen';
+                  navigation.navigate('Root_LoginOptionsScreen', {
+                    showGoBack: true,
+                    transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
+                  });
+                } else {
+                  navigation.navigate('Root_LoginPhoneInputScreen', {});
                 }
-
-                return navigation.navigate(screen, {});
               }}
               icon={<ThemeIcon svg={LogIn} />}
               testID="loginButton"

@@ -1,4 +1,4 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {
   DeparturesStackParams,
@@ -8,6 +8,7 @@ import {Departures_NearbyStopPlacesScreen} from './Departures_NearbyStopPlacesSc
 import {Departures_DepartureDetailsScreen} from './Departures_DepartureDetailsScreen';
 import {Departures_TravelDetailsMapScreen} from './Departures_TravelDetailsMapScreen';
 import {Departures_PlaceScreen} from './Departures_PlaceScreen';
+import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 
 const Stack = createStackNavigator<DeparturesStackParams>();
 
@@ -15,7 +16,9 @@ export const TabNav_DeparturesStack = ({}: RootDeparturesScreenProps) => {
   return (
     <Stack.Navigator
       initialRouteName="Departures_NearbyStopPlacesScreen"
-      screenOptions={{headerShown: false}}
+      screenOptions={screenOptions(TransitionPresets.SlideFromRightIOS, {
+        headerShown: false,
+      })}
     >
       <Stack.Screen
         name="Departures_NearbyStopPlacesScreen"
