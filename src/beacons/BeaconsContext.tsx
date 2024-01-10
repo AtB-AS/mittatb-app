@@ -32,7 +32,7 @@ type BeaconsContextState = {
   kettleInfo?: KettleInfo;
   onboardForBeacons: () => Promise<boolean>;
   revokeBeacons: () => Promise<void>;
-  deleteCollectedData: () => Promise<void>;
+  deleteCollectedData: () => void;
   getPrivacyDashboardUrl: () => Promise<string>;
   getPrivacyTermsUrl: () => Promise<string>;
 };
