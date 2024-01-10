@@ -31,15 +31,11 @@ export const Profile_DeleteProfileScreen = () => {
   const {deleteCollectedData} = useBeaconsState();
 
   const handleDeleteProfile = async () => {
-    try {
-      const deleteOK = await deleteProfile();
-      if (deleteOK) {
-        await deleteCollectedData();
-        await signOut();
-      } else {
-        setDeleteError(true);
-      }
-    } catch (error) {
+    const isProfileDeleted = await deleteProfile();
+    if (isProfileDeleted) {
+      await deleteCollectedData();
+      await signOut();
+    } else {
       setDeleteError(true);
     }
   };
