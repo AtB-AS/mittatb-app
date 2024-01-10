@@ -18,6 +18,7 @@ import {
 import {useBeaconsMessages} from './use-beacons-messages';
 import {storage} from '@atb/storage';
 import {parseBoolean} from '@atb/utils/parse-boolean';
+import Bugsnag from '@bugsnag/react-native';
 
 type KettleInfo = {
   isKettleStarted: boolean;
@@ -31,7 +32,7 @@ type BeaconsContextState = {
   kettleInfo?: KettleInfo;
   onboardForBeacons: () => Promise<boolean>;
   revokeBeacons: () => Promise<void>;
-  deleteCollectedData: () => Promise<void>;
+  deleteCollectedData: () => Promise<boolean | undefined>;
   getPrivacyDashboardUrl: () => Promise<string>;
   getPrivacyTermsUrl: () => Promise<string>;
 };
@@ -54,7 +55,9 @@ const defaultState = {
     return new Promise<void>(() => {});
   },
   deleteCollectedData: () => {
-    return new Promise<void>(() => {});
+    return new Promise<boolean>(() => {
+      return false;
+    });
   },
 };
 
@@ -131,7 +134,17 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
-    if (isInitializedRef.current) return Kettle.deleteCollectedData();
+    if (isInitializedRef.current) {
+      const deleteOK = await Kettle.deleteCollectedData()
+        .then(() => {
+          return true;
+        })
+        .catch((error) => {
+          Bugsnag.notify(error);
+          return false;
+        });
+      return deleteOK;
+    }
   }, [isBeaconsSupported]);
 
   useEffect(() => {
