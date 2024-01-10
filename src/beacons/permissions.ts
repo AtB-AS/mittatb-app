@@ -107,7 +107,7 @@ const checkPermissionStatuses = async () => {
   return permissionStatuses;
 };
 
-export const allowedPermissionForBeacons = async () => {
+export const allowedPermissionsForBeacons = async () => {
   const permissionStatuses = await checkPermissionStatuses();
   const kettleModulesArray = [];
   if (permissionStatuses.bluetooth) {

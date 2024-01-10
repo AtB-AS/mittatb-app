@@ -12,7 +12,7 @@ import {Kettle} from 'react-native-kettle-module';
 import {NativeModules, Platform} from 'react-native';
 import {
   BEACONS_CONSENTS,
-  allowedPermissionForBeacons,
+  allowedPermissionsForBeacons,
   requestAndroidBeaconPermissions,
 } from './permissions';
 import {useBeaconsMessages} from './use-beacons-messages';
@@ -100,7 +100,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const initializeKettleSDK = useCallback(async () => {
     if (!isInitializedRef.current) {
-      const permissions = await allowedPermissionForBeacons();
+      const permissions = await allowedPermissionsForBeacons();
       if (permissions.length > 0) {
         await NativeModules.KettleSDKExtension.initializeKettleSDK();
         isInitializedRef.current = true;
@@ -145,7 +145,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
     if (isInitializedRef.current) {
-      const permissions = await allowedPermissionForBeacons();
+      const permissions = await allowedPermissionsForBeacons();
       Kettle.stop(permissions);
       Kettle.revoke(BEACONS_CONSENTS);
       await storage.set(storeKey.beaconsConsent, 'false');
@@ -171,7 +171,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         await initializeKettleSDK();
       }
 
-      const permissions = await allowedPermissionForBeacons();
+      const permissions = await allowedPermissionsForBeacons();
       if (consentGranted && permissions && !beaconsInfo?.isStarted) {
         Kettle.start(permissions);
         await updateBeaconsInfo();
