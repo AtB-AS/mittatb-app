@@ -174,11 +174,15 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         // this case can happen when the `enable_beacons` remote config is set to false
         // when the app is already onboarded for beacons.
         if (isInitializedRef.current && beaconsInfo?.isStarted) {
-          const permissions = await allowedPermissionsForBeacons();
-          if (permissions.length > 0) {
-            Kettle.stop(permissions);
-            await updateBeaconsInfo();
-          }
+          // Stop all the modules regardless of the permissions
+          // to avoid a bug where the SDK is not stopped properly
+          // when the user revokes the permissions.
+          Kettle.stop([
+            KettleModules.ACTIVITY,
+            KettleModules.BLUETOOTH,
+            KettleModules.LOCATION,
+          ]);
+          await updateBeaconsInfo();
         }
         // If beacons are not supported, stop the SDK if it was initialized
         return;
