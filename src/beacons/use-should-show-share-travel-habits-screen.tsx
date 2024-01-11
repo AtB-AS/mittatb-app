@@ -1,12 +1,12 @@
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import {storage} from '@atb/storage';
 
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 import {useAppState} from '@atb/AppContext';
 
 import {useBeaconsState} from './BeaconsContext';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count_v2';
@@ -22,8 +22,6 @@ export const useShouldShowShareTravelHabitsScreen = (
   const [sessionCount, setSessionCount] = useState(0);
   const isInitializedRef = useRef(false);
   const {isBeaconsSupported, beaconsInfo} = useBeaconsState();
-
-  const appStatus = useAppStateStatus();
 
   const {onboarded, shareTravelHabitsOnboarded} = useAppState();
   const enabled =
@@ -48,22 +46,22 @@ export const useShouldShowShareTravelHabitsScreen = (
     [utilizeThisHookInstanceForSessionCounting],
   );
 
-  useEffect(() => {
-    if (!enabled) return;
-    if (appStatus !== 'active') return;
-
-    if (!isInitializedRef.current) {
-      storage
-        .get(shareTravelHabitsSessionCountKey)
-        .then((countStr) => parseInt(countStr ?? '0'))
-        .then((count) => {
-          isInitializedRef.current = true;
-          updateCount(count);
-        });
-    } else {
-      updateCount(sessionCountRef.current);
-    }
-  }, [enabled, appStatus, updateCount]);
+  useFocusEffect(    
+    useCallback(() => {
+      if (!enabled) return;
+      if (!isInitializedRef.current) {
+        storage
+          .get(shareTravelHabitsSessionCountKey)
+          .then((countStr) => parseInt(countStr ?? '0'))
+          .then((count) => {
+            isInitializedRef.current = true;
+            updateCount(count);
+          });
+      } else {
+        updateCount(sessionCountRef.current);
+      }
+    }, [enabled, updateCount]),
+  );
 
   return shouldShowShareTravelHabitsScreen;
 };
