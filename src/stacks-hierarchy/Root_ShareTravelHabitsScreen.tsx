@@ -31,11 +31,10 @@ export const Root_ShareTravelHabitsScreen = () => {
   // call useFocusEffect to send analytics once when the screen is shown
   useFocusEffect(
     useCallback(() => {
-      const didSeeShareTravelHabitsScreen = analytics.logEvent(
+      analytics.logEvent(
         'Onboarding',
         'didSeeShareTravelHabitsScreen',
       );
-      return () => didSeeShareTravelHabitsScreen;
     }, [analytics]),
   );
 
@@ -44,7 +43,7 @@ export const Root_ShareTravelHabitsScreen = () => {
 
     const permissions = await checkPermissionStatuses(); // get given permissions status
     analytics.logEvent('Onboarding', 'beaconsPermissionAnswers', {
-      beacons: permissions.bluetooth,
+      bluetooth: permissions.bluetooth,
       locationAlways: permissions.locationAlways,
       motion: permissions.motion,
     });
