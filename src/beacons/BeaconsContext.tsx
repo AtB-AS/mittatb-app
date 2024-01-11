@@ -8,7 +8,7 @@ import {
 } from 'react';
 import {useIsBeaconsEnabled} from './use-is-beacons-enabled';
 import {KETTLE_API_KEY} from '@env';
-import {Kettle} from 'react-native-kettle-module';
+import {Kettle, KettleModules} from 'react-native-kettle-module';
 import {NativeModules, Platform} from 'react-native';
 import {
   BEACONS_CONSENTS,
@@ -177,11 +177,8 @@ const BeaconsContextProvider: React.FC = ({children}) => {
           // Stop all the modules regardless of the permissions
           // to avoid a bug where the SDK is not stopped properly
           // when the user revokes the permissions.
-          Kettle.stop([
-            KettleModules.ACTIVITY,
-            KettleModules.BLUETOOTH,
-            KettleModules.LOCATION,
-          ]);
+          const enabledModules = await Kettle.getEnabledModules();
+          Kettle.stop([enabledModules]);
           await updateBeaconsInfo();
         }
         // If beacons are not supported, stop the SDK if it was initialized
