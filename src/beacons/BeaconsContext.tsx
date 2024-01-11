@@ -8,7 +8,7 @@ import {
 } from 'react';
 import {useIsBeaconsEnabled} from './use-is-beacons-enabled';
 import {KETTLE_API_KEY} from '@env';
-import {Kettle, KettleModules} from 'react-native-kettle-module';
+import {Kettle} from 'react-native-kettle-module';
 import {NativeModules, Platform} from 'react-native';
 import {
   BEACONS_CONSENTS,
