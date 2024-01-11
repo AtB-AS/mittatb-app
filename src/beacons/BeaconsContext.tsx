@@ -150,6 +150,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       await initializeKettleSDK(false);
       Kettle.grant(BEACONS_CONSENTS);
       await storage.set(storeKey.beaconsConsent, 'true');
+      setIsConsentGranted(true);
       await updateBeaconsInfo();
     }
 
@@ -162,6 +163,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     await stopBeacons();
     Kettle.revoke(BEACONS_CONSENTS);
     await storage.set(storeKey.beaconsConsent, 'false');
+    setIsConsentGranted(false);
     await updateBeaconsInfo();
   }, [isBeaconsSupported, stopBeacons, initializeKettleSDK]);
 
@@ -183,7 +185,6 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         permissions.length > 0 &&
         !beaconsInfo?.isStarted
       ) {
-        console.log("Starting beacons");
         await initializeKettleSDK(false);
         Kettle.start(permissions);
         await updateBeaconsInfo();
