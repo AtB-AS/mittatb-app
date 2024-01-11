@@ -160,7 +160,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   const updateNumberOfExpandedLegsOrFadeIn = useCallback(() => {
     if (numberOfExpandedLegs > 1) {
-      setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
+      setNumberOfExpandedLegs((val) => val - 1);
     } else {
       Animated.timing(fadeInValueRef.current, {
         toValue: 1,
