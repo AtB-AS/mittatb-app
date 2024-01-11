@@ -20,11 +20,11 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
   const {
-    beaconsInfo,
-    onboardForBeacons,
     revokeBeacons,
-    deleteCollectedData,
+    isConsentGranted,
+    onboardForBeacons,
     isBeaconsSupported,
+    deleteCollectedData,
     getPrivacyDashboardUrl,
   } = useBeaconsState();
   const {privacy_policy_url} = useRemoteConfig();
@@ -32,6 +32,7 @@ export const Profile_PrivacyScreen = () => {
   const {clearHistory} = useSearchHistory();
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
+
   return (
     <FullScreenView
       headerProps={{
@@ -61,7 +62,7 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={beaconsInfo?.isConsentGranted}
+                value={isConsentGranted}
                 onValueChange={async (checked) => {
                   if (checked) {
                     await onboardForBeacons();

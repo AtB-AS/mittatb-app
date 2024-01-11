@@ -79,6 +79,7 @@ export const Profile_DebugInfoScreen = () => {
     revokeBeacons,
     deleteCollectedData,
     beaconsInfo,
+    isConsentGranted,
     isBeaconsSupported,
     getPrivacyDashboardUrl,
     getPrivacyTermsUrl,
@@ -620,24 +621,24 @@ export const Profile_DebugInfoScreen = () => {
               showIconText={true}
               expandContent={
                 <View>
-                  {beaconsInfo && (
-                    <View>
-                      <ThemeText>{`Identifier: ${beaconsInfo.identifier}`}</ThemeText>
-                      <ThemeText>{`Status: ${
-                        beaconsInfo.isStarted ? 'Running' : 'Stopped'
-                      }`}</ThemeText>
-                      <ThemeText>{`Granted consents: ${beaconsInfo.consents}`}</ThemeText>
-                    </View>
-                  )}
+                  <View>
+                    <ThemeText>{`Identifier: ${
+                      beaconsInfo?.identifier ?? 'N/A'
+                    }`}</ThemeText>
+                    <ThemeText>{`Status: ${
+                      beaconsInfo?.isStarted ? 'Running' : 'Not running'
+                    }`}</ThemeText>
+                    <ThemeText>{`Granted consents: ${
+                      beaconsInfo?.consents ?? 'N/A'
+                    }`}</ThemeText>
+                  </View>
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
                       const granted = await onboardForBeacons();
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
                     }}
-                    disabled={
-                      beaconsInfo?.isConsentGranted && !!beaconsInfo?.consents
-                    }
+                    disabled={isConsentGranted}
                     style={style.button}
                     text="Onboard"
                   />
@@ -647,7 +648,7 @@ export const Profile_DebugInfoScreen = () => {
                       await revokeBeacons();
                     }}
                     style={style.button}
-                    disabled={!beaconsInfo?.isConsentGranted}
+                    disabled={!isConsentGranted}
                     text="Revoke"
                   />
                   <Button
@@ -656,7 +657,6 @@ export const Profile_DebugInfoScreen = () => {
                       await deleteCollectedData();
                     }}
                     style={style.button}
-                    disabled={!beaconsInfo?.isConsentGranted}
                     text="Delete Collected Data"
                   />
                   <Button
@@ -668,7 +668,7 @@ export const Profile_DebugInfoScreen = () => {
                         Linking.openURL(privacyDashboardUrl);
                     }}
                     style={style.button}
-                    disabled={!beaconsInfo?.isConsentGranted}
+                    disabled={!isConsentGranted}
                     text="Open Privacy Dashboard"
                   />
                   <Button
@@ -678,7 +678,7 @@ export const Profile_DebugInfoScreen = () => {
                       privacyTermsUrl && Linking.openURL(privacyTermsUrl);
                     }}
                     style={style.button}
-                    disabled={!beaconsInfo?.isConsentGranted}
+                    disabled={!isConsentGranted}
                     text="Open Privacy Terms"
                   />
                 </View>
