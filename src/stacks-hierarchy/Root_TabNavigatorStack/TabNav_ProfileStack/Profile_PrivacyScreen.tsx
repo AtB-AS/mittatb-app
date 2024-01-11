@@ -5,8 +5,8 @@ import {
 } from '@atb/components/sections';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
-import React from 'react';
-import {Linking, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Alert, Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
@@ -30,8 +30,51 @@ export const Profile_PrivacyScreen = () => {
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
+  const [isBeaconsToggleEnabled, setIsBeaconsToggleEnabled] = useState(
+    isConsentGranted ?? false,
+  );
+  const [isBeaconsToggleDisabled, setIsBeaconsToggleDisabled] = useState(false);
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
+
+  const beaconsPermissionsAlert = useCallback(
+    () =>
+      Alert.alert(
+        t(PrivacySettingsTexts.permissionsAlert.title),
+        t(PrivacySettingsTexts.permissionsAlert.message),
+        [
+          {
+            text: t(PrivacySettingsTexts.permissionsAlert.action),
+            onPress: () => Linking.openSettings(),
+          },
+        ],
+      ),
+    [t],
+  );
+
+  useEffect(() => {
+    (async () => {
+      setIsBeaconsToggleDisabled(true);
+      if (isBeaconsToggleEnabled) {
+        const permissionsGranted = await onboardForBeacons();
+
+        // If the toggle was set to true, but we don't have the required
+        // permissions, we ask the user to grant permissions from Settings.
+        if (!permissionsGranted) beaconsPermissionsAlert();
+
+        setIsBeaconsToggleEnabled(permissionsGranted);
+      } else {
+        await revokeBeacons();
+        setIsBeaconsToggleEnabled(false);
+      }
+      setIsBeaconsToggleDisabled(false);
+    })();
+  }, [
+    isBeaconsToggleEnabled,
+    onboardForBeacons,
+    revokeBeacons,
+    beaconsPermissionsAlert,
+  ]);
 
   return (
     <FullScreenView
@@ -62,14 +105,9 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={isConsentGranted}
-                onValueChange={async (checked) => {
-                  if (checked) {
-                    await onboardForBeacons();
-                  } else {
-                    await revokeBeacons();
-                  }
-                }}
+                value={isBeaconsToggleEnabled}
+                onValueChange={(checked) => setIsBeaconsToggleEnabled(checked)}
+                disabled={isBeaconsToggleDisabled}
                 testID="toggleCollectData"
               />
             </Section>

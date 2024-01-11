@@ -10,9 +10,9 @@ import {useParkingViolations} from '@atb/parking-violations-reporting';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
 export type PhotoScreenProps =
-  RootStackScreenProps<'Root_ParkingViolationsPhoto'>;
+  RootStackScreenProps<'Root_ParkingViolationsPhotoScreen'>;
 
-export const Root_ParkingViolationsPhoto = ({
+export const Root_ParkingViolationsPhotoScreen = ({
   navigation,
   route: {params},
 }: PhotoScreenProps) => {
@@ -27,7 +27,7 @@ export const Root_ParkingViolationsPhoto = ({
       <ImageConfirmationBottomSheet
         onConfirm={() => {
           closeBottomSheet();
-          navigation.navigate('Root_ParkingViolationsQr', {
+          navigation.navigate('Root_ParkingViolationsQrScreen', {
             ...params,
             photo: file.path,
           });
