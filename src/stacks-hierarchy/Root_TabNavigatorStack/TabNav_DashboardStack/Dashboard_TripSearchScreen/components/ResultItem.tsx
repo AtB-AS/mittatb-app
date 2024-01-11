@@ -176,14 +176,12 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
-    if (
-      legIconsParentWidth &&
-      legIconsContentWidth &&
-      legIconsContentWidth >= legIconsParentWidth
-    ) {
-      updateNumberOfExpandedLegsOrFadeIn();
-    } else {
-      fadeIn();
+    if (legIconsParentWidth && legIconsContentWidth) {
+      if (legIconsContentWidth >= legIconsParentWidth) {
+        updateNumberOfExpandedLegsOrFadeIn();
+      } else {
+        fadeIn();
+      }
     }
   }, [
     fadeIn,
