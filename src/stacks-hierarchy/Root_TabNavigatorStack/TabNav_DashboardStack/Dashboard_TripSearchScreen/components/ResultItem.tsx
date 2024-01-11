@@ -158,17 +158,21 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   );
   const fadeInValueRef = useRef(new Animated.Value(0));
 
+  const fadeIn = useCallback(() => {
+    Animated.timing(fadeInValueRef.current, {
+      toValue: 1,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
   const updateNumberOfExpandedLegsOrFadeIn = useCallback(() => {
     if (numberOfExpandedLegs > 1) {
       setNumberOfExpandedLegs((val) => val - 1);
     } else {
-      Animated.timing(fadeInValueRef.current, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
+      fadeIn();
     }
-  }, [numberOfExpandedLegs]);
+  }, [fadeIn, numberOfExpandedLegs]);
 
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
@@ -178,8 +182,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
       legIconsContentWidth >= legIconsParentWidth
     ) {
       updateNumberOfExpandedLegsOrFadeIn();
+    } else {
+      fadeIn();
     }
   }, [
+    fadeIn,
     legIconsParentWidth,
     legIconsContentWidth,
     updateNumberOfExpandedLegsOrFadeIn,
