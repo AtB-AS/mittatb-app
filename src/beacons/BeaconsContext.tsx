@@ -53,7 +53,6 @@ type BeaconsInfo = {
 type BeaconsContextState = {
   isBeaconsSupported: boolean;
   beaconsInfo?: BeaconsInfo;
-
   /**
    * Onboard the user for beacons by asking for permissions if possible. If
    * permissions are granted, the Kettle SDK will be started, and beaconsInfo
