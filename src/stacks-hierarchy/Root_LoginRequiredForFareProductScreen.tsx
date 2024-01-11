@@ -19,6 +19,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTimeContextState} from '@atb/time';
+import {TransitionPresets} from '@react-navigation/stack';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -45,16 +46,20 @@ export const Root_LoginRequiredForFareProductScreen = ({
     if (hasActiveFareContracts) {
       navigation.navigate('Root_LoginActiveFareContractWarningScreen', {
         afterLogin,
+        transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
       });
     } else {
-      navigation.navigate(
-        enable_vipps_login
-          ? 'Root_LoginOptionsScreen'
-          : 'Root_LoginPhoneInputScreen',
-        {
+      if (enable_vipps_login) {
+        navigation.navigate('Root_LoginOptionsScreen', {
           afterLogin,
-        },
-      );
+          showGoBack: true,
+          transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
+        });
+      } else {
+        navigation.navigate('Root_LoginPhoneInputScreen', {
+          afterLogin,
+        });
+      }
     }
   };
 

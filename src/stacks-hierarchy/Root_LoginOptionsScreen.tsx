@@ -24,6 +24,7 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {TransitionPresets} from '@react-navigation/stack';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -32,7 +33,7 @@ type Props = RootStackScreenProps<'Root_LoginOptionsScreen'>;
 export const Root_LoginOptionsScreen = ({
   navigation,
   route: {
-    params: {afterLogin, showGoBack},
+    params: {afterLogin, showGoBack, transitionPreset},
   },
 }: Props) => {
   const {t} = useTranslation();
@@ -135,7 +136,16 @@ export const Root_LoginOptionsScreen = ({
     <View style={styles.container}>
       <FullScreenHeader
         setFocusOnLoad={false}
-        leftButton={showGoBack ? {type: 'back'} : undefined}
+        leftButton={
+          showGoBack
+            ? {
+                type:
+                  transitionPreset === TransitionPresets.ModalSlideFromBottomIOS
+                    ? 'close'
+                    : 'back',
+              }
+            : undefined
+        }
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
       />
@@ -167,9 +177,7 @@ export const Root_LoginOptionsScreen = ({
           mode="primary"
           style={styles.loginOptionButton}
           onPress={() =>
-            navigation.navigate('Root_LoginPhoneInputScreen', {
-              afterLogin: afterLogin,
-            })
+            navigation.navigate('Root_LoginPhoneInputScreen', {afterLogin})
           }
           text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
           accessibilityHint={t(

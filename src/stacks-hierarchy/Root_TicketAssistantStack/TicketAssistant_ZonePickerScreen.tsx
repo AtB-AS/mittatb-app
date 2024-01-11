@@ -43,8 +43,8 @@ export const TicketAssistant_ZonePickerScreen = ({
 
   const isApplicableOnSingleZoneOnly = false;
 
-  const fromTariffZone = route.params?.fromTariffZone ?? defaultTariffZone;
-  const toTariffZone = route.params?.toTariffZone ?? defaultTariffZone;
+  const fromTariffZone = defaultTariffZone;
+  const toTariffZone = defaultTariffZone;
 
   const [selectedZones, setSelectedZones] = useState<TariffZoneSelection>({
     from: fromTariffZone,

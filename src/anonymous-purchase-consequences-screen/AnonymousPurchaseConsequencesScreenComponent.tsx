@@ -13,17 +13,20 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {LeftButtonProps} from '@atb/components/screen-header';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = {
   onPressContinueWithoutLogin: () => void;
   onPressLogin?: () => void;
+  leftButton: LeftButtonProps;
 };
 
 export const AnonymousPurchaseConsequencesScreenComponent = ({
   onPressContinueWithoutLogin,
   onPressLogin,
+  leftButton,
 }: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
@@ -48,9 +51,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 
   return (
     <OnboardingFullScreenView
-      fullScreenHeaderProps={{
-        leftButton: {type: onPressLogin ? 'cancel' : 'back'},
-      }}
+      fullScreenHeaderProps={{leftButton}}
       footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
       secondaryFooterButton={
         onPressLogin ? continueWithoutLoginButton : undefined

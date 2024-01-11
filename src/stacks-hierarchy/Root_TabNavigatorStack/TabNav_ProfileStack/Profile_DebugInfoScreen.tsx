@@ -78,7 +78,7 @@ export const Profile_DebugInfoScreen = () => {
     onboardForBeacons,
     revokeBeacons,
     deleteCollectedData,
-    kettleInfo,
+    beaconsInfo,
     isBeaconsSupported,
     getPrivacyDashboardUrl,
     getPrivacyTermsUrl,
@@ -620,13 +620,13 @@ export const Profile_DebugInfoScreen = () => {
               showIconText={true}
               expandContent={
                 <View>
-                  {kettleInfo && (
+                  {beaconsInfo && (
                     <View>
-                      <ThemeText>{`Identifier: ${kettleInfo.kettleIdentifier}`}</ThemeText>
+                      <ThemeText>{`Identifier: ${beaconsInfo.identifier}`}</ThemeText>
                       <ThemeText>{`Status: ${
-                        kettleInfo.isKettleStarted ? 'Running' : 'Stopped'
+                        beaconsInfo.isStarted ? 'Running' : 'Stopped'
                       }`}</ThemeText>
-                      <ThemeText>{`Granted consents: ${kettleInfo.kettleConsents}`}</ThemeText>
+                      <ThemeText>{`Granted consents: ${beaconsInfo.consents}`}</ThemeText>
                     </View>
                   )}
                   <Button
@@ -636,8 +636,7 @@ export const Profile_DebugInfoScreen = () => {
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
                     }}
                     disabled={
-                      kettleInfo?.isBeaconsOnboarded &&
-                      !!kettleInfo?.kettleConsents
+                      beaconsInfo?.isConsentGranted && !!beaconsInfo?.consents
                     }
                     style={style.button}
                     text="Onboard"
@@ -648,7 +647,7 @@ export const Profile_DebugInfoScreen = () => {
                       await revokeBeacons();
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!beaconsInfo?.isConsentGranted}
                     text="Revoke"
                   />
                   <Button
@@ -657,7 +656,7 @@ export const Profile_DebugInfoScreen = () => {
                       await deleteCollectedData();
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!beaconsInfo?.isConsentGranted}
                     text="Delete Collected Data"
                   />
                   <Button
@@ -669,7 +668,7 @@ export const Profile_DebugInfoScreen = () => {
                         Linking.openURL(privacyDashboardUrl);
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!beaconsInfo?.isConsentGranted}
                     text="Open Privacy Dashboard"
                   />
                   <Button
@@ -679,7 +678,7 @@ export const Profile_DebugInfoScreen = () => {
                       privacyTermsUrl && Linking.openURL(privacyTermsUrl);
                     }}
                     style={style.button}
-                    disabled={!kettleInfo?.isBeaconsOnboarded}
+                    disabled={!beaconsInfo?.isConsentGranted}
                     text="Open Privacy Terms"
                   />
                 </View>

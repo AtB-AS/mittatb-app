@@ -1,15 +1,17 @@
 import {NavigationProp, NavigatorScreenParams} from '@react-navigation/native';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackScreenProps, TransitionPreset} from '@react-navigation/stack';
 import {TabNavigatorStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
 import {Location, SearchLocation, StoredLocationFavorite} from '@atb/favorites';
 import {Root_LocationSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
-import {FareProductTypeConfig} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  PreassignedFareProduct,
+} from '@atb/configuration';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ReserveOffer} from '@atb/ticketing';
-import {PreassignedFareProduct} from '@atb/configuration';
 import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
@@ -116,8 +118,11 @@ type Root_PurchaseAsAnonymousConsequencesScreenParams = {
   showLoginButton: boolean | undefined;
 };
 
-export type RootStackParamList = {
-  NotFound: undefined;
+type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
+  paymentMethod: CardPaymentMethod;
+};
+
+export type RootStackParamList = StackParams<{
   Root_OnboardingStack: undefined;
   Root_TermsInformationScreen: undefined;
   Root_ConsiderTravelTokenChangeScreen: undefined;
@@ -135,15 +140,12 @@ export type RootStackParamList = {
   Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
   Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
   Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
-  Root_PurchasePaymentWithCreditCardScreen: PaymentParams & {
-    paymentMethod: CardPaymentMethod;
-  };
+  Root_PurchasePaymentWithCreditCardScreen: Root_PurchasePaymentWithCreditCardScreenParams;
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
   Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
   Root_TicketInformationScreen: TicketInformationScreenParams;
-
   Root_LoginActiveFareContractWarningScreen: Root_LoginActiveFareContractWarningScreenParams;
   Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
@@ -151,19 +153,41 @@ export type RootStackParamList = {
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
   Root_AddPaymentMethodScreen: undefined;
-
-  Root_ParkingViolationsSelect: undefined;
-  Root_ParkingViolationsPhoto: Root_ParkingViolationsPhotoParams;
-  Root_ParkingViolationsQr: Root_ParkingViolationsQrParams;
-  Root_ParkingViolationsConfirmation: Root_ParkingViolationsConfirmationParams;
+  Root_ParkingViolationsSelectScreen: undefined;
+  Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;
+  Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
+  Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
-
   Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
-};
+}>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
 export type RootStackProps = RootStackScreenProps<keyof RootStackParamList>;
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   StackScreenProps<RootStackParamList, T>;
+
+export type CustomScreenParams = {
+  transitionPreset?: TransitionPreset;
+};
+
+/**
+ * This type is meant to be used on every stack params specification. It both:
+ * - Checks that each key in the stack param list ends with "Screen" or "Stack"
+ * - Adds the CustomScreenParams to the mapped value type., which makes it
+ *   possible to set transition when navigating.
+ */
+export type StackParams<
+  T extends {
+    [K in keyof T]: K extends string
+      ? K extends `${string}Screen` | `${string}Stack`
+        ? object | undefined
+        : never
+      : never;
+  },
+> = {
+  [K in keyof T]: T[K] extends undefined
+    ? CustomScreenParams | undefined
+    : T[K] & CustomScreenParams;
+};

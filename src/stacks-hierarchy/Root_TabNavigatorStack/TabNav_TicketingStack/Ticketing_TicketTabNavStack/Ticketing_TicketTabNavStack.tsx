@@ -55,9 +55,6 @@ export const Ticketing_TicketTabNavStack = () => {
           tabBarLabel: t(
             TicketingTexts.activeFareProductsAndReservationsTab.label,
           ),
-          tabBarAccessibilityLabel: t(
-            TicketingTexts.activeFareProductsAndReservationsTab.a11yLabel,
-          ),
           tabBarTestID: 'activeTicketsTab',
         }}
       />

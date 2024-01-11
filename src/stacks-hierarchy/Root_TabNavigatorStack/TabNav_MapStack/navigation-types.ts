@@ -5,13 +5,16 @@ import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorSt
 import {CompositeScreenProps} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {DashboardScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/navigation-types';
+import {
+  StackParams,
+} from '@atb/stacks-hierarchy/navigation-types';
 
-export type MapStackParams = {
+export type MapStackParams = StackParams<{
   Map_RootScreen: undefined;
   Map_PlaceScreen: PlaceScreenParams;
   Map_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Map_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
-};
+}>;
 
 type RootMapScreenProps = TabNavigatorScreenProps<'TabNav_MapStack'>;
 export type MapScreenProps<T extends keyof MapStackParams> =

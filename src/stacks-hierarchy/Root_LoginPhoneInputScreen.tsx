@@ -11,6 +11,8 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {PhoneInput} from '@atb/components/phone-input';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
+import {TransitionPresets} from '@react-navigation/stack';
+
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = RootStackScreenProps<'Root_LoginPhoneInputScreen'>;
@@ -18,7 +20,7 @@ type Props = RootStackScreenProps<'Root_LoginPhoneInputScreen'>;
 export const Root_LoginPhoneInputScreen = ({
   navigation,
   route: {
-    params: {afterLogin},
+    params: {afterLogin, transitionPreset},
   },
 }: Props) => {
   const {t} = useTranslation();
@@ -29,7 +31,12 @@ export const Root_LoginPhoneInputScreen = ({
   return (
     <View style={styles.container}>
       <FullScreenHeader
-        leftButton={{type: 'close'}}
+        leftButton={{
+          type:
+            transitionPreset === TransitionPresets.ModalSlideFromBottomIOS
+              ? 'close'
+              : 'back',
+        }}
         setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.phoneInput.title)}
