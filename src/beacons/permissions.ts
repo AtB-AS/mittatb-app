@@ -91,7 +91,7 @@ export const requestAndroidBeaconPermissions = async (
   return permissionRequiredForBeaconsGranted;
 };
 
-const checkPermissionStatuses = async () => {
+export const checkPermissionStatuses = async () => {
   const statuses = await checkMultiple(Object.values(BEACONS_PERMISSIONS));
   const permissionStatuses: Record<PermissionKey, boolean> = {
     bluetooth: false,
