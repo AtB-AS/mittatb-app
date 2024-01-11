@@ -213,6 +213,7 @@ export const Root_LoginOptionsScreen = ({
         <View style={styles.termsOfUseContainer}>
           <PressableOpacity
             onPress={() => navigation.navigate('Root_TermsInformationScreen')}
+            role="button"
           >
             <ThemeText color={themeColor} style={styles.termsOfUseText}>
               {t(LoginTexts.logInOptions.termsOfUse)}
