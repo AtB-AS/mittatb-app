@@ -180,7 +180,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       }
 
       const permissions = await allowedPermissionsForBeacons();
-      if (consentGranted && permissions && !beaconsInfo?.isStarted) {
+      if (consentGranted && permissions.length > 0 && !beaconsInfo?.isStarted) {
         Kettle.start(permissions);
         await updateBeaconsInfo();
       }
