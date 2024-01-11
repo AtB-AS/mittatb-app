@@ -32,7 +32,7 @@ import {
   getTranslatedModeName,
 } from '@atb/utils/transportation-names';
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AccessibilityProps,
   Animated,
@@ -158,37 +158,32 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   );
   const fadeInValueRef = useRef(new Animated.Value(0));
 
-  const fadeIn = useCallback(() => {
-    Animated.timing(fadeInValueRef.current, {
-      toValue: 1,
-      duration: 250,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  const updateNumberOfExpandedLegsOrFadeIn = useCallback(() => {
-    if (numberOfExpandedLegs > 1) {
-      setNumberOfExpandedLegs((val) => val - 1);
-    } else {
-      fadeIn();
-    }
-  }, [fadeIn, numberOfExpandedLegs]);
+  const [hasMinimumOfExpandedLegs, setHasMinimumOfExpandedLegs] =
+    useState(false);
 
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
     if (legIconsParentWidth && legIconsContentWidth) {
-      if (legIconsContentWidth >= legIconsParentWidth) {
-        updateNumberOfExpandedLegsOrFadeIn();
+      if (
+        legIconsContentWidth >= legIconsParentWidth &&
+        !hasMinimumOfExpandedLegs
+      ) {
+        setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
       } else {
-        fadeIn();
+        Animated.timing(fadeInValueRef.current, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true,
+        }).start();
       }
     }
-  }, [
-    fadeIn,
-    legIconsParentWidth,
-    legIconsContentWidth,
-    updateNumberOfExpandedLegsOrFadeIn,
-  ]);
+  }, [legIconsParentWidth, legIconsContentWidth, hasMinimumOfExpandedLegs]);
+
+  useEffect(() => {
+    if (numberOfExpandedLegs <= 1) {
+      setHasMinimumOfExpandedLegs(true);
+    }
+  }, [numberOfExpandedLegs, setHasMinimumOfExpandedLegs]);
 
   if (filteredLegs.length < 1) return null;
 
