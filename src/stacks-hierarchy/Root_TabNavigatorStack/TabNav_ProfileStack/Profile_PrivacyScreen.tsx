@@ -30,9 +30,8 @@ export const Profile_PrivacyScreen = () => {
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
-  const [isBeaconsToggleEnabled, setIsBeaconsToggleEnabled] = useState(
-    isConsentGranted ?? false,
-  );
+  const [isBeaconsToggleValue, setIsBeaconsToggleValue] =
+    useState(isConsentGranted);
   const [isBeaconsToggleDisabled, setIsBeaconsToggleDisabled] = useState(false);
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
@@ -55,22 +54,22 @@ export const Profile_PrivacyScreen = () => {
   useEffect(() => {
     (async () => {
       setIsBeaconsToggleDisabled(true);
-      if (isBeaconsToggleEnabled) {
+      if (isBeaconsToggleValue) {
         const permissionsGranted = await onboardForBeacons();
 
         // If the toggle was set to true, but we don't have the required
         // permissions, we ask the user to grant permissions from Settings.
         if (!permissionsGranted) beaconsPermissionsAlert();
 
-        setIsBeaconsToggleEnabled(permissionsGranted);
+        setIsBeaconsToggleValue(permissionsGranted);
       } else {
         await revokeBeacons();
-        setIsBeaconsToggleEnabled(false);
+        setIsBeaconsToggleValue(false);
       }
       setIsBeaconsToggleDisabled(false);
     })();
   }, [
-    isBeaconsToggleEnabled,
+    isBeaconsToggleValue,
     onboardForBeacons,
     revokeBeacons,
     beaconsPermissionsAlert,
@@ -105,8 +104,8 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={isBeaconsToggleEnabled}
-                onValueChange={(checked) => setIsBeaconsToggleEnabled(checked)}
+                value={isBeaconsToggleValue}
+                onValueChange={(checked) => setIsBeaconsToggleValue(checked)}
                 disabled={isBeaconsToggleDisabled}
                 testID="toggleCollectData"
               />
