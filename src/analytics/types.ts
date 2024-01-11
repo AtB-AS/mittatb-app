@@ -7,6 +7,7 @@ export type AnalyticsEventContext =
   | 'Loading boundary'
   | 'Map'
   | 'Mobility'
+  | 'Onboarding'
   | 'Parking violations'
   | 'Profile'
   | 'Receipt'

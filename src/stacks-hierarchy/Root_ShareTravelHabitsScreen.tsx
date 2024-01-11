@@ -3,8 +3,7 @@ import {
   useTranslation,
   getTextForLanguage,
 } from '@atb/translations';
-import React from 'react';
-
+import React, {useCallback} from 'react';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
@@ -12,6 +11,9 @@ import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 import {useAppState} from '@atb/AppContext';
+import {useAnalytics} from '@atb/analytics';
+import {checkPermissionStatuses} from '@atb/beacons/permissions';
+import {useFocusEffect} from '@react-navigation/native';
 
 export const Root_ShareTravelHabitsScreen = () => {
   const {t, language} = useTranslation();
@@ -24,8 +26,29 @@ export const Root_ShareTravelHabitsScreen = () => {
 
   const {onboardForBeacons} = useBeaconsState();
 
+  const analytics = useAnalytics();
+
+  // call useFocusEffect to send analytics once when the screen is shown
+  useFocusEffect(
+    useCallback(() => {
+      const didSeeShareTravelHabitsScreen = analytics.logEvent(
+        'Onboarding',
+        'didSeeShareTravelHabitsScreen',
+      );
+      return () => didSeeShareTravelHabitsScreen;
+    }, [analytics]),
+  );
+
   const choosePermissions = async () => {
     await onboardForBeacons();
+
+    const permissions = await checkPermissionStatuses(); // get given permissions status
+    analytics.logEvent('Onboarding', 'beaconsPermissionAnswers', {
+      beacons: permissions.bluetooth,
+      locationAlways: permissions.locationAlways,
+      motion: permissions.motion,
+    });
+    
     completeShareTravelHabitsOnboarding();
     continueFromOnboardingScreen('Root_ShareTravelHabitsScreen');
   };
