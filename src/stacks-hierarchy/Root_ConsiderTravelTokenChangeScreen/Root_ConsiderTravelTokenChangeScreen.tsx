@@ -1,4 +1,3 @@
-import {RootStackScreenProps} from '../navigation-types';
 import {StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -16,12 +15,11 @@ import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
 import {LoadingScreen} from '@atb/loading-screen';
-
-type Props = RootStackScreenProps<'Root_ConsiderTravelTokenChangeScreen'>;
+import {useCallback} from 'react';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
+export const Root_ConsiderTravelTokenChangeScreen = () => {
   const styles = useStyle();
   const {t} = useTranslation();
 
@@ -31,11 +29,26 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
     completeMobileTokenOnboarding,
     completeMobileTokenWithoutTravelcardOnboarding,
   } = useAppState();
-
-  const NoTokenView = <NoTravelTokenInfo close={navigation.pop} />;
-  const {tokens, mobileTokenStatus} = useMobileTokenContextState();
-
   const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+
+  const onPressContinue = useCallback(() => {
+    disable_travelcard
+      ? completeMobileTokenWithoutTravelcardOnboarding()
+      : completeMobileTokenOnboarding();
+
+    continueFromOnboardingScreen('Root_ConsiderTravelTokenChangeScreen');
+  }, [
+    completeMobileTokenOnboarding,
+    completeMobileTokenWithoutTravelcardOnboarding,
+    continueFromOnboardingScreen,
+    disable_travelcard,
+  ]);
+
+  const NoTokenView = (
+    <NoTravelTokenInfo onPressFooterButton={onPressContinue} />
+  );
+
+  const {tokens, mobileTokenStatus} = useMobileTokenContextState();
 
   if (mobileTokenStatus === 'loading') return <LoadingScreen />;
 
@@ -47,13 +60,7 @@ export const Root_ConsiderTravelTokenChangeScreen = ({navigation}: Props) => {
   return (
     <OnboardingFullScreenView
       footerButton={{
-        onPress: () => {
-          disable_travelcard
-            ? completeMobileTokenWithoutTravelcardOnboarding()
-            : completeMobileTokenOnboarding();
-
-          continueFromOnboardingScreen('Root_ConsiderTravelTokenChangeScreen');
-        },
+        onPress: onPressContinue,
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
       }}
     >

@@ -27,6 +27,7 @@ import {Profile_SortFavoritesScreen} from './Profile_SortFavoritesScreen';
 import {Profile_EditProfileScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_EditProfileScreen';
 import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 import {Profile_NotificationsScreen} from './Profile_NotificationsScreen';
+import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -34,10 +35,9 @@ export const TabNav_ProfileStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="Profile_RootScreen"
-      screenOptions={{
-        ...TransitionPresets.SlideFromRightIOS,
+      screenOptions={screenOptions(TransitionPresets.SlideFromRightIOS, {
         headerShown: false,
-      }}
+      })}
     >
       <Stack.Screen name="Profile_RootScreen" component={Profile_RootScreen} />
       <Stack.Screen

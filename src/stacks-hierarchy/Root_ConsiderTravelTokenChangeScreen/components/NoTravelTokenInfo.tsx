@@ -7,31 +7,26 @@ import {StyleSheet} from '@atb/theme';
 import React from 'react';
 import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
-import {useAppState} from '@atb/AppContext';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export function NoTravelTokenInfo({close}: {close: () => void}): JSX.Element {
+export function NoTravelTokenInfo({
+  onPressFooterButton,
+}: {
+  onPressFooterButton: () => void;
+}): JSX.Element {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {
-    completeMobileTokenOnboarding,
-    completeMobileTokenWithoutTravelcardOnboarding,
-  } = useAppState();
+
   const {disable_travelcard} = useRemoteConfig();
 
   return (
     <OnboardingFullScreenView
       footerButton={{
-        onPress: () => {
-          disable_travelcard
-            ? completeMobileTokenWithoutTravelcardOnboarding()
-            : completeMobileTokenOnboarding();
-          close();
-        },
+        onPress: onPressFooterButton,
         text: t(MobileTokenOnboardingTexts.ok),
       }}
     >

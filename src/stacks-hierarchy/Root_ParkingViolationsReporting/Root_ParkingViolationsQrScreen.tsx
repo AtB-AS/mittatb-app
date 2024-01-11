@@ -19,9 +19,9 @@ import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
-export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQr'>;
+export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
 
-export const Root_ParkingViolationsQr = ({
+export const Root_ParkingViolationsQrScreen = ({
   navigation,
   route: {params},
 }: QrScreenProps) => {
@@ -80,7 +80,7 @@ export const Root_ParkingViolationsQr = ({
       timestamp: new Date().toISOString(),
     })
       .then(() => {
-        navigation.navigate('Root_ParkingViolationsConfirmation', {
+        navigation.navigate('Root_ParkingViolationsConfirmationScreen', {
           providerName: providers.find((p) => p.id === providerId)?.name,
         });
         enableScanning();

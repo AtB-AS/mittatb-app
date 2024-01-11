@@ -14,6 +14,8 @@ import {InteractiveColor, TextNames} from '@atb/theme/colors';
 import {LabelInfo} from '@atb/components/label-info';
 import {LabelType} from '@atb/configuration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {useTranslation} from '@atb/translations';
+import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 
 type Props = SectionItemProps<{
   text: string;
@@ -40,6 +42,7 @@ export function LinkSectionItem({
   interactiveColor = 'interactive_2',
   ...props
 }: Props) {
+  const {t} = useTranslation();
   const {contentContainer, topContainer} = useSectionItem(props);
   const style = useSectionStyle();
   const linkSectionItemStyle = useStyles();
@@ -64,7 +67,9 @@ export function LinkSectionItem({
       onPress={disabled ? undefined : onPress}
       disabled={disabled}
       accessibilityLabel={
-        label ? `${accessibilityLabel} ${label}` : accessibilityLabel
+        label
+          ? `${accessibilityLabel} ${t(LabelInfoTexts.labels[label])}`
+          : accessibilityLabel
       }
       accessibilityState={{disabled}}
       style={[topContainer, {backgroundColor: themeColor.background}]}

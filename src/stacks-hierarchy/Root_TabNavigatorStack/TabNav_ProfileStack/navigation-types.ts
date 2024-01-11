@@ -5,8 +5,9 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
+import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 
-export type ProfileStackParams = {
+export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;
   Profile_PaymentOptionsScreen: undefined;
   Profile_TicketHistoryScreen: undefined;
@@ -33,7 +34,7 @@ export type ProfileStackParams = {
   Profile_GenericWebsiteInformationScreen: undefined;
   Profile_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
   Profile_PlaceScreen: PlaceScreenParams;
-};
+}>;
 
 export type ProfileStackRootProps =
   TabNavigatorScreenProps<'TabNav_ProfileStack'>;

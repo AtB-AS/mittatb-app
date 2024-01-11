@@ -4,14 +4,11 @@ import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
 import {TripDetailsScreenParams} from '@atb/travel-details-screens/TripDetailsScreenComponent';
 import {JourneyDatePickerScreenParams} from '@atb/journey-date-picker';
 import {TabNavigatorScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack';
-import {
-  CompositeNavigationProp,
-  CompositeScreenProps,
-} from '@react-navigation/native';
-import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {CompositeScreenProps} from '@react-navigation/native';
+import {StackScreenProps} from '@react-navigation/stack';
 import {TripSearchScreenParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/types';
 import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
+import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 
 export type DashboardRootScreenParams = {} & TripSearchScreenParams;
 
@@ -23,7 +20,7 @@ type Dashboard_PlaceScreenParams = PlaceScreenParams & {
   onCloseRoute?: keyof DashboardStackParams;
 };
 
-export type DashboardStackParams = {
+export type DashboardStackParams = StackParams<{
   Dashboard_RootScreen: DashboardRootScreenParams;
   Dashboard_DepartureDetailsScreen: DepartureDetailsScreenParams;
   Dashboard_TravelDetailsMapScreen: TravelDetailsMapScreenParams;
@@ -33,7 +30,7 @@ export type DashboardStackParams = {
   Dashboard_JourneyDatePickerScreen: JourneyDatePickerScreenParams;
   Dashboard_FavoriteDeparturesScreen: undefined;
   Dashboard_NearbyStopPlacesScreen: Dashboard_NearbyStopPlacesScreenParams;
-};
+}>;
 
 export type RootDashboardScreenProps =
   TabNavigatorScreenProps<'TabNav_DashboardStack'>;
@@ -42,10 +39,4 @@ export type DashboardScreenProps<T extends keyof DashboardStackParams> =
   CompositeScreenProps<
     StackScreenProps<DashboardStackParams, T>,
     RootDashboardScreenProps
-  >;
-
-export type DashboardRootNavigation<T extends keyof DashboardStackParams> =
-  CompositeNavigationProp<
-    StackNavigationProp<DashboardStackParams, T>,
-    RootNavigationProps
   >;
