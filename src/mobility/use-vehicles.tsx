@@ -105,9 +105,9 @@ export const useVehicles: (
     pollingTimeInSeconds: Math.round(pollInterval / 1000),
   });
 
-  const updateRegion = async (region: MapRegion) => {
+  const updateRegion = useCallback((region: MapRegion) => {
     setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
-  };
+  }, []);
 
   const onFilterChange = (filter: MobilityMapFilterType) => {
     setFilter(filter);
