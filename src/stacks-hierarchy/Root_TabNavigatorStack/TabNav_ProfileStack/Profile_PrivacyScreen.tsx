@@ -22,11 +22,11 @@ import {checkPermissionStatuses} from '@atb/beacons/permissions';
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
   const {
-    beaconsInfo,
-    onboardForBeacons,
     revokeBeacons,
-    deleteCollectedData,
+    isConsentGranted,
+    onboardForBeacons,
     isBeaconsSupported,
+    deleteCollectedData,
     getPrivacyDashboardUrl,
   } = useBeaconsState();
 
@@ -74,7 +74,7 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={beaconsInfo ? beaconsInfo.isConsentGranted : false}
+                value={isConsentGranted}
                 onValueChange={(checked) => {
                   async () => {
                     if (checked) {
@@ -86,7 +86,7 @@ export const Profile_PrivacyScreen = () => {
                 }}
                 testID="toggleCollectData"
               />
-              {beaconsInfo?.isConsentGranted && !hasPermissionsForBeacons && (
+              {isConsentGranted && !hasPermissionsForBeacons && (
                 <MessageSectionItem
                   messageType="info"
                   title="TODO"

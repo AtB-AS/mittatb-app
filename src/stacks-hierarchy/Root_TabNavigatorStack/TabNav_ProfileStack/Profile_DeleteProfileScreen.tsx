@@ -10,20 +10,15 @@ import {useTranslation} from '@atb/translations';
 import DeleteProfileTexts from '@atb/translations/screens/subscreens/DeleteProfile';
 import React, {useEffect, useState} from 'react';
 import {Alert, View} from 'react-native';
-import {ProfileScreenProps} from './navigation-types';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useTimeContextState} from '@atb/time';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 
-type DeleteProfileScreenProps =
-  ProfileScreenProps<'Profile_DeleteProfileScreen'>;
-
-export const Profile_DeleteProfileScreen = ({
-  navigation,
-}: DeleteProfileScreenProps) => {
+export const Profile_DeleteProfileScreen = () => {
   const style = useStyle();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthState();
@@ -33,9 +28,20 @@ export const Profile_DeleteProfileScreen = ({
     filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow).length > 0;
 
   const [deleteError, setDeleteError] = useState<boolean>(false);
+  const {deleteCollectedData} = useBeaconsState();
 
-  const doDeleteProfile = async () => {
-    await Alert.alert(
+  const handleDeleteProfile = async () => {
+    const isProfileDeleted = await deleteProfile();
+    if (isProfileDeleted) {
+      await deleteCollectedData();
+      await signOut();
+    } else {
+      setDeleteError(true);
+    }
+  };
+
+  const showDeleteAlert = async () => {
+    Alert.alert(
       t(DeleteProfileTexts.deleteConfirmation.title),
       t(DeleteProfileTexts.deleteConfirmation.message),
       [
@@ -46,16 +52,7 @@ export const Profile_DeleteProfileScreen = ({
         {
           text: t(DeleteProfileTexts.deleteConfirmation.confirm),
           style: 'destructive',
-          onPress: async () => {
-            const delete_ok = await deleteProfile();
-            if (delete_ok) {
-              signOut().then(() => {
-                navigation.navigate('Profile_RootScreen');
-              });
-            } else {
-              setDeleteError(true);
-            }
-          },
+          onPress: handleDeleteProfile,
         },
       ],
     );
@@ -117,7 +114,7 @@ export const Profile_DeleteProfileScreen = ({
               DeleteProfileTexts.buttonA11ytext(customerNumber?.toString()),
             ),
           }}
-          onPress={() => doDeleteProfile()}
+          onPress={() => showDeleteAlert()}
           disabled={activeFareContracts}
           icon={<ThemeIcon svg={Delete} colorType="error" />}
         />
