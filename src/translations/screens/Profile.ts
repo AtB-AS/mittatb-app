@@ -118,9 +118,9 @@ const ProfileTexts = {
                 `Gi AtB løyve til å sende varslingar til ${email}`,
               ),
             noEmailPlaceholder: _(
-              'Legg til e-post i min profil for å benytte e-postvarsel.',
-              'Add e-mail to my profile to use e-mail notifications.',
-              'Legg til e-post i min profil for å bruke e-postvarsel.',
+              'Tillat at AtB sender varslinger til e-posten din.',
+              'Allow AtB to send notifications to your e-mail.',
+              'Gi AtB løyve til å sende varslingar til e-posten din.',
             ),
           },
           button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
