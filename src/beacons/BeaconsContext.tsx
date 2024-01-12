@@ -176,7 +176,6 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     (async function () {
-      // Start beacons if consent is granted and permissions are granted
       if (!isBeaconsSupported) {
         // If beacons became unsupported, stop the SDK if it was initialized
         // this case can happen when the `enable_beacons` remote config is set to false
@@ -185,10 +184,10 @@ const BeaconsContextProvider: React.FC = ({children}) => {
           stopBeacons();
           await updateBeaconsInfo();
         }
-        // If beacons are not supported, stop the SDK if it was initialized
         return;
       }
 
+      // Start beacons if consent is granted and permissions are granted
       const permissions = await allowedPermissionsForBeacons();
       if (
         isConsentGranted &&
