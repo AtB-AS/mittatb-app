@@ -216,6 +216,23 @@ const ProfileTexts = {
             'Aktiver for å lese personvernerklæring på ekstern side',
           ),
         },
+        permissionRequired: {
+          title: _(
+            'Tillatelse kreves',
+            'Permission required',
+            'Løyve krevjast',
+          ),
+          message: _(
+            'Gi tilgang til Bluetooth for å dele dine reisevaner.',
+            'Enable Bluetooth to share your travel habits.',
+            'Gi løyve til Bluetooth for å dele dine reisevanar.',
+          ),
+          action: _(
+            'Åpne telefoninnstillinger',
+            'Open Settings',
+            'Opne telefoninnstillingar',
+          ),
+        },
         clearHistory: {
           label: _(
             'Tøm søkehistorikk',

@@ -87,10 +87,19 @@ export const Profile_PrivacyScreen = () => {
               {isConsentGranted && !hasPermissionsForBeacons && (
                 <MessageSectionItem
                   messageType="info"
-                  title="TODO"
-                  message="TODO"
+                  title={t(
+                    ProfileTexts.sections.privacy.linkSectionItems
+                      .permissionRequired.title,
+                  )}
+                  message={t(
+                    ProfileTexts.sections.privacy.linkSectionItems
+                      .permissionRequired.message,
+                  )}
                   onPressConfig={{
-                    text: 'TODO',
+                    text: t(
+                      ProfileTexts.sections.privacy.linkSectionItems
+                        .permissionRequired.action,
+                    ),
                     action: () => Linking.openSettings(),
                   }}
                 />
