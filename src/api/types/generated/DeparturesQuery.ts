@@ -16,6 +16,8 @@ export type DeparturesQuery = {
       destinationDisplay?: {frontText?: string; via?: Array<string>};
       serviceJourney: {
         id: string;
+        transportMode?: Types.TransportMode;
+        transportSubmode?: Types.TransportSubmode;
         line: {
           id: string;
           description?: string;
