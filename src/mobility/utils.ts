@@ -78,8 +78,8 @@ export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
  * Determines if vehicles need to be reloaded, by checking if the
  * previously loaded area covers the new area.
  *
- * @param newArea Area currently visible in the map
  * @param prevArea Area in which vehicles are already loaded
+ * @param newArea Area currently visible in the map
  * @return false if the previous area covers the new area and no reload is
  * needed, otherwise true
  */
