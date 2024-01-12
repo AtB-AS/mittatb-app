@@ -62,6 +62,10 @@ type BeaconsContextState = {
    * @returns Whether or not the user have granted permissions
    */
   onboardForBeacons: () => Promise<boolean>;
+
+  /**
+   * Stops the SDK from collecting data, and sets isConsentGranted to false
+   */
   revokeBeacons: () => Promise<void>;
   deleteCollectedData: () => Promise<void>;
   getPrivacyDashboardUrl: () => Promise<string>;
@@ -130,24 +134,26 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   const onboardForBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return false;
+    await storage.set(storeKey.beaconsConsent, 'true');
 
-    let granted = false;
+    let permissionsGranted = false;
     if (Platform.OS === 'ios') {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
-      granted = await NativeModules.BeaconsPermissions.request();
+      permissionsGranted = await NativeModules.BeaconsPermissions.request();
     } else {
-      granted = await requestAndroidBeaconPermissions(rationaleMessages);
+      permissionsGranted = await requestAndroidBeaconPermissions(
+        rationaleMessages,
+      );
     }
 
-    if (granted) {
+    if (permissionsGranted) {
       // Initialize beacons SDK after consent is granted
       await initializeKettleSDK();
       Kettle.grant(BEACONS_CONSENTS);
-      await storage.set(storeKey.beaconsConsent, 'true');
       await updateBeaconsInfo();
     }
 
-    return granted;
+    return permissionsGranted;
   }, [isBeaconsSupported, rationaleMessages, initializeKettleSDK]);
 
   const revokeBeacons = useCallback(async () => {
@@ -194,6 +200,15 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
       const permissions = await allowedPermissionsForBeacons();
       if (consentGranted && permissions.length > 0 && !beaconsInfo?.isStarted) {
+        // TODO: What is the return type?
+        const consents: any = await Kettle.getGrantedConsents();
+
+        // If the user have given consents, but permissions were enabled later,
+        // the consents are not necessarily set in the SDK.
+        if (consents.length === 0) {
+          Kettle.grant(BEACONS_CONSENTS);
+        }
+
         Kettle.start(permissions);
         await updateBeaconsInfo();
       }
