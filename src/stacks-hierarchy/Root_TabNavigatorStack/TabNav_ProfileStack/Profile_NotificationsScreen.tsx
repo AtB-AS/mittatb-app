@@ -23,7 +23,6 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {NotificationConfigGroup} from '@atb/notifications/types';
 import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
-import {Button} from '@atb/components/button';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
