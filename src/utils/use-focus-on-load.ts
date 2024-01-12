@@ -20,8 +20,8 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
 
   const focusCallbackRef: RefCallback<any> = useCallback(
     (node) => {
-      if (setFocusOnLoad) giveFocus(node);
       focusRef.current = node;
+      if (setFocusOnLoad) giveFocus(focusRef);
     },
     [setFocusOnLoad],
   );
