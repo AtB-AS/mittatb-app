@@ -202,8 +202,8 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         await initializeKettleSDK(false);
 
         // If the user have given consents, but permissions were enabled later,
-        // the consents are not necessarily set in the SDK. So we check the list
-        // of granted consents and grant if they are not set.
+        // the consents are not necessarily set in the SDK. So we check the SDKs
+        // list of granted consents and grant if they are not set.
         const consents: any[] = await Kettle.getGrantedConsents();
         if (consents.length === 0) {
           Kettle.grant(BEACONS_CONSENTS);
