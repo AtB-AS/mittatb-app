@@ -114,14 +114,12 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     [],
   );
 
-  const stopBeacons = useCallback(async () => {
-    const permissions = await allowedPermissionsForBeacons();
-    if (
-      permissions.length > 0 &&
-      beaconsInfo?.isStarted &&
-      isInitializedRef.current
-    ) {
-      Kettle.stop(permissions);
+  const stopBeacons = useCallback(() => {
+    if (beaconsInfo?.isStarted && isInitializedRef.current) {
+      // Stop all the modules regardless of the permissions
+      // to avoid a bug where the SDK is not stopped properly
+      // when the user revokes the permissions.
+      Kettle.stop(KettleModulesForBeacons);
     }
   }, [beaconsInfo]);
 
@@ -161,7 +159,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
     await initializeKettleSDK(true);
-    await stopBeacons();
+    stopBeacons();
     Kettle.revoke(BEACONS_CONSENTS);
     await storage.set(storeKey.beaconsConsent, 'false');
     setIsConsentGranted(false);
@@ -183,11 +181,8 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         // If beacons became unsupported, stop the SDK if it was initialized
         // this case can happen when the `enable_beacons` remote config is set to false
         // when the app is already onboarded for beacons.
-        if (isInitializedRef.current && beaconsInfo?.isStarted) {
-          // Stop all the modules regardless of the permissions
-          // to avoid a bug where the SDK is not stopped properly
-          // when the user revokes the permissions.
-          Kettle.stop(KettleModulesForBeacons);
+        if (isInitializedRef.current) {
+          stopBeacons();
           await updateBeaconsInfo();
         }
         // If beacons are not supported, stop the SDK if it was initialized
@@ -205,7 +200,13 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         await updateBeaconsInfo();
       }
     })();
-  }, [isBeaconsSupported, beaconsInfo, isConsentGranted, initializeKettleSDK]);
+  }, [
+    isBeaconsSupported,
+    beaconsInfo,
+    isConsentGranted,
+    initializeKettleSDK,
+    stopBeacons,
+  ]);
 
   useEffect(() => {
     (async function () {
