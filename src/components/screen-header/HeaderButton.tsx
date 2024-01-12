@@ -111,9 +111,10 @@ const useHeaderButton = (
     case 'chat':
       return chatIcon;
     case 'info':
-      const {onPress, color, ...accessibilityProps} = buttonProps;
+      const {onPress, type, color, ...accessibilityProps} = buttonProps;
       return {
         children: <ThemeIcon svg={Info} colorType={color}/>,
+        accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
         onPress: onPress,
         ...accessibilityProps
       };

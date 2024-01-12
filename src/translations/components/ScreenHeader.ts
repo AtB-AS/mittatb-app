@@ -45,6 +45,9 @@ const ScreenHeaderTexts = {
     chat: {
       a11yHint: _('Kontakt AtB', 'Contact AtB', 'Kontakt AtB'),
     },
+    info: {
+      a11yHint: _('Aktivér for å gå til billettinformasjon', 'Activate to go to ticket information', 'Aktivér for å gå til billetinformasjon'),
+    }
   },
 };
 
