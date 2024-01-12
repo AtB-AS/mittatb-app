@@ -68,7 +68,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
   const close = () => {
     setContentFunction(() => () => null);
     setIsOpen(false);
-    giveFocus(onCloseFocusRef.current);
+    giveFocus(onCloseFocusRef);
   };
 
   const open = (
@@ -120,7 +120,7 @@ export const BottomSheetProvider: React.FC = ({children}) => {
         </AnimatedBottomSheet>
       </>
     ),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isOpen, close, animatedOffset, safeAreaBottom],
   );
 
