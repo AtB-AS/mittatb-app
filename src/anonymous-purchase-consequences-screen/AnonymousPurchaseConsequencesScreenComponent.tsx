@@ -11,6 +11,8 @@ import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {OnboardingFullScreenView} from '@atb/onboarding-screen';
+import {View} from 'react-native';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps} from '@atb/components/screen-header';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -28,6 +30,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
 }: Props) => {
   const styles = useStyle();
   const {t} = useTranslation();
+  const focusRef = useFocusOnLoad();
 
   const loginButton = {
     onPress: onPressLogin || (() => {}),
@@ -54,10 +57,11 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
         onPressLogin ? continueWithoutLoginButton : undefined
       }
     >
-      <ThemeText type="heading--big" color={themeColor} style={styles.header}>
-        {t(AnonymousPurchasesTexts.consequences.title)}
-      </ThemeText>
-
+      <View ref={focusRef} accessible>
+        <ThemeText type="heading--big" color={themeColor} style={styles.header}>
+          {t(AnonymousPurchasesTexts.consequences.title)}
+        </ThemeText>
+      </View>
       <Consequence
         value={t(AnonymousPurchasesTexts.consequences.messages[0])}
         icon={<ThemeIcon svg={Phone} colorType={themeColor} size="large" />}
