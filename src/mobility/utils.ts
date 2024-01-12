@@ -76,24 +76,26 @@ export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
 
 /**
  * Determines if vehicles need to be reloaded, by checking if the
- * previously loaded area covers the new area.
+ * previously loaded area covers the shown area.
  *
  * @param prevArea Area in which vehicles are already loaded
- * @param newArea Area currently visible in the map
- * @return false if the previous area covers the new area and no reload is
+ * @param shownArea Area currently visible in the map
+ * @return false if the previous area covers the shown area and no reload is
  * needed, otherwise true
  */
 export const needsReload = (
-  prevArea: AreaState,
-  newArea: AreaState,
+  prevArea: AreaState | undefined,
+  shownArea: AreaState,
 ): boolean => {
+  if (!prevArea) return true;
+
   const prevAreaFeature = extend(
     toFeaturePoint({lat: prevArea.lat, lon: prevArea.lon}),
     prevArea.range,
   );
   const newAreaFeature = extend(
-    toFeaturePoint({lat: newArea.lat, lon: newArea.lon}),
-    newArea.range,
+    toFeaturePoint({lat: shownArea.lat, lon: shownArea.lon}),
+    shownArea.range,
   );
 
   // If the previous area covers the new area the 'difference' will return null
@@ -131,9 +133,10 @@ export const updateAreaState = (
   return (prevArea: AreaState | undefined): AreaState | undefined => {
     if (region.zoomLevel < minZoomLevel) return undefined;
 
-    const newArea = mapRegionToArea(region, bufferDistance);
-    if (!prevArea) return newArea;
-    return needsReload(prevArea, newArea) ? newArea : prevArea;
+    const shownArea = mapRegionToArea(region, 0);
+    return needsReload(prevArea, shownArea)
+      ? mapRegionToArea(region, bufferDistance)
+      : prevArea;
   };
 };
 
