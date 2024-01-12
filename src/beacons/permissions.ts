@@ -20,6 +20,11 @@ export const BEACONS_CONSENTS = [
   KettleConsents.SURVEYS,
   KettleConsents.ANALYTICS,
 ];
+export const KettleModulesForBeacons = [
+  KettleModules.BLUETOOTH,
+  KettleModules.LOCATION,
+  KettleModules.ACTIVITY,
+];
 const BEACONS_PERMISSIONS: Record<PermissionKey, Permission> = {
   bluetooth: getBluetoothPermission(),
   locationWhenInUse:

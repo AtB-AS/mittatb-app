@@ -12,6 +12,7 @@ import {Kettle} from 'react-native-kettle-module';
 import {NativeModules, Platform} from 'react-native';
 import {
   BEACONS_CONSENTS,
+  KettleModulesForBeacons,
   allowedPermissionsForBeacons,
   requestAndroidBeaconPermissions,
 } from './permissions';
@@ -53,7 +54,6 @@ type BeaconsInfo = {
 type BeaconsContextState = {
   isBeaconsSupported: boolean;
   beaconsInfo?: BeaconsInfo;
-
   /**
    * Onboard the user for beacons by asking for permissions if possible. If
    * permissions are granted, the Kettle SDK will be started, and beaconsInfo
@@ -170,7 +170,20 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     (async function () {
-      if (!isBeaconsSupported) return;
+      if (!isBeaconsSupported) {
+        // If beacons became unsupported, stop the SDK if it was initialized
+        // this case can happen when the `enable_beacons` remote config is set to false
+        // when the app is already onboarded for beacons.
+        if (isInitializedRef.current && beaconsInfo?.isStarted) {
+          // Stop all the modules regardless of the permissions
+          // to avoid a bug where the SDK is not stopped properly
+          // when the user revokes the permissions.
+          Kettle.stop(KettleModulesForBeacons);
+          await updateBeaconsInfo();
+        }
+        // If beacons are not supported, stop the SDK if it was initialized
+        return;
+      }
       const consentGranted =
         parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
 
