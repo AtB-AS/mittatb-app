@@ -1,6 +1,10 @@
 import React, {useEffect} from 'react';
 import {FullScreenView} from '@atb/components/screen-view';
-import {Section, ToggleSectionItem} from '@atb/components/sections';
+import {
+  MessageSectionItem,
+  Section,
+  ToggleSectionItem,
+} from '@atb/components/sections';
 import {Linking, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -49,9 +53,8 @@ export const Profile_NotificationsScreen = ({
   }, [isFocusedAndActive, checkPermissions]);
 
   const hasNoEmail = profileQuery.isSuccess && profileQuery.data.email === '';
-  const mailEnabled = isConfigEnabled(config?.modes, 'mail') && !hasNoEmail;
-  const pushEnabled =
-    isConfigEnabled(config?.modes, 'push') && permissionStatus === 'granted';
+  const mailEnabled = isConfigEnabled(config?.modes, 'mail');
+  const pushEnabled = isConfigEnabled(config?.modes, 'push');
   const anyModeEnabled = mailEnabled || pushEnabled;
 
   const handleModeToggle = async (id: string, enabled: boolean) => {
@@ -111,22 +114,31 @@ export const Profile_NotificationsScreen = ({
                             .notifications.emailToggle.noEmailPlaceholder,
                     )
               }
-              disabled={hasNoEmail}
               value={mailEnabled}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
+            {hasNoEmail && mailEnabled && (
+              <MessageSectionItem
+                messageType="info"
+                title={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .emailRequired.title,
+                )}
+                message={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .emailRequired.message,
+                )}
+                onPressConfig={{
+                  text: t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.emailRequired.action,
+                  ),
+                  action: () =>
+                    navigation.navigate('Profile_EditProfileScreen'),
+                }}
+              />
+            )}
           </Section>
-          {hasNoEmail && (
-            <Button
-              onPress={() => navigation.navigate('Profile_EditProfileScreen')}
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .button,
-              )}
-              interactiveColor="interactive_2"
-              mode="secondary"
-            />
-          )}
           <Section>
             <ToggleSectionItem
               text={t(
@@ -138,33 +150,31 @@ export const Profile_NotificationsScreen = ({
                   .pushToggle.subText,
               )}
               value={pushEnabled}
-              disabled={
-                permissionStatus === 'updating' || permissionStatus === 'denied'
-              }
               onValueChange={(enabled) => handleModeToggle('push', enabled)}
             />
+            {pushEnabled &&
+              permissionStatus !== 'error' &&
+              permissionStatus === 'denied' && (
+                <MessageSectionItem
+                  messageType="info"
+                  title={t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.permissionRequired.title,
+                  )}
+                  message={t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.permissionRequired.message,
+                  )}
+                  onPressConfig={{
+                    text: t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .notifications.permissionRequired.action,
+                    ),
+                    action: () => Linking.openSettings(),
+                  }}
+                />
+              )}
           </Section>
-
-          {permissionStatus !== 'error' && permissionStatus === 'denied' && (
-            <MessageInfoBox
-              type="info"
-              title={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionRequired.title,
-              )}
-              message={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .permissionRequired.message,
-              )}
-              onPressConfig={{
-                text: t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .permissionRequired.action,
-                ),
-                action: () => Linking.openSettings(),
-              }}
-            />
-          )}
           {permissionStatus === 'error' && (
             <MessageInfoBox
               type="error"

@@ -124,6 +124,19 @@ const ProfileTexts = {
             ),
           },
           button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
+          emailRequired: {
+            title: _('E-post mangler', 'E-mail missing', 'E-post manglar'),
+            message: _(
+              'Legg til e-post i min profil for å benytte e-postvarsel.',
+              'Add e-mail to my profile to use e-mail notifications.',
+              'Legg til e-post i min profil for å bruke e-postvarsel.',
+            ),
+            action: _(
+              'Legg til e-post',
+              'Add e-mail address',
+              'Legg til e-post',
+            ),
+          },
           permissionRequired: {
             title: _(
               'Tillatelse kreves',
