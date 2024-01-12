@@ -12,6 +12,7 @@ import {Kettle} from 'react-native-kettle-module';
 import {NativeModules, Platform} from 'react-native';
 import {
   BEACONS_CONSENTS,
+  KettleModulesForBeacons,
   allowedPermissionsForBeacons,
   requestAndroidBeaconPermissions,
 } from './permissions';
@@ -177,8 +178,22 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     (async function () {
-      if (!isBeaconsSupported) return;
       // Start beacons if consent is granted and permissions are granted
+      if (!isBeaconsSupported) {
+        // If beacons became unsupported, stop the SDK if it was initialized
+        // this case can happen when the `enable_beacons` remote config is set to false
+        // when the app is already onboarded for beacons.
+        if (isInitializedRef.current && beaconsInfo?.isStarted) {
+          // Stop all the modules regardless of the permissions
+          // to avoid a bug where the SDK is not stopped properly
+          // when the user revokes the permissions.
+          Kettle.stop(KettleModulesForBeacons);
+          await updateBeaconsInfo();
+        }
+        // If beacons are not supported, stop the SDK if it was initialized
+        return;
+      }
+
       const permissions = await allowedPermissionsForBeacons();
       if (
         isConsentGranted &&
