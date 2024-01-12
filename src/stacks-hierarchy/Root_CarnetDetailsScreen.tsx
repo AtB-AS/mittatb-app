@@ -8,6 +8,13 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {CarnetDetailedView} from '@atb/fare-contracts';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useNow} from '@atb/utils/use-now';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAnalytics} from '@atb/analytics';
+import {
+  findReferenceDataById,
+  isOfFareProductRef,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 
 type Props = RootStackScreenProps<'Root_CarnetDetailsScreen'>;
 
@@ -16,7 +23,32 @@ export function Root_CarnetDetailsScreen({navigation, route}: Props) {
   const now = useNow(2500);
   const {findFareContractByOrderId} = useTicketingState();
   const fc = findFareContractByOrderId(route?.params?.orderId);
+  const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
+  const {enable_ticket_information} = useRemoteConfig();
+  const analytics = useAnalytics();
+
+  const {preassignedFareProducts} = useFirestoreConfiguration();
+  const preassignedFareProduct = findReferenceDataById(
+    preassignedFareProducts,
+    isOfFareProductRef(firstTravelRight) ? firstTravelRight.fareProductRef : '',
+  );
+
+  const ticketInfoParams = preassignedFareProduct && {
+    fareProductTypeConfigType: preassignedFareProduct?.type,
+    preassignedFareProductId: preassignedFareProduct?.id,
+  };
+
+  const onPressInfo = () => {
+    ticketInfoParams &&
+      navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
+    ticketInfoParams &&
+      analytics.logEvent(
+        'Ticketing',
+        'Ticket information button clicked',
+        ticketInfoParams,
+      );
+  };
 
   const onReceiptNavigate = () =>
     fc &&
@@ -29,6 +61,11 @@ export function Root_CarnetDetailsScreen({navigation, route}: Props) {
     <View style={styles.container}>
       <FullScreenHeader
         leftButton={{type: 'close'}}
+        rightButton={
+          enable_ticket_information
+            ? {type: 'info', onPress: onPressInfo, color: 'background_accent_0'}
+            : undefined
+        }
         title={t(FareContractTexts.details.header.title)}
       />
       <ScrollView contentContainerStyle={styles.content}>

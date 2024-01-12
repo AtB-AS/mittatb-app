@@ -13,6 +13,7 @@ import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {useServiceDisruptionIcon} from '@atb/service-disruptions/use-service-disruption-icon';
 import {AnalyticsEventContext, useAnalytics} from '@atb/analytics';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {Info} from '@atb/assets/svg/mono-icons/status';
 
 export type ButtonModes =
   | 'back'
@@ -21,6 +22,7 @@ export type ButtonModes =
   | 'chat'
   | 'skip'
   | 'status-disruption'
+  | 'info'
   | 'custom';
 export type HeaderButtonProps = {
   type: ButtonModes;
@@ -108,6 +110,13 @@ const useHeaderButton = (
     }
     case 'chat':
       return chatIcon;
+    case 'info':
+      const {onPress, color, ...accessibilityProps} = buttonProps;
+      return {
+        children: <ThemeIcon svg={Info} colorType={color}/>,
+        onPress: onPress,
+        ...accessibilityProps
+      };
     case 'custom': {
       const {text, color, onPress, ...accessibilityProps} = buttonProps;
       return {
