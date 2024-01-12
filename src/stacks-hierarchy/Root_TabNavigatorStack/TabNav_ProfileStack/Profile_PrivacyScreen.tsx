@@ -75,14 +75,12 @@ export const Profile_PrivacyScreen = () => {
                     .CollectTravelHabits.subText,
                 )}
                 value={isConsentGranted}
-                onValueChange={(checked) => {
-                  async () => {
-                    if (checked) {
-                      await onboardForBeacons();
-                    } else {
-                      await revokeBeacons();
-                    }
-                  };
+                onValueChange={async (checked) => {
+                  if (checked) {
+                    await onboardForBeacons();
+                  } else {
+                    await revokeBeacons();
+                  }
                 }}
                 testID="toggleCollectData"
               />
