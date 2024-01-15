@@ -71,7 +71,6 @@ export type Root_LoginOptionsScreenParams = {
 
 export type Root_LoginPhoneInputScreenParams = {
   afterLogin?: AfterLoginScreenType;
-  transitionPreset?: TransitionPreset;
 };
 
 export type Root_LoginConfirmCodeScreenParams = {
@@ -90,9 +89,9 @@ export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {
     | NextScreenParams<'Root_PurchaseOverviewScreen'>;
 };
 
-type Root_ParkingViolationsPhotoParams = ScreenParams<{
+type Root_ParkingViolationsPhotoParams = {
   selectedViolations: ParkingViolationType[];
-}>;
+};
 
 type Root_ParkingViolationsQrParams = Root_ParkingViolationsPhotoParams & {
   photo: string;
@@ -104,55 +103,51 @@ type Root_ParkingViolationsConfirmationParams = {
 
 type Root_PurchaseAsAnonymousConsequencesScreenParams = {
   showLoginButton: boolean | undefined;
-  transitionPreset?: TransitionPreset;
 };
 
 type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
   paymentMethod: CardPaymentMethod;
 };
 
-export type RootStackParamList = {
-  NotFound: ScreenParams<undefined>;
-  Root_OnboardingStack: ScreenParams<undefined>;
-  Root_TermsInformationScreen: ScreenParams<undefined>;
-  Root_ConsiderTravelTokenChangeScreen: ScreenParams<undefined>;
-  Root_SelectTravelTokenScreen: ScreenParams<undefined>;
-  Root_TicketAssistantStack: ScreenParams<undefined>;
-  Root_TabNavigatorStack: ScreenParams<
-    NavigatorScreenParams<TabNavigatorStackParams>
-  >;
-  Root_LocationSearchByTextScreen: ScreenParams<Root_LocationSearchByTextScreenParams>;
-  Root_LocationSearchByMapScreen: ScreenParams<Root_LocationSearchByMapScreenParams>;
-  Root_AddEditFavoritePlaceScreen: ScreenParams<Root_AddEditFavoritePlaceScreenParams>;
-  Root_SearchStopPlaceScreen: ScreenParams<undefined>;
-  Root_ShareTravelHabitsScreen: ScreenParams<undefined>;
-  Root_PurchaseOverviewScreen: ScreenParams<Root_PurchaseOverviewScreenParams>;
-  Root_PurchaseConfirmationScreen: ScreenParams<Root_PurchaseConfirmationScreenParams>;
-  Root_PurchaseTariffZonesSearchByMapScreen: ScreenParams<Root_PurchaseTariffZonesSearchByMapScreenParams>;
-  Root_PurchaseTariffZonesSearchByTextScreen: ScreenParams<Root_PurchaseTariffZonesSearchByTextScreenParams>;
-  Root_PurchaseHarborSearchScreen: ScreenParams<Root_PurchaseHarborSearchScreenParams>;
-  Root_PurchaseAsAnonymousConsequencesScreen: ScreenParams<Root_PurchaseAsAnonymousConsequencesScreenParams>;
-  Root_PurchasePaymentWithCreditCardScreen: ScreenParams<Root_PurchasePaymentWithCreditCardScreenParams>;
-  Root_PurchasePaymentWithVippsScreen: ScreenParams<PaymentParams>;
-  Root_FareContractDetailsScreen: ScreenParams<FareContractDetailsRouteParams>;
-  Root_CarnetDetailsScreen: ScreenParams<CarnetDetailsRouteParams>;
-  Root_ReceiptScreen: ScreenParams<ReceiptScreenRouteParams>;
-  Root_TicketInformationScreen: ScreenParams<TicketInformationScreenParams>;
-  Root_LoginActiveFareContractWarningScreen: ScreenParams<Root_LoginActiveFareContractWarningScreenParams>;
-  Root_LoginOptionsScreen: ScreenParams<Root_LoginOptionsScreenParams>;
-  Root_LoginConfirmCodeScreen: ScreenParams<Root_LoginConfirmCodeScreenParams>;
-  Root_LoginPhoneInputScreen: ScreenParams<Root_LoginPhoneInputScreenParams>;
-  Root_LoginRequiredForFareProductScreen: ScreenParams<Root_LoginRequiredForFareProductScreenParams>;
-  Root_ActiveTokenOnPhoneRequiredForFareProductScreen: ScreenParams<Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams>;
-  Root_AddPaymentMethodScreen: ScreenParams<undefined>;
-  Root_ParkingViolationsSelect: ScreenParams<undefined>;
-  Root_ParkingViolationsPhoto: ScreenParams<Root_ParkingViolationsPhotoParams>;
-  Root_ParkingViolationsQr: ScreenParams<Root_ParkingViolationsQrParams>;
-  Root_ParkingViolationsConfirmation: ScreenParams<Root_ParkingViolationsConfirmationParams>;
-  Root_NotificationPermissionScreen: ScreenParams<undefined>;
-  Root_LocationWhenInUsePermissionScreen: ScreenParams<undefined>;
-  Root_ChooseTicketReceiverScreen: ScreenParams<Root_ChooseTicketReceiverScreenParams>;
-};
+export type RootStackParamList = StackParams<{
+  Root_OnboardingStack: undefined;
+  Root_TermsInformationScreen: undefined;
+  Root_ConsiderTravelTokenChangeScreen: undefined;
+  Root_SelectTravelTokenScreen: undefined;
+  Root_TicketAssistantStack: undefined;
+  Root_TabNavigatorStack: NavigatorScreenParams<TabNavigatorStackParams>;
+  Root_LocationSearchByTextScreen: Root_LocationSearchByTextScreenParams;
+  Root_LocationSearchByMapScreen: Root_LocationSearchByMapScreenParams;
+  Root_AddEditFavoritePlaceScreen: Root_AddEditFavoritePlaceScreenParams;
+  Root_SearchStopPlaceScreen: undefined;
+  Root_ShareTravelHabitsScreen: undefined;
+  Root_PurchaseOverviewScreen: Root_PurchaseOverviewScreenParams;
+  Root_PurchaseConfirmationScreen: Root_PurchaseConfirmationScreenParams;
+  Root_PurchaseTariffZonesSearchByMapScreen: Root_PurchaseTariffZonesSearchByMapScreenParams;
+  Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
+  Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
+  Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
+  Root_PurchasePaymentWithCreditCardScreen: Root_PurchasePaymentWithCreditCardScreenParams;
+  Root_PurchasePaymentWithVippsScreen: PaymentParams;
+  Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
+  Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
+  Root_ReceiptScreen: ReceiptScreenRouteParams;
+  Root_TicketInformationScreen: TicketInformationScreenParams;
+  Root_LoginActiveFareContractWarningScreen: Root_LoginActiveFareContractWarningScreenParams;
+  Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;
+  Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
+  Root_LoginPhoneInputScreen: Root_LoginPhoneInputScreenParams;
+  Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
+  Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
+  Root_AddPaymentMethodScreen: undefined;
+  Root_ParkingViolationsSelectScreen: undefined;
+  Root_ParkingViolationsPhotoScreen: Root_ParkingViolationsPhotoParams;
+  Root_ParkingViolationsQrScreen: Root_ParkingViolationsQrParams;
+  Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
+  Root_NotificationPermissionScreen: undefined;
+  Root_LocationWhenInUsePermissionScreen: undefined;
+  Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
+}>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
 export type RootStackProps = RootStackScreenProps<keyof RootStackParamList>;
@@ -165,8 +160,21 @@ export type CustomScreenParams = {
 };
 
 /**
- * This type is meant to be used on every screen params in a stack param list, and
- * it makes it possible to specify transition when navigating to another screen.
+ * This type is meant to be used on every stack params specification. It both:
+ * - Checks that each key in the stack param list ends with "Screen" or "Stack"
+ * - Adds the CustomScreenParams to the mapped value type., which makes it
+ *   possible to set transition when navigating.
  */
-export type ScreenParams<T extends Record<string, any> | undefined> = T &
-  (CustomScreenParams | undefined);
+export type StackParams<
+  T extends {
+    [K in keyof T]: K extends string
+      ? K extends `${string}Screen` | `${string}Stack`
+        ? object | undefined
+        : never
+      : never;
+  },
+> = {
+  [K in keyof T]: T[K] extends undefined
+    ? CustomScreenParams | undefined
+    : T[K] & CustomScreenParams;
+};

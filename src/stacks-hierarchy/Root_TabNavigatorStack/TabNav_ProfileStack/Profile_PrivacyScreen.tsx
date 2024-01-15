@@ -5,8 +5,8 @@ import {
 } from '@atb/components/sections';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
-import React from 'react';
-import {Linking, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Alert, Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
@@ -20,18 +20,61 @@ import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
   const {
-    kettleInfo,
-    onboardForBeacons,
     revokeBeacons,
-    deleteCollectedData,
+    isConsentGranted,
+    onboardForBeacons,
     isBeaconsSupported,
+    deleteCollectedData,
     getPrivacyDashboardUrl,
   } = useBeaconsState();
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
+  const [isBeaconsToggleValue, setIsBeaconsToggleValue] =
+    useState(isConsentGranted);
+  const [isBeaconsToggleDisabled, setIsBeaconsToggleDisabled] = useState(false);
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
+
+  const beaconsPermissionsAlert = useCallback(
+    () =>
+      Alert.alert(
+        t(PrivacySettingsTexts.permissionsAlert.title),
+        t(PrivacySettingsTexts.permissionsAlert.message),
+        [
+          {
+            text: t(PrivacySettingsTexts.permissionsAlert.action),
+            onPress: () => Linking.openSettings(),
+          },
+        ],
+      ),
+    [t],
+  );
+
+  useEffect(() => {
+    (async () => {
+      setIsBeaconsToggleDisabled(true);
+      if (isBeaconsToggleValue) {
+        const permissionsGranted = await onboardForBeacons();
+
+        // If the toggle was set to true, but we don't have the required
+        // permissions, we ask the user to grant permissions from Settings.
+        if (!permissionsGranted) beaconsPermissionsAlert();
+
+        setIsBeaconsToggleValue(permissionsGranted);
+      } else {
+        await revokeBeacons();
+        setIsBeaconsToggleValue(false);
+      }
+      setIsBeaconsToggleDisabled(false);
+    })();
+  }, [
+    isBeaconsToggleValue,
+    onboardForBeacons,
+    revokeBeacons,
+    beaconsPermissionsAlert,
+  ]);
+
   return (
     <FullScreenView
       headerProps={{
@@ -61,14 +104,9 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={kettleInfo?.isBeaconsOnboarded}
-                onValueChange={async (checked) => {
-                  if (checked) {
-                    await onboardForBeacons();
-                  } else {
-                    await revokeBeacons();
-                  }
-                }}
+                value={isBeaconsToggleValue}
+                onValueChange={(checked) => setIsBeaconsToggleValue(checked)}
+                disabled={isBeaconsToggleDisabled}
                 testID="toggleCollectData"
               />
             </Section>

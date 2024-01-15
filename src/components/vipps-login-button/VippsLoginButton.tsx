@@ -25,6 +25,7 @@ export const VippsLoginButton = ({
   return (
     <PressableOpacity
       accessibilityLabel={t(LoginTexts.logInOptions.options.vipps.a11yLabel)}
+      role="button"
       onPress={onPress}
     >
       <View

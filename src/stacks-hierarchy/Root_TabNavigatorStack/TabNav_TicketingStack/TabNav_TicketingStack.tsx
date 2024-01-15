@@ -5,11 +5,12 @@ import {Ticketing_RootScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {NavigatorScreenParams} from '@react-navigation/native';
 import {TicketTabNavStackParams} from './Ticketing_TicketTabNavStack/navigation-types';
+import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 
-export type TicketingStackParams = {
+export type TicketingStackParams = StackParams<{
   Ticketing_NotEnabledScreen: undefined;
   Ticketing_RootScreen: NavigatorScreenParams<TicketTabNavStackParams>;
-};
+}>;
 
 const Stack = createStackNavigator<TicketingStackParams>();
 

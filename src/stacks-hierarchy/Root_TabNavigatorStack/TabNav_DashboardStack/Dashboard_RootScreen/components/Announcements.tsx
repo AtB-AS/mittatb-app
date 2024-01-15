@@ -19,7 +19,7 @@ export const Announcements = ({style}: Props) => {
   const {findAnnouncements} = useAnnouncementsState();
   const {t} = useTranslation();
   const now = useNow(10000);
-  const {kettleInfo} = useBeaconsState();
+  const {isConsentGranted} = useBeaconsState();
 
   const {shareTravelHabitsOnboarded} = useAppState();
 
@@ -27,7 +27,7 @@ export const Announcements = ({style}: Props) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const ruleVariables = {
-    isBeaconsOnboarded: kettleInfo?.isBeaconsOnboarded ?? false,
+    isBeaconsConsentGranted: isConsentGranted ?? false,
     shareTravelHabitsOnboarded,
   };
 

@@ -158,10 +158,16 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   );
   const fadeInValueRef = useRef(new Animated.Value(0));
 
+  const [hasMinimumOfExpandedLegs, setHasMinimumOfExpandedLegs] =
+    useState(false);
+
   // Dynamically collapse legs to fit horizontally
   useEffect(() => {
     if (legIconsParentWidth && legIconsContentWidth) {
-      if (legIconsContentWidth >= legIconsParentWidth) {
+      if (
+        legIconsContentWidth >= legIconsParentWidth &&
+        !hasMinimumOfExpandedLegs
+      ) {
         setNumberOfExpandedLegs((val) => Math.max(val - 1, 1));
       } else {
         Animated.timing(fadeInValueRef.current, {
@@ -171,7 +177,13 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
         }).start();
       }
     }
-  }, [legIconsParentWidth, legIconsContentWidth]);
+  }, [legIconsParentWidth, legIconsContentWidth, hasMinimumOfExpandedLegs]);
+
+  useEffect(() => {
+    if (numberOfExpandedLegs <= 1) {
+      setHasMinimumOfExpandedLegs(true);
+    }
+  }, [numberOfExpandedLegs, setHasMinimumOfExpandedLegs]);
 
   if (filteredLegs.length < 1) return null;
 

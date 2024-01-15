@@ -16,6 +16,7 @@ import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {
   getFilteredLegsByWalkOrWaitTime,
+  getShouldShowLiveVehicle,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
   isLegFlexibleTransport,
@@ -45,6 +46,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {getAxiosErrorType} from '@atb/api/utils';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {isDefined} from '@atb/utils/presence';
 
 export type TripProps = {
   tripPattern: TripPattern;
@@ -72,17 +74,17 @@ export const Trip: React.FC<TripProps> = ({
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
 
   const realtimeMapEnabled = useRealtimeMapEnabled();
-  // avoid typescript errors on id
-  const filterLegs = (id?: string): id is string => {
-    return !!id;
-  };
-  // get vehicle position if there is realtime data for leg
-  const ids = realtimeMapEnabled
-    ? tripPattern.legs
-        .map((leg) => (leg.realtime ? leg.serviceJourney?.id : undefined))
-        .filter(filterLegs)
-    : undefined;
-  const {vehiclePositions} = useGetServiceJourneyVehicles(ids);
+
+  const liveVehicleIds = tripPattern.legs
+    .filter((leg) =>
+      getShouldShowLiveVehicle(
+        leg.serviceJourneyEstimatedCalls,
+        realtimeMapEnabled,
+      ),
+    )
+    .map((leg) => leg.serviceJourney?.id)
+    .filter(isDefined);
+  const {vehiclePositions} = useGetServiceJourneyVehicles(liveVehicleIds);
 
   const tripPatternLegs = tripPattern?.legs.map((leg) => {
     const mode: AnyMode = isLegFlexibleTransport(leg) ? 'flex' : leg.mode;

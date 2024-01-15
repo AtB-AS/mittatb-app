@@ -51,10 +51,10 @@ import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
 import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
 import {
-  Root_ParkingViolationsConfirmation,
-  Root_ParkingViolationsPhoto,
-  Root_ParkingViolationsQr,
-  Root_ParkingViolationsSelect,
+  Root_ParkingViolationsConfirmationScreen,
+  Root_ParkingViolationsPhotoScreen,
+  Root_ParkingViolationsQrScreen,
+  Root_ParkingViolationsSelectScreen,
 } from '@atb/stacks-hierarchy/Root_ParkingViolationsReporting';
 import {Root_TermsInformationScreen} from './Root_TermsInformationScreen';
 import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_NotificationPermissionScreen';
@@ -401,20 +401,20 @@ export const RootStack = () => {
                 component={Root_AddPaymentMethodScreen}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsSelect"
-                component={Root_ParkingViolationsSelect}
+                name="Root_ParkingViolationsSelectScreen"
+                component={Root_ParkingViolationsSelectScreen}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsPhoto"
-                component={Root_ParkingViolationsPhoto}
+                name="Root_ParkingViolationsPhotoScreen"
+                component={Root_ParkingViolationsPhotoScreen}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsQr"
-                component={Root_ParkingViolationsQr}
+                name="Root_ParkingViolationsQrScreen"
+                component={Root_ParkingViolationsQrScreen}
               />
               <Stack.Screen
-                name="Root_ParkingViolationsConfirmation"
-                component={Root_ParkingViolationsConfirmation}
+                name="Root_ParkingViolationsConfirmationScreen"
+                component={Root_ParkingViolationsConfirmationScreen}
               />
               <Stack.Screen
                 name="Root_NotificationPermissionScreen"
