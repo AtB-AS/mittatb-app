@@ -114,7 +114,7 @@ const useHeaderButton = (
       const {onPress, type, color, ...accessibilityProps} = buttonProps;
       return {
         children: <ThemeIcon svg={Info} colorType={color}/>,
-        accessibilityHint: t(ScreenHeaderTexts.headerButton[type].a11yHint),
+        accessibilityLabel: t(ScreenHeaderTexts.headerButton[type].text),
         onPress: onPress,
         ...accessibilityProps
       };

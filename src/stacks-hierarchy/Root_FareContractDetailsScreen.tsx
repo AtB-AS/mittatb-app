@@ -1,63 +1,36 @@
-import {FullScreenHeader} from '@atb/components/screen-header';
+import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/fare-contracts';
-import {
-  findReferenceDataById,
-  isOfFareProductRef,
-  useFirestoreConfiguration,
-} from '@atb/configuration';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
-import {useTicketingState} from '@atb/ticketing';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  ScreenHeaderTexts,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {useAnalytics} from '@atb/analytics';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
-  const {serverNow} = useTimeContextState();
-  const {findFareContractByOrderId} = useTicketingState();
-  const fc = findFareContractByOrderId(route?.params?.orderId);
-  const firstTravelRight = fc?.travelRights[0];
   const {t} = useTranslation();
   const {enable_ticket_information} = useRemoteConfig();
-  const analytics = useAnalytics();
+  const {serverNow} = useTimeContextState();
+  const {navigateToTicketInfoScreen, fareContract, preassignedFareProduct} =
+    useTicketInfo(route?.params?.orderId);
 
   useApplePassPresentationSuppression();
 
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    isOfFareProductRef(firstTravelRight) ? firstTravelRight.fareProductRef : '',
-  );
-
   const onReceiptNavigate = () =>
-    fc &&
+    fareContract &&
     navigation.push('Root_ReceiptScreen', {
-      orderId: fc.orderId,
-      orderVersion: fc.version,
+      orderId: fareContract.orderId,
+      orderVersion: fareContract.version,
     });
-
-  const ticketInfoParams = preassignedFareProduct && {
-    fareProductTypeConfigType: preassignedFareProduct?.type,
-    preassignedFareProductId: preassignedFareProduct?.id,
-  };
-
-  const onPressInfo = () => {
-    ticketInfoParams &&
-      navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
-    ticketInfoParams &&
-      analytics.logEvent(
-        'Ticketing',
-        'Ticket information button clicked',
-        ticketInfoParams,
-      );
-  };
 
   return (
     <View style={styles.container}>
@@ -65,15 +38,22 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
         leftButton={{type: 'close'}}
         rightButton={
           enable_ticket_information
-            ? {type: 'info', onPress: onPressInfo, color:'background_accent_0'}
+            ? {
+                type: 'info',
+                onPress: navigateToTicketInfoScreen,
+                color: 'background_accent_0',
+                accessibilityHint: t(
+                  ScreenHeaderTexts.headerButton.info.a11yHint,
+                ),
+              }
             : undefined
         }
         title={t(FareContractTexts.details.header.title)}
       />
       <ScrollView contentContainerStyle={styles.content}>
-        {fc && (
+        {fareContract && (
           <DetailsContent
-            fareContract={fc}
+            fareContract={fareContract}
             preassignedFareProduct={preassignedFareProduct}
             now={serverNow}
             onReceiptNavigate={onReceiptNavigate}
