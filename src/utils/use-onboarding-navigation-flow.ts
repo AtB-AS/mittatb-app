@@ -4,6 +4,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {useAuthState} from '@atb/auth';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 import {
   useNotifications,
   usePushNotificationsEnabled,
@@ -155,8 +156,11 @@ const useShouldShowTravelTokenOnboarding = () => {
   const {mobileTokenOnboarded, mobileTokenWithoutTravelcardOnboarded} =
     useAppState();
   const {disable_travelcard} = useRemoteConfig();
-
+  const {tokens, mobileTokenStatus} = useMobileTokenContextState();
+  const hasInspectableToken = tokens.some((token) => token.isInspectable);
   return (
+    hasInspectableToken &&
+    mobileTokenStatus === 'success' &&
     authenticationType === 'phone' &&
     ((!mobileTokenOnboarded && !disable_travelcard) ||
       (!mobileTokenWithoutTravelcardOnboarded && disable_travelcard))
