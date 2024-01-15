@@ -5,7 +5,7 @@ import {
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
-import {Linking, View} from 'react-native';
+import {Linking, Platform, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StaticColorByType} from '@atb/theme/colors';
 import {StyleSheet} from '@atb/theme';
@@ -24,6 +24,7 @@ import {NotificationConfigGroup} from '@atb/notifications/types';
 import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
+import {useAuthState} from '@atb/auth';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 type NotificationsScreenProps =
@@ -44,6 +45,7 @@ export const Profile_NotificationsScreen = ({
   } = useNotifications();
   const {notificationConfig} = useFirestoreConfiguration();
   const profileQuery = useProfileQuery();
+  const {authenticationType} = useAuthState();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -55,6 +57,20 @@ export const Profile_NotificationsScreen = ({
   const mailEnabled = isConfigEnabled(config?.modes, 'mail');
   const pushEnabled = isConfigEnabled(config?.modes, 'push');
   const anyModeEnabled = mailEnabled || pushEnabled;
+
+  // Prompt for push permissions on iOS, since it won't appear in the system
+  // settings until we do. On Android we don't know if we have asked for
+  // permissions before, but the option will always appear in the system
+  // settings, so we can always redirect the user there.
+  const shouldPromptForPushPermission =
+    Platform.OS === 'ios' && pushEnabled && permissionStatus === 'undetermined';
+
+  // Redirect to system settings if we need permissions, but are not able to
+  // prompt the user for it.
+  const shouldRedirectToSettings =
+    !shouldPromptForPushPermission &&
+    pushEnabled &&
+    permissionStatus === 'denied';
 
   const handleModeToggle = async (id: string, enabled: boolean) => {
     if (id === 'push' && enabled) {
@@ -84,10 +100,9 @@ export const Profile_NotificationsScreen = ({
         </View>
       )}
     >
-      {(permissionStatus === 'loading' || profileQuery.isLoading) && (
+      {permissionStatus === 'loading' || profileQuery.isLoading ? (
         <Processing message={t(dictionary.loading)} />
-      )}
-      {permissionStatus !== 'loading' && (
+      ) : (
         <View style={style.content}>
           <ContentHeading
             text={t(
@@ -116,6 +131,19 @@ export const Profile_NotificationsScreen = ({
               value={mailEnabled}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
             />
+            {mailEnabled && authenticationType === 'anonymous' && (
+              <MessageSectionItem
+                messageType="info"
+                title={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .loginRequired.title,
+                )}
+                message={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .loginRequired.message,
+                )}
+              />
+            )}
             {hasNoEmail && mailEnabled && (
               <MessageSectionItem
                 messageType="info"
@@ -151,28 +179,46 @@ export const Profile_NotificationsScreen = ({
               value={pushEnabled}
               onValueChange={(enabled) => handleModeToggle('push', enabled)}
             />
-            {pushEnabled &&
-              permissionStatus !== 'error' &&
-              permissionStatus === 'denied' && (
-                <MessageSectionItem
-                  messageType="info"
-                  title={t(
+            {shouldPromptForPushPermission && (
+              <MessageSectionItem
+                messageType="info"
+                title={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .promptRequired.title,
+                )}
+                message={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .promptRequired.message,
+                )}
+                onPressConfig={{
+                  text: t(
                     ProfileTexts.sections.settings.linkSectionItems
-                      .notifications.permissionRequired.title,
-                  )}
-                  message={t(
+                      .notifications.promptRequired.action,
+                  ),
+                  action: () => requestPermissions(),
+                }}
+              />
+            )}
+            {shouldRedirectToSettings && (
+              <MessageSectionItem
+                messageType="info"
+                title={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .permissionRequired.title,
+                )}
+                message={t(
+                  ProfileTexts.sections.settings.linkSectionItems.notifications
+                    .permissionRequired.message,
+                )}
+                onPressConfig={{
+                  text: t(
                     ProfileTexts.sections.settings.linkSectionItems
-                      .notifications.permissionRequired.message,
-                  )}
-                  onPressConfig={{
-                    text: t(
-                      ProfileTexts.sections.settings.linkSectionItems
-                        .notifications.permissionRequired.action,
-                    ),
-                    action: () => Linking.openSettings(),
-                  }}
-                />
-              )}
+                      .notifications.permissionRequired.action,
+                  ),
+                  action: () => Linking.openSettings(),
+                }}
+              />
+            )}
           </Section>
           {permissionStatus === 'error' && (
             <MessageInfoBox

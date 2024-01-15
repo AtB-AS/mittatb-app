@@ -124,6 +124,14 @@ const ProfileTexts = {
             ),
           },
           button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
+          loginRequired: {
+            title: _('Krever innlogging', 'Login required', 'Krev innlogging'),
+            message: _(
+              'Logg inn for å for å benytte e-postvarsel.',
+              'Log in to use e-mail notifications.',
+              'Logg inn for å nytte deg av e-postvarslingar.',
+            ),
+          },
           emailRequired: {
             title: _('E-post mangler', 'E-mail missing', 'E-post manglar'),
             message: _(
@@ -153,6 +161,19 @@ const ProfileTexts = {
               'Open Settings',
               'Opne telefoninnstillingar',
             ),
+          },
+          promptRequired: {
+            title: _(
+              'Tillatelse kreves',
+              'Permission required',
+              'Løyve krevjast',
+            ),
+            message: _(
+              'Du må tillate appen å sende deg varslinger for å få beskjed før billettene dine utløper.',
+              'You have to allow the app to send you notifications to be informed before your tickets expire.',
+              'Du må tillate appen å sende deg varsel for å bli informert før billettane dine går ut.',
+            ),
+            action: _('Velg tillatelser', 'Choose permissions', 'Vel løyve'),
           },
           permissionError: {
             title: _('Oops!', 'Whoops!', 'Oops!'),
