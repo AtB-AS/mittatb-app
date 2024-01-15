@@ -157,9 +157,9 @@ const useShouldShowTravelTokenOnboarding = () => {
     useAppState();
   const {disable_travelcard} = useRemoteConfig();
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
-  const inspectableToken = tokens.find((token) => token.isInspectable);
+  const hasInspectableToken = tokens.some((token) => token.isInspectable);
   return (
-    inspectableToken &&
+    hasInspectableToken &&
     mobileTokenStatus === 'success' &&
     authenticationType === 'phone' &&
     ((!mobileTokenOnboarded && !disable_travelcard) ||

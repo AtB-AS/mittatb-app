@@ -57,8 +57,8 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
 
   if (mobileTokenStatus !== 'success') return NoTokenView;
 
-  const inspectableToken = tokens.find((token) => token.isInspectable);
-  if (!inspectableToken) return NoTokenView;
+  const hasInspectableToken = tokens.some((token) => token.isInspectable);
+  if (!hasInspectableToken) return NoTokenView;
 
   return (
     <OnboardingFullScreenView
