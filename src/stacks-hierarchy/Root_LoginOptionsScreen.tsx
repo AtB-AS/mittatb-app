@@ -25,7 +25,7 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
+import {useEnterApp} from '@atb/utils/use-enter-app';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

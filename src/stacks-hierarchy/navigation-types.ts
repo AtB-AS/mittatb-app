@@ -16,10 +16,8 @@ import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
-import {
-  AfterLoginScreenType,
-  NextScreenParams,
-} from '@atb/utils/use-complete-onboarding-and-enter-app';
+
+import {AfterLoginScreenType, NextScreenParams} from '@atb/utils/use-enter-app';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;

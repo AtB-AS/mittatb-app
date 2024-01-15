@@ -20,10 +20,8 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {
-  useCompleteOnboardingAndEnterApp,
-  useEnterApp,
-} from '@atb/utils/use-complete-onboarding-and-enter-app';
+import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
+import {useEnterApp} from '@atb/utils/use-enter-app';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
