@@ -4,7 +4,7 @@ import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
 import {Feature} from 'geojson';
-import React, {useMemo, useRef} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
@@ -16,6 +16,7 @@ import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {MapProps, MapRegion} from './types';
 import {isFeaturePoint} from './utils';
+import isEqual from 'lodash.isequal';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -41,14 +42,14 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
-  const loadMobility = (mapRegion: MapRegion) => {
-    if (props.vehicles) {
-      props.vehicles.updateRegion(mapRegion);
-    }
-    if (props.stations) {
-      props.stations.updateRegion(mapRegion);
-    }
-  };
+  const updateRegionForVehicles = props.vehicles?.updateRegion;
+  const updateRegionForStations = props.stations?.updateRegion;
+  const [mapRegion, setMapRegion] = useState<MapRegion>();
+  useEffect(() => {
+    if (!mapRegion) return;
+    updateRegionForVehicles?.(mapRegion);
+    updateRegionForStations?.(mapRegion);
+  }, [mapRegion, updateRegionForVehicles, updateRegionForStations]);
 
   const onDidFinishLoadingMap = async () => {
     const visibleBounds = await mapViewRef.current?.getVisibleBounds();
@@ -57,19 +58,32 @@ export const Map = (props: MapProps) => {
 
     if (!visibleBounds || !zoomLevel || !center) return;
 
-    loadMobility({
+    setMapRegion({
       visibleBounds,
       zoomLevel,
       center,
     });
   };
 
+  /**
+   * OnMapIdle fires more often than expected, because of that we check if the
+   * map region is changed before updating its state.
+   *
+   * There is a slight performance overhead by deep comparing previous and new
+   * map regions on each on map idle, but since we have control over the size of
+   * the objects it should be ok. The risk of firing effects that uses the map
+   * region too often is greater than the risk introduced by the performance
+   * overhead.
+   */
   const onMapIdle = (state: MapState) => {
-    loadMobility({
+    const newMapRegion: MapRegion = {
       visibleBounds: [state.properties.bounds.ne, state.properties.bounds.sw],
       zoomLevel: state.properties.zoom,
       center: state.properties.center,
-    });
+    };
+    setMapRegion((prevMapRegion) =>
+      isEqual(prevMapRegion, newMapRegion) ? prevMapRegion : newMapRegion,
+    );
   };
 
   return (
