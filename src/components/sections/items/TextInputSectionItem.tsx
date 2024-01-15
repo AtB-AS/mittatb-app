@@ -58,7 +58,7 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
     const errorFocusRef = useRef(null);
 
     useEffect(() => {
-      giveFocus(errorFocusRef.current);
+      giveFocus(errorFocusRef);
     }, [errorText]);
     function accessibilityEscapeKeyboard() {
       setTimeout(

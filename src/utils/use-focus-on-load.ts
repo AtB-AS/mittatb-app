@@ -1,5 +1,9 @@
-import {Ref, RefCallback, useCallback, useEffect, useRef} from 'react';
-import {AccessibilityInfo, findNodeHandle, InteractionManager,} from 'react-native';
+import React, {Ref, RefCallback, useCallback, useEffect, useRef} from 'react';
+import {
+  AccessibilityInfo,
+  findNodeHandle,
+  InteractionManager,
+} from 'react-native';
 import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
 
 /**
@@ -16,17 +20,17 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
 
   const focusCallbackRef: RefCallback<any> = useCallback(
     (node) => {
-      if (setFocusOnLoad) giveFocus(node);
       focusRef.current = node;
+      if (setFocusOnLoad) giveFocus(focusRef);
     },
     [setFocusOnLoad],
   );
 
   useEffect(() => {
-    if (!navigation || !focusRef.current || !setFocusOnLoad) return;
+    if (!navigation || !focusRef || !setFocusOnLoad) return;
 
     const unsubscribe = navigation.addListener('focus', () =>
-      giveFocus(focusRef.current),
+      giveFocus(focusRef),
     );
     return () => unsubscribe();
   }, [navigation, setFocusOnLoad]);
@@ -34,11 +38,13 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
   return focusCallbackRef;
 }
 
-export const giveFocus = (node: any) => {
-  if (node) {
+export const giveFocus = (
+  focusRef?: React.RefObject<any> | null | undefined,
+) => {
+  if (focusRef && focusRef.current) {
     InteractionManager.runAfterInteractions(() => {
       setTimeout(() => {
-        const reactTag = findNodeHandle(node);
+        const reactTag = findNodeHandle(focusRef?.current);
         reactTag && AccessibilityInfo.setAccessibilityFocus(reactTag);
       }, 100);
     });
