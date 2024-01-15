@@ -146,6 +146,8 @@ const FareContractTexts = {
         'Kunne ikkje laste kaier.',
       ),
     },
+    infoButtonA11yHint: _('Aktivér for å gå til billettinformasjon', 'Activate to go to ticket information', 'Aktivér for å gå til billetinformasjon'),
+
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>

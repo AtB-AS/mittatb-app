@@ -2,7 +2,6 @@ import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
 import {
   FareContractTexts,
-  ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
@@ -42,7 +41,7 @@ export function Root_CarnetDetailsScreen({navigation, route}: Props) {
                 onPress: navigateToTicketInfoScreen,
                 color: 'background_accent_0',
                 accessibilityHint: t(
-                  ScreenHeaderTexts.headerButton.info.a11yHint,
+                  FareContractTexts.details.infoButtonA11yHint,
                 ),
               }
             : undefined

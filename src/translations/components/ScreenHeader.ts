@@ -47,7 +47,6 @@ const ScreenHeaderTexts = {
     },
     info: {
       text: _('Info', 'Info', 'Info'),
-      a11yHint: _('Aktivér for å gå til billettinformasjon', 'Activate to go to ticket information', 'Aktivér for å gå til billetinformasjon'),
     }
   },
 };

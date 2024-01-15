@@ -4,7 +4,6 @@ import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentati
 import {StyleSheet} from '@atb/theme';
 import {
   FareContractTexts,
-  ScreenHeaderTexts,
   useTranslation,
 } from '@atb/translations';
 import React from 'react';
@@ -43,7 +42,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
                 onPress: navigateToTicketInfoScreen,
                 color: 'background_accent_0',
                 accessibilityHint: t(
-                  ScreenHeaderTexts.headerButton.info.a11yHint,
+                  FareContractTexts.details.infoButtonA11yHint,
                 ),
               }
             : undefined
