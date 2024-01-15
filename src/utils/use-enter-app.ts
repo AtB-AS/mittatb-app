@@ -16,6 +16,16 @@ export type AfterLoginScreenType =
   | NextScreenParams<'Root_PurchaseConfirmationScreen'>
   | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
 
+/**
+ * This hook provides a function to navigate directly to the next screen,
+ * with Root_TabNavigatorStack as the only screen you can go back to.
+ * It omits unwanted animations or transitions in between.
+ *
+ * @returns {Function} A function that takes an optional `afterLogin` parameter of type `AfterLoginScreenType`.
+ * When called, it navigates to either the 'Root_TabNavigatorStack', a screen specified by
+ * `afterLogin`, or the next onboarding screen based on the app's current state.
+ */
+
 export const useEnterApp = () => {
   const {getNextOnboardingScreen} = useOnboardingNavigationFlow();
   const navigation = useNavigation<RootNavigationProps>();
