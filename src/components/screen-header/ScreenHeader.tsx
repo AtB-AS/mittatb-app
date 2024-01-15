@@ -27,6 +27,10 @@ export type RightButtonProps =
       type: 'chat' | 'skip' | 'close';
     })
   | (HeaderButtonProps & {
+      type: 'info',
+      onPress: () => void; 
+    })
+  | (HeaderButtonProps & {
       type: 'custom';
       onPress: () => void;
       text: string;
