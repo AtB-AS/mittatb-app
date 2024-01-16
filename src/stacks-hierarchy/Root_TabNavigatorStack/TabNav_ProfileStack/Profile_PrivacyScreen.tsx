@@ -6,7 +6,7 @@ import {
 } from '@atb/components/sections';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
 import {Button} from '@atb/components/button';
@@ -17,7 +17,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
-import {checkPermissionStatuses} from '@atb/beacons/permissions';
+import {allowedPermissionsForBeacons} from '@atb/beacons/permissions';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
@@ -39,11 +39,13 @@ export const Profile_PrivacyScreen = () => {
   const [hasPermissionsForBeacons, setHasPermissionsForBeacons] =
     useState(false);
 
-  useEffect(() => {
-    checkPermissionStatuses().then((permissions) => {
-      setHasPermissionsForBeacons(permissions.bluetooth);
+  const updatePermissions = useCallback(() => {
+    allowedPermissionsForBeacons().then((permissions) => {
+      const hasSomePermissions = permissions.length > 0;
+      setHasPermissionsForBeacons(hasSomePermissions);
     });
   }, []);
+  useEffect(() => updatePermissions(), [updatePermissions]);
 
   return (
     <FullScreenView
@@ -75,8 +77,11 @@ export const Profile_PrivacyScreen = () => {
                     .CollectTravelHabits.subText,
                 )}
                 value={isConsentGranted}
-                onValueChange={(checked) => {
-                  checked ? onboardForBeacons(true) : revokeBeacons();
+                onValueChange={async (checked) => {
+                  checked
+                    ? await onboardForBeacons(true)
+                    : await revokeBeacons();
+                  updatePermissions();
                 }}
                 testID="toggleCollectData"
               />
