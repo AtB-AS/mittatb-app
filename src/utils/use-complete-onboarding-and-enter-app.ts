@@ -55,7 +55,7 @@ const useEnterApp = () => {
       Route<keyof RootStackParamList, object | undefined>
     >[] = [{name: 'Root_TabNavigatorStack'}];
 
-    if (afterLogin) {
+    if (afterLogin?.screen) {
       routes.push({
         name: afterLogin.screen,
         params: afterLogin.params,

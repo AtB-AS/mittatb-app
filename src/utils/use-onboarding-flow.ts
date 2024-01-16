@@ -30,6 +30,7 @@ export type GoToScreenType = (screenName: any, params?: any) => void;
 // note: utilizeThisHookInstanceForSessionCounting should only be true for one instance
 export const useOnboardingFlow = (
   utilizeThisHookInstanceForSessionCounting = false,
+  assumeLoginOnboardingCompleted = false,
 ) => {
   const {enable_extended_onboarding} = useRemoteConfig();
 
@@ -111,12 +112,14 @@ export const useOnboardingFlow = (
   );
 
   const [nextOnboardingScreen, setNextOnboardingScreen] = useState<ScreenProps>(
-    getNextOnboardingScreen(),
+    getNextOnboardingScreen(undefined, assumeLoginOnboardingCompleted),
   );
 
   useEffect(() => {
-    setNextOnboardingScreen(getNextOnboardingScreen());
-  }, [getNextOnboardingScreen]);
+    setNextOnboardingScreen(
+      getNextOnboardingScreen(undefined, assumeLoginOnboardingCompleted),
+    );
+  }, [getNextOnboardingScreen, assumeLoginOnboardingCompleted]);
 
   /**
    * add Root_TabNavigatorStack as root when loginOnboardingCompleted

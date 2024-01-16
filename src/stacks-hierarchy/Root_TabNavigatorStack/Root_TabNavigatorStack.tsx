@@ -57,7 +57,8 @@ export const Root_TabNavigatorStack = () => {
   useOnPushNotificationOpened();
 
   const navigation = useNavigation<RootNavigationProps>();
-  const {nextOnboardingScreen} = useOnboardingFlow(true);
+
+  const {nextOnboardingScreen} = useOnboardingFlow(true, true); // assumeLoginOnboardingCompleted true to ensure outdated onboarded value not used
   const {goToScreen} = useOnboardingNavigation();
 
   useEffect(() => {
