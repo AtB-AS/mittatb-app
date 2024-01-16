@@ -20,13 +20,13 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useAppState} from '@atb/AppContext';
+import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
 
-export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
+export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const {phoneNumber, afterLogin} = route.params;
   const {t} = useTranslation();
   const styles = useStyles();
@@ -39,7 +39,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   >();
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
-  const {completeOnboarding} = useAppState();
+  const completeOnboardingAndEnterApp = useCompleteOnboardingAndEnterApp();
 
   const onLogin = async () => {
     setIsLoading(true);
@@ -48,7 +48,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
       setError(errorCode);
       setIsLoading(false);
     }
-    completeOnboarding();
+    completeOnboardingAndEnterApp();
   };
 
   const onResendCode = async () => {
@@ -66,10 +66,7 @@ export const Root_LoginConfirmCodeScreen = ({navigation, route}: Props) => {
   // Check authentication from state and see if it is updated while we wait
   useEffect(() => {
     if (authenticationType === 'phone') {
-      navigation.popToTop();
-      if (afterLogin) {
-        navigation.navigate(afterLogin.screen, afterLogin.params as any);
-      }
+      completeOnboardingAndEnterApp(afterLogin);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticationType]);

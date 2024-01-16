@@ -9,7 +9,7 @@ import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
-import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 import {useAnalytics} from '@atb/analytics';
 import {checkPermissionStatuses} from '@atb/beacons/permissions';
 import {useFocusEffect} from '@react-navigation/native';
@@ -19,7 +19,7 @@ export const Root_ShareTravelHabitsScreen = () => {
 
   const {configurableLinks} = useFirestoreConfiguration();
 
-  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+  const {continueFromOnboardingScreen} = useOnboardingNavigation();
 
   const {onboardForBeacons} = useBeaconsState();
 

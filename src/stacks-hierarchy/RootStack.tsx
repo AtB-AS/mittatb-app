@@ -63,6 +63,7 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
+import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -72,6 +73,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export const RootStack = () => {
   const {isLoading} = useAppState();
+  const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
   useFlipper(navRef);
@@ -164,6 +166,7 @@ export const RootStack = () => {
         <LoadingScreenBoundary>
           <NavigationContainer<RootStackParamList>
             onStateChange={trackNavigation}
+            initialState={getInitialNavigationContainerState(true)}
             ref={navRef}
             theme={ReactNavigationTheme}
             fallback={<LoadingScreen />}
