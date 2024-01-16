@@ -33,6 +33,17 @@ def intent_cert_info
   return intent_prov_profile_name, intent_prov_profile_path
 end
 
+def remove_background_location
+  update_info_plist(
+    xcodeproj: "./ios/atb.xcodeproj",
+    plist_path: "./atb/Info.plist",
+    block: proc do |plist|
+      puts "Deleting location from UIBackgroundModes..."
+      plist["UIBackgroundModes"].delete("location")
+    end
+  )
+end
+
 platform :ios do
   desc 'Update new devices and provisioning profiles'
   lane :update_devices do
@@ -179,6 +190,10 @@ platform :ios do
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
 
+    kettle_api_key_present = ENV["KETTLE_API_KEY"].to_s != ""
+    beacons_disabled = !kettle_api_key_present
+    puts "Is beacons disabled: #{!beacons_disabled}"
+
     update_project_team(
       path: "./ios/atb.xcodeproj",
       teamid: ENV["IOS_DEVELOPMENT_TEAM_ID"]
@@ -190,6 +205,9 @@ platform :ios do
       build_configuration: ENV['BUILD_CONFIGURATION'],
       code_signing_identity: app_signing_identity_name
     )
+    if beacons_disabled
+      remove_background_location()
+    end
     if widget_enabled
       update_project_provisioning(
         xcodeproj: "./ios/atb.xcodeproj",
