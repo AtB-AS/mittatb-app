@@ -192,7 +192,7 @@ platform :ios do
 
     kettle_api_key_present = ENV["KETTLE_API_KEY"].to_s != ""
     beacons_disabled = !kettle_api_key_present
-    puts "Is beacons disabled: #{!beacons_disabled}"
+    puts "Is beacons disabled: #{beacons_disabled}"
 
     update_project_team(
       path: "./ios/atb.xcodeproj",
