@@ -53,6 +53,14 @@ type BeaconsContextState = {
    * have not accepted any prompts about data collection.
    */
   isConsentGranted: boolean;
+  /**
+   * Whether or not the user have ever granted the consent for beacons even
+   * once. This is used to prevent the onboarding screen from showing if the
+   * user manually approves the consent on the privacy policy screen.
+   * Since they manually approves the consent without onboarding, we don't 
+   * want the onboarding to show again for these users.
+   */
+  isConsentAlreadyGrantedOnce: boolean;
   isBeaconsSupported: boolean;
   /**
    * Stops the SDK from collecting data, and sets isConsentGranted to false
@@ -74,6 +82,7 @@ type BeaconsContextState = {
 const defaultState: BeaconsContextState = {
   beaconsInfo: undefined,
   isConsentGranted: false,
+  isConsentAlreadyGrantedOnce: false,
   isBeaconsSupported: false,
   revokeBeacons: () => new Promise<void>(() => undefined),
   onboardForBeacons: () => new Promise<boolean>(() => false),
@@ -84,6 +93,7 @@ const defaultState: BeaconsContextState = {
 
 enum storeKey {
   beaconsConsent = '@ATB_beacons_consent_granted',
+  beaconsConsentAlreadyGrantedOnce = '@ATB_beacons_consent_granted_once'
 }
 
 const BeaconsContext = createContext<BeaconsContextState>(defaultState);
@@ -92,6 +102,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const {rationaleMessages} = useBeaconsMessages();
   const [beaconsInfo, setBeaconsInfo] = useState<BeaconsInfo>();
   const [isConsentGranted, setIsConsentGranted] = useState<boolean>(false);
+  const [isConsentAlreadyGrantedOnce, setIsConsentAlreadyGrantedOnce] = useState<boolean>(false);
   const [isBeaconsEnabled, debugOverrideReady] = useIsBeaconsEnabled();
 
   const isInitializedRef = useRef(false);
@@ -140,7 +151,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     if (!isBeaconsSupported) return false;
     await storage.set(storeKey.beaconsConsent, 'true');
     setIsConsentGranted(true);
-
+    await storage.set(storeKey.beaconsConsentAlreadyGrantedOnce, 'true');
     let permissionsGranted = false;
     if (Platform.OS === 'ios') {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
@@ -226,6 +237,9 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       const isConsentGranted =
         parseBoolean(await storage.get(storeKey.beaconsConsent)) ?? false;
       setIsConsentGranted(isConsentGranted);
+      const isConsentAlreadyGrantedOnce = 
+        parseBoolean(await storage.get(storeKey.beaconsConsentAlreadyGrantedOnce)) ?? false;
+        setIsConsentAlreadyGrantedOnce(isConsentAlreadyGrantedOnce)
     })();
   }, []);
 
@@ -234,6 +248,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       value={{
         beaconsInfo,
         isConsentGranted,
+        isConsentAlreadyGrantedOnce,
         isBeaconsSupported,
         revokeBeacons,
         onboardForBeacons,

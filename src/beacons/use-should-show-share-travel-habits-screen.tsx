@@ -21,7 +21,7 @@ export const useShouldShowShareTravelHabitsScreen = (
   const sessionCountRef = useRef(0);
   const [sessionCount, setSessionCount] = useState(0);
   const isInitializedRef = useRef(false);
-  const {isBeaconsSupported, isConsentGranted} = useBeaconsState();
+  const {isBeaconsSupported, isConsentGranted, isConsentAlreadyGrantedOnce} = useBeaconsState();
 
   const appStatus = useAppStateStatus();
 
@@ -30,7 +30,7 @@ export const useShouldShowShareTravelHabitsScreen = (
     onboarded && isBeaconsSupported && !shareTravelHabitsOnboarded;
 
   const shouldShowShareTravelHabitsScreen =
-    enabled && !isConsentGranted && sessionCount > runAfterSessionsCount;
+    enabled && !isConsentGranted && !isConsentAlreadyGrantedOnce && sessionCount > runAfterSessionsCount;
 
   const updateCount = useCallback(
     async (currentCount: number) => {
