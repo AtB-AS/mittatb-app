@@ -76,7 +76,7 @@ export const Profile_PrivacyScreen = () => {
                 )}
                 value={isConsentGranted}
                 onValueChange={(checked) => {
-                  checked ? onboardForBeacons() : revokeBeacons();
+                  checked ? onboardForBeacons(true) : revokeBeacons();
                 }}
                 testID="toggleCollectData"
               />

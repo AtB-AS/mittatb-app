@@ -64,9 +64,11 @@ type BeaconsContextState = {
    * permissions are granted, the Kettle SDK will be started, and beaconsInfo
    * will be initialized. `shareTravelHabitsOnboarded` will also be set to true.
    *
+   * @param alreadyConsented When true, consent will be set to true regardless
+   * of permissions. Otherwise permissions will determine consent.
    * @returns Whether or not the user have granted permissions
    */
-  onboardForBeacons: () => Promise<boolean>;
+  onboardForBeacons: (alreadyConsented: boolean) => Promise<boolean>;
   getPrivacyTermsUrl: () => Promise<string>;
   deleteCollectedData: () => Promise<void>;
   getPrivacyDashboardUrl: () => Promise<string>;
@@ -138,38 +140,49 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     return await Kettle.getPrivacyTermsUrl();
   }, [initializeKettleSDK]);
 
-  const onboardForBeacons = useCallback(async () => {
-    if (!isBeaconsSupported) return false;
-    await storage.set(storeKey.beaconsConsent, 'true');
-    setIsConsentGranted(true);
+  const onboardForBeacons = useCallback(
+    async (alreadyConsented: boolean) => {
+      if (!isBeaconsSupported) return false;
 
-    // Consider the user onboarded for beacons at this point
-    completeShareTravelHabitsOnboarding();
+      if (alreadyConsented) {
+        await storage.set(storeKey.beaconsConsent, 'true');
+        setIsConsentGranted(true);
+      }
 
-    let permissionsGranted = false;
-    if (Platform.OS === 'ios') {
-      // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
-      permissionsGranted = await NativeModules.BeaconsPermissions.request();
-    } else {
-      permissionsGranted = await requestAndroidBeaconPermissions(
-        rationaleMessages,
-      );
-    }
+      // Consider the user onboarded for beacons
+      completeShareTravelHabitsOnboarding();
 
-    if (permissionsGranted) {
-      // Initialize beacons SDK after consent is granted
-      await initializeKettleSDK(false);
-      Kettle.grant(BEACONS_CONSENTS);
-      await updateBeaconsInfo();
-    }
+      let permissionsGranted = false;
+      if (Platform.OS === 'ios') {
+        // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
+        permissionsGranted = await NativeModules.BeaconsPermissions.request();
+      } else {
+        permissionsGranted = await requestAndroidBeaconPermissions(
+          rationaleMessages,
+        );
+      }
+      if (permissionsGranted) {
+        // Initialize beacons SDK after consent is granted
+        await initializeKettleSDK(false);
+        Kettle.grant(BEACONS_CONSENTS);
+        await updateBeaconsInfo();
 
-    return permissionsGranted;
-  }, [
-    isBeaconsSupported,
-    rationaleMessages,
-    initializeKettleSDK,
-    completeShareTravelHabitsOnboarding,
-  ]);
+        // If consent wasn't set above, set it to true now
+        if (!alreadyConsented) {
+          await storage.set(storeKey.beaconsConsent, 'true');
+          setIsConsentGranted(true);
+        }
+      }
+
+      return permissionsGranted;
+    },
+    [
+      isBeaconsSupported,
+      rationaleMessages,
+      initializeKettleSDK,
+      completeShareTravelHabitsOnboarding,
+    ],
+  );
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;

@@ -33,7 +33,7 @@ export const Root_ShareTravelHabitsScreen = () => {
   );
 
   const choosePermissions = async () => {
-    await onboardForBeacons();
+    await onboardForBeacons(false);
 
     const permissions = await checkPermissionStatuses(); // get given permissions status
     analytics.logEvent('Onboarding', 'beaconsPermissionAnswers', {
