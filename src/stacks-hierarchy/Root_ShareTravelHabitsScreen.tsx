@@ -10,7 +10,6 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
-import {useAppState} from '@atb/AppContext';
 import {useAnalytics} from '@atb/analytics';
 import {checkPermissionStatuses} from '@atb/beacons/permissions';
 import {useFocusEffect} from '@react-navigation/native';
@@ -22,8 +21,6 @@ export const Root_ShareTravelHabitsScreen = () => {
 
   const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
 
-  const {completeShareTravelHabitsOnboarding} = useAppState();
-
   const {onboardForBeacons} = useBeaconsState();
 
   const analytics = useAnalytics();
@@ -31,10 +28,7 @@ export const Root_ShareTravelHabitsScreen = () => {
   // call useFocusEffect to send analytics once when the screen is shown
   useFocusEffect(
     useCallback(() => {
-      analytics.logEvent(
-        'Onboarding',
-        'didSeeShareTravelHabitsScreen',
-      );
+      analytics.logEvent('Onboarding', 'didSeeShareTravelHabitsScreen');
     }, [analytics]),
   );
 
@@ -47,8 +41,7 @@ export const Root_ShareTravelHabitsScreen = () => {
       locationAlways: permissions.locationAlways,
       motion: permissions.motion,
     });
-    
-    completeShareTravelHabitsOnboarding();
+
     continueFromOnboardingScreen('Root_ShareTravelHabitsScreen');
   };
 
