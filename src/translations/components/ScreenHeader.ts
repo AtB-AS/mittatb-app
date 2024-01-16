@@ -45,6 +45,9 @@ const ScreenHeaderTexts = {
     chat: {
       a11yHint: _('Kontakt AtB', 'Contact AtB', 'Kontakt AtB'),
     },
+    info: {
+      text: _('Info', 'Info', 'Info'),
+    }
   },
 };
 

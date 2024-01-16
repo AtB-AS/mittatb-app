@@ -1,12 +1,13 @@
 import {
   LinkSectionItem,
+  MessageSectionItem,
   Section,
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {StyleSheet, Theme} from '@atb/theme';
 import {ProfileTexts, useTranslation} from '@atb/translations';
-import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, Linking, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
 import {Button} from '@atb/components/button';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
@@ -16,6 +17,7 @@ import {useSearchHistory} from '@atb/search-history';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
+import {checkPermissionStatuses} from '@atb/beacons/permissions';
 
 export const Profile_PrivacyScreen = () => {
   const {t} = useTranslation();
@@ -27,53 +29,21 @@ export const Profile_PrivacyScreen = () => {
     deleteCollectedData,
     getPrivacyDashboardUrl,
   } = useBeaconsState();
+
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
-  const [isBeaconsToggleValue, setIsBeaconsToggleValue] =
-    useState(isConsentGranted);
-  const [isBeaconsToggleDisabled, setIsBeaconsToggleDisabled] = useState(false);
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
 
-  const beaconsPermissionsAlert = useCallback(
-    () =>
-      Alert.alert(
-        t(PrivacySettingsTexts.permissionsAlert.title),
-        t(PrivacySettingsTexts.permissionsAlert.message),
-        [
-          {
-            text: t(PrivacySettingsTexts.permissionsAlert.action),
-            onPress: () => Linking.openSettings(),
-          },
-        ],
-      ),
-    [t],
-  );
+  const [hasPermissionsForBeacons, setHasPermissionsForBeacons] =
+    useState(false);
 
   useEffect(() => {
-    (async () => {
-      setIsBeaconsToggleDisabled(true);
-      if (isBeaconsToggleValue) {
-        const permissionsGranted = await onboardForBeacons();
-
-        // If the toggle was set to true, but we don't have the required
-        // permissions, we ask the user to grant permissions from Settings.
-        if (!permissionsGranted) beaconsPermissionsAlert();
-
-        setIsBeaconsToggleValue(permissionsGranted);
-      } else {
-        await revokeBeacons();
-        setIsBeaconsToggleValue(false);
-      }
-      setIsBeaconsToggleDisabled(false);
-    })();
-  }, [
-    isBeaconsToggleValue,
-    onboardForBeacons,
-    revokeBeacons,
-    beaconsPermissionsAlert,
-  ]);
+    checkPermissionStatuses().then((permissions) => {
+      setHasPermissionsForBeacons(permissions.bluetooth);
+    });
+  }, []);
 
   return (
     <FullScreenView
@@ -104,11 +74,32 @@ export const Profile_PrivacyScreen = () => {
                   PrivacySettingsTexts.sections.consents.items
                     .CollectTravelHabits.subText,
                 )}
-                value={isBeaconsToggleValue}
-                onValueChange={(checked) => setIsBeaconsToggleValue(checked)}
-                disabled={isBeaconsToggleDisabled}
+                value={isConsentGranted}
+                onValueChange={(checked) => {
+                  checked ? onboardForBeacons() : revokeBeacons();
+                }}
                 testID="toggleCollectData"
               />
+              {isConsentGranted && !hasPermissionsForBeacons && (
+                <MessageSectionItem
+                  messageType="info"
+                  title={t(
+                    ProfileTexts.sections.privacy.linkSectionItems
+                      .permissionRequired.title,
+                  )}
+                  message={t(
+                    ProfileTexts.sections.privacy.linkSectionItems
+                      .permissionRequired.message,
+                  )}
+                  onPressConfig={{
+                    text: t(
+                      ProfileTexts.sections.privacy.linkSectionItems
+                        .permissionRequired.action,
+                    ),
+                    action: () => Linking.openSettings(),
+                  }}
+                />
+              )}
             </Section>
           </>
         )}

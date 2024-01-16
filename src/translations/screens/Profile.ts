@@ -118,12 +118,33 @@ const ProfileTexts = {
                 `Gi AtB løyve til å sende varslingar til ${email}`,
               ),
             noEmailPlaceholder: _(
+              'Tillat at AtB sender varslinger til e-posten din.',
+              'Allow AtB to send notifications to your e-mail.',
+              'Gi AtB løyve til å sende varslingar til e-posten din.',
+            ),
+          },
+          button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
+          loginRequired: {
+            title: _('Krever innlogging', 'Login required', 'Krev innlogging'),
+            message: _(
+              'Logg inn for å for å benytte e-postvarsel.',
+              'Log in to use e-mail notifications.',
+              'Logg inn for å nytte deg av e-postvarslingar.',
+            ),
+          },
+          emailRequired: {
+            title: _('E-post mangler', 'E-mail missing', 'E-post manglar'),
+            message: _(
               'Legg til e-post i min profil for å benytte e-postvarsel.',
               'Add e-mail to my profile to use e-mail notifications.',
               'Legg til e-post i min profil for å bruke e-postvarsel.',
             ),
+            action: _(
+              'Legg til e-post',
+              'Add e-mail address',
+              'Legg til e-post',
+            ),
           },
-          button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
           permissionRequired: {
             title: _(
               'Tillatelse kreves',
@@ -140,6 +161,19 @@ const ProfileTexts = {
               'Open Settings',
               'Opne telefoninnstillingar',
             ),
+          },
+          promptRequired: {
+            title: _(
+              'Tillatelse kreves',
+              'Permission required',
+              'Løyve krevjast',
+            ),
+            message: _(
+              'Du må tillate appen å sende deg varslinger for å få beskjed før billettene dine utløper.',
+              'You have to allow the app to send you notifications to be informed before your tickets expire.',
+              'Du må tillate appen å sende deg varsel for å bli informert før billettane dine går ut.',
+            ),
+            action: _('Velg tillatelser', 'Choose permissions', 'Vel løyve'),
           },
           permissionError: {
             title: _('Oops!', 'Whoops!', 'Oops!'),
@@ -201,6 +235,23 @@ const ProfileTexts = {
             'Aktivér for å lese personvernerklæring på ekstern side',
             'Activate to read our privacy statement (external content)',
             'Aktiver for å lese personvernerklæring på ekstern side',
+          ),
+        },
+        permissionRequired: {
+          title: _(
+            'Tillatelse kreves',
+            'Permission required',
+            'Løyve krevjast',
+          ),
+          message: _(
+            'Gi tilgang til Bluetooth for å dele dine reisevaner.',
+            'Enable Bluetooth to share your travel habits.',
+            'Gi løyve til Bluetooth for å dele dine reisevanar.',
+          ),
+          action: _(
+            'Åpne telefoninnstillinger',
+            'Open Settings',
+            'Opne telefoninnstillingar',
           ),
         },
         clearHistory: {
