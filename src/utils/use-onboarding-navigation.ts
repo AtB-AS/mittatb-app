@@ -4,7 +4,7 @@ import {useNavigation, StackActions} from '@react-navigation/native';
 
 import {useCallback} from 'react';
 import {InteractionManager} from 'react-native';
-import {useOnboardingFlow} from './use-onboarding-navigation-flow';
+import {useOnboardingFlow} from './use-onboarding-flow';
 
 export const useOnboardingNavigation = () => {
   const navigation = useNavigation<RootNavigationProps>();

@@ -32,7 +32,7 @@ import {
 } from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
-import {useOnboardingFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
