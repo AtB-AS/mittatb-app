@@ -178,7 +178,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     }
 
     return permissionsGranted;
-  }, [isBeaconsSupported, rationaleMessages, initializeKettleSDK]);
+  }, [isBeaconsSupported, isConsentAlreadyGrantedOnce, rationaleMessages, initializeKettleSDK]);
 
   const revokeBeacons = useCallback(async () => {
     if (!isBeaconsSupported) return;
