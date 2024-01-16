@@ -151,7 +151,15 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     if (!isBeaconsSupported) return false;
     await storage.set(storeKey.beaconsConsent, 'true');
     setIsConsentGranted(true);
-    await storage.set(storeKey.beaconsConsentAlreadyGrantedOnce, 'true');
+    
+    /**
+     * if the consent is granted and 'beaconsConsentAlreadyGrantedOnce' is
+     * not set, then set it, otherwise just skip it. 
+     */
+    if (!isConsentAlreadyGrantedOnce) {
+      await storage.set(storeKey.beaconsConsentAlreadyGrantedOnce, 'true');
+    }
+
     let permissionsGranted = false;
     if (Platform.OS === 'ios') {
       // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift

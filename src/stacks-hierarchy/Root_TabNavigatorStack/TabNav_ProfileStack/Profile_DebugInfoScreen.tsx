@@ -172,6 +172,7 @@ export const Profile_DebugInfoScreen = () => {
   const {setPreference, preferences} = usePreferences();
   const {showTestIds, debugShowSeconds} = preferences;
 
+
   return (
     <View style={style.container}>
       <FullScreenHeader
@@ -266,7 +267,10 @@ export const Profile_DebugInfoScreen = () => {
           />
           <LinkSectionItem
             text="Restart ShareTravelHabits onboarding"
-            onPress={restartShareTravelHabitsOnboarding}
+            onPress={() => {
+              restartShareTravelHabitsOnboarding
+              storage.remove('@ATB_beacons_consent_granted_once')
+            }}
           />
           <LinkSectionItem
             text="Reset one time popovers"
