@@ -50,7 +50,7 @@ export const OnboardingScreenComponent = ({
       footerDescription={footerDescription}
     >
       <View style={styles.header}>{illustration}</View>
-      <View ref={focusRef}>
+      <View ref={focusRef} accessible>
         <ThemeText
           type="body__primary--big--bold"
           color={themeColor}
