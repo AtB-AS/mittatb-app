@@ -10,14 +10,14 @@ import {
   usePushNotificationsEnabled,
 } from '@atb/notifications';
 import {useHasFareContractWithActivatedNotification} from '@atb/notifications/use-has-fare-contract-with-activated-notification';
-import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
+import {RootStackParamList} from '@atb/stacks-hierarchy';
 
 import {useValidRightNowFareContract} from '@atb/ticketing/use-valid-right-now-fare-contracts';
 
-import {useNavigation, StackActions} from '@react-navigation/native';
-
 import {useCallback, useEffect, useState} from 'react';
-import {InteractionManager, Platform} from 'react-native';
+import {Platform} from 'react-native';
+
+import {PartialRoute, Route} from '@react-navigation/native';
 
 type ScreenProps =
   | {
@@ -28,10 +28,10 @@ type ScreenProps =
 export type GoToScreenType = (screenName: any, params?: any) => void;
 
 // note: utilizeThisHookInstanceForSessionCounting should only be true for one instance
-export const useOnboardingNavigationFlow = (
+export const useOnboardingFlow = (
   utilizeThisHookInstanceForSessionCounting = false,
 ) => {
-  const navigation = useNavigation<RootNavigationProps>();
+  const {enable_extended_onboarding} = useRemoteConfig();
 
   const {onboarded: loginOnboardingCompleted} = useAppState();
 
@@ -54,19 +54,26 @@ export const useOnboardingNavigationFlow = (
     ): ScreenProps => {
       let screenName: keyof RootStackParamList | undefined = undefined;
       let params = undefined;
-      if (loginOnboardingCompleted || assumeLoginOnboardingCompleted) {
+      if (!(loginOnboardingCompleted || assumeLoginOnboardingCompleted)) {
+        if (enable_extended_onboarding) {
+          screenName = 'Root_OnboardingStack';
+        } else {
+          screenName = 'Root_LoginOptionsScreen';
+          params = {};
+        }
+      } else {
         const orderedOnboardingScreensAfterLogin: {
           shouldShow: boolean;
           screenName: keyof RootStackParamList;
           params?: any;
         }[] = [
           {
-            shouldShow: shouldShowTravelTokenOnboarding,
-            screenName: 'Root_ConsiderTravelTokenChangeScreen',
-          },
-          {
             shouldShow: shouldShowLocationOnboarding,
             screenName: 'Root_LocationWhenInUsePermissionScreen',
+          },
+          {
+            shouldShow: shouldShowTravelTokenOnboarding,
+            screenName: 'Root_ConsiderTravelTokenChangeScreen',
           },
           {
             shouldShow: shouldShowShareTravelHabitsScreen,
@@ -99,51 +106,52 @@ export const useOnboardingNavigationFlow = (
       shouldShowLocationOnboarding,
       shouldShowShareTravelHabitsScreen,
       shouldShowNotificationPermissionScreen,
+      enable_extended_onboarding,
     ],
   );
 
-  const goToScreen = useCallback(
-    (replace, screenName, params?) => {
-      InteractionManager.runAfterInteractions(() => {
-        if (replace) {
-          navigation.dispatch(StackActions.replace(screenName, params));
-        } else {
-          navigation.navigate(screenName, params);
-        }
-      });
-    },
-    [navigation],
+  const [nextOnboardingScreen, setNextOnboardingScreen] = useState<ScreenProps>(
+    getNextOnboardingScreen(),
   );
-
-  const continueFromOnboardingScreen = useCallback(
-    (comingFromScreenName?: keyof RootStackParamList) => {
-      const nextOnboardingScreen =
-        getNextOnboardingScreen(comingFromScreenName);
-      if (nextOnboardingScreen?.screenName) {
-        goToScreen(
-          true,
-          nextOnboardingScreen.screenName,
-          nextOnboardingScreen.params,
-        );
-      } else {
-        navigation.goBack();
-      }
-    },
-    [getNextOnboardingScreen, goToScreen, navigation],
-  );
-
-  const [nextOnboardingScreen, setNextOnboardingScreen] =
-    useState<ScreenProps>();
 
   useEffect(() => {
     setNextOnboardingScreen(getNextOnboardingScreen());
   }, [getNextOnboardingScreen]);
 
+  /**
+   * add Root_TabNavigatorStack as root when loginOnboardingCompleted
+   * this allows goBack from an onboarding screen when used as initial screen
+   * @param {Boolean} shouldGoDirectlyToOnboardingScreen when loginOnboardingCompleted, true if going directly to the next onboarding screen, false if instead going to Root_TabNavigatorStack first
+   * @returns navigation state object
+   */
+  const getInitialNavigationContainerState = (
+    shouldGoDirectlyToOnboardingScreen: boolean,
+  ) => {
+    const initialOnboardingScreen = getNextOnboardingScreen(); // dont rely on effects as it will be too late for initialState
+    const initialOnboardingRoute = {
+      name: initialOnboardingScreen?.screenName ?? 'Root_TabNavigatorStack',
+      params: initialOnboardingScreen?.params,
+    };
+
+    const routes: PartialRoute<
+      Route<keyof RootStackParamList, object | undefined>
+    >[] = [];
+    if (loginOnboardingCompleted) {
+      routes.push({name: 'Root_TabNavigatorStack'});
+
+      if (shouldGoDirectlyToOnboardingScreen) {
+        routes.push(initialOnboardingRoute);
+      }
+    } else {
+      routes.push(initialOnboardingRoute);
+    }
+    return {routes};
+  };
+
   return {
     nextOnboardingScreen,
     getNextOnboardingScreen,
-    goToScreen,
-    continueFromOnboardingScreen,
+    getInitialNavigationContainerState,
   };
 };
 

@@ -32,7 +32,8 @@ import {
 } from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
-import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -56,7 +57,8 @@ export const Root_TabNavigatorStack = () => {
   useOnPushNotificationOpened();
 
   const navigation = useNavigation<RootNavigationProps>();
-  const {nextOnboardingScreen, goToScreen} = useOnboardingNavigationFlow(true);
+  const {nextOnboardingScreen} = useOnboardingFlow(true);
+  const {goToScreen} = useOnboardingNavigation();
 
   useEffect(() => {
     if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path

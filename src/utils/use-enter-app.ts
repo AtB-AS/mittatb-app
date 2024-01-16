@@ -1,4 +1,4 @@
-import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingFlow} from '@atb/utils/use-onboarding-navigation-flow';
 import {PartialRoute, Route, useNavigation} from '@react-navigation/native';
 import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
 
@@ -27,7 +27,7 @@ export type AfterLoginScreenType =
  */
 
 export const useEnterApp = () => {
-  const {getNextOnboardingScreen} = useOnboardingNavigationFlow();
+  const {getNextOnboardingScreen} = useOnboardingFlow();
   const navigation = useNavigation<RootNavigationProps>();
 
   return (afterLogin?: AfterLoginScreenType) => {

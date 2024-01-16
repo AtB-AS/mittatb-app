@@ -13,7 +13,7 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
 import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 import {TravelTokenBox} from '@atb/travel-token-box';
-import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 import {LoadingScreen} from '@atb/loading-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -32,7 +32,7 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
     completeMobileTokenOnboarding,
     completeMobileTokenWithoutTravelcardOnboarding,
   } = useAppState();
-  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+  const {continueFromOnboardingScreen} = useOnboardingNavigation();
 
   const onPressContinue = useCallback(() => {
     disable_travelcard
