@@ -17,7 +17,10 @@ import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
 
-import {AfterLoginScreenType, NextScreenParams} from '@atb/utils/use-enter-app';
+import {
+  AfterLoginScreenType,
+  NextScreenParams,
+} from '@atb/utils/use-complete-onboarding-and-enter-app';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;

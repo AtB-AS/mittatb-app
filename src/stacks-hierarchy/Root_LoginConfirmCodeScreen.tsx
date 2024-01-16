@@ -21,7 +21,6 @@ import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
-import {useEnterApp} from '@atb/utils/use-enter-app';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -41,7 +40,6 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
   const completeOnboardingAndEnterApp = useCompleteOnboardingAndEnterApp();
-  const enterApp = useEnterApp();
 
   const onLogin = async () => {
     setIsLoading(true);
@@ -68,7 +66,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   // Check authentication from state and see if it is updated while we wait
   useEffect(() => {
     if (authenticationType === 'phone') {
-      enterApp(afterLogin);
+      completeOnboardingAndEnterApp(afterLogin);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticationType]);
