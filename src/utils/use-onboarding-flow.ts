@@ -72,16 +72,16 @@ export const useOnboardingFlow = (
             screenName: 'Root_LocationWhenInUsePermissionScreen',
           },
           {
-            shouldShow: shouldShowTravelTokenOnboarding,
-            screenName: 'Root_ConsiderTravelTokenChangeScreen',
-          },
-          {
             shouldShow: shouldShowShareTravelHabitsScreen,
             screenName: 'Root_ShareTravelHabitsScreen',
           },
           {
             shouldShow: shouldShowNotificationPermissionScreen,
             screenName: 'Root_NotificationPermissionScreen',
+          },
+          {
+            shouldShow: shouldShowTravelTokenOnboarding,
+            screenName: 'Root_ConsiderTravelTokenChangeScreen',
           },
         ];
         for (const onboardingScreen of orderedOnboardingScreensAfterLogin) {
