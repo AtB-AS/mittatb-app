@@ -72,6 +72,18 @@ platform :ios do
     )
   end
 
+  desc "Removes background location"
+  lane :remove_background_location do
+    update_info_plist(
+      xcodeproj: "./ios/atb.xcodeproj",
+      plist_path: "./atb/Info.plist",
+      block: proc do |plist|
+        puts "Deleting location from UIBackgroundModes..."
+        plist["UIBackgroundModes"].delete("location")
+      end
+    )
+  end
+
   desc "Generate new certificates"
   lane :generate_new_certificates do
     ensure_env_vars(
