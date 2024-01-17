@@ -122,6 +122,11 @@ type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
   paymentMethod: CardPaymentMethod;
 };
 
+type Root_ConfirmationScreenParams = {
+  message: string;
+  onCompleted: () => void;
+};
+
 export type RootStackParamList = StackParams<{
   Root_OnboardingStack: undefined;
   Root_TermsInformationScreen: undefined;
@@ -160,6 +165,7 @@ export type RootStackParamList = StackParams<{
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
+  Root_ConfirmationScreen: Root_ConfirmationScreenParams;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
