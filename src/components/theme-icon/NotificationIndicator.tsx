@@ -55,7 +55,9 @@ export const NotificationIndicator = ({
 function useNotificationColor(color?: NotificationColor): string | undefined {
   const {theme, themeName} = useTheme();
   if (!color) return undefined;
-  if (isStatusColor(color)) {
+  if (typeof color !== 'string') {
+    return color.text;
+  } else if (isStatusColor(color)) {
     return theme.static.status[color].background;
   } else if (isStaticColor(color)) {
     return flatStaticColors[themeName][color].background;
