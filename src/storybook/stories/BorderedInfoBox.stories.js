@@ -19,6 +19,7 @@ const BorderedInfoBoxMeta = {
       options: [
         ...Object.keys(themes['light'].static.background),
         ...Object.keys(themes['light'].static.status),
+        ...Object.keys(themes['light'].interactive),
       ],
     },
   },
@@ -33,9 +34,8 @@ const BorderedInfoBoxMeta = {
           justifyContent: 'center',
           padding: 12,
           flex: 1,
-          backgroundColor:
-            getStaticColor(args.theme, args.backgroundColor)?.background ||
-            getStaticColor(args.theme, 'background_0').background,
+          backgroundColor: getColor(args.theme, args.backgroundColor)
+            .background,
           gap: 12,
         }}
       >
@@ -50,10 +50,15 @@ const BorderedInfoBoxMeta = {
                 <ThemeIcon
                   svg={Info}
                   style={{marginRight: 4}}
-                  colorType={args.backgroundColor}
+                  colorType={getColor(args.theme, args.backgroundColor)}
                 />
-                <ThemeText type="body__tertiary" color={args.backgroundColor} style={{flex: 1}}>
-                  This is a large box with custom child component. Can have icons, line breaks, and such.
+                <ThemeText
+                  type="body__tertiary"
+                  color={getColor(args.theme, args.backgroundColor)}
+                  style={{flex: 1}}
+                >
+                  This is a large box with custom child component. Can have
+                  icons, line breaks, and such.
                 </ThemeText>
               </View>
             ),
@@ -63,6 +68,11 @@ const BorderedInfoBoxMeta = {
     ),
   ],
 };
+
+const getColor = (theme, backgroundColor) =>
+  getStaticColor(theme, backgroundColor) ||
+  themes[theme].interactive[backgroundColor]?.default ||
+  getStaticColor(theme, 'background_0');
 
 export default BorderedInfoBoxMeta;
 

@@ -63,7 +63,9 @@ export const ThemeIcon = ({
 };
 
 function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
-  if (isStatusColor(colorType)) {
+  if (colorType && typeof colorType !== 'string') {
+    return colorType.text;
+  } else if (isStatusColor(colorType)) {
     return theme.static.status[colorType].background;
   } else if (isStaticColor(colorType)) {
     return flatStaticColors[themeType][colorType].text;
