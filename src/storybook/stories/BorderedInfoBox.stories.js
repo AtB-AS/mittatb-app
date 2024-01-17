@@ -1,7 +1,10 @@
 import React from 'react';
 import {View} from 'react-native';
 import {getStaticColor, themes} from '@atb/theme/colors';
-import {BorderedInfoBox} from "@atb/components/bordered-info-box";
+import {BorderedInfoBox} from '@atb/components/bordered-info-box';
+import {ThemeText} from '@atb/components/text';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {Info} from '@atb/assets/svg/mono-icons/status';
 
 const BorderedInfoBoxMeta = {
   title: 'BorderedInfoBox',
@@ -36,8 +39,26 @@ const BorderedInfoBoxMeta = {
           gap: 12,
         }}
       >
-        <Story args={{...args, type: 'large', text: "This is the large box"}} />
-        <Story args={{...args, type: 'small', text: "Small box"}} />
+        <Story args={{...args, type: 'small', text: 'Small box'}} />
+        <Story args={{...args, type: 'large', text: 'This is a large box'}} />
+        <Story
+          args={{
+            ...args,
+            type: 'large',
+            children: (
+              <View style={{flexDirection: 'row'}}>
+                <ThemeIcon
+                  svg={Info}
+                  style={{marginRight: 4}}
+                  colorType={args.backgroundColor}
+                />
+                <ThemeText type="body__tertiary" color={args.backgroundColor} style={{flex: 1}}>
+                  This is a large box with custom child component. Can have icons, line breaks, and such.
+                </ThemeText>
+              </View>
+            ),
+          }}
+        />
       </View>
     ),
   ],
