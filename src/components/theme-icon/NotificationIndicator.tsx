@@ -56,7 +56,7 @@ function useNotificationColor(color?: NotificationColor): string | undefined {
   const {theme, themeName} = useTheme();
   if (!color) return undefined;
   if (typeof color !== 'string') {
-    return color.text;
+    return color.background;
   } else if (isStatusColor(color)) {
     return theme.static.status[color].background;
   } else if (isStaticColor(color)) {
