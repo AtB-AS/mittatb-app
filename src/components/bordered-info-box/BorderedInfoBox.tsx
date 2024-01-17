@@ -12,6 +12,12 @@ type Props =
       style?: StyleProp<ViewStyle>;
     } & ({text: string} | {children: ReactNode});
 
+/**
+ * A bordered info box, where the border color is based on the text color of the
+ * background where it is applied. The component can be used either by sending
+ * in text or children, but if using children remember to ensure correct
+ * typography and text color on the child component.
+ */
 export const BorderedInfoBox = ({
   type,
   backgroundColor,
@@ -22,7 +28,9 @@ export const BorderedInfoBox = ({
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
-        <ThemeText color={backgroundColor}>{props.text}</ThemeText>
+        <ThemeText type="body__tertiary" color={backgroundColor}>
+          {props.text}
+        </ThemeText>
       ) : (
         props.children
       )}
