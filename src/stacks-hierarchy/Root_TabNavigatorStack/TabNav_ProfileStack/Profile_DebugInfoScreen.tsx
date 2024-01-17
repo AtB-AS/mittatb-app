@@ -635,12 +635,12 @@ export const Profile_DebugInfoScreen = () => {
                   <Button
                     interactiveColor="interactive_0"
                     onPress={async () => {
-                      const granted = await onboardForBeacons();
+                      const granted = await onboardForBeacons(true);
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
                     }}
                     disabled={isConsentGranted}
                     style={style.button}
-                    text="Onboard"
+                    text="Onboard and give consent"
                   />
                   <Button
                     interactiveColor="interactive_0"
