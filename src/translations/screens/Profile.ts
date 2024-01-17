@@ -129,7 +129,7 @@ const ProfileTexts = {
             message: _(
               'Logg inn for å benytte e-postvarsel.',
               'Log in to use e-mail notifications.',
-              'Logg inn for å nytte deg av e-postvarslingar.',
+              'Logg inn for å nytte e-postvarslingar.',
             ),
           },
           emailRequired: {
