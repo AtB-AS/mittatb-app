@@ -52,7 +52,6 @@ export type FareContractInfoDetailsProps = {
   userProfilesWithCount: UserProfileWithCount[];
   status: FareContractInfoProps['status'];
   isCarnetFareContract?: boolean;
-  omitUserProfileCount?: boolean;
   testID?: string;
   now?: number;
   validTo?: number;
@@ -120,7 +119,6 @@ export const FareContractInfoDetails = (
     fromTariffZone,
     toTariffZone,
     userProfilesWithCount,
-    omitUserProfileCount,
     status,
     preassignedFareProduct,
   } = props;
@@ -140,7 +138,7 @@ export const FareContractInfoDetails = (
           <FareContractDetail
             header={t(FareContractTexts.label.travellers)}
             content={userProfilesWithCount.map((u) =>
-              userProfileCountAndName(u, omitUserProfileCount, language),
+              userProfileCountAndName(u, language),
             )}
           />
           {tariffZoneSummary && (

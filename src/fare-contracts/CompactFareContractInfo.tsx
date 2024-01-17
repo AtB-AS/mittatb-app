@@ -71,7 +71,6 @@ const CompactFareContractInfoTexts = (
 ) => {
   const {
     userProfilesWithCount,
-    omitUserProfileCount,
     productName,
     tariffZoneSummary,
     timeUntilExpire,
@@ -86,7 +85,7 @@ const CompactFareContractInfoTexts = (
       </ThemeText>
       {userProfilesWithCount.map((u) => (
         <ThemeText key={u.id} type="body__secondary" color="secondary">
-          {userProfileCountAndName(u, omitUserProfileCount, language)}
+          {userProfileCountAndName(u, language)}
         </ThemeText>
       ))}
       {productName && (
@@ -127,7 +126,6 @@ export const useFareContractInfoTexts = (
 ): FareContractInfoTextsProps => {
   const {
     userProfilesWithCount,
-    omitUserProfileCount,
     preassignedFareProduct,
     fromTariffZone,
     toTariffZone,
@@ -165,7 +163,7 @@ export const useFareContractInfoTexts = (
   accessibilityLabel += timeUntilExpireOrWarning + screenReaderPause;
   accessibilityLabel += userProfilesWithCount.map(
     (u) =>
-      userProfileCountAndName(u, omitUserProfileCount, language) +
+      userProfileCountAndName(u, language) +
       screenReaderPause,
   );
   accessibilityLabel += productName + screenReaderPause;

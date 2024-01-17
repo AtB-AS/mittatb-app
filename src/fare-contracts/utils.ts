@@ -43,12 +43,9 @@ export function getRelativeValidity(
 
 export const userProfileCountAndName = (
   u: UserProfileWithCount,
-  omitUserProfileCount: Boolean | undefined,
   language: Language,
 ) =>
-  omitUserProfileCount
-    ? `${getReferenceDataName(u, language)}`
-    : `${u.count} ${getReferenceDataName(u, language)}`;
+  `${u.count} ${getReferenceDataName(u, language)}`;
 
 export function getValidityStatus(
   now: number,

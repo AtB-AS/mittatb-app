@@ -129,7 +129,6 @@ export const DetailsContent: React.FC<Props> = ({
         )}
         <GenericSectionItem>
           <FareContractInfoDetails
-            omitUserProfileCount={true}
             fromTariffZone={fromTariffZone}
             toTariffZone={toTariffZone}
             userProfilesWithCount={userProfilesWithCount}
