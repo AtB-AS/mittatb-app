@@ -16,6 +16,7 @@ type Props =
       backgroundColor: StaticColor | InteractiveColor;
       type: 'large' | 'small';
       style?: StyleProp<ViewStyle>;
+      testID?: string;
     } & ({text: string} | {children: ReactNode});
 
 /**
@@ -28,6 +29,7 @@ export const BorderedInfoBox = ({
   type,
   backgroundColor,
   style,
+  testID,
   ...props
 }: Props) => {
   const contrastColor = useContrastColor(backgroundColor);
@@ -35,7 +37,7 @@ export const BorderedInfoBox = ({
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
-        <ThemeText type="body__tertiary" color={contrastColor}>
+        <ThemeText type="body__tertiary" color={contrastColor} testID={testID}>
           {props.text}
         </ThemeText>
       ) : (
