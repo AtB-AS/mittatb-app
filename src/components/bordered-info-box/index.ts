@@ -1,0 +1,1 @@
+export {BorderedInfoBox} from './BorderedInfoBox';
