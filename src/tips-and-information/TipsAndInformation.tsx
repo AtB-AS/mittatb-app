@@ -31,16 +31,15 @@ export const TipsAndInformation = () => {
     <Section>
       {tips.sort(byTitle(language)).map((tip, index) => {
         const title = getTextForLanguage(tip.title, language);
-        const emoji = tip.emoji;
         const description = getTextForLanguage(tip.description, language);
 
-        if (!emoji || !title || !description) return null;
+        if (!title || !description) return null;
 
         return (
           <ExpandableSectionItem
             key={title + description}
             textType="body__primary--bold"
-            text={emoji + ' ' + title}
+            text={title}
             showIconText={false}
             expanded={currentlyOpen === index}
             onPress={() => {
