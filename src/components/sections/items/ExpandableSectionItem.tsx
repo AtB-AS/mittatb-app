@@ -97,7 +97,9 @@ export function ExpandableSectionItem({
         <ExpandIcon expanded={expanded} showText={showIconText} />
       </PressableOpacity>
       {expanded && 'expandContent' in props && (
-        <View style={styles.expandContent}>{props.expandContent}</View>
+        <View style={styles.expandContent} accessible={true}>
+          {props.expandContent}
+        </View>
       )}
     </View>
   );
