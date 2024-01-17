@@ -11,8 +11,6 @@ import {
   TransportColor,
 } from '@atb/theme/colors';
 
-import {InfoTag} from '@atb/components/info-tag';
-
 import {TicketingTileIllustration} from './TicketingTileIllustration';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
@@ -25,7 +23,6 @@ export const TicketingTile = ({
   title,
   description,
   accessibilityLabel,
-  infoTag,
 }: {
   accented?: boolean;
   onPress: () => void;
@@ -35,7 +32,6 @@ export const TicketingTile = ({
   title?: string;
   description?: string;
   accessibilityLabel?: string;
-  infoTag?: 'new' | 'beta';
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -71,11 +67,6 @@ export const TicketingTile = ({
     >
       <View style={styles.spreadContent} testID={testID}>
         <View style={styles.contentContainer}>
-          {infoTag && (
-            <View style={styles.betaTagContainer}>
-              <InfoTag mode={infoTag} style={styles.betaTag} />
-            </View>
-          )}
           <ThemeText
             type="body__secondary--bold"
             style={styles.title}
@@ -136,11 +127,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginBottom: theme.spacings.small,
   },
   description: {marginBottom: theme.spacings.small},
-  betaTag: {
-    marginBottom: theme.spacings.xSmall,
-  },
-  betaTagContainer: {
-    flexDirection: 'row',
-    marginBottom: theme.spacings.small,
-  },
 }));
