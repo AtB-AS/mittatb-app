@@ -23,14 +23,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Update new devices and provisioning profiles
 
-### ios remove_beacons_data
-
-```sh
-[bundle exec] fastlane ios remove_beacons_data
-```
-
-Remove data that is not needed when beacons are disabled
-
 ### ios generate_new_certificates
 
 ```sh
