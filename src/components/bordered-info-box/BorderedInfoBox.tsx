@@ -1,13 +1,20 @@
-import {getStaticColor, StaticColor} from '@atb/theme/colors';
+import {
+  flatStaticColors,
+  InteractiveColor,
+  isStaticColor,
+  StaticColor,
+} from '@atb/theme/colors';
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import React, {ReactNode} from 'react';
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {addOpacity} from '@atb/utils/add-opacity';
+import {ContrastColor} from '@atb-as/theme';
 
 type Props =
   | {
-      backgroundColor: StaticColor;
+      /** The background color of the component where this box is placed */
+      backgroundColor: StaticColor | InteractiveColor;
       type: 'large' | 'small';
       style?: StyleProp<ViewStyle>;
     } & ({text: string} | {children: ReactNode});
@@ -24,11 +31,12 @@ export const BorderedInfoBox = ({
   style,
   ...props
 }: Props) => {
-  const styles = useStyles(type, backgroundColor);
+  const contrastColor = useContrastColor(backgroundColor);
+  const styles = useStyles(type, contrastColor.text);
   return (
     <View style={[styles.container, style]}>
       {'text' in props ? (
-        <ThemeText type="body__tertiary" color={backgroundColor}>
+        <ThemeText type="body__tertiary" color={contrastColor}>
           {props.text}
         </ThemeText>
       ) : (
@@ -38,16 +46,23 @@ export const BorderedInfoBox = ({
   );
 };
 
-const useStyles = (
-  type: Props['type'],
+/**
+ * Find the contrast color to use, based on given static or interactive color
+ */
+function useContrastColor(
   backgroundColor: Props['backgroundColor'],
-) =>
-  StyleSheet.createThemeHook((theme, themeName) => ({
+): ContrastColor {
+  const {theme, themeName} = useTheme();
+  if (isStaticColor(backgroundColor)) {
+    return flatStaticColors[themeName][backgroundColor];
+  }
+  return theme.interactive[backgroundColor].default;
+}
+
+const useStyles = (type: Props['type'], textColor: string) =>
+  StyleSheet.createThemeHook((theme) => ({
     container: {
-      borderColor: addOpacity(
-        getStaticColor(themeName, backgroundColor).text,
-        0.1,
-      ),
+      borderColor: addOpacity(textColor, 0.1),
       borderWidth: theme.border.width.slim,
       borderRadius: theme.border.radius.regular,
       paddingHorizontal:
