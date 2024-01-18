@@ -41,8 +41,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		503D2E5A29674028002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		503D2E5C2967436E002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		503D2E5A29674028002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		503D2E5C2967436E002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -54,11 +54,12 @@
 		6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAA1D092A77D3EC00CC8016 /* PassKit.framework */; };
 		6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */; };
 		6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */; };
-		86ADA222293F651800F1E080 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		86ADA222293F651800F1E080 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
 		FE09922928FFF47300E5046D /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
 		FE09922C28FFF50800E5046D /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922B28FFF50800E5046D /* Bundle.swift */; };
+		FE2FB3BD2B596D4B00F2F400 /* Beacons.strings in Resources */ = {isa = PBXBuildFile; fileRef = FE2FB3BF2B596D4B00F2F400 /* Beacons.strings */; };
 		FE55264928EC45ED0091F697 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264828EC45ED0091F697 /* WidgetKit.framework */; };
 		FE55264B28EC45ED0091F697 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264A28EC45ED0091F697 /* SwiftUI.framework */; };
 		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
@@ -164,6 +165,9 @@
 		F414F94904E6D6734DFB7191 /* Pods-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app.debug.xcconfig"; path = "Target Support Files/Pods-app/Pods-app.debug.xcconfig"; sourceTree = "<group>"; };
 		FE09922828FFF47300E5046D /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		FE09922B28FFF50800E5046D /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		FE2FB3BE2B596D4B00F2F400 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Beacons.strings; sourceTree = "<group>"; };
+		FE2FB3C02B596D5F00F2F400 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Beacons.strings; sourceTree = "<group>"; };
+		FE2FB3C12B596D6000F2F400 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Beacons.strings; sourceTree = "<group>"; };
 		FE55264728EC45ED0091F697 /* departureWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = departureWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE55264828EC45ED0091F697 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FE55264A28EC45ED0091F697 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -199,7 +203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86ADA222293F651800F1E080 /* BuildFile in Frameworks */,
+				86ADA222293F651800F1E080 /* (null) in Frameworks */,
 				6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */,
 				FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */,
 				FEBDDCD3293107D500C3755B /* WidgetKit.framework in Frameworks */,
@@ -259,6 +263,7 @@
 				FE8186AC297593DA000D2195 /* Configs */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				298D19492AEBC45E00065733 /* InfoPlist.strings */,
+				FE2FB3BF2B596D4B00F2F400 /* Beacons.strings */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -524,6 +529,7 @@
 				0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */,
 				0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */,
 				F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */,
+				FE2FB3BD2B596D4B00F2F400 /* Beacons.strings in Resources */,
 				E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -729,8 +735,8 @@
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				500752EC29855E4D00AC5A7F /* IntentHandler.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
-				503D2E5C2967436E002E0A6A /* BuildFile in Sources */,
-				503D2E5A29674028002E0A6A /* BuildFile in Sources */,
+				503D2E5C2967436E002E0A6A /* (null) in Sources */,
+				503D2E5A29674028002E0A6A /* (null) in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -795,6 +801,16 @@
 				50AAE58729897C4C00BA7611 /* nb */,
 			);
 			name = WidgetConfiguration.intentdefinition;
+			sourceTree = "<group>";
+		};
+		FE2FB3BF2B596D4B00F2F400 /* Beacons.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FE2FB3BE2B596D4B00F2F400 /* en */,
+				FE2FB3C02B596D5F00F2F400 /* nb */,
+				FE2FB3C12B596D6000F2F400 /* nn */,
+			);
+			name = Beacons.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
