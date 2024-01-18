@@ -3,6 +3,7 @@ import {
   AccessibilityInfo,
   findNodeHandle,
   InteractionManager,
+  Platform,
 } from 'react-native';
 import {useNavigationSafe} from '@atb/utils/use-navigation-safe';
 
@@ -38,15 +39,21 @@ export function useFocusOnLoad(setFocusOnLoad: boolean = true): Ref<any> {
   return focusCallbackRef;
 }
 
-export const giveFocus = (
-  focusRef?: React.RefObject<any> | null | undefined,
-) => {
+type focusRefType = React.RefObject<any> | null | undefined;
+
+const focusOnRef = (focusRef: focusRefType) => {
+  const reactTag = findNodeHandle(focusRef?.current);
+  reactTag && AccessibilityInfo.setAccessibilityFocus(reactTag);
+};
+
+export const giveFocus = (focusRef?: focusRefType) => {
   if (focusRef && focusRef.current) {
     InteractionManager.runAfterInteractions(() => {
-      setTimeout(() => {
-        const reactTag = findNodeHandle(focusRef?.current);
-        reactTag && AccessibilityInfo.setAccessibilityFocus(reactTag);
-      }, 100);
+      if (Platform.OS === 'ios') {
+        focusOnRef(focusRef);
+      } else {
+        setTimeout(() => focusOnRef(focusRef), 100);
+      }
     });
   }
 };
