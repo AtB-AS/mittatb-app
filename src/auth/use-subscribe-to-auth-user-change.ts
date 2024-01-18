@@ -5,17 +5,20 @@ import {AuthReducerAction} from './types';
 import {mapAuthenticationType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
+import {useAppState} from '@atb/AppContext';
 
 export const useSubscribeToAuthUserChange = (
   dispatch: Dispatch<AuthReducerAction>,
 ) => {
   const {resubscribeToggle, resubscribe} = useResubscribeToggle();
+  const {completeOnboarding} = useAppState();
 
   useEffect(() => {
     Bugsnag.leaveBreadcrumb('Subscribing to auth user changes');
     let signInInitiated = false;
     const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
+        !user.isAnonymous && completeOnboarding();
         updateMetadata({
           'AtB-Firebase-Auth-Id': user?.uid,
           'AtB-Auth-Type': mapAuthenticationType(user),
@@ -35,7 +38,7 @@ export const useSubscribeToAuthUserChange = (
       }
     });
     return () => unsubscribe();
-  }, [resubscribeToggle, dispatch]);
+  }, [resubscribeToggle, dispatch, completeOnboarding]);
 
   return {
     resubscribe: resubscribe,
