@@ -5,10 +5,12 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import ConfirmSvg from '@atb/assets/svg/mono-icons/actions/Confirm';
 import {useEffect} from 'react';
 import {getStaticColor} from '@atb/theme/colors';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 
 const DEFAULT_DELAY_BEFORE_COMPLETED = 5000;
+const CONFIRMATION_CONTAINER_SIZE = 106;
 
 export const Root_ConfirmationScreen = ({
   route: {
@@ -17,7 +19,7 @@ export const Root_ConfirmationScreen = ({
 }: Props) => {
   const styles = useStyles();
   const {themeName} = useTheme();
-  const themeColor = getStaticColor(themeName, 'background_0');
+  const themeColor = getStaticColor(themeName, 'background_accent_0');
   const confirmationCircleColor = getStaticColor(
     themeName,
     'background_accent_1',
@@ -31,7 +33,7 @@ export const Root_ConfirmationScreen = ({
     return () => clearTimeout(timer);
   }, [onCompleted, delayBeforeCompleted]);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: themeColor.background}]}>
       <ThemeText
         type="body__primary--jumbo"
         color={themeColor}
@@ -45,12 +47,7 @@ export const Root_ConfirmationScreen = ({
           {backgroundColor: confirmationCircleColor.background},
         ]}
       >
-        <ConfirmSvg
-          style={styles.confirmIcon}
-          width={33.78}
-          height={24.1}
-          fill={themeColor.text}
-        />
+        <ThemeIcon size="large" svg={ConfirmSvg} fill={themeColor.text} />
       </View>
     </View>
   );
@@ -63,16 +60,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   confirmContainer: {
-    width: 106,
-    height: 106,
+    width: CONFIRMATION_CONTAINER_SIZE,
+    height: CONFIRMATION_CONTAINER_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: theme.spacings.xLarge,
-    borderRadius: 106 / 2,
-  },
-  confirmIcon: {
-    width: 33.78,
-    height: 24.1,
+    borderRadius: CONFIRMATION_CONTAINER_SIZE / 2,
   },
   message: {
     textAlign: 'center',
