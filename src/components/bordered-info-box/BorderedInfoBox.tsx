@@ -13,6 +13,7 @@ import {ContrastColor} from '@atb-as/theme';
 
 type Props =
   | {
+      /** The background color of the component where this box is placed */
       backgroundColor: StaticColor | InteractiveColor;
       type: 'large' | 'small';
       style?: StyleProp<ViewStyle>;
