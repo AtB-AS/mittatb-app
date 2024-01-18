@@ -12,7 +12,6 @@ import {PhoneInput} from '@atb/components/phone-input';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 import {TransitionPresets} from '@react-navigation/stack';
-import {Button} from '@atb/components/button';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -75,25 +74,6 @@ export const Root_LoginPhoneInputScreen = ({
               });
             }}
             rightIcon={ArrowRight}
-          />
-          <Button
-            interactiveColor="interactive_0"
-            mode="primary"
-            style={styles.submitButton}
-            onPress={() =>
-              navigation.navigate('Root_ConfirmationScreen', {
-                message: 'Billetten har blitt sendt!',
-                onCompleted: () => {
-                  navigation.navigate('Root_LoginConfirmCodeScreen', {
-                    afterLogin,
-                    phoneNumber: "9888888",
-                  });
-                },
-              })
-            }
-            text={t(LoginTexts.phoneInput.mainButton)}
-            accessibilityHint={t(LoginTexts.phoneInput.mainButton)}
-            rightIcon={{svg: ArrowRight}}
           />
         </ScrollView>
       </KeyboardAvoidingView>

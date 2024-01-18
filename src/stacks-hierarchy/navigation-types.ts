@@ -124,6 +124,8 @@ type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
 
 type Root_ConfirmationScreenParams = {
   message: string;
+  // Time that must be wait until onComplete is called (in milliseconds)
+  delayBeforeCompleted?: number;
   onCompleted: () => void;
 };
 
