@@ -72,16 +72,27 @@ platform :ios do
     )
   end
 
-  desc "Removes background location"
-  lane :remove_background_location do
+  desc "Remove data that is not needed when beacons are disabled"
+  lane :remove_beacons_data  do
     update_info_plist(
       xcodeproj: "./ios/atb.xcodeproj",
       plist_path: "./atb/Info.plist",
       block: proc do |plist|
-        puts "Deleting location from UIBackgroundModes..."
+        puts "Deleting location, bluetooth-central from UIBackgroundModes..."
         plist["UIBackgroundModes"].delete("location")
+        plist["UIBackgroundModes"].delete("bluetooth-central")
+
+        puts "Deleting NSLocationAlwaysUsageDescription..."
+        plist.delete("NSLocationAlwaysUsageDescription")
+
+        puts "Deleting NSLocationAlwaysAndWhenInUseUsageDescription..."
+        plist.delete("NSLocationAlwaysAndWhenInUseUsageDescription")
       end
     )
+    puts "Deleting beacons translations files..."
+    File.delete("./ios/atb/en.lproj/Beacon.strings")
+    File.delete("./ios/atb/nb.lproj/Beacon.strings")
+    File.delete("./ios/atb/nn.lproj/Beacon.strings")
   end
 
   desc "Generate new certificates"
