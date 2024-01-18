@@ -1,0 +1,9 @@
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
+
+"NSLocationAlwaysUsageDescription" = "I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
+
+"NSBluetoothAlwaysUsageDescription" = "Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
+
+"NSBluetoothPeripheralUsageDescription" = "Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
+
+"NSMotionUsageDescription" = "Du gir oss lov til å bruke disse dataene for å lære mer om dine reisevaner. Vi kan for eksempel se om kunder velger å sykle, gå eller kjøre bil fremfor å busse. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.";
