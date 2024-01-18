@@ -338,7 +338,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   t,
                   language,
                 )}
-                interactiveColor="interactive_0"
+                interactiveColor="interactive_1"
                 mode="secondary"
                 compact={true}
                 onPress={onSearchTimePress}
@@ -357,7 +357,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   <Button
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                    interactiveColor="interactive_0"
+                    interactiveColor="interactive_1"
                     mode="secondary"
                     type="inline"
                     compact={true}

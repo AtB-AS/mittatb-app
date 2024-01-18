@@ -108,9 +108,20 @@ export const Button = React.forwardRef<any, ButtonProps>(
     const isInline = type === 'inline' || type === 'pill';
 
     const spacing = compact ? theme.spacings.small : theme.spacings.medium;
-
-    const {background: backgroundColor, text: textColor} =
+    const {background: backgroundColor} =
       theme.interactive[themeColor][active ? 'active' : 'default'];
+
+    const {text: textColor} =
+      mode === 'primary'
+        ? theme.interactive[themeColor][active ? 'active' : 'default']
+        : theme.interactive[themeColor]['active'];
+
+    const borderColor =
+      active && mode === 'primary'
+        ? theme.interactive[themeColor].default.background
+        : modeData.visibleBorder
+        ? textColor
+        : 'transparent';
 
     const styleContainer: ViewStyle[] = [
       css.button,
@@ -118,12 +129,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         backgroundColor: modeData.withBackground
           ? backgroundColor
           : 'transparent',
-        borderColor:
-          active && type === 'pill' && mode === 'primary'
-            ? theme.interactive[themeColor].default.background
-            : modeData.visibleBorder
-            ? textColor
-            : 'transparent',
+        borderColor: borderColor,
         paddingHorizontal: spacing,
         paddingVertical: type === 'pill' ? theme.spacings.xSmall : spacing,
         alignSelf: isInline ? 'flex-start' : undefined,
