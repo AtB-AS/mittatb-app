@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 
 const DEFAULT_DELAY_BEFORE_COMPLETED = 5000;
-const CONFIRMATION_CONTAINER_SIZE = 106;
+const CIRCLE_SIZE = 106;
 
 export const Root_ConfirmationScreen = ({
   route: {
@@ -20,10 +20,7 @@ export const Root_ConfirmationScreen = ({
   const styles = useStyles();
   const {themeName} = useTheme();
   const themeColor = getStaticColor(themeName, 'background_accent_0');
-  const confirmationCircleColor = getStaticColor(
-    themeName,
-    'background_accent_1',
-  );
+  const circleColor = getStaticColor(themeName, 'background_accent_1');
 
   useEffect(() => {
     const timer = setTimeout(
@@ -43,8 +40,8 @@ export const Root_ConfirmationScreen = ({
       </ThemeText>
       <View
         style={[
-          styles.confirmContainer,
-          {backgroundColor: confirmationCircleColor.background},
+          styles.circle,
+          {backgroundColor: circleColor.background},
         ]}
       >
         <ThemeIcon size="large" svg={ConfirmSvg} fill={themeColor.text} />
@@ -59,13 +56,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  confirmContainer: {
-    width: CONFIRMATION_CONTAINER_SIZE,
-    height: CONFIRMATION_CONTAINER_SIZE,
+  circle: {
+    width: CIRCLE_SIZE,
+    height: CIRCLE_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: theme.spacings.xLarge,
-    borderRadius: CONFIRMATION_CONTAINER_SIZE / 2,
+    borderRadius: CIRCLE_SIZE / 2,
   },
   message: {
     textAlign: 'center',
