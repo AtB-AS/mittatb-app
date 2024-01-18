@@ -74,7 +74,10 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
               analytics.logEvent('Ticketing', 'Ticket details clicked');
               navigation.navigate({
                 name: 'Root_FareContractDetailsScreen',
-                params: {orderId: fcOrReservation.orderId},
+                params: {
+                  orderId: fcOrReservation.orderId,
+                  ticketType: 'normal',
+                },
               });
             }}
             key={fcOrReservation.orderId}
