@@ -1,1 +1,0 @@
-export {InfoTag} from './InfoTag';
