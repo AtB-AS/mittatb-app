@@ -35,7 +35,7 @@ export const Root_ConfirmationScreen = ({
   return (
     <View style={[styles.container, {backgroundColor: themeColor.background}]}>
       <ThemeText
-        type="body__primary--jumbo"
+        type="heading--jumbo"
         color={themeColor}
         style={styles.message}
       >
