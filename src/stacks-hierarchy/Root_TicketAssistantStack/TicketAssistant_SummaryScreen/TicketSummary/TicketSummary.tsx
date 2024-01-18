@@ -2,7 +2,6 @@ import {View} from 'react-native';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
-import {InfoChip} from '@atb/components/info-chip';
 import {themeColor} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_WelcomeScreen';
 import {StyleSheet, useTheme} from '@atb/theme';
 import React from 'react';
@@ -12,6 +11,7 @@ import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistan
 import {getReferenceDataName} from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {daysInWeek} from 'date-fns';
+import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';
 const themeColor_1: StaticColorByType<'background'> = 'background_accent_1';
@@ -142,8 +142,9 @@ export const TicketSummary = () => {
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.traveller)}
               </ThemeText>
-              <InfoChip
-                interactiveColor={interactiveColorName}
+              <BorderedInfoBox
+                backgroundColor={interactiveColorName}
+                type="small"
                 style={styles.infoChip}
                 text={travellerName}
               />
@@ -153,8 +154,9 @@ export const TicketSummary = () => {
               <ThemeText type="label__uppercase" color="secondary">
                 {t(TicketAssistantTexts.summary.zones)}
               </ThemeText>
-              <InfoChip
-                interactiveColor={interactiveColorName}
+              <BorderedInfoBox
+                backgroundColor={interactiveColorName}
+                type="small"
                 style={styles.infoChip}
                 text={zonesString}
               />

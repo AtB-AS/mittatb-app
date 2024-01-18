@@ -5,14 +5,13 @@ import RecentFareContractsTexts from '@atb/translations/screens/subscreens/Recen
 import {RecentFareContract} from '../../types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Dimensions, View} from 'react-native';
-import {getReferenceDataName} from '@atb/configuration';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {
   FareProductTypeConfig,
+  getReferenceDataName,
   useFirestoreConfiguration,
 } from '@atb/configuration';
-import {InfoChip} from '@atb/components/info-chip';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {InteractiveColor} from '@atb/theme/colors';
 import {
   getTransportModeText,
@@ -22,6 +21,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {FareContractHarborStopPlaces} from '@atb/fare-contracts';
 import {useHarborsQuery} from '@atb/queries';
 import {TravelRightDirection} from '@atb/ticketing';
+import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 
 type RecentFareContractProps = {
   recentFareContract: RecentFareContract;
@@ -184,8 +184,9 @@ export const RecentFareContractComponent = ({
               <View style={styles.travellersTileWrapper}>
                 {userProfilesWithCount.length <= 2 &&
                   userProfilesWithCount.map((u) => (
-                    <InfoChip
-                      interactiveColor={interactiveColorName}
+                    <BorderedInfoBox
+                      backgroundColor={interactiveColorName}
+                      type="small"
                       key={u.id}
                       text={`${u.count} ${getReferenceDataName(u, language)}`}
                       style={[styles.infoChip, styles.infoChip_travellers]}
@@ -197,9 +198,10 @@ export const RecentFareContractComponent = ({
                 {userProfilesWithCount.length > 2 && (
                   <>
                     {userProfilesWithCount.slice(0, 1).map((u) => (
-                      <InfoChip
+                      <BorderedInfoBox
                         key={u.id}
-                        interactiveColor={interactiveColorName}
+                        type="small"
+                        backgroundColor={interactiveColorName}
                         style={styles.infoChip}
                         text={`${u.count} ${getReferenceDataName(u, language)}`}
                         testID={`${testID}Travellers${userProfilesWithCount.indexOf(
@@ -230,15 +232,17 @@ export const RecentFareContractComponent = ({
                   {t(RecentFareContractsTexts.titles.zone)}
                 </ThemeText>
                 {fromZoneName === toZoneName ? (
-                  <InfoChip
-                    interactiveColor={interactiveColorName}
+                  <BorderedInfoBox
+                    backgroundColor={interactiveColorName}
+                    type="small"
                     style={styles.infoChip}
                     text={`${fromZoneName}`}
                     testID={`${testID}Zone`}
                   />
                 ) : (
-                  <InfoChip
-                    interactiveColor={interactiveColorName}
+                  <BorderedInfoBox
+                    backgroundColor={interactiveColorName}
+                    type="small"
                     style={styles.infoChip}
                     text={`${fromZoneName} - ${toZoneName}`}
                     testID={`${testID}Zones`}
