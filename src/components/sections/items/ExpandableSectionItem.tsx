@@ -45,7 +45,7 @@ export function ExpandableSectionItem({
   testID,
   ...props
 }: Props) {
-  const {contentContainer, topContainer, spacing} = useSectionItem(props);
+  const {contentContainer, topContainer} = useSectionItem(props);
   const sectionStyle = useSectionStyle();
   const styles = useStyles();
   const {t} = useTranslation();
@@ -71,39 +71,34 @@ export function ExpandableSectionItem({
   };
 
   return (
-    <>
-      <View
-        style={topContainer}
-        accessible={true}
-        accessibilityLabel={text}
-        accessibilityHint={
-          expanded
-            ? t(SectionTexts.expandableSectionItem.a11yHint.contract)
-            : t(SectionTexts.expandableSectionItem.a11yHint.expand)
-        }
-        accessibilityRole="button"
-        accessibilityState={{
-          expanded: expanded,
-        }}
+    <View
+      style={topContainer}
+      accessible={true}
+      accessibilityHint={
+        expanded
+          ? t(SectionTexts.expandableSectionItem.a11yHint.contract)
+          : t(SectionTexts.expandableSectionItem.a11yHint.expand)
+      }
+      accessibilityRole="button"
+      accessibilityState={{
+        expanded: expanded,
+      }}
+    >
+      <PressableOpacity
+        onPress={onPress}
+        style={sectionStyle.spaceBetween}
+        testID={testID}
+        {...accessibility}
       >
-        <PressableOpacity
-          onPress={onPress}
-          style={sectionStyle.spaceBetween}
-          testID={testID}
-          {...accessibility}
-        >
-          <ThemeText style={contentContainer} type={textType}>
-            {text}
-          </ThemeText>
-          <ExpandIcon expanded={expanded} showText={showIconText} />
-        </PressableOpacity>
-      </View>
+        <ThemeText style={contentContainer} type={textType}>
+          {text}
+        </ThemeText>
+        <ExpandIcon expanded={expanded} showText={showIconText} />
+      </PressableOpacity>
       {expanded && 'expandContent' in props && (
-        <View style={[{padding: spacing}, styles.expandContent]}>
-          {props.expandContent}
-        </View>
+        <View style={styles.expandContent}>{props.expandContent}</View>
       )}
-    </>
+    </View>
   );
 }
 
@@ -145,7 +140,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     marginRight: theme.spacings.xSmall,
   },
   expandContent: {
-    // marginTop: theme.spacings.medium,
-    backgroundColor: theme.static.background.background_0.background,
+    marginTop: theme.spacings.medium,
   },
 }));
