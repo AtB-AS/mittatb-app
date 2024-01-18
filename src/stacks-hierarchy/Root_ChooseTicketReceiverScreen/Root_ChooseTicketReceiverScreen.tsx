@@ -1,3 +1,4 @@
+import {getCustomerAccountId} from '@atb/api/profile';
 import {PhoneInput} from '@atb/components/phone-input';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
@@ -22,6 +23,21 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   const {t} = useTranslation();
 
   const focusRef = useFocusOnLoad();
+
+  const handleValidatePhoneNumber = async (phoneNumber: string) => {
+    const result = await getCustomerAccountId(phoneNumber);
+    if (result) {
+      switch (typeof result) {
+        case 'string': // customer account id successfully returned
+          return result;
+        case 'object': // phone number not associated to any account or invalid number
+          return 'no_associated_account';
+        case 'undefined': // unknown error
+          return 'unknown_error';
+      }
+    }
+    return 'unknown_error';
+  };
 
   return (
     <View style={styles.container}>
@@ -58,12 +74,12 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
           <PhoneInput
             submitButtonText={t(PurchaseOverviewTexts.summary.button)}
             submitButtonTestId="toPaymentButton"
-            // TODO: this is just a placeholder, update when API is ready
-            onSubmitPromise={() => new Promise((r) => setTimeout(r, 1000))}
-            onSubmitAction={(number) => {
+            onSubmitPromise={(number) => handleValidatePhoneNumber(number)}
+            onSubmitAction={(number, customerAccountId) => {
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 ...params,
                 phoneNumber: number,
+                customerAccountId: customerAccountId,
               });
             }}
           />

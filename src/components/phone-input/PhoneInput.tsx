@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
-import {LoginTexts, useTranslation} from '@atb/translations';
+import {PhoneInputTexts, useTranslation} from '@atb/translations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {PhoneSignInErrorCode} from '@atb/auth';
 import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
@@ -9,6 +9,9 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import phone from 'phone';
 import {SvgProps} from 'react-native-svg';
+import {GetAccountByNumberErrorCode} from '@atb/on-behalf-of/types';
+
+type PhoneInputErrorCode = PhoneSignInErrorCode | GetAccountByNumberErrorCode;
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -17,8 +20,8 @@ type Props = {
   onSubmitPromise: (
     number: string,
     forceResend?: boolean,
-  ) => Promise<PhoneSignInErrorCode | undefined>;
-  onSubmitAction: (number: string) => void;
+  ) => Promise<PhoneInputErrorCode | string | undefined>;
+  onSubmitAction: (number: string, data?: any) => void;
   rightIcon?: (props: SvgProps) => JSX.Element;
 };
 
@@ -40,7 +43,7 @@ export const PhoneInput = ({
   const [prefix, setPrefix] = useState('47');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<PhoneSignInErrorCode>();
+  const [error, setError] = useState<PhoneInputErrorCode>();
 
   const phoneValidationParams = {
     strictDetection: true,
@@ -62,14 +65,20 @@ export const PhoneInput = ({
       return;
     }
 
-    const errorCode = await onSubmitPromise(phoneValidation.phoneNumber);
-    if (!errorCode) {
+    const result = await onSubmitPromise(phoneValidation.phoneNumber);
+
+    setIsSubmitting(false);
+
+    if (!result) {
       setError(undefined);
-      setIsSubmitting(false);
       onSubmitAction(phoneValidation.phoneNumber);
     } else {
-      setIsSubmitting(false);
-      setError(errorCode);
+      if (isError(result)) {
+        setError(result);
+      } else {
+        setError(undefined);
+        onSubmitAction(phoneValidation.phoneNumber, result);
+      }
     }
   };
 
@@ -77,14 +86,17 @@ export const PhoneInput = ({
     <View style={style}>
       <Section>
         <PhoneInputSectionItem
-          label={t(LoginTexts.phoneInput.input.heading)}
+          label={t(PhoneInputTexts.input.title)}
           value={phoneNumber}
-          onChangeText={setPhoneNumber}
+          onChangeText={(text) => {
+            setPhoneNumber(text);
+            setError(undefined);
+          }}
           prefix={prefix}
           onChangePrefix={setPrefix}
           showClear={true}
           keyboardType="number-pad"
-          placeholder={t(LoginTexts.phoneInput.input.placeholder)}
+          placeholder={t(PhoneInputTexts.input.placeholder)}
           autoFocus={true}
           textContentType="telephoneNumber"
         />
@@ -103,7 +115,7 @@ export const PhoneInput = ({
           <MessageInfoBox
             style={styles.errorMessage}
             type="error"
-            message={t(LoginTexts.phoneInput.errors[error])}
+            message={t(PhoneInputTexts.errors[error])}
           />
         )}
 
@@ -122,6 +134,12 @@ export const PhoneInput = ({
     </View>
   );
 };
+
+function isError(error: string): error is PhoneInputErrorCode {
+  return ['invalid_phone', 'no_associated_account', 'unknown_error'].includes(
+    error,
+  );
+}
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   activityIndicator: {
