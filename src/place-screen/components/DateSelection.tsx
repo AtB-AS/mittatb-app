@@ -91,6 +91,7 @@ export const DateSelection = ({
         }
         type="inline"
         mode="tertiary"
+        compact={true}
         leftIcon={{svg: ArrowLeft}}
         disabled={disablePreviousDayNavigation}
         accessibilityHint={
@@ -98,15 +99,6 @@ export const DateSelection = ({
             ? t(DeparturesTexts.dateNavigation.a11yDisabled)
             : t(DeparturesTexts.dateNavigation.a11yPreviousDayHint)
         }
-        style={styles.button}
-        textStyle={[
-          styles.buttonText,
-          {
-            alignSelf: 'flex-start', // Align text to left side of button
-          },
-        ]}
-        textContainerStyle={styles.nextPrevButtonTextContainer}
-        viewContainerStyle={styles.nextPrevButtonContainer}
         testID="previousDayButton"
       />
       <Button
@@ -123,8 +115,6 @@ export const DateSelection = ({
         compact={true}
         mode="tertiary"
         rightIcon={{svg: DateIcon}}
-        style={styles.button}
-        textStyle={styles.buttonText}
         testID="setDateButton"
       />
       <Button
@@ -141,20 +131,6 @@ export const DateSelection = ({
         compact={true}
         mode="tertiary"
         rightIcon={{svg: ArrowRight}}
-        style={[
-          styles.button,
-          {
-            alignSelf: 'flex-end', // Align button to right side of View
-          },
-        ]}
-        textStyle={[
-          styles.buttonText,
-          {
-            alignSelf: 'flex-end', // Align text to right side of button
-          },
-        ]}
-        textContainerStyle={styles.nextPrevButtonTextContainer}
-        viewContainerStyle={styles.nextPrevButtonContainer}
         accessibilityHint={t(DeparturesTexts.dateNavigation.a11yNextDayHint)}
         testID="nextDayButton"
       />
@@ -188,19 +164,7 @@ function formatToTwoLineDateTime(isoDate: string, language: Language) {
 const useStyles = StyleSheet.createThemeHook(() => ({
   dateNavigator: {
     flexDirection: 'row',
-  },
-  button: {
-    flexGrow: 1, // Fill vertically
-  },
-  nextPrevButtonContainer: {
-    flexGrow: 1, // Fill horizontally
-  },
-  buttonText: {
-    textAlign: 'center',
-  },
-  nextPrevButtonTextContainer: {
-    // Wrap text and fit availiable space
-    flex: 1,
-    flexGrow: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }));
