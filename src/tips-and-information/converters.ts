@@ -17,14 +17,12 @@ function mapToTip(id: string, result: TipRaw): TipType | undefined {
 
   const title = mapToLanguageAndTexts(result.title);
   const description = mapToLanguageAndTexts(result.description);
-  const emoji = result.emoji;
 
-  if (!title || !description || !emoji) return;
+  if (!title || !description) return;
 
   return {
     id,
     title,
     description,
-    emoji,
   };
 }

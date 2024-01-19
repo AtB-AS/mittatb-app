@@ -7,8 +7,8 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
-import {useAppState} from '@atb/AppContext';
 import {TransitionPresets} from '@react-navigation/stack';
+import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
@@ -16,8 +16,9 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   navigation,
   route: {params},
 }: Props) => {
-  const {onboarded, completeOnboarding} = useAppState();
   const {enable_vipps_login} = useRemoteConfig();
+
+  const completeOnboardingAndEnterApp = useCompleteOnboardingAndEnterApp();
 
   const {fareContracts} = useTicketingState();
   const {serverNow} = useTimeContextState();
@@ -41,10 +42,7 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
   return (
     <AnonymousPurchaseConsequencesScreenComponent
       onPressLogin={params.showLoginButton ? onPressLogin : undefined}
-      onPressContinueWithoutLogin={() => {
-        !onboarded && completeOnboarding();
-        navigation.popToTop();
-      }}
+      onPressContinueWithoutLogin={completeOnboardingAndEnterApp}
       leftButton={{
         type:
           params?.transitionPreset === TransitionPresets.ModalSlideFromBottomIOS

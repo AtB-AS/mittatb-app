@@ -6,7 +6,7 @@ import {MyLocation} from '@atb/assets/svg/color/images';
 import {useAppState} from '@atb/AppContext';
 import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 
 export const Root_LocationWhenInUsePermissionScreen = () => {
   const {t} = useTranslation();
@@ -14,7 +14,7 @@ export const Root_LocationWhenInUsePermissionScreen = () => {
   const {completeLocationWhenInUsePermissionOnboarding} = useAppState();
   const {requestLocationPermission} = useGeolocationState();
 
-  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+  const {continueFromOnboardingScreen} = useOnboardingNavigation();
 
   const buttonOnPress = useCallback(async () => {
     await requestLocationPermission();

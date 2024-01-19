@@ -52,7 +52,7 @@ export const Root_PurchaseHarborSearchScreen = ({navigation, route}: Props) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    isFocused && giveFocus(inputRef.current);
+    isFocused && giveFocus(inputRef);
   }, [isFocused]);
 
   const harborsQuery = useHarbors(fromHarbor?.id);

@@ -17,14 +17,10 @@ import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
 
-export type NextScreenParams<T extends keyof RootStackParamList> = {
-  screen: T;
-  /*
-   Can use 'as any' when using these params when navigating, as type safety is
-   ensured at creation time.
-   */
-  params: RootStackParamList[T];
-};
+import {
+  AfterLoginScreenType,
+  NextScreenParams,
+} from '@atb/utils/use-complete-onboarding-and-enter-app';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -66,12 +62,6 @@ type TicketInformationScreenParams = {
   fareProductTypeConfigType: string;
   preassignedFareProductId: string | undefined;
 };
-
-type AfterLoginScreenType =
-  | NextScreenParams<'Root_TabNavigatorStack'>
-  | NextScreenParams<'Root_PurchaseOverviewScreen'>
-  | NextScreenParams<'Root_PurchaseConfirmationScreen'>
-  | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
 
 export type Root_LoginActiveFareContractWarningScreenParams = {
   afterLogin?: AfterLoginScreenType;

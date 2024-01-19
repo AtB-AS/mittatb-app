@@ -7,12 +7,12 @@ import {PushNotification} from '@atb/assets/svg/color/images';
 import {useAppState} from '@atb/AppContext';
 import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useNotifications} from '@atb/notifications';
-import {useOnboardingNavigationFlow} from '@atb/utils/use-onboarding-navigation-flow';
+import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 
 export const Root_NotificationPermissionScreen = () => {
   const {t} = useTranslation();
 
-  const {continueFromOnboardingScreen} = useOnboardingNavigationFlow();
+  const {continueFromOnboardingScreen} = useOnboardingNavigation();
 
   const {completeNotificationPermissionOnboarding} = useAppState();
   const {requestPermissions} = useNotifications();

@@ -25,6 +25,7 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
+import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -32,10 +33,12 @@ type Props = RootStackScreenProps<'Root_LoginOptionsScreen'>;
 
 export const Root_LoginOptionsScreen = ({
   navigation,
-  route: {
-    params: {afterLogin, showGoBack, transitionPreset},
-  },
+  route: {params},
 }: Props) => {
+  const afterLogin = params?.afterLogin;
+  const showGoBack = params?.showGoBack;
+  const transitionPreset = params?.transitionPreset;
+
   const {t} = useTranslation();
   const styles = useStyles();
   const {signInWithCustomToken} = useAuthState();
@@ -45,6 +48,7 @@ export const Root_LoginOptionsScreen = ({
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
+  const completeOnboardingAndEnterApp = useCompleteOnboardingAndEnterApp();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -67,10 +71,7 @@ export const Root_LoginOptionsScreen = ({
   const signInUsingCustomToken = async (token: string) => {
     const errorCode = await signInWithCustomToken(token);
     if (!errorCode) {
-      navigation.popToTop();
-      if (afterLogin) {
-        navigation.navigate(afterLogin.screen, afterLogin.params as any);
-      }
+      completeOnboardingAndEnterApp(afterLogin);
     } else {
       setError(errorCode);
       setIsLoading(false);

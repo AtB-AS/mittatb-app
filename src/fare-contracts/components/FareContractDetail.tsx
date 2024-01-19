@@ -2,10 +2,10 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
-import {InteractiveColor} from '@atb/theme/colors';
-import {InfoChip} from '@atb/components/info-chip';
+import {StaticColor} from '@atb/theme/colors';
+import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 
-const themeColor: InteractiveColor = 'interactive_2';
+const themeColor: StaticColor = 'background_0';
 
 export function FareContractDetail({
   header,
@@ -17,23 +17,23 @@ export function FareContractDetail({
   const styles = useStyles();
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <ThemeText type="body__secondary" color="secondary">
-          {header}
-        </ThemeText>
-        {content.map((c) => (
-          <InfoChip text={c} key={c} interactiveColor={themeColor} />
-        ))}
-      </View>
+      <ThemeText type="body__secondary" color="secondary">
+        {header}
+      </ThemeText>
+      {content.map((c) => (
+        <BorderedInfoBox
+          type="small"
+          text={c}
+          key={c}
+          backgroundColor={themeColor}
+        />
+      ))}
     </View>
   );
 }
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flexDirection: 'row',
-  },
-  content: {
     rowGap: theme.spacings.small,
   },
 }));

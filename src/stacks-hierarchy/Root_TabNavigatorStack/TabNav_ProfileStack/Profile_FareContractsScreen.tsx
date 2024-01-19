@@ -10,6 +10,7 @@ import {addDays} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useAuthState} from '@atb/auth';
 
 export const Profile_FareContractsScreen = () => {
   const styles = useStyles();
@@ -22,10 +23,11 @@ export const Profile_FareContractsScreen = () => {
   const toTimeStamp = (date: Date) =>
     new FirestoreTimestampMock(Math.floor(date.valueOf() / 1000), 0);
   const NOW = new Date();
+  const {abtCustomerId} = useAuthState();
 
   const RESERVATION: Reservation = {
     created: toTimeStamp(NOW),
-    customerAccountId: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
+    customerAccountId: abtCustomerId,
     // discount: 0,
     orderId: 'DW2N19A6',
     paymentId: 870266,
