@@ -52,9 +52,6 @@ export type ButtonProps = {
   onPress(): void;
   interactiveColor?: InteractiveColor;
   mode?: ButtonMode;
-  viewContainerStyle?: StyleProp<ViewStyle>;
-  textContainerStyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   active?: boolean;
@@ -81,9 +78,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
       loading = false,
       compact = false,
       style,
-      viewContainerStyle,
-      textContainerStyle,
-      textStyle,
       ...props
     },
     ref,
@@ -171,9 +165,16 @@ export const Button = React.forwardRef<any, ButtonProps>(
     };
 
     return (
-      <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
+      <Animated.View
+        style={[
+          {
+            opacity: fadeAnim,
+          },
+          style,
+        ]}
+      >
         <PressableOpacity
-          style={[styleContainer, style]}
+          style={styleContainer}
           onPress={disabled ? undefined : onPress}
           disabled={disabled}
           accessibilityRole="button"
@@ -187,11 +188,8 @@ export const Button = React.forwardRef<any, ButtonProps>(
             </View>
           )}
           {text && (
-            <View style={[textContainer, textContainerStyle]}>
-              <ThemeText
-                type={getTextType(mode, type)}
-                style={[styleText, textStyle]}
-              >
+            <View style={textContainer}>
+              <ThemeText type={getTextType(mode, type)} style={styleText}>
                 {text}
               </ThemeText>
             </View>
