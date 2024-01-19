@@ -24,6 +24,7 @@ const ButtonMeta = {
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
+    hasShadow: {control: 'boolean'},
   },
   args: {
     theme: 'light',
