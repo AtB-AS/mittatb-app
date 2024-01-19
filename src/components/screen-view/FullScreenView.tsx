@@ -52,7 +52,9 @@ export function FullScreenView(props: Props) {
         <ScreenHeader
           {...props.headerProps}
           textOpacity={opacity}
-          setFocusOnLoad={!props.parallaxContent}
+          setFocusOnLoad={
+            props.parallaxContent ? false : props.headerProps.setFocusOnLoad
+          }
         />
       </View>
 
