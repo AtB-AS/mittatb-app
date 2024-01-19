@@ -9,7 +9,7 @@ import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAnalytics} from '@atb/analytics';
-import {isCarnet} from '@atb/fare-contracts/FareContractInfo';
+import {isCarnet} from '@atb/ticketing';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
