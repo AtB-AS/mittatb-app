@@ -19,9 +19,7 @@ type Props = RootStackScreenProps<'Root_LoginPhoneInputScreen'>;
 
 export const Root_LoginPhoneInputScreen = ({
   navigation,
-  route: {
-    params: {afterLogin, transitionPreset},
-  },
+  route: {params},
 }: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -33,7 +31,8 @@ export const Root_LoginPhoneInputScreen = ({
       <FullScreenHeader
         leftButton={{
           type:
-            transitionPreset === TransitionPresets.ModalSlideFromBottomIOS
+            params?.transitionPreset ===
+            TransitionPresets.ModalSlideFromBottomIOS
               ? 'close'
               : 'back',
         }}
@@ -69,7 +68,6 @@ export const Root_LoginPhoneInputScreen = ({
             onSubmitPromise={signInWithPhoneNumber}
             onSubmitAction={(number) => {
               navigation.navigate('Root_LoginConfirmCodeScreen', {
-                afterLogin,
                 phoneNumber: number,
               });
             }}

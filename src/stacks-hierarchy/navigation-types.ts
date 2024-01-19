@@ -18,7 +18,6 @@ import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
 
 import {
-  AfterLoginScreenType,
   NextScreenParams,
 } from '@atb/utils/use-complete-onboarding-and-enter-app';
 
@@ -63,26 +62,15 @@ type TicketInformationScreenParams = {
   preassignedFareProductId: string | undefined;
 };
 
-export type Root_LoginActiveFareContractWarningScreenParams = {
-  afterLogin?: AfterLoginScreenType;
-};
-
 export type Root_LoginOptionsScreenParams = {
-  afterLogin?: AfterLoginScreenType;
   showGoBack?: boolean;
-};
-
-export type Root_LoginPhoneInputScreenParams = {
-  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginConfirmCodeScreenParams = {
   phoneNumber: string;
-  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
-  afterLogin?: AfterLoginScreenType;
   fareProductTypeConfig: FareProductTypeConfig;
 };
 
@@ -136,10 +124,10 @@ export type RootStackParamList = StackParams<{
   Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
   Root_TicketInformationScreen: TicketInformationScreenParams;
-  Root_LoginActiveFareContractWarningScreen: Root_LoginActiveFareContractWarningScreenParams;
+  Root_LoginActiveFareContractWarningScreen: undefined;
   Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
-  Root_LoginPhoneInputScreen: Root_LoginPhoneInputScreenParams;
+  Root_LoginPhoneInputScreen: undefined;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
   Root_AddPaymentMethodScreen: undefined;

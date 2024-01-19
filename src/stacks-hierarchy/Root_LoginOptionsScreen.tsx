@@ -24,7 +24,7 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useAppState} from '@atb/AppContext';
+import {useAppState} from "@atb/AppContext";
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -34,7 +34,6 @@ export const Root_LoginOptionsScreen = ({
   navigation,
   route: {params},
 }: Props) => {
-  const afterLogin = params?.afterLogin;
   const showGoBack = params?.showGoBack;
   const transitionPreset = params?.transitionPreset;
 
@@ -176,7 +175,7 @@ export const Root_LoginOptionsScreen = ({
           mode="primary"
           style={styles.loginOptionButton}
           onPress={() =>
-            navigation.navigate('Root_LoginPhoneInputScreen', {afterLogin})
+            navigation.navigate('Root_LoginPhoneInputScreen')
           }
           text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
           accessibilityHint={t(
