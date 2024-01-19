@@ -43,6 +43,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
         <View style={styles.buttonContainer}>
           {showWebsiteFeedback ? (
             <Button
+              interactiveColor="interactive_2"
               text={t(ContactSheetTexts.customer_feedback_website.button)}
               accessibilityHint={t(
                 ContactSheetTexts.customer_feedback_website.a11yHint,
@@ -81,6 +82,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
             />
           ) : undefined}
           <Button
+            interactiveColor="interactive_2"
             text={t(ContactSheetTexts.customer_service.button)}
             accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
             mode="secondary"
@@ -93,6 +95,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
           />
           {isParkingViolationsReportingEnabled && (
             <Button
+              interactiveColor="interactive_2"
               text={t(ContactSheetTexts.parking_violations.buttonText)}
               accessibilityHint={t(
                 ContactSheetTexts.parking_violations.a11yHint,
