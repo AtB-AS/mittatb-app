@@ -28,7 +28,7 @@ const MessageInfoTextMeta: Meta<MessageInfoTextMetaProps> = {
   },
   decorators: [
     (Story, {args}) => (
-      <View>
+      <View style={{alignItems: 'center'}}>
         <Story args={{...args, type: 'info'}} />
         <Story args={{...args, type: 'valid'}} />
         <Story args={{...args, type: 'warning'}} />

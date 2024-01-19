@@ -8,6 +8,7 @@ import {
   themedStoryControls,
   themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
+import {View} from 'react-native';
 
 type ThemeTextMetaProps = ThemeTextProps & ThemedStoryProps;
 
@@ -36,7 +37,14 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
     children: 'Hello world',
     ...themedStoryDefaultArgs,
   },
-  decorators: [ThemedStoryDecorator],
+  decorators: [
+    (Story) => (
+      <View style={{alignItems: 'center'}}>
+        <Story />
+      </View>
+    ),
+    ThemedStoryDecorator,
+  ],
 };
 
 export default ThemeTextMeta;

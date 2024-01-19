@@ -33,7 +33,6 @@ const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
           justifyContent: 'center',
           padding: 12,
           flex: 1,
-          width: '100%', // TODO: Remove styling from parent
           gap: 12,
         }}
       >
