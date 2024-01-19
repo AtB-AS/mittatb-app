@@ -173,43 +173,43 @@ export const Root_LoginOptionsScreen = ({
         <ThemeText style={styles.description} color={themeColor}>
           {t(LoginTexts.logInOptions.selectLoginMethod)}
         </ThemeText>
-        <Button
-          interactiveColor="interactive_0"
-          mode="primary"
-          style={styles.loginOptionButton}
-          onPress={() =>
-            navigation.navigate('Root_LoginPhoneInputScreen', {afterLogin})
-          }
-          text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
-          accessibilityHint={t(
-            LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
-          )}
-          disabled={isLoading}
-          rightIcon={{svg: ArrowRight}}
-          testID="chooseLoginPhone"
-        />
-        <VippsLoginButton
-          onPress={authenticateUserByVipps}
-          disabled={isLoading}
-          style={styles.loginOptionButton}
-        />
-        <Button
-          interactiveColor="interactive_0"
-          mode="secondary"
-          style={styles.loginOptionButton}
-          onPress={() =>
-            navigation.push('Root_PurchaseAsAnonymousConsequencesScreen', {
-              showLoginButton: false,
-            })
-          }
-          text={t(LoginTexts.logInOptions.options.anonymous.label)}
-          accessibilityHint={t(
-            LoginTexts.logInOptions.options.anonymous.a11yLabel,
-          )}
-          disabled={isLoading}
-          rightIcon={{svg: ArrowRight}}
-          testID="useAppAnonymously"
-        />
+
+        <View style={styles.buttonContainer}>
+          <Button
+            interactiveColor="interactive_0"
+            mode="primary"
+            onPress={() =>
+              navigation.navigate('Root_LoginPhoneInputScreen', {afterLogin})
+            }
+            text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
+            accessibilityHint={t(
+              LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
+            )}
+            disabled={isLoading}
+            rightIcon={{svg: ArrowRight}}
+            testID="chooseLoginPhone"
+          />
+          <VippsLoginButton
+            onPress={authenticateUserByVipps}
+            disabled={isLoading}
+          />
+          <Button
+            interactiveColor="interactive_1"
+            mode="secondary"
+            onPress={() =>
+              navigation.push('Root_PurchaseAsAnonymousConsequencesScreen', {
+                showLoginButton: false,
+              })
+            }
+            text={t(LoginTexts.logInOptions.options.anonymous.label)}
+            accessibilityHint={t(
+              LoginTexts.logInOptions.options.anonymous.a11yLabel,
+            )}
+            disabled={isLoading}
+            rightIcon={{svg: ArrowRight}}
+            testID="useAppAnonymously"
+          />
+        </View>
 
         <View style={styles.termsOfUseContainer}>
           <PressableOpacity
@@ -256,8 +256,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     errorMessage: {
       marginBottom: theme.spacings.medium,
     },
-    loginOptionButton: {
-      marginVertical: theme.spacings.medium / 2,
+    buttonContainer: {
+      gap: theme.spacings.medium,
     },
     termsOfUseContainer: {
       marginVertical: theme.spacings.xLarge - theme.spacings.medium,
