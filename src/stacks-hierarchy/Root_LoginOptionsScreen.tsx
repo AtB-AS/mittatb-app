@@ -3,8 +3,7 @@ import {
   getOrCreateVippsUserCustomToken,
   VIPPS_CALLBACK_URL,
 } from '@atb/api/vipps-login/api';
-import {useAuthState} from '@atb/auth';
-import {VippsSignInErrorCode} from '@atb/auth';
+import {useAuthState, VippsSignInErrorCode} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
@@ -25,7 +24,7 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -48,7 +47,7 @@ export const Root_LoginOptionsScreen = ({
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
-  const completeOnboardingAndEnterApp = useCompleteOnboardingAndEnterApp();
+  const {completeOnboarding} = useAppState();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -69,10 +68,9 @@ export const Root_LoginOptionsScreen = ({
   );
 
   const signInUsingCustomToken = async (token: string) => {
+    completeOnboarding();
     const errorCode = await signInWithCustomToken(token);
-    if (!errorCode) {
-      completeOnboardingAndEnterApp(afterLogin);
-    } else {
+    if (errorCode) {
       setError(errorCode);
       setIsLoading(false);
     }
