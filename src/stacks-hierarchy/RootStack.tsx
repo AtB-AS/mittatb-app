@@ -12,7 +12,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
@@ -84,20 +84,10 @@ export const RootStack = () => {
 
   useBeaconsState();
   useTestIds();
-  // // const queries = queryClient.getQueryCache().getAll();
-  //
-  // useEffect(() => {
-  //   console.log('start');
-  //   // queries.map((i) => console.log(i.queryKey));
-  //   // queryClient.invalidateQueries();
-  //   queryClient.clear();
-  //
-  //   // queryClient.invalidateQueries({refetchType: 'all'});
-  //   // console.log('after');
-  //   // queries.map((i) => console.log(i.queryKey));
-  // }, [userId, queryClient]);
-  // // console.log('end');
-  // // queries.map((i) => console.log(i.queryKey));
+
+  useEffect(() => {
+    queryClient.invalidateQueries();
+  }, [userId, queryClient]);
 
   if (isLoading) {
     return null;

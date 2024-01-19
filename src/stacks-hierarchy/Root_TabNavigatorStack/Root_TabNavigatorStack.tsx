@@ -25,16 +25,11 @@ import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
-import {
-  useNotifications,
-  useOnPushNotificationOpened,
-  usePushNotificationsEnabled,
-} from '@atb/notifications';
+import {useOnPushNotificationOpened} from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
-import {useAuthState} from '@atb/auth';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -43,11 +38,6 @@ export const Root_TabNavigatorStack = () => {
   const {t} = useTranslation();
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
-
-  const {authStatus} = useAuthState();
-  const pushNotificationsEnabled = usePushNotificationsEnabled();
-  const {checkPermissions: checkPushNotificationPermissions} =
-    useNotifications();
 
   useOnPushNotificationOpened();
 
