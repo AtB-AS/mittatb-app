@@ -111,7 +111,6 @@ export function CarnetDetails(props: {
         <SectionSeparator />
       </View>
       <FareContractInfoDetails
-        omitUserProfileCount={true}
         fromTariffZone={fromTariffZone}
         toTariffZone={toTariffZone}
         userProfilesWithCount={userProfilesWithCount}

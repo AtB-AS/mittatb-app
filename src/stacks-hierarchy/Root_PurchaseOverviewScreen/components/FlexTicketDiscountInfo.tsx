@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {ThemeText} from '@atb/components/text';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
-import {InfoChip} from '@atb/components/info-chip';
 import {
   getTextForLanguage,
   PurchaseOverviewTexts,
@@ -9,8 +8,8 @@ import {
 } from '@atb/translations';
 import {UserProfileWithCountAndOffer} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-offer-state';
 import {
-  useFirestoreConfiguration,
   getReferenceDataName,
+  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
 import {StyleSheet} from '@atb/theme';
@@ -22,6 +21,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
+import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
@@ -91,14 +91,16 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     )}
                   </ThemeText>
                   <View style={styles.infoChips}>
-                    <InfoChip
+                    <BorderedInfoBox
                       style={styles.infoChips_first}
-                      interactiveColor="interactive_2"
+                      type="small"
+                      backgroundColor="background_0"
                       text={discountText}
                     />
-                    <InfoChip
+                    <BorderedInfoBox
+                      type="small"
+                      backgroundColor="background_0"
                       text={priceText}
-                      interactiveColor="interactive_2"
                     />
                   </View>
                 </View>

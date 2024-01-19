@@ -36,7 +36,7 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
         text={t(FareContractTexts.detailsLink.notValid)}
         onPress={() =>
           navigation.navigate({
-            name: 'Root_CarnetDetailsScreen',
+            name: 'Root_FareContractDetailsScreen',
             params: {
               orderId: fareContract.orderId,
             },
