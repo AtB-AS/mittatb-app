@@ -6,6 +6,7 @@ import {
   ThemedStoryDecorator,
   ThemedStoryProps,
   themedStoryControls,
+  themedStoryDefaultArgs,
 } from '../ThemedStoryDecorator';
 
 type ThemeTextMetaProps = ThemeTextProps & ThemedStoryProps;
@@ -31,10 +32,9 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
   args: {
     color: 'background_0',
     type: 'body__primary',
-    theme: 'light',
     isMarkdown: false,
     children: 'Hello world',
-    backgroundColor: 'background_0',
+    ...themedStoryDefaultArgs,
   },
   decorators: [ThemedStoryDecorator],
 };

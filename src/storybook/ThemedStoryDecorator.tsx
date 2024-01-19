@@ -42,3 +42,8 @@ export const themedStoryControls: Meta['argTypes'] = {
     ],
   },
 };
+
+export const themedStoryDefaultArgs: ThemedStoryProps = {
+  theme: 'light',
+  backgroundColor: 'background_0',
+};
