@@ -64,6 +64,8 @@ import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInf
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
+import {useQueryClient} from '@tanstack/react-query';
+import {useAuthState} from '@atb/auth';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -77,9 +79,25 @@ export const RootStack = () => {
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
   useFlipper(navRef);
+  const {userId} = useAuthState();
+  const queryClient = useQueryClient();
 
   useBeaconsState();
   useTestIds();
+  // // const queries = queryClient.getQueryCache().getAll();
+  //
+  // useEffect(() => {
+  //   console.log('start');
+  //   // queries.map((i) => console.log(i.queryKey));
+  //   // queryClient.invalidateQueries();
+  //   queryClient.clear();
+  //
+  //   // queryClient.invalidateQueries({refetchType: 'all'});
+  //   // console.log('after');
+  //   // queries.map((i) => console.log(i.queryKey));
+  // }, [userId, queryClient]);
+  // // console.log('end');
+  // // queries.map((i) => console.log(i.queryKey));
 
   if (isLoading) {
     return null;
