@@ -1,30 +1,30 @@
 import React from 'react';
 import {View} from 'react-native';
-import {getStaticColor, themes} from '@atb/theme/colors';
-import {BorderedInfoBox} from '@atb/components/bordered-info-box';
+import {
+  BorderedInfoBox,
+  BorderedInfoBoxProps,
+} from '@atb/components/bordered-info-box';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {Info} from '@atb/assets/svg/mono-icons/status';
+import {
+  ThemedStoryDecorator,
+  ThemedStoryProps,
+  themedStoryControls,
+  themedStoryDefaultArgs,
+} from '../ThemedStoryDecorator';
+import {Meta} from '@storybook/react-native';
 
-const BorderedInfoBoxMeta = {
+type BorderedInfoBoxMetaProps = BorderedInfoBoxProps & ThemedStoryProps;
+
+const BorderedInfoBoxMeta: Meta<BorderedInfoBoxMetaProps> = {
   title: 'BorderedInfoBox',
   component: BorderedInfoBox,
   argTypes: {
-    theme: {
-      control: {type: 'radio'},
-      options: ['light', 'dark'],
-    },
-    backgroundColor: {
-      control: 'select',
-      options: [
-        ...Object.keys(themes['light'].static.background),
-        ...Object.keys(themes['light'].static.status),
-      ],
-    },
+    ...themedStoryControls,
   },
   args: {
-    theme: 'light',
-    backgroundColor: 'background_0',
+    ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => (
@@ -33,9 +33,7 @@ const BorderedInfoBoxMeta = {
           justifyContent: 'center',
           padding: 12,
           flex: 1,
-          backgroundColor:
-            getStaticColor(args.theme, args.backgroundColor)?.background ||
-            getStaticColor(args.theme, 'background_0').background,
+          width: '100%', // TODO: Remove styling from parent
           gap: 12,
         }}
       >
@@ -52,8 +50,13 @@ const BorderedInfoBoxMeta = {
                   style={{marginRight: 4}}
                   colorType={args.backgroundColor}
                 />
-                <ThemeText type="body__tertiary" color={args.backgroundColor} style={{flex: 1}}>
-                  This is a large box with custom child component. Can have icons, line breaks, and such.
+                <ThemeText
+                  type="body__tertiary"
+                  color={args.backgroundColor}
+                  style={{flex: 1}}
+                >
+                  This is a large box with custom child component. Can have
+                  icons, line breaks, and such.
                 </ThemeText>
               </View>
             ),
@@ -61,6 +64,7 @@ const BorderedInfoBoxMeta = {
         />
       </View>
     ),
+    ThemedStoryDecorator,
   ],
 };
 
