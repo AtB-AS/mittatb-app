@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {ScrollView} from 'react-native';
 import {getStaticColor, themes} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
@@ -34,11 +34,10 @@ const ButtonMeta = {
   },
   decorators: [
     (Story, {args}) => (
-      <View
-        style={{
+      <ScrollView
+        contentContainerStyle={{
           justifyContent: 'center',
           padding: 12,
-          flex: 1,
           width: '100%',
           alignSelf: 'center',
           backgroundColor:
@@ -80,7 +79,7 @@ const ButtonMeta = {
             rightIcon: {svg: Add},
           }}
         />
-      </View>
+      </ScrollView>
     ),
   ],
 };
