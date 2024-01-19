@@ -165,7 +165,7 @@ export const TicketAssistant_SummaryScreen = ({navigation}: SummaryProps) => {
         {(error || !loading) && (
           <Button
             style={styles.feedback}
-            interactiveColor="interactive_0"
+            interactiveColor="interactive_1"
             mode="secondary"
             text={t(TicketAssistantTexts.closeButton)}
             onPress={() => {

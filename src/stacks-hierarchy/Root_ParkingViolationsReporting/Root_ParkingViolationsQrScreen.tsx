@@ -19,7 +19,8 @@ import {Image} from 'react-native-compressor';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 
-export type QrScreenProps = RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
+export type QrScreenProps =
+  RootStackScreenProps<'Root_ParkingViolationsQrScreen'>;
 
 export const Root_ParkingViolationsQrScreen = ({
   navigation,
@@ -154,7 +155,7 @@ export const Root_ParkingViolationsQrScreen = ({
         <Button
           disabled={isError}
           mode="secondary"
-          interactiveColor="interactive_0"
+          interactiveColor="interactive_1"
           onPress={() => selectProvider()}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
         />

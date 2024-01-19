@@ -125,6 +125,7 @@ export const DeparturesWidget = ({
       {!!favoriteDepartures.length && (
         <Button
           mode="secondary"
+          interactiveColor="interactive_1"
           type="block"
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
