@@ -74,8 +74,10 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
           <PhoneInput
             submitButtonText={t(PurchaseOverviewTexts.summary.button)}
             submitButtonTestId="toPaymentButton"
-            onSubmitPromise={(number) => handleValidatePhoneNumber(number)}
-            onSubmitAction={(number, customerAccountId) => {
+            phoneNumberValidation={(number) =>
+              handleValidatePhoneNumber(number)
+            }
+            onPhoneNumberValidatedAction={(number, customerAccountId) => {
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 ...params,
                 phoneNumber: number,

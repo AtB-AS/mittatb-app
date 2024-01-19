@@ -17,11 +17,11 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   submitButtonText: string;
   submitButtonTestId: string;
-  onSubmitPromise: (
+  phoneNumberValidation: (
     number: string,
     forceResend?: boolean,
   ) => Promise<PhoneInputErrorCode | string | undefined>;
-  onSubmitAction: (number: string, data?: any) => void;
+  onPhoneNumberValidatedAction: (number: string, data?: any) => void;
   rightIcon?: (props: SvgProps) => JSX.Element;
 };
 
@@ -31,8 +31,8 @@ export const PhoneInput = ({
   style,
   submitButtonText,
   submitButtonTestId,
-  onSubmitPromise,
-  onSubmitAction,
+  phoneNumberValidation,
+  onPhoneNumberValidatedAction,
   rightIcon,
 }: Props) => {
   const styles = useStyles();
@@ -65,19 +65,19 @@ export const PhoneInput = ({
       return;
     }
 
-    const result = await onSubmitPromise(phoneValidation.phoneNumber);
+    const result = await phoneNumberValidation(phoneValidation.phoneNumber);
 
     setIsSubmitting(false);
 
     if (!result) {
       setError(undefined);
-      onSubmitAction(phoneValidation.phoneNumber);
+      onPhoneNumberValidatedAction(phoneValidation.phoneNumber);
     } else {
       if (isError(result)) {
         setError(result);
       } else {
         setError(undefined);
-        onSubmitAction(phoneValidation.phoneNumber, result);
+        onPhoneNumberValidatedAction(phoneValidation.phoneNumber, result);
       }
     }
   };
