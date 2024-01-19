@@ -221,7 +221,7 @@
 		FE2FB3BE2B596D4B00F2F400 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BeaconsInfoPlist.strings; sourceTree = "<group>"; };
 		FE2FB3C02B596D5F00F2F400 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/BeaconsInfoPlist.strings; sourceTree = "<group>"; };
 		FE2FB3C12B596D6000F2F400 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/BeaconsInfoPlist.strings; sourceTree = "<group>"; };
-		FE2FB5282B59C2C100F2F400 /* beacons.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beacons.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE2FB5282B59C2C100F2F400 /* AtB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE2FB52E2B59C4D100F2F400 /* BeaconsInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BeaconsInfo.plist; sourceTree = "<group>"; };
 		FE55264728EC45ED0091F697 /* departureWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = departureWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE55264828EC45ED0091F697 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -407,7 +407,7 @@
 				13B07F961A680F5B00A75B9A /* AtB.app */,
 				FE55264728EC45ED0091F697 /* departureWidget.appex */,
 				500752DA29855BD100AC5A7F /* AtbAppIntent.appex */,
-				FE2FB5282B59C2C100F2F400 /* beacons.app */,
+				FE2FB5282B59C2C100F2F400 /* AtB.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -558,7 +558,7 @@
 			);
 			name = beacons;
 			productName = atb;
-			productReference = FE2FB5282B59C2C100F2F400 /* beacons.app */;
+			productReference = FE2FB5282B59C2C100F2F400 /* AtB.app */;
 			productType = "com.apple.product-type.application";
 		};
 		FE55264628EC45ED0091F697 /* departureWidget */ = {
@@ -1430,7 +1430,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = "$(PROJECT_NAME)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AtB;
 				PROVISIONING_PROFILE_SPECIFIER = "match Development $(IOS_BUNDLE_IDENTIFIER)";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development $(IOS_BUNDLE_IDENTIFIER)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1472,7 +1472,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(IOS_BUNDLE_IDENTIFIER)";
 				PRODUCT_MODULE_NAME = "$(PROJECT_NAME)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AtB;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
