@@ -116,7 +116,7 @@ type Root_ConfirmationScreenParams = {
   message: string;
   // Time that must be wait until onComplete is called (in milliseconds)
   delayBeforeCompleted?: number;
-  onCompleted: () => void;
+  nextScreen: NextScreenParams<'Root_TabNavigatorStack'>;
 };
 
 export type RootStackParamList = StackParams<{

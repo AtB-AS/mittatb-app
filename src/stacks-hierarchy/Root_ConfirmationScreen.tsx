@@ -4,33 +4,35 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
 import ConfirmSvg from '@atb/assets/svg/mono-icons/actions/Confirm';
 import {useEffect} from 'react';
-import {getStaticColor} from '@atb/theme/colors';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {InteractiveColor, StaticColor} from '@atb/theme/colors';
 
 type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 
 const DEFAULT_DELAY_BEFORE_COMPLETED = 5000;
 const CIRCLE_SIZE = 80;
+const themeColor: StaticColor = 'background_accent_0';
+const circleColor: InteractiveColor = 'interactive_2';
 
 export const Root_ConfirmationScreen = ({
+  navigation,
   route: {
-    params: {message, delayBeforeCompleted, onCompleted},
+    params: {message, delayBeforeCompleted, nextScreen},
   },
 }: Props) => {
   const styles = useStyles();
-  const {themeName} = useTheme();
-  const themeColor = getStaticColor(themeName, 'background_accent_0');
-  const circleColor = getStaticColor(themeName, 'background_accent_1');
+  const {theme} = useTheme();
 
   useEffect(() => {
     const timer = setTimeout(
-      onCompleted,
+      () => navigation.navigate(nextScreen.screen, nextScreen.params),
       delayBeforeCompleted ?? DEFAULT_DELAY_BEFORE_COMPLETED,
     );
     return () => clearTimeout(timer);
-  }, [onCompleted, delayBeforeCompleted]);
+  }, [delayBeforeCompleted, navigation, nextScreen]);
+
   return (
-    <View style={[styles.container, {backgroundColor: themeColor.background}]}>
+    <View style={styles.container}>
       <ThemeText
         type="heading--jumbo"
         color={themeColor}
@@ -38,13 +40,8 @@ export const Root_ConfirmationScreen = ({
       >
         {message}
       </ThemeText>
-      <View
-        style={[
-          styles.circle,
-          {backgroundColor: circleColor.background},
-        ]}
-      >
-        <ThemeIcon size="large" svg={ConfirmSvg} fill={themeColor.text} />
+      <View style={styles.circle}>
+        <ThemeIcon size="large" svg={ConfirmSvg} colorType={theme.interactive[circleColor].outline} />
       </View>
     </View>
   );
@@ -55,6 +52,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: theme.static.background[themeColor].background,
   },
   circle: {
     width: CIRCLE_SIZE,
@@ -63,6 +61,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'center',
     marginTop: theme.spacings.xLarge,
     borderRadius: CIRCLE_SIZE / 2,
+    backgroundColor: theme.interactive[circleColor].outline.background,
   },
   message: {
     textAlign: 'center',
