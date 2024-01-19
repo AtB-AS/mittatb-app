@@ -48,7 +48,7 @@ try {
 const getStories = () => {
   return {
     "./src/storybook/stories/BorderedInfoBox.stories.tsx": require("../src/storybook/stories/BorderedInfoBox.stories.tsx"),
-    "./src/storybook/stories/Button.stories.js": require("../src/storybook/stories/Button.stories.js"),
+    "./src/storybook/stories/Button.stories.tsx": require("../src/storybook/stories/Button.stories.tsx"),
     "./src/storybook/stories/MessageInfoBox.stories.tsx": require("../src/storybook/stories/MessageInfoBox.stories.tsx"),
     "./src/storybook/stories/MessageInfoText.stories.tsx": require("../src/storybook/stories/MessageInfoText.stories.tsx"),
     "./src/storybook/stories/ThemeText.stories.tsx": require("../src/storybook/stories/ThemeText.stories.tsx"),
