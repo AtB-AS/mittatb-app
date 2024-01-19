@@ -84,7 +84,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
   ) => {
     const modeData = DefaultModeStyles[mode];
     const themeColor = interactiveColor;
-    const css = useButtonStyle();
+    const styles = useButtonStyle();
     const {theme} = useTheme();
     const fadeAnim = useRef(
       new Animated.Value(disabled ? DISABLED_OPACITY : 1),
@@ -118,7 +118,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         : 'transparent';
 
     const styleContainer: ViewStyle[] = [
-      css.button,
+      styles.button,
       {
         backgroundColor: modeData.withBackground
           ? backgroundColor

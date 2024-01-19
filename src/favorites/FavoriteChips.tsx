@@ -5,7 +5,6 @@ import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
 import {StyleSheet} from '@atb/theme';
-import {InteractiveColor} from '@atb/theme/colors';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -18,8 +17,6 @@ import {
   Location,
   useFavorites,
 } from '@atb/favorites';
-
-const themeColor: InteractiveColor = 'interactive_0';
 
 type Props = {
   onSelectLocation: (location: Location) => void;
@@ -80,7 +77,7 @@ export const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
-              interactiveColor={themeColor}
+              interactiveColor="interactive_0"
               key={fav.id}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
