@@ -39,8 +39,8 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
 };
 
 type ButtonTypeAwareProps =
-  | {text?: string; type: 'inline'}
   | {text: string; type?: 'block'}
+  | {text?: string; type: 'inline'}
   | {text: string; type: 'pill'};
 
 type ButtonIconProps = {
