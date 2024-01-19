@@ -4,7 +4,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
@@ -96,11 +96,6 @@ export const FavoriteChips: React.FC<Props> = ({
                   favoriteId: fav.id,
                 })
               }
-              style={
-                !activeType('add-favorite') && i === favorites.length - 1
-                  ? {marginRight: 0}
-                  : undefined
-              }
               testID={'favoriteChip' + i}
             />
           ))}
@@ -112,7 +107,6 @@ export const FavoriteChips: React.FC<Props> = ({
             accessibilityRole="button"
             leftIcon={{svg: Add}}
             onPress={onAddFavorite}
-            style={{marginRight: 0}}
             testID="addFavoriteButton"
           />
         )}
@@ -122,24 +116,13 @@ export const FavoriteChips: React.FC<Props> = ({
 };
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
-  const {theme} = useTheme();
-  const style = typeof props.style === 'object' ? props.style : {};
-  return (
-    <Button
-      {...props}
-      style={{
-        marginRight: theme.spacings.small,
-        ...style,
-      }}
-      type="inline"
-      compact={true}
-    />
-  );
+  return <Button {...props} type="inline" compact={true} />;
 };
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   staticChipsContainer: {
     flexDirection: 'row',
+    gap: theme.spacings.small,
   },
 }));
 
