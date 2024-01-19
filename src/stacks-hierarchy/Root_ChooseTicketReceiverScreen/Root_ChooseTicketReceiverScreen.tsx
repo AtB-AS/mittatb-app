@@ -79,7 +79,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 ...params,
                 phoneNumber: number,
-                customerAccountId: customerAccountId,
+                destinationAccountId: customerAccountId,
               });
             }}
           />

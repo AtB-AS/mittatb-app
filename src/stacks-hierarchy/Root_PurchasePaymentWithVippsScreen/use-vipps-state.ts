@@ -63,7 +63,11 @@ const initialState: VippsReducerState = {
   state: 'reserving-offer',
 };
 
-export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
+export function useVippsState(
+  offers: ReserveOffer[],
+  destinationAccountId: string | undefined,
+  dismiss: () => void,
+) {
   const [{state, error, reservation}, dispatch] = useReducer(
     vippsReducer,
     initialState,
@@ -84,6 +88,10 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
     [dispatch],
   );
 
+  const targetCustomerId = destinationAccountId
+    ? destinationAccountId
+    : abtCustomerId;
+
   const reserveOffer = useCallback(
     async function () {
       try {
@@ -95,7 +103,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
             retry: true,
           },
           scaExemption: false,
-          customerAccountId: abtCustomerId!,
+          customerAccountId: targetCustomerId!,
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
         if (userId) {
@@ -109,7 +117,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
         handleAxiosError(err, 'reserve-offer');
       }
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [offers, dispatch, handleAxiosError],
   );
 
@@ -133,7 +141,7 @@ export function useVippsState(offers: ReserveOffer[], dismiss: () => void) {
         });
       }
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [reservation?.url],
   );
 

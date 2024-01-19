@@ -38,6 +38,7 @@ export type Root_LocationSearchByMapScreenParams = {
 type PaymentParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
+  destinationAccountId?: string;
 };
 
 type ReceiptScreenRouteParams = {
