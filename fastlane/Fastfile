@@ -182,7 +182,7 @@ platform :ios do
     beacons_enabled = ENV["KETTLE_API_KEY"] != ""
     puts "Is beacons enabled: #{beacons_enabled}"
 
-    target = widget_enabled ? "beacon" : "app"
+    target = beacons_enabled ? "beacons" : "app"
 
     update_project_team(
       path: "./ios/atb.xcodeproj",
@@ -234,7 +234,7 @@ platform :ios do
     beacons_enabled = ENV["KETTLE_API_KEY"] != ""
     puts "Is beacons enabled: #{beacons_enabled}"
 
-    target = widget_enabled ? "beacon" : "app"
+    target = beacons_enabled ? "beacons" : "app"
 
     cocoapods(podfile: './ios/Podfile')
     build_app(
