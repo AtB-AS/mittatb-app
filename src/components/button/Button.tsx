@@ -43,10 +43,6 @@ type ButtonTypeAwareProps =
   | {text?: string; type: 'inline'}
   | {text: string; type: 'pill'};
 
-type ButtonModeAwareProps =
-  | {active?: boolean; mode?: 'primary'}
-  | {mode: Exclude<ButtonMode, 'primary'>};
-
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
   size?: keyof Theme['icon']['size'];
@@ -56,14 +52,15 @@ type ButtonIconProps = {
 export type ButtonProps = {
   onPress(): void;
   interactiveColor?: InteractiveColor;
+  mode?: ButtonMode;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
+  active?: boolean;
   compact?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   hasShadow?: boolean;
-} & ButtonModeAwareProps &
-  ButtonTypeAwareProps &
+} & ButtonTypeAwareProps &
   PressableProps;
 
 const DISABLED_OPACITY = 0.2;
@@ -79,6 +76,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       rightIcon,
       text,
       disabled,
+      active,
       loading = false,
       compact = false,
       hasShadow = false,
@@ -87,8 +85,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
     },
     ref,
   ) => {
-    const isActive = 'active' in props && props.active;
-
     const modeData = DefaultModeStyles[mode];
     const themeColor = interactiveColor;
     const styles = useButtonStyle();
@@ -110,15 +106,15 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const spacing = compact ? theme.spacings.small : theme.spacings.medium;
     const {background: backgroundColor} =
-      theme.interactive[themeColor][isActive ? 'active' : 'default'];
+      theme.interactive[themeColor][active ? 'active' : 'default'];
 
     const {text: textColor} =
       mode === 'primary'
-        ? theme.interactive[themeColor][isActive ? 'active' : 'default']
+        ? theme.interactive[themeColor][active ? 'active' : 'default']
         : theme.interactive[themeColor]['active'];
 
     const borderColor =
-      isActive && mode === 'primary'
+      active && mode === 'primary'
         ? theme.interactive[themeColor].default.background
         : modeData.visibleBorder
         ? textColor

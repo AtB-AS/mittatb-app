@@ -617,6 +617,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="secondary"
+                    active={true}
                     interactiveColor="interactive_0"
                   />
                   <Button
@@ -652,6 +653,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="secondary"
+                    active={true}
                     interactiveColor="interactive_1"
                   />
                   <Button
@@ -687,6 +689,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="secondary"
+                    active={true}
                     interactiveColor="interactive_2"
                   />
                   <Button
@@ -722,6 +725,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="secondary"
+                    active={true}
                     interactiveColor="interactive_destructive"
                   />
                   <Button
@@ -757,6 +761,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
+                    active={true}
                     interactiveColor="interactive_0"
                   />
                   <Button
@@ -792,6 +797,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
+                    active={true}
                     interactiveColor="interactive_1"
                   />
                   <Button
@@ -827,6 +833,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
+                    active={true}
                     interactiveColor="interactive_2"
                   />
                   <Button
@@ -862,6 +869,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
+                    active={true}
                     interactiveColor="interactive_destructive"
                   />
                   <Button
@@ -935,6 +943,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="inline"
+                    active={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
@@ -1021,6 +1030,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="pill"
+                    active={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
@@ -1125,6 +1135,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="inline"
+                    active={true}
                     interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
@@ -1134,6 +1145,7 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="inline"
+                    active={true}
                     interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
