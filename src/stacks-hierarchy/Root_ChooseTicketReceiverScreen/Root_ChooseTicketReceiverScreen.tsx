@@ -27,14 +27,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   const handleValidatePhoneNumber = async (phoneNumber: string) => {
     const result = await getCustomerAccountId(phoneNumber);
     if (result) {
-      switch (typeof result) {
-        case 'string': // customer account id successfully returned
-          return result;
-        case 'object': // phone number not associated to any account or invalid number
-          return 'no_associated_account';
-        case 'undefined': // unknown error
-          return 'unknown_error';
-      }
+      return typeof result === 'string' ? result : 'no_associated_account';
     }
     return 'unknown_error';
   };

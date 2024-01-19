@@ -69,16 +69,11 @@ export const PhoneInput = ({
 
     setIsSubmitting(false);
 
-    if (!result) {
-      setError(undefined);
-      onPhoneNumberValidatedAction(phoneValidation.phoneNumber);
+    if (result && isError(result)) {
+      setError(result);
     } else {
-      if (isError(result)) {
-        setError(result);
-      } else {
-        setError(undefined);
-        onPhoneNumberValidatedAction(phoneValidation.phoneNumber, result);
-      }
+      setError(undefined);
+      onPhoneNumberValidatedAction(phoneValidation.phoneNumber, result);
     }
   };
 
