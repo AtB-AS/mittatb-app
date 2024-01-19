@@ -4,7 +4,7 @@ import {
   BottomSheetContainer,
   useBottomSheet,
 } from '@atb/components/bottom-sheet';
-import {Button, ButtonGroup} from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {Toggle} from '@atb/components/toggle';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
@@ -150,7 +150,7 @@ export const SelectFavouritesBottomSheet = ({
       </ScrollView>
 
       <FullScreenFooter>
-        <ButtonGroup>
+        <View style={styles.buttonContainer}>
           <Button
             interactiveColor="interactive_0"
             text={t(SelectFavouriteDeparturesText.confirm_button.text)}
@@ -176,7 +176,7 @@ export const SelectFavouritesBottomSheet = ({
             testID="editButton"
             mode="secondary"
           />
-        </ButtonGroup>
+        </View>
       </FullScreenFooter>
     </BottomSheetContainer>
   );
@@ -186,6 +186,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     container: {
       flex: 1,
+    },
+    buttonContainer: {
+      gap: theme.spacings.small,
     },
     questionText: {
       padding: theme.spacings.medium,

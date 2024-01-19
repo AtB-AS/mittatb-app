@@ -2,9 +2,8 @@ import SvgConfirm from '@atb/assets/svg/mono-icons/actions/Confirm';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
 import {Pin} from '@atb/assets/svg/mono-icons/map';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
-import {Button, ButtonGroup} from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ScreenReaderAnnouncement} from '@atb/components/screen-reader-announcement';
 import {ThemeText} from '@atb/components/text';
@@ -23,6 +22,7 @@ import {
   Section,
   TextInputSectionItem,
 } from '@atb/components/sections';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
 
@@ -218,7 +218,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
       </ScrollView>
 
       <FullScreenFooter avoidKeyboard={true}>
-        <ButtonGroup>
+        <View style={css.buttonContainer}>
           {editItem && (
             <Button
               onPress={deleteItem}
@@ -236,7 +236,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
             text={t(AddEditFavoriteTexts.save.label)}
             testID="saveButton"
           />
-        </ButtonGroup>
+        </View>
       </FullScreenFooter>
     </View>
   );
@@ -245,6 +245,9 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_3.background,
+  },
+  buttonContainer: {
+    gap: theme.spacings.small,
   },
   emojiContainer: {
     flexDirection: 'row',

@@ -2,7 +2,7 @@ import {ContrastColor} from '@atb-as/theme';
 import {Add, Delete, Edit, Feedback} from '@atb/assets/svg/mono-icons/actions';
 import {Check} from '@atb/assets/svg/mono-icons/status';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
-import {Button, ButtonGroup} from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioSegments} from '@atb/components/radio';
 import {FullScreenHeader} from '@atb/components/screen-header';
@@ -462,7 +462,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/0
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -490,7 +490,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_0"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -498,7 +498,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/1
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default - block"
                     onPress={presser}
@@ -526,7 +526,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_1"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -534,7 +534,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/2
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -562,7 +562,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_2"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -570,7 +570,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/destructive
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -598,7 +598,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_destructive"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -606,7 +606,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Secondary - block - interactive/0
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -634,7 +634,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_0"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -642,7 +642,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Secondary - block - interactive/1
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -670,7 +670,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_1"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -678,7 +678,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Secondary - block - interactive/2
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -706,7 +706,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_2"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -714,7 +714,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Secondary - block - interactive/destructive
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -742,7 +742,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_destructive"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -750,7 +750,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   tertiary - block - interactive/0
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -778,7 +778,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_0"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -786,7 +786,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   tertiary - block - interactive/1
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -814,7 +814,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_1"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -822,7 +822,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   tertiary - block - interactive/2
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -850,7 +850,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_2"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -858,7 +858,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   tertiary - block - interactive/destructive
                 </ThemeText>
-                <ButtonGroup>
+                <View style={style.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -886,7 +886,7 @@ export const Profile_DesignSystemScreen = ({
                     compact={true}
                     interactiveColor="interactive_destructive"
                   />
-                </ButtonGroup>
+                </View>
 
                 <ThemeText
                   style={{marginTop: 24, marginBottom: 12}}
@@ -1389,7 +1389,7 @@ export const Profile_DesignSystemScreen = ({
         </Section>
 
         <View style={style.section}>
-          <ButtonGroup>{buttons}</ButtonGroup>
+          <View style={style.buttonContainer}>{buttons}</View>
         </View>
 
         <View style={style.swatchGroup}>{backgroundSwatches}</View>
@@ -1418,6 +1418,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
+  },
+  buttonContainer: {
+    gap: theme.spacings.small,
   },
   transportationIcon: {
     marginRight: theme.spacings.xSmall,
