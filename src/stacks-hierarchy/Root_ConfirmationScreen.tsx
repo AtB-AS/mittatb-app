@@ -10,7 +10,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 
 const DEFAULT_DELAY_BEFORE_COMPLETED = 5000;
-const CIRCLE_SIZE = 106;
+const CIRCLE_SIZE = 80;
 
 export const Root_ConfirmationScreen = ({
   route: {
