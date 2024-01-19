@@ -76,7 +76,6 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
                 name: 'Root_FareContractDetailsScreen',
                 params: {
                   orderId: fcOrReservation.orderId,
-                  ticketType: 'normal',
                 },
               });
             }}

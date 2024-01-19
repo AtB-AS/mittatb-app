@@ -257,12 +257,11 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         {enable_ticketing && (
           <CompactFareContracts
             style={style.contentSection}
-            onPressDetails={(isCarnet: boolean, orderId: string) => {
+            onPressDetails={(orderId: string) => {
               return navigation.navigate({
                 name: 'Root_FareContractDetailsScreen',
                 params: {
                   orderId: orderId,
-                  ticketType: isCarnet ? 'carnet' : 'normal',
                 },
               });
             }}

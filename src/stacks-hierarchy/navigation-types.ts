@@ -51,7 +51,6 @@ type ReceiptScreenRouteParams = {
 };
 
 type FareContractDetailsRouteParams = {
-  ticketType: 'normal' | 'carnet';
   orderId: string;
 };
 

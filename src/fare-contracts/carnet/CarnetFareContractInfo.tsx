@@ -39,7 +39,6 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
             name: 'Root_FareContractDetailsScreen',
             params: {
               orderId: fareContract.orderId,
-              ticketType: 'carnet',
             },
           })
         }

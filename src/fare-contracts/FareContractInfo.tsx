@@ -219,6 +219,10 @@ export const getFareContractInfoDetails = (
   };
 };
 
+export function isCarnet(fareContract: FareContract) {
+  return fareContract.travelRights.some(isCarnetTravelRight);
+}
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {flex: 1},
   fareContractDetails: {

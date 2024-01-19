@@ -9,10 +9,9 @@ import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAnalytics} from '@atb/analytics';
+import {isCarnet} from '@atb/fare-contracts/FareContractInfo';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
-
-export type TicketType = 'normal' | 'carnet';
 
 export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const styles = useStyles();
@@ -22,8 +21,6 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const analytics = useAnalytics();
   const {ticketInfoParams, fareContract, preassignedFareProduct} =
     useTicketInfo(route.params.orderId);
-
-  const ticketType = route.params.ticketType;
 
   useApplePassPresentationSuppression();
 
@@ -65,21 +62,20 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       />
       <ScrollView contentContainerStyle={styles.content}>
         {fareContract &&
-          ((ticketType === 'carnet' && (
+          (isCarnet(fareContract) ? (
             <CarnetDetailedView
               fareContract={fareContract}
               now={serverNow}
               onReceiptNavigate={onReceiptNavigate}
             />
-          )) ||
-            (ticketType === 'normal' && (
-              <DetailsContent
-                fareContract={fareContract}
-                preassignedFareProduct={preassignedFareProduct}
-                now={serverNow}
-                onReceiptNavigate={onReceiptNavigate}
-              />
-            )))}
+          ) : (
+            <DetailsContent
+              fareContract={fareContract}
+              preassignedFareProduct={preassignedFareProduct}
+              now={serverNow}
+              onReceiptNavigate={onReceiptNavigate}
+            />
+          ))}
       </ScrollView>
     </View>
   );
