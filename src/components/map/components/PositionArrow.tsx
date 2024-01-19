@@ -4,7 +4,6 @@ import {insets} from '@atb/utils/insets';
 import React from 'react';
 import {AccessibilityProps} from 'react-native';
 import {Button} from '@atb/components/button';
-import {shadows} from './shadows';
 
 export const PositionArrow: React.FC<
   {onPress(): void} & AccessibilityProps
@@ -20,12 +19,12 @@ export const PositionArrow: React.FC<
       hitSlop={insets.symmetric(12, 20)}
       leftIcon={{svg: Location}}
       style={styles.flyToButton}
+      hasShadow={true}
     />
   );
 };
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   flyToButton: {
     marginBottom: theme.spacings.small,
-    ...shadows,
   },
 }));

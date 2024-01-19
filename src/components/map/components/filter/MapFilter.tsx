@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button} from '@atb/components/button';
 import {StyleSheet} from '@atb/theme';
-import {shadows} from '../shadows';
 import {Filter} from '@atb/assets/svg/mono-icons/actions';
 import {useAnalytics} from '@atb/analytics';
 
@@ -26,6 +25,7 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
       }}
       loading={isLoading}
       rightIcon={{svg: Filter}}
+      hasShadow={true}
     />
   );
 };
@@ -33,6 +33,5 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   filterButton: {
     marginBottom: theme.spacings.small,
-    ...shadows,
   },
 }));
