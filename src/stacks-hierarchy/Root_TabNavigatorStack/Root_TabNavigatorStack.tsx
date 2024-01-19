@@ -34,6 +34,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
+import {useAuthState} from '@atb/auth';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -43,16 +44,10 @@ export const Root_TabNavigatorStack = () => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
+  const {authStatus} = useAuthState();
   const pushNotificationsEnabled = usePushNotificationsEnabled();
   const {checkPermissions: checkPushNotificationPermissions} =
     useNotifications();
-  // Check notification status, and register notification language when the app
-  // starts, in case the user have changed language since last time the app was
-  // opened. This useEffect will also trigger when language is changed manually
-  // in the app.
-  useEffect(() => {
-    if (pushNotificationsEnabled) checkPushNotificationPermissions();
-  }, [pushNotificationsEnabled, checkPushNotificationPermissions]);
 
   useOnPushNotificationOpened();
 
