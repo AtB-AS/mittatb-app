@@ -126,7 +126,6 @@ export const DeparturesWidget = ({
         <Button
           mode="secondary"
           interactiveColor="interactive_1"
-          type="block"
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}
