@@ -5,7 +5,7 @@ import React, {ReactNode} from 'react';
 import {StyleSheet} from '@atb/theme';
 import {addOpacity} from '@atb/utils/add-opacity';
 
-type Props =
+export type BorderedInfoBoxProps =
   | {
       backgroundColor: StaticColor;
       type: 'large' | 'small';
@@ -23,7 +23,7 @@ export const BorderedInfoBox = ({
   backgroundColor,
   style,
   ...props
-}: Props) => {
+}: BorderedInfoBoxProps) => {
   const styles = useStyles(type, backgroundColor);
   return (
     <View style={[styles.container, style]}>
@@ -39,8 +39,8 @@ export const BorderedInfoBox = ({
 };
 
 const useStyles = (
-  type: Props['type'],
-  backgroundColor: Props['backgroundColor'],
+  type: BorderedInfoBoxProps['type'],
+  backgroundColor: BorderedInfoBoxProps['backgroundColor'],
 ) =>
   StyleSheet.createThemeHook((theme, themeName) => ({
     container: {
