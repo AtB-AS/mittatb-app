@@ -50,7 +50,7 @@ const getStories = () => {
     "./src/storybook/stories/BorderedInfoBox.stories.js": require("../src/storybook/stories/BorderedInfoBox.stories.js"),
     "./src/storybook/stories/Button.stories.js": require("../src/storybook/stories/Button.stories.js"),
     "./src/storybook/stories/MessageInfoBox.stories.js": require("../src/storybook/stories/MessageInfoBox.stories.js"),
-    "./src/storybook/stories/MessageInfoText.stories.js": require("../src/storybook/stories/MessageInfoText.stories.js"),
+    "./src/storybook/stories/MessageInfoText.stories.tsx": require("../src/storybook/stories/MessageInfoText.stories.tsx"),
     "./src/storybook/stories/ThemeText.stories.tsx": require("../src/storybook/stories/ThemeText.stories.tsx"),
   };
 };

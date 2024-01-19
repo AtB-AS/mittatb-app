@@ -1,43 +1,41 @@
 import React from 'react';
 import {View} from 'react-native';
-import {getStaticColor} from '@atb/theme/colors';
-import {MessageInfoText} from '@atb/components/message-info-text';
+import {
+  MessageInfoText,
+  MessageInfoTextProps,
+} from '@atb/components/message-info-text';
+import {
+  ThemedStoryDecorator,
+  ThemedStoryProps,
+  themedStoryControls,
+  themedStoryDefaultArgs,
+} from '../ThemedStoryDecorator';
+import {Meta} from '@storybook/react-native';
 
-const MessageInfoTextMeta = {
+type MessageInfoTextMetaProps = MessageInfoTextProps & ThemedStoryProps;
+
+const MessageInfoTextMeta: Meta<MessageInfoTextMetaProps> = {
   title: 'MessageInfoText',
   component: MessageInfoText,
   argTypes: {
-    theme: {
-      control: {type: 'radio'},
-      options: ['light', 'dark'],
-    },
+    ...themedStoryControls,
   },
   args: {
-    theme: 'light',
     message: 'The message body.',
     iconPosition: 'left',
     isMarkdown: false,
+    ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => (
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 12,
-          flex: 1,
-          backgroundColor:
-            getStaticColor(args.theme, args.textColor)?.background ||
-            getStaticColor(args.theme, 'background_0').background,
-          gap: 12,
-        }}
-      >
+      <View>
         <Story args={{...args, type: 'info'}} />
         <Story args={{...args, type: 'valid'}} />
         <Story args={{...args, type: 'warning'}} />
         <Story args={{...args, type: 'error'}} />
       </View>
     ),
+    ThemedStoryDecorator,
   ],
 };
 
