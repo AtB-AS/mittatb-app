@@ -1,23 +1,19 @@
-import React from 'react';
-import {View, ViewStyle} from 'react-native';
-import {ThemeText} from '@atb/components/text';
-import {StaticColor, getStaticColor, themes} from '@atb/theme/colors';
 import {textNames} from '@atb-as/theme';
-import {ThemeTextProps} from '@atb/components/text';
+import {ThemeText, ThemeTextProps} from '@atb/components/text';
+import {themes} from '@atb/theme/colors';
+import {Meta} from '@storybook/react-native';
+import {
+  ThemedStoryDecorator,
+  ThemedStoryProps,
+  themedStoryControls,
+} from '../ThemedStoryDecorator';
 
-type ThemeTextMetaProps = ThemeTextProps & {
-  theme: 'light' | 'dark';
-  backgroundColor: StaticColor;
-};
+type ThemeTextMetaProps = ThemeTextProps & ThemedStoryProps;
 
-const ThemeTextMeta = {
+const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
   title: 'ThemeText',
   component: ThemeText,
   argTypes: {
-    theme: {
-      control: {type: 'radio'},
-      options: ['light', 'dark'],
-    },
     color: {
       control: 'select',
       options: [
@@ -26,18 +22,11 @@ const ThemeTextMeta = {
         ...Object.keys(themes['light'].text.colors),
       ],
     },
-    backgroundColor: {
-      control: 'select',
-      description: 'Will fallback to color',
-      options: [
-        ...Object.keys(themes['light'].static.background),
-        ...Object.keys(themes['light'].static.status),
-      ],
-    },
     type: {
       control: 'select',
       options: textNames,
     },
+    ...themedStoryControls,
   },
   args: {
     color: 'background_0',
@@ -45,26 +34,9 @@ const ThemeTextMeta = {
     theme: 'light',
     isMarkdown: false,
     children: 'Hello world',
+    backgroundColor: 'background_0',
   },
-  decorators: [
-    (Story: React.ComponentType, {args}: {args: ThemeTextMetaProps}) => (
-      <View
-        style={
-          {
-            alignItems: 'center',
-            justifyContent: 'center',
-            flex: 1,
-            backgroundColor:
-              getStaticColor(args.theme, args.backgroundColor || args.color)
-                ?.background ||
-              getStaticColor(args.theme, 'background_0').background,
-          } as ViewStyle
-        }
-      >
-        <Story />
-      </View>
-    ),
-  ],
+  decorators: [ThemedStoryDecorator],
 };
 
 export default ThemeTextMeta;
