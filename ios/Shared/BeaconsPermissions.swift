@@ -66,7 +66,9 @@ class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDele
 
   func request(callback onComplete: @escaping PermissionCallback) {
     self.onComplete = onComplete
-    bluetoothManager = CBCentralManager(delegate: self, queue: nil)
+    // A fix for double prompt for Bluetooth when CBCentralManagerOptionShowPowerAlertKey is not explicitly set to false
+    // https://developer.apple.com/documentation/corebluetooth/cbcentralmanageroptionshowpoweralertkey
+    bluetoothManager = CBCentralManager(delegate: self, queue: nil, options: ["CBCentralManagerOptionShowPowerAlertKey": 0])
   }
 }
 
