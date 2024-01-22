@@ -20,14 +20,13 @@ export const useCompleteOnboardingAndEnterApp = () => {
   };
 };
 
-export type NextScreenParams<T extends keyof RootStackParamList> = {
-  screen: T;
-  /*
-     Can use 'as any' when using these params when navigating, as type safety is
-     ensured at creation time.
-     */
-  params: RootStackParamList[T];
-};
+export type NextScreenParams<T extends keyof RootStackParamList = keyof RootStackParamList> = {
+  [S in T]: {
+    screen: S;
+    params: RootStackParamList[S];
+  };
+}[T];
+
 export type AfterLoginScreenType =
   | NextScreenParams<'Root_TabNavigatorStack'>
   | NextScreenParams<'Root_PurchaseOverviewScreen'>
