@@ -25,9 +25,7 @@ type Props = RootStackScreenProps<'Root_LoginActiveFareContractWarningScreen'>;
 
 export const Root_LoginActiveFareContractWarningScreen = ({
   navigation,
-  route,
 }: Props) => {
-  const {afterLogin} = route.params;
   const {enable_vipps_login} = useRemoteConfig();
   const {t} = useTranslation();
   const styles = useStyles();
@@ -43,12 +41,10 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const onNext = async () => {
     if (enable_vipps_login) {
       navigation.navigate('Root_LoginOptionsScreen', {
-        afterLogin,
         showGoBack: true,
       });
     } else {
       navigation.navigate('Root_LoginPhoneInputScreen', {
-        afterLogin,
         transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
       });
     }

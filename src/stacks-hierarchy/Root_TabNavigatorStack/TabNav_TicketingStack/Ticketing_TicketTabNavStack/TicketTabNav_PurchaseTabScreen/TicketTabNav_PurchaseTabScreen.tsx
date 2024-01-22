@@ -57,18 +57,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       ) {
         navigation.navigate('Root_LoginRequiredForFareProductScreen', {
           fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
-            params: {
-              nextScreen: {
-                screen: 'Root_PurchaseOverviewScreen',
-                params: {
-                  fareProductTypeConfig,
-                  mode: 'Ticket',
-                },
-              },
-            },
-          },
         });
         return;
       }
@@ -76,13 +64,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
       if (fareProductTypeConfig.configuration.requiresLogin) {
         navigation.navigate('Root_LoginRequiredForFareProductScreen', {
           fareProductTypeConfig,
-          afterLogin: {
-            screen: 'Root_PurchaseOverviewScreen',
-            params: {
-              fareProductTypeConfig,
-              mode: 'Ticket',
-            },
-          },
         });
         return;
       }
