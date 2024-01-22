@@ -78,9 +78,7 @@ export const RecentFareContracts = ({
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{
-              paddingHorizontal: theme.spacings.xSmall,
-            }}
+            contentContainerStyle={styles.scrollViewContent}
             style={styles.horizontalScrollView}
             testID="recentTicketsScrollView"
           >
@@ -104,6 +102,12 @@ export const RecentFareContracts = ({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalScrollView: {
     marginVertical: theme.spacings.medium,
+    columnGap: theme.spacings.medium,
+  },
+  scrollViewContent: {
+    flexDirection: 'row',
+    paddingHorizontal: theme.spacings.medium,
+    columnGap: theme.spacings.medium,
   },
   header: {
     marginTop: theme.spacings.xLarge,

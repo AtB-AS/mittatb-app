@@ -4,7 +4,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
 import React from 'react';
-import {View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 
 type TileWithButtonProps = {
@@ -13,7 +13,7 @@ type TileWithButtonProps = {
   onPress: () => void;
   accessibilityLabel: string;
   accessibilityHint?: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
   buttonText: string;
   buttonSvg: (props: SvgProps) => JSX.Element;
@@ -21,6 +21,7 @@ type TileWithButtonProps = {
 };
 
 export function TileWithButton({
+  mode,
   interactiveColor,
   onPress,
   accessibilityLabel,
@@ -45,15 +46,29 @@ export function TileWithButton({
       testID={testID}
     >
       <View
-        // style={[styles.upperPart, {minWidth: width * 0.6}]}
-        style={styles.contentContainer}
+        style={
+          mode === 'spacious'
+            ? styles.spaciousContentContainer
+            : styles.compactContentContainer
+        }
         importantForAccessibility="no-hide-descendants"
       >
         {children}
       </View>
-      <View style={styles.button} testID={testID + 'BuyButton'}>
-        <ThemeText style={styles.buttonText}>{buttonText}</ThemeText>
-        <ThemeIcon svg={buttonSvg} fill={color.outline.text} />
+      <View
+        style={[
+          styles.button,
+          mode === 'spacious' ? styles.spaciousButton : styles.compactButton,
+        ]}
+        testID={testID + 'BuyButton'}
+      >
+        <ThemeText
+          style={styles.buttonText}
+          type={mode === 'spacious' ? 'body__primary' : 'body__tertiary'}
+        >
+          {buttonText}
+        </ThemeText>
+        <ThemeIcon size="small" svg={buttonSvg} fill={color.outline.text} />
       </View>
     </PressableOpacity>
   );
@@ -62,23 +77,33 @@ export function TileWithButton({
 const useStyles = (interactiveColor: InteractiveColor) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
-      marginHorizontal: theme.spacings.small,
       backgroundColor: theme.interactive[interactiveColor].default.background,
       borderRadius: theme.border.radius.regular,
       overflow: 'hidden',
       borderWidth: theme.border.width.slim,
       borderColor: theme.static.background.background_2.background,
     },
-    contentContainer: {
+    spaciousContentContainer: {
       padding: theme.spacings.xLarge,
+      flexGrow: 1,
+    },
+    compactContentContainer: {
+      padding: theme.spacings.medium,
       flexGrow: 1,
     },
     button: {
       flexDirection: 'row',
       justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: theme.interactive[interactiveColor].outline.background,
+    },
+    spaciousButton: {
       paddingHorizontal: theme.spacings.xLarge,
       paddingVertical: theme.spacings.medium,
-      backgroundColor: theme.interactive[interactiveColor].outline.background,
+    },
+    compactButton: {
+      paddingHorizontal: theme.spacings.medium,
+      paddingVertical: theme.spacings.small,
     },
     buttonText: {
       color: theme.interactive[interactiveColor].outline.text,
