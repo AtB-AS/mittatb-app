@@ -1,16 +1,15 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
-import {DetailsContent} from '@atb/fare-contracts';
+import {CarnetDetailedView, DetailsContent} from '@atb/fare-contracts';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
-import {
-  FareContractTexts,
-  useTranslation,
-} from '@atb/translations';
+import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useAnalytics} from '@atb/analytics';
+import {isCarnet} from '@atb/ticketing';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -19,10 +18,22 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {t} = useTranslation();
   const {enable_ticket_information} = useRemoteConfig();
   const {serverNow} = useTimeContextState();
-  const {navigateToTicketInfoScreen, fareContract, preassignedFareProduct} =
-    useTicketInfo(route?.params?.orderId);
+  const analytics = useAnalytics();
+  const {ticketInfoParams, fareContract, preassignedFareProduct} =
+    useTicketInfo(route.params.orderId);
 
   useApplePassPresentationSuppression();
+
+  const navigateToTicketInfoScreen = () => {
+    if (ticketInfoParams) {
+      analytics.logEvent(
+        'Ticketing',
+        'Ticket information button clicked',
+        ticketInfoParams,
+      );
+      navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
+    }
+  };
 
   const onReceiptNavigate = () =>
     fareContract &&
@@ -50,14 +61,21 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
         title={t(FareContractTexts.details.header.title)}
       />
       <ScrollView contentContainerStyle={styles.content}>
-        {fareContract && (
-          <DetailsContent
-            fareContract={fareContract}
-            preassignedFareProduct={preassignedFareProduct}
-            now={serverNow}
-            onReceiptNavigate={onReceiptNavigate}
-          />
-        )}
+        {fareContract &&
+          (isCarnet(fareContract) ? (
+            <CarnetDetailedView
+              fareContract={fareContract}
+              now={serverNow}
+              onReceiptNavigate={onReceiptNavigate}
+            />
+          ) : (
+            <DetailsContent
+              fareContract={fareContract}
+              preassignedFareProduct={preassignedFareProduct}
+              now={serverNow}
+              onReceiptNavigate={onReceiptNavigate}
+            />
+          ))}
       </ScrollView>
     </View>
   );

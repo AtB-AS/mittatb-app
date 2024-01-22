@@ -10,6 +10,7 @@ import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
   flattenCarnetTravelRightAccesses,
+  isCarnet,
   isCarnetTravelRight,
   NormalTravelRight,
   PreActivatedTravelRight,
@@ -199,7 +200,7 @@ export const getFareContractInfoDetails = (
 
   const carnetTravelRights =
     fareContract.travelRights.filter(isCarnetTravelRight);
-  const isACarnetFareContract = carnetTravelRights.length > 0;
+  const isACarnetFareContract = isCarnet(fareContract);
   if (isACarnetFareContract) {
     const {usedAccesses} = flattenCarnetTravelRightAccesses(carnetTravelRights);
 

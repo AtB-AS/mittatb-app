@@ -44,10 +44,6 @@ type PaymentParams = {
   preassignedFareProduct: PreassignedFareProduct;
 };
 
-type CarnetDetailsRouteParams = {
-  orderId: string;
-};
-
 type ReceiptScreenRouteParams = {
   orderId: string;
   orderVersion: string;
@@ -121,7 +117,6 @@ export type RootStackParamList = StackParams<{
   Root_PurchasePaymentWithCreditCardScreen: Root_PurchasePaymentWithCreditCardScreenParams;
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
-  Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
   Root_TicketInformationScreen: TicketInformationScreenParams;
   Root_LoginActiveFareContractWarningScreen: undefined;
