@@ -119,7 +119,7 @@ export const allowedPermissionsForBeacons = async () => {
     const majorVersionIOS = parseInt(Platform.Version, 10);
     // For iOS 13 and above, Bluetooth permission is not required
     // Then it should send bluetooth as on in the kettle module
-    // NOTE: This is a fix for iOS 13 and above were the SDK crashes if bluetooth is not on
+    // NOTE: This is a fix for iOS 12 and above were the SDK crashes if bluetooth is not on
     if (majorVersionIOS < 13) {
       kettleModulesArray.push(KettleModules.BLUETOOTH);
     } else if (permissionStatuses.bluetooth) {
