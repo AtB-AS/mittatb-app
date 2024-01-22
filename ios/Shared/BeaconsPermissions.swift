@@ -42,10 +42,8 @@ class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDele
   internal var onComplete: PermissionCallback?
   private var bluetoothManager: CBCentralManager?
   private var isBluetoothPermissionGranted: Bool {
-    if #available(iOS 13.1, *) {
-      return CBCentralManager.authorization == .allowedAlways
-    } else if #available(iOS 13.0, *) {
-      return CBCentralManager().authorization == .allowedAlways
+    if #available(iOS 13.0, *) {
+      return bluetoothManager?.authorization == .allowedAlways
     }
 
     // Before iOS 13, Bluetooth permissions are not required
