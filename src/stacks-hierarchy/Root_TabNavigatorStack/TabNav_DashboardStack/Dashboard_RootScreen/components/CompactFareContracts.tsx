@@ -18,7 +18,7 @@ import {useTimeContextState} from '@atb/time';
 import {ContentHeading} from '@atb/components/heading';
 
 type Props = {
-  onPressDetails?: (isCarnet: boolean, orderId: string) => void;
+  onPressDetails?: (orderId: string) => void;
   onPressBuy(): void;
   style?: ViewStyle;
 };
@@ -69,10 +69,7 @@ export const CompactFareContracts: React.FC<Props> = ({
                 {...fareContractInfoDetailsProps}
                 now={serverNow}
                 onPressDetails={() => {
-                  onPressDetails?.(
-                    fareContractInfoDetailsProps.isCarnetFareContract ?? false,
-                    fareContract.orderId,
-                  );
+                  onPressDetails?.(fareContract.orderId);
                 }}
                 testID={'fareContract' + index}
               />

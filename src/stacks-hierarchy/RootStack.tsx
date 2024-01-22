@@ -39,7 +39,6 @@ import {Root_PurchasePaymentWithVippsScreen} from '@atb/stacks-hierarchy/Root_Pu
 import {Root_PurchaseAsAnonymousConsequencesScreen} from '@atb/stacks-hierarchy/Root_PurchaseAsAnonymousConsequencesScreen';
 import {Root_TicketAssistantStack} from '@atb/stacks-hierarchy/Root_TicketAssistantStack';
 import {Root_FareContractDetailsScreen} from '@atb/stacks-hierarchy/Root_FareContractDetailsScreen';
-import {Root_CarnetDetailsScreen} from '@atb/stacks-hierarchy/Root_CarnetDetailsScreen';
 import {Root_ReceiptScreen} from '@atb/stacks-hierarchy/Root_ReceiptScreen';
 import {Root_LoginActiveFareContractWarningScreen} from '@atb/stacks-hierarchy/Root_LoginActiveFareContractWarningScreen';
 import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsScreen';
@@ -346,10 +345,6 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_TicketInformationScreen"
                 component={Root_TicketInformationScreen}
-              />
-              <Stack.Screen
-                name="Root_CarnetDetailsScreen"
-                component={Root_CarnetDetailsScreen}
               />
               <Stack.Screen
                 name="Root_ReceiptScreen"

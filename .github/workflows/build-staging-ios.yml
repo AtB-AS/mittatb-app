@@ -57,9 +57,6 @@ jobs:
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
-      - name: Disable Beacons background mode
-        if: ${{ env.KETTLE_API_KEY == '' }}
-        run: bundle exec fastlane ios remove_background_location
       - name: Run fastlane build
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: bundle exec fastlane ios build

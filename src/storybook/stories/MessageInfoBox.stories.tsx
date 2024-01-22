@@ -1,12 +1,23 @@
 import React from 'react';
 import {View} from 'react-native';
-import {getStaticColor} from '@atb/theme/colors';
-import {MessageInfoBox} from '@atb/components/message-info-box';
+import {
+  MessageInfoBox,
+  MessageInfoBoxProps,
+} from '@atb/components/message-info-box';
+import {
+  ThemedStoryProps,
+  ThemedStoryDecorator,
+  themedStoryControls,
+  themedStoryDefaultArgs,
+} from '../ThemedStoryDecorator';
+import {Meta} from '@storybook/react-native';
 
 const ON_PRESS_CONFIG = {action: () => {}, text: 'Press me!'};
 const ON_DISMISS = () => {};
 
-const MessageInfoBoxMeta = {
+type MessageInfoBoxMetaProps = MessageInfoBoxProps & ThemedStoryProps;
+
+const MessageInfoBoxMeta: Meta<MessageInfoBoxMetaProps> = {
   title: 'MessageInfoBox',
   component: MessageInfoBox,
   argTypes: {
@@ -30,14 +41,15 @@ const MessageInfoBoxMeta = {
       },
       control: 'boolean',
     },
+    ...themedStoryControls,
   },
   args: {
-    theme: 'light',
     message: 'The message body.',
     title: 'The message title',
     onPressConfig: undefined,
     noStatusIcon: false,
     isMarkdown: false,
+    ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => (
@@ -45,12 +57,9 @@ const MessageInfoBoxMeta = {
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          padding: 12,
+          margin: 12,
           flex: 1,
-          backgroundColor:
-            getStaticColor(args.theme, args.textColor)?.background ||
-            getStaticColor(args.theme, 'background_0').background,
-          gap: 12,
+          rowGap: 12,
         }}
       >
         <Story args={{...args, type: 'info'}} />
@@ -59,6 +68,7 @@ const MessageInfoBoxMeta = {
         <Story args={{...args, type: 'error'}} />
       </View>
     ),
+    ThemedStoryDecorator,
   ],
 };
 

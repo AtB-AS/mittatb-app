@@ -21,6 +21,10 @@ export function isCarnetTravelRight(
   return travelRight?.type === 'CarnetTicket';
 }
 
+export function isCarnet(fareContract: FareContract): boolean {
+  return fareContract.travelRights.some(isCarnetTravelRight);
+}
+
 export function isPreActivatedTravelRight(
   travelRight: TravelRight | undefined,
 ): travelRight is PreActivatedTravelRight {
