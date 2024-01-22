@@ -11,7 +11,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {addOpacity} from '@atb/utils/add-opacity';
 import {ContrastColor} from '@atb-as/theme';
 
-type Props =
+export type BorderedInfoBoxProps =
   | {
       /** The background color of the component where this box is placed */
       backgroundColor: StaticColor | InteractiveColor;
@@ -32,7 +32,7 @@ export const BorderedInfoBox = ({
   style,
   testID,
   ...props
-}: Props) => {
+}: BorderedInfoBoxProps) => {
   const contrastColor = useContrastColor(backgroundColor);
   const styles = useStyles(type, contrastColor.text);
   return (
@@ -52,7 +52,7 @@ export const BorderedInfoBox = ({
  * Find the contrast color to use, based on given static or interactive color
  */
 function useContrastColor(
-  backgroundColor: Props['backgroundColor'],
+  backgroundColor: BorderedInfoBoxProps['backgroundColor'],
 ): ContrastColor {
   const {theme, themeName} = useTheme();
   if (isStaticColor(backgroundColor)) {
@@ -61,7 +61,7 @@ function useContrastColor(
   return theme.interactive[backgroundColor].default;
 }
 
-const useStyles = (type: Props['type'], textColor: string) =>
+const useStyles = (type: BorderedInfoBoxProps['type'], textColor: string) =>
   StyleSheet.createThemeHook((theme) => ({
     container: {
       borderColor: addOpacity(textColor, 0.1),
