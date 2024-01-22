@@ -1,7 +1,7 @@
-import {getCustomerAccountId} from '@atb/api/profile';
 import {PhoneInput} from '@atb/components/phone-input';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
+import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/use-get-account-id-by-phone-query';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
@@ -19,17 +19,17 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   route: {params},
 }) => {
   const styles = useStyles();
-
   const {t} = useTranslation();
-
   const focusRef = useFocusOnLoad();
 
+  const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
   const handleValidatePhoneNumber = async (phoneNumber: string) => {
-    const result = await getCustomerAccountId(phoneNumber);
-    if (result) {
-      return typeof result === 'string' ? result : 'no_associated_account';
+    try {
+      const result = await getAccountIdByPhone(phoneNumber);
+      return result;
+    } catch (error) {
+      return error as string;
     }
-    return 'unknown_error';
   };
 
   return (
@@ -67,9 +67,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
           <PhoneInput
             submitButtonText={t(PurchaseOverviewTexts.summary.button)}
             submitButtonTestId="toPaymentButton"
-            phoneNumberValidation={(number) =>
-              handleValidatePhoneNumber(number)
-            }
+            validatePhoneNumber={(number) => handleValidatePhoneNumber(number)}
             onPhoneNumberValidatedAction={(number, customerAccountId) => {
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 ...params,

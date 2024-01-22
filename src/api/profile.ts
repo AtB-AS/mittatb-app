@@ -3,6 +3,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
 import {getAxiosErrorMetadata} from './utils';
+import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of/types';
 
 const profileEndpoint = '/profile/v1';
 
@@ -43,15 +44,15 @@ export async function deleteProfile(opts?: AxiosRequestConfig) {
  * Function to get customer account ID based on phone number
  *
  * @param phoneNumber phone number with prefix
+ * @returns {string | GetAccountByPhoneErrorCode}
+ *  - customer_account_id as string if successful,
+ *  - "no_associated_account" if account ID not found,
+ *  - "unknown_error" if there's other error
  *
- * @returns customer account ID as string if request is success
- *
- * Will return one the following errors if request unsuccessful:
- * -  Error 404 with object {"error": "cannot find user from phone number: \"{phoneNumber}\""}
- * -  Error 400 with object {"error": "Invalid phone number as per country code"}
- * -  other than those 2 errors mentioned earlier, returns undefined.
  */
-export const getCustomerAccountId = async (phoneNumber: string) => {
+export const getCustomerAccountId = async (
+  phoneNumber: string,
+): Promise<string | GetAccountByPhoneErrorCode> => {
   return await client
     .post(
       `${profileEndpoint}/search`,
@@ -62,13 +63,13 @@ export const getCustomerAccountId = async (phoneNumber: string) => {
           error.response?.status === 404 || error.response?.status === 400,
       },
     )
-    .then((response) => response.data.customerAccountId)
+    .then((response) => response.data.customerAccountId as string)
     .catch((error) => {
       const metadata = getAxiosErrorMetadata(error);
       const responseStatus = metadata.responseStatus;
       if (responseStatus === 404 || responseStatus === 400) {
-        return metadata.responseData && JSON.parse(metadata.responseData);
+        return 'no_associated_account';
       }
-      return undefined;
+      return 'unknown_error';
     });
 };

@@ -9,15 +9,15 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import phone from 'phone';
 import {SvgProps} from 'react-native-svg';
-import {GetAccountByNumberErrorCode} from '@atb/on-behalf-of/types';
+import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of/types';
 
-type PhoneInputErrorCode = PhoneSignInErrorCode | GetAccountByNumberErrorCode;
+type PhoneInputErrorCode = PhoneSignInErrorCode | GetAccountByPhoneErrorCode;
 
 type Props = {
   style?: StyleProp<ViewStyle>;
   submitButtonText: string;
   submitButtonTestId: string;
-  phoneNumberValidation: (
+  validatePhoneNumber: (
     number: string,
     forceResend?: boolean,
   ) => Promise<PhoneInputErrorCode | string | undefined>;
@@ -31,7 +31,7 @@ export const PhoneInput = ({
   style,
   submitButtonText,
   submitButtonTestId,
-  phoneNumberValidation,
+  validatePhoneNumber,
   onPhoneNumberValidatedAction,
   rightIcon,
 }: Props) => {
@@ -65,7 +65,7 @@ export const PhoneInput = ({
       return;
     }
 
-    const result = await phoneNumberValidation(phoneValidation.phoneNumber);
+    const result = await validatePhoneNumber(phoneValidation.phoneNumber);
 
     setIsSubmitting(false);
 
