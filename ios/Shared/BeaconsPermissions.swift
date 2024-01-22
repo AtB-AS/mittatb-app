@@ -64,6 +64,7 @@ class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDele
   }
 
   func centralManagerDidUpdateState(_ central: CBCentralManager) {
+    // NOTE: Do not use central.status because it gives if the service is on / off but not actual user permission status.
     guard isBluetoothPermissionGranted else {
       response(mandatory ? false : true)
       return
