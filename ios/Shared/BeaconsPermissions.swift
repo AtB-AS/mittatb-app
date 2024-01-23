@@ -41,6 +41,14 @@ class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDele
   internal var mandatory: Bool
   internal var onComplete: PermissionCallback?
   private var bluetoothManager: CBCentralManager?
+  private var isBluetoothPermissionGranted: Bool {
+    if #available(iOS 13.0, *) {
+      return bluetoothManager?.authorization == .allowedAlways
+    }
+
+    // Before iOS 13, Bluetooth permissions are not required
+    return true
+  }
 
   override init() {
     self.mandatory = true
@@ -56,7 +64,8 @@ class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDele
   }
 
   func centralManagerDidUpdateState(_ central: CBCentralManager) {
-    guard central.state == .poweredOn else {
+    // NOTE: Do not use central.status because it gives if the service is on / off but not actual user permission status.
+    guard isBluetoothPermissionGranted else {
       response(mandatory ? false : true)
       return
     }
@@ -66,7 +75,9 @@ class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDele
 
   func request(callback onComplete: @escaping PermissionCallback) {
     self.onComplete = onComplete
-    bluetoothManager = CBCentralManager(delegate: self, queue: nil)
+    // A fix for double prompt for Bluetooth when CBCentralManagerOptionShowPowerAlertKey is not explicitly set to false
+    // https://developer.apple.com/documentation/corebluetooth/cbcentralmanageroptionshowpoweralertkey
+    bluetoothManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: 0])
   }
 }
 
