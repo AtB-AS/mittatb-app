@@ -17,10 +17,6 @@ import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
 
-import {
-  NextScreenParams,
-} from '@atb/utils/use-complete-onboarding-and-enter-app';
-
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
   searchLocation?: SearchLocation;
@@ -96,6 +92,20 @@ type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
   paymentMethod: CardPaymentMethod;
 };
 
+type Root_ConfirmationScreenParams = {
+  message: string;
+  // Time that must be wait until onComplete is called (in milliseconds)
+  delayBeforeCompleted?: number;
+  nextScreen: NextScreenParams<'Root_TabNavigatorStack'>;
+};
+
+export type NextScreenParams<T extends keyof RootStackParamList = keyof RootStackParamList> = {
+  [S in T]: {
+    screen: S;
+    params: RootStackParamList[S];
+  };
+}[T];
+
 export type RootStackParamList = StackParams<{
   Root_OnboardingStack: undefined;
   Root_TermsInformationScreen: undefined;
@@ -133,6 +143,7 @@ export type RootStackParamList = StackParams<{
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
+  Root_ConfirmationScreen: Root_ConfirmationScreenParams;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
