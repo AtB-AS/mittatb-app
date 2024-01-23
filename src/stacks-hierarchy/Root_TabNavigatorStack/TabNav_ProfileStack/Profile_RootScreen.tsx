@@ -41,6 +41,7 @@ import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
+import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -92,6 +93,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const phoneNumber = parsePhoneNumber(authPhoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
+  const {isBeaconsSupported} = useBeaconsState();
 
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
@@ -303,7 +305,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             text={t(
               ProfileTexts.sections.settings.linkSectionItems.privacy.label,
             )}
-            label="new"
+            label={isBeaconsSupported ? 'new' : undefined}
             onPress={() => navigation.navigate('Profile_PrivacyScreen')}
             testID="privacyButton"
           />
