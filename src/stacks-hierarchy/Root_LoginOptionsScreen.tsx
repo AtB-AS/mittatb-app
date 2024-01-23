@@ -24,7 +24,8 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useAppState} from "@atb/AppContext";
+import {useAppState} from '@atb/AppContext';
+import {useQueryClient} from '@tanstack/react-query';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -47,6 +48,7 @@ export const Root_LoginOptionsScreen = ({
     string | undefined
   >(undefined);
   const {completeOnboarding} = useAppState();
+  const queryClient = useQueryClient();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -56,6 +58,7 @@ export const Root_LoginOptionsScreen = ({
       setError('unknown_error');
       setIsLoading(false);
     }
+    queryClient.invalidateQueries();
   };
 
   useEffect(
@@ -174,9 +177,7 @@ export const Root_LoginOptionsScreen = ({
           interactiveColor="interactive_0"
           mode="primary"
           style={styles.loginOptionButton}
-          onPress={() =>
-            navigation.navigate('Root_LoginPhoneInputScreen')
-          }
+          onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
           text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
           accessibilityHint={t(
             LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
