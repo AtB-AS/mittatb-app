@@ -173,58 +173,52 @@ export const RecentFareContractComponent = ({
       )}
 
       <View style={styles.horizontalFlex}>
-        <View>
-          <View>
-            <ThemeText type="label__uppercase" color="secondary">
-              {t(RecentFareContractsTexts.titles.travellers)}
-            </ThemeText>
-            <View style={styles.travellersTileWrapper}>
-              {userProfilesWithCount.length <= 2 &&
-                userProfilesWithCount.map((u) => (
-                  <BorderedInfoBox
-                    backgroundColor={interactiveColorName}
-                    type="small"
-                    key={u.id}
-                    text={`${u.count} ${getReferenceDataName(u, language)}`}
-                    style={[styles.infoChip, styles.infoChip_travellers]}
-                    testID={`${testID}Travellers${userProfilesWithCount.indexOf(
-                      u,
-                    )}`}
-                  />
-                ))}
-              {userProfilesWithCount.length > 2 && (
-                <>
-                  {userProfilesWithCount.slice(0, 1).map((u) => (
-                    <BorderedInfoBox
-                      key={u.id}
-                      type="small"
-                      backgroundColor={interactiveColorName}
-                      style={styles.infoChip}
-                      text={`${u.count} ${getReferenceDataName(u, language)}`}
-                      testID={`${testID}Travellers${userProfilesWithCount.indexOf(
-                        u,
-                      )}`}
-                    />
-                  ))}
-                  <View style={styles.additionalCategories}>
-                    <ThemeText
-                      type="body__tertiary"
-                      testID={`${testID}TravellersOthers`}
-                      color={interactiveColor.default}
-                    >
-                      + {userProfilesWithCount.slice(1).length}{' '}
-                      {t(RecentFareContractsTexts.titles.moreTravelers)}
-                    </ThemeText>
-                  </View>
-                </>
-              )}
-            </View>
-          </View>
+        <View style={styles.detailContainer}>
+          <ThemeText type="label__uppercase" color="secondary">
+            {t(RecentFareContractsTexts.titles.travellers)}
+          </ThemeText>
+          {userProfilesWithCount.length <= 2 &&
+            userProfilesWithCount.map((u) => (
+              <BorderedInfoBox
+                backgroundColor={interactiveColorName}
+                type="small"
+                key={u.id}
+                text={`${u.count} ${getReferenceDataName(u, language)}`}
+                style={styles.infoChip_travellers}
+                testID={`${testID}Travellers${userProfilesWithCount.indexOf(
+                  u,
+                )}`}
+              />
+            ))}
+          {userProfilesWithCount.length > 2 && (
+            <>
+              {userProfilesWithCount.slice(0, 1).map((u) => (
+                <BorderedInfoBox
+                  key={u.id}
+                  type="small"
+                  backgroundColor={interactiveColorName}
+                  text={`${u.count} ${getReferenceDataName(u, language)}`}
+                  testID={`${testID}Travellers${userProfilesWithCount.indexOf(
+                    u,
+                  )}`}
+                />
+              ))}
+              <ThemeText
+                type="body__tertiary"
+                testID={`${testID}TravellersOthers`}
+                color={interactiveColor.default}
+                style={styles.additionalCategories}
+              >
+                + {userProfilesWithCount.slice(1).length}{' '}
+                {t(RecentFareContractsTexts.titles.moreTravelers)}
+              </ThemeText>
+            </>
+          )}
         </View>
         {fareProductTypeConfig.configuration.zoneSelectionMode !== 'none' &&
           fromZoneName &&
           toZoneName && (
-            <View>
+            <View style={styles.detailContainer}>
               <ThemeText type="label__uppercase" color="secondary">
                 {t(RecentFareContractsTexts.titles.zone)}
               </ThemeText>
@@ -232,7 +226,6 @@ export const RecentFareContractComponent = ({
                 <BorderedInfoBox
                   backgroundColor={interactiveColorName}
                   type="small"
-                  style={styles.infoChip}
                   text={`${fromZoneName}`}
                   testID={`${testID}Zone`}
                 />
@@ -240,7 +233,6 @@ export const RecentFareContractComponent = ({
                 <BorderedInfoBox
                   backgroundColor={interactiveColorName}
                   type="small"
-                  style={styles.infoChip}
                   text={`${fromZoneName} - ${toZoneName}`}
                   testID={`${testID}Zones`}
                 />
@@ -269,15 +261,14 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  infoChip: {
-    marginVertical: theme.spacings.xSmall,
+  detailContainer: {
+    rowGap: theme.spacings.xSmall,
   },
   infoChip_travellers: {
     marginRight: theme.spacings.xSmall,
   },
   additionalCategories: {
     marginHorizontal: theme.spacings.small,
-    marginVertical: theme.spacings.xSmall,
   },
   harbors: {
     marginBottom: theme.spacings.medium,
