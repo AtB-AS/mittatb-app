@@ -60,7 +60,7 @@ export function TileWithButton({
           styles.button,
           mode === 'spacious' ? styles.spaciousButton : styles.compactButton,
         ]}
-        testID={testID + 'BuyButton'}
+        testID={testID + 'Button'}
       >
         <ThemeText
           style={styles.buttonText}
@@ -68,7 +68,11 @@ export function TileWithButton({
         >
           {buttonText}
         </ThemeText>
-        <ThemeIcon size="small" svg={buttonSvg} fill={color.outline.text} />
+        <ThemeIcon
+          size={mode === 'spacious' ? 'normal' : 'small'}
+          svg={buttonSvg}
+          fill={color.outline.text}
+        />
       </View>
     </PressableOpacity>
   );
