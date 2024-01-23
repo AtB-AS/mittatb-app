@@ -7,6 +7,7 @@ import {View, ViewStyle} from 'react-native';
 import {Check} from '@atb/assets/svg/color/icons/status';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
+import {SvgProps} from 'react-native-svg';
 
 type BenefitImageProps = {
   formFactor: FormFactor;
@@ -27,12 +28,20 @@ export const BenefitImage = ({
   );
 };
 
-const BenefitImageAsset = ({formFactor}: {formFactor: FormFactor}) => {
+export const BenefitImageAsset = ({
+  formFactor,
+  svgProps,
+}: {
+  formFactor?: FormFactor;
+  svgProps?: SvgProps;
+}) => {
+  if (!formFactor) return null;
+
   switch (formFactor) {
     case FormFactor.Car:
-      return <BundlingCarSharing />;
+      return <BundlingCarSharing {...svgProps} />;
     case FormFactor.Bicycle:
-      return <BundlingCityBike />;
+      return <BundlingCityBike {...svgProps} />;
     default:
       return null;
   }

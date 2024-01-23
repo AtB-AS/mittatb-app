@@ -65,5 +65,8 @@ export const getFareProductBenefits = (
   //     authWithIdToken: true,
   //   })
   //   .then((response) => FareProductBenefit.array().parse(response.data ?? []));
-  return Promise.resolve([]);
+  return Promise.resolve([
+    {operator: 'HYR:Operator:Hyre', benefits: ['single-unlock']},
+    {operator: 'YTR:Operator:trondheimbysykkel', benefits: ['free-use']},
+  ]);
 };
