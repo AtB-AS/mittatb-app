@@ -20,6 +20,12 @@ export const useCompleteOnboardingAndEnterApp = () => {
   };
 };
 
+export type AfterLoginScreenType =
+  | NextScreenParams<'Root_TabNavigatorStack'>
+  | NextScreenParams<'Root_PurchaseOverviewScreen'>
+  | NextScreenParams<'Root_PurchaseConfirmationScreen'>
+  | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
+
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
   /*

@@ -45,6 +45,7 @@ import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsSc
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
+import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
@@ -380,6 +381,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_LoginRequiredForFareProductScreen"
                 component={Root_LoginRequiredForFareProductScreen}
+              />
+              <Stack.Screen
+                name="Root_ConfirmationScreen"
+                component={Root_ConfirmationScreen}
               />
               <Stack.Screen
                 name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"
