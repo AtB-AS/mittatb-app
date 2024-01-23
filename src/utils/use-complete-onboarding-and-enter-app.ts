@@ -3,6 +3,7 @@ import {useAppState} from '@atb/AppContext';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 import {PartialRoute, Route, useNavigation} from '@react-navigation/native';
 import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
+import {NextScreenParams} from '@atb/stacks-hierarchy';
 
 /**
  * Hook to complete the onboarding process and correctly navigate to the next screen.
@@ -19,13 +20,6 @@ export const useCompleteOnboardingAndEnterApp = () => {
     enterApp(afterLogin);
   };
 };
-
-export type NextScreenParams<T extends keyof RootStackParamList = keyof RootStackParamList> = {
-  [S in T]: {
-    screen: S;
-    params: RootStackParamList[S];
-  };
-}[T];
 
 export type AfterLoginScreenType =
   | NextScreenParams<'Root_TabNavigatorStack'>

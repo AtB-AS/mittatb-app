@@ -16,11 +16,7 @@ import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
-
-import {
-  AfterLoginScreenType,
-  NextScreenParams,
-} from '@atb/utils/use-complete-onboarding-and-enter-app';
+import {AfterLoginScreenType} from '@atb/utils/use-complete-onboarding-and-enter-app';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -118,6 +114,13 @@ type Root_ConfirmationScreenParams = {
   delayBeforeCompleted?: number;
   nextScreen: NextScreenParams<'Root_TabNavigatorStack'>;
 };
+
+export type NextScreenParams<T extends keyof RootStackParamList = keyof RootStackParamList> = {
+  [S in T]: {
+    screen: S;
+    params: RootStackParamList[S];
+  };
+}[T];
 
 export type RootStackParamList = StackParams<{
   Root_OnboardingStack: undefined;
