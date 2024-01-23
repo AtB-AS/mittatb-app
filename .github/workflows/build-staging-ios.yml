@@ -10,10 +10,14 @@ on:
         options:
           - true
           - false
-      app-no-flipper:
-        description: 'Wether to enable flipper or not. 1: Enable, 0: Disable'
-        default: '1'
+      flipper-enabled:
+        description: 'Do you want to enable Flipper?'
+        type: choice
+        default: false
         required: true
+        options:
+          - true
+          - false
   push:
     branches:
       - master
@@ -44,7 +48,7 @@ jobs:
           app-environment: 'staging'
           app-org: ${{ matrix.org }}
           git-crypt-key: ${{ secrets.GIT_CRYPT_KEY }}
-          app-no-flipper: ${{ inputs.app-no-flipper }}
+          flipper-enabled: ${{ inputs.flipper-enabled }}
       - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
