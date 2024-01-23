@@ -82,7 +82,7 @@
 		FE2FB5182B59C2C100F2F400 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0FAAF32624069EFC00267583 /* GoogleService-Info.plist */; };
 		FE2FB5192B59C2C100F2F400 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FF6825E247FE01600FB80EE /* BootSplash.storyboard */; };
 		FE2FB51A2B59C2C100F2F400 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
-		FE2FB51B2B59C2C100F2F400 /* BeaconsInfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FE2FB3BF2B596D4B00F2F400 /* BeaconsInfoPlist.strings */; };
+		FE2FB51B2B59C2C100F2F400 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FE2FB3BF2B596D4B00F2F400 /* InfoPlist.strings */; };
 		FE2FB51C2B59C2C100F2F400 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		FE2FB51F2B59C2C100F2F400 /* AtbAppIntent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 500752DA29855BD100AC5A7F /* AtbAppIntent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE2FB5202B59C2C100F2F400 /* departureWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE55264728EC45ED0091F697 /* departureWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -221,11 +221,11 @@
 		F414F94904E6D6734DFB7191 /* Pods-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app.debug.xcconfig"; path = "Target Support Files/Pods-app/Pods-app.debug.xcconfig"; sourceTree = "<group>"; };
 		FE09922828FFF47300E5046D /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		FE09922B28FFF50800E5046D /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
-		FE2FB3BE2B596D4B00F2F400 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/BeaconsInfoPlist.strings; sourceTree = "<group>"; };
-		FE2FB3C02B596D5F00F2F400 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/BeaconsInfoPlist.strings; sourceTree = "<group>"; };
-		FE2FB3C12B596D6000F2F400 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/BeaconsInfoPlist.strings; sourceTree = "<group>"; };
+		FE2FB3BE2B596D4B00F2F400 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FE2FB3C02B596D5F00F2F400 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FE2FB3C12B596D6000F2F400 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FE2FB5282B59C2C100F2F400 /* AtB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtB.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		FE2FB52E2B59C4D100F2F400 /* BeaconsInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BeaconsInfo.plist; sourceTree = "<group>"; };
+		FE2FB52E2B59C4D100F2F400 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE55264728EC45ED0091F697 /* departureWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = departureWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE55264828EC45ED0091F697 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FE55264A28EC45ED0091F697 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -430,8 +430,8 @@
 		FE2FB52A2B59C30500F2F400 /* beacons */ = {
 			isa = PBXGroup;
 			children = (
-				FE2FB52E2B59C4D100F2F400 /* BeaconsInfo.plist */,
-				FE2FB3BF2B596D4B00F2F400 /* BeaconsInfoPlist.strings */,
+				FE2FB52E2B59C4D100F2F400 /* Info.plist */,
+				FE2FB3BF2B596D4B00F2F400 /* InfoPlist.strings */,
 			);
 			path = beacons;
 			sourceTree = "<group>";
@@ -659,7 +659,7 @@
 				FE2FB5182B59C2C100F2F400 /* GoogleService-Info.plist in Resources */,
 				FE2FB5192B59C2C100F2F400 /* BootSplash.storyboard in Resources */,
 				FE2FB51A2B59C2C100F2F400 /* Roboto-Bold.ttf in Resources */,
-				FE2FB51B2B59C2C100F2F400 /* BeaconsInfoPlist.strings in Resources */,
+				FE2FB51B2B59C2C100F2F400 /* InfoPlist.strings in Resources */,
 				FE2FB51C2B59C2C100F2F400 /* Roboto-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1028,14 +1028,14 @@
 			name = WidgetConfiguration.intentdefinition;
 			sourceTree = "<group>";
 		};
-		FE2FB3BF2B596D4B00F2F400 /* BeaconsInfoPlist.strings */ = {
+		FE2FB3BF2B596D4B00F2F400 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				FE2FB3BE2B596D4B00F2F400 /* en */,
 				FE2FB3C02B596D5F00F2F400 /* nb */,
 				FE2FB3C12B596D6000F2F400 /* nn */,
 			);
-			name = BeaconsInfoPlist.strings;
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1373,7 +1373,7 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = ./beacons/BeaconsInfo.plist;
+				INFOPLIST_FILE = ./beacons/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1415,7 +1415,7 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = ./beacons/BeaconsInfo.plist;
+				INFOPLIST_FILE = ./beacons/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
