@@ -118,6 +118,6 @@ target 'app' do
   end
 
   target 'beacons' do
-    inherit! :search_paths
+    inherit!
   end
 end
