@@ -23,14 +23,6 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   const focusRef = useFocusOnLoad();
 
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
-  const handleValidatePhoneNumber = async (phoneNumber: string) => {
-    try {
-      const result = await getAccountIdByPhone(phoneNumber);
-      return result;
-    } catch (error) {
-      return error as string;
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -67,7 +59,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
           <PhoneInput
             submitButtonText={t(PurchaseOverviewTexts.summary.button)}
             submitButtonTestId="toPaymentButton"
-            validatePhoneNumber={(number) => handleValidatePhoneNumber(number)}
+            validatePhoneNumber={(number) => getAccountIdByPhone(number)}
             onPhoneNumberValidatedAction={(number, customerAccountId) => {
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 ...params,
