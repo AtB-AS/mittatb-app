@@ -25,9 +25,9 @@ inputs:
     description: "The gitcrypt key to unlock the repository files with"
     required: true
   app-no-flipper:
+    required: false
     description: "Wether to enable flipper or not"
-    default: 1
-    required: true
+    default: "1"
 
 runs:
   using: "composite"
