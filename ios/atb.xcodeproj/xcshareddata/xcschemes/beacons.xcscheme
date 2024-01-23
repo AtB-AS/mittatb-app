@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FE2FB4F82B59C2C100F2F400"
-               BuildableName = "beacons.app"
+               BuildableName = "AtB.app"
                BlueprintName = "beacons"
                ReferencedContainer = "container:atb.xcodeproj">
             </BuildableReference>
@@ -44,7 +44,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FE2FB4F82B59C2C100F2F400"
-            BuildableName = "beacons.app"
+            BuildableName = "AtB.app"
             BlueprintName = "beacons"
             ReferencedContainer = "container:atb.xcodeproj">
          </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FE2FB4F82B59C2C100F2F400"
-            BuildableName = "beacons.app"
+            BuildableName = "AtB.app"
             BlueprintName = "beacons"
             ReferencedContainer = "container:atb.xcodeproj">
          </BuildableReference>

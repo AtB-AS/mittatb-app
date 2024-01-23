@@ -117,4 +117,7 @@ target 'app' do
     $RNMapboxMaps.pre_install(installer)
   end
 
+  target 'beacons' do
+    inherit! :search_paths
+  end
 end
