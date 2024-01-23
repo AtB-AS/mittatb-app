@@ -7,7 +7,7 @@ import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
 import {SvgProps} from 'react-native-svg';
 
-type TileWithButtonProps = {
+export type TileWithButtonProps = {
   mode: 'compact' | 'spacious';
   interactiveColor: InteractiveColor;
   onPress: () => void;
