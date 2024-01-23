@@ -301,24 +301,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
             onPress={() => navigation.navigate('Profile_LanguageScreen')}
             testID="languageButton"
           />
-          {isBeaconsEnabled ? (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.privacy.label,
-              )}
-              label="new"
-              onPress={() => navigation.navigate('Profile_PrivacyScreen')}
-              testID="privacyButton"
-            />
-          ) : (
-            <LinkSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.privacy.label,
-              )}
-              onPress={() => navigation.navigate('Profile_PrivacyScreen')}
-              testID="privacyButton"
-            />
-          )}
+          <LinkSectionItem
+            text={t(
+              ProfileTexts.sections.settings.linkSectionItems.privacy.label,
+            )}
+            label={isBeaconsEnabled ? 'new' : undefined}
+            onPress={() => navigation.navigate('Profile_PrivacyScreen')}
+            testID="privacyButton"
+          />
           {isPushNotificationsEnabled && (
             <LinkSectionItem
               text={t(
