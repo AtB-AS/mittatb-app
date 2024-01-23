@@ -1,7 +1,7 @@
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 #include "Config.xcconfig"
-#include "../Pods/Target Support Files/Pods-app/Pods-app.release.xcconfig"
-#include "../Pods/Target Support Files/Pods-beacons/Pods-beacons.release.xcconfig"
+#include "../Pods/Target Support Files/Pods-defaults-app/Pods-defaults-app.release.xcconfig"
+#include "../Pods/Target Support Files/Pods-defaults-beacons/Pods-defaults-beacons.release.xcconfig"
 CODE_SIGN_IDENTITY=iPhone Distribution
 GCC_PREPROCESSOR_DEFINITIONS = $(inherit) IS_WIDGET_ENABLE=$(ENABLE_WIDGET) KETTLE_API_KEY=\@\"$(KETTLE_API_KEY)\"

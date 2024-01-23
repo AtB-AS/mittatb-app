@@ -44,7 +44,7 @@ production = ENV["PRODUCTION"] == "1"
 
 $RNMapboxMapsImpl = 'mapbox'
 
-target 'app' do
+abstract_target 'defaults' do
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
@@ -117,7 +117,9 @@ target 'app' do
     $RNMapboxMaps.pre_install(installer)
   end
 
+  target 'app' do
+  end
+
   target 'beacons' do
-    inherit! :search_paths
   end
 end
