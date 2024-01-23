@@ -1,40 +1,15 @@
-import {TravelTokenTexts, useTranslation} from '@atb/translations';
-import {useMobileTokenContextState} from '@atb/mobile-token';
 import React from 'react';
-import {ThemeIcon} from '@atb/components/theme-icon';
-import {Swap} from '@atb/assets/svg/mono-icons/actions';
 import {StyleSheet, Theme} from '@atb/theme';
-import {
-  GenericSectionItem,
-  LinkSectionItem,
-  Section,
-} from '@atb/components/sections';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {GenericSectionItem, Section} from '@atb/components/sections';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 
-const ChangeTokenAction = ({onChange}: {onChange: () => void}) => {
-  const {t} = useTranslation();
+const ChangeTokenAction = () => {
   const styles = useStyles();
-  const {mobileTokenStatus} = useMobileTokenContextState();
-  const {disable_travelcard} = useRemoteConfig();
   const {data} = useTokenToggleDetailsQuery();
 
   return (
-    <Section style={styles.changeTokenButton}>
-      <LinkSectionItem
-        type="spacious"
-        text={
-          disable_travelcard
-            ? t(TravelTokenTexts.travelToken.changeTokenWithoutTravelcardButton)
-            : t(TravelTokenTexts.travelToken.changeTokenButton)
-        }
-        disabled={mobileTokenStatus !== 'success' || data?.toggleLimit === 0}
-        onPress={onChange}
-        testID="switchTokenButton"
-        icon={<ThemeIcon svg={Swap} />}
-      />
-
+    <Section style={styles.changeTokenSection}>
       {data?.toggleLimit !== undefined && (
         <GenericSectionItem>
           <TokenToggleInfo style={styles.tokenInfoView} />
@@ -47,10 +22,8 @@ const ChangeTokenAction = ({onChange}: {onChange: () => void}) => {
 export {ChangeTokenAction};
 
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
-  changeTokenButton: {
+  changeTokenSection: {
     marginBottom: theme.spacings.medium,
   },
-  loader: {alignSelf: 'center', flex: 1},
   tokenInfoView: {flexDirection: 'row'},
-  tokenInfo: {marginLeft: theme.spacings.xSmall, flex: 1},
 }));
