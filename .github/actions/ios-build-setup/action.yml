@@ -24,6 +24,10 @@ inputs:
   git-crypt-key:
     description: "The gitcrypt key to unlock the repository files with"
     required: true
+  app-no-flipper:
+    description: "Wether to enable flipper or not"
+    default: 1
+    required: true
 
 runs:
   using: "composite"
@@ -31,7 +35,7 @@ runs:
       - name: Set global env vars
         shell: bash
         run: |
-          echo "NO_FLIPPER=1" >> $GITHUB_ENV
+          echo "NO_FLIPPER=${{ inputs.app-no-flipper }}" >> $GITHUB_ENV
           echo "BUILD_ID=$(date +%s)" >> $GITHUB_ENV
           echo "APP_ENVIRONMENT=${{ inputs.app-environment }}" >> $GITHUB_ENV
       - name: Decrypt env files
