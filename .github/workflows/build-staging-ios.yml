@@ -19,14 +19,6 @@ on:
           - app-store
           - ad-hoc
           - development
-      build-configuration:
-        description: 'Build configuration for the build'
-        required: false
-        type: choice
-        default: Release
-        options:
-          - Release
-          - Development
   push:
     branches:
       - master
@@ -88,7 +80,6 @@ jobs:
           EXPORT_METHOD: ${{ inputs.export-method }}
           GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          BUILD_CONFIGURATION: ${{ inputs.build-configuration }}
       - name: Run fastlane cert match
         if: inputs.force-build == 'false' || steps.ipa-cache.outputs.cache-hit == 'true'
         run: bundle exec fastlane ios get_certs
