@@ -72,6 +72,18 @@ platform :ios do
     )
   end
 
+  desc "Removes background location"
+  lane :remove_background_location do
+    update_info_plist(
+      xcodeproj: "./ios/atb.xcodeproj",
+      plist_path: "./atb/Info.plist",
+      block: proc do |plist|
+        puts "Deleting location from UIBackgroundModes..."
+        plist["UIBackgroundModes"].delete("location")
+      end
+    )
+  end
+
   desc "Generate new certificates"
   lane :generate_new_certificates do
     ensure_env_vars(
@@ -179,18 +191,13 @@ platform :ios do
     widget_enabled = ENV["ENABLE_WIDGET"] == "true"
     puts "Is widget enabled: #{widget_enabled}"
 
-    beacons_enabled = ENV["KETTLE_API_KEY"] != ""
-    puts "Is beacons enabled: #{beacons_enabled}"
-
-    target = beacons_enabled ? "beacons" : "app"
-
     update_project_team(
       path: "./ios/atb.xcodeproj",
       teamid: ENV["IOS_DEVELOPMENT_TEAM_ID"]
     )
     update_project_provisioning(
       xcodeproj: "./ios/atb.xcodeproj",
-      target_filter: target,
+      target_filter: "app",
       profile: app_prov_profile_path,
       build_configuration: ENV['BUILD_CONFIGURATION'],
       code_signing_identity: app_signing_identity_name
@@ -231,14 +238,9 @@ platform :ios do
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
 
-    beacons_enabled = ENV["KETTLE_API_KEY"] != ""
-    puts "Is beacons enabled: #{beacons_enabled}"
-
-    target = beacons_enabled ? "beacons" : "app"
-
     cocoapods(podfile: './ios/Podfile')
     build_app(
-      scheme: target,
+      scheme: 'atb',
       configuration: ENV['BUILD_CONFIGURATION'],
       export_method: ENV['EXPORT_METHOD'],
       workspace: './ios/atb.xcworkspace',
