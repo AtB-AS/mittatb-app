@@ -36,9 +36,9 @@ export const useOnboardingFlow = (
 
   const {userCreationOnboarded} = useAppState();
 
-  const shouldShowTravelTokenOnboarding = useShouldShowTravelTokenOnboarding();
-
   const shouldShowLocationOnboarding = useShouldShowLocationOnboarding();
+
+  const shouldShowTravelTokenOnboarding = useShouldShowTravelTokenOnboarding();
 
   const shouldShowShareTravelHabitsScreen =
     useShouldShowShareTravelHabitsScreen(
@@ -55,59 +55,63 @@ export const useOnboardingFlow = (
     ): ScreenProps => {
       let screenName: keyof RootStackParamList | undefined = undefined;
       let params = undefined;
-      if (!(userCreationOnboarded || assumeUserCreationOnboarded)) {
-        if (enable_extended_onboarding) {
-          screenName = 'Root_OnboardingStack';
-        } else {
-          screenName = 'Root_LoginOptionsScreen';
-          params = {};
-        }
-      } else {
-        const orderedOnboardingScreensAfterLogin: {
-          shouldShow: boolean;
-          screenName: keyof RootStackParamList;
-          params?: any;
-        }[] = [
-          {
-            shouldShow: shouldShowLocationOnboarding,
-            screenName: 'Root_LocationWhenInUsePermissionScreen',
-          },
-          {
-            shouldShow: shouldShowShareTravelHabitsScreen,
-            screenName: 'Root_ShareTravelHabitsScreen',
-          },
-          {
-            shouldShow: shouldShowNotificationPermissionScreen,
-            screenName: 'Root_NotificationPermissionScreen',
-          },
-          {
-            shouldShow: shouldShowTravelTokenOnboarding,
-            screenName: 'Root_ConsiderTravelTokenChangeScreen',
-          },
-        ];
-        for (const onboardingScreen of orderedOnboardingScreensAfterLogin) {
-          if (
-            onboardingScreen.shouldShow &&
-            onboardingScreen.screenName !== comingFromScreenName
-          ) {
-            screenName = onboardingScreen.screenName;
-            params = onboardingScreen?.params;
-            break;
-          }
+
+      const shouldShowUserCreationOnboarding = !(
+        userCreationOnboarded || assumeUserCreationOnboarded
+      );
+
+      const orderedOnboardingScreens: {
+        shouldShow: boolean;
+        screenName: keyof RootStackParamList;
+        params?: any;
+      }[] = [
+        {
+          shouldShow: shouldShowUserCreationOnboarding,
+          screenName: enable_extended_onboarding
+            ? 'Root_OnboardingStack'
+            : 'Root_LoginOptionsScreen',
+          params: enable_extended_onboarding ? undefined : {},
+        },
+        {
+          shouldShow: shouldShowLocationOnboarding,
+          screenName: 'Root_LocationWhenInUsePermissionScreen',
+        },
+        {
+          shouldShow: shouldShowShareTravelHabitsScreen,
+          screenName: 'Root_ShareTravelHabitsScreen',
+        },
+        {
+          shouldShow: shouldShowNotificationPermissionScreen,
+          screenName: 'Root_NotificationPermissionScreen',
+        },
+        {
+          shouldShow: shouldShowTravelTokenOnboarding,
+          screenName: 'Root_ConsiderTravelTokenChangeScreen',
+        },
+      ];
+      for (const onboardingScreen of orderedOnboardingScreens) {
+        if (
+          onboardingScreen.shouldShow &&
+          onboardingScreen.screenName !== comingFromScreenName
+        ) {
+          screenName = onboardingScreen.screenName;
+          params = onboardingScreen?.params;
+          break;
         }
       }
+
       return {
         screenName,
         params,
       };
     },
     [
-      userCreationOnboarded,
-      shouldShowTravelTokenOnboarding,
-      shouldShowLocationOnboarding,
-      shouldShowShareTravelHabitsScreen,
-      shouldShowNotificationPermissionScreen,
       enable_extended_onboarding,
+      userCreationOnboarded,
+      shouldShowLocationOnboarding,
+      shouldShowTravelTokenOnboarding,
+      shouldShowNotificationPermissionScreen,
+      shouldShowShareTravelHabitsScreen,
     ],
   );
 
