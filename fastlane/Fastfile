@@ -72,16 +72,38 @@ platform :ios do
     )
   end
 
-  desc "Removes background location"
-  lane :remove_background_location do
+  desc "Removes the use of beacons from the app"
+  lane :remove_use_of_beacons do
+    languages = ['nb', 'en', 'nn']
+    keys = [
+      'NSBluetoothAlwaysUsageDescription', 'NSBluetoothPeripheralUsageDescription',
+      'NSLocationAlwaysAndWhenInUseUsageDescription', 'NSLocationAlwaysUsageDescription',
+      'NSMotionUsageDescription'
+    ]
+
     update_info_plist(
       xcodeproj: "./ios/atb.xcodeproj",
       plist_path: "./atb/Info.plist",
       block: proc do |plist|
-        puts "Deleting location from UIBackgroundModes..."
-        plist["UIBackgroundModes"].delete("location")
+        %w(location bluetooth-central).each do |key|
+          plist["UIBackgroundModes"].delete(key)
+        end
+        keys.each do |key|
+          plist.delete(key)
+        end
       end
     )
+
+    languages.each do |language|
+      file_path = "ios/#{language}.lproj/InfoPlist.strings"
+      lines = File.readlines(file_path)
+
+      updated_lines = lines.reject { |line| keys.any? { |key| line.start_with?("\"#{key}\"") } }
+
+      File.open(file_path, 'w') do |file|
+        file.puts(updated_lines)
+      end
+    end
   end
 
   desc "Generate new certificates"
@@ -237,6 +259,8 @@ platform :ios do
     widget_prov_profile_name, widget_prov_profile_path = widget_cert_info
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
+
+    remove_use_of_beacons
 
     cocoapods(podfile: './ios/Podfile')
     build_app(
