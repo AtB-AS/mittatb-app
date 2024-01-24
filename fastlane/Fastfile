@@ -78,38 +78,36 @@ platform :ios do
     puts "Is beacons enabled: #{beacons_enabled}"
 
     # Don't remove beacons if they are enabled
-    if beacons_enabled
-      return
-    end
+    unless beacons_enabled
+      languages = ['nb', 'en', 'nn']
+      keys = [
+        'NSBluetoothAlwaysUsageDescription', 'NSBluetoothPeripheralUsageDescription',
+        'NSLocationAlwaysAndWhenInUseUsageDescription', 'NSLocationAlwaysUsageDescription',
+        'NSMotionUsageDescription'
+      ]
 
-    languages = ['nb', 'en', 'nn']
-    keys = [
-      'NSBluetoothAlwaysUsageDescription', 'NSBluetoothPeripheralUsageDescription',
-      'NSLocationAlwaysAndWhenInUseUsageDescription', 'NSLocationAlwaysUsageDescription',
-      'NSMotionUsageDescription'
-    ]
-
-    update_info_plist(
-      xcodeproj: "./ios/atb.xcodeproj",
-      plist_path: "./atb/Info.plist",
-      block: proc do |plist|
-        %w(location bluetooth-central).each do |key|
-          plist["UIBackgroundModes"].delete(key)
+      update_info_plist(
+        xcodeproj: "./ios/atb.xcodeproj",
+        plist_path: "./atb/Info.plist",
+        block: proc do |plist|
+          %w(location bluetooth-central).each do |key|
+            plist["UIBackgroundModes"].delete(key)
+          end
+          keys.each do |key|
+            plist.delete(key)
+          end
         end
-        keys.each do |key|
-          plist.delete(key)
+      )
+
+      languages.each do |language|
+        file_path = "../ios/#{language}.lproj/InfoPlist.strings"
+        lines = File.readlines(file_path)
+
+        updated_lines = lines.reject { |line| keys.any? { |key| line.start_with?("\"#{key}\"") } }
+
+        File.open(file_path, 'w') do |file|
+          file.puts(updated_lines)
         end
-      end
-    )
-
-    languages.each do |language|
-      file_path = "../ios/#{language}.lproj/InfoPlist.strings"
-      lines = File.readlines(file_path)
-
-      updated_lines = lines.reject { |line| keys.any? { |key| line.start_with?("\"#{key}\"") } }
-
-      File.open(file_path, 'w') do |file|
-        file.puts(updated_lines)
       end
     end
   end
