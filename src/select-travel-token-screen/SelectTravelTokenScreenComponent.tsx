@@ -150,7 +150,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             ? t(TravelTokenTexts.toggleToken.titleWithoutTravelcard)
             : t(TravelTokenTexts.toggleToken.title)
         }
-        leftButton={{type: 'back'}}
+        leftButton={{type: 'close'}}
       />
       <ScrollView
         contentContainerStyle={styles.scrollView}
