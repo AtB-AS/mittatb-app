@@ -185,6 +185,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
               <ThemeText
                 type={getTextType(mode, type)}
                 style={[styleText, textStyle]}
+                testID="buttonText"
               >
                 {text}
               </ThemeText>
