@@ -17,6 +17,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   submitButtonText: string;
   submitButtonTestId: string;
+  placeholderText: string;
   validatePhoneNumber: (
     number: string,
     forceResend?: boolean,
@@ -31,6 +32,7 @@ export const PhoneInput = ({
   style,
   submitButtonText,
   submitButtonTestId,
+  placeholderText,
   validatePhoneNumber,
   onPhoneNumberValidatedAction,
   rightIcon,
@@ -91,7 +93,7 @@ export const PhoneInput = ({
           onChangePrefix={setPrefix}
           showClear={true}
           keyboardType="number-pad"
-          placeholder={t(PhoneInputTexts.input.placeholder)}
+          placeholder={placeholderText}
           autoFocus={true}
           textContentType="telephoneNumber"
         />

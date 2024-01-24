@@ -3,11 +3,18 @@ import {translation as _} from '../commons';
 const PhoneInputTexts = {
   input: {
     title: _('Mobilnummer', 'Phone number', 'Mobilnummer'),
-    placeholder: _(
-      'Skriv inn ditt telefonnummer',
-      'Type in your phone number',
-      'Skriv inn ditt telefonnummer',
-    ),
+    placeholder: {
+      login: _(
+        'Skriv inn ditt telefonnummer',
+        'Type in your phone number',
+        'Skriv inn ditt telefonnummer',
+      ),
+      sendTicket: _(
+        'Skriv inn telefonnummer',
+        'Enter phone number',
+        'Skriv inn telefonnummer',
+      ),
+    },
   },
   errors: {
     invalid_phone: _(

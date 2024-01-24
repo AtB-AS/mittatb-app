@@ -1,6 +1,6 @@
 import React from 'react';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {LoginTexts, useTranslation} from '@atb/translations';
+import {LoginTexts, PhoneInputTexts, useTranslation} from '@atb/translations';
 import {StyleSheet} from '@atb/theme';
 import {useAuthState} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -65,6 +65,7 @@ export const Root_LoginPhoneInputScreen = ({
           <PhoneInput
             submitButtonText={t(LoginTexts.phoneInput.mainButton)}
             submitButtonTestId="sendCodeButton"
+            placeholderText={t(PhoneInputTexts.input.placeholder.login)}
             validatePhoneNumber={signInWithPhoneNumber}
             onPhoneNumberValidatedAction={(number) => {
               navigation.navigate('Root_LoginConfirmCodeScreen', {

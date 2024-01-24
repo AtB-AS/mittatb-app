@@ -5,7 +5,11 @@ import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/use-get-account-
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  PhoneInputTexts,
+  PurchaseOverviewTexts,
+  useTranslation,
+} from '@atb/translations';
 import {OnBehalfOfTexts} from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {KeyboardAvoidingView, View} from 'react-native';
@@ -59,6 +63,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
           <PhoneInput
             submitButtonText={t(PurchaseOverviewTexts.summary.button)}
             submitButtonTestId="toPaymentButton"
+            placeholderText={t(PhoneInputTexts.input.placeholder.sendTicket)}
             validatePhoneNumber={(number) => getAccountIdByPhone(number)}
             onPhoneNumberValidatedAction={(number, customerAccountId) => {
               navigation.navigate('Root_PurchaseConfirmationScreen', {
