@@ -25,9 +25,9 @@ export const useShouldShowShareTravelHabitsScreen = (
 
   const appStatus = useAppStateStatus();
 
-  const {onboarded, shareTravelHabitsOnboarded} = useAppState();
+  const {userCreationOnboarded, shareTravelHabitsOnboarded} = useAppState();
   const enabled =
-    onboarded && isBeaconsSupported && !shareTravelHabitsOnboarded;
+    userCreationOnboarded && isBeaconsSupported && !shareTravelHabitsOnboarded;
 
   const shouldShowShareTravelHabitsScreen =
     enabled && !isConsentGranted && sessionCount > runAfterSessionsCount;
