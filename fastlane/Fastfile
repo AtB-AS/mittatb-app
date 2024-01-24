@@ -95,7 +95,7 @@ platform :ios do
     )
 
     languages.each do |language|
-      file_path = "ios/#{language}.lproj/InfoPlist.strings"
+      file_path = "../ios/#{language}.lproj/InfoPlist.strings"
       lines = File.readlines(file_path)
 
       updated_lines = lines.reject { |line| keys.any? { |key| line.start_with?("\"#{key}\"") } }
