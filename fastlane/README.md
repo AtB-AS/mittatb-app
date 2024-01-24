@@ -21,7 +21,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios update_devices
 ```
 
-Update new devices and provisioning profiles
+Update ad hoc devices
 
 ### ios generate_new_certificates
 
