@@ -31,12 +31,11 @@ export const CounterIconBox = ({
     type: 'label__uppercase',
   };
 
-  // @FIXME
-  // const smallStyling: CounterStyling = {
-  //   padding: theme.spacings.xSmall,
-  //   lineHeight: iconSizes.small,
-  //   type: 'label__uppercase',
-  // };
+  const smallStyling: CounterStyling = {
+    padding: theme.spacings.xSmall,
+    lineHeight: iconSizes.small,
+    type: 'label__uppercase',
+  };
 
   const normalStyling: CounterStyling = {
     padding: theme.spacings.small,
@@ -54,9 +53,8 @@ export const CounterIconBox = ({
     switch (size) {
       case 'xSmall':
         return xSmallStyling;
-      // @FIXME
-      // case 'small':
-      //   return smallStyling;
+      case 'small':
+        return smallStyling;
       case 'normal':
         return normalStyling;
       case 'large':
