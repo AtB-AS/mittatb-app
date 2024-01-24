@@ -289,6 +289,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isError={!!error || !hasSelection}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
+            summaryButtonText={
+              isOnBehalfOfToggle
+                ? t(PurchaseOverviewTexts.summary.button.sendToOthers)
+                : t(PurchaseOverviewTexts.summary.button.payment)
+            }
             onPressBuy={() => {
               analytics.logEvent('Ticketing', 'Purchase summary clicked', {
                 fareProduct: params.fareProductTypeConfig.name,

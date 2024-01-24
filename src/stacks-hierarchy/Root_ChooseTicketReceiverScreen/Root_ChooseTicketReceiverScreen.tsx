@@ -61,7 +61,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
             </ThemeText>
           </View>
           <PhoneInput
-            submitButtonText={t(PurchaseOverviewTexts.summary.button)}
+            submitButtonText={t(PurchaseOverviewTexts.summary.button.payment)}
             submitButtonTestId="toPaymentButton"
             placeholderText={t(PhoneInputTexts.input.placeholder.sendTicket)}
             validatePhoneNumber={(number) => getAccountIdByPhone(number)}
