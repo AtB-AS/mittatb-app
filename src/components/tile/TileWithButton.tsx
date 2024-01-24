@@ -69,7 +69,7 @@ export function TileWithButton({
           {buttonText}
         </ThemeText>
         <ThemeIcon
-          size={mode === 'spacious' ? 'normal' : 'small'}
+          size={mode === 'spacious' ? 'normal' : 'xSmall'}
           svg={buttonSvg}
           fill={color.outline.text}
         />

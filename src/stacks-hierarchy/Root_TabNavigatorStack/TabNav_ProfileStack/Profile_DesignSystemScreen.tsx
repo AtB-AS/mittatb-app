@@ -42,7 +42,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {LabelInfo} from "@atb/components/label-info";
+import {LabelInfo} from '@atb/components/label-info';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -177,7 +177,7 @@ export const Profile_DesignSystemScreen = ({
               <ThemeIcon svg={Check} colorType="info" />
               <ThemeIcon svg={Check} colorType="warning" />
 
-              <ThemeIcon svg={Ticket} colorType="disabled" size="small" />
+              <ThemeIcon svg={Ticket} colorType="disabled" size="xSmall" />
               <ThemeIcon svg={Ticket} colorType="error" />
               <ThemeIcon svg={Ticket} size="large" />
             </View>
@@ -189,7 +189,7 @@ export const Profile_DesignSystemScreen = ({
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
-                size="small"
+                size="xSmall"
                 notification={{color: 'valid'}}
               />
               <ThemeIcon
@@ -214,7 +214,7 @@ export const Profile_DesignSystemScreen = ({
               <ThemeIcon
                 style={{marginRight: 12}}
                 svg={Feedback}
-                size="small"
+                size="xSmall"
                 notification={{color: 'valid', backgroundColor: 'background_0'}}
               />
               <ThemeIcon
@@ -412,9 +412,8 @@ export const Profile_DesignSystemScreen = ({
                   marginTop: -theme.spacings.small,
                 }}
               >
-                <LabelInfo label="new"/>
-                <LabelInfo label="beta"/>
-
+                <LabelInfo label="new" />
+                <LabelInfo label="beta" />
               </View>
             }
           />

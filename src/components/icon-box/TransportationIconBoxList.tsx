@@ -41,7 +41,7 @@ export const TransportationIconBoxList = ({
       {modesCount > modesDisplayLimit && (
         <CounterIconBox
           count={modesCount - modesDisplayLimit}
-          size="small"
+          size="xSmall"
           accessibilityLabel={t(
             FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
               modesCount,
@@ -57,7 +57,7 @@ const useStyles = ({iconSize}: Pick<Props, 'iconSize'>) =>
   StyleSheet.createThemeHook((theme) => ({
     icon: {
       marginRight:
-        iconSize === 'small' ? theme.spacings.xSmall : theme.spacings.small,
+        iconSize === 'xSmall' ? theme.spacings.xSmall : theme.spacings.small,
     },
   }));
 

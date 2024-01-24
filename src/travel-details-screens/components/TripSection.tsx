@@ -304,7 +304,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <View style={style.realtime}>
               <ThemeIcon
                 svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-                size="small"
+                size="xSmall"
                 style={style.realtimeIcon}
               />
               <ThemeText

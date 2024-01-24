@@ -38,7 +38,7 @@ export function UsedAccessValidityHeader(props: Props) {
           <TransportModes
             modes={fareProductTypeConfig?.transportModes}
             disabled={props.status === 'inactive'}
-            iconSize="small"
+            iconSize="xSmall"
           />
         )}
         <ThemeText

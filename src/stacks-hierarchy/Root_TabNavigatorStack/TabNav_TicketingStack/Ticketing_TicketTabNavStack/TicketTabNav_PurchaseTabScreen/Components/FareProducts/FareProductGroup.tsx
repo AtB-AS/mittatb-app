@@ -41,7 +41,7 @@ export const FareProductGroup = ({
       {heading ? (
         <TransportModes
           modes={transportModes}
-          iconSize="small"
+          iconSize="xSmall"
           style={styles.heading}
           textType="body__secondary"
           textColor="primary"
@@ -50,7 +50,7 @@ export const FareProductGroup = ({
       ) : (
         <TransportModes
           modes={transportModes}
-          iconSize="small"
+          iconSize="xSmall"
           style={styles.heading}
           textType="body__secondary"
           textColor="primary"
