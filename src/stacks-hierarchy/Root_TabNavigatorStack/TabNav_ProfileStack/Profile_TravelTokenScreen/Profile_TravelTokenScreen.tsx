@@ -5,15 +5,14 @@ import {TravelTokenBox} from '@atb/travel-token-box';
 import React from 'react';
 import {View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {ProfileScreenProps} from '../navigation-types';
 import {FaqSection} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/FaqSection';
-import {ChangeTokenAction} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_TravelTokenScreen/ChangeTokenAction';
+
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {Section, GenericSectionItem} from '@atb/components/sections';
+import {TokenToggleInfo} from '@atb/token-toggle-info';
 
-type Props = ProfileScreenProps<'Profile_TravelTokenScreen'>;
-
-export const Profile_TravelTokenScreen = ({navigation}: Props) => {
+export const Profile_TravelTokenScreen = () => {
   const styles = useStyles();
   const {t} = useTranslation();
   const {disable_travelcard} = useRemoteConfig();
@@ -35,11 +34,13 @@ export const Profile_TravelTokenScreen = ({navigation}: Props) => {
           alwaysShowErrors={true}
           interactiveColor="interactive_0"
         />
-        <ChangeTokenAction
-          onChange={() =>
-            navigation.navigate('Profile_SelectTravelTokenScreen')
-          }
-        />
+        <Section style={styles.tokenInfoSection}>
+          {data?.toggleLimit !== undefined && (
+            <GenericSectionItem>
+              <TokenToggleInfo style={styles.tokenInfoView} />
+            </GenericSectionItem>
+          )}
+        </Section>
         <FaqSection toggleMaxLimit={data?.maxToggleLimit} />
       </ScrollView>
     </View>
@@ -54,4 +55,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   scrollView: {
     padding: theme.spacings.medium,
   },
+  tokenInfoSection: {
+    marginBottom: theme.spacings.medium,
+  },
+  tokenInfoView: {flexDirection: 'row'},
 }));
