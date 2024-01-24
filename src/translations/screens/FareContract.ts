@@ -146,8 +146,11 @@ const FareContractTexts = {
         'Kunne ikkje laste kaier.',
       ),
     },
-    infoButtonA11yHint: _('Aktivér for å gå til billettinformasjon', 'Activate to go to ticket information', 'Aktivér for å gå til billetinformasjon'),
-
+    infoButtonA11yHint: _(
+      'Aktivér for å gå til billettinformasjon',
+      'Activate to go to ticket information',
+      'Aktivér for å gå til billetinformasjon',
+    ),
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
@@ -212,6 +215,11 @@ const FareContractTexts = {
   label: {
     travellers: _('Reisende', 'Travellers', 'Reisande'),
     zone: _('Sone', 'Zone', 'Sone'),
+    indludedBenefits: _(
+      'Inkludert i billetten',
+      'Included in the ticket',
+      'Inkludert i billetten',
+    ),
   },
   warning: {
     errorWithToken: _(

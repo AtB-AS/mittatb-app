@@ -60,10 +60,10 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
-"@atb-as/theme@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-7.2.0.tgz#9d35a63aab097b3cc3762634b2ec92c7722dafa4"
-  integrity sha512-eamBOSrCoWNCh+Bgb3TPQsfvLaTn1TpqwRnKN51MJp7UIchcYvzTqzCia4aCKlvuNd3/VT+15+o+F8pPHtZ8xw==
+"@atb-as/theme@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-7.3.0.tgz#9c8203321b5f29a79d8a30ea8da4d0381b1089fe"
+  integrity sha512-jPPPgPO6i6gPzmnE2SPPblYLWds0RFt1aHt19GuES9mG/fhDNvO2hHyh3Q/3PmMCa/6bAom7HQD9v8Vq2PxY/A==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"

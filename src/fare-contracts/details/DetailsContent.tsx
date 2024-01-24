@@ -36,6 +36,9 @@ import {
   PreassignedFareProduct,
 } from '@atb/configuration';
 import {Barcode} from './Barcode';
+import {BenefitTiles} from '@atb/mobility/components/BenefitTile';
+import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
+import {ThemeText} from '@atb/components/text';
 
 type Props = {
   fareContract: FareContract;
@@ -58,6 +61,9 @@ export const DetailsContent: React.FC<Props> = ({
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
+  const {benefits} = useOperatorBenefitsForFareProduct(
+    preassignedFareProduct?.id,
+  );
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
@@ -150,6 +156,17 @@ export const DetailsContent: React.FC<Props> = ({
             </View>
           </GenericSectionItem>
         )}
+        {benefits && (
+          <GenericSectionItem style={styles.benefitSection}>
+            <ThemeText type="body__secondary" color="secondary">
+              {t(FareContractTexts.label.indludedBenefits)}
+            </ThemeText>
+            <BenefitTiles
+              benefits={benefits}
+              interactiveColor="interactive_2"
+            />
+          </GenericSectionItem>
+        )}
         <GenericSectionItem>
           <OrderDetails fareContract={fc} />
         </GenericSectionItem>
@@ -174,5 +191,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   enlargedWhiteBarcodePaddingView: {
     backgroundColor: '#ffffff',
     paddingVertical: theme.spacings.xLarge * 2,
+  },
+  benefitSection: {
+    rowGap: theme.spacings.small,
   },
 }));
