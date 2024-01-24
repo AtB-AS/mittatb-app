@@ -266,8 +266,6 @@ platform :ios do
 
     intent_prov_profile_name, intent_prov_profile_path = intent_cert_info
 
-    remove_use_of_beacons
-
     cocoapods(podfile: './ios/Podfile')
     build_app(
       scheme: 'atb',
