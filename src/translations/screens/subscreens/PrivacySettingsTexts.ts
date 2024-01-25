@@ -11,7 +11,7 @@ const PrivacySettingsTexts = {
       },
       dataSharingButton: {
         title: _(
-          'Les hvordan vi bruker dine personopplysninger',
+          'Les om hvordan vi bruker dine personopplysninger',
           'Read about how we use your personal data',
           'Les om korleis vi bruker personopplysningane dine'
         ),
