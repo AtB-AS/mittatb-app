@@ -1,5 +1,5 @@
-import ElementHelper from '../utils/element.helper';
-import AppHelper from '../utils/app.helper';
+import ElementHelper from '../utils/element.helper.ts';
+import AppHelper from '../utils/app.helper.ts';
 
 class SearchPage {
   /**
@@ -20,7 +20,7 @@ class SearchPage {
 
   /**
    * Search for a location
-   * @param: location: location to search for
+   * @param location location to search for
    */
   async setSearchLocation(location: string) {
     await ElementHelper.waitForElement('id', 'locationSearchInput');

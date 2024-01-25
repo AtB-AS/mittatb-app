@@ -9,8 +9,8 @@ class TravelSearchDetailsPage {
 
   /**
    * Returns the start or end time for a leg at index
-   * @param legIndex: leg index
-   * @param startOrEnd: to get start or end time of a leg
+   * @param legIndex leg index
+   * @param startOrEnd to get start or end time of a leg
    */
   async getTime(startOrEnd: 'start' | 'end', legIndex: number) {
     const searchResultId = `//*[@resource-id="legContainer${legIndex}"]`;
@@ -34,8 +34,8 @@ class TravelSearchDetailsPage {
 
   /**
    * Returns the name of the start or end location for a leg
-   * @param startOrEnd: start or end location
-   * @param legIndex: leg index
+   * @param startOrEnd start or end location
+   * @param legIndex leg index
    */
   async getLocation(startOrEnd: 'start' | 'end', legIndex: number) {
     const searchResultId = `//*[@resource-id="legContainer${legIndex}"]`;

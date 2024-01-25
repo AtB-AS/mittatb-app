@@ -1,6 +1,6 @@
-import ElementHelper from './element.helper';
+import ElementHelper from './element.helper.ts';
 
-const screenshotsFolder: string = './e2e/screenshots';
+const screenshotsFolder: string = './screenshots';
 
 /**
  * Different helper methods related to the app in general
@@ -23,8 +23,8 @@ class AppHelper {
 
   /***
    * Pause in ms
-   * @param ms: how long to pause in ms
-   * @param isLocalDependent: if true, use a lower pause time for local runs - min(2000, ms)
+   * @param ms how long to pause in ms
+   * @param isLocalDependent if true, use a lower pause time for local runs - min(2000, ms)
    */
   async pause(ms: number = 500, isLocalDependent: boolean = false) {
     if (isLocalDependent && process.env.IS_LOCAL === 'true') {
@@ -37,7 +37,7 @@ class AppHelper {
 
   /**
    * Take a screenshot
-   * @param fileName: The filename as <filename>.png
+   * @param fileName The filename as <filename>.png
    */
   async screenshot(fileName: string) {
     await driver.saveScreenshot(`${screenshotsFolder}/${fileName}.png`);
@@ -45,7 +45,7 @@ class AppHelper {
 
   /**
    * Wait until the loading screen is finished
-   * @param numberOfRetries: used internally to count retries, max = 2
+   * @param numberOfRetries used internally to count retries, max = 2
    */
   async waitOnLoadingScreen(numberOfRetries: number = 0) {
     const retryAuthId = `//*[@resource-id="retryAuthButton"]`;
@@ -95,7 +95,7 @@ class AppHelper {
 
   /**
    * Scroll down until given id is visisble
-   * @param id: id to scroll to
+   * @param id id to scroll to
    */
   async scrollDownUntilId(id: string) {
     let elem = await ElementHelper.getElement(id);
@@ -110,7 +110,7 @@ class AppHelper {
 
   /**
    * Scroll up until given id is visisble
-   * @param id: id to scroll to
+   * @param id id to scroll to
    */
   async scrollUpUntilId(id: string) {
     let elem = await ElementHelper.getElement(id);

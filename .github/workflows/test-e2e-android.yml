@@ -9,7 +9,7 @@ on:
       branch:
         description: 'Define branch to test'
         required: true
-        default: 'master'
+        default: 'main'
   schedule:
     - cron: '0 6 * * *'
 
@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Set env variables
         env:
-          DEFAULT_BRANCH: 'master'
+          DEFAULT_BRANCH: 'main'
           DEFAULT_API_LEVEL: 29
         run: |
           echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
@@ -52,6 +52,7 @@ jobs:
           ENTUR_REGISTRY_USER: ${{ vars.ENTUR_REGISTRY_USER }}
           ENTUR_REGISTRY_TOKEN: ${{ secrets.ENTUR_REGISTRY_TOKEN }}
       - name: Install E2E tests
+        working-directory: e2e
         run: yarn install
       - name: tsc
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false --project e2e
@@ -68,7 +69,8 @@ jobs:
           emulator-boot-timeout: 900
           disable-spellchecker: true
           script: yarn test:android
-          pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
+          pre-emulator-launch-script: ./scripts/restart-adb.sh
+          working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
