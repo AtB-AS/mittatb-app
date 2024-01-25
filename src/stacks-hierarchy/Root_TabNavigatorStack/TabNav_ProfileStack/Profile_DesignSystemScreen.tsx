@@ -178,6 +178,7 @@ export const Profile_DesignSystemScreen = ({
               <ThemeIcon svg={Check} colorType="warning" />
 
               <ThemeIcon svg={Ticket} colorType="disabled" size="xSmall" />
+              <ThemeIcon svg={Ticket} colorType="info" size="small" />
               <ThemeIcon svg={Ticket} colorType="error" />
               <ThemeIcon svg={Ticket} size="large" />
             </View>
@@ -191,6 +192,12 @@ export const Profile_DesignSystemScreen = ({
                 svg={Feedback}
                 size="xSmall"
                 notification={{color: 'valid'}}
+              />
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                size="small"
+                notification={{color: 'warning'}}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
@@ -216,6 +223,15 @@ export const Profile_DesignSystemScreen = ({
                 svg={Feedback}
                 size="xSmall"
                 notification={{color: 'valid', backgroundColor: 'background_0'}}
+              />
+              <ThemeIcon
+                style={{marginRight: 12}}
+                svg={Feedback}
+                size="small"
+                notification={{
+                  color: 'warning',
+                  backgroundColor: 'background_0',
+                }}
               />
               <ThemeIcon
                 style={{marginRight: 12}}
