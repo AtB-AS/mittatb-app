@@ -23,8 +23,11 @@ import {
   TextInputSectionItem,
 } from '@atb/components/sections';
 import {FullScreenFooter} from '@atb/components/screen-footer';
+import {StaticColorByType} from '@atb/theme/colors';
 
 export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
+
+const themeColor: StaticColorByType<'background'> = 'background_3';
 
 export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   const css = useScreenStyle();
@@ -208,7 +211,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
               text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
               type="pill"
               mode="tertiary"
-              interactiveColor="interactive_3"
+              backgroundColor={themeColor}
               onPress={() => {
                 setEmoji(undefined);
               }}
@@ -244,7 +247,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
 const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   container: {
     flex: 1,
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor: theme.static.background[themeColor].background,
   },
   buttonContainer: {
     gap: theme.spacings.small,

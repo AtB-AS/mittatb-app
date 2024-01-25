@@ -175,9 +175,7 @@ export const Root_LoginOptionsScreen = ({
           <Button
             interactiveColor="interactive_0"
             mode="primary"
-            onPress={() =>
-              navigation.navigate('Root_LoginPhoneInputScreen')
-            }
+            onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
             text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
             accessibilityHint={t(
               LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
@@ -191,8 +189,8 @@ export const Root_LoginOptionsScreen = ({
             disabled={isLoading}
           />
           <Button
-            interactiveColor="interactive_1"
             mode="secondary"
+            backgroundColor={themeColor}
             onPress={() =>
               navigation.push('Root_PurchaseAsAnonymousConsequencesScreen', {
                 showLoginButton: false,

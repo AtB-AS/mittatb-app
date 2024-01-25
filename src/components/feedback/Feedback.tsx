@@ -308,7 +308,7 @@ export const Feedback = ({
               onPress={setDoNotShowAgain}
               text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
               mode="tertiary"
-              interactiveColor="interactive_2"
+              backgroundColor="background_1"
             />
           )}
       </View>

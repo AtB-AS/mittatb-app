@@ -338,7 +338,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   t,
                   language,
                 )}
-                interactiveColor="interactive_1"
+                backgroundColor={headerBackgroundColor}
                 mode="secondary"
                 compact={true}
                 style={style.searchTimeButton}
@@ -357,7 +357,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   <Button
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                    interactiveColor="interactive_1"
+                    backgroundColor={headerBackgroundColor}
                     mode="secondary"
                     type="inline"
                     compact={true}

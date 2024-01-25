@@ -163,7 +163,6 @@ export const SelectFavouritesBottomSheet = ({
             testID="confirmButton"
           />
           <Button
-            interactiveColor="interactive_2"
             text={t(SelectFavouriteDeparturesText.edit_button.text)}
             accessibilityHint={t(
               SelectFavouriteDeparturesText.edit_button.a11yhint,

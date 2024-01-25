@@ -40,7 +40,6 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               mode="tertiary"
               disabled={!hasPrevious}
               leftIcon={{svg: ArrowLeft}}
-              interactiveColor="interactive_2"
               onPress={() => onNavigate(page - 1)}
               text={t(PaginationTexts.previous.label)}
               testID="previousTripButton"
@@ -64,7 +63,6 @@ export const PaginatedDetailsHeader: React.FC<PaginatedDetailsHeader> = ({
               mode="tertiary"
               disabled={!hasNext}
               rightIcon={{svg: ArrowRight}}
-              interactiveColor="interactive_2"
               onPress={() => onNavigate(page + 1)}
               text={t(PaginationTexts.next.label)}
               testID="nextTripButton"

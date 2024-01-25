@@ -80,7 +80,6 @@ export const DateSelection = ({
   return (
     <View style={styles.dateNavigator}>
       <Button
-        interactiveColor="interactive_2"
         onPress={() => {
           setSearchTime(changeDay(searchTime, -1));
         }}
@@ -102,7 +101,6 @@ export const DateSelection = ({
         testID="previousDayButton"
       />
       <Button
-        interactiveColor="interactive_2"
         onPress={onLaterTimePress}
         text={searchTimeText}
         accessibilityLabel={t(
@@ -118,7 +116,6 @@ export const DateSelection = ({
         testID="setDateButton"
       />
       <Button
-        interactiveColor="interactive_2"
         onPress={() => {
           setSearchTime(changeDay(searchTime, 1));
         }}

@@ -155,7 +155,7 @@ export const Root_ParkingViolationsQrScreen = ({
         <Button
           disabled={isError}
           mode="secondary"
-          interactiveColor="interactive_1"
+          backgroundColor="background_accent_0"
           onPress={() => selectProvider()}
           text={t(ParkingViolationTexts.qr.scanningNotPossible)}
         />

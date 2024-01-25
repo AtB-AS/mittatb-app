@@ -125,7 +125,7 @@ export const DeparturesWidget = ({
       {!!favoriteDepartures.length && (
         <Button
           mode="secondary"
-          interactiveColor="interactive_1"
+          backgroundColor="background_accent_0"
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}
