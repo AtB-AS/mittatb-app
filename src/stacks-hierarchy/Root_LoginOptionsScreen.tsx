@@ -181,7 +181,7 @@ export const Root_LoginOptionsScreen = ({
           )}
           disabled={isLoading}
           rightIcon={{svg: ArrowRight}}
-          testID="chooseLoginPhone"
+          testID="chooseLoginPhoneButton"
         />
         <VippsLoginButton
           onPress={authenticateUserByVipps}
@@ -203,7 +203,7 @@ export const Root_LoginOptionsScreen = ({
           )}
           disabled={isLoading}
           rightIcon={{svg: ArrowRight}}
-          testID="useAppAnonymously"
+          testID="useAppAnonymouslyButton"
         />
 
         <View style={styles.termsOfUseContainer}>
