@@ -72,16 +72,44 @@ platform :ios do
     )
   end
 
-  desc "Removes background location"
-  lane :remove_background_location do
-    update_info_plist(
-      xcodeproj: "./ios/atb.xcodeproj",
-      plist_path: "./atb/Info.plist",
-      block: proc do |plist|
-        puts "Deleting location from UIBackgroundModes..."
-        plist["UIBackgroundModes"].delete("location")
+  desc "Removes the use of beacons from the app"
+  lane :remove_use_of_beacons do
+    beacons_enabled = ENV["KETTLE_API_KEY"] != ""
+    puts "Is beacons enabled: #{beacons_enabled}"
+
+    # Don't remove beacons if they are enabled
+    unless beacons_enabled
+      languages = ['nb', 'en', 'nn']
+      keys = [
+        'NSBluetoothAlwaysUsageDescription', 'NSBluetoothPeripheralUsageDescription',
+        'NSLocationAlwaysAndWhenInUseUsageDescription', 'NSLocationAlwaysUsageDescription',
+        'NSMotionUsageDescription'
+      ]
+
+      update_info_plist(
+        xcodeproj: "./ios/atb.xcodeproj",
+        plist_path: "./atb/Info.plist",
+        block: proc do |plist|
+          %w(location bluetooth-central).each do |key|
+            plist["UIBackgroundModes"].delete(key)
+          end
+          keys.each do |key|
+            plist.delete(key)
+          end
+        end
+      )
+
+      languages.each do |language|
+        file_path = "../ios/#{language}.lproj/InfoPlist.strings"
+        lines = File.readlines(file_path)
+
+        updated_lines = lines.reject { |line| keys.any? { |key| line.start_with?("\"#{key}\"") } }
+
+        File.open(file_path, 'w') do |file|
+          file.puts(updated_lines)
+        end
       end
-    )
+    end
   end
 
   desc "Generate new certificates"
