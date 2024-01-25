@@ -164,7 +164,15 @@ export const Profile_PrivacyScreen = () => {
         {isBeaconsSupported && isConsentGranted && dataSharingInfoUrl && (
           <Section style={style.spacingTop}>
             <LinkSectionItem
-              text={t(PrivacySettingsTexts.sections.items.dataSharingButton)}
+              text={t(
+                PrivacySettingsTexts.sections.items.dataSharingButton.title,
+              )}
+              accessibility={{
+                accessibilityHint: t(
+                  PrivacySettingsTexts.sections.items.dataSharingButton
+                     .a11yHint,
+                ),
+              }}
               icon="external-link"
               testID="dataSharingInfoButton"
               onPress={async () => {
