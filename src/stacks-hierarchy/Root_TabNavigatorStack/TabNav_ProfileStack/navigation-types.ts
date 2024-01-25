@@ -18,7 +18,6 @@ export type ProfileStackParams = StackParams<{
   Profile_FavoriteDeparturesScreen: undefined;
   Profile_SelectStartScreenScreen: undefined;
   Profile_TravelTokenScreen: undefined;
-  Profile_SelectTravelTokenScreen: undefined;
   Profile_AppearanceScreen: undefined;
   Profile_LanguageScreen: undefined;
   Profile_PrivacyScreen: undefined;

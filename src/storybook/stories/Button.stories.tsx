@@ -1,36 +1,40 @@
 import React from 'react';
+import {View} from 'react-native';
+import {themes} from '@atb/theme/colors';
+import {Button, ButtonProps} from '@atb/components/button';
 import {ScrollView} from 'react-native';
 import {getStaticColor, themes} from '@atb/theme/colors';
 import {Button} from '@atb/components/button';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
+import {
+  ThemedStoryDecorator,
+  ThemedStoryProps,
+  themedStoryControls,
+  themedStoryDefaultArgs,
+} from '../ThemedStoryDecorator';
+import {Meta} from '@storybook/react-native';
 
-const ButtonMeta = {
+type ButtonMetaProps = ButtonProps & ThemedStoryProps;
+
+const ButtonMeta: Meta<ButtonMetaProps> = {
   title: 'Button',
   component: Button,
   argTypes: {
-    theme: {
-      control: {type: 'radio'},
-      options: ['light', 'dark'],
-    },
     interactiveColor: {
       control: 'select',
       options: [...Object.keys(themes['light'].interactive)],
-    },
-    backgroundColor: {
-      control: 'select',
-      options: [...Object.keys(themes['light'].static.background)],
     },
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
+    ...themedStoryControls,
     hasShadow: {control: 'boolean'},
   },
   args: {
-    theme: 'light',
     text: 'text',
     interactiveColor: 'interactive_0',
-    backgroundColor: 'background_0',
+    ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => (
@@ -39,11 +43,7 @@ const ButtonMeta = {
           justifyContent: 'center',
           padding: 12,
           width: '100%',
-          alignSelf: 'center',
-          backgroundColor:
-            getStaticColor(args.theme, args.textColor)?.background ||
-            getStaticColor(args.theme, args.backgroundColor).background,
-          gap: 12,
+          rowGap: 12,
         }}
       >
         <Story args={{...args}} />
@@ -81,6 +81,7 @@ const ButtonMeta = {
         />
       </ScrollView>
     ),
+    ThemedStoryDecorator,
   ],
 };
 

@@ -30,15 +30,15 @@ export type GoToScreenType = (screenName: any, params?: any) => void;
 // note: utilizeThisHookInstanceForSessionCounting should only be true for one instance
 export const useOnboardingFlow = (
   utilizeThisHookInstanceForSessionCounting = false,
-  assumeLoginOnboardingCompleted = false,
+  assumeUserCreationOnboarded = false,
 ) => {
   const {enable_extended_onboarding} = useRemoteConfig();
 
-  const {onboarded: loginOnboardingCompleted} = useAppState();
-
-  const shouldShowTravelTokenOnboarding = useShouldShowTravelTokenOnboarding();
+  const {userCreationOnboarded} = useAppState();
 
   const shouldShowLocationOnboarding = useShouldShowLocationOnboarding();
+
+  const shouldShowTravelTokenOnboarding = useShouldShowTravelTokenOnboarding();
 
   const shouldShowShareTravelHabitsScreen =
     useShouldShowShareTravelHabitsScreen(
@@ -51,80 +51,84 @@ export const useOnboardingFlow = (
   const getNextOnboardingScreen = useCallback(
     (
       comingFromScreenName?: keyof RootStackParamList,
-      assumeLoginOnboardingCompleted?: Boolean,
+      assumeUserCreationOnboarded?: Boolean,
     ): ScreenProps => {
       let screenName: keyof RootStackParamList | undefined = undefined;
       let params = undefined;
-      if (!(loginOnboardingCompleted || assumeLoginOnboardingCompleted)) {
-        if (enable_extended_onboarding) {
-          screenName = 'Root_OnboardingStack';
-        } else {
-          screenName = 'Root_LoginOptionsScreen';
-          params = {};
-        }
-      } else {
-        const orderedOnboardingScreensAfterLogin: {
-          shouldShow: boolean;
-          screenName: keyof RootStackParamList;
-          params?: any;
-        }[] = [
-          {
-            shouldShow: shouldShowLocationOnboarding,
-            screenName: 'Root_LocationWhenInUsePermissionScreen',
-          },
-          {
-            shouldShow: shouldShowShareTravelHabitsScreen,
-            screenName: 'Root_ShareTravelHabitsScreen',
-          },
-          {
-            shouldShow: shouldShowNotificationPermissionScreen,
-            screenName: 'Root_NotificationPermissionScreen',
-          },
-          {
-            shouldShow: shouldShowTravelTokenOnboarding,
-            screenName: 'Root_ConsiderTravelTokenChangeScreen',
-          },
-        ];
-        for (const onboardingScreen of orderedOnboardingScreensAfterLogin) {
-          if (
-            onboardingScreen.shouldShow &&
-            onboardingScreen.screenName !== comingFromScreenName
-          ) {
-            screenName = onboardingScreen.screenName;
-            params = onboardingScreen?.params;
-            break;
-          }
+
+      const shouldShowUserCreationOnboarding = !(
+        userCreationOnboarded || assumeUserCreationOnboarded
+      );
+
+      const orderedOnboardingScreens: {
+        shouldShow: boolean;
+        screenName: keyof RootStackParamList;
+        params?: any;
+      }[] = [
+        {
+          shouldShow: shouldShowUserCreationOnboarding,
+          screenName: enable_extended_onboarding
+            ? 'Root_OnboardingStack'
+            : 'Root_LoginOptionsScreen',
+          params: enable_extended_onboarding ? undefined : {},
+        },
+        {
+          shouldShow: shouldShowLocationOnboarding,
+          screenName: 'Root_LocationWhenInUsePermissionScreen',
+        },
+        {
+          shouldShow: shouldShowShareTravelHabitsScreen,
+          screenName: 'Root_ShareTravelHabitsScreen',
+        },
+        {
+          shouldShow: shouldShowNotificationPermissionScreen,
+          screenName: 'Root_NotificationPermissionScreen',
+        },
+        {
+          shouldShow: shouldShowTravelTokenOnboarding,
+          screenName: 'Root_ConsiderTravelTokenChangeScreen',
+        },
+      ];
+      for (const onboardingScreen of orderedOnboardingScreens) {
+        if (
+          onboardingScreen.shouldShow &&
+          onboardingScreen.screenName !== comingFromScreenName
+        ) {
+          screenName = onboardingScreen.screenName;
+          params = onboardingScreen?.params;
+          break;
         }
       }
+
       return {
         screenName,
         params,
       };
     },
     [
-      loginOnboardingCompleted,
-      shouldShowTravelTokenOnboarding,
-      shouldShowLocationOnboarding,
-      shouldShowShareTravelHabitsScreen,
-      shouldShowNotificationPermissionScreen,
       enable_extended_onboarding,
+      userCreationOnboarded,
+      shouldShowLocationOnboarding,
+      shouldShowTravelTokenOnboarding,
+      shouldShowNotificationPermissionScreen,
+      shouldShowShareTravelHabitsScreen,
     ],
   );
 
   const [nextOnboardingScreen, setNextOnboardingScreen] = useState<ScreenProps>(
-    getNextOnboardingScreen(undefined, assumeLoginOnboardingCompleted),
+    getNextOnboardingScreen(undefined, assumeUserCreationOnboarded),
   );
 
   useEffect(() => {
     setNextOnboardingScreen(
-      getNextOnboardingScreen(undefined, assumeLoginOnboardingCompleted),
+      getNextOnboardingScreen(undefined, assumeUserCreationOnboarded),
     );
-  }, [getNextOnboardingScreen, assumeLoginOnboardingCompleted]);
+  }, [getNextOnboardingScreen, assumeUserCreationOnboarded]);
 
   /**
-   * add Root_TabNavigatorStack as root when loginOnboardingCompleted
+   * add Root_TabNavigatorStack as root when userCreationOnboarded
    * this allows goBack from an onboarding screen when used as initial screen
-   * @param {Boolean} shouldGoDirectlyToOnboardingScreen when loginOnboardingCompleted, true if going directly to the next onboarding screen, false if instead going to Root_TabNavigatorStack first
+   * @param {Boolean} shouldGoDirectlyToOnboardingScreen when userCreationOnboarded, true if going directly to the next onboarding screen, false if instead going to Root_TabNavigatorStack first
    * @returns navigation state object
    */
   const getInitialNavigationContainerState = (
@@ -139,7 +143,7 @@ export const useOnboardingFlow = (
     const routes: PartialRoute<
       Route<keyof RootStackParamList, object | undefined>
     >[] = [];
-    if (loginOnboardingCompleted) {
+    if (userCreationOnboarded) {
       routes.push({name: 'Root_TabNavigatorStack'});
 
       if (shouldGoDirectlyToOnboardingScreen) {
@@ -164,9 +168,10 @@ const useShouldShowTravelTokenOnboarding = () => {
     useAppState();
   const {disable_travelcard} = useRemoteConfig();
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
-  const hasInspectableToken = tokens.some((token) => token.isInspectable);
+  const inspectableToken = tokens.find((token) => token.isInspectable);
   return (
-    hasInspectableToken &&
+    !!inspectableToken &&
+    !inspectableToken?.isThisDevice &&
     mobileTokenStatus === 'success' &&
     authenticationType === 'phone' &&
     ((!mobileTokenOnboarded && !disable_travelcard) ||

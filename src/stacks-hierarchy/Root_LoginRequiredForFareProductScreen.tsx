@@ -29,7 +29,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
   navigation,
   route,
 }: Props) => {
-  const {fareProductTypeConfig, afterLogin} = route.params;
+  const {fareProductTypeConfig} = route.params;
   const {enable_vipps_login} = useRemoteConfig();
   const {t} = useTranslation();
   const styles = useThemeStyles();
@@ -45,19 +45,16 @@ export const Root_LoginRequiredForFareProductScreen = ({
     const hasActiveFareContracts = activeFareContracts.length > 0;
     if (hasActiveFareContracts) {
       navigation.navigate('Root_LoginActiveFareContractWarningScreen', {
-        afterLogin,
         transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
       });
     } else {
       if (enable_vipps_login) {
         navigation.navigate('Root_LoginOptionsScreen', {
-          afterLogin,
           showGoBack: true,
           transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
         });
       } else {
         navigation.navigate('Root_LoginPhoneInputScreen', {
-          afterLogin,
         });
       }
     }

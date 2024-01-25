@@ -10,15 +10,21 @@ import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
  * @returns {Function} A function that, when called, checks if the onboarding is not completed,
  * completes it if not, and then navigates to the next screen using enterApp.
  */
-export const useCompleteOnboardingAndEnterApp = () => {
-  const {onboarded, completeOnboarding} = useAppState();
+export const useCompleteUserCreationOnboardingAndEnterApp = () => {
+  const {userCreationOnboarded, completeUserCreationOnboarding} = useAppState();
   const enterApp = useEnterApp();
 
-  return (afterLogin?: AfterLoginScreenType) => {
-    !onboarded && completeOnboarding();
-    enterApp(afterLogin);
+  return () => {
+    !userCreationOnboarded && completeUserCreationOnboarding();
+    enterApp();
   };
 };
+
+export type AfterLoginScreenType =
+  | NextScreenParams<'Root_TabNavigatorStack'>
+  | NextScreenParams<'Root_PurchaseOverviewScreen'>
+  | NextScreenParams<'Root_PurchaseConfirmationScreen'>
+  | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
 
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;
@@ -28,39 +34,28 @@ export type NextScreenParams<T extends keyof RootStackParamList> = {
      */
   params: RootStackParamList[T];
 };
-export type AfterLoginScreenType =
-  | NextScreenParams<'Root_TabNavigatorStack'>
-  | NextScreenParams<'Root_PurchaseOverviewScreen'>
-  | NextScreenParams<'Root_PurchaseConfirmationScreen'>
-  | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
 
 /**
  * This hook provides a function to navigate directly to the next screen,
  * with Root_TabNavigatorStack as the only screen you can go back to.
  * It omits unwanted animations or transitions in between.
  *
- * @returns {Function} A function that takes an optional `afterLogin` parameter of type `AfterLoginScreenType`.
- * When called, it navigates to either the 'Root_TabNavigatorStack', a screen specified by
- * `afterLogin`, or the next onboarding screen based on the app's current state.
+ * @returns {Function} A function that when called, navigates to either the
+ * 'Root_TabNavigatorStack', or the next onboarding screen based on the app's
+ * current state.
  */
-
 const useEnterApp = () => {
   const {getNextOnboardingScreen} = useOnboardingFlow();
   const navigation = useNavigation<RootNavigationProps>();
 
-  return (afterLogin?: AfterLoginScreenType) => {
+  return () => {
     const nextOnboardingScreen = getNextOnboardingScreen(undefined, true);
 
     const routes: PartialRoute<
       Route<keyof RootStackParamList, object | undefined>
     >[] = [{name: 'Root_TabNavigatorStack'}];
 
-    if (afterLogin?.screen) {
-      routes.push({
-        name: afterLogin.screen,
-        params: afterLogin.params,
-      });
-    } else if (nextOnboardingScreen?.screenName) {
+    if (nextOnboardingScreen?.screenName) {
       routes.push({
         name: nextOnboardingScreen.screenName,
         params: nextOnboardingScreen.params,

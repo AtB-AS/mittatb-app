@@ -1,7 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {LoginTexts, useTranslation} from '@atb/translations';
-import {useAuthState} from '@atb/auth';
-import {ConfirmationErrorCode, PhoneSignInErrorCode} from '@atb/auth';
+import {
+  ConfirmationErrorCode,
+  PhoneSignInErrorCode,
+  useAuthState,
+} from '@atb/auth';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {
   ActivityIndicator,
@@ -20,35 +23,34 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useCompleteOnboardingAndEnterApp} from '@atb/utils/use-complete-onboarding-and-enter-app';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
 
 export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
-  const {phoneNumber, afterLogin} = route.params;
+  const {phoneNumber} = route.params;
   const {t} = useTranslation();
   const styles = useStyles();
   const {themeName} = useTheme();
-  const {authenticationType, confirmCode, signInWithPhoneNumber} =
-    useAuthState();
+  const {confirmCode, signInWithPhoneNumber} = useAuthState();
   const [code, setCode] = useState('');
   const [error, setError] = useState<
     ConfirmationErrorCode | PhoneSignInErrorCode
   >();
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
-  const completeOnboardingAndEnterApp = useCompleteOnboardingAndEnterApp();
+  const {completeUserCreationOnboarding} = useAppState();
 
   const onLogin = async () => {
     setIsLoading(true);
+    completeUserCreationOnboarding();
     const errorCode = await confirmCode(code);
     if (errorCode) {
       setError(errorCode);
       setIsLoading(false);
     }
-    completeOnboardingAndEnterApp();
   };
 
   const onResendCode = async () => {
@@ -61,15 +63,6 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
       setError(errorCode);
     }
   };
-
-  // User might be automatically logged in with Firebase auth, but only on Android
-  // Check authentication from state and see if it is updated while we wait
-  useEffect(() => {
-    if (authenticationType === 'phone') {
-      completeOnboardingAndEnterApp(afterLogin);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticationType]);
 
   return (
     <View style={styles.container}>

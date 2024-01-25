@@ -17,11 +17,6 @@ import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
 
-import {
-  AfterLoginScreenType,
-  NextScreenParams,
-} from '@atb/utils/use-complete-onboarding-and-enter-app';
-
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
   searchLocation?: SearchLocation;
@@ -45,10 +40,6 @@ type PaymentParams = {
   preassignedFareProduct: PreassignedFareProduct;
 };
 
-type CarnetDetailsRouteParams = {
-  orderId: string;
-};
-
 type ReceiptScreenRouteParams = {
   orderId: string;
   orderVersion: string;
@@ -63,26 +54,15 @@ type TicketInformationScreenParams = {
   preassignedFareProductId: string | undefined;
 };
 
-export type Root_LoginActiveFareContractWarningScreenParams = {
-  afterLogin?: AfterLoginScreenType;
-};
-
 export type Root_LoginOptionsScreenParams = {
-  afterLogin?: AfterLoginScreenType;
   showGoBack?: boolean;
-};
-
-export type Root_LoginPhoneInputScreenParams = {
-  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginConfirmCodeScreenParams = {
   phoneNumber: string;
-  afterLogin?: AfterLoginScreenType;
 };
 
 export type Root_LoginRequiredForFareProductScreenParams = {
-  afterLogin?: AfterLoginScreenType;
   fareProductTypeConfig: FareProductTypeConfig;
 };
 
@@ -112,6 +92,20 @@ type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
   paymentMethod: CardPaymentMethod;
 };
 
+type Root_ConfirmationScreenParams = {
+  message: string;
+  // Time that must be wait until onComplete is called (in milliseconds)
+  delayBeforeCompleted?: number;
+  nextScreen: NextScreenParams<'Root_TabNavigatorStack'>;
+};
+
+export type NextScreenParams<T extends keyof RootStackParamList = keyof RootStackParamList> = {
+  [S in T]: {
+    screen: S;
+    params: RootStackParamList[S];
+  };
+}[T];
+
 export type RootStackParamList = StackParams<{
   Root_OnboardingStack: undefined;
   Root_TermsInformationScreen: undefined;
@@ -133,13 +127,12 @@ export type RootStackParamList = StackParams<{
   Root_PurchasePaymentWithCreditCardScreen: Root_PurchasePaymentWithCreditCardScreenParams;
   Root_PurchasePaymentWithVippsScreen: PaymentParams;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
-  Root_CarnetDetailsScreen: CarnetDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
   Root_TicketInformationScreen: TicketInformationScreenParams;
-  Root_LoginActiveFareContractWarningScreen: Root_LoginActiveFareContractWarningScreenParams;
+  Root_LoginActiveFareContractWarningScreen: undefined;
   Root_LoginOptionsScreen: Root_LoginOptionsScreenParams;
   Root_LoginConfirmCodeScreen: Root_LoginConfirmCodeScreenParams;
-  Root_LoginPhoneInputScreen: Root_LoginPhoneInputScreenParams;
+  Root_LoginPhoneInputScreen: undefined;
   Root_LoginRequiredForFareProductScreen: Root_LoginRequiredForFareProductScreenParams;
   Root_ActiveTokenOnPhoneRequiredForFareProductScreen: Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams;
   Root_AddPaymentMethodScreen: undefined;
@@ -150,6 +143,7 @@ export type RootStackParamList = StackParams<{
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
+  Root_ConfirmationScreen: Root_ConfirmationScreenParams;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;

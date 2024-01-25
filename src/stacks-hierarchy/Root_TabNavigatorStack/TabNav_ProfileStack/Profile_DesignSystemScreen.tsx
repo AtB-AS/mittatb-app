@@ -23,7 +23,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {dictionary, useTranslation} from '@atb/translations';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {InfoChip} from '@atb/components/info-chip';
 import {
   ActionSectionItem,
   ButtonSectionItem,
@@ -43,6 +42,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {LabelInfo} from "@atb/components/label-info";
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -401,7 +401,7 @@ export const Profile_DesignSystemScreen = ({
 
         <Section style={style.section}>
           <ExpandableSectionItem
-            text="InfoChip"
+            text="LabelInfo"
             showIconText={false}
             textType="heading__title"
             expandContent={
@@ -412,38 +412,9 @@ export const Profile_DesignSystemScreen = ({
                   marginTop: -theme.spacings.small,
                 }}
               >
-                <InfoChip
-                  text="Interactive/0"
-                  interactiveColor="interactive_0"
-                  style={{
-                    marginRight: theme.spacings.small,
-                    marginTop: theme.spacings.small,
-                  }}
-                />
-                <InfoChip
-                  text="Interactive/1"
-                  interactiveColor="interactive_1"
-                  style={{
-                    marginRight: theme.spacings.small,
-                    marginTop: theme.spacings.small,
-                  }}
-                />
-                <InfoChip
-                  text="Interactive/2"
-                  interactiveColor="interactive_2"
-                  style={{
-                    marginRight: theme.spacings.small,
-                    marginTop: theme.spacings.small,
-                  }}
-                />
-                <InfoChip
-                  text="Interactive/destructive"
-                  interactiveColor="interactive_destructive"
-                  style={{
-                    marginRight: theme.spacings.small,
-                    marginTop: theme.spacings.small,
-                  }}
-                />
+                <LabelInfo label="new"/>
+                <LabelInfo label="beta"/>
+
               </View>
             }
           />
