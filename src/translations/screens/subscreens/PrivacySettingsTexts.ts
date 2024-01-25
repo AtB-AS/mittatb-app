@@ -9,6 +9,18 @@ const PrivacySettingsTexts = {
           'Tøm innsamla data',
         ),
       },
+      dataSharingButton: {
+        title: _(
+          'Les om hvordan vi bruker dine personopplysninger',
+          'Read about how we use your personal data',
+          'Les om korleis vi bruker personopplysningane dine'
+        ),
+        a11yHint: _(
+          'Aktiver for å lese mer på ekstern side',
+          'Activate to read more (external content)',
+          'Aktiver for å lese meir på ekstern side',
+        ),
+      },
       controlPanel: {
         title: _(
           'Kontrollpanel for datainnsamling',
