@@ -5,7 +5,11 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {StyleSheet, Theme} from '@atb/theme';
-import {ProfileTexts, useTranslation} from '@atb/translations';
+import {
+  ProfileTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Linking, View} from 'react-native';
 import PrivacySettingsTexts from '@atb/translations/screens/subscreens/PrivacySettingsTexts';
@@ -18,9 +22,10 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ContentHeading, ScreenHeading} from '@atb/components/heading';
 import {allowedPermissionsForBeacons} from '@atb/beacons/permissions';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 export const Profile_PrivacyScreen = () => {
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const {
     revokeBeacons,
     isConsentGranted,
@@ -33,11 +38,18 @@ export const Profile_PrivacyScreen = () => {
   const {privacy_policy_url} = useRemoteConfig();
   const style = useStyle();
   const {clearHistory} = useSearchHistory();
+  const {configurableLinks} = useFirestoreConfiguration();
+
   const [isCleaningCollectedData, setIsCleaningCollectedData] =
     React.useState<boolean>(false);
 
   const [hasPermissionsForBeacons, setHasPermissionsForBeacons] =
     useState(false);
+
+  const dataSharingInfoUrl = getTextForLanguage(
+    configurableLinks?.dataSharingInfo,
+    language,
+  );
 
   const updatePermissions = useCallback(() => {
     allowedPermissionsForBeacons().then((permissions) => {
@@ -144,6 +156,19 @@ export const Profile_PrivacyScreen = () => {
                 const privacyDashboardUrl = await getPrivacyDashboardUrl();
                 privacyDashboardUrl &&
                   (await Linking.openURL(privacyDashboardUrl));
+              }}
+            />
+          </Section>
+        )}
+
+        {isBeaconsSupported && isConsentGranted && dataSharingInfoUrl && (
+          <Section style={style.spacingTop}>
+            <LinkSectionItem
+              text={t(PrivacySettingsTexts.sections.items.dataSharingButton)}
+              icon="external-link"
+              testID="dataSharingInfoButton"
+              onPress={async () => {
+                Linking.openURL(dataSharingInfoUrl);
               }}
             />
           </Section>
