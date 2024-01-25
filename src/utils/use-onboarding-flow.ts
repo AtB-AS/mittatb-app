@@ -167,7 +167,12 @@ const useShouldShowExtendedOnboarding = () => {
   const {enable_extended_onboarding} = useRemoteConfig();
   const {extendedOnboardingOnboarded} = useAppState();
 
-  return enable_extended_onboarding && !extendedOnboardingOnboarded;
+  const {userCreationOnboarded} = useAppState();
+  return (
+    enable_extended_onboarding &&
+    !extendedOnboardingOnboarded &&
+    !userCreationOnboarded // this is for backward compatibility
+  );
 };
 
 const useShouldShowUserCreationOnboarding = () => {
