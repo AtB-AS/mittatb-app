@@ -27,6 +27,8 @@ type Props = {
   onAddFavorite: () => void;
 };
 
+const themeColor = 'background_accent_0';
+
 export const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
   style,
@@ -52,7 +54,7 @@ export const FavoriteChips: React.FC<Props> = ({
       >
         {activeType('location') && (
           <FavoriteChip
-            interactiveColor="interactive_1"
+            backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.currentLocation)}
             accessibilityRole="button"
@@ -68,7 +70,7 @@ export const FavoriteChips: React.FC<Props> = ({
             accessibilityRole="button"
             leftIcon={{svg: Pin}}
             onPress={onMapSelection}
-            interactiveColor="interactive_1"
+            backgroundColor={themeColor}
             mode="secondary"
             testID="mapLocationChip"
           />
@@ -98,7 +100,7 @@ export const FavoriteChips: React.FC<Props> = ({
           ))}
         {activeType('add-favorite') && (
           <FavoriteChip
-            interactiveColor="interactive_1"
+            backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
