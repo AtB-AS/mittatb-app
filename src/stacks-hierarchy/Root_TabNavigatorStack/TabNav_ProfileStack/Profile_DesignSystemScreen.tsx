@@ -42,7 +42,7 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-import {LabelInfo} from "@atb/components/label-info";
+import {LabelInfo} from '@atb/components/label-info';
 
 type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 
@@ -412,9 +412,8 @@ export const Profile_DesignSystemScreen = ({
                   marginTop: -theme.spacings.small,
                 }}
               >
-                <LabelInfo label="new"/>
-                <LabelInfo label="beta"/>
-
+                <LabelInfo label="new" />
+                <LabelInfo label="beta" />
               </View>
             }
           />
@@ -575,35 +574,27 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   type="heading__paragraph"
                 >
-                  Secondary - block - interactive/0
+                  Secondary - block
                 </ThemeText>
                 <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="secondary"
-                    interactiveColor="interactive_0"
-                  />
+                  <Button text="Default" onPress={presser} mode="secondary" />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="secondary"
                     active={true}
-                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="secondary"
                     disabled={true}
-                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="secondary"
                     compact={true}
-                    interactiveColor="interactive_0"
                   />
                 </View>
 
@@ -611,251 +602,27 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   type="heading__paragraph"
                 >
-                  Secondary - block - interactive/1
+                  tertiary - block
                 </ThemeText>
                 <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="secondary"
-                    interactiveColor="interactive_1"
-                  />
-                  <Button
-                    text="Active"
-                    onPress={presser}
-                    mode="secondary"
-                    active={true}
-                    interactiveColor="interactive_1"
-                  />
-                  <Button
-                    text="Disabled"
-                    onPress={presser}
-                    mode="secondary"
-                    disabled={true}
-                    interactiveColor="interactive_1"
-                  />
-                  <Button
-                    text="Compact"
-                    onPress={presser}
-                    mode="secondary"
-                    compact={true}
-                    interactiveColor="interactive_1"
-                  />
-                </View>
-
-                <ThemeText
-                  style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
-                >
-                  Secondary - block - interactive/2
-                </ThemeText>
-                <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="secondary"
-                    interactiveColor="interactive_2"
-                  />
-                  <Button
-                    text="Active"
-                    onPress={presser}
-                    mode="secondary"
-                    active={true}
-                    interactiveColor="interactive_2"
-                  />
-                  <Button
-                    text="Disabled"
-                    onPress={presser}
-                    mode="secondary"
-                    disabled={true}
-                    interactiveColor="interactive_2"
-                  />
-                  <Button
-                    text="Compact"
-                    onPress={presser}
-                    mode="secondary"
-                    compact={true}
-                    interactiveColor="interactive_2"
-                  />
-                </View>
-
-                <ThemeText
-                  style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
-                >
-                  Secondary - block - interactive/destructive
-                </ThemeText>
-                <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="secondary"
-                    interactiveColor="interactive_destructive"
-                  />
-                  <Button
-                    text="Active"
-                    onPress={presser}
-                    mode="secondary"
-                    active={true}
-                    interactiveColor="interactive_destructive"
-                  />
-                  <Button
-                    text="Disabled"
-                    onPress={presser}
-                    mode="secondary"
-                    disabled={true}
-                    interactiveColor="interactive_destructive"
-                  />
-                  <Button
-                    text="Compact"
-                    onPress={presser}
-                    mode="secondary"
-                    compact={true}
-                    interactiveColor="interactive_destructive"
-                  />
-                </View>
-
-                <ThemeText
-                  style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
-                >
-                  tertiary - block - interactive/0
-                </ThemeText>
-                <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="tertiary"
-                    interactiveColor="interactive_0"
-                  />
+                  <Button text="Default" onPress={presser} mode="tertiary" />
                   <Button
                     text="Active"
                     onPress={presser}
                     mode="tertiary"
                     active={true}
-                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Disabled"
                     onPress={presser}
                     mode="tertiary"
                     disabled={true}
-                    interactiveColor="interactive_0"
                   />
                   <Button
                     text="Compact"
                     onPress={presser}
                     mode="tertiary"
                     compact={true}
-                    interactiveColor="interactive_0"
-                  />
-                </View>
-
-                <ThemeText
-                  style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
-                >
-                  tertiary - block - interactive/1
-                </ThemeText>
-                <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="tertiary"
-                    interactiveColor="interactive_1"
-                  />
-                  <Button
-                    text="Active"
-                    onPress={presser}
-                    mode="tertiary"
-                    active={true}
-                    interactiveColor="interactive_1"
-                  />
-                  <Button
-                    text="Disabled"
-                    onPress={presser}
-                    mode="tertiary"
-                    disabled={true}
-                    interactiveColor="interactive_1"
-                  />
-                  <Button
-                    text="Compact"
-                    onPress={presser}
-                    mode="tertiary"
-                    compact={true}
-                    interactiveColor="interactive_1"
-                  />
-                </View>
-
-                <ThemeText
-                  style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
-                >
-                  tertiary - block - interactive/2
-                </ThemeText>
-                <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="tertiary"
-                    interactiveColor="interactive_2"
-                  />
-                  <Button
-                    text="Active"
-                    onPress={presser}
-                    mode="tertiary"
-                    active={true}
-                    interactiveColor="interactive_2"
-                  />
-                  <Button
-                    text="Disabled"
-                    onPress={presser}
-                    mode="tertiary"
-                    disabled={true}
-                    interactiveColor="interactive_2"
-                  />
-                  <Button
-                    text="Compact"
-                    onPress={presser}
-                    mode="tertiary"
-                    compact={true}
-                    interactiveColor="interactive_2"
-                  />
-                </View>
-
-                <ThemeText
-                  style={{marginTop: 24, marginBottom: 12}}
-                  type="heading__paragraph"
-                >
-                  tertiary - block - interactive/destructive
-                </ThemeText>
-                <View style={style.buttonContainer}>
-                  <Button
-                    text="Default"
-                    onPress={presser}
-                    mode="tertiary"
-                    interactiveColor="interactive_destructive"
-                  />
-                  <Button
-                    text="Active"
-                    onPress={presser}
-                    mode="tertiary"
-                    active={true}
-                    interactiveColor="interactive_destructive"
-                  />
-                  <Button
-                    text="Disabled"
-                    onPress={presser}
-                    mode="tertiary"
-                    disabled={true}
-                    interactiveColor="interactive_destructive"
-                  />
-                  <Button
-                    text="Compact"
-                    onPress={presser}
-                    mode="tertiary"
-                    compact={true}
-                    interactiveColor="interactive_destructive"
                   />
                 </View>
 
@@ -906,7 +673,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="inline"
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -915,7 +681,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="inline"
                     active={true}
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -924,7 +689,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="inline"
                     compact={true}
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -932,7 +696,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="inline"
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -941,7 +704,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     type="inline"
                     disabled={true}
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                 </View>
@@ -993,7 +755,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="pill"
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1002,7 +763,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="pill"
                     active={true}
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1011,7 +771,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="pill"
                     compact={true}
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1019,7 +778,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="pill"
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                   <Button
@@ -1028,7 +786,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     type="pill"
                     disabled={true}
-                    interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
                 </View>
@@ -1107,7 +864,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="inline"
                     active={true}
-                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1117,7 +873,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="tertiary"
                     type="inline"
                     active={true}
-                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1152,7 +907,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="secondary"
                     type="inline"
-                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1160,7 +914,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="inline"
-                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1179,7 +932,6 @@ export const Profile_DesignSystemScreen = ({
                     mode="secondary"
                     type="pill"
                     compact={true}
-                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -1188,7 +940,6 @@ export const Profile_DesignSystemScreen = ({
                     onPress={presser}
                     mode="tertiary"
                     type="pill"
-                    interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
