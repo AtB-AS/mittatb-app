@@ -1,10 +1,7 @@
 import React from 'react';
-import {View} from 'react-native';
-import {themes} from '@atb/theme/colors';
 import {Button, ButtonProps} from '@atb/components/button';
 import {ScrollView} from 'react-native';
-import {getStaticColor, themes} from '@atb/theme/colors';
-import {Button} from '@atb/components/button';
+import {themes} from '@atb/theme/colors';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {
   ThemedStoryDecorator,
