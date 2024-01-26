@@ -24,7 +24,6 @@ import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useAppState} from '@atb/AppContext';
-import {useQueryClient} from '@tanstack/react-query';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -43,7 +42,6 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
   const {completeOnboarding} = useAppState();
-  const queryClient = useQueryClient();
 
   const onLogin = async () => {
     setIsLoading(true);
@@ -53,7 +51,6 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
       setError(errorCode);
       setIsLoading(false);
     }
-    queryClient.invalidateQueries();
   };
 
   const onResendCode = async () => {

@@ -45,7 +45,6 @@ import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useQueryClient} from '@tanstack/react-query';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
@@ -85,7 +84,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
-  const queryClient = useQueryClient();
 
   const {disable_travelcard} = useRemoteConfig();
 
@@ -236,7 +234,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     } catch (err: any) {
                       Bugsnag.notify(err);
                     } finally {
-                      queryClient.invalidateQueries();
                       setIsLoading(false);
                     }
                   },

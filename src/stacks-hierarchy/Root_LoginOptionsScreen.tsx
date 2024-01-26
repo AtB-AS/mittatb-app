@@ -25,7 +25,6 @@ import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useAppState} from '@atb/AppContext';
-import {useQueryClient} from '@tanstack/react-query';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -48,7 +47,6 @@ export const Root_LoginOptionsScreen = ({
     string | undefined
   >(undefined);
   const {completeOnboarding} = useAppState();
-  const queryClient = useQueryClient();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -58,7 +56,6 @@ export const Root_LoginOptionsScreen = ({
       setError('unknown_error');
       setIsLoading(false);
     }
-    queryClient.invalidateQueries();
   };
 
   useEffect(
