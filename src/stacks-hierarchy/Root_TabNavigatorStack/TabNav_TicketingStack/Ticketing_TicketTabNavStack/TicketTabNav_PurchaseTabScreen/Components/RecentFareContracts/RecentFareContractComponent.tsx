@@ -147,7 +147,7 @@ export const RecentFareContractComponent = ({
     >
       <View style={styles.travelModeWrapper}>
         <TransportModes
-          iconSize="small"
+          iconSize="xSmall"
           modes={fareProductTypeConfig.transportModes}
           style={{flex: 2}}
         />
