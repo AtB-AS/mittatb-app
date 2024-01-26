@@ -21,16 +21,19 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
       control: 'select',
       options: [...Object.keys(themes['light'].interactive)],
     },
+    backgroundColor: {
+      control: 'select',
+      options: [...Object.keys(themes['light'].static)],
+    },
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
-    ...themedStoryControls,
     hasShadow: {control: 'boolean'},
+    ...themedStoryControls,
   },
   args: {
     text: 'text',
-    interactiveColor: 'interactive_0',
     ...themedStoryDefaultArgs,
   },
   decorators: [
