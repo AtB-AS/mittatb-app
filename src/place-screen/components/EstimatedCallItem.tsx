@@ -94,7 +94,7 @@ export const EstimatedCallItem = memo(
         <View style={styles.container} testID={testID}>
           <View
             accessible={true}
-            style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}
+            style={styles.lineAndDepartureTime}
             accessibilityLabel={a11yLabel}
             accessibilityHint={a11yHint}
           >
@@ -324,6 +324,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'space-between',
+  },
+  lineAndDepartureTime: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   transportInfo: {
     flexDirection: 'row',
