@@ -102,7 +102,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
         : 'background_0';
 
     const modeData = DefaultModeStyles[mode];
-    const themeColor = interactiveColor;
     const styles = useButtonStyle();
     const {theme} = useTheme();
     const fadeAnim = useRef(
@@ -122,19 +121,18 @@ export const Button = React.forwardRef<any, ButtonProps>(
 
     const spacing = compact ? theme.spacings.small : theme.spacings.medium;
     const {background: buttonColor} =
-      theme.interactive[themeColor][active ? 'active' : 'default'];
+      theme.interactive[interactiveColor][active ? 'active' : 'default'];
 
-    const textColorBasedOnBackground = useColor(
-      backgroundColor ?? 'background_0',
-    );
+    const textColorBasedOnBackground = useColor(backgroundColor);
     const textColor =
       mode !== 'primary'
         ? textColorBasedOnBackground
-        : theme.interactive[themeColor][active ? 'active' : 'default'].text;
+        : theme.interactive[interactiveColor][active ? 'active' : 'default']
+            .text;
 
     const borderColor =
       active && mode === 'primary'
-        ? theme.interactive[themeColor].default.background
+        ? theme.interactive[interactiveColor].default.background
         : modeData.visibleBorder
         ? textColor
         : 'transparent';
