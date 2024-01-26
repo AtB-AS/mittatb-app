@@ -21,7 +21,15 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane ios update_devices
 ```
 
-Update ad hoc devices
+Update new devices and provisioning profiles
+
+### ios remove_use_of_beacons
+
+```sh
+[bundle exec] fastlane ios remove_use_of_beacons
+```
+
+Removes the use of beacons from the app
 
 ### ios generate_new_certificates
 
