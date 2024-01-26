@@ -89,13 +89,16 @@ export const EstimatedCallItem = memo(
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
-        accessible={true}
-        accessibilityLabel={a11yLabel}
-        accessibilityHint={a11yHint}
+        accessible={false}
       >
         <View style={styles.container} testID={testID}>
-          <View style={styles.estimatedCallItem}>
-            <View style={styles.transportInfo}>
+          <View
+            accessible={true}
+            style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}
+            accessibilityLabel={a11yLabel}
+            accessibilityHint={a11yHint}
+          >
+            <View style={styles.transportInfo} accessible={false}>
               <LineChip departure={departure} mode={mode} testID={testID} />
               <ThemeText
                 type={
@@ -108,16 +111,20 @@ export const EstimatedCallItem = memo(
                 {lineName}
               </ThemeText>
             </View>
-            {mode !== 'Favourite' && <DepartureTime departure={departure} />}
-            {mode !== 'Map' && (
-              <FavouriteDepartureToggle
-                existingFavorite={existingFavorite}
-                onMarkFavourite={() =>
-                  onPressFavorite(departure, existingFavorite)
-                }
-              />
+            {mode !== 'Favourite' && (
+              <DepartureTime accessible={false} departure={departure} />
             )}
           </View>
+
+          {mode !== 'Map' && (
+            <FavouriteDepartureToggle
+              existingFavorite={existingFavorite}
+              toggleFavouriteAccessibilityLabel="Favorite"
+              onMarkFavourite={() =>
+                onPressFavorite(departure, existingFavorite)
+              }
+            />
+          )}
         </View>
       </GenericClickableSectionItem>
     );
@@ -156,13 +163,19 @@ export const EstimatedCallItem = memo(
   },
 );
 
-const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
+const DepartureTime = ({
+  departure,
+  accessible,
+}: {
+  departure: EstimatedCall;
+  accessible?: boolean;
+}) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {themeName} = useTheme();
 
   return (
-    <View>
+    <View accessible={accessible}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         {departure.realtime && !departure.cancellation && (
           <ThemeIcon
@@ -310,11 +323,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-  },
-  estimatedCallItem: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
   },
   transportInfo: {
     flexDirection: 'row',
