@@ -6,6 +6,7 @@ import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHisto
 import {useTimeContextState} from '@atb/time';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {ScrollContainer} from '@atb/fare-contracts/components/ScrollContainer';
 
 export const Profile_TicketHistoryScreen: React.FC = () => {
   const {
@@ -32,21 +33,24 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
         <ScreenHeading ref={focusRef} text={t(TicketHistoryTexts.header)} />
       )}
     >
-      <FareContractAndReservationsList
-        fareContracts={expiredFareContracts}
-        reservations={rejectedReservations}
+      <ScrollContainer
         isRefreshing={isRefreshingFareContracts}
         refresh={resubscribeFirestoreListeners}
-        now={serverNow}
-        emptyStateTitleText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .emptyTicketHistoryTitle,
-        )}
-        emptyStateDetailsText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .emptyTicketHistoryDetails,
-        )}
-      />
+      >
+        <FareContractAndReservationsList
+          fareContracts={expiredFareContracts}
+          reservations={rejectedReservations}
+          now={serverNow}
+          emptyStateTitleText={t(
+            TicketingTexts.activeFareProductsAndReservationsTab
+              .emptyTicketHistoryTitle,
+          )}
+          emptyStateDetailsText={t(
+            TicketingTexts.activeFareProductsAndReservationsTab
+              .emptyTicketHistoryDetails,
+          )}
+        />
+      </ScrollContainer>
     </FullScreenView>
   );
 };

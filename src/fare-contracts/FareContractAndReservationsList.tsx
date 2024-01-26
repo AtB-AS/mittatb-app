@@ -1,26 +1,24 @@
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
-import {StyleSheet} from '@atb/theme';
 import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useMemo} from 'react';
-import {View} from 'react-native';
 import {useAnalytics} from '@atb/analytics';
-import {TicketTilted} from '@atb/assets/svg/color/images';
+import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
-import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
+
+export type EmptyStateMode = 'expired' | 'sent';
 
 type Props = {
   reservations?: Reservation[];
   fareContracts?: FareContract[];
-  isRefreshing: boolean;
-  refresh: () => void;
   now: number;
   travelCard?: TravelCard;
   showTokenInfo?: boolean;
+  emptyStateMode?: EmptyStateMode;
   emptyStateTitleText: string;
   emptyStateDetailsText: string;
 };
@@ -28,14 +26,12 @@ type Props = {
 export const FareContractAndReservationsList: React.FC<Props> = ({
   fareContracts,
   reservations,
-  isRefreshing,
-  refresh,
   now,
   showTokenInfo,
+  emptyStateMode = 'expired',
   emptyStateTitleText,
   emptyStateDetailsText,
 }) => {
-  const styles = useStyles();
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalytics();
 
@@ -46,50 +42,47 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   }, [reservations, fareContracts]);
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
-        }
-      >
-        {showTokenInfo && (
-          <TravelTokenBox
-            showIfThisDevice={false}
-            interactiveColor="interactive_2"
-          />
-        )}
-        {!fareContractsAndReservationsSorted.length && (
-          <EmptyState
-            title={emptyStateTitleText}
-            details={emptyStateDetailsText}
-            illustrationComponent={<TicketTilted height={84} />}
-            testID="fareContracts"
-          />
-        )}
-        {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
-          <FareContractOrReservation
-            now={now}
-            onPressFareContract={() => {
-              analytics.logEvent('Ticketing', 'Ticket details clicked');
-              navigation.navigate({
-                name: 'Root_FareContractDetailsScreen',
-                params: {
-                  orderId: fcOrReservation.orderId,
-                },
-              });
-            }}
-            key={fcOrReservation.orderId}
-            fcOrReservation={fcOrReservation}
-            index={index}
-          />
-        ))}
-      </ScrollView>
-    </View>
+    <>
+      {showTokenInfo && (
+        <TravelTokenBox
+          showIfThisDevice={false}
+          interactiveColor="interactive_2"
+        />
+      )}
+      {!fareContractsAndReservationsSorted.length && (
+        <EmptyState
+          title={emptyStateTitleText}
+          details={emptyStateDetailsText}
+          illustrationComponent={emptyStateImage(emptyStateMode)}
+          testID="fareContracts"
+        />
+      )}
+      {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
+        <FareContractOrReservation
+          now={now}
+          onPressFareContract={() => {
+            analytics.logEvent('Ticketing', 'Ticket details clicked');
+            navigation.navigate({
+              name: 'Root_FareContractDetailsScreen',
+              params: {
+                orderId: fcOrReservation.orderId,
+              },
+            });
+          }}
+          key={fcOrReservation.orderId}
+          fcOrReservation={fcOrReservation}
+          index={index}
+        />
+      ))}
+    </>
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flex: 1},
-  scrollView: {flex: 1, padding: theme.spacings.medium},
-}));
+const emptyStateImage = (emptyStateMode: EmptyStateMode) => {
+  switch (emptyStateMode) {
+    case 'expired':
+      return <TicketTilted height={84} />;
+    case 'sent':
+      return <HoldingHands height={84} />;
+  }
+};
