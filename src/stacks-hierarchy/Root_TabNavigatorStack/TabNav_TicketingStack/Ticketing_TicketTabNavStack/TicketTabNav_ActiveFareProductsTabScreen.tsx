@@ -112,7 +112,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   content: {
     flex: 1,
-    padding: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
 }));
