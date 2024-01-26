@@ -18,7 +18,7 @@ export function FullScreenFooter({
   const containerStyle = {...styles.container, backgroundColor: footerColor};
 
   return avoidKeyboard ? (
-    <KeyboardAvoidingView behavior="height" style={containerStyle}>
+    <KeyboardAvoidingView behavior="padding" style={containerStyle}>
       {children}
     </KeyboardAvoidingView>
   ) : (
