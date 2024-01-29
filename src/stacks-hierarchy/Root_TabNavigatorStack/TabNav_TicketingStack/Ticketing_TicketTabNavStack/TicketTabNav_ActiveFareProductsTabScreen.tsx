@@ -1,7 +1,8 @@
 import {StyleSheet} from '@atb/theme';
 import {
   filterAndSortActiveOrCanBeUsedFareContracts,
-  filterExpiredFareContracts,
+  filterMyExpiredFareContracts,
+  filterSentFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
 import React from 'react';
@@ -14,6 +15,7 @@ import {LinkSectionItem, Section} from '@atb/components/sections';
 import Ticketing from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
+import {useAuthState} from '@atb/auth';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_ActiveFareProductsTabScreen'>;
@@ -28,20 +30,28 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
     resubscribeFirestoreListeners,
   } = useTicketingState();
   const {serverNow} = useTimeContextState();
+  const {abtCustomerId} = useAuthState();
   const analytics = useAnalytics();
 
-  const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
-    fareContracts,
-    serverNow,
-  );
+  const activeFareContracts = abtCustomerId
+    ? filterAndSortActiveOrCanBeUsedFareContracts(
+        fareContracts,
+        serverNow,
+        abtCustomerId,
+      )
+    : [];
 
   const styles = useStyles();
   const {t} = useTranslation();
 
   const hasExpiredFareContracts =
-    filterExpiredFareContracts(fareContracts, serverNow).length > 0;
+    abtCustomerId &&
+    filterMyExpiredFareContracts(fareContracts, serverNow, abtCustomerId)
+      .length > 0;
 
-  const hasSentFareContracts = false; // TODO replace with proper checking
+  const hasSentFareContracts =
+    abtCustomerId &&
+    filterSentFareContracts(fareContracts, abtCustomerId).length > 0;
 
   return (
     <View style={styles.container}>

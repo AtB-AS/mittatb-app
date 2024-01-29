@@ -77,6 +77,8 @@ export type FareContract = {
   version: string;
   id: string;
   orderId: string;
+  purchasedBy: string;
+  customerAccountId: string;
   state: FareContractState;
   minimumSecurityLevel: number;
   travelRights: TravelRight[];

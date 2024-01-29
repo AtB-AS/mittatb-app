@@ -1,10 +1,12 @@
+import {useAuthState} from '@atb/auth';
 import {ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
-  filterExpiredFareContracts,
+  filterMyExpiredFareContracts,
+  filterSentFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
@@ -29,6 +31,8 @@ export const TicketHistoryScreenComponent = ({mode}: Props) => {
   } = useTicketingState();
 
   const {serverNow} = useTimeContextState();
+  const {abtCustomerId} = useAuthState();
+
   const {t} = useTranslation();
   const styles = useStyles();
 
@@ -81,12 +85,17 @@ const displayFareContracts = (
   mode: Mode,
   fareContracts: FareContract[],
   serverNow: number,
+  abtCustomerId?: string,
 ) => {
   switch (mode) {
     case 'expired':
-      return filterExpiredFareContracts(fareContracts, serverNow);
-    case 'sent': // TODO replace with sent fare contracts
-      return filterExpiredFareContracts(fareContracts, serverNow);
+      return abtCustomerId
+        ? filterMyExpiredFareContracts(fareContracts, serverNow, abtCustomerId)
+        : [];
+    case 'sent':
+      return abtCustomerId
+        ? filterSentFareContracts(fareContracts, abtCustomerId)
+        : [];
   }
 };
 
