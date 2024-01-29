@@ -27,6 +27,7 @@ import {Profile_EditProfileScreen} from '@atb/stacks-hierarchy/Root_TabNavigator
 import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 import {Profile_NotificationsScreen} from './Profile_NotificationsScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
+import {Profile_TicketHistorySelectionScreen} from './Profile_TicketHistorySelectionScreen';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -42,6 +43,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_TicketHistoryScreen"
         component={Profile_TicketHistoryScreen}
+      />
+      <Stack.Screen
+        name="Profile_TicketHistorySelectionScreen"
+        component={Profile_TicketHistorySelectionScreen}
       />
       <Stack.Screen
         name="Profile_PaymentOptionsScreen"
