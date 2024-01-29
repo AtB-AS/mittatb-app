@@ -1,7 +1,8 @@
 import {StyleSheet} from '@atb/theme';
 import {
   filterAndSortActiveOrCanBeUsedFareContracts,
-  filterExpiredFareContracts,
+  filterMyExpiredFareContracts,
+  filterSentFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
 import React from 'react';
@@ -28,20 +29,28 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
     resubscribeFirestoreListeners,
   } = useTicketingState();
   const {serverNow} = useTimeContextState();
+  const {abtCustomerId} = useAuthState();
   const analytics = useAnalytics();
 
-  const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
-    fareContracts,
-    serverNow,
-  );
+  const activeFareContracts = abtCustomerId
+    ? filterAndSortActiveOrCanBeUsedFareContracts(
+        fareContracts,
+        serverNow,
+        abtCustomerId,
+      )
+    : [];
 
   const styles = useStyles();
   const {t} = useTranslation();
 
   const hasExpiredFareContracts =
-    filterExpiredFareContracts(fareContracts, serverNow).length > 0;
+    abtCustomerId &&
+    filterMyExpiredFareContracts(fareContracts, serverNow, abtCustomerId)
+      .length > 0;
 
-  const hasSentFareContracts = false; // TODO replace with proper checking
+  const hasSentFareContracts =
+    abtCustomerId &&
+    filterSentFareContracts(fareContracts, abtCustomerId).length > 0;
 
   return (
     <View style={styles.container}>

@@ -50,6 +50,16 @@ function isOrWillBeActivatedFareContract(f: FareContract): boolean {
   );
 }
 
+function isMyFareContract(f: FareContract, currentUserId: string): boolean {
+  return f.customerAccountId === currentUserId;
+}
+
+function isSentFareContract(f: FareContract, currentUserId: string): boolean {
+  return (
+    f.purchasedBy === currentUserId && f.customerAccountId !== currentUserId
+  );
+}
+
 function isValidPreActivatedTravelRight(
   travelRight: PreActivatedTravelRight,
   now: number,
@@ -166,8 +176,10 @@ export const filterActiveOrCanBeUsedFareContracts = (
 export const filterAndSortActiveOrCanBeUsedFareContracts = (
   fareContracts: FareContract[],
   now: number,
+  currentUserId: string,
 ) => {
-  return filterActiveOrCanBeUsedFareContracts(fareContracts, now).sort(
+  const myFareContract = filterMyFareContracts(fareContracts, currentUserId);
+  return filterActiveOrCanBeUsedFareContracts(myFareContract, now).sort(
     function (a, b): number {
       const isA = isValidRightNowFareContract(a, now);
       const isB = isValidRightNowFareContract(b, now);
@@ -188,6 +200,35 @@ export const filterExpiredFareContracts = (
   const isExpiredOrRefunded = (f: FareContract) =>
     !isActiveFareContractNowOrCanBeUsed(f, now) || isRefunded(f);
   return fareContracts.filter(isExpiredOrRefunded);
+};
+
+export const filterMyExpiredFareContracts = (
+  fareContracts: FareContract[],
+  now: number,
+  currentUserId: string,
+) => {
+  return filterExpiredFareContracts(
+    filterMyFareContracts(fareContracts, currentUserId),
+    now,
+  );
+};
+
+export const filterSentFareContracts = (
+  fareContracts: FareContract[],
+  currentUserId: string,
+) => {
+  const sentTicketFilter = (f: FareContract) =>
+    isSentFareContract(f, currentUserId);
+  return fareContracts.filter(sentTicketFilter);
+};
+
+export const filterMyFareContracts = (
+  fareContracts: FareContract[],
+  currentUserId: string,
+) => {
+  const myTicketFilter = (f: FareContract) =>
+    isMyFareContract(f, currentUserId);
+  return fareContracts.filter(myTicketFilter);
 };
 
 export const filterRejectedReservations = (reservations: Reservation[]) =>
