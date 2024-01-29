@@ -3,7 +3,7 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {OnboardingTexts, useTranslation} from '@atb/translations';
+import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
@@ -11,7 +11,7 @@ import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const Onboarding_AlsoGoodToKnowScreen = () => {
+export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
@@ -30,11 +30,11 @@ export const Onboarding_AlsoGoodToKnowScreen = () => {
           color={themeColor}
           style={styles.header}
         >
-          {t(OnboardingTexts.alsoGoodToKnow.title)}
+          {t(ExtendedOnboardingTexts.alsoGoodToKnow.title)}
         </ThemeText>
         <Onboarding5 width={windowWidth} height={windowWidth * (4 / 5)} />
         <ThemeText style={styles.description} color={themeColor}>
-          {t(OnboardingTexts.alsoGoodToKnow.description)}
+          {t(ExtendedOnboardingTexts.alsoGoodToKnow.description)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
@@ -42,9 +42,9 @@ export const Onboarding_AlsoGoodToKnowScreen = () => {
           interactiveColor="interactive_0"
           onPress={() => {
             completeExtendedOnboarding();
-            continueFromOnboardingScreen('Root_OnboardingStack');
+            continueFromOnboardingScreen('Root_ExtendedOnboardingStack');
           }}
-          text={t(OnboardingTexts.alsoGoodToKnow.mainButton)}
+          text={t(ExtendedOnboardingTexts.alsoGoodToKnow.mainButton)}
           testID="nextButtonAlsoGoodToKnowOnboarding"
         />
       </View>

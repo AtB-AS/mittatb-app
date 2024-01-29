@@ -12,7 +12,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type OnboardingFullScreenViewProps = PropsWithChildren<{
+export type ExtendedOnboardingFullScreenViewProps = PropsWithChildren<{
   footerButton: ButtonProps;
   secondaryFooterButton?: ButtonProps;
   fullScreenHeaderProps?: ScreenHeaderProps;
@@ -20,14 +20,14 @@ export type OnboardingFullScreenViewProps = PropsWithChildren<{
   testID?: string;
 }>;
 
-export const OnboardingFullScreenView = ({
+export const ExtendedOnboardingFullScreenView = ({
   children,
   footerButton,
   secondaryFooterButton,
   fullScreenHeaderProps,
   footerDescription,
   testID,
-}: OnboardingFullScreenViewProps) => {
+}: ExtendedOnboardingFullScreenViewProps) => {
   const styles = useStyles();
 
   return (

@@ -5,7 +5,7 @@ import NotificationPermissionTexts from '@atb/translations/screens/NotificationP
 import {PushNotification} from '@atb/assets/svg/color/images';
 
 import {useAppState} from '@atb/AppContext';
-import {OnboardingScreenComponent} from '@atb/onboarding-screen';
+import {ExtendedOnboardingScreenComponent} from '@atb/extended-onboarding-screen';
 import {useNotifications} from '@atb/notifications';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 
@@ -27,7 +27,7 @@ export const Root_NotificationPermissionScreen = () => {
   ]);
 
   return (
-    <OnboardingScreenComponent
+    <ExtendedOnboardingScreenComponent
       illustration={<PushNotification height={220} />}
       title={t(NotificationPermissionTexts.title)}
       description={t(NotificationPermissionTexts.description)}

@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {StaticColorByType} from '@atb/theme/colors';
-import {OnboardingFullScreenView} from '@atb/onboarding-screen';
+import {ExtendedOnboardingFullScreenView} from '@atb/extended-onboarding-screen';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type DescriptionLink = {
@@ -14,7 +14,7 @@ type DescriptionLink = {
   onPress: () => void;
 };
 
-type OnboardingScreenComponentParams = {
+type ExtendedOnboardingScreenComponentParams = {
   illustration: JSX.Element;
   title: string;
   description: string;
@@ -27,7 +27,7 @@ type OnboardingScreenComponentParams = {
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const OnboardingScreenComponent = ({
+export const ExtendedOnboardingScreenComponent = ({
   illustration,
   title,
   description,
@@ -36,12 +36,12 @@ export const OnboardingScreenComponent = ({
   buttonText,
   buttonOnPress,
   testID,
-}: OnboardingScreenComponentParams) => {
+}: ExtendedOnboardingScreenComponentParams) => {
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
 
   return (
-    <OnboardingFullScreenView
+    <ExtendedOnboardingFullScreenView
       footerButton={{
         onPress: buttonOnPress,
         text: buttonText,
@@ -82,7 +82,7 @@ export const OnboardingScreenComponent = ({
           </ThemeText>
         </PressableOpacity>
       )}
-    </OnboardingFullScreenView>
+    </ExtendedOnboardingFullScreenView>
   );
 };
 

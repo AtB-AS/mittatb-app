@@ -65,7 +65,7 @@ export const useOnboardingFlow = (
         {
           shouldShow:
             shouldShowExtendedOnboarding && !assumeUserCreationOnboarded,
-          screenName: 'Root_OnboardingStack',
+          screenName: 'Root_ExtendedOnboardingStack',
         },
         {
           shouldShow:
