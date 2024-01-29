@@ -82,7 +82,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
               .noActiveTicketsDetails,
           )}
         />
-        <Section style={styles.content}>
+        <Section style={styles.additionalButtons}>
           {hasExpiredFareContracts && (
             <LinkSectionItem
               text={t(Ticketing.expiredTickets.title)}
@@ -124,8 +124,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_1.background,
     padding: theme.spacings.medium,
   },
-  content: {
+  additionalButtons: {
     flex: 1,
     marginBottom: theme.spacings.medium,
+    paddingBottom: theme.spacings.medium,
   },
 }));
