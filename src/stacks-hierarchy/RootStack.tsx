@@ -174,7 +174,7 @@ export const RootStack = () => {
         <LoadingScreenBoundary>
           <NavigationContainer<RootStackParamList>
             onStateChange={trackNavigation}
-            initialState={getInitialNavigationContainerState(true)}
+            initialState={getInitialNavigationContainerState()}
             ref={navRef}
             theme={ReactNavigationTheme}
             fallback={<LoadingScreen />}
