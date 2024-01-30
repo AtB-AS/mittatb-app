@@ -81,9 +81,7 @@ platform :ios do
     unless beacons_enabled
       languages = ['nb', 'en', 'nn']
       keys = [
-        'NSBluetoothAlwaysUsageDescription', 'NSBluetoothPeripheralUsageDescription',
-        'NSLocationAlwaysAndWhenInUseUsageDescription', 'NSLocationAlwaysUsageDescription',
-        'NSMotionUsageDescription'
+        'NSLocationAlwaysUsageDescription'
       ]
 
       update_info_plist(
