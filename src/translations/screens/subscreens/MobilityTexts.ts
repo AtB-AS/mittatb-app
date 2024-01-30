@@ -82,6 +82,11 @@ export const MobilityTexts = {
       `approximately ${range} range`,
       `omlag ${range} rekkjevidde`,
     ),
+  includedWithTheTicket: _(
+    'Inkludert i billetten',
+    'Included with the ticket',
+    'Inkludert i billetten',
+  ),
 };
 
 export const ScooterTexts = {

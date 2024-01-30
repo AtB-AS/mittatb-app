@@ -15,8 +15,8 @@ import {useFirestoreConfiguration} from '@atb/configuration';
 import {useTipsAndInformationEnabled} from '@atb/tips-and-information/use-tips-and-information-enabled';
 import {TipsAndInformation} from '@atb/tips-and-information';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-// import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
-// import {BenefitImage} from '@atb/mobility/components/BenefitImage';
+import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
+import {MobilitySingleBenefitInfoSectionItem} from '@atb/mobility/components/MobilitySingleBenefitInfoSectionItem';
 
 type Props = RootStackScreenProps<'Root_TicketInformationScreen'>;
 
@@ -26,9 +26,9 @@ export const Root_TicketInformationScreen = (props: Props) => {
   const {preassignedFareProducts, fareProductTypeConfigs} =
     useFirestoreConfiguration();
   const showTipsAndInformation = useTipsAndInformationEnabled();
-  // const {isLoading, benefits} = useOperatorBenefitsForFareProduct(
-  //   props.route.params.preassignedFareProductId,
-  // );
+  const {benefits} = useOperatorBenefitsForFareProduct(
+    props.route.params.preassignedFareProductId,
+  );
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (f) => f.type === props.route.params.fareProductTypeConfigType,
@@ -77,24 +77,9 @@ export const Root_TicketInformationScreen = (props: Props) => {
                   )}
                 </ThemeText>
               </GenericSectionItem>
-              {/*{!isLoading &&*/}
-              {/*  benefits.length > 0 &&*/}
-              {/*  benefits.map((b) => (*/}
-              {/*    <GenericSectionItem key={b.formFactor + b.ticketDescription}>*/}
-              {/*      <View style={styles.mobilityBenefit}>*/}
-              {/*        <BenefitImage*/}
-              {/*          formFactor={b.formFactor}*/}
-              {/*          eligible={false}*/}
-              {/*        />*/}
-              {/*        <ThemeText*/}
-              {/*          type="body__secondary"*/}
-              {/*          style={styles.mobilityBenefitText}*/}
-              {/*        >*/}
-              {/*          {getTextForLanguage(b.ticketDescription, language)}*/}
-              {/*        </ThemeText>*/}
-              {/*      </View>*/}
-              {/*    </GenericSectionItem>*/}
-              {/*  ))}*/}
+              {benefits?.map((b) => (
+                <MobilitySingleBenefitInfoSectionItem benefit={b} key={b.id} />
+              ))}
             </Section>
           </>
         )}
@@ -127,14 +112,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: theme.spacings.small,
-      flexShrink: 1,
-    },
-    mobilityBenefit: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      columnGap: theme.spacings.medium,
-    },
-    mobilityBenefitText: {
       flexShrink: 1,
     },
   };

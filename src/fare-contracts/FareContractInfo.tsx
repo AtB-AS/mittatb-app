@@ -38,7 +38,6 @@ import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {BundledMobilityBenefitsInfo} from '@atb/fare-contracts/components/BundledMobilityBenefitsInfo';
 
 export type FareContractInfoProps = {
   travelRight: PreActivatedTravelRight;
@@ -152,10 +151,6 @@ export const FareContractInfoDetails = (
         </View>
         {isValidFareContract(status) && <InspectionSymbol {...props} />}
       </View>
-      <BundledMobilityBenefitsInfo
-        fareProductId={preassignedFareProduct?.id}
-        style={{marginTop: 12}}
-      />
     </View>
   );
 };

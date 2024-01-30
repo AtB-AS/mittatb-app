@@ -21,6 +21,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token';
+import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
 
 type Props = {
   fareContractState: FareContractState;
@@ -109,6 +110,9 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           preassignedFareProduct={preassignedFareProduct}
         />
       </GenericSectionItem>
+      <MobilityBenefitsInfoSectionItem
+        fareProductId={preassignedFareProduct?.id}
+      />
       {!hideDetails && (
         <LinkSectionItem
           text={t(
