@@ -24,7 +24,6 @@ export const MobilityBenefitsInfoSectionItem = ({
   const {topContainer} = useSectionItem(props);
   const {t, language} = useTranslation();
   const styles = useStyles();
-  const fontScale = useFontScale();
   if (status !== 'success') return null;
   if (!benefits?.length) return null;
 
