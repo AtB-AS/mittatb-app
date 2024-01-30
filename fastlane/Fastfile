@@ -81,9 +81,7 @@ platform :ios do
     unless beacons_enabled
       languages = ['nb', 'en', 'nn']
       keys = [
-        'NSBluetoothAlwaysUsageDescription', 'NSBluetoothPeripheralUsageDescription',
-        'NSLocationAlwaysAndWhenInUseUsageDescription', 'NSLocationAlwaysUsageDescription',
-        'NSMotionUsageDescription'
+        'NSLocationAlwaysUsageDescription'
       ]
 
       update_info_plist(
@@ -103,10 +101,28 @@ platform :ios do
         file_path = "../ios/#{language}.lproj/InfoPlist.strings"
         lines = File.readlines(file_path)
 
-        updated_lines = lines.reject { |line| keys.any? { |key| line.start_with?("\"#{key}\"") } }
+        lines_hash = {}
+        lines.each do |line|
+          match = line.match(/^"(.*?)"\s*=\s*"(.*?)";$/)
+          if match
+            key = match[1]
+            value = match[2]
+            lines_hash[key] = value
+          end
+        end
 
-        File.open(file_path, 'w') do |file|
-          file.puts(updated_lines)
+        # Apple requires that the key NSLocationAlwaysAndWhenInUseUsageDescription is present even if the app only uses when in use
+        # because some of the libraries we use require always permission even if we don't use it.
+        # If NSLocationAlwaysAndWhenInUseUsageDescription is present it takes precedence over NSLocationWhenInUseUsageDescription
+        # so to avoid presenting the wrong text to the user we copy the value from NSLocationWhenInUseUsageDescription to NSLocationAlwaysAndWhenInUseUsageDescription
+        # even if we don't use always permission.
+        lines_hash["NSLocationAlwaysAndWhenInUseUsageDescription"] = lines_hash["NSLocationWhenInUseUsageDescription"]
+
+        # Save key-value pairs in a file
+        File.open(file_path, "w") do |file|
+          lines_hash.each do |key, value|
+            file.puts "\"#{key}\" = \"#{value}\";"
+          end
         end
       end
     end
