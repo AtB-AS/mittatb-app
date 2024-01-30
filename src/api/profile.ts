@@ -3,7 +3,6 @@ import Bugsnag from '@bugsnag/react-native';
 import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
 import {getAxiosErrorMetadata} from './utils';
-import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of/types';
 
 const profileEndpoint = '/profile/v1';
 
