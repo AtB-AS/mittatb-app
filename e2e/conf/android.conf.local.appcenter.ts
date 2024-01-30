@@ -11,7 +11,7 @@ export const config: WebdriverIO.Config = {
         'appium',
         {
           //args: {},
-          command: 'appium',
+          //command: 'appium',
         },
       ],
     ],
