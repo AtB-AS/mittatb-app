@@ -13,7 +13,7 @@ import {useTimeContextState} from '@atb/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import Ticketing from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
-import {ScrollContainer} from '@atb/fare-contracts/components/ScrollContainer';
+import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_ActiveFareProductsTabScreen'>;
@@ -45,15 +45,19 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 
   return (
     <View style={styles.container}>
-      <ScrollContainer
-        isRefreshing={isRefreshingFareContracts}
-        refresh={() => {
-          resubscribeFirestoreListeners();
-          analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
-            reservationsCount: reservations.length,
-            activeFareContractsCount: activeFareContracts.length,
-          });
-        }}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshingFareContracts}
+            onRefresh={() => {
+              resubscribeFirestoreListeners();
+              analytics.logEvent('Ticketing', 'Pull to refresh tickets', {
+                reservationsCount: reservations.length,
+                activeFareContractsCount: activeFareContracts.length,
+              });
+            }}
+          />
+        }
       >
         <FareContractAndReservationsList
           reservations={reservations}
@@ -100,7 +104,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
             />
           )}
         </Section>
-      </ScrollContainer>
+      </ScrollView>
     </View>
   );
 };

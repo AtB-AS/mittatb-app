@@ -6,7 +6,7 @@ import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHisto
 import {useTimeContextState} from '@atb/time';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
-import {ScrollContainer} from '@atb/fare-contracts/components/ScrollContainer';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 export const Profile_TicketHistoryScreen: React.FC = () => {
   const {
@@ -32,25 +32,26 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={t(TicketHistoryTexts.header)} />
       )}
-    >
-      <ScrollContainer
-        isRefreshing={isRefreshingFareContracts}
-        refresh={resubscribeFirestoreListeners}
-      >
-        <FareContractAndReservationsList
-          fareContracts={expiredFareContracts}
-          reservations={rejectedReservations}
-          now={serverNow}
-          emptyStateTitleText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
-              .emptyTicketHistoryTitle,
-          )}
-          emptyStateDetailsText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
-              .emptyTicketHistoryDetails,
-          )}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshingFareContracts}
+          onRefresh={resubscribeFirestoreListeners}
         />
-      </ScrollContainer>
+      }
+    >
+      <FareContractAndReservationsList
+        fareContracts={expiredFareContracts}
+        reservations={rejectedReservations}
+        now={serverNow}
+        emptyStateTitleText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .emptyTicketHistoryTitle,
+        )}
+        emptyStateDetailsText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .emptyTicketHistoryDetails,
+        )}
+      />
     </FullScreenView>
   );
 };

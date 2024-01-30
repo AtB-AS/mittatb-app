@@ -1,7 +1,6 @@
 import {ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
-import {ScrollContainer} from '@atb/fare-contracts/components/ScrollContainer';
 import {
   FareContract,
   filterExpiredFareContracts,
@@ -13,6 +12,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 type Mode = 'expired' | 'sent';
 
@@ -39,26 +39,27 @@ export const TicketHistoryScreenComponent = ({mode}: Props) => {
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={getTitle(mode, t)} />
       )}
-    >
-      <ScrollContainer
-        isRefreshing={isRefreshingFareContracts}
-        refresh={resubscribeFirestoreListeners}
-      >
-        <FareContractAndReservationsList
-          fareContracts={displayFareContracts(mode, fareContracts, serverNow)}
-          reservations={rejectedReservations}
-          now={serverNow}
-          emptyStateMode={mode}
-          emptyStateTitleText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
-              .emptyTicketHistoryTitle,
-          )}
-          emptyStateDetailsText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
-              .emptyTicketHistoryDetails,
-          )}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshingFareContracts}
+          onRefresh={resubscribeFirestoreListeners}
         />
-      </ScrollContainer>
+      }
+    >
+      <FareContractAndReservationsList
+        fareContracts={displayFareContracts(mode, fareContracts, serverNow)}
+        reservations={rejectedReservations}
+        now={serverNow}
+        emptyStateMode={mode}
+        emptyStateTitleText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .emptyTicketHistoryTitle,
+        )}
+        emptyStateDetailsText={t(
+          TicketingTexts.activeFareProductsAndReservationsTab
+            .emptyTicketHistoryDetails,
+        )}
+      />
     </FullScreenView>
   );
 };
