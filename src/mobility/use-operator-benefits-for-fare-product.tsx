@@ -31,12 +31,3 @@ export const useOperatorBenefitsForFareProduct = (
 
   return {status, benefits};
 };
-
-// function getEnumValue(str: string): FormFactor {
-//   // Form factors from config and enum keys have different case.
-//   // Makes converting the config strings to enum values a bit more cumbersome
-//   const enumKey = Object.keys(FormFactor).find(
-//     (key) => key.toLowerCase() === str.toLowerCase(),
-//   ) as keyof typeof FormFactor | undefined;
-//   return FormFactor[enumKey ?? 'Other'];
-// }
