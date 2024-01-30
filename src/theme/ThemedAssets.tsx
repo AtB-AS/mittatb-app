@@ -55,10 +55,10 @@ export const ThemedScooter = () => {
   return <Scooter />;
 };
 
-export const ThemedCityBike = ({...props}: SvgProps) => {
+export const ThemedCityBike = () => {
   const {themeName} = useTheme();
   const CityBike = themeName === 'dark' ? CityBikeDark : CityBikeLight;
-  return <CityBike {...props}/>;
+  return <CityBike />;
 };
 
 export const ThemedParkAndRide = () => {
