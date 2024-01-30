@@ -34,7 +34,7 @@ export const config: WebdriverIO.Config = {
         'appium:appWaitActivity': 'no.mittatb.MainActivity',
         'appium:app': `${
           process.env.APP_PATH || 'EMPTY_ENV_APP_PATH'
-        }/apk/app-staging.apk`,
+        }/e2e/apk/app-staging.apk`,
 
         //'appium:appWaitForLaunch': true,
         //'appium:skipDeviceInitialization': true,
