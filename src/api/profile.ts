@@ -2,8 +2,6 @@ import {CustomerProfile, CustomerProfileUpdate} from '@atb/api/types/profile';
 import Bugsnag from '@bugsnag/react-native';
 import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
-import {getAxiosErrorMetadata} from './utils';
-import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of/types';
 
 const profileEndpoint = '/profile/v1';
 
@@ -44,15 +42,15 @@ export async function deleteProfile(opts?: AxiosRequestConfig) {
  * Function to get customer account ID based on phone number
  *
  * @param phoneNumber phone number with prefix
- * @returns {string | GetAccountByPhoneErrorCode}
+ * @returns {string | undefined}
  *  - customer_account_id as string if successful,
- *  - "no_associated_account" if account ID not found,
+ *  - undefined if account ID not found,
  *  - "unknown_error" if there's other error
  *
  */
 export const getCustomerAccountId = async (
   phoneNumber: string,
-): Promise<string | GetAccountByPhoneErrorCode> => {
+): Promise<string | undefined> => {
   return await client
     .post(
       `${profileEndpoint}/search`,
@@ -64,12 +62,7 @@ export const getCustomerAccountId = async (
       },
     )
     .then((response) => response.data.customerAccountId as string)
-    .catch((error) => {
-      const metadata = getAxiosErrorMetadata(error);
-      const responseStatus = metadata.responseStatus;
-      if (responseStatus === 404 || responseStatus === 400) {
-        return 'no_associated_account';
-      }
-      return 'unknown_error';
+    .catch(() => {
+      return undefined;
     });
 };

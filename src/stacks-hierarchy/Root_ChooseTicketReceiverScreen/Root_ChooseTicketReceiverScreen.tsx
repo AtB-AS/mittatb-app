@@ -1,10 +1,13 @@
-import {PhoneInput} from '@atb/components/phone-input';
+import {Button} from '@atb/components/button';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
+import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
+import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of/types';
 import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/use-get-account-id-by-phone-query';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {StyleSheet} from '@atb/theme';
-import {StaticColorByType} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
 import {
   PhoneInputTexts,
   PurchaseOverviewTexts,
@@ -12,7 +15,9 @@ import {
 } from '@atb/translations';
 import {OnBehalfOfTexts} from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
-import {KeyboardAvoidingView, View} from 'react-native';
+import phone from 'phone';
+import {useState} from 'react';
+import {ActivityIndicator, KeyboardAvoidingView, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketReceiverScreen'>;
@@ -27,6 +32,48 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   const focusRef = useFocusOnLoad();
 
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
+
+  const [prefix, setPrefix] = useState('47');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<GetAccountByPhoneErrorCode>();
+  const {themeName} = useTheme();
+
+  const phoneValidationParams = {
+    strictDetection: true,
+    validateMobilePrefix: false,
+  };
+
+  const phoneValidation = phone(
+    '+' + prefix + phoneNumber,
+    phoneValidationParams,
+  );
+
+  const isValidPhoneNumber = phoneValidation.isValid;
+
+  const onNext = async () => {
+    setIsSubmitting(true);
+    if (!phoneValidation.phoneNumber) {
+      setIsSubmitting(false);
+      setError('invalid_phone');
+      return;
+    }
+
+    const result = await getAccountIdByPhone(phoneValidation.phoneNumber);
+
+    setIsSubmitting(false);
+
+    if (result) {
+      setError(undefined);
+      navigation.navigate('Root_PurchaseConfirmationScreen', {
+        ...params,
+        phoneNumber: phoneValidation.phoneNumber,
+        destinationAccountId: result,
+      });
+    } else {
+      setError('no_associated_account');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -60,19 +107,52 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               {t(OnBehalfOfTexts.chooseReceiver.subtitle)}
             </ThemeText>
           </View>
-          <PhoneInput
-            submitButtonText={t(PurchaseOverviewTexts.summary.button.payment)}
-            submitButtonTestId="toPaymentButton"
-            placeholderText={t(PhoneInputTexts.input.placeholder.sendTicket)}
-            validatePhoneNumber={(number) => getAccountIdByPhone(number)}
-            onPhoneNumberValidatedAction={(number, customerAccountId) => {
-              navigation.navigate('Root_PurchaseConfirmationScreen', {
-                ...params,
-                phoneNumber: number,
-                destinationAccountId: customerAccountId,
-              });
-            }}
-          />
+          <Section>
+            <PhoneInputSectionItem
+              label={t(PhoneInputTexts.input.title)}
+              value={phoneNumber}
+              onChangeText={(text) => {
+                setPhoneNumber(text);
+                setError(undefined);
+              }}
+              prefix={prefix}
+              onChangePrefix={setPrefix}
+              showClear={true}
+              keyboardType="number-pad"
+              placeholder={t(PhoneInputTexts.input.placeholder.sendTicket)}
+              autoFocus={true}
+              textContentType="telephoneNumber"
+            />
+          </Section>
+
+          <View style={styles.buttonView}>
+            {isSubmitting && (
+              <ActivityIndicator
+                style={styles.activityIndicator}
+                size="large"
+                color={getStaticColor(themeName, themeColor).text}
+              />
+            )}
+
+            {error && !isSubmitting && (
+              <MessageInfoBox
+                style={styles.errorMessage}
+                type="error"
+                message={t(PhoneInputTexts.errors[error])}
+              />
+            )}
+
+            {!isSubmitting && (
+              <Button
+                style={styles.submitButton}
+                interactiveColor="interactive_0"
+                onPress={onNext}
+                text={t(PurchaseOverviewTexts.summary.button.payment)}
+                disabled={!isValidPhoneNumber}
+                testID="toPaymentButton"
+              />
+            )}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
