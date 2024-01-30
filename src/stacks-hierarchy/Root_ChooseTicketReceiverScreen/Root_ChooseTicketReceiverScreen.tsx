@@ -36,6 +36,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
   const [prefix, setPrefix] = useState('47');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [error, setError] = useState<GetAccountByPhoneErrorCode>();
   const {themeName} = useTheme();
 
@@ -53,25 +54,30 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
 
   const onNext = async () => {
     setIsSubmitting(true);
+    setError(undefined);
     if (!phoneValidation.phoneNumber) {
       setIsSubmitting(false);
       setError('invalid_phone');
       return;
     }
 
-    const result = await getAccountIdByPhone(phoneValidation.phoneNumber);
+    try {
+      const result = await getAccountIdByPhone(phoneValidation.phoneNumber);
 
-    setIsSubmitting(false);
+      setIsSubmitting(false);
 
-    if (result) {
-      setError(undefined);
-      navigation.navigate('Root_PurchaseConfirmationScreen', {
-        ...params,
-        phoneNumber: phoneValidation.phoneNumber,
-        destinationAccountId: result,
-      });
-    } else {
-      setError('no_associated_account');
+      if (result) {
+        navigation.navigate('Root_PurchaseConfirmationScreen', {
+          ...params,
+          phoneNumber: phoneValidation.phoneNumber,
+          destinationAccountId: result,
+        });
+      } else {
+        setError('no_associated_account');
+      }
+    } catch {
+      setIsSubmitting(false);
+      setError('unknown_error');
     }
   };
 
@@ -122,6 +128,11 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               placeholder={t(PhoneInputTexts.input.placeholder.sendTicket)}
               autoFocus={true}
               textContentType="telephoneNumber"
+              errorText={
+                error !== 'unknown_error'
+                  ? error && t(PhoneInputTexts.errors[error])
+                  : undefined
+              }
             />
           </Section>
 
@@ -134,7 +145,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               />
             )}
 
-            {error && !isSubmitting && (
+            {error === 'unknown_error' && !isSubmitting && (
               <MessageInfoBox
                 style={styles.errorMessage}
                 type="error"
