@@ -120,7 +120,7 @@ export const TicketSummary = () => {
         <View style={styles.upperPart}>
           <View style={styles.travelModeWrapper}>
             <TransportModes
-              iconSize="small"
+              iconSize="xSmall"
               modes={transportModes}
               style={styles.transportModes}
             />

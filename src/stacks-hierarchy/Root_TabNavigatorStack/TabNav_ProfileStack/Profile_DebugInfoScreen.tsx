@@ -69,7 +69,8 @@ export const Profile_DebugInfoScreen = () => {
   const {
     restartMobileTokenOnboarding,
     restartMobileTokenWithoutTravelcardOnboarding,
-    restartOnboarding,
+    restartExtendedOnboarding,
+    restartUserCreationOnboarding,
     restartNotificationPermissionOnboarding,
     restartLocationWhenInUsePermissionOnboarding,
     restartShareTravelHabitsOnboarding,
@@ -196,8 +197,12 @@ export const Profile_DebugInfoScreen = () => {
             }}
           />
           <LinkSectionItem
-            text="Restart onboarding"
-            onPress={restartOnboarding}
+            text="Restart extended onboarding"
+            onPress={restartExtendedOnboarding}
+          />
+          <LinkSectionItem
+            text="Restart user creation onboarding"
+            onPress={restartUserCreationOnboarding}
           />
           <LinkSectionItem
             text="Restart notification onboarding"

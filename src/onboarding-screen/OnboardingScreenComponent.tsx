@@ -45,9 +45,9 @@ export const OnboardingScreenComponent = ({
       footerButton={{
         onPress: buttonOnPress,
         text: buttonText,
-        testID: testID ? `${testID}Button` : 'nextButton',
       }}
       footerDescription={footerDescription}
+      testID={testID ? `${testID}` : 'next'}
     >
       <View style={styles.header}>{illustration}</View>
       <View ref={focusRef} accessible collapsable={false}>

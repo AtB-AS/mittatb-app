@@ -10,15 +10,21 @@ import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
  * @returns {Function} A function that, when called, checks if the onboarding is not completed,
  * completes it if not, and then navigates to the next screen using enterApp.
  */
-export const useCompleteOnboardingAndEnterApp = () => {
-  const {onboarded, completeOnboarding} = useAppState();
+export const useCompleteUserCreationOnboardingAndEnterApp = () => {
+  const {userCreationOnboarded, completeUserCreationOnboarding} = useAppState();
   const enterApp = useEnterApp();
 
   return () => {
-    !onboarded && completeOnboarding();
+    !userCreationOnboarded && completeUserCreationOnboarding();
     enterApp();
   };
 };
+
+export type AfterLoginScreenType =
+  | NextScreenParams<'Root_TabNavigatorStack'>
+  | NextScreenParams<'Root_PurchaseOverviewScreen'>
+  | NextScreenParams<'Root_PurchaseConfirmationScreen'>
+  | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
 
 export type NextScreenParams<T extends keyof RootStackParamList> = {
   screen: T;

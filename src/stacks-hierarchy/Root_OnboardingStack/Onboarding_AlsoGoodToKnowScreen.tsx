@@ -6,19 +6,18 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {OnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
-import {OnboardingScreenProps} from './navigation-types';
+import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type AlsoGoodToKnowScreenProps =
-  OnboardingScreenProps<'Onboarding_AlsoGoodToKnowScreen'>;
-
-export const Onboarding_AlsoGoodToKnowScreen = ({
-  navigation,
-}: AlsoGoodToKnowScreenProps) => {
+export const Onboarding_AlsoGoodToKnowScreen = () => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
+
+  const {continueFromOnboardingScreen} = useOnboardingNavigation();
+  const {completeExtendedOnboarding} = useAppState();
 
   return (
     <ScrollView
@@ -41,7 +40,10 @@ export const Onboarding_AlsoGoodToKnowScreen = ({
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('Root_LoginOptionsScreen', {})}
+          onPress={() => {
+            completeExtendedOnboarding();
+            continueFromOnboardingScreen('Root_OnboardingStack');
+          }}
           text={t(OnboardingTexts.alsoGoodToKnow.mainButton)}
           testID="nextButtonAlsoGoodToKnowOnboarding"
         />

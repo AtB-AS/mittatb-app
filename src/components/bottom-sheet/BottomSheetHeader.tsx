@@ -62,6 +62,7 @@ export const BottomSheetHeader = ({
         accessibilityLabel={t(BottomSheetTexts.closeButton.a11yLabel)}
         accessibilityHint={t(BottomSheetTexts.closeButton.a11yHint)}
         accessibilityRole="button"
+        testID="closeButton"
       >
         <ThemeIcon fill={textColor} svg={Close} size="normal" />
       </TouchableOpacity>

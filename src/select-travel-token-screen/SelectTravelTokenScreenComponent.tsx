@@ -17,7 +17,7 @@ import {
 } from '@atb/translations';
 import {animateNextChange} from '@atb/utils/animation';
 import {flatMap} from '@atb/utils/array';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {RadioGroupSection, Section} from '@atb/components/sections';
@@ -32,6 +32,7 @@ import {useTimeContextState} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
+import {useAppState} from '@atb/AppContext';
 
 type Props = {onAfterSave: () => void};
 
@@ -43,6 +44,11 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {disable_travelcard} = useRemoteConfig();
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
+
+  const {
+    completeMobileTokenOnboarding,
+    completeMobileTokenWithoutTravelcardOnboarding,
+  } = useAppState();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
   const {data} = useTokenToggleDetailsQuery();
@@ -89,6 +95,21 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         fareProductTypeConfig?.configuration.requiresTokenOnMobile === true,
     );
 
+  useEffect(() => {
+    // Whenever a user enters this screen, the onboarding is done.
+    // This useEffect is needed for when onboarding was skipped because of
+    // already being on your own device, but then changed to another device
+    if (disable_travelcard) {
+      completeMobileTokenWithoutTravelcardOnboarding();
+    } else {
+      completeMobileTokenOnboarding();
+    }
+  }, [
+    disable_travelcard,
+    completeMobileTokenWithoutTravelcardOnboarding,
+    completeMobileTokenOnboarding,
+  ]);
+
   const [saveState, setSaveState] = useState({
     saving: false,
     error: false,
@@ -129,7 +150,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             ? t(TravelTokenTexts.toggleToken.titleWithoutTravelcard)
             : t(TravelTokenTexts.toggleToken.title)
         }
-        leftButton={{type: 'back'}}
+        leftButton={{type: 'close'}}
       />
       <ScrollView
         contentContainerStyle={styles.scrollView}

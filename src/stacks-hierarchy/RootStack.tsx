@@ -12,7 +12,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
@@ -45,6 +45,7 @@ import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsSc
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
+import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
@@ -63,6 +64,8 @@ import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInf
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
+import {useQueryClient} from '@tanstack/react-query';
+import {useAuthState} from '@atb/auth';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -75,10 +78,16 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
+  const {userId} = useAuthState();
+  const queryClient = useQueryClient();
   useFlipper(navRef);
 
   useBeaconsState();
   useTestIds();
+
+  useEffect(() => {
+    queryClient.invalidateQueries();
+  }, [userId, queryClient]);
 
   if (isLoading) {
     return null;
@@ -380,6 +389,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_LoginRequiredForFareProductScreen"
                 component={Root_LoginRequiredForFareProductScreen}
+              />
+              <Stack.Screen
+                name="Root_ConfirmationScreen"
+                component={Root_ConfirmationScreen}
               />
               <Stack.Screen
                 name="Root_ActiveTokenOnPhoneRequiredForFareProductScreen"

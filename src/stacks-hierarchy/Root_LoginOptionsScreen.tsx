@@ -24,7 +24,7 @@ import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useAppState} from "@atb/AppContext";
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -46,7 +46,7 @@ export const Root_LoginOptionsScreen = ({
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
-  const {completeOnboarding} = useAppState();
+  const {completeUserCreationOnboarding} = useAppState();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -67,7 +67,7 @@ export const Root_LoginOptionsScreen = ({
   );
 
   const signInUsingCustomToken = async (token: string) => {
-    completeOnboarding();
+    completeUserCreationOnboarding();
     const errorCode = await signInWithCustomToken(token);
     if (errorCode) {
       setError(errorCode);
@@ -174,16 +174,14 @@ export const Root_LoginOptionsScreen = ({
           interactiveColor="interactive_0"
           mode="primary"
           style={styles.loginOptionButton}
-          onPress={() =>
-            navigation.navigate('Root_LoginPhoneInputScreen')
-          }
+          onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
           text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
           accessibilityHint={t(
             LoginTexts.logInOptions.options.phoneAndCode.a11yLabel,
           )}
           disabled={isLoading}
           rightIcon={{svg: ArrowRight}}
-          testID="chooseLoginPhone"
+          testID="chooseLoginPhoneButton"
         />
         <VippsLoginButton
           onPress={authenticateUserByVipps}
@@ -205,7 +203,7 @@ export const Root_LoginOptionsScreen = ({
           )}
           disabled={isLoading}
           rightIcon={{svg: ArrowRight}}
-          testID="useAppAnonymously"
+          testID="useAppAnonymouslyButton"
         />
 
         <View style={styles.termsOfUseContainer}>

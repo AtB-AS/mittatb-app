@@ -47,7 +47,7 @@ export const ValidityHeader: React.FC<{
           fareProductTypeConfig && (
             <TransportModes
               modes={fareProductTypeConfig.transportModes}
-              iconSize="small"
+              iconSize="xSmall"
               style={{flex: 2}}
             />
           )

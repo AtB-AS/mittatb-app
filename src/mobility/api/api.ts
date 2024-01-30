@@ -57,16 +57,11 @@ const FareProductBenefit = z.object({
 export type FareProductBenefitType = z.infer<typeof FareProductBenefit>;
 
 export const getFareProductBenefits = (
-  _: PreassignedFareProductId,
+  productId: PreassignedFareProductId,
 ): Promise<FareProductBenefitType[]> => {
-  // TODO: Uncomment this when https://github.com/AtB-AS/team-platform/issues/487 is resolved
-  // return client
-  //   .get(`/mobilty/fare-product-benefits/${productId}`, {
-  //     authWithIdToken: true,
-  //   })
-  //   .then((response) => FareProductBenefit.array().parse(response.data ?? []));
-  return Promise.resolve([
-    {operator: 'HYR:Operator:Hyre', benefits: ['single-unlock']},
-    {operator: 'YTR:Operator:trondheimbysykkel', benefits: ['free-use']},
-  ]);
+  return client
+    .get(`/mobility/v1/benefits/${productId}`, {
+      authWithIdToken: true,
+    })
+    .then((response) => FareProductBenefit.array().parse(response.data ?? []));
 };

@@ -25,11 +25,7 @@ import {SvgProps} from 'react-native-svg';
 import {TabNavigatorStackParams} from './navigation-types';
 import {TabNav_ProfileStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack';
 import {dictionary, useTranslation} from '@atb/translations';
-import {
-  useNotifications,
-  useOnPushNotificationOpened,
-  usePushNotificationsEnabled,
-} from '@atb/notifications';
+import {useOnPushNotificationOpened} from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
@@ -43,22 +39,11 @@ export const Root_TabNavigatorStack = () => {
   const {startScreen} = usePreferenceItems();
   const lineHeight = theme.typography.body__secondary.fontSize.valueOf();
 
-  const pushNotificationsEnabled = usePushNotificationsEnabled();
-  const {checkPermissions: checkPushNotificationPermissions} =
-    useNotifications();
-  // Check notification status, and register notification language when the app
-  // starts, in case the user have changed language since last time the app was
-  // opened. This useEffect will also trigger when language is changed manually
-  // in the app.
-  useEffect(() => {
-    if (pushNotificationsEnabled) checkPushNotificationPermissions();
-  }, [pushNotificationsEnabled, checkPushNotificationPermissions]);
-
   useOnPushNotificationOpened();
 
   const navigation = useNavigation<RootNavigationProps>();
 
-  const {nextOnboardingScreen} = useOnboardingFlow(true, true); // assumeLoginOnboardingCompleted true to ensure outdated onboarded value not used
+  const {nextOnboardingScreen} = useOnboardingFlow(true, true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
 
   useEffect(() => {

@@ -41,7 +41,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   const styles = useStyles();
 
   const iconStyle =
-    size == 'small'
+    size == 'xSmall'
       ? styles.transportationIconBox_small
       : styles.transportationIconBox;
   const lineNumberElement = lineNumber ? (

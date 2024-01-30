@@ -52,6 +52,7 @@ const getStories = () => {
     "./src/storybook/stories/MessageInfoBox.stories.tsx": require("../src/storybook/stories/MessageInfoBox.stories.tsx"),
     "./src/storybook/stories/MessageInfoText.stories.tsx": require("../src/storybook/stories/MessageInfoText.stories.tsx"),
     "./src/storybook/stories/ThemeText.stories.tsx": require("../src/storybook/stories/ThemeText.stories.tsx"),
+    "./src/storybook/stories/TileWithButton.stories.tsx": require("../src/storybook/stories/TileWithButton.stories"),
   };
 };
 
