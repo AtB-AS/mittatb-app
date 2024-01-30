@@ -113,6 +113,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     travelDate,
     headerLeftButton,
     phoneNumber,
+    destinationAccountId,
   } = params;
 
   const {travellerSelectionMode, zoneSelectionMode} =
@@ -185,6 +186,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         navigation.push('Root_PurchasePaymentWithVippsScreen', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
+          destinationAccountId: destinationAccountId,
         });
       }
     }
@@ -202,6 +204,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
           paymentMethod: option,
+          destinationAccountId: destinationAccountId,
         });
       }
     }
@@ -348,7 +351,11 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
                 {phoneNumber && (
-                  <ThemeText type="body__secondary" color="secondary" style={styles.sendingToText}>
+                  <ThemeText
+                    type="body__secondary"
+                    color="secondary"
+                    style={styles.sendingToText}
+                  >
                     {t(PurchaseConfirmationTexts.sendingTo(phoneNumber))}
                   </ThemeText>
                 )}
@@ -641,7 +648,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
   },
   sendingToText: {
-    marginTop: theme.spacings.xSmall
+    marginTop: theme.spacings.xSmall,
   },
   totalPaymentContainer: {
     flexDirection: 'row',

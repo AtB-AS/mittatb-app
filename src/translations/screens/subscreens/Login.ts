@@ -116,32 +116,11 @@ const LoginTexts = {
       'Log in with a one-time code sent to your phone',
       'Logg inn med eingongskode sendt til din mobil',
     ),
-    input: {
-      heading: _('Mobilnummer', 'Phone number', 'Mobilnummer'),
-      label: _('+47', '+47', '+47'),
-      placeholder: _(
-        'Skriv inn ditt telefonnummer',
-        'Type in your phone number',
-        'Skriv inn ditt telefonnummer',
-      ),
-    },
     mainButton: _(
       'Send engangskode',
       'Send one-time code',
       'Send eingongskode',
     ),
-    errors: {
-      invalid_phone: _(
-        'Er du sikker på at telefonnummeret er korrekt?',
-        'Are you certain the phone number is correct?',
-        'Er du sikker på at telefonnummeret er korrekt?',
-      ),
-      unknown_error: _(
-        'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
-        'Whoops - something went wrong. Please try again 🤞',
-        'Oops - noko gjekk gale. Supert om du prøver på nytt 🤞',
-      ),
-    },
   },
   confirmCode: {
     title: _('Engangskode', 'One-time code', 'Eingongskode'),

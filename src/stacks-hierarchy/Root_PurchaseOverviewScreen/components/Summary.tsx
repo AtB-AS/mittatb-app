@@ -14,6 +14,7 @@ type Props = {
   isLoading: boolean;
   isError: boolean;
   userProfilesWithCount: UserProfileWithCount[];
+  summaryButtonText: string;
   onPressBuy: () => void;
   style?: StyleProp<ViewStyle>;
 };
@@ -24,6 +25,7 @@ export function Summary({
   isLoading,
   isError,
   userProfilesWithCount,
+  summaryButtonText,
   onPressBuy,
   style,
 }: Props) {
@@ -52,7 +54,7 @@ export function Summary({
       )}
       <Button
         interactiveColor="interactive_0"
-        text={t(PurchaseOverviewTexts.summary.button)}
+        text={summaryButtonText}
         disabled={isLoading || !hasSelection || isFree || isError}
         onPress={toPaymentFunction}
         rightIcon={{svg: ArrowRight}}

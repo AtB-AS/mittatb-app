@@ -210,7 +210,10 @@ const PurchaseOverviewTexts = {
       `Only available on phone`,
       `Gjeld kun på mobil`,
     ),
-    button: _('Til betaling', 'To payment', 'Til betaling'),
+    button: {
+      payment: _('Til betaling', 'To payment', 'Til betaling'),
+      sendToOthers: _('Gå videre', 'Continue', 'Gå vidare'),
+    },
   },
   flexDiscount: {
     heading: _('Rabatt', 'Discount', 'Rabatt'),
@@ -257,7 +260,7 @@ const PurchaseOverviewTexts = {
     sendToOthersText: _(
       'Sendes til noen andre',
       'Sending to someone else',
-      'Sendast til nokon andre'
+      'Sendast til nokon andre',
     ),
   },
   ticketInformation: {
