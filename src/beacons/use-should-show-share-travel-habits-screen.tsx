@@ -4,9 +4,8 @@ import {storage} from '@atb/storage';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
-import {useAppState} from '@atb/AppContext';
-
 import {useBeaconsState} from './BeaconsContext';
+import {useOnboardingSectionIsOnboarded} from '@atb/utils/use-onboarding-sections';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count_v2';
@@ -25,9 +24,15 @@ export const useShouldShowShareTravelHabitsScreen = (
 
   const appStatus = useAppStateStatus();
 
-  const {userCreationOnboarded, shareTravelHabitsOnboarded} = useAppState();
+  const userCreationIsOnboarded =
+    useOnboardingSectionIsOnboarded('userCreation');
+  const shareTravelHabitsIsOnboarded =
+    useOnboardingSectionIsOnboarded('shareTravelHabits');
+
   const enabled =
-    userCreationOnboarded && isBeaconsSupported && !shareTravelHabitsOnboarded;
+    userCreationIsOnboarded &&
+    isBeaconsSupported &&
+    !shareTravelHabitsIsOnboarded;
 
   const shouldShowShareTravelHabitsScreen =
     enabled && !isConsentGranted && sessionCount > runAfterSessionsCount;

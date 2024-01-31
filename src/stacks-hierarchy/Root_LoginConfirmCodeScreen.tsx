@@ -41,11 +41,11 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   >();
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
-  const {completeUserCreationOnboarding} = useAppState();
+  const {completeOnboardingSection} = useAppState();
 
   const onLogin = async () => {
     setIsLoading(true);
-    completeUserCreationOnboarding();
+    completeOnboardingSection('userCreation');
     const errorCode = await confirmCode(code);
     if (errorCode) {
       setError(errorCode);

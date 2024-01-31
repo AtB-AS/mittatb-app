@@ -58,6 +58,7 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
+import {useOnboardingSections} from '@atb/utils/use-onboarding-sections';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -66,15 +67,11 @@ function setClipboard(content: string) {
 
 export const Profile_DebugInfoScreen = () => {
   const style = useProfileHomeStyle();
-  const {
-    restartMobileTokenOnboarding,
-    restartMobileTokenWithoutTravelcardOnboarding,
-    restartExtendedOnboarding,
-    restartUserCreationOnboarding,
-    restartNotificationPermissionOnboarding,
-    restartLocationWhenInUsePermissionOnboarding,
-    restartShareTravelHabitsOnboarding,
-  } = useAppState();
+
+  const {restartOnboardingSection, restartAllOnboardingSections} =
+    useAppState();
+  const onboardingSections = useOnboardingSections(false);
+
   const {
     onboardForBeacons,
     revokeBeacons,
@@ -182,6 +179,30 @@ export const Profile_DebugInfoScreen = () => {
       />
       <ScrollView testID="debugInfoScrollView">
         <Section withPadding withTopPadding>
+          <LinkSectionItem
+            text="Restart all onboarding sections"
+            onPress={() => restartAllOnboardingSections()}
+          />
+          <ExpandableSectionItem
+            text="Individual onboarding restarts"
+            showIconText={true}
+            expandContent={onboardingSections.map((onboardingSection) => {
+              const {onboardingSectionId} = onboardingSection;
+              return (
+                <LinkSectionItem
+                  key={onboardingSectionId}
+                  text={`Restart ${onboardingSectionId} onboarding`}
+                  onPress={() => restartOnboardingSection(onboardingSectionId)}
+                />
+              );
+            })}
+          />
+        </Section>
+        <Section withPadding withTopPadding>
+          <LinkSectionItem
+            text="Reset shareTravelHabits session counter"
+            onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
+          />
           <ToggleSectionItem
             text="Toggle test-ID"
             value={showTestIds}
@@ -195,30 +216,6 @@ export const Profile_DebugInfoScreen = () => {
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
             }}
-          />
-          <LinkSectionItem
-            text="Restart extended onboarding"
-            onPress={restartExtendedOnboarding}
-          />
-          <LinkSectionItem
-            text="Restart user creation onboarding"
-            onPress={restartUserCreationOnboarding}
-          />
-          <LinkSectionItem
-            text="Restart notification onboarding"
-            onPress={restartNotificationPermissionOnboarding}
-          />
-          <LinkSectionItem
-            text="Restart location when in use onboarding"
-            onPress={restartLocationWhenInUsePermissionOnboarding}
-          />
-          <LinkSectionItem
-            text="Set mobile token onboarded to false"
-            onPress={restartMobileTokenOnboarding}
-          />
-          <LinkSectionItem
-            text="Set mobile token without travelcard onboarded to false"
-            onPress={restartMobileTokenWithoutTravelcardOnboarding}
           />
           <LinkSectionItem
             text="Reset dismissed Global messages"
@@ -264,14 +261,6 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() =>
               storage.set('@ATB_user_travel_search_filters_v2', '')
             }
-          />
-          <LinkSectionItem
-            text="Reset ShareTravelHabits session counter"
-            onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
-          />
-          <LinkSectionItem
-            text="Restart ShareTravelHabits onboarding"
-            onPress={restartShareTravelHabitsOnboarding}
           />
           <LinkSectionItem
             text="Reset one time popovers"

@@ -46,7 +46,7 @@ export const Root_LoginOptionsScreen = ({
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
-  const {completeUserCreationOnboarding} = useAppState();
+  const {completeOnboardingSection} = useAppState();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -67,7 +67,7 @@ export const Root_LoginOptionsScreen = ({
   );
 
   const signInUsingCustomToken = async (token: string) => {
-    completeUserCreationOnboarding();
+    completeOnboardingSection('userCreation');
     const errorCode = await signInWithCustomToken(token);
     if (errorCode) {
       setError(errorCode);
