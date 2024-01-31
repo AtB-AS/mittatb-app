@@ -1,2 +1,2 @@
-export {ExtendedOnboardingScreenComponent} from './ExtendedOnboardingScreenComponent';
+export {OnboardingScreenComponent} from './OnboardingScreenComponent';
 export {OnboardingFullScreenView} from './OnboardingFullScreenView';

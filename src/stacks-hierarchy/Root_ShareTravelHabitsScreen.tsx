@@ -7,7 +7,7 @@ import React, {useCallback} from 'react';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {ExtendedOnboardingScreenComponent} from '@atb/extended-onboarding-screen';
+import {OnboardingScreenComponent} from '@atb/extended-onboarding-screen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 import {useAnalytics} from '@atb/analytics';
@@ -46,7 +46,7 @@ export const Root_ShareTravelHabitsScreen = () => {
   };
 
   return (
-    <ExtendedOnboardingScreenComponent
+    <OnboardingScreenComponent
       illustration={<Beacons height={132} />}
       title={t(ShareTravelHabitsTexts.title)}
       description={
