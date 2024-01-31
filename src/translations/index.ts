@@ -13,7 +13,7 @@ export {getTextForLanguage} from './utils';
 
 export {default as FavoriteTexts} from './components/FavoriteChips';
 export {default as PaginationTexts} from './components/Pagination';
-export {default as OnboardingTexts} from './screens/Onboarding';
+export {default as ExtendedOnboardingTexts} from './screens/ExtendedOnboarding';
 export {default as SectionTexts} from './components/Section';
 export {default as MapTexts} from './components/Map';
 export {default as ScreenHeaderTexts} from './components/ScreenHeader';

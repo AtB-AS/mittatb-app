@@ -3,17 +3,17 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {OnboardingTexts, useTranslation} from '@atb/translations';
+import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
-import {OnboardingScreenProps} from './navigation-types';
+import {ExtendedOnboardingScreenProps} from './navigation-types';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 export type GoodToKnowScreenProps =
-  OnboardingScreenProps<'Onboarding_GoodToKnowScreen'>;
+  ExtendedOnboardingScreenProps<'ExtendedOnboarding_GoodToKnowScreen'>;
 
-export const Onboarding_GoodToKnowScreen = ({
+export const ExtendedOnboarding_GoodToKnowScreen = ({
   navigation,
 }: GoodToKnowScreenProps) => {
   const {t} = useTranslation();
@@ -31,18 +31,20 @@ export const Onboarding_GoodToKnowScreen = ({
           color={themeColor}
           style={styles.header}
         >
-          {t(OnboardingTexts.goodToKnow.title)}
+          {t(ExtendedOnboardingTexts.goodToKnow.title)}
         </ThemeText>
         <Onboarding4 width={windowWidth} height={windowWidth * (4 / 5)} />
         <ThemeText style={styles.description} color={themeColor}>
-          {t(OnboardingTexts.goodToKnow.description)}
+          {t(ExtendedOnboardingTexts.goodToKnow.description)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('Onboarding_AlsoGoodToKnowScreen')}
-          text={t(OnboardingTexts.goodToKnow.mainButton)}
+          onPress={() =>
+            navigation.navigate('ExtendedOnboarding_AlsoGoodToKnowScreen')
+          }
+          text={t(ExtendedOnboardingTexts.goodToKnow.mainButton)}
           testID="nextButtonGoodToKnowOnboarding"
         />
       </View>

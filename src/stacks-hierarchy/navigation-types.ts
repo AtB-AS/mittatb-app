@@ -100,7 +100,9 @@ type Root_ConfirmationScreenParams = {
   nextScreen: NextScreenParams<'Root_TabNavigatorStack'>;
 };
 
-export type NextScreenParams<T extends keyof RootStackParamList = keyof RootStackParamList> = {
+export type NextScreenParams<
+  T extends keyof RootStackParamList = keyof RootStackParamList,
+> = {
   [S in T]: {
     screen: S;
     params: RootStackParamList[S];
@@ -108,7 +110,7 @@ export type NextScreenParams<T extends keyof RootStackParamList = keyof RootStac
 }[T];
 
 export type RootStackParamList = StackParams<{
-  Root_OnboardingStack: undefined;
+  Root_ExtendedOnboardingStack: undefined;
   Root_TermsInformationScreen: undefined;
   Root_ConsiderTravelTokenChangeScreen: undefined;
   Root_SelectTravelTokenScreen: undefined;
