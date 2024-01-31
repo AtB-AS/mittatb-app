@@ -1,6 +1,6 @@
 import {useAppState} from '@atb/AppContext';
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
-import {Root_OnboardingStack} from './Root_OnboardingStack';
+import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
@@ -174,7 +174,7 @@ export const RootStack = () => {
         <LoadingScreenBoundary>
           <NavigationContainer<RootStackParamList>
             onStateChange={trackNavigation}
-            initialState={getInitialNavigationContainerState(true)}
+            initialState={getInitialNavigationContainerState()}
             ref={navRef}
             theme={ReactNavigationTheme}
             fallback={<LoadingScreen />}
@@ -276,8 +276,8 @@ export const RootStack = () => {
                 component={Root_TabNavigatorStack}
               />
               <Stack.Screen
-                name="Root_OnboardingStack"
-                component={Root_OnboardingStack}
+                name="Root_ExtendedOnboardingStack"
+                component={Root_ExtendedOnboardingStack}
               />
               <Stack.Screen
                 name="Root_TermsInformationScreen"

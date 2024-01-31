@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useState} from 'react';
+import React, {forwardRef, useEffect, useRef, useState} from 'react';
 import {
   AccessibilityInfo,
   Keyboard,
@@ -16,16 +16,17 @@ import {ThemeText, MAX_FONT_SCALE} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
-import {SectionTexts, useTranslation} from '@atb/translations';
+import {SectionTexts, dictionary, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {ExpandMore, ExpandLess} from '@atb/assets/svg/mono-icons/navigation';
 import {ScrollView} from 'react-native-gesture-handler';
 import {countryPhoneData} from 'phone';
 import {Section} from '../Section';
 import {GenericClickableSectionItem} from '@atb/components/sections';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {loginPhoneInputId} from '@atb/test-ids';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {Error} from '@atb/assets/svg/color/icons/status';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -36,12 +37,14 @@ type Props = SectionItemProps<
     onChangePrefix: (prefix: string) => void;
     showClear?: boolean;
     onClear?: () => void;
+    errorText?: string;
   }
 >;
 
 export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
   (
     {
+      errorText = undefined,
       label,
       prefix,
       onChangePrefix,
@@ -62,7 +65,13 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
     const {t} = useTranslation();
     const myRef = useRef<InternalTextInput>(null);
     const combinedRef = composeRefs<InternalTextInput>(forwardedRef, myRef);
+    const errorFocusRef = useRef(null);
+
     const prefixListRef = useFocusOnLoad();
+
+    useEffect(() => {
+      giveFocus(errorFocusRef);
+    }, [errorText]);
 
     function accessibilityEscapeKeyboard() {
       setTimeout(
@@ -93,9 +102,18 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       else if (props.onChangeText) props.onChangeText('');
     };
 
-    const borderColor = !isFocused
-      ? undefined
-      : {borderColor: theme.border.focus};
+    const getBorderColor = () => {
+      if (isFocused) {
+        return {borderColor: theme.border.focus};
+      } else if (errorText) {
+        return {
+          borderColor:
+            theme.interactive.interactive_destructive.destructive.background,
+        };
+      } else {
+        return undefined;
+      }
+    };
 
     const padding = {
       // There are some oddities with handling padding
@@ -140,7 +158,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
             label ? styles.containerMultiline : null,
             topContainerStyle,
             containerPadding,
-            borderColor,
+            getBorderColor(),
           ]}
           onAccessibilityEscape={accessibilityEscapeKeyboard}
         >
@@ -191,6 +209,22 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
               </View>
             ) : null}
           </View>
+          {errorText !== undefined && (
+            <View
+              ref={errorFocusRef}
+              accessible={true}
+              style={styles.error}
+              accessibilityRole="alert"
+              accessibilityLabel={`${t(
+                dictionary.messageTypes.error,
+              )}, ${errorText}`}
+            >
+              <ThemeIcon svg={Error} />
+              <ThemeText type="body__secondary" style={styles.errorMessage}>
+                {errorText}
+              </ThemeText>
+            </View>
+          )}
         </View>
         {isSelectingPrefix && (
           <ScrollView style={styles.prefixList} ref={prefixListRef}>
@@ -267,5 +301,11 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   },
   countryName: {
     width: '83%',
+  },
+  error: {flexDirection: 'row'},
+  errorMessage: {
+    paddingLeft: theme.spacings.medium,
+    paddingBottom: theme.spacings.small,
+    flex: 1,
   },
 }));
