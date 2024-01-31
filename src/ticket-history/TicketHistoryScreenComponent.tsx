@@ -54,7 +54,12 @@ export const TicketHistoryScreenComponent = ({mode}: Props) => {
     >
       <View style={styles.container}>
         <FareContractAndReservationsList
-          fareContracts={displayFareContracts(mode, fareContracts, serverNow)}
+          fareContracts={displayFareContracts(
+            mode,
+            fareContracts,
+            serverNow,
+            abtCustomerId,
+          )}
           reservations={rejectedReservations}
           now={serverNow}
           emptyStateMode={mode}
