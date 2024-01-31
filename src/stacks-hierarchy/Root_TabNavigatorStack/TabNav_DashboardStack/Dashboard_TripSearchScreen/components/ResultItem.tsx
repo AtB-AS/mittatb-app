@@ -586,7 +586,7 @@ const TransportationLeg = ({
   return (
     <TransportationIconBox
       style={style}
-      mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
+      mode={leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
       testID="trLeg"
