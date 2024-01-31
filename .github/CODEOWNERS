@@ -13,7 +13,7 @@
 # Builds (GH Actions, App Store, Play Store, App Center)
 /.github/workflows/ @gorandalum @jorelosorio @reidzeibel
 /env/ @gorandalum @jorelosorio @reidzeibel
-/fastnane/ @gorandalum @jorelosorio @reidzeibel
+/fastlane/ @gorandalum @jorelosorio @reidzeibel
 /scripts/ @gorandalum @jorelosorio @reidzeibel
 /tools/ @gorandalum @jorelosorio @reidzeibel
 
