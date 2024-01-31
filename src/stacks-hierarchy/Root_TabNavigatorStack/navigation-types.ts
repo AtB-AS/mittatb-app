@@ -12,9 +12,9 @@ import {
   BottomTabScreenProps,
 } from '@react-navigation/bottom-tabs';
 import {RootStackParamList, RootStackScreenProps} from '@atb/stacks-hierarchy';
-import {TicketingStackParams} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/TabNav_TicketingStack';
 import {DeparturesStackParams} from './TabNav_DeparturesStack';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
+import {TicketingStackParams} from './TabNav_TicketingStack/navigation-types';
 
 export type TabNavigatorStackParams = StackParams<{
   TabNav_DashboardStack: NavigatorScreenParams<DashboardStackParams>;
