@@ -206,7 +206,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             }
             rowLabel={
               <TransportationIconBox
-                mode={isFlexible ? 'flex' : leg.mode}
+                mode={leg.mode}
                 subMode={leg.line?.transportSubmode}
               />
             }
