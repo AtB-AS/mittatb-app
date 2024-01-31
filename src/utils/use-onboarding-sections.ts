@@ -60,7 +60,7 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
       isOnboardedStoreKey: '@ATB_extended_onboarding_onboarded',
       onboardingSectionId: 'extendedOnboarding',
       initialScreen: {
-        name: 'Root_OnboardingStack',
+        name: 'Root_ExtendedOnboardingStack',
       },
       shouldShowBeforeUserCreated: true,
     },

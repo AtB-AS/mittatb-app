@@ -69,7 +69,7 @@ export const useOnboardingFlow = (
     const nextOnboardingSection = getNextOnboardingSection(); // dont rely on effects as it will be too late for initialState
     const initialOnboardingScreen = nextOnboardingSection?.initialScreen;
     const initialOnboardingRoute = {
-      name: initialOnboardingScreen?.screenName ?? defaultInitialRouteName,
+      name: initialOnboardingScreen?.name ?? defaultInitialRouteName,
       params: initialOnboardingScreen?.params,
     };
 
@@ -78,7 +78,7 @@ export const useOnboardingFlow = (
     >[] = [initialOnboardingRoute];
     if (
       !nextOnboardingSection?.shouldShowBeforeUserCreated &&
-      initialOnboardingScreen?.screenName
+      initialOnboardingScreen?.name
     ) {
       routes.unshift({name: defaultInitialRouteName});
     }
