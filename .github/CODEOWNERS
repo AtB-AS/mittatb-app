@@ -1,0 +1,28 @@
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# https://github.com/AtB-AS/docs-private/blob/main/kundevendt-development-guidelines.md#systemdomain-captains
+
+# App
+* @gorandalum @marius-at-atb @jorelosorio @rosvik
+
+# Mobile token (App, Webshop, Token-server)
+/src/mobile-token/ @gorandalum @jorelosorio @hanne-at-atb
+
+# Mobility (App, BFF)
+/src/mobility/ @gorandalum @marius-at-atb @reidzeibel
+
+# Builds (GH Actions, App Store, Play Store, App Center)
+/.github/workflows/ @gorandalum @jorelosorio @reidzeibel
+/env/ @gorandalum @jorelosorio @reidzeibel
+/fastlane/ @gorandalum @jorelosorio @reidzeibel
+/scripts/ @gorandalum @jorelosorio @reidzeibel
+/tools/ @gorandalum @jorelosorio @reidzeibel
+
+# Firebase (Firestore, RemoteConfig, Configs, Typings)
+/src/configuration/ @gorandalum @reidzeibel @jorelosorio
+
+# Tests
+/e2e/ @gorandalum @marius-at-atb @jorelosorio @rosvik @tormoseng
+
+# Native code
+/android/ @gorandalum @reidzeibel @jorelosorio
+/ios/ @gorandalum @jorelosorio @reidzeibel
