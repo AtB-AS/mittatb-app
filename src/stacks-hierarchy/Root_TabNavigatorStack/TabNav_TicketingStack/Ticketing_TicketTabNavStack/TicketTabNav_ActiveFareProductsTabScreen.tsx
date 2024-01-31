@@ -15,6 +15,7 @@ import {LinkSectionItem, Section} from '@atb/components/sections';
 import Ticketing from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
+import {useAuthState} from '@atb/auth';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_ActiveFareProductsTabScreen'>;
