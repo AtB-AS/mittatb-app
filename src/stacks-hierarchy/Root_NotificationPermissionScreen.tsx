@@ -5,7 +5,7 @@ import NotificationPermissionTexts from '@atb/translations/screens/NotificationP
 import {PushNotification} from '@atb/assets/svg/color/images';
 
 import {useAppState} from '@atb/AppContext';
-import {OnboardingScreenComponent} from '@atb/extended-onboarding-screen';
+import {OnboardingScreenComponent} from '@atb/onboarding-screen';
 import {useNotifications} from '@atb/notifications';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 

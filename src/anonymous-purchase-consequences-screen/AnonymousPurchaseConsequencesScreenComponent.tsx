@@ -10,7 +10,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {OnboardingFullScreenView} from '@atb/extended-onboarding-screen';
+import {OnboardingFullScreenView} from '@atb/onboarding-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps} from '@atb/components/screen-header';
