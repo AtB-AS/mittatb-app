@@ -32,11 +32,9 @@ export const BenefitImageAsset = ({
   formFactor,
   svgProps,
 }: {
-  formFactor?: FormFactor;
+  formFactor: FormFactor;
   svgProps?: SvgProps;
 }) => {
-  if (!formFactor) return null;
-
   switch (formFactor) {
     case FormFactor.Car:
       return <BundlingCarSharing {...svgProps} />;
