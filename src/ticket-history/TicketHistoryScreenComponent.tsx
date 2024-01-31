@@ -1,6 +1,7 @@
 import {ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
+import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
   filterExpiredFareContracts,
@@ -12,6 +13,7 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
+import {View} from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
 
 type Mode = 'expired' | 'sent';
@@ -27,8 +29,8 @@ export const TicketHistoryScreenComponent = ({mode}: Props) => {
   } = useTicketingState();
 
   const {serverNow} = useTimeContextState();
-
   const {t} = useTranslation();
+  const styles = useStyles();
 
   return (
     <FullScreenView
@@ -46,20 +48,22 @@ export const TicketHistoryScreenComponent = ({mode}: Props) => {
         />
       }
     >
-      <FareContractAndReservationsList
-        fareContracts={displayFareContracts(mode, fareContracts, serverNow)}
-        reservations={rejectedReservations}
-        now={serverNow}
-        emptyStateMode={mode}
-        emptyStateTitleText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .emptyTicketHistoryTitle,
-        )}
-        emptyStateDetailsText={t(
-          TicketingTexts.activeFareProductsAndReservationsTab
-            .emptyTicketHistoryDetails,
-        )}
-      />
+      <View style={styles.container}>
+        <FareContractAndReservationsList
+          fareContracts={displayFareContracts(mode, fareContracts, serverNow)}
+          reservations={rejectedReservations}
+          now={serverNow}
+          emptyStateMode={mode}
+          emptyStateTitleText={t(
+            TicketingTexts.activeFareProductsAndReservationsTab
+              .emptyTicketHistoryTitle,
+          )}
+          emptyStateDetailsText={t(
+            TicketingTexts.activeFareProductsAndReservationsTab
+              .emptyTicketHistoryDetails,
+          )}
+        />
+      </View>
     </FullScreenView>
   );
 };
@@ -85,3 +89,11 @@ const displayFareContracts = (
       return filterExpiredFareContracts(fareContracts, serverNow);
   }
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  container: {
+    flex: 1,
+    backgroundColor: theme.static.background.background_1.background,
+    padding: theme.spacings.medium,
+  },
+}));
