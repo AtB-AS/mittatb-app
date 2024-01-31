@@ -11,7 +11,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
-import {ExtendedOnboardingFullScreenView} from '@atb/extended-onboarding-screen';
+import {OnboardingFullScreenView} from '@atb/extended-onboarding-screen';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 import {LoadingScreen} from '@atb/loading-screen';
@@ -61,7 +61,7 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
   if (!hasInspectableToken) return NoTokenView;
 
   return (
-    <ExtendedOnboardingFullScreenView
+    <OnboardingFullScreenView
       footerButton={{
         onPress: onPressContinue,
         text: t(ConsiderTravelTokenChangeTexts.nextButton),
@@ -84,7 +84,7 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
         alwaysShowErrors={true}
         interactiveColor="interactive_1"
       />
-    </ExtendedOnboardingFullScreenView>
+    </OnboardingFullScreenView>
   );
 };
 

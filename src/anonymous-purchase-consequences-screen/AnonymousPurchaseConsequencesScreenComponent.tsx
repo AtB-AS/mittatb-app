@@ -10,7 +10,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {AnonymousPurchasesTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {ExtendedOnboardingFullScreenView} from '@atb/extended-onboarding-screen';
+import {OnboardingFullScreenView} from '@atb/extended-onboarding-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {LeftButtonProps} from '@atb/components/screen-header';
@@ -50,7 +50,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
   };
 
   return (
-    <ExtendedOnboardingFullScreenView
+    <OnboardingFullScreenView
       fullScreenHeaderProps={{leftButton}}
       footerButton={onPressLogin ? loginButton : continueWithoutLoginButton}
       secondaryFooterButton={
@@ -75,7 +75,7 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
         value={t(AnonymousPurchasesTexts.consequences.messages[2])}
         icon={<ThemeIcon svg={Support} colorType={themeColor} size="large" />}
       />
-    </ExtendedOnboardingFullScreenView>
+    </OnboardingFullScreenView>
   );
 };
 
