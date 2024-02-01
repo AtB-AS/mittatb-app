@@ -10,7 +10,8 @@ import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
 export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;
   Profile_PaymentOptionsScreen: undefined;
-  Profile_TicketHistoryScreen: undefined;
+  Profile_TicketHistoryScreen: ProfileTicketHistoryScreenParams;
+  Profile_TicketHistorySelectionScreen: undefined;
   Profile_DeleteProfileScreen: undefined;
   Profile_EditProfileScreen: undefined;
   Profile_FavoriteListScreen: undefined;
@@ -34,6 +35,10 @@ export type ProfileStackParams = StackParams<{
   Profile_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
   Profile_PlaceScreen: PlaceScreenParams;
 }>;
+
+export type ProfileTicketHistoryScreenParams = {
+  mode: 'expired' | 'sent';
+};
 
 export type ProfileStackRootProps =
   TabNavigatorScreenProps<'TabNav_ProfileStack'>;

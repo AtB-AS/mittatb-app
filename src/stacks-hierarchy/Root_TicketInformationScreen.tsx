@@ -62,7 +62,7 @@ export const Root_TicketInformationScreen = (props: Props) => {
                 {fareProductTypeConfig && (
                   <View style={styles.descriptionHeading}>
                     <TransportationIconBoxList
-                      iconSize="small"
+                      iconSize="xSmall"
                       modes={fareProductTypeConfig?.transportModes}
                     />
                     <ThemeText type="body__primary--bold">

@@ -19,7 +19,7 @@ type Props = RootStackScreenProps<'Root_PurchasePaymentWithVippsScreen'>;
 export const Root_PurchasePaymentWithVippsScreen = ({
   navigation,
   route: {
-    params: {offers},
+    params: {offers, destinationAccountId},
   },
 }: Props) => {
   const styles = useStyles();
@@ -39,7 +39,11 @@ export const Root_PurchasePaymentWithVippsScreen = ({
     });
   };
 
-  const {state, error, openVipps} = useVippsState(offers, dismiss);
+  const {state, error, openVipps} = useVippsState(
+    offers,
+    destinationAccountId,
+    dismiss,
+  );
 
   return (
     <View style={styles.container}>

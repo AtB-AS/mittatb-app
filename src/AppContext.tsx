@@ -11,6 +11,7 @@ import {register as registerChatUser} from './chat/user';
 import {storage} from '@atb/storage';
 
 enum storeKey {
+  extendedOnboardingOnboarded = '@ATB_extended_onboarding_onboarded',
   userCreationOnboarded = '@ATB_onboarded', // variable renamed, but keep old storage key
   mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
   mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
@@ -20,6 +21,7 @@ enum storeKey {
 }
 type AppState = {
   isLoading: boolean;
+  extendedOnboardingOnboarded: boolean;
   userCreationOnboarded: boolean;
   mobileTokenOnboarded: boolean;
   mobileTokenWithoutTravelcardOnboarded: boolean;
@@ -31,6 +33,7 @@ type AppState = {
 type AppReducerAction =
   | {
       type: 'LOAD_APP_SETTINGS';
+      extendedOnboardingOnboarded: boolean;
       userCreationOnboarded: boolean;
       mobileTokenOnboarded: boolean;
       mobileTokenWithoutTravelcardOnboarded: boolean;
@@ -38,6 +41,8 @@ type AppReducerAction =
       locationWhenInUsePermissionOnboarded: boolean;
       shareTravelHabitsOnboarded: boolean;
     }
+  | {type: 'COMPLETE_EXTENDED_ONBOARDING'}
+  | {type: 'RESTART_EXTENDED_ONBOARDING'}
   | {type: 'COMPLETE_USER_CREATION_ONBOARDING'}
   | {type: 'RESTART_USER_CREATION_ONBOARDING'}
   | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
@@ -52,6 +57,8 @@ type AppReducerAction =
   | {type: 'RESTART_SHARE_TRAVEL_HABITS_ONBOARDING'};
 
 type AppContextState = AppState & {
+  completeExtendedOnboarding: () => void;
+  restartExtendedOnboarding: () => void;
   completeUserCreationOnboarding: () => void;
   restartUserCreationOnboarding: () => void;
   completeMobileTokenOnboarding: () => void;
@@ -76,6 +83,7 @@ const appReducer: AppReducer = (prevState, action) => {
   switch (action.type) {
     case 'LOAD_APP_SETTINGS':
       const {
+        extendedOnboardingOnboarded,
         userCreationOnboarded,
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
@@ -85,6 +93,7 @@ const appReducer: AppReducer = (prevState, action) => {
       } = action;
       return {
         ...prevState,
+        extendedOnboardingOnboarded,
         userCreationOnboarded,
         isLoading: false,
         mobileTokenOnboarded,
@@ -92,6 +101,16 @@ const appReducer: AppReducer = (prevState, action) => {
         notificationPermissionOnboarded,
         locationWhenInUsePermissionOnboarded,
         shareTravelHabitsOnboarded,
+      };
+    case 'COMPLETE_EXTENDED_ONBOARDING':
+      return {
+        ...prevState,
+        extendedOnboardingOnboarded: true,
+      };
+    case 'RESTART_EXTENDED_ONBOARDING':
+      return {
+        ...prevState,
+        extendedOnboardingOnboarded: false,
       };
     case 'COMPLETE_USER_CREATION_ONBOARDING':
       return {
@@ -164,6 +183,7 @@ const appReducer: AppReducer = (prevState, action) => {
 
 const defaultAppState: AppState = {
   isLoading: true,
+  extendedOnboardingOnboarded: false,
   userCreationOnboarded: false,
   mobileTokenOnboarded: false,
   mobileTokenWithoutTravelcardOnboarded: false,
@@ -177,6 +197,13 @@ export const AppContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function loadAppSettings() {
+      const savedExtendedOnboardingOnboarded = await storage.get(
+        storeKey.extendedOnboardingOnboarded,
+      );
+      const extendedOnboardingOnboarded = !savedExtendedOnboardingOnboarded
+        ? false
+        : JSON.parse(savedExtendedOnboardingOnboarded);
+
       const savedUserCreationOnboarded = await storage.get(
         storeKey.userCreationOnboarded,
       );
@@ -229,6 +256,7 @@ export const AppContextProvider: React.FC = ({children}) => {
 
       dispatch({
         type: 'LOAD_APP_SETTINGS',
+        extendedOnboardingOnboarded,
         userCreationOnboarded,
         mobileTokenOnboarded,
         mobileTokenWithoutTravelcardOnboarded,
@@ -243,6 +271,8 @@ export const AppContextProvider: React.FC = ({children}) => {
   }, []);
 
   const {
+    completeExtendedOnboarding,
+    restartExtendedOnboarding,
     completeUserCreationOnboarding,
     restartUserCreationOnboarding,
     completeMobileTokenOnboarding,
@@ -257,6 +287,20 @@ export const AppContextProvider: React.FC = ({children}) => {
     restartShareTravelHabitsOnboarding,
   } = useMemo(
     () => ({
+      completeExtendedOnboarding: async () => {
+        await storage.set(
+          storeKey.extendedOnboardingOnboarded,
+          JSON.stringify(true),
+        );
+        dispatch({type: 'COMPLETE_EXTENDED_ONBOARDING'});
+      },
+      restartExtendedOnboarding: async () => {
+        await storage.set(
+          storeKey.extendedOnboardingOnboarded,
+          JSON.stringify(false),
+        );
+        dispatch({type: 'RESTART_EXTENDED_ONBOARDING'});
+      },
       completeUserCreationOnboarding: async () => {
         await storage.set(storeKey.userCreationOnboarded, JSON.stringify(true));
         dispatch({type: 'COMPLETE_USER_CREATION_ONBOARDING'});
@@ -347,6 +391,8 @@ export const AppContextProvider: React.FC = ({children}) => {
     <AppContext.Provider
       value={{
         ...state,
+        completeExtendedOnboarding,
+        restartExtendedOnboarding,
         completeUserCreationOnboarding,
         restartUserCreationOnboarding,
         completeMobileTokenOnboarding,

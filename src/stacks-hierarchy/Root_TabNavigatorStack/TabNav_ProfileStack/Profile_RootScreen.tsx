@@ -160,7 +160,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               ProfileTexts.sections.account.linkSectionItems.ticketHistory
                 .label,
             )}
-            onPress={() => navigation.navigate('Profile_TicketHistoryScreen')}
+            onPress={() =>
+              navigation.navigate('Profile_TicketHistorySelectionScreen')
+            }
             testID="ticketHistoryButton"
           />
           {authenticationType !== 'phone' && (

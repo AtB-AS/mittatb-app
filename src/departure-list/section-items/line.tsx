@@ -261,7 +261,7 @@ function DepartureTimeItem({
           svg: rightIcon,
         }
       }
-      leftIcon={leftIcon && {svg: leftIcon, size: 'small'}}
+      leftIcon={leftIcon && {svg: leftIcon, size: 'xSmall'}}
       testID={testID}
     />
   );

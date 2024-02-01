@@ -304,7 +304,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
     <View style={styles.passedSection}>
       <ThemeIcon
         svg={RealtimeDark}
-        size="small"
+        size="xSmall"
         style={styles.passedSectionRealtimeIcon}
       />
       <ThemeText
