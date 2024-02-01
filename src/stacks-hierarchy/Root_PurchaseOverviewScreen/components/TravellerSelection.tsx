@@ -83,11 +83,13 @@ export function TravellerSelection({
 
   useFocusEffect(
     useCallback(() => {
-      addPopOver({
-        oneTimeKey: 'on-behalf-of-new-feature-introduction',
-        target: onBehalfOfIndicatorRef,
-      });
-    }, [addPopOver]),
+      if (isOnBehalfOfEnabled) {
+        addPopOver({
+          oneTimeKey: 'on-behalf-of-new-feature-introduction',
+          target: onBehalfOfIndicatorRef,
+        });
+      }
+    }, [isOnBehalfOfEnabled, addPopOver]),
   );
 
   if (selectionMode === 'none') {
