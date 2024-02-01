@@ -11,7 +11,6 @@ export const ShadowWrapper: React.FC = ({children}) => {
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   shadowContainer: {
-    backgroundColor: 'white',
     borderRadius: theme.border.radius.regular,
   },
 }));
