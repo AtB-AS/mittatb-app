@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {shadows} from '@atb/components/map';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -66,7 +65,6 @@ export type ButtonProps = {
   compact?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
-  hasShadow?: boolean;
 } & ButtonTypeAwareProps &
   ButtonModeAwareProps &
   PressableProps;
@@ -86,7 +84,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
       active,
       loading = false,
       compact = false,
-      hasShadow = false,
       style,
       ...props
     },
@@ -192,7 +189,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
         ]}
       >
         <PressableOpacity
-          style={[styleContainer, hasShadow ? shadows : undefined]}
+          style={styleContainer}
           onPress={disabled ? undefined : onPress}
           disabled={disabled}
           accessibilityRole="button"

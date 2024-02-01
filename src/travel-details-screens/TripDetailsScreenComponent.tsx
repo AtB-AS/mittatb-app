@@ -279,17 +279,6 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   paddedContainer: {
     paddingHorizontal: theme.spacings.medium,
   },
-  purchaseButton: {
-    position: 'absolute',
-    marginHorizontal: theme.spacings.large,
-    marginBottom: theme.spacings.large,
-    bottom: 0,
-    right: 0,
-    shadowRadius: theme.spacings.small,
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    elevation: 3,
-  },
   purchaseButtonAccessible: {
     marginHorizontal: theme.spacings.medium,
     marginVertical: theme.spacings.xSmall,
