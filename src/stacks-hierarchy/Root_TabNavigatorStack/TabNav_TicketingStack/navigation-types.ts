@@ -6,17 +6,15 @@ import {
   CompositeScreenProps,
   NavigatorScreenParams,
 } from '@react-navigation/native';
-import {
-  TicketTabNavStackParams,
-  TicketingTicketHistoryScreenParams,
-} from './Ticketing_TicketTabNavStack/navigation-types';
+import {TicketTabNavStackParams} from './Ticketing_TicketTabNavStack/navigation-types';
 import {TabNavigatorScreenProps} from '../navigation-types';
 import {StackScreenProps} from '@react-navigation/stack';
+import {TicketHistoryScreenParams} from '@atb/ticket-history';
 
 export type TicketingStackParams = StackParams<{
   Ticketing_NotEnabledScreen: undefined;
   Ticketing_RootScreen: NavigatorScreenParams<TicketTabNavStackParams>;
-  Ticketing_TicketHistoryScreen: TicketingTicketHistoryScreenParams;
+  Ticketing_TicketHistoryScreen: TicketHistoryScreenParams;
 }>;
 
 export type TicketingStackRootProps =
