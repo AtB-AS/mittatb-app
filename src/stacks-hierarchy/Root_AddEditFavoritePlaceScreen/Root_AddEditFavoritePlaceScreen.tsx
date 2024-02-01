@@ -209,7 +209,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           {emoji && (
             <Button
               text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
-              type="pill"
+              type="small"
               mode="tertiary"
               backgroundColor={themeColor}
               onPress={() => {

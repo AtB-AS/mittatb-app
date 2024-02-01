@@ -36,7 +36,7 @@ export const SelectedFiltersButtons = ({
   return (
     <View style={styles.container}>
       <Button
-        type="pill"
+        type="small"
         accessibilityLabel={
           t(TripSearchTexts.filters.selection.a11yLabelPrefix) + text
         }

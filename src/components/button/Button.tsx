@@ -44,9 +44,9 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
 };
 
 type ButtonTypeAwareProps =
-  | {text: string; type?: 'block'}
-  | {text?: string; type: 'inline'}
-  | {text: string; type: 'pill'};
+  | {text: string; type?: 'large'}
+  | {text?: string; type: 'medium'}
+  | {text: string; type: 'small'};
 
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
@@ -117,7 +117,7 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = type === 'inline' || type === 'pill';
+    const isInline = type === 'medium' || type === 'small';
 
     const spacing = compact ? theme.spacings.small : theme.spacings.medium;
     const {background: buttonColor} =
@@ -143,10 +143,10 @@ export const Button = React.forwardRef<any, ButtonProps>(
         backgroundColor: modeData.withBackground ? buttonColor : 'transparent',
         borderColor: borderColor,
         paddingHorizontal: spacing,
-        paddingVertical: type === 'pill' ? theme.spacings.xSmall : spacing,
+        paddingVertical: type === 'small' ? theme.spacings.xSmall : spacing,
         alignSelf: isInline ? 'flex-start' : undefined,
         borderRadius:
-          type === 'pill'
+          type === 'small'
             ? theme.border.radius.circle
             : theme.border.radius.regular,
       },
@@ -266,6 +266,6 @@ const useColor = (color: StaticColor): string => {
 
 function getTextType(mode: string, type: string) {
   if (mode === 'tertiary') return 'body__primary';
-  if (type === 'pill') return 'body__secondary';
+  if (type === 'small') return 'body__secondary';
   return 'body__primary--bold';
 }

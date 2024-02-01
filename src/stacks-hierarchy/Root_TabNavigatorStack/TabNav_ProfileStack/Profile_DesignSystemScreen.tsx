@@ -630,14 +630,14 @@ export const Profile_DesignSystemScreen = ({
                   style={{marginTop: 24, marginBottom: 12}}
                   type="heading__paragraph"
                 >
-                  Inline button examples (interactive_0)
+                  Medium button examples (interactive_0)
                 </ThemeText>
                 <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                   <Button
                     text="Primary"
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
@@ -645,7 +645,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Primary - active"
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     active={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
@@ -654,7 +654,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Primary - disabled"
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     disabled={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
@@ -663,7 +663,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Primary - compact"
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     compact={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
@@ -672,14 +672,14 @@ export const Profile_DesignSystemScreen = ({
                     text="Secondary"
                     onPress={presser}
                     mode="secondary"
-                    type="inline"
+                    type="medium"
                     style={{margin: 4}}
                   />
                   <Button
                     text="Secondary - active"
                     onPress={presser}
                     mode="secondary"
-                    type="inline"
+                    type="medium"
                     active={true}
                     style={{margin: 4}}
                   />
@@ -687,7 +687,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Secondary - compact"
                     onPress={presser}
                     mode="secondary"
-                    type="inline"
+                    type="medium"
                     compact={true}
                     style={{margin: 4}}
                   />
@@ -695,14 +695,14 @@ export const Profile_DesignSystemScreen = ({
                     text="Tertiary"
                     onPress={presser}
                     mode="tertiary"
-                    type="inline"
+                    type="medium"
                     style={{margin: 4}}
                   />
                   <Button
                     text="Tertiary - disabled"
                     onPress={presser}
                     mode="tertiary"
-                    type="inline"
+                    type="medium"
                     disabled={true}
                     style={{margin: 4}}
                   />
@@ -719,7 +719,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Primary"
                     onPress={presser}
                     mode="primary"
-                    type="pill"
+                    type="small"
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
                   />
@@ -727,7 +727,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Primary - active"
                     onPress={presser}
                     mode="primary"
-                    type="pill"
+                    type="small"
                     active={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
@@ -736,7 +736,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Primary - disabled"
                     onPress={presser}
                     mode="primary"
-                    type="pill"
+                    type="small"
                     disabled={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
@@ -745,7 +745,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Primary - compact"
                     onPress={presser}
                     mode="primary"
-                    type="pill"
+                    type="small"
                     compact={true}
                     interactiveColor="interactive_0"
                     style={{margin: 4}}
@@ -754,14 +754,14 @@ export const Profile_DesignSystemScreen = ({
                     text="Secondary"
                     onPress={presser}
                     mode="secondary"
-                    type="pill"
+                    type="small"
                     style={{margin: 4}}
                   />
                   <Button
                     text="Secondary - active"
                     onPress={presser}
                     mode="secondary"
-                    type="pill"
+                    type="small"
                     active={true}
                     style={{margin: 4}}
                   />
@@ -769,7 +769,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Secondary - compact"
                     onPress={presser}
                     mode="secondary"
-                    type="pill"
+                    type="small"
                     compact={true}
                     style={{margin: 4}}
                   />
@@ -777,14 +777,14 @@ export const Profile_DesignSystemScreen = ({
                     text="Tertiary"
                     onPress={presser}
                     mode="tertiary"
-                    type="pill"
+                    type="small"
                     style={{margin: 4}}
                   />
                   <Button
                     text="Tertiary - disabled"
                     onPress={presser}
                     mode="tertiary"
-                    type="pill"
+                    type="small"
                     disabled={true}
                     style={{margin: 4}}
                   />
@@ -843,7 +843,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     interactiveColor="interactive_0"
                     leftIcon={{svg: Add, notification: {color: 'valid'}}}
                     style={{margin: 4}}
@@ -852,7 +852,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     active={true}
                     interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
@@ -862,7 +862,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="secondary"
-                    type="inline"
+                    type="medium"
                     active={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
@@ -871,7 +871,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="tertiary"
-                    type="inline"
+                    type="medium"
                     active={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
@@ -880,7 +880,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     active={true}
                     interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
@@ -889,7 +889,7 @@ export const Profile_DesignSystemScreen = ({
                   <Button
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     interactiveColor="interactive_0"
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
@@ -897,7 +897,7 @@ export const Profile_DesignSystemScreen = ({
                   <Button
                     onPress={presser}
                     mode="primary"
-                    type="inline"
+                    type="medium"
                     compact={true}
                     interactiveColor="interactive_0"
                     rightIcon={{svg: Delete}}
@@ -906,14 +906,14 @@ export const Profile_DesignSystemScreen = ({
                   <Button
                     onPress={presser}
                     mode="secondary"
-                    type="inline"
+                    type="medium"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
                   <Button
                     onPress={presser}
                     mode="tertiary"
-                    type="inline"
+                    type="medium"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />
@@ -921,7 +921,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="primary"
-                    type="pill"
+                    type="small"
                     interactiveColor="interactive_0"
                     leftIcon={{svg: Add}}
                     style={{margin: 4}}
@@ -930,7 +930,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="secondary"
-                    type="pill"
+                    type="small"
                     compact={true}
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
@@ -939,7 +939,7 @@ export const Profile_DesignSystemScreen = ({
                     text="Example"
                     onPress={presser}
                     mode="tertiary"
-                    type="pill"
+                    type="small"
                     rightIcon={{svg: Delete}}
                     style={{margin: 4}}
                   />

@@ -12,7 +12,7 @@ export const PositionArrow: React.FC<
 
   return (
     <Button
-      type="inline"
+      type="medium"
       compact={true}
       interactiveColor="interactive_2"
       onPress={onPress}

@@ -15,7 +15,7 @@ export const MapFilter = ({onPress, isLoading}: MapFilterProps) => {
   return (
     <Button
       style={style.filterButton}
-      type="inline"
+      type="medium"
       compact={true}
       interactiveColor="interactive_2"
       accessibilityRole="button"

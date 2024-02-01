@@ -9,7 +9,7 @@ export const BackArrow: React.FC<{onBack(): void} & AccessibilityProps> = ({
 }) => {
   return (
     <Button
-      type="inline"
+      type="medium"
       compact={true}
       interactiveColor="interactive_0"
       onPress={onBack}

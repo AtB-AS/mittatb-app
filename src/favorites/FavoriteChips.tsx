@@ -114,7 +114,7 @@ export const FavoriteChips: React.FC<Props> = ({
 };
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
-  return <Button {...props} type="inline" compact={true} />;
+  return <Button {...props} type="medium" compact={true} />;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
