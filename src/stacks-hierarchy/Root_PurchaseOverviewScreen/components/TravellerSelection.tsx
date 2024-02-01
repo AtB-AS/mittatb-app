@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
@@ -19,6 +19,8 @@ import {ContentHeading} from '@atb/components/heading';
 import {LabelInfo} from '@atb/components/label-info';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
+import {usePopOver} from '@atb/popover';
+import {useFocusEffect} from '@react-navigation/native';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -51,6 +53,9 @@ export function TravellerSelection({
 
   const isOnBehalfOfEnabled = useOnBehalfOf();
 
+  const {addPopOver} = usePopOver();
+  const onBehalfOfIndicatorRef = useRef(null);
+
   const [userProfilesState, setUserProfilesState] = useState<
     UserProfileWithCount[]
   >(selectableUserProfiles);
@@ -75,6 +80,17 @@ export function TravellerSelection({
     setTravellerSelection(filteredSelection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fareProductType, selectionMode, userProfilesState]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (isOnBehalfOfEnabled) {
+        addPopOver({
+          oneTimeKey: 'on-behalf-of-new-feature-introduction',
+          target: onBehalfOfIndicatorRef,
+        });
+      }
+    }, [isOnBehalfOfEnabled, addPopOver]),
+  );
 
   if (selectionMode === 'none') {
     return null;
@@ -187,7 +203,15 @@ export function TravellerSelection({
             </View>
 
             {/* remove new label when requested */}
-            {isOnBehalfOfEnabled && <LabelInfo label="new" />}
+            {isOnBehalfOfEnabled && (
+              <View
+                ref={onBehalfOfIndicatorRef}
+                renderToHardwareTextureAndroid={true}
+                collapsable={false}
+              >
+                <LabelInfo label="new" />
+              </View>
+            )}
 
             <ThemeIcon svg={Edit} size="normal" />
           </View>
