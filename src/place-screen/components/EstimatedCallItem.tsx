@@ -90,7 +90,7 @@ export const EstimatedCallItem = memo(
             accessibilityLabel={getLineAndTimeA11yLabel(departure, t, language)}
             accessibilityHint={t(DeparturesTexts.a11yViewDepartureDetailsHint)}
           >
-            <View style={styles.transportInfo} accessible={false}>
+            <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
               <ThemeText
                 type={
