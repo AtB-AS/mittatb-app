@@ -109,6 +109,7 @@ const DeparturesTexts = {
     'Aktiver for å merke som favoritt',
   ),
   favorites: {
+    favoriteButton: _('Favorittknapp', 'Favorite button', 'Favorittknapp'),
     toggle: _(
       'Vis kun favorittavganger',
       'View favourite departures only',

@@ -17,9 +17,9 @@ const FavoriteDeparturesTexts = {
       'Legg til favorittavgang',
     ),
     a11yHint: _(
-      'Aktiver for å legge til favorittavganger',
-      'Activate to add favourite departures',
-      'Aktiver for å legge til favorittavgangar',
+      'Aktiver for å legge til favorittavgang',
+      'Activate to add favourite departure',
+      'Aktiver for å legge til favorittavgang',
     ),
   },
   delete: {

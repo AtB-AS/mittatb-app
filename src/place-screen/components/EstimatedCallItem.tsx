@@ -71,16 +71,6 @@ export const EstimatedCallItem = memo(
         ? () => onPressFavorite(departure, existingFavorite)
         : () => onPressDetails(departure);
 
-    const a11yLabel =
-      mode === 'Favourite'
-        ? getLineA11yLabel(departure, t)
-        : getLineAndTimeA11yLabel(departure, t, language);
-
-    const a11yHint =
-      mode === 'Favourite'
-        ? t(DeparturesTexts.a11yMarkFavouriteHint)
-        : t(DeparturesTexts.a11yViewDepartureDetailsHint);
-
     const {destinationDisplay} = departure;
     const lineName = formatDestinationDisplay(t, destinationDisplay);
 
@@ -89,14 +79,16 @@ export const EstimatedCallItem = memo(
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
-        accessible={false}
+        accessible={mode == 'Favourite'}
+        accessibilityLabel={getLineA11yLabel(departure, t)}
+        accessibilityHint={t(DeparturesTexts.a11yMarkFavouriteHint)}
       >
         <View style={styles.container} testID={testID}>
           <View
             accessible={true}
             style={styles.lineAndDepartureTime}
-            accessibilityLabel={a11yLabel}
-            accessibilityHint={a11yHint}
+            accessibilityLabel={getLineAndTimeA11yLabel(departure, t, language)}
+            accessibilityHint={t(DeparturesTexts.a11yViewDepartureDetailsHint)}
           >
             <View style={styles.transportInfo} accessible={false}>
               <LineChip departure={departure} mode={mode} testID={testID} />
@@ -111,15 +103,15 @@ export const EstimatedCallItem = memo(
                 {lineName}
               </ThemeText>
             </View>
-            {mode !== 'Favourite' && (
-              <DepartureTime accessible={false} departure={departure} />
-            )}
+            {mode !== 'Favourite' && <DepartureTime departure={departure} />}
           </View>
 
           {mode !== 'Map' && (
             <FavouriteDepartureToggle
               existingFavorite={existingFavorite}
-              toggleFavouriteAccessibilityLabel="Favorite"
+              toggleFavouriteAccessibilityLabel={t(
+                DeparturesTexts.favorites.favoriteButton,
+              )}
               onMarkFavourite={() =>
                 onPressFavorite(departure, existingFavorite)
               }
@@ -163,19 +155,13 @@ export const EstimatedCallItem = memo(
   },
 );
 
-const DepartureTime = ({
-  departure,
-  accessible,
-}: {
-  departure: EstimatedCall;
-  accessible?: boolean;
-}) => {
+const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const {themeName} = useTheme();
 
   return (
-    <View accessible={accessible}>
+    <View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         {departure.realtime && !departure.cancellation && (
           <ThemeIcon

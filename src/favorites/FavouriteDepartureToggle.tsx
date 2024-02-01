@@ -8,6 +8,7 @@ import {FavoriteDeparture} from './types';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {FavoriteDeparturesTexts, useTranslation} from '@atb/translations';
 
 type Props = {
   onMarkFavourite?: () => void;
@@ -21,12 +22,19 @@ export const FavouriteDepartureToggle = ({
   toggleFavouriteAccessibilityLabel,
 }: Props) => {
   const style = useStyles();
+  const {t} = useTranslation();
+
   return (
     <PressableOpacity
       onPress={onMarkFavourite}
       accessibilityRole="checkbox"
       accessibilityState={{checked: !!existingFavorite}}
       accessibilityLabel={toggleFavouriteAccessibilityLabel}
+      accessibilityHint={
+        !!existingFavorite
+          ? t(FavoriteDeparturesTexts.favoriteItemDelete.a11yHint)
+          : t(FavoriteDeparturesTexts.favoriteItemAdd.a11yHint)
+      }
       accessible={!!toggleFavouriteAccessibilityLabel}
       importantForAccessibility={
         !!toggleFavouriteAccessibilityLabel ? 'yes' : 'no'
