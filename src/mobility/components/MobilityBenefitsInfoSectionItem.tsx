@@ -94,7 +94,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     borderedInfoBox: {marginTop: theme.spacings.small},
     borderedInfoBoxContent: {gap: theme.spacings.small},
     benefitInfo: {flexDirection: 'row', flex: 1, gap: theme.spacings.small},
-    formFactorsContainer: {height: 18 * fontScale, aspectRatio: 1},
+    formFactorsContainer: {height: 18 * fontScale, width: 28 * fontScale},
     benefitText: {flex: 1},
   };
 });
