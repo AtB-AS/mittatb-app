@@ -32,7 +32,7 @@ import {useTimeContextState} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {useAppState} from '@atb/AppContext';
+import {useOnboardingState} from '@atb/onboarding';
 
 type Props = {onAfterSave: () => void};
 
@@ -45,7 +45,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {completeOnboardingSection} = useAppState();
+  const {completeOnboardingSection} = useOnboardingState();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
   const {data} = useTokenToggleDetailsQuery();

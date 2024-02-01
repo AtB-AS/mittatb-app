@@ -1,10 +1,10 @@
+import {useOnboardingState} from '@atb/onboarding';
 import {OnboardingSectionId} from './use-onboarding-sections';
-import {useAppState} from '@atb/AppContext';
 
 export const useOnboardingSectionIsOnboarded: (
   onboardingSectionId: OnboardingSectionId,
 ) => boolean = (onboardingSectionId) => {
-  const {loadedOnboardingSections} = useAppState();
+  const {loadedOnboardingSections} = useOnboardingState();
   return (
     loadedOnboardingSections.find(
       (lOS) => lOS.onboardingSectionId === onboardingSectionId,

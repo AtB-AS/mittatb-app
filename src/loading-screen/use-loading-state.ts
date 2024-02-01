@@ -1,11 +1,16 @@
-import {useAppState} from '@atb/AppContext';
+import {useOnboardingState} from '@atb/onboarding';
 import {useAuthState} from '@atb/auth';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {LoadingState, LoadingStatus} from '@atb/loading-screen/types';
 import {useFirestoreConfiguration} from '@atb/configuration';
 
+export const useIsLoadingAppState = () => {
+  const {isLoading: onboardingIsLoading} = useOnboardingState();
+  return onboardingIsLoading;
+};
+
 export const useLoadingState = (timeoutMs: number): LoadingState => {
-  const {isLoading: isLoadingAppState} = useAppState();
+  const isLoadingAppState = useIsLoadingAppState();
   const {authStatus, retryAuth} = useAuthState();
   const [status, setStatus] = useState<LoadingStatus>('loading');
   const {resubscribeFirestoreConfig, firestoreConfigStatus} =
@@ -26,7 +31,11 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
     } else {
       setStatus((prev) => (prev === 'timeout' ? 'timeout' : 'loading'));
     }
-    paramsRef.current = {isLoadingAppState, authStatus, firestoreConfigStatus};
+    paramsRef.current = {
+      isLoadingAppState,
+      authStatus,
+      firestoreConfigStatus,
+    };
   }, [isLoadingAppState, authStatus, firestoreConfigStatus]);
 
   useEffect(() => {

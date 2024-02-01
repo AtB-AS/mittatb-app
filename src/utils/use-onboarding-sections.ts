@@ -1,8 +1,8 @@
-import {useAppState} from '@atb/AppContext';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 
 import {useMemo} from 'react';
 import {useOnboardingGetCustomShouldShow} from './use-onboarding-get-custom-should-show';
+import {useOnboardingState} from '@atb/onboarding';
 
 type IsOnboardedStoreKey =
   | '@ATB_extended_onboarding_onboarded'
@@ -96,10 +96,10 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
     },
   ];
 
-export const useOnboardingSections = (
+export const useOnboardingSections: (
   utilizeThisHookInstanceForSessionCounting: boolean,
-) => {
-  const {loadedOnboardingSections} = useAppState();
+) => OnboardingSection[] = (utilizeThisHookInstanceForSessionCounting) => {
+  const {loadedOnboardingSections} = useOnboardingState();
 
   const getCustomShouldShow = useOnboardingGetCustomShouldShow(
     utilizeThisHookInstanceForSessionCounting,

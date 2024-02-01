@@ -8,29 +8,29 @@ import React, {
   useReducer,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import {register as registerChatUser} from './chat/user';
+import {register as registerChatUser} from '../chat/user';
 import {storage} from '@atb/storage';
 import {
   OnboardingSection,
   OnboardingSectionId,
   staticOnboardingSectionsInPrioritizedOrder,
   LoadedOnboardingSection,
-} from './utils/use-onboarding-sections';
+} from '../utils/use-onboarding-sections';
 
-export type AppState = {
+export type OnboardingState = {
   isLoading: boolean;
   loadedOnboardingSections: LoadedOnboardingSection[];
 };
 
-type AppContextState = AppState & {
+type OnboardingContextState = OnboardingState & {
   completeOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartAllOnboardingSections: () => void;
 };
 
-type AppReducerAction =
+type OnboardingReducerAction =
   | {
-      type: 'LOAD_APP_SETTINGS';
+      type: 'LOAD_ONBOARDING_SETTINGS';
       loadedOnboardingSections: LoadedOnboardingSection[];
     }
   | {
@@ -42,16 +42,21 @@ type AppReducerAction =
       onboardingSectionId: OnboardingSectionId;
     };
 
-const AppContext = createContext<AppContextState | undefined>(undefined);
-const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
+const OnboardingContext = createContext<OnboardingContextState | undefined>(
   undefined,
 );
+const OnboardingDispatch = createContext<
+  Dispatch<OnboardingReducerAction> | undefined
+>(undefined);
 
-type AppReducer = (prevState: AppState, action: AppReducerAction) => AppState;
+type OnboardingReducer = (
+  prevState: OnboardingState,
+  action: OnboardingReducerAction,
+) => OnboardingState;
 
-const appReducer: AppReducer = (prevState, action) => {
+const onboardingReducer: OnboardingReducer = (prevState, action) => {
   switch (action.type) {
-    case 'LOAD_APP_SETTINGS':
+    case 'LOAD_ONBOARDING_SETTINGS':
       const {loadedOnboardingSections} = action;
       return {
         ...prevState,
@@ -79,16 +84,19 @@ const appReducer: AppReducer = (prevState, action) => {
   }
 };
 
-const defaultAppState: AppState = {
+const defaultOnboardingState: OnboardingState = {
   isLoading: true,
   loadedOnboardingSections: [],
 };
 
-export const AppContextProvider: React.FC = ({children}) => {
-  const [state, dispatch] = useReducer<AppReducer>(appReducer, defaultAppState);
+export const OnboardingContextProvider: React.FC = ({children}) => {
+  const [state, dispatch] = useReducer<OnboardingReducer>(
+    onboardingReducer,
+    defaultOnboardingState,
+  );
 
   useEffect(() => {
-    async function loadAppSettings() {
+    async function loadOnboardingSettings() {
       const loadedOnboardingSections = await Promise.all(
         staticOnboardingSectionsInPrioritizedOrder.map(
           async (staticOnboardingSection) => {
@@ -112,13 +120,13 @@ export const AppContextProvider: React.FC = ({children}) => {
       }
 
       dispatch({
-        type: 'LOAD_APP_SETTINGS',
+        type: 'LOAD_ONBOARDING_SETTINGS',
         loadedOnboardingSections,
       });
 
       RNBootSplash.hide({fade: true});
     }
-    loadAppSettings();
+    loadOnboardingSettings();
   }, []);
 
   const {completeOnboardingSection, restartOnboardingSection} = useMemo(
@@ -164,7 +172,7 @@ export const AppContextProvider: React.FC = ({children}) => {
   );
 
   return (
-    <AppContext.Provider
+    <OnboardingContext.Provider
       value={{
         ...state,
         completeOnboardingSection,
@@ -172,23 +180,29 @@ export const AppContextProvider: React.FC = ({children}) => {
         restartAllOnboardingSections,
       }}
     >
-      <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
-    </AppContext.Provider>
+      <OnboardingDispatch.Provider value={dispatch}>
+        {children}
+      </OnboardingDispatch.Provider>
+    </OnboardingContext.Provider>
   );
 };
 
-export function useAppState() {
-  const context = useContext(AppContext);
+export function useOnboardingState() {
+  const context = useContext(OnboardingContext);
   if (context === undefined) {
-    throw new Error('useAppState must be used within a AppContextProvider');
+    throw new Error(
+      'useOnboardingState must be used within a OnboardingContextProvider',
+    );
   }
   return context;
 }
 
-export function useAppDispatch() {
-  const context = useContext(AppDispatch);
+export function useOnboardingDispatch() {
+  const context = useContext(OnboardingDispatch);
   if (context === undefined) {
-    throw new Error('useAppDispatch must be used within a AppContextProvider');
+    throw new Error(
+      'useOnboardingDispatch must be used within a OnboardingContextProvider',
+    );
   }
   return context;
 }

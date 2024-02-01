@@ -1,4 +1,3 @@
-import {useAppState} from '@atb/AppContext';
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useTheme} from '@atb/theme';
@@ -66,6 +65,7 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
+import {useIsLoadingAppState} from '@atb/loading-screen/use-loading-state';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -74,7 +74,7 @@ type ResultState = PartialState<NavigationState> & {
 const Stack = createStackNavigator<RootStackParamList>();
 
 export const RootStack = () => {
-  const {isLoading} = useAppState();
+  const isLoadingAppState = useIsLoadingAppState();
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
@@ -89,7 +89,7 @@ export const RootStack = () => {
     queryClient.invalidateQueries();
   }, [userId, queryClient]);
 
-  if (isLoading) {
+  if (isLoadingAppState) {
     return null;
   }
 
