@@ -4,7 +4,7 @@ import React, {useCallback} from 'react';
 import NotificationPermissionTexts from '@atb/translations/screens/NotificationPermission';
 import {PushNotification} from '@atb/assets/svg/color/images';
 
-import {OnboardingScreenComponent} from '@atb/onboarding-screen';
+import {OnboardingScreenComponent} from '@atb/onboarding';
 import {useNotifications} from '@atb/notifications';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 

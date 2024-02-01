@@ -9,7 +9,7 @@ import {
 
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
-import {OnboardingFullScreenView} from '@atb/onboarding-screen';
+import {OnboardingFullScreenView} from '@atb/onboarding';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 import {LoadingScreen} from '@atb/loading-screen';
