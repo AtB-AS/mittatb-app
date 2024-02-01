@@ -30,6 +30,7 @@ import {useCityBikesInMapDebugOverride} from '@atb/mobility/use-city-bikes-enabl
 import {useFlexibleTransportDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-flexible-transport-enabled';
 import {useShowValidTimeInfoDebugOverride} from '../TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 import {
+  ButtonSectionItem,
   ExpandableSectionItem,
   GenericSectionItem,
   HeaderSectionItem,
@@ -179,8 +180,8 @@ export const Profile_DebugInfoScreen = () => {
       />
       <ScrollView testID="debugInfoScrollView">
         <Section withPadding withTopPadding>
-          <LinkSectionItem
-            text="Restart all onboarding sections"
+          <ButtonSectionItem
+            label="Restart all onboarding sections"
             onPress={() => restartAllOnboardingSections()}
           />
           <ExpandableSectionItem
@@ -189,9 +190,9 @@ export const Profile_DebugInfoScreen = () => {
             expandContent={onboardingSections.map((onboardingSection) => {
               const {onboardingSectionId} = onboardingSection;
               return (
-                <LinkSectionItem
+                <ButtonSectionItem
                   key={onboardingSectionId}
-                  text={`Restart ${onboardingSectionId} onboarding`}
+                  label={`Restart ${onboardingSectionId} onboarding`}
                   onPress={() => restartOnboardingSection(onboardingSectionId)}
                 />
               );
