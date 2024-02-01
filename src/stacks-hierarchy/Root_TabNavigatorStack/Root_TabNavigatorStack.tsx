@@ -43,19 +43,15 @@ export const Root_TabNavigatorStack = () => {
 
   const navigation = useNavigation<RootNavigationProps>();
 
-  const {nextOnboardingScreen} = useOnboardingFlow(true, true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
+  const {nextOnboardingSection} = useOnboardingFlow(true, true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
 
   useEffect(() => {
     if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
 
-    nextOnboardingScreen?.screenName &&
-      goToScreen(
-        false,
-        nextOnboardingScreen.screenName,
-        nextOnboardingScreen.params,
-      );
-  }, [nextOnboardingScreen, goToScreen, navigation]);
+    const nextOnboardingScreen = nextOnboardingSection?.initialScreen;
+    nextOnboardingScreen?.name && goToScreen(false, nextOnboardingScreen);
+  }, [nextOnboardingSection?.initialScreen, goToScreen, navigation]);
 
   return (
     <Tab.Navigator

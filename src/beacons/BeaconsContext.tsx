@@ -20,7 +20,6 @@ import {useBeaconsMessages} from './use-beacons-messages';
 import {storage} from '@atb/storage';
 import {parseBoolean} from '@atb/utils/parse-boolean';
 import Bugsnag from '@bugsnag/react-native';
-import {useAppState} from '@atb/AppContext';
 
 type BeaconsInfo = {
   /**
@@ -96,7 +95,6 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const [beaconsInfo, setBeaconsInfo] = useState<BeaconsInfo>();
   const [isConsentGranted, setIsConsentGranted] = useState<boolean>(false);
   const [isBeaconsEnabled, debugOverrideReady] = useIsBeaconsEnabled();
-  const {completeShareTravelHabitsOnboarding} = useAppState();
 
   const isInitializedRef = useRef(false);
   const isBeaconsSupported =
@@ -149,9 +147,6 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         setIsConsentGranted(true);
       }
 
-      // Consider the user onboarded for beacons
-      completeShareTravelHabitsOnboarding();
-
       let permissionsGranted = false;
       if (Platform.OS === 'ios') {
         // NOTE: This module can be found in /ios/Shared/BeaconsPermissions.swift
@@ -176,12 +171,7 @@ const BeaconsContextProvider: React.FC = ({children}) => {
 
       return permissionsGranted;
     },
-    [
-      isBeaconsSupported,
-      rationaleMessages,
-      initializeKettleSDK,
-      completeShareTravelHabitsOnboarding,
-    ],
+    [isBeaconsSupported, rationaleMessages, initializeKettleSDK],
   );
 
   const revokeBeacons = useCallback(async () => {

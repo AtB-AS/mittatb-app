@@ -19,7 +19,7 @@ export const Root_ShareTravelHabitsScreen = () => {
 
   const {configurableLinks} = useFirestoreConfiguration();
 
-  const {continueFromOnboardingScreen} = useOnboardingNavigation();
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
 
   const {onboardForBeacons} = useBeaconsState();
 
@@ -42,7 +42,7 @@ export const Root_ShareTravelHabitsScreen = () => {
       motion: permissions.motion,
     });
 
-    continueFromOnboardingScreen('Root_ShareTravelHabitsScreen');
+    continueFromOnboardingSection('shareTravelHabits');
   };
 
   return (

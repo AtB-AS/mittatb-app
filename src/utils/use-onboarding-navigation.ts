@@ -1,47 +1,54 @@
-import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
+import {RootNavigationProps} from '@atb/stacks-hierarchy';
 
 import {useNavigation, StackActions} from '@react-navigation/native';
 
 import {useCallback} from 'react';
 import {InteractionManager} from 'react-native';
 import {useOnboardingFlow} from './use-onboarding-flow';
+import {useAppState} from '@atb/AppContext';
+import {OnboardingSectionId} from './use-onboarding-sections';
 
 export const useOnboardingNavigation = () => {
   const navigation = useNavigation<RootNavigationProps>();
-  const {getNextOnboardingScreen} = useOnboardingFlow();
+  const {getNextOnboardingSection} = useOnboardingFlow();
+  const {completeOnboardingSection} = useAppState();
 
   const goToScreen = useCallback(
-    (replace, screenName, params?) => {
+    (replace, screen: {name?: any; params?: any}) => {
       InteractionManager.runAfterInteractions(() => {
+        if (!screen?.name) return;
         if (replace) {
-          navigation.dispatch(StackActions.replace(screenName, params));
+          navigation.dispatch(StackActions.replace(screen.name, screen.params));
         } else {
-          navigation.navigate(screenName, params);
+          navigation.navigate(screen.name, screen.params);
         }
       });
     },
     [navigation],
   );
 
-  const continueFromOnboardingScreen = useCallback(
-    (comingFromScreenName?: keyof RootStackParamList) => {
-      const nextOnboardingScreen =
-        getNextOnboardingScreen(comingFromScreenName);
-      if (nextOnboardingScreen?.screenName) {
-        goToScreen(
-          true,
-          nextOnboardingScreen.screenName,
-          nextOnboardingScreen.params,
-        );
+  const continueFromOnboardingSection = useCallback(
+    (comingFromSectionId: OnboardingSectionId) => {
+      completeOnboardingSection(comingFromSectionId);
+      const nextOnboardingSection =
+        getNextOnboardingSection(comingFromSectionId);
+
+      if (nextOnboardingSection?.initialScreen?.name) {
+        goToScreen(true, nextOnboardingSection?.initialScreen);
       } else {
         navigation.goBack();
       }
     },
-    [getNextOnboardingScreen, goToScreen, navigation],
+    [
+      completeOnboardingSection,
+      getNextOnboardingSection,
+      goToScreen,
+      navigation,
+    ],
   );
 
   return {
     goToScreen,
-    continueFromOnboardingScreen,
+    continueFromOnboardingSection,
   };
 };
