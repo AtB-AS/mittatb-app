@@ -5,7 +5,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 
 import {useBeaconsState} from './BeaconsContext';
-import {useOnboardingSectionIsOnboarded} from '@atb/utils/use-onboarding-sections';
+import {useOnboardingSectionIsOnboarded} from '@atb/utils/use-onboarding-section-is-onboarded';
 
 export const shareTravelHabitsSessionCountKey =
   '@ATB_share_travel_habits_session_count_v2';

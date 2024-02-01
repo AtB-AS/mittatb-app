@@ -14,7 +14,6 @@ import {
   OnboardingSection,
   OnboardingSectionId,
   staticOnboardingSectionsInPrioritizedOrder,
-  getOnboardingSection,
   LoadedOnboardingSection,
 } from './utils/use-onboarding-sections';
 
@@ -104,10 +103,11 @@ export const AppContextProvider: React.FC = ({children}) => {
         ),
       );
 
-      const userCreationOnboardedScreen = loadedOnboardingSections.find(
-        (sOS) => sOS.onboardingSectionId === 'userCreation',
-      );
-      if (userCreationOnboardedScreen?.isOnboarded) {
+      if (
+        loadedOnboardingSections.find(
+          (lOS) => lOS.onboardingSectionId === 'userCreation',
+        )?.isOnboarded
+      ) {
         registerChatUser();
       }
 
@@ -199,7 +199,7 @@ const getUpdatedOnboardingSections = (
   isOnboarded: boolean,
 ) => {
   const index = onboardingSections.findIndex(
-    (sOS) => sOS.onboardingSectionId === onboardingSectionId,
+    (oS) => oS.onboardingSectionId === onboardingSectionId,
   );
   if (index !== -1) {
     // only return a new array if a value is changed
@@ -217,11 +217,13 @@ const storeOnboardingSectionIsOnboarded = async (
   onboardingSectionId: OnboardingSectionId,
   isOnboarded: boolean,
 ) => {
-  const isOnboardedStoreKey = getOnboardingSection(
-    onboardingSections,
-    onboardingSectionId,
-  )?.isOnboardedStoreKey;
-  if (isOnboardedStoreKey) {
-    await storage.set(isOnboardedStoreKey, JSON.stringify(isOnboarded));
+  const onboardingSection = onboardingSections.find(
+    (oS) => oS.onboardingSectionId === onboardingSectionId,
+  );
+  if (onboardingSection?.isOnboardedStoreKey) {
+    await storage.set(
+      onboardingSection.isOnboardedStoreKey,
+      JSON.stringify(isOnboarded),
+    );
   }
 };
