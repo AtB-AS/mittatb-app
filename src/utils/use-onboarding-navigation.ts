@@ -18,11 +18,9 @@ export const useOnboardingNavigation = () => {
       InteractionManager.runAfterInteractions(() => {
         if (!screen?.name) return;
         if (replace) {
-          navigation.dispatch(
-            StackActions.replace(screen.name, screen?.params),
-          );
+          navigation.dispatch(StackActions.replace(screen.name, screen.params));
         } else {
-          navigation.navigate(screen.name, screen?.params);
+          navigation.navigate(screen.name, screen.params);
         }
       });
     },
