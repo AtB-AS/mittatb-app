@@ -69,6 +69,7 @@ export const Profile_DebugInfoScreen = () => {
   const {
     restartMobileTokenOnboarding,
     restartMobileTokenWithoutTravelcardOnboarding,
+    restartExtendedOnboarding,
     restartUserCreationOnboarding,
     restartNotificationPermissionOnboarding,
     restartLocationWhenInUsePermissionOnboarding,
@@ -194,6 +195,10 @@ export const Profile_DebugInfoScreen = () => {
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
             }}
+          />
+          <LinkSectionItem
+            text="Restart extended onboarding"
+            onPress={restartExtendedOnboarding}
           />
           <LinkSectionItem
             text="Restart user creation onboarding"

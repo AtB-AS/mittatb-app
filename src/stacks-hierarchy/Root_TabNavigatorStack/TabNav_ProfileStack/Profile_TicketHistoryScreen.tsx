@@ -6,6 +6,7 @@ import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHisto
 import {useTimeContextState} from '@atb/time';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 export const Profile_TicketHistoryScreen: React.FC = () => {
   const {
@@ -31,12 +32,16 @@ export const Profile_TicketHistoryScreen: React.FC = () => {
       parallaxContent={(focusRef) => (
         <ScreenHeading ref={focusRef} text={t(TicketHistoryTexts.header)} />
       )}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshingFareContracts}
+          onRefresh={resubscribeFirestoreListeners}
+        />
+      }
     >
       <FareContractAndReservationsList
         fareContracts={expiredFareContracts}
         reservations={rejectedReservations}
-        isRefreshing={isRefreshingFareContracts}
-        refresh={resubscribeFirestoreListeners}
         now={serverNow}
         emptyStateTitleText={t(
           TicketingTexts.activeFareProductsAndReservationsTab

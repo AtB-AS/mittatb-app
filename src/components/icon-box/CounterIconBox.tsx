@@ -25,6 +25,12 @@ export const CounterIconBox = ({
 
   if (count < 1) return null;
 
+  const xSmallStyling: CounterStyling = {
+    padding: theme.spacings.xSmall,
+    lineHeight: iconSizes.xSmall,
+    type: 'label__uppercase',
+  };
+
   const smallStyling: CounterStyling = {
     padding: theme.spacings.xSmall,
     lineHeight: iconSizes.small,
@@ -45,6 +51,8 @@ export const CounterIconBox = ({
 
   const styling = (): CounterStyling => {
     switch (size) {
+      case 'xSmall':
+        return xSmallStyling;
       case 'small':
         return smallStyling;
       case 'normal':

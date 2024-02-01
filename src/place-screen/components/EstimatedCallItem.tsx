@@ -168,7 +168,7 @@ const DepartureTime = ({departure}: {departure: EstimatedCall}) => {
           <ThemeIcon
             style={styles.realtimeIcon}
             svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-            size="small"
+            size="xSmall"
           />
         )}
         <ThemeText

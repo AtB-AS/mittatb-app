@@ -29,7 +29,7 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {offers} = route.params;
+  const {offers, destinationAccountId} = route.params;
   const [showWebView, setShowWebView] = useState<boolean>(true);
   const analytics = useAnalytics();
 
@@ -78,6 +78,7 @@ export const Root_PurchasePaymentWithCreditCardScreen: React.FC<Props> = ({
     paymentType,
     recurringPaymentId,
     saveRecurringCard,
+    destinationAccountId,
     navigateBackFromTerminal,
   );
 

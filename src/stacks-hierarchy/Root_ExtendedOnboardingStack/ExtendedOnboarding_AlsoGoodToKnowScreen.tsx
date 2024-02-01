@@ -3,22 +3,21 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {OnboardingTexts, useTranslation} from '@atb/translations';
+import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
-import {OnboardingScreenProps} from './navigation-types';
+import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
+import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export type AlsoGoodToKnowScreenProps =
-  OnboardingScreenProps<'Onboarding_AlsoGoodToKnowScreen'>;
-
-export const Onboarding_AlsoGoodToKnowScreen = ({
-  navigation,
-}: AlsoGoodToKnowScreenProps) => {
+export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
   const {t} = useTranslation();
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
+
+  const {continueFromOnboardingScreen} = useOnboardingNavigation();
+  const {completeExtendedOnboarding} = useAppState();
 
   return (
     <ScrollView
@@ -31,18 +30,21 @@ export const Onboarding_AlsoGoodToKnowScreen = ({
           color={themeColor}
           style={styles.header}
         >
-          {t(OnboardingTexts.alsoGoodToKnow.title)}
+          {t(ExtendedOnboardingTexts.alsoGoodToKnow.title)}
         </ThemeText>
         <Onboarding5 width={windowWidth} height={windowWidth * (4 / 5)} />
         <ThemeText style={styles.description} color={themeColor}>
-          {t(OnboardingTexts.alsoGoodToKnow.description)}
+          {t(ExtendedOnboardingTexts.alsoGoodToKnow.description)}
         </ThemeText>
       </View>
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() => navigation.navigate('Root_LoginOptionsScreen', {})}
-          text={t(OnboardingTexts.alsoGoodToKnow.mainButton)}
+          onPress={() => {
+            completeExtendedOnboarding();
+            continueFromOnboardingScreen('Root_ExtendedOnboardingStack');
+          }}
+          text={t(ExtendedOnboardingTexts.alsoGoodToKnow.mainButton)}
           testID="nextButtonAlsoGoodToKnowOnboarding"
         />
       </View>

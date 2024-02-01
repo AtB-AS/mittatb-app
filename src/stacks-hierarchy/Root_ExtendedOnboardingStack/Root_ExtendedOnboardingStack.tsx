@@ -8,14 +8,14 @@ import {
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {OnboardingStackParams} from './navigation-types';
-import {Onboarding_GoodToKnowScreen} from './Onboarding_GoodToKnowScreen';
-import {Onboarding_AlsoGoodToKnowScreen} from './Onboarding_AlsoGoodToKnowScreen';
+import {ExtendedOnboardingStackParams} from './navigation-types';
+import {ExtendedOnboarding_GoodToKnowScreen} from './ExtendedOnboarding_GoodToKnowScreen';
+import {ExtendedOnboarding_AlsoGoodToKnowScreen} from './ExtendedOnboarding_AlsoGoodToKnowScreen';
 
-const Tab = createMaterialTopTabNavigator<OnboardingStackParams>();
+const Tab = createMaterialTopTabNavigator<ExtendedOnboardingStackParams>();
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const Root_OnboardingStack = () => {
+export const Root_ExtendedOnboardingStack = () => {
   const styles = useStyles();
   const {theme} = useTheme();
   return (
@@ -29,16 +29,16 @@ export const Root_OnboardingStack = () => {
             return <PageIndicator {...props} />;
           }}
           tabBarPosition="bottom"
-          initialRouteName="Onboarding_GoodToKnowScreen"
+          initialRouteName="ExtendedOnboarding_GoodToKnowScreen"
         >
           <>
             <Tab.Screen
-              name="Onboarding_GoodToKnowScreen"
-              component={Onboarding_GoodToKnowScreen}
+              name="ExtendedOnboarding_GoodToKnowScreen"
+              component={ExtendedOnboarding_GoodToKnowScreen}
             />
             <Tab.Screen
-              name="Onboarding_AlsoGoodToKnowScreen"
-              component={Onboarding_AlsoGoodToKnowScreen}
+              name="ExtendedOnboarding_AlsoGoodToKnowScreen"
+              component={ExtendedOnboarding_AlsoGoodToKnowScreen}
             />
           </>
         </Tab.Navigator>

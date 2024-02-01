@@ -32,9 +32,10 @@ export const useOnboardingFlow = (
   utilizeThisHookInstanceForSessionCounting = false,
   assumeUserCreationOnboarded = false,
 ) => {
-  const {enable_extended_onboarding} = useRemoteConfig();
+  const shouldShowExtendedOnboarding = useShouldShowExtendedOnboarding();
 
-  const {userCreationOnboarded} = useAppState();
+  const shouldShowUserCreationOnboarding =
+    useShouldShowUserCreationOnboarding();
 
   const shouldShowLocationOnboarding = useShouldShowLocationOnboarding();
 
@@ -56,21 +57,21 @@ export const useOnboardingFlow = (
       let screenName: keyof RootStackParamList | undefined = undefined;
       let params = undefined;
 
-      const shouldShowUserCreationOnboarding = !(
-        userCreationOnboarded || assumeUserCreationOnboarded
-      );
-
       const orderedOnboardingScreens: {
         shouldShow: boolean;
         screenName: keyof RootStackParamList;
         params?: any;
       }[] = [
         {
-          shouldShow: shouldShowUserCreationOnboarding,
-          screenName: enable_extended_onboarding
-            ? 'Root_OnboardingStack'
-            : 'Root_LoginOptionsScreen',
-          params: enable_extended_onboarding ? undefined : {},
+          shouldShow:
+            shouldShowExtendedOnboarding && !assumeUserCreationOnboarded,
+          screenName: 'Root_ExtendedOnboardingStack',
+        },
+        {
+          shouldShow:
+            shouldShowUserCreationOnboarding && !assumeUserCreationOnboarded,
+          screenName: 'Root_LoginOptionsScreen',
+          params: {},
         },
         {
           shouldShow: shouldShowLocationOnboarding,
@@ -106,8 +107,8 @@ export const useOnboardingFlow = (
       };
     },
     [
-      enable_extended_onboarding,
-      userCreationOnboarded,
+      shouldShowExtendedOnboarding,
+      shouldShowUserCreationOnboarding,
       shouldShowLocationOnboarding,
       shouldShowTravelTokenOnboarding,
       shouldShowNotificationPermissionScreen,
@@ -126,31 +127,26 @@ export const useOnboardingFlow = (
   }, [getNextOnboardingScreen, assumeUserCreationOnboarded]);
 
   /**
-   * add Root_TabNavigatorStack as root when userCreationOnboarded
+   * add defaultInitialRouteName as root when userCreationOnboarded
    * this allows goBack from an onboarding screen when used as initial screen
-   * @param {Boolean} shouldGoDirectlyToOnboardingScreen when userCreationOnboarded, true if going directly to the next onboarding screen, false if instead going to Root_TabNavigatorStack first
    * @returns navigation state object
    */
-  const getInitialNavigationContainerState = (
-    shouldGoDirectlyToOnboardingScreen: boolean,
-  ) => {
+  const getInitialNavigationContainerState = () => {
+    const defaultInitialRouteName = 'Root_TabNavigatorStack';
     const initialOnboardingScreen = getNextOnboardingScreen(); // dont rely on effects as it will be too late for initialState
     const initialOnboardingRoute = {
-      name: initialOnboardingScreen?.screenName ?? 'Root_TabNavigatorStack',
+      name: initialOnboardingScreen?.screenName ?? defaultInitialRouteName,
       params: initialOnboardingScreen?.params,
     };
 
     const routes: PartialRoute<
       Route<keyof RootStackParamList, object | undefined>
-    >[] = [];
-    if (userCreationOnboarded) {
-      routes.push({name: 'Root_TabNavigatorStack'});
-
-      if (shouldGoDirectlyToOnboardingScreen) {
-        routes.push(initialOnboardingRoute);
-      }
-    } else {
-      routes.push(initialOnboardingRoute);
+    >[] = [initialOnboardingRoute];
+    if (
+      !shouldShowUserCreationOnboarding &&
+      initialOnboardingScreen?.screenName
+    ) {
+      routes.unshift({name: defaultInitialRouteName});
     }
     return {routes};
   };
@@ -160,6 +156,23 @@ export const useOnboardingFlow = (
     getNextOnboardingScreen,
     getInitialNavigationContainerState,
   };
+};
+
+const useShouldShowExtendedOnboarding = () => {
+  const {enable_extended_onboarding} = useRemoteConfig();
+  const {extendedOnboardingOnboarded} = useAppState();
+
+  const {userCreationOnboarded} = useAppState();
+  return (
+    enable_extended_onboarding &&
+    !extendedOnboardingOnboarded &&
+    !userCreationOnboarded // this is for backward compatibility
+  );
+};
+
+const useShouldShowUserCreationOnboarding = () => {
+  const {userCreationOnboarded} = useAppState();
+  return !userCreationOnboarded;
 };
 
 const useShouldShowTravelTokenOnboarding = () => {

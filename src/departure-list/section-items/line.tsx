@@ -250,7 +250,7 @@ function DepartureTimeItem({
       key={departure.aimedTime + departure.serviceJourneyId}
       onPress={() => onPress(departure)}
     >
-      {leftIcon && <ThemeIcon svg={leftIcon} size="small" />}
+      {leftIcon && <ThemeIcon svg={leftIcon} size="xSmall" />}
 
       <ThemeText
         type="body__primary--bold"

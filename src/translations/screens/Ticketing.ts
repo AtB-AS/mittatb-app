@@ -136,6 +136,26 @@ const TicketingTexts = {
       transportModes: _('Buss/trikk', 'Bus/tram', 'Buss/trikk'),
     },
   },
+  expiredTickets: {
+    title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
+    a11yHint: _(
+      'Aktiver for å vise dine utløpte billetter',
+      'Activate to show your expired tickets',
+      'Aktiver for å vise billettane dine som har gått ut',
+    ),
+  },
+  sentToOthers: {
+    title: _(
+      'Billetter sendt til andre',
+      'Tickets sent to others',
+      'Billettar sendt til andre',
+    ),
+    a11yHint: _(
+      'Aktiver for å vise billetter sendt til andre',
+      'Activate to show tickets sent to other',
+      'Aktiver for å vise billettar sendt til andre',
+    ),
+  },
   reservation: {
     reserving: _(
       'Prosesseres... ikke gyldig enda',
