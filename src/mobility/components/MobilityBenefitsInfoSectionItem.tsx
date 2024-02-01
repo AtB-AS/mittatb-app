@@ -1,5 +1,4 @@
 import {View} from 'react-native';
-import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
@@ -13,19 +12,16 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import {useFontScale} from '@atb/utils/use-font-scale';
 
 type Props = SectionItemProps<{
-  fareProductId?: string;
+  benefits: OperatorBenefitType[];
 }>;
 
 export const MobilityBenefitsInfoSectionItem = ({
-  fareProductId,
+  benefits,
   ...props
 }: Props) => {
-  const {benefits, status} = useOperatorBenefitsForFareProduct(fareProductId);
   const {topContainer} = useSectionItem(props);
   const {t, language} = useTranslation();
   const styles = useStyles();
-  if (status !== 'success') return null;
-  if (!benefits?.length) return null;
 
   const accessibilityLabel =
     t(MobilityTexts.includedWithTheTicket) +

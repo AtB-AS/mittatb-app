@@ -5,12 +5,6 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
-import {
-  findReferenceDataById,
-  useFirestoreConfiguration,
-} from '@atb/configuration';
-import {getFareProductRef} from '@atb/fare-contracts/utils';
 
 type Props = {
   fareContract: FareContract;
@@ -29,11 +23,6 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
 }) => {
   const {t} = useTranslation();
   const navigation = useNavigation<RootNavigationProp>();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-  const preassignedFareProduct = findReferenceDataById(
-    preassignedFareProducts,
-    getFareProductRef(fareContract),
-  );
 
   return (
     <Section withBottomPadding testID={testID}>
@@ -42,9 +31,6 @@ export const CarnetFareContractInfo: React.FC<Props> = ({
         travelRights={travelRights}
         testID={testID}
         fareContract={fareContract}
-      />
-      <MobilityBenefitsInfoSectionItem
-        fareProductId={preassignedFareProduct?.id}
       />
       <LinkSectionItem
         text={t(FareContractTexts.detailsLink.notValid)}
