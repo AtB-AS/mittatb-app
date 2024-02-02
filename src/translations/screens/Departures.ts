@@ -202,8 +202,8 @@ const DeparturesTexts = {
           ) =>
             _(
               `Sikker på at du vil fjerne linje ${lineNumber} ${lineName} fra ${quayName} som favorittavgang?`,
-              'Sure you want to delete this favourite?',
-              'Er du sikker på at du vil slette denne favorittavgangen?',
+              `Sure you want to delete line ${lineNumber} ${lineName} from ${quayName} as a favourite?`,
+              `Er du sikker på at du vil fjerne linje ${lineNumber} ${lineName} fra ${quayName} som favorittavgang?`,
             ),
           cancel: _('Avbryt', 'Cancel', 'Avbryt'),
           delete: _('Slett', 'Delete', 'Slett'),
