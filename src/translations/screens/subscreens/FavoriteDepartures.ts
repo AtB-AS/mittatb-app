@@ -6,7 +6,7 @@ const FavoriteDeparturesTexts = {
   favoriteItemDelete: {
     a11yHint: _(
       'Aktivér for å fjerne favorittavgang',
-      'Activate to delete favourite departure',
+      'Activate to remove as a favourite departure',
       'Aktiver for å fjerne favorittavgang',
     ),
   },
