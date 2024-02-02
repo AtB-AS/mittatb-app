@@ -7,12 +7,15 @@ import Ticketing, {
 } from '@atb/translations/screens/Ticketing';
 import {ProfileScreenProps} from './navigation-types';
 import {StyleSheet} from '@atb/theme';
+import {useOnBehalfOf} from '@atb/on-behalf-of';
 
 type Props = ProfileScreenProps<'Profile_TicketHistorySelectionScreen'>;
 
 export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
   const {t} = useTranslation();
   const styles = useStyles();
+
+  const isOnBehalfOfEnabled = useOnBehalfOf();
 
   return (
     <FullScreenView
@@ -37,16 +40,18 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
             })
           }
         />
-        <LinkSectionItem
-          text={t(TicketHistoryModeTexts.sent.title)}
-          accessibility={{
-            accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
-          }}
-          testID="sentToOthersButton"
-          onPress={() =>
-            navigation.navigate('Profile_TicketHistoryScreen', {mode: 'sent'})
-          }
-        />
+        {isOnBehalfOfEnabled && (
+          <LinkSectionItem
+            text={t(Ticketing.sentToOthers.title)}
+            accessibility={{
+              accessibilityHint: t(Ticketing.sentToOthers.a11yHint),
+            }}
+            testID="sentToOthersButton"
+            onPress={() =>
+              navigation.navigate('Profile_TicketHistoryScreen', {mode: 'sent'})
+            }
+          />
+        )}
       </Section>
     </FullScreenView>
   );

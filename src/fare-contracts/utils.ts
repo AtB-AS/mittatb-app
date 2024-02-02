@@ -1,4 +1,4 @@
-import {FareContractState} from '@atb/ticketing';
+import {FareContract, FareContractState} from '@atb/ticketing';
 import {
   findReferenceDataById,
   getReferenceDataName,
@@ -202,3 +202,6 @@ export const useDefaultPreassignedFareProduct = (
 
   return preAssignedFareProducts[0];
 };
+
+export const getFareProductRef = (fc: FareContract) =>
+  fc.travelRights[0]?.fareProductRef;
