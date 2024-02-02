@@ -89,6 +89,7 @@ export const EstimatedCallItem = memo(
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
+        accessible={false}
       >
         <View style={styles.container} testID={testID}>
           <View
@@ -117,7 +118,6 @@ export const EstimatedCallItem = memo(
 
           {mode !== 'Map' && (
             <FavouriteDepartureToggle
-              accessible={mode !== 'Favourite'}
               existingFavorite={existingFavorite}
               onMarkFavourite={() =>
                 onPressFavorite(departure, existingFavorite)
