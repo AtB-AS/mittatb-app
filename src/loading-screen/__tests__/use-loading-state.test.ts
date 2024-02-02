@@ -29,9 +29,6 @@ jest.mock('@atb/configuration', () => ({
     },
   }),
 }));
-jest.mock('@atb/AppContext', () => ({
-  useAppState: () => ({isLoading: mockState.isLoadingAppState}),
-}));
 
 describe('useLoadingState', () => {
   beforeAll(() => jest.useFakeTimers());
