@@ -84,23 +84,20 @@ export const EstimatedCallItem = memo(
     const {destinationDisplay} = departure;
     const lineName = formatDestinationDisplay(t, destinationDisplay);
 
-    const isFavouriteOrMapMode = mode === 'Favourite' || mode === 'Map';
-
     const showAsCancelled = departure.cancellation && mode !== 'Favourite';
     return (
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
-        accessible={isFavouriteOrMapMode}
-        accessibilityLabel={a11yLabel}
-        accessibilityHint={a11yHint}
       >
         <View style={styles.container} testID={testID}>
           <View
-            accessible={!isFavouriteOrMapMode}
+            accessible={true}
+            accessibilityRole="button"
             accessibilityLabel={a11yLabel}
             accessibilityHint={a11yHint}
             style={styles.lineAndDepartureTime}
+            importantForAccessibility="yes"
           >
             <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
