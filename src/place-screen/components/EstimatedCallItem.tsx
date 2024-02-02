@@ -71,24 +71,36 @@ export const EstimatedCallItem = memo(
         ? () => onPressFavorite(departure, existingFavorite)
         : () => onPressDetails(departure);
 
+    const a11yLabel =
+      mode === 'Favourite'
+        ? getLineA11yLabel(departure, t)
+        : getLineAndTimeA11yLabel(departure, t, language);
+
+    const a11yHint =
+      mode === 'Favourite'
+        ? t(DeparturesTexts.a11yMarkFavouriteHint)
+        : t(DeparturesTexts.a11yViewDepartureDetailsHint);
+
     const {destinationDisplay} = departure;
     const lineName = formatDestinationDisplay(t, destinationDisplay);
+
+    const isFavouriteOrMapMode = mode === 'Favourite' || mode === 'Map';
 
     const showAsCancelled = departure.cancellation && mode !== 'Favourite';
     return (
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
-        accessible={mode == 'Favourite'}
-        accessibilityLabel={getLineA11yLabel(departure, t)}
-        accessibilityHint={t(DeparturesTexts.a11yMarkFavouriteHint)}
+        accessible={isFavouriteOrMapMode}
+        accessibilityLabel={a11yLabel}
+        accessibilityHint={a11yHint}
       >
         <View style={styles.container} testID={testID}>
           <View
-            accessible={true}
+            accessible={!isFavouriteOrMapMode}
+            accessibilityLabel={a11yLabel}
+            accessibilityHint={a11yHint}
             style={styles.lineAndDepartureTime}
-            accessibilityLabel={getLineAndTimeA11yLabel(departure, t, language)}
-            accessibilityHint={t(DeparturesTexts.a11yViewDepartureDetailsHint)}
           >
             <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
@@ -108,10 +120,8 @@ export const EstimatedCallItem = memo(
 
           {mode !== 'Map' && (
             <FavouriteDepartureToggle
+              accessible={mode !== 'Favourite'}
               existingFavorite={existingFavorite}
-              toggleFavouriteAccessibilityLabel={t(
-                DeparturesTexts.favorites.favoriteButton,
-              )}
               onMarkFavourite={() =>
                 onPressFavorite(departure, existingFavorite)
               }
@@ -310,6 +320,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'space-between',
+    gap: theme.spacings.medium,
   },
   lineAndDepartureTime: {
     flex: 1,

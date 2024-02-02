@@ -88,10 +88,16 @@ export function useOnMarkFavouriteDepartures(
     line: FavouriteDepartureLine,
     existing: StoredFavoriteDeparture | undefined,
   ) => {
-    if (existing) {
+    if (existing && line.lineNumber) {
       Alert.alert(
         t(DeparturesTexts.results.lines.favorite.delete.label),
-        t(DeparturesTexts.results.lines.favorite.delete.confirmWarning),
+        t(
+          DeparturesTexts.results.lines.favorite.delete.confirmWarning(
+            line.lineNumber,
+            formatDestinationDisplay(t, existing.destinationDisplay) || '',
+            existing.quayName,
+          ),
+        ),
         [
           {
             text: t(DeparturesTexts.results.lines.favorite.delete.cancel),

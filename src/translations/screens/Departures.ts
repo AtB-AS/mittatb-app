@@ -109,7 +109,19 @@ const DeparturesTexts = {
     'Aktiver for å merke som favoritt',
   ),
   favorites: {
-    favoriteButton: _('Favorittknapp', 'Favorite button', 'Favorittknapp'),
+    favoriteButton: {
+      allVariations: _(
+        'Alle variasjoner av linjen er favoritt',
+        'All variations of the line are favourite',
+        'Alle variasjoner av linjen er favoritt',
+      ),
+
+      oneVariation: _(
+        'Denne variasjonen av linjen er favoritt',
+        'This variaton of the line is a favourite',
+        'Denne variasjonen av linjen er en favoritt',
+      ),
+    },
     toggle: _(
       'Vis kun favorittavganger',
       'View favourite departures only',
@@ -178,12 +190,21 @@ const DeparturesTexts = {
             `Fjern favorittavgang: ${name} frå ${place}`,
           ),
         delete: {
-          label: _('Fjerne avgang?', 'Delete departure?', 'Slette avgang?'),
-          confirmWarning: _(
-            'Sikker på at du vil fjerne favorittavgang?',
-            'Sure you want to delete this favourite?',
-            'Er du sikker på at du vil slette denne favorittavgangen?',
+          label: _(
+            'Fjerne faovrittavgang?',
+            'Delete favourite departure?',
+            'Slette favorittavgang?',
           ),
+          confirmWarning: (
+            lineNumber: string,
+            lineName: string,
+            quayName: string,
+          ) =>
+            _(
+              `Sikker på at du vil fjerne linje ${lineNumber} ${lineName} fra ${quayName} som favorittavgang?`,
+              'Sure you want to delete this favourite?',
+              'Er du sikker på at du vil slette denne favorittavgangen?',
+            ),
           cancel: _('Avbryt', 'Cancel', 'Avbryt'),
           delete: _('Slett', 'Delete', 'Slett'),
         },
