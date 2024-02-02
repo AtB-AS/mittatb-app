@@ -61,7 +61,7 @@ export const OnboardingFullScreenView = ({
           />
           {secondaryFooterButton && (
             <Button
-              interactiveColor="interactive_0"
+              backgroundColor={themeColor}
               mode="secondary"
               onPress={secondaryFooterButton.onPress}
               style={styles.footerButton}
