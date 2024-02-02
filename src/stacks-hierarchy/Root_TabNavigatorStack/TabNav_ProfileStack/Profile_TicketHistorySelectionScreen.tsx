@@ -42,9 +42,9 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
         />
         {isOnBehalfOfEnabled && (
           <LinkSectionItem
-            text={t(Ticketing.sentToOthers.title)}
+            text={t(TicketHistoryModeTexts.sent.title)}
             accessibility={{
-              accessibilityHint: t(Ticketing.sentToOthers.a11yHint),
+              accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
             }}
             testID="sentToOthersButton"
             onPress={() =>
