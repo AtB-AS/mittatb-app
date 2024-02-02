@@ -252,7 +252,7 @@ const LiveVehicleMarker = ({
   isError,
 }: VehicleIconProps) => {
   const {theme} = useTheme();
-  const fillColor = useTransportationColor(mode, subMode, 'background');
+  const fillColor = useTransportationColor(mode, subMode, false, 'background');
   const {live_vehicle_stale_threshold} = useRemoteConfig();
 
   const [isStale, setIsStale] = useState(false);
@@ -361,7 +361,7 @@ const LiveVehicleIcon = ({
   isError,
 }: LiveVehicleIconProps): JSX.Element => {
   const {theme} = useTheme();
-  const fillColor = useTransportationColor(mode, subMode, 'text');
+  const fillColor = useTransportationColor(mode, subMode, false, 'text');
   const {svg} = getTransportModeSvg(mode, subMode);
 
   if (isError)

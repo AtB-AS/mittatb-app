@@ -32,7 +32,7 @@ import {
   getNoticesForLeg,
   getPublicCodeFromLeg,
   getTimeRepresentationType,
-  isLegFlexibleTransport,
+  isLineFlexibleTransport,
   getLegBookingIsAvailable,
   getLegRequiresBookingUrgently,
   significantWaitTime,
@@ -98,11 +98,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
-  const isFlexible = isLegFlexibleTransport(leg);
+  const isFlexible = isLineFlexibleTransport(leg.line);
   const timesAreApproximations = isFlexible;
   const legColor = useTransportationColor(
-    isFlexible ? 'flex' : leg.mode,
+    leg.mode,
     leg.line?.transportSubmode,
+    isFlexible,
   );
   const iconColor = useTransportationColor();
 

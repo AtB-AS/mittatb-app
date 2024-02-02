@@ -47,7 +47,7 @@ import {RailReplacementBusMessage} from './RailReplacementBusMessage';
 import {
   getNoticesForLeg,
   getTimeRepresentationType,
-  isLegFlexibleTransport,
+  isLineFlexibleTransport,
   getFilteredLegsByWalkOrWaitTime,
   significantWaitTime,
   significantWalkTime,
@@ -82,7 +82,7 @@ const ResultItemHeader: React.FC<{
   } else if (tripPattern.legs[0].mode !== 'foot') {
     startName = getQuayName(start.fromPlace.quay);
   }
-  const startLegIsFlexibleTransport = isLegFlexibleTransport(start);
+  const startLegIsFlexibleTransport = isLineFlexibleTransport(start.line);
   const publicCode = start.fromPlace.quay?.publicCode || start.line?.publicCode;
 
   const durationText = secondsToDurationShort(tripPattern.duration, language);
@@ -187,8 +187,8 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
 
   if (filteredLegs.length < 1) return null;
 
-  const lastLegIsFlexible = isLegFlexibleTransport(
-    filteredLegs[filteredLegs.length - 1],
+  const lastLegIsFlexible = isLineFlexibleTransport(
+    filteredLegs[filteredLegs.length - 1].line,
   );
   const expandedLegs = filteredLegs.slice(0, numberOfExpandedLegs);
   const collapsedLegs = filteredLegs.slice(
@@ -270,7 +270,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                           color="primary"
                           testID={'schTime' + i}
                         >
-                          {(isLegFlexibleTransport(leg)
+                          {(isLineFlexibleTransport(leg.line)
                             ? t(dictionary.missingRealTimePrefix)
                             : '') +
                             formatToClock(
@@ -588,7 +588,7 @@ const TransportationLeg = ({
       style={style}
       mode={leg.mode}
       subMode={leg.line?.transportSubmode}
-      isFlexible={isLegFlexibleTransport(leg)}
+      isFlexible={isLineFlexibleTransport(leg.line)}
       lineNumber={leg.line?.publicCode}
       testID="trLeg"
     />
@@ -670,7 +670,7 @@ const tripSummary = (
             formatToClock(firstLeg.aimedStartTime, language, 'floor'),
           ),
         )
-      : (isLegFlexibleTransport(firstLeg)
+      : (isLineFlexibleTransport(firstLeg.line)
           ? t(dictionary.missingRealTimePrefix)
           : '') +
         t(
@@ -713,10 +713,10 @@ const tripSummary = (
 
   const filteredLegs = getFilteredLegsByWalkOrWaitTime(tripPattern);
   const startTimeIsApproximation =
-    filteredLegs.length > 0 && isLegFlexibleTransport(filteredLegs[0]);
+    filteredLegs.length > 0 && isLineFlexibleTransport(filteredLegs[0].line);
   const endTimeIsApproximation =
     filteredLegs.length > 0 &&
-    isLegFlexibleTransport(filteredLegs[filteredLegs.length - 1]);
+    isLineFlexibleTransport(filteredLegs[filteredLegs.length - 1].line);
 
   const traveltimesText = t(
     TripSearchTexts.results.resultItem.journeySummary.travelTimes(

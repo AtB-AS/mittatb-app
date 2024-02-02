@@ -13,7 +13,10 @@ import {
   getSvgForMostCriticalSituationOrNotice,
 } from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {
+  formatDestinationDisplay,
+  getNoticesForEstimatedCall,
+} from '@atb/travel-details-screens/utils';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 
 import {
@@ -24,7 +27,6 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
 import {
   formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
@@ -262,6 +264,7 @@ function LineChip({
   const transportTextColor = useTransportationColor(
     transportMode,
     transportSubmode,
+    false,
     'text',
   );
 

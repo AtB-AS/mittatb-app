@@ -18,6 +18,7 @@ import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations'
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {Line} from '@atb/api/types/trips';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -149,6 +150,7 @@ export type MapLeg = {
   faded?: boolean;
   transportSubmode?: TransportSubmode;
   pointsOnLink?: PointsOnLink;
+  line?: Line;
 };
 
 export interface MapLine extends Feature<LineString> {

@@ -5,10 +5,11 @@ import {TransportColor} from '@atb/theme/colors';
 export function useTransportationColor(
   mode?: AnyMode,
   subMode?: AnySubMode,
+  isFlexible?: boolean,
   colorType: 'background' | 'text' = 'background',
   colorMode: 'primary' | 'secondary' = 'primary',
 ): string {
-  const themeColor = useThemeColorForTransportMode(mode, subMode);
+  const themeColor = useThemeColorForTransportMode(mode, subMode, isFlexible);
   const {theme} = useTheme();
   return theme.transport[themeColor][colorMode][colorType];
 }
