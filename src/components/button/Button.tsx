@@ -261,7 +261,7 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
 }));
 
 const useColor = (color: StaticColor | InteractiveColor): string => {
-  const {theme, themeName} = useTheme();
+  const {themeName} = useTheme();
 
   return isStaticColor(color)
     ? getStaticColor(themeName, color).text
