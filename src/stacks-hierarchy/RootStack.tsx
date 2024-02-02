@@ -66,7 +66,7 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
-import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
+import {useOnboardingFlow} from '@atb/onboarding';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
 

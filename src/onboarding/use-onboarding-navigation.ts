@@ -4,8 +4,11 @@ import {useNavigation, StackActions} from '@react-navigation/native';
 
 import {useCallback} from 'react';
 import {InteractionManager} from 'react-native';
-import {useOnboardingFlow} from './use-onboarding-flow';
-import {useOnboardingState, OnboardingSectionId} from '@atb/onboarding';
+import {
+  useOnboardingFlow,
+  useOnboardingState,
+  OnboardingSectionId,
+} from '@atb/onboarding';
 
 export const useOnboardingNavigation = () => {
   const navigation = useNavigation<RootNavigationProps>();

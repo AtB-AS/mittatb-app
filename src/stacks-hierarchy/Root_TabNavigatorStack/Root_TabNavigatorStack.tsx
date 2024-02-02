@@ -28,8 +28,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {useOnPushNotificationOpened} from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
-import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
-import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
+import {useOnboardingFlow, useOnboardingNavigation} from '@atb/onboarding';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 

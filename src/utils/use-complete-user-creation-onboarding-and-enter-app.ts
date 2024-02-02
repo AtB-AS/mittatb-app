@@ -1,6 +1,5 @@
-import {useOnboardingState} from '@atb/onboarding';
+import {useOnboardingState, useOnboardingFlow} from '@atb/onboarding';
 
-import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 import {PartialRoute, Route, useNavigation} from '@react-navigation/native';
 import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
 

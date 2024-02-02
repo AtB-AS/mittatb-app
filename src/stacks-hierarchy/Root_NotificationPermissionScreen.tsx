@@ -4,9 +4,11 @@ import React, {useCallback} from 'react';
 import NotificationPermissionTexts from '@atb/translations/screens/NotificationPermission';
 import {PushNotification} from '@atb/assets/svg/color/images';
 
-import {OnboardingScreenComponent} from '@atb/onboarding';
+import {
+  OnboardingScreenComponent,
+  useOnboardingNavigation,
+} from '@atb/onboarding';
 import {useNotifications} from '@atb/notifications';
-import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 
 export const Root_NotificationPermissionScreen = () => {
   const {t} = useTranslation();

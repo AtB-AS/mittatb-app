@@ -7,9 +7,11 @@ import React, {useCallback} from 'react';
 import {Linking} from 'react-native';
 import {Beacons} from '@atb/assets/svg/color/images';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {OnboardingScreenComponent} from '@atb/onboarding';
+import {
+  OnboardingScreenComponent,
+  useOnboardingNavigation,
+} from '@atb/onboarding';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
-import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 import {useAnalytics} from '@atb/analytics';
 import {checkPermissionStatuses} from '@atb/beacons/permissions';
 import {useFocusEffect} from '@react-navigation/native';
