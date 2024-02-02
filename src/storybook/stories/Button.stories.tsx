@@ -88,5 +88,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
 export default ButtonMeta;
 
 export const Block = {};
-export const Pill = {args: {type: 'pill'}};
-export const Inline = {args: {type: 'inline'}};
+
+export const Medium = {args: {type: 'medium'}};
+
+export const Small = {args: {type: 'small'}};
