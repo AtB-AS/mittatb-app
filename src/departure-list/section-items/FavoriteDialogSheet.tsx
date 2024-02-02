@@ -18,10 +18,11 @@ type Props = {
   lineNumber: string;
   destinationDisplay: DestinationDisplay;
   addFavorite: (forSpecificLineName: boolean) => void;
+  quayName: string;
 };
 
 export const FavoriteDialogSheet = forwardRef<View, Props>(
-  ({lineNumber, destinationDisplay, addFavorite}, focusRef) => {
+  ({lineNumber, destinationDisplay, addFavorite, quayName}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
     const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
@@ -37,7 +38,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
             {t(
               DeparturesTexts.favoriteDialogSheet.description(
                 lineNumber,
-                lineName,
+                quayName,
               ),
             )}
           </ThemeText>

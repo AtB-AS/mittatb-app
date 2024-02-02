@@ -295,11 +295,11 @@ const DeparturesTexts = {
       'Select favourite departure',
       'Vel favorittavgang',
     ),
-    description: (lineNumber: string, lineName: string) =>
+    description: (lineNumber: string, quayName: string) =>
       _(
-        `Vil du favorittmarkere kun '${lineNumber} ${lineName}' eller alle variasjoner av linje ${lineNumber}?`,
-        `Do you want to favourite mark only '${lineNumber} ${lineName}' or all variations of line ${lineNumber}?`,
-        `Vil du kun merke '${lineNumber} ${lineName}' som favoritt eller alle variasjonane av linje ${lineNumber}?`,
+        `Hvilken variasjon av linje ${lineNumber} fra ${quayName} ønsker du å sette som favoritt?`,
+        `Which variation of line ${lineNumber} from ${quayName} do you want to mark as a favourite?`,
+        `Korleis variasjon av linje ${lineNumber} frå ${quayName} ønsker du å sette som favoritt?`,
       ),
     buttons: {
       specific: (lineNumber: string, lineName: string) =>

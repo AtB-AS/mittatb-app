@@ -116,10 +116,11 @@ export function useOnMarkFavouriteDepartures(
           },
         ],
       );
-    } else if (line.destinationDisplay && line.lineNumber) {
+    } else if (line.destinationDisplay && line.lineNumber && quay.name) {
       openBottomSheet(() => {
         return line.destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
+            quayName={quay.name}
             destinationDisplay={line.destinationDisplay}
             lineNumber={line.lineNumber}
             addFavorite={(forSpecificLineName: boolean) =>
