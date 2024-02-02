@@ -41,6 +41,7 @@ export const Profile_FareContractsScreen = () => {
   const BASE = {
     created: toTimeStamp(NOW),
     customerAccountId: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
+    purchasedBy: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     eventTimestamp: toTimeStamp(daysFromNow(-1)),
     id: 'ATB:FareContract:V3TZT6NE-xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     minimumSecurityLevel: -200,
