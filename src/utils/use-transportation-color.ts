@@ -16,10 +16,10 @@ export function useTransportationColor(
 export const useThemeColorForTransportMode = (
   mode?: AnyMode,
   subMode?: AnySubMode,
+  isFlexible?: boolean,
 ): TransportColor => {
+  if (isFlexible) return 'transport_flexible';
   switch (mode) {
-    case 'flex':
-      return 'transport_flexible';
     case 'bus':
     case 'coach':
       if (subMode === 'localBus') return 'transport_city';

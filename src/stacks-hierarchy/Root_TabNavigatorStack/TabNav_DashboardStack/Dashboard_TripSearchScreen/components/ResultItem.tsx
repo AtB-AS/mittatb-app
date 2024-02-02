@@ -588,6 +588,7 @@ const TransportationLeg = ({
       style={style}
       mode={leg.mode}
       subMode={leg.line?.transportSubmode}
+      isFlexible={isLegFlexibleTransport(leg)}
       lineNumber={leg.line?.publicCode}
       testID="trLeg"
     />

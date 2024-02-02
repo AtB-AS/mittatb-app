@@ -208,6 +208,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
               <TransportationIconBox
                 mode={leg.mode}
                 subMode={leg.line?.transportSubmode}
+                isFlexible={isFlexible}
               />
             }
           >
