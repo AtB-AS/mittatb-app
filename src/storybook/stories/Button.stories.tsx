@@ -29,6 +29,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
+    hasShadow: {control: 'boolean'},
     ...themedStoryControls,
   },
   args: {

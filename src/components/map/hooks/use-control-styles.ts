@@ -32,7 +32,6 @@ export function useControlPositionsStyle() {
         bottom:
           bottom + bottomPaddingIfBottomSheetIsOpen + theme.spacings.medium,
         right: theme.spacings.medium,
-        gap: theme.spacings.small,
       },
       locationContainer: {
         position: 'absolute',
