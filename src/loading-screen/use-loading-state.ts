@@ -1,13 +1,8 @@
-import {useOnboardingState} from '@atb/onboarding';
 import {useAuthState} from '@atb/auth';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {LoadingState, LoadingStatus} from '@atb/loading-screen/types';
 import {useFirestoreConfiguration} from '@atb/configuration';
-
-export const useIsLoadingAppState = () => {
-  const {isLoading: onboardingIsLoading} = useOnboardingState();
-  return onboardingIsLoading;
-};
+import {useIsLoadingAppState} from '@atb/loading-screen';
 
 export const useLoadingState = (timeoutMs: number): LoadingState => {
   const isLoadingAppState = useIsLoadingAppState();

@@ -47,7 +47,11 @@ import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root
 import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
-import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
+import {
+  LoadingScreen,
+  LoadingScreenBoundary,
+  useIsLoadingAppState,
+} from '@atb/loading-screen';
 import {Root_AddPaymentMethodScreen} from '@atb/stacks-hierarchy/Root_AddPaymentMethodScreen/Root_AddPaymentMethodScreen';
 import {
   Root_ParkingViolationsConfirmationScreen,
@@ -65,7 +69,6 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
-import {useIsLoadingAppState} from '@atb/loading-screen/use-loading-state';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;

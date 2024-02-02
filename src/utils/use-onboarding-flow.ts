@@ -3,20 +3,15 @@ import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {useCallback, useEffect, useState} from 'react';
 
 import {PartialRoute, Route} from '@react-navigation/native';
-import {
-  OnboardingSectionId,
-  OnboardingSection,
-  useOnboardingSections,
-} from './use-onboarding-sections';
 
-// note: utilizeThisHookInstanceForSessionCounting should only be true for one instance
-export const useOnboardingFlow = (
-  utilizeThisHookInstanceForSessionCounting = false,
-  assumeUserCreationOnboarded = false,
-) => {
-  const onboardingSections = useOnboardingSections(
-    utilizeThisHookInstanceForSessionCounting,
-  );
+import {
+  useOnboardingState,
+  OnboardingSection,
+  OnboardingSectionId,
+} from '@atb/onboarding';
+
+export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
+  const {onboardingSections} = useOnboardingState();
 
   const getNextOnboardingSection = useCallback(
     (

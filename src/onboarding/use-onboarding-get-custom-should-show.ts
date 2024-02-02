@@ -15,22 +15,23 @@ import {useValidRightNowFareContract} from '@atb/ticketing/use-valid-right-now-f
 import {Platform} from 'react-native';
 
 import {useCallback} from 'react';
-import {OnboardingSectionId} from './use-onboarding-sections';
-import {useOnboardingSectionIsOnboarded} from './use-onboarding-section-is-onboarded';
+import {
+  LoadedOnboardingSection,
+  OnboardingSectionId,
+  getOnboardingSectionIsOnboarded,
+} from '@atb/onboarding';
 
 export const useOnboardingGetCustomShouldShow = (
-  utilizeThisHookInstanceForSessionCounting: boolean,
+  loadedOnboardingSections: LoadedOnboardingSection[],
 ) => {
   const customShouldShowExtendedOnboarding =
-    useCustomShouldShowExtendedOnboarding();
+    useCustomShouldShowExtendedOnboarding(loadedOnboardingSections);
 
   const customShouldShowLocationOnboarding =
     useCustomShouldShowLocationOnboarding();
 
   const customShouldShowShareTravelHabitsScreen =
-    useShouldShowShareTravelHabitsScreen(
-      utilizeThisHookInstanceForSessionCounting,
-    );
+    useShouldShowShareTravelHabitsScreen(loadedOnboardingSections);
 
   const customShouldShowNotificationPermissionScreen =
     useCustomShouldShowNotificationPermissionScreen();
@@ -73,11 +74,15 @@ export const useOnboardingGetCustomShouldShow = (
 
 /* --- useCustomShouldShow hooks --- */
 
-const useCustomShouldShowExtendedOnboarding = () => {
+const useCustomShouldShowExtendedOnboarding = (
+  loadedOnboardingSections: LoadedOnboardingSection[],
+) => {
   const {enable_extended_onboarding} = useRemoteConfig();
 
-  const userCreationIsOnboarded =
-    useOnboardingSectionIsOnboarded('userCreation');
+  const userCreationIsOnboarded = getOnboardingSectionIsOnboarded(
+    loadedOnboardingSections,
+    'userCreation',
+  );
 
   return (
     enable_extended_onboarding && !userCreationIsOnboarded // !userCreationIsOnboarded for backward compatibility

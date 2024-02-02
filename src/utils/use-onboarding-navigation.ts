@@ -5,8 +5,7 @@ import {useNavigation, StackActions} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {InteractionManager} from 'react-native';
 import {useOnboardingFlow} from './use-onboarding-flow';
-import {OnboardingSectionId} from './use-onboarding-sections';
-import {useOnboardingState} from '@atb/onboarding';
+import {useOnboardingState, OnboardingSectionId} from '@atb/onboarding';
 
 export const useOnboardingNavigation = () => {
   const navigation = useNavigation<RootNavigationProps>();
@@ -28,10 +27,11 @@ export const useOnboardingNavigation = () => {
   );
 
   const continueFromOnboardingSection = useCallback(
-    (comingFromSectionId: OnboardingSectionId) => {
-      completeOnboardingSection(comingFromSectionId);
-      const nextOnboardingSection =
-        getNextOnboardingSection(comingFromSectionId);
+    (comingFromOnboardingSectionId: OnboardingSectionId) => {
+      completeOnboardingSection(comingFromOnboardingSectionId);
+      const nextOnboardingSection = getNextOnboardingSection(
+        comingFromOnboardingSectionId,
+      );
 
       if (nextOnboardingSection?.initialScreen?.name) {
         goToScreen(true, nextOnboardingSection?.initialScreen);

@@ -10,19 +10,25 @@ import React, {
 import RNBootSplash from 'react-native-bootsplash';
 import {register as registerChatUser} from '../chat/user';
 import {storage} from '@atb/storage';
+
 import {
+  LoadedOnboardingSection,
   OnboardingSection,
   OnboardingSectionId,
   staticOnboardingSectionsInPrioritizedOrder,
-  LoadedOnboardingSection,
-} from '../utils/use-onboarding-sections';
+  useOnboardingGetCustomShouldShow,
+} from '@atb/onboarding';
 
 export type OnboardingState = {
   isLoading: boolean;
   loadedOnboardingSections: LoadedOnboardingSection[];
 };
 
-type OnboardingContextState = OnboardingState & {
+type OnboardingContextState = Omit<
+  OnboardingState,
+  'loadedOnboardingSections'
+> & {
+  onboardingSections: OnboardingSection[];
   completeOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
   restartAllOnboardingSections: () => void;
@@ -95,6 +101,9 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
     defaultOnboardingState,
   );
 
+  // loadedOnboardingSections is omitted for contextState as onboardingSections should always be used instead
+  const {loadedOnboardingSections, ...contextState} = state;
+
   useEffect(() => {
     async function loadOnboardingSettings() {
       const loadedOnboardingSections = await Promise.all(
@@ -139,7 +148,7 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
           onboardingSectionId,
         });
         await storeOnboardingSectionIsOnboarded(
-          state.loadedOnboardingSections,
+          loadedOnboardingSections,
           onboardingSectionId,
           true,
         );
@@ -152,29 +161,44 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
           onboardingSectionId,
         });
         await storeOnboardingSectionIsOnboarded(
-          state.loadedOnboardingSections,
+          loadedOnboardingSections,
           onboardingSectionId,
           false,
         );
       },
     }),
-    [state.loadedOnboardingSections],
+    [loadedOnboardingSections],
   );
 
   const restartAllOnboardingSections = useCallback(
     () =>
       Promise.all(
-        state.loadedOnboardingSections.map((loadedOnboardingSection) =>
+        loadedOnboardingSections.map((loadedOnboardingSection) =>
           restartOnboardingSection(loadedOnboardingSection.onboardingSectionId),
         ),
       ),
-    [state.loadedOnboardingSections, restartOnboardingSection],
+    [loadedOnboardingSections, restartOnboardingSection],
+  );
+
+  const getCustomShouldShow = useOnboardingGetCustomShouldShow(
+    loadedOnboardingSections,
+  );
+  const onboardingSections = useMemo(
+    () =>
+      loadedOnboardingSections.map((loadedOnboardingSection) => ({
+        ...loadedOnboardingSection,
+        customShouldShow: getCustomShouldShow(
+          loadedOnboardingSection.onboardingSectionId,
+        ),
+      })),
+    [getCustomShouldShow, loadedOnboardingSections],
   );
 
   return (
     <OnboardingContext.Provider
       value={{
-        ...state,
+        ...contextState,
+        onboardingSections,
         completeOnboardingSection,
         restartOnboardingSection,
         restartAllOnboardingSections,
