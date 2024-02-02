@@ -291,7 +291,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
         {onPressShowLive && mapData ? (
           <TripRow>
             <Button
-              type="pill"
+              type="small"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live)}
               interactiveColor="interactive_3"

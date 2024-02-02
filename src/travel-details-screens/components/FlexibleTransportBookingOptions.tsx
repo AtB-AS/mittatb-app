@@ -43,7 +43,7 @@ export const FlexibleTransportBookingOptions: React.FC<
             text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
             onPress={() => Linking.openURL(bookingUrl)}
             mode="primary"
-            type="pill"
+            type="small"
             interactiveColor="interactive_0"
             leftIcon={{svg: ExternalLink}}
           />
@@ -61,7 +61,7 @@ export const FlexibleTransportBookingOptions: React.FC<
             )}
             onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
             style={style.bookByPhoneButton}
-            type="pill"
+            type="small"
             interactiveColor="interactive_3"
             leftIcon={{svg: Phone}}
           />

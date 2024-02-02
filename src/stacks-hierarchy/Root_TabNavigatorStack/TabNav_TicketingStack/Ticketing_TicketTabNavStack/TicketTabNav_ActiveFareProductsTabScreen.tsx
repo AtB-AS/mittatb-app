@@ -11,7 +11,7 @@ import {useTranslation, TicketingTexts} from '@atb/translations';
 import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import Ticketing from '@atb/translations/screens/Ticketing';
+import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 
@@ -76,9 +76,9 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
         <Section style={styles.content}>
           {hasExpiredFareContracts && (
             <LinkSectionItem
-              text={t(Ticketing.expiredTickets.title)}
+              text={t(TicketHistoryModeTexts.expired.title)}
               accessibility={{
-                accessibilityHint: t(Ticketing.expiredTickets.a11yHint),
+                accessibilityHint: t(TicketHistoryModeTexts.expired.titleA11y),
               }}
               testID="expiredTicketsButton"
               onPress={() =>
@@ -91,9 +91,9 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 
           {hasSentFareContracts && (
             <LinkSectionItem
-              text={t(Ticketing.sentToOthers.title)}
+              text={t(TicketHistoryModeTexts.sent.title)}
               accessibility={{
-                accessibilityHint: t(Ticketing.sentToOthers.a11yHint),
+                accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
               }}
               testID="sentToOthersButton"
               onPress={() =>

@@ -67,24 +67,18 @@ export const ParkAndRideBottomSheet = ({
     >
       <ScrollView>
         <View style={styles.buttonsContainer}>
-          <View style={styles.travelButton}>
-            <Button
-              text={t(DeparturesDialogSheetTexts.travelFrom.title)}
-              onPress={() =>
-                navigateToTripSearch(searchLocation, 'fromLocation')
-              }
-              mode="primary"
-              style={styles.travelFromButtonPadding}
-            />
-          </View>
-          <View style={styles.travelButton}>
-            <Button
-              text={t(DeparturesDialogSheetTexts.travelTo.title)}
-              onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
-              mode="primary"
-              style={styles.travelToButtonPadding}
-            />
-          </View>
+          <Button
+            text={t(DeparturesDialogSheetTexts.travelFrom.title)}
+            onPress={() => navigateToTripSearch(searchLocation, 'fromLocation')}
+            mode="primary"
+            style={styles.travelButton}
+          />
+          <Button
+            text={t(DeparturesDialogSheetTexts.travelTo.title)}
+            onPress={() => navigateToTripSearch(searchLocation, 'toLocation')}
+            mode="primary"
+            style={styles.travelButton}
+          />
         </View>
         <ScrollView style={styles.container}>
           <Section>
@@ -143,15 +137,10 @@ const useSheetStyle = StyleSheet.createThemeHook((theme) => {
       paddingHorizontal: theme.spacings.medium,
       marginBottom: theme.spacings.large,
       flexDirection: 'row',
+      gap: 8,
     },
     travelButton: {
-      flex: 1,
-    },
-    travelFromButtonPadding: {
-      marginRight: theme.spacings.medium / 2,
-    },
-    travelToButtonPadding: {
-      marginLeft: theme.spacings.medium / 2,
+      flexGrow: 1,
     },
     parkingName: {
       flexDirection: 'row',

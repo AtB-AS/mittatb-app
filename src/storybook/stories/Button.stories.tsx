@@ -1,7 +1,7 @@
 import React from 'react';
-import {View} from 'react-native';
-import {themes} from '@atb/theme/colors';
 import {Button, ButtonProps} from '@atb/components/button';
+import {ScrollView} from 'react-native';
+import {themes} from '@atb/theme/colors';
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import {
   ThemedStoryDecorator,
@@ -21,24 +21,27 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
       control: 'select',
       options: [...Object.keys(themes['light'].interactive)],
     },
+    backgroundColor: {
+      control: 'select',
+      options: [...Object.keys(themes['light'].static)],
+    },
     active: {control: 'boolean'},
     compact: {control: 'boolean'},
     disabled: {control: 'boolean'},
     loading: {control: 'boolean'},
+    hasShadow: {control: 'boolean'},
     ...themedStoryControls,
   },
   args: {
     text: 'text',
-    interactiveColor: 'interactive_0',
     ...themedStoryDefaultArgs,
   },
   decorators: [
     (Story, {args}) => (
-      <View
-        style={{
+      <ScrollView
+        contentContainerStyle={{
           justifyContent: 'center',
           padding: 12,
-          flex: 1,
           width: '100%',
           rowGap: 12,
         }}
@@ -76,7 +79,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
             rightIcon: {svg: Add},
           }}
         />
-      </View>
+      </ScrollView>
     ),
     ThemedStoryDecorator,
   ],
@@ -85,5 +88,7 @@ const ButtonMeta: Meta<ButtonMetaProps> = {
 export default ButtonMeta;
 
 export const Block = {};
-export const Pill = {args: {type: 'pill'}};
-export const Inline = {args: {type: 'inline'}};
+
+export const Medium = {args: {type: 'medium'}};
+
+export const Small = {args: {type: 'small'}};

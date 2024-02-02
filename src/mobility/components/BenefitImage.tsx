@@ -1,12 +1,13 @@
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {
-  BundlingCarSharing,
-  BundlingCityBike,
-} from '@atb/assets/svg/color/images/mobility';
 import {View, ViewStyle} from 'react-native';
 import {Check} from '@atb/assets/svg/color/icons/status';
 import {StyleSheet} from '@atb/theme';
 import React from 'react';
+import {SvgProps} from 'react-native-svg';
+import {
+  ThemedBundlingCarSharing,
+  ThemedBundlingCityBike,
+} from '@atb/theme/ThemedAssets';
 
 type BenefitImageProps = {
   formFactor: FormFactor;
@@ -27,12 +28,18 @@ export const BenefitImage = ({
   );
 };
 
-const BenefitImageAsset = ({formFactor}: {formFactor: FormFactor}) => {
+export const BenefitImageAsset = ({
+  formFactor,
+  svgProps,
+}: {
+  formFactor: FormFactor;
+  svgProps?: SvgProps;
+}) => {
   switch (formFactor) {
     case FormFactor.Car:
-      return <BundlingCarSharing />;
+      return <ThemedBundlingCarSharing {...svgProps} />;
     case FormFactor.Bicycle:
-      return <BundlingCityBike />;
+      return <ThemedBundlingCityBike {...svgProps} />;
     default:
       return null;
   }

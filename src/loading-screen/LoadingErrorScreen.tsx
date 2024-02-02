@@ -81,7 +81,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
               LoadingScreenTexts.error.contactButton.a11yLabel,
             )}
             rightIcon={{svg: ExternalLink}}
-            interactiveColor="interactive_0"
+            backgroundColor={themeColor}
           />
         </View>
       </ScrollView>
