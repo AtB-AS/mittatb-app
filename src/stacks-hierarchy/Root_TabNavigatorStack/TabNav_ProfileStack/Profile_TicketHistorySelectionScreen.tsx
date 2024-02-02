@@ -2,8 +2,9 @@ import {ScreenHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
 import {LinkSectionItem, Section} from '@atb/components/sections';
 import {useTranslation} from '@atb/translations';
-import Ticketing from '@atb/translations/screens/Ticketing';
-import TicketHistoryTexts from '@atb/translations/screens/subscreens/TicketHistory';
+import Ticketing, {
+  TicketHistoryModeTexts,
+} from '@atb/translations/screens/Ticketing';
 import {ProfileScreenProps} from './navigation-types';
 import {StyleSheet} from '@atb/theme';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
@@ -19,18 +20,18 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
   return (
     <FullScreenView
       headerProps={{
-        title: t(TicketHistoryTexts.header),
+        title: t(Ticketing.ticketHistory.title),
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={(focusRef) => (
-        <ScreenHeading ref={focusRef} text={t(TicketHistoryTexts.header)} />
+        <ScreenHeading ref={focusRef} text={t(Ticketing.ticketHistory.title)} />
       )}
     >
       <Section style={styles.content}>
         <LinkSectionItem
-          text={t(Ticketing.expiredTickets.title)}
+          text={t(TicketHistoryModeTexts.expired.title)}
           accessibility={{
-            accessibilityHint: t(Ticketing.expiredTickets.a11yHint),
+            accessibilityHint: t(TicketHistoryModeTexts.expired.titleA11y),
           }}
           testID="expiredTicketsButton"
           onPress={() =>
@@ -41,9 +42,9 @@ export const Profile_TicketHistorySelectionScreen = ({navigation}: Props) => {
         />
         {isOnBehalfOfEnabled && (
           <LinkSectionItem
-            text={t(Ticketing.sentToOthers.title)}
+            text={t(TicketHistoryModeTexts.sent.title)}
             accessibility={{
-              accessibilityHint: t(Ticketing.sentToOthers.a11yHint),
+              accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
             }}
             testID="sentToOthersButton"
             onPress={() =>

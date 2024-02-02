@@ -8,10 +8,6 @@ export type TicketTabNavStackParams = StackParams<{
   TicketTabNav_ActiveFareProductsTabScreen: undefined;
 }>;
 
-export type TicketingTicketHistoryScreenParams = {
-  mode: 'expired' | 'sent';
-};
-
 export type TicketTabNavStackRootProps =
   TicketingScreenProps<'Ticketing_RootScreen'>;
 
