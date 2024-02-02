@@ -29,9 +29,9 @@ export type StaticOnboardingSection = {
 };
 
 export type LoadedOnboardingSection = StaticOnboardingSection & {
-  isOnboarded: boolean; // loaded and added in AppContext
+  isOnboarded: boolean;
 };
 
 export type OnboardingSection = LoadedOnboardingSection & {
-  customShouldShow?: boolean; // calculated and added in useOnboardingSections
+  customShouldShow?: boolean;
 };
