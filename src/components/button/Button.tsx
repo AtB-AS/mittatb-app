@@ -1,6 +1,7 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {
+  getInteractiveColor,
   getStaticColor,
   InteractiveColor,
   isStaticColor,
@@ -56,7 +57,10 @@ type ButtonIconProps = {
 
 type ButtonModeAwareProps =
   | {mode?: 'primary'; interactiveColor?: InteractiveColor}
-  | {mode: Exclude<ButtonMode, 'primary'>; backgroundColor?: StaticColor};
+  | {
+      mode: Exclude<ButtonMode, 'primary'>;
+      backgroundColor?: StaticColor | InteractiveColor;
+    };
 
 export type ButtonProps = {
   onPress(): void;
@@ -256,12 +260,12 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
 }));
 
-const useColor = (color: StaticColor): string => {
+const useColor = (color: StaticColor | InteractiveColor): string => {
   const {theme, themeName} = useTheme();
 
   return isStaticColor(color)
     ? getStaticColor(themeName, color).text
-    : theme.text.colors[color];
+    : getInteractiveColor(themeName, color).default.text;
 };
 
 function getTextType(mode: string, type: string) {

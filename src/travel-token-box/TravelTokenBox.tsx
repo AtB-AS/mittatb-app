@@ -118,6 +118,7 @@ export function TravelTokenBox({
       </View>
       <Button
         mode="secondary"
+        backgroundColor={interactiveColor}
         onPress={onPressChangeButton}
         text={t(TravelTokenBoxTexts.change)}
         testID="continueWithoutChangingTravelTokenButton"
