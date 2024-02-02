@@ -11,12 +11,15 @@ import {useTimeContextState} from '@atb/time';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
-import {TicketHistoryMode} from '@atb/ticket-history';
+import {
+  TicketHistoryMode,
+  TicketHistoryScreenParams,
+} from '@atb/ticket-history';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 
-type Props = {mode: TicketHistoryMode};
-
-export const TicketHistoryScreenComponent = ({mode}: Props) => {
+export const TicketHistoryScreenComponent = ({
+  mode,
+}: TicketHistoryScreenParams) => {
   const {
     fareContracts,
     isRefreshingFareContracts,

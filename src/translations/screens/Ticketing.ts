@@ -14,8 +14,12 @@ export const TicketHistoryModeTexts: {
   [key in TicketHistoryMode]: TicketHistoryModeText;
 } = {
   expired: {
-    title: _('', '', ''),
-    titleA11y: _('', '', ''),
+    title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
+    titleA11y: _(
+      'Aktiver for å vise dine utløpte billetter',
+      'Activate to show your expired tickets',
+      'Aktiver for å vise billettane dine som har gått ut',
+    ),
     emptyDetail: _(
       'Dine utløpte billetter vil dukke opp her. Dra ned for å oppdatere om du ikke finner billetten din.',
       "Your expired tickets will show here. Pull down to refresh if you can't find your ticket.",
