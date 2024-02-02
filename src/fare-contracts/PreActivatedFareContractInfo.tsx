@@ -79,7 +79,8 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
     userProfiles,
   );
 
-  const shouldShowBundlingInfo = benefits?.length && validityStatus === 'valid';
+  const shouldShowBundlingInfo =
+    benefits && benefits.length > 0 && validityStatus === 'valid';
 
   return (
     <Section withBottomPadding testID={testID}>
