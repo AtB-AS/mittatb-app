@@ -16,7 +16,7 @@ on:
 jobs:
   run_tests:
     name: E2E test Android
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     environment: atb
     timeout-minutes: 90
     steps:
@@ -42,6 +42,11 @@ jobs:
           APPCENTER_USER_API_TOKEN: ${{ secrets.APPCENTER_USER_API_TOKEN }}
 
       # E2E init
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: Install Appium
         run: npm install -g appium
       - name: Install uiautomator2 driver
@@ -58,6 +63,34 @@ jobs:
         working-directory: e2e
         run: ./node_modules/typescript/bin/tsc --noEmit --noErrorTruncation --pretty false --incremental false
 
+      # Caching
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ env.INPUT_API_LEVEL }}
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
+          api-level: ${{ env.INPUT_API_LEVEL }}
+          arch: x86_64
+          profile: pixel_5
+          emulator-build: 9536276
+          emulator-boot-timeout: 900
+          disable-spellchecker: true
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+                            -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
       # E2E run
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2.28.0
@@ -69,6 +102,9 @@ jobs:
           emulator-build: 9536276
           emulator-boot-timeout: 900
           disable-spellchecker: true
+          disable-animations: true
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: yarn test:android
           pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
