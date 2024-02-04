@@ -65,7 +65,7 @@ jobs:
 
       # E2E run
       - name: Run tests on Android emulator
-        uses: reactivecircus/android-emulator-runner@v2.28.0
+        uses: reactivecircus/android-emulator-runner@v2
         with:
           avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
