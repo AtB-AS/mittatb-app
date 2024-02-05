@@ -60,8 +60,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Install Flashlight
-        run: sh ./scripts/install-flashlight.sh
-        working-directory: e2e
+        #run: sh ./scripts/install-flashlight.sh
+        run: curl https://get.flashlight.dev | bash
+        #working-directory: e2e
       #- name: Install Appium
       #  run: npm install -g appium
       #- name: Install uiautomator2 driver
