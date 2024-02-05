@@ -1,16 +1,21 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {getConfig, NotificationConfigUpdate, updateConfig} from './api';
+import {
+  getNotificationConfig,
+  NotificationConfigUpdate,
+  updateNotificationConfig,
+} from './api';
 
-export const useConfig = () => {
+export const useNotificationConfig = () => {
   const queryClient = useQueryClient();
 
   const queryKey = ['notification/config'];
   const query = useQuery({
     queryKey,
-    queryFn: getConfig,
+    queryFn: getNotificationConfig,
   });
   const mutation = useMutation({
-    mutationFn: (update: NotificationConfigUpdate) => updateConfig(update),
+    mutationFn: (update: NotificationConfigUpdate) =>
+      updateNotificationConfig(update),
     onSuccess: () => queryClient.invalidateQueries(queryKey),
   });
 

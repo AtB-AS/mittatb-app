@@ -29,7 +29,7 @@ export const registerForPushNotifications = ({
       return response.status === 200;
     });
 
-export const getConfig = (): Promise<NotificationConfig> =>
+export const getNotificationConfig = (): Promise<NotificationConfig> =>
   client
     .get<NotificationConfig>('/notification/v1/config', {authWithIdToken: true})
     .then((response) => response.data);
@@ -38,7 +38,7 @@ export interface NotificationConfigUpdate extends NotificationConfigValue {
   config_type: NotificationConfigType;
 }
 
-export const updateConfig = (
+export const updateNotificationConfig = (
   update: NotificationConfigUpdate,
 ): Promise<void> => {
   return client.patch('/notification/v1/config', update, {
