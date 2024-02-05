@@ -13,7 +13,7 @@ export {getTextForLanguage} from './utils';
 
 export {default as FavoriteTexts} from './components/FavoriteChips';
 export {default as PaginationTexts} from './components/Pagination';
-export {default as OnboardingTexts} from './screens/Onboarding';
+export {default as ExtendedOnboardingTexts} from './screens/ExtendedOnboarding';
 export {default as SectionTexts} from './components/Section';
 export {default as MapTexts} from './components/Map';
 export {default as ScreenHeaderTexts} from './components/ScreenHeader';
@@ -66,3 +66,4 @@ export {default as LoadingScreenTexts} from './screens/LoadingScreen';
 export {default as InfoTagTexts} from './components/InfoTag';
 export {default as DeparturesTexts} from './screens/Departures';
 export {default as GeoLocationTexts} from './GeoLocation';
+export {default as PhoneInputTexts} from './components/PhoneInput';

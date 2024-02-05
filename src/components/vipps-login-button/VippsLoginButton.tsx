@@ -15,7 +15,7 @@ export const VippsLoginButton = ({
 }: {
   onPress: () => {};
   disabled: boolean;
-  style: ViewStyle;
+  style?: ViewStyle;
 }) => {
   const {t} = useTranslation();
   const {theme} = useTheme();
@@ -51,6 +51,8 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: VIPPS_BACKGROUND_COLOR,
     borderRadius: theme.border.radius.regular,
     justifyContent: 'center',
+    borderWidth: theme.border.width.medium,
+    borderColor: VIPPS_BACKGROUND_COLOR,
   },
   disabledOpacity: {
     opacity: 0.2,

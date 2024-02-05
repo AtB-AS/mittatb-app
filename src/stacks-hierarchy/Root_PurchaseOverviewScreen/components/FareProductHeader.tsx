@@ -70,7 +70,7 @@ export const FareProductHeader = forwardRef<View, Props>(
               {productDescription}
             </ThemeText>
             <Button
-              type="pill"
+              type="small"
               leftIcon={{svg: Info}}
               interactiveColor="interactive_1"
               text={t(PurchaseOverviewTexts.ticketInformation.button)}

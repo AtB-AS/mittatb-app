@@ -45,10 +45,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {
-    completeMobileTokenOnboarding,
-    completeMobileTokenWithoutTravelcardOnboarding,
-  } = useAppState();
+  const {completeOnboardingSection} = useAppState();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
   const {data} = useTokenToggleDetailsQuery();
@@ -99,16 +96,10 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     // Whenever a user enters this screen, the onboarding is done.
     // This useEffect is needed for when onboarding was skipped because of
     // already being on your own device, but then changed to another device
-    if (disable_travelcard) {
-      completeMobileTokenWithoutTravelcardOnboarding();
-    } else {
-      completeMobileTokenOnboarding();
-    }
-  }, [
-    disable_travelcard,
-    completeMobileTokenWithoutTravelcardOnboarding,
-    completeMobileTokenOnboarding,
-  ]);
+    completeOnboardingSection(
+      disable_travelcard ? 'mobileTokenWithoutTravelcard' : 'mobileToken',
+    );
+  }, [disable_travelcard, completeOnboardingSection]);
 
   const [saveState, setSaveState] = useState({
     saving: false,
@@ -150,7 +141,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             ? t(TravelTokenTexts.toggleToken.titleWithoutTravelcard)
             : t(TravelTokenTexts.toggleToken.title)
         }
-        leftButton={{type: 'back'}}
+        leftButton={{type: 'close'}}
       />
       <ScrollView
         contentContainerStyle={styles.scrollView}

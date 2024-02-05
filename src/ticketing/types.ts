@@ -76,6 +76,8 @@ export type FareContract = {
   created: Timestamp;
   version: string;
   id: string;
+  customerAccountId: string;
+  purchasedBy: string;
   orderId: string;
   state: FareContractState;
   minimumSecurityLevel: number;

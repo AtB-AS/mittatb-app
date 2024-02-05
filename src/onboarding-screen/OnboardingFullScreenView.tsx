@@ -17,6 +17,7 @@ export type OnboardingFullScreenViewProps = PropsWithChildren<{
   secondaryFooterButton?: ButtonProps;
   fullScreenHeaderProps?: ScreenHeaderProps;
   footerDescription?: string;
+  testID?: string;
 }>;
 
 export const OnboardingFullScreenView = ({
@@ -25,6 +26,7 @@ export const OnboardingFullScreenView = ({
   secondaryFooterButton,
   fullScreenHeaderProps,
   footerDescription,
+  testID,
 }: OnboardingFullScreenViewProps) => {
   const styles = useStyles();
 
@@ -55,15 +57,17 @@ export const OnboardingFullScreenView = ({
             style={styles.footerButton}
             text={footerButton.text || ''}
             rightIcon={footerButton.rightIcon}
+            testID={testID ? `${testID}Button` : 'nextButton'}
           />
           {secondaryFooterButton && (
             <Button
-              interactiveColor="interactive_0"
+              backgroundColor={themeColor}
               mode="secondary"
               onPress={secondaryFooterButton.onPress}
               style={styles.footerButton}
               text={secondaryFooterButton.text || ''}
               rightIcon={secondaryFooterButton.rightIcon}
+              testID={testID ? `${testID}Button` : 'nextButton'}
             />
           )}
         </View>

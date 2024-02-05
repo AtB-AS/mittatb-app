@@ -122,17 +122,18 @@ export const DetailsContent: React.FC<Props> = ({
             preassignedFareProduct={preassignedFareProduct}
           />
         </GenericSectionItem>
-        {deviceInspectionStatus === 'inspectable' && (
-          <GenericSectionItem
-            style={
-              barcodeStatus === 'staticQr'
-                ? styles.enlargedWhiteBarcodePaddingView
-                : undefined
-            }
-          >
-            <Barcode validityStatus={validityStatus} fc={fc} />
-          </GenericSectionItem>
-        )}
+        {deviceInspectionStatus === 'inspectable' &&
+          validityStatus === 'valid' && (
+            <GenericSectionItem
+              style={
+                barcodeStatus === 'staticQr'
+                  ? styles.enlargedWhiteBarcodePaddingView
+                  : undefined
+              }
+            >
+              <Barcode validityStatus={validityStatus} fc={fc} />
+            </GenericSectionItem>
+          )}
         <GenericSectionItem>
           <FareContractInfoDetails
             fromTariffZone={fromTariffZone}

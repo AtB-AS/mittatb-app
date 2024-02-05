@@ -1,6 +1,7 @@
 import React, {
   createContext,
   Dispatch,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -9,62 +10,38 @@ import React, {
 import RNBootSplash from 'react-native-bootsplash';
 import {register as registerChatUser} from './chat/user';
 import {storage} from '@atb/storage';
+import {
+  OnboardingSection,
+  OnboardingSectionId,
+  staticOnboardingSectionsInPrioritizedOrder,
+  LoadedOnboardingSection,
+} from './utils/use-onboarding-sections';
 
-enum storeKey {
-  onboarding = '@ATB_onboarded',
-  mobileTokenOnboarding = '@ATB_mobile_token_onboarded',
-  mobileTokenWithoutTravelcardOnboarding = '@ATB_mobile_token_without_travelcard_onboarded',
-  notificationPermissionOnboarding = '@ATB_notification_permission_onboarded',
-  locationWhenInUsePermissionOnboarded = '@ATB_location_when_in_use_permission_onboarded',
-  shareTravelHabitsOnboarded = '@ATB_share_travel_habits_onboarded',
-}
-type AppState = {
+export type AppState = {
   isLoading: boolean;
-  onboarded: boolean;
-  mobileTokenOnboarded: boolean;
-  mobileTokenWithoutTravelcardOnboarded: boolean;
-  notificationPermissionOnboarded: boolean;
-  locationWhenInUsePermissionOnboarded: boolean;
-  shareTravelHabitsOnboarded: boolean;
+  loadedOnboardingSections: LoadedOnboardingSection[];
+};
+
+type AppContextState = AppState & {
+  completeOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
+  restartOnboardingSection: (onboardingSectionId: OnboardingSectionId) => void;
+  restartAllOnboardingSections: () => void;
 };
 
 type AppReducerAction =
   | {
       type: 'LOAD_APP_SETTINGS';
-      onboarded: boolean;
-      mobileTokenOnboarded: boolean;
-      mobileTokenWithoutTravelcardOnboarded: boolean;
-      notificationPermissionOnboarded: boolean;
-      locationWhenInUsePermissionOnboarded: boolean;
-      shareTravelHabitsOnboarded: boolean;
+      loadedOnboardingSections: LoadedOnboardingSection[];
     }
-  | {type: 'COMPLETE_ONBOARDING'}
-  | {type: 'RESTART_ONBOARDING'}
-  | {type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'}
-  | {type: 'RESTART_MOBILE_TOKEN_ONBOARDING'}
-  | {type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
-  | {type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'}
-  | {type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'}
-  | {type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'}
-  | {type: 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'}
-  | {type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'}
-  | {type: 'COMPLETE_SHARE_TRAVEL_HABITS_ONBOARDING'}
-  | {type: 'RESTART_SHARE_TRAVEL_HABITS_ONBOARDING'};
+  | {
+      type: 'COMPLETE_ONBOARDING_SECTION';
+      onboardingSectionId: OnboardingSectionId;
+    }
+  | {
+      type: 'RESTART_ONBOARDING_SECTION';
+      onboardingSectionId: OnboardingSectionId;
+    };
 
-type AppContextState = AppState & {
-  completeOnboarding: () => void;
-  restartOnboarding: () => void;
-  completeMobileTokenOnboarding: () => void;
-  restartMobileTokenOnboarding: () => void;
-  completeMobileTokenWithoutTravelcardOnboarding: () => void;
-  restartMobileTokenWithoutTravelcardOnboarding: () => void;
-  completeNotificationPermissionOnboarding: () => void;
-  restartNotificationPermissionOnboarding: () => void;
-  completeLocationWhenInUsePermissionOnboarding: () => void;
-  restartLocationWhenInUsePermissionOnboarding: () => void;
-  completeShareTravelHabitsOnboarding: () => void;
-  restartShareTravelHabitsOnboarding: () => void;
-};
 const AppContext = createContext<AppContextState | undefined>(undefined);
 const AppDispatch = createContext<Dispatch<AppReducerAction> | undefined>(
   undefined,
@@ -75,101 +52,36 @@ type AppReducer = (prevState: AppState, action: AppReducerAction) => AppState;
 const appReducer: AppReducer = (prevState, action) => {
   switch (action.type) {
     case 'LOAD_APP_SETTINGS':
-      const {
-        onboarded,
-        mobileTokenOnboarded,
-        mobileTokenWithoutTravelcardOnboarded,
-        notificationPermissionOnboarded,
-        locationWhenInUsePermissionOnboarded,
-        shareTravelHabitsOnboarded,
-      } = action;
+      const {loadedOnboardingSections} = action;
       return {
         ...prevState,
-        onboarded,
         isLoading: false,
-        mobileTokenOnboarded,
-        mobileTokenWithoutTravelcardOnboarded,
-        notificationPermissionOnboarded,
-        locationWhenInUsePermissionOnboarded,
-        shareTravelHabitsOnboarded,
+        loadedOnboardingSections,
       };
-    case 'COMPLETE_ONBOARDING':
+    case 'COMPLETE_ONBOARDING_SECTION':
       return {
         ...prevState,
-        onboarded: true,
+        loadedOnboardingSections: getUpdatedOnboardingSections(
+          prevState.loadedOnboardingSections,
+          action.onboardingSectionId,
+          true,
+        ),
       };
-    case 'RESTART_ONBOARDING':
+    case 'RESTART_ONBOARDING_SECTION':
       return {
         ...prevState,
-        onboarded: false,
-      };
-    case 'COMPLETE_MOBILE_TOKEN_ONBOARDING':
-      return {
-        ...prevState,
-        mobileTokenOnboarded: true,
-      };
-    case 'RESTART_MOBILE_TOKEN_ONBOARDING':
-      return {
-        ...prevState,
-        mobileTokenOnboarded: false,
-      };
-    case 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING':
-      return {
-        ...prevState,
-        mobileTokenWithoutTravelcardOnboarded: true,
-      };
-    case 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING':
-      return {
-        ...prevState,
-        mobileTokenWithoutTravelcardOnboarded: false,
-      };
-
-    case 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING':
-      return {
-        ...prevState,
-        notificationPermissionOnboarded: true,
-      };
-
-    case 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING':
-      return {
-        ...prevState,
-        notificationPermissionOnboarded: false,
-      };
-
-    case 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING':
-      return {
-        ...prevState,
-        locationWhenInUsePermissionOnboarded: true,
-      };
-
-    case 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING':
-      return {
-        ...prevState,
-        locationWhenInUsePermissionOnboarded: false,
-      };
-
-    case 'COMPLETE_SHARE_TRAVEL_HABITS_ONBOARDING':
-      return {
-        ...prevState,
-        shareTravelHabitsOnboarded: true,
-      };
-
-    case 'RESTART_SHARE_TRAVEL_HABITS_ONBOARDING':
-      return {
-        ...prevState,
-        shareTravelHabitsOnboarded: false,
+        loadedOnboardingSections: getUpdatedOnboardingSections(
+          prevState.loadedOnboardingSections,
+          action.onboardingSectionId,
+          false,
+        ),
       };
   }
 };
 
 const defaultAppState: AppState = {
   isLoading: true,
-  onboarded: false,
-  mobileTokenOnboarded: false,
-  mobileTokenWithoutTravelcardOnboarded: false,
-  notificationPermissionOnboarded: false,
-  locationWhenInUsePermissionOnboarded: false,
-  shareTravelHabitsOnboarded: false,
+  loadedOnboardingSections: [],
 };
 
 export const AppContextProvider: React.FC = ({children}) => {
@@ -177,60 +89,31 @@ export const AppContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     async function loadAppSettings() {
-      const savedOnboarded = await storage.get(storeKey.onboarding);
-      const onboarded = !savedOnboarded ? false : JSON.parse(savedOnboarded);
-
-      const savedMobileTokenOnboarded = await storage.get(
-        storeKey.mobileTokenOnboarding,
-      );
-      const mobileTokenOnboarded = !savedMobileTokenOnboarded
-        ? false
-        : JSON.parse(savedMobileTokenOnboarded);
-
-      const savedMobileTokenWithoutTravelcardOnboarded = await storage.get(
-        storeKey.mobileTokenWithoutTravelcardOnboarding,
-      );
-      const mobileTokenWithoutTravelcardOnboarded =
-        !savedMobileTokenWithoutTravelcardOnboarded
-          ? false
-          : JSON.parse(savedMobileTokenWithoutTravelcardOnboarded);
-
-      const savedNotificationPermissionOnboarded = await storage.get(
-        storeKey.notificationPermissionOnboarding,
+      const loadedOnboardingSections = await Promise.all(
+        staticOnboardingSectionsInPrioritizedOrder.map(
+          async (staticOnboardingSection) => {
+            const savedIsOnboarded = await storage.get(
+              staticOnboardingSection.isOnboardedStoreKey,
+            );
+            const isOnboarded = !savedIsOnboarded
+              ? false
+              : JSON.parse(savedIsOnboarded);
+            return {...staticOnboardingSection, isOnboarded};
+          },
+        ),
       );
 
-      const notificationPermissionOnboarded =
-        !savedNotificationPermissionOnboarded
-          ? false
-          : JSON.parse(savedNotificationPermissionOnboarded);
-
-      const savedLocationWhenInUsePermissionOnboarded = await storage.get(
-        storeKey.locationWhenInUsePermissionOnboarded,
-      );
-      const locationWhenInUsePermissionOnboarded =
-        !savedLocationWhenInUsePermissionOnboarded
-          ? false
-          : JSON.parse(savedLocationWhenInUsePermissionOnboarded);
-
-      const savedShareTravelHabitsOnboarded = await storage.get(
-        storeKey.shareTravelHabitsOnboarded,
-      );
-      const shareTravelHabitsOnboarded = !savedShareTravelHabitsOnboarded
-        ? false
-        : JSON.parse(savedShareTravelHabitsOnboarded);
-
-      if (onboarded) {
+      if (
+        loadedOnboardingSections.find(
+          (lOS) => lOS.onboardingSectionId === 'userCreation',
+        )?.isOnboarded
+      ) {
         registerChatUser();
       }
 
       dispatch({
         type: 'LOAD_APP_SETTINGS',
-        onboarded,
-        mobileTokenOnboarded,
-        mobileTokenWithoutTravelcardOnboarded,
-        notificationPermissionOnboarded,
-        locationWhenInUsePermissionOnboarded,
-        shareTravelHabitsOnboarded,
+        loadedOnboardingSections,
       });
 
       RNBootSplash.hide({fade: true});
@@ -238,120 +121,55 @@ export const AppContextProvider: React.FC = ({children}) => {
     loadAppSettings();
   }, []);
 
-  const {
-    completeOnboarding,
-    restartOnboarding,
-    completeMobileTokenOnboarding,
-    restartMobileTokenOnboarding,
-    completeMobileTokenWithoutTravelcardOnboarding,
-    restartMobileTokenWithoutTravelcardOnboarding,
-    completeNotificationPermissionOnboarding,
-    restartNotificationPermissionOnboarding,
-    completeLocationWhenInUsePermissionOnboarding,
-    restartLocationWhenInUsePermissionOnboarding,
-    completeShareTravelHabitsOnboarding,
-    restartShareTravelHabitsOnboarding,
-  } = useMemo(
+  const {completeOnboardingSection, restartOnboardingSection} = useMemo(
     () => ({
-      completeOnboarding: async () => {
-        await storage.set(storeKey.onboarding, JSON.stringify(true));
-        dispatch({type: 'COMPLETE_ONBOARDING'});
-
-        registerChatUser();
-      },
-      restartOnboarding: async () => {
-        await storage.set(storeKey.onboarding, JSON.stringify(false));
-        dispatch({type: 'RESTART_ONBOARDING'});
-      },
-      completeMobileTokenOnboarding: async () => {
-        dispatch({type: 'COMPLETE_MOBILE_TOKEN_ONBOARDING'});
-        await storage.set(storeKey.mobileTokenOnboarding, JSON.stringify(true));
-      },
-      restartMobileTokenOnboarding: async () => {
-        dispatch({type: 'RESTART_MOBILE_TOKEN_ONBOARDING'});
-        await storage.set(
-          storeKey.mobileTokenOnboarding,
-          JSON.stringify(false),
+      completeOnboardingSection: async (
+        onboardingSectionId: OnboardingSectionId,
+      ) => {
+        dispatch({
+          type: 'COMPLETE_ONBOARDING_SECTION',
+          onboardingSectionId,
+        });
+        await storeOnboardingSectionIsOnboarded(
+          state.loadedOnboardingSections,
+          onboardingSectionId,
+          true,
         );
       },
-      completeMobileTokenWithoutTravelcardOnboarding: async () => {
-        dispatch({type: 'COMPLETE_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
-        await storage.set(
-          storeKey.mobileTokenWithoutTravelcardOnboarding,
-          JSON.stringify(true),
+      restartOnboardingSection: async (
+        onboardingSectionId: OnboardingSectionId,
+      ) => {
+        dispatch({
+          type: 'RESTART_ONBOARDING_SECTION',
+          onboardingSectionId,
+        });
+        await storeOnboardingSectionIsOnboarded(
+          state.loadedOnboardingSections,
+          onboardingSectionId,
+          false,
         );
-      },
-      restartMobileTokenWithoutTravelcardOnboarding: async () => {
-        dispatch({type: 'RESTART_MOBILE_TOKEN_WITHOUT_TRAVELCARD_ONBOARDING'});
-        await storage.set(
-          storeKey.mobileTokenWithoutTravelcardOnboarding,
-          JSON.stringify(false),
-        );
-      },
-      completeNotificationPermissionOnboarding: async () => {
-        await storage.set(
-          storeKey.notificationPermissionOnboarding,
-          JSON.stringify(true),
-        );
-        dispatch({type: 'COMPLETE_NOTIFICATION_PERMISSION_ONBOARDING'});
-      },
-      restartNotificationPermissionOnboarding: async () => {
-        await storage.set(
-          storeKey.notificationPermissionOnboarding,
-          JSON.stringify(false),
-        );
-        dispatch({type: 'RESTART_NOTIFICATION_PERMISSION_ONBOARDING'});
-      },
-
-      completeLocationWhenInUsePermissionOnboarding: async () => {
-        await storage.set(
-          storeKey.locationWhenInUsePermissionOnboarded,
-          JSON.stringify(true),
-        );
-        dispatch({type: 'COMPLETE_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'});
-      },
-      restartLocationWhenInUsePermissionOnboarding: async () => {
-        await storage.set(
-          storeKey.locationWhenInUsePermissionOnboarded,
-          JSON.stringify(false),
-        );
-        dispatch({type: 'RESTART_LOCATION_WHEN_IN_USE_PERMISSION_ONBOARDING'});
-      },
-
-      completeShareTravelHabitsOnboarding: async () => {
-        await storage.set(
-          storeKey.shareTravelHabitsOnboarded,
-          JSON.stringify(true),
-        );
-        dispatch({type: 'COMPLETE_SHARE_TRAVEL_HABITS_ONBOARDING'});
-      },
-      restartShareTravelHabitsOnboarding: async () => {
-        await storage.set(
-          storeKey.shareTravelHabitsOnboarded,
-          JSON.stringify(false),
-        );
-        dispatch({type: 'RESTART_SHARE_TRAVEL_HABITS_ONBOARDING'});
       },
     }),
-    [],
+    [state.loadedOnboardingSections],
+  );
+
+  const restartAllOnboardingSections = useCallback(
+    () =>
+      Promise.all(
+        state.loadedOnboardingSections.map((loadedOnboardingSection) =>
+          restartOnboardingSection(loadedOnboardingSection.onboardingSectionId),
+        ),
+      ),
+    [state.loadedOnboardingSections, restartOnboardingSection],
   );
 
   return (
     <AppContext.Provider
       value={{
         ...state,
-        completeOnboarding,
-        restartOnboarding,
-        completeMobileTokenOnboarding,
-        restartMobileTokenOnboarding,
-        completeMobileTokenWithoutTravelcardOnboarding,
-        restartMobileTokenWithoutTravelcardOnboarding,
-        completeNotificationPermissionOnboarding,
-        restartNotificationPermissionOnboarding,
-        completeLocationWhenInUsePermissionOnboarding,
-        restartLocationWhenInUsePermissionOnboarding,
-        completeShareTravelHabitsOnboarding,
-        restartShareTravelHabitsOnboarding,
+        completeOnboardingSection,
+        restartOnboardingSection,
+        restartAllOnboardingSections,
       }}
     >
       <AppDispatch.Provider value={dispatch}>{children}</AppDispatch.Provider>
@@ -374,3 +192,38 @@ export function useAppDispatch() {
   }
   return context;
 }
+
+const getUpdatedOnboardingSections = (
+  onboardingSections: OnboardingSection[],
+  onboardingSectionId: OnboardingSectionId,
+  isOnboarded: boolean,
+) => {
+  const index = onboardingSections.findIndex(
+    (oS) => oS.onboardingSectionId === onboardingSectionId,
+  );
+  if (index !== -1) {
+    // only return a new array if a value is changed
+    if (onboardingSections[index].isOnboarded !== isOnboarded) {
+      const updatedOnboardingSections = [...onboardingSections];
+      updatedOnboardingSections[index].isOnboarded = isOnboarded;
+      return updatedOnboardingSections;
+    }
+  }
+  return onboardingSections;
+};
+
+const storeOnboardingSectionIsOnboarded = async (
+  onboardingSections: OnboardingSection[],
+  onboardingSectionId: OnboardingSectionId,
+  isOnboarded: boolean,
+) => {
+  const onboardingSection = onboardingSections.find(
+    (oS) => oS.onboardingSectionId === onboardingSectionId,
+  );
+  if (onboardingSection?.isOnboardedStoreKey) {
+    await storage.set(
+      onboardingSection.isOnboardedStoreKey,
+      JSON.stringify(isOnboarded),
+    );
+  }
+};

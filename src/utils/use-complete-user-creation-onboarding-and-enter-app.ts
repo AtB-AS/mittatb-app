@@ -10,29 +10,15 @@ import {RootNavigationProps, RootStackParamList} from '@atb/stacks-hierarchy';
  * @returns {Function} A function that, when called, checks if the onboarding is not completed,
  * completes it if not, and then navigates to the next screen using enterApp.
  */
-export const useCompleteOnboardingAndEnterApp = () => {
-  const {onboarded, completeOnboarding} = useAppState();
+export const useCompleteUserCreationOnboardingAndEnterApp = () => {
+  const {completeOnboardingSection} = useAppState();
+
   const enterApp = useEnterApp();
 
   return () => {
-    !onboarded && completeOnboarding();
+    completeOnboardingSection('userCreation');
     enterApp();
   };
-};
-
-export type AfterLoginScreenType =
-  | NextScreenParams<'Root_TabNavigatorStack'>
-  | NextScreenParams<'Root_PurchaseOverviewScreen'>
-  | NextScreenParams<'Root_PurchaseConfirmationScreen'>
-  | NextScreenParams<'Root_ActiveTokenOnPhoneRequiredForFareProductScreen'>;
-
-export type NextScreenParams<T extends keyof RootStackParamList> = {
-  screen: T;
-  /*
-     Can use 'as any' when using these params when navigating, as type safety is
-     ensured at creation time.
-     */
-  params: RootStackParamList[T];
 };
 
 /**
@@ -45,22 +31,18 @@ export type NextScreenParams<T extends keyof RootStackParamList> = {
  * current state.
  */
 const useEnterApp = () => {
-  const {getNextOnboardingScreen} = useOnboardingFlow();
+  const {getNextOnboardingSection} = useOnboardingFlow();
   const navigation = useNavigation<RootNavigationProps>();
 
   return () => {
-    const nextOnboardingScreen = getNextOnboardingScreen(undefined, true);
+    const nextOnboardingSection = getNextOnboardingSection(undefined, true);
 
     const routes: PartialRoute<
       Route<keyof RootStackParamList, object | undefined>
     >[] = [{name: 'Root_TabNavigatorStack'}];
 
-    if (nextOnboardingScreen?.screenName) {
-      routes.push({
-        name: nextOnboardingScreen.screenName,
-        params: nextOnboardingScreen.params,
-      });
-    }
+    const {name, params} = nextOnboardingSection?.initialScreen || {};
+    name && routes.push({name, params});
 
     navigation.reset({routes});
   };

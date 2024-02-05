@@ -140,7 +140,6 @@ export const TripDetailsScreenComponent = ({
                 mode: 'TravelSearch',
               });
             }}
-            type="block"
             text={t(TripDetailsTexts.trip.buyTicket.text)}
             rightIcon={{svg: Ticket}}
             style={styles.purchaseButtonAccessible}
@@ -292,11 +291,8 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
     elevation: 3,
   },
   purchaseButtonAccessible: {
-    alignSelf: 'center',
-    justifyContent: 'center',
     marginHorizontal: theme.spacings.medium,
     marginVertical: theme.spacings.xSmall,
-    flexDirection: 'row',
   },
   borderTop: {
     borderTopColor: theme.border.primary,

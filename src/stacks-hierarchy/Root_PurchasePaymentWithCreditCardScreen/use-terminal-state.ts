@@ -24,6 +24,7 @@ export function useTerminalState(
   paymentType: PaymentType.Visa | PaymentType.Mastercard,
   recurringPaymentId: number | undefined,
   saveRecurringCard: boolean,
+  destinationAccountId: string | undefined,
   cancelTerminal: () => void,
 ) {
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +44,9 @@ export function useTerminalState(
     }
   },
   []);
+  const targetCustomerId = destinationAccountId
+    ? destinationAccountId
+    : abtCustomerId;
 
   const reserveOffer = useCallback(
     async function () {
@@ -56,7 +60,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
-              customerAccountId: abtCustomerId!,
+              customerAccountId: targetCustomerId!,
             })
           : await reserveOffers({
               offers,
@@ -66,7 +70,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
-              customerAccountId: abtCustomerId!,
+              customerAccountId: targetCustomerId!,
             });
         setReservation(response);
       } catch (err) {
@@ -74,7 +78,7 @@ export function useTerminalState(
         handleAxiosError(err, 'reservation');
       }
     },
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [offers, handleAxiosError],
   );
 

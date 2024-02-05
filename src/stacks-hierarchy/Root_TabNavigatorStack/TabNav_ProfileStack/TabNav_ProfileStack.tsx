@@ -21,13 +21,13 @@ import {Profile_TicketInspectionInformationScreen} from './Profile_TicketInspect
 import {Profile_GenericWebsiteInformationScreen} from './Profile_GenericWebsiteInformationScreen';
 import {Profile_DeleteProfileScreen} from './Profile_DeleteProfileScreen';
 import {Profile_TravelTokenScreen} from './Profile_TravelTokenScreen';
-import {Profile_SelectTravelTokenScreen} from './Profile_SelectTravelTokenScreen';
 import {Profile_FavoriteListScreen} from './Profile_FavoriteListScreen';
 import {Profile_SortFavoritesScreen} from './Profile_SortFavoritesScreen';
 import {Profile_EditProfileScreen} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/Profile_EditProfileScreen';
 import {Profile_FareContractsScreen} from './Profile_FareContractsScreen';
 import {Profile_NotificationsScreen} from './Profile_NotificationsScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
+import {Profile_TicketHistorySelectionScreen} from './Profile_TicketHistorySelectionScreen';
 
 const Stack = createStackNavigator<ProfileStackParams>();
 
@@ -43,6 +43,10 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_TicketHistoryScreen"
         component={Profile_TicketHistoryScreen}
+      />
+      <Stack.Screen
+        name="Profile_TicketHistorySelectionScreen"
+        component={Profile_TicketHistorySelectionScreen}
       />
       <Stack.Screen
         name="Profile_PaymentOptionsScreen"
@@ -75,10 +79,6 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_TravelTokenScreen"
         component={Profile_TravelTokenScreen}
-      />
-      <Stack.Screen
-        name="Profile_SelectTravelTokenScreen"
-        component={Profile_SelectTravelTokenScreen}
       />
       <Stack.Screen
         name="Profile_AppearanceScreen"

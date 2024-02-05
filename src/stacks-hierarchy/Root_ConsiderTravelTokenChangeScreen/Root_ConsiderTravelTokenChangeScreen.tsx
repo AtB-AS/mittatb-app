@@ -6,8 +6,6 @@ import {
   ConsiderTravelTokenChangeTexts,
   useTranslation,
 } from '@atb/translations';
-import {useAppState} from '@atb/AppContext';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
@@ -18,6 +16,7 @@ import {LoadingScreen} from '@atb/loading-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useCallback} from 'react';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -25,27 +24,17 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
   const styles = useStyle();
   const {t} = useTranslation();
   const focusRef = useFocusOnLoad();
-
   const {disable_travelcard} = useRemoteConfig();
 
-  const {
-    completeMobileTokenOnboarding,
-    completeMobileTokenWithoutTravelcardOnboarding,
-  } = useAppState();
-  const {continueFromOnboardingScreen} = useOnboardingNavigation();
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
 
-  const onPressContinue = useCallback(() => {
-    disable_travelcard
-      ? completeMobileTokenWithoutTravelcardOnboarding()
-      : completeMobileTokenOnboarding();
-
-    continueFromOnboardingScreen('Root_ConsiderTravelTokenChangeScreen');
-  }, [
-    completeMobileTokenOnboarding,
-    completeMobileTokenWithoutTravelcardOnboarding,
-    continueFromOnboardingScreen,
-    disable_travelcard,
-  ]);
+  const onPressContinue = useCallback(
+    () =>
+      continueFromOnboardingSection(
+        disable_travelcard ? 'mobileTokenWithoutTravelcard' : 'mobileToken',
+      ),
+    [continueFromOnboardingSection, disable_travelcard],
+  );
 
   const NoTokenView = (
     <NoTravelTokenInfo onPressFooterButton={onPressContinue} />

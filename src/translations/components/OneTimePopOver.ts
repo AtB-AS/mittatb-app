@@ -19,6 +19,14 @@ const OneTimePopOverTexts: {[key in PopOverKey]: PopOverText} = {
       'Tips om bestillingstransport kan skruast på igjen i filter.',
     ),
   },
+  'on-behalf-of-new-feature-introduction': {
+    heading: _('Nyhet!', 'New!', 'Nyhet!'),
+    text: _(
+      'Kjøp til noen andre.',
+      'Buy for someone else.',
+      'Kjøp til nokon andre.',
+    ),
+  },
 };
 
 export default OneTimePopOverTexts;
