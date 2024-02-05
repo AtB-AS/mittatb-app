@@ -62,6 +62,8 @@ jobs:
       - name: Install Flashlight
         #run: sh ./scripts/install-flashlight.sh
         run: curl https://get.flashlight.dev | bash
+      - name: Debug - ls -l
+        run: cat /home/runner/.bashrc
         #working-directory: e2e
       #- name: Install Appium
       #  run: npm install -g appium
@@ -90,7 +92,7 @@ jobs:
           emulator-build: 11237101
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          script: /Users/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performance_measures --iterationCount ${{ env.INPUT_TEST_ITERATIONS }} --maxRetries ${{ env.INPUT_MAX_RETRIES }}
+          script: /home/runner/.flashlight/bin/flashlight test --bundleId no.mittatb.staging --testCommand "yarn test:android --spec test/flashlight/performanceMeasures.e2e.ts" --resultsTitle performance_measures --iterationCount ${{ env.INPUT_TEST_ITERATIONS }} --maxRetries ${{ env.INPUT_MAX_RETRIES }}
           pre-emulator-launch-script: ./e2e/scripts/restart-adb.sh
           working-directory: e2e
         env:
