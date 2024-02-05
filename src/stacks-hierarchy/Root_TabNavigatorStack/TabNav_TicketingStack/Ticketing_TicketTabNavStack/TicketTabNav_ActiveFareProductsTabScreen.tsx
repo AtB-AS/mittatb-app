@@ -46,6 +46,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
   return (
     <View style={styles.container}>
       <ScrollView
+        contentContainerStyle={styles.content}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshingFareContracts}
@@ -73,7 +74,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
               .noActiveTicketsDetails,
           )}
         />
-        <Section style={styles.content}>
+        <Section>
           {hasExpiredFareContracts && (
             <LinkSectionItem
               text={t(TicketHistoryModeTexts.expired.title)}
@@ -113,10 +114,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
-    padding: theme.spacings.medium,
   },
   content: {
-    flex: 1,
-    marginBottom: theme.spacings.medium,
+    padding: theme.spacings.medium,
   },
 }));
