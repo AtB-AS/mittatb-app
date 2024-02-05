@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Map,
+  MobilityMapFilterType,
   NavigateToTripSearchCallback as TravelFromAndToLocationsCallback,
 } from '@atb/components/map';
 import {MapScreenProps} from './navigation-types';
@@ -9,12 +10,18 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {MapDisabledForScreenReader} from './components/MapDisabledForScreenReader';
 import {StatusBarOnFocus} from '@atb/components/status-bar-on-focus';
 import {useStations, useVehicles} from '@atb/mobility';
+
+export type MapScreenParams = {
+  initialMobilityFilter?: MobilityMapFilterType;
+};
+
 export const Map_RootScreen = ({
   navigation,
+  route,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const vehicles = useVehicles();
-  const stations = useStations();
+  const vehicles = useVehicles(route.params?.initialMobilityFilter);
+  const stations = useStations(route.params?.initialMobilityFilter);
 
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
 
