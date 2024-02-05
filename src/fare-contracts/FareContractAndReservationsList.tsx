@@ -35,11 +35,22 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalytics();
 
+  /**
+   * This const will filter out completed reservation to not be shown,
+   * so when a user only have sent tickets to someone else,
+   * the completed reservations are not included in the calculation,
+   * showing a proper empty page.
+   */
+  const filterFinishedReservation = reservations?.filter((reservation) => {
+    reservation.paymentStatus !== 'CAPTURE';
+  });
+
   const fareContractsAndReservationsSorted = useMemo(() => {
-    return [...(fareContracts || []), ...(reservations || [])].sort(
-      (a, b) => b.created.toMillis() - a.created.toMillis(),
-    );
-  }, [reservations, fareContracts]);
+    return [
+      ...(fareContracts || []),
+      ...(filterFinishedReservation || []),
+    ].sort((a, b) => b.created.toMillis() - a.created.toMillis());
+  }, [filterFinishedReservation, fareContracts]);
 
   return (
     <>
