@@ -12,21 +12,36 @@ export type FormFactorTicketDescriptionPair = {
   ticketDescription: LanguageAndTextType[] | undefined;
 };
 
+export type FareProductBenefitType = {
+  operatorId: string;
+} & OperatorBenefitType;
+
 export const useOperatorBenefitsForFareProduct = (
   productId: PreassignedFareProductId | undefined,
 ): {
   status: UseQueryResult['status'];
-  benefits?: OperatorBenefitType[];
+  benefits?: Array<FareProductBenefitType>;
 } => {
-  const {data, status} = useFareProductBenefitsQuery(productId);
+  const {data: fareProductBenefits, status} =
+    useFareProductBenefitsQuery(productId);
   const {mobilityOperators} = useOperators();
 
-  const benefits: OperatorBenefitType[] | undefined = data
-    ?.map((d) =>
-      mobilityOperators
-        ?.find((m) => m.id === d.operator)
-        ?.benefits.find((b) => d.benefits.includes(b.id)),
-    )
+  const benefits: FareProductBenefitType[] | undefined = fareProductBenefits
+    ?.map((fareProductBenefit) => {
+      const benefitOperator = mobilityOperators?.find(
+        (mobilityOperator) =>
+          mobilityOperator.id === fareProductBenefit.operator,
+      );
+      const operatorBenefits = benefitOperator?.benefits.find(
+        (mobilityBenefit) =>
+          fareProductBenefit.benefits.includes(mobilityBenefit.id),
+      );
+      if (!operatorBenefits) return;
+      return {
+        ...operatorBenefits,
+        operatorId: fareProductBenefit.operator,
+      };
+    })
     .filter(isDefined);
 
   return {status, benefits};

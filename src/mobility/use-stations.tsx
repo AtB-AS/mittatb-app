@@ -47,6 +47,9 @@ export const useStations: (
       getMapFilter().then((userFilter) => {
         setFilter(userFilter.mobility ?? {});
       });
+    } else {
+      // TODO: This triggers a rerender if initialFilter have changed?
+      setFilter(initialFilter ?? {});
     }
   }, [getMapFilter, initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
 

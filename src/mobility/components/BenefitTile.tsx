@@ -1,43 +1,82 @@
-import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {TileWithButton} from '@atb/components/tile';
 import {StyleSheet} from '@atb/theme';
 import {InteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle} from 'react-native';
 import {BenefitImageAsset} from './BenefitImage';
-import {FormFactorTicketDescriptionPair} from '../use-operator-benefits-for-fare-product';
+import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {Map} from '@atb/assets/svg/mono-icons/map';
+import {MobilityMapFilterType, useUserMapFilters} from '@atb/components/map';
+import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 
 type BenefitCardProps = {
   interactiveColor: InteractiveColor;
   style?: ViewStyle;
-  benefit: FormFactorTicketDescriptionPair;
+  benefit: FareProductBenefitType;
+  onNavigateToMap?: (initialMobilityFilter: MobilityMapFilterType) => void;
 };
 
 export const BenefitTile = ({
   style,
   benefit,
+  onNavigateToMap,
 }: BenefitCardProps): JSX.Element => {
   const styles = useStyles();
   const {t, language} = useTranslation();
-  const title = t(MobilityTexts.formFactor(benefit.formFactor));
+  const title = t(
+    MobilityTexts.formFactor(benefit.formFactors[0] as FormFactor),
+  );
   const description = getTextForLanguage(benefit.ticketDescription, language);
+
+  const {getMapFilter, setMapFilter} = useUserMapFilters();
+
+  const onPress = onNavigateToMap
+    ? async () => {
+        const filter = await getMapFilter();
+        const formFactor = benefit.formFactors[0] as FormFactor;
+        const selection = filter.mobility[formFactor]?.showAll
+          ? {
+              operators: [],
+              showAll: true,
+            }
+          : {
+              operators: [benefit.operatorId],
+              showAll: false,
+            };
+
+        const mobilityFilters: MobilityMapFilterType = {
+          ...filter.mobility,
+          [formFactor]: selection,
+        };
+
+        // TODO: Picked up by bottom sheet?
+        await setMapFilter({...filter, mobility: mobilityFilters});
+
+        // TODO: Picked up by map screen?
+        onNavigateToMap(mobilityFilters);
+      }
+    : undefined;
+
   return (
     <View style={[styles.container, style]}>
       <TileWithButton
-        buttonSvg={ExternalLink}
+        buttonSvg={Map}
         accessibilityLabel={title + screenReaderPause + description}
         mode="compact"
-        buttonText="Aktiver"
+        buttonText="Se i kart"
         interactiveColor="interactive_2"
         style={styles.contentContainer}
+        onPress={onPress}
       >
         <BenefitImageAsset
-          formFactor={benefit.formFactor}
-          width={28}
-          height={19}
-          style={styles.image}
+          formFactor={benefit.formFactors[0] as FormFactor}
+          svgProps={{
+            width: 28,
+            height: 19,
+            style: styles.image,
+          }}
         />
         <ThemeText type="body__tertiary--bold">{title}</ThemeText>
         <ThemeText
@@ -53,7 +92,7 @@ export const BenefitTile = ({
 };
 
 type BenefitCardsProps = Omit<BenefitCardProps, 'benefit'> & {
-  benefits: FormFactorTicketDescriptionPair[];
+  benefits: FareProductBenefitType[];
   style?: ViewStyle;
 };
 export const BenefitTiles = ({
