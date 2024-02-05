@@ -53,21 +53,20 @@ export const NotificationContextProvider: React.FC = ({children}) => {
 
   const register = useCallback(
     async (enabled: boolean) => {
+      if (!fcmToken) return;
       try {
-        const token = await messaging().getToken();
-        if (!token) return;
-        setFcmToken(token);
         mutateRegister({
-          token,
+          token: fcmToken,
           language: getLanguageAndTextEnum(language),
           enabled,
         });
-        return token;
+        return fcmToken;
       } catch (e) {
         Bugsnag.notify(`Failed to register for push notifications: ${e}`);
       }
     },
-    [language, mutateRegister],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [language, fcmToken],
   );
 
   const checkPermissions = useCallback(() => {
@@ -125,6 +124,14 @@ export const NotificationContextProvider: React.FC = ({children}) => {
     if (pushNotificationsEnabled && authStatus === 'authenticated')
       checkPermissions();
   }, [pushNotificationsEnabled, checkPermissions, authStatus]);
+
+  useEffect(() => {
+    (async function () {
+      const token = await messaging().getToken();
+      if (!token) return;
+      setFcmToken(token);
+    })();
+  }, []);
 
   return (
     <NotificationContext.Provider
