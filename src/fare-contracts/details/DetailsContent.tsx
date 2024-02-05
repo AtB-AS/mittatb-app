@@ -36,6 +36,8 @@ import {
   PreassignedFareProduct,
 } from '@atb/configuration';
 import {Barcode} from './Barcode';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 
 type Props = {
   fareContract: FareContract;
@@ -58,6 +60,13 @@ export const DetailsContent: React.FC<Props> = ({
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
+
+  // Checks if the FareContract is purchased by a different ID,
+  // then if yes, return the purchaser ID, otherwise return blank.
+  const accountId =
+    fc.purchasedBy !== fc.customerAccountId ? fc.purchasedBy : undefined;
+
+  const {data: purchaserPhoneNumber} = useGetPhoneByAccountIdQuery(accountId);
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
@@ -149,6 +158,16 @@ export const DetailsContent: React.FC<Props> = ({
                 style={styles.globalMessages}
               />
             </View>
+          </GenericSectionItem>
+        )}
+        {purchaserPhoneNumber && (
+          <GenericSectionItem>
+            <MessageInfoText
+              type="info"
+              message={t(
+                FareContractTexts.details.purchasedBy(purchaserPhoneNumber),
+              )}
+            />
           </GenericSectionItem>
         )}
         <GenericSectionItem>
