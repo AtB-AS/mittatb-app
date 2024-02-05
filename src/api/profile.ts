@@ -76,11 +76,11 @@ export const getCustomerAccountId = async (
  * Function to get phone number from an account ID
  *
  * @param {string} accountId customer account ID
- * @returns {string} customer_account_id as string if successful
+ * @returns {string} phone number as string if successful
  * @throws error from server
  */
 export const getPhoneNumberFromId = async (
-  accountId: string,
+  accountId?: string,
 ): Promise<string> => {
   return await client
     .post<CustomerProfile>(
