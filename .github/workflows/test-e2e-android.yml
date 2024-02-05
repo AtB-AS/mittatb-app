@@ -74,15 +74,14 @@ jobs:
           emulator-build: 11237101
           emulator-boot-timeout: 900
           disable-spellchecker: true
-          #disable-animations: true
-          #force-avd-creation: false
-          #emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: yarn test:android
           pre-emulator-launch-script: ./scripts/restart-adb.sh
           working-directory: e2e
         env:
           APP_PATH: ${{ github.workspace }}
           IS_CI: "true"
+
+      # Results
       - name: Upload screenshots
         if: failure()
         uses: actions/upload-artifact@v3

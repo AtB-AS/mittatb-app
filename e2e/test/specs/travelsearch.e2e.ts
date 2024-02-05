@@ -133,7 +133,10 @@ describe('Travel search', () => {
       // Number of legs
       const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
       await TravelsearchOverviewPage.openFirstSearchResult();
-      await AppHelper.scrollDownUntilId('tripDetailsContentView', `legContainer${noLegs - 1}`);
+      await AppHelper.scrollDownUntilId(
+        'tripDetailsContentView',
+        `legContainer${noLegs - 1}`,
+      );
       await AppHelper.scrollDownUntilId('tripDetailsContentView', 'travelTime');
       const endLocation = await TravelsearchDetailsPage.getLocation(
         'end',

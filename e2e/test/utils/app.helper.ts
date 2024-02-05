@@ -1,5 +1,5 @@
 import ElementHelper from './element.helper.ts';
-import {driver} from "@wdio/globals";
+import {driver} from '@wdio/globals';
 
 const screenshotsFolder: string = './screenshots';
 
@@ -76,19 +76,12 @@ class AppHelper {
    * Scroll down with default scroll parameters
    */
   async scrollDown(scrollableId: string) {
-    //let elem = await ElementHelper.getElement('tripDetailsContentView');
     let elem = await ElementHelper.getElement(scrollableId);
     await driver.execute('mobile: scrollGesture', {
       direction: 'down',
       elementId: elem,
-      percent: 1.0
+      percent: 1.0,
     });
-    /*await driver.touchAction([
-      {action: 'longPress', x: 0, y: 1000},
-      {action: 'moveTo', x: 0, y: 10},
-      'release',
-    ]);
-     */
   }
 
   /**
@@ -99,15 +92,8 @@ class AppHelper {
     await driver.execute('mobile: scrollGesture', {
       direction: 'up',
       elementId: elem,
-      percent: 1.0
+      percent: 1.0,
     });
-    /*
-    await driver.touchAction([
-      {action: 'longPress', x: 0, y: 10},
-      {action: 'moveTo', x: 0, y: 1000},
-      'release',
-    ]);
-     */
   }
 
   /**
