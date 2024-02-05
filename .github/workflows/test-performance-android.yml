@@ -24,7 +24,7 @@ on:
 jobs:
   run_tests:
     name: Performance measures for Android
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     environment: atb
     timeout-minutes: 90
     steps:
