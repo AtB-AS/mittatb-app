@@ -1,4 +1,5 @@
 import ElementHelper from './element.helper.ts';
+import {driver} from "@wdio/globals";
 
 const screenshotsFolder: string = './screenshots';
 
@@ -74,35 +75,52 @@ class AppHelper {
   /**
    * Scroll down with default scroll parameters
    */
-  async scrollDown() {
-    await driver.touchAction([
+  async scrollDown(scrollableId: string) {
+    //let elem = await ElementHelper.getElement('tripDetailsContentView');
+    let elem = await ElementHelper.getElement(scrollableId);
+    await driver.execute('mobile: scrollGesture', {
+      direction: 'down',
+      elementId: elem,
+      percent: 1.0
+    });
+    /*await driver.touchAction([
       {action: 'longPress', x: 0, y: 1000},
       {action: 'moveTo', x: 0, y: 10},
       'release',
     ]);
+     */
   }
 
   /**
    * Scroll up with default scroll parameters
    */
-  async scrollUp() {
+  async scrollUp(scrollableId: string) {
+    let elem = await ElementHelper.getElement(scrollableId);
+    await driver.execute('mobile: scrollGesture', {
+      direction: 'up',
+      elementId: elem,
+      percent: 1.0
+    });
+    /*
     await driver.touchAction([
       {action: 'longPress', x: 0, y: 10},
       {action: 'moveTo', x: 0, y: 1000},
       'release',
     ]);
+     */
   }
 
   /**
    * Scroll down until given id is visisble
-   * @param id id to scroll to
+   * @param scrollableId scrollable element id
+   * @param scrollUntilId id to scroll to
    */
-  async scrollDownUntilId(id: string) {
-    let elem = await ElementHelper.getElement(id);
+  async scrollDownUntilId(scrollableId: string, scrollUntilId: string) {
+    let elem = await ElementHelper.getElement(scrollUntilId);
     let j = 0;
     while (elem.elementId === undefined && j < 5) {
-      await this.scrollDown();
-      elem = await ElementHelper.getElement(id);
+      await this.scrollDown(scrollableId);
+      elem = await ElementHelper.getElement(scrollUntilId);
       j++;
     }
     await expect(elem).toBeDisplayed({wait: 200, interval: 100});
@@ -110,14 +128,15 @@ class AppHelper {
 
   /**
    * Scroll up until given id is visisble
-   * @param id id to scroll to
+   * @param scrollableId scrollable element id
+   * @param scrollUntilId id to scroll to
    */
-  async scrollUpUntilId(id: string) {
-    let elem = await ElementHelper.getElement(id);
+  async scrollUpUntilId(scrollableId: string, scrollUntilId: string) {
+    let elem = await ElementHelper.getElement(scrollUntilId);
     let j = 0;
     while (elem.elementId === undefined && j < 5) {
-      await this.scrollUp();
-      elem = await ElementHelper.getElement(id);
+      await this.scrollUp(scrollableId);
+      elem = await ElementHelper.getElement(scrollUntilId);
       j++;
     }
     await expect(elem).toBeDisplayed({wait: 200, interval: 100});
