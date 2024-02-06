@@ -13,7 +13,7 @@ import {
 import {PermissionsAndroid, Platform} from 'react-native';
 import {NotificationConfigUpdate} from './api';
 import {NotificationConfig} from './types';
-import {useConfig} from './use-config';
+import {useNotificationConfig} from './use-notification-config';
 import {useRegister} from './use-register';
 import {getLanguageAndTextEnum} from '@atb/translations/utils';
 import {usePushNotificationsEnabled} from '@atb/notifications/use-push-notifications-enabled';
@@ -46,8 +46,9 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const [permissionStatus, setStatus] = useState<PermissionStatus>('loading');
   const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
-  const {mutate: mutateRegister} = registerMutation;
-  const {query: configQuery, mutation: configMutation} = useConfig();
+  const mutateRegister = registerMutation.mutate;
+  const {query: configQuery, mutation: configMutation} =
+    useNotificationConfig();
   const pushNotificationsEnabled = usePushNotificationsEnabled();
   const {authStatus} = useAuthState();
 

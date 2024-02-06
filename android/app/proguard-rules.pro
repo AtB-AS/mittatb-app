@@ -57,3 +57,9 @@
 -dontwarn com.facebook.react.**
 -keep,includedescriptorclasses class com.facebook.react.bridge.** { *; }
 -keep,includedescriptorclasses class com.facebook.react.turbomodule.core.** { *; }
+
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+  @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }

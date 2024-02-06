@@ -51,7 +51,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           mode="primary"
           onPress={buttonProps.onPress}
           compact={true}
-          type="pill"
+          type="small"
         />
       )}
     </View>

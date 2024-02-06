@@ -78,6 +78,12 @@ const FareContractTexts = {
         `Valid to ${dateTime}`,
         `Gyldig til ${dateTime}`,
       ),
+    purchasedBy: (phoneNumber: string) =>
+      _(
+        `Denne billetten ble kjøpt av ${phoneNumber}`,
+        `This ticket was purchased by ${phoneNumber}`,
+        `Denne billetten vart kjøpt av ${phoneNumber}`,
+      ),
     askForReceipt: _(
       'Få kvittering tilsendt',
       'Get receipt sent',
@@ -146,8 +152,11 @@ const FareContractTexts = {
         'Kunne ikkje laste kaier.',
       ),
     },
-    infoButtonA11yHint: _('Aktivér for å gå til billettinformasjon', 'Activate to go to ticket information', 'Aktivér for å gå til billetinformasjon'),
-
+    infoButtonA11yHint: _(
+      'Aktivér for å gå til billettinformasjon',
+      'Activate to go to ticket information',
+      'Aktivér for å gå til billetinformasjon',
+    ),
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>

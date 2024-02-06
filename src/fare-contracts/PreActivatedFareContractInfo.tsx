@@ -21,6 +21,8 @@ import {
   Section,
 } from '@atb/components/sections';
 import {useMobileTokenContextState} from '@atb/mobile-token';
+import {MobilityBenefitsInfoSectionItem} from '@atb/mobility/components/MobilityBenefitsInfoSectionItem';
+import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 
 type Props = {
   fareContractState: FareContractState;
@@ -48,6 +50,7 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   const {startDateTime, endDateTime, tariffZoneRefs, fareProductRef} =
     firstTravelRight;
 
+  const {benefits} = useOperatorBenefitsForFareProduct(fareProductRef);
   const validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
   const validityStatus = getValidityStatus(
@@ -75,6 +78,9 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
     travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
   );
+
+  const shouldShowBundlingInfo =
+    benefits && benefits.length > 0 && validityStatus === 'valid';
 
   return (
     <Section withBottomPadding testID={testID}>
@@ -109,6 +115,9 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           preassignedFareProduct={preassignedFareProduct}
         />
       </GenericSectionItem>
+      {shouldShowBundlingInfo && (
+        <MobilityBenefitsInfoSectionItem benefits={benefits} />
+      )}
       {!hideDetails && (
         <LinkSectionItem
           text={t(

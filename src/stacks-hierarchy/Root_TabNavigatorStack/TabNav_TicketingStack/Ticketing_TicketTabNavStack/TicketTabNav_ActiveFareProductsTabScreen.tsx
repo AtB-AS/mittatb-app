@@ -11,7 +11,7 @@ import {useTranslation, TicketingTexts} from '@atb/translations';
 import {useAnalytics} from '@atb/analytics';
 import {useTimeContextState} from '@atb/time';
 import {LinkSectionItem, Section} from '@atb/components/sections';
-import Ticketing from '@atb/translations/screens/Ticketing';
+import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 
@@ -46,6 +46,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
   return (
     <View style={styles.container}>
       <ScrollView
+        contentContainerStyle={styles.content}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshingFareContracts}
@@ -73,12 +74,12 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
               .noActiveTicketsDetails,
           )}
         />
-        <Section style={styles.content}>
+        <Section>
           {hasExpiredFareContracts && (
             <LinkSectionItem
-              text={t(Ticketing.expiredTickets.title)}
+              text={t(TicketHistoryModeTexts.expired.title)}
               accessibility={{
-                accessibilityHint: t(Ticketing.expiredTickets.a11yHint),
+                accessibilityHint: t(TicketHistoryModeTexts.expired.titleA11y),
               }}
               testID="expiredTicketsButton"
               onPress={() =>
@@ -91,9 +92,9 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 
           {hasSentFareContracts && (
             <LinkSectionItem
-              text={t(Ticketing.sentToOthers.title)}
+              text={t(TicketHistoryModeTexts.sent.title)}
               accessibility={{
-                accessibilityHint: t(Ticketing.sentToOthers.a11yHint),
+                accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
               }}
               testID="sentToOthersButton"
               onPress={() =>
@@ -113,10 +114,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
-    padding: theme.spacings.medium,
   },
   content: {
-    flex: 1,
-    marginBottom: theme.spacings.medium,
+    padding: theme.spacings.medium,
   },
 }));

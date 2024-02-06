@@ -125,6 +125,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   content: {
     flex: 1,
     justifyContent: 'center',
+    margin: theme.spacings.medium,
   },
   messageBox: {marginBottom: theme.spacings.small},
   button: {marginBottom: theme.spacings.small},
