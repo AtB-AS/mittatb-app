@@ -184,7 +184,7 @@ describe('Frontpage', () => {
   /**
    * Service disruption info
    */
-  xit('should show link to service disruptions', async () => {
+  it('should show link to service disruptions', async () => {
     const linkText = 'atb.no/driftsavvik';
 
     try {
