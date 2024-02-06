@@ -72,7 +72,7 @@ export const DetailsContent: React.FC<Props> = ({
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
 
-    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
+    const validityStatus = getValidityStatus(now, fc);
 
     const {tariffZoneRefs} = firstTravelRight;
     const firstZone = tariffZoneRefs?.[0];
