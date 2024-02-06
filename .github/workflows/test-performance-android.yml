@@ -101,7 +101,7 @@ jobs:
       # Results
       - name: Check for performance report
         run: |
-          if [ -f ./e2e/performance_measures_*.json ];
+          if [ ! -f ./e2e/performance_measures_*.json ];
           then
             exit 1
           fi
