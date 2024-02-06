@@ -1,6 +1,7 @@
 import {FormFactorFilterType} from '@atb/components/map';
 import {useEffect, useState} from 'react';
 import {MobilityOperatorType} from '@atb/configuration';
+import {getNewFilterState} from '@atb/mobility/utils';
 
 export const useOperatorToggle = (
   allOperators: MobilityOperatorType[],
@@ -43,44 +44,5 @@ export const useOperatorToggle = (
     onOperatorToggle,
     showAll,
     isChecked,
-  };
-};
-
-const getNewFilterState = (
-  isChecked: boolean,
-  selectedOperator: string,
-  currentFilter: FormFactorFilterType | undefined,
-  allOperators: MobilityOperatorType[],
-): FormFactorFilterType => {
-  if (isChecked) {
-    // Add checked operator to list
-    const operators = [...(currentFilter?.operators ?? []), selectedOperator];
-    // If all operators are checked, set 'showAll' to true, rather that having all operators explicitly in the list.
-    // This allows for showing operators that do not exist in the whitelist
-    return operators.length === allOperators.length
-      ? {
-          operators: [],
-          showAll: true,
-        }
-      : {
-          operators,
-          showAll: false,
-        };
-  }
-  // If only one operator exists, treat unselecting this as unselecting all
-  if (allOperators.length === 1) {
-    return {
-      operators: [],
-      showAll: false,
-    };
-  }
-  // If 'showAll' was true at the time of unchecking one, all other operators should be added to the list.
-  const operators = currentFilter?.showAll
-    ? allOperators.map((o) => o.id).filter((o) => o !== selectedOperator)
-    : currentFilter?.operators?.filter((o: string) => o !== selectedOperator) ??
-      [];
-  return {
-    operators,
-    showAll: false,
   };
 };
