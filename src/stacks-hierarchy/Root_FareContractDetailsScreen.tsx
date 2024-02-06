@@ -22,6 +22,8 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {ticketInfoParams, fareContract, preassignedFareProduct} =
     useTicketInfo(route.params.orderId);
 
+  const isSentFareContract = route.params.isSentFareContract;
+
   useApplePassPresentationSuppression();
 
   const navigateToTicketInfoScreen = () => {
@@ -73,6 +75,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               fareContract={fareContract}
               preassignedFareProduct={preassignedFareProduct}
               now={serverNow}
+              isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
             />
           ))}

@@ -66,6 +66,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
               name: 'Root_FareContractDetailsScreen',
               params: {
                 orderId: fcOrReservation.orderId,
+                isSentFareContract: mode == 'sent',
               },
             });
           }}

@@ -44,7 +44,7 @@ type Props = {
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
-  hasActiveTravelCard?: boolean;
+  isSentFareContract?: boolean;
 };
 
 export const DetailsContent: React.FC<Props> = ({
@@ -52,6 +52,7 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
+  isSentFareContract = false,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -61,18 +62,20 @@ export const DetailsContent: React.FC<Props> = ({
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
 
+  const validityStatus = getValidityStatus(now, fc, isSentFareContract);
+
   // Checks if the FareContract is purchased by a different ID,
   // then if yes, return the purchaser ID, otherwise return blank.
   const accountId =
-    fc.purchasedBy !== fc.customerAccountId ? fc.purchasedBy : undefined;
+    isSentFareContract && fc.purchasedBy !== fc.customerAccountId
+      ? fc.purchasedBy
+      : undefined;
 
   const {data: purchaserPhoneNumber} = useGetPhoneByAccountIdQuery(accountId);
 
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-
-    const validityStatus = getValidityStatus(now, fc);
 
     const {tariffZoneRefs} = firstTravelRight;
     const firstZone = tariffZoneRefs?.[0];
@@ -123,6 +126,7 @@ export const DetailsContent: React.FC<Props> = ({
             status={validityStatus}
             testID="details"
             preassignedFareProduct={preassignedFareProduct}
+            fareContract={isSentFareContract ? fc : undefined}
           />
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' &&
