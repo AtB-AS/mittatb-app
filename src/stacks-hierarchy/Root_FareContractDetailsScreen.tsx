@@ -10,7 +10,7 @@ import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAnalytics} from '@atb/analytics';
 import {isCarnet} from '@atb/ticketing';
-import {MobilityMapFilterType} from '@atb/components/map';
+import {MapFilterType} from '@atb/components/map';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -35,14 +35,12 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
     }
   };
-  const navigateToMap = async (
-    initialMobilityFilter: MobilityMapFilterType,
-  ) => {
+  const onNavigateToMap = async (initialFilters: MapFilterType) => {
     navigation.navigate('Root_TabNavigatorStack', {
       screen: 'TabNav_MapStack',
       params: {
         screen: 'Map_RootScreen',
-        params: {initialMobilityFilter},
+        params: {initialFilters},
       },
     });
   };
@@ -85,7 +83,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               preassignedFareProduct={preassignedFareProduct}
               now={serverNow}
               onReceiptNavigate={onReceiptNavigate}
-              onNavigateToMap={navigateToMap}
+              onNavigateToMap={onNavigateToMap}
             />
           ))}
       </ScrollView>

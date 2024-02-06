@@ -39,14 +39,14 @@ import {Barcode} from './Barcode';
 import {BenefitTiles} from '@atb/mobility/components/BenefitTile';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ThemeText} from '@atb/components/text';
-import {MobilityMapFilterType} from '@atb/components/map';
+import {MapFilterType} from '@atb/components/map';
 
 type Props = {
   fareContract: FareContract;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
-  onNavigateToMap?: (initialMobilityFilter: MobilityMapFilterType) => void;
+  onNavigateToMap?: (initialFilters: MapFilterType) => void;
   hasActiveTravelCard?: boolean;
 };
 

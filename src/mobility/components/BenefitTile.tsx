@@ -8,14 +8,20 @@ import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product'
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {Map} from '@atb/assets/svg/mono-icons/map';
-import {MobilityMapFilterType, useUserMapFilters} from '@atb/components/map';
+import {
+  MapFilterType,
+  MobilityMapFilterType,
+  useUserMapFilters,
+} from '@atb/components/map';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {getNewFilterState} from '../utils';
+import {useOperators} from '../use-operators';
 
 type BenefitCardProps = {
   interactiveColor: InteractiveColor;
   style?: ViewStyle;
   benefit: FareProductBenefitType;
-  onNavigateToMap?: (initialMobilityFilter: MobilityMapFilterType) => void;
+  onNavigateToMap?: (initialFilters: MapFilterType) => void;
 };
 
 export const BenefitTile = ({
@@ -31,31 +37,31 @@ export const BenefitTile = ({
   const description = getTextForLanguage(benefit.ticketDescription, language);
 
   const {getMapFilter, setMapFilter} = useUserMapFilters();
+  const operators = useOperators();
 
   const onPress = onNavigateToMap
     ? async () => {
-        const filter = await getMapFilter();
-        const formFactor = benefit.formFactors[0] as FormFactor;
-        const selection = filter.mobility[formFactor]?.showAll
-          ? {
-              operators: [],
-              showAll: true,
-            }
-          : {
-              operators: [benefit.operatorId],
-              showAll: false,
-            };
+        const storedFilters = await getMapFilter();
 
-        const mobilityFilters: MobilityMapFilterType = {
-          ...filter.mobility,
-          [formFactor]: selection,
-        };
+        let mobilityFilters: MobilityMapFilterType = storedFilters.mobility;
+        benefit.formFactors.forEach((formFactor) => {
+          const allOperators = operators.byFormFactor(FormFactor.Scooter);
+          const formFactorFilter = getNewFilterState(
+            true,
+            benefit.operatorId,
+            storedFilters.mobility[formFactor],
+            allOperators,
+          );
+          mobilityFilters = {
+            ...mobilityFilters,
+            [formFactor]: formFactorFilter,
+          };
+        });
 
-        // TODO: Picked up by bottom sheet?
-        await setMapFilter({...filter, mobility: mobilityFilters});
-
-        // TODO: Picked up by map screen?
-        onNavigateToMap(mobilityFilters);
+        // Update stored filters (for persistence, and the filters bottom sheet)
+        await setMapFilter({...storedFilters, mobility: mobilityFilters});
+        // Provide the same filters as intital filter state for the map screen
+        onNavigateToMap({...storedFilters, mobility: mobilityFilters});
       }
     : undefined;
 
