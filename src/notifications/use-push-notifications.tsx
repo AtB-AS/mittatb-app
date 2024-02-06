@@ -33,7 +33,7 @@ type NotificationContextState = {
   permissionStatus: PermissionStatus;
   checkPermissions: () => void;
   requestPermissions: () => Promise<void>;
-  register: (enabled: boolean) => Promise<string | undefined>;
+  register: (enabled: boolean) => void;
   fcmToken: string | undefined;
 };
 
@@ -46,13 +46,13 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const [permissionStatus, setStatus] = useState<PermissionStatus>('loading');
   const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
-  const mutateRegister = registerMutation.mutate;
+  const {mutate: mutateRegister} = registerMutation;
   const {query: configQuery, mutation: configMutation} = useConfig();
   const pushNotificationsEnabled = usePushNotificationsEnabled();
   const {authStatus} = useAuthState();
 
   const register = useCallback(
-    async (enabled: boolean) => {
+    (enabled: boolean) => {
       if (!fcmToken) return;
       try {
         mutateRegister({
@@ -60,13 +60,11 @@ export const NotificationContextProvider: React.FC = ({children}) => {
           language: getLanguageAndTextEnum(language),
           enabled,
         });
-        return fcmToken;
       } catch (e) {
         Bugsnag.notify(`Failed to register for push notifications: ${e}`);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [language, fcmToken],
+    [language, mutateRegister, fcmToken],
   );
 
   const checkPermissions = useCallback(() => {
@@ -108,13 +106,13 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const requestPermissions = useCallback(async () => {
     setStatus('updating');
     const permissionStatus = await requestUserPermission();
-    const token = await register(permissionStatus === 'granted');
-    if (!token) {
+    if (!fcmToken) {
       setStatus('error');
       return;
     }
+    register(permissionStatus === 'granted');
     setStatus(permissionStatus);
-  }, [register]);
+  }, [register, fcmToken]);
 
   // Check notification status, and register notification language when the app
   // starts, in case the user have changed language since last time the app was
