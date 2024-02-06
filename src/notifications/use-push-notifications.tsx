@@ -46,11 +46,17 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const [permissionStatus, setStatus] = useState<PermissionStatus>('loading');
   const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
-  const mutateRegister = registerMutation.mutate;
+  const {mutate: mutateRegister} = registerMutation;
   const {query: configQuery, mutation: configMutation} =
     useNotificationConfig();
   const pushNotificationsEnabled = usePushNotificationsEnabled();
   const {authStatus} = useAuthState();
+
+  const getFcmToken = useCallback(async () => {
+    const token = await messaging().getToken();
+    setFcmToken(token);
+    return token;
+  }, []);
 
   const register = useCallback(
     (enabled: boolean) => {
@@ -65,7 +71,7 @@ export const NotificationContextProvider: React.FC = ({children}) => {
         Bugsnag.notify(`Failed to register for push notifications: ${e}`);
       }
     },
-    [language, mutateRegister, fcmToken],
+    [language, fcmToken, mutateRegister],
   );
 
   const checkPermissions = useCallback(() => {
@@ -107,13 +113,15 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const requestPermissions = useCallback(async () => {
     setStatus('updating');
     const permissionStatus = await requestUserPermission();
-    if (!fcmToken) {
+    // Retry to get the token after the user has granted permission
+    const token = await getFcmToken();
+    if (!token) {
       setStatus('error');
       return;
     }
     register(permissionStatus === 'granted');
     setStatus(permissionStatus);
-  }, [register, fcmToken]);
+  }, [register, getFcmToken]);
 
   // Check notification status, and register notification language when the app
   // starts, in case the user have changed language since last time the app was
@@ -124,13 +132,10 @@ export const NotificationContextProvider: React.FC = ({children}) => {
       checkPermissions();
   }, [pushNotificationsEnabled, checkPermissions, authStatus]);
 
+  // Get FCM token when component mounts
   useEffect(() => {
-    (async function () {
-      const token = await messaging().getToken();
-      if (!token) return;
-      setFcmToken(token);
-    })();
-  }, []);
+    getFcmToken();
+  }, [getFcmToken]);
 
   return (
     <NotificationContext.Provider
