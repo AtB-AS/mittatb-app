@@ -33,7 +33,7 @@ type NotificationContextState = {
   permissionStatus: PermissionStatus;
   checkPermissions: () => void;
   requestPermissions: () => Promise<void>;
-  register: (enabled: boolean) => void;
+  register: (enabled: boolean) => Promise<string | undefined>;
   fcmToken: string | undefined;
 };
 
@@ -59,19 +59,21 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   }, []);
 
   const register = useCallback(
-    (enabled: boolean) => {
-      if (!fcmToken) return;
+    async (enabled: boolean) => {
+      const token = await getFcmToken();
+      if (!token) return;
       try {
         mutateRegister({
-          token: fcmToken,
+          token,
           language: getLanguageAndTextEnum(language),
           enabled,
         });
+        return token;
       } catch (e) {
         Bugsnag.notify(`Failed to register for push notifications: ${e}`);
       }
     },
-    [language, fcmToken, mutateRegister],
+    [language, getFcmToken, mutateRegister],
   );
 
   const checkPermissions = useCallback(() => {
@@ -113,15 +115,13 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const requestPermissions = useCallback(async () => {
     setStatus('updating');
     const permissionStatus = await requestUserPermission();
-    // Retry to get the token after the user has granted permission
-    const token = await getFcmToken();
+    const token = await register(permissionStatus === 'granted');
     if (!token) {
       setStatus('error');
       return;
     }
-    register(permissionStatus === 'granted');
     setStatus(permissionStatus);
-  }, [register, getFcmToken]);
+  }, [register]);
 
   // Check notification status, and register notification language when the app
   // starts, in case the user have changed language since last time the app was
