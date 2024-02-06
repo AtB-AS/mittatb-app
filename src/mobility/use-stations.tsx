@@ -48,10 +48,9 @@ export const useStations: (
         setFilter(userFilter.mobility ?? {});
       });
     } else {
-      // TODO: This triggers a rerender if initialFilter have changed?
-      setFilter(initialFilter ?? {});
+      setFilter(initialFilter);
     }
-  }, [getMapFilter, initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
+  }, [getMapFilter, initialFilter]);
 
   useEffect(() => {
     if (isCityBikesEnabled && isFocused && area) {
