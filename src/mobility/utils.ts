@@ -1,4 +1,4 @@
-import {Feature, Point, Polygon, Position} from 'geojson';
+import {Feature, Point, Position} from 'geojson';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {
   PricingPlanFragment,
@@ -12,7 +12,6 @@ import {
   toFeaturePoint,
 } from '@atb/components/map';
 import buffer from '@turf/buffer';
-import bbox from '@turf/bbox-polygon';
 import difference from '@turf/difference';
 import {Platform} from 'react-native';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
@@ -78,24 +77,32 @@ export const hasMultiplePricingPlans = (plan: PricingPlanFragment) =>
   (plan.perKmPricing && plan.perKmPricing.length > 1) ||
   (plan.perMinPricing && plan.perMinPricing.length > 1);
 
-export const toBbox = (position: Position[]) => {
-  const [[lonMax, latMax], [lonMin, latMin]] = position;
-  return bbox([lonMin, latMin, lonMax, latMax]);
-};
-
 /**
- * Determines if vehicles need to be reloaded
- * @param visibleBounds Area currently visible in the map
- * @param loadedArea Area in which vehicles are already loaded.
+ * Determines if vehicles need to be reloaded, by checking if the
+ * previously loaded area covers the shown area.
+ *
+ * @param prevArea Area in which vehicles are already loaded
+ * @param shownArea Area currently visible in the map
+ * @return false if the previous area covers the shown area and no reload is
+ * needed, otherwise true
  */
 export const needsReload = (
-  visibleBounds: Position[],
-  loadedArea: Feature<Polygon> | undefined,
-) => {
-  if (!loadedArea) return true;
-  // If the loaded area totally covers the current loaded bounds,
-  // no reload is needed. In this case 'difference' will return null.
-  const diff = difference(toBbox(visibleBounds), loadedArea);
+  prevArea: AreaState | undefined,
+  shownArea: AreaState,
+): boolean => {
+  if (!prevArea) return true;
+
+  const prevAreaFeature = extend(
+    toFeaturePoint({lat: prevArea.lat, lon: prevArea.lon}),
+    prevArea.range,
+  );
+  const newAreaFeature = extend(
+    toFeaturePoint({lat: shownArea.lat, lon: shownArea.lon}),
+    shownArea.range,
+  );
+
+  // If the previous area covers the new area the 'difference' will return null
+  const diff = difference(newAreaFeature, prevAreaFeature);
   return Boolean(diff);
 };
 
@@ -118,10 +125,7 @@ export const extend = (midpoint: Feature<Point>, range: number) =>
 export type AreaState = {
   lat: number;
   lon: number;
-  zoom: number;
   range: number;
-  visibleBounds: Position[];
-  loadedArea: Feature<Polygon> | undefined;
 };
 
 export const updateAreaState = (
@@ -129,27 +133,23 @@ export const updateAreaState = (
   bufferDistance: number,
   minZoomLevel: number,
 ) => {
-  return (previousState: AreaState | undefined) => {
-    if (region.zoomLevel < minZoomLevel) {
-      return undefined;
-    }
+  return (prevArea: AreaState | undefined): AreaState | undefined => {
+    if (region.zoomLevel < minZoomLevel) return undefined;
 
-    const visibleBounds = region.visibleBounds;
-    if (!needsReload(visibleBounds, previousState?.loadedArea)) {
-      return previousState;
-    }
-
-    const [lon, lat] = region.center;
-    const range = getRadius(visibleBounds, bufferDistance);
-    return {
-      lat,
-      lon,
-      zoom: region.zoomLevel,
-      range,
-      visibleBounds,
-      loadedArea: extend(toFeaturePoint({lat, lon}), range),
-    };
+    const shownArea = mapRegionToArea(region, 0);
+    return needsReload(prevArea, shownArea)
+      ? mapRegionToArea(region, bufferDistance)
+      : prevArea;
   };
+};
+
+const mapRegionToArea = (
+  region: MapRegion,
+  bufferDistance: number,
+): AreaState => {
+  const [lon, lat] = region.center;
+  const range = getRadius(region.visibleBounds, bufferDistance);
+  return {lat, lon, range};
 };
 
 export const formatRange = (rangeInMeters: number, language: Language) => {

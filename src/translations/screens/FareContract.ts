@@ -78,6 +78,12 @@ const FareContractTexts = {
         `Valid to ${dateTime}`,
         `Gyldig til ${dateTime}`,
       ),
+    purchasedBy: (phoneNumber: string) =>
+      _(
+        `Denne billetten ble kjøpt av ${phoneNumber}`,
+        `This ticket was purchased by ${phoneNumber}`,
+        `Denne billetten vart kjøpt av ${phoneNumber}`,
+      ),
     askForReceipt: _(
       'Få kvittering tilsendt',
       'Get receipt sent',
