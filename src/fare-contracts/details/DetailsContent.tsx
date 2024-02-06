@@ -67,7 +67,7 @@ export const DetailsContent: React.FC<Props> = ({
   // Checks if the FareContract is purchased by a different ID,
   // then if yes, return the purchaser ID, otherwise return blank.
   const accountId =
-    isSentFareContract && fc.purchasedBy !== fc.customerAccountId
+    !isSentFareContract && fc.purchasedBy !== fc.customerAccountId
       ? fc.purchasedBy
       : undefined;
 
