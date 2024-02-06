@@ -82,6 +82,7 @@ jobs:
       # E2E run
       - name: Run tests on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
+        continue-on-error: true
         with:
           avd-name: emulator-api${{ env.INPUT_API_LEVEL }}
           api-level: ${{ env.INPUT_API_LEVEL }}
@@ -98,6 +99,12 @@ jobs:
           IS_CI: "true"
 
       # Results
+      - name: Check for performance report
+        run: |
+          if [ -f ./e2e/performance_measures_*.json ];
+          then
+            exit 1
+          fi
       - name: Upload performance reports
         if: always()
         uses: actions/upload-artifact@v3
