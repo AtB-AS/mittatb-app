@@ -13,10 +13,15 @@ import {
 } from '@atb/configuration';
 import {FareProductTypeConfig} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
-import {RadioGroupSection, Section} from '@atb/components/sections';
+import {
+  HeaderSectionItem,
+  RadioGroupSection,
+  Section,
+} from '@atb/components/sections';
 import {useTicketingState} from '@atb/ticketing';
 import {ProductDescriptionToggle} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/ProductDescriptionToggle';
 import {usePreferenceItems} from '@atb/preferences';
+import {ContentHeading} from '@atb/components/heading';
 
 type ProductSelectionByProductsProps = {
   selectedProduct: PreassignedFareProduct;
@@ -41,47 +46,59 @@ export function ProductSelectionByProducts({
     .filter((product) => product.type === selectedProduct.type);
   const [selected, setProduct] = useState(selectedProduct);
 
-  const title = useTextForLanguage(
-    fareProductTypeConfig.configuration.productSelectionTitle,
-  );
+  const title =
+    useTextForLanguage(
+      fareProductTypeConfig.configuration.productSelectionTitle,
+    ) || t(PurchaseOverviewTexts.productSelection.title);
+
+  const subText = (fp: PreassignedFareProduct) => {
+    const descriptionMessage = getTextForLanguage(
+      fp.description ?? [],
+      language,
+    );
+    const warningMessage = getTextForLanguage(fp.warningMessage, language);
+    if (descriptionMessage && warningMessage) {
+      return `${descriptionMessage}\n${warningMessage}`;
+    }
+
+    return descriptionMessage ?? warningMessage;
+  };
 
   return (
     <View style={style}>
-      <ProductDescriptionToggle
-        title={title || t(PurchaseOverviewTexts.productSelection.title)}
-      />
-      <Section>
-        <RadioGroupSection<PreassignedFareProduct>
-          items={selectableProducts}
-          keyExtractor={(u) => u.id}
-          itemToText={(fp) => getReferenceDataName(fp, language)}
-          hideSubtext={hideProductDescriptions}
-          itemToSubtext={(fp) => {
-            const descriptionMessage = getTextForLanguage(
-              fp.description ?? [],
-              language,
-            );
-            const warningMessage = getTextForLanguage(
-              fp.warningMessage,
-              language,
-            );
-            if (descriptionMessage && warningMessage) {
-              return `${descriptionMessage}\n${warningMessage}`;
-            }
-
-            return descriptionMessage ?? warningMessage;
-          }}
-          selected={selected}
-          onSelect={(fp) => {
-            setProduct(fp);
-            setSelectedProduct(fp);
-          }}
-          color="interactive_2"
-          accessibilityHint={t(
-            PurchaseOverviewTexts.productSelection.a11yTitle,
-          )}
-        />
-      </Section>
+      {selectableProducts.length > 1 ? (
+        <>
+          <ProductDescriptionToggle title={title} />
+          <Section>
+            <RadioGroupSection<PreassignedFareProduct>
+              items={selectableProducts}
+              keyExtractor={(u) => u.id}
+              itemToText={(fp) => getReferenceDataName(fp, language)}
+              hideSubtext={hideProductDescriptions}
+              itemToSubtext={(fp) => subText(fp)}
+              selected={selected}
+              onSelect={(fp) => {
+                setProduct(fp);
+                setSelectedProduct(fp);
+              }}
+              color="interactive_2"
+              accessibilityHint={t(
+                PurchaseOverviewTexts.productSelection.a11yTitle,
+              )}
+            />
+          </Section>
+        </>
+      ) : (
+        <>
+          <ContentHeading text={title} />
+          <Section>
+            <HeaderSectionItem
+              text={getReferenceDataName(selectedProduct, language)}
+              subtitle={subText(selectedProduct)}
+            />
+          </Section>
+        </>
+      )}
     </View>
   );
 }
