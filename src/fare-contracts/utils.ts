@@ -178,6 +178,8 @@ export const useTariffZoneSummary = (
 export const isValidFareContract = (status: ValidityStatus) =>
   status === 'valid';
 
+export const isSentFareContract = (status: ValidityStatus) => status === 'sent';
+
 export function tariffZonesSummary(
   fromTariffZone: TariffZone,
   toTariffZone: TariffZone,

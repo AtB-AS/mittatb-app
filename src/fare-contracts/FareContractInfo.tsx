@@ -25,6 +25,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {
   getValidityStatus,
+  isSentFareContract,
   isValidFareContract,
   mapToUserProfilesWithCount,
   useNonInspectableTokenWarning,
@@ -38,12 +39,14 @@ import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 
 export type FareContractInfoProps = {
   travelRight: PreActivatedTravelRight;
   status: ValidityStatus;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
+  fareContract?: FareContract;
 };
 
 export type FareContractInfoDetailsProps = {
@@ -64,9 +67,10 @@ export const FareContractInfoHeader = ({
   status,
   testID,
   preassignedFareProduct,
+  fareContract,
 }: FareContractInfoProps) => {
   const styles = useStyles();
-  const {language} = useTranslation();
+  const {t, language} = useTranslation();
   const {startPointRef: fromStopPlaceId, endPointRef: toStopPlaceId} =
     travelRight;
 
@@ -78,6 +82,10 @@ export const FareContractInfoHeader = ({
     : undefined;
   const warning = useNonInspectableTokenWarning(preassignedFareProduct?.type);
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
+
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
+    fareContract?.customerAccountId,
+  );
 
   return (
     <View style={styles.header}>
@@ -104,6 +112,12 @@ export const FareContractInfoHeader = ({
           fromStopPlaceId={fromStopPlaceId}
           toStopPlaceId={toStopPlaceId}
           showTwoWayIcon={showTwoWayIcon}
+        />
+      )}
+      {phoneNumber && (
+        <MessageInfoText
+          type="warning"
+          message={t(FareContractTexts.details.sentTo(phoneNumber))}
         />
       )}
       {status === 'valid' && warning && (
@@ -150,6 +164,9 @@ export const FareContractInfoDetails = (
           )}
         </View>
         {isValidFareContract(status) && <InspectionSymbol {...props} />}
+        {isSentFareContract(status) && (
+          <InspectionSymbol {...props} sentTicket={true} />
+        )}
       </View>
     </View>
   );

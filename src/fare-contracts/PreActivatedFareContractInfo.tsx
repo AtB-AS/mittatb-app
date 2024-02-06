@@ -29,6 +29,7 @@ type Props = {
   travelRights: PreActivatedTravelRight[];
   now: number;
   hideDetails?: boolean;
+  sentToOthers?: boolean;
   onPressDetails?: () => void;
   testID?: string;
 };
@@ -38,6 +39,7 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   travelRights,
   now,
   hideDetails,
+  sentToOthers = false,
   onPressDetails,
   testID,
 }) => {
@@ -53,7 +55,7 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
   const {benefits} = useOperatorBenefitsForFareProduct(fareProductRef);
   const validTo = endDateTime.toMillis();
   const validFrom = startDateTime.toMillis();
-  const validityStatus = getValidityStatus(now, fareContract);
+  const validityStatus = getValidityStatus(now, fareContract, sentToOthers);
 
   const firstZone = tariffZoneRefs?.[0];
   const lastZone = tariffZoneRefs?.slice(-1)?.[0];
@@ -99,6 +101,7 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           status={validityStatus}
           testID={testID}
           preassignedFareProduct={preassignedFareProduct}
+          fareContract={sentToOthers ? fareContract : undefined}
         />
       </GenericSectionItem>
       <GenericSectionItem>

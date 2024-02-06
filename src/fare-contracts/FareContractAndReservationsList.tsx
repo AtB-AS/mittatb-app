@@ -59,6 +59,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
       {fareContractsAndReservationsSorted?.map((fcOrReservation, index) => (
         <FareContractOrReservation
           now={now}
+          mode={mode}
           onPressFareContract={() => {
             analytics.logEvent('Ticketing', 'Ticket details clicked');
             navigation.navigate({
