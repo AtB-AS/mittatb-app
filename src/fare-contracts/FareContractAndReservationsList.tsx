@@ -7,10 +7,9 @@ import React, {useMemo} from 'react';
 import {useAnalytics} from '@atb/analytics';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
+import {TicketHistoryMode} from '@atb/ticket-history';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
-
-export type EmptyStateMode = 'expired' | 'sent';
 
 type Props = {
   reservations?: Reservation[];
@@ -18,7 +17,7 @@ type Props = {
   now: number;
   travelCard?: TravelCard;
   showTokenInfo?: boolean;
-  emptyStateMode?: EmptyStateMode;
+  mode?: TicketHistoryMode;
   emptyStateTitleText: string;
   emptyStateDetailsText: string;
 };
@@ -28,7 +27,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   reservations,
   now,
   showTokenInfo,
-  emptyStateMode = 'expired',
+  mode = 'expired',
   emptyStateTitleText,
   emptyStateDetailsText,
 }) => {
@@ -53,7 +52,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
         <EmptyState
           title={emptyStateTitleText}
           details={emptyStateDetailsText}
-          illustrationComponent={emptyStateImage(emptyStateMode)}
+          illustrationComponent={emptyStateImage(mode)}
           testID="fareContracts"
         />
       )}
@@ -78,7 +77,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   );
 };
 
-const emptyStateImage = (emptyStateMode: EmptyStateMode) => {
+const emptyStateImage = (emptyStateMode: TicketHistoryMode) => {
   switch (emptyStateMode) {
     case 'expired':
       return <TicketTilted height={84} />;

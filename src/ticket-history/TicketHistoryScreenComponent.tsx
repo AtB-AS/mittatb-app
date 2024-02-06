@@ -61,7 +61,7 @@ export const TicketHistoryScreenComponent = ({
           )}
           reservations={rejectedReservations}
           now={serverNow}
-          emptyStateMode={mode}
+          mode={mode}
           emptyStateTitleText={t(TicketingTexts.ticketHistory.emptyState)}
           emptyStateDetailsText={t(TicketHistoryModeTexts[mode].emptyDetail)}
         />
