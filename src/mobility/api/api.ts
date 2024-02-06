@@ -49,23 +49,21 @@ export const getValueCode = (
     });
 };
 
-const FareProductBenefitReferences = z.object({
+const FareProductBenefitMapping = z.object({
   operator: z.string(),
   benefits: OperatorBenefitId.array(),
 });
 
-type FareProductBenefitReferenceType = z.infer<
-  typeof FareProductBenefitReferences
->;
+type FareProductBenefitMappingType = z.infer<typeof FareProductBenefitMapping>;
 
 export const getFareProductBenefits = (
   productId: PreassignedFareProductId,
-): Promise<FareProductBenefitReferenceType[]> => {
+): Promise<FareProductBenefitMappingType[]> => {
   return client
     .get(`/mobility/v1/benefits/${productId}`, {
       authWithIdToken: true,
     })
     .then((response) =>
-      FareProductBenefitReferences.array().parse(response.data ?? []),
+      FareProductBenefitMapping.array().parse(response.data ?? []),
     );
 };
