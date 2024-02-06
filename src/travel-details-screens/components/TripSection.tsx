@@ -291,7 +291,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
         {onPressShowLive && mapData ? (
           <TripRow>
             <Button
-              type="pill"
+              type="small"
               leftIcon={{svg: Map}}
               text={t(TripDetailsTexts.trip.leg.live)}
               interactiveColor="interactive_3"
@@ -304,7 +304,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <View style={style.realtime}>
               <ThemeIcon
                 svg={themeName == 'dark' ? RealtimeDark : RealtimeLight}
-                size="small"
+                size="xSmall"
                 style={style.realtimeIcon}
               />
               <ThemeText

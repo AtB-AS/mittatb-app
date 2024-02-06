@@ -9,6 +9,7 @@ import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
 
 type TicketingReducerState = {
   fareContracts: FareContract[];
+  sentFareContracts: FareContract[];
   reservations: Reservation[];
   rejectedReservations: Reservation[];
   isRefreshingFareContracts: boolean;
@@ -20,6 +21,10 @@ type TicketingReducerAction =
   | {type: 'SET_ERROR_REFRESHING_FARE_CONTRACTS'}
   | {
       type: 'UPDATE_FARE_CONTRACTS';
+      fareContracts: FareContract[];
+    }
+  | {
+      type: 'UPDATE_SENT_FARE_CONTRACTS';
       fareContracts: FareContract[];
     }
   | {
@@ -65,6 +70,19 @@ const ticketingReducer: TicketingReducer = (
         isRefreshingFareContracts: false,
       };
     }
+    case 'UPDATE_SENT_FARE_CONTRACTS': {
+      const currentFareContractOrderIds = action.fareContracts.map(
+        (fc) => fc.orderId,
+      );
+      return {
+        ...prevState,
+        sentFareContracts: action.fareContracts,
+        reservations: prevState.reservations.filter(
+          (r) => !currentFareContractOrderIds.includes(r.orderId),
+        ),
+        isRefreshingFareContracts: false,
+      };
+    }
     case 'UPDATE_RESERVATIONS': {
       const currentFareContractOrderIds = prevState.fareContracts.map(
         (fc) => fc.orderId,
@@ -98,6 +116,7 @@ const ticketingReducer: TicketingReducer = (
 
 type TicketingState = {
   fareContracts: FareContract[];
+  sentFareContracts: FareContract[];
   findFareContractByOrderId: (id: string) => FareContract | undefined;
   resubscribeFirestoreListeners: () => void;
 } & Pick<
@@ -110,6 +129,7 @@ type TicketingState = {
 
 const initialReducerState: TicketingReducerState = {
   fareContracts: [],
+  sentFareContracts: [],
   reservations: [],
   rejectedReservations: [],
   isRefreshingFareContracts: false,
@@ -131,6 +151,12 @@ export const TicketingContextProvider: React.FC = ({children}) => {
         fareContracts: {
           onSnapshot: (fareContracts) =>
             dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
+          onError: () =>
+            dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACTS'}),
+        },
+        sentFareContracts: {
+          onSnapshot: (fareContracts) =>
+            dispatch({type: 'UPDATE_SENT_FARE_CONTRACTS', fareContracts}),
           onError: () =>
             dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACTS'}),
         },

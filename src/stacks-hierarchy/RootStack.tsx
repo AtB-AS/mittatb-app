@@ -1,6 +1,6 @@
 import {useAppState} from '@atb/AppContext';
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
-import {Root_OnboardingStack} from './Root_OnboardingStack';
+import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useTheme} from '@atb/theme';
 import {APP_SCHEME} from '@env';
 import {
@@ -12,7 +12,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
@@ -64,6 +64,8 @@ import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInf
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/utils/use-onboarding-flow';
+import {useQueryClient} from '@tanstack/react-query';
+import {useAuthState} from '@atb/auth';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -76,10 +78,16 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
+  const {userId} = useAuthState();
+  const queryClient = useQueryClient();
   useFlipper(navRef);
 
   useBeaconsState();
   useTestIds();
+
+  useEffect(() => {
+    queryClient.invalidateQueries();
+  }, [userId, queryClient]);
 
   if (isLoading) {
     return null;
@@ -166,7 +174,7 @@ export const RootStack = () => {
         <LoadingScreenBoundary>
           <NavigationContainer<RootStackParamList>
             onStateChange={trackNavigation}
-            initialState={getInitialNavigationContainerState(true)}
+            initialState={getInitialNavigationContainerState()}
             ref={navRef}
             theme={ReactNavigationTheme}
             fallback={<LoadingScreen />}
@@ -268,8 +276,8 @@ export const RootStack = () => {
                 component={Root_TabNavigatorStack}
               />
               <Stack.Screen
-                name="Root_OnboardingStack"
-                component={Root_OnboardingStack}
+                name="Root_ExtendedOnboardingStack"
+                component={Root_ExtendedOnboardingStack}
               />
               <Stack.Screen
                 name="Root_TermsInformationScreen"

@@ -164,20 +164,12 @@ export const getFareContractInfoDetails = (
 ): FareContractInfoDetailsProps => {
   const firstTravelRight = fareContract.travelRights?.[0] as NormalTravelRight;
   const {
-    startDateTime,
     endDateTime,
     fareProductRef: productRef,
     tariffZoneRefs,
   } = firstTravelRight;
-  const fareContractState = fareContract.state;
   let validTo = endDateTime.toMillis();
-  const validFrom = startDateTime.toMillis();
-  const validityStatus = getValidityStatus(
-    now,
-    validFrom,
-    validTo,
-    fareContractState,
-  );
+  const validityStatus = getValidityStatus(now, fareContract);
 
   const firstZone = tariffZoneRefs?.[0];
   const lastZone = tariffZoneRefs?.slice(-1)?.[0];

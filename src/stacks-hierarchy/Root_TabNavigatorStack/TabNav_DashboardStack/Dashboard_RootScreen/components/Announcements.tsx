@@ -7,9 +7,9 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {useNow} from '@atb/utils/use-now';
 import {StyleSheet} from '@atb/theme';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
-import {useAppState} from '@atb/AppContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ContentHeading} from '@atb/components/heading';
+import {useOnboardingSectionIsOnboarded} from '@atb/utils/use-onboarding-section-is-onboarded';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
@@ -21,14 +21,15 @@ export const Announcements = ({style}: Props) => {
   const now = useNow(10000);
   const {isConsentGranted} = useBeaconsState();
 
-  const {shareTravelHabitsOnboarded} = useAppState();
+  const shareTravelHabitsIsOnboarded =
+    useOnboardingSectionIsOnboarded('shareTravelHabits');
 
   const styles = useStyle();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   const ruleVariables = {
     isBeaconsConsentGranted: isConsentGranted ?? false,
-    shareTravelHabitsOnboarded,
+    shareTravelHabitsIsOnboarded,
   };
 
   const filteredAnnouncements = findAnnouncements(ruleVariables).filter((a) =>

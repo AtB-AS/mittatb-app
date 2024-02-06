@@ -14,12 +14,15 @@ import {RenderQuestion} from './RenderQuestions';
 import {Button} from '@atb/components/button';
 import {GoodOrBadQuestion} from './GoodOrBadQuestion';
 import {StyleSheet} from '@atb/theme';
+import {StaticColorByType} from '@atb/theme/colors';
 
 export enum Opinions {
   Good = 'GOOD',
   Bad = 'BAD',
   NotClickedYet = 'NOTCLICKEDYET',
 }
+
+const themeColor: StaticColorByType<'background'> = 'background_1';
 
 type VersionStats = {
   // answered is a number so that we know at which render the user answered
@@ -308,7 +311,7 @@ export const Feedback = ({
               onPress={setDoNotShowAgain}
               text={t(FeedbackTexts.goodOrBadTexts.doNotShowAgain)}
               mode="tertiary"
-              interactiveColor="interactive_2"
+              backgroundColor={themeColor}
             />
           )}
       </View>
@@ -319,7 +322,7 @@ export const Feedback = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background.background_1.background,
+    backgroundColor: theme.static.background[themeColor].background,
     borderRadius: theme.border.radius.regular,
     padding: theme.spacings.xLarge,
   },

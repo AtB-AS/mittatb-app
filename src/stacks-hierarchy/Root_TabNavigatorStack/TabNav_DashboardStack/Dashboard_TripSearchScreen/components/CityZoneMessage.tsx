@@ -105,7 +105,7 @@ const CityZoneBox = ({
             {actionButtons.map((actionButton) => (
               <Button
                 key={actionButton.id}
-                type="pill"
+                type="small"
                 compact={true}
                 interactiveColor={actionButton.interactiveColor}
                 text={actionButton.text}

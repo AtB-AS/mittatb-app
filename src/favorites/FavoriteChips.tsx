@@ -4,8 +4,7 @@ import {Location as LocationIcon} from '@atb/assets/svg/mono-icons/places';
 import {screenReaderPause} from '@atb/components/text';
 import {Button, ButtonProps} from '@atb/components/button';
 import {useGeolocationState} from '@atb/GeolocationContext';
-import {StyleSheet, useTheme} from '@atb/theme';
-import {InteractiveColor} from '@atb/theme/colors';
+import {StyleSheet} from '@atb/theme';
 import {FavoriteTexts, useTranslation} from '@atb/translations';
 import {useDisableMapCheck} from '@atb/utils/use-disable-map-check';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -19,8 +18,6 @@ import {
   useFavorites,
 } from '@atb/favorites';
 
-const themeColor: InteractiveColor = 'interactive_0';
-
 type Props = {
   onSelectLocation: (location: Location) => void;
   onMapSelection?: () => void;
@@ -29,6 +26,8 @@ type Props = {
   chipActionHint?: string;
   onAddFavorite: () => void;
 };
+
+const themeColor = 'background_accent_0';
 
 export const FavoriteChips: React.FC<Props> = ({
   onSelectLocation,
@@ -55,7 +54,7 @@ export const FavoriteChips: React.FC<Props> = ({
       >
         {activeType('location') && (
           <FavoriteChip
-            interactiveColor={themeColor}
+            backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.currentLocation)}
             accessibilityRole="button"
@@ -71,7 +70,7 @@ export const FavoriteChips: React.FC<Props> = ({
             accessibilityRole="button"
             leftIcon={{svg: Pin}}
             onPress={onMapSelection}
-            interactiveColor={themeColor}
+            backgroundColor={themeColor}
             mode="secondary"
             testID="mapLocationChip"
           />
@@ -80,7 +79,6 @@ export const FavoriteChips: React.FC<Props> = ({
         {activeType('favorites') &&
           favorites.map((fav, i) => (
             <FavoriteChip
-              interactiveColor={themeColor}
               key={fav.id}
               text={fav.name ?? ''}
               accessibilityLabel={'Favoritt: ' + fav.name + screenReaderPause}
@@ -96,23 +94,17 @@ export const FavoriteChips: React.FC<Props> = ({
                   favoriteId: fav.id,
                 })
               }
-              style={
-                !activeType('add-favorite') && i === favorites.length - 1
-                  ? {marginRight: 0}
-                  : undefined
-              }
               testID={'favoriteChip' + i}
             />
           ))}
         {activeType('add-favorite') && (
           <FavoriteChip
-            interactiveColor={themeColor}
+            backgroundColor={themeColor}
             mode="secondary"
             text={t(FavoriteTexts.chips.addFavorite)}
             accessibilityRole="button"
             leftIcon={{svg: Add}}
             onPress={onAddFavorite}
-            style={{marginRight: 0}}
             testID="addFavoriteButton"
           />
         )}
@@ -122,24 +114,13 @@ export const FavoriteChips: React.FC<Props> = ({
 };
 
 const FavoriteChip: React.FC<ButtonProps> = (props) => {
-  const {theme} = useTheme();
-  const style = typeof props.style === 'object' ? props.style : {};
-  return (
-    <Button
-      {...props}
-      style={{
-        marginRight: theme.spacings.small,
-        ...style,
-      }}
-      type="inline"
-      compact={true}
-    />
-  );
+  return <Button {...props} type="medium" compact={true} />;
 };
 
-const useStyles = StyleSheet.createThemeHook(() => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   staticChipsContainer: {
     flexDirection: 'row',
+    gap: theme.spacings.small,
   },
 }));
 

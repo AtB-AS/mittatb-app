@@ -6,11 +6,13 @@ import {PlaceScreenParams} from '@atb/place-screen/PlaceScreenComponent';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {NearbyStopPlacesScreenParams} from '@atb/nearby-stop-places/NearbyStopPlacesScreenComponent';
 import {StackParams} from '@atb/stacks-hierarchy/navigation-types';
+import {TicketHistoryScreenParams} from '@atb/ticket-history';
 
 export type ProfileStackParams = StackParams<{
   Profile_RootScreen: undefined;
   Profile_PaymentOptionsScreen: undefined;
-  Profile_TicketHistoryScreen: undefined;
+  Profile_TicketHistoryScreen: TicketHistoryScreenParams;
+  Profile_TicketHistorySelectionScreen: undefined;
   Profile_DeleteProfileScreen: undefined;
   Profile_EditProfileScreen: undefined;
   Profile_FavoriteListScreen: undefined;

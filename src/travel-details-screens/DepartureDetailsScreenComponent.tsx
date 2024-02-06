@@ -170,7 +170,7 @@ export const DepartureDetailsScreenComponent = ({
                 )}
                 {shouldShowMapButton ? (
                   <Button
-                    type="pill"
+                    type="small"
                     leftIcon={{svg: Map}}
                     style={realtimeText ? styles.liveButton : undefined}
                     text={t(
@@ -304,7 +304,7 @@ function LastPassedStop({realtimeText}: {realtimeText: string}) {
     <View style={styles.passedSection}>
       <ThemeIcon
         svg={RealtimeDark}
-        size="small"
+        size="xSmall"
         style={styles.passedSectionRealtimeIcon}
       />
       <ThemeText

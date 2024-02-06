@@ -3,13 +3,21 @@ import Bugsnag from '@bugsnag/react-native';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import {createContext, useCallback, useContext, useState} from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {NotificationConfigUpdate} from './api';
 import {NotificationConfig} from './types';
-import {useConfig} from './use-config';
+import {useNotificationConfig} from './use-notification-config';
 import {useRegister} from './use-register';
 import {getLanguageAndTextEnum} from '@atb/translations/utils';
+import {usePushNotificationsEnabled} from '@atb/notifications/use-push-notifications-enabled';
+import {useAuthState} from '@atb/auth';
 
 type PermissionStatus =
   | 'granted'
@@ -39,7 +47,10 @@ export const NotificationContextProvider: React.FC = ({children}) => {
   const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
   const mutateRegister = registerMutation.mutate;
-  const {query: configQuery, mutation: configMutation} = useConfig();
+  const {query: configQuery, mutation: configMutation} =
+    useNotificationConfig();
+  const pushNotificationsEnabled = usePushNotificationsEnabled();
+  const {authStatus} = useAuthState();
 
   const register = useCallback(
     async (enabled: boolean) => {
@@ -106,6 +117,15 @@ export const NotificationContextProvider: React.FC = ({children}) => {
     }
     setStatus(permissionStatus);
   }, [register]);
+
+  // Check notification status, and register notification language when the app
+  // starts, in case the user have changed language since last time the app was
+  // opened. This useEffect will also trigger when language is changed manually
+  // in the app.
+  useEffect(() => {
+    if (pushNotificationsEnabled && authStatus === 'authenticated')
+      checkPermissions();
+  }, [pushNotificationsEnabled, checkPermissions, authStatus]);
 
   return (
     <NotificationContext.Provider

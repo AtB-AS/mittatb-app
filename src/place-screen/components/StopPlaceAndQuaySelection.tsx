@@ -2,7 +2,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import {ActivityIndicator, ViewStyle} from 'react-native';
 import {Button} from '@atb/components/button';
 import React from 'react';
-import {StyleSheet, useTheme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {StopPlace, Quay} from '@atb/api/types/departures';
 
@@ -22,7 +22,6 @@ const StopPlaceAndQuaySelection = ({
   style?: ViewStyle;
 }) => {
   const styles = useStyles();
-  const {theme} = useTheme();
   const {t} = useTranslation();
 
   const isMissingQuays = place.quays === undefined;
@@ -34,6 +33,7 @@ const StopPlaceAndQuaySelection = ({
       horizontal={!isMissingQuays}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.quayChipContentContainer}
       ListHeaderComponent={
         <>
           {isMissingQuays ? (
@@ -44,10 +44,9 @@ const StopPlaceAndQuaySelection = ({
               text={t(DeparturesTexts.quayChips.allStops)}
               interactiveColor="interactive_1"
               active={!selectedQuay}
-              style={[styles.quayChip, {marginLeft: theme.spacings.medium}]}
               accessibilityHint={t(DeparturesTexts.quayChips.a11yAllStopsHint)}
               testID="allStopsSelectionButton"
-             />
+            />
           )}
         </>
       }
@@ -57,12 +56,11 @@ const StopPlaceAndQuaySelection = ({
           text={getQuayName(item)}
           interactiveColor="interactive_1"
           active={selectedQuay?.id === item.id}
-          style={styles.quayChip}
           accessibilityHint={
             t(DeparturesTexts.quayChips.a11yHint) + getQuayName(item)
           }
           testID="quaySelectionButton"
-         />
+        />
       )}
     />
   );
@@ -77,9 +75,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_accent_0.background,
     flexShrink: 0,
     flexGrow: 0,
+    gap: theme.spacings.medium,
   },
-  quayChip: {
-    marginRight: theme.spacings.medium,
+  quayChipContentContainer: {
+    gap: theme.spacings.medium,
+    paddingHorizontal: theme.spacings.medium,
   },
 }));
 

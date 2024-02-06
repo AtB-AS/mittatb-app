@@ -43,12 +43,7 @@ export function CarnetDetails(props: {
     validTo: usedAccessValidTo,
   } = getLastUsedAccess(now, usedAccesses);
   const style = useStyles();
-  const fareContractValidityStatus = getValidityStatus(
-    now,
-    fareContractValidFrom,
-    fareContractValidTo,
-    fareContract.state,
-  );
+  const fareContractValidityStatus = getValidityStatus(now, fareContract);
   const firstTravelRight = travelRights[0];
   const {tariffZoneRefs} = firstTravelRight;
   const firstZone = tariffZoneRefs?.[0];

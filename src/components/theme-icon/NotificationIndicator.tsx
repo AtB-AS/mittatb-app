@@ -31,7 +31,7 @@ export const NotificationIndicator = ({
   const borderColor = useNotificationColor(backgroundColor);
   const fontScale = useFontScale();
   const indicatorSize = getIndicatorSize(iconSize, !!borderColor, fontScale);
-  const borderWidth = (iconSize === 'small' ? 1 : 2) * fontScale;
+  const borderWidth = (iconSize === 'xSmall' ? 1 : 2) * fontScale;
   return (
     <View
       style={{
@@ -74,12 +74,14 @@ const getIndicatorSize = (
   fontScale: number,
 ) => {
   switch (size) {
-    case 'small':
+    case 'xSmall':
       return (hasBorder ? 6 : 4) * fontScale;
+    case 'small':
+      return (hasBorder ? 8 : 6) * fontScale;
+    case 'normal':
+      return (hasBorder ? 10 : 6) * fontScale;
     case 'large':
       return (hasBorder ? 12 : 8) * fontScale;
-    default:
-      return (hasBorder ? 10 : 6) * fontScale;
   }
 };
 

@@ -29,7 +29,7 @@ export const SimpleFareContract: React.FC<Props> = ({
   if (isPreActivatedTravelRight(firstTravelRight)) {
     return (
       <PreActivatedFareContractInfo
-        fareContractState={fc.state}
+        fareContract={fc}
         travelRights={fc.travelRights.filter(isPreActivatedTravelRight)}
         now={now}
         hideDetails={hideDetails}

@@ -10,8 +10,16 @@ import {NoFavouriteDeparture as DarkNoFavouriteDeparture} from '@atb/assets/svg/
 import {OnBehalfOf as LightOnBehalfOf} from '@atb/assets/svg/color/images/light';
 import {OnBehalfOf as DarkOnBehalfOf} from '@atb/assets/svg/color/images/dark';
 import {Scooter as ScooterLight} from '@atb/assets/svg/color/images/mobility/light';
-import {Scooter as ScooterDark} from '@atb/assets/svg/color/images/mobility/dark';
-import {CityBike as CityBikeLight} from '@atb/assets/svg/color/images/mobility/light';
+import {
+  BundlingCarSharing as BundlingCarSharingDark,
+  BundlingCityBike as BundlingCityBikeDark,
+  Scooter as ScooterDark,
+} from '@atb/assets/svg/color/images/mobility/dark';
+import {
+  BundlingCarSharing as BundlingCarSharingLight,
+  BundlingCityBike as BundlingCityBikeLight,
+  CityBike as CityBikeLight,
+} from '@atb/assets/svg/color/images/mobility/light';
 import {CityBike as CityBikeDark} from '@atb/assets/svg/color/images/mobility/dark';
 import {ParkAndRide as ParkAndRideLight} from '@atb/assets/svg/color/images/mobility/light';
 import {ParkAndRide as ParkAndRideDark} from '@atb/assets/svg/color/images/mobility/dark';
@@ -65,4 +73,18 @@ export const ThemedParkAndRide = () => {
   const {themeName} = useTheme();
   const ParkAndRide = themeName === 'dark' ? ParkAndRideDark : ParkAndRideLight;
   return <ParkAndRide />;
+};
+
+export const ThemedBundlingCarSharing = ({...props}: SvgProps) => {
+  const {themeName} = useTheme();
+  const BundlingCarSharing =
+    themeName === 'dark' ? BundlingCarSharingDark : BundlingCarSharingLight;
+  return <BundlingCarSharing {...props} />;
+};
+
+export const ThemedBundlingCityBike = ({...props}: SvgProps) => {
+  const {themeName} = useTheme();
+  const BundlingCityBike =
+    themeName === 'dark' ? BundlingCityBikeDark : BundlingCityBikeLight;
+  return <BundlingCityBike {...props} />;
 };
