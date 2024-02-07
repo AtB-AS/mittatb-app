@@ -46,7 +46,7 @@ export type FareContractInfoProps = {
   status: ValidityStatus;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
-  fareContract?: FareContract;
+  sentToCustomerAccountId?: string;
 };
 
 export type FareContractInfoDetailsProps = {
@@ -67,7 +67,7 @@ export const FareContractInfoHeader = ({
   status,
   testID,
   preassignedFareProduct,
-  fareContract,
+  sentToCustomerAccountId,
 }: FareContractInfoProps) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
@@ -84,7 +84,7 @@ export const FareContractInfoHeader = ({
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
 
   const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
-    fareContract?.customerAccountId,
+    sentToCustomerAccountId,
   );
 
   return (

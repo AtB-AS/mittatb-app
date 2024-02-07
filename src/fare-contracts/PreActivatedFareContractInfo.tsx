@@ -101,7 +101,9 @@ export const PreActivatedFareContractInfo: React.FC<Props> = ({
           status={validityStatus}
           testID={testID}
           preassignedFareProduct={preassignedFareProduct}
-          fareContract={sentToOthers ? fareContract : undefined}
+          sentToCustomerAccountId={
+            sentToOthers ? fareContract.customerAccountId : undefined
+          }
         />
       </GenericSectionItem>
       <GenericSectionItem>

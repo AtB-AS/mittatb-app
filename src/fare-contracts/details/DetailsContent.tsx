@@ -126,7 +126,9 @@ export const DetailsContent: React.FC<Props> = ({
             status={validityStatus}
             testID="details"
             preassignedFareProduct={preassignedFareProduct}
-            fareContract={isSentFareContract ? fc : undefined}
+            sentToCustomerAccountId={
+              isSentFareContract ? fc.customerAccountId : undefined
+            }
           />
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' &&
