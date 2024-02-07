@@ -45,7 +45,7 @@ export const BenefitTile = ({
 
         let mobilityFilters: MobilityMapFilterType = storedFilters.mobility;
         benefit.formFactors.forEach((formFactor) => {
-          const allOperators = operators.byFormFactor(FormFactor.Scooter);
+          const allOperators = operators.byFormFactor(formFactor as FormFactor);
           const formFactorFilter = getNewFilterState(
             true,
             benefit.operatorId,
