@@ -48,7 +48,7 @@ type Props = {
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
-  onNavigateToMap?: (initialFilters: MapFilterType) => void;
+  onNavigateToMap: (initialFilters: MapFilterType) => void;
   hasActiveTravelCard?: boolean;
 };
 

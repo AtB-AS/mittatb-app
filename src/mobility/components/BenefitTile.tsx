@@ -21,7 +21,7 @@ type BenefitCardProps = {
   interactiveColor: InteractiveColor;
   style?: ViewStyle;
   benefit: FareProductBenefitType;
-  onNavigateToMap?: (initialFilters: MapFilterType) => void;
+  onNavigateToMap: (initialFilters: MapFilterType) => void;
 };
 
 export const BenefitTile = ({
