@@ -36,12 +36,10 @@ import {
   PreassignedFareProduct,
 } from '@atb/configuration';
 import {Barcode} from './Barcode';
-import {BenefitTiles} from '@atb/mobility/components/BenefitTile';
-import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
-import {ThemeText} from '@atb/components/text';
 import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
+import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
 
 type Props = {
   fareContract: FareContract;
@@ -66,9 +64,6 @@ export const DetailsContent: React.FC<Props> = ({
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
-  const {benefits} = useOperatorBenefitsForFareProduct(
-    preassignedFareProduct?.id,
-  );
 
   // Checks if the FareContract is purchased by a different ID,
   // then if yes, return the purchaser ID, otherwise return blank.
@@ -179,17 +174,11 @@ export const DetailsContent: React.FC<Props> = ({
             />
           </GenericSectionItem>
         )}
-        {benefits && (
-          <GenericSectionItem style={styles.benefitSection}>
-            <ThemeText type="body__secondary" color="secondary">
-              {t(FareContractTexts.label.indludedBenefits)}
-            </ThemeText>
-            <BenefitTiles
-              benefits={benefits}
-              onNavigateToMap={onNavigateToMap}
-              interactiveColor="interactive_2"
-            />
-          </GenericSectionItem>
+        {preassignedFareProduct && (
+          <MobilityBenefitsActionSectionItem
+            preassignedFareProductId={preassignedFareProduct?.id}
+            onNavigateToMap={onNavigateToMap}
+          />
         )}
         <GenericSectionItem>
           <OrderDetails fareContract={fc} />
@@ -215,8 +204,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   enlargedWhiteBarcodePaddingView: {
     backgroundColor: '#ffffff',
     paddingVertical: theme.spacings.xLarge * 2,
-  },
-  benefitSection: {
-    rowGap: theme.spacings.small,
   },
 }));
