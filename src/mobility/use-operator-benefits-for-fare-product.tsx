@@ -20,7 +20,7 @@ export const useOperatorBenefitsForFareProduct = (
   productId: PreassignedFareProductId | undefined,
 ): {
   status: UseQueryResult['status'];
-  benefits?: Array<FareProductBenefitType>;
+  benefits?: FareProductBenefitType[];
 } => {
   const {data: fareProductBenefits, status} =
     useFareProductBenefitsQuery(productId);
