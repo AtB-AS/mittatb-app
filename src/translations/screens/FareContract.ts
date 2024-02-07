@@ -37,6 +37,8 @@ const FareContractTexts = {
         `Blir gyldig om ${duration}`,
       ),
     reserving: _(`Reserverer…`, `Reserving…`, `Reserverar…`),
+    sent: (dateTime: string) =>
+      _(`Sendt ${dateTime}`, `Sent ${dateTime}`, `Sendt ${dateTime}`),
     unknown: _(`Ukjent`, `Unknown`, `Ukjent`),
     inactive: _(`Inaktiv`, `Inactive`, `Inaktiv`),
     inactiveCarnet: _(
@@ -77,6 +79,12 @@ const FareContractTexts = {
         `Gyldig til ${dateTime}`,
         `Valid to ${dateTime}`,
         `Gyldig til ${dateTime}`,
+      ),
+    sentTo: (phoneNumber: string) =>
+      _(
+        `Denne billetten ble sendt til ${phoneNumber}`,
+        `This ticket was sent to ${phoneNumber}`,
+        `Denne billetten vart sendt til ${phoneNumber}`,
       ),
     purchasedBy: (phoneNumber: string) =>
       _(

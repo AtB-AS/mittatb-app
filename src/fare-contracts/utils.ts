@@ -1,6 +1,8 @@
 import {
   FareContract,
   FareContractState,
+  isCarnet,
+  isCarnetTravelRight,
   isPreActivatedTravelRight,
 } from '@atb/ticketing';
 import {
@@ -59,7 +61,9 @@ export function getValidityStatus(
   if (fc.state === FareContractState.Refunded) return 'refunded';
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
-  const firstTravelRight = fc.travelRights.filter(isPreActivatedTravelRight)[0];
+  const firstTravelRight = fc.travelRights.filter(
+    isCarnet(fc) ? isCarnetTravelRight : isPreActivatedTravelRight,
+  )[0];
   return getRelativeValidity(
     now,
     firstTravelRight.startDateTime.toMillis(),
@@ -177,6 +181,8 @@ export const useTariffZoneSummary = (
 
 export const isValidFareContract = (status: ValidityStatus) =>
   status === 'valid';
+
+export const isSentFareContract = (status: ValidityStatus) => status === 'sent';
 
 export function tariffZonesSummary(
   fromTariffZone: TariffZone,

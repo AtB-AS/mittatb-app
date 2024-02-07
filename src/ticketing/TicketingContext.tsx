@@ -200,7 +200,9 @@ export const TicketingContextProvider: React.FC = ({children}) => {
       value={{
         ...state,
         findFareContractByOrderId: (orderId) =>
-          state.fareContracts.find((fc) => fc.orderId === orderId),
+          state.fareContracts
+            .concat(state.sentFareContracts)
+            .find((fc) => fc.orderId === orderId),
         resubscribeFirestoreListeners: resubscribe,
       }}
     >
