@@ -39,32 +39,29 @@ export const BenefitTile = ({
   const {getMapFilter, setMapFilter} = useUserMapFilters();
   const operators = useOperators();
 
-  const onPress = onNavigateToMap
-    ? async () => {
-        const storedFilters = await getMapFilter();
+  const onPress = async () => {
+    const storedFilters = await getMapFilter();
 
-        let mobilityFilters: MobilityMapFilterType = storedFilters.mobility;
-        benefit.formFactors.forEach((formFactor) => {
-          const allOperators = operators.byFormFactor(formFactor as FormFactor);
-          const formFactorFilter = getNewFilterState(
-            true,
-            benefit.operatorId,
-            storedFilters.mobility[formFactor],
-            allOperators,
-          );
-          mobilityFilters = {
-            ...mobilityFilters,
-            [formFactor]: formFactorFilter,
-          };
-        });
+    let mobilityFilters: MobilityMapFilterType = storedFilters.mobility;
+    benefit.formFactors.forEach((formFactor) => {
+      const allOperators = operators.byFormFactor(formFactor as FormFactor);
+      const formFactorFilter = getNewFilterState(
+        true,
+        benefit.operatorId,
+        storedFilters.mobility[formFactor],
+        allOperators,
+      );
+      mobilityFilters = {
+        ...mobilityFilters,
+        [formFactor]: formFactorFilter,
+      };
+    });
 
-        // Update stored filters (for persistence, and the filters bottom sheet)
-        await setMapFilter({...storedFilters, mobility: mobilityFilters});
-        // Provide the same filters as intital filter state for the map screen
-        onNavigateToMap({...storedFilters, mobility: mobilityFilters});
-      }
-    : undefined;
-
+    // Update stored filters (for persistence, and the filters bottom sheet)
+    await setMapFilter({...storedFilters, mobility: mobilityFilters});
+    // Provide the same filters as intital filter state for the map screen
+    onNavigateToMap({...storedFilters, mobility: mobilityFilters});
+  };
   return (
     <View style={[styles.container, style]}>
       <TileWithButton

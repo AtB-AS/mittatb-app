@@ -65,8 +65,3 @@ export const Spacious: Meta<TileWithButtonMetaProps> = {
     mode: 'spacious',
   },
 };
-export const WithoutAction: Meta<TileWithButtonMetaProps> = {
-  args: {
-    onPress: undefined,
-  },
-};

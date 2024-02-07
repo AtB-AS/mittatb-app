@@ -10,7 +10,7 @@ import {SvgProps} from 'react-native-svg';
 export type TileWithButtonProps = {
   mode: 'compact' | 'spacious';
   interactiveColor: InteractiveColor;
-  onPress?: () => void;
+  onPress: () => void;
   accessibilityLabel: string;
   accessibilityHint?: string;
   style?: StyleProp<ViewStyle>;
@@ -41,7 +41,6 @@ export function TileWithButton({
       style={[styles.container, style]}
       accessible={true}
       onPress={onPress}
-      disabled={onPress === undefined}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
       testID={testID}
@@ -56,27 +55,25 @@ export function TileWithButton({
       >
         {children}
       </View>
-      {onPress !== undefined && (
-        <View
-          style={[
-            styles.button,
-            mode === 'spacious' ? styles.spaciousButton : styles.compactButton,
-          ]}
-          testID={testID + 'Button'}
+      <View
+        style={[
+          styles.button,
+          mode === 'spacious' ? styles.spaciousButton : styles.compactButton,
+        ]}
+        testID={testID + 'Button'}
+      >
+        <ThemeText
+          style={styles.buttonText}
+          type={mode === 'spacious' ? 'body__primary' : 'body__tertiary'}
         >
-          <ThemeText
-            style={styles.buttonText}
-            type={mode === 'spacious' ? 'body__primary' : 'body__tertiary'}
-          >
-            {buttonText}
-          </ThemeText>
-          <ThemeIcon
-            size={mode === 'spacious' ? 'normal' : 'xSmall'}
-            svg={buttonSvg}
-            fill={color.outline.text}
-          />
-        </View>
-      )}
+          {buttonText}
+        </ThemeText>
+        <ThemeIcon
+          size={mode === 'spacious' ? 'normal' : 'xSmall'}
+          svg={buttonSvg}
+          fill={color.outline.text}
+        />
+      </View>
     </PressableOpacity>
   );
 }
