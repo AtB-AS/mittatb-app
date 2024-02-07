@@ -52,15 +52,11 @@ export function ProductSelectionByProducts({
     ) || t(PurchaseOverviewTexts.productSelection.title);
 
   const subText = (fp: PreassignedFareProduct) => {
-    const descriptionMessage = getTextForLanguage(
-      fp.description ?? [],
-      language,
-    );
+    const descriptionMessage = getTextForLanguage(fp.description, language);
     const warningMessage = getTextForLanguage(fp.warningMessage, language);
     if (descriptionMessage && warningMessage) {
       return `${descriptionMessage}\n${warningMessage}`;
     }
-
     return descriptionMessage ?? warningMessage;
   };
 
