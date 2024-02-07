@@ -17,7 +17,7 @@ on:
       branch:
         description: 'Define branch to test'
         required: true
-        default: 'main'
+        default: 'master'
   schedule:
     - cron: '0 7 * * *'
 
@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Set env variables
         env:
-          DEFAULT_BRANCH: 'main'
+          DEFAULT_BRANCH: 'master'
           DEFAULT_API_LEVEL: 30
           DEFAULT_TEST_ITERATIONS: 1
           DEFAULT_MAX_RETRIES: 1
