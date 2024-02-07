@@ -317,6 +317,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 ProfileTexts.sections.settings.linkSectionItems.notifications
                   .label,
               )}
+              label="new"
               onPress={() => navigation.navigate('Profile_NotificationsScreen')}
               testID="notificationsButton"
             />
