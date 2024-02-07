@@ -28,13 +28,12 @@ export const useOperatorBenefitsForFareProduct = (
 
   const benefits: FareProductBenefitType[] | undefined = fareProductBenefits
     ?.map((fareProductBenefit) => {
-      const benefitOperator = mobilityOperators?.find(
+      const operator = mobilityOperators?.find(
         (mobilityOperator) =>
           mobilityOperator.id === fareProductBenefit.operator,
       );
-      const operatorBenefits = benefitOperator?.benefits.find(
-        (mobilityBenefit) =>
-          fareProductBenefit.benefits.includes(mobilityBenefit.id),
+      const operatorBenefits = operator?.benefits.find((mobilityBenefit) =>
+        fareProductBenefit.benefits.includes(mobilityBenefit.id),
       );
       if (!operatorBenefits) return;
       return {

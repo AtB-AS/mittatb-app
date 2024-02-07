@@ -176,7 +176,7 @@ export const DetailsContent: React.FC<Props> = ({
         )}
         {preassignedFareProduct && (
           <MobilityBenefitsActionSectionItem
-            preassignedFareProductId={preassignedFareProduct?.id}
+            preassignedFareProductId={preassignedFareProduct.id}
             onNavigateToMap={onNavigateToMap}
           />
         )}
