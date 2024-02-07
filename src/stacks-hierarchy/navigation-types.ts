@@ -48,7 +48,6 @@ type ReceiptScreenRouteParams = {
 
 type FareContractDetailsRouteParams = {
   orderId: string;
-  isSentFareContract?: boolean;
 };
 
 type TicketInformationScreenParams = {

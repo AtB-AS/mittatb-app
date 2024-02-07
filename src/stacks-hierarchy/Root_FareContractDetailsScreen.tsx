@@ -10,6 +10,7 @@ import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAnalytics} from '@atb/analytics';
 import {isCarnet} from '@atb/ticketing';
+import {useAuthState} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -19,10 +20,13 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
   const {enable_ticket_information} = useRemoteConfig();
   const {serverNow} = useTimeContextState();
   const analytics = useAnalytics();
+  const {abtCustomerId: currentUserId} = useAuthState();
   const {ticketInfoParams, fareContract, preassignedFareProduct} =
     useTicketInfo(route.params.orderId);
 
-  const isSentFareContract = route.params.isSentFareContract;
+  const isSentFareContract =
+    fareContract?.customerAccountId !== fareContract?.purchasedBy &&
+    fareContract?.purchasedBy === currentUserId;
 
   useApplePassPresentationSuppression();
 
