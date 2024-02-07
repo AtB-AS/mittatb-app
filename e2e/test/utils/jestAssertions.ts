@@ -1,4 +1,4 @@
-import jestExpect from 'expect';
+import {expect as jestExpect} from '@jest/globals';
 
 export const expectBoolean = (
   value: boolean,

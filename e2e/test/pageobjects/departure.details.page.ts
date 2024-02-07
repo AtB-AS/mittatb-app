@@ -1,5 +1,5 @@
-import AppHelper from '../utils/app.helper';
-import ElementHelper from '../utils/element.helper';
+import AppHelper from '../utils/app.helper.ts';
+import ElementHelper from '../utils/element.helper.ts';
 
 class DepartureDetailPage {
   /**
@@ -21,8 +21,8 @@ class DepartureDetailPage {
 
   /**
    * Return the quay name
-   * @param legType: 'passed' or 'trip'
-   * @param legIndex: index of the leg
+   * @param legType 'passed' or 'trip'
+   * @param legIndex index of the leg
    */
   async getQuayName(legType: 'passed' | 'trip', legIndex: number = 0) {
     const legId = `//*[@resource-id="legType_${legType}"]`;
@@ -33,8 +33,8 @@ class DepartureDetailPage {
 
   /**
    * Click the quay
-   * @param legType: 'passed' or 'trip'
-   * @param legIndex: index of the leg
+   * @param legType 'passed' or 'trip'
+   * @param legIndex index of the leg
    */
   async tapQuay(legType: 'passed' | 'trip', legIndex: number = 0) {
     const legId = `//*[@resource-id="legType_${legType}"]`;

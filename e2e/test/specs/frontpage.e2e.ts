@@ -1,11 +1,12 @@
-import OnboardingPage from '../pageobjects/onboarding.page';
-import AppHelper from '../utils/app.helper';
-import ElementHelper from '../utils/element.helper';
-import FrontPagePage from '../pageobjects/frontpage.page';
-import SearchPage from '../pageobjects/search.page';
-import NavigationHelper from '../utils/navigation.helper';
-import DepartureOverviewPage from '../pageobjects/departure.overview.page';
-import FavoritePage from '../pageobjects/favorite.page';
+import OnboardingPage from '../pageobjects/onboarding.page.ts';
+import AppHelper from '../utils/app.helper.ts';
+import ElementHelper from '../utils/element.helper.ts';
+import FrontPagePage from '../pageobjects/frontpage.page.ts';
+import SearchPage from '../pageobjects/search.page.ts';
+import NavigationHelper from '../utils/navigation.helper.ts';
+import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
+import FavoritePage from '../pageobjects/favorite.page.ts';
+import FrontpagePage from '../pageobjects/frontpage.page.ts';
 
 describe('Frontpage', () => {
   before(async () => {
@@ -43,13 +44,19 @@ describe('Frontpage', () => {
 
     try {
       await ElementHelper.waitForElement('id', 'addFavoriteDeparture');
-      expect(await FrontPagePage.noFavoriteInfo.getText()).toHaveTextContaining(
-        'You have no favorite departures',
+      //expect(await FrontPagePage.noFavoriteInfo.getText()).toHaveTextContaining(
+      //  'You have no favorite departures',
+      //);
+      expect(await FrontPagePage.noFavoriteInfo).toHaveText(
+        expect.stringContaining('You have no favorite departures'),
       );
 
       // Choose stop place
       await FrontPagePage.addFavoriteDeparture.click();
-      await ElementHelper.waitForElement('id', 'noAccessToLocationEmptyStateView');
+      await ElementHelper.waitForElement(
+        'id',
+        'noAccessToLocationEmptyStateView',
+      );
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(stopPlace);
 
@@ -178,23 +185,17 @@ describe('Frontpage', () => {
    * Service disruption info
    */
   it('should show link to service disruptions', async () => {
-    const linkText = 'atb.no/driftsavvik (opens in browser)';
+    const linkText = 'atb.no/driftsavvik';
 
     try {
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
       await FrontPagePage.serviceDisruptionsInfo.click();
 
       await ElementHelper.waitForElement('id', 'serviceDisruptionsBottomSheet');
-      expect(
-        await ElementHelper.isElementExisting(
-          'navigateToServiceDisruptions',
-          2000,
-        ),
-      ).toEqual(true);
-      expect(
-        await FrontPagePage.serviceDisruptionsButton,
-      ).toHaveAttributeContaining('text', linkText);
-      await NavigationHelper.cancel();
+      await ElementHelper.waitForElement('id', 'navigateToServiceDisruptions');
+      expect(await FrontpagePage.serviceDisruptionsLink).toContain(linkText);
+
+      await NavigationHelper.close();
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_frontpage_should_show_link_to_service_disruptions',
