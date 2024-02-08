@@ -20,8 +20,9 @@ export const Map_RootScreen = ({
   route,
 }: MapScreenProps<'Map_RootScreen'>) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
-  const vehicles = useVehicles(route.params?.initialFilters?.mobility);
-  const stations = useStations(route.params?.initialFilters?.mobility);
+  const mobilityFilters = route.params?.initialFilters?.mobility;
+  const vehicles = useVehicles(mobilityFilters);
+  const stations = useStations(mobilityFilters);
 
   if (isScreenReaderEnabled) return <MapDisabledForScreenReader />;
 
