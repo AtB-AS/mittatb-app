@@ -1,39 +1,40 @@
 import {
-  TripDetailsTexts,
   Language,
   TranslateFunction,
+  TripDetailsTexts,
   useTranslation,
 } from '@atb/translations';
 import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
 import {
-  secondsToMinutesLong,
   formatToShortDateTimeWithRelativeDayNames,
+  secondsToMinutesLong,
 } from '@atb/utils/date';
 
 import {Leg} from '@atb/api/types/trips';
 import {
   getEarliestBookingDateFromLeg,
-  getLegRequiresBooking,
-  getLegRequiresBookingUrgently,
   getIsTooEarlyToBookLeg,
+  getLatestBookingDateFromLeg,
   getLegBookingIsAvailableImminently,
+  getLegRequiresBookingUrgently, getPublicCodeFromLeg,
   getSecondsRemainingToLegBookingAvailable,
   getSecondsRemainingToLegBookingDeadline,
-  getLatestBookingDateFromLeg,
 } from '../utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-type FlexibleTransportMessageProps = {
+type Props = {
   leg: Leg;
-  publicCode: string;
   now: number;
   showStatusIcon: boolean;
   onPressConfig?: OnPressConfig;
 };
 
-export const FlexibleTransportMessageBox: React.FC<
-  FlexibleTransportMessageProps
-> = ({leg, publicCode, now, showStatusIcon, onPressConfig}) => {
+export const BookingInfoBox = ({
+  leg,
+  now,
+  showStatusIcon,
+  onPressConfig,
+}: Props) => {
   const {t, language} = useTranslation();
 
   const {flex_booking_number_of_days_available} = useRemoteConfig();
@@ -56,6 +57,8 @@ export const FlexibleTransportMessageBox: React.FC<
     t,
     language,
   );
+
+  const publicCode = getPublicCodeFromLeg(leg);
 
   return (
     <MessageInfoBox
@@ -84,8 +87,7 @@ function getFormattedTimeForLegBooking(
   t: TranslateFunction,
   language: Language,
 ): string {
-  const requiresBooking = getLegRequiresBooking(leg);
-  if (!requiresBooking) {
+  if (!leg.bookingArrangements) {
     return '';
   } else {
     const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
