@@ -23,6 +23,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 }: Props) => {
   const {
     reservations,
+    sentFareContracts,
     fareContracts,
     isRefreshingFareContracts,
     resubscribeFirestoreListeners,
@@ -41,11 +42,12 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
   const hasExpiredFareContracts =
     filterExpiredFareContracts(fareContracts, serverNow).length > 0;
 
-  const hasSentFareContracts = false; // TODO replace with proper checking
+  const hasSentFareContracts = sentFareContracts.length > 0;
 
   return (
     <View style={styles.container}>
       <ScrollView
+        contentContainerStyle={styles.content}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshingFareContracts}
@@ -73,7 +75,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
               .noActiveTicketsDetails,
           )}
         />
-        <Section style={styles.content}>
+        <Section>
           {hasExpiredFareContracts && (
             <LinkSectionItem
               text={t(TicketHistoryModeTexts.expired.title)}
@@ -113,10 +115,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background.background_1.background,
-    padding: theme.spacings.medium,
   },
   content: {
-    flex: 1,
-    marginBottom: theme.spacings.medium,
+    padding: theme.spacings.medium,
   },
 }));

@@ -1,6 +1,6 @@
-import ElementHelper from '../utils/element.helper';
-import AppHelper from '../utils/app.helper';
-import AlertHelper from '../utils/alert.helper';
+import ElementHelper from '../utils/element.helper.ts';
+import AppHelper from '../utils/app.helper.ts';
+import AlertHelper from '../utils/alert.helper.ts';
 
 class FavoritePage {
   /**
@@ -44,7 +44,7 @@ class FavoritePage {
 
   /**
    * Choose variation of departure favorite
-   * @param type: type of favorite [single, all]
+   * @param type type of favorite [single, all]
    */
   async chooseFavoriteType(type: 'single' | 'all') {
     let typeId = '';
@@ -63,9 +63,9 @@ class FavoritePage {
 
   /**
    * Get favorite toggle icon
-   * @param favorite: favorite or not [no, semi, all]
-   * @param quayIndex: index of the quay
-   * @param depIndex: index of the departure
+   * @param favorite favorite or not [no, semi, all]
+   * @param quayIndex index of the quay
+   * @param depIndex index of the departure
    */
   async getFavoriteIcon(
     favorite: 'no' | 'semi' | 'all',

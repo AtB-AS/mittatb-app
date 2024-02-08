@@ -1,9 +1,9 @@
-import AppHelper from '../utils/app.helper';
+import AppHelper from '../utils/app.helper.ts';
 
 class TicketPage {
   /**
-   * Choose a ticket a.k.a fare product
-   * @param fareProduct: fare product to choose, e.g. 'single'
+   * Choose a ticket aka fare product
+   * @param fareProduct fare product to choose, e.g. 'single'
    */
   async chooseFareProduct(fareProduct: string) {
     const reqId = `//*[@resource-id="${fareProduct}FareProduct"]`;

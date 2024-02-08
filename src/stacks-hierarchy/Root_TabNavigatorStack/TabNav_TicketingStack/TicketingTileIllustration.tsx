@@ -54,7 +54,7 @@ const getIllustrationFileName = (
     case 'hour24':
       return 'H24';
     case 'carnet':
-      return 'Carnet';
+      return 'TicketMultiple';
     case 'night':
       return 'Night';
     case 'summer':

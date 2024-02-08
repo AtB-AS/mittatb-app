@@ -36,13 +36,15 @@ import {
   PreassignedFareProduct,
 } from '@atb/configuration';
 import {Barcode} from './Barcode';
+import {MessageInfoText} from '@atb/components/message-info-text';
+import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 
 type Props = {
   fareContract: FareContract;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
-  hasActiveTravelCard?: boolean;
+  isSentFareContract?: boolean;
 };
 
 export const DetailsContent: React.FC<Props> = ({
@@ -50,6 +52,7 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
+  isSentFareContract = false,
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
@@ -59,11 +62,20 @@ export const DetailsContent: React.FC<Props> = ({
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
 
+  const validityStatus = getValidityStatus(now, fc, isSentFareContract);
+
+  // Checks if the FareContract is purchased by a different ID,
+  // then if yes, return the purchaser ID, otherwise return blank.
+  const accountId =
+    !isSentFareContract && fc.purchasedBy !== fc.customerAccountId
+      ? fc.purchasedBy
+      : undefined;
+
+  const {data: purchaserPhoneNumber} = useGetPhoneByAccountIdQuery(accountId);
+
   if (isPreActivatedTravelRight(firstTravelRight)) {
     const validFrom = firstTravelRight.startDateTime.toMillis();
     const validTo = firstTravelRight.endDateTime.toMillis();
-
-    const validityStatus = getValidityStatus(now, validFrom, validTo, fc.state);
 
     const {tariffZoneRefs} = firstTravelRight;
     const firstZone = tariffZoneRefs?.[0];
@@ -114,6 +126,9 @@ export const DetailsContent: React.FC<Props> = ({
             status={validityStatus}
             testID="details"
             preassignedFareProduct={preassignedFareProduct}
+            sentToCustomerAccountId={
+              isSentFareContract ? fc.customerAccountId : undefined
+            }
           />
         </GenericSectionItem>
         {deviceInspectionStatus === 'inspectable' &&
@@ -149,6 +164,16 @@ export const DetailsContent: React.FC<Props> = ({
                 style={styles.globalMessages}
               />
             </View>
+          </GenericSectionItem>
+        )}
+        {purchaserPhoneNumber && (
+          <GenericSectionItem>
+            <MessageInfoText
+              type="info"
+              message={t(
+                FareContractTexts.details.purchasedBy(purchaserPhoneNumber),
+              )}
+            />
           </GenericSectionItem>
         )}
         <GenericSectionItem>

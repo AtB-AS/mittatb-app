@@ -1,4 +1,4 @@
-import AppHelper from './app.helper';
+import AppHelper from './app.helper.ts';
 
 /**
  * Different helper methods related to elements in the app
@@ -6,9 +6,9 @@ import AppHelper from './app.helper';
 class ElementHelper {
   /**
    * Waits for an element to be displayed given default timeout
-   * @param type: test-id or text
-   * @param id: name of the test-id or text to wait for
-   * @param timeout: optionally wait longer than default (ms)
+   * @param type test-id or text
+   * @param id name of the test-id or text to wait for
+   * @param timeout optionally wait longer than default (ms)
    */
   async waitForElement(
     type: 'id' | 'ids' | 'text',
@@ -33,10 +33,10 @@ class ElementHelper {
 
   /**
    * Waits for an element in an array to be displayed given default timeout
-   * @param type: test-id or text
-   * @param id: name of the test-id or text to wait for
-   * @param index: if type = ids
-   * @param timeout: optionally wait longer than default (ms)
+   * @param type test-id or text
+   * @param id name of the test-id or text to wait for
+   * @param index if type = ids
+   * @param timeout optionally wait longer than default (ms)
    */
   async waitForIndexedElement(
     type: 'id' | 'text',
@@ -63,8 +63,8 @@ class ElementHelper {
 
   /**
    * Waits for an element to exist given default timeout
-   * @param type: test-id or text
-   * @param id: name of the test-id or text to wait for
+   * @param type test-id or text
+   * @param id name of the test-id or text to wait for
    */
   async waitForElementExists(type: 'id' | 'text', id: string) {
     let requestedEl = '';
@@ -88,8 +88,8 @@ class ElementHelper {
 
   /**
    * Checks if an element exists given timeout sec
-   * @param id: the test-id
-   * @param timeout: sec
+   * @param id the test-id
+   * @param timeout sec
    * @return boolean
    */
   async isElementExisting(id: string, timeout: number) {
@@ -107,7 +107,7 @@ class ElementHelper {
 
   /**
    * Returns an element based on a test-id
-   * @param id: the test-id
+   * @param id the test-id
    */
   async getElement(id: string) {
     const reqId = `//*[@resource-id="${id}"]`;
@@ -116,7 +116,7 @@ class ElementHelper {
 
   /**
    * Returns an element based on a text string
-   * @param text: the text string
+   * @param text the text string
    */
   async getElementText(text: string) {
     const reqText = `//*[@text="${text}"]`;
