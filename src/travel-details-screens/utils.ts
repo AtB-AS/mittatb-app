@@ -12,12 +12,13 @@ import {EstimatedCall} from '@atb/api/types/departures';
 import {iterateWithNext} from '@atb/utils/array';
 import {differenceInSeconds, parseISO} from 'date-fns';
 import {
+  DestinationDisplay,
   Mode,
   TariffZone,
-  DestinationDisplay,
 } from '@atb/api/types/generated/journey_planner_v3_types';
 import {dictionary, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
+import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -244,14 +245,16 @@ export function isLegFlexibleTransport(leg: Leg): boolean {
 
 export const getPublicCodeFromLeg = (leg: Leg) => leg.line?.publicCode || '';
 
-export function getLatestBookingDateFromLeg(leg: Leg): Date {
-  const latestBookingTime = leg.bookingArrangements?.latestBookingTime; // e.g. '15:16:00'
-  const expectedStartTime = leg.expectedStartTime; // e.g. '2023-07-14T17:56:32+02:00'
+export function getLatestBookingDate(
+  bookingArrangements: BookingArrangementFragment,
+  expectedStartTime: string,
+): Date {
+  const latestBookingTime = bookingArrangements.latestBookingTime; // e.g. '15:16:00'
 
   const expectedStartDate = new Date(expectedStartTime);
   let latestBookingDate = new Date(expectedStartTime);
 
-  const bookWhen = leg.bookingArrangements?.bookWhen;
+  const bookWhen = bookingArrangements.bookWhen;
   if (bookWhen === 'timeOfTravelOnly') {
     return latestBookingDate; // note: 'timeOfTravelOnly' is deprecated
   } else if (
@@ -276,7 +279,7 @@ export function getLatestBookingDateFromLeg(leg: Leg): Date {
       }
     }
   } else if (bookWhen === undefined || bookWhen === null) {
-    const minimumBookingPeriod = leg.bookingArrangements?.minimumBookingPeriod;
+    const minimumBookingPeriod = bookingArrangements.minimumBookingPeriod;
     if (minimumBookingPeriod) {
       latestBookingDate.setSeconds(
         latestBookingDate.getSeconds() -
@@ -288,11 +291,15 @@ export function getLatestBookingDateFromLeg(leg: Leg): Date {
   return latestBookingDate;
 }
 
-export function getEarliestBookingDateFromLeg(
-  leg: Leg,
+export function getEarliestBookingDate(
+  bookingArrangements: BookingArrangementFragment,
+  expectedStartTime: string,
   flex_booking_number_of_days_available: number,
 ): Date {
-  const latestBookingDate = getLatestBookingDateFromLeg(leg);
+  const latestBookingDate = getLatestBookingDate(
+    bookingArrangements,
+    expectedStartTime,
+  );
 
   const earliestBookingDate = new Date(latestBookingDate);
   earliestBookingDate.setDate(
@@ -302,33 +309,43 @@ export function getEarliestBookingDateFromLeg(
   return earliestBookingDate;
 }
 
-export function getSecondsRemainingToLegBookingDeadline(
-  leg: Leg,
+export function getSecondsRemainingToBookingDeadline(
+  bookingArrangements: BookingArrangementFragment,
+  expectedStartTime: string,
   now: number,
 ): number {
-  const latestBookingDate = getLatestBookingDateFromLeg(leg);
+  const latestBookingDate = getLatestBookingDate(
+    bookingArrangements,
+    expectedStartTime,
+  );
   return secondsBetween(new Date(now), latestBookingDate);
 }
 
-export function getSecondsRemainingToLegBookingAvailable(
-  leg: Leg,
+export function getSecondsRemainingUntilBookingAvailable(
+  bookingArrangements: BookingArrangementFragment,
+  expectedStartTime: string,
   now: number,
   flex_booking_number_of_days_available: number,
 ): number {
-  const earliestBookingDate = getEarliestBookingDateFromLeg(
-    leg,
+  const earliestBookingDate = getEarliestBookingDate(
+    bookingArrangements,
+    expectedStartTime,
     flex_booking_number_of_days_available,
   );
   return secondsBetween(new Date(now), earliestBookingDate);
 }
 
 const secondsInOneHour = 60 * 60;
-export function getLegRequiresBookingUrgently(leg: Leg, now: number): boolean {
-  if (!leg.bookingArrangements) {
-    return false;
-  }
-  const secondsRemainingToDeadline = getSecondsRemainingToLegBookingDeadline(
-    leg,
+export function doesRequiresBookingUrgently(
+  bookingArrangements: BookingArrangementFragment | undefined,
+  expectedStartTime: string,
+  now: number,
+): boolean {
+  if (!bookingArrangements) return false;
+
+  const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
+    bookingArrangements,
+    expectedStartTime,
     now,
   );
   return (
@@ -337,18 +354,17 @@ export function getLegRequiresBookingUrgently(leg: Leg, now: number): boolean {
   );
 }
 
-export function getIsTooEarlyToBookLeg(
-  leg: Leg,
+export function getIsTooEarlyToBook(
+  bookingArrangements: BookingArrangementFragment,
+  expectedStartTime: string,
   now: number,
   flex_booking_number_of_days_available: number,
 ): boolean {
-  if (!leg.bookingArrangements) {
-    return false;
-  }
   const secondsInNumberOfDaysAvailable =
     flex_booking_number_of_days_available * 24 * secondsInOneHour;
-  const secondsRemainingToDeadline = getSecondsRemainingToLegBookingDeadline(
-    leg,
+  const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
+    bookingArrangements,
+    expectedStartTime,
     now,
   );
   return (
@@ -357,27 +373,28 @@ export function getIsTooEarlyToBookLeg(
   );
 }
 
-export function getIsTooLateToBookLeg(leg: Leg, now: number): boolean {
-  if (!leg.bookingArrangements) {
-    return false;
-  }
-  const secondsRemainingToDeadline = getSecondsRemainingToLegBookingDeadline(
-    leg,
+export function getIsTooLateToBook(
+  bookingArrangements: BookingArrangementFragment,
+  expectedStartTime: string,
+  now: number,
+): boolean {
+  const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
+    bookingArrangements,
+    expectedStartTime,
     now,
   );
   return secondsRemainingToDeadline < 0;
 }
 
-export function getLegBookingIsAvailableImminently(
-  leg: Leg,
+export function getBookingIsAvailableImminently(
+  bookingArrangements: BookingArrangementFragment,
+  expectedStartTime: string,
   now: number,
   flex_booking_number_of_days_available: number,
 ): boolean {
-  if (!leg.bookingArrangements) {
-    return false;
-  }
-  const secondsRemainingToAvailable = getSecondsRemainingToLegBookingAvailable(
-    leg,
+  const secondsRemainingToAvailable = getSecondsRemainingUntilBookingAvailable(
+    bookingArrangements,
+    expectedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
@@ -387,20 +404,27 @@ export function getLegBookingIsAvailableImminently(
   );
 }
 
-export function getLegBookingIsAvailable(
-  leg: Leg,
+export function getIsBookingAvailable(
+  bookingArrangements: BookingArrangementFragment | undefined,
+  expectedStartTime: string,
   now: number,
   flex_booking_number_of_days_available: number,
 ): boolean {
-  const requiresBooking = !!leg.bookingArrangements;
-  const isTooEarly = getIsTooEarlyToBookLeg(
-    leg,
+  if (!bookingArrangements) return false;
+
+  const isTooEarly = getIsTooEarlyToBook(
+    bookingArrangements,
+    expectedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
-  const isTooLate = getIsTooLateToBookLeg(leg, now);
+  const isTooLate = getIsTooLateToBook(
+    bookingArrangements,
+    expectedStartTime,
+    now,
+  );
 
-  return requiresBooking && !isTooEarly && !isTooLate;
+  return !isTooEarly && !isTooLate;
 }
 
 export const getTripPatternBookingsRequiredCount = (tp: TripPattern): number =>
@@ -410,8 +434,14 @@ export function getTripPatternRequiresBookingUrgently(
   tripPattern: TripPattern,
   now: number,
 ): boolean {
-  return tripPattern?.legs?.some((leg) =>
-    getLegRequiresBookingUrgently(leg, now),
+  return tripPattern?.legs?.some(
+    (leg) =>
+      leg.bookingArrangements &&
+      doesRequiresBookingUrgently(
+        leg.bookingArrangements,
+        leg.expectedStartTime,
+        now,
+      ),
   );
 }
 
@@ -419,7 +449,11 @@ export function getIsTooLateToBookTripPattern(
   tripPattern: TripPattern,
   now: number,
 ): boolean {
-  return tripPattern?.legs?.some((leg) => getIsTooLateToBookLeg(leg, now));
+  return tripPattern?.legs?.some(
+    (leg) =>
+      leg.bookingArrangements &&
+      getIsTooLateToBook(leg.bookingArrangements, leg.expectedStartTime, now),
+  );
 }
 
 export const getShouldShowLiveVehicle = (
