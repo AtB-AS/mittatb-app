@@ -1,7 +1,7 @@
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {TileWithButton} from '@atb/components/tile';
-import {StyleSheet} from '@atb/theme';
-import {InteractiveColor} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
 import {View, ViewStyle} from 'react-native';
 import {BenefitImageAsset} from './BenefitImage';
 import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
@@ -27,9 +27,11 @@ type BenefitCardProps = {
 export const BenefitTile = ({
   style,
   benefit,
+  interactiveColor,
   onNavigateToMap,
 }: BenefitCardProps): JSX.Element => {
   const styles = useStyles();
+  const {themeName} = useTheme();
   const {t, language} = useTranslation();
   const title = t(
     MobilityTexts.formFactor(benefit.formFactors[0] as FormFactor),
@@ -69,7 +71,7 @@ export const BenefitTile = ({
         accessibilityLabel={title + screenReaderPause + description}
         mode="compact"
         buttonText={t(MobilityTexts.showInMap)}
-        interactiveColor="interactive_2"
+        interactiveColor={interactiveColor}
         style={styles.contentContainer}
         onPress={onPress}
       >
@@ -81,7 +83,12 @@ export const BenefitTile = ({
             style: styles.image,
           }}
         />
-        <ThemeText type="body__tertiary--bold">{title}</ThemeText>
+        <ThemeText
+          type="body__tertiary--bold"
+          color={getInteractiveColor(themeName, interactiveColor).default}
+        >
+          {title}
+        </ThemeText>
         <ThemeText
           type="body__tertiary"
           color="secondary"
