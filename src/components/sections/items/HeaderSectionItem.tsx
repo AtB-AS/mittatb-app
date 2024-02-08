@@ -3,6 +3,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {useSectionItem} from '../use-section-item';
 import {SectionItemProps} from '../types';
+import {StyleSheet} from '@atb/theme';
 
 type Props = SectionItemProps<{
   text: string;
@@ -16,6 +17,7 @@ export function HeaderSectionItem({
   ...props
 }: Props) {
   const {contentContainer, topContainer} = useSectionItem(props);
+  const styles = useStyles();
 
   return (
     <View style={topContainer}>
@@ -27,7 +29,7 @@ export function HeaderSectionItem({
       </ThemeText>
       {subtitle && (
         <ThemeText
-          style={contentContainer}
+          style={[styles.subtitle, contentContainer]}
           color="secondary"
           type={mode === 'heading' ? 'body__secondary' : 'body__tertiary'}
         >
@@ -37,3 +39,9 @@ export function HeaderSectionItem({
     </View>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  subtitle: {
+    paddingTop: theme.spacings.small,
+  },
+}));
