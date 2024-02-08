@@ -143,7 +143,7 @@ const useStyles = (interactiveColor: InteractiveColor) =>
       marginBottom: theme.spacings.medium,
     },
     content: {
-      //marginBottom: theme.spacings.large, // re-add when new onboarding ready
+      marginBottom: theme.spacings.large,
       display: 'flex',
       flexDirection: 'row',
     },
