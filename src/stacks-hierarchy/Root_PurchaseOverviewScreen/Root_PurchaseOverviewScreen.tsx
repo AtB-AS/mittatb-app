@@ -268,7 +268,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           ) : (
             <View style={styles.messages}>
-              <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
+              {!isOnBehalfOfToggle && (
+                <PurchaseMessages
+                  requiresTokenOnMobile={requiresTokenOnMobile}
+                />
+              )}
               <GlobalMessage
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview
