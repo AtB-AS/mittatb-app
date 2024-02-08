@@ -6,7 +6,7 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
 import {useOperatorBenefitsForFareProduct} from '../use-operator-benefits-for-fare-product';
-import {BenefitTiles} from './BenefitTile';
+import {BenefitTiles} from './BenefitTiles';
 
 type Props = SectionItemProps<{
   preassignedFareProductId: string;
