@@ -1,5 +1,5 @@
-import AppHelper from '../utils/app.helper';
-import ElementHelper from '../utils/element.helper';
+import AppHelper from '../utils/app.helper.ts';
+import ElementHelper from '../utils/element.helper.ts';
 
 class DepartureOverviewPage {
   /**
@@ -14,7 +14,7 @@ class DepartureOverviewPage {
 
   /**
    * The single quay button
-   * @param quayIndex: index for the quay button
+   * @param quayIndex index for the quay button
    */
   async showQuay(quayIndex: number = 0) {
     const buttonId = `//*[@resource-id="quaySelectionButton"]`;
@@ -26,8 +26,8 @@ class DepartureOverviewPage {
 
   /**
    * Get the given departure for the given quay
-   * @param quayIndex: index for the quay, default: first
-   * @param departureIndex: index for the departure, default: first
+   * @param quayIndex index for the quay, default: first
+   * @param departureIndex index for the departure, default: first
    */
   async getDeparture(quayIndex: number = 0, departureIndex: number = 0) {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
@@ -37,8 +37,8 @@ class DepartureOverviewPage {
 
   /**
    * Get the given departure for the given quay
-   * @param quayIndex: index for the quay, default: first
-   * @param departureIndex: index for the departure, default: first
+   * @param quayIndex index for the quay, default: first
+   * @param departureIndex index for the departure, default: first
    */
   async openDeparture(quayIndex: number = 0, departureIndex: number = 0) {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
@@ -50,7 +50,7 @@ class DepartureOverviewPage {
 
   /**
    * Hide or expand (depending on the state) departures section for a given quay
-   * @param quayIndex: index for the quay, default: first
+   * @param quayIndex index for the quay, default: first
    */
   async hideExpandDeps(quayIndex: number = 0) {
     const hideId = `//*[@resource-id="quaySection${quayIndex}HideAction"]`;
@@ -60,8 +60,8 @@ class DepartureOverviewPage {
 
   /**
    * Return the public code
-   * @param quayIndex: index of the quay
-   * @param depIndex: index of the departure
+   * @param quayIndex index of the quay
+   * @param depIndex index of the departure
    */
   async getLinePublicCode(quayIndex: number = 0, depIndex: number = 0) {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
@@ -71,8 +71,8 @@ class DepartureOverviewPage {
 
   /**
    * Return the line name
-   * @param quayIndex: index of the quay
-   * @param depIndex: index of the departure
+   * @param quayIndex index of the quay
+   * @param depIndex index of the departure
    */
   async getLineName(quayIndex: number = 0, depIndex: number = 0) {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
@@ -82,7 +82,7 @@ class DepartureOverviewPage {
 
   /**
    * Get number of departures
-   * @param quayIndex: index of quay id overview or empty if quay-view
+   * @param quayIndex index of quay id overview or empty if quay-view
    */
   async getNumberOfDepartures(quayIndex: string = '') {
     const quayId = `//*[@resource-id="quaySection${quayIndex}"]`;
@@ -95,7 +95,7 @@ class DepartureOverviewPage {
 
   /**
    * Tap the 'show more departures' button for a quay
-   * @param: quayIndex: index for the quay
+   * @param quayIndex index for the quay
    */
   async showMoreDepartures(quayIndex: number = 0) {
     await ElementHelper.waitForElement('id', `quaySection${quayIndex}More`);

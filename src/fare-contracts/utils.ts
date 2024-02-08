@@ -1,4 +1,10 @@
-import {FareContract, FareContractState} from '@atb/ticketing';
+import {
+  FareContract,
+  FareContractState,
+  isCarnet,
+  isCarnetTravelRight,
+  isPreActivatedTravelRight,
+} from '@atb/ticketing';
 import {
   findReferenceDataById,
   getReferenceDataName,
@@ -28,7 +34,8 @@ export type ValidityStatus =
   | 'cancelled'
   | 'inactive'
   | 'rejected'
-  | 'approved';
+  | 'approved'
+  | 'sent';
 
 export function getRelativeValidity(
   now: number,
@@ -44,18 +51,24 @@ export function getRelativeValidity(
 export const userProfileCountAndName = (
   u: UserProfileWithCount,
   language: Language,
-) =>
-  `${u.count} ${getReferenceDataName(u, language)}`;
+) => `${u.count} ${getReferenceDataName(u, language)}`;
 
 export function getValidityStatus(
   now: number,
-  validFrom: number,
-  validTo: number,
-  state: FareContractState,
+  fc: FareContract,
+  isSentFareContract?: boolean,
 ): ValidityStatus {
-  if (state === FareContractState.Refunded) return 'refunded';
-  if (state === FareContractState.Cancelled) return 'cancelled';
-  return getRelativeValidity(now, validFrom, validTo);
+  if (fc.state === FareContractState.Refunded) return 'refunded';
+  if (fc.state === FareContractState.Cancelled) return 'cancelled';
+  if (isSentFareContract) return 'sent';
+  const firstTravelRight = fc.travelRights.filter(
+    isCarnet(fc) ? isCarnetTravelRight : isPreActivatedTravelRight,
+  )[0];
+  return getRelativeValidity(
+    now,
+    firstTravelRight.startDateTime.toMillis(),
+    firstTravelRight.endDateTime.toMillis(),
+  );
 }
 
 export const mapToUserProfilesWithCount = (
@@ -168,6 +181,8 @@ export const useTariffZoneSummary = (
 
 export const isValidFareContract = (status: ValidityStatus) =>
   status === 'valid';
+
+export const isSentFareContract = (status: ValidityStatus) => status === 'sent';
 
 export function tariffZonesSummary(
   fromTariffZone: TariffZone,

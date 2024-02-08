@@ -1,5 +1,5 @@
-import ElementHelper from '../utils/element.helper';
-import AppHelper from '../utils/app.helper';
+import ElementHelper from '../utils/element.helper.ts';
+import AppHelper from '../utils/app.helper.ts';
 
 class FrontPagePage {
   /**
@@ -40,6 +40,15 @@ class FrontPagePage {
   get serviceDisruptionsButton() {
     const reqId = `//*[@resource-id="navigateToServiceDisruptions"]`;
     return $(reqId);
+  }
+
+  /**
+   * Service disruptions link in bottom sheet
+   */
+  get serviceDisruptionsLink() {
+    const reqId = `//*[@resource-id="navigateToServiceDisruptions"]`;
+    const textId = `//*[@resource-id="buttonText"]`;
+    return $(reqId).$(textId).getText();
   }
 
   /**
@@ -111,7 +120,7 @@ class FrontPagePage {
     // Check for n sec
     const exists = await ElementHelper.isElementExisting(
       'globalMessageClose',
-      5,
+      3,
     );
     if (exists) {
       const noGMs = await $$(closeId).length;
@@ -130,14 +139,12 @@ class FrontPagePage {
     // Check for n sec
     const exists = await ElementHelper.isElementExisting(
       'closeAnnouncement',
-      2,
+      3,
     );
     if (exists) {
-      const noAnnouncements = await $$(closeId).length;
-      for (let i = 0; i < noAnnouncements; i++) {
-        await $$(closeId)[0].click();
-        await AppHelper.pause(100);
-      }
+      await $(closeId).click();
+      // Recursive in case of multiple (horizontal scroll)
+      await this.removeAnnouncements();
     }
   }
 }

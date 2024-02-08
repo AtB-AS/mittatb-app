@@ -23,6 +23,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 }: Props) => {
   const {
     reservations,
+    sentFareContracts,
     fareContracts,
     isRefreshingFareContracts,
     resubscribeFirestoreListeners,
@@ -41,7 +42,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
   const hasExpiredFareContracts =
     filterExpiredFareContracts(fareContracts, serverNow).length > 0;
 
-  const hasSentFareContracts = false; // TODO replace with proper checking
+  const hasSentFareContracts = sentFareContracts.length > 0;
 
   return (
     <View style={styles.container}>

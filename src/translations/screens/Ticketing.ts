@@ -286,6 +286,11 @@ const TicketingTexts = {
     rejected: _('Avvist billett', 'Rejected ticket', 'Avvist billett'),
     upcoming: _('Kommende billett', 'Upcoming ticket', 'Kommende billett'),
     approved: _('Godkjent billett', 'Approved ticket', 'Godkjent billett'),
+    sent: _(
+      'Billett sendt til andre',
+      'Ticket sent to someone else',
+      'Billett sendt til andre',
+    ),
   },
   ticketAssistantTile: {
     title: _(

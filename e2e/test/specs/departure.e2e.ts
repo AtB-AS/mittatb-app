@@ -1,11 +1,11 @@
-import OnboardingPage from '../pageobjects/onboarding.page';
-import AppHelper from '../utils/app.helper';
-import ElementHelper from '../utils/element.helper';
-import SearchPage from '../pageobjects/search.page';
-import NavigationHelper from '../utils/navigation.helper';
-import DepartureSearchPage from '../pageobjects/departure.search.page';
-import DepartureOverviewPage from '../pageobjects/departure.overview.page';
-import DepartureDetailsPage from '../pageobjects/departure.details.page';
+import OnboardingPage from '../pageobjects/onboarding.page.ts';
+import AppHelper from '../utils/app.helper.ts';
+import ElementHelper from '../utils/element.helper.ts';
+import SearchPage from '../pageobjects/search.page.ts';
+import NavigationHelper from '../utils/navigation.helper.ts';
+import DepartureSearchPage from '../pageobjects/departure.search.page.ts';
+import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
+import DepartureDetailsPage from '../pageobjects/departure.details.page.ts';
 
 // The same stop place is used if not overrun in test
 const stopPlace = 'Prinsens gate';
@@ -13,7 +13,7 @@ const stopPlace = 'Prinsens gate';
 describe('Departure', () => {
   before(async () => {
     await AppHelper.waitOnLoadingScreen();
-    await OnboardingPage.skipOnboarding('flashlight');
+    await OnboardingPage.skipOnboarding('departure');
     await AppHelper.pause(5000, true);
   });
   beforeEach(async () => {

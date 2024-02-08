@@ -21,12 +21,14 @@ export type InspectionSymbolProps = {
   preassignedFareProduct?: PreassignedFareProduct;
   fromTariffZone?: TariffZone;
   toTariffZone?: TariffZone;
+  sentTicket?: boolean;
 };
 
 export const InspectionSymbol = ({
   preassignedFareProduct,
   fromTariffZone,
   toTariffZone,
+  sentTicket,
 }: InspectionSymbolProps) => {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
@@ -56,7 +58,7 @@ export const InspectionSymbol = ({
     <View
       style={[styles.symbolContainer, {borderColor: themeColor.background}]}
     >
-      {deviceInspectionStatus === 'inspectable' ? (
+      {deviceInspectionStatus === 'inspectable' && !sentTicket ? (
         <InspectableContent
           preassignedFareProduct={preassignedFareProduct}
           fromTariffZone={fromTariffZone}

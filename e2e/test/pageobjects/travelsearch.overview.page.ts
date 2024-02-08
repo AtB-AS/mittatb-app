@@ -1,4 +1,4 @@
-import ElementHelper from '../utils/element.helper';
+import ElementHelper from '../utils/element.helper.ts';
 
 class TravelSearchOverviewPage {
   /**
@@ -28,7 +28,7 @@ class TravelSearchOverviewPage {
 
   /**
    * Confirm the travel search onboarding - if it exists
-   * @param timeoutValue: How long to search for the onboarding confirmation button
+   * @param timeoutValue How long to search for the onboarding confirmation button
    */
   async confirmOnboarding(timeoutValue: number = 10) {
     const id = `//*[@resource-id="filterOnboardingConfirmButton"]`;
@@ -44,7 +44,7 @@ class TravelSearchOverviewPage {
 
   /**
    * Return the number of legs for a journey
-   * @param tripIndex: index of the journey (default first trip)
+   * @param tripIndex index of the journey (default first trip)
    */
   async getNumberOfLegs(tripIndex: number = 0) {
     const tripId = `//*[@resource-id="tripSearchSearchResult${tripIndex}"]`;
@@ -65,7 +65,7 @@ class TravelSearchOverviewPage {
 
   /**
    * Returns the start time for travel result at index
-   * @param resultIndex: travel search result at index
+   * @param resultIndex travel search result at index
    */
   async getStartTime(resultIndex: number) {
     const searchResultId = `//*[@resource-id="tripSearchSearchResult${resultIndex}"]`;
@@ -79,7 +79,7 @@ class TravelSearchOverviewPage {
   }
   /**
    * Returns the end time for travel result at index
-   * @param resultIndex: travel search result at index
+   * @param resultIndex travel search result at index
    */
   async getEndTime(resultIndex: number) {
     const searchResultId = `//*[@resource-id="tripSearchSearchResult${resultIndex}"]`;
@@ -89,7 +89,7 @@ class TravelSearchOverviewPage {
   /**
    * Returns the given trip duration
    * NB! Must be in minutes
-   * @param resultIndex: travel search result at index
+   * @param resultIndex travel search result at index
    */
   async getTravelTime(resultIndex: number) {
     const searchResultId = `//*[@resource-id="tripSearchSearchResult${resultIndex}"]`;
