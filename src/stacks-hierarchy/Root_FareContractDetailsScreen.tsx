@@ -10,6 +10,7 @@ import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAnalytics} from '@atb/analytics';
 import {isCarnet} from '@atb/ticketing';
+import {MapFilterType} from '@atb/components/map';
 import {useAuthState} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
@@ -40,7 +41,15 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       navigation.navigate('Root_TicketInformationScreen', ticketInfoParams);
     }
   };
-
+  const onNavigateToMap = async (initialFilters: MapFilterType) => {
+    navigation.navigate('Root_TabNavigatorStack', {
+      screen: 'TabNav_MapStack',
+      params: {
+        screen: 'Map_RootScreen',
+        params: {initialFilters},
+      },
+    });
+  };
   const onReceiptNavigate = () =>
     fareContract &&
     navigation.push('Root_ReceiptScreen', {
@@ -81,6 +90,7 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
               now={serverNow}
               isSentFareContract={isSentFareContract}
               onReceiptNavigate={onReceiptNavigate}
+              onNavigateToMap={onNavigateToMap}
             />
           ))}
       </ScrollView>

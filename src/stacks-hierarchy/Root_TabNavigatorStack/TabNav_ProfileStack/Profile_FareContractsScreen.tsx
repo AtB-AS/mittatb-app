@@ -208,6 +208,7 @@ export const Profile_FareContractsScreen = () => {
             )}
             now={Date.now()}
             onReceiptNavigate={() => {}}
+            onNavigateToMap={() => {}}
           />
         ))}
       </ScrollView>

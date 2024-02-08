@@ -47,8 +47,10 @@ export const useStations: (
       getMapFilter().then((userFilter) => {
         setFilter(userFilter.mobility ?? {});
       });
+    } else {
+      setFilter(initialFilter);
     }
-  }, [getMapFilter, initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
+  }, [getMapFilter, initialFilter]);
 
   useEffect(() => {
     if (isCityBikesEnabled && isFocused && area) {

@@ -87,6 +87,7 @@ export const MobilityTexts = {
     'Included with the ticket',
     'Inkludert i billetten',
   ),
+  showInMap: _('Se i kart', 'Show in map', 'Sjå i kart'),
 };
 
 export const ScooterTexts = {

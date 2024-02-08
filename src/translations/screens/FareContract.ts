@@ -229,6 +229,11 @@ const FareContractTexts = {
   label: {
     travellers: _('Reisende', 'Travellers', 'Reisande'),
     zone: _('Sone', 'Zone', 'Sone'),
+    includedBenefits: _(
+      'Inkludert i billetten',
+      'Included in the ticket',
+      'Inkludert i billetten',
+    ),
   },
   warning: {
     errorWithToken: _(

@@ -36,14 +36,19 @@ import {
   PreassignedFareProduct,
 } from '@atb/configuration';
 import {Barcode} from './Barcode';
+import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
+import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
+import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 
 type Props = {
   fareContract: FareContract;
   preassignedFareProduct?: PreassignedFareProduct;
   now: number;
   onReceiptNavigate: () => void;
+  onNavigateToMap: (initialFilters: MapFilterType) => void;
+  hasActiveTravelCard?: boolean;
   isSentFareContract?: boolean;
 };
 
@@ -52,6 +57,7 @@ export const DetailsContent: React.FC<Props> = ({
   preassignedFareProduct,
   now,
   onReceiptNavigate,
+  onNavigateToMap,
   isSentFareContract = false,
 }) => {
   const {t} = useTranslation();
@@ -61,6 +67,9 @@ export const DetailsContent: React.FC<Props> = ({
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
+  const {benefits} = useOperatorBenefitsForFareProduct(
+    preassignedFareProduct?.id,
+  );
 
   const validityStatus = getValidityStatus(now, fc, isSentFareContract);
 
@@ -175,6 +184,12 @@ export const DetailsContent: React.FC<Props> = ({
               )}
             />
           </GenericSectionItem>
+        )}
+        {benefits && benefits.length > 0 && (
+          <MobilityBenefitsActionSectionItem
+            benefits={benefits}
+            onNavigateToMap={onNavigateToMap}
+          />
         )}
         <GenericSectionItem>
           <OrderDetails fareContract={fc} />
