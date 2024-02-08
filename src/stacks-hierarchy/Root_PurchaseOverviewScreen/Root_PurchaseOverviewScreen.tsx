@@ -20,7 +20,7 @@ import {FlexTicketDiscountInfo} from './components/FlexTicketDiscountInfo';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
 import {useAnalytics} from '@atb/analytics';
 import {FromToSelection} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FromToSelection';
-import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 import {useFocusRefs} from '@atb/utils/use-focus-refs';
 import {isAfter} from '@atb/utils/date';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -269,17 +269,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           ) : (
             <View style={styles.messages}>
               <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
-              <GlobalMessage
-                globalMessageContext={
-                  GlobalMessageContextEnum.appPurchaseOverview
-                }
-                textColor="background_0"
-                ruleVariables={{
-                  preassignedFareProductType: preassignedFareProduct.type,
-                  fromTariffZone: fromPlace.id,
-                  toTariffZone: toPlace.id,
-                }}
-              />
             </View>
           )}
 

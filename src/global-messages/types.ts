@@ -9,7 +9,6 @@ export enum GlobalMessageContextEnum {
   appAssistant = 'app-assistant',
   appDepartures = 'app-departures',
   appTicketing = 'app-ticketing',
-  appPurchaseOverview = 'app-purchase-overview',
   appFareContractDetails = 'app-fare-contract-details',
   appDepartureDetails = 'app-departure-details',
   appTripDetails = 'app-trip-details',
@@ -31,7 +30,7 @@ export type GlobalMessageRaw = {
   startDate?: FirebaseFirestoreTypes.Timestamp;
   endDate?: FirebaseFirestoreTypes.Timestamp;
   rules?: Rule[];
-}
+};
 
 export type GlobalMessageType = Omit<
   GlobalMessageRaw,
