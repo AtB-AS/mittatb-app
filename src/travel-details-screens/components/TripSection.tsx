@@ -42,7 +42,7 @@ import {
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
 import {TripRow} from './TripRow';
-import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
+import {BookingInfoBox} from './BookingInfoBox';
 
 import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
@@ -55,8 +55,8 @@ import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
-import {FlexibleTransportBookingDetails} from './FlexibleTransportBookingDetails';
+import {BookingOptions} from './BookingOptions';
+import {FlexibleTransportBookingDetailsSheet} from './FlexibleTransportBookingDetailsSheet';
 import {
   Mode,
   TransportSubmode,
@@ -133,11 +133,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
 
   const atbAuthorityId = 'ATB:Authority:2';
-  const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;
+  const shouldShowButtonForOpeningFlexBottomSheet =
+    isLegFlexibleTransport(leg) && leg.authority?.id === atbAuthorityId;
 
   const {open: openBottomSheet} = useBottomSheet();
   function openBookingDetails() {
-    openBottomSheet(() => <FlexibleTransportBookingDetails leg={leg} />);
+    openBottomSheet(() => <FlexibleTransportBookingDetailsSheet leg={leg} />);
   }
 
   const sectionOutput = (
@@ -242,20 +243,19 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         ))}
-        {isFlexible && (
+        {leg.bookingArrangements && (
           <TripRow
             rowLabel={
               <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
             }
             accessible={false}
           >
-            <FlexibleTransportMessageBox
+            <BookingInfoBox
               leg={leg}
-              publicCode={publicCode}
               now={now}
               showStatusIcon={false}
               onPressConfig={
-                legAuthorityIsAtB
+                shouldShowButtonForOpeningFlexBottomSheet
                   ? {
                       text: t(
                         TripDetailsTexts.flexibleTransport.needsBookingWhatIsThis(
@@ -269,10 +269,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {isFlexible && bookingIsAvailable && (
+        {leg.bookingArrangements && bookingIsAvailable && (
           <View style={style.flexBookingOptions}>
             <TripRow accessible={false}>
-              <FlexibleTransportBookingOptions leg={leg} />
+              <BookingOptions bookingArrangements={leg.bookingArrangements} />
             </TripRow>
           </View>
         )}

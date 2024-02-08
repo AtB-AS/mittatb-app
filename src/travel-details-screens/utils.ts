@@ -302,10 +302,6 @@ export function getEarliestBookingDateFromLeg(
   return earliestBookingDate;
 }
 
-export function getLegRequiresBooking(leg: Leg): boolean {
-  return isLegFlexibleTransport(leg);
-}
-
 export function getSecondsRemainingToLegBookingDeadline(
   leg: Leg,
   now: number,
@@ -328,7 +324,7 @@ export function getSecondsRemainingToLegBookingAvailable(
 
 const secondsInOneHour = 60 * 60;
 export function getLegRequiresBookingUrgently(leg: Leg, now: number): boolean {
-  if (!getLegRequiresBooking(leg)) {
+  if (!leg.bookingArrangements) {
     return false;
   }
   const secondsRemainingToDeadline = getSecondsRemainingToLegBookingDeadline(
@@ -346,7 +342,7 @@ export function getIsTooEarlyToBookLeg(
   now: number,
   flex_booking_number_of_days_available: number,
 ): boolean {
-  if (!getLegRequiresBooking(leg)) {
+  if (!leg.bookingArrangements) {
     return false;
   }
   const secondsInNumberOfDaysAvailable =
@@ -362,7 +358,7 @@ export function getIsTooEarlyToBookLeg(
 }
 
 export function getIsTooLateToBookLeg(leg: Leg, now: number): boolean {
-  if (!getLegRequiresBooking(leg)) {
+  if (!leg.bookingArrangements) {
     return false;
   }
   const secondsRemainingToDeadline = getSecondsRemainingToLegBookingDeadline(
@@ -377,7 +373,7 @@ export function getLegBookingIsAvailableImminently(
   now: number,
   flex_booking_number_of_days_available: number,
 ): boolean {
-  if (!getLegRequiresBooking(leg)) {
+  if (!leg.bookingArrangements) {
     return false;
   }
   const secondsRemainingToAvailable = getSecondsRemainingToLegBookingAvailable(
@@ -396,7 +392,7 @@ export function getLegBookingIsAvailable(
   now: number,
   flex_booking_number_of_days_available: number,
 ): boolean {
-  const requiresBooking = getLegRequiresBooking(leg);
+  const requiresBooking = !!leg.bookingArrangements;
   const isTooEarly = getIsTooEarlyToBookLeg(
     leg,
     now,
@@ -407,11 +403,8 @@ export function getLegBookingIsAvailable(
   return requiresBooking && !isTooEarly && !isTooLate;
 }
 
-export function getTripPatternBookingsRequiredCount(
-  tripPattern: TripPattern,
-): number {
-  return tripPattern?.legs?.filter((leg) => getLegRequiresBooking(leg)).length;
-}
+export const getTripPatternBookingsRequiredCount = (tp: TripPattern): number =>
+  tp?.legs?.filter((leg) => !!leg.bookingArrangements).length;
 
 export function getTripPatternRequiresBookingUrgently(
   tripPattern: TripPattern,
