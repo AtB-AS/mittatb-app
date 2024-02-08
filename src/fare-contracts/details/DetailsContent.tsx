@@ -40,6 +40,7 @@ import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
+import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 
 type Props = {
   fareContract: FareContract;
@@ -64,6 +65,9 @@ export const DetailsContent: React.FC<Props> = ({
   const firstTravelRight = fc.travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
+  const {benefits} = useOperatorBenefitsForFareProduct(
+    preassignedFareProduct?.id,
+  );
 
   // Checks if the FareContract is purchased by a different ID,
   // then if yes, return the purchaser ID, otherwise return blank.
@@ -174,9 +178,9 @@ export const DetailsContent: React.FC<Props> = ({
             />
           </GenericSectionItem>
         )}
-        {preassignedFareProduct && (
+        {benefits && benefits.length > 0 && (
           <MobilityBenefitsActionSectionItem
-            preassignedFareProductId={preassignedFareProduct.id}
+            benefits={benefits}
             onNavigateToMap={onNavigateToMap}
           />
         )}

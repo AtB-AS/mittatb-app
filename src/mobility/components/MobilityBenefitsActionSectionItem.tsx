@@ -5,26 +5,22 @@ import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {View} from 'react-native';
-import {useOperatorBenefitsForFareProduct} from '../use-operator-benefits-for-fare-product';
+import {FareProductBenefitType} from '../use-operator-benefits-for-fare-product';
 import {BenefitTiles} from './BenefitTiles';
 
 type Props = SectionItemProps<{
-  preassignedFareProductId: string;
+  benefits: FareProductBenefitType[];
   onNavigateToMap: (initialFilters: MapFilterType) => void;
 }>;
 
 export const MobilityBenefitsActionSectionItem = ({
-  preassignedFareProductId,
   onNavigateToMap,
+  benefits,
   ...props
 }: Props) => {
   const styles = useStyles();
   const {topContainer} = useSectionItem(props);
   const {t} = useTranslation();
-  const {benefits} = useOperatorBenefitsForFareProduct(
-    preassignedFareProductId,
-  );
-  if (!benefits || benefits.length < 1) return null;
   return (
     <View style={[topContainer, styles.benefitSection]}>
       <ThemeText type="body__secondary" color="secondary">
