@@ -127,13 +127,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
   const {flex_booking_number_of_days_available} = useRemoteConfig();
   const bookingIsAvailable = getIsBookingAvailable(
     leg.bookingArrangements,
-    leg.expectedStartTime,
+    leg.aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
   const requiresBookingUrgently = doesRequiresBookingUrgently(
     leg.bookingArrangements,
-    leg.expectedStartTime,
+    leg.aimedStartTime,
     now,
   );
 
@@ -257,7 +257,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
           >
             <BookingInfoBox
               bookingArrangements={leg.bookingArrangements}
-              expectedStartTime={leg.expectedStartTime}
+              aimedStartTime={leg.aimedStartTime}
               publicCode={publicCode}
               now={now}
               showStatusIcon={false}

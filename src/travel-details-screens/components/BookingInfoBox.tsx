@@ -24,7 +24,7 @@ import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/boo
 
 type Props = {
   bookingArrangements?: BookingArrangementFragment;
-  expectedStartTime: string;
+  aimedStartTime: string;
   publicCode: string;
   now: number;
   showStatusIcon: boolean;
@@ -33,7 +33,7 @@ type Props = {
 
 export const BookingInfoBox = ({
   bookingArrangements,
-  expectedStartTime,
+  aimedStartTime,
   publicCode,
   now,
   showStatusIcon,
@@ -47,25 +47,25 @@ export const BookingInfoBox = ({
 
   const requiresBookingUrgently = doesRequiresBookingUrgently(
     bookingArrangements,
-    expectedStartTime,
+    aimedStartTime,
     now,
   );
   const bookingIsAvailableImminently = getBookingIsAvailableImminently(
     bookingArrangements,
-    expectedStartTime,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
   const isTooEarly = getIsTooEarlyToBook(
     bookingArrangements,
-    expectedStartTime,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
 
   const formattedTimeForLegBooking = getFormattedTimeForBooking(
     bookingArrangements,
-    expectedStartTime,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
     t,
