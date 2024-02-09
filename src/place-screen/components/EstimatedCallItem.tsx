@@ -89,12 +89,17 @@ export const EstimatedCallItem = memo(
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
-        accessible={true}
-        accessibilityLabel={a11yLabel}
-        accessibilityHint={a11yHint}
+        accessible={false}
       >
         <View style={styles.container} testID={testID}>
-          <View style={styles.estimatedCallItem}>
+          <View
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={a11yLabel}
+            accessibilityHint={a11yHint}
+            style={styles.lineAndDepartureTime}
+            importantForAccessibility="yes"
+          >
             <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
               <ThemeText
@@ -109,15 +114,16 @@ export const EstimatedCallItem = memo(
               </ThemeText>
             </View>
             {mode !== 'Favourite' && <DepartureTime departure={departure} />}
-            {mode !== 'Map' && (
-              <FavouriteDepartureToggle
-                existingFavorite={existingFavorite}
-                onMarkFavourite={() =>
-                  onPressFavorite(departure, existingFavorite)
-                }
-              />
-            )}
           </View>
+
+          {mode !== 'Map' && (
+            <FavouriteDepartureToggle
+              existingFavorite={existingFavorite}
+              onMarkFavourite={() =>
+                onPressFavorite(departure, existingFavorite)
+              }
+            />
+          )}
         </View>
       </GenericClickableSectionItem>
     );
@@ -310,10 +316,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-  },
-  estimatedCallItem: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: theme.spacings.medium,
+  },
+  lineAndDepartureTime: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
   },
   transportInfo: {
