@@ -94,7 +94,7 @@ export const BookingInfoBox = ({
 
 function getFormattedTimeForBooking(
   bookingArrangements: BookingArrangementFragment,
-  expectedStartTime: string,
+  aimedStartTime: string,
   now: number,
   flex_booking_number_of_days_available: number,
   t: TranslateFunction,
@@ -102,18 +102,18 @@ function getFormattedTimeForBooking(
 ): string {
   const requiresBookingUrgently = doesRequiresBookingUrgently(
     bookingArrangements,
-    expectedStartTime,
+    aimedStartTime,
     now,
   );
   const bookingIsAvailableImminently = getBookingIsAvailableImminently(
     bookingArrangements,
-    expectedStartTime,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
   const isTooEarly = getIsTooEarlyToBook(
     bookingArrangements,
-    expectedStartTime,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
@@ -122,13 +122,13 @@ function getFormattedTimeForBooking(
     const secondsRemainingToAvailable =
       getSecondsRemainingUntilBookingAvailable(
         bookingArrangements,
-        expectedStartTime,
+        aimedStartTime,
         now,
         flex_booking_number_of_days_available,
       );
     const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
       bookingArrangements,
-      expectedStartTime,
+      aimedStartTime,
       now,
     );
 
