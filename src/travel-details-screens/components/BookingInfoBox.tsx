@@ -139,12 +139,12 @@ function getFormattedTimeForBooking(
   } else {
     const earliestBookingDate = getEarliestBookingDate(
       bookingArrangements,
-      expectedStartTime,
+      aimedStartTime,
       flex_booking_number_of_days_available,
     );
     const latestBookingDate = getLatestBookingDate(
       bookingArrangements,
-      expectedStartTime,
+      aimedStartTime,
     );
     const nextBookingStateChangeDate = isTooEarly
       ? earliestBookingDate
