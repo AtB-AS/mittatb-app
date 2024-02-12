@@ -17,7 +17,7 @@ import {SearchTime} from '@atb/journey-date-picker';
 import {MemoizedResultItem} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/ResultItem';
 import {TripPattern} from '@atb/api/types/trips';
 import {TripPatternWithKey} from '@atb/travel-details-screens/types';
-import {getIsTooLateToBookTripPattern} from '@atb/travel-details-screens/utils';
+import {getIsTooLateToBookFlexLine} from '@atb/travel-details-screens/utils';
 import {useNow} from '@atb/utils/use-now';
 
 import {EmptyState} from '@atb/components/empty-state';
@@ -108,7 +108,7 @@ export const Results: React.FC<Props> = ({
   return (
     <View style={styles.container} testID="tripSearchContentView">
       {tripPatterns
-        .filter((tp) => !getIsTooLateToBookTripPattern(tp, now))
+        .filter((tp) => !getIsTooLateToBookFlexLine(tp, now))
         .map((tripPattern, i) => (
           <Fragment key={tripPattern.key}>
             <DayLabel

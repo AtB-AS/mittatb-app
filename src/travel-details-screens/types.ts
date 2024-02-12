@@ -10,3 +10,6 @@ export type ServiceJourneyDeparture = {
 };
 
 export type TripPatternWithKey = TripPattern & {key: string};
+
+export type BookingStatus = 'none' | 'early' | 'bookable' | 'late';
+export type TripPatternBookingStatus = Exclude<BookingStatus, 'early'>;
