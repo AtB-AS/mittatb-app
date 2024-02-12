@@ -76,6 +76,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
                 notification: unreadCount
                   ? {
                       color: 'valid',
+                      backgroundColor: 'background_accent_3',
                     }
                   : undefined,
               }}
