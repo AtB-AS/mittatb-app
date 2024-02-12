@@ -10,27 +10,31 @@ import {
   secondsToMinutesLong,
 } from '@atb/utils/date';
 
-import {Leg} from '@atb/api/types/trips';
 import {
-  getEarliestBookingDateFromLeg,
-  getIsTooEarlyToBookLeg,
-  getLatestBookingDateFromLeg,
-  getLegBookingIsAvailableImminently,
-  getLegRequiresBookingUrgently, getPublicCodeFromLeg,
-  getSecondsRemainingToLegBookingAvailable,
-  getSecondsRemainingToLegBookingDeadline,
+  getEarliestBookingDate,
+  getIsTooEarlyToBook,
+  getLatestBookingDate,
+  getBookingIsAvailableImminently,
+  doesRequiresBookingUrgently,
+  getSecondsRemainingUntilBookingAvailable,
+  getSecondsRemainingToBookingDeadline,
 } from '../utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
 type Props = {
-  leg: Leg;
+  bookingArrangements?: BookingArrangementFragment;
+  aimedStartTime: string;
+  publicCode: string;
   now: number;
   showStatusIcon: boolean;
   onPressConfig?: OnPressConfig;
 };
 
 export const BookingInfoBox = ({
-  leg,
+  bookingArrangements,
+  aimedStartTime,
+  publicCode,
   now,
   showStatusIcon,
   onPressConfig,
@@ -38,27 +42,35 @@ export const BookingInfoBox = ({
   const {t, language} = useTranslation();
 
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
-  const bookingIsAvailableImminently = getLegBookingIsAvailableImminently(
-    leg,
+
+  if (!bookingArrangements) return null;
+
+  const requiresBookingUrgently = doesRequiresBookingUrgently(
+    bookingArrangements,
+    aimedStartTime,
+    now,
+  );
+  const bookingIsAvailableImminently = getBookingIsAvailableImminently(
+    bookingArrangements,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
-  const isTooEarly = getIsTooEarlyToBookLeg(
-    leg,
+  const isTooEarly = getIsTooEarlyToBook(
+    bookingArrangements,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
 
-  const formattedTimeForLegBooking = getFormattedTimeForLegBooking(
-    leg,
+  const formattedTimeForLegBooking = getFormattedTimeForBooking(
+    bookingArrangements,
+    aimedStartTime,
     now,
     flex_booking_number_of_days_available,
     t,
     language,
   );
-
-  const publicCode = getPublicCodeFromLeg(leg);
 
   return (
     <MessageInfoBox
@@ -80,58 +92,69 @@ export const BookingInfoBox = ({
   );
 };
 
-function getFormattedTimeForLegBooking(
-  leg: Leg,
+function getFormattedTimeForBooking(
+  bookingArrangements: BookingArrangementFragment,
+  aimedStartTime: string,
   now: number,
   flex_booking_number_of_days_available: number,
   t: TranslateFunction,
   language: Language,
 ): string {
-  if (!leg.bookingArrangements) {
-    return '';
-  } else {
-    const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
-    const bookingIsAvailableImminently = getLegBookingIsAvailableImminently(
-      leg,
-      now,
-      flex_booking_number_of_days_available,
-    );
-    const isTooEarly = getIsTooEarlyToBookLeg(
-      leg,
-      now,
-      flex_booking_number_of_days_available,
-    );
+  const requiresBookingUrgently = doesRequiresBookingUrgently(
+    bookingArrangements,
+    aimedStartTime,
+    now,
+  );
+  const bookingIsAvailableImminently = getBookingIsAvailableImminently(
+    bookingArrangements,
+    aimedStartTime,
+    now,
+    flex_booking_number_of_days_available,
+  );
+  const isTooEarly = getIsTooEarlyToBook(
+    bookingArrangements,
+    aimedStartTime,
+    now,
+    flex_booking_number_of_days_available,
+  );
 
-    if (requiresBookingUrgently || bookingIsAvailableImminently) {
-      const secondsRemainingToAvailable =
-        getSecondsRemainingToLegBookingAvailable(
-          leg,
-          now,
-          flex_booking_number_of_days_available,
-        );
-      const secondsRemainingToDeadline =
-        getSecondsRemainingToLegBookingDeadline(leg, now);
-
-      return secondsToMinutesLong(
-        isTooEarly ? secondsRemainingToAvailable : secondsRemainingToDeadline,
-        language,
-      );
-    } else {
-      const earliestBookingDate = getEarliestBookingDateFromLeg(
-        leg,
+  if (requiresBookingUrgently || bookingIsAvailableImminently) {
+    const secondsRemainingToAvailable =
+      getSecondsRemainingUntilBookingAvailable(
+        bookingArrangements,
+        aimedStartTime,
+        now,
         flex_booking_number_of_days_available,
       );
-      const latestBookingDate = getLatestBookingDateFromLeg(leg);
-      const nextBookingStateChangeDate = isTooEarly
-        ? earliestBookingDate
-        : latestBookingDate;
+    const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
+      bookingArrangements,
+      aimedStartTime,
+      now,
+    );
 
-      return formatToShortDateTimeWithRelativeDayNames(
-        new Date(now),
-        nextBookingStateChangeDate,
-        t,
-        language,
-      );
-    }
+    return secondsToMinutesLong(
+      isTooEarly ? secondsRemainingToAvailable : secondsRemainingToDeadline,
+      language,
+    );
+  } else {
+    const earliestBookingDate = getEarliestBookingDate(
+      bookingArrangements,
+      aimedStartTime,
+      flex_booking_number_of_days_available,
+    );
+    const latestBookingDate = getLatestBookingDate(
+      bookingArrangements,
+      aimedStartTime,
+    );
+    const nextBookingStateChangeDate = isTooEarly
+      ? earliestBookingDate
+      : latestBookingDate;
+
+    return formatToShortDateTimeWithRelativeDayNames(
+      new Date(now),
+      nextBookingStateChangeDate,
+      t,
+      language,
+    );
   }
 }

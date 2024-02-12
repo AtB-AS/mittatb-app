@@ -17,7 +17,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {BookingOptions} from './BookingOptions';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {getLegBookingIsAvailable, getPublicCodeFromLeg} from '../utils';
+import {getIsBookingAvailable, getPublicCodeFromLeg} from '../utils';
 import {BookingInfoBox} from './BookingInfoBox';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
@@ -45,11 +45,14 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(30000);
-  const bookingIsAvailable = getLegBookingIsAvailable(
-    leg,
-    now,
-    flex_booking_number_of_days_available,
-  );
+  const bookingIsAvailable =
+    leg.bookingArrangements &&
+    getIsBookingAvailable(
+      leg.bookingArrangements,
+      leg.aimedStartTime,
+      now,
+      flex_booking_number_of_days_available,
+    );
 
   const {bottom: safeAreaBottom} = useSafeAreaInsets();
   const marginBottom =
@@ -68,7 +71,13 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
       <View style={[style.scrollViewContainer, {marginBottom}]}>
         <ScrollView contentContainerStyle={{padding: theme.spacings.xLarge}}>
           <View style={style.messageBoxContainer}>
-            <BookingInfoBox leg={leg} now={now} showStatusIcon={true} />
+            <BookingInfoBox
+              bookingArrangements={leg.bookingArrangements}
+              aimedStartTime={leg.aimedStartTime}
+              publicCode={publicCode}
+              now={now}
+              showStatusIcon={true}
+            />
           </View>
 
           {!isSmallScreen && (

@@ -1,14 +1,14 @@
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {TripDetailsTexts, useTranslation} from '@atb/translations';
-import {Leg} from '@atb/api/types/trips';
 import {Linking, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
+import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
 type Props = {
-  bookingArrangements: Leg['bookingArrangements'];
+  bookingArrangements?: BookingArrangementFragment;
 };
 
 export const BookingOptions = ({bookingArrangements}: Props) => {

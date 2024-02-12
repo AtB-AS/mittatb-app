@@ -33,8 +33,8 @@ import {
   getPublicCodeFromLeg,
   getTimeRepresentationType,
   isLegFlexibleTransport,
-  getLegBookingIsAvailable,
-  getLegRequiresBookingUrgently,
+  getIsBookingAvailable,
+  doesRequiresBookingUrgently,
   significantWaitTime,
   significantWalkTime,
   TimeValues,
@@ -125,12 +125,17 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const now = useNow(30000);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const bookingIsAvailable = getLegBookingIsAvailable(
-    leg,
+  const bookingIsAvailable = getIsBookingAvailable(
+    leg.bookingArrangements,
+    leg.aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
-  const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
+  const requiresBookingUrgently = doesRequiresBookingUrgently(
+    leg.bookingArrangements,
+    leg.aimedStartTime,
+    now,
+  );
 
   const atbAuthorityId = 'ATB:Authority:2';
   const shouldShowButtonForOpeningFlexBottomSheet =
@@ -251,7 +256,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
             accessible={false}
           >
             <BookingInfoBox
-              leg={leg}
+              bookingArrangements={leg.bookingArrangements}
+              aimedStartTime={leg.aimedStartTime}
+              publicCode={publicCode}
               now={now}
               showStatusIcon={false}
               onPressConfig={
