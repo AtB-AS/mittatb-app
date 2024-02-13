@@ -28,16 +28,22 @@ import {TFunc} from '@leile/lobo-t';
 import React from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
-import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
 import {Realtime as RealtimeLight} from '@atb/assets/svg/color/icons/status/light';
 import {
+  bookingStatusToMsgType,
   filterNotices,
   formatDestinationDisplay,
+  getBookingStatus,
 } from '@atb/travel-details-screens/utils';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {ThemeIcon} from '@atb/components/theme-icon';
+import {
+  getMsgTypeForMostCriticalSituationOrNotice,
+  toMostCriticalStatus,
+} from '@atb/situations/utils';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
@@ -226,13 +232,7 @@ function DepartureTimeItem({
   const {t, language} = useTranslation();
   const {themeName} = useTheme();
 
-  const notices = filterNotices(departure.notices || []);
-
-  const rightIcon = getSvgForMostCriticalSituationOrNotice(
-    departure.situations,
-    notices,
-    departure.cancellation,
-  );
+  const rightIcon = getSvgForDeparture(departure);
   const leftIcon =
     !departure.cancellation && departure.realtime
       ? themeName === 'dark'
@@ -331,3 +331,23 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
     paddingLeft: theme.spacings.medium,
   },
 }));
+
+export const getSvgForDeparture = (departure: DepartureTime) => {
+  const msgTypeForSituationOrNotice =
+    getMsgTypeForMostCriticalSituationOrNotice(
+      [],
+      filterNotices(departure.notices || []),
+      departure.cancellation,
+    );
+
+  const bookingStatus = getBookingStatus(
+    departure.bookingArrangements,
+    departure.aimedTime,
+  );
+  const msgTypeForBooking = bookingStatusToMsgType(bookingStatus);
+
+  const msgType = [msgTypeForSituationOrNotice, msgTypeForBooking].reduce(
+    toMostCriticalStatus,
+  );
+  return msgType && messageTypeToIcon(msgType, true);
+};

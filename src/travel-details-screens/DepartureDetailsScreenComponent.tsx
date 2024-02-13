@@ -33,8 +33,8 @@ import {TripLegDecoration} from './components/TripLegDecoration';
 import {TripRow} from './components/TripRow';
 import {ServiceJourneyDeparture} from './types';
 import {
-  useDepartureData,
   EstimatedCallWithMetadata,
+  useDepartureData,
 } from './use-departure-data';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {PaginatedDetailsHeader} from '@atb/travel-details-screens/components/PaginatedDetailsHeader';
@@ -48,7 +48,13 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {canSellTicketsForSubMode} from '@atb/operator-config';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {getShouldShowLiveVehicle} from '@atb/travel-details-screens/utils';
+import {
+  getBookingStatus,
+  getShouldShowLiveVehicle,
+} from '@atb/travel-details-screens/utils';
+import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
+import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
+import {bookingStatusToIcon} from '@atb/situations/utils';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -240,6 +246,7 @@ export const DepartureDetailsScreenComponent = ({
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
           {situations.map((situation) => (
             <SituationMessageBox
+              key={situation.id}
               situation={situation}
               style={styles.messageBox}
             />
@@ -433,12 +440,24 @@ function EstimatedCallRow({
 
   const {group, isStartOfGroup, isEndOfGroup, isStartOfServiceJourney} =
     call.metadata;
+  const isFirstOfTrip = group === 'trip' && isStartOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
   const iconColor = useTransportationColor(
     group === 'trip' ? mode : undefined,
     subMode,
   );
+
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  const bookingStatus = getBookingStatus(
+    call.bookingArrangements,
+    call.aimedDepartureTime,
+    Date.now(),
+    flex_booking_number_of_days_available,
+  );
+
+  const bookingIcon = bookingStatusToIcon(bookingStatus);
+
   return (
     <View style={[styles.place, isStartOfGroup && styles.startPlace]}>
       <TripLegDecoration
@@ -496,6 +515,23 @@ function EstimatedCallRow({
           <SituationMessageBox noStatusIcon={true} situation={situation} />
         </TripRow>
       ))}
+
+      {isFirstOfTrip && bookingStatus !== 'none' && (
+        <TripRow rowLabel={bookingIcon && <ThemeIcon svg={bookingIcon} />}>
+          <BookingInfoBox
+            bookingArrangements={call.bookingArrangements}
+            aimedStartTime={call.aimedDepartureTime}
+            now={Date.now()}
+            showStatusIcon={false}
+          />
+        </TripRow>
+      )}
+
+      {isFirstOfTrip && !call.cancellation && bookingStatus === 'bookable' && (
+        <TripRow>
+          <BookingOptions bookingArrangements={call.bookingArrangements} />
+        </TripRow>
+      )}
 
       {collapseButton}
     </View>
