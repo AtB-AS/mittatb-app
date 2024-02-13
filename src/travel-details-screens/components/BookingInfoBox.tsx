@@ -1,31 +1,19 @@
-import {
-  Language,
-  TranslateFunction,
-  TripDetailsTexts,
-  useTranslation,
-} from '@atb/translations';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
 import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
-import {
-  formatToShortDateTimeWithRelativeDayNames,
-  secondsToMinutesLong,
-} from '@atb/utils/date';
+import {formatToShortDateTimeWithRelativeDayNames} from '@atb/utils/date';
 
 import {
+  getBookingStatus,
   getEarliestBookingDate,
-  getIsTooEarlyToBook,
   getLatestBookingDate,
-  getBookingIsAvailableImminently,
-  doesRequiresBookingUrgently,
-  getSecondsRemainingUntilBookingAvailable,
-  getSecondsRemainingToBookingDeadline,
 } from '../utils';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
+import {BookingArrangement} from '@atb/api/types/generated/journey_planner_v3_types';
 
 type Props = {
   bookingArrangements?: BookingArrangementFragment;
   aimedStartTime: string;
-  publicCode: string;
   now: number;
   showStatusIcon: boolean;
   onPressConfig?: OnPressConfig;
@@ -34,127 +22,81 @@ type Props = {
 export const BookingInfoBox = ({
   bookingArrangements,
   aimedStartTime,
-  publicCode,
   now,
   showStatusIcon,
   onPressConfig,
 }: Props) => {
-  const {t, language} = useTranslation();
-
-  const {flex_booking_number_of_days_available} = useRemoteConfig();
-
-  if (!bookingArrangements) return null;
-
-  const requiresBookingUrgently = doesRequiresBookingUrgently(
+  const bookingMessage = useBookingMessage(
     bookingArrangements,
     aimedStartTime,
     now,
   );
-  const bookingIsAvailableImminently = getBookingIsAvailableImminently(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-    flex_booking_number_of_days_available,
-  );
-  const isTooEarly = getIsTooEarlyToBook(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-    flex_booking_number_of_days_available,
-  );
 
-  const formattedTimeForLegBooking = getFormattedTimeForBooking(
+  if (!bookingMessage) return null;
+
+  const bookingStatus = getBookingStatus(
     bookingArrangements,
     aimedStartTime,
     now,
-    flex_booking_number_of_days_available,
-    t,
-    language,
   );
 
   return (
     <MessageInfoBox
-      type={requiresBookingUrgently ? 'warning' : 'info'}
+      type={bookingStatus === 'late' ? 'error' : 'warning'}
       noStatusIcon={!showStatusIcon}
-      message={t(
-        TripDetailsTexts.flexibleTransport?.[
-          isTooEarly
-            ? 'needsBookingButIsTooEarly'
-            : 'needsBookingAndIsAvailable'
-        ](
-          publicCode,
-          formattedTimeForLegBooking,
-          isTooEarly ? bookingIsAvailableImminently : requiresBookingUrgently,
-        ),
-      )}
+      message={bookingMessage}
       onPressConfig={onPressConfig}
     />
   );
 };
 
-function getFormattedTimeForBooking(
-  bookingArrangements: BookingArrangementFragment,
+const useBookingMessage = (
+  bookingArrangements: BookingArrangement | undefined,
   aimedStartTime: string,
   now: number,
-  flex_booking_number_of_days_available: number,
-  t: TranslateFunction,
-  language: Language,
-): string {
-  const requiresBookingUrgently = doesRequiresBookingUrgently(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-  );
-  const bookingIsAvailableImminently = getBookingIsAvailableImminently(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-    flex_booking_number_of_days_available,
-  );
-  const isTooEarly = getIsTooEarlyToBook(
+): string | undefined => {
+  const {t, language} = useTranslation();
+  const {flex_booking_number_of_days_available} = useRemoteConfig();
+  if (!bookingArrangements) return undefined;
+
+  const status = getBookingStatus(
     bookingArrangements,
     aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
 
-  if (requiresBookingUrgently || bookingIsAvailableImminently) {
-    const secondsRemainingToAvailable =
-      getSecondsRemainingUntilBookingAvailable(
+  const formatDate = (date: Date) =>
+    formatToShortDateTimeWithRelativeDayNames(new Date(now), date, t, language);
+
+  switch (status) {
+    case 'early': {
+      const earliestBookingDate = getEarliestBookingDate(
         bookingArrangements,
         aimedStartTime,
-        now,
         flex_booking_number_of_days_available,
       );
-    const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
-      bookingArrangements,
-      aimedStartTime,
-      now,
-    );
-
-    return secondsToMinutesLong(
-      isTooEarly ? secondsRemainingToAvailable : secondsRemainingToDeadline,
-      language,
-    );
-  } else {
-    const earliestBookingDate = getEarliestBookingDate(
-      bookingArrangements,
-      aimedStartTime,
-      flex_booking_number_of_days_available,
-    );
-    const latestBookingDate = getLatestBookingDate(
-      bookingArrangements,
-      aimedStartTime,
-    );
-    const nextBookingStateChangeDate = isTooEarly
-      ? earliestBookingDate
-      : latestBookingDate;
-
-    return formatToShortDateTimeWithRelativeDayNames(
-      new Date(now),
-      nextBookingStateChangeDate,
-      t,
-      language,
-    );
+      return t(
+        TripDetailsTexts.flexibleTransport.needsBookingButIsTooEarly(
+          formatDate(earliestBookingDate),
+        ),
+      );
+    }
+    case 'bookable': {
+      const latestBookingDate = getLatestBookingDate(
+        bookingArrangements,
+        aimedStartTime,
+      );
+      return t(
+        TripDetailsTexts.flexibleTransport.needsBookingAndIsAvailable(
+          formatDate(latestBookingDate),
+        ),
+      );
+    }
+    case 'late': {
+      return t(TripDetailsTexts.flexibleTransport.needsBookingButIsTooLate);
+    }
+    case 'none':
+      return undefined;
   }
-}
+};

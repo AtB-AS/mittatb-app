@@ -1,5 +1,5 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {Info, Warning} from '@atb/assets/svg/color/icons/status';
+import {Info, Warning, Error} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import {
   AccessibleText,
@@ -33,8 +33,7 @@ import {
   getPublicCodeFromLeg,
   getTimeRepresentationType,
   isLegFlexibleTransport,
-  getIsBookingAvailable,
-  doesRequiresBookingUrgently,
+  getBookingStatus,
   significantWaitTime,
   significantWalkTime,
   TimeValues,
@@ -125,16 +124,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const now = useNow(30000);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const bookingIsAvailable = getIsBookingAvailable(
+  const bookingStatus = getBookingStatus(
     leg.bookingArrangements,
     leg.aimedStartTime,
     now,
     flex_booking_number_of_days_available,
-  );
-  const requiresBookingUrgently = doesRequiresBookingUrgently(
-    leg.bookingArrangements,
-    leg.aimedStartTime,
-    now,
   );
 
   const atbAuthorityId = 'ATB:Authority:2';
@@ -248,17 +242,16 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         ))}
-        {leg.bookingArrangements && (
+        {bookingStatus !== 'none' && (
           <TripRow
             rowLabel={
-              <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
+              <ThemeIcon svg={bookingStatus === 'late' ? Error : Warning} />
             }
             accessible={false}
           >
             <BookingInfoBox
               bookingArrangements={leg.bookingArrangements}
               aimedStartTime={leg.aimedStartTime}
-              publicCode={publicCode}
               now={now}
               showStatusIcon={false}
               onPressConfig={
@@ -276,7 +269,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {leg.bookingArrangements && bookingIsAvailable && (
+        {bookingStatus === 'bookable' && (
           <View style={style.flexBookingOptions}>
             <TripRow accessible={false}>
               <BookingOptions bookingArrangements={leg.bookingArrangements} />

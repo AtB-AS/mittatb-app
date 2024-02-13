@@ -19,6 +19,7 @@ import {
 import {dictionary, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
+import {BookingStatus, TripPatternBookingStatus} from './types';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -321,138 +322,93 @@ export function getSecondsRemainingToBookingDeadline(
   return secondsBetween(new Date(now), latestBookingDate);
 }
 
-export function getSecondsRemainingUntilBookingAvailable(
-  bookingArrangements: BookingArrangementFragment,
-  aimedStartTime: string,
-  now: number,
-  flex_booking_number_of_days_available: number,
-): number {
-  const earliestBookingDate = getEarliestBookingDate(
-    bookingArrangements,
-    aimedStartTime,
-    flex_booking_number_of_days_available,
-  );
-  return secondsBetween(new Date(now), earliestBookingDate);
-}
-
 const secondsInOneHour = 60 * 60;
-export function doesRequiresBookingUrgently(
+
+/**
+ * Get bookings status based on the given booking arrangements and aimed start
+ * time. Will return one of these values:
+ * - 'none': When there is no booking arrangements
+ * - 'early': It is too early to book the trip
+ * - 'bookable': The trip may be booked
+ * - 'late': The booking deadline has passed
+ * '´
+ * @param bookingArrangements The booking arrangements for the leg or estimated
+ * call
+ * @param aimedStartTime the aimed start time of the leg or estimated call
+ * @param now The now value to use, if not given the Date.now() is used
+ * @param flex_booking_number_of_days_available Number of days before latest
+ * booking time the user may book, if not given then the returned status can
+ * never be 'early'.
+ */
+export const getBookingStatus = (
   bookingArrangements: BookingArrangementFragment | undefined,
   aimedStartTime: string,
-  now: number,
-): boolean {
-  if (!bookingArrangements) return false;
+  now: number = Date.now(),
+  flex_booking_number_of_days_available?: number,
+): BookingStatus => {
+  if (!bookingArrangements) return 'none';
 
-  const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
+  const secondsToDeadline = getSecondsRemainingToBookingDeadline(
     bookingArrangements,
     aimedStartTime,
     now,
   );
-  return (
-    secondsRemainingToDeadline >= 0 &&
-    secondsRemainingToDeadline < secondsInOneHour
-  );
+
+  if (secondsToDeadline < 0) {
+    return 'late';
+  }
+
+  if (flex_booking_number_of_days_available) {
+    const secondsBeforehandItCanBeBooked =
+      flex_booking_number_of_days_available * 24 * secondsInOneHour;
+    if (secondsToDeadline > secondsBeforehandItCanBeBooked) {
+      return 'early';
+    }
+  }
+
+  return 'bookable';
+};
+
+/**
+ * Return a booking status for the whole trip pattern, based on the booking
+ * status of each leg. Returns as of now either 'none', 'bookable' or 'late'.
+ * @param tripPattern
+ * @param now
+ */
+export function getTripPatternBookingStatus(
+  tripPattern: TripPattern,
+  now?: number,
+): TripPatternBookingStatus {
+  return tripPattern?.legs?.reduce<TripPatternBookingStatus>((status, leg) => {
+    if (status === 'late') return status;
+
+    const currentLegStatus = getBookingStatus(
+      leg.bookingArrangements,
+      leg.aimedStartTime,
+      now,
+    );
+
+    switch (currentLegStatus) {
+      case 'none':
+        return status;
+      case 'late':
+        return 'late';
+      case 'early':
+      case 'bookable':
+        return 'bookable';
+    }
+  }, 'none');
 }
 
-export function getIsTooEarlyToBook(
-  bookingArrangements: BookingArrangementFragment,
-  aimedStartTime: string,
-  now: number,
-  flex_booking_number_of_days_available: number,
-): boolean {
-  const secondsInNumberOfDaysAvailable =
-    flex_booking_number_of_days_available * 24 * secondsInOneHour;
-  const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-  );
-  return (
-    secondsRemainingToDeadline >= secondsInOneHour &&
-    secondsRemainingToDeadline > secondsInNumberOfDaysAvailable
-  );
-}
-
-export function getIsTooLateToBook(
-  bookingArrangements: BookingArrangementFragment,
-  aimedStartTime: string,
-  now: number,
-): boolean {
-  const secondsRemainingToDeadline = getSecondsRemainingToBookingDeadline(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-  );
-  return secondsRemainingToDeadline < 0;
-}
-
-export function getBookingIsAvailableImminently(
-  bookingArrangements: BookingArrangementFragment,
-  aimedStartTime: string,
-  now: number,
-  flex_booking_number_of_days_available: number,
-): boolean {
-  const secondsRemainingToAvailable = getSecondsRemainingUntilBookingAvailable(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-    flex_booking_number_of_days_available,
-  );
-  return (
-    secondsRemainingToAvailable > 0 &&
-    secondsRemainingToAvailable < secondsInOneHour
-  );
-}
-
-export function getIsBookingAvailable(
-  bookingArrangements: BookingArrangementFragment | undefined,
-  aimedStartTime: string,
-  now: number,
-  flex_booking_number_of_days_available: number,
-): boolean {
-  if (!bookingArrangements) return false;
-
-  const isTooEarly = getIsTooEarlyToBook(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-    flex_booking_number_of_days_available,
-  );
-  const isTooLate = getIsTooLateToBook(
-    bookingArrangements,
-    aimedStartTime,
-    now,
-  );
-
-  return !isTooEarly && !isTooLate;
-}
-
-export const getTripPatternBookingsRequiredCount = (tp: TripPattern): number =>
-  tp?.legs?.filter((leg) => !!leg.bookingArrangements).length;
-
-export function getTripPatternRequiresBookingUrgently(
+export function getIsTooLateToBookFlexLine(
   tripPattern: TripPattern,
   now: number,
 ): boolean {
   return tripPattern?.legs?.some(
     (leg) =>
-      leg.bookingArrangements &&
-      doesRequiresBookingUrgently(
-        leg.bookingArrangements,
-        leg.aimedStartTime,
-        now,
-      ),
-  );
-}
-
-export function getIsTooLateToBookTripPattern(
-  tripPattern: TripPattern,
-  now: number,
-): boolean {
-  return tripPattern?.legs?.some(
-    (leg) =>
-      leg.bookingArrangements &&
-      getIsTooLateToBook(leg.bookingArrangements, leg.aimedStartTime, now),
+      leg.line?.flexibleLineType &&
+      getBookingStatus(leg.bookingArrangements, leg.aimedStartTime, now) ===
+        'late',
   );
 }
 
