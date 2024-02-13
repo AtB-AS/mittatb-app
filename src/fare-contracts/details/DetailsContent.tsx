@@ -113,6 +113,9 @@ export const DetailsContent: React.FC<Props> = ({
       globalMessageRuleVariables,
     ).length;
 
+    const shouldShowBundlingInfo =
+      benefits && benefits.length > 0 && validityStatus === 'valid';
+
     return (
       <Section withBottomPadding>
         <GenericSectionItem>
@@ -185,7 +188,7 @@ export const DetailsContent: React.FC<Props> = ({
             />
           </GenericSectionItem>
         )}
-        {benefits && benefits.length > 0 && (
+        {shouldShowBundlingInfo && (
           <MobilityBenefitsActionSectionItem
             benefits={benefits}
             onNavigateToMap={onNavigateToMap}
