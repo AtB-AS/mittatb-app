@@ -74,6 +74,7 @@ export const BenefitTile = ({
         interactiveColor={interactiveColor}
         style={styles.contentContainer}
         onPress={onPress}
+        accessibilityHint={t(MobilityTexts.showInMapA11yLabel)}
       >
         <BenefitImageAsset
           formFactor={benefit.formFactors[0] as FormFactor}
