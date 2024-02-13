@@ -47,9 +47,8 @@ export {default as UserProfileSettingsTexts} from './screens/subscreens/UserProf
 export {default as LoginTexts} from './screens/subscreens/Login';
 export {default as dictionary} from './dictionary';
 export {default as JourneyDatePickerTexts} from './screens/subscreens/JourneyDatePicker';
-export {default as DepartureDatePickerTexts} from './screens/subscreens/DepartureDatePicker';
 export {default as TravelDateTexts} from './screens/subscreens/TravelDate';
-export {default as InformationTexts} from './screens/subscreens/Information';
+export {InformationTexts} from './screens/subscreens/Information';
 export {default as ContactSheetTexts} from './screens/subscreens/ContactSheet';
 export {default as FeedbackTexts} from './screens/Feedback';
 export {default as TravelTokenTexts} from './screens/subscreens/TravelToken';
@@ -63,7 +62,6 @@ export {default as TicketAssistantTexts} from './screens/TicketAssistant';
 export {default as ShareTravelHabitsTexts} from './screens/ShareTravelHabits';
 export {default as ActiveTokenRequiredTexts} from './screens/subscreens/ActiveTokenRequired';
 export {default as LoadingScreenTexts} from './screens/LoadingScreen';
-export {default as InfoTagTexts} from './components/InfoTag';
 export {default as DeparturesTexts} from './screens/Departures';
 export {default as GeoLocationTexts} from './GeoLocation';
 export {default as PhoneInputTexts} from './components/PhoneInput';

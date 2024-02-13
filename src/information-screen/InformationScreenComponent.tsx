@@ -58,6 +58,7 @@ type InformationProps = {
   leftButton?: LeftButtonProps;
 };
 
+// can be removed?
 export const InformationScreenComponent: React.FC<InformationProps> = ({
   title,
   informations,

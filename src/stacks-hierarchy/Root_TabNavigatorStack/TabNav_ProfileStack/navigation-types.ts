@@ -29,10 +29,6 @@ export type ProfileStackParams = StackParams<{
   Profile_DesignSystemScreen: undefined;
   Profile_FareContractsScreen: undefined;
   Profile_DebugInfoScreen: undefined;
-  Profile_TicketingInformationScreen: undefined;
-  Profile_TermsInformationScreen: undefined;
-  Profile_TicketInspectionInformationScreen: undefined;
-  Profile_GenericWebsiteInformationScreen: undefined;
   Profile_NearbyStopPlacesScreen: NearbyStopPlacesScreenParams;
   Profile_PlaceScreen: PlaceScreenParams;
 }>;
