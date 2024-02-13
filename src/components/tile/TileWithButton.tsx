@@ -43,6 +43,7 @@ export function TileWithButton({
       onPress={onPress}
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
+      accessibilityRole="button"
       testID={testID}
     >
       <View

@@ -88,6 +88,11 @@ export const MobilityTexts = {
     'Inkludert i billetten',
   ),
   showInMap: _('Se i kart', 'Show in map', 'Sjå i kart'),
+  showInMapA11yLabel: _(
+    'Aktiver for å se i kart',
+    'Activate to show in map',
+    'Aktiver for å sjå i kart',
+  ),
 };
 
 export const ScooterTexts = {
