@@ -19,7 +19,6 @@ import {
   getShouldShowLiveVehicle,
   hasShortWaitTime,
   hasShortWaitTimeAndNotGuaranteedCorrespondence,
-  isLegFlexibleTransport,
   withinZoneIds,
 } from '@atb/travel-details-screens/utils';
 import {
@@ -28,7 +27,6 @@ import {
 } from '@atb/travel-details-map-screen';
 import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {MapFilterType, useRealtimeMapEnabled} from '@atb/components/map';
-import {AnyMode} from '@atb/components/icon-box';
 import {Divider} from '@atb/components/divider';
 import {
   TranslateFunction,
@@ -86,13 +84,7 @@ export const Trip: React.FC<TripProps> = ({
     .filter(isDefined);
   const {vehiclePositions} = useGetServiceJourneyVehicles(liveVehicleIds);
 
-  const tripPatternLegs = tripPattern?.legs.map((leg) => {
-    const mode: AnyMode = isLegFlexibleTransport(leg) ? 'flex' : leg.mode;
-    return {
-      ...leg,
-      mode,
-    };
-  });
+  const tripPatternLegs = tripPattern?.legs;
 
   const mapFilter: MapFilterType = {
     mobility: {

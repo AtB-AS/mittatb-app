@@ -14,6 +14,7 @@ import {getTransportationColor} from '@atb/theme/colors';
 export type TransportationIconBoxProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
+  isFlexible?: boolean;
   lineNumber?: string;
   size?: keyof Theme['icon']['size'];
   style?: StyleProp<ViewStyle>;
@@ -24,6 +25,7 @@ export type TransportationIconBoxProps = {
 export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   mode,
   subMode,
+  isFlexible = false,
   lineNumber,
   size = 'normal',
   style,
@@ -32,7 +34,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
 }) => {
   const {t} = useTranslation();
   const {theme, themeName} = useTheme();
-  const themeColor = useThemeColorForTransportMode(mode, subMode);
+  const themeColor = useThemeColorForTransportMode(mode, subMode, isFlexible);
   const transportationColor = getTransportationColor(themeName, themeColor);
   const backgroundColor = disabled
     ? theme.text.colors.disabled

@@ -30,6 +30,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
   const lineColorInput = useTransportationColor(
     line?.faded ? undefined : line?.travelType,
     line?.subMode,
+    line.isFlexible,
     undefined,
     'secondary',
   );
@@ -55,7 +56,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
             lineColor,
             ...customStyle,
           }}
-         />
+        />
       </MapboxGL.ShapeSource>
 
       <MapboxGL.ShapeSource
@@ -71,7 +72,7 @@ function MapLineItem({line, index}: MapLineItemProps) {
             circleRadius: 7.5,
             circleColor: lineColor,
           }}
-         />
+        />
       </MapboxGL.ShapeSource>
     </View>
   );

@@ -11,6 +11,7 @@ import {
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   formatDestinationDisplay,
+  getNoticesForEstimatedCall,
   bookingStatusToMsgType,
   getBookingStatus,
 } from '@atb/travel-details-screens/utils';
@@ -25,7 +26,6 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
 import {
   formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
@@ -271,6 +271,7 @@ function LineChip({
   const transportTextColor = useTransportationColor(
     transportMode,
     transportSubmode,
+    false,
     'text',
   );
 

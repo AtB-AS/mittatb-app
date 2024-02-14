@@ -32,7 +32,7 @@ import {
   getNoticesForLeg,
   getPublicCodeFromLeg,
   getTimeRepresentationType,
-  isLegFlexibleTransport,
+  isLineFlexibleTransport,
   getBookingStatus,
   significantWaitTime,
   significantWalkTime,
@@ -97,11 +97,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
-  const isFlexible = isLegFlexibleTransport(leg);
+  const isFlexible = isLineFlexibleTransport(leg.line);
   const timesAreApproximations = isFlexible;
   const legColor = useTransportationColor(
-    isFlexible ? 'flex' : leg.mode,
+    leg.mode,
     leg.line?.transportSubmode,
+    isFlexible,
   );
   const iconColor = useTransportationColor();
 
@@ -133,7 +134,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const atbAuthorityId = 'ATB:Authority:2';
   const shouldShowButtonForOpeningFlexBottomSheet =
-    isLegFlexibleTransport(leg) && leg.authority?.id === atbAuthorityId;
+    isLineFlexibleTransport(leg.line) && leg.authority?.id === atbAuthorityId;
 
   const {open: openBottomSheet} = useBottomSheet();
   function openBookingDetails() {
@@ -206,8 +207,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
             }
             rowLabel={
               <TransportationIconBox
-                mode={isFlexible ? 'flex' : leg.mode}
+                mode={leg.mode}
                 subMode={leg.line?.transportSubmode}
+                isFlexible={isFlexible}
               />
             }
           >

@@ -4,7 +4,7 @@ import {
   minutesBetween,
   secondsBetween,
 } from '@atb/utils/date';
-import {Leg, TripPattern} from '@atb/api/types/trips';
+import {Leg, Line, TripPattern} from '@atb/api/types/trips';
 import {onlyUniquesBasedOnField} from '@atb/utils/only-uniques';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {ServiceJourneyWithEstCallsFragment} from '@atb/api/types/generated/fragments/service-journeys';
@@ -141,7 +141,7 @@ export function getLineName(t: TranslateFunction, leg: Leg) {
     leg.line?.name ??
     '';
   return leg.line?.publicCode
-    ? isLegFlexibleTransport(leg)
+    ? isLineFlexibleTransport(leg.line)
       ? leg.line.publicCode
       : `${leg.line.publicCode} ${name}`
     : name;
@@ -241,9 +241,9 @@ export function withinZoneIds(legs: Leg[]): string[] {
   return containingZones;
 }
 
-export function isLegFlexibleTransport(leg: Leg): boolean {
-  return !!leg.line?.flexibleLineType;
-}
+export const isLineFlexibleTransport = (
+  line?: Pick<Line, 'flexibleLineType'>,
+) => !!line?.flexibleLineType;
 
 export const getPublicCodeFromLeg = (leg: Leg) => leg.line?.publicCode || '';
 

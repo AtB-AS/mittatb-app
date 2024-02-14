@@ -26,8 +26,6 @@ const TRANSPORT_SUB_MODES_BOAT: AnySubMode[] = [
 
 export function getTransportModeSvg(mode?: AnyMode, subMode?: AnySubMode) {
   switch (mode) {
-    case 'flex':
-      return {svg: Bus, name: 'Flexible'};
     case 'bus':
     case 'coach':
       return {svg: Bus, name: 'Bus'};
