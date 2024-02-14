@@ -47,7 +47,6 @@ export {default as LoginTexts} from './screens/subscreens/Login';
 export {default as dictionary} from './dictionary';
 export {default as JourneyDatePickerTexts} from './screens/subscreens/JourneyDatePicker';
 export {default as TravelDateTexts} from './screens/subscreens/TravelDate';
-export {default as InformationTexts} from './screens/subscreens/Information';
 export {default as ContactSheetTexts} from './screens/subscreens/ContactSheet';
 export {default as FeedbackTexts} from './screens/Feedback';
 export {default as TravelTokenTexts} from './screens/subscreens/TravelToken';
