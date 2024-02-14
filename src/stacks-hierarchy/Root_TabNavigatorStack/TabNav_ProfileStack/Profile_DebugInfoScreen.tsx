@@ -60,7 +60,7 @@ import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
 import {useOnboardingSections} from '@atb/utils/use-onboarding-sections';
-import {useServerTimeEnabledDebugOverride} from '@atb/time/use-server-time-enabled';
+import {useServerTimeEnabledDebugOverride} from '@atb/time';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);

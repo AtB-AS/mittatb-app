@@ -1,7 +1,7 @@
 import {useInterval} from '@atb/utils/use-interval';
 import {clock, start} from '@entur-private/abt-time-react-native-lib';
 import React, {createContext, useContext, useEffect, useState} from 'react';
-import {useServerTimeEnabled} from '@atb/time/use-server-time-enabled';
+import {useServerTimeEnabled} from '@atb/time';
 
 type TimeContextState = {
   /**
