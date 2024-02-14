@@ -35,6 +35,7 @@ export const Root_ConfirmationScreen = ({
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      navigation.reset({index: 0, routes: [{name: destinationScreen.screen}]});
       navigation.navigate(destinationScreen.screen, destinationScreen.params);
     }, delayBeforeCompleted ?? DEFAULT_DELAY_BEFORE_COMPLETED);
     return () => clearTimeout(timer);
