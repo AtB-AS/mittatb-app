@@ -79,11 +79,11 @@ export const App = () => {
       <StorybookContextProvider>
         <ErrorBoundary type="full-screen">
           <AppContextProvider>
-            <TimeContextProvider>
-              <PreferencesContextProvider>
-                <LocaleContextProvider>
-                  <AuthContextProvider>
-                    <RemoteConfigContextProvider>
+            <PreferencesContextProvider>
+              <LocaleContextProvider>
+                <AuthContextProvider>
+                  <RemoteConfigContextProvider>
+                    <TimeContextProvider>
                       <AnalyticsContextProvider>
                         <AccessibilityContextProvider>
                           <ThemeContextProvider>
@@ -123,11 +123,11 @@ export const App = () => {
                           </ThemeContextProvider>
                         </AccessibilityContextProvider>
                       </AnalyticsContextProvider>
-                    </RemoteConfigContextProvider>
-                  </AuthContextProvider>
-                </LocaleContextProvider>
-              </PreferencesContextProvider>
-            </TimeContextProvider>
+                    </TimeContextProvider>
+                  </RemoteConfigContextProvider>
+                </AuthContextProvider>
+              </LocaleContextProvider>
+            </PreferencesContextProvider>
           </AppContextProvider>
         </ErrorBoundary>
       </StorybookContextProvider>

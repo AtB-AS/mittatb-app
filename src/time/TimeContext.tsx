@@ -1,6 +1,7 @@
 import {useInterval} from '@atb/utils/use-interval';
 import {clock, start} from '@entur-private/abt-time-react-native-lib';
 import React, {createContext, useContext, useEffect, useState} from 'react';
+import {useServerTimeEnabled} from '@atb/time/use-server-time-enabled';
 
 type TimeContextState = {
   /**
@@ -24,24 +25,34 @@ export const getServerNow = () => Date.now() - serverDiff;
 export const TimeContextProvider: React.FC = ({children}) => {
   const [clockIsRunning, setClockIsRunning] = useState(false);
   const [serverNow, setServerNow] = useState(Date.now());
+  const [serverTimeEnabled] = useServerTimeEnabled();
 
   useEffect(() => {
-    start({
-      autoStart: true,
-      maxDelayInMilliSeconds: 1000,
-      parallelizationCount: 3,
-      host: 'time.google.com',
-    }).then(() => setClockIsRunning(true));
-  }, []);
+    if (serverTimeEnabled) {
+      start({
+        autoStart: true,
+        maxDelayInMilliSeconds: 1000,
+        parallelizationCount: 3,
+        host: 'time.google.com',
+      }).then(() => setClockIsRunning(true));
+    }
+  }, [serverTimeEnabled]);
+
   useInterval(
-    () =>
-      clock.currentTimeMillis().then((ms) => {
-        serverDiff = Date.now() - ms;
-        setServerNow(ms);
-      }),
-    [],
+    () => {
+      if (serverTimeEnabled && clockIsRunning) {
+        clock.currentTimeMillis().then((ms) => {
+          serverDiff = Date.now() - ms;
+          setServerNow(ms);
+        });
+      } else {
+        serverDiff = 0;
+        setServerNow(Date.now());
+      }
+    },
+    [clockIsRunning, serverTimeEnabled],
     2500,
-    !clockIsRunning,
+    false,
     true,
   );
 

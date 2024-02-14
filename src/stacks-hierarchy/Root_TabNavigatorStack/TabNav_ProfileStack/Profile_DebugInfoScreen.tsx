@@ -60,6 +60,7 @@ import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
 import {useOnboardingSections} from '@atb/utils/use-onboarding-sections';
+import {useServerTimeEnabledDebugOverride} from '@atb/time/use-server-time-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -124,6 +125,7 @@ export const Profile_DebugInfoScreen = () => {
   const ticketInformationEnabledDebugOverride =
     useTicketInformationEnabledDebugOverride();
   const posthogEnabledDebugOverride = usePosthogEnabledDebugOverride();
+  const serverTimeEnabledDebugOverride = useServerTimeEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -398,6 +400,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable PostHog"
               override={posthogEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable server time"
+              override={serverTimeEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>
