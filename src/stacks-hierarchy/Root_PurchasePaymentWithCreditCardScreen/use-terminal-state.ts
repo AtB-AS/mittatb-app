@@ -25,6 +25,7 @@ export function useTerminalState(
   recurringPaymentId: number | undefined,
   saveRecurringCard: boolean,
   destinationAccountId: string | undefined,
+  paymentRedirectUrl: string | undefined,
   cancelTerminal: () => void,
 ) {
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +61,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
+              paymentRedirectUrl: paymentRedirectUrl,
               customerAccountId: targetCustomerId!,
             })
           : await reserveOffers({
@@ -70,6 +72,7 @@ export function useTerminalState(
                 retry: true,
               },
               scaExemption: true,
+              paymentRedirectUrl: paymentRedirectUrl,
               customerAccountId: targetCustomerId!,
             });
         setReservation(response);

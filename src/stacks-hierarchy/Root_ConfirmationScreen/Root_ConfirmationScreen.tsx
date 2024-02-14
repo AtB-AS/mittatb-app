@@ -6,10 +6,16 @@ import ConfirmSvg from '@atb/assets/svg/mono-icons/actions/Confirm';
 import {useEffect} from 'react';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {InteractiveColor, StaticColor} from '@atb/theme/colors';
+import {useTranslation} from '@atb/translations';
+import {ConfirmationTexts} from '@atb/translations/screens/subscreens/PurchaseConfirmation';
+import {ConfirmationScreenResolver} from '@atb/stacks-hierarchy/Root_ConfirmationScreen';
 
 type Props = RootStackScreenProps<'Root_ConfirmationScreen'>;
 
-const DEFAULT_DELAY_BEFORE_COMPLETED = 5000;
+const DEFAULT_DELAY_BEFORE_COMPLETED = 3000;
+const DEFAULT_NEXT_SCREEN: keyof typeof ConfirmationScreenResolver =
+  'myTickets';
+const DEFAULT_MESSAGE: keyof typeof ConfirmationTexts = 'ticketHasBeenSent';
 const CIRCLE_SIZE = 80;
 const themeColor: StaticColor = 'background_accent_0';
 const circleColor: InteractiveColor = 'interactive_2';
@@ -22,14 +28,17 @@ export const Root_ConfirmationScreen = ({
 }: Props) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {t} = useTranslation();
+
+  const destinationScreen =
+    ConfirmationScreenResolver[nextScreen ?? DEFAULT_NEXT_SCREEN];
 
   useEffect(() => {
-    const timer = setTimeout(
-      () => navigation.navigate(nextScreen.screen, nextScreen.params),
-      delayBeforeCompleted ?? DEFAULT_DELAY_BEFORE_COMPLETED,
-    );
+    const timer = setTimeout(() => {
+      navigation.navigate(destinationScreen.screen, destinationScreen.params);
+    }, delayBeforeCompleted ?? DEFAULT_DELAY_BEFORE_COMPLETED);
     return () => clearTimeout(timer);
-  }, [delayBeforeCompleted, navigation, nextScreen]);
+  }, [delayBeforeCompleted, navigation, destinationScreen]);
 
   return (
     <View style={styles.container}>
@@ -38,10 +47,14 @@ export const Root_ConfirmationScreen = ({
         color={themeColor}
         style={styles.message}
       >
-        {message}
+        {t(ConfirmationTexts[message ?? DEFAULT_MESSAGE])}
       </ThemeText>
       <View style={styles.circle}>
-        <ThemeIcon size="large" svg={ConfirmSvg} colorType={theme.interactive[circleColor].outline} />
+        <ThemeIcon
+          size="large"
+          svg={ConfirmSvg}
+          colorType={theme.interactive[circleColor].outline}
+        />
       </View>
     </View>
   );

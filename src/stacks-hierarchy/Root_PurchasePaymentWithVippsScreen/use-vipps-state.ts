@@ -66,7 +66,7 @@ const initialState: VippsReducerState = {
 export function useVippsState(
   offers: ReserveOffer[],
   destinationAccountId: string | undefined,
-  dismiss: () => void,
+  paymentRedirectUrl: string | undefined,
 ) {
   const [{state, error, reservation}, dispatch] = useReducer(
     vippsReducer,
@@ -103,6 +103,7 @@ export function useVippsState(
             retry: true,
           },
           scaExemption: false,
+          paymentRedirectUrl: paymentRedirectUrl,
           customerAccountId: targetCustomerId!,
         });
         dispatch({type: 'OFFER_RESERVED', reservation: response});
@@ -147,7 +148,6 @@ export function useVippsState(
 
   useEffect(() => {
     if (state === 'offer-reserved' && reservation) {
-      dismiss();
       openVipps();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

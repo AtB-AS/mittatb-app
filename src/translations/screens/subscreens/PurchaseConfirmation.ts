@@ -1,6 +1,17 @@
 import {translation as _} from '../../commons';
 import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 
+/**
+ * Texts to be shown at the confirmation screen
+ */
+export const ConfirmationTexts = {
+  ticketHasBeenSent: _(
+    'Billetten har blitt sendt!',
+    'The ticket has been sent!',
+    'Billetten har vorte sendt!',
+  ),
+};
+
 const PurchaseConfirmationTexts = {
   errorMessageBox: {
     title: _(
@@ -61,7 +72,7 @@ const PurchaseConfirmationTexts = {
         `Billettvarigheit ${validTime} frå oppstart`,
       ),
   },
-  sendingTo: (phoneNumber: string) => 
+  sendingTo: (phoneNumber: string) =>
     _(
       `Sendes til ${phoneNumber}`,
       `Sending to ${phoneNumber}`,

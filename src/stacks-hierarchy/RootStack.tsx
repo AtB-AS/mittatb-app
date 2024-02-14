@@ -45,7 +45,7 @@ import {Root_LoginOptionsScreen} from '@atb/stacks-hierarchy/Root_LoginOptionsSc
 import {Root_LoginPhoneInputScreen} from '@atb/stacks-hierarchy/Root_LoginPhoneInputScreen';
 import {Root_LoginConfirmCodeScreen} from '@atb/stacks-hierarchy/Root_LoginConfirmCodeScreen';
 import {Root_LoginRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_LoginRequiredForFareProductScreen';
-import {Root_ConfirmationScreen} from './Root_ConfirmationScreen';
+import {Root_ConfirmationScreen} from '@atb/stacks-hierarchy/Root_ConfirmationScreen';
 import {Root_ActiveTokenOnPhoneRequiredForFareProductScreen} from '@atb/stacks-hierarchy/Root_ActiveTokenOnPhoneRequiredForFareProductScreen';
 import {useFlipper} from '@react-navigation/devtools';
 import {LoadingScreen, LoadingScreenBoundary} from '@atb/loading-screen';
@@ -195,6 +195,14 @@ export const RootStack = () => {
                           },
                         },
                       },
+                    },
+                  },
+                  Root_ConfirmationScreen: {
+                    path: 'confirmation/:nextScreen?/:message?/:delayBeforeCompleted?',
+                    parse: {
+                      nextScreen: String,
+                      message: String,
+                      delayBeforeCompleted: Number,
                     },
                   },
                 },

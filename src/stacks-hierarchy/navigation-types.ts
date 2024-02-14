@@ -16,7 +16,7 @@ import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
-
+import {Root_ConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_ConfirmationScreen';
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
   searchLocation?: SearchLocation;
@@ -91,13 +91,6 @@ type Root_PurchaseAsAnonymousConsequencesScreenParams = {
 
 type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
   paymentMethod: CardPaymentMethod;
-};
-
-type Root_ConfirmationScreenParams = {
-  message: string;
-  // Time that must be wait until onComplete is called (in milliseconds)
-  delayBeforeCompleted?: number;
-  nextScreen: NextScreenParams<'Root_TabNavigatorStack'>;
 };
 
 export type NextScreenParams<

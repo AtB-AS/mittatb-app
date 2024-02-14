@@ -85,6 +85,7 @@ type ReserveOfferParams = {
   paymentType: PaymentType;
   opts?: AxiosRequestConfig;
   scaExemption: boolean;
+  paymentRedirectUrl?: string;
   customerAccountId: string;
 };
 
@@ -135,13 +136,16 @@ export async function reserveOffers({
   opts,
   scaExemption,
   customerAccountId,
+  paymentRedirectUrl,
   ...rest
 }:
   | ReserveOfferWithSavePaymentParams
   | ReserveOfferWithRecurringParams): Promise<OfferReservation> {
   const url = 'ticket/v3/reserve';
   const body: ReserveOfferRequestBody = {
-    payment_redirect_url: `${APP_SCHEME}://ticketing?transaction_id={transaction_id}&payment_id={payment_id}`,
+    payment_redirect_url: paymentRedirectUrl
+      ? paymentRedirectUrl
+      : `${APP_SCHEME}://ticketing?transaction_id={transaction_id}&payment_id={payment_id}`,
     offers,
     payment_type: paymentType,
     store_payment:

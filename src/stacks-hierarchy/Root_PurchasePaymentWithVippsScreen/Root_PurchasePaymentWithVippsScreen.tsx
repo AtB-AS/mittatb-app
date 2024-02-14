@@ -13,6 +13,7 @@ import {View} from 'react-native';
 import {Processing} from '@atb/components/loading';
 import {useVippsState, ErrorContext, State} from './use-vipps-state';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
+import {redirectUrlBuilder} from '@atb/stacks-hierarchy/Root_ConfirmationScreen';
 
 type Props = RootStackScreenProps<'Root_PurchasePaymentWithVippsScreen'>;
 
@@ -27,22 +28,14 @@ export const Root_PurchasePaymentWithVippsScreen = ({
 
   const cancelVipps = () => navigation.pop();
 
-  const dismiss = () => {
-    navigation.navigate('Root_TabNavigatorStack', {
-      screen: 'TabNav_TicketingStack',
-      params: {
-        screen: 'Ticketing_RootScreen',
-        params: {
-          screen: 'TicketTabNav_ActiveFareProductsTabScreen',
-        },
-      },
-    });
-  };
+  const paymentRedirectUrl = destinationAccountId
+    ? redirectUrlBuilder('myTickets', 'ticketHasBeenSent', 3000)
+    : undefined;
 
   const {state, error, openVipps} = useVippsState(
     offers,
     destinationAccountId,
-    dismiss,
+    paymentRedirectUrl,
   );
 
   return (
