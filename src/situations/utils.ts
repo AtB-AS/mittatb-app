@@ -73,7 +73,10 @@ export const getMsgTypeForMostCriticalSituationOrNotice = (
   }
   return situations
     .map(getMessageTypeForSituation)
-    .reduce(toMostCriticalStatus);
+    .reduce<Exclude<Statuses, 'valid'> | undefined>(
+      toMostCriticalStatus,
+      undefined,
+    );
 };
 
 /**
@@ -83,10 +86,13 @@ export const getMsgTypeForMostCriticalSituationOrNotice = (
 export const toMostCriticalStatus = <T extends Statuses | undefined>(
   currentlyMostCritical: T,
   msgType: T,
-): T =>
-  statusComparator(currentlyMostCritical, msgType) === -1
+): T => {
+  if (!msgType) return currentlyMostCritical;
+  if (!currentlyMostCritical) return msgType;
+  return statusComparator(currentlyMostCritical, msgType) === 1
     ? currentlyMostCritical
     : msgType;
+};
 
 export const bookingStatusToIcon = (bookingStatus: BookingStatus) => {
   const bookingMsgType = bookingStatusToMsgType(bookingStatus);

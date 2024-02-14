@@ -325,9 +325,9 @@ export const getMsgTypeForEstimatedCall = (
   );
   const msgTypeForBooking = bookingStatusToMsgType(bookingStatus);
 
-  return [msgTypeForSituationOrNotice, msgTypeForBooking].reduce(
-    toMostCriticalStatus,
-  );
+  return [msgTypeForSituationOrNotice, msgTypeForBooking].reduce<
+    Exclude<Statuses, 'valid'> | undefined
+  >(toMostCriticalStatus, undefined);
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
