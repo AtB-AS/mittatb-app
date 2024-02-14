@@ -436,7 +436,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             </View>
           </GenericSectionItem>
         </Section>
-        {inspectableTokenWarningText && (
+        {inspectableTokenWarningText && !phoneNumber && (
           <MessageInfoBox
             type="warning"
             message={inspectableTokenWarningText}

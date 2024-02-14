@@ -8,21 +8,21 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import {useTimeContextState} from '@atb/time';
-import {
-  TicketingTexts,
-  TranslateFunction,
-  useTranslation,
-} from '@atb/translations';
+import {TicketingTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {RefreshControl} from 'react-native-gesture-handler';
+import {
+  TicketHistoryMode,
+  TicketHistoryScreenParams,
+} from '@atb/ticket-history';
+import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 
-type Mode = 'expired' | 'sent';
-
-type Props = {mode: Mode};
-
-export const TicketHistoryScreenComponent = ({mode}: Props) => {
+export const TicketHistoryScreenComponent = ({
+  mode,
+}: TicketHistoryScreenParams) => {
   const {
     fareContracts,
+    sentFareContracts,
     isRefreshingFareContracts,
     rejectedReservations,
     resubscribeFirestoreListeners,
@@ -35,11 +35,14 @@ export const TicketHistoryScreenComponent = ({mode}: Props) => {
   return (
     <FullScreenView
       headerProps={{
-        title: getTitle(mode, t),
+        title: t(TicketHistoryModeTexts[mode].title),
         leftButton: {type: 'back', withIcon: true},
       }}
       parallaxContent={(focusRef) => (
-        <ScreenHeading ref={focusRef} text={getTitle(mode, t)} />
+        <ScreenHeading
+          ref={focusRef}
+          text={t(TicketHistoryModeTexts[mode].title)}
+        />
       )}
       refreshControl={
         <RefreshControl
@@ -50,43 +53,34 @@ export const TicketHistoryScreenComponent = ({mode}: Props) => {
     >
       <View style={styles.container}>
         <FareContractAndReservationsList
-          fareContracts={displayFareContracts(mode, fareContracts, serverNow)}
+          fareContracts={displayFareContracts(
+            mode,
+            fareContracts,
+            sentFareContracts,
+            serverNow,
+          )}
           reservations={rejectedReservations}
           now={serverNow}
-          emptyStateMode={mode}
-          emptyStateTitleText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
-              .emptyTicketHistoryTitle,
-          )}
-          emptyStateDetailsText={t(
-            TicketingTexts.activeFareProductsAndReservationsTab
-              .emptyTicketHistoryDetails,
-          )}
+          mode={mode}
+          emptyStateTitleText={t(TicketingTexts.ticketHistory.emptyState)}
+          emptyStateDetailsText={t(TicketHistoryModeTexts[mode].emptyDetail)}
         />
       </View>
     </FullScreenView>
   );
 };
 
-const getTitle = (mode: Mode, t: TranslateFunction) => {
-  switch (mode) {
-    case 'expired':
-      return t(TicketingTexts.expiredTickets.title);
-    case 'sent':
-      return t(TicketingTexts.sentToOthers.title);
-  }
-};
-
 const displayFareContracts = (
-  mode: Mode,
+  mode: TicketHistoryMode,
   fareContracts: FareContract[],
+  sentFareContracts: FareContract[],
   serverNow: number,
 ) => {
   switch (mode) {
     case 'expired':
       return filterExpiredFareContracts(fareContracts, serverNow);
-    case 'sent': // TODO replace with sent fare contracts
-      return filterExpiredFareContracts(fareContracts, serverNow);
+    case 'sent':
+      return sentFareContracts;
   }
 };
 

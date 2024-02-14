@@ -2,7 +2,7 @@ import {DeparturesTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {FullScreenFooter} from '@atb/components/screen-footer';
-import {Button, ButtonGroup} from '@atb/components/button';
+import {Button} from '@atb/components/button';
 import SvgFavoriteSemi from '@atb/assets/svg/mono-icons/places/FavoriteSemi';
 import SvgFavoriteFill from '@atb/assets/svg/mono-icons/places/FavoriteFill';
 import {
@@ -18,10 +18,11 @@ type Props = {
   lineNumber: string;
   destinationDisplay: DestinationDisplay;
   addFavorite: (forSpecificLineName: boolean) => void;
+  quayName: string;
 };
 
 export const FavoriteDialogSheet = forwardRef<View, Props>(
-  ({lineNumber, destinationDisplay, addFavorite}, focusRef) => {
+  ({lineNumber, destinationDisplay, addFavorite, quayName}, focusRef) => {
     const {t} = useTranslation();
     const styles = useStyles();
     const lineName = formatDestinationDisplay(t, destinationDisplay) || '';
@@ -37,13 +38,13 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
             {t(
               DeparturesTexts.favoriteDialogSheet.description(
                 lineNumber,
-                lineName,
+                quayName,
               ),
             )}
           </ThemeText>
         </View>
         <FullScreenFooter>
-          <ButtonGroup>
+          <View style={styles.buttonContainer}>
             <Button
               interactiveColor="interactive_0"
               onPress={() => {
@@ -71,7 +72,7 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
               rightIcon={{svg: SvgFavoriteFill}}
               testID="allVariationsOfDeparture"
             />
-          </ButtonGroup>
+          </View>
         </FullScreenFooter>
       </BottomSheetContainer>
     );
@@ -81,5 +82,8 @@ export const FavoriteDialogSheet = forwardRef<View, Props>(
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   text: {
     margin: theme.spacings.medium,
+  },
+  buttonContainer: {
+    gap: theme.spacings.small,
   },
 }));

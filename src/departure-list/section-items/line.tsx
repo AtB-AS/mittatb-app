@@ -1,6 +1,5 @@
 import {DepartureGroup, DepartureTime} from '@atb/api/departures/types';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
-import {Button} from '@atb/components/button';
 import {
   SectionItemProps,
   useSectionItem,
@@ -27,7 +26,7 @@ import {
 import {insets} from '@atb/utils/insets';
 import {TFunc} from '@leile/lobo-t';
 import React from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {hasNoDeparturesOnGroup, isValidDeparture} from '../utils';
 import {getSvgForMostCriticalSituationOrNotice} from '@atb/situations';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
@@ -38,6 +37,7 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {QuaySectionProps} from '@atb/departure-list/section-items/quay-section';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {ThemeIcon} from '@atb/components/theme-icon';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
@@ -244,26 +244,25 @@ function DepartureTimeItem({
     return null;
   }
   return (
-    <Button
-      key={departure.aimedTime + departure.serviceJourneyId}
-      type="inline"
-      compact={true}
-      interactiveColor="interactive_2"
-      onPress={() => onPress(departure)}
-      text={formatTimeText(departure, searchDate, language, t)}
+    <TouchableOpacity
       style={styles.departure}
-      textStyle={[
-        styles.departureText,
-        departure.cancellation && styles.strikethrough,
-      ]}
-      rightIcon={
-        rightIcon && {
-          svg: rightIcon,
-        }
-      }
-      leftIcon={leftIcon && {svg: leftIcon, size: 'xSmall'}}
       testID={testID}
-    />
+      key={departure.aimedTime + departure.serviceJourneyId}
+      onPress={() => onPress(departure)}
+    >
+      {leftIcon && <ThemeIcon svg={leftIcon} size="xSmall" />}
+
+      <ThemeText
+        type="body__primary--bold"
+        style={[
+          styles.departureText,
+          departure.cancellation && styles.strikethrough,
+        ]}
+      >
+        {formatTimeText(departure, searchDate, language, t)}
+      </ThemeText>
+      {rightIcon && <ThemeIcon svg={rightIcon} />}
+    </TouchableOpacity>
   );
 }
 
@@ -316,8 +315,13 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
     fontWeight: 'normal',
   },
   departure: {
+    padding: theme.spacings.small,
     backgroundColor: theme.static.background.background_1.background,
-    borderWidth: 0,
+    borderRadius: theme.border.radius.regular,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: theme.spacings.xSmall,
     marginRight: theme.spacings.small,
   },
   departureText: {

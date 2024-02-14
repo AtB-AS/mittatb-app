@@ -29,6 +29,7 @@ import {
   Section,
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
+import {StaticColorByType} from '@atb/theme/colors';
 
 type Props = {
   onEditFavouriteDeparture: () => void;
@@ -37,6 +38,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
+const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 export const DeparturesWidget = ({
   onEditFavouriteDeparture,
   onAddFavouriteDeparture,
@@ -73,7 +75,7 @@ export const DeparturesWidget = ({
     <View style={style}>
       <ContentHeading
         style={styles.heading}
-        color="background_accent_0"
+        color={themeColor}
         text={t(DeparturesTexts.widget.heading)}
       />
       {!favoriteDepartures.length && (
@@ -125,7 +127,7 @@ export const DeparturesWidget = ({
       {!!favoriteDepartures.length && (
         <Button
           mode="secondary"
-          type="block"
+          backgroundColor={themeColor}
           onPress={openFrontpageFavouritesBottomSheet}
           text={t(DeparturesTexts.button.text)}
           rightIcon={{svg: Edit}}

@@ -338,9 +338,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   t,
                   language,
                 )}
-                interactiveColor="interactive_0"
+                backgroundColor={headerBackgroundColor}
                 mode="secondary"
                 compact={true}
+                style={style.searchTimeButton}
                 onPress={onSearchTimePress}
                 testID="dashboardDateTimePicker"
                 rightIcon={{
@@ -350,16 +351,15 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                       ? {color: 'valid', backgroundColor: 'background_accent_0'}
                       : undefined,
                 }}
-                viewContainerStyle={style.searchTimeButton}
               />
               {filtersState.enabled && (
                 <View ref={filterButtonWrapperRef} collapsable={false}>
                   <Button
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                    interactiveColor="interactive_0"
+                    backgroundColor={headerBackgroundColor}
                     mode="secondary"
-                    type="inline"
+                    type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
                     testID="dashboardDateTimePicker"
@@ -372,7 +372,6 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                           }
                         : undefined,
                     }}
-                    viewContainerStyle={style.filterButton}
                     ref={filtersState.onCloseFocusRef}
                   />
                 </View>
@@ -646,9 +645,9 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   searchParametersButtons: {
     marginTop: theme.spacings.medium,
     flexDirection: 'row',
+    gap: theme.spacings.small,
   },
-  searchTimeButton: {flex: 1},
-  filterButton: {marginLeft: theme.spacings.medium},
+  searchTimeButton: {flexGrow: 1},
   searchHeader: {
     marginHorizontal: theme.spacings.medium,
     backgroundColor: theme.static.background[headerBackgroundColor].background,

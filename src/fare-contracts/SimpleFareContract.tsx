@@ -12,6 +12,7 @@ type Props = {
   fareContract: FareContract;
   now: number;
   hideDetails?: boolean;
+  sentToOthers?: boolean;
   onPressDetails?: () => void;
   hasActiveTravelCard?: boolean;
   testID?: string;
@@ -21,6 +22,7 @@ export const SimpleFareContract: React.FC<Props> = ({
   fareContract: fc,
   now,
   hideDetails,
+  sentToOthers = false,
   onPressDetails,
   testID,
 }) => {
@@ -29,10 +31,11 @@ export const SimpleFareContract: React.FC<Props> = ({
   if (isPreActivatedTravelRight(firstTravelRight)) {
     return (
       <PreActivatedFareContractInfo
-        fareContractState={fc.state}
+        fareContract={fc}
         travelRights={fc.travelRights.filter(isPreActivatedTravelRight)}
         now={now}
         hideDetails={hideDetails}
+        sentToOthers={sentToOthers}
         onPressDetails={onPressDetails}
         testID={testID}
       />

@@ -1,7 +1,7 @@
-import OnboardingPage from '../pageobjects/onboarding.page';
-import AppHelper from '../utils/app.helper';
-import ElementHelper from '../utils/element.helper';
-import {HeadingTexts} from '../texts';
+import OnboardingPage from '../pageobjects/onboarding.page.ts';
+import AppHelper from '../utils/app.helper.ts';
+import ElementHelper from '../utils/element.helper.ts';
+import {HeadingTexts} from '../texts/index.ts';
 
 describe('Onboarding', () => {
   before(async () => {
@@ -14,33 +14,20 @@ describe('Onboarding', () => {
    */
   it('should onboard', async () => {
     try {
-      await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
-      await OnboardingPage.nextButtonOnboardingWelcome.click();
-      await AppHelper.pause(10000, true);
+      await ElementHelper.waitForElement('id', 'useAppAnonymouslyButton');
+      await OnboardingPage.useAppAnonymously.click();
 
-      await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
-      await OnboardingPage.nextButtonIntercomOnboarding.click();
+      await ElementHelper.waitForElement('id', 'acceptLimitationsButton');
+      await OnboardingPage.acceptLimitations.click();
 
-      await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
-      await OnboardingPage.accRestrButton.click();
-
+      // Location
       await ElementHelper.waitForElement(
         'id',
         'locationWhenInUsePermissionButton',
       );
-      await OnboardingPage.nextButtonLocationOnboarding.click();
-
-      // Location
+      await OnboardingPage.locationPermission.click();
       await OnboardingPage.denyLocation();
 
-      //NOTE! Temporarily disabled
-      /*
-      await ElementHelper.waitForElement(
-        'id',
-        'nextButtonNotificationOnboarding',
-      );
-      await OnboardingPage.nextButtonNotificationOnboarding.click();
-      */
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
       await ElementHelper.expectText(HeadingTexts.travelsearch);
     } catch (errMsg) {

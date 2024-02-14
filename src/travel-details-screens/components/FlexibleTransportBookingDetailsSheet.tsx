@@ -1,22 +1,26 @@
 import {FlexibleTransport} from '@atb/assets/svg/color/images';
 import {
-  useTranslation,
   getTextForLanguage,
   TripDetailsTexts,
+  useTranslation,
 } from '@atb/translations';
 import {Leg} from '@atb/api/types/trips';
-import {View, TouchableOpacity, Linking, ScrollView} from 'react-native';
+import {
+  Dimensions,
+  Linking,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {StyleSheet, useTheme} from '@atb/theme';
 
 import {ThemeText} from '@atb/components/text';
-import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
+import {BookingOptions} from './BookingOptions';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
-import {getPublicCodeFromLeg, getLegBookingIsAvailable} from '../utils';
-import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
+import {getBookingStatus, getPublicCodeFromLeg} from '../utils';
+import {BookingInfoBox} from './BookingInfoBox';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-
-import {Dimensions} from 'react-native';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
@@ -28,7 +32,7 @@ type FlexibleTransportBookingDetailsProps = {
   leg: Leg;
 };
 
-export const FlexibleTransportBookingDetails: React.FC<
+export const FlexibleTransportBookingDetailsSheet: React.FC<
   FlexibleTransportBookingDetailsProps
 > = ({leg}) => {
   const {t, language} = useTranslation();
@@ -41,8 +45,9 @@ export const FlexibleTransportBookingDetails: React.FC<
   const publicCode = getPublicCodeFromLeg(leg);
 
   const now = useNow(30000);
-  const bookingIsAvailable = getLegBookingIsAvailable(
-    leg,
+  const bookingStatus = getBookingStatus(
+    leg.bookingArrangements,
+    leg.aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
@@ -64,9 +69,9 @@ export const FlexibleTransportBookingDetails: React.FC<
       <View style={[style.scrollViewContainer, {marginBottom}]}>
         <ScrollView contentContainerStyle={{padding: theme.spacings.xLarge}}>
           <View style={style.messageBoxContainer}>
-            <FlexibleTransportMessageBox
-              leg={leg}
-              publicCode={publicCode}
+            <BookingInfoBox
+              bookingArrangements={leg.bookingArrangements}
+              aimedStartTime={leg.aimedStartTime}
               now={now}
               showStatusIcon={true}
             />
@@ -130,7 +135,9 @@ export const FlexibleTransportBookingDetails: React.FC<
             </ThemeText>
           </TouchableOpacity>
 
-          {bookingIsAvailable && <FlexibleTransportBookingOptions leg={leg} />}
+          {bookingStatus === 'bookable' && (
+            <BookingOptions bookingArrangements={leg.bookingArrangements} />
+          )}
         </ScrollView>
       </View>
     </BottomSheetContainer>

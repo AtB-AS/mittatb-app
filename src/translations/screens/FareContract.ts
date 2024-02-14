@@ -37,6 +37,8 @@ const FareContractTexts = {
         `Blir gyldig om ${duration}`,
       ),
     reserving: _(`Reserverer…`, `Reserving…`, `Reserverar…`),
+    sent: (dateTime: string) =>
+      _(`Sendt ${dateTime}`, `Sent ${dateTime}`, `Sendt ${dateTime}`),
     unknown: _(`Ukjent`, `Unknown`, `Ukjent`),
     inactive: _(`Inaktiv`, `Inactive`, `Inaktiv`),
     inactiveCarnet: _(
@@ -77,6 +79,18 @@ const FareContractTexts = {
         `Gyldig til ${dateTime}`,
         `Valid to ${dateTime}`,
         `Gyldig til ${dateTime}`,
+      ),
+    sentTo: (phoneNumber: string) =>
+      _(
+        `Denne billetten ble sendt til ${phoneNumber}`,
+        `This ticket was sent to ${phoneNumber}`,
+        `Denne billetten vart sendt til ${phoneNumber}`,
+      ),
+    purchasedBy: (phoneNumber: string) =>
+      _(
+        `Denne billetten ble kjøpt av ${phoneNumber}`,
+        `This ticket was purchased by ${phoneNumber}`,
+        `Denne billetten vart kjøpt av ${phoneNumber}`,
       ),
     askForReceipt: _(
       'Få kvittering tilsendt',
@@ -146,8 +160,11 @@ const FareContractTexts = {
         'Kunne ikkje laste kaier.',
       ),
     },
-    infoButtonA11yHint: _('Aktivér for å gå til billettinformasjon', 'Activate to go to ticket information', 'Aktivér for å gå til billetinformasjon'),
-
+    infoButtonA11yHint: _(
+      'Aktivér for å gå til billettinformasjon',
+      'Activate to go to ticket information',
+      'Aktivér for å gå til billetinformasjon',
+    ),
   },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
@@ -212,6 +229,11 @@ const FareContractTexts = {
   label: {
     travellers: _('Reisende', 'Travellers', 'Reisande'),
     zone: _('Sone', 'Zone', 'Sone'),
+    includedBenefits: _(
+      'Inkludert i billetten',
+      'Included in the ticket',
+      'Inkludert i billetten',
+    ),
   },
   warning: {
     errorWithToken: _(

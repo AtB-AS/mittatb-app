@@ -42,10 +42,6 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
 
-  const iconStyle =
-    size == 'xSmall'
-      ? styles.transportationIconBox_small
-      : styles.transportationIconBox;
   const lineNumberElement = lineNumber ? (
     <ThemeText
       type="body__primary--bold"
@@ -60,7 +56,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   return (
     <View
       style={[
-        iconStyle,
+        styles.transportationIconBox,
         style,
         {
           backgroundColor,
@@ -83,15 +79,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIconBox: {
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    borderRadius: theme.border.radius.small,
-  },
-  transportationIconBox_small: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingVertical: theme.spacings.xSmall,
-    paddingHorizontal: theme.spacings.xSmall,
+    padding: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
   },
   lineNumberText: {

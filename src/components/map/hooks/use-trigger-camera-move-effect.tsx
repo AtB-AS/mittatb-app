@@ -7,7 +7,7 @@ import {useBottomNavigationStyles} from '@atb/utils/navigation';
 import {Coordinates} from '@atb/utils/coordinates';
 import {fitBounds, flyToLocation, mapPositionToCoordinates} from '../utils';
 import {CameraFocusModeType, MapPadding} from '../types';
-import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
+import {Dimensions, Platform, StatusBar} from 'react-native';
 
 type BoundingBox = {
   xMin: number;
@@ -152,25 +152,18 @@ const useCalculatePaddings = (): MapPadding => {
   const {height: bottomSheetHeight} = useBottomSheet();
   const {minHeight: tabBarMinHeight} = useBottomNavigationStyles();
   const {height: screenHeight} = Dimensions.get('screen');
-  const padding = screenHeight * 0.1;
+  const basePadding = screenHeight * 0.1;
 
-  if (Platform.OS === 'android') {
-    const headerHeight = StatusBar.currentHeight ?? 0;
-
-    // This is the base level for the padding, where the values are divided by the device font scale to match the map unit.
-    const scaledBottomSheetPadding = bottomSheetHeight - tabBarMinHeight;
-    return [
-      padding + headerHeight, // Subtract the header height on Android since it is not see through
-      padding,
-      padding + scaledBottomSheetPadding,
-      padding,
-    ].map((p) => p / PixelRatio.getFontScale()) as MapPadding;
-  }
+  const bottomPaddingAdjustment = bottomSheetHeight - tabBarMinHeight;
+  const topPadding =
+    Platform.OS === 'android'
+      ? basePadding + (StatusBar.currentHeight ?? 0)
+      : basePadding;
 
   return [
-    padding,
-    padding,
-    padding + (bottomSheetHeight - tabBarMinHeight),
-    padding,
+    topPadding,
+    basePadding,
+    basePadding + bottomPaddingAdjustment,
+    basePadding,
   ];
 };

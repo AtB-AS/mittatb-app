@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {AreaState, getOperators, isShowAll, updateAreaState} from './utils';
 import {useIsCityBikesEnabled} from './use-city-bikes-enabled';
 import {
@@ -47,8 +47,10 @@ export const useStations: (
       getMapFilter().then((userFilter) => {
         setFilter(userFilter.mobility ?? {});
       });
+    } else {
+      setFilter(initialFilter);
     }
-  }, [getMapFilter, initialFilter, isCityBikesEnabled, isCarSharingEnabled]);
+  }, [getMapFilter, initialFilter]);
 
   useEffect(() => {
     if (isCityBikesEnabled && isFocused && area) {
@@ -87,9 +89,9 @@ export const useStations: (
     setStations(emptyStations);
   }, [area, isCityBikesEnabled, isCarSharingEnabled, filter, isFocused]);
 
-  const updateRegion = async (region: MapRegion) => {
+  const updateRegion = useCallback((region: MapRegion) => {
     setArea(updateAreaState(region, BUFFER_DISTANCE_IN_METERS, MIN_ZOOM_LEVEL));
-  };
+  }, []);
 
   const onFilterChange = (filter: MobilityMapFilterType) => {
     setFilter(filter);

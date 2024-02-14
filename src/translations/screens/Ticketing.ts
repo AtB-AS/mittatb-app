@@ -1,7 +1,49 @@
 import {orgSpecificTranslations} from '../orgSpecificTranslations';
-import {translation as _} from '../commons';
+import {TranslatedString, translation as _} from '../commons';
+import {TicketHistoryMode} from '@atb/ticket-history';
 
 const bulletPoint = '\u2022';
+
+type TicketHistoryModeText = {
+  title: TranslatedString;
+  titleA11y: TranslatedString;
+  emptyDetail: TranslatedString;
+};
+
+export const TicketHistoryModeTexts: {
+  [key in TicketHistoryMode]: TicketHistoryModeText;
+} = {
+  expired: {
+    title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
+    titleA11y: _(
+      'Aktiver for å vise dine utløpte billetter',
+      'Activate to show your expired tickets',
+      'Aktiver for å vise billettane dine som har gått ut',
+    ),
+    emptyDetail: _(
+      'Dine utløpte billetter vil dukke opp her. Dra ned for å oppdatere om du ikke finner billetten din.',
+      "Your expired tickets will show here. Pull down to refresh if you can't find your ticket.",
+      'Billettane dine som har gått ut vil dukke opp her. Drag ned for å oppdatere om du ikkje finn billetten din.',
+    ),
+  },
+  sent: {
+    title: _(
+      'Billetter sendt til andre',
+      'Tickets sent to others',
+      'Billettar sendt til andre',
+    ),
+    titleA11y: _(
+      'Aktiver for å vise billetter sendt til andre',
+      'Activate to show tickets sent to other',
+      'Aktiver for å vise billettar sendt til andre',
+    ),
+    emptyDetail: _(
+      'Billetter sendt til andre vil dukke opp her. Dra ned for å oppdatere om du ikke finner billetten din.',
+      "Tickets sent to others will show here. Pull down to refresh if you can't find your ticket.",
+      'Billettar sendt til andre vil dukke opp her. Drag ned for å oppdatere om du ikkje finn billetten din.',
+    ),
+  },
+};
 
 const TicketingTexts = {
   header: {
@@ -58,16 +100,6 @@ const TicketingTexts = {
       'When you buy tickets, they will show up here. Pull down to refresh if your ticket is not showing.',
       'Når du kjøper billettar vil dei dukke opp her. Drag ned for å oppdatere dersom billetten din ikkje visast.',
     ),
-    emptyTicketHistoryTitle: _(
-      'Ingen billetter kjøpt',
-      'No tickets bought',
-      'Ingen billettar kjøpt',
-    ),
-    emptyTicketHistoryDetails: _(
-      'Dine utløpte billetter vil dukke opp her. Dra ned for å oppdatere om du ikke finner billetten din.',
-      "Your expired tickets will show here. Pull down to refresh if you can't find your ticket.",
-      'Billettane dine som har gått ut vil dukke opp her. Drag ned for å oppdatere om du ikkje finn billetten din.',
-    ),
   },
   ticketHistoryTab: {
     noItems: _(
@@ -75,6 +107,10 @@ const TicketingTexts = {
       'Nothing to show here until you have purchased a ticket.',
       'Fann ingen billetthistorikk.',
     ),
+  },
+  ticketHistory: {
+    title: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
+    emptyState: _('Ingen billetter', 'No tickets', 'Ingen billettar'),
   },
   ticket: {
     valid: {
@@ -135,26 +171,6 @@ const TicketingTexts = {
     carnet: {
       transportModes: _('Buss/trikk', 'Bus/tram', 'Buss/trikk'),
     },
-  },
-  expiredTickets: {
-    title: _('Utløpte billetter', 'Expired tickets', 'Utgåtte billettar'),
-    a11yHint: _(
-      'Aktiver for å vise dine utløpte billetter',
-      'Activate to show your expired tickets',
-      'Aktiver for å vise billettane dine som har gått ut',
-    ),
-  },
-  sentToOthers: {
-    title: _(
-      'Billetter sendt til andre',
-      'Tickets sent to others',
-      'Billettar sendt til andre',
-    ),
-    a11yHint: _(
-      'Aktiver for å vise billetter sendt til andre',
-      'Activate to show tickets sent to other',
-      'Aktiver for å vise billettar sendt til andre',
-    ),
   },
   reservation: {
     reserving: _(
@@ -270,6 +286,11 @@ const TicketingTexts = {
     rejected: _('Avvist billett', 'Rejected ticket', 'Avvist billett'),
     upcoming: _('Kommende billett', 'Upcoming ticket', 'Kommende billett'),
     approved: _('Godkjent billett', 'Approved ticket', 'Godkjent billett'),
+    sent: _(
+      'Billett sendt til andre',
+      'Ticket sent to someone else',
+      'Billett sendt til andre',
+    ),
   },
   ticketAssistantTile: {
     title: _(

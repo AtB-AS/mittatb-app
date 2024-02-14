@@ -1,11 +1,11 @@
-import OnboardingPage from '../pageobjects/onboarding.page';
-import AppHelper from '../utils/app.helper';
-import ElementHelper from '../utils/element.helper';
-import FrontPagePage from '../pageobjects/frontpage.page';
-import SearchPage from '../pageobjects/search.page';
-import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page';
-import TravelsearchDetailsPage from '../pageobjects/travelsearch.details.page';
-import NavigationHelper from '../utils/navigation.helper';
+import OnboardingPage from '../pageobjects/onboarding.page.ts';
+import AppHelper from '../utils/app.helper.ts';
+import ElementHelper from '../utils/element.helper.ts';
+import FrontPagePage from '../pageobjects/frontpage.page.ts';
+import SearchPage from '../pageobjects/search.page.ts';
+import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page.ts';
+import TravelsearchDetailsPage from '../pageobjects/travelsearch.details.page.ts';
+import NavigationHelper from '../utils/navigation.helper.ts';
 
 describe('Travel search', () => {
   before(async () => {
@@ -68,7 +68,7 @@ describe('Travel search', () => {
       expect(departureInDetails).toContain(departure);
 
       // Check end time and arrival
-      await AppHelper.scrollDownUntilId(`travelTime`);
+      await AppHelper.scrollDownUntilId('tripDetailsContentView', 'travelTime');
       const endTimeInDetails = await TravelsearchDetailsPage.getTime(
         'end',
         noLegs - 1,
@@ -133,8 +133,11 @@ describe('Travel search', () => {
       // Number of legs
       const noLegs = await TravelsearchOverviewPage.getNumberOfLegs(0);
       await TravelsearchOverviewPage.openFirstSearchResult();
-      await AppHelper.scrollDownUntilId(`legContainer${noLegs - 1}`);
-      await AppHelper.scrollDownUntilId(`travelTime`);
+      await AppHelper.scrollDownUntilId(
+        'tripDetailsContentView',
+        `legContainer${noLegs - 1}`,
+      );
+      await AppHelper.scrollDownUntilId('tripDetailsContentView', 'travelTime');
       const endLocation = await TravelsearchDetailsPage.getLocation(
         'end',
         noLegs - 1,

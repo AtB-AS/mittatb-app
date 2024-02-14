@@ -7,7 +7,6 @@ import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
 import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
-import {useAppState} from '@atb/AppContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -16,8 +15,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
   const styles = useThemeStyles();
   const {width: windowWidth} = useWindowDimensions();
 
-  const {continueFromOnboardingScreen} = useOnboardingNavigation();
-  const {completeExtendedOnboarding} = useAppState();
+  const {continueFromOnboardingSection} = useOnboardingNavigation();
 
   return (
     <ScrollView
@@ -40,10 +38,7 @@ export const ExtendedOnboarding_AlsoGoodToKnowScreen = () => {
       <View style={styles.bottomView}>
         <Button
           interactiveColor="interactive_0"
-          onPress={() => {
-            completeExtendedOnboarding();
-            continueFromOnboardingScreen('Root_ExtendedOnboardingStack');
-          }}
+          onPress={() => continueFromOnboardingSection('extendedOnboarding')}
           text={t(ExtendedOnboardingTexts.alsoGoodToKnow.mainButton)}
           testID="nextButtonAlsoGoodToKnowOnboarding"
         />

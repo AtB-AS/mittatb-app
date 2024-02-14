@@ -57,7 +57,6 @@ export const ImageConfirmationBottomSheet = ({
         <Button
           style={styles.button}
           mode="secondary"
-          interactiveColor="interactive_2"
           onPress={close}
           text={t(ParkingViolationTexts.imageConfirmation.retryButton)}
         />

@@ -1,44 +1,28 @@
-import ElementHelper from '../utils/element.helper';
-import AppHelper from '../utils/app.helper';
+import ElementHelper from '../utils/element.helper.ts';
+import AppHelper from '../utils/app.helper.ts';
 
 class OnboardingPage {
   /**
-   * Next button on welcome screen
+   * Use the app anonymously
    */
-  get nextButtonOnboardingWelcome() {
-    const reqId = `//*[@resource-id="nextButtonOnboardingWelcome"]`;
+  get useAppAnonymously() {
+    const reqId = `//*[@resource-id="useAppAnonymouslyButton"]`;
     return $(reqId);
   }
 
   /**
-   * Next button on intercom screen
+   * Accept limitations
    */
-  get nextButtonIntercomOnboarding() {
-    const reqId = `//*[@resource-id="nextButtonIntercomOnboarding"]`;
-    return $(reqId);
-  }
-
-  /**
-   * Next button on notifications screen
-   */
-  get nextButtonNotificationOnboarding() {
-    const reqId = `//*[@resource-id="nextButtonNotificationOnboarding"]`;
+  get acceptLimitations() {
+    const reqId = `//*[@resource-id="acceptLimitationsButton"]`;
     return $(reqId);
   }
 
   /**
    * Next button on location screen
    */
-  get nextButtonLocationOnboarding() {
+  get locationPermission() {
     const reqId = `//*[@resource-id="locationWhenInUsePermissionButton"]`;
-    return $(reqId);
-  }
-
-  /**
-   * Accept restrictions
-   */
-  get accRestrButton() {
-    const reqId = `//*[@resource-id="acceptRestrictionsButton"]`;
     return $(reqId);
   }
 
@@ -62,28 +46,17 @@ class OnboardingPage {
    */
   async skipOnboarding(testName: string = '') {
     try {
-      await ElementHelper.waitForElement('id', 'nextButtonOnboardingWelcome');
-      await this.nextButtonOnboardingWelcome.click();
-      await AppHelper.pause(10000, true);
-      await ElementHelper.waitForElement('id', 'nextButtonIntercomOnboarding');
-      await this.nextButtonIntercomOnboarding.click();
-      await ElementHelper.waitForElement('id', 'acceptRestrictionsButton');
-      await this.accRestrButton.click();
+      await ElementHelper.waitForElement('id', 'useAppAnonymouslyButton');
+      await this.useAppAnonymously.click();
+      //await AppHelper.pause(10000, true);
+      await ElementHelper.waitForElement('id', 'acceptLimitationsButton');
+      await this.acceptLimitations.click();
       await ElementHelper.waitForElement(
         'id',
         'locationWhenInUsePermissionButton',
       );
-      await this.nextButtonLocationOnboarding.click();
+      await this.locationPermission.click();
       await this.denyLocation();
-      //NOTE! Temporarily disabled
-      /*
-      await AppHelper.pause(3000, true);
-      await ElementHelper.waitForElement(
-        'id',
-        'nextButtonNotificationOnboarding',
-      );
-      await this.nextButtonNotificationOnboarding.click();
-       */
     } catch (errMsg) {
       await AppHelper.screenshot(`error_${testName}_skipOnboarding`);
       throw errMsg;

@@ -1,4 +1,4 @@
-import ElementHelper from '../utils/element.helper';
+import ElementHelper from '../utils/element.helper.ts';
 
 class DepartureSearchPage {
   /**
@@ -11,7 +11,7 @@ class DepartureSearchPage {
 
   /**
    * Click the given stop place
-   * @param stopPlace: name of the stop place
+   * @param stopPlace name of the stop place
    */
   async chooseStopPlace(stopPlace: string) {
     await ElementHelper.waitForElement('id', 'nearbyStopsContainerView');

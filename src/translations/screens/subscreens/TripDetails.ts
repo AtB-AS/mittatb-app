@@ -360,38 +360,23 @@ const TripDetailsTexts = {
       `On-demand transport`,
       `Bestillingstransport`,
     ),
-    needsBookingAndIsAvailable: (
-      publicCode: string,
-      formattedTimeForBooking: string,
-      isUrgent: boolean,
-    ) =>
+    needsBookingAndIsAvailable: (formattedTimeForBooking: string) =>
       _(
-        `Frist for reservasjon av ${publicCode} på denne reisen går ut ${
-          (isUrgent ? 'om ' : '') + formattedTimeForBooking
-        }.`,
-        `Deadline for reservation of ${publicCode} on this trip expires ${
-          (isUrgent ? 'in ' : '') + formattedTimeForBooking
-        }.`,
-        `Frist for reservasjon av ${publicCode} på denne reisa går ut ${
-          (isUrgent ? 'om ' : '') + formattedTimeForBooking
-        }.`,
+        `Denne reisen krever reservasjon innen ${formattedTimeForBooking}.`,
+        `This trip requires booking before ${formattedTimeForBooking}.`,
+        `Denne reisa krever reservasjon innen ${formattedTimeForBooking}.`,
       ),
-    needsBookingButIsTooEarly: (
-      publicCode: string,
-      formattedTimeForBooking: string,
-      isImminent: boolean,
-    ) =>
+    needsBookingButIsTooEarly: (formattedTimeForBooking: string) =>
       _(
-        `${publicCode} på denne reisen kan tidligst reserveres ${
-          (isImminent ? 'om ' : '') + formattedTimeForBooking
-        }.`,
-        `${publicCode} on this trip can be booked no sooner than ${
-          (isImminent ? 'in ' : '') + formattedTimeForBooking
-        }.`,
-        `${publicCode} på denne reisa kan tidlegast reserverast ${
-          (isImminent ? 'om ' : '') + formattedTimeForBooking
-        }.`,
+        `Denne reisen krever reservasjon og kan tidligst reserveres ${formattedTimeForBooking}.`,
+        `This trip requires booking and can be booked no earlier than ${formattedTimeForBooking}.`,
+        `Denne reisa krever reservasjon og kan tidlegast reserverast ${formattedTimeForBooking}.`,
       ),
+    needsBookingButIsTooLate: _(
+      `Denne reisen krever reservasjon. Frist for reservasjon har utløpt.`,
+      `This trip requires booking. The booking deadline has expired.`,
+      `Denne reisa krever reservasjon. Frist for reservasjon har utgått.`,
+    ),
     needsBookingWhatIsThis: (publicCode: string) =>
       _(
         `Hva er ${publicCode}?`,

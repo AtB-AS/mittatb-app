@@ -1,28 +1,26 @@
 import {Phone} from '@atb/assets/svg/mono-icons/devices';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {useTranslation, TripDetailsTexts} from '@atb/translations';
-import {Leg} from '@atb/api/types/trips';
-import {View, Linking} from 'react-native';
+import {TripDetailsTexts, useTranslation} from '@atb/translations';
+import {Linking, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Button} from '@atb/components/button';
 import {BookingMethod} from '@atb/api/types/generated/journey_planner_v3_types';
+import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 
-type FlexibleTransportBookingOptionsProps = {
-  leg: Leg;
+type Props = {
+  bookingArrangements?: BookingArrangementFragment;
 };
 
-export const FlexibleTransportBookingOptions: React.FC<
-  FlexibleTransportBookingOptionsProps
-> = ({leg}) => {
+export const BookingOptions = ({bookingArrangements}: Props) => {
   const {t} = useTranslation();
   const style = useStyle();
 
-  const bookingArrangements = leg.bookingArrangements;
+  if (!bookingArrangements) return null;
 
-  const bookingPhone = bookingArrangements?.bookingContact?.phone;
-  const bookingUrl = bookingArrangements?.bookingContact?.url;
+  const bookingPhone = bookingArrangements.bookingContact?.phone;
+  const bookingUrl = bookingArrangements.bookingContact?.url;
 
-  const bookingMethods = bookingArrangements?.bookingMethods;
+  const bookingMethods = bookingArrangements.bookingMethods;
 
   const showBookOnlineOption =
     bookingUrl && bookingMethods?.some((bm) => bm === BookingMethod.Online);
@@ -43,7 +41,7 @@ export const FlexibleTransportBookingOptions: React.FC<
             text={t(TripDetailsTexts.flexibleTransport.bookOnline)}
             onPress={() => Linking.openURL(bookingUrl)}
             mode="primary"
-            type="pill"
+            type="small"
             interactiveColor="interactive_0"
             leftIcon={{svg: ExternalLink}}
           />
@@ -60,8 +58,7 @@ export const FlexibleTransportBookingOptions: React.FC<
               TripDetailsTexts.flexibleTransport.bookByPhone(bookingPhone),
             )}
             onPress={() => Linking.openURL(`tel:${bookingPhone}`)}
-            style={style.bookByPhoneButton}
-            type="pill"
+            type="small"
             interactiveColor="interactive_3"
             leftIcon={{svg: Phone}}
           />
@@ -74,8 +71,5 @@ export const FlexibleTransportBookingOptions: React.FC<
 const useStyle = StyleSheet.createThemeHook((theme) => ({
   flexBookingOption: {
     paddingVertical: theme.spacings.medium / 2,
-  },
-  bookByPhoneButton: {
-    backgroundColor: theme.interactive.interactive_3.default.background,
   },
 }));

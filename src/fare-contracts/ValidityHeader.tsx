@@ -116,6 +116,9 @@ function validityTimeText(
     }
     case 'reserving':
       return t(FareContractTexts.validityHeader.reserving);
+    case 'sent':
+      const dateTime = formatToLongDateTime(toDate(validFrom), language);
+      return t(FareContractTexts.validityHeader.sent(dateTime));
     case 'unknown':
     default:
       return t(FareContractTexts.validityHeader.unknown);

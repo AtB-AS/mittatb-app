@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {ValidityStatus} from '@atb/fare-contracts/utils';
 import {SectionSeparator} from '@atb/components/sections';
 import {useValidityLineColors} from './use-validity-line-colors';
-import {useMobileTokenContextState} from "@atb/mobile-token";
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 const SPACE_BETWEEN_VERTICAL_LINES = 72;
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -47,7 +47,8 @@ export const ValidityLine = (props: Props): ReactElement => {
 
       // Carnet fare contracts are not inspectable, but we still want to show
       // the validity line
-      return deviceInspectionStatus === 'inspectable' || fareProductType === 'carnet' ? (
+      return deviceInspectionStatus === 'inspectable' ||
+        fareProductType === 'carnet' ? (
         <LineWithVerticalBars
           backgroundColor={backgroundColor}
           lineColor={lineColor}
@@ -64,6 +65,7 @@ export const ValidityLine = (props: Props): ReactElement => {
     case 'inactive':
     case 'rejected':
     case 'cancelled':
+    case 'sent':
       return (
         <View style={styles.container}>
           <SectionSeparator />

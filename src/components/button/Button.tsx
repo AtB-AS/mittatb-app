@@ -1,6 +1,12 @@
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {InteractiveColor} from '@atb/theme/colors';
+import {
+  getInteractiveColor,
+  getStaticColor,
+  InteractiveColor,
+  isStaticColor,
+  StaticColor,
+} from '@atb/theme/colors';
 import React, {useRef} from 'react';
 import {
   ActivityIndicator,
@@ -14,6 +20,7 @@ import {
 } from 'react-native';
 import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {shadows} from '@atb/components/map';
 
 type ButtonMode = 'primary' | 'secondary' | 'tertiary';
 
@@ -38,9 +45,9 @@ const DefaultModeStyles: {[key in ButtonMode]: ButtonSettings} = {
 };
 
 type ButtonTypeAwareProps =
-  | {text?: string; type: 'inline'}
-  | {text: string; type?: 'block'}
-  | {text: string; type: 'pill'};
+  | {text: string; type?: 'large'}
+  | {text?: string; type: 'medium'}
+  | {text: string; type: 'small'};
 
 type ButtonIconProps = {
   svg: ({fill}: {fill: string}) => JSX.Element;
@@ -48,20 +55,24 @@ type ButtonIconProps = {
   notification?: ThemeIconProps['notification'];
 };
 
+type ButtonModeAwareProps =
+  | {mode?: 'primary'; interactiveColor?: InteractiveColor}
+  | {
+      mode: Exclude<ButtonMode, 'primary'>;
+      backgroundColor?: StaticColor | InteractiveColor;
+    };
+
 export type ButtonProps = {
   onPress(): void;
-  interactiveColor?: InteractiveColor;
-  mode?: ButtonMode;
-  viewContainerStyle?: StyleProp<ViewStyle>;
-  textContainerStyle?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
   leftIcon?: ButtonIconProps;
   rightIcon?: ButtonIconProps;
   active?: boolean;
   compact?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
+  hasShadow?: boolean;
 } & ButtonTypeAwareProps &
+  ButtonModeAwareProps &
   PressableProps;
 
 const DISABLED_OPACITY = 0.2;
@@ -70,7 +81,6 @@ export const Button = React.forwardRef<any, ButtonProps>(
   (
     {
       onPress,
-      interactiveColor = 'interactive_0',
       mode = 'primary',
       type = 'block',
       leftIcon,
@@ -80,17 +90,23 @@ export const Button = React.forwardRef<any, ButtonProps>(
       active,
       loading = false,
       compact = false,
+      hasShadow = false,
       style,
-      viewContainerStyle,
-      textContainerStyle,
-      textStyle,
       ...props
     },
     ref,
   ) => {
+    const interactiveColor =
+      'interactiveColor' in props && props.interactiveColor
+        ? props.interactiveColor
+        : 'interactive_0';
+    const backgroundColor =
+      'backgroundColor' in props && props.backgroundColor
+        ? props.backgroundColor
+        : 'background_0';
+
     const modeData = DefaultModeStyles[mode];
-    const themeColor = interactiveColor;
-    const css = useButtonStyle();
+    const styles = useButtonStyle();
     const {theme} = useTheme();
     const fadeAnim = useRef(
       new Animated.Value(disabled ? DISABLED_OPACITY : 1),
@@ -105,30 +121,36 @@ export const Button = React.forwardRef<any, ButtonProps>(
       }).start();
     }, [disabled, fadeAnim]);
 
-    const isInline = type === 'inline' || type === 'pill';
+    const isInline = type === 'medium' || type === 'small';
 
     const spacing = compact ? theme.spacings.small : theme.spacings.medium;
+    const {background: buttonColor} =
+      theme.interactive[interactiveColor][active ? 'active' : 'default'];
 
-    const {background: backgroundColor, text: textColor} =
-      theme.interactive[themeColor][active ? 'active' : 'default'];
+    const textColorBasedOnBackground = useColor(backgroundColor);
+    const textColor =
+      mode !== 'primary'
+        ? textColorBasedOnBackground
+        : theme.interactive[interactiveColor][active ? 'active' : 'default']
+            .text;
+
+    const borderColor =
+      active && mode === 'primary'
+        ? theme.interactive[interactiveColor].default.background
+        : modeData.visibleBorder
+        ? textColor
+        : 'transparent';
 
     const styleContainer: ViewStyle[] = [
-      css.button,
+      styles.button,
       {
-        backgroundColor: modeData.withBackground
-          ? backgroundColor
-          : 'transparent',
-        borderColor:
-          active && type === 'pill' && mode === 'primary'
-            ? theme.interactive[themeColor].default.background
-            : modeData.visibleBorder
-            ? textColor
-            : 'transparent',
+        backgroundColor: modeData.withBackground ? buttonColor : 'transparent',
+        borderColor: borderColor,
         paddingHorizontal: spacing,
-        paddingVertical: type === 'pill' ? theme.spacings.xSmall : spacing,
+        paddingVertical: type === 'small' ? theme.spacings.xSmall : spacing,
         alignSelf: isInline ? 'flex-start' : undefined,
         borderRadius:
-          type === 'pill'
+          type === 'small'
             ? theme.border.radius.circle
             : theme.border.radius.regular,
       },
@@ -165,9 +187,16 @@ export const Button = React.forwardRef<any, ButtonProps>(
     };
 
     return (
-      <Animated.View style={[{opacity: fadeAnim}, viewContainerStyle]}>
+      <Animated.View
+        style={[
+          {
+            opacity: fadeAnim,
+          },
+          style,
+        ]}
+      >
         <PressableOpacity
-          style={[styleContainer, style]}
+          style={[styleContainer, hasShadow ? shadows : undefined]}
           onPress={disabled ? undefined : onPress}
           disabled={disabled}
           accessibilityRole="button"
@@ -181,10 +210,11 @@ export const Button = React.forwardRef<any, ButtonProps>(
             </View>
           )}
           {text && (
-            <View style={[textContainer, textContainerStyle]}>
+            <View style={textContainer}>
               <ThemeText
                 type={getTextType(mode, type)}
-                style={[styleText, textStyle]}
+                style={styleText}
+                testID="buttonText"
               >
                 {text}
               </ThemeText>
@@ -234,8 +264,16 @@ const useButtonStyle = StyleSheet.createThemeHook((theme: Theme) => ({
   },
 }));
 
+const useColor = (color: StaticColor | InteractiveColor): string => {
+  const {themeName} = useTheme();
+
+  return isStaticColor(color)
+    ? getStaticColor(themeName, color).text
+    : getInteractiveColor(themeName, color).default.text;
+};
+
 function getTextType(mode: string, type: string) {
   if (mode === 'tertiary') return 'body__primary';
-  if (type === 'pill') return 'body__secondary';
+  if (type === 'small') return 'body__secondary';
   return 'body__primary--bold';
 }

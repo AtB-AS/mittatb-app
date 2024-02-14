@@ -8,7 +8,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import TravelTokenBoxTexts from '@atb/translations/components/TravelTokenBox';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
-import {Button} from '@atb/components/button';
+import {Button} from '@atb/components/button'; // re-add when new onboarding ready
 import {InteractiveColor, getInteractiveColor} from '@atb/theme/colors';
 import {TravelTokenDeviceTitle} from './TravelTokenDeviceTitle';
 import {useNavigation} from '@react-navigation/native';
@@ -117,8 +117,8 @@ export function TravelTokenBox({
         </View>
       </View>
       <Button
-        interactiveColor={interactiveColor}
         mode="secondary"
+        backgroundColor={interactiveColor}
         onPress={onPressChangeButton}
         text={t(TravelTokenBoxTexts.change)}
         testID="continueWithoutChangingTravelTokenButton"
