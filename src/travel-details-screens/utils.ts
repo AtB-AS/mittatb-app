@@ -20,6 +20,7 @@ import {dictionary, TranslateFunction} from '@atb/translations';
 import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingStatus, TripPatternBookingStatus} from './types';
+import {Statuses} from '@atb-as/theme';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -399,6 +400,20 @@ export function getTripPatternBookingStatus(
     }
   }, 'none');
 }
+
+export const bookingStatusToMsgType = (
+  bookingStatus: BookingStatus,
+): Extract<Statuses, 'warning' | 'error'> | undefined => {
+  switch (bookingStatus) {
+    case 'none':
+      return undefined;
+    case 'early':
+    case 'bookable':
+      return 'warning';
+    case 'late':
+      return 'error';
+  }
+};
 
 export function getIsTooLateToBookFlexLine(
   tripPattern: TripPattern,

@@ -7,6 +7,7 @@ import {
   TransportSubmode,
   DestinationDisplay,
 } from './generated/journey_planner_v3_types';
+import {DepartureTime} from "@atb/api/departures/types";
 
 type QuayWithEstimatedCalls = Required<Types.DeparturesQuery>['quays'][0];
 
@@ -40,16 +41,6 @@ export type DepartureLineInfo = {
   notices: Notice[];
   lineId: string;
   lineVariationIdentifier?: string;
-};
-
-export type DepartureTime = {
-  time: string;
-  aimedTime: string;
-  realtime?: boolean;
-  predictionInaccurate?: boolean;
-  situations?: PtSituationElement[];
-  serviceJourneyId?: string;
-  serviceDate: string;
 };
 
 export type StopPlaceInfo = {

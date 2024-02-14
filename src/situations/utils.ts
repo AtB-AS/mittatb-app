@@ -9,8 +9,11 @@ import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {SvgProps} from 'react-native-svg';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {isAfter, isBefore, isBetween} from '@atb/utils/date';
-import {Statuses} from '@atb-as/theme';
+import {statusComparator} from '@atb/utils/status-comparator';
+import {Statuses} from '@atb/theme';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {bookingStatusToMsgType} from '@atb/travel-details-screens/utils';
+import {BookingStatus} from '@atb/travel-details-screens/types';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {
   const seenIds: string[] = [];
@@ -42,7 +45,9 @@ export const getSituationSummary = (
   return text || undefined;
 };
 
-export const getMessageTypeForSituation = (situation: SituationType) =>
+export const getMessageTypeForSituation = (
+  situation: SituationType,
+): Extract<Statuses, 'warning' | 'info'> =>
   situation.reportType === 'incident' ? 'warning' : 'info';
 
 export const getSvgForSituation = (
@@ -61,18 +66,37 @@ export const getMsgTypeForMostCriticalSituationOrNotice = (
   situations: SituationType[],
   notices?: NoticeFragment[],
   cancellation: boolean = false,
-): Statuses | undefined => {
+): Exclude<Statuses, 'valid'> | undefined => {
   if (cancellation) return 'error';
   if (!situations.length) {
     return notices?.length ? 'info' : undefined;
   }
   return situations
     .map(getMessageTypeForSituation)
-    .reduce(
-      (mostCritical, msgType) =>
-        msgType === 'warning' ? 'warning' : mostCritical,
-      'info',
+    .reduce<Exclude<Statuses, 'valid'> | undefined>(
+      toMostCriticalStatus,
+      undefined,
     );
+};
+
+/**
+ * A function which may be used in a reducer function to decide what the most
+ * critical status level is.
+ */
+export const toMostCriticalStatus = <T extends Statuses | undefined>(
+  currentlyMostCritical: T,
+  msgType: T,
+): T => {
+  if (!msgType) return currentlyMostCritical;
+  if (!currentlyMostCritical) return msgType;
+  return statusComparator(currentlyMostCritical, msgType) === 1
+    ? currentlyMostCritical
+    : msgType;
+};
+
+export const bookingStatusToIcon = (bookingStatus: BookingStatus) => {
+  const bookingMsgType = bookingStatusToMsgType(bookingStatus);
+  return bookingMsgType && messageTypeToIcon(bookingMsgType, true);
 };
 
 export const getSvgForMostCriticalSituationOrNotice = (

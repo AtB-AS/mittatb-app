@@ -52,6 +52,7 @@ export type RemoteConfig = {
   enable_on_behalf_of: boolean;
   enable_ticket_information: boolean;
   enable_posthog: boolean;
+  enable_server_time: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -109,6 +110,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_on_behalf_of: false,
   enable_ticket_information: false,
   enable_posthog: false,
+  enable_server_time: true,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -294,6 +296,10 @@ export function getConfig(): RemoteConfig {
   const enable_posthog =
     values['enable_posthog']?.asBoolean() ?? defaultRemoteConfig.enable_posthog;
 
+  const enable_server_time =
+    values['enable_server_time']?.asBoolean() ??
+    defaultRemoteConfig.enable_server_time;
+
   return {
     enable_ticketing,
     enable_intercom,
@@ -345,6 +351,7 @@ export function getConfig(): RemoteConfig {
     enable_ticket_information,
     enable_on_behalf_of,
     enable_posthog,
+    enable_server_time,
   };
 }
 
