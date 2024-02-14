@@ -11,7 +11,7 @@ export const Root_TermsInformationScreen = () => {
   const data = termsInfo[language];
   return (
     <InformationScreenComponent
-      informations={data as InformationElement[]}
+      information={data as InformationElement[]}
       title={t(InformationTexts.terms.title)}
       leftButton={{type: 'close'}}
     />
