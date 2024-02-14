@@ -282,15 +282,35 @@ const ProfileTexts = {
       linkSectionItems: {
         ticketing: {
           label: _('Billettkjøp', 'Ticketing', 'Billettkjøp'),
+          a11yLabel: _(
+            'Billettkjøp, åpner side i nettleser',
+            'Ticketing, opens page in browser',
+            'Billettkjøp, åpner side i nettlesar',
+          ),
         },
         terms: {
           label: _('Betingelser', 'Terms', 'Vilkår'),
+          a11yLabel: _(
+            'Betingelser, åpner side i nettleser',
+            'Terms, opens page in browser',
+            'Vilkår, åpner side i nettlesar',
+          ),
         },
         inspection: {
           label: _('Billettkontroll', 'Ticket inspection', 'Billettkontroll'),
+          a11yLabel: _(
+            'Billettkontroll, åpner side i nettleser',
+            'Ticket inspection, opens page in browser',
+            'Billettkontroll, åpner side i nettlesar',
+          ),
         },
         refund: {
           label: _('Refusjon', 'Refund', 'Refusjon'),
+          a11yLabel: _(
+            'Refusjon, åpner side i nettleser',
+            'Refund, opens page in browser',
+            'Refusjon, åpner side i nettlesar',
+          ),
         },
       },
     },

@@ -381,6 +381,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   )}
                   testID="ticketingInfoButton"
                   onPress={() => Linking.openURL(ticketingInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.information.linkSectionItems
+                        .ticketing.a11yLabel,
+                    ),
+                  }}
                 />
               )}
               {termsInfoUrl && (
@@ -392,6 +398,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   )}
                   testID="termsInfoButton"
                   onPress={() => Linking.openURL(termsInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.information.linkSectionItems.terms
+                        .a11yLabel,
+                    ),
+                  }}
                 />
               )}
 
@@ -404,6 +416,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   )}
                   testID="inspectionInfoButton"
                   onPress={() => Linking.openURL(inspectionInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.information.linkSectionItems
+                        .inspection.a11yLabel,
+                    ),
+                  }}
                 />
               )}
 
@@ -416,6 +434,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   )}
                   testID="refundInfoButton"
                   onPress={() => Linking.openURL(refundInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.information.linkSectionItems.refund
+                        .a11yLabel,
+                    ),
+                  }}
                 />
               )}
             </Section>
