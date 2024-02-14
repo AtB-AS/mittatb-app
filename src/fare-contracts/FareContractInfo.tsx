@@ -145,8 +145,10 @@ export const FareContractInfoDetails = (
     toTariffZone,
   );
 
+  const isStatusSent = status === 'sent';
+
   const isValidOrSentFareContract: boolean =
-    isValidFareContract(status) || status === 'sent';
+    isValidFareContract(status) || isStatusSent;
 
   return (
     <View style={styles.container} accessible={true}>
@@ -166,7 +168,7 @@ export const FareContractInfoDetails = (
           )}
         </View>
         {isValidOrSentFareContract && (
-          <InspectionSymbol {...props} sentTicket={status === 'sent'} />
+          <InspectionSymbol {...props} sentTicket={isStatusSent} />
         )}
       </View>
     </View>
