@@ -24,8 +24,8 @@ import {
 import React from 'react';
 import {View} from 'react-native';
 import {
+  getLastUsedAccess,
   getValidityStatus,
-  isSentFareContract,
   isValidFareContract,
   mapToUserProfilesWithCount,
   useNonInspectableTokenWarning,
@@ -34,7 +34,6 @@ import {
   ValidityStatus,
 } from '../fare-contracts/utils';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
-import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
@@ -146,8 +145,10 @@ export const FareContractInfoDetails = (
     toTariffZone,
   );
 
+  const isStatusSent = status === 'sent';
+
   const isValidOrSentFareContract: boolean =
-    isValidFareContract(status) || isSentFareContract(status);
+    isValidFareContract(status) || isStatusSent;
 
   return (
     <View style={styles.container} accessible={true}>
@@ -167,10 +168,7 @@ export const FareContractInfoDetails = (
           )}
         </View>
         {isValidOrSentFareContract && (
-          <InspectionSymbol
-            {...props}
-            sentTicket={isSentFareContract(status)}
-          />
+          <InspectionSymbol {...props} sentTicket={isStatusSent} />
         )}
       </View>
     </View>

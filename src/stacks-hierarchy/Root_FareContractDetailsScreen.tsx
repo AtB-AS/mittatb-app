@@ -1,5 +1,5 @@
 import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
-import {CarnetDetailedView, DetailsContent} from '@atb/fare-contracts';
+import {DetailsContent} from '@atb/fare-contracts';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
@@ -9,7 +9,6 @@ import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAnalytics} from '@atb/analytics';
-import {isCarnet} from '@atb/ticketing';
 import {MapFilterType} from '@atb/components/map';
 import {useAuthState} from '@atb/auth';
 
@@ -76,23 +75,16 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
         title={t(FareContractTexts.details.header.title)}
       />
       <ScrollView contentContainerStyle={styles.content}>
-        {fareContract &&
-          (isCarnet(fareContract) ? (
-            <CarnetDetailedView
-              fareContract={fareContract}
-              now={serverNow}
-              onReceiptNavigate={onReceiptNavigate}
-            />
-          ) : (
-            <DetailsContent
-              fareContract={fareContract}
-              preassignedFareProduct={preassignedFareProduct}
-              now={serverNow}
-              isSentFareContract={isSentFareContract}
-              onReceiptNavigate={onReceiptNavigate}
-              onNavigateToMap={onNavigateToMap}
-            />
-          ))}
+        {fareContract && (
+          <DetailsContent
+            fareContract={fareContract}
+            preassignedFareProduct={preassignedFareProduct}
+            now={serverNow}
+            isSentFareContract={isSentFareContract}
+            onReceiptNavigate={onReceiptNavigate}
+            onNavigateToMap={onNavigateToMap}
+          />
+        )}
       </ScrollView>
     </View>
   );
