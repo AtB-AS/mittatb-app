@@ -440,7 +440,7 @@ function EstimatedCallRow({
 
   const {group, isStartOfGroup, isEndOfGroup, isStartOfServiceJourney} =
     call.metadata;
-  const isFirstOfTrip = group === 'trip' && isStartOfGroup;
+  const isStartOfTripGroup = group === 'trip' && isStartOfGroup;
 
   const isBetween = !isStartOfGroup && !isEndOfGroup;
   const iconColor = useTransportationColor(
@@ -516,7 +516,7 @@ function EstimatedCallRow({
         </TripRow>
       ))}
 
-      {isFirstOfTrip && bookingStatus !== 'none' && (
+      {isStartOfTripGroup && bookingStatus !== 'none' && (
         <TripRow rowLabel={bookingIcon && <ThemeIcon svg={bookingIcon} />}>
           <BookingInfoBox
             bookingArrangements={call.bookingArrangements}
@@ -527,7 +527,7 @@ function EstimatedCallRow({
         </TripRow>
       )}
 
-      {isFirstOfTrip && !call.cancellation && bookingStatus === 'bookable' && (
+      {isStartOfTripGroup && !call.cancellation && bookingStatus === 'bookable' && (
         <TripRow>
           <BookingOptions bookingArrangements={call.bookingArrangements} />
         </TripRow>
