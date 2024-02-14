@@ -134,7 +134,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const atbAuthorityId = 'ATB:Authority:2';
   const shouldShowButtonForOpeningFlexBottomSheet =
-    isLegFlexibleTransport(leg) && leg.authority?.id === atbAuthorityId;
+    isLineFlexibleTransport(leg.line) && leg.authority?.id === atbAuthorityId;
 
   const {open: openBottomSheet} = useBottomSheet();
   function openBookingDetails() {
