@@ -16,7 +16,7 @@ export type TransportationIconBoxProps = {
   subMode?: AnySubMode;
   lineNumber?: string;
   size?: keyof Theme['icon']['size'];
-  spacious?: boolean;
+  type?: 'compact' | 'standard';
   style?: StyleProp<ViewStyle>;
   disabled?: boolean;
   testID?: string;
@@ -27,7 +27,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   subMode,
   lineNumber,
   size = 'normal',
-  spacious = false,
+  type = 'compact',
   style,
   disabled,
   testID,
@@ -57,7 +57,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
     <View
       style={[
         styles.transportationIconBox,
-        spacious && styles.spaciousTransportationIconBox,
+        type === 'standard' && styles.standardTransportationIconBox,
         style,
         {
           backgroundColor,
@@ -83,7 +83,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     padding: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
   },
-  spaciousTransportationIconBox: {
+  standardTransportationIconBox: {
     padding: theme.spacings.small,
   },
   lineNumberText: {

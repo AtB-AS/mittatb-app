@@ -581,7 +581,7 @@ const TransportationLeg = ({
       mode={isLegFlexibleTransport(leg) ? 'flex' : leg.mode}
       subMode={leg.line?.transportSubmode}
       lineNumber={leg.line?.publicCode}
-      spacious={true}
+      type="standard"
       testID="trLeg"
     />
   );
