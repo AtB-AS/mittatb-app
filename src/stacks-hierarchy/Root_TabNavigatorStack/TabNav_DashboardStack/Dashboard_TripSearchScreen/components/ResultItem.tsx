@@ -58,7 +58,7 @@ import {useFontScale} from '@atb/utils/use-font-scale';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
-import {TripPatternBookingStatus} from "@atb/travel-details-screens/types";
+import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -582,6 +582,7 @@ const TransportationLeg = ({
       subMode={leg.line?.transportSubmode}
       isFlexible={isLineFlexibleTransport(leg.line)}
       lineNumber={leg.line?.publicCode}
+      type="standard"
       testID="trLeg"
     />
   );
