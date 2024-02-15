@@ -517,7 +517,10 @@ function EstimatedCallRow({
       ))}
 
       {isStartOfTripGroup && bookingStatus !== 'none' && (
-        <TripRow rowLabel={bookingIcon && <ThemeIcon svg={bookingIcon} />}>
+        <TripRow
+          rowLabel={bookingIcon && <ThemeIcon svg={bookingIcon} />}
+          accessible={false}
+        >
           <BookingInfoBox
             bookingArrangements={call.bookingArrangements}
             aimedStartTime={call.aimedDepartureTime}
@@ -527,11 +530,13 @@ function EstimatedCallRow({
         </TripRow>
       )}
 
-      {isStartOfTripGroup && !call.cancellation && bookingStatus === 'bookable' && (
-        <TripRow>
-          <BookingOptions bookingArrangements={call.bookingArrangements} />
-        </TripRow>
-      )}
+      {isStartOfTripGroup &&
+        !call.cancellation &&
+        bookingStatus === 'bookable' && (
+          <TripRow accessible={false}>
+            <BookingOptions bookingArrangements={call.bookingArrangements} />
+          </TripRow>
+        )}
 
       {collapseButton}
     </View>
