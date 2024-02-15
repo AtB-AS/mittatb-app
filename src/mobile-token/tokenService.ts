@@ -91,7 +91,7 @@ export const tokenService: TokenService = {
       .catch(handleError),
   initiateMobileTokenRenewal: (token, secureContainer, traceId, attestation) =>
     client
-      .post<InitiateTokenRenewalResponse>('/tokens/v4/renew', undefined, {
+      .post<InitiateTokenRenewalResponse>('/tokens/v4/renew', {"tokenId": token.tokenId}, {
         headers: {
           [CorrelationIdHeaderName]: traceId,
           [SignedTokenHeaderName]: secureContainer,
