@@ -41,6 +41,8 @@ import {
   RegionPayload,
 } from '@rnmapbox/maps/lib/typescript/src/components/MapView';
 
+const EMPTY_FILTER = {};
+
 export type TravelDetailsMapScreenParams = {
   legs: MapLeg[];
   vehicleWithPosition?: VehicleWithPosition;
@@ -87,7 +89,7 @@ export const TravelDetailsMapScreenComponent = ({
   const controlStyles = useControlPositionsStyle();
   const styles = useStyles();
 
-  const stations = useStations(mapFilter?.mobility ?? {});
+  const stations = useStations(mapFilter?.mobility ?? EMPTY_FILTER);
 
   const [liveVehicle, isLiveConnected] = useLiveVehicleSubscription({
     serviceJourneyId: vehicleWithPosition?.serviceJourney?.id,
