@@ -61,14 +61,14 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
   // if user has sent fare contracts AND the popOver is not seen yet,
   // the popOver should be shown
   const shouldShowPopOver =
-    hasSentFareContracts && !isPopOverSeen('on-behalf-of-first-time-purchase');
+    hasSentFareContracts && !isPopOverSeen('on-behalf-of-sent-tickets-button');
 
   const showPopOver = useCallback(() => {
     addPopOver({
-      oneTimeKey: 'on-behalf-of-first-time-purchase',
+      oneTimeKey: 'on-behalf-of-sent-tickets-button',
       target: sentFareContractRef,
     });
-    setPopOverSeen('on-behalf-of-first-time-purchase');
+    setPopOverSeen('on-behalf-of-sent-tickets-button');
   }, [addPopOver, setPopOverSeen]);
 
   useFocusEffect(

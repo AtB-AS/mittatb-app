@@ -27,7 +27,7 @@ const OneTimePopOverTexts: {[key in PopOverKey]: PopOverText} = {
       'Kjøp til nokon andre.',
     ),
   },
-  'on-behalf-of-first-time-purchase': {
+  'on-behalf-of-sent-tickets-button': {
     heading: _(
       'Leter du etter sendte billetter?',
       'Looking for sent tickets?',
