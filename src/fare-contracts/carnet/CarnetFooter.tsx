@@ -20,19 +20,34 @@ export const CarnetFooter: React.FC<Props> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const activeAccess = active ? 1 : 0;
+
   const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
 
+  // The number of accesses remaining, including the active one
+  const shownAccessesRemaining = accessesRemaining + activeAccess;
+
   // If any active, the remaining count is the active index
-  const activeIndex = active ? accessesRemaining : undefined;
+  const activeIndex = active
+    ? (shownAccessesRemaining - 1) % CARNET_DIVIDER
+    : undefined;
 
   // Figure out how many unused travel rights there are left
   // does not need to match actual number of travel rights
-  const carnetsLeftCount = Math.ceil(accessesRemaining / CARNET_DIVIDER);
+  const carnetsLeftCount = Math.ceil(
+    (shownAccessesRemaining + activeAccess) / CARNET_DIVIDER,
+  );
 
   // For the ones not displayed as "multi carnets"
   // how many accesses are used in the travel right
   const restUsed =
-    carnetsLeftCount > 0 ? numberOfUsedAccesses % (10 * carnetsLeftCount) : 10;
+    carnetsLeftCount > 0
+      ? (numberOfUsedAccesses - activeAccess) % CARNET_DIVIDER
+      : CARNET_DIVIDER;
+
+  const numberOfMultiCarnets = Math.floor(
+    Math.max(0, shownAccessesRemaining - 1) / CARNET_DIVIDER,
+  );
 
   return (
     <View
@@ -54,10 +69,11 @@ export const CarnetFooter: React.FC<Props> = ({
         </ThemeText>
       </View>
       <View style={styles.container}>
-        {carnetsLeftCount - 1 > 0 &&
-          Array(carnetsLeftCount - 1)
-            .fill(CARNET_DIVIDER)
-            .map((count, idx) => <MultiCarnet key={idx} count={count} />)}
+        {Array(numberOfMultiCarnets)
+          .fill(CARNET_DIVIDER)
+          .map((count, idx) => (
+            <MultiCarnet key={idx} count={count} />
+          ))}
         {Array(CARNET_DIVIDER)
           .fill(true)
           .map((_, idx) => idx < restUsed)
@@ -72,9 +88,7 @@ export const CarnetFooter: React.FC<Props> = ({
                   : undefined,
               ]}
             >
-              {idx === activeIndex && (
-                <View style={styles.dotFill__active} />
-              )}
+              {idx === activeIndex && <View style={styles.dotFill__active} />}
             </View>
           ))}
       </View>
@@ -89,7 +103,7 @@ function MultiCarnet({count}: {count: number}) {
       <View style={[styles.dot, {marginRight: 8}]} />
       <View
         style={[styles.dot, {opacity: 0.8, position: 'absolute', left: 8}]}
-       />
+      />
       <View style={styles.box}>
         <View style={styles.triangle} />
       </View>
