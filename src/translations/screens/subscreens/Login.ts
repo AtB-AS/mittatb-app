@@ -45,6 +45,9 @@ const LoginTexts = {
       },
     },
   },
+  terms: {
+    title: _('Betingelser', 'Terms', 'Vilkår'),
+  },
   activeFareContractPrompt: {
     title: _(
       'Vent litt, du har en gyldig billett',

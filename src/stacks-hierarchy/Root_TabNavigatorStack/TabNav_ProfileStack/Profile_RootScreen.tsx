@@ -23,7 +23,7 @@ import {
 import {numberToAccessibilityString} from '@atb/utils/accessibility';
 import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
-import {APP_ORG, IS_QA_ENV} from '@env';
+import {IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
 import {Linking, View} from 'react-native';
@@ -372,83 +372,57 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               text={t(ProfileTexts.sections.information.heading)}
             />
             <Section>
-              {APP_ORG === 'atb' ? (
+              {ticketingInfoUrl && (
                 <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
                   text={t(
                     ProfileTexts.sections.information.linkSectionItems.ticketing
                       .label,
                   )}
                   testID="ticketingInfoButton"
-                  onPress={() =>
-                    navigation.navigate('Profile_TicketingInformationScreen')
-                  }
-                />
-              ) : (
-                ticketingInfoUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
+                  onPress={() => Linking.openURL(ticketingInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
                       ProfileTexts.sections.information.linkSectionItems
-                        .ticketing.label,
-                    )}
-                    testID="ticketingInfoButton"
-                    onPress={() => Linking.openURL(ticketingInfoUrl)}
-                  />
-                )
+                        .ticketing.a11yLabel,
+                    ),
+                  }}
+                />
               )}
-
-              {APP_ORG === 'atb' ? (
+              {termsInfoUrl && (
                 <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
                   text={t(
                     ProfileTexts.sections.information.linkSectionItems.terms
                       .label,
                   )}
                   testID="termsInfoButton"
-                  onPress={() =>
-                    navigation.navigate('Profile_TermsInformationScreen')
-                  }
-                />
-              ) : (
-                termsInfoUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
+                  onPress={() => Linking.openURL(termsInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
                       ProfileTexts.sections.information.linkSectionItems.terms
-                        .label,
-                    )}
-                    testID="termsInfoButton"
-                    onPress={() => Linking.openURL(termsInfoUrl)}
-                  />
-                )
+                        .a11yLabel,
+                    ),
+                  }}
+                />
               )}
 
-              {APP_ORG === 'atb' ? (
+              {inspectionInfoUrl && (
                 <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
                   text={t(
                     ProfileTexts.sections.information.linkSectionItems
                       .inspection.label,
                   )}
                   testID="inspectionInfoButton"
-                  onPress={() =>
-                    navigation.navigate(
-                      APP_ORG === 'atb'
-                        ? 'Profile_TicketInspectionInformationScreen'
-                        : 'Profile_GenericWebsiteInformationScreen',
-                    )
-                  }
-                />
-              ) : (
-                inspectionInfoUrl && (
-                  <LinkSectionItem
-                    icon={<ThemeIcon svg={ExternalLink} />}
-                    text={t(
+                  onPress={() => Linking.openURL(inspectionInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
                       ProfileTexts.sections.information.linkSectionItems
-                        .inspection.label,
-                    )}
-                    testID="inspectionInfoButton"
-                    onPress={() => Linking.openURL(inspectionInfoUrl)}
-                  />
-                )
+                        .inspection.a11yLabel,
+                    ),
+                  }}
+                />
               )}
 
               {refundInfoUrl && (
@@ -460,6 +434,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   )}
                   testID="refundInfoButton"
                   onPress={() => Linking.openURL(refundInfoUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.information.linkSectionItems.refund
+                        .a11yLabel,
+                    ),
+                  }}
                 />
               )}
             </Section>
