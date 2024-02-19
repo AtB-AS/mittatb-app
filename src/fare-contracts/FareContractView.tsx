@@ -26,6 +26,7 @@ import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-bene
 import {UsedAccessValidityHeader} from '@atb/fare-contracts/carnet/UsedAccessValidityHeader';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {isSentOrReceivedFareContract} from '@atb/ticketing';
+import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetButton';
 
 type Props = {
   now: number;
@@ -166,6 +167,9 @@ export const FareContractView: React.FC<Props> = ({
           onPress={onPressDetails}
           testID={testID + 'Details'}
         />
+      )}
+      {isCarnetFareContract && (
+        <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
       )}
     </Section>
   );

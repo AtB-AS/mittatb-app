@@ -45,6 +45,7 @@ import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/Mobili
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ValidityLine} from '../ValidityLine';
 import {ValidityHeader} from '../ValidityHeader';
+import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetButton';
 
 type Props = {
   fareContract: FareContract;
@@ -235,6 +236,9 @@ export const DetailsContent: React.FC<Props> = ({
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
+        {isCarnetFareContract && (
+          <ConsumeCarnetSectionItem fareContractId={fc.id} />
+        )}
       </Section>
     );
   } else {
