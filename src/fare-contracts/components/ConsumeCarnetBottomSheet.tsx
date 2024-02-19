@@ -1,11 +1,17 @@
+import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {Confirm} from '@atb/assets/svg/mono-icons/actions';
-import {BottomSheetContainer} from '@atb/components/bottom-sheet';
+import {
+  BottomSheetContainer,
+  useBottomSheet,
+} from '@atb/components/bottom-sheet';
 import {Button} from '@atb/components/button';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
+import {consumeCarnet} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -16,6 +22,22 @@ type Props = {
 export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<boolean>(false);
+  const {close} = useBottomSheet();
+
+  const onConsume = async () => {
+    setIsLoading(true);
+    try {
+      await consumeCarnet(fareContractId);
+      close();
+    } catch (e: any) {
+      const errorData = getAxiosErrorMetadata(e);
+      console.error('Error when consuming carnet: ', errorData);
+      setError(true);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <BottomSheetContainer
@@ -26,6 +48,12 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
+        {error && (
+          <MessageInfoBox
+            message={t(FareContractTexts.carnet.genericError)}
+            type="error"
+          />
+        )}
         <Section>
           <GenericSectionItem type="spacious">
             <ThemeText>
@@ -34,12 +62,10 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
           </GenericSectionItem>
         </Section>
         <Button
-          onPress={() => {
-            // @TODO: Implement activation of carnet
-            console.log(fareContractId);
-          }}
+          onPress={onConsume}
           text={t(FareContractTexts.carnet.activateCarnet)}
           rightIcon={{svg: Confirm}}
+          loading={isLoading}
         />
       </ScrollView>
     </BottomSheetContainer>
