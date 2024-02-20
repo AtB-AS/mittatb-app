@@ -14,6 +14,7 @@ export function setupFirestoreListeners(
   abtCustomerId: string,
   listeners: {
     fareContracts: SnapshotListener<FareContract[]>;
+    sentFareContracts: SnapshotListener<FareContract[]>;
     reservations: SnapshotListener<Reservation[]>;
     rejectedReservations: SnapshotListener<Reservation[]>;
     customer: SnapshotListener<CustomerProfile>;
@@ -40,6 +41,30 @@ export function setupFirestoreListeners(
           event.addMetadata('ticket', {abtCustomerId});
         });
         listeners.fareContracts.onError(err);
+      },
+    );
+
+  const sentFareContractsUnsub = firestore()
+    .collection('customers')
+    .doc(abtCustomerId)
+    .collection('sentFareContracts')
+    .orderBy('created', 'desc')
+    .onSnapshot(
+      (snapshot) => {
+        const sentFareContracts = (
+          snapshot as FirebaseFirestoreTypes.QuerySnapshot<FareContract>
+        ).docs.map<FareContract>((d) => d.data());
+        listeners.sentFareContracts.onSnapshot(sentFareContracts);
+
+        Bugsnag.leaveBreadcrumb('sentfarecontract_snapshot', {
+          count: sentFareContracts.length,
+        });
+      },
+      (err) => {
+        Bugsnag.notify(err, function (event) {
+          event.addMetadata('sentticket', {abtCustomerId});
+        });
+        listeners.sentFareContracts.onError(err);
       },
     );
 
@@ -114,6 +139,7 @@ export function setupFirestoreListeners(
   // Stop listening for updates when no longer required
   return function removeListeners() {
     fareContractUnsub();
+    sentFareContractsUnsub();
     reservationsUnsub();
     customerProfileUnsub();
     rejectedReservationsUnsub();

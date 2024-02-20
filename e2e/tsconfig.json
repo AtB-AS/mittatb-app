@@ -1,15 +1,31 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "module": "commonjs",
+    "moduleResolution": "NodeNext",
+    "module": "nodenext",
+    "target": "es6",
+    "esModuleInterop": true,
     "skipLibCheck": true,
+    "strict": false,
+    "allowJs": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": false,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "allowArbitraryExtensions": true,
     "types": [
       "node",
       "@wdio/globals/types",
       "expect-webdriverio",
       "@wdio/mocha-framework",
       "@wdio/appium-service"
-    ],
-    "target": "es2022"
-  }
+    ]
+  },
+  "ts-node": {
+    "files": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

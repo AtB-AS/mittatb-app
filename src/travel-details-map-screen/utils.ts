@@ -10,10 +10,12 @@ import {MapLeg} from '@atb/components/map';
 import {Coordinates} from '@atb/utils/coordinates';
 import {CameraBounds} from '@rnmapbox/maps';
 import {AnyMode} from '@atb/components/icon-box';
+import {isLineFlexibleTransport} from '@atb/travel-details-screens/utils';
 
 export interface MapLine extends Feature<LineString> {
   travelType?: AnyMode;
   subMode?: TransportSubmode;
+  isFlexible?: boolean;
   faded?: boolean;
 }
 
@@ -59,6 +61,7 @@ export function createMapLines(legs: MapLeg[]): MapLine[] {
         travelType: leg.mode as unknown as Mode,
         subMode: leg.transportSubmode as unknown as TransportSubmode,
         geometry: line,
+        isFlexible: isLineFlexibleTransport(leg.line),
       };
     });
 }

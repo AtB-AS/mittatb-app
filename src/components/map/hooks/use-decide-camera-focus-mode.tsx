@@ -16,7 +16,6 @@ import {
 } from '../utils';
 import {tripsSearch} from '@atb/api/trips';
 import MapboxGL from '@rnmapbox/maps';
-import {isLegFlexibleTransport} from '@atb/travel-details-screens/utils';
 import {StreetMode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 const MAX_LIMIT_TO_SHOW_WALKING_TRIP = 5000;
@@ -114,12 +113,7 @@ const fetchMapLines = async (
     walkingTripPattern?.walkDistance &&
     walkingTripPattern.walkDistance <= MAX_LIMIT_TO_SHOW_WALKING_TRIP
   ) {
-    const tripLegs: MapLeg[] = walkingTripPattern?.legs.map((leg) => {
-      return {
-        ...leg,
-        mode: isLegFlexibleTransport(leg) ? 'flex' : leg.mode,
-      };
-    });
+    const tripLegs: MapLeg[] = walkingTripPattern?.legs
     const distance = walkingTripPattern.walkDistance;
     const mapLines = tripLegs ? createMapLines(tripLegs) : undefined;
     return {mapLines, distance};

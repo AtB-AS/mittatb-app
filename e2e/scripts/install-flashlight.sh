@@ -4,7 +4,10 @@ echo "Install Flashlight"
 curl https://get.flashlight.dev | bash
 
 echo "Add Flashlight"
-source /Users/runner/.profile
+# macos
+# source /Users/runner/.profile
+# ubuntu
+source /home/runner/.bashrc
 
 echo "Test Flashlight"
 flashlight -v

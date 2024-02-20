@@ -8,12 +8,13 @@ import {
   FavouriteDepartureToggle,
   StoredFavoriteDeparture,
 } from '@atb/favorites';
-import {
-  getSituationOrNoticeA11yLabel,
-  getSvgForMostCriticalSituationOrNotice,
-} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {formatDestinationDisplay} from '@atb/travel-details-screens/utils';
+import {
+  formatDestinationDisplay,
+  getNoticesForEstimatedCall,
+  bookingStatusToMsgType,
+  getBookingStatus,
+} from '@atb/travel-details-screens/utils';
 import {destinationDisplaysAreEqual} from '@atb/utils/destination-displays-are-equal';
 
 import {
@@ -21,10 +22,10 @@ import {
   DeparturesTexts,
   dictionary,
   Language,
+  SituationsTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {getNoticesForEstimatedCall} from '@atb/travel-details-screens/utils';
 import {
   formatLocaleTime,
   formatToClockOrLongRelativeMinutes,
@@ -38,6 +39,12 @@ import {View} from 'react-native';
 import {GenericClickableSectionItem} from '@atb/components/sections';
 import {isDefined} from '@atb/utils/presence';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
+import {
+  getMsgTypeForMostCriticalSituationOrNotice,
+  toMostCriticalStatus,
+} from '@atb/situations/utils';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {Statuses} from '@atb-as/theme';
 
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;
@@ -89,12 +96,17 @@ export const EstimatedCallItem = memo(
       <GenericClickableSectionItem
         radius={showBottomBorder ? 'bottom' : undefined}
         onPress={onPress}
-        accessible={true}
-        accessibilityLabel={a11yLabel}
-        accessibilityHint={a11yHint}
+        accessible={false}
       >
         <View style={styles.container} testID={testID}>
-          <View style={styles.estimatedCallItem}>
+          <View
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={a11yLabel}
+            accessibilityHint={a11yHint}
+            style={styles.lineAndDepartureTime}
+            importantForAccessibility="yes"
+          >
             <View style={styles.transportInfo}>
               <LineChip departure={departure} mode={mode} testID={testID} />
               <ThemeText
@@ -109,15 +121,16 @@ export const EstimatedCallItem = memo(
               </ThemeText>
             </View>
             {mode !== 'Favourite' && <DepartureTime departure={departure} />}
-            {mode !== 'Map' && (
-              <FavouriteDepartureToggle
-                existingFavorite={existingFavorite}
-                onMarkFavourite={() =>
-                  onPressFavorite(departure, existingFavorite)
-                }
-              />
-            )}
           </View>
+
+          {mode !== 'Map' && (
+            <FavouriteDepartureToggle
+              existingFavorite={existingFavorite}
+              onMarkFavourite={() =>
+                onPressFavorite(departure, existingFavorite)
+              }
+            />
+          )}
         </View>
       </GenericClickableSectionItem>
     );
@@ -204,15 +217,11 @@ export function getLineAndTimeA11yLabel(
   t: TranslateFunction,
   language: Language,
 ) {
+  const msgType = getMsgTypeForEstimatedCall(departure);
   return [
     departure.cancellation ? t(CancelledDepartureTexts.message) : undefined,
     getLineA11yLabel(departure, t),
-    getSituationOrNoticeA11yLabel(
-      departure.situations,
-      getNoticesForEstimatedCall(departure),
-      departure.cancellation,
-      t,
-    ),
+    msgType && t(SituationsTexts.a11yLabel[msgType]),
     departure.realtime
       ? t(dictionary.a11yRealTimePrefix)
       : t(dictionary.a11yRouteTimePrefix),
@@ -262,16 +271,12 @@ function LineChip({
   const transportTextColor = useTransportationColor(
     transportMode,
     transportSubmode,
+    false,
     'text',
   );
 
-  const icon =
-    mode !== 'Favourite' &&
-    getSvgForMostCriticalSituationOrNotice(
-      departure.situations,
-      getNoticesForEstimatedCall(departure),
-      departure.cancellation,
-    );
+  const msgType = mode !== 'Favourite' && getMsgTypeForEstimatedCall(departure);
+  const icon = msgType && messageTypeToIcon(msgType, true);
 
   if (!publicCode && !transportMode) return null;
 
@@ -305,15 +310,38 @@ const isMoreThanOneMinuteDelayed = (departure: EstimatedCall) =>
     departure.expectedDepartureTime,
   ) >= 60;
 
+export const getMsgTypeForEstimatedCall = (
+  estimatedCall: EstimatedCall,
+): Exclude<Statuses, 'valid'> | undefined => {
+  const msgTypeForSituationOrNotice =
+    getMsgTypeForMostCriticalSituationOrNotice(
+      estimatedCall.situations,
+      getNoticesForEstimatedCall(estimatedCall),
+      estimatedCall.cancellation,
+    );
+
+  const bookingStatus = getBookingStatus(
+    estimatedCall.bookingArrangements,
+    estimatedCall.aimedDepartureTime,
+  );
+  const msgTypeForBooking = bookingStatusToMsgType(bookingStatus);
+
+  return [msgTypeForSituationOrNotice, msgTypeForBooking].reduce<
+    Exclude<Statuses, 'valid'> | undefined
+  >(toMostCriticalStatus, undefined);
+};
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
-  },
-  estimatedCallItem: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: theme.spacings.medium,
+  },
+  lineAndDepartureTime: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
   },
   transportInfo: {

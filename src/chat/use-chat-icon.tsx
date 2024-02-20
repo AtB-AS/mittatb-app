@@ -8,9 +8,9 @@ import {StaticColor, TextColor} from '@atb/theme/colors';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {ContactSheet} from '@atb/chat/ContactSheet';
 import {ScreenHeaderTexts, useTranslation} from '@atb/translations';
-import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
+import {Chat} from '@atb/assets/svg/mono-icons/actions';
 
 export const useChatIcon = (
   color?: StaticColor | TextColor,
@@ -42,6 +42,7 @@ export const useChatIcon = (
             unreadCount
               ? {
                   color: 'valid',
+                  backgroundColor: color,
                 }
               : undefined
           }

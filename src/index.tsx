@@ -78,11 +78,11 @@ export const App = () => {
       {IS_QA_OR_DEV && <FlipperAsyncStorage />}
       <StorybookContextProvider>
         <ErrorBoundary type="full-screen">
-          <TimeContextProvider>
-            <PreferencesContextProvider>
-              <LocaleContextProvider>
-                <AuthContextProvider>
-                  <RemoteConfigContextProvider>
+          <PreferencesContextProvider>
+            <LocaleContextProvider>
+              <AuthContextProvider>
+                <RemoteConfigContextProvider>
+                  <TimeContextProvider>
                     <AnalyticsContextProvider>
                       <AccessibilityContextProvider>
                         <ThemeContextProvider>
@@ -124,11 +124,11 @@ export const App = () => {
                         </ThemeContextProvider>
                       </AccessibilityContextProvider>
                     </AnalyticsContextProvider>
-                  </RemoteConfigContextProvider>
-                </AuthContextProvider>
-              </LocaleContextProvider>
-            </PreferencesContextProvider>
-          </TimeContextProvider>
+                  </TimeContextProvider>
+                </RemoteConfigContextProvider>
+              </AuthContextProvider>
+            </LocaleContextProvider>
+          </PreferencesContextProvider>
         </ErrorBoundary>
       </StorybookContextProvider>
     </SafeAreaProvider>

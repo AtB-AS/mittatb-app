@@ -1,13 +1,13 @@
-import AppHelper from '../utils/app.helper';
-import OnboardingPage from '../pageobjects/onboarding.page';
-import NavigationHelper from '../utils/navigation.helper';
-import ElementHelper from '../utils/element.helper';
-import FrontPagePage from '../pageobjects/frontpage.page';
-import SearchPage from '../pageobjects/search.page';
-import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page';
-import DepartureSearchPage from '../pageobjects/departure.search.page';
-import DepartureOverviewPage from '../pageobjects/departure.overview.page';
-import TicketPage from '../pageobjects/ticket.page';
+import AppHelper from '../utils/app.helper.ts';
+import OnboardingPage from '../pageobjects/onboarding.page.ts';
+import NavigationHelper from '../utils/navigation.helper.ts';
+import ElementHelper from '../utils/element.helper.ts';
+import FrontPagePage from '../pageobjects/frontpage.page.ts';
+import SearchPage from '../pageobjects/search.page.ts';
+import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page.ts';
+import DepartureSearchPage from '../pageobjects/departure.search.page.ts';
+import DepartureOverviewPage from '../pageobjects/departure.overview.page.ts';
+import TicketPage from '../pageobjects/ticket.page.ts';
 
 /**
  * Runs through some simple use cases in the app. Used together with '$ flashlight measure' to get performance metrics

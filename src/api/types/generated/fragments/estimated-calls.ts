@@ -36,4 +36,18 @@ export type EstimatedCallWithQuayFragment = {
     infoLinks?: Array<{uri: string; label?: string}>;
     validityPeriod?: {startTime?: any; endTime?: any};
   }>;
+  bookingArrangements?: {
+    bookingMethods?: Array<Types.BookingMethod>;
+    latestBookingTime?: any;
+    bookingNote?: string;
+    bookWhen?: Types.PurchaseWhen;
+    minimumBookingPeriod?: string;
+    bookingContact?: {
+      contactPerson?: string;
+      email?: string;
+      url?: string;
+      phone?: string;
+      furtherDetails?: string;
+    };
+  };
 };

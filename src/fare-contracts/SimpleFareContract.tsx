@@ -4,14 +4,14 @@ import {
   isPreActivatedTravelRight,
 } from '@atb/ticketing';
 import React from 'react';
-import {PreActivatedFareContractInfo} from './PreActivatedFareContractInfo';
 import {UnknownFareContract} from './UnknownFareContract';
-import {CarnetFareContractInfo} from './carnet/CarnetFareContractInfo';
+import {FareContractView} from '@atb/fare-contracts/FareContractView';
 
 type Props = {
   fareContract: FareContract;
   now: number;
   hideDetails?: boolean;
+  sentToOthers?: boolean;
   onPressDetails?: () => void;
   hasActiveTravelCard?: boolean;
   testID?: string;
@@ -26,23 +26,16 @@ export const SimpleFareContract: React.FC<Props> = ({
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
 
-  if (isPreActivatedTravelRight(firstTravelRight)) {
+  if (
+    isPreActivatedTravelRight(firstTravelRight) ||
+    isCarnetTravelRight(firstTravelRight)
+  ) {
     return (
-      <PreActivatedFareContractInfo
-        fareContractState={fc.state}
-        travelRights={fc.travelRights.filter(isPreActivatedTravelRight)}
+      <FareContractView
         now={now}
+        fareContract={fc}
         hideDetails={hideDetails}
         onPressDetails={onPressDetails}
-        testID={testID}
-      />
-    );
-  } else if (isCarnetTravelRight(firstTravelRight)) {
-    return (
-      <CarnetFareContractInfo
-        fareContract={fc}
-        travelRights={fc.travelRights.filter(isCarnetTravelRight)}
-        now={now}
         testID={testID}
       />
     );

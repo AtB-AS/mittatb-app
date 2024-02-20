@@ -71,3 +71,25 @@ export const getCustomerAccountId = async (
       throw error;
     });
 };
+
+/**
+ * Function to get phone number from an account ID
+ *
+ * @param {string} accountId customer account ID
+ * @returns {string} phone number as string if successful
+ * @throws error from server
+ */
+export const getPhoneNumberFromId = async (
+  accountId?: string,
+): Promise<string> => {
+  return await client
+    .post<CustomerProfile>(
+      `${profileEndpoint}/lookup`,
+      {customerAccountId: accountId},
+      {
+        authWithIdToken: true,
+        skipErrorLogging: (error) => error.response?.status === 400,
+      },
+    )
+    .then((response) => response.data.phone);
+};

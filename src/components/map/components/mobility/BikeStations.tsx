@@ -18,6 +18,7 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
   const stationTextColor = useTransportationColor(
     Mode.Bicycle,
     undefined,
+    false,
     'text',
   );
   const clustersSource = useRef<MapboxGL.ShapeSource>(null);

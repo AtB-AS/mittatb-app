@@ -1,5 +1,5 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {Info, Warning} from '@atb/assets/svg/color/icons/status';
+import {Info, Warning, Error} from '@atb/assets/svg/color/icons/status';
 import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import {
   AccessibleText,
@@ -32,9 +32,8 @@ import {
   getNoticesForLeg,
   getPublicCodeFromLeg,
   getTimeRepresentationType,
-  isLegFlexibleTransport,
-  getLegBookingIsAvailable,
-  getLegRequiresBookingUrgently,
+  isLineFlexibleTransport,
+  getBookingStatus,
   significantWaitTime,
   significantWalkTime,
   TimeValues,
@@ -42,7 +41,7 @@ import {
 import {Time} from './Time';
 import {TripLegDecoration} from './TripLegDecoration';
 import {TripRow} from './TripRow';
-import {FlexibleTransportMessageBox} from './FlexibleTransportMessageBox';
+import {BookingInfoBox} from './BookingInfoBox';
 
 import {WaitDetails, WaitSection} from './WaitSection';
 import {Realtime as RealtimeDark} from '@atb/assets/svg/color/icons/status/dark';
@@ -55,8 +54,8 @@ import {useMapData} from '@atb/travel-details-screens/use-map-data';
 import {useRealtimeText} from '@atb/travel-details-screens/use-realtime-text';
 import {useNow} from '@atb/utils/use-now';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {FlexibleTransportBookingOptions} from './FlexibleTransportBookingOptions';
-import {FlexibleTransportBookingDetails} from './FlexibleTransportBookingDetails';
+import {BookingOptions} from './BookingOptions';
+import {FlexibleTransportBookingDetailsSheet} from './FlexibleTransportBookingDetailsSheet';
 import {
   Mode,
   TransportSubmode,
@@ -98,11 +97,12 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const isWalkSection = leg.mode === Mode.Foot;
   const isBikeSection = leg.mode === Mode.Bicycle;
-  const isFlexible = isLegFlexibleTransport(leg);
+  const isFlexible = isLineFlexibleTransport(leg.line);
   const timesAreApproximations = isFlexible;
   const legColor = useTransportationColor(
-    isFlexible ? 'flex' : leg.mode,
+    leg.mode,
     leg.line?.transportSubmode,
+    isFlexible,
   );
   const iconColor = useTransportationColor();
 
@@ -125,19 +125,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const now = useNow(30000);
   const {flex_booking_number_of_days_available} = useRemoteConfig();
-  const bookingIsAvailable = getLegBookingIsAvailable(
-    leg,
+  const bookingStatus = getBookingStatus(
+    leg.bookingArrangements,
+    leg.aimedStartTime,
     now,
     flex_booking_number_of_days_available,
   );
-  const requiresBookingUrgently = getLegRequiresBookingUrgently(leg, now);
 
   const atbAuthorityId = 'ATB:Authority:2';
-  const legAuthorityIsAtB = leg.authority?.id === atbAuthorityId;
+  const shouldShowButtonForOpeningFlexBottomSheet =
+    isLineFlexibleTransport(leg.line) && leg.authority?.id === atbAuthorityId;
 
   const {open: openBottomSheet} = useBottomSheet();
   function openBookingDetails() {
-    openBottomSheet(() => <FlexibleTransportBookingDetails leg={leg} />);
+    openBottomSheet(() => <FlexibleTransportBookingDetailsSheet leg={leg} />);
   }
 
   const sectionOutput = (
@@ -206,8 +207,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
             }
             rowLabel={
               <TransportationIconBox
-                mode={isFlexible ? 'flex' : leg.mode}
+                mode={leg.mode}
                 subMode={leg.line?.transportSubmode}
+                isFlexible={isFlexible}
               />
             }
           >
@@ -242,20 +244,20 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         ))}
-        {isFlexible && (
+        {bookingStatus !== 'none' && (
           <TripRow
             rowLabel={
-              <ThemeIcon svg={requiresBookingUrgently ? Warning : Info} />
+              <ThemeIcon svg={bookingStatus === 'late' ? Error : Warning} />
             }
             accessible={false}
           >
-            <FlexibleTransportMessageBox
-              leg={leg}
-              publicCode={publicCode}
+            <BookingInfoBox
+              bookingArrangements={leg.bookingArrangements}
+              aimedStartTime={leg.aimedStartTime}
               now={now}
               showStatusIcon={false}
               onPressConfig={
-                legAuthorityIsAtB
+                shouldShowButtonForOpeningFlexBottomSheet
                   ? {
                       text: t(
                         TripDetailsTexts.flexibleTransport.needsBookingWhatIsThis(
@@ -269,10 +271,10 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
-        {isFlexible && bookingIsAvailable && (
+        {bookingStatus === 'bookable' && (
           <View style={style.flexBookingOptions}>
             <TripRow accessible={false}>
-              <FlexibleTransportBookingOptions leg={leg} />
+              <BookingOptions bookingArrangements={leg.bookingArrangements} />
             </TripRow>
           </View>
         )}

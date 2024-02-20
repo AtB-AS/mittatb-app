@@ -14,6 +14,7 @@ import {getTransportationColor} from '@atb/theme/colors';
 export type TransportationIconBoxProps = {
   mode?: AnyMode;
   subMode?: AnySubMode;
+  isFlexible?: boolean;
   lineNumber?: string;
   size?: keyof Theme['icon']['size'];
   style?: StyleProp<ViewStyle>;
@@ -24,6 +25,7 @@ export type TransportationIconBoxProps = {
 export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   mode,
   subMode,
+  isFlexible = false,
   lineNumber,
   size = 'normal',
   style,
@@ -32,7 +34,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
 }) => {
   const {t} = useTranslation();
   const {theme, themeName} = useTheme();
-  const themeColor = useThemeColorForTransportMode(mode, subMode);
+  const themeColor = useThemeColorForTransportMode(mode, subMode, isFlexible);
   const transportationColor = getTransportationColor(themeName, themeColor);
   const backgroundColor = disabled
     ? theme.text.colors.disabled
@@ -40,10 +42,6 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   const {svg} = getTransportModeSvg(mode, subMode);
   const styles = useStyles();
 
-  const iconStyle =
-    size == 'xSmall'
-      ? styles.transportationIconBox_small
-      : styles.transportationIconBox;
   const lineNumberElement = lineNumber ? (
     <ThemeText
       type="body__primary--bold"
@@ -58,7 +56,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
   return (
     <View
       style={[
-        iconStyle,
+        styles.transportationIconBox,
         style,
         {
           backgroundColor,
@@ -81,15 +79,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   transportationIconBox: {
     display: 'flex',
     flexDirection: 'row',
-    paddingVertical: theme.spacings.small,
-    paddingHorizontal: theme.spacings.small,
-    borderRadius: theme.border.radius.small,
-  },
-  transportationIconBox_small: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingVertical: theme.spacings.xSmall,
-    paddingHorizontal: theme.spacings.xSmall,
+    padding: theme.spacings.xSmall,
     borderRadius: theme.border.radius.small,
   },
   lineNumberText: {

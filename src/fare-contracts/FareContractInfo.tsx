@@ -24,6 +24,7 @@ import {
 import React from 'react';
 import {View} from 'react-native';
 import {
+  getLastUsedAccess,
   getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,
@@ -33,17 +34,18 @@ import {
   ValidityStatus,
 } from '../fare-contracts/utils';
 import {FareContractDetail} from '../fare-contracts/components/FareContractDetail';
-import {getLastUsedAccess} from './carnet/CarnetDetails';
 import {InspectionSymbol} from '../fare-contracts/components/InspectionSymbol';
 import {UserProfileWithCount} from './types';
 import {FareContractHarborStopPlaces} from './components/FareContractHarborStopPlaces';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 
 export type FareContractInfoProps = {
   travelRight: PreActivatedTravelRight;
   status: ValidityStatus;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;
+  sentToCustomerAccountId?: string;
 };
 
 export type FareContractInfoDetailsProps = {
@@ -64,9 +66,10 @@ export const FareContractInfoHeader = ({
   status,
   testID,
   preassignedFareProduct,
+  sentToCustomerAccountId,
 }: FareContractInfoProps) => {
   const styles = useStyles();
-  const {language} = useTranslation();
+  const {t, language} = useTranslation();
   const {startPointRef: fromStopPlaceId, endPointRef: toStopPlaceId} =
     travelRight;
 
@@ -78,6 +81,10 @@ export const FareContractInfoHeader = ({
     : undefined;
   const warning = useNonInspectableTokenWarning(preassignedFareProduct?.type);
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
+
+  const {data: phoneNumber} = useGetPhoneByAccountIdQuery(
+    sentToCustomerAccountId,
+  );
 
   return (
     <View style={styles.header}>
@@ -106,6 +113,12 @@ export const FareContractInfoHeader = ({
           showTwoWayIcon={showTwoWayIcon}
         />
       )}
+      {phoneNumber && (
+        <MessageInfoText
+          type="warning"
+          message={t(FareContractTexts.details.sentTo(phoneNumber))}
+        />
+      )}
       {status === 'valid' && warning && (
         <MessageInfoText message={warning} type="warning" />
       )}
@@ -132,6 +145,11 @@ export const FareContractInfoDetails = (
     toTariffZone,
   );
 
+  const isStatusSent = status === 'sent';
+
+  const isValidOrSentFareContract: boolean =
+    isValidFareContract(status) || isStatusSent;
+
   return (
     <View style={styles.container} accessible={true}>
       <View style={styles.fareContractDetails}>
@@ -149,7 +167,9 @@ export const FareContractInfoDetails = (
             />
           )}
         </View>
-        {isValidFareContract(status) && <InspectionSymbol {...props} />}
+        {isValidOrSentFareContract && (
+          <InspectionSymbol {...props} sentTicket={isStatusSent} />
+        )}
       </View>
     </View>
   );
@@ -164,20 +184,12 @@ export const getFareContractInfoDetails = (
 ): FareContractInfoDetailsProps => {
   const firstTravelRight = fareContract.travelRights?.[0] as NormalTravelRight;
   const {
-    startDateTime,
     endDateTime,
     fareProductRef: productRef,
     tariffZoneRefs,
   } = firstTravelRight;
-  const fareContractState = fareContract.state;
   let validTo = endDateTime.toMillis();
-  const validFrom = startDateTime.toMillis();
-  const validityStatus = getValidityStatus(
-    now,
-    validFrom,
-    validTo,
-    fareContractState,
-  );
+  const validityStatus = getValidityStatus(now, fareContract);
 
   const firstZone = tariffZoneRefs?.[0];
   const lastZone = tariffZoneRefs?.slice(-1)?.[0];

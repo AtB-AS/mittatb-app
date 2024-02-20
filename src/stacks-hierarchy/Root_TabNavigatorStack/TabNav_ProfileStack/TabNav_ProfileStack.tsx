@@ -10,15 +10,11 @@ import {Profile_SelectStartScreenScreen} from './Profile_SelectStartScreenScreen
 import {Profile_DesignSystemScreen} from './Profile_DesignSystemScreen';
 import {Profile_DebugInfoScreen} from './Profile_DebugInfoScreen';
 import {Profile_DefaultUserProfileScreen} from './Profile_DefaultUserProfileScreen';
-import {Profile_TicketingInformationScreen} from './Profile_TicketingInformationScreen';
 import {Profile_PaymentOptionsScreen} from './Profile_PaymentOptionsScreen';
 import {ProfileStackParams} from './navigation-types';
 import {Profile_PlaceScreen} from './Profile_PlaceScreen';
 import {Profile_NearbyStopPlacesScreen} from './Profile_NearbyStopPlacesScreen';
 import {Profile_FavoriteDeparturesScreen} from './Profile_FavoriteDeparturesScreen';
-import {Profile_TermsInformationScreen} from './Profile_TermsInformationScreen';
-import {Profile_TicketInspectionInformationScreen} from './Profile_TicketInspectionInformationScreen';
-import {Profile_GenericWebsiteInformationScreen} from './Profile_GenericWebsiteInformationScreen';
 import {Profile_DeleteProfileScreen} from './Profile_DeleteProfileScreen';
 import {Profile_TravelTokenScreen} from './Profile_TravelTokenScreen';
 import {Profile_FavoriteListScreen} from './Profile_FavoriteListScreen';
@@ -115,22 +111,6 @@ export const TabNav_ProfileStack = () => {
       <Stack.Screen
         name="Profile_DebugInfoScreen"
         component={Profile_DebugInfoScreen}
-      />
-      <Stack.Screen
-        name="Profile_TicketingInformationScreen"
-        component={Profile_TicketingInformationScreen}
-      />
-      <Stack.Screen
-        name="Profile_TermsInformationScreen"
-        component={Profile_TermsInformationScreen}
-      />
-      <Stack.Screen
-        name="Profile_TicketInspectionInformationScreen"
-        component={Profile_TicketInspectionInformationScreen}
-      />
-      <Stack.Screen
-        name="Profile_GenericWebsiteInformationScreen"
-        component={Profile_GenericWebsiteInformationScreen}
       />
       <Stack.Screen
         name="Profile_NearbyStopPlacesScreen"

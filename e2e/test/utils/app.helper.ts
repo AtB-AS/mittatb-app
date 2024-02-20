@@ -1,6 +1,7 @@
-import ElementHelper from './element.helper';
+import ElementHelper from './element.helper.ts';
+import {driver} from '@wdio/globals';
 
-const screenshotsFolder: string = './e2e/screenshots';
+const screenshotsFolder: string = './screenshots';
 
 /**
  * Different helper methods related to the app in general
@@ -23,8 +24,8 @@ class AppHelper {
 
   /***
    * Pause in ms
-   * @param ms: how long to pause in ms
-   * @param isLocalDependent: if true, use a lower pause time for local runs - min(2000, ms)
+   * @param ms how long to pause in ms
+   * @param isLocalDependent if true, use a lower pause time for local runs - min(2000, ms)
    */
   async pause(ms: number = 500, isLocalDependent: boolean = false) {
     if (isLocalDependent && process.env.IS_LOCAL === 'true') {
@@ -37,7 +38,7 @@ class AppHelper {
 
   /**
    * Take a screenshot
-   * @param fileName: The filename as <filename>.png
+   * @param fileName The filename as <filename>.png
    */
   async screenshot(fileName: string) {
     await driver.saveScreenshot(`${screenshotsFolder}/${fileName}.png`);
@@ -45,7 +46,7 @@ class AppHelper {
 
   /**
    * Wait until the loading screen is finished
-   * @param numberOfRetries: used internally to count retries, max = 2
+   * @param numberOfRetries used internally to count retries, max = 2
    */
   async waitOnLoadingScreen(numberOfRetries: number = 0) {
     const retryAuthId = `//*[@resource-id="retryAuthButton"]`;
@@ -74,35 +75,38 @@ class AppHelper {
   /**
    * Scroll down with default scroll parameters
    */
-  async scrollDown() {
-    await driver.touchAction([
-      {action: 'longPress', x: 0, y: 1000},
-      {action: 'moveTo', x: 0, y: 10},
-      'release',
-    ]);
+  async scrollDown(scrollableId: string) {
+    let elem = await ElementHelper.getElement(scrollableId);
+    await driver.execute('mobile: scrollGesture', {
+      direction: 'down',
+      elementId: elem,
+      percent: 1.0,
+    });
   }
 
   /**
    * Scroll up with default scroll parameters
    */
-  async scrollUp() {
-    await driver.touchAction([
-      {action: 'longPress', x: 0, y: 10},
-      {action: 'moveTo', x: 0, y: 1000},
-      'release',
-    ]);
+  async scrollUp(scrollableId: string) {
+    let elem = await ElementHelper.getElement(scrollableId);
+    await driver.execute('mobile: scrollGesture', {
+      direction: 'up',
+      elementId: elem,
+      percent: 1.0,
+    });
   }
 
   /**
    * Scroll down until given id is visisble
-   * @param id: id to scroll to
+   * @param scrollableId scrollable element id
+   * @param scrollUntilId id to scroll to
    */
-  async scrollDownUntilId(id: string) {
-    let elem = await ElementHelper.getElement(id);
+  async scrollDownUntilId(scrollableId: string, scrollUntilId: string) {
+    let elem = await ElementHelper.getElement(scrollUntilId);
     let j = 0;
     while (elem.elementId === undefined && j < 5) {
-      await this.scrollDown();
-      elem = await ElementHelper.getElement(id);
+      await this.scrollDown(scrollableId);
+      elem = await ElementHelper.getElement(scrollUntilId);
       j++;
     }
     await expect(elem).toBeDisplayed({wait: 200, interval: 100});
@@ -110,14 +114,15 @@ class AppHelper {
 
   /**
    * Scroll up until given id is visisble
-   * @param id: id to scroll to
+   * @param scrollableId scrollable element id
+   * @param scrollUntilId id to scroll to
    */
-  async scrollUpUntilId(id: string) {
-    let elem = await ElementHelper.getElement(id);
+  async scrollUpUntilId(scrollableId: string, scrollUntilId: string) {
+    let elem = await ElementHelper.getElement(scrollUntilId);
     let j = 0;
     while (elem.elementId === undefined && j < 5) {
-      await this.scrollUp();
-      elem = await ElementHelper.getElement(id);
+      await this.scrollUp(scrollableId);
+      elem = await ElementHelper.getElement(scrollUntilId);
       j++;
     }
     await expect(elem).toBeDisplayed({wait: 200, interval: 100});

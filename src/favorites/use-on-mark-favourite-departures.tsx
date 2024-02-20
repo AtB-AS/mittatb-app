@@ -88,10 +88,16 @@ export function useOnMarkFavouriteDepartures(
     line: FavouriteDepartureLine,
     existing: StoredFavoriteDeparture | undefined,
   ) => {
-    if (existing) {
+    if (existing && line.lineNumber) {
       Alert.alert(
         t(DeparturesTexts.results.lines.favorite.delete.label),
-        t(DeparturesTexts.results.lines.favorite.delete.confirmWarning),
+        t(
+          DeparturesTexts.results.lines.favorite.delete.confirmWarning(
+            line.lineNumber,
+            formatDestinationDisplay(t, existing.destinationDisplay) || '',
+            existing.quayName,
+          ),
+        ),
         [
           {
             text: t(DeparturesTexts.results.lines.favorite.delete.cancel),
@@ -110,10 +116,11 @@ export function useOnMarkFavouriteDepartures(
           },
         ],
       );
-    } else if (line.destinationDisplay && line.lineNumber) {
+    } else if (line.destinationDisplay && line.lineNumber && quay.name) {
       openBottomSheet(() => {
         return line.destinationDisplay && line.lineNumber ? (
           <FavoriteDialogSheet
+            quayName={quay.name}
             destinationDisplay={line.destinationDisplay}
             lineNumber={line.lineNumber}
             addFavorite={(forSpecificLineName: boolean) =>

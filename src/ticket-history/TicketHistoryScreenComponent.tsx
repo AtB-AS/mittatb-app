@@ -22,6 +22,7 @@ export const TicketHistoryScreenComponent = ({
 }: TicketHistoryScreenParams) => {
   const {
     fareContracts,
+    sentFareContracts,
     isRefreshingFareContracts,
     rejectedReservations,
     resubscribeFirestoreListeners,
@@ -52,10 +53,15 @@ export const TicketHistoryScreenComponent = ({
     >
       <View style={styles.container}>
         <FareContractAndReservationsList
-          fareContracts={displayFareContracts(mode, fareContracts, serverNow)}
+          fareContracts={displayFareContracts(
+            mode,
+            fareContracts,
+            sentFareContracts,
+            serverNow,
+          )}
           reservations={rejectedReservations}
           now={serverNow}
-          emptyStateMode={mode}
+          mode={mode}
           emptyStateTitleText={t(TicketingTexts.ticketHistory.emptyState)}
           emptyStateDetailsText={t(TicketHistoryModeTexts[mode].emptyDetail)}
         />
@@ -67,13 +73,14 @@ export const TicketHistoryScreenComponent = ({
 const displayFareContracts = (
   mode: TicketHistoryMode,
   fareContracts: FareContract[],
+  sentFareContracts: FareContract[],
   serverNow: number,
 ) => {
   switch (mode) {
     case 'expired':
       return filterExpiredFareContracts(fareContracts, serverNow);
-    case 'sent': // TODO replace with sent fare contracts
-      return filterExpiredFareContracts(fareContracts, serverNow);
+    case 'sent':
+      return sentFareContracts;
   }
 };
 

@@ -1,4 +1,4 @@
-import AppHelper from './app.helper';
+import AppHelper from './app.helper.ts';
 
 /**
  * Different helper methods related to navigation in the app
@@ -23,8 +23,17 @@ class NavigationHelper {
   }
 
   /**
+   * Close
+   */
+  async close() {
+    const closeId = `//*[@resource-id="closeButton"]`;
+    await $(closeId).click();
+    await AppHelper.pause(2000);
+  }
+
+  /**
    * Go to the chosen tab
-   * @param page: tab to open
+   * @param page tab to open
    */
   async tapMenu(
     page: 'assistant' | 'map' | 'departures' | 'tickets' | 'profile',

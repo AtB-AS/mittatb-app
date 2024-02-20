@@ -1,18 +1,20 @@
+//import {number} from "prop-types";
+
 /**
  * Different helper methods related to time calculations
  */
 class TimeHelper {
   /**
    * Returns the difference in minutes
-   * @param startTime: start time in HH:MM
-   * @param endTime: end time in HH:MM
+   * @param startTime start time in HH:MM
+   * @param endTime end time in HH:MM
    */
   getTimeDurationInMin(startTime: string, endTime: string) {
-    function toNumber(value) {
+    function toNumber(value: string) {
       return Number(value);
     }
-    let start: number[] = startTime.split(':').map(toNumber);
-    let end: number[] = endTime.split(':').map(toNumber);
+    let start: number[] = startTime.split(':').map((n) => toNumber(n));
+    let end: number[] = endTime.split(':').map((n) => toNumber(n));
     let startDate: number = new Date(0).setHours(start[0], start[1]);
     let endDate: number =
       start[0] > end[0]

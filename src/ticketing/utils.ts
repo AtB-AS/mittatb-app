@@ -1,4 +1,3 @@
-import {getLastUsedAccess} from '@atb/fare-contracts';
 import {flatten, sumBy} from 'lodash';
 import {
   CarnetTravelRightUsedAccess,
@@ -14,6 +13,7 @@ import {
 } from './types';
 import {WebViewNavigation} from 'react-native-webview/lib/WebViewTypes';
 import {parse as parseURL} from 'search-params';
+import {getLastUsedAccess} from '@atb/fare-contracts/utils';
 
 export function isCarnetTravelRight(
   travelRight: TravelRight | undefined,
@@ -86,6 +86,10 @@ export function isValidRightNowFareContract(
   }
 
   return false;
+}
+
+export function isSentOrReceivedFareContract(fc: FareContract) {
+  return fc.customerAccountId !== fc.purchasedBy;
 }
 
 export function hasActiveOrUsableCarnetTravelRight(

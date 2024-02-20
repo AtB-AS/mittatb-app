@@ -40,6 +40,20 @@ export type DeparturesQuery = {
         validityPeriod?: {startTime?: any; endTime?: any};
       }>;
       notices: Array<{id: string; text?: string}>;
+      bookingArrangements?: {
+        bookingMethods?: Array<Types.BookingMethod>;
+        latestBookingTime?: any;
+        bookingNote?: string;
+        bookWhen?: Types.PurchaseWhen;
+        minimumBookingPeriod?: string;
+        bookingContact?: {
+          contactPerson?: string;
+          email?: string;
+          url?: string;
+          phone?: string;
+          furtherDetails?: string;
+        };
+      };
     }>;
     situations: Array<{
       id: string;

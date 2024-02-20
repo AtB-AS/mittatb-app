@@ -1,4 +1,4 @@
-import {InformationTexts, useTranslation} from '@atb/translations';
+import {LoginTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import termsInfo from '@atb/assets/information-data/termsInformation.json';
 import {
@@ -11,8 +11,8 @@ export const Root_TermsInformationScreen = () => {
   const data = termsInfo[language];
   return (
     <InformationScreenComponent
-      informations={data as InformationElement[]}
-      title={t(InformationTexts.terms.title)}
+      information={data as InformationElement[]}
+      title={t(LoginTexts.terms.title)}
       leftButton={{type: 'close'}}
     />
   );
