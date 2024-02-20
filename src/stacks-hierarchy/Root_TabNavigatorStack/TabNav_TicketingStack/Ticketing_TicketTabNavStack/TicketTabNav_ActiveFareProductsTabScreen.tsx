@@ -5,12 +5,7 @@ import {
   useTicketingState,
 } from '@atb/ticketing';
 import React, {useCallback, useRef} from 'react';
-import {
-  Dimensions,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  View,
-} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {useTranslation, TicketingTexts} from '@atb/translations';
 import {useAnalytics} from '@atb/analytics';
