@@ -74,52 +74,15 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
   useFocusEffect(
     useCallback(() => {
       if (shouldShowPopOver) {
-        // Check if the button for tickets sent to others is visible on screen or not
-        if (sentFareContractRef.current) {
-          const currentView = sentFareContractRef.current as View;
-          currentView.measure((x, y, width, height, pageX, pageY) => {
-            const rectTop = pageX;
-            const rectBottom = pageY + height;
-            const rectWidth = pageX + width;
-            const window = Dimensions.get('window');
-            const isVisible =
-              rectBottom != 0 &&
-              rectTop >= 0 &&
-              rectBottom <= window.height &&
-              rectWidth > 0 &&
-              rectWidth <= window.width;
-
-            // if layout is visible : show pop over
-            // else : scroll to bottom, and then show pop over (see handleScrollEvent)
-            if (isVisible) {
-              showPopOver();
-            } else {
-              scrollViewRef.current?.scrollToEnd({animated: true});
-            }
-          });
-        }
+        showPopOver();
       }
     }, [shouldShowPopOver, showPopOver]),
   );
-
-  // show popover when it reaches the end of scrollview
-  const handleScrollEvent = (
-    event: NativeSyntheticEvent<NativeScrollEvent>,
-  ) => {
-    if (shouldShowPopOver) {
-      const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
-      if (layoutMeasurement.height + contentOffset.y >= contentSize.height) {
-        showPopOver();
-      }
-    }
-  };
 
   return (
     <View style={styles.container}>
       <ScrollView
         ref={scrollViewRef}
-        onScroll={handleScrollEvent}
-        scrollEventThrottle={0} // this will make the onScroll event sent only once
         contentContainerStyle={styles.content}
         refreshControl={
           <RefreshControl
