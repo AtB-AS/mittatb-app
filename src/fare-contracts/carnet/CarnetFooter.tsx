@@ -10,6 +10,9 @@ type Props = {
   numberOfUsedAccesses: number;
 };
 
+/**
+ * Total
+ */
 const CARNET_DIVIDER = 10;
 
 export const CarnetFooter: React.FC<Props> = ({
@@ -20,34 +23,8 @@ export const CarnetFooter: React.FC<Props> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const activeAccess = active ? 1 : 0;
-
-  const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
-
-  // The number of accesses remaining, including the active one
-  const shownAccessesRemaining = accessesRemaining + activeAccess;
-
-  // If any active, the remaining count is the active index
-  const activeIndex = active
-    ? (shownAccessesRemaining - 1) % CARNET_DIVIDER
-    : undefined;
-
-  // Figure out how many unused travel rights there are left
-  // does not need to match actual number of travel rights
-  const carnetsLeftCount = Math.ceil(
-    (shownAccessesRemaining + activeAccess) / CARNET_DIVIDER,
-  );
-
-  // For the ones not displayed as "multi carnets"
-  // how many accesses are used in the travel right
-  const restUsed =
-    carnetsLeftCount > 0
-      ? (numberOfUsedAccesses - activeAccess) % CARNET_DIVIDER
-      : CARNET_DIVIDER;
-
-  const numberOfMultiCarnets = Math.floor(
-    Math.max(0, shownAccessesRemaining - 1) / CARNET_DIVIDER,
-  );
+  const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
+    calculateCarnetData(active, maximumNumberOfAccesses, numberOfUsedAccesses);
 
   return (
     <View
@@ -69,32 +46,109 @@ export const CarnetFooter: React.FC<Props> = ({
         </ThemeText>
       </View>
       <View style={styles.container}>
-        {Array(numberOfMultiCarnets)
-          .fill(CARNET_DIVIDER)
-          .map((count, idx) => (
-            <MultiCarnet key={idx} count={count} />
-          ))}
-        {Array(CARNET_DIVIDER)
-          .fill(true)
-          .map((_, idx) => idx < restUsed)
-          .reverse()
-          .map((isUnused, idx) => (
-            <View
-              key={idx}
-              style={[
-                styles.dot,
-                isUnused && idx !== activeIndex
-                  ? styles.dot__unused
-                  : undefined,
-              ]}
-            >
-              {idx === activeIndex && <View style={styles.dotFill__active} />}
-            </View>
-          ))}
+        {multiCarnetArray.map((count, idx) => (
+          <MultiCarnet key={idx} count={count} />
+        ))}
+        {unusedArray.map((_, idx) => (
+          <View key={idx} style={styles.dot} />
+        ))}
+        {active && (
+          <View style={styles.dot}>
+            <View style={styles.dotFill__active} />
+          </View>
+        )}
+        {usedArray.map((_, idx) => (
+          <View key={idx} style={[styles.dot, styles.dot__unused]} />
+        ))}
       </View>
     </View>
   );
 };
+
+/**
+ * Function to get the arrays required to display the carnet footer dots.
+ *
+ * @param active the ticket status (active | inactive).
+ * @param maximumNumberOfAccesses total amount of available access that the carnet has.
+ * @param numberOfUsedAccesses total amount of used access that the carnet has.
+ * @returns values to display the carnet footer, it will be displayed in this order :
+ *
+ * `multi-carnet dots --- unused dots --- active dots --- used dots`
+ *
+ */
+
+function calculateCarnetData(
+  active: boolean,
+  maximumNumberOfAccesses: number,
+  numberOfUsedAccesses: number,
+) {
+  /**
+   * If the ticket status is active, it should be considered into calculation.
+   */
+  const activeAccess = active ? 1 : 0;
+
+  /**
+   * The number of the remaining access, calculated by the following formula :
+   *
+   * `maximumNumberOfAccesses - numberOfUsedAccesses`
+   */
+  const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
+
+  /**
+   * Calculates the amount of padding needed,
+   * if `maximumNumberOfAccesses` are not divisible by `CARNET_DIVIDER`.
+   */
+  const padding =
+    Math.abs(CARNET_DIVIDER - maximumNumberOfAccesses) % CARNET_DIVIDER;
+
+  /**
+   * Number of additional dots that should be added when the padding is there.
+   */
+  const numberOfAdditionalDots =
+    maximumNumberOfAccesses > CARNET_DIVIDER
+      ? CARNET_DIVIDER - padding
+      : padding;
+
+  /**
+   * Determines whether we should add extra multi-carnet dots or not.
+   *
+   * Should only add extra carnet when:
+   * - accessesRemaining is divisible by CARNET_DIVIDER
+   * - status is currently active
+   */
+  const shouldAddExtraMultiCarnet =
+    accessesRemaining % CARNET_DIVIDER === 0 && active ? 1 : 0;
+
+  /**
+   * Calculates the amount of dots showing for the multi-carnet part
+   */
+  const numberOfMultiCarnets =
+    Math.ceil(accessesRemaining / CARNET_DIVIDER - 1) +
+    shouldAddExtraMultiCarnet;
+
+  /**
+   * Calculates the amount of dots showing for the used part
+   */
+  const numberOfUsedDots =
+    (numberOfUsedAccesses + numberOfAdditionalDots - activeAccess) %
+    CARNET_DIVIDER;
+
+  /**
+   * Calculates the amount of dots showing for the unused part
+   */
+  const numberOfUnusedDots = CARNET_DIVIDER - numberOfUsedDots - activeAccess;
+
+  const multiCarnetArray = Array(numberOfMultiCarnets).fill(CARNET_DIVIDER);
+  const unusedArray = Array(numberOfUnusedDots).fill(true);
+  const usedArray = Array(numberOfUsedDots).fill(false);
+
+  return {
+    accessesRemaining,
+    multiCarnetArray,
+    unusedArray,
+    usedArray,
+  };
+}
 
 function MultiCarnet({count}: {count: number}) {
   const styles = useStyles();
