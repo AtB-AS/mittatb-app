@@ -45,10 +45,13 @@ export function calculateCarnetData(
   const shouldAddExtraMultiCarnet =
     accessesRemaining % CARNET_DIVIDER === 0 && active ? 1 : 0;
 
-  // Calculates the amount of dots showing for the multi-carnet part
-  const numberOfMultiCarnets =
+  // Calculates the amount of dots showing for the multi-carnet part. Prevent
+  // negative when there are no accesses remaining.
+  const numberOfMultiCarnets = Math.max(
     Math.ceil(accessesRemaining / CARNET_DIVIDER - 1) +
-    shouldAddExtraMultiCarnet;
+      shouldAddExtraMultiCarnet,
+    0,
+  );
 
   // Calculates the amount of dots showing for the used part
   const numberOfUsedDots =
