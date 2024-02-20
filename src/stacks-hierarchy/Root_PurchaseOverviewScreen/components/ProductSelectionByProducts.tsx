@@ -28,6 +28,7 @@ type ProductSelectionByProductsProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
   style?: StyleProp<ViewStyle>;
+  useAlias?: boolean;
 };
 
 export function ProductSelectionByProducts({
@@ -35,6 +36,7 @@ export function ProductSelectionByProducts({
   fareProductTypeConfig,
   setSelectedProduct,
   style,
+  useAlias,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
   const {preassignedFareProducts} = useFirestoreConfiguration();
@@ -50,6 +52,14 @@ export function ProductSelectionByProducts({
     useTextForLanguage(
       fareProductTypeConfig.configuration.productSelectionTitle,
     ) || t(PurchaseOverviewTexts.productSelection.title);
+
+  const aliasText = useAlias
+    ? getTextForLanguage(selectedProduct.productAlias, language)
+    : undefined;
+
+  const productName = aliasText
+    ? aliasText
+    : getReferenceDataName(selectedProduct, language);
 
   const subText = (fp: PreassignedFareProduct) => {
     const descriptionMessage = getTextForLanguage(fp.description, language);
@@ -89,7 +99,7 @@ export function ProductSelectionByProducts({
           <ContentHeading text={title} />
           <Section>
             <HeaderSectionItem
-              text={getReferenceDataName(selectedProduct, language)}
+              text={productName}
               subtitle={subText(selectedProduct)}
             />
           </Section>

@@ -28,6 +28,15 @@ export function ProductSelection({
         />
       );
     case 'productAlias':
+      return (
+        <ProductSelectionByProducts
+          selectedProduct={preassignedFareProduct}
+          fareProductTypeConfig={fareProductTypeConfig}
+          setSelectedProduct={setSelectedProduct}
+          style={style}
+          useAlias={true}
+        />
+      );
     case 'duration':
       return (
         <ProductSelectionByAlias
