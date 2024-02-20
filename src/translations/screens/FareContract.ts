@@ -169,9 +169,9 @@ const FareContractTexts = {
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
       _(
-        `${count} klipp gjenstår`,
-        `${count} tickets left`,
-        `${count} klipp att`,
+        `${count} enkeltbilletter gjenstår`,
+        `${count} single ticket(s) left`,
+        `${count} enkeltbillettar att`,
       ),
   },
   receipt: {
