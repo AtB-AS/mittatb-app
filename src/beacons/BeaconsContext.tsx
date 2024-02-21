@@ -181,9 +181,9 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     await initializeKettleSDK(true);
     stopBeacons();
     Kettle.revoke(BEACONS_CONSENTS);
-    await updateBeaconsInfo();
     await storage.set(storeKey.beaconsConsent, 'false');
     setIsConsentGranted(false);
+    await updateBeaconsInfo();
   }, [isBeaconsSupported, stopBeacons, initializeKettleSDK]);
 
   const deleteCollectedData = useCallback(async () => {
