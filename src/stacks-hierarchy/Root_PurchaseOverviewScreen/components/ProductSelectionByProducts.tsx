@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   getTextForLanguage,
+  Language,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
@@ -43,22 +44,13 @@ export function ProductSelectionByProducts({
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type)
-    .slice(-1);
+    .filter((product) => product.type === selectedProduct.type);
   const [selected, setProduct] = useState(selectedProduct);
 
   const title =
     useTextForLanguage(
       fareProductTypeConfig.configuration.productSelectionTitle,
     ) || t(PurchaseOverviewTexts.productSelection.title);
-
-  const aliasText = selectedProduct.productAlias
-    ? getTextForLanguage(selectedProduct.productAlias, language)
-    : undefined;
-
-  const productName = aliasText
-    ? aliasText
-    : getReferenceDataName(selectedProduct, language);
 
   const subText = (fp: PreassignedFareProduct) => {
     const descriptionMessage = getTextForLanguage(fp.description, language);
@@ -78,7 +70,7 @@ export function ProductSelectionByProducts({
             <RadioGroupSection<PreassignedFareProduct>
               items={selectableProducts}
               keyExtractor={(u) => u.id}
-              itemToText={(fp) => getReferenceDataName(fp, language)}
+              itemToText={(fp) => getProductName(fp, language)}
               hideSubtext={hideProductDescriptions}
               itemToSubtext={(fp) => subText(fp)}
               selected={selected}
@@ -98,7 +90,7 @@ export function ProductSelectionByProducts({
           <ContentHeading text={title} />
           <Section>
             <HeaderSectionItem
-              text={productName}
+              text={getProductName(selectedProduct, language)}
               subtitle={subText(selectedProduct)}
             />
           </Section>
@@ -106,4 +98,29 @@ export function ProductSelectionByProducts({
       )}
     </View>
   );
+}
+
+/**
+ * This function will return the product name to be displayed.
+ *
+ * If the product name has alias set, then show the alias,
+ * otherwise get the regular product name.
+ *
+ * @param fareProduct product to be displayed
+ * @param language current language of the app
+ * @returns product name to be displayed, string
+ */
+function getProductName(
+  fareProduct: PreassignedFareProduct,
+  language: Language,
+): string {
+  const aliasText = fareProduct.productAlias
+    ? getTextForLanguage(fareProduct.productAlias, language)
+    : undefined;
+
+  const productName = aliasText
+    ? aliasText
+    : getReferenceDataName(fareProduct, language);
+
+  return productName;
 }
