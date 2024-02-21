@@ -11,6 +11,7 @@ import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {consumeCarnet} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
+import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -33,7 +34,10 @@ export const ConsumeCarnetBottomSheet = ({fareContractId}: Props) => {
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);
-      console.error('Error when consuming carnet: ', errorData);
+      Bugsnag.notify({
+        name: `${errorData.responseStatus} error when consuming carnet`,
+        message: `Error: ${JSON.stringify(errorData)}`,
+      });
       setError(true);
     }
     setIsLoading(false);
