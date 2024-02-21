@@ -159,8 +159,10 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       if (permissionsGranted) {
         // Initialize beacons SDK after consent is granted
         await initializeKettleSDK(false);
-        Kettle.grant(BEACONS_CONSENTS);
-        await updateBeaconsInfo();
+        if (isInitializedRef.current) {
+          Kettle.grant(BEACONS_CONSENTS);
+          await updateBeaconsInfo();
+        }
 
         // If consent wasn't set above, set it to true now
         if (!alreadyConsented) {
@@ -178,10 +180,8 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     if (!isBeaconsSupported) return;
     await initializeKettleSDK(true);
     stopBeacons();
-    if (isInitializedRef.current) {
-      Kettle.revoke(BEACONS_CONSENTS);
-      await updateBeaconsInfo();
-    }
+    Kettle.revoke(BEACONS_CONSENTS);
+    await updateBeaconsInfo();
     await storage.set(storeKey.beaconsConsent, 'false');
     setIsConsentGranted(false);
   }, [isBeaconsSupported, stopBeacons, initializeKettleSDK]);
@@ -189,11 +189,9 @@ const BeaconsContextProvider: React.FC = ({children}) => {
   const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
     await initializeKettleSDK(true);
-    if (isInitializedRef.current) {
-      await Kettle.deleteCollectedData().catch((error) => {
-        Bugsnag.notify(error);
-      });
-    }
+    await Kettle.deleteCollectedData().catch((error) => {
+      Bugsnag.notify(error);
+    });
   }, [isBeaconsSupported, initializeKettleSDK]);
 
   useEffect(() => {
