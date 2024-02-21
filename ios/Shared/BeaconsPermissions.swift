@@ -75,6 +75,7 @@ class BluetoothPermission: NSObject, PermissionRequestable, CBCentralManagerDele
 
   func request(callback onComplete: @escaping PermissionCallback) {
     self.onComplete = onComplete
+
     // A fix for double prompt for Bluetooth when CBCentralManagerOptionShowPowerAlertKey is not explicitly set to false
     // https://developer.apple.com/documentation/corebluetooth/cbcentralmanageroptionshowpoweralertkey
     bluetoothManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: 0])
@@ -253,6 +254,22 @@ class BeaconsPermissions: NSObject {
     alwaysPermission = AlwaysUsePermission()
     motionPermission = MotionPermission()
 
+#if targetEnvironment(simulator)
+    // Only allow location permissions on the simulator
+    // Bluetooth permissions are not required on the simulator
+    // Motion permissions are not required on the simulator
+    whenInUsePermission?.request { [weak self] whenInUsePermissionGranted in
+      if whenInUsePermissionGranted {
+        self?.alwaysPermission?.request { _ in
+          resolve(true)
+          self?.releasePermissionObjects()
+        }
+      } else {
+        resolve(true)
+        self?.releasePermissionObjects()
+      }
+    }
+#else
     bluetoothPermission?.request { [weak self] bluetoothPermissionGranted in
       if bluetoothPermissionGranted {
         self?.whenInUsePermission?.request { [weak self] whenInUsePermissionGranted in
@@ -278,6 +295,7 @@ class BeaconsPermissions: NSObject {
         self?.releasePermissionObjects()
       }
     }
+#endif
   }
 
   private func releasePermissionObjects() {
