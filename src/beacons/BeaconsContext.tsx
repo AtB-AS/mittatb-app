@@ -178,18 +178,22 @@ const BeaconsContextProvider: React.FC = ({children}) => {
     if (!isBeaconsSupported) return;
     await initializeKettleSDK(true);
     stopBeacons();
-    Kettle.revoke(BEACONS_CONSENTS);
+    if (isInitializedRef.current) {
+      Kettle.revoke(BEACONS_CONSENTS);
+      await updateBeaconsInfo();
+    }
     await storage.set(storeKey.beaconsConsent, 'false');
     setIsConsentGranted(false);
-    await updateBeaconsInfo();
   }, [isBeaconsSupported, stopBeacons, initializeKettleSDK]);
 
   const deleteCollectedData = useCallback(async () => {
     if (!isBeaconsSupported) return;
     await initializeKettleSDK(true);
-    Kettle.deleteCollectedData().catch((error) => {
-      Bugsnag.notify(error);
-    });
+    if (isInitializedRef.current) {
+      await Kettle.deleteCollectedData().catch((error) => {
+        Bugsnag.notify(error);
+      });
+    }
   }, [isBeaconsSupported, initializeKettleSDK]);
 
   useEffect(() => {
@@ -213,6 +217,9 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         !beaconsInfo?.isStarted
       ) {
         await initializeKettleSDK(false);
+        if (!isInitializedRef.current) {
+          return;
+        }
 
         // If the user have given consents, but permissions were enabled later,
         // the consents are not necessarily set in the SDK. So we check the SDKs
