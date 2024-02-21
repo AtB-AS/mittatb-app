@@ -7,14 +7,14 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ConsumeCarnetBottomSheet} from './ConsumeCarnetBottomSheet';
 
-type ConsumeCarnetButtonProps = SectionItemProps<{
+type ConsumeCarnetSectionItemProps = SectionItemProps<{
   fareContractId: string;
 }>;
 
 export function ConsumeCarnetSectionItem({
   fareContractId,
   ...sectionProps
-}: ConsumeCarnetButtonProps): JSX.Element {
+}: ConsumeCarnetSectionItemProps): JSX.Element {
   const {t} = useTranslation();
   const {theme} = useTheme();
 

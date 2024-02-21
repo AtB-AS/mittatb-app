@@ -46,7 +46,7 @@ import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/Mobili
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ValidityLine} from '../ValidityLine';
 import {ValidityHeader} from '../ValidityHeader';
-import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetButton';
+import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 
 type Props = {
   fareContract: FareContract;

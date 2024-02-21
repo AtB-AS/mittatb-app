@@ -29,7 +29,7 @@ import {
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
 } from '@atb/ticketing';
-import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetButton';
+import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 
 type Props = {
   now: number;
