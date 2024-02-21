@@ -92,21 +92,35 @@ export function isSentOrReceivedFareContract(fc: FareContract) {
   return fc.customerAccountId !== fc.purchasedBy;
 }
 
-export function hasActiveOrUsableCarnetTravelRight(
+export function hasUsableCarnetTravelRight(
   travelRights: CarnetTravelRight[],
-): boolean {
-  const [firstTravelRight] = travelRights;
-  const {usedAccesses, maximumNumberOfAccesses, numberOfUsedAccesses} =
+  now: number,
+) {
+  // Travel right has not expired
+  if (
+    travelRights.some((travelRight) => now > travelRight.endDateTime.toMillis())
+  )
+    return false;
+
+  // There are remaining accesses
+  const {maximumNumberOfAccesses, numberOfUsedAccesses} =
     flattenCarnetTravelRightAccesses(travelRights);
+  if (maximumNumberOfAccesses <= numberOfUsedAccesses) return false;
 
-  const [lastUsedAccess] = usedAccesses?.slice(-1);
-  const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
-  const now = Date.now();
+  return true;
+}
 
-  return (
-    now < validTo ||
-    (firstTravelRight.endDateTime.toMillis() > now &&
-      maximumNumberOfAccesses > numberOfUsedAccesses)
+export function hasActiveCarnetTravelRight(
+  travelRights: CarnetTravelRight[],
+  now: number,
+) {
+  // Some travel right have some active access
+  return travelRights.some((travelRight) =>
+    travelRight.usedAccesses.some(
+      (access) =>
+        now > access.startDateTime.toMillis() &&
+        now < access.endDateTime.toMillis(),
+    ),
   );
 }
 
@@ -138,10 +152,7 @@ export function flattenCarnetTravelRightAccesses(
   };
 }
 
-function isActiveFareContractNowOrCanBeUsed(
-  f: FareContract,
-  now: number,
-): boolean {
+function isActiveNowOrCanBeUsedFareContract(f: FareContract, now: number) {
   if (!isOrWillBeActivatedFareContract(f)) {
     return false;
   }
@@ -150,8 +161,10 @@ function isActiveFareContractNowOrCanBeUsed(
   if (isPreActivatedTravelRight(firstTravelRight)) {
     return isValidPreActivatedTravelRight(firstTravelRight, now);
   } else if (isCarnetTravelRight(firstTravelRight)) {
-    return hasActiveOrUsableCarnetTravelRight(
-      f.travelRights.filter(isCarnetTravelRight),
+    const travelRights = f.travelRights.filter(isCarnetTravelRight);
+    return (
+      hasActiveCarnetTravelRight(travelRights, now) ||
+      hasUsableCarnetTravelRight(travelRights, now)
     );
   }
 
@@ -163,7 +176,7 @@ export const filterActiveOrCanBeUsedFareContracts = (
   now: number,
 ) => {
   return fareContracts.filter((f) =>
-    isActiveFareContractNowOrCanBeUsed(f, now),
+    isActiveNowOrCanBeUsedFareContract(f, now),
   );
 };
 
@@ -190,7 +203,7 @@ export const filterExpiredFareContracts = (
   const isRefunded = (f: FareContract) =>
     f.state === FareContractState.Refunded;
   const isExpiredOrRefunded = (f: FareContract) =>
-    !isActiveFareContractNowOrCanBeUsed(f, now) || isRefunded(f);
+    !isActiveNowOrCanBeUsedFareContract(f, now) || isRefunded(f);
   return fareContracts.filter(isExpiredOrRefunded);
 };
 
