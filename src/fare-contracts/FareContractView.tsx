@@ -2,7 +2,7 @@ import {
   findReferenceDataById,
   useFirestoreConfiguration,
 } from '@atb/configuration';
-import {FareContract} from '../ticketing/types';
+import {FareContract, FareContractState} from '../ticketing/types';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
@@ -168,9 +168,10 @@ export const FareContractView: React.FC<Props> = ({
           testID={testID + 'Details'}
         />
       )}
-      {isCarnetFareContract && (
-        <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
-      )}
+      {isCarnetFareContract &&
+        fareContract.state === FareContractState.NotActivated && (
+          <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
+        )}
     </Section>
   );
 };

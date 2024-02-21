@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FareContract,
+  FareContractState,
   isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
   NormalTravelRight,
@@ -236,9 +237,10 @@ export const DetailsContent: React.FC<Props> = ({
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
-        {isCarnetFareContract && (
-          <ConsumeCarnetSectionItem fareContractId={fc.id} />
-        )}
+        {isCarnetFareContract &&
+          fc.state === FareContractState.NotActivated && (
+            <ConsumeCarnetSectionItem fareContractId={fc.id} />
+          )}
       </Section>
     );
   } else {
