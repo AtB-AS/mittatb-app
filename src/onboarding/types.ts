@@ -1,4 +1,8 @@
 import {RootStackParamList} from '@atb/stacks-hierarchy';
+import {PermissionStatus} from "react-native-permissions";
+import {AuthenticationType} from "@atb/auth/types";
+import {NotificationPermissionStatus} from "@atb/notifications/use-push-notifications";
+import {BarcodeStatus, DeviceInspectionStatus, MobileTokenStatus} from "@atb/mobile-token/types";
 
 type IsOnboardedStoreKey =
   | '@ATB_extended_onboarding_onboarded'
@@ -18,7 +22,21 @@ export type OnboardingSectionId =
   | 'mobileToken'
   | 'mobileTokenWithoutTravelcard';
 
-export type StaticOnboardingSection = {
+export type ShouldShowArgsType = {
+  locationPermissionStatus: PermissionStatus | null;
+  pushNotificationPermissionStatus: NotificationPermissionStatus;
+  authenticationType: AuthenticationType;
+  pushNotificationsEnabled: boolean;
+  hasFareContractWithActivatedNotification: boolean;
+  travelCardDisabled: boolean;
+  mobileTokenStatus: MobileTokenStatus;
+  deviceInspectionStatus: DeviceInspectionStatus;
+  extendedOnboardingEnabled: boolean;
+  userCreationIsOnboarded: boolean;
+  shouldShowShareTravelHabitsScreen: boolean;
+}
+
+export type OnboardingSectionConfig = {
   isOnboardedStoreKey: IsOnboardedStoreKey;
   onboardingSectionId: OnboardingSectionId;
   initialScreen?: {
@@ -26,12 +44,13 @@ export type StaticOnboardingSection = {
     params?: any;
   };
   shouldShowBeforeUserCreated?: boolean;
+  shouldShowPredicate: (args: ShouldShowArgsType) => boolean
 };
 
-export type LoadedOnboardingSection = StaticOnboardingSection & {
+export type LoadedOnboardingSection = OnboardingSectionConfig & {
   isOnboarded: boolean;
 };
 
 export type OnboardingSection = LoadedOnboardingSection & {
-  customShouldShow?: boolean;
+  shouldShow: boolean;
 };

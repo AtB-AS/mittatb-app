@@ -12,12 +12,23 @@ import {register as registerChatUser} from '../chat/user';
 import {storage} from '@atb/storage';
 
 import {
+  getOnboardingSectionIsOnboarded,
   LoadedOnboardingSection,
   OnboardingSection,
   OnboardingSectionId,
-  staticOnboardingSectionsInPrioritizedOrder,
-  useOnboardingGetCustomShouldShow,
+  onboardingSectionsInPrioritizedOrder,
 } from '@atb/onboarding';
+import {ShouldShowArgsType} from '@atb/onboarding/types';
+import {useHasFareContractWithActivatedNotification} from '@atb/notifications/use-has-fare-contract-with-activated-notification';
+import {
+  useNotifications,
+  usePushNotificationsEnabled,
+} from '@atb/notifications';
+import {useGeolocationState} from '@atb/GeolocationContext';
+import {useAuthState} from '@atb/auth';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
+import {useMobileTokenContextState} from '@atb/mobile-token';
 
 export type OnboardingState = {
   isLoading: boolean;
@@ -107,7 +118,7 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
   useEffect(() => {
     async function loadOnboardingSettings() {
       const loadedOnboardingSections = await Promise.all(
-        staticOnboardingSectionsInPrioritizedOrder.map(
+        onboardingSectionsInPrioritizedOrder.map(
           async (staticOnboardingSection) => {
             const savedIsOnboarded = await storage.get(
               staticOnboardingSection.isOnboardedStoreKey,
@@ -180,18 +191,15 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
     [loadedOnboardingSections, restartOnboardingSection],
   );
 
-  const getCustomShouldShow = useOnboardingGetCustomShouldShow(
-    loadedOnboardingSections,
-  );
+  const shouldShowArgs = useShouldShowArgs(loadedOnboardingSections);
+
   const onboardingSections = useMemo(
     () =>
       loadedOnboardingSections.map((loadedOnboardingSection) => ({
         ...loadedOnboardingSection,
-        customShouldShow: getCustomShouldShow(
-          loadedOnboardingSection.onboardingSectionId,
-        ),
+        shouldShow: loadedOnboardingSection.shouldShowPredicate(shouldShowArgs),
       })),
-    [getCustomShouldShow, loadedOnboardingSections],
+    [loadedOnboardingSections, shouldShowArgs],
   );
 
   return (
@@ -232,7 +240,7 @@ export function useOnboardingDispatch() {
 }
 
 const getUpdatedOnboardingSections = (
-  onboardingSections: OnboardingSection[],
+  onboardingSections: LoadedOnboardingSection[],
   onboardingSectionId: OnboardingSectionId,
   isOnboarded: boolean,
 ) => {
@@ -251,7 +259,7 @@ const getUpdatedOnboardingSections = (
 };
 
 const storeOnboardingSectionIsOnboarded = async (
-  onboardingSections: OnboardingSection[],
+  onboardingSections: LoadedOnboardingSection[],
   onboardingSectionId: OnboardingSectionId,
   isOnboarded: boolean,
 ) => {
@@ -264,4 +272,63 @@ const storeOnboardingSectionIsOnboarded = async (
       JSON.stringify(isOnboarded),
     );
   }
+};
+
+const useShouldShowArgs = (
+  loadedOnboardingSections: LoadedOnboardingSection[],
+): ShouldShowArgsType => {
+  const hasFareContractWithActivatedNotification =
+    useHasFareContractWithActivatedNotification();
+
+  const pushNotificationsEnabled = usePushNotificationsEnabled();
+  const {permissionStatus: pushNotificationPermissionStatus} =
+    useNotifications();
+
+  const {status: locationPermissionStatus} = useGeolocationState();
+  const {authenticationType} = useAuthState();
+
+  const {
+    enable_extended_onboarding: extendedOnboardingEnabled,
+    disable_travelcard: travelCardDisabled,
+  } = useRemoteConfig();
+
+  const shouldShowShareTravelHabitsScreen =
+    useShouldShowShareTravelHabitsScreen(loadedOnboardingSections);
+
+  const userCreationIsOnboarded = getOnboardingSectionIsOnboarded(
+    loadedOnboardingSections,
+    'userCreation',
+  );
+
+  const {mobileTokenStatus, deviceInspectionStatus} =
+    useMobileTokenContextState();
+
+  return useMemo(
+    () => ({
+      hasFareContractWithActivatedNotification,
+      pushNotificationPermissionStatus,
+      pushNotificationsEnabled,
+      locationPermissionStatus,
+      authenticationType,
+      extendedOnboardingEnabled,
+      shouldShowShareTravelHabitsScreen,
+      travelCardDisabled,
+      userCreationIsOnboarded,
+      mobileTokenStatus,
+      deviceInspectionStatus,
+    }),
+    [
+      hasFareContractWithActivatedNotification,
+      pushNotificationPermissionStatus,
+      pushNotificationsEnabled,
+      locationPermissionStatus,
+      authenticationType,
+      extendedOnboardingEnabled,
+      shouldShowShareTravelHabitsScreen,
+      travelCardDisabled,
+      userCreationIsOnboarded,
+      mobileTokenStatus,
+      deviceInspectionStatus,
+    ],
+  );
 };

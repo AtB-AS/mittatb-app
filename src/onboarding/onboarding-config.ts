@@ -1,6 +1,7 @@
-import {StaticOnboardingSection} from '@atb/onboarding';
+import {OnboardingSectionConfig} from '@atb/onboarding';
+import {Platform} from 'react-native';
 
-export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection[] =
+export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
   [
     {
       isOnboardedStoreKey: '@ATB_extended_onboarding_onboarded',
@@ -9,6 +10,10 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
         name: 'Root_ExtendedOnboardingStack',
       },
       shouldShowBeforeUserCreated: true,
+      shouldShowPredicate: ({
+        extendedOnboardingEnabled,
+        userCreationIsOnboarded,
+      }) => extendedOnboardingEnabled && !userCreationIsOnboarded, // !userCreationIsOnboarded for backward compatibility,
     },
     {
       isOnboardedStoreKey: '@ATB_onboarded', // variable renamed, but keep old isOnboardedStoreKey
@@ -18,6 +23,7 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
         params: {},
       },
       shouldShowBeforeUserCreated: true,
+      shouldShowPredicate: () => true,
     },
     {
       isOnboardedStoreKey: '@ATB_location_when_in_use_permission_onboarded',
@@ -25,6 +31,8 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
       initialScreen: {
         name: 'Root_LocationWhenInUsePermissionScreen',
       },
+      shouldShowPredicate: ({locationPermissionStatus}) =>
+        locationPermissionStatus === 'denied',
     },
     {
       isOnboardedStoreKey: '@ATB_share_travel_habits_onboarded',
@@ -32,12 +40,30 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
       initialScreen: {
         name: 'Root_ShareTravelHabitsScreen',
       },
+      shouldShowPredicate: ({shouldShowShareTravelHabitsScreen}) =>
+        shouldShowShareTravelHabitsScreen,
     },
     {
       isOnboardedStoreKey: '@ATB_notification_permission_onboarded',
       onboardingSectionId: 'notificationPermission',
       initialScreen: {
         name: 'Root_NotificationPermissionScreen',
+      },
+      shouldShowPredicate: ({
+        pushNotificationPermissionStatus,
+        pushNotificationsEnabled,
+        hasFareContractWithActivatedNotification,
+      }) => {
+        const pushNotificationPermissionsNotGranted =
+          Platform.OS === 'ios'
+            ? pushNotificationPermissionStatus === 'undetermined'
+            : pushNotificationPermissionStatus === 'denied';
+
+        return (
+          pushNotificationsEnabled &&
+          pushNotificationPermissionsNotGranted &&
+          hasFareContractWithActivatedNotification
+        );
       },
     },
     {
@@ -46,6 +72,14 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
       initialScreen: {
         name: 'Root_ConsiderTravelTokenChangeScreen',
       },
+      shouldShowPredicate: ({
+        mobileTokenStatus,
+        deviceInspectionStatus,
+        travelCardDisabled,
+      }) =>
+        mobileTokenStatus === 'success' &&
+        deviceInspectionStatus === 'not-inspectable' &&
+        !travelCardDisabled,
     },
     {
       isOnboardedStoreKey: '@ATB_mobile_token_without_travelcard_onboarded',
@@ -53,5 +87,13 @@ export const staticOnboardingSectionsInPrioritizedOrder: StaticOnboardingSection
       initialScreen: {
         name: 'Root_ConsiderTravelTokenChangeScreen',
       },
+      shouldShowPredicate: ({
+        mobileTokenStatus,
+        deviceInspectionStatus,
+        travelCardDisabled,
+      }) =>
+        mobileTokenStatus === 'success' &&
+        deviceInspectionStatus === 'not-inspectable' &&
+        travelCardDisabled,
     },
   ];
