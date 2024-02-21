@@ -80,6 +80,18 @@ export async function cancelRecurringPayment(paymentId: number) {
   return response.data;
 }
 
+export async function consumeCarnet(fareContractId: string) {
+  const url = `ticket/v4/consume`;
+  const response = await client.post<void>(
+    url,
+    {
+      fareContractId,
+    },
+    {authWithIdToken: true},
+  );
+  return response.data;
+}
+
 type ReserveOfferParams = {
   offers: ReserveOffer[];
   paymentType: PaymentType;

@@ -2,7 +2,7 @@ import {
   findReferenceDataById,
   useFirestoreConfiguration,
 } from '@atb/configuration';
-import {FareContract} from '../ticketing/types';
+import {FareContract, FareContractState} from '../ticketing/types';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
@@ -26,6 +26,7 @@ import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-bene
 import {UsedAccessValidityHeader} from '@atb/fare-contracts/carnet/UsedAccessValidityHeader';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {isSentOrReceivedFareContract} from '@atb/ticketing';
+import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetButton';
 
 type Props = {
   now: number;
@@ -167,6 +168,10 @@ export const FareContractView: React.FC<Props> = ({
           testID={testID + 'Details'}
         />
       )}
+      {isCarnetFareContract &&
+        fareContract.state === FareContractState.NotActivated && (
+          <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
+        )}
     </Section>
   );
 };

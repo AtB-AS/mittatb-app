@@ -173,6 +173,26 @@ const FareContractTexts = {
         `${count} tickets left`,
         `${count} klipp att`,
       ),
+    activateCarnet: _(
+      'Aktiver enkeltbillett',
+      'Activate single ticket',
+      'Aktiver enkeltbillett',
+    ),
+    bottomSheetTitle: _(
+      'Aktiver én enkeltbillett',
+      'Activate a single ticket',
+      'Aktiver ein enkeltbillett',
+    ),
+    bottomSheetDescription: _(
+      'Billetten blir gyldig med en gang. Man kan bare aktivere én enkeltbillett fra klippekortet om gangen.',
+      'The ticket becomes valid immediately. You can only activate one single ticket from the punch card at a time.',
+      'Billetten blir gyldig med ein gong. Du kan berre aktivere ein enkeltbillett frå klippekortet om gongen.',
+    ),
+    genericError: _(
+      'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
+      'An error occurred while activating the ticket. Please try again.',
+      'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
+    ),
   },
   receipt: {
     header: {

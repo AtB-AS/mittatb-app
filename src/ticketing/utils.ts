@@ -18,7 +18,7 @@ import {getLastUsedAccess} from '@atb/fare-contracts/utils';
 export function isCarnetTravelRight(
   travelRight: TravelRight | undefined,
 ): travelRight is CarnetTravelRight {
-  return travelRight?.type === 'CarnetTicket';
+  return !!travelRight && 'maximumNumberOfAccesses' in travelRight;
 }
 
 export function isCarnet(fareContract: FareContract): boolean {
