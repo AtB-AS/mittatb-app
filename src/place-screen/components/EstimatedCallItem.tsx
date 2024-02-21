@@ -45,6 +45,7 @@ import {
 } from '@atb/situations/utils';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {Statuses} from '@atb-as/theme';
+import {TransportSubmode} from '@atb/api/types/generated/journey_planner_v3_types';
 
 export type EstimatedCallItemProps = {
   secondsUntilDeparture: number;
@@ -320,15 +321,26 @@ export const getMsgTypeForEstimatedCall = (
       estimatedCall.cancellation,
     );
 
+  const msgTypeForRailReplacementBus: Statuses | undefined =
+    estimatedCall.serviceJourney.transportSubmode ===
+    TransportSubmode.RailReplacementBus
+      ? 'warning'
+      : undefined;
+
   const bookingStatus = getBookingStatus(
     estimatedCall.bookingArrangements,
     estimatedCall.aimedDepartureTime,
   );
   const msgTypeForBooking = bookingStatusToMsgType(bookingStatus);
 
-  return [msgTypeForSituationOrNotice, msgTypeForBooking].reduce<
-    Exclude<Statuses, 'valid'> | undefined
-  >(toMostCriticalStatus, undefined);
+  return [
+    msgTypeForSituationOrNotice,
+    msgTypeForBooking,
+    msgTypeForRailReplacementBus,
+  ].reduce<Exclude<Statuses, 'valid'> | undefined>(
+    toMostCriticalStatus,
+    undefined,
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({

@@ -20,7 +20,11 @@ import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/
 import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
 import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {DepartureDetailsTexts, useTranslation} from '@atb/translations';
+import {
+  DepartureDetailsTexts,
+  TripDetailsTexts,
+  useTranslation,
+} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {animateNextChange} from '@atb/utils/animation';
 import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
@@ -217,6 +221,14 @@ export const DepartureDetailsScreenComponent = ({
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
+          {subMode === TransportSubmode.RailReplacementBus ? (
+            <MessageInfoBox
+              type="warning"
+              message={t(
+                TripDetailsTexts.messages.departureIsRailReplacementBus,
+              )}
+            />
+          ) : null}
           {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
             activeItem ? (
               <PaginatedDetailsHeader
@@ -527,11 +539,13 @@ function EstimatedCallRow({
         </TripRow>
       )}
 
-      {isStartOfTripGroup && !call.cancellation && bookingStatus === 'bookable' && (
-        <TripRow>
-          <BookingOptions bookingArrangements={call.bookingArrangements} />
-        </TripRow>
-      )}
+      {isStartOfTripGroup &&
+        !call.cancellation &&
+        bookingStatus === 'bookable' && (
+          <TripRow>
+            <BookingOptions bookingArrangements={call.bookingArrangements} />
+          </TripRow>
+        )}
 
       {collapseButton}
     </View>
