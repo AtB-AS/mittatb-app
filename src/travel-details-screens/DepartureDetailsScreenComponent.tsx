@@ -221,14 +221,14 @@ export const DepartureDetailsScreenComponent = ({
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          {subMode === TransportSubmode.RailReplacementBus ? (
+          {subMode === TransportSubmode.RailReplacementBus && (
             <MessageInfoBox
               type="warning"
               message={t(
                 TripDetailsTexts.messages.departureIsRailReplacementBus,
               )}
             />
-          ) : null}
+          )}
           {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
             activeItem ? (
               <PaginatedDetailsHeader
