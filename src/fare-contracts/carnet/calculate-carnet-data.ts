@@ -53,10 +53,14 @@ export function calculateCarnetData(
     0,
   );
 
-  // Calculates the amount of dots showing for the used part
+  // Calculates the amount of dots showing for the used part. We show all as
+  // used only if every access has been used, otherwise we "expand the next"
+  // multicarnet.
   const numberOfUsedDots =
-    (numberOfUsedAccesses + numberOfAdditionalDots - activeAccess) %
-    CARNET_DIVIDER;
+    accessesRemaining === 0
+      ? CARNET_DIVIDER - activeAccess
+      : (numberOfUsedAccesses + numberOfAdditionalDots - activeAccess) %
+        CARNET_DIVIDER;
 
   // Calculates the amount of dots showing for the unused part
   const numberOfUnusedDots = CARNET_DIVIDER - numberOfUsedDots - activeAccess;
