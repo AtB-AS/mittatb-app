@@ -28,7 +28,6 @@ type ProductSelectionByProductsProps = {
   fareProductTypeConfig: FareProductTypeConfig;
   setSelectedProduct: (product: PreassignedFareProduct) => void;
   style?: StyleProp<ViewStyle>;
-  useAlias?: boolean;
 };
 
 export function ProductSelectionByProducts({
@@ -36,7 +35,6 @@ export function ProductSelectionByProducts({
   fareProductTypeConfig,
   setSelectedProduct,
   style,
-  useAlias,
 }: ProductSelectionByProductsProps) {
   const {t, language} = useTranslation();
   const {preassignedFareProducts} = useFirestoreConfiguration();
@@ -45,7 +43,8 @@ export function ProductSelectionByProducts({
 
   const selectableProducts = preassignedFareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
-    .filter((product) => product.type === selectedProduct.type);
+    .filter((product) => product.type === selectedProduct.type)
+    .slice(-1);
   const [selected, setProduct] = useState(selectedProduct);
 
   const title =
@@ -53,7 +52,7 @@ export function ProductSelectionByProducts({
       fareProductTypeConfig.configuration.productSelectionTitle,
     ) || t(PurchaseOverviewTexts.productSelection.title);
 
-  const aliasText = useAlias
+  const aliasText = selectedProduct.productAlias
     ? getTextForLanguage(selectedProduct.productAlias, language)
     : undefined;
 
