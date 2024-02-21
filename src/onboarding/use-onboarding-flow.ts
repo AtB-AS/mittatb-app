@@ -21,10 +21,6 @@ export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
       onboardingSections.find((onboardingSection) => {
         const hasSeenOnboardingSection = onboardingSection?.isOnboarded;
 
-        const customShouldShowOnboardingSection =
-          onboardingSection.customShouldShow ||
-          onboardingSection.customShouldShow === undefined;
-
         const skipDueToUserCreatedAssumption =
           onboardingSection?.shouldShowBeforeUserCreated &&
           assumeUserCreationOnboarded;
@@ -35,7 +31,7 @@ export const useOnboardingFlow = (assumeUserCreationOnboarded = false) => {
 
         const isNextOnboardingSection =
           !hasSeenOnboardingSection &&
-          customShouldShowOnboardingSection &&
+          onboardingSection.shouldShow &&
           !skipDueToUserCreatedAssumption &&
           !isComingFromThisOnboardingSection;
 

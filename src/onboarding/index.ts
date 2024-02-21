@@ -8,13 +8,12 @@ export {
   useOnboardingSectionIsOnboarded,
   getOnboardingSectionIsOnboarded,
 } from './use-onboarding-section-is-onboarded';
-export {useOnboardingGetCustomShouldShow} from './use-onboarding-get-custom-should-show';
 export {useOnboardingFlow} from './use-onboarding-flow';
 export {useOnboardingNavigation} from './use-onboarding-navigation';
-export {staticOnboardingSectionsInPrioritizedOrder} from './onboarding-config';
+export {onboardingSectionsInPrioritizedOrder} from './onboarding-config';
 export type {
   OnboardingSectionId,
   OnboardingSection,
   LoadedOnboardingSection,
-  StaticOnboardingSection,
+  OnboardingSectionConfig,
 } from './types';
