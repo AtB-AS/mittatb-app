@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   FareContract,
-  FareContractState,
+  isCanBeConsumedNowFareContract,
   isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
   NormalTravelRight,
@@ -46,7 +46,7 @@ import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/Mobili
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ValidityLine} from '../ValidityLine';
 import {ValidityHeader} from '../ValidityHeader';
-import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetButton';
+import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 
 type Props = {
   fareContract: FareContract;
@@ -237,10 +237,9 @@ export const DetailsContent: React.FC<Props> = ({
           accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
-        {isCarnetFareContract &&
-          fc.state === FareContractState.NotActivated && (
-            <ConsumeCarnetSectionItem fareContractId={fc.id} />
-          )}
+        {isCanBeConsumedNowFareContract(fc, now) && (
+          <ConsumeCarnetSectionItem fareContractId={fc.id} />
+        )}
       </Section>
     );
   } else {
