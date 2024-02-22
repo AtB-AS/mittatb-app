@@ -168,9 +168,6 @@ const TicketingTexts = {
         'Fleire reisemåtar',
       ),
     },
-    carnet: {
-      transportModes: _('Buss/trikk', 'Bus/tram', 'Buss/trikk'),
-    },
   },
   reservation: {
     reserving: _(
