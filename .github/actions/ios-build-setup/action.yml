@@ -9,7 +9,7 @@ inputs:
     default: "2.7.6"
     required: false
   xcode-version:
-    default: "latest-stable"
+    default: "15.1"
     required: false
   use-build-cache:
     description: "Wether to use the build cache for artifacts and dependencies (will speed up subsequent builds if no native changes have happened)"
