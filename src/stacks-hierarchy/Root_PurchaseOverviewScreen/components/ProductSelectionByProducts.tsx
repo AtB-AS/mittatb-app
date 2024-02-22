@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   getTextForLanguage,
-  Language,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
