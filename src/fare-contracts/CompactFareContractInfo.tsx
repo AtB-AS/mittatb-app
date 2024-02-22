@@ -153,9 +153,7 @@ export const useFareContractInfoTexts = (
     serialComma: false,
   });
 
-  const tokenWarning = useNonInspectableTokenWarning(
-    preassignedFareProduct?.type,
-  );
+  const tokenWarning = useNonInspectableTokenWarning();
   const timeUntilExpireOrWarning: string | undefined =
     tokenWarning ?? t(FareContractTexts.validityHeader.valid(durationText));
 

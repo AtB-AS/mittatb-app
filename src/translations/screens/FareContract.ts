@@ -272,11 +272,6 @@ const FareContractTexts = {
         `Bring ${deviceName} when you travel`,
         `Bruk ${deviceName} når du reiser`,
       ),
-    carnetWarning: _(
-      'Vennligst bytt til t:kort for å kunne bruke dette klippekortet.',
-      'Please switch to t:card to be able to use this punch card.',
-      'Ver venleg og byt til t:kort for å kunne bruke dette klippekortet.',
-    ),
     anotherPhoneIsInspectableWarning: (deviceName: string) =>
       _(
         `Merk at billetter du kjøper nå vil være tilknyttet ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.`,
@@ -380,11 +375,6 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Bring your travel card when you travel',
         'Ta med deg reisekortet når du reiser',
       ),
-      carnetWarning: _(
-        'Vennligst bytt til reisekort for å kunne bruke dette klippekortet.',
-        'Please switch to travel card to be able to use this punch card.',
-        'Ver venleg og byt til reisekort for å kunne bruke dette klippekortet.',
-      ),
       tcardIsInspectableWarning: _(
         'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
         'This ticket will be connected to your travel card. If you would rather use tickets on this phone, you can switch to this device from **My profile**.',
@@ -420,11 +410,6 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Bruk reisekort når du reiser',
         'Bring your travel card when you travel',
         'Ta med deg reisekortet når du reiser',
-      ),
-      carnetWarning: _(
-        'Vennligst bytt til reisekort for å kunne bruke dette klippekortet.',
-        'Please switch to travel card to be able to use this punch card.',
-        'Ver venleg og byt til reisekort for å bruke dette klippekortet.',
       ),
       tcardIsInspectableWarning: _(
         'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min bruker**.',

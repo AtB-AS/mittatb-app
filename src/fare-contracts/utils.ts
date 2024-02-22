@@ -107,7 +107,7 @@ export const mapToUserProfilesWithCount = (
         'id' in userProfileWithCount,
     );
 
-export const useNonInspectableTokenWarning = (fareProductType?: string) => {
+export const useNonInspectableTokenWarning = () => {
   const {t} = useTranslation();
   const {barcodeStatus, tokens} = useMobileTokenContextState();
   switch (barcodeStatus) {
@@ -120,22 +120,14 @@ export const useNonInspectableTokenWarning = (fareProductType?: string) => {
       return t(FareContractTexts.warning.errorWithToken);
     case 'other':
       const inspectableToken = tokens.find((t) => t.isInspectable);
-      if (fareProductType === 'carnet') {
-        if (inspectableToken?.type !== 'travel-card') {
-          return t(FareContractTexts.warning.carnetWarning);
-        } else {
-          return t(FareContractTexts.warning.travelCardAstoken);
-        }
-      } else {
-        return inspectableToken?.type === 'travel-card'
-          ? t(FareContractTexts.warning.travelCardAstoken)
-          : t(
-              FareContractTexts.warning.anotherMobileAsToken(
-                inspectableToken?.name ||
-                  t(FareContractTexts.warning.unnamedDevice),
-              ),
-            );
-      }
+      return inspectableToken?.type === 'travel-card'
+        ? t(FareContractTexts.warning.travelCardAstoken)
+        : t(
+            FareContractTexts.warning.anotherMobileAsToken(
+              inspectableToken?.name ||
+                t(FareContractTexts.warning.unnamedDevice),
+            ),
+          );
   }
 };
 
