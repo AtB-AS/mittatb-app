@@ -234,7 +234,6 @@ export const DetailsContent: React.FC<Props> = ({
         <LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
-          accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
         {isCanBeConsumedNowFareContract(fc, now) && (
