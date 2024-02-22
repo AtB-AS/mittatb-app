@@ -50,7 +50,9 @@ export const CarnetFooter: React.FC<Props> = ({
         ))}
         {active && (
           <View style={styles.dot}>
-            <View style={styles.dotFill__active} />
+            <View style={styles.dotFill__activeViewBox}>
+              <View style={styles.dotFill__activeFill} />
+            </View>
           </View>
         )}
         {usedArray.map((_, idx) => (
@@ -120,12 +122,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   dot__unused: {
     backgroundColor: theme.static.background.background_0.background,
   },
-  dotFill__active: {
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
+  dotFill__activeViewBox: {
     height: '100%',
     width: '50%',
-    marginLeft: '50%',
+    overflow: 'hidden',
+    alignSelf: 'flex-end',
+  },
+  dotFill__activeFill: {
+    borderRadius: 20,
+    height: '100%',
+    width: '200%',
+    alignSelf: 'flex-end',
     backgroundColor: theme.static.background.background_0.background,
   },
 }));
