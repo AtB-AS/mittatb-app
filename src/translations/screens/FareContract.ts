@@ -261,7 +261,7 @@ const FareContractTexts = {
       'Error retrieving t:card / phone',
       'Feil ved uthenting av t:kort / mobil',
     ),
-    travelCardAstoken: _(
+    travelCardAsToken: _(
       'Bruk t:kort når du reiser',
       'Bring your t:card when you travel',
       'Bruk t:kort når du reiser',
@@ -370,7 +370,7 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
       ),
-      travelCardAstoken: _(
+      travelCardAsToken: _(
         'Bruk reisekort når du reiser',
         'Bring your travel card when you travel',
         'Ta med deg reisekortet når du reiser',
@@ -406,7 +406,7 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
       ),
-      travelCardAstoken: _(
+      travelCardAsToken: _(
         'Bruk reisekort når du reiser',
         'Bring your travel card when you travel',
         'Ta med deg reisekortet når du reiser',

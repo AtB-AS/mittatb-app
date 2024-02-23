@@ -121,7 +121,7 @@ export const useNonInspectableTokenWarning = () => {
     case 'other':
       const inspectableToken = tokens.find((t) => t.isInspectable);
       return inspectableToken?.type === 'travel-card'
-        ? t(FareContractTexts.warning.travelCardAstoken)
+        ? t(FareContractTexts.warning.travelCardAsToken)
         : t(
             FareContractTexts.warning.anotherMobileAsToken(
               inspectableToken?.name ||
