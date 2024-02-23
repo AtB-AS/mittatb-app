@@ -169,8 +169,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       )
     : t(PurchaseConfirmationTexts.travelDate.now);
 
-  const isCarnet = preassignedFareProduct.type === 'carnet';
-
   useEffect(() => {
     const prevMethod = getPreviousPaymentMethod(
       previousPaymentMethod,
@@ -366,7 +364,6 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 {!isSearchingOffer &&
                   validDurationSeconds &&
                   isShowValidTimeInfoEnabled &&
-                  !isCarnet &&
                   summary(
                     t(
                       PurchaseConfirmationTexts.validityTexts.time(
@@ -381,27 +378,22 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         .onlyOnPhone,
                     ),
                   )}
-                {isCarnet ? (
-                  <GlobalMessage
-                    style={styles.globalMessage}
-                    globalMessageContext={
-                      GlobalMessageContextEnum.appPurchaseConfirmation
-                    }
-                    textColor="secondary"
-                    ruleVariables={{
-                      preassignedFareProductType: preassignedFareProduct.type,
-                      fromTariffZone: fromPlace.id,
-                      toTariffZone: toPlace.id,
-                    }}
-                  />
-                ) : (
-                  <MessageInfoText
-                    style={styles.smallTopMargin}
-                    type="info"
-                    message={travelDateText}
-                    textColor="secondary"
-                  />
-                )}
+                <GlobalMessage
+                  style={styles.globalMessage}
+                  globalMessageContext={
+                    GlobalMessageContextEnum.appPurchaseConfirmation
+                  }
+                  textColor="secondary"
+                  ruleVariables={{
+                    preassignedFareProductType: preassignedFareProduct.type,
+                  }}
+                />
+                <MessageInfoText
+                  style={styles.smallTopMargin}
+                  type="info"
+                  message={travelDateText}
+                  textColor="secondary"
+                />
               </View>
             </GenericSectionItem>
           </Section>
