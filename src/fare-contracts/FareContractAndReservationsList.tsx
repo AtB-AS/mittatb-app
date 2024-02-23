@@ -3,11 +3,13 @@ import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReser
 import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {useAnalytics} from '@atb/analytics';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
+import {getFareContractInfo} from './utils';
+import {useAuthState} from '@atb/auth';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -33,12 +35,28 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalytics();
+  const {abtCustomerId: currentUserId} = useAuthState();
+
+  const calculateWeight = useCallback(
+    (fcOrReservation: FareContract | Reservation) => {
+      return 'travelRights' in fcOrReservation
+        ? getFareContractInfo(now, fcOrReservation, currentUserId)
+            .validityStatus === 'valid'
+          ? 1
+          : 0
+        : 0;
+    },
+    [now, currentUserId],
+  );
 
   const fareContractsAndReservationsSorted = useMemo(() => {
-    return [...(fareContracts || []), ...(reservations || [])].sort(
-      (a, b) => b.created.toMillis() - a.created.toMillis(),
-    );
-  }, [reservations, fareContracts]);
+    return [...(fareContracts || []), ...(reservations || [])].sort((a, b) => {
+      const validityWeight = calculateWeight(b) - calculateWeight(a);
+      return validityWeight === 0
+        ? b.created.toMillis() - a.created.toMillis()
+        : validityWeight;
+    });
+  }, [fareContracts, reservations, calculateWeight]);
 
   return (
     <>
