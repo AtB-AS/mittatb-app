@@ -155,7 +155,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const fromPlaceName = getPlaceName(fromPlace, language);
 
   const toPlaceName = getPlaceName(toPlace, language);
-  const vatAmount = totalPrice * (vatPercent / 100);
+  const vatAmount = totalPrice - (totalPrice / (1 + vatPercent / 100));
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
