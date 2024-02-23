@@ -39,12 +39,12 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 
   const calculateWeight = useCallback(
     (fcOrReservation: FareContract | Reservation) => {
-      return 'travelRights' in fcOrReservation
-        ? getFareContractInfo(now, fcOrReservation, currentUserId)
-            .validityStatus === 'valid'
-          ? 1
-          : 0
-        : 0;
+      const isFareContract = 'travelRights' in fcOrReservation;
+      // Make reservations go first, then fare contracts
+      if (!isFareContract) return 1;
+
+      const fc = getFareContractInfo(now, fcOrReservation, currentUserId);
+      return fc.validityStatus === 'valid' ? 1 : 0;
     },
     [now, currentUserId],
   );
