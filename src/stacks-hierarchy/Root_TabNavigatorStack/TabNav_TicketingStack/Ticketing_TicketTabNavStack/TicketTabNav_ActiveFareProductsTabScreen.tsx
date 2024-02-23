@@ -141,20 +141,19 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
           )}
 
           {hasSentFareContracts && (
-            <View ref={sentFareContractRef} collapsable={false}>
-              <LinkSectionItem
-                text={t(TicketHistoryModeTexts.sent.title)}
-                accessibility={{
-                  accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
-                }}
-                testID="sentToOthersButton"
-                onPress={() =>
-                  navigation.navigate('Ticketing_TicketHistoryScreen', {
-                    mode: 'sent',
-                  })
-                }
-              />
-            </View>
+            <LinkSectionItem
+              ref={sentFareContractRef}
+              text={t(TicketHistoryModeTexts.sent.title)}
+              accessibility={{
+                accessibilityHint: t(TicketHistoryModeTexts.sent.titleA11y),
+              }}
+              testID="sentToOthersButton"
+              onPress={() =>
+                navigation.navigate('Ticketing_TicketHistoryScreen', {
+                  mode: 'sent',
+                })
+              }
+            />
           )}
         </Section>
       </ScrollView>
