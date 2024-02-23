@@ -48,7 +48,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
 
   const hasSentFareContracts = sentFareContracts.length > 0;
 
-  const sentFareContractRef = useRef(null);
+  const sentFareContractRef = useRef<View>(null);
 
   const {isPopOverSeen, setPopOverSeen} = useOneTimePopover();
 
@@ -65,33 +65,29 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
     setPopOverSeen('on-behalf-of-sent-tickets-button');
   }, [addPopOver, setPopOverSeen]);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (shouldShowPopOver) {
-        // Check if the button for tickets sent to others is visible on screen or not
-        if (sentFareContractRef.current) {
-          const currentView = sentFareContractRef.current as View;
-          currentView.measure((x, y, width, height, pageX, pageY) => {
-            const rectTop = pageX;
-            const rectBottom = pageY + height;
-            const rectWidth = pageX + width;
-            const window = Dimensions.get('window');
-            const isVisible =
-              rectBottom != 0 &&
-              rectTop >= 0 &&
-              rectBottom <= window.height &&
-              rectWidth > 0 &&
-              rectWidth <= window.width;
+  if (shouldShowPopOver) {
+    // Check if the button for tickets sent to others is visible on screen or not
+    if (sentFareContractRef.current) {
+      const currentView = sentFareContractRef.current;
+      currentView.measure((x, y, width, height, pageX, pageY) => {
+        const rectTop = pageX;
+        const rectBottom = pageY + height;
+        const rectWidth = pageX + width;
+        const window = Dimensions.get('window');
+        const isVisible =
+          rectBottom != 0 &&
+          rectTop >= 0 &&
+          rectBottom <= window.height &&
+          rectWidth > 0 &&
+          rectWidth <= window.width;
 
-            // if layout is visible : show pop over
-            if (isVisible) {
-              showPopOver();
-            }
-          });
+        // if layout is visible : show pop over
+        if (isVisible) {
+          showPopOver();
         }
-      }
-    }, [shouldShowPopOver, showPopOver]),
-  );
+      });
+    }
+  }
 
   return (
     <View style={styles.container}>
