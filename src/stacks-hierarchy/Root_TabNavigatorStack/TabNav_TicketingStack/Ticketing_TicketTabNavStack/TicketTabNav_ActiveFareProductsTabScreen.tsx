@@ -14,7 +14,6 @@ import {LinkSectionItem, Section} from '@atb/components/sections';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
 import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
-import {useFocusEffect} from '@react-navigation/native';
 import {usePopOver} from '@atb/popover';
 import {useOneTimePopover} from '@atb/popover/use-one-time-popover';
 
