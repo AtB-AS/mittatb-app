@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import {AccessibilityProps, GestureResponderEvent, View} from 'react-native';
 import {ThemeText, screenReaderPause} from '@atb/components/text';
 import {
@@ -29,73 +29,80 @@ type Props = SectionItemProps<{
   textType?: TextNames;
   interactiveColor?: InteractiveColor;
 }>;
-export function LinkSectionItem({
-  text,
-  onPress,
-  subtitle,
-  label,
-  icon,
-  accessibility,
-  disabled,
-  textType,
-  testID,
-  interactiveColor = 'interactive_2',
-  ...props
-}: Props) {
-  const {t} = useTranslation();
-  const {contentContainer, topContainer} = useSectionItem(props);
-  const style = useSectionStyle();
-  const linkSectionItemStyle = useStyles();
-  const {theme} = useTheme();
-  const themeColor = theme.interactive[interactiveColor].default;
-  const iconEl =
-    isNavigationIcon(icon) || !icon ? (
-      <NavigationIcon mode={icon} fill={themeColor.text} />
-    ) : (
-      icon
-    );
-  const disabledStyle = disabled ? linkSectionItemStyle.disabled : undefined;
-  const accessibilityWithOverrides = disabled
-    ? {...accessibility, accessibilityHint: undefined}
-    : accessibility;
-  const accessibilityLabel =
-    text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
-  return (
-    <PressableOpacity
-      accessible
-      accessibilityRole="link"
-      onPress={disabled ? undefined : onPress}
-      disabled={disabled}
-      accessibilityLabel={
-        label
-          ? `${accessibilityLabel} ${t(LabelInfoTexts.labels[label])}`
-          : accessibilityLabel
-      }
-      accessibilityState={{disabled}}
-      style={[topContainer, {backgroundColor: themeColor.background}]}
-      testID={testID}
-      {...accessibilityWithOverrides}
-    >
-      <View style={[style.spaceBetween, disabledStyle]}>
-        <ThemeText
-          style={[contentContainer, {color: themeColor.text}]}
-          type={textType}
-        >
-          {text}
-        </ThemeText>
-        {label && <LabelInfo label={label} />}
-        {iconEl}
-      </View>
-      {subtitle && (
-        <View style={disabledStyle}>
-          <ThemeText color="secondary" type="body__secondary">
-            {subtitle}
+
+export const LinkSectionItem = forwardRef<View, Props>(
+  (
+    {
+      text,
+      onPress,
+      subtitle,
+      label,
+      icon,
+      accessibility,
+      disabled,
+      textType,
+      testID,
+      interactiveColor = 'interactive_2',
+      ...props
+    },
+    forwardedRef,
+  ) => {
+    const {t} = useTranslation();
+    const {contentContainer, topContainer} = useSectionItem(props);
+    const style = useSectionStyle();
+    const linkSectionItemStyle = useStyles();
+    const {theme} = useTheme();
+    const themeColor = theme.interactive[interactiveColor].default;
+    const iconEl =
+      isNavigationIcon(icon) || !icon ? (
+        <NavigationIcon mode={icon} fill={themeColor.text} />
+      ) : (
+        icon
+      );
+    const disabledStyle = disabled ? linkSectionItemStyle.disabled : undefined;
+    const accessibilityWithOverrides = disabled
+      ? {...accessibility, accessibilityHint: undefined}
+      : accessibility;
+    const accessibilityLabel =
+      text + screenReaderPause + (subtitle ? subtitle + screenReaderPause : '');
+    return (
+      <PressableOpacity
+        accessible
+        accessibilityRole="link"
+        onPress={disabled ? undefined : onPress}
+        disabled={disabled}
+        accessibilityLabel={
+          label
+            ? `${accessibilityLabel} ${t(LabelInfoTexts.labels[label])}`
+            : accessibilityLabel
+        }
+        accessibilityState={{disabled}}
+        style={[topContainer, {backgroundColor: themeColor.background}]}
+        testID={testID}
+        ref={forwardedRef}
+        {...accessibilityWithOverrides}
+      >
+        <View style={[style.spaceBetween, disabledStyle]}>
+          <ThemeText
+            style={[contentContainer, {color: themeColor.text}]}
+            type={textType}
+          >
+            {text}
           </ThemeText>
+          {label && <LabelInfo label={label} />}
+          {iconEl}
         </View>
-      )}
-    </PressableOpacity>
-  );
-}
+        {subtitle && (
+          <View style={disabledStyle}>
+            <ThemeText color="secondary" type="body__secondary">
+              {subtitle}
+            </ThemeText>
+          </View>
+        )}
+      </PressableOpacity>
+    );
+  },
+);
 
 const useStyles = StyleSheet.createThemeHook(() => ({
   disabled: {opacity: 0.2},
