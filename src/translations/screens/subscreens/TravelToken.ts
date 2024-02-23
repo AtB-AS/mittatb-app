@@ -260,11 +260,6 @@ const SelectTravelTokenTexts = {
       `We're trying to get your phone ready for ticket usage, but it seems like it's taking some time. Check that your device is connected to the internet, if not we'll try again once the internet connection is restored.`,
       `Vi forsøker å klargjere mobilen din til å bruke billettane, men det ser ut til at det tar litt tid. Sjekk om du har tilkopling til internett, og hvis ikkje vil appen prøve på nytt neste gong du får tilkopling.`,
     ),
-    hasCarnet: _(
-      'Du har et klippekort. Foreløpig fungerer ikke klippekort på mobil. Hvis du bytter til mobil vil du ikke kunne bruke klippekortet ditt.',
-      `You have an active punch card. Currently punch cards cannot be activated using a phone. If you change to a phone now, you will not be able to use your punch card.`,
-      `Du har eit klippekort. Førebels fungerer ikkje klippekort på mobil. Hvis du byter til mobil vil du ikkje kunne bruke klippekortet ditt.`,
-    ),
     notAllowedToUseTravelCardError: {
       title: _(
         'Kan ikke brukes på t:kort',
