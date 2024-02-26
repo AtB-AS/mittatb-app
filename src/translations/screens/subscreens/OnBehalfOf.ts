@@ -1,6 +1,7 @@
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 import {translation as _} from '../../commons';
 
-export const OnBehalfOfTexts = {
+const OnBehalfOfTexts = {
   chooseReceiver: {
     header: _('Kjøp til andre', 'Buy for others', 'Kjøp til andre'),
     title: _(
@@ -20,3 +21,24 @@ export const OnBehalfOfTexts = {
     ),
   },
 };
+
+export default orgSpecificTranslations(OnBehalfOfTexts, {
+  nfk: {
+    chooseReceiver: {
+      subtitle: _(
+        'Den du kjøper billett til, må være innlogget i Reis-appen for å få billetten.',
+        'The person receiving the ticket must be logged in to the Reis app to get the ticket.',
+        'Den du kjøper billett til, må vere logga inn i Reis-appen for å få billetten.',
+      ),
+    },
+  },
+  fram: {
+    chooseReceiver: {
+      subtitle: _(
+        'Den du kjøper billett til, må være innlogget i FRAM-appen for å få billetten.',
+        'The person receiving the ticket must be logged in to the FRAM app to get the ticket.',
+        'Den du kjøper billett til, må vere logga inn i FRAM-appen for å få billetten.',
+      ),
+    },
+  },
+});
