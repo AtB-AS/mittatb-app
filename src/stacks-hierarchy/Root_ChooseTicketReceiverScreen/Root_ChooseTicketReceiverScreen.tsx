@@ -12,8 +12,8 @@ import {
   PhoneInputTexts,
   PurchaseOverviewTexts,
   useTranslation,
+  OnBehalfOfTexts,
 } from '@atb/translations';
-import {OnBehalfOfTexts} from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import phone from 'phone';
 import {useState} from 'react';
