@@ -288,6 +288,13 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'When traveling, you need to bring the travel card registered on your profile.',
       'Når du er på reise, må du ha med deg reisekortet som er registrert på profilen din.',
     ),
+    onBehalfOf: {
+      sectionSubText: _(
+        'Den du kjøper billett til, må være innlogget i Reis-appen for å få billetten.',
+        'The person you buy a ticket for, must be logged in to the Reis app to get the ticket.',
+        'Den du kjøper billett til, må vere logga inn i Reis-appen for å få billetten.',
+      ),
+    },
   },
   fram: {
     warning: _(
@@ -295,5 +302,12 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       'When traveling, you need to bring the travel card registered on your user.',
       'Når du er på reise, må du ha med deg reisekortet som er registrert på brukeren din.',
     ),
+    onBehalfOf: {
+      sectionSubText: _(
+        'Den du kjøper billett til, må være innlogget i FRAM-appen for å få billetten.',
+        'The person you buy a ticket for, must be logged in to the FRAM app to get the ticket.',
+        'Den du kjøper billett til, må vere logga inn i FRAM-appen for å få billetten.',
+      ),
+    },
   },
 });
