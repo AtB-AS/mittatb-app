@@ -1,5 +1,6 @@
 // Sections
 export {Section} from './Section';
+export type {SectionProps} from './Section';
 export {RadioGroupSection} from './RadioGroupSection';
 export {SectionSeparator} from './SectionSeparator';
 
