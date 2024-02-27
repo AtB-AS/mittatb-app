@@ -79,13 +79,11 @@ export const LinkSectionItem = forwardRef<View, Props>(
         accessibilityState={{disabled}}
         style={[topContainer, {backgroundColor: themeColor.background}]}
         testID={testID}
+        ref={forwardedRef}
+        collapsable={false}
         {...accessibilityWithOverrides}
       >
-        <View
-          ref={forwardedRef}
-          collapsable={false}
-          style={[style.spaceBetween, disabledStyle]}
-        >
+        <View style={[style.spaceBetween, disabledStyle]}>
           <ThemeText
             style={[contentContainer, {color: themeColor.text}]}
             type={textType}
