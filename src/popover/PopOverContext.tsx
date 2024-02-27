@@ -1,4 +1,10 @@
-import React, {createContext, useCallback, useContext, useState} from 'react';
+import React, {
+  Component,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import {PopOverKey} from './types';
 import {PopOver} from '@atb/components/popover';
 import {useOneTimePopover} from './use-one-time-popover';
@@ -10,7 +16,7 @@ import {InteractionManager} from 'react-native';
 export const POPOVER_ANIMATION_DURATION = 200;
 
 type PopOverType = {
-  target: React.RefObject<JSX.Element | null>;
+  target: React.RefObject<Component | null>;
   oneTimeKey: PopOverKey;
 };
 
