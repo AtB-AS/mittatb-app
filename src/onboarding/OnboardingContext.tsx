@@ -112,7 +112,8 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
     defaultOnboardingState,
   );
 
-  // loadedOnboardingSections is omitted for contextState as onboardingSections should always be used instead
+  // Omit internal fields from what's exposed externally.
+  // loadedOnboardingSections is omitted since onboardingSections should be used instead
   const {loadedOnboardingSections, ...contextState} = state;
 
   useEffect(() => {
