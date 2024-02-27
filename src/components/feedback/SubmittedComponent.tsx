@@ -75,6 +75,7 @@ export const SubmittedComponent = ({
             onPress={handleButtonClick}
             text={t(FeedbackTexts.additionalFeedback.contactsheetButton)}
             rightIcon={{svg: ExternalLink}}
+            accessibilityRole="link"
             interactiveColor="interactive_0"
           />
         )}

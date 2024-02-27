@@ -386,6 +386,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems
                         .ticketing.a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}
@@ -403,6 +404,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems.terms
                         .a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}
@@ -421,6 +423,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems
                         .inspection.a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}
@@ -439,6 +442,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems.refund
                         .a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}

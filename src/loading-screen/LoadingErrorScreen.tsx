@@ -80,6 +80,7 @@ export const LoadingErrorScreen = React.memo(({retry}: {retry: () => void}) => {
             accessibilityLabel={t(
               LoadingScreenTexts.error.contactButton.a11yLabel,
             )}
+            accessibilityRole="link"
             rightIcon={{svg: ExternalLink}}
             backgroundColor={themeColor}
           />

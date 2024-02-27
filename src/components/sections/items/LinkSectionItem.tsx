@@ -68,7 +68,7 @@ export const LinkSectionItem = forwardRef<View, Props>(
     return (
       <PressableOpacity
         accessible
-        accessibilityRole="link"
+        accessibilityRole="button"
         onPress={disabled ? undefined : onPress}
         disabled={disabled}
         accessibilityLabel={

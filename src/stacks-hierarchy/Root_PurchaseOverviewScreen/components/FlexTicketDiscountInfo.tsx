@@ -114,6 +114,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
             onPress={() => Linking.openURL(flex_ticket_url)}
             accessibility={{
               accessibilityHint: t(PurchaseOverviewTexts.flexDiscount.a11yHint),
+              accessibilityRole: 'link',
             }}
           />
         )}

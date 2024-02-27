@@ -92,7 +92,7 @@ const Link = ({link}: {link: InformationLink}) => {
     <PressableOpacity
       style={styles.link}
       onPress={() => Linking.openURL(link.link ?? '')}
-      accessibilityRole="button"
+      accessibilityRole="link"
     >
       <ThemeText type="body__primary--underline">{link.text}</ThemeText>
     </PressableOpacity>
