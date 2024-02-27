@@ -174,6 +174,12 @@ function isActiveNowOrCanBeUsedFareContract(f: FareContract, now: number) {
 export function isCanBeConsumedNowFareContract(f: FareContract, now: number) {
   if (!isCarnet(f)) return false;
   const travelRights = f.travelRights.filter(isCarnetTravelRight);
+
+  // @TODO: This is a temporary limitation because of issues with consumption of
+  // carnets with more than one travel right. Should be removed once there is a
+  // solution for this in the backend.
+  if (travelRights.length > 1) return false;
+
   return (
     hasUsableCarnetTravelRight(travelRights, now) &&
     !hasActiveCarnetTravelRight(travelRights, now)
