@@ -27,6 +27,18 @@ const OneTimePopOverTexts: {[key in PopOverKey]: PopOverText} = {
       'Kjøp til nokon andre.',
     ),
   },
+  'on-behalf-of-sent-tickets-button': {
+    heading: _(
+      'Leter du etter sendte billetter?',
+      'Looking for sent tickets?',
+      'Leitar du etter sende billettar?',
+    ),
+    text: _(
+      'Oversikt over sendte billetter finner du her.',
+      'You can see the tickets you have sent here.',
+      'Oversikt over sende billettar finn du her.',
+    ),
+  },
 };
 
 export default OneTimePopOverTexts;
