@@ -6,7 +6,6 @@ import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
-import {useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
 import {useMobileTokenContextState} from '@atb/mobile-token';
@@ -59,7 +58,7 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
-import {useOnboardingSections} from '@atb/utils/use-onboarding-sections';
+import {useOnboardingState} from '@atb/onboarding';
 import {useServerTimeEnabledDebugOverride} from '@atb/time';
 
 function setClipboard(content: string) {
@@ -70,9 +69,11 @@ function setClipboard(content: string) {
 export const Profile_DebugInfoScreen = () => {
   const style = useProfileHomeStyle();
 
-  const {restartOnboardingSection, restartAllOnboardingSections} =
-    useAppState();
-  const onboardingSections = useOnboardingSections(false);
+  const {
+    onboardingSections,
+    restartOnboardingSection,
+    restartAllOnboardingSections,
+  } = useOnboardingState();
 
   const {
     onboardForBeacons,

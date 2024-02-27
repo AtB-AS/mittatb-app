@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {StaticColorByType} from '@atb/theme/colors';
-import {OnboardingFullScreenView} from '@atb/onboarding-screen';
+import {OnboardingFullScreenView} from '@atb/onboarding';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 
 type DescriptionLink = {

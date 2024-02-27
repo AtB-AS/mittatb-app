@@ -9,7 +9,7 @@ import {StyleSheet} from '@atb/theme';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {ContentHeading} from '@atb/components/heading';
-import {useOnboardingSectionIsOnboarded} from '@atb/utils/use-onboarding-section-is-onboarded';
+import {useOnboardingSectionIsOnboarded} from '@atb/onboarding';
 
 type Props = {
   style?: StyleProp<ViewStyle>;
