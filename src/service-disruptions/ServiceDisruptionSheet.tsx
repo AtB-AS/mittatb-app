@@ -39,6 +39,7 @@ export const ServiceDisruptionSheet = () => {
               mode="secondary"
               text={t(ServiceDisruptionsTexts.button.text)}
               accessibilityHint={t(ServiceDisruptionsTexts.button.a11yHint)}
+              accessibilityRole="link"
               rightIcon={{svg: ExternalLink}}
               onPress={() => {
                 Linking.openURL(service_disruption_url);

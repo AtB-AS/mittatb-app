@@ -112,13 +112,15 @@ export const Announcement = ({announcement, style}: Props) => {
                 announcement.actionButton.actionType
               ],
             ),
+            accessibilityRole:
+              announcement.actionButton.actionType === 'bottom_sheet'
+                ? 'button'
+                : 'link',
           }}
           onPress={async () => {
             if (announcement.actionButton.actionType === 'bottom_sheet') {
               openBottomSheet(() => (
-                <AnnouncementSheet
-                  announcement={announcement}
-                />
+                <AnnouncementSheet announcement={announcement} />
               ));
             } else {
               const actionButtonURL = announcement.actionButton.url;
