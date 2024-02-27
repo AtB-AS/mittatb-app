@@ -13,9 +13,9 @@ const GeoLocationTexts = {
       'Vi brukar posisjon for å vise posisjonen din i kart og reisesøk, og for å finne holdeplassar og stader i nærleiken.',
     ),
     goToSettings: _(
-      'Gå til instillinger',
+      'Gå til innstillinger',
       'Go to settings',
-      'Gå til instillingar',
+      'Gå til innstillingar',
     ),
     cancel: _('Avbryt', 'Cancel', 'Avbryt'),
   },
