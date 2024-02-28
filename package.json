@@ -174,7 +174,7 @@
     "metro-react-native-babel-preset": "^0.77.0",
     "patch-package": "^6.5.1",
     "postinstall-postinstall": "^2.1.0",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.8",
     "react-dom": "18.2.0",
     "react-native-dotenv": "^3.4.7",
     "react-native-flipper-performance-plugin": "^0.4.0",
