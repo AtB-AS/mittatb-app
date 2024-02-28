@@ -19,7 +19,7 @@ import {
   useFirestoreConfiguration,
   UserProfile,
 } from '@atb/configuration';
-import {UserProfileWithCount} from '@atb/fare-contracts';
+import { UserProfileWithCount } from '@atb/fare-contracts';
 import {
   FareContractTexts,
   Language,
@@ -27,10 +27,10 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-import {useMobileTokenContextState} from '@atb/mobile-token';
-import {UsedAccessStatus} from './carnet/types';
-import {useCallback, useMemo} from 'react';
-import {useAuthState} from '@atb/auth';
+import { useMobileTokenContextState } from '@atb/mobile-token';
+import { UsedAccessStatus } from './carnet/types';
+import { useMemo } from 'react';
+import { useAuthState } from '@atb/auth';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -84,29 +84,29 @@ export const useSortFcOrReservationByValidityAndCreation = (
   reservations?: Reservation[],
   fareContracts?: FareContract[],
 ): (FareContract | Reservation)[] => {
-  const {abtCustomerId: currentUserId} = useAuthState();
-
-  const getFcOrReservationOrder = useCallback(
-    (fcOrReservation: FareContract | Reservation) => {
-      const isFareContract = 'travelRights' in fcOrReservation;
-      // Make reservations go first, then fare contracts
-      if (!isFareContract) return 1;
-
-      const fc = getFareContractInfo(now, fcOrReservation, currentUserId);
-      return fc.validityStatus === 'valid' ? 1 : 0;
-    },
-    [now, currentUserId],
-  );
+  const { abtCustomerId: currentUserId } = useAuthState();
 
   const fareContractsAndReservationsSorted = useMemo(() => {
-    return [...(fareContracts || []), ...(reservations || [])].sort((a, b) => {
-      const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
-      return order === 0 ? b.created.toMillis() - a.created.toMillis() : order;
-    });
-  }, [fareContracts, reservations, getFcOrReservationOrder]);
+    const comparator = createFcAndReservationComparator(now, currentUserId);
+    return [...(fareContracts || []), ...(reservations || [])].sort(comparator);
+  }, [currentUserId, now, fareContracts, reservations]);
 
   return fareContractsAndReservationsSorted;
 };
+
+const getFcOrReservationOrder = (now: number, fcOrReservation: FareContract | Reservation, currentUserId?: string) => {
+  const isFareContract = 'travelRights' in fcOrReservation;
+  // Make reservations go first, then fare contracts
+  if (!isFareContract) return 1;
+
+  const fc = getFareContractInfo(now, fcOrReservation, currentUserId);
+  return fc.validityStatus === 'valid' ? 1 : 0;
+};
+
+export const createFcAndReservationComparator = (now: number, currentUserId?: string) => (a: FareContract | Reservation, b: FareContract | Reservation) => {
+  const order = getFcOrReservationOrder(now, b, currentUserId) - getFcOrReservationOrder(now, a, currentUserId);
+  return order === 0 ? b.created.toMillis() - a.created.toMillis() : order;
+}
 
 export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],
@@ -121,8 +121,8 @@ export const mapToUserProfilesWithCount = (
         existing.count += 1;
         return groupedById;
       }
-      return [...groupedById, {userProfileRef, count: 1}];
-    }, [] as {userProfileRef: string; count: number}[])
+      return [...groupedById, { userProfileRef, count: 1 }];
+    }, [] as { userProfileRef: string; count: number }[])
     .map((refAndCount) => {
       const userProfile = findReferenceDataById(
         userProfiles,
@@ -139,8 +139,8 @@ export const mapToUserProfilesWithCount = (
     );
 
 export const useNonInspectableTokenWarning = (fareProductType?: string) => {
-  const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
+  const { t } = useTranslation();
+  const { barcodeStatus, tokens } = useMobileTokenContextState();
   switch (barcodeStatus) {
     case 'mobiletoken':
     case 'static':
@@ -161,18 +161,18 @@ export const useNonInspectableTokenWarning = (fareProductType?: string) => {
         return inspectableToken?.type === 'travel-card'
           ? t(FareContractTexts.warning.travelCardAstoken)
           : t(
-              FareContractTexts.warning.anotherMobileAsToken(
-                inspectableToken?.name ||
-                  t(FareContractTexts.warning.unnamedDevice),
-              ),
-            );
+            FareContractTexts.warning.anotherMobileAsToken(
+              inspectableToken?.name ||
+              t(FareContractTexts.warning.unnamedDevice),
+            ),
+          );
       }
   }
 };
 
 export const useOtherDeviceIsInspectableWarning = () => {
-  const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
+  const { t } = useTranslation();
+  const { barcodeStatus, tokens } = useMobileTokenContextState();
   switch (barcodeStatus) {
     case 'mobiletoken':
     case 'static':
@@ -189,10 +189,10 @@ export const useOtherDeviceIsInspectableWarning = () => {
       return inspectableToken?.type === 'travel-card'
         ? t(FareContractTexts.warning.tcardIsInspectableWarning)
         : t(
-            FareContractTexts.warning.anotherPhoneIsInspectableWarning(
-              deviceName,
-            ),
-          );
+          FareContractTexts.warning.anotherPhoneIsInspectableWarning(
+            deviceName,
+          ),
+        );
   }
 };
 
@@ -201,8 +201,8 @@ export const useTariffZoneSummary = (
   fromTariffZone?: TariffZone,
   toTariffZone?: TariffZone,
 ) => {
-  const {t, language} = useTranslation();
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const { t, language } = useTranslation();
+  const { fareProductTypeConfigs } = useFirestoreConfiguration();
 
   if (!fromTariffZone || !toTariffZone) return undefined;
 
@@ -360,5 +360,5 @@ export function getLastUsedAccess(
     status = getUsedAccessValidity(now, validFrom, validTo);
   }
 
-  return {status, validFrom, validTo};
+  return { status, validFrom, validTo };
 }
