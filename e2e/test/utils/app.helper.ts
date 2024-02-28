@@ -48,10 +48,10 @@ class AppHelper {
    * Remove the popover if it exists
    */
   async removePopover() {
-    const popoverId = `//*[@resource-id="closePopover"]`;
+    const closePopoverId = `//*[@resource-id="closePopover"]`;
     const exists = await ElementHelper.isElementExisting('closePopover', 2);
     if (exists) {
-      await $(popoverId).click();
+      await $(closePopoverId).click();
     }
   }
 
