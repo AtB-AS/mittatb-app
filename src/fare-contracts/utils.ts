@@ -2,6 +2,7 @@ import {
   CarnetTravelRight,
   CarnetTravelRightUsedAccess,
   FareContract,
+  Reservation,
   FareContractState,
   NormalTravelRight,
   flattenCarnetTravelRightAccesses,
@@ -26,9 +27,10 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {UsedAccessStatus} from './carnet/types';
+import {useCallback, useMemo} from 'react';
+import {useAuthState} from '@atb/auth';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -76,6 +78,35 @@ export function getValidityStatus(
     firstTravelRight.endDateTime.toMillis(),
   );
 }
+
+export const useSortFcOrReservationByValidityAndCreation = (
+  now: number,
+  reservations?: Reservation[],
+  fareContracts?: FareContract[],
+): (FareContract | Reservation)[] => {
+  const {abtCustomerId: currentUserId} = useAuthState();
+
+  const getFcOrReservationOrder = useCallback(
+    (fcOrReservation: FareContract | Reservation) => {
+      const isFareContract = 'travelRights' in fcOrReservation;
+      // Make reservations go first, then fare contracts
+      if (!isFareContract) return 1;
+
+      const fc = getFareContractInfo(now, fcOrReservation, currentUserId);
+      return fc.validityStatus === 'valid' ? 1 : 0;
+    },
+    [now, currentUserId],
+  );
+
+  const fareContractsAndReservationsSorted = useMemo(() => {
+    return [...(fareContracts || []), ...(reservations || [])].sort((a, b) => {
+      const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
+      return order === 0 ? b.created.toMillis() - a.created.toMillis() : order;
+    });
+  }, [fareContracts, reservations, getFcOrReservationOrder]);
+
+  return fareContractsAndReservationsSorted;
+};
 
 export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],

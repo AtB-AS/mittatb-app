@@ -1,15 +1,14 @@
+import React from 'react';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo} from 'react';
 import {useAnalytics} from '@atb/analytics';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
-import {getFareContractInfo} from './utils';
-import {useAuthState} from '@atb/auth';
+import {useSortFcOrReservationByValidityAndCreation} from './utils';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -35,26 +34,12 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalytics();
-  const {abtCustomerId: currentUserId} = useAuthState();
-
-  const getFcOrReservationOrder = useCallback(
-    (fcOrReservation: FareContract | Reservation) => {
-      const isFareContract = 'travelRights' in fcOrReservation;
-      // Make reservations go first, then fare contracts
-      if (!isFareContract) return 1;
-
-      const fc = getFareContractInfo(now, fcOrReservation, currentUserId);
-      return fc.validityStatus === 'valid' ? 1 : 0;
-    },
-    [now, currentUserId],
-  );
-
-  const fareContractsAndReservationsSorted = useMemo(() => {
-    return [...(fareContracts || []), ...(reservations || [])].sort((a, b) => {
-      const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
-      return order === 0 ? b.created.toMillis() - a.created.toMillis() : order;
-    });
-  }, [fareContracts, reservations, getFcOrReservationOrder]);
+  const fareContractsAndReservationsSorted =
+    useSortFcOrReservationByValidityAndCreation(
+      now,
+      reservations,
+      fareContracts,
+    );
 
   return (
     <>
