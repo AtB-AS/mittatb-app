@@ -52,7 +52,7 @@ export const PopOver = ({
     >
       <View style={style.heading}>
         <ThemeText type="body__primary--bold">{heading}</ThemeText>
-        <TouchableOpacity onPress={handleClose}>
+        <TouchableOpacity onPress={handleClose} testID="closePopover">
           <ThemeIcon style={style.closeIcon} svg={Close} />
         </TouchableOpacity>
       </View>
