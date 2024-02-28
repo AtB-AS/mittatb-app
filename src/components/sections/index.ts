@@ -3,6 +3,7 @@ export {Section} from './Section';
 export type {SectionProps} from './Section';
 export {RadioGroupSection} from './RadioGroupSection';
 export {SectionSeparator} from './SectionSeparator';
+export {InternalLabeledSectionItem} from './items/InternalLabeledSectionItem';
 
 // Links and actions
 export {LinkSectionItem} from './items/LinkSectionItem';
@@ -29,4 +30,4 @@ export {MessageSectionItem} from './items/MessageSectionItem';
 
 export {useSectionItem} from './use-section-item';
 export {useSectionStyle} from './use-section-style';
-export type {SectionItemProps} from './types';
+export type {SectionItemProps, ContainerSizingType} from './types';

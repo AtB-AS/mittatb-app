@@ -19,6 +19,9 @@ import {
   TextInputSectionItem,
   TimeInputSectionItem,
   ToggleSectionItem,
+  InternalLabeledSectionItem,
+  RadioGroupSection,
+  ContainerSizingType,
 } from '@atb/components/sections';
 import {Meta} from '@storybook/react-native';
 import {ScrollView, View} from 'react-native';
@@ -28,9 +31,14 @@ import {
   ThemedStoryProps,
 } from '@atb/storybook/ThemedStoryDecorator';
 import {ThemeText} from '@atb/components/text';
-import {InternalLabeledSectionItem} from '@atb/components/sections/items/InternalLabeledSectionItem';
 
 type SectionMetaProps = SectionProps & ThemedStoryProps;
+const containerSizingType: ContainerSizingType[] = [
+  'inline',
+  'block',
+  'compact',
+  'spacious',
+];
 
 const SectionMeta: Meta<SectionMetaProps> = {
   title: 'Section',
@@ -43,7 +51,7 @@ const SectionMeta: Meta<SectionMetaProps> = {
     withBottomPadding: {control: 'boolean'},
     type: {
       control: 'select',
-      options: ['inline', 'compact', 'block', 'spacious'], // ContainerSizingType
+      options: containerSizingType,
     },
   },
   args: {
@@ -58,11 +66,11 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
   args: {withFullPadding: true},
   decorators: [
     (Story, {args}) => (
-      <Story
-        args={{
-          ...args,
-          children: (
-            <ScrollView>
+      <ScrollView>
+        <Story
+          args={{
+            ...args,
+            children: (
               <Section>
                 <HeaderSectionItem
                   text="HeaderSectionItem"
@@ -94,7 +102,7 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                     stopId: '2',
                     lineId: '3',
                     quayId: '4',
-                    quayName: 'Quay name',
+                    quayName: 'FavoriteDepartureSectionItem',
                   }}
                 />
                 <FavoriteSectionItem
@@ -140,16 +148,21 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   text="ToggleSectionItem"
                   onValueChange={() => {}}
                 />
+                <RadioGroupSection
+                  items={['Radio group option 1', 'Radio group option 2']}
+                  keyExtractor={(s) => s}
+                  itemToText={(t) => t}
+                />
                 <DateInputSectionItem
                   value={new Date().toISOString()}
                   onChange={() => {}}
                 />
                 <TimeInputSectionItem value="22:22" onChange={() => {}} />
               </Section>
-            </ScrollView>
-          ),
-        }}
-      />
+            ),
+          }}
+        />
+      </ScrollView>
     ),
     ThemedStoryDecorator,
   ],
@@ -159,20 +172,22 @@ export const OneSectionItem: Meta<SectionMetaProps> = {
   args: {withFullPadding: true},
   decorators: [
     (Story, {args}) => (
-      <Story
-        args={{
-          ...args,
-          children: (
-            <View>
-              <Section>
-                <GenericClickableSectionItem>
-                  <ThemeText>GenericClickableSectionItem</ThemeText>
-                </GenericClickableSectionItem>
-              </Section>
-            </View>
-          ),
-        }}
-      />
+      <View style={{backgroundColor: 'pink'}}>
+        <Story
+          args={{
+            ...args,
+            children: (
+              <View>
+                <Section>
+                  <GenericClickableSectionItem>
+                    <ThemeText>GenericClickableSectionItem</ThemeText>
+                  </GenericClickableSectionItem>
+                </Section>
+              </View>
+            ),
+          }}
+        />
+      </View>
     ),
     ThemedStoryDecorator,
   ],

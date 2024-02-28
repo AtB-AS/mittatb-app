@@ -17,7 +17,7 @@ type StorybookContextState = {
 };
 
 const defaultState: StorybookContextState = {
-  isEnabled: true, // Tip: Change this to true if implementing stories in Storybook locally  // flip
+  isEnabled: false, // Tip: Change this to true if implementing stories in Storybook locally
   setEnabled: () => {},
 };
 
@@ -35,10 +35,10 @@ export const StorybookContextProvider = ({children}: {children: ReactNode}) => {
   return (
     <StorybookContext.Provider value={{isEnabled, setEnabled}}>
       {isEnabled ? (
-        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-          <StatusBar translucent={true} backgroundColor="white" />
+        <SafeAreaView style={{flex: 1}}>
+          <StatusBar translucent={true} />
           <PressableOpacity onPress={() => setEnabled(false)}>
-            <Text style={{marginLeft: 12, fontSize: 18, color: '#32a852'}}>
+            <Text style={{marginLeft: 12, fontSize: 18}}>
               {'<-- Back to app'}
             </Text>
           </PressableOpacity>
