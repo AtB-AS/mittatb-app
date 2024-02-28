@@ -27,6 +27,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
+import {Section, ToggleSectionItem} from '@atb/components/sections';
+import {HoldingHands} from '@atb/assets/svg/color/images';
+import {ThemeText} from '@atb/components/text';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -243,6 +246,31 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ref={focusRefs}
           />
 
+          {travellerSelectionMode === 'none' && (
+            <View>
+              <ThemeText
+                style={styles.onBehalfOfTitle}
+                type="body__secondary"
+                color="secondary"
+              >
+                {t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+              </ThemeText>
+              <Section>
+                <ToggleSectionItem
+                  leftImage={<HoldingHands />}
+                  text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+                  subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
+                  value={isOnBehalfOfToggle}
+                  label="new"
+                  textType="body__primary--bold"
+                  onValueChange={(checked) => {
+                    setIsOnBehalfOfToggle(checked);
+                  }}
+                />
+              </Section>
+            </View>
+          )}
+
           <StartTimeSelection
             selectionMode={timeSelectionMode}
             color="interactive_2"
@@ -345,6 +373,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     messages: {
       rowGap: theme.spacings.medium,
       marginTop: theme.spacings.medium,
+    },
+    onBehalfOfTitle: {
+      marginHorizontal: theme.spacings.medium,
+      marginBottom: theme.spacings.medium,
+      marginTop: theme.spacings.small,
     },
     selectionComponent: {
       rowGap: theme.spacings.medium,
