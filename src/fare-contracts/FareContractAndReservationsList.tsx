@@ -37,7 +37,7 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   const analytics = useAnalytics();
   const {abtCustomerId: currentUserId} = useAuthState();
 
-  const calculateWeight = useCallback(
+  const getFcOrReservationOrder = useCallback(
     (fcOrReservation: FareContract | Reservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       // Make reservations go first, then fare contracts
@@ -51,12 +51,10 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 
   const fareContractsAndReservationsSorted = useMemo(() => {
     return [...(fareContracts || []), ...(reservations || [])].sort((a, b) => {
-      const validityWeight = calculateWeight(b) - calculateWeight(a);
-      return validityWeight === 0
-        ? b.created.toMillis() - a.created.toMillis()
-        : validityWeight;
+      const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
+      return order === 0 ? b.created.toMillis() - a.created.toMillis() : order;
     });
-  }, [fareContracts, reservations, calculateWeight]);
+  }, [fareContracts, reservations, getFcOrReservationOrder]);
 
   return (
     <>
