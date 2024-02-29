@@ -29,7 +29,6 @@ import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScre
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
-import {ThemeText} from '@atb/components/text';
 import {ContentHeading} from '@atb/components/heading';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
