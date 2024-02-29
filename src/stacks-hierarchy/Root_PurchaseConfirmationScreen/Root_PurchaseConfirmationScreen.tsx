@@ -388,12 +388,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     preassignedFareProductType: preassignedFareProduct.type,
                   }}
                 />
-                <MessageInfoText
-                  style={styles.smallTopMargin}
-                  type="info"
-                  message={travelDateText}
-                  textColor="secondary"
-                />
+                {!fareProductTypeConfig.isCollectionOfAccesses && (
+                  <MessageInfoText
+                    style={styles.smallTopMargin}
+                    type="info"
+                    message={travelDateText}
+                    textColor="secondary"
+                  />
+                )}
               </View>
             </GenericSectionItem>
           </Section>
