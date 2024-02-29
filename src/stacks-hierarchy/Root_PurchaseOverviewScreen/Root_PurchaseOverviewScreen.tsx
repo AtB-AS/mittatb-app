@@ -135,10 +135,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const isEmptyOffer = error?.type === 'empty-offers';
 
-  const isTravellerNotSelectable =
-    travellerSelectionMode === 'none' ||
-    (travellerSelectionMode === 'single' && selectableTravellers.length <= 1);
-
   const handleTicketInfoButtonPress = () => {
     const parameters = {
       fareProductTypeConfigType: params.fareProductTypeConfig.type,
@@ -262,7 +258,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
-          {isTravellerNotSelectable && (
+          {travellerSelectionMode === 'none' && (
             <>
               <ContentHeading
                 text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
