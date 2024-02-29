@@ -1,5 +1,5 @@
 import RNPopover from 'react-native-popover-view';
-import React from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   Platform,
@@ -14,7 +14,7 @@ import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export type PopOverProps = {
-  from: React.RefObject<JSX.Element | null>;
+  from: React.RefObject<Component | null>;
   heading?: string;
   text: string;
   isOpen?: boolean;
@@ -52,7 +52,7 @@ export const PopOver = ({
     >
       <View style={style.heading}>
         <ThemeText type="body__primary--bold">{heading}</ThemeText>
-        <TouchableOpacity onPress={handleClose}>
+        <TouchableOpacity onPress={handleClose} testID="closePopover">
           <ThemeIcon style={style.closeIcon} svg={Close} />
         </TouchableOpacity>
       </View>

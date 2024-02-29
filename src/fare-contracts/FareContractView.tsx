@@ -25,7 +25,11 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {UsedAccessValidityHeader} from '@atb/fare-contracts/carnet/UsedAccessValidityHeader';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
-import {isSentOrReceivedFareContract} from '@atb/ticketing';
+import {
+  isCanBeConsumedNowFareContract,
+  isSentOrReceivedFareContract,
+} from '@atb/ticketing';
+import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 
 type Props = {
   now: number;
@@ -166,6 +170,9 @@ export const FareContractView: React.FC<Props> = ({
           onPress={onPressDetails}
           testID={testID + 'Details'}
         />
+      )}
+      {isCanBeConsumedNowFareContract(fareContract, now) && (
+        <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
       )}
     </Section>
   );

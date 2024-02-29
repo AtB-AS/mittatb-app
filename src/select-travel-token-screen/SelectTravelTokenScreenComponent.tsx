@@ -7,7 +7,6 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
 import {
@@ -32,7 +31,7 @@ import {useTimeContextState} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {useAppState} from '@atb/AppContext';
+import {useOnboardingState} from '@atb/onboarding';
 
 type Props = {onAfterSave: () => void};
 
@@ -45,7 +44,7 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {completeOnboardingSection} = useAppState();
+  const {completeOnboardingSection} = useOnboardingState();
 
   const {tokens, toggleToken} = useMobileTokenContextState();
   const {data} = useTokenToggleDetailsQuery();
@@ -65,9 +64,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow),
     (i) => i.travelRights,
   );
-
-  const hasActiveCarnetFareContract =
-    activeFareContracts.some(isCarnetTravelRight);
 
   // Filter for unique travel rights config types
   const activeFareContractsTypes = activeFareContracts
@@ -211,20 +207,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             isMarkdown={false}
           />
         )}
-
-        {/* Show warning if we have selected to switch to mobile, but the
-            current inspectable token is travelCard AND we have active carnet
-             fare contract */}
-        {selectedType === 'mobile' &&
-          inspectableToken?.type === 'travel-card' &&
-          hasActiveCarnetFareContract && (
-            <MessageInfoBox
-              type="warning"
-              message={t(TravelTokenTexts.toggleToken.hasCarnet)}
-              style={styles.errorMessageBox}
-              isMarkdown={false}
-            />
-          )}
 
         {requiresTokenOnMobile && (
           <MessageInfoBox

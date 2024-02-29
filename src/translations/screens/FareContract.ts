@@ -169,10 +169,30 @@ const FareContractTexts = {
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
       _(
-        `${count} klipp gjenstår`,
-        `${count} tickets left`,
-        `${count} klipp att`,
+        `${count} enkeltbilletter gjenstår`,
+        `${count} single ticket(s) left`,
+        `${count} enkeltbillettar att`,
       ),
+    activateCarnet: _(
+      'Aktiver enkeltbillett',
+      'Activate single ticket',
+      'Aktiver enkeltbillett',
+    ),
+    bottomSheetTitle: _(
+      'Aktiver én enkeltbillett',
+      'Activate a single ticket',
+      'Aktiver ein enkeltbillett',
+    ),
+    bottomSheetDescription: _(
+      'Billetten blir gyldig med en gang. Man kan bare aktivere én enkeltbillett fra klippekortet om gangen.',
+      'The ticket becomes valid immediately. You can only activate one single ticket from the punch card at a time.',
+      'Billetten blir gyldig med ein gong. Du kan berre aktivere ein enkeltbillett frå klippekortet om gongen.',
+    ),
+    genericError: _(
+      'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
+      'An error occurred while activating the ticket. Please try again.',
+      'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
+    ),
   },
   receipt: {
     header: {
@@ -241,7 +261,7 @@ const FareContractTexts = {
       'Error retrieving t:card / phone',
       'Feil ved uthenting av t:kort / mobil',
     ),
-    travelCardAstoken: _(
+    travelCardAsToken: _(
       'Bruk t:kort når du reiser',
       'Bring your t:card when you travel',
       'Bruk t:kort når du reiser',
@@ -252,11 +272,6 @@ const FareContractTexts = {
         `Bring ${deviceName} when you travel`,
         `Bruk ${deviceName} når du reiser`,
       ),
-    carnetWarning: _(
-      'Vennligst bytt til t:kort for å kunne bruke dette klippekortet.',
-      'Please switch to t:card to be able to use this punch card.',
-      'Ver venleg og byt til t:kort for å kunne bruke dette klippekortet.',
-    ),
     anotherPhoneIsInspectableWarning: (deviceName: string) =>
       _(
         `Merk at billetter du kjøper nå vil være tilknyttet ${deviceName}. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.`,
@@ -355,15 +370,10 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
       ),
-      travelCardAstoken: _(
+      travelCardAsToken: _(
         'Bruk reisekort når du reiser',
         'Bring your travel card when you travel',
         'Ta med deg reisekortet når du reiser',
-      ),
-      carnetWarning: _(
-        'Vennligst bytt til reisekort for å kunne bruke dette klippekortet.',
-        'Please switch to travel card to be able to use this punch card.',
-        'Ver venleg og byt til reisekort for å kunne bruke dette klippekortet.',
       ),
       tcardIsInspectableWarning: _(
         'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min profil**.',
@@ -396,15 +406,10 @@ export default orgSpecificTranslations(FareContractTexts, {
         'Error retrieving travel card / phone',
         'Feil ved uthenting av reisekort / mobil',
       ),
-      travelCardAstoken: _(
+      travelCardAsToken: _(
         'Bruk reisekort når du reiser',
         'Bring your travel card when you travel',
         'Ta med deg reisekortet når du reiser',
-      ),
-      carnetWarning: _(
-        'Vennligst bytt til reisekort for å kunne bruke dette klippekortet.',
-        'Please switch to travel card to be able to use this punch card.',
-        'Ver venleg og byt til reisekort for å bruke dette klippekortet.',
       ),
       tcardIsInspectableWarning: _(
         'Merk at billetter du kjøper nå vil være tilknyttet ditt reisekort. Om du heller vil bruke billett på denne mobilen kan du endre det fra **Min bruker**.',

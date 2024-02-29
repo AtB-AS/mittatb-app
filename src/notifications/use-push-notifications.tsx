@@ -19,7 +19,7 @@ import {getLanguageAndTextEnum} from '@atb/translations/utils';
 import {usePushNotificationsEnabled} from '@atb/notifications/use-push-notifications-enabled';
 import {useAuthState} from '@atb/auth';
 
-type PermissionStatus =
+export type NotificationPermissionStatus =
   | 'granted'
   | 'denied'
   | 'undetermined'
@@ -30,7 +30,7 @@ type PermissionStatus =
 type NotificationContextState = {
   config: NotificationConfig | undefined;
   updateConfig: (config: NotificationConfigUpdate) => void;
-  permissionStatus: PermissionStatus;
+  permissionStatus: NotificationPermissionStatus;
   checkPermissions: () => void;
   requestPermissions: () => Promise<void>;
   register: (enabled: boolean) => Promise<string | undefined>;
@@ -43,7 +43,7 @@ const NotificationContext = createContext<NotificationContextState | undefined>(
 
 export const NotificationContextProvider: React.FC = ({children}) => {
   const {language} = useLocaleContext();
-  const [permissionStatus, setStatus] = useState<PermissionStatus>('loading');
+  const [permissionStatus, setStatus] = useState<NotificationPermissionStatus>('loading');
   const [fcmToken, setFcmToken] = useState<string>();
   const {mutation: registerMutation} = useRegister();
   const {mutate: mutateRegister} = registerMutation;
@@ -164,7 +164,7 @@ export function useNotifications() {
   return context;
 }
 
-async function requestUserPermission(): Promise<PermissionStatus> {
+async function requestUserPermission(): Promise<NotificationPermissionStatus> {
   if (Platform.OS === 'ios') {
     const authStatus = await messaging().requestPermission();
     return mapIosPermissionStatus(authStatus);

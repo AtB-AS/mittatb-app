@@ -28,9 +28,9 @@ import {Button} from '@atb/components/button';
 import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useAppState} from '@atb/AppContext';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {APP_ORG} from '@env';
+import {useOnboardingState} from '@atb/onboarding';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -52,8 +52,8 @@ export const Root_LoginOptionsScreen = ({
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
-  const {completeOnboardingSection} = useAppState();
   const {configurableLinks} = useFirestoreConfiguration();
+  const {completeOnboardingSection} = useOnboardingState();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);

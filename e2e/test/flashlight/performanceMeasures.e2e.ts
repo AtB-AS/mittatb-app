@@ -119,6 +119,7 @@ describe('Flashlight performance measure', () => {
 
       // Choose a fare product
       await TicketPage.chooseFareProduct('single');
+      await AppHelper.removePopover();
       await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
       await AppHelper.pause(waitingTime);
 

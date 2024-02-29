@@ -46,6 +46,15 @@ export function ProductSelectionByProducts({
     .filter((product) => product.type === selectedProduct.type);
   const [selected, setProduct] = useState(selectedProduct);
 
+  const alias = (fareProduct: PreassignedFareProduct) =>
+    fareProduct.productAlias &&
+    getTextForLanguage(fareProduct.productAlias, language);
+
+  const productDisplayName = (fareProduct: PreassignedFareProduct) =>
+    alias(fareProduct)
+      ? alias(fareProduct)!
+      : getReferenceDataName(fareProduct, language);
+
   const title =
     useTextForLanguage(
       fareProductTypeConfig.configuration.productSelectionTitle,
@@ -69,7 +78,7 @@ export function ProductSelectionByProducts({
             <RadioGroupSection<PreassignedFareProduct>
               items={selectableProducts}
               keyExtractor={(u) => u.id}
-              itemToText={(fp) => getReferenceDataName(fp, language)}
+              itemToText={(fp) => productDisplayName(fp)}
               hideSubtext={hideProductDescriptions}
               itemToSubtext={(fp) => subText(fp)}
               selected={selected}
@@ -89,7 +98,7 @@ export function ProductSelectionByProducts({
           <ContentHeading text={title} />
           <Section>
             <HeaderSectionItem
-              text={getReferenceDataName(selectedProduct, language)}
+              text={productDisplayName(selectedProduct)}
               subtitle={subText(selectedProduct)}
             />
           </Section>

@@ -9,7 +9,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {CrashSmall} from '@atb/assets/svg/color/images';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
-import {OnboardingFullScreenView} from '@atb/onboarding-screen';
+import {OnboardingFullScreenView} from '@atb/onboarding';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

@@ -3,14 +3,13 @@ import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {FareContractTexts, useTranslation} from '@atb/translations';
+import {calculateCarnetData} from './calculate-carnet-data';
 
 type Props = {
   active: boolean;
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
 };
-
-const CARNET_DIVIDER = 10;
 
 export const CarnetFooter: React.FC<Props> = ({
   active,
@@ -20,19 +19,8 @@ export const CarnetFooter: React.FC<Props> = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const accessesRemaining = maximumNumberOfAccesses - numberOfUsedAccesses;
-
-  // If any active, the remaining count is the active index
-  const activeIndex = active ? accessesRemaining : undefined;
-
-  // Figure out how many unused travel rights there are left
-  // does not need to match actual number of travel rights
-  const carnetsLeftCount = Math.ceil(accessesRemaining / CARNET_DIVIDER);
-
-  // For the ones not displayed as "multi carnets"
-  // how many accesses are used in the travel right
-  const restUsed =
-    carnetsLeftCount > 0 ? numberOfUsedAccesses % (10 * carnetsLeftCount) : 10;
+  const {accessesRemaining, multiCarnetArray, unusedArray, usedArray} =
+    calculateCarnetData(active, maximumNumberOfAccesses, numberOfUsedAccesses);
 
   return (
     <View
@@ -54,29 +42,22 @@ export const CarnetFooter: React.FC<Props> = ({
         </ThemeText>
       </View>
       <View style={styles.container}>
-        {carnetsLeftCount - 1 > 0 &&
-          Array(carnetsLeftCount - 1)
-            .fill(CARNET_DIVIDER)
-            .map((count, idx) => <MultiCarnet key={idx} count={count} />)}
-        {Array(CARNET_DIVIDER)
-          .fill(true)
-          .map((_, idx) => idx < restUsed)
-          .reverse()
-          .map((isUnused, idx) => (
-            <View
-              key={idx}
-              style={[
-                styles.dot,
-                isUnused && idx !== activeIndex
-                  ? styles.dot__unused
-                  : undefined,
-              ]}
-            >
-              {idx === activeIndex && (
-                <View style={styles.dotFill__active} />
-              )}
+        {multiCarnetArray.map((count, idx) => (
+          <MultiCarnet key={idx} count={count} />
+        ))}
+        {unusedArray.map((_, idx) => (
+          <View key={idx} style={styles.dot} />
+        ))}
+        {active && (
+          <View style={styles.dot}>
+            <View style={styles.dotFill__activeViewBox}>
+              <View style={styles.dotFill__activeFill} />
             </View>
-          ))}
+          </View>
+        )}
+        {usedArray.map((_, idx) => (
+          <View key={idx} style={[styles.dot, styles.dot__unused]} />
+        ))}
       </View>
     </View>
   );
@@ -89,7 +70,7 @@ function MultiCarnet({count}: {count: number}) {
       <View style={[styles.dot, {marginRight: 8}]} />
       <View
         style={[styles.dot, {opacity: 0.8, position: 'absolute', left: 8}]}
-       />
+      />
       <View style={styles.box}>
         <View style={styles.triangle} />
       </View>
@@ -141,12 +122,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   dot__unused: {
     backgroundColor: theme.static.background.background_0.background,
   },
-  dotFill__active: {
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
+  dotFill__activeViewBox: {
     height: '100%',
     width: '50%',
-    marginLeft: '50%',
+    overflow: 'hidden',
+    alignSelf: 'flex-end',
+  },
+  dotFill__activeFill: {
+    borderRadius: 20,
+    height: '100%',
+    width: '200%',
+    alignSelf: 'flex-end',
     backgroundColor: theme.static.background.background_0.background,
   },
 }));

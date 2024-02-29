@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FareContract,
+  isCanBeConsumedNowFareContract,
   isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
   NormalTravelRight,
@@ -45,6 +46,7 @@ import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/Mobili
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
 import {ValidityLine} from '../ValidityLine';
 import {ValidityHeader} from '../ValidityHeader';
+import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
 
 type Props = {
   fareContract: FareContract;
@@ -121,6 +123,7 @@ export const DetailsContent: React.FC<Props> = ({
       validityStatus: validityStatus,
       tariffZones: firstTravelRight.tariffZoneRefs ?? [],
       numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,
+      numberOfTravelRights: fc.travelRights.length,
     };
     const globalMessageCount = findGlobalMessages(
       GlobalMessageContextEnum.appFareContractDetails,
@@ -232,9 +235,11 @@ export const DetailsContent: React.FC<Props> = ({
         <LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
-          accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
+        {isCanBeConsumedNowFareContract(fc, now) && (
+          <ConsumeCarnetSectionItem fareContractId={fc.id} />
+        )}
       </Section>
     );
   } else {

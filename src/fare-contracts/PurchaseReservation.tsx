@@ -56,9 +56,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             {status === 'reserving' ? (
               <ActivityIndicator color={theme.text.colors.primary} />
             ) : (
-              <FareContractStatusSymbol
-                status={status}
-               />
+              <FareContractStatusSymbol status={status} />
             )}
             <ThemeText type="body__secondary" style={styles.reservationStatus}>
               {t(TicketingTexts.reservation[status])}
@@ -93,6 +91,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
             status === 'reserving' && (
               <Button
                 onPress={() => openVippsUrl(reservation.url)}
+                accessibilityRole="link"
                 text={t(TicketingTexts.reservation.goToVipps)}
                 mode="tertiary"
               />

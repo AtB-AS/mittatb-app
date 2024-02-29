@@ -159,8 +159,10 @@ const BeaconsContextProvider: React.FC = ({children}) => {
       if (permissionsGranted) {
         // Initialize beacons SDK after consent is granted
         await initializeKettleSDK(false);
-        Kettle.grant(BEACONS_CONSENTS);
-        await updateBeaconsInfo();
+        if (isInitializedRef.current) {
+          Kettle.grant(BEACONS_CONSENTS);
+          await updateBeaconsInfo();
+        }
 
         // If consent wasn't set above, set it to true now
         if (!alreadyConsented) {
@@ -213,6 +215,9 @@ const BeaconsContextProvider: React.FC = ({children}) => {
         !beaconsInfo?.isStarted
       ) {
         await initializeKettleSDK(false);
+        if (!isInitializedRef.current) {
+          return;
+        }
 
         // If the user have given consents, but permissions were enabled later,
         // the consents are not necessarily set in the SDK. So we check the SDKs

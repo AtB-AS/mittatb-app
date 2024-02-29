@@ -29,8 +29,8 @@ jest.mock('@atb/configuration', () => ({
     },
   }),
 }));
-jest.mock('@atb/AppContext', () => ({
-  useAppState: () => ({isLoading: mockState.isLoadingAppState}),
+jest.mock('@atb/loading-screen', () => ({
+  useIsLoadingAppState: () => mockState.isLoadingAppState,
 }));
 
 describe('useLoadingState', () => {

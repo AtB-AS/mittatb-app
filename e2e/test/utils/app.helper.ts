@@ -45,6 +45,17 @@ class AppHelper {
   }
 
   /**
+   * Remove the popover if it exists
+   */
+  async removePopover() {
+    const closePopoverId = `//*[@resource-id="closePopover"]`;
+    const exists = await ElementHelper.isElementExisting('closePopover', 2);
+    if (exists) {
+      await $(closePopoverId).click();
+    }
+  }
+
+  /**
    * Wait until the loading screen is finished
    * @param numberOfRetries used internally to count retries, max = 2
    */
