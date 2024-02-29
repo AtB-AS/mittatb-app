@@ -28,6 +28,7 @@ import {ScrollView, View} from 'react-native';
 import {
   themedStoryControls,
   ThemedStoryDecorator,
+  themedStoryDefaultArgs,
   ThemedStoryProps,
 } from '@atb/storybook/ThemedStoryDecorator';
 import {ThemeText} from '@atb/components/text';
@@ -55,15 +56,14 @@ const SectionMeta: Meta<SectionMetaProps> = {
     },
   },
   args: {
-    theme: 'light',
-    backgroundColor: 'background_2',
+    ...themedStoryDefaultArgs,
     type: 'block',
   },
 };
 export default SectionMeta;
 
 export const ListedSectionItems: Meta<SectionMetaProps> = {
-  args: {withFullPadding: true},
+  args: {withFullPadding: true, backgroundColor: 'background_2'},
   decorators: [
     (Story, {args}) => (
       <ScrollView>
@@ -140,7 +140,7 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                 />
                 <PhoneInputSectionItem
                   label="PhoneInputSectionItem"
-                  prefix="+47"
+                  prefix="47"
                   onChangePrefix={() => {}}
                 />
                 <TextInputSectionItem label="TextInputSectionItem" />
