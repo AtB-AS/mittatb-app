@@ -263,9 +263,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           />
 
           {isTravellerNotSelectable && (
-            <View>
+            <>
               <ContentHeading
-                style={styles.onBehalfOfTitle}
                 text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
               />
               <Section>
@@ -281,7 +280,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   }}
                 />
               </Section>
-            </View>
+            </>
           )}
 
           <FlexTicketDiscountInfo
@@ -374,9 +373,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     messages: {
       rowGap: theme.spacings.medium,
       marginTop: theme.spacings.medium,
-    },
-    onBehalfOfTitle: {
-      marginBottom: theme.spacings.medium,
     },
     selectionComponent: {
       rowGap: theme.spacings.medium,
