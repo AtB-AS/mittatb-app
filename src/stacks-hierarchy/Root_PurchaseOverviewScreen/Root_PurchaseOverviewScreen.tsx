@@ -30,6 +30,7 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ThemeText} from '@atb/components/text';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -134,6 +135,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     userProfilesWithCountAndOffer.some((u) => u.count);
 
   const isEmptyOffer = error?.type === 'empty-offers';
+
+  const isTravellerNotSelectable =
+    travellerSelectionMode === 'none' ||
+    (travellerSelectionMode === 'single' && selectableTravellers.length <= 1);
 
   const handleTicketInfoButtonPress = () => {
     const parameters = {
@@ -246,15 +251,24 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             ref={focusRefs}
           />
 
-          {travellerSelectionMode === 'none' && (
+          <StartTimeSelection
+            selectionMode={timeSelectionMode}
+            color="interactive_2"
+            travelDate={travelDate}
+            setTravelDate={setTravelDate}
+            validFromTime={travelDate}
+            maximumDate={maximumDateObjectIfExisting}
+            style={styles.selectionComponent}
+            showActivationDateWarning={showActivationDateWarning}
+            setShowActivationDateWarning={setShowActivationDateWarning}
+          />
+
+          {isTravellerNotSelectable && (
             <View>
-              <ThemeText
+              <ContentHeading
                 style={styles.onBehalfOfTitle}
-                type="body__secondary"
-                color="secondary"
-              >
-                {t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
-              </ThemeText>
+                text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+              />
               <Section>
                 <ToggleSectionItem
                   leftImage={<HoldingHands />}
@@ -270,18 +284,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               </Section>
             </View>
           )}
-
-          <StartTimeSelection
-            selectionMode={timeSelectionMode}
-            color="interactive_2"
-            travelDate={travelDate}
-            setTravelDate={setTravelDate}
-            validFromTime={travelDate}
-            maximumDate={maximumDateObjectIfExisting}
-            style={styles.selectionComponent}
-            showActivationDateWarning={showActivationDateWarning}
-            setShowActivationDateWarning={setShowActivationDateWarning}
-          />
 
           <FlexTicketDiscountInfo
             userProfiles={userProfilesWithCountAndOffer}
@@ -375,9 +377,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
       marginTop: theme.spacings.medium,
     },
     onBehalfOfTitle: {
-      marginHorizontal: theme.spacings.medium,
       marginBottom: theme.spacings.medium,
-      marginTop: theme.spacings.small,
     },
     selectionComponent: {
       rowGap: theme.spacings.medium,
