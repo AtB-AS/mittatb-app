@@ -54,6 +54,8 @@ export function TravellerSelection({
   isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
+  const styles = useStyles();
+
   const {
     open: openBottomSheet,
     close: closeBottomSheet,
@@ -191,121 +193,83 @@ export function TravellerSelection({
             : t(PurchaseOverviewTexts.travellerSelection.titleNotSelectable)
         }
       />
-      <SelectionContentWrapper
+      <TravellerSelectionWrapper
         condition={canSelectUserProfile}
         travellerSelectionOnPress={travellerSelectionOnPress}
         ref={onCloseFocusRef}
         {...accessibility}
       >
-        <SelectionContent
-          multipleTravellerCategoriesSelectedFrom={
-            multipleTravellerCategoriesSelectedFrom
-          }
-          totalTravellersCount={totalTravellersCount}
-          travellersDetailsText={travellersDetailsText}
-          isOnBehalfOfToggle={isOnBehalfOfToggle}
-          isOnBehalfOfEnabled={isOnBehalfOfEnabled}
-          canSelectUserProfile={canSelectUserProfile}
-          ref={onBehalfOfIndicatorRef}
-        />
-      </SelectionContentWrapper>
+        <View style={styles.sectionContentContainer}>
+          <View style={{flex: 1}}>
+            <ThemeText type="body__primary--bold">
+              {multipleTravellerCategoriesSelectedFrom
+                ? t(
+                    PurchaseOverviewTexts.travellerSelection.travellers_title(
+                      totalTravellersCount,
+                    ),
+                  )
+                : travellersDetailsText}
+            </ThemeText>
+
+            {isOnBehalfOfToggle && (
+              <ThemeText type="body__secondary" color="secondary">
+                {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+              </ThemeText>
+            )}
+
+            {multipleTravellerCategoriesSelectedFrom && (
+              <ThemeText
+                type="body__secondary"
+                color="secondary"
+                style={styles.multipleTravellersDetails}
+              >
+                {travellersDetailsText}
+              </ThemeText>
+            )}
+          </View>
+
+          {/* remove new label when requested */}
+          {isOnBehalfOfEnabled && canSelectUserProfile && (
+            <View
+              ref={onBehalfOfIndicatorRef}
+              renderToHardwareTextureAndroid={true}
+              collapsable={false}
+            >
+              <LabelInfo label="new" />
+            </View>
+          )}
+
+          {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
+        </View>
+      </TravellerSelectionWrapper>
     </View>
   );
 }
 
-type SelectionContentWrapperProps = {
+type TravellerSelectionWrapperProps = {
   condition: boolean;
   children: JSX.Element;
   travellerSelectionOnPress: () => void;
 };
 
-const SelectionContentWrapper = forwardRef<any, SelectionContentWrapperProps>(
-  ({condition, children, travellerSelectionOnPress, ...props}, ref) =>
-    condition ? (
-      <Section {...props}>
-        <GenericClickableSectionItem
-          onPress={travellerSelectionOnPress}
-          ref={ref}
-        >
-          {children}
-        </GenericClickableSectionItem>
-      </Section>
-    ) : (
-      <Section {...props}>
-        <GenericSectionItem>{children}</GenericSectionItem>
-      </Section>
-    ),
-);
-
-type SelectionContentProps = {
-  multipleTravellerCategoriesSelectedFrom: boolean;
-  totalTravellersCount: number;
-  travellersDetailsText: string;
-  isOnBehalfOfToggle: boolean;
-  isOnBehalfOfEnabled: boolean;
-  canSelectUserProfile: boolean;
-};
-
-const SelectionContent = forwardRef<any, SelectionContentProps>(
-  (
-    {
-      multipleTravellerCategoriesSelectedFrom,
-      totalTravellersCount,
-      travellersDetailsText,
-      isOnBehalfOfToggle,
-      isOnBehalfOfEnabled,
-      canSelectUserProfile,
-    },
-    onBehalfOfRef,
-  ) => {
-    const {t} = useTranslation();
-    const styles = useStyles();
-
-    return (
-      <View style={styles.sectionContentContainer}>
-        <View style={{flex: 1}}>
-          <ThemeText type="body__primary--bold">
-            {multipleTravellerCategoriesSelectedFrom
-              ? t(
-                  PurchaseOverviewTexts.travellerSelection.travellers_title(
-                    totalTravellersCount,
-                  ),
-                )
-              : travellersDetailsText}
-          </ThemeText>
-
-          {isOnBehalfOfToggle && (
-            <ThemeText type="body__secondary" color="secondary">
-              {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
-            </ThemeText>
-          )}
-
-          {multipleTravellerCategoriesSelectedFrom && (
-            <ThemeText
-              type="body__secondary"
-              color="secondary"
-              style={styles.multipleTravellersDetails}
-            >
-              {travellersDetailsText}
-            </ThemeText>
-          )}
-        </View>
-
-        {/* remove new label when requested */}
-        {isOnBehalfOfEnabled && canSelectUserProfile && (
-          <View
-            ref={onBehalfOfRef}
-            renderToHardwareTextureAndroid={true}
-            collapsable={false}
-          >
-            <LabelInfo label="new" />
-          </View>
-        )}
-
-        {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
-      </View>
-    );
-  },
+const TravellerSelectionWrapper = forwardRef<
+  any,
+  TravellerSelectionWrapperProps
+>(({condition, children, travellerSelectionOnPress, ...props}, ref) =>
+  condition ? (
+    <Section {...props}>
+      <GenericClickableSectionItem
+        onPress={travellerSelectionOnPress}
+        ref={ref}
+      >
+        {children}
+      </GenericClickableSectionItem>
+    </Section>
+  ) : (
+    <Section {...props}>
+      <GenericSectionItem>{children}</GenericSectionItem>
+    </Section>
+  ),
 );
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
