@@ -34,12 +34,10 @@ import {
 import {ThemeText} from '@atb/components/text';
 
 type SectionMetaProps = SectionProps & ThemedStoryProps;
-const containerSizingType: ContainerSizingType[] = [
-  'inline',
-  'block',
-  'compact',
-  'spacious',
-];
+const containerSizingType: Exclude<
+  ContainerSizingType,
+  'compact' | 'inline'
+>[] = ['block', 'spacious'];
 
 const SectionMeta: Meta<SectionMetaProps> = {
   title: 'Section',

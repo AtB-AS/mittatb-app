@@ -9,7 +9,7 @@ export type SectionProps = PropsWithChildren<{
   withFullPadding?: boolean;
   withTopPadding?: boolean;
   withBottomPadding?: boolean;
-  type?: ContainerSizingType;
+  type?: Exclude<ContainerSizingType, 'compact' | 'inline'>;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }> &
