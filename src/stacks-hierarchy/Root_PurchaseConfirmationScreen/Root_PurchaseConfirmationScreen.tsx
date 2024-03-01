@@ -41,11 +41,11 @@ import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
-import {Info} from '@atb/assets/svg/color/icons/status';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {GlobalMessage, GlobalMessageContextEnum} from '@atb/global-messages';
 import {useShowValidTimeInfoEnabled} from '../Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-show-valid-time-info-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 function getPreviousPaymentMethod(
   previousPaymentMethod: SavedPaymentOption | undefined,
@@ -346,7 +346,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           )}
           <Section>
             <GenericSectionItem>
-              <View accessible={true}>
+              <View accessible={true} style={styles.ticketInfoContainer}>
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
@@ -378,17 +378,24 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         .onlyOnPhone,
                     ),
                   )}
-
-                <View style={[styles.smallTopMargin, {flexDirection: 'row'}]}>
-                  <Info
-                    height={theme.icon.size.normal}
-                    width={theme.icon.size.normal}
-                    style={{marginRight: theme.spacings.small}}
+                <GlobalMessage
+                  style={styles.globalMessage}
+                  globalMessageContext={
+                    GlobalMessageContextEnum.appPurchaseConfirmation
+                  }
+                  textColor="secondary"
+                  ruleVariables={{
+                    preassignedFareProductType: preassignedFareProduct.type,
+                  }}
+                />
+                {!fareProductTypeConfig.isCollectionOfAccesses && (
+                  <MessageInfoText
+                    style={styles.smallTopMargin}
+                    type="info"
+                    message={travelDateText}
+                    textColor="secondary"
                   />
-                  <ThemeText type="body__secondary" color="secondary">
-                    {travelDateText}
-                  </ThemeText>
-                </View>
+                )}
               </View>
             </GenericSectionItem>
           </Section>
@@ -650,6 +657,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   sendingToText: {
     marginTop: theme.spacings.xSmall,
   },
+  ticketInfoContainer: {
+    flex: 1,
+  },
   totalPaymentContainer: {
     flexDirection: 'row',
     width: '100%',
@@ -658,6 +668,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   totalContainerHeadings: {
     paddingVertical: theme.spacings.xSmall,
+  },
+  globalMessage: {
+    marginTop: theme.spacings.small,
   },
   smallTopMargin: {
     marginTop: theme.spacings.xSmall,

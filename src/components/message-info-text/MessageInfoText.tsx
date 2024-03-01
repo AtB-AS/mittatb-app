@@ -4,7 +4,7 @@ import {Statuses, StyleSheet} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {StaticColor} from '@atb/theme/colors';
+import {StaticColor, TextColor} from '@atb/theme/colors';
 
 export type MessageInfoTextProps = {
   type: Statuses;
@@ -12,7 +12,7 @@ export type MessageInfoTextProps = {
   style?: StyleProp<ViewStyle>;
   testID?: string;
   iconPosition?: 'right' | 'left';
-  textColor?: StaticColor;
+  textColor?: StaticColor | TextColor;
   isMarkdown?: boolean;
 };
 
