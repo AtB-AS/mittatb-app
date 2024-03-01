@@ -145,8 +145,9 @@ const PurchaseOverviewTexts = {
     ),
   },
   travellerSelection: {
-    title_single: _('Velg reisende', 'Select a traveller', 'Vel ein reisande'),
-    title_multiple: _('Velg reisende', 'Select travellers', 'Vel reisande'),
+    titleSingle: _('Velg reisende', 'Select a traveller', 'Vel ein reisande'),
+    titleMultiple: _('Velg reisende', 'Select travellers', 'Vel reisande'),
+    titleNotSelectable: _('Reisende', 'Traveller', 'Reisande'),
     a11yLabelPrefixSingle: _(
       'Valgt reisende:',
       'Selected traveller:',
@@ -157,6 +158,7 @@ const PurchaseOverviewTexts = {
       'Selected travellers:',
       'Valde reisande:',
     ),
+    a11yLabelPrefixNotSelectable: _('Reisende:', 'Traveller:', 'Reisande:'),
     a11yHint: _(
       'Aktiver for å velge reisende',
       'Activate to select traveller',

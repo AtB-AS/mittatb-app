@@ -129,6 +129,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ? new Date(preassignedFareProduct.limitations.latestActivationDate * 1000)
     : undefined;
 
+  const canSelectUserProfile = !(
+    travellerSelectionMode === `none` ||
+    (travellerSelectionMode === `single` && selectableTravellers.length <= 1)
+  );
+
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
     userProfilesWithCountAndOffer.some((u) => u.count);
@@ -258,7 +263,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
-          {travellerSelectionMode === 'none' && (
+          {!canSelectUserProfile && (
             <>
               <ContentHeading
                 text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}

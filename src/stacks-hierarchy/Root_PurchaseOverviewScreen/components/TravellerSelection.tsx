@@ -60,6 +60,10 @@ export function TravellerSelection({
     UserProfileWithCount[]
   >(selectableUserProfiles);
 
+  const canSelectUserProfile = !(
+    selectionMode === `single` && selectableUserProfiles.length <= 1
+  );
+
   useEffect(() => {
     setUserProfilesState((prevState) => {
       const updatedState = selectableUserProfiles.map((u) => ({
@@ -111,9 +115,10 @@ export function TravellerSelection({
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
-  const newLabelAccessibility = isOnBehalfOfEnabled
-    ? screenReaderPause + t(LabelInfoTexts.labels['new'])
-    : '';
+  const newLabelAccessibility =
+    isOnBehalfOfEnabled && canSelectUserProfile
+      ? screenReaderPause + t(LabelInfoTexts.labels['new'])
+      : '';
 
   const sendingToOthersAccessibility = isOnBehalfOfToggle
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
@@ -121,19 +126,24 @@ export function TravellerSelection({
 
   const accessibility: AccessibilityProps = {
     accessible: true,
-    accessibilityRole: 'button',
-    accessibilityLabel:
-      t(
-        selectionMode == 'multiple'
-          ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
-          : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
-      ) +
-      ' ' +
-      travellersDetailsText +
-      sendingToOthersAccessibility +
-      newLabelAccessibility +
-      screenReaderPause,
-    accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
+    accessibilityRole: canSelectUserProfile ? 'button' : 'none',
+    accessibilityLabel: canSelectUserProfile
+      ? t(
+          selectionMode == 'multiple'
+            ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
+            : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
+        )
+      : t(
+          PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixNotSelectable,
+        ) +
+        ' ' +
+        travellersDetailsText +
+        sendingToOthersAccessibility +
+        newLabelAccessibility +
+        screenReaderPause,
+    accessibilityHint: canSelectUserProfile
+      ? t(PurchaseOverviewTexts.travellerSelection.a11yHint)
+      : undefined,
   };
 
   const travellerSelectionOnPress = () => {
@@ -163,14 +173,19 @@ export function TravellerSelection({
     <View style={style}>
       <ContentHeading
         text={
-          selectionMode == 'multiple'
-            ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
-            : t(PurchaseOverviewTexts.travellerSelection.title_single)
+          canSelectUserProfile
+            ? t(
+                selectionMode == 'multiple'
+                  ? PurchaseOverviewTexts.travellerSelection.titleMultiple
+                  : PurchaseOverviewTexts.travellerSelection.titleSingle,
+              )
+            : t(PurchaseOverviewTexts.travellerSelection.titleNotSelectable)
         }
       />
       <Section {...accessibility}>
         <GenericClickableSectionItem
           onPress={travellerSelectionOnPress}
+          disabled={!canSelectUserProfile}
           ref={onCloseFocusRef}
         >
           <View style={styles.sectionContentContainer}>
@@ -203,7 +218,7 @@ export function TravellerSelection({
             </View>
 
             {/* remove new label when requested */}
-            {isOnBehalfOfEnabled && (
+            {isOnBehalfOfEnabled && canSelectUserProfile && (
               <View
                 ref={onBehalfOfIndicatorRef}
                 renderToHardwareTextureAndroid={true}
@@ -213,7 +228,7 @@ export function TravellerSelection({
               </View>
             )}
 
-            <ThemeIcon svg={Edit} size="normal" />
+            {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
           </View>
         </GenericClickableSectionItem>
       </Section>
