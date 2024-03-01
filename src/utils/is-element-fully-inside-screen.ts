@@ -1,10 +1,10 @@
 /**
- * Function for checking whether a layout is visible on-screen or not, by comparing
+ * Function for checking whether an element's border is inside screen or not, by comparing
  * it's position and size on screen and the available window size.
  *
- * If it's border is within the available window size, then the view is visible
- * otherwise the view is deemed as not visible. So, only a fully visible view is
- * considered as "visible".
+ * If it's border is within the available window size, then the element is visible
+ * otherwise the element is deemed as not visible. So, only when all the borders of an element
+ * is visible on screen that it is considered as "visible".
  *
  * example of how to use this function:
  *
@@ -14,14 +14,14 @@
  *   if (viewRef.current) {
  *     viewRef.current.measure((x, y, width, height, pageX, pageY) => {
  *       const window = Dimensions.get('window');
- *       const isViewVisible = isViewVisibleOnScreen(
+ *       const isVisible = isElementFullyInsideScreen(
  *         width,height,pageX,pageY,window.width, window.height
  *       );
  *
- *       if (isViewVisible){
- *         // do something when view is visible
+ *       if (isVisible){
+ *         // do something when element is visible
  *       } else {
- *         // do something when view is not fully visible
+ *         // do something when element is not fully visible
  *       }
  *     });
  *   }
@@ -53,46 +53,46 @@
  *
  * the View also has position, width, and height, for the view:
  *
- * a = (viewX, viewY)
- * b = (viewX + w, viewY)
- * c = (viewX, viewY + h)
- * d = (viewX + w, viewY + h)
+ * a = (elementX, elementY)
+ * b = (elementX + w, elementY)
+ * c = (elementX, elementY + h)
+ * d = (elementX + w, elementY + h)
  *
  *
  * So, for the view to be fully visible in the window, all of this
  * comparison must be true:
  *
- *  - viewX >= 0
- *  - viewY >= 0
- *  - viewX + w <= windowWidth
- *  - viewY + h <= windowHeight
+ *  - elementX >= 0
+ *  - elementY >= 0
+ *  - elementX + w <= windowWidth
+ *  - elementY + h <= windowHeight
  *  - w > 0
  *  - h > 0
  *
- * @param w view width
- * @param h view height
- * @param viewX view x-coordinate relative to page
- * @param viewY view y-coordinate relative to page
+ * @param w element width
+ * @param h element height
+ * @param elementX element starting x-coordinate (left) relative to page
+ * @param elementY element starting y-coordinate (top) relative to page
  * @param windowWidth window width
  * @param windowHeight window height
- * @returns boolean value, true if view is visible on screen,
- * false if view is not fully visible on screen.
+ * @returns boolean value, true if element is fully visible on screen,
+ * false if element is not fully visible on screen.
  */
 
-export function isViewVisibleOnScreen(
+export function isElementFullyInsideScreen(
   w: number,
   h: number,
-  viewX: number,
-  viewY: number,
+  elementX: number,
+  elementY: number,
   windowWidth: number,
   windowHeight: number,
 ): boolean {
   return (
-    viewX >= 0 &&
-    viewY >= 0 &&
+    elementX >= 0 &&
+    elementY >= 0 &&
     w > 0 &&
     h > 0 &&
-    viewX + w <= windowWidth &&
-    viewY + h <= windowHeight
+    elementX + w <= windowWidth &&
+    elementY + h <= windowHeight
   );
 }
