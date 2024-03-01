@@ -127,17 +127,20 @@ export function TravellerSelection({
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: canSelectUserProfile ? 'button' : 'none',
-    accessibilityLabel:
-      t(
-        selectionMode == 'multiple'
-          ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
-          : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
-      ) +
-      ' ' +
-      travellersDetailsText +
-      sendingToOthersAccessibility +
-      newLabelAccessibility +
-      screenReaderPause,
+    accessibilityLabel: canSelectUserProfile
+      ? t(
+          selectionMode == 'multiple'
+            ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
+            : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
+        )
+      : t(
+          PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixNotSelectable,
+        ) +
+        ' ' +
+        travellersDetailsText +
+        sendingToOthersAccessibility +
+        newLabelAccessibility +
+        screenReaderPause,
     accessibilityHint: canSelectUserProfile
       ? t(PurchaseOverviewTexts.travellerSelection.a11yHint)
       : undefined,
@@ -170,9 +173,13 @@ export function TravellerSelection({
     <View style={style}>
       <ContentHeading
         text={
-          selectionMode == 'multiple'
-            ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
-            : t(PurchaseOverviewTexts.travellerSelection.title_single)
+          canSelectUserProfile
+            ? t(
+                selectionMode == 'multiple'
+                  ? PurchaseOverviewTexts.travellerSelection.titleMultiple
+                  : PurchaseOverviewTexts.travellerSelection.titleSingle,
+              )
+            : t(PurchaseOverviewTexts.travellerSelection.titleNotSelectable)
         }
       />
       <Section {...accessibility}>
