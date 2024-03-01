@@ -27,6 +27,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
+import {Section, ToggleSectionItem} from '@atb/components/sections';
+import {HoldingHands} from '@atb/assets/svg/color/images';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -254,6 +257,27 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             showActivationDateWarning={showActivationDateWarning}
             setShowActivationDateWarning={setShowActivationDateWarning}
           />
+
+          {travellerSelectionMode === 'none' && (
+            <>
+              <ContentHeading
+                text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+              />
+              <Section>
+                <ToggleSectionItem
+                  leftImage={<HoldingHands />}
+                  text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+                  subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
+                  value={isOnBehalfOfToggle}
+                  label="new"
+                  textType="body__primary--bold"
+                  onValueChange={(checked) => {
+                    setIsOnBehalfOfToggle(checked);
+                  }}
+                />
+              </Section>
+            </>
+          )}
 
           <FlexTicketDiscountInfo
             userProfiles={userProfilesWithCountAndOffer}
