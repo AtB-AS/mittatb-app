@@ -37,7 +37,7 @@
  *  ||   a----w----b    ||
  *  ||   |         |    ||
  *  ||   |         |    ||
- *  ||   h   view  |    ||
+ *  ||   h element |    ||
  *  ||   |         |    ||
  *  ||   |         |    ||
  *  ||   c---------d    ||
@@ -51,7 +51,7 @@
  * wc = (0, windowHeight)
  * wd = (windowWidth, windowHeight)
  *
- * the View also has position, width, and height, for the view:
+ * the element also has position, width, and height:
  *
  * a = (elementX, elementY)
  * b = (elementX + w, elementY)
@@ -59,7 +59,7 @@
  * d = (elementX + w, elementY + h)
  *
  *
- * So, for the view to be fully visible in the window, all of this
+ * So, for the element to be fully visible in the window, all of this
  * comparison must be true:
  *
  *  - elementX >= 0
