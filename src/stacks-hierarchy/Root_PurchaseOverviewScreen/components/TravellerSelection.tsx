@@ -60,6 +60,10 @@ export function TravellerSelection({
     UserProfileWithCount[]
   >(selectableUserProfiles);
 
+  const canSelectUserProfile = !(
+    selectionMode === `single` && selectableUserProfiles.length <= 1
+  );
+
   useEffect(() => {
     setUserProfilesState((prevState) => {
       const updatedState = selectableUserProfiles.map((u) => ({
@@ -111,9 +115,10 @@ export function TravellerSelection({
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
-  const newLabelAccessibility = isOnBehalfOfEnabled
-    ? screenReaderPause + t(LabelInfoTexts.labels['new'])
-    : '';
+  const newLabelAccessibility =
+    isOnBehalfOfEnabled && canSelectUserProfile
+      ? screenReaderPause + t(LabelInfoTexts.labels['new'])
+      : '';
 
   const sendingToOthersAccessibility = isOnBehalfOfToggle
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
@@ -121,7 +126,7 @@ export function TravellerSelection({
 
   const accessibility: AccessibilityProps = {
     accessible: true,
-    accessibilityRole: 'button',
+    accessibilityRole: canSelectUserProfile ? 'button' : 'none',
     accessibilityLabel:
       t(
         selectionMode == 'multiple'
@@ -133,7 +138,9 @@ export function TravellerSelection({
       sendingToOthersAccessibility +
       newLabelAccessibility +
       screenReaderPause,
-    accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
+    accessibilityHint: canSelectUserProfile
+      ? t(PurchaseOverviewTexts.travellerSelection.a11yHint)
+      : undefined,
   };
 
   const travellerSelectionOnPress = () => {
@@ -171,6 +178,7 @@ export function TravellerSelection({
       <Section {...accessibility}>
         <GenericClickableSectionItem
           onPress={travellerSelectionOnPress}
+          disabled={!canSelectUserProfile}
           ref={onCloseFocusRef}
         >
           <View style={styles.sectionContentContainer}>
@@ -203,7 +211,7 @@ export function TravellerSelection({
             </View>
 
             {/* remove new label when requested */}
-            {isOnBehalfOfEnabled && (
+            {isOnBehalfOfEnabled && canSelectUserProfile && (
               <View
                 ref={onBehalfOfIndicatorRef}
                 renderToHardwareTextureAndroid={true}
@@ -213,7 +221,7 @@ export function TravellerSelection({
               </View>
             )}
 
-            <ThemeIcon svg={Edit} size="normal" />
+            {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
           </View>
         </GenericClickableSectionItem>
       </Section>
