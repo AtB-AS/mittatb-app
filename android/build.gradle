@@ -2,10 +2,10 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "33.0.0"
+        buildToolsVersion = "34.0.0"
         minSdkVersion = 23
-        compileSdkVersion = 33
-        targetSdkVersion = 33
+        compileSdkVersion = 34
+        targetSdkVersion = 34
         // Setting androidXBrowser to avoid react-native-reborn picking newest alpha requiring SDK 33
         androidXBrowser = "1.5.0"
         RNMapboxMapsImpl = "mapbox"
@@ -21,6 +21,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
         classpath 'com.google.gms:google-services:4.3.13'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${KOTLIN_VERSION}"
         classpath "com.bugsnag:bugsnag-android-gradle-plugin:7.6.0"
@@ -29,6 +30,8 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+
+apply plugin: "com.facebook.react.rootproject"
 
 allprojects {
     repositories {

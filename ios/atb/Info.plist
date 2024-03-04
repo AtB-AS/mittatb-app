@@ -68,14 +68,11 @@
 	<string>Vi må bruke NFC for sikkerhetsformål.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
+		<!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Du gir oss lov til å gjenkjenne busser og bussholdeplasser i nærheten. Det gjør at vi kan analysere hvor du og andre kunder reiser, og til å sende deg relevante undersøkelser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.</string>
