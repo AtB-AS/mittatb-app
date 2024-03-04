@@ -38,7 +38,6 @@ jobs:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Generate native assets
         run: |
-          brew update
           rm '/usr/local/bin/2to3'
           rm '/usr/local/bin/2to3-3.12'
           rm '/usr/local/bin/idle3'
