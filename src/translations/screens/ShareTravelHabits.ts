@@ -46,9 +46,9 @@ const ShareTravelHabitsTexts = {
     locationAlways: {
       title: _('Posisjon', 'Location', 'Posisjon'),
       message: _(
-        'I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.',
-        'In addition to being able to show your position on maps and to plan journeys, we will gain valuable learning about where you and other customers travel. The data is used to improve our services to make them better for you.',
-        'I tillegg til å kunne vise posisjonen din i kart og til å planleggje reiser, vil vi få verdifull læring om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet.',
+        'I tillegg til å kunne vise din posisjon i kart og til å planlegge reiser, vil vi få verdifull læring når appen er lukket om hvor du og andre kunder reiser. Det vil hjelpe oss til å kunne forbedre ditt reisetilbud.',
+        'In addition to being able to show your location on maps and to plan journeys, we will gain valuable learning when the app is closed about where you and other customers travel. The data is used to improve our services to make them better for you.',
+        'I tillegg til å kunne vise posisjonen din i kart og til å planleggje reiser, vil vi få verdifull læring når appen er lukka om kor du og andre kundar reiser. Det vil hjelpe oss til å kunne forbetre reisetilbodet.',
       ),
     },
     locationWhenInUse: {

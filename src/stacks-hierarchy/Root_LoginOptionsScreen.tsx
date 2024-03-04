@@ -11,7 +11,11 @@ import {VippsLoginButton} from '@atb/components/vipps-login-button';
 import {storage} from '@atb/storage';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
-import {LoginTexts, useTranslation} from '@atb/translations';
+import {
+  getTextForLanguage,
+  LoginTexts,
+  useTranslation,
+} from '@atb/translations';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
@@ -21,10 +25,12 @@ import {parseUrl} from 'query-string/base';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {ArrowRight, ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useAppState} from '@atb/AppContext';
+import {useFirestoreConfiguration} from '@atb/configuration';
+import {APP_ORG} from '@env';
+import {useOnboardingState} from '@atb/onboarding';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -37,7 +43,7 @@ export const Root_LoginOptionsScreen = ({
   const showGoBack = params?.showGoBack;
   const transitionPreset = params?.transitionPreset;
 
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
   const styles = useStyles();
   const {signInWithCustomToken} = useAuthState();
   const [error, setError] = useState<VippsSignInErrorCode>();
@@ -46,7 +52,8 @@ export const Root_LoginOptionsScreen = ({
   const [authorizationCode, setAuthorizationCode] = useState<
     string | undefined
   >(undefined);
-  const {completeOnboardingSection} = useAppState();
+  const {configurableLinks} = useFirestoreConfiguration();
+  const {completeOnboardingSection} = useOnboardingState();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -130,6 +137,11 @@ export const Root_LoginOptionsScreen = ({
     return () => eventSubscription.remove();
   }, [appStatus]);
 
+  const termsInfoUrl = getTextForLanguage(
+    configurableLinks?.termsInfo,
+    language,
+  );
+
   return (
     <View style={styles.container}>
       <FullScreenHeader
@@ -205,17 +217,31 @@ export const Root_LoginOptionsScreen = ({
             testID="useAppAnonymouslyButton"
           />
         </View>
-
-        <View style={styles.termsOfUseContainer}>
-          <PressableOpacity
-            onPress={() => navigation.navigate('Root_TermsInformationScreen')}
-            role="button"
-          >
-            <ThemeText color={themeColor} style={styles.termsOfUseText}>
-              {t(LoginTexts.logInOptions.termsOfUse)}
-            </ThemeText>
-          </PressableOpacity>
-        </View>
+        {APP_ORG === 'atb' ? (
+          <View style={styles.termsOfUseButtonContainer}>
+            <PressableOpacity
+              onPress={() => navigation.navigate('Root_TermsInformationScreen')}
+              role="button"
+            >
+              <ThemeText color={themeColor} style={styles.termsOfUseText}>
+                {t(LoginTexts.logInOptions.termsOfUse)}
+              </ThemeText>
+            </PressableOpacity>
+          </View>
+        ) : (
+          termsInfoUrl && (
+            <View style={styles.termsOfUseLinkContainer}>
+              <Button
+                backgroundColor={themeColor}
+                mode="tertiary"
+                rightIcon={{svg: ExternalLink}}
+                onPress={() => Linking.openURL(termsInfoUrl)}
+                text={t(LoginTexts.logInOptions.termsOfUse)}
+                accessibilityRole="link"
+              />
+            </View>
+          )
+        )}
       </ScrollView>
     </View>
   );
@@ -254,7 +280,10 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
     buttonContainer: {
       gap: theme.spacings.medium,
     },
-    termsOfUseContainer: {
+    termsOfUseLinkContainer: {
+      marginVertical: theme.spacings.xLarge - theme.spacings.medium,
+    },
+    termsOfUseButtonContainer: {
       marginVertical: theme.spacings.xLarge - theme.spacings.medium,
       flexDirection: 'row',
       justifyContent: 'center',

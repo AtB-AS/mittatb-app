@@ -48,6 +48,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
               accessibilityHint={t(
                 ContactSheetTexts.customer_feedback_website.a11yHint,
               )}
+              accessibilityRole="link"
               rightIcon={{svg: ExternalLink}}
               onPress={() => {
                 Linking.openURL(customer_feedback_url);
@@ -87,6 +88,7 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
             accessibilityHint={t(ContactSheetTexts.customer_service.a11yHint)}
             mode="secondary"
             rightIcon={{svg: ExternalLink}}
+            accessibilityRole="link"
             onPress={() => {
               Linking.openURL(customer_service_url);
               analytics.logEvent('Contact', 'Contact customer service clicked');

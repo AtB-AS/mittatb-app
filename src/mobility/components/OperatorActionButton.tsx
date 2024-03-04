@@ -74,6 +74,7 @@ export const OperatorActionButton = ({
       mode="primary"
       interactiveColor="interactive_0"
       rightIcon={{svg: ExternalLink}}
+      accessibilityRole="link"
     />
   );
 };

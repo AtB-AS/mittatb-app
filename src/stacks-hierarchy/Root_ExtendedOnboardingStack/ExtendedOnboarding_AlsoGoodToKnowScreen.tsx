@@ -6,7 +6,7 @@ import {StaticColorByType} from '@atb/theme/colors';
 import {ExtendedOnboardingTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ScrollView, useWindowDimensions, View} from 'react-native';
-import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
+import {useOnboardingNavigation} from '@atb/onboarding';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 

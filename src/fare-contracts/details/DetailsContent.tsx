@@ -123,6 +123,7 @@ export const DetailsContent: React.FC<Props> = ({
       validityStatus: validityStatus,
       tariffZones: firstTravelRight.tariffZoneRefs ?? [],
       numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,
+      numberOfTravelRights: fc.travelRights.length,
     };
     const globalMessageCount = findGlobalMessages(
       GlobalMessageContextEnum.appFareContractDetails,
@@ -234,7 +235,6 @@ export const DetailsContent: React.FC<Props> = ({
         <LinkSectionItem
           text={t(FareContractTexts.details.askForReceipt)}
           onPress={onReceiptNavigate}
-          accessibility={{accessibilityRole: 'button'}}
           testID="receiptButton"
         />
         {isCanBeConsumedNowFareContract(fc, now) && (
