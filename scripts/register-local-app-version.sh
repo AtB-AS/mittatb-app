@@ -5,7 +5,7 @@
 # use of gcloud secrets and the project name to get ABT client credentials
 
 echo "Loading all env variables from .env file"
-export $(grep -v '^#' .env | gxargs -d '\n') > /dev/null 2>&1
+export $(grep -v '^#' .env | xargs -0 -n1 echo) > /dev/null 2>&1
 
 credentials=$(gcloud secrets versions access --project atb-staging-c420 --secret=entur-client-credentials-publish latest)
 
