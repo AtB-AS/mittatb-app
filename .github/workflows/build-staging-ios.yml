@@ -53,7 +53,10 @@ jobs:
           key: ${{ matrix.org }}-${{ runner.os }}-ios-cache-${{ hashFiles('ios/**') }}-${{ hashFiles('.yalc/**') }}-${{ hashFiles('.env') }}-${{ hashFiles('assets/') }}
       - name: Generate native assets
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
-        run: brew install imagemagick && yarn generate-native-assets
+        run: |
+          rm '/usr/local/bin/2to3'
+          brew install imagemagick
+          yarn generate-native-assets
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
