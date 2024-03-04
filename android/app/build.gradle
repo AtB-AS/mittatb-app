@@ -168,7 +168,6 @@ android {
 }
 
 dependencies {
-
     implementation 'com.facebook.soloader:soloader:0.10.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"
@@ -188,7 +187,16 @@ dependencies {
 
     implementation 'com.kogenta.kettle:kettle-sdk:1.2.3'
 
-    implementation("com.facebook.react:flipper-integration")
+    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+        exclude group: 'com.facebook.fbjni'
+    }
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+        exclude group: 'com.facebook.flipper'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:0.182.0") {
+        exclude group: 'com.facebook.flipper'
+    }
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
