@@ -39,7 +39,8 @@ jobs:
       - name: Generate native assets
         run: |
           rm '/usr/local/bin/2to3'
-          brew install imagemagick && yarn generate-native-assets
+          brew install imagemagick
+          yarn generate-native-assets
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
