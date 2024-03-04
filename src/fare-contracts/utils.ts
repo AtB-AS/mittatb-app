@@ -81,8 +81,8 @@ export function getValidityStatus(
 
 export const useSortFcOrReservationByValidityAndCreation = (
   now: number,
-  reservations?: Reservation[],
-  fareContracts?: FareContract[],
+  fcOrReservations: (Reservation | FareContract)[],
+  getFareContractStatus: (now: number, fc: FareContract, currentUserId?: string) => ValidityStatus | undefined,
 ): (FareContract | Reservation)[] => {
   const {abtCustomerId: currentUserId} = useAuthState();
 
@@ -92,18 +92,18 @@ export const useSortFcOrReservationByValidityAndCreation = (
       // Make reservations go first, then fare contracts
       if (!isFareContract) return 1;
 
-      const fc = getFareContractInfo(now, fcOrReservation, currentUserId);
-      return fc.validityStatus === 'valid' ? 1 : 0;
+      const validityStatus = getFareContractStatus(now, fcOrReservation, currentUserId);
+      return validityStatus === 'valid' ? 1 : 0;
     },
-    [now, currentUserId],
+    [getFareContractStatus, now, currentUserId],
   );
 
   const fareContractsAndReservationsSorted = useMemo(() => {
-    return [...(fareContracts || []), ...(reservations || [])].sort((a, b) => {
+    return fcOrReservations.sort((a, b) => {
       const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
       return order === 0 ? b.created.toMillis() - a.created.toMillis() : order;
     });
-  }, [fareContracts, reservations, getFcOrReservationOrder]);
+  }, [fcOrReservations, getFcOrReservationOrder]);
 
   return fareContractsAndReservationsSorted;
 };

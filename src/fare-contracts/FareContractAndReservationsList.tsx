@@ -9,6 +9,7 @@ import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
 import {useSortFcOrReservationByValidityAndCreation} from './utils';
+import {getFareContractInfo} from './utils';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -34,11 +35,16 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
 }) => {
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalytics();
+
+  const fcOrReservations = [...(fareContracts || []), ...(reservations || [])];
+
   const fareContractsAndReservationsSorted =
     useSortFcOrReservationByValidityAndCreation(
       now,
-      reservations,
-      fareContracts,
+      fcOrReservations,
+      (currentTime, fareContract, currentUserId) =>
+        getFareContractInfo(currentTime, fareContract, currentUserId)
+          .validityStatus,
     );
 
   return (
