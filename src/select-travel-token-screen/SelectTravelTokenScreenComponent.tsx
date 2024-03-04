@@ -19,7 +19,7 @@ import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {RadioGroupSection, Section} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
   findReferenceDataById,
@@ -189,7 +189,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             testID="selectMobile"
           />
         </View>
-
         {selectedType === 'travel-card' && !travelCardToken && (
           <MessageInfoBox
             type="warning"
@@ -198,7 +197,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             isMarkdown={true}
           />
         )}
-
         {selectedType === 'mobile' && !mobileTokens?.length && (
           <MessageInfoBox
             type="warning"
@@ -207,7 +205,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             isMarkdown={false}
           />
         )}
-
         {requiresTokenOnMobile && (
           <MessageInfoBox
             type="error"
@@ -227,20 +224,19 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         )}
         {selectedType === 'mobile' && mobileTokens?.length ? (
-          <Section type="spacious" style={styles.selectDeviceSection}>
-            <RadioGroupSection<Token>
-              items={mobileTokens}
-              keyExtractor={(token) => token.id}
-              itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
-              selected={selectedToken}
-              onSelect={setSelectedToken}
-              headerText={t(
-                TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
-              )}
-            />
-          </Section>
+          <RadioGroupSection<Token>
+            type="spacious"
+            style={styles.selectDeviceSection}
+            items={mobileTokens}
+            keyExtractor={(token) => token.id}
+            itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
+            selected={selectedToken}
+            onSelect={setSelectedToken}
+            headerText={t(
+              TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
+            )}
+          />
         ) : null}
-
         {saveState.error && (
           <MessageInfoBox
             type="error"
@@ -248,14 +244,12 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             style={styles.errorMessageBox}
           />
         )}
-
         {data?.toggleLimit !== undefined && (
           <TokenToggleInfo
             style={styles.tokenInfo}
             textColor="background_accent_0"
           />
         )}
-
         {saveState.saving ? (
           <ActivityIndicator size="large" />
         ) : (

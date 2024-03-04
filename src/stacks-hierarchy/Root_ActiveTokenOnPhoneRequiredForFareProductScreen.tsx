@@ -12,7 +12,7 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Token, useMobileTokenContextState} from '@atb/mobile-token';
-import {RadioGroupSection, Section} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import MobileTokenOnboarding from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
@@ -94,22 +94,22 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           color={themeColor}
           style={[styles.text, styles.textSpacing]}
         >
-          {t(ActiveTokenRequiredTexts.switchToMobile)}
+          t(ActiveTokenRequiredTexts.switchToMobile)
         </ThemeText>
 
         {mobileTokens?.length ? (
-          <Section type="spacious" style={styles.selectDeviceSection}>
-            <RadioGroupSection<Token>
-              items={mobileTokens}
-              keyExtractor={(token) => token.id}
-              itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
-              selected={selectedToken}
-              onSelect={setSelectedToken}
-              headerText={t(
-                TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
-              )}
-            />
-          </Section>
+          <RadioGroupSection<Token>
+            type="spacious"
+            style={styles.selectDeviceSection}
+            items={mobileTokens}
+            keyExtractor={(token) => token.id}
+            itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
+            selected={selectedToken}
+            onSelect={setSelectedToken}
+            headerText={t(
+              TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
+            )}
+          />
         ) : (
           <MessageInfoBox
             type="warning"

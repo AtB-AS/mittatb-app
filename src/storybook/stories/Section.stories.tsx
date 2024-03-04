@@ -146,11 +146,6 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   text="ToggleSectionItem"
                   onValueChange={() => {}}
                 />
-                <RadioGroupSection
-                  items={['Radio group option 1', 'Radio group option 2']}
-                  keyExtractor={(s) => s}
-                  itemToText={(t) => t}
-                />
                 <DateInputSectionItem
                   value={new Date().toISOString()}
                   onChange={() => {}}
@@ -186,6 +181,28 @@ export const OneSectionItem: Meta<SectionMetaProps> = {
           }}
         />
       </View>
+    ),
+    ThemedStoryDecorator,
+  ],
+};
+
+export const RadioSection: Meta<SectionMetaProps> = {
+  args: {withFullPadding: true, backgroundColor: 'background_1'},
+  decorators: [
+    (Story, {args}) => (
+      <Story
+        args={{
+          ...args,
+          children: (
+            <RadioGroupSection
+              items={['Radio group option 1', 'Radio group option 2']}
+              keyExtractor={(s) => s}
+              itemToText={(t) => t}
+              selected="Radio group option 1"
+            />
+          ),
+        }}
+      />
     ),
     ThemedStoryDecorator,
   ],
