@@ -37,7 +37,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       - name: Generate native assets
-        run: brew install imagemagick && yarn generate-native-assets
+        run: brew install --overwrite imagemagick && yarn generate-native-assets
       - name: Disable widget
         if: ${{ env.ENABLE_WIDGET != 'true' }}
         run: bundle exec configure_extensions remove ios/atb.xcodeproj app departureWidget AtbAppIntent
