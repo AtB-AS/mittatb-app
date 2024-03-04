@@ -60,6 +60,13 @@ jobs:
           rm '/usr/local/bin/idle3.12'
           rm '/usr/local/bin/pydoc3'
           rm '/usr/local/bin/pydoc3.12'
+          rm '/usr/local/bin/python3'
+          rm '/usr/local/bin/python3-config'
+          rm '/usr/local/bin/python3.12'
+          rm '/usr/local/bin/python3.12-config'
+          rm '/usr/local/share/man/man1/python3.1'
+          rm '/usr/local/lib/pkgconfig/python3-embed.pc'
+          rm '/usr/local/lib/pkgconfig/python3.pc'
           brew install imagemagick
           yarn generate-native-assets
       - name: Disable widget
