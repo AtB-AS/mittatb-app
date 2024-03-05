@@ -54,21 +54,8 @@ jobs:
       - name: Generate native assets
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
         run: |
-          rm '/usr/local/bin/2to3'
-          rm '/usr/local/bin/2to3-3.12'
-          rm '/usr/local/bin/idle3'
-          rm '/usr/local/bin/idle3.12'
-          rm '/usr/local/bin/pydoc3'
-          rm '/usr/local/bin/pydoc3.12'
-          rm '/usr/local/bin/python3'
-          rm '/usr/local/bin/python3-config'
-          rm '/usr/local/bin/python3.12'
-          rm '/usr/local/bin/python3.12-config'
-          rm '/usr/local/bin/2to3-3.11'
-          rm '/usr/local/bin/idle3.11'
-          rm '/usr/local/bin/pydoc3.11'
-          rm '/usr/local/bin/python3.11'
-          rm '/usr/local/bin/python3.11-config'
+          brew link --overwrite python@3.12
+          brew link --overwrite python@3.11
           brew install imagemagick
           yarn generate-native-assets
       - name: Disable widget
