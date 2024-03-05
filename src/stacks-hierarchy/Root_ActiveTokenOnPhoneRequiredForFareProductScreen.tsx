@@ -94,7 +94,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           color={themeColor}
           style={[styles.text, styles.textSpacing]}
         >
-          t(ActiveTokenRequiredTexts.switchToMobile)
+          {t(ActiveTokenRequiredTexts.switchToMobile)}
         </ThemeText>
 
         {mobileTokens?.length ? (
