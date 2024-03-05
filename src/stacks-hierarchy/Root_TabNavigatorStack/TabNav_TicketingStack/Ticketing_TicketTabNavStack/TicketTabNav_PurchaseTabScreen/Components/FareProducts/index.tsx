@@ -1,0 +1,1 @@
+export {useFareProductHeadingStyles} from './FareProductGroup';

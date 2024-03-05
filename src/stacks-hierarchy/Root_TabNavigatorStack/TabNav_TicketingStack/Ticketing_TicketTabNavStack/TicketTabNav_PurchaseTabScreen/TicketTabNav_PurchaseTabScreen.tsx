@@ -22,6 +22,7 @@ import {TariffZone} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
+import {useFareProductHeadingStyles} from './Components/FareProducts';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -32,6 +33,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {recentFareContracts, loading} = useRecentFareContracts();
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
+  const headingStyles = useFareProductHeadingStyles();
   const {t} = useTranslation();
 
   const showTicketAssistant = useTicketingAssistantEnabled();
@@ -166,7 +168,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
           <>
-            <ThemeText style={styles.heading} type="body__secondary">
+            <ThemeText style={headingStyles.heading} type="body__secondary">
               {t(TicketingTexts.ticketAssistantTile.title)}
             </ThemeText>
             <TicketAssistantTile
@@ -187,10 +189,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginTop: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
-  },
-  heading: {
-    margin: theme.spacings.medium,
-    marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.large,
   },
 }));

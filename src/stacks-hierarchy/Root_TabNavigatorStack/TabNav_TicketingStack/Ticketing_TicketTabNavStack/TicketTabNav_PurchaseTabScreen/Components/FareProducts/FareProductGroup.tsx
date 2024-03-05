@@ -23,6 +23,7 @@ export const FareProductGroup = ({
   onProductSelect,
 }: Props) => {
   const styles = useStyles();
+  const headingStyles = useFareProductHeadingStyles();
   const {t} = useTranslation();
 
   /*
@@ -42,7 +43,7 @@ export const FareProductGroup = ({
         <TransportModes
           modes={transportModes}
           iconSize="xSmall"
-          style={styles.heading}
+          style={headingStyles.heading}
           textType="body__secondary"
           textColor="primary"
           customTransportModeText={heading}
@@ -51,7 +52,7 @@ export const FareProductGroup = ({
         <TransportModes
           modes={transportModes}
           iconSize="xSmall"
-          style={styles.heading}
+          style={headingStyles.heading}
           textType="body__secondary"
           textColor="primary"
           customTransportModeText={
@@ -88,11 +89,6 @@ export const FareProductGroup = ({
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  heading: {
-    margin: theme.spacings.medium,
-    marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.large,
-  },
   fareProductsContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -103,3 +99,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.medium,
   },
 }));
+
+export const useFareProductHeadingStyles = StyleSheet.createThemeHook(
+  (theme) => ({
+    heading: {
+      margin: theme.spacings.medium,
+      marginLeft: theme.spacings.xLarge,
+      marginTop: theme.spacings.large,
+    },
+  }),
+);
