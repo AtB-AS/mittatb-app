@@ -23,7 +23,7 @@ export const FareProductGroup = ({
   onProductSelect,
 }: Props) => {
   const styles = useStyles();
-  const headingStyles = useFareProductHeadingStyles();
+  const headingStyles = usePurchaseTicketHeadingStyles();
   const {t} = useTranslation();
 
   /*
@@ -100,7 +100,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export const useFareProductHeadingStyles = StyleSheet.createThemeHook(
+export const usePurchaseTicketHeadingStyles = StyleSheet.createThemeHook(
   (theme) => ({
     heading: {
       margin: theme.spacings.medium,

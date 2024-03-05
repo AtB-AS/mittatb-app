@@ -1,1 +1,1 @@
-export {useFareProductHeadingStyles} from './FareProductGroup';
+export {usePurchaseTicketHeadingStyles} from './FareProductGroup';

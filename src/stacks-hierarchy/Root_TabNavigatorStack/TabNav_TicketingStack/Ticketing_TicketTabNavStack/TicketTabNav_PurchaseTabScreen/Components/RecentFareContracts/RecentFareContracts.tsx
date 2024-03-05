@@ -12,6 +12,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
 import {RecentFareContract} from '../../types';
 import {useTicketingState} from '@atb/ticketing';
+import {usePurchaseTicketHeadingStyles} from '../FareProducts';
 
 type Props = {
   recentFareContracts: RecentFareContract[];
@@ -28,6 +29,7 @@ export const RecentFareContracts = ({
   onSelect,
 }: Props) => {
   const styles = useStyles();
+  const headingStyles = usePurchaseTicketHeadingStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
@@ -71,7 +73,7 @@ export const RecentFareContracts = ({
 
       {!loading && !!memoizedRecentFareContracts.length && (
         <>
-          <ThemeText type="body__secondary" style={styles.header}>
+          <ThemeText type="body__secondary" style={headingStyles.heading}>
             {t(RecentFareContractsTexts.repeatPurchase.label)}
           </ThemeText>
           <ScrollView
@@ -101,16 +103,12 @@ export const RecentFareContracts = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   horizontalScrollView: {
-    marginVertical: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
     columnGap: theme.spacings.medium,
   },
   scrollViewContent: {
     flexDirection: 'row',
     paddingHorizontal: theme.spacings.medium,
     columnGap: theme.spacings.medium,
-  },
-  header: {
-    marginTop: theme.spacings.xLarge,
-    marginLeft: theme.spacings.xLarge,
   },
 }));

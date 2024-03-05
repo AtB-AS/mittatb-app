@@ -22,7 +22,7 @@ import {TariffZone} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
-import {useFareProductHeadingStyles} from './Components/FareProducts';
+import {usePurchaseTicketHeadingStyles} from './Components/FareProducts';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -33,7 +33,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {recentFareContracts, loading} = useRecentFareContracts();
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
-  const headingStyles = useFareProductHeadingStyles();
+  const headingStyles = usePurchaseTicketHeadingStyles();
   const {t} = useTranslation();
 
   const showTicketAssistant = useTicketingAssistantEnabled();
@@ -135,7 +135,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   };
 
   return authenticationType !== 'none' ? (
-    <ScrollView>
+    <ScrollView style={styles.scrollView}>
       <RecentFareContracts
         recentFareContracts={recentFareContracts}
         loading={loading}
@@ -186,6 +186,9 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
+  scrollView: {
+    marginTop: theme.spacings.xSmall,
+  },
   container: {
     marginTop: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
