@@ -19,9 +19,10 @@ import {useHarborsQuery} from '@atb/queries';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {TariffZone} from '@atb/configuration';
-import {ThemeText} from '@atb/components/text';
+
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
+import {ContentHeading} from '@atb/components/heading';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -165,10 +166,13 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
         <FareProducts onProductSelect={onProductSelect} />
         {showTicketAssistant && (
-          <>
-            <ThemeText style={styles.heading} type="body__secondary">
-              {t(TicketingTexts.ticketAssistantTile.title)}
-            </ThemeText>
+          <View>
+            <ContentHeading
+              style={styles.heading}
+              color="primary"
+              text={t(TicketingTexts.ticketAssistantTile.title)}
+            />
+
             <TicketAssistantTile
               onPress={() => {
                 analytics.logEvent('Ticketing', 'Ticket assistant opened');
@@ -176,7 +180,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
               }}
               testID="ticketAssistant"
             />
-          </>
+          </View>
         )}
       </View>
     </ScrollView>
@@ -187,10 +191,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     marginTop: theme.spacings.medium,
     paddingBottom: theme.spacings.medium,
+    paddingTop: theme.spacings.large,
+    rowGap: theme.spacings.large,
   },
   heading: {
-    margin: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.large,
+    marginTop: 0,
   },
 }));

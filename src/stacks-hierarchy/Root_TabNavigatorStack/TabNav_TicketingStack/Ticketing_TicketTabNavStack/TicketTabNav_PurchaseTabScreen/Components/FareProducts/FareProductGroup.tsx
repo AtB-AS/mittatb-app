@@ -89,9 +89,8 @@ export const FareProductGroup = ({
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   heading: {
-    margin: theme.spacings.medium,
+    marginBottom: theme.spacings.medium,
     marginLeft: theme.spacings.xLarge,
-    marginTop: theme.spacings.large,
   },
   fareProductsContainer: {
     flex: 1,
