@@ -3,7 +3,11 @@ import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
-import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericClickableSectionItem,
+  GenericSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 
 import {StyleSheet} from '@atb/theme';
@@ -45,6 +49,7 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
+
   const {
     open: openBottomSheet,
     close: closeBottomSheet,
@@ -169,6 +174,51 @@ export function TravellerSelection({
     ));
   };
 
+  const content = (
+    <View style={styles.sectionContentContainer}>
+      <View style={{flex: 1}}>
+        <ThemeText type="body__primary--bold">
+          {multipleTravellerCategoriesSelectedFrom
+            ? t(
+                PurchaseOverviewTexts.travellerSelection.travellers_title(
+                  totalTravellersCount,
+                ),
+              )
+            : travellersDetailsText}
+        </ThemeText>
+
+        {isOnBehalfOfToggle && (
+          <ThemeText type="body__secondary" color="secondary">
+            {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+          </ThemeText>
+        )}
+
+        {multipleTravellerCategoriesSelectedFrom && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={styles.multipleTravellersDetails}
+          >
+            {travellersDetailsText}
+          </ThemeText>
+        )}
+      </View>
+
+      {/* remove new label when requested */}
+      {isOnBehalfOfEnabled && canSelectUserProfile && (
+        <View
+          ref={onCloseFocusRef}
+          renderToHardwareTextureAndroid={true}
+          collapsable={false}
+        >
+          <LabelInfo label="new" />
+        </View>
+      )}
+
+      {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
+    </View>
+  );
+
   return (
     <View style={style}>
       <ContentHeading
@@ -183,54 +233,16 @@ export function TravellerSelection({
         }
       />
       <Section {...accessibility}>
-        <GenericClickableSectionItem
-          onPress={travellerSelectionOnPress}
-          disabled={!canSelectUserProfile}
-          ref={onCloseFocusRef}
-        >
-          <View style={styles.sectionContentContainer}>
-            <View style={{flex: 1}}>
-              <ThemeText type="body__primary--bold">
-                {multipleTravellerCategoriesSelectedFrom
-                  ? t(
-                      PurchaseOverviewTexts.travellerSelection.travellers_title(
-                        totalTravellersCount,
-                      ),
-                    )
-                  : travellersDetailsText}
-              </ThemeText>
-
-              {isOnBehalfOfToggle && (
-                <ThemeText type="body__secondary" color="secondary">
-                  {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
-                </ThemeText>
-              )}
-
-              {multipleTravellerCategoriesSelectedFrom && (
-                <ThemeText
-                  type="body__secondary"
-                  color="secondary"
-                  style={styles.multipleTravellersDetails}
-                >
-                  {travellersDetailsText}
-                </ThemeText>
-              )}
-            </View>
-
-            {/* remove new label when requested */}
-            {isOnBehalfOfEnabled && canSelectUserProfile && (
-              <View
-                ref={onBehalfOfIndicatorRef}
-                renderToHardwareTextureAndroid={true}
-                collapsable={false}
-              >
-                <LabelInfo label="new" />
-              </View>
-            )}
-
-            {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
-          </View>
-        </GenericClickableSectionItem>
+        {canSelectUserProfile ? (
+          <GenericClickableSectionItem
+            onPress={travellerSelectionOnPress}
+            ref={onCloseFocusRef}
+          >
+            {content}
+          </GenericClickableSectionItem>
+        ) : (
+          <GenericSectionItem>{content}</GenericSectionItem>
+        )}
       </Section>
     </View>
   );
