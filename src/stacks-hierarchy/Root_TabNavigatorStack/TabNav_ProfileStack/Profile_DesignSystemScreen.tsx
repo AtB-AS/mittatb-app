@@ -983,7 +983,6 @@ export const Profile_DesignSystemScreen = ({
             text="Some short text"
             mode="check"
             checked
-            type="compact"
             leftIcon={Bus}
             onPress={() => {}}
           />
@@ -999,7 +998,6 @@ export const Profile_DesignSystemScreen = ({
             label="Label"
             placeholder="Short"
             onPress={() => {}}
-            type="compact"
           />
         </Section>
 
