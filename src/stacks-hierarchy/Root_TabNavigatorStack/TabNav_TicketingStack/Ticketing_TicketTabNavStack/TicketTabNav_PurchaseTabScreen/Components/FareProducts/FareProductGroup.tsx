@@ -8,6 +8,7 @@ import {FareProductTile} from './FareProductTile';
 import React from 'react';
 import {StyleSheet} from '@atb/theme';
 import {TransportModes} from '@atb/components/transportation-modes';
+import {usePurchaseTicketHeadingStyles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen';
 
 type Props = {
   heading?: string | undefined;
@@ -99,13 +100,3 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     paddingTop: theme.spacings.medium,
   },
 }));
-
-export const usePurchaseTicketHeadingStyles = StyleSheet.createThemeHook(
-  (theme) => ({
-    heading: {
-      margin: theme.spacings.medium,
-      marginLeft: theme.spacings.xLarge,
-      marginTop: theme.spacings.large,
-    },
-  }),
-);

@@ -1,1 +1,0 @@
-export {usePurchaseTicketHeadingStyles} from './FareProductGroup';

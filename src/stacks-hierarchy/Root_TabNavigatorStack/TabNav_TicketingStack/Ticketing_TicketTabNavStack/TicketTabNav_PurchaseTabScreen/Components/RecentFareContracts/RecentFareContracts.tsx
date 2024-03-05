@@ -12,7 +12,7 @@ import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {RecentFareContractComponent} from './RecentFareContractComponent';
 import {RecentFareContract} from '../../types';
 import {useTicketingState} from '@atb/ticketing';
-import {usePurchaseTicketHeadingStyles} from '../FareProducts';
+import {usePurchaseTicketHeadingStyles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen';
 
 type Props = {
   recentFareContracts: RecentFareContract[];

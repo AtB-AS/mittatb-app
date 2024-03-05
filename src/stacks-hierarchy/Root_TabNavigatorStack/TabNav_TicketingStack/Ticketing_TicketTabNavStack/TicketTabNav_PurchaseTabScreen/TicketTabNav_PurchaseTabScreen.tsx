@@ -22,7 +22,7 @@ import {TariffZone} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
-import {usePurchaseTicketHeadingStyles} from './Components/FareProducts';
+import {usePurchaseTicketHeadingStyles} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
