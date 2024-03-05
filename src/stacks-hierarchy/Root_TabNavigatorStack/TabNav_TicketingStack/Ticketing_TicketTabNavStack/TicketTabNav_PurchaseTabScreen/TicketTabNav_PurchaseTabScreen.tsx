@@ -187,7 +187,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   scrollView: {
-    marginTop: theme.spacings.xSmall,
+    paddingTop: theme.spacings.xSmall,
   },
   container: {
     marginTop: theme.spacings.medium,
