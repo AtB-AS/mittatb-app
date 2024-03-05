@@ -3,7 +3,11 @@ import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
 import {TravellerSelectionMode} from '@atb/configuration';
-import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericClickableSectionItem,
+  GenericSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 
 import {StyleSheet} from '@atb/theme';
@@ -45,6 +49,7 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
+
   const {
     open: openBottomSheet,
     close: closeBottomSheet,
@@ -59,6 +64,10 @@ export function TravellerSelection({
   const [userProfilesState, setUserProfilesState] = useState<
     UserProfileWithCount[]
   >(selectableUserProfiles);
+
+  const canSelectUserProfile = !(
+    selectionMode === `single` && selectableUserProfiles.length <= 1
+  );
 
   useEffect(() => {
     setUserProfilesState((prevState) => {
@@ -111,9 +120,10 @@ export function TravellerSelection({
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
-  const newLabelAccessibility = isOnBehalfOfEnabled
-    ? screenReaderPause + t(LabelInfoTexts.labels['new'])
-    : '';
+  const newLabelAccessibility =
+    isOnBehalfOfEnabled && canSelectUserProfile
+      ? screenReaderPause + t(LabelInfoTexts.labels['new'])
+      : '';
 
   const sendingToOthersAccessibility = isOnBehalfOfToggle
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
@@ -121,19 +131,24 @@ export function TravellerSelection({
 
   const accessibility: AccessibilityProps = {
     accessible: true,
-    accessibilityRole: 'button',
-    accessibilityLabel:
-      t(
-        selectionMode == 'multiple'
-          ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
-          : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
-      ) +
-      ' ' +
-      travellersDetailsText +
-      sendingToOthersAccessibility +
-      newLabelAccessibility +
-      screenReaderPause,
-    accessibilityHint: t(PurchaseOverviewTexts.travellerSelection.a11yHint),
+    accessibilityRole: canSelectUserProfile ? 'button' : 'none',
+    accessibilityLabel: canSelectUserProfile
+      ? t(
+          selectionMode == 'multiple'
+            ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
+            : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
+        )
+      : t(
+          PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixNotSelectable,
+        ) +
+        ' ' +
+        travellersDetailsText +
+        sendingToOthersAccessibility +
+        newLabelAccessibility +
+        screenReaderPause,
+    accessibilityHint: canSelectUserProfile
+      ? t(PurchaseOverviewTexts.travellerSelection.a11yHint)
+      : undefined,
   };
 
   const travellerSelectionOnPress = () => {
@@ -159,63 +174,75 @@ export function TravellerSelection({
     ));
   };
 
+  const content = (
+    <View style={styles.sectionContentContainer}>
+      <View style={{flex: 1}}>
+        <ThemeText type="body__primary--bold">
+          {multipleTravellerCategoriesSelectedFrom
+            ? t(
+                PurchaseOverviewTexts.travellerSelection.travellers_title(
+                  totalTravellersCount,
+                ),
+              )
+            : travellersDetailsText}
+        </ThemeText>
+
+        {isOnBehalfOfToggle && (
+          <ThemeText type="body__secondary" color="secondary">
+            {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
+          </ThemeText>
+        )}
+
+        {multipleTravellerCategoriesSelectedFrom && (
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={styles.multipleTravellersDetails}
+          >
+            {travellersDetailsText}
+          </ThemeText>
+        )}
+      </View>
+
+      {/* remove new label when requested */}
+      {isOnBehalfOfEnabled && canSelectUserProfile && (
+        <View
+          ref={onCloseFocusRef}
+          renderToHardwareTextureAndroid={true}
+          collapsable={false}
+        >
+          <LabelInfo label="new" />
+        </View>
+      )}
+
+      {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
+    </View>
+  );
+
   return (
     <View style={style}>
       <ContentHeading
         text={
-          selectionMode == 'multiple'
-            ? t(PurchaseOverviewTexts.travellerSelection.title_multiple)
-            : t(PurchaseOverviewTexts.travellerSelection.title_single)
+          canSelectUserProfile
+            ? t(
+                selectionMode == 'multiple'
+                  ? PurchaseOverviewTexts.travellerSelection.titleMultiple
+                  : PurchaseOverviewTexts.travellerSelection.titleSingle,
+              )
+            : t(PurchaseOverviewTexts.travellerSelection.titleNotSelectable)
         }
       />
       <Section {...accessibility}>
-        <GenericClickableSectionItem
-          onPress={travellerSelectionOnPress}
-          ref={onCloseFocusRef}
-        >
-          <View style={styles.sectionContentContainer}>
-            <View style={{flex: 1}}>
-              <ThemeText type="body__primary--bold">
-                {multipleTravellerCategoriesSelectedFrom
-                  ? t(
-                      PurchaseOverviewTexts.travellerSelection.travellers_title(
-                        totalTravellersCount,
-                      ),
-                    )
-                  : travellersDetailsText}
-              </ThemeText>
-
-              {isOnBehalfOfToggle && (
-                <ThemeText type="body__secondary" color="secondary">
-                  {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
-                </ThemeText>
-              )}
-
-              {multipleTravellerCategoriesSelectedFrom && (
-                <ThemeText
-                  type="body__secondary"
-                  color="secondary"
-                  style={styles.multipleTravellersDetails}
-                >
-                  {travellersDetailsText}
-                </ThemeText>
-              )}
-            </View>
-
-            {/* remove new label when requested */}
-            {isOnBehalfOfEnabled && (
-              <View
-                ref={onBehalfOfIndicatorRef}
-                renderToHardwareTextureAndroid={true}
-                collapsable={false}
-              >
-                <LabelInfo label="new" />
-              </View>
-            )}
-
-            <ThemeIcon svg={Edit} size="normal" />
-          </View>
-        </GenericClickableSectionItem>
+        {canSelectUserProfile ? (
+          <GenericClickableSectionItem
+            onPress={travellerSelectionOnPress}
+            ref={onCloseFocusRef}
+          >
+            {content}
+          </GenericClickableSectionItem>
+        ) : (
+          <GenericSectionItem>{content}</GenericSectionItem>
+        )}
       </Section>
     </View>
   );
