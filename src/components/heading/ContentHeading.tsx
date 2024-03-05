@@ -20,7 +20,7 @@ export function ContentHeading({
   const styles = useStyles();
 
   return (
-    <View style={[style, styles.container]}>
+    <View style={[styles.container, style]}>
       <ThemeText
         type="body__secondary"
         color={color}
