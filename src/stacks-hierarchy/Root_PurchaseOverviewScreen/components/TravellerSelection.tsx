@@ -207,7 +207,7 @@ export function TravellerSelection({
       {/* remove new label when requested */}
       {isOnBehalfOfEnabled && canSelectUserProfile && (
         <View
-          ref={onCloseFocusRef}
+          ref={onBehalfOfIndicatorRef}
           renderToHardwareTextureAndroid={true}
           collapsable={false}
         >
