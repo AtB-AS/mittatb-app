@@ -186,7 +186,7 @@ dependencies {
 
     implementation 'com.kogenta.kettle:kettle-sdk:1.2.3'
 
-    implementation("com.facebook.react:flipper-integration")
+    debugImplementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
