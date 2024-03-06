@@ -27,12 +27,17 @@ const TravelTokenBoxTexts = {
       'Vel kor du vil bruke billettane dine',
     ),
     noInspectableToken: _(
-      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nGå til **Min profil, Bytt mellom t:kort / mobil** for å velge.',
-      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one. Go to **My profile, switch between t:card / phone** to select`,
-      `Billettar må brukast på enten eit t:kort eller ein mobil, og det ser ikkje ut som du har valt ein av dei.\n\nGå til **Mi profil, Bytt mellom t:kort / mobil** for å velje.`,
+      'Billetter må brukes på enten et t:kort eller en mobil, og det ser ikke ut som du har valgt en av dem.\n\nTrykk på knappen under for å velge.',
+      `Tickets must be used on either a t:card or a phone, and it looks like you haven't chosen one.\n\nTap the button below to choose.`,
+      `Billettar må brukast på enten eit t:kort eller ein mobil, og det ser ikkje ut som du har valt ein av dei.\n\nTrykk på knappen under for å velje.`,
     ),
   },
   change: _('Endre', 'Change', 'Endre'),
+  choose: _(
+    'Velg t:kort eller mobil',
+    'Choose t:card or phone',
+    'Vel t:kort eller mobil',
+  ),
 };
 
 export default orgSpecificTranslations(TravelTokenBoxTexts, {

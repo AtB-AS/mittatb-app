@@ -71,13 +71,22 @@ export function TravelTokenBox({
   const inspectableToken = tokens.find((t) => t.isInspectable);
   if (!inspectableToken)
     return (
-      <MessageInfoBox
-        type="warning"
-        isMarkdown={true}
-        title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
-        message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
-        style={styles.errorMessage}
-      />
+      <View>
+        <MessageInfoBox
+          type="warning"
+          isMarkdown={true}
+          title={t(TravelTokenBoxTexts.errorMessages.noInspectableTokenTitle)}
+          message={t(TravelTokenBoxTexts.errorMessages.noInspectableToken)}
+          style={styles.errorMessage}
+        />
+        <Button
+          mode="secondary"
+          backgroundColor={interactiveColor}
+          onPress={onPressChangeButton}
+          text={t(TravelTokenBoxTexts.choose)}
+          testID="continueWithoutChangingTravelTokenButton"
+        />
+      </View>
     );
 
   const isTravelCard = inspectableToken.type === 'travel-card';
