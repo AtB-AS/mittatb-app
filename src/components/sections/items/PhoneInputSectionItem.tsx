@@ -263,7 +263,6 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
     backgroundColor: theme.static.background.background_0.background,
     borderWidth: theme.border.width.slim,
     borderColor: theme.static.background.background_0.background,
-    marginVertical: theme.spacings.xSmall,
   },
   containerInline: {
     alignItems: 'center',
