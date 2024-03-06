@@ -7,7 +7,7 @@ buildscript {
         compileSdkVersion = 34
         targetSdkVersion = 34
         // Setting androidXBrowser to avoid react-native-reborn picking newest alpha requiring SDK 33
-        androidXBrowser = "1.5.0"
+        androidXBrowser = "1.7.0"
         RNMapboxMapsImpl = "mapbox"
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
@@ -22,7 +22,7 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
-        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.google.gms:google-services:4.4.1'
         classpath "com.bugsnag:bugsnag-android-gradle-plugin:8.1.0"
 
         // NOTE: Do not place your application dependencies here; they belong
