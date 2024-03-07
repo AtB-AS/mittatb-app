@@ -142,7 +142,8 @@ export const Profile_DebugInfoScreen = () => {
     deviceInspectionStatus,
     mobileTokenStatus,
     barcodeStatus,
-    debug: {nativeToken, validateToken, removeRemoteToken, renewToken},
+    nativeToken,
+    debug: {validateToken, removeRemoteToken, renewToken},
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 

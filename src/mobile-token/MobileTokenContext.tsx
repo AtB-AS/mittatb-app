@@ -65,7 +65,6 @@ type MobileTokenContextState = {
    * has occurred (without fallback).
    */
   deviceInspectionStatus: DeviceInspectionStatus;
-  getSignedToken: () => Promise<string | undefined>;
   toggleToken: (
     tokenId: string,
     bypassRestrictions: boolean,
@@ -73,12 +72,12 @@ type MobileTokenContextState = {
   retry: () => void;
   wipeToken: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
+  nativeToken?: ActivatedToken;
   /**
    * Low level debug details and functions of the mobile token process, for the
    * debug screen
    */
   debug: {
-    nativeToken?: ActivatedToken;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
@@ -205,30 +204,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     true,
   );
 
-  /**
-   * Retrieve the signed representation of the native token. This signed token
-   * can be encoded into QR/Aztec, or used as an authentication header in
-   * requests to Entur.
-   */
-  const getSignedToken = useCallback(async () => {
-    const token = state.nativeToken;
-    if (token) {
-      try {
-        return await mobileTokenClient.encode(token);
-      } catch (err: any) {
-        Bugsnag.notify(err, (event) => {
-          event.addMetadata('token', {
-            userId,
-            tokenId: token.tokenId,
-            description: 'Error encoding signed token',
-          });
-        });
-        return undefined;
-      }
-    }
-    return undefined;
-  }, [state.nativeToken, userId]);
-
   const barcodeStatus = useBarcodeStatus(
     state.status,
     state.nativeToken,
@@ -272,7 +247,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     <MobileTokenContext.Provider
       value={{
         tokens,
-        getSignedToken,
         mobileTokenStatus: state.status,
         deviceInspectionStatus,
         barcodeStatus,
@@ -289,8 +263,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           [state.nativeToken],
         ),
         getTokenToggleDetails,
+        nativeToken: state.nativeToken,
         debug: {
-          nativeToken: state.nativeToken,
           validateToken: () =>
             mobileTokenClient
               .encode(state.nativeToken!, [
