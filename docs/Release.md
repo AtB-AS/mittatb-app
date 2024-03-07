@@ -19,6 +19,7 @@ Bump the version number in these files:
 
 - All .env-files
 - package.json
+- e2e/package.json
 
 Do this in a commit with message "chore: Bump to version x.xx". You can check earlier commits with the message "chore: Bump to version x.xx" to see if all necessary files are bumped.
 
