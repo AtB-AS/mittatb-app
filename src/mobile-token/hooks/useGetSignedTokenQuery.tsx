@@ -1,6 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {useMobileTokenContextState} from '@atb/mobile-token';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const TEN_SECONDS_MS = 1000 * 10;
 
@@ -18,13 +19,10 @@ export const useGetSignedTokenQuery = () => {
       try {
         return await mobileTokenClient.encode(nativeToken);
       } catch (err: any) {
-        // Bugsnag.notify(err, (event) => {
-        //   event.addMetadata('token', {
-        //     userId,
-        //     tokenId: token.tokenId,
-        //     description: 'Error encoding signed token',
-        //   });
-        // });
+        notifyBugsnag(err, {
+          tokenId: nativeToken.tokenId,
+          description: 'Error encoding signed token',
+        });
         return undefined;
       }
     },
