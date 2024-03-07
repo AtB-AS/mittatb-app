@@ -132,20 +132,22 @@ export function TravellerSelection({
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: canSelectUserProfile ? 'button' : 'none',
-    accessibilityLabel: canSelectUserProfile
-      ? t(
-          selectionMode == 'multiple'
-            ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
-            : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
-        )
-      : t(
-          PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixNotSelectable,
-        ) +
-        ' ' +
-        travellersDetailsText +
-        sendingToOthersAccessibility +
-        newLabelAccessibility +
-        screenReaderPause,
+    accessibilityLabel:
+      (canSelectUserProfile
+        ? t(
+            selectionMode == 'multiple'
+              ? PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixMultiple
+              : PurchaseOverviewTexts.travellerSelection.a11yLabelPrefixSingle,
+          )
+        : t(
+            PurchaseOverviewTexts.travellerSelection
+              .a11yLabelPrefixNotSelectable,
+          )) +
+      ' ' +
+      travellersDetailsText +
+      sendingToOthersAccessibility +
+      newLabelAccessibility +
+      screenReaderPause,
     accessibilityHint: canSelectUserProfile
       ? t(PurchaseOverviewTexts.travellerSelection.a11yHint)
       : undefined,
