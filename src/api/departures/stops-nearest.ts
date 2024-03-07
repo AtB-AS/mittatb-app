@@ -5,7 +5,7 @@ import {client} from '../client';
 import {FavoriteDeparture, UserFavoriteDepartures} from '@atb/favorites';
 import {NearestStopPlacesQuery} from '../types/generated/NearestStopPlacesQuery';
 import {StopsDetailsQuery} from '../types/generated/StopsDetailsQuery';
-import {stringifyUrl} from 'query-string/base';
+import queryString from 'query-string';
 import {DeparturesQuery} from '../types/generated/DeparturesQuery';
 import {DeparturesWithLineName} from './types';
 
@@ -49,7 +49,7 @@ export async function getStopsDetails(
   opts?: AxiosRequestConfig,
 ): Promise<StopsDetailsQuery> {
   const url = `${BASE_URL}/stops-details`;
-  return requestStopsDetails(stringifyUrl({url, query}), opts);
+  return requestStopsDetails(queryString.stringifyUrl({url, query}), opts);
 }
 
 export async function getDepartures(
