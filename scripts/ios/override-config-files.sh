@@ -5,12 +5,8 @@ echo "Copy .netrc file for mapbox api token"
 cat .netrc >> ~/.netrc
 chmod 600 ~/.netrc
 
-echo "Installing pre-build dependencies"
-brew install findutils # for git-crypt
-# findutils for gxargs which is used to load environment variables from .env file
-
 echo "Loading all env variables from .env file"
-export $(grep -v '^#' .env | gxargs -d '\n') > /dev/null 2>&1
+export $(grep -v '^#' .env | xargs -0 -n1 echo) > /dev/null 2>&1
 
 echo "Currently set ios bundle id: $IOS_BUNDLE_IDENTIFIER"
 

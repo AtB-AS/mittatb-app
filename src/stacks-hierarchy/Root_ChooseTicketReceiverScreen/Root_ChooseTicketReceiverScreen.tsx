@@ -113,7 +113,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               {t(OnBehalfOfTexts.chooseReceiver.subtitle)}
             </ThemeText>
           </View>
-          <Section>
+          <Section style={styles.phoneInput}>
             <PhoneInputSectionItem
               label={t(PhoneInputTexts.input.title)}
               value={phoneNumber}
@@ -196,6 +196,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.xLarge,
+  },
+  phoneInput: {
+    marginVertical: theme.spacings.xSmall,
   },
   activityIndicator: {
     marginVertical: theme.spacings.large,

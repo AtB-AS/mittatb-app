@@ -62,26 +62,22 @@ export function SingleTravellerSelection({
 
   return (
     <View>
-      <Section>
-        <RadioGroupSection<UserProfileWithCount>
-          items={userProfilesWithCount}
-          keyExtractor={(u) => u.userTypeString}
-          itemToText={(u) => getReferenceDataName(u, language)}
-          itemToSubtext={(u) =>
-            travellerInfoByFareProductType(fareProductType, u)
-          }
-          selected={selectedProfile}
-          onSelect={select}
-          color="interactive_2"
-          accessibilityHint={t(
-            PurchaseOverviewTexts.travellerSelection.a11yHint,
-          )}
-        />
-      </Section>
+      <RadioGroupSection<UserProfileWithCount>
+        items={userProfilesWithCount}
+        keyExtractor={(u) => u.userTypeString}
+        itemToText={(u) => getReferenceDataName(u, language)}
+        itemToSubtext={(u) =>
+          travellerInfoByFareProductType(fareProductType, u)
+        }
+        selected={selectedProfile}
+        onSelect={select}
+        color="interactive_2"
+        accessibilityHint={t(PurchaseOverviewTexts.travellerSelection.a11yHint)}
+      />
       {isOnBehalfOfEnabled && (
         <Section style={styles.onBehalfOfContainer}>
           <ToggleSectionItem
-            leftImage={<HoldingHands/>}
+            leftImage={<HoldingHands />}
             text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
             subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
             value={isTravelerOnBehalfOfToggle}

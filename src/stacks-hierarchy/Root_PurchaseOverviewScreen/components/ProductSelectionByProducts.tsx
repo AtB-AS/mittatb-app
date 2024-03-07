@@ -74,24 +74,22 @@ export function ProductSelectionByProducts({
       {selectableProducts.length > 1 ? (
         <>
           <ProductDescriptionToggle title={title} />
-          <Section>
-            <RadioGroupSection<PreassignedFareProduct>
-              items={selectableProducts}
-              keyExtractor={(u) => u.id}
-              itemToText={(fp) => productDisplayName(fp)}
-              hideSubtext={hideProductDescriptions}
-              itemToSubtext={(fp) => subText(fp)}
-              selected={selected}
-              onSelect={(fp) => {
-                setProduct(fp);
-                setSelectedProduct(fp);
-              }}
-              color="interactive_2"
-              accessibilityHint={t(
-                PurchaseOverviewTexts.productSelection.a11yTitle,
-              )}
-            />
-          </Section>
+          <RadioGroupSection<PreassignedFareProduct>
+            items={selectableProducts}
+            keyExtractor={(u) => u.id}
+            itemToText={(fp) => productDisplayName(fp)}
+            hideSubtext={hideProductDescriptions}
+            itemToSubtext={(fp) => subText(fp)}
+            selected={selected}
+            onSelect={(fp) => {
+              setProduct(fp);
+              setSelectedProduct(fp);
+            }}
+            color="interactive_2"
+            accessibilityHint={t(
+              PurchaseOverviewTexts.productSelection.a11yTitle,
+            )}
+          />
         </>
       ) : (
         <>
