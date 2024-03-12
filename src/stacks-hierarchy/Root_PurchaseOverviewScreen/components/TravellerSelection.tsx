@@ -29,6 +29,7 @@ import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
+import {useAuthState} from '@atb/auth';
 import {getTravellerInfoByFareProductType} from './../utils';
 
 type TravellerSelectionProps = {
@@ -65,6 +66,10 @@ export function TravellerSelection({
     useOnBehalfOfEnabled() &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
+  const isLoggedIn = useAuthState().authenticationType === 'phone';
+
+  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
+
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
 
@@ -100,13 +105,13 @@ export function TravellerSelection({
 
   useFocusEffect(
     useCallback(() => {
-      if (isOnBehalfOfEnabled && canSelectUserProfile) {
+      if (isOnBehalfOfAllowed && canSelectUserProfile) {
         addPopOver({
           oneTimeKey: 'on-behalf-of-new-feature-introduction',
           target: onBehalfOfIndicatorRef,
         });
       }
-    }, [isOnBehalfOfEnabled, addPopOver, canSelectUserProfile]),
+    }, [isOnBehalfOfAllowed, addPopOver, canSelectUserProfile]),
   );
 
   if (selectionMode === 'none') {
@@ -129,7 +134,7 @@ export function TravellerSelection({
           .join(', ');
 
   const newLabelAccessibility =
-    isOnBehalfOfEnabled && canSelectUserProfile
+    isOnBehalfOfAllowed && canSelectUserProfile
       ? screenReaderPause + t(LabelInfoTexts.labels['new'])
       : '';
 
@@ -230,7 +235,7 @@ export function TravellerSelection({
       </View>
 
       {/* remove new label when requested */}
-      {isOnBehalfOfEnabled && canSelectUserProfile && (
+      {isOnBehalfOfAllowed && canSelectUserProfile && (
         <View
           ref={onBehalfOfIndicatorRef}
           renderToHardwareTextureAndroid={true}
