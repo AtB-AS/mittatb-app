@@ -59,7 +59,6 @@ def appVersionCode = '1'
 
 android {
     ndkVersion rootProject.ext.ndkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -187,15 +186,7 @@ dependencies {
 
     implementation 'com.kogenta.kettle:kettle-sdk:1.2.3'
 
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-        exclude group: 'com.facebook.fbjni'
-    }
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group: 'com.facebook.flipper'
-        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
-    }
-    debugImplementation("com.facebook.fresco:ui-common:${FRESCO_VERSION}")
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FRESCO_VERSION}")
+    debugImplementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

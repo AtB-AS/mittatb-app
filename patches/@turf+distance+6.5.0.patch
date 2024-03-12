@@ -1,0 +1,12 @@
+diff --git a/node_modules/@turf/distance/package.json b/node_modules/@turf/distance/package.json
+index 45a7b20..9417f00 100644
+--- a/node_modules/@turf/distance/package.json
++++ b/node_modules/@turf/distance/package.json
+@@ -27,6 +27,7 @@
+   "exports": {
+     "./package.json": "./package.json",
+     ".": {
++      "types": "./dist/js/index.d.ts",
+       "import": "./dist/es/index.js",
+       "require": "./dist/js/index.js"
+     }

@@ -23,7 +23,7 @@ import {
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import {useFontScale} from '@atb/utils/use-font-scale';
-import {parseUrl} from 'query-string/base';
+import queryString from 'query-string';
 import React, {useEffect, useState} from 'react';
 import {Linking, RefreshControl, View} from 'react-native';
 import {ProfileScreenProps} from './navigation-types';
@@ -65,8 +65,10 @@ export const Profile_PaymentOptionsScreen = ({
         // Timeout required to make loading spinner appear,
         // see https://github.com/facebook/react-native/issues/37308
         setTimeout(() => setIsLoading(true), 20);
-        const responseCode = parseUrl(url).query.response_code;
-        const paymentId = Number(parseUrl(url).query.recurring_payment_id);
+        const responseCode = queryString.parseUrl(url).query.response_code;
+        const paymentId = Number(
+          queryString.parseUrl(url).query.recurring_payment_id,
+        );
         try {
           if (responseCode === 'OK') {
             await authorizeRecurringPayment(paymentId);
