@@ -44,7 +44,6 @@ import {
   LIST_REMOTE_TOKENS_QUERY_KEY,
   useListRemoteTokensQuery,
 } from '@atb/mobile-token/hooks/useListRemoteTokensQuery';
-import {LOAD_NATIVE_TOKEN_QUERY_KEY} from '@atb/mobile-token/hooks/useLoadNativeTokenQuery';
 
 const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
 
@@ -182,7 +181,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         if (shouldRenew) {
           Bugsnag.leaveBreadcrumb(`Renewing token (id: ${token.tokenId})`);
           const renewedToken = await mobileTokenClient.renew(token, traceId);
-          queryClient.invalidateQueries([LOAD_NATIVE_TOKEN_QUERY_KEY]);
+          queryClient.invalidateQueries([LIST_REMOTE_TOKENS_QUERY_KEY]);
 
           Bugsnag.leaveBreadcrumb(
             `Token (new id: ${renewedToken.tokenId}) renewed successfully`,
