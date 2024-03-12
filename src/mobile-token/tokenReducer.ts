@@ -6,7 +6,7 @@ export type TokenReducerState = {
   status: MobileTokenStatus;
 };
 
-type TokenReducerAction =
+export type TokenReducerAction =
   | {type: 'LOADING'}
   | {type: 'SUCCESS'; nativeToken: ActivatedToken}
   | {type: 'CLEAR_TOKENS'}

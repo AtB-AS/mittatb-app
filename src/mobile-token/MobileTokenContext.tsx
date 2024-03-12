@@ -44,6 +44,7 @@ import {
   LIST_REMOTE_TOKENS_QUERY_KEY,
   useListRemoteTokensQuery,
 } from '@atb/mobile-token/hooks/useListRemoteTokensQuery';
+import {usePreemptiveRenewTokenMutation} from '@atb/mobile-token/hooks/usePreemptiveRenewTokenMutation';
 
 const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
 
@@ -105,6 +106,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     enabled,
     state.nativeToken,
   );
+  const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(dispatch);
 
   const load = useCallback(async () => {
     if (enabled) {
@@ -168,36 +170,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   }, [load]);
 
   useInterval(
-    async function checkIfRenewNecessaryEverySixHours() {
-      const token = state.nativeToken;
-      if (!token) return;
-      Bugsnag.leaveBreadcrumb(
-        `Checking if token (id: ${token.tokenId}, validityEnd: ${token.validityEnd}) should be renewed`,
-      );
-
-      const traceId = uuid();
-      try {
-        const shouldRenew = await mobileTokenClient.shouldRenew(token);
-        if (shouldRenew) {
-          Bugsnag.leaveBreadcrumb(`Renewing token (id: ${token.tokenId})`);
-          const renewedToken = await mobileTokenClient.renew(token, traceId);
-          queryClient.invalidateQueries([LIST_REMOTE_TOKENS_QUERY_KEY]);
-
-          Bugsnag.leaveBreadcrumb(
-            `Token (new id: ${renewedToken.tokenId}) renewed successfully`,
-          );
-          dispatch({
-            type: 'SUCCESS',
-            nativeToken: renewedToken,
-          });
-        }
-      } catch (err: any) {
-        dispatch({type: 'ERROR'});
-        logError(err, traceId, userId);
-      }
-    },
-    // 10000,
-    [queryClient, state.nativeToken, userId],
+    () => checkRenewMutate(state.nativeToken),
+    [checkRenewMutate, state.nativeToken],
     SIX_HOURS_MS,
     false,
     true,
