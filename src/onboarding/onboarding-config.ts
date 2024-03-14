@@ -23,7 +23,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
         params: {},
       },
       shouldShowBeforeUserCreated: true,
-      shouldShowPredicate: () => true,
+      shouldShowPredicate: ({authenticationType}) => authenticationType === 'anonymous',
     },
     {
       isOnboardedStoreKey: '@ATB_location_when_in_use_permission_onboarded',
