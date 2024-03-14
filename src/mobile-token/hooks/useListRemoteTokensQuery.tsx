@@ -17,8 +17,8 @@ export const useListRemoteTokensQuery = (
   nativeToken?: ActivatedToken,
 ) =>
   useQuery({
-    queryKey: [LIST_REMOTE_TOKENS_QUERY_KEY, nativeToken?.tokenId],
-    queryFn: async () => tokenService.listTokens(uuid()),
+    queryKey: [LIST_REMOTE_TOKENS_QUERY_KEY],
+    queryFn: () => tokenService.listTokens(uuid()),
     enabled,
     select: (tokens) =>
       tokens.map(

@@ -38,7 +38,6 @@ import {updateMetadata} from '@atb/chat/metadata';
 import {tokenService} from './tokenService';
 import {tokenReducer} from '@atb/mobile-token/tokenReducer';
 import {useQueryClient} from '@tanstack/react-query';
-import {GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY} from '@atb/mobile-token/use-token-toggle-details';
 import {useInterval} from '@atb/utils/use-interval';
 import {
   LIST_REMOTE_TOKENS_QUERY_KEY,
@@ -69,10 +68,6 @@ type MobileTokenContextState = {
    * has occurred (without fallback).
    */
   deviceInspectionStatus: DeviceInspectionStatus;
-  toggleToken: (
-    tokenId: string,
-    bypassRestrictions: boolean,
-  ) => Promise<boolean>;
   retry: () => void;
   wipeToken: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
@@ -107,6 +102,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     state.nativeToken,
   );
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(dispatch);
+
+  useEffect(() => {
+    queryClient.invalidateQueries([LIST_REMOTE_TOKENS_QUERY_KEY]);
+  }, [queryClient, state.nativeToken?.tokenId]);
 
   const load = useCallback(async () => {
     if (enabled) {
@@ -184,24 +183,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   );
   const deviceInspectionStatus = getDeviceInspectionStatus(barcodeStatus);
 
-  const toggleToken = useCallback(
-    async (tokenId: string, bypassRestrictions: boolean) => {
-      try {
-        const updatedTokens = await tokenService.toggle(
-          tokenId,
-          uuid(),
-          bypassRestrictions,
-        );
-        queryClient.invalidateQueries([GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY]);
-        queryClient.setQueryData([LIST_REMOTE_TOKENS_QUERY_KEY], updatedTokens);
-        return true;
-      } catch (err) {
-        return false;
-      }
-    },
-    [queryClient],
-  );
-
   return (
     <MobileTokenContext.Provider
       value={{
@@ -209,7 +190,6 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         mobileTokenStatus: state.status,
         deviceInspectionStatus,
         barcodeStatus,
-        toggleToken,
         retry: () => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
           load();
