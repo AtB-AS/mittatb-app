@@ -196,6 +196,7 @@ export const Profile_FareContractsScreen = () => {
             fareContract={fc}
             now={Date.now()}
             onPressDetails={() => {}}
+            style={styles.fareContract}
           />
         ))}
         <ThemeText type="heading--jumbo">Fare contract details</ThemeText>
@@ -223,6 +224,9 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   },
   content: {
     padding: theme.spacings.medium,
+  },
+  fareContract: {
+    paddingBottom: theme.spacings.medium,
   },
 }));
 

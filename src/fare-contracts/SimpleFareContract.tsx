@@ -6,23 +6,26 @@ import {
 import React from 'react';
 import {UnknownFareContract} from './UnknownFareContract';
 import {FareContractView} from '@atb/fare-contracts/FareContractView';
+import {StyleProp, ViewStyle} from 'react-native';
 
 type Props = {
   fareContract: FareContract;
   now: number;
-  showSummarisedFareContract?: boolean;
+  isStatic?: boolean;
   sentToOthers?: boolean;
   onPressDetails?: () => void;
   hasActiveTravelCard?: boolean;
   testID?: string;
+  style?: StyleProp<ViewStyle>;
 };
 
 export const SimpleFareContract: React.FC<Props> = ({
   fareContract: fc,
   now,
-  showSummarisedFareContract,
+  isStatic,
   onPressDetails,
   testID,
+  style,
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
 
@@ -34,9 +37,10 @@ export const SimpleFareContract: React.FC<Props> = ({
       <FareContractView
         now={now}
         fareContract={fc}
-        showSummarisedFareContract={showSummarisedFareContract}
+        isStatic={isStatic}
         onPressDetails={onPressDetails}
         testID={testID}
+        style={style}
       />
     );
   } else {

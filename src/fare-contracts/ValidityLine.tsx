@@ -44,7 +44,9 @@ export const ValidityLine = (props: Props): ReactElement => {
       );
     case 'valid':
       const {now, validFrom, validTo, fareProductType, animate} = props;
-      const validityPercent = getValidityPercent(now, validFrom, validTo);
+      const validityPercent = animate
+        ? getValidityPercent(now, validFrom, validTo)
+        : 100;
 
       // Carnet fare contracts are not inspectable, but we still want to show
       // the validity line

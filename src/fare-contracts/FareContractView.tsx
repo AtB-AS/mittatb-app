@@ -30,21 +30,25 @@ import {
   FareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
+import {ViewStyle} from 'react-native';
+import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   now: number;
   fareContract: FareContract;
-  showSummarisedFareContract?: boolean;
+  isStatic?: boolean;
   onPressDetails?: () => void;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 };
 
 export const FareContractView: React.FC<Props> = ({
   now,
   fareContract,
-  showSummarisedFareContract,
+  isStatic,
   onPressDetails,
   testID,
+  style,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthState();
   const {deviceInspectionStatus} = useMobileTokenContextState();
@@ -94,7 +98,6 @@ export const FareContractView: React.FC<Props> = ({
     travelRights.map((tr) => tr.userProfileRef),
     userProfiles,
   );
-  const opacity = {opacity: showSummarisedFareContract ? 0.7 : 1};
 
   const preassignedFareProduct = findReferenceDataById(
     preassignedFareProducts,
@@ -102,8 +105,8 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   return (
-    <Section withBottomPadding testID={testID}>
-      <GenericSectionItem style={opacity}>
+    <Section style={style} testID={testID}>
+      <GenericSectionItem>
         {isCarnetFareContract &&
         fareContractValidityStatus === 'valid' &&
         carnetAccessStatus ? (
@@ -128,7 +131,7 @@ export const FareContractView: React.FC<Props> = ({
           validFrom={validFrom}
           validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
-          animate={!showSummarisedFareContract}
+          animate={!isStatic}
         />
         <FareContractInfoHeader
           travelRight={firstTravelRight}
@@ -140,14 +143,13 @@ export const FareContractView: React.FC<Props> = ({
           }
         />
       </GenericSectionItem>
-      <GenericSectionItem style={opacity}>
+      <GenericSectionItem>
         <FareContractInfoDetails
           fromTariffZone={fromTariffZone}
           toTariffZone={toTariffZone}
           userProfilesWithCount={userProfilesWithCount}
           status={validityStatus}
           preassignedFareProduct={preassignedFareProduct}
-          showSummarisedFareContract={showSummarisedFareContract}
         />
       </GenericSectionItem>
       {isCarnetFareContract && (
@@ -162,7 +164,7 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
-      {!showSummarisedFareContract && (
+      {!isStatic && (
         <LinkSectionItem
           text={t(
             validityStatus === 'valid' &&

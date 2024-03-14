@@ -77,11 +77,12 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           </ThemeText>
         </View>
         <View style={styles.fareContract}>
+          <View style={styles.overlay} />
           {firstActiveFc && (
             <SimpleFareContract
               fareContract={firstActiveFc}
               now={serverNow}
-              showSummarisedFareContract={true}
+              isStatic={true}
             />
           )}
         </View>
@@ -89,12 +90,12 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           interactiveColor="interactive_destructive"
           onPress={onNext}
           text={t(LoginTexts.activeFareContractPrompt.logInAndDeleteButton)}
+          style={styles.logInAndDeleteButton}
         />
         <Button
           onPress={navigation.goBack}
           text={t(LoginTexts.activeFareContractPrompt.cancelButton)}
           interactiveColor="interactive_0"
-          style={styles.logInAndDeleteButton}
         />
       </ScrollView>
     </View>
@@ -117,16 +118,24 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
     textAlign: 'center',
   },
-  fareContract: {
-    marginVertical: theme.spacings.large,
-    paddingHorizontal: theme.spacings.medium,
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: theme.static.background.background_0.text,
+    opacity: 0.4,
+    zIndex: 1,
+    borderRadius: theme.border.radius.regular,
   },
-  illustation: {
-    alignSelf: 'center',
-    marginVertical: theme.spacings.medium,
+  fareContract: {
+    marginTop: theme.spacings.large,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.xLarge,
   },
   logInAndDeleteButton: {
     marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
+    marginBottom: theme.spacings.medium,
   },
 }));
