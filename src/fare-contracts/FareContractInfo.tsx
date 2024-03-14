@@ -59,6 +59,7 @@ export type FareContractInfoDetailsProps = {
   now?: number;
   validTo?: number;
   fareProductType?: string;
+  showSummarisedFareContract?: boolean;
 };
 
 export const FareContractInfoHeader = ({
@@ -135,6 +136,7 @@ export const FareContractInfoDetails = (
     userProfilesWithCount,
     status,
     preassignedFareProduct,
+    showSummarisedFareContract,
   } = props;
   const {t, language} = useTranslation();
   const styles = useStyles();
@@ -155,14 +157,22 @@ export const FareContractInfoDetails = (
       <View style={styles.fareContractDetails}>
         <View style={styles.details}>
           <FareContractDetail
-            header={t(FareContractTexts.label.travellers)}
+            header={
+              showSummarisedFareContract
+                ? undefined
+                : t(FareContractTexts.label.travellers)
+            }
             content={userProfilesWithCount.map((u) =>
               userProfileCountAndName(u, language),
             )}
           />
           {tariffZoneSummary && (
             <FareContractDetail
-              header={t(FareContractTexts.label.zone)}
+              header={
+                showSummarisedFareContract
+                  ? undefined
+                  : t(FareContractTexts.label.zone)
+              }
               content={[tariffZoneSummary]}
             />
           )}

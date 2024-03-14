@@ -17,6 +17,7 @@ type Props =
       validFrom: number;
       validTo: number;
       fareProductType?: string;
+      animate?: boolean;
     }
   | {status: Exclude<ValidityStatus, 'valid'>};
 
@@ -42,7 +43,7 @@ export const ValidityLine = (props: Props): ReactElement => {
         />
       );
     case 'valid':
-      const {now, validFrom, validTo, fareProductType} = props;
+      const {now, validFrom, validTo, fareProductType, animate} = props;
       const validityPercent = getValidityPercent(now, validFrom, validTo);
 
       // Carnet fare contracts are not inspectable, but we still want to show
@@ -53,6 +54,7 @@ export const ValidityLine = (props: Props): ReactElement => {
           backgroundColor={backgroundColor}
           lineColor={lineColor}
           validityPercent={validityPercent}
+          animate={animate}
         />
       ) : (
         <View style={styles.container}>

@@ -10,7 +10,7 @@ import {FareContractView} from '@atb/fare-contracts/FareContractView';
 type Props = {
   fareContract: FareContract;
   now: number;
-  hideDetails?: boolean;
+  showSummarisedFareContract?: boolean;
   sentToOthers?: boolean;
   onPressDetails?: () => void;
   hasActiveTravelCard?: boolean;
@@ -20,7 +20,7 @@ type Props = {
 export const SimpleFareContract: React.FC<Props> = ({
   fareContract: fc,
   now,
-  hideDetails,
+  showSummarisedFareContract,
   onPressDetails,
   testID,
 }) => {
@@ -34,7 +34,7 @@ export const SimpleFareContract: React.FC<Props> = ({
       <FareContractView
         now={now}
         fareContract={fc}
-        hideDetails={hideDetails}
+        showSummarisedFareContract={showSummarisedFareContract}
         onPressDetails={onPressDetails}
         testID={testID}
       />

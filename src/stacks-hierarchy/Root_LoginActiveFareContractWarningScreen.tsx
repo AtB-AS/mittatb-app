@@ -5,7 +5,6 @@ import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
-import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {
@@ -15,7 +14,6 @@ import {
 import {SimpleFareContract} from '@atb/fare-contracts';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
-import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useTimeContextState} from '@atb/time';
 import {TransitionPresets} from '@react-navigation/stack';
 
@@ -56,12 +54,13 @@ export const Root_LoginActiveFareContractWarningScreen = ({
         leftButton={{type: 'back'}}
         setFocusOnLoad={false}
         color={themeColor}
+        title={t(LoginTexts.activeFareContractPrompt.header)}
       />
 
       <ScrollView centerContent={true} contentContainerStyle={styles.mainView}>
         <View accessible={true} accessibilityRole="header" ref={focusRef}>
           <ThemeText
-            type="body__primary--jumbo--bold"
+            type="body__primary--big--bold"
             style={styles.title}
             color={themeColor}
           >
@@ -82,29 +81,21 @@ export const Root_LoginActiveFareContractWarningScreen = ({
             <SimpleFareContract
               fareContract={firstActiveFc}
               now={serverNow}
-              hideDetails={true}
+              showSummarisedFareContract={true}
             />
           )}
         </View>
         <Button
-          interactiveColor="interactive_0"
-          onPress={navigation.goBack}
-          text={t(LoginTexts.activeFareContractPrompt.laterButton)}
-          rightIcon={{svg: ArrowRight}}
-        />
-        <PressableOpacity
-          style={styles.laterButton}
+          interactiveColor="interactive_destructive"
           onPress={onNext}
-          accessibilityRole="button"
-        >
-          <ThemeText
-            style={styles.laterButtonText}
-            type="body__primary"
-            color={themeColor}
-          >
-            {t(LoginTexts.activeFareContractPrompt.continueButton)}
-          </ThemeText>
-        </PressableOpacity>
+          text={t(LoginTexts.activeFareContractPrompt.logInAndDeleteButton)}
+        />
+        <Button
+          onPress={navigation.goBack}
+          text={t(LoginTexts.activeFareContractPrompt.cancelButton)}
+          interactiveColor="interactive_0"
+          style={styles.logInAndDeleteButton}
+        />
       </ScrollView>
     </View>
   );
@@ -126,27 +117,16 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
     textAlign: 'center',
   },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
-  },
   fareContract: {
     marginVertical: theme.spacings.large,
+    paddingHorizontal: theme.spacings.medium,
   },
   illustation: {
     alignSelf: 'center',
     marginVertical: theme.spacings.medium,
   },
-  laterButton: {
+  logInAndDeleteButton: {
     marginTop: theme.spacings.medium,
-    padding: theme.spacings.medium,
     marginBottom: theme.spacings.xLarge,
-  },
-  laterButtonText: {textAlign: 'center'},
-  carrotInfo: {
-    margin: theme.spacings.xLarge,
-    marginBottom: theme.spacings.xLarge,
-  },
-  carrotTitle: {
-    marginVertical: theme.spacings.medium,
   },
 }));

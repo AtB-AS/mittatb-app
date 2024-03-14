@@ -11,15 +11,17 @@ export function FareContractDetail({
   header,
   content,
 }: {
-  header: string;
+  header?: string;
   content: string[];
 }) {
   const styles = useStyles();
   return (
     <View style={styles.container}>
-      <ThemeText type="body__secondary" color="secondary">
-        {header}
-      </ThemeText>
+      {header && (
+        <ThemeText type="body__secondary" color="secondary">
+          {header}
+        </ThemeText>
+      )}
       {content.map((c) => (
         <BorderedInfoBox
           type="small"
