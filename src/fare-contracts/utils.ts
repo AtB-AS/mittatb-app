@@ -271,7 +271,7 @@ export function getFareContractInfo(
       ? 'sent'
       : lastUsedAccess.status
     : fareContractValidityStatus;
-
+  // TODO: Carnet access status should be part of validity status
   const carnetAccessStatus = isSent ? 'inactive' : lastUsedAccess?.status;
 
   const maximumNumberOfAccesses =

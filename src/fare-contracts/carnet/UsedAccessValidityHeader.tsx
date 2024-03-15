@@ -21,6 +21,9 @@ type Props = {
   validTo: number | undefined;
 };
 
+/**
+ * TODO: Should be merged with `ValidityHeader`
+ */
 export function UsedAccessValidityHeader(props: Props) {
   const styles = useStyles();
   const {t, language} = useTranslation();
