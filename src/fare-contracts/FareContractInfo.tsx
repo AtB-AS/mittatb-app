@@ -59,7 +59,6 @@ export type FareContractInfoDetailsProps = {
   now?: number;
   validTo?: number;
   fareProductType?: string;
-  showSummarisedFareContract?: boolean;
 };
 
 export const FareContractInfoHeader = ({
