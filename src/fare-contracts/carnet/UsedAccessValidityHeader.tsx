@@ -29,7 +29,7 @@ export function UsedAccessValidityHeader(props: Props) {
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === 'carnet',
   );
-  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContextState();
 
   return (
     <View style={styles.validityHeader}>
@@ -45,7 +45,7 @@ export function UsedAccessValidityHeader(props: Props) {
           style={styles.label}
           type="body__secondary"
           accessibilityLabel={
-            deviceInspectionStatus !== 'inspectable'
+            !isInspectable
               ? usedAccessValidityText +
                 ', ' +
                 t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)

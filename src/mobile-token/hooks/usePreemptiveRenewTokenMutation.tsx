@@ -4,12 +4,10 @@ import Bugsnag from '@bugsnag/react-native';
 import {v4 as uuid} from 'uuid';
 import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
 import {LIST_REMOTE_TOKENS_QUERY_KEY} from '@atb/mobile-token/hooks/useListRemoteTokensQuery';
-import {Dispatch} from 'react';
-import {TokenReducerAction} from '@atb/mobile-token/tokenReducer';
+import {LOAD_NATIVE_TOKEN_QUERY_KEY} from '@atb/mobile-token/hooks/use-load-native-token-query';
+import {MOBILE_TOKEN_QUERY_KEY} from '@atb/mobile-token/utils';
 
-export const usePreemptiveRenewTokenMutation = (
-  dispatch: Dispatch<TokenReducerAction>,
-) => {
+export const usePreemptiveRenewTokenMutation = (userId?: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (
@@ -35,8 +33,14 @@ export const usePreemptiveRenewTokenMutation = (
     },
     onSuccess: (renewedToken) => {
       if (renewedToken) {
-        queryClient.invalidateQueries([LIST_REMOTE_TOKENS_QUERY_KEY]);
-        dispatch({type: 'SUCCESS', nativeToken: renewedToken});
+        queryClient.invalidateQueries([
+          MOBILE_TOKEN_QUERY_KEY,
+          LIST_REMOTE_TOKENS_QUERY_KEY,
+        ]);
+        queryClient.setQueryData(
+          [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
+          renewedToken,
+        );
       }
     },
   });

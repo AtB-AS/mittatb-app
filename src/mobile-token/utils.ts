@@ -1,6 +1,8 @@
 import {RemoteToken} from './types';
 import {TokenAction} from '@entur-private/abt-mobile-client-sdk';
 
+export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
+
 export const isInspectable = (remoteToken: RemoteToken) =>
   remoteToken.allowedActions.includes(
     TokenAction[TokenAction.TOKEN_ACTION_TICKET_INSPECTION],

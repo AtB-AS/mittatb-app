@@ -47,7 +47,7 @@ export const FareContractView: React.FC<Props> = ({
   testID,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthState();
-  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContextState();
 
   const {t} = useTranslation();
 
@@ -162,8 +162,7 @@ export const FareContractView: React.FC<Props> = ({
       {!hideDetails && (
         <LinkSectionItem
           text={t(
-            validityStatus === 'valid' &&
-              deviceInspectionStatus === 'inspectable'
+            validityStatus === 'valid' && isInspectable
               ? FareContractTexts.detailsLink.valid
               : FareContractTexts.detailsLink.notValid,
           )}

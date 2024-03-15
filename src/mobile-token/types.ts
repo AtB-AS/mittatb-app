@@ -94,21 +94,9 @@ export type Token = RemoteToken & {
 };
 
 export type MobileTokenStatus =
-  | 'none'
   | 'loading'
-  | 'timeout'
-  | 'error'
-  | 'success';
-
-export type DeviceInspectionStatus =
-  | 'loading'
-  | 'inspectable'
-  | 'not-inspectable';
-
-export type BarcodeStatus =
-  | 'loading'
-  | 'static'
+  | 'success-and-inspectable'
+  | 'success-not-inspectable'
   | 'staticQr'
-  | 'mobiletoken'
-  | 'other'
-  | 'error';
+  | 'error'
+  | 'fallback';

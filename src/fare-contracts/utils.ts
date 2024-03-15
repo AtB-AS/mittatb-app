@@ -109,16 +109,16 @@ export const mapToUserProfilesWithCount = (
 
 export const useNonInspectableTokenWarning = () => {
   const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
-  switch (barcodeStatus) {
-    case 'mobiletoken':
-    case 'static':
+  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  switch (mobileTokenStatus) {
+    case 'success-and-inspectable':
+    case 'fallback':
     case 'staticQr':
     case 'loading':
       return undefined;
     case 'error':
       return t(FareContractTexts.warning.errorWithToken);
-    case 'other':
+    case 'success-not-inspectable':
       const inspectableToken = tokens.find((t) => t.isInspectable);
       return inspectableToken?.type === 'travel-card'
         ? t(FareContractTexts.warning.travelCardAsToken)
@@ -133,16 +133,16 @@ export const useNonInspectableTokenWarning = () => {
 
 export const useOtherDeviceIsInspectableWarning = () => {
   const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
-  switch (barcodeStatus) {
-    case 'mobiletoken':
-    case 'static':
+  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  switch (mobileTokenStatus) {
+    case 'success-and-inspectable':
+    case 'fallback':
     case 'staticQr':
     case 'loading':
       return undefined;
     case 'error':
       return t(FareContractTexts.warning.errorWithToken);
-    case 'other':
+    case 'success-not-inspectable':
       const inspectableToken = tokens.find((t) => t.isInspectable);
       const deviceName =
         inspectableToken?.name || t(FareContractTexts.warning.unnamedDevice);

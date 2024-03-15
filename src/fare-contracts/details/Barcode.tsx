@@ -26,20 +26,20 @@ type Props = {
 };
 
 export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
-  const {barcodeStatus} = useMobileTokenContextState();
+  const {mobileTokenStatus} = useMobileTokenContextState();
   useScreenBrightnessIncrease();
   if (validityStatus !== 'valid') return null;
 
-  switch (barcodeStatus) {
+  switch (mobileTokenStatus) {
     case 'loading':
       return <LoadingBarcode />;
-    case 'static':
+    case 'fallback':
       return <StaticAztec fc={fc} />;
     case 'staticQr':
       return <StaticQrCode fc={fc} />;
-    case 'mobiletoken':
+    case 'success-and-inspectable':
       return <MobileTokenAztec fc={fc} />;
-    case 'other':
+    case 'success-not-inspectable':
       return <DeviceNotInspectable />;
     case 'error':
       return <BarcodeError />;
