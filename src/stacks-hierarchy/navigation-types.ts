@@ -68,7 +68,7 @@ export type Root_LoginRequiredForFareProductScreenParams = {
 };
 
 export type Root_ActiveTokenOnPhoneRequiredForFareProductScreenParams = {
-  nextScreen?:
+  nextScreen:
     | NextScreenParams<'Root_TabNavigatorStack'>
     | NextScreenParams<'Root_PurchaseOverviewScreen'>;
 };
