@@ -16,6 +16,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
 import {TransitionPresets} from '@react-navigation/stack';
+import {FullScreenFooter} from '@atb/components/screen-footer';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -77,7 +78,6 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           </ThemeText>
         </View>
         <View style={styles.fareContract}>
-          <View style={styles.overlay} />
           {firstActiveFc && (
             <SimpleFareContract
               fareContract={firstActiveFc}
@@ -86,6 +86,8 @@ export const Root_LoginActiveFareContractWarningScreen = ({
             />
           )}
         </View>
+      </ScrollView>
+      <FullScreenFooter>
         <Button
           interactiveColor="interactive_destructive"
           onPress={onNext}
@@ -97,7 +99,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
           text={t(LoginTexts.activeFareContractPrompt.cancelButton)}
           interactiveColor="interactive_0"
         />
-      </ScrollView>
+      </FullScreenFooter>
     </View>
   );
 };
@@ -118,24 +120,12 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginVertical: theme.spacings.medium,
     textAlign: 'center',
   },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: theme.static.background.background_0.text,
-    opacity: 0.45,
-    zIndex: 1,
-    borderRadius: theme.border.radius.regular,
-  },
   fareContract: {
     marginTop: theme.spacings.large,
     marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
+    opacity: 0.6,
   },
   logInAndDeleteButton: {
-    marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.medium,
   },
 }));

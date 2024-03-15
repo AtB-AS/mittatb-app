@@ -6,7 +6,7 @@ import {
 import React from 'react';
 import {UnknownFareContract} from './UnknownFareContract';
 import {FareContractView} from '@atb/fare-contracts/FareContractView';
-import {StyleProp, ViewStyle} from 'react-native';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   fareContract: FareContract;
@@ -16,7 +16,6 @@ type Props = {
   onPressDetails?: () => void;
   hasActiveTravelCard?: boolean;
   testID?: string;
-  style?: StyleProp<ViewStyle>;
 };
 
 export const SimpleFareContract: React.FC<Props> = ({
@@ -25,9 +24,9 @@ export const SimpleFareContract: React.FC<Props> = ({
   isStatic,
   onPressDetails,
   testID,
-  style,
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
+  const styles = useStyles();
 
   if (
     isPreActivatedTravelRight(firstTravelRight) ||
@@ -40,10 +39,16 @@ export const SimpleFareContract: React.FC<Props> = ({
         isStatic={isStatic}
         onPressDetails={onPressDetails}
         testID={testID}
-        style={style}
+        style={styles.fareContract}
       />
     );
   } else {
     return <UnknownFareContract fc={fc} />;
   }
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  fareContract: {
+    paddingBottom: theme.spacings.large,
+  },
+}));

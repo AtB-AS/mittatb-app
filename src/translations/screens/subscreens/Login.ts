@@ -53,7 +53,7 @@ const LoginTexts = {
     title: _(
       'Billetten din slettes ved innlogging',
       'Your ticket will be deleted upon logging in',
-      'Billetten din slettes ved innlogging',
+      'Billetten din slettast ved innlogging',
     ),
     body: _(
       'Billetten din kan ikke overføres til en profil, fordi den er kjøpt anonymt. Vent med å logge inn til billetten utløper, for å unngå at den blir slettet. Slettede billetter **refunderes ikke.**',

@@ -196,7 +196,6 @@ export const Profile_FareContractsScreen = () => {
             fareContract={fc}
             now={Date.now()}
             onPressDetails={() => {}}
-            style={styles.fareContract}
           />
         ))}
         <ThemeText type="heading--jumbo">Fare contract details</ThemeText>

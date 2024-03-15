@@ -5,7 +5,6 @@ import {TicketingTexts, useTranslation} from '@atb/translations';
 import {SimpleFareContract} from '@atb/fare-contracts';
 import {ErrorBoundary} from '@atb/error-boundary';
 import {TicketHistoryMode} from '@atb/ticket-history';
-import {StyleSheet} from '@atb/theme';
 
 export function FareContractOrReservation({
   fcOrReservation,
@@ -22,7 +21,6 @@ export function FareContractOrReservation({
 }) {
   const {t} = useTranslation();
   const hasActiveTravelCard = false;
-  const styles = useStyles();
 
   if ('transactionId' in fcOrReservation) {
     return (
@@ -46,15 +44,8 @@ export function FareContractOrReservation({
           sentToOthers={mode === 'sent'}
           onPressDetails={onPressFareContract}
           testID={'ticket' + index}
-          style={styles.fareContract}
         />
       </ErrorBoundary>
     );
   }
 }
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  fareContract: {
-    paddingBottom: theme.spacings.large,
-  },
-}));
