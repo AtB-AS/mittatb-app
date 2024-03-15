@@ -125,7 +125,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     left: 0,
     right: 0,
     backgroundColor: theme.static.background.background_0.text,
-    opacity: 0.4,
+    opacity: 0.45,
     zIndex: 1,
     borderRadius: theme.border.radius.regular,
   },
