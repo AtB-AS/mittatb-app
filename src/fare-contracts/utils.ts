@@ -265,11 +265,15 @@ export function getFareContractInfo(
   const validTo = lastUsedAccess?.validTo
     ? lastUsedAccess.validTo
     : fareContractValidTo;
+
   const validityStatus = lastUsedAccess
-    ? lastUsedAccess.status
+    ? isSent
+      ? 'sent'
+      : lastUsedAccess.status
     : fareContractValidityStatus;
 
-  const carnetAccessStatus = lastUsedAccess?.status;
+  const carnetAccessStatus = isSent ? 'inactive' : lastUsedAccess?.status;
+
   const maximumNumberOfAccesses =
     carnetTravelRightAccesses?.maximumNumberOfAccesses;
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
