@@ -60,6 +60,11 @@ const LoginTexts = {
       'Your ticket cannot be transferred to a profile because it was purchased anonymously. Please wait until it expires before you log in, to avoid deletion. Deleted tickets are **non-refundable.**',
       'Billetten din kan ikkje overførast til ein profil, sidan den vart kjøpt anonymt. Vent med å logge inn til billetten går ut, for å unngå at den blir sletta. Sletta billettar blir **ikkje refunderte.**',
     ),
+    ticketReservationBody: _(
+      'Billetten din er under behandling og kan ikke overføres til en profil, fordi den er kjøpt anonymt. Vent med å logge inn til billetten er behandlet og utløpt, for å unngå at den blir slettet. Slettede billetter **refunderes ikke.**',
+      'Your ticket is being processed and cannot be transferred to a profile because it was purchased anonymously. Please wait until processing is finished and it expires before you log in, to avoid deletion. Deleted tickets are **non-refundable.**',
+      'Billetten din er under behandling og kan ikkje overførast til ein profil, sidan den vart kjøpt anonymt. Vent med å logge inn til billetten er behandla og går ut, for å unngå at den blir sletta. Sletta billettar blir **ikkje refunderte.**',
+    ),
     logInAndDeleteButton: _(
       'Logg inn og slett',
       'Log in and delete',

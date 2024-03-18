@@ -11,12 +11,12 @@ import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
-import {SimpleFareContract} from '@atb/fare-contracts';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
 import {TransitionPresets} from '@react-navigation/stack';
 import {FullScreenFooter} from '@atb/components/screen-footer';
+import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -29,14 +29,13 @@ export const Root_LoginActiveFareContractWarningScreen = ({
   const {t} = useTranslation();
   const styles = useStyles();
   const focusRef = useFocusOnLoad();
-  const {fareContracts} = useTicketingState();
+  const {fareContracts, reservations} = useTicketingState();
   const {serverNow} = useTimeContextState();
   const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
     fareContracts,
     serverNow,
   );
   const firstActiveFc = activeFareContracts[0];
-
   const onNext = async () => {
     if (enable_vipps_login) {
       navigation.navigate('Root_LoginOptionsScreen', {
@@ -74,15 +73,19 @@ export const Root_LoginActiveFareContractWarningScreen = ({
             color={themeColor}
             isMarkdown={true}
           >
-            {t(LoginTexts.activeFareContractPrompt.body)}
+            {reservations.length > 0 && !firstActiveFc
+              ? t(LoginTexts.activeFareContractPrompt.ticketReservationBody)
+              : t(LoginTexts.activeFareContractPrompt.body)}
           </ThemeText>
         </View>
         <View style={styles.fareContract}>
-          {firstActiveFc && (
-            <SimpleFareContract
-              fareContract={firstActiveFc}
-              now={serverNow}
+          {(firstActiveFc || reservations.length > 0) && (
+            <FareContractOrReservation
+              fcOrReservation={firstActiveFc || reservations[0]}
               isStatic={true}
+              onPressFareContract={() => {}}
+              now={serverNow}
+              index={0}
             />
           )}
         </View>
@@ -124,6 +127,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     marginTop: theme.spacings.large,
     marginHorizontal: theme.spacings.medium,
     opacity: 0.6,
+    pointerEvents: 'none',
   },
   logInAndDeleteButton: {
     marginBottom: theme.spacings.medium,
