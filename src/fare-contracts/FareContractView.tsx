@@ -103,6 +103,7 @@ export const FareContractView: React.FC<Props> = ({
   return (
     <Section withBottomPadding testID={testID}>
       <GenericSectionItem>
+        {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
         {isCarnetFareContract &&
         fareContractValidityStatus === 'valid' &&
         carnetAccessStatus ? (
