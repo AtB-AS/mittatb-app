@@ -43,7 +43,7 @@ export const ValidityLine = (props: Props): ReactElement => {
         />
       );
     case 'valid':
-      const {now, validFrom, validTo, fareProductType, animate} = props;
+      const {now, validFrom, validTo, fareProductType, animate = true} = props;
       const validityPercent = animate
         ? getValidityPercent(now, validFrom, validTo)
         : 100;
