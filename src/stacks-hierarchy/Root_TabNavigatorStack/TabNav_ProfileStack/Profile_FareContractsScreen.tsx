@@ -224,9 +224,6 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
   content: {
     padding: theme.spacings.medium,
   },
-  fareContract: {
-    paddingBottom: theme.spacings.medium,
-  },
 }));
 
 /*

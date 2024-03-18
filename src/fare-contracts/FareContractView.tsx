@@ -30,15 +30,12 @@ import {
   FareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
-import {ViewStyle} from 'react-native';
-import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 type Props = {
   now: number;
   fareContract: FareContract;
   isStatic?: boolean;
   onPressDetails?: () => void;
-  style?: StyleProp<ViewStyle>;
   testID?: string;
 };
 
@@ -48,7 +45,6 @@ export const FareContractView: React.FC<Props> = ({
   isStatic,
   onPressDetails,
   testID,
-  style,
 }) => {
   const {abtCustomerId: currentUserId} = useAuthState();
   const {deviceInspectionStatus} = useMobileTokenContextState();
@@ -105,7 +101,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   return (
-    <Section style={style} testID={testID}>
+    <Section withBottomPadding testID={testID}>
       <GenericSectionItem>
         {isCarnetFareContract &&
         fareContractValidityStatus === 'valid' &&

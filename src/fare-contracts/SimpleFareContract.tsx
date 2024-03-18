@@ -6,7 +6,6 @@ import {
 import React from 'react';
 import {UnknownFareContract} from './UnknownFareContract';
 import {FareContractView} from '@atb/fare-contracts/FareContractView';
-import {StyleSheet} from '@atb/theme';
 
 type Props = {
   fareContract: FareContract;
@@ -26,7 +25,6 @@ export const SimpleFareContract: React.FC<Props> = ({
   testID,
 }) => {
   const firstTravelRight = fc.travelRights?.[0];
-  const styles = useStyles();
 
   if (
     isPreActivatedTravelRight(firstTravelRight) ||
@@ -39,16 +37,9 @@ export const SimpleFareContract: React.FC<Props> = ({
         isStatic={isStatic}
         onPressDetails={onPressDetails}
         testID={testID}
-        style={styles.fareContract}
       />
     );
   } else {
     return <UnknownFareContract fc={fc} />;
   }
 };
-
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  fareContract: {
-    paddingBottom: theme.spacings.large,
-  },
-}));
