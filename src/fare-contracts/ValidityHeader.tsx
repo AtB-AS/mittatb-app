@@ -29,7 +29,7 @@ export const ValidityHeader: React.FC<{
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (c) => c.type === fareProductType,
   );
-  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContextState();
 
   const validityTime: string = validityTimeText(
     status,
@@ -58,7 +58,7 @@ export const ValidityHeader: React.FC<{
           style={styles.label}
           type="body__secondary"
           accessibilityLabel={
-            deviceInspectionStatus !== 'inspectable'
+            !isInspectable
               ? validityTime +
                 ', ' +
                 t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)

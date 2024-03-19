@@ -3,71 +3,56 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useReducer,
+  useState,
 } from 'react';
 import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
-  BarcodeStatus,
-  DeviceInspectionStatus,
   MobileTokenStatus,
   RemoteToken,
   Token,
   TokenLimitResponse,
 } from './types';
 
-import {
-  TokenEncodingInvalidRemoteTokenStateError,
-  TokenMustBeRenewedRemoteTokenStateError,
-  TokenMustBeReplacedRemoteTokenStateError,
-  TokenNotFoundRemoteTokenStateError,
-} from '@entur-private/abt-token-server-javascript-interface';
 import {v4 as uuid} from 'uuid';
-import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {mobileTokenClient} from './mobileTokenClient';
 import {
   ActivatedToken,
   TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
-import {isInspectable} from './utils';
+import {isInspectable, MOBILE_TOKEN_QUERY_KEY} from './utils';
 
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
-import {updateMetadata} from '@atb/chat/metadata';
 import {tokenService} from './tokenService';
-import {tokenReducer} from '@atb/mobile-token/tokenReducer';
-import {useQueryClient} from '@tanstack/react-query';
+import {QueryStatus, useQueryClient} from '@tanstack/react-query';
 import {useInterval} from '@atb/utils/use-interval';
 import {
   LIST_REMOTE_TOKENS_QUERY_KEY,
   useListRemoteTokensQuery,
 } from '@atb/mobile-token/hooks/useListRemoteTokensQuery';
 import {usePreemptiveRenewTokenMutation} from '@atb/mobile-token/hooks/usePreemptiveRenewTokenMutation';
+import {
+  LOAD_NATIVE_TOKEN_QUERY_KEY,
+  useLoadNativeTokenQuery,
+} from '@atb/mobile-token/hooks/use-load-native-token-query';
 
 const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
+
+let cancelTimeoutHandler: (() => void) | undefined = undefined;
 
 type MobileTokenContextState = {
   tokens: Token[];
   /**
-   * The technical status of the mobile token process. Note that 'success' means
-   * that a token was created for this mobile, but not necessarily that it is
-   * inspectable.
+   * The status of the whole mobile token process.
    */
   mobileTokenStatus: MobileTokenStatus;
   /**
-   * A status which represents which type of barcode to show. This also takes into
-   * account the fallback settings for error and loading.
+   * Will return true if the phone is inspectable, whether it is with mobile token
+   * or static barcode.
    */
-  barcodeStatus: BarcodeStatus;
-  /**
-   * A simplified status representing whether this device is inspectable or not.
-   * The status 'inspectable' includes both working mobile token and static
-   * barcode because of fallbacks. The status 'not-inspectable' includes both
-   * situations where the current mobile token is not inspectable, or an error
-   * has occurred (without fallback).
-   */
-  deviceInspectionStatus: DeviceInspectionStatus;
+  isInspectable: boolean;
   retry: () => void;
   wipeToken: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
@@ -77,6 +62,8 @@ type MobileTokenContextState = {
    * debug screen
    */
   debug: {
+    nativeTokenStatus: QueryStatus;
+    remoteTokensStatus: QueryStatus;
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
@@ -89,32 +76,36 @@ const MobileTokenContext = createContext<MobileTokenContextState | undefined>(
 
 export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {userId, authStatus} = useAuthState();
-  const [state, dispatch] = useReducer(tokenReducer, {status: 'none'});
   const queryClient = useQueryClient();
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
 
+  const [isTimeout, setTimout] = useState(false);
+
   const enabled =
     mobileTokenEnabled && !!userId && authStatus === 'authenticated';
-  const {data: remoteTokens} = useListRemoteTokensQuery(
-    enabled,
-    state.nativeToken,
-  );
-  const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(dispatch);
+
+  const {data: nativeToken, status: nativeTokenStatus} =
+    useLoadNativeTokenQuery(enabled, userId);
+
+  const {data: remoteTokens, status: remoteTokensStatus} =
+    useListRemoteTokensQuery(enabled, nativeToken);
+  const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
   useEffect(() => {
-    queryClient.invalidateQueries([LIST_REMOTE_TOKENS_QUERY_KEY]);
-  }, [queryClient, state.nativeToken?.tokenId]);
+    queryClient.invalidateQueries([
+      MOBILE_TOKEN_QUERY_KEY,
+      LIST_REMOTE_TOKENS_QUERY_KEY,
+    ]);
+  }, [queryClient, nativeToken?.tokenId]);
 
-  const load = useCallback(async () => {
-    if (enabled) {
-      const traceId = uuid();
-
-      const cancelTimeoutHandler = timeoutHandler(() => {
+  useEffect(() => {
+    if (enabled && nativeTokenStatus === 'loading') {
+      cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        dispatch({type: 'TIMEOUT'});
+        setTimout(true);
 
         Bugsnag.notify(
           new Error(
@@ -122,106 +113,83 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           ),
           (event) => {
             event.addMetadata('token', {
-              userId,
-              traceId,
               description: 'Native and remote tokens took too long to load.',
             });
           },
         );
       }, token_timeout_in_seconds);
-
-      dispatch({type: 'LOADING'});
-      let nativeToken: ActivatedToken;
-
-      // This still happens even on timeout, but we mark the state as timedout.
-      // If it works in the background after a while the timeout will be reversed.
-      try {
-        // Retry loading native token and remote tokens twice for improved stability
-        try {
-          nativeToken = await loadNativeToken(userId, traceId);
-        } catch (_) {
-          nativeToken = await loadNativeToken(userId, traceId);
-        }
-
-        updateMetadata({
-          'AtB-Mobile-Token-Id': nativeToken.tokenId,
-          'AtB-Mobile-Token-Status': 'success',
-          'AtB-Mobile-Token-Error-Correlation-Id': undefined,
-        });
-
-        dispatch({type: 'SUCCESS', nativeToken});
-      } catch (err: any) {
-        dispatch({type: 'ERROR'});
-        /*
-         Errors that needs a certain action should already be handled. Just log
-         to Bugsnag here.
-         */
-        logError(err, traceId, userId);
-      } finally {
-        // We've finished with remote tokens. Cancel timeout notification.
-        cancelTimeoutHandler();
-      }
+    } else {
+      // We've finished with remote tokens. Cancel timeout notification.
+      cancelTimeoutHandler?.();
     }
-  }, [enabled, userId, token_timeout_in_seconds]);
-
-  useEffect(() => {
-    load();
-  }, [load]);
+  }, [enabled, nativeTokenStatus, token_timeout_in_seconds]);
 
   useInterval(
-    () => checkRenewMutate(state.nativeToken),
-    [checkRenewMutate, state.nativeToken],
+    () => checkRenewMutate(nativeToken),
+    [checkRenewMutate, nativeToken],
     SIX_HOURS_MS,
     false,
     true,
   );
 
-  const barcodeStatus = useBarcodeStatus(
-    state.status,
-    state.nativeToken,
+  const mobileTokenStatus = useMobileTokenStatus(
+    nativeTokenStatus,
+    remoteTokensStatus,
+    nativeToken,
     remoteTokens,
+    isTimeout,
   );
-  const deviceInspectionStatus = getDeviceInspectionStatus(barcodeStatus);
+
+  const isInspectable = getIsInspectableFromStatus(mobileTokenStatus);
 
   return (
     <MobileTokenContext.Provider
       value={{
         tokens: remoteTokens || [],
-        mobileTokenStatus: state.status,
-        deviceInspectionStatus,
-        barcodeStatus,
-        retry: () => {
+        mobileTokenStatus,
+        isInspectable,
+        retry: useCallback(() => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
-          load();
-        },
+          queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
+        }, [queryClient]),
         wipeToken: useCallback(
           () =>
-            wipeToken(state.nativeToken, uuid()).then(() =>
-              dispatch({type: 'CLEAR_TOKENS'}),
+            wipeToken(nativeToken, uuid()).then(() =>
+              queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
             ),
-          [state.nativeToken],
+          [queryClient, nativeToken],
         ),
         getTokenToggleDetails,
-        nativeToken: state.nativeToken,
+        nativeToken,
         debug: {
+          nativeTokenStatus,
+          remoteTokensStatus,
           validateToken: () =>
             mobileTokenClient
-              .encode(state.nativeToken!, [
+              .encode(nativeToken!, [
                 TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
               ])
               .then((signed) =>
-                tokenService.validate(state.nativeToken!, signed, uuid()),
+                tokenService.validate(nativeToken!, signed, uuid()),
               ),
           removeRemoteToken: async (tokenId) => {
             const removed = await tokenService.removeToken(tokenId, uuid());
             if (removed) {
               queryClient.setQueryData(
-                [LIST_REMOTE_TOKENS_QUERY_KEY],
+                [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY],
                 remoteTokens?.filter(({id}) => id !== tokenId),
               );
             }
           },
-          renewToken: () => mobileTokenClient.renew(state.nativeToken!, uuid()),
+          renewToken: () =>
+            mobileTokenClient
+              .renew(nativeToken!, uuid())
+              .then((renewedToken) => {
+                queryClient.setQueryData(
+                  [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
+                  renewedToken,
+                );
+              }),
         },
       }}
     >
@@ -265,27 +233,13 @@ function timeoutHandler<T>(fn: () => T, timeoutInSeconds: number): () => void {
   };
 }
 
-const getDeviceInspectionStatus = (
-  barcodeStatus: BarcodeStatus,
-): DeviceInspectionStatus => {
-  switch (barcodeStatus) {
-    case 'loading':
-      return 'loading';
-    case 'staticQr':
-    case 'static':
-    case 'mobiletoken':
-      return 'inspectable';
-    case 'error':
-    case 'other':
-      return 'not-inspectable';
-  }
-};
-
-const useBarcodeStatus = (
-  status: MobileTokenStatus,
-  nativeToken?: ActivatedToken,
-  remoteTokens?: RemoteToken[],
-): BarcodeStatus => {
+const useMobileTokenStatus = (
+  loadNativeTokenStatus: QueryStatus,
+  remoteTokensStatus: QueryStatus,
+  nativeToken: ActivatedToken | undefined,
+  remoteTokens: RemoteToken[] | undefined,
+  isTimeout: boolean,
+): MobileTokenStatus => {
   const {
     enable_token_fallback,
     enable_token_fallback_on_timeout,
@@ -294,19 +248,30 @@ const useBarcodeStatus = (
 
   if (use_trygg_overgang_qr_code) return 'staticQr';
 
-  switch (status) {
-    case 'none': // Handle as loading, as 'none' should only be temporary before starting the process
+  // Treat iOS emulator as fallback
+  if (Platform.OS === 'ios' && DeviceInfo.isEmulatorSync()) {
+    return 'fallback';
+  }
+
+  if (isTimeout)
+    return enable_token_fallback_on_timeout ? 'fallback' : 'loading';
+
+  switch (loadNativeTokenStatus) {
     case 'loading':
       return 'loading';
-    case 'timeout':
-      return enable_token_fallback_on_timeout ? 'static' : 'loading';
     case 'error':
-      return enable_token_fallback ? 'static' : 'error';
+      return enable_token_fallback ? 'fallback' : 'error';
     case 'success':
-      if (!remoteTokens) return 'loading';
-      return deviceInspectable(nativeToken, remoteTokens)
-        ? 'mobiletoken'
-        : 'other';
+      switch (remoteTokensStatus) {
+        case 'loading':
+          return 'loading';
+        case 'error':
+          return enable_token_fallback ? 'fallback' : 'error';
+        case 'success':
+          return deviceInspectable(nativeToken, remoteTokens)
+            ? 'success-and-inspectable'
+            : 'success-not-inspectable';
+      }
   }
 };
 
@@ -326,82 +291,6 @@ const deviceInspectable = (
   return isInspectable(matchingRemoteToken);
 };
 
-/**
- * Load/create native token and handle the situations that can arise.
- *
- * - First check if there has been a user change. If there has, then a new
- *   token should always be created (skip to last step).
- * - If no user change retrieve the token from the client-sdk. If necessary,
- *   the token will be renewed while getting it.
- * - If a token already exists it will be validated, and any exceptions thrown
- *   will be handled accordingly.
- * - A new token will be created if necessary.
- *
- * Note: This useEffect is large and complex. I tried simplifying it, but I
- * found that breaking it up into smaller parts made it even more hard to
- * follow what is happening.
- */
-const loadNativeToken = async (userId: string, traceId: string) => {
-  Bugsnag.leaveBreadcrumb(`Loading mobile token state for user ${userId}`);
-
-  /*
-  Check if there has been a user change.
-   */
-  const lastUserId = await storage.get('@ATB_last_mobile_token_user');
-  const noUserChange = lastUserId === userId;
-
-  let token: ActivatedToken | undefined;
-  if (noUserChange) {
-    /*
-    Retrieve the token from the native layer
-     */
-    token = await mobileTokenClient.get(traceId);
-
-    if (token) {
-      /*
-      If native token exists then validate it. The validation request will
-      throw an error if validation fails, and these errors will be handled
-      as best possible.
-       */
-      try {
-        Bugsnag.leaveBreadcrumb(`Validating token ${token.getTokenId()}`);
-        const signedToken = await mobileTokenClient.encode(token, [
-          TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
-        ]);
-        await tokenService.validate(token, signedToken, traceId);
-      } catch (err) {
-        if (
-          err instanceof TokenMustBeReplacedRemoteTokenStateError ||
-          err instanceof TokenNotFoundRemoteTokenStateError
-        ) {
-          token = undefined;
-        } else if (err instanceof TokenEncodingInvalidRemoteTokenStateError) {
-          await wipeToken(token, traceId);
-          token = undefined;
-        } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
-          token = await mobileTokenClient.renew(token, traceId);
-        } else {
-          throw err;
-        }
-      }
-    }
-  }
-
-  if (!token) {
-    /*
-    If token is undefined, then create a new one. We can end up here if:
-    - No token previously created on this device.
-    - There has been a user change and the existing token has been wiped.
-    - There was a validation error which signaled that a new token should
-      be created.
-     */
-    Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
-    token = await mobileTokenClient.create(traceId);
-  }
-  await storage.set('@ATB_last_mobile_token_user', userId!);
-  return token;
-};
-
 const wipeToken = async (
   token: ActivatedToken | undefined,
   traceId: string,
@@ -412,25 +301,25 @@ const wipeToken = async (
   await mobileTokenClient.clear();
 };
 
+export const getIsInspectableFromStatus = (
+  mobileTokenStatus: MobileTokenStatus,
+): boolean => {
+  switch (mobileTokenStatus) {
+    case 'success-and-inspectable':
+    case 'fallback':
+    case 'staticQr':
+      return true;
+    case 'error':
+    case 'success-not-inspectable':
+    case 'loading':
+      return false;
+  }
+};
+
 const getTokenToggleDetails = async () => {
   try {
     return await tokenService.getTokenToggleDetails();
   } catch (err) {
     return undefined;
   }
-};
-
-const logError = (err: Error, traceId: string, userId?: string) => {
-  updateMetadata({
-    'AtB-Mobile-Token-Id': undefined,
-    'AtB-Mobile-Token-Status': 'error',
-    'AtB-Mobile-Token-Error-Correlation-Id': traceId,
-  });
-  Bugsnag.notify(err, (event) => {
-    event.addMetadata('token', {
-      userId,
-      traceId,
-      description: 'Error loading native and remote tokens',
-    });
-  });
 };

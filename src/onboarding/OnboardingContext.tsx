@@ -301,7 +301,7 @@ const useShouldShowArgs = (
     'userCreation',
   );
 
-  const {mobileTokenStatus, deviceInspectionStatus} =
+  const {mobileTokenStatus} =
     useMobileTokenContextState();
 
   return useMemo(
@@ -316,7 +316,6 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
-      deviceInspectionStatus,
     }),
     [
       hasFareContractWithActivatedNotification,
@@ -329,7 +328,6 @@ const useShouldShowArgs = (
       travelCardDisabled,
       userCreationIsOnboarded,
       mobileTokenStatus,
-      deviceInspectionStatus,
     ],
   );
 };

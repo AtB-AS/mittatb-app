@@ -91,7 +91,7 @@ export const DetailsContent: React.FC<Props> = ({
 
   const firstTravelRight = travelRights[0];
   const {tariffZones, userProfiles} = useFirestoreConfiguration();
-  const {deviceInspectionStatus, barcodeStatus} = useMobileTokenContextState();
+  const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
   const {benefits} = useOperatorBenefitsForFareProduct(
     preassignedFareProduct?.id,
   );
@@ -170,11 +170,11 @@ export const DetailsContent: React.FC<Props> = ({
             sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
           />
         </GenericSectionItem>
-        {deviceInspectionStatus === 'inspectable' &&
+        {isInspectable &&
           validityStatus === 'valid' && (
             <GenericSectionItem
               style={
-                barcodeStatus === 'staticQr'
+                mobileTokenStatus === 'staticQr'
                   ? styles.enlargedWhiteBarcodePaddingView
                   : undefined
               }
