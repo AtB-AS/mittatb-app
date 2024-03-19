@@ -66,7 +66,8 @@ export function TravellerSelection({
   >(selectableUserProfiles);
 
   const canSelectUserProfile = !(
-    selectionMode === `single` && selectableUserProfiles.length <= 1
+    (selectionMode === `single` || selectionMode === 'none') &&
+    selectableUserProfiles.length <= 1
   );
 
   useEffect(() => {
@@ -92,13 +93,13 @@ export function TravellerSelection({
 
   useFocusEffect(
     useCallback(() => {
-      if (isOnBehalfOfEnabled && selectionMode !== 'none') {
+      if (isOnBehalfOfEnabled && canSelectUserProfile) {
         addPopOver({
           oneTimeKey: 'on-behalf-of-new-feature-introduction',
           target: onBehalfOfIndicatorRef,
         });
       }
-    }, [isOnBehalfOfEnabled, addPopOver, selectionMode]),
+    }, [isOnBehalfOfEnabled, addPopOver, canSelectUserProfile]),
   );
 
   if (selectionMode === 'none') {
