@@ -12,12 +12,14 @@ export function FareContractOrReservation({
   now,
   mode,
   index,
+  isStatic,
 }: {
   fcOrReservation: FareContract | Reservation;
   onPressFareContract: () => void;
   now: number;
   mode?: TicketHistoryMode;
   index: number;
+  isStatic?: boolean;
 }) {
   const {t} = useTranslation();
   const hasActiveTravelCard = false;
@@ -44,6 +46,7 @@ export function FareContractOrReservation({
           sentToOthers={mode === 'sent'}
           onPressDetails={onPressFareContract}
           testID={'ticket' + index}
+          isStatic={isStatic}
         />
       </ErrorBoundary>
     );

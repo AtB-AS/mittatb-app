@@ -2,7 +2,6 @@ import {
   findReferenceDataById,
   useFirestoreConfiguration,
 } from '@atb/configuration';
-import {FareContract} from '../ticketing/types';
 import {
   getFareContractInfo,
   mapToUserProfilesWithCount,
@@ -28,13 +27,14 @@ import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
+  FareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 
 type Props = {
   now: number;
   fareContract: FareContract;
-  hideDetails?: boolean;
+  isStatic?: boolean;
   onPressDetails?: () => void;
   testID?: string;
 };
@@ -42,7 +42,7 @@ type Props = {
 export const FareContractView: React.FC<Props> = ({
   now,
   fareContract,
-  hideDetails,
+  isStatic,
   onPressDetails,
   testID,
 }) => {
@@ -103,6 +103,7 @@ export const FareContractView: React.FC<Props> = ({
   return (
     <Section withBottomPadding testID={testID}>
       <GenericSectionItem>
+        {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
         {isCarnetFareContract &&
         fareContractValidityStatus === 'valid' &&
         carnetAccessStatus ? (
@@ -127,6 +128,7 @@ export const FareContractView: React.FC<Props> = ({
           validFrom={validFrom}
           validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
+          animate={!isStatic}
         />
         <FareContractInfoHeader
           travelRight={firstTravelRight}
@@ -159,7 +161,7 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
-      {!hideDetails && (
+      {!isStatic && (
         <LinkSectionItem
           text={t(
             validityStatus === 'valid' && isInspectable
