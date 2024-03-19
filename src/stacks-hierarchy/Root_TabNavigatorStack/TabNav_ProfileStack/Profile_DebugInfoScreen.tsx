@@ -140,11 +140,16 @@ export const Profile_DebugInfoScreen = () => {
     tokens,
     retry,
     wipeToken,
-    deviceInspectionStatus,
     mobileTokenStatus,
-    barcodeStatus,
+    isInspectable,
     nativeToken,
-    debug: {validateToken, removeRemoteToken, renewToken},
+    debug: {
+      nativeTokenStatus,
+      remoteTokensStatus,
+      validateToken,
+      removeRemoteToken,
+      renewToken,
+    },
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
@@ -588,8 +593,9 @@ export const Profile_DebugInfoScreen = () => {
                   </View>
                 )}
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
-                <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
-                <ThemeText>{`Barcode status: ${barcodeStatus}`}</ThemeText>
+                <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
+                <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
+                <ThemeText>{`Remote tokens status: ${remoteTokensStatus}`}</ThemeText>
                 <ThemeText>{`Now: ${new Date(
                   serverNow,
                 ).toISOString()}`}</ThemeText>

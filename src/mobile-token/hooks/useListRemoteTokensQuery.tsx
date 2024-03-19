@@ -5,6 +5,7 @@ import {
   getTravelCardId,
   isInspectable,
   isTravelCardToken,
+  MOBILE_TOKEN_QUERY_KEY,
 } from '@atb/mobile-token/utils';
 import {Token} from '@atb/mobile-token/types';
 
@@ -17,7 +18,7 @@ export const useListRemoteTokensQuery = (
   nativeToken?: ActivatedToken,
 ) =>
   useQuery({
-    queryKey: [LIST_REMOTE_TOKENS_QUERY_KEY],
+    queryKey: [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY],
     queryFn: () => tokenService.listTokens(uuid()),
     enabled,
     select: (tokens) =>

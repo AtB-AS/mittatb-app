@@ -43,14 +43,14 @@ export const InspectionSymbol = ({
     fareProductTypeConfig?.transportModes[0].subMode,
   );
 
-  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
 
   const themeColor =
-    deviceInspectionStatus === 'inspectable'
+    isInspectable
       ? getTransportationColor(themeName, transportColor)
       : theme.static.status['warning'];
 
-  if (deviceInspectionStatus === 'loading') {
+  if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
   }
 
@@ -58,7 +58,7 @@ export const InspectionSymbol = ({
     <View
       style={[styles.symbolContainer, {borderColor: themeColor.background}]}
     >
-      {deviceInspectionStatus === 'inspectable' && !sentTicket ? (
+      {isInspectable && !sentTicket ? (
         <InspectableContent
           preassignedFareProduct={preassignedFareProduct}
           fromTariffZone={fromTariffZone}

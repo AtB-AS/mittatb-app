@@ -25,6 +25,7 @@ import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
+import {isUserProfileSelectable} from '../utils';
 import {getTravellerInfoByFareProductType} from './utils';
 
 type TravellerSelectionProps = {
@@ -66,8 +67,9 @@ export function TravellerSelection({
     UserProfileWithCount[]
   >(selectableUserProfiles);
 
-  const canSelectUserProfile = !(
-    selectionMode === `single` && selectableUserProfiles.length <= 1
+  const canSelectUserProfile = isUserProfileSelectable(
+    selectionMode,
+    selectableUserProfiles,
   );
 
   useEffect(() => {
@@ -93,13 +95,13 @@ export function TravellerSelection({
 
   useFocusEffect(
     useCallback(() => {
-      if (isOnBehalfOfEnabled && selectionMode !== 'none') {
+      if (isOnBehalfOfEnabled && canSelectUserProfile) {
         addPopOver({
           oneTimeKey: 'on-behalf-of-new-feature-introduction',
           target: onBehalfOfIndicatorRef,
         });
       }
-    }, [isOnBehalfOfEnabled, addPopOver, selectionMode]),
+    }, [isOnBehalfOfEnabled, addPopOver, canSelectUserProfile]),
   );
 
   if (selectionMode === 'none') {

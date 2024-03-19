@@ -46,7 +46,11 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
 
   if (mobileTokenStatus === 'loading') return <LoadingScreen />;
 
-  if (mobileTokenStatus !== 'success') return NoTokenView;
+  if (
+    mobileTokenStatus === 'error' ||
+    mobileTokenStatus === 'fallback'
+  )
+    return NoTokenView;
 
   const hasInspectableToken = tokens.some((token) => token.isInspectable);
   if (!hasInspectableToken) return NoTokenView;
