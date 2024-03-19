@@ -65,6 +65,8 @@ describe('Ticket', () => {
         await NavigationHelper.back();
         await AppHelper.pause();
         await NavigationHelper.back();
+        await AppHelper.pause();
+        await NavigationHelper.back();
       }
       // No offer
       else {
