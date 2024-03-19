@@ -15,6 +15,7 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 type TravellerSelectionSheetProps = {
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
+  fareProductOnBehalfOfEnabled: boolean;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
   onConfirmSelection: (
     chosenSelectableUserProfiles: UserProfileWithCount[],
@@ -25,6 +26,7 @@ type TravellerSelectionSheetProps = {
 export const TravellerSelectionSheet = ({
   selectionMode,
   fareProductType,
+  fareProductOnBehalfOfEnabled,
   selectableUserProfilesWithCountInit,
   onConfirmSelection,
   isOnBehalfOfToggle,
@@ -53,6 +55,7 @@ export const TravellerSelectionSheet = ({
         {selectionMode === 'multiple' ? (
           <MultipleTravellersSelection
             fareProductType={fareProductType}
+            fareProductOnBehalfOfEnabled={fareProductOnBehalfOfEnabled}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
             setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}
@@ -61,6 +64,7 @@ export const TravellerSelectionSheet = ({
         ) : (
           <SingleTravellerSelection
             fareProductType={fareProductType}
+            fareProductOnBehalfOfEnabled={fareProductOnBehalfOfEnabled}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
             setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}

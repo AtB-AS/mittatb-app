@@ -91,6 +91,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     requiresTokenOnMobile,
   } = params.fareProductTypeConfig.configuration;
 
+  const fareProductOnBehalfOfEnabled =
+    params.fareProductTypeConfig.onBehalfOfEnabled;
+
   const offerEndpoint =
     zoneSelectionMode === 'none'
       ? 'authority'
@@ -228,6 +231,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
           <TravellerSelection
             setTravellerSelection={setTravellerSelection}
             fareProductType={preassignedFareProduct.type}
+            fareProductOnBehalfOfEnabled={fareProductOnBehalfOfEnabled}
             selectionMode={travellerSelectionMode}
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
@@ -264,7 +268,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
-          {!canSelectUserProfile && (
+          {!canSelectUserProfile && fareProductOnBehalfOfEnabled && (
             <>
               <ContentHeading
                 text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}

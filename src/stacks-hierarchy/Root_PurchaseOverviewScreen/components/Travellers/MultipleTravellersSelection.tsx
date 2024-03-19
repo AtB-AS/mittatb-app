@@ -27,6 +27,7 @@ export function MultipleTravellersSelection({
   addCount,
   removeCount,
   fareProductType,
+  fareProductOnBehalfOfEnabled,
   setIsTravelerOnBehalfOfToggle,
   isTravelerOnBehalfOfToggle,
 }: UserCountState & TravelerOnBehalfOfProps) {
@@ -35,7 +36,7 @@ export function MultipleTravellersSelection({
 
   const travellersModified = useRef(false);
 
-  const isOnBehalfOfEnabled = useOnBehalfOf();
+  const isOnBehalfOfEnabled = useOnBehalfOf() && fareProductOnBehalfOfEnabled;
 
   const addTraveller = (userTypeString: string) => {
     travellersModified.current = true;

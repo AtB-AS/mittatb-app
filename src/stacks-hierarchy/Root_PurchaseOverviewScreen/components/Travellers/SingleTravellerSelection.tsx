@@ -24,6 +24,7 @@ export function SingleTravellerSelection({
   addCount,
   removeCount,
   fareProductType,
+  fareProductOnBehalfOfEnabled,
   setIsTravelerOnBehalfOfToggle,
   isTravelerOnBehalfOfToggle,
 }: UserCountState & TravelerOnBehalfOfProps) {
@@ -31,7 +32,7 @@ export function SingleTravellerSelection({
   const styles = useStyles();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
 
-  const isOnBehalfOfEnabled = useOnBehalfOf();
+  const isOnBehalfOfEnabled = useOnBehalfOf() && fareProductOnBehalfOfEnabled;
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {

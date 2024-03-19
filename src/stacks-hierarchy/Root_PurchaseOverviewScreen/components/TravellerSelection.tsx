@@ -35,6 +35,7 @@ type TravellerSelectionProps = {
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
   fareProductType: string;
+  fareProductOnBehalfOfEnabled: boolean;
   setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
   isOnBehalfOfToggle: boolean;
 };
@@ -45,6 +46,7 @@ export function TravellerSelection({
   selectableUserProfiles,
   selectionMode,
   fareProductType,
+  fareProductOnBehalfOfEnabled,
   setIsOnBehalfOfToggle,
   isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
@@ -57,7 +59,7 @@ export function TravellerSelection({
     onCloseFocusRef,
   } = useBottomSheet();
 
-  const isOnBehalfOfEnabled = useOnBehalfOf();
+  const isOnBehalfOfEnabled = useOnBehalfOf() && fareProductOnBehalfOfEnabled;
 
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
@@ -160,6 +162,7 @@ export function TravellerSelection({
       <TravellerSelectionSheet
         selectionMode={selectionMode}
         fareProductType={fareProductType}
+        fareProductOnBehalfOfEnabled={fareProductOnBehalfOfEnabled}
         selectableUserProfilesWithCountInit={userProfilesState}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
         onConfirmSelection={(
