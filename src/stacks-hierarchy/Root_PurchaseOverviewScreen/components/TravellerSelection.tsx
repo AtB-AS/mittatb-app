@@ -25,7 +25,7 @@ import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
-import {canSelectUserProfile, isUserProfileSelectable} from '../utils';
+import {isUserProfileSelectable} from '../utils';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
