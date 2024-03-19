@@ -30,6 +30,7 @@ import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_
 import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
+import {isUserProfileSelectable} from './utils';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -129,9 +130,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ? new Date(preassignedFareProduct.limitations.latestActivationDate * 1000)
     : undefined;
 
-  const canSelectUserProfile = !(
-    travellerSelectionMode === `none` ||
-    (travellerSelectionMode === `single` && selectableTravellers.length <= 1)
+  const canSelectUserProfile = isUserProfileSelectable(
+    travellerSelectionMode,
+    selectableTravellers,
   );
 
   const hasSelection =
