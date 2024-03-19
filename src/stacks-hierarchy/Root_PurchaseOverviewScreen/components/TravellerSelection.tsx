@@ -25,6 +25,7 @@ import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
+import {canSelectUserProfile, isUserProfileSelectable} from '../utils';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -65,9 +66,9 @@ export function TravellerSelection({
     UserProfileWithCount[]
   >(selectableUserProfiles);
 
-  const canSelectUserProfile = !(
-    (selectionMode === `single` || selectionMode === 'none') &&
-    selectableUserProfiles.length <= 1
+  const canSelectUserProfile = isUserProfileSelectable(
+    selectionMode,
+    selectableUserProfiles,
   );
 
   useEffect(() => {
