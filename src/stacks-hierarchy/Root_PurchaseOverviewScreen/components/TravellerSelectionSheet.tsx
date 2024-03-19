@@ -79,6 +79,7 @@ export const TravellerSelectionSheet = ({
             )
           }
           rightIcon={{svg: Confirm}}
+          testID="confirmButton"
         />
       </FullScreenFooter>
     </BottomSheetContainer>

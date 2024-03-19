@@ -185,7 +185,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         />
       )}
     >
-      <ScrollView testID="ticketingScrollView">
+      <ScrollView>
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox

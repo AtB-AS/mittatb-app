@@ -93,7 +93,7 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
             <View style={styles.sectionContentContainer}>
               <View>
                 {displayAsOneZone ? (
-                  <ZoneLabel tariffZone={fromTariffZone} />
+                  <ZoneLabel tariffZone={fromTariffZone}/>
                 ) : (
                   <>
                     <View style={styles.fromZone}>
@@ -134,14 +134,16 @@ const ZoneLabel = ({tariffZone}: {tariffZone: TariffZoneWithMetadata}) => {
   const zoneLabel = t(PurchaseOverviewTexts.zones.zoneName(zoneName));
 
   return tariffZone.venueName ? (
-    <ThemeText style={{flexShrink: 1}}>
-      <ThemeText type="body__primary--bold">
+    <ThemeText style={{flexShrink: 1}} testID="selectedStationAndZone">
+      <ThemeText type="body__primary--bold" testID="selectedStation">
         {tariffZone.venueName + ' '}
       </ThemeText>
       ({zoneLabel})
     </ThemeText>
   ) : (
-    <ThemeText type="body__primary--bold">{zoneLabel}</ThemeText>
+    <ThemeText type="body__primary--bold" testID="selectedZone">
+      {zoneLabel}
+    </ThemeText>
   );
 };
 

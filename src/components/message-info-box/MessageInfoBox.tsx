@@ -102,6 +102,7 @@ export const MessageInfoBox = ({
             type="body__primary--bold"
             color={type}
             style={styles.title}
+            testID={testID ? `${testID}Title` : 'title'}
           >
             {title}
           </ThemeText>

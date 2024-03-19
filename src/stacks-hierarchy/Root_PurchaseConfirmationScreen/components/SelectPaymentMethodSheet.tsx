@@ -386,6 +386,7 @@ const PaymentOptionView: React.FC<PaymentOptionsProps> = ({
                     : SelectPaymentMethodTexts.a11yHint.save,
                 ),
               }}
+              testID="saveCard"
             />
             <ThemeText>{t(SelectPaymentMethodTexts.save_card)}</ThemeText>
           </View>
