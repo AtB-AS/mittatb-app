@@ -31,6 +31,7 @@ import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
+import {useOnBehalfOf} from '@atb/on-behalf-of';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -137,6 +138,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     travellerSelectionMode,
     selectableTravellers,
   );
+
+  const isOnBehalfOfEnabled = useOnBehalfOf() && fareProductOnBehalfOfEnabled;
 
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
@@ -268,7 +271,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
-          {!canSelectUserProfile && fareProductOnBehalfOfEnabled && (
+          {isOnBehalfOfEnabled && !canSelectUserProfile && (
             <>
               <ContentHeading
                 text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
