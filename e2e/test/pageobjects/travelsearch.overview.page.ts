@@ -77,6 +77,7 @@ class TravelSearchOverviewPage {
     }
     return await $(searchResultId).$(schTimeId).getText();
   }
+
   /**
    * Returns the end time for travel result at index
    * @param resultIndex travel search result at index
@@ -86,6 +87,7 @@ class TravelSearchOverviewPage {
     const endTimeId = `//*[@resource-id="endTime"]`;
     return await $(searchResultId).$(endTimeId).getText();
   }
+
   /**
    * Returns the given trip duration
    * NB! Must be in minutes
