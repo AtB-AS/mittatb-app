@@ -25,6 +25,7 @@ import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
+import {getTravellerInfoByFareProductType} from './utils';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -129,6 +130,16 @@ export function TravellerSelection({
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
     : '';
 
+  const travellerInfoAlly =
+    userProfilesState.length === 1
+      ? getTravellerInfoByFareProductType(
+          fareProductType,
+          userProfilesState[0],
+          language,
+          t,
+        )
+      : '';
+
   const accessibility: AccessibilityProps = {
     accessible: true,
     accessibilityRole: canSelectUserProfile ? 'button' : 'none',
@@ -146,6 +157,7 @@ export function TravellerSelection({
       ' ' +
       travellersDetailsText +
       sendingToOthersAccessibility +
+      travellerInfoAlly +
       newLabelAccessibility +
       screenReaderPause,
     accessibilityHint: canSelectUserProfile
@@ -202,6 +214,16 @@ export function TravellerSelection({
             style={styles.multipleTravellersDetails}
           >
             {travellersDetailsText}
+          </ThemeText>
+        )}
+        {userProfilesState.length === 1 && (
+          <ThemeText type="body__secondary" color="secondary">
+            {getTravellerInfoByFareProductType(
+              fareProductType,
+              userProfilesState[0],
+              language,
+              t,
+            )}
           </ThemeText>
         )}
       </View>
