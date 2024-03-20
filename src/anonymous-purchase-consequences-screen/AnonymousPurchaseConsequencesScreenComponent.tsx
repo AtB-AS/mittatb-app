@@ -56,7 +56,8 @@ export const AnonymousPurchaseConsequencesScreenComponent = ({
       secondaryFooterButton={
         onPressLogin ? continueWithoutLoginButton : undefined
       }
-      testID="acceptLimitations"
+      testID={onPressLogin ? 'logIn' : 'acceptLimitations'}
+      secondaryTestID={onPressLogin ? 'acceptLimitations' : ''}
     >
       <View ref={focusRef} accessible>
         <ThemeText type="heading--big" color={themeColor} style={styles.header}>

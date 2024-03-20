@@ -19,6 +19,30 @@ class OnboardingPage {
   }
 
   /**
+   * Log in
+   */
+  get logIn() {
+    const reqId = `//*[@resource-id="logInButton"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Log in later
+   */
+  get logInLater() {
+    const reqId = `//*[@resource-id="logInLaterButton"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Description for log in to purchase
+   */
+  get logInPurchaseDescription() {
+    const reqId = `//*[@resource-id="logInPurchaseDescription"]`;
+    return $(reqId).getText();
+  }
+
+  /**
    * Next button on location screen
    */
   get locationPermission() {

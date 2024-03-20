@@ -181,7 +181,7 @@ export function TravellerSelection({
   const content = (
     <View style={styles.sectionContentContainer}>
       <View style={{flex: 1}}>
-        <ThemeText type="body__primary--bold">
+        <ThemeText type="body__primary--bold" testID="selectedTravellers">
           {multipleTravellerCategoriesSelectedFrom
             ? t(
                 PurchaseOverviewTexts.travellerSelection.travellers_title(
@@ -202,6 +202,7 @@ export function TravellerSelection({
             type="body__secondary"
             color="secondary"
             style={styles.multipleTravellersDetails}
+            testID="selectedTravellers"
           >
             {travellersDetailsText}
           </ThemeText>
@@ -241,6 +242,7 @@ export function TravellerSelection({
           <GenericClickableSectionItem
             onPress={travellerSelectionOnPress}
             ref={onCloseFocusRef}
+            testID="selectTravellerButton"
           >
             {content}
           </GenericClickableSectionItem>
