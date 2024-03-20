@@ -117,6 +117,7 @@ export const FareContractView: React.FC<Props> = ({
           <ValidityHeader
             status={fareContractValidityStatus}
             now={now}
+            createdDate={fareContract.created.toMillis()}
             validFrom={fareContractValidFrom}
             validTo={fareContractValidTo}
             fareProductType={preassignedFareProduct?.type}
