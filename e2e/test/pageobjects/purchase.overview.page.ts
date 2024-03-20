@@ -1,7 +1,7 @@
 import AppHelper from '../utils/app.helper.ts';
-import ElementHelper from '../utils/element.helper.js';
-import OnboardingPage from './onboarding.page.js';
-import AlertHelper from '../utils/alert.helper.js';
+import ElementHelper from '../utils/element.helper.ts';
+import OnboardingPage from './onboarding.page.ts';
+import AlertHelper from '../utils/alert.helper.ts';
 
 class PurchaseOverviewPage {
   /**
