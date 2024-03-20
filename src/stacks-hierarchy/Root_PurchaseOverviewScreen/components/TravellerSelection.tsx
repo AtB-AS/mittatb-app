@@ -26,7 +26,7 @@ import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
-import {getTravellerInfoByFareProductType} from './utils';
+import {getTravellerInfoByFareProductType} from './../utils';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -132,8 +132,8 @@ export function TravellerSelection({
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
     : '';
 
-  const travellerInfoAlly =
-    userProfilesState.length === 1
+  const travellerInfo =
+    selectionMode == 'single'
       ? getTravellerInfoByFareProductType(
           fareProductType,
           userProfilesState[0],
@@ -159,7 +159,7 @@ export function TravellerSelection({
       ' ' +
       travellersDetailsText +
       sendingToOthersAccessibility +
-      travellerInfoAlly +
+      travellerInfo +
       newLabelAccessibility +
       screenReaderPause,
     accessibilityHint: canSelectUserProfile
@@ -202,8 +202,12 @@ export function TravellerSelection({
               )
             : travellersDetailsText}
         </ThemeText>
-
-        {isOnBehalfOfToggle && (
+        {selectionMode === 'single' && (
+          <ThemeText type="body__secondary" color="secondary">
+            {travellerInfo}
+          </ThemeText>
+        )}
+        {isOnBehalfOfToggle && canSelectUserProfile && (
           <ThemeText type="body__secondary" color="secondary">
             {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
           </ThemeText>
@@ -216,16 +220,6 @@ export function TravellerSelection({
             style={styles.multipleTravellersDetails}
           >
             {travellersDetailsText}
-          </ThemeText>
-        )}
-        {!canSelectUserProfile && (
-          <ThemeText type="body__secondary" color="secondary">
-            {getTravellerInfoByFareProductType(
-              fareProductType,
-              userProfilesState[0],
-              language,
-              t,
-            )}
           </ThemeText>
         )}
       </View>

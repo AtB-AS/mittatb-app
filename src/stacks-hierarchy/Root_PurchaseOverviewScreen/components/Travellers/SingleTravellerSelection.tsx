@@ -13,7 +13,7 @@ import {StyleSheet} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {TravelerOnBehalfOfProps} from './types';
-import {getTravellerInfoByFareProductType} from './../utils';
+import {getTravellerInfoByFareProductType} from './../../utils';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
