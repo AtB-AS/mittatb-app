@@ -19,7 +19,6 @@ import MobileTokenOnboarding from '@atb/translations/screens/subscreens/MobileTo
 import Ticketing from '@atb/translations/screens/Ticketing';
 import {getDeviceNameWithUnitInfo} from '@atb/select-travel-token-screen/utils';
 import {useToggleTokenMutation} from '@atb/mobile-token';
-import {FullScreenFooter} from '@atb/components/screen-footer';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -135,8 +134,6 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         >
           {t(ActiveTokenRequiredTexts.actionMessage)}
         </ThemeText>
-      </ScrollView>
-      <FullScreenFooter>
         {toggleMutation.isLoading ? (
           <ActivityIndicator size="large" />
         ) : (
@@ -146,9 +143,10 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
             interactiveColor="interactive_0"
             disabled={!selectedToken}
             testID="confirmSelectionButton"
+            style={styles.buttonStyle}
           />
         )}
-      </FullScreenFooter>
+      </ScrollView>
     </View>
   );
 };
@@ -174,5 +172,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   errorMessageBox: {
     marginBottom: theme.spacings.medium,
+  },
+  buttonStyle: {
+    paddingVertical: theme.spacings.medium,
   },
 }));
