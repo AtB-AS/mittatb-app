@@ -5,6 +5,7 @@ import ElementHelper from '../utils/element.helper.ts';
 import MyProfilePage from '../pageobjects/myProfile.page.ts';
 import AlertHelper from '../utils/alert.helper.ts';
 import PrivacyPage from '../pageobjects/privacy.page.ts';
+import NotificationsPage from '../pageobjects/notifications.page.ts';
 
 describe('My profile', () => {
   before(async () => {
@@ -34,16 +35,16 @@ describe('My profile', () => {
       await ElementHelper.waitForElement('text', 'Notifications');
       await ElementHelper.waitForElement('id', 'emailToggle');
 
-      expect(await MyProfilePage.notificationIsEnabled('email')).toBe(
+      expect(await NotificationsPage.notificationIsEnabled('email')).toBe(
         defaultSettings.email,
       );
-      expect(await MyProfilePage.notificationIsEnabled('push')).toBe(
+      expect(await NotificationsPage.notificationIsEnabled('push')).toBe(
         defaultSettings.push,
       );
-      expect(await MyProfilePage.notificationIsEnabled('single')).toBe(
+      expect(await NotificationsPage.notificationIsEnabled('single')).toBe(
         defaultSettings.single,
       );
-      expect(await MyProfilePage.notificationIsEnabled('period')).toBe(
+      expect(await NotificationsPage.notificationIsEnabled('period')).toBe(
         defaultSettings.period,
       );
       // Scroll
@@ -51,15 +52,15 @@ describe('My profile', () => {
         'notificationsView',
         'on-behalf-ofToggle',
       );
-      expect(await MyProfilePage.notificationIsEnabled('night')).toBe(
+      expect(await NotificationsPage.notificationIsEnabled('night')).toBe(
         defaultSettings.night,
       );
-      expect(await MyProfilePage.notificationIsEnabled('carnet')).toBe(
+      expect(await NotificationsPage.notificationIsEnabled('carnet')).toBe(
         defaultSettings.carnet,
       );
-      expect(await MyProfilePage.notificationIsEnabled('on-behalf-of')).toBe(
-        defaultSettings['on-behalf-of'],
-      );
+      expect(
+        await NotificationsPage.notificationIsEnabled('on-behalf-of'),
+      ).toBe(defaultSettings['on-behalf-of']);
 
       await NavigationHelper.back();
       await AppHelper.pause();
@@ -67,6 +68,39 @@ describe('My profile', () => {
       await AppHelper.screenshot(
         'error_myProfile_default_notification_options',
       );
+      throw errMsg;
+    }
+  });
+
+  // Verify that login is required and email is missing for email notifications
+  it('should show login and missing email info for email notifications', async () => {
+    try {
+      await MyProfilePage.openSetting('notifications');
+      await ElementHelper.waitForElement('text', 'Notifications');
+      await ElementHelper.waitForElement('id', 'emailToggle');
+
+      // Pre
+      expect(await NotificationsPage.notificationIsEnabled('email')).toBe(
+        false,
+      );
+      await NotificationsPage.missingLoginAndEmailInfoExists(false);
+
+      // On
+      await NotificationsPage.toggleEmailNotifications();
+      expect(await NotificationsPage.notificationIsEnabled('email')).toBe(true);
+      await NotificationsPage.missingLoginAndEmailInfoExists(true);
+
+      // Off
+      await NotificationsPage.toggleEmailNotifications();
+      expect(await NotificationsPage.notificationIsEnabled('email')).toBe(
+        false,
+      );
+      await NotificationsPage.missingLoginAndEmailInfoExists(false);
+
+      await NavigationHelper.back();
+      await AppHelper.pause();
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_myProfile_email_notification_info');
       throw errMsg;
     }
   });
