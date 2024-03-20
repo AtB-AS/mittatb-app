@@ -2,7 +2,10 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {TravellerSelectionMode} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  TravellerSelectionMode,
+} from '@atb/configuration';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
@@ -34,8 +37,7 @@ type TravellerSelectionProps = {
   ) => void;
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
-  fareProductType: string;
-  fareProductOnBehalfOfEnabled: boolean;
+  fareProductTypeConfig: FareProductTypeConfig;
   setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
   isOnBehalfOfToggle: boolean;
 };
@@ -45,8 +47,7 @@ export function TravellerSelection({
   style,
   selectableUserProfiles,
   selectionMode,
-  fareProductType,
-  fareProductOnBehalfOfEnabled,
+  fareProductTypeConfig,
   setIsOnBehalfOfToggle,
   isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
@@ -59,7 +60,8 @@ export function TravellerSelection({
     onCloseFocusRef,
   } = useBottomSheet();
 
-  const isOnBehalfOfEnabled = useOnBehalfOf() && fareProductOnBehalfOfEnabled;
+  const isOnBehalfOfEnabled =
+    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
@@ -92,7 +94,7 @@ export function TravellerSelection({
     );
     setTravellerSelection(filteredSelection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fareProductType, selectionMode, userProfilesState]);
+  }, [selectionMode, userProfilesState]);
 
   useFocusEffect(
     useCallback(() => {
@@ -161,8 +163,7 @@ export function TravellerSelection({
     openBottomSheet(() => (
       <TravellerSelectionSheet
         selectionMode={selectionMode}
-        fareProductType={fareProductType}
-        fareProductOnBehalfOfEnabled={fareProductOnBehalfOfEnabled}
+        fareProductTypeConfig={fareProductTypeConfig}
         selectableUserProfilesWithCountInit={userProfilesState}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
         onConfirmSelection={(

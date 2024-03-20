@@ -93,7 +93,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   } = params.fareProductTypeConfig.configuration;
 
   const fareProductOnBehalfOfEnabled =
-    params.fareProductTypeConfig.onBehalfOfEnabled;
+    params.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const offerEndpoint =
     zoneSelectionMode === 'none'
@@ -233,8 +233,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <TravellerSelection
             setTravellerSelection={setTravellerSelection}
-            fareProductType={preassignedFareProduct.type}
-            fareProductOnBehalfOfEnabled={fareProductOnBehalfOfEnabled}
+            fareProductTypeConfig={params.fareProductTypeConfig}
             selectionMode={travellerSelectionMode}
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
