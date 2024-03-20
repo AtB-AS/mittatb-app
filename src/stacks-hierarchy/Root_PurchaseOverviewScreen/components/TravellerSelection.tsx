@@ -218,7 +218,7 @@ export function TravellerSelection({
             {travellersDetailsText}
           </ThemeText>
         )}
-        {userProfilesState.length === 1 && (
+        {!canSelectUserProfile && (
           <ThemeText type="body__secondary" color="secondary">
             {getTravellerInfoByFareProductType(
               fareProductType,
