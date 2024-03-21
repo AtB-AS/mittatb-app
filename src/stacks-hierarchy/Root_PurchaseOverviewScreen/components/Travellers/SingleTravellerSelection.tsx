@@ -17,6 +17,7 @@ import {StyleSheet} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {TravellerSelectionBottomSheetType} from './types';
+import {useAuthState} from '@atb/auth';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -32,6 +33,10 @@ export function SingleTravellerSelection({
 
   const isOnBehalfOfEnabled =
     useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
+
+  const isLoggedIn = useAuthState().authenticationType === 'phone';
+
+  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {
@@ -74,7 +79,7 @@ export function SingleTravellerSelection({
         color="interactive_2"
         accessibilityHint={t(PurchaseOverviewTexts.travellerSelection.a11yHint)}
       />
-      {isOnBehalfOfEnabled && (
+      {isOnBehalfOfAllowed && (
         <Section style={styles.onBehalfOfContainer}>
           <ToggleSectionItem
             leftImage={<HoldingHands />}
