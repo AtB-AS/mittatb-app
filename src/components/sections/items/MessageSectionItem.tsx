@@ -68,6 +68,7 @@ export function MessageSectionItem({
             type="body__primary--bold"
             style={styles.title}
             color={messageType}
+            testID="title"
           >
             {title}
           </ThemeText>

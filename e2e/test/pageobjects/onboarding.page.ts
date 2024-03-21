@@ -66,6 +66,24 @@ class OnboardingPage {
   }
 
   /**
+   * Deny use of location - and don't ask again
+   * Possible other values:
+   * - com.android.permissioncontroller:id/permission_allow_foreground_only_button
+   * - com.android.permissioncontroller:id/permission_allow_one_time_button
+   */
+  async denyLocationAndDontAskAgain() {
+    await ElementHelper.waitForElement(
+      'id',
+      'com.android.permissioncontroller:id/permission_deny_and_dont_ask_again_button',
+    );
+    await driver
+      .$(
+        '//*[@resource-id="com.android.permissioncontroller:id/permission_deny_and_dont_ask_again_button"]',
+      )
+      .click();
+  }
+
+  /**
    * Tap through the onboarding
    */
   async skipOnboarding(testName: string = '') {
