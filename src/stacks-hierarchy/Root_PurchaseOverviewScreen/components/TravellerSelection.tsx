@@ -132,15 +132,14 @@ export function TravellerSelection({
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
     : '';
 
-  const travellerInfo =
-    selectionMode == 'single'
-      ? getTravellerInfoByFareProductType(
-          fareProductType,
-          userProfilesState[0],
-          language,
-          t,
-        )
-      : '';
+  const travellerInfo = !canSelectUserProfile
+    ? getTravellerInfoByFareProductType(
+        fareProductType,
+        userProfilesState[0],
+        language,
+        t,
+      )
+    : '';
 
   const accessibility: AccessibilityProps = {
     accessible: true,
@@ -202,7 +201,7 @@ export function TravellerSelection({
               )
             : travellersDetailsText}
         </ThemeText>
-        {selectionMode === 'single' && (
+        {!canSelectUserProfile && (
           <ThemeText type="body__secondary" color="secondary">
             {travellerInfo}
           </ThemeText>
