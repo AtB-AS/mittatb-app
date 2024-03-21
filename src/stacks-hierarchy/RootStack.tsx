@@ -11,7 +11,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
@@ -84,11 +84,6 @@ export const RootStack = () => {
   const {userId} = useAuthState();
   const queryClient = useQueryClient();
   useFlipper(navRef);
-
-  const initialNavigationContainerState = useMemo(
-    () => getInitialNavigationContainerState(),
-    [getInitialNavigationContainerState],
-  );
 
   useBeaconsState();
   useTestIds();
@@ -182,7 +177,7 @@ export const RootStack = () => {
         <LoadingScreenBoundary>
           <NavigationContainer<RootStackParamList>
             onStateChange={trackNavigation}
-            initialState={initialNavigationContainerState}
+            initialState={getInitialNavigationContainerState()}
             ref={navRef}
             theme={ReactNavigationTheme}
             fallback={<LoadingScreen />}

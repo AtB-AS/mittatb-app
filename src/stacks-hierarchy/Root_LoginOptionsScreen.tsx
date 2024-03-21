@@ -53,7 +53,7 @@ export const Root_LoginOptionsScreen = ({
     string | undefined
   >(undefined);
   const {configurableLinks} = useFirestoreConfiguration();
-  //const {completeOnboardingSection} = useOnboardingState();
+  const {completeOnboardingSection} = useOnboardingState();
 
   const authenticateUserByVipps = async () => {
     setIsLoading(true);
@@ -74,7 +74,7 @@ export const Root_LoginOptionsScreen = ({
   );
 
   const signInUsingCustomToken = async (token: string) => {
-    //completeOnboardingSection('userCreation');
+    completeOnboardingSection('userCreation');
     const errorCode = await signInWithCustomToken(token);
     if (errorCode) {
       setError(errorCode);

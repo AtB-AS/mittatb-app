@@ -186,12 +186,7 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
 
   const onAuthStateChanged = useCallback(
     (user: FirebaseAuthTypes.User | null) => {
-      console.log('onAuthStateChanged user', user);
-
-      if (!user?.isAnonymous) {
-        console.log('completeOnboardingSection');
-        completeOnboardingSection('userCreation');
-      }
+      !user?.isAnonymous && completeOnboardingSection('userCreation');
     },
     [completeOnboardingSection],
   );
