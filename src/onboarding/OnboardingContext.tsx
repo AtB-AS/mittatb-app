@@ -29,6 +29,8 @@ import {useAuthState} from '@atb/auth';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useShouldShowShareTravelHabitsScreen} from '@atb/beacons/use-should-show-share-travel-habits-screen';
 import {useMobileTokenContextState} from '@atb/mobile-token';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {useOnAuthStateChanged} from '@atb/auth/use-subscribe-to-auth-user-change';
 
 export type OnboardingState = {
   isLoading: boolean;
@@ -182,6 +184,20 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
     [loadedOnboardingSections],
   );
 
+  const onAuthStateChanged = useCallback(
+    (user: FirebaseAuthTypes.User | null) => {
+      console.log('onAuthStateChanged user', user);
+
+      if (!user?.isAnonymous) {
+        console.log('completeOnboardingSection');
+        completeOnboardingSection('userCreation');
+      }
+    },
+    [completeOnboardingSection],
+  );
+
+  useOnAuthStateChanged(onAuthStateChanged);
+
   const restartAllOnboardingSections = useCallback(
     () =>
       Promise.all(
@@ -301,8 +317,7 @@ const useShouldShowArgs = (
     'userCreation',
   );
 
-  const {mobileTokenStatus} =
-    useMobileTokenContextState();
+  const {mobileTokenStatus} = useMobileTokenContextState();
 
   return useMemo(
     () => ({

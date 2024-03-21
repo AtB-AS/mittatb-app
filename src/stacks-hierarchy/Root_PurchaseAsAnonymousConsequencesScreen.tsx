@@ -5,6 +5,7 @@ import {RootStackParamList, RootStackScreenProps} from './navigation-types';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useCompleteUserCreationOnboardingAndEnterApp} from '@atb/utils/use-complete-user-creation-onboarding-and-enter-app';
 import {useHasReservationOrActiveFareContract} from '@atb/ticketing';
+import {useOnboardingState} from '@atb/onboarding';
 
 type Props = RootStackScreenProps<'Root_PurchaseAsAnonymousConsequencesScreen'>;
 
@@ -17,8 +18,10 @@ export const Root_PurchaseAsAnonymousConsequencesScreen = ({
     useHasReservationOrActiveFareContract();
   const completeUserCreationOnboardingAndEnterApp =
     useCompleteUserCreationOnboardingAndEnterApp();
+  const {completeOnboardingSection} = useOnboardingState();
 
   const onPressLogin = () => {
+    completeOnboardingSection('userCreation');
     let screen: keyof RootStackParamList = 'Root_LoginPhoneInputScreen';
     if (hasReservationOrActiveFareContract) {
       screen = 'Root_LoginActiveFareContractWarningScreen';
