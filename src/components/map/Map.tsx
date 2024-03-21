@@ -17,6 +17,8 @@ import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effe
 import {MapProps, MapRegion} from './types';
 import {isFeaturePoint} from './utils';
 import isEqual from 'lodash.isequal';
+import {useGeofencingZones} from './hooks/use-geofencing-zones';
+import {GeofencingZones} from './components/mobility/GeofencingZones';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -25,6 +27,8 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+
+  const geofencingZones = useGeofencingZones();
 
   const startingCoordinates = useMemo(
     () =>
@@ -122,6 +126,9 @@ export const Map = (props: MapProps) => {
             ]}
             {...MapCameraConfig}
           />
+
+          <GeofencingZones geofencingZones={geofencingZones} />
+
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
