@@ -1,5 +1,4 @@
 import React from 'react';
-import {UserCountState} from './use-user-count-state';
 import {useTranslation, PurchaseOverviewTexts} from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
 import {
@@ -12,21 +11,22 @@ import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
-import {TravelerOnBehalfOfProps} from './types';
+import {TravellerSelectionBottomSheetType} from './types';
 import {getTravellerInfoByFareProductType} from './../../utils';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
-  fareProductType,
+  fareProductTypeConfig,
   setIsTravelerOnBehalfOfToggle,
   isTravelerOnBehalfOfToggle,
-}: UserCountState & TravelerOnBehalfOfProps) {
+}: TravellerSelectionBottomSheetType) {
   const {t, language} = useTranslation();
   const styles = useStyles();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
-  const isOnBehalfOfEnabled = useOnBehalfOf();
+  const isOnBehalfOfEnabled =
+    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {
@@ -42,7 +42,7 @@ export function SingleTravellerSelection({
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
         itemToSubtext={(u) =>
-          getTravellerInfoByFareProductType(fareProductType, u, language, t)
+          getTravellerInfoByFareProductType(fareProductTypeConfig.type, u, language, t)
         }
         selected={selectedProfile}
         onSelect={select}

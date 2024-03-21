@@ -72,7 +72,11 @@ export const Root_LoginRequiredForFareProductScreen = ({
           </ThemeText>
         </View>
         <View accessible={true}>
-          <ThemeText style={styles.description} color={themeColor}>
+          <ThemeText
+            style={styles.description}
+            color={themeColor}
+            testID="logInPurchaseDescription"
+          >
             {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
@@ -83,14 +87,14 @@ export const Root_LoginRequiredForFareProductScreen = ({
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}
             rightIcon={{svg: ArrowRight}}
-            testID="loginButton"
+            testID="logInButton"
           />
         </View>
         <PressableOpacity
           style={styles.laterButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
-          testID="loginLaterButton"
+          testID="logInLaterButton"
         >
           <ThemeText
             style={styles.laterButtonText}

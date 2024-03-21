@@ -19,6 +19,7 @@ export const AnonymousPurchaseWarning = ({onPress}: {onPress: () => void}) => {
         }}
         type="warning"
         isMarkdown={true}
+        testID="anonymousWarning"
       />
     </View>
   );

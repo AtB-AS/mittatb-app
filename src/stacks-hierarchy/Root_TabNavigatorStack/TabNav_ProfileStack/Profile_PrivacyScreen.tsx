@@ -153,7 +153,7 @@ export const Profile_PrivacyScreen = () => {
                 ),
                 accessibilityRole: 'link',
               }}
-              testID="privacyButton"
+              testID="controlPanelButton"
               onPress={async () => {
                 const privacyDashboardUrl = await getPrivacyDashboardUrl();
                 privacyDashboardUrl &&
@@ -211,7 +211,7 @@ export const Profile_PrivacyScreen = () => {
                 },
               })
             }
-            testID="deleteLocalSearchData"
+            testID="deleteLocalSearchDataButton"
           />
           {isBeaconsSupported && (
             <Button
@@ -239,7 +239,7 @@ export const Profile_PrivacyScreen = () => {
                   },
                 });
               }}
-              testID="deleteLocalSearchData"
+              testID="deleteCollectedDataButton"
             />
           )}
         </Section>

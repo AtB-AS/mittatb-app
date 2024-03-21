@@ -1,5 +1,5 @@
 import {Dispatch, useEffect} from 'react';
-import auth from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {updateMetadata} from '@atb/chat/metadata';
 import {AuthReducerAction} from './types';
 import {mapAuthenticationType} from './utils';
@@ -40,4 +40,13 @@ export const useSubscribeToAuthUserChange = (
   return {
     resubscribe: resubscribe,
   };
+};
+
+export const useOnAuthStateChanged = (
+  callback: (user: FirebaseAuthTypes.User | null) => void,
+) => {
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(callback);
+    return () => unsubscribe();
+  }, [callback]);
 };

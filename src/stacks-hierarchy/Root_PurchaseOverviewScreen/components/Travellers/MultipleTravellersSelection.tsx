@@ -1,5 +1,4 @@
 import React, {useRef} from 'react';
-import {UserCountState} from './use-user-count-state';
 import {
   getTextForLanguage,
   Language,
@@ -20,22 +19,23 @@ import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
-import {TravelerOnBehalfOfProps} from './types';
+import {TravellerSelectionBottomSheetType} from './types';
 
 export function MultipleTravellersSelection({
   userProfilesWithCount,
   addCount,
   removeCount,
-  fareProductType,
+  fareProductTypeConfig,
   setIsTravelerOnBehalfOfToggle,
   isTravelerOnBehalfOfToggle,
-}: UserCountState & TravelerOnBehalfOfProps) {
+}: TravellerSelectionBottomSheetType) {
   const {t, language} = useTranslation();
   const styles = useStyles();
 
   const travellersModified = useRef(false);
 
-  const isOnBehalfOfEnabled = useOnBehalfOf();
+  const isOnBehalfOfEnabled =
+    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const addTraveller = (userTypeString: string) => {
     travellersModified.current = true;
@@ -70,7 +70,7 @@ export function MultipleTravellersSelection({
               t(
                 TicketTravellerTexts.information(
                   u.userTypeString,
-                  fareProductType,
+                  fareProductTypeConfig.type,
                 ),
               ),
             ].join(' ')}
@@ -80,7 +80,7 @@ export function MultipleTravellersSelection({
       {isOnBehalfOfEnabled && (
         <Section style={styles.onBehalfOfContainer}>
           <ToggleSectionItem
-            leftImage={<HoldingHands/>}
+            leftImage={<HoldingHands />}
             text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
             subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
             value={isTravelerOnBehalfOfToggle}
@@ -89,6 +89,7 @@ export function MultipleTravellersSelection({
             onValueChange={(checked) => {
               setIsTravelerOnBehalfOfToggle(checked);
             }}
+            testID="onBehalfOfToggle"
           />
         </Section>
       )}

@@ -264,6 +264,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         style={styles.smallTopMargin}
         type="body__secondary"
         color="secondary"
+        testID="summaryText"
       >
         {text}
       </ThemeText>
@@ -355,6 +356,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     type="body__secondary"
                     color="secondary"
                     style={styles.sendingToText}
+                    testID="onBehalfOfText"
                   >
                     {t(PurchaseConfirmationTexts.sendingTo(phoneNumber))}
                   </ThemeText>
@@ -430,7 +432,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
               </View>
 
               {!isSearchingOffer ? (
-                <ThemeText type="body__primary--jumbo">
+                <ThemeText type="body__primary--jumbo" testID="totalPrice">
                   {totalPriceString} kr
                 </ThemeText>
               ) : (
@@ -578,6 +580,7 @@ const PricePerUserProfile = ({
         style={styles.userProfileCountAndName}
         color="secondary"
         type="body__secondary"
+        testID="userProfileCountAndName"
       >
         {count} {userProfileName}
       </ThemeText>

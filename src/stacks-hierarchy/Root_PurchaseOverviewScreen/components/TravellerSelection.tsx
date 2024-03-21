@@ -2,7 +2,10 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {TravellerSelectionMode} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  TravellerSelectionMode,
+} from '@atb/configuration';
 import {
   GenericClickableSectionItem,
   GenericSectionItem,
@@ -35,7 +38,7 @@ type TravellerSelectionProps = {
   ) => void;
   style?: StyleProp<ViewStyle>;
   selectionMode: TravellerSelectionMode;
-  fareProductType: string;
+  fareProductTypeConfig: FareProductTypeConfig;
   setIsOnBehalfOfToggle: (onBehalfOfToggle: boolean) => void;
   isOnBehalfOfToggle: boolean;
 };
@@ -45,7 +48,7 @@ export function TravellerSelection({
   style,
   selectableUserProfiles,
   selectionMode,
-  fareProductType,
+  fareProductTypeConfig,
   setIsOnBehalfOfToggle,
   isOnBehalfOfToggle,
 }: TravellerSelectionProps) {
@@ -58,7 +61,8 @@ export function TravellerSelection({
     onCloseFocusRef,
   } = useBottomSheet();
 
-  const isOnBehalfOfEnabled = useOnBehalfOf();
+  const isOnBehalfOfEnabled =
+    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
@@ -91,7 +95,7 @@ export function TravellerSelection({
     );
     setTravellerSelection(filteredSelection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fareProductType, selectionMode, userProfilesState]);
+  }, [selectionMode, userProfilesState]);
 
   useFocusEffect(
     useCallback(() => {
@@ -134,7 +138,7 @@ export function TravellerSelection({
 
   const travellerInfo = !canSelectUserProfile
     ? getTravellerInfoByFareProductType(
-        fareProductType,
+        fareProductTypeConfig.type,
         userProfilesState[0],
         language,
         t,
@@ -170,7 +174,7 @@ export function TravellerSelection({
     openBottomSheet(() => (
       <TravellerSelectionSheet
         selectionMode={selectionMode}
-        fareProductType={fareProductType}
+        fareProductTypeConfig={fareProductTypeConfig}
         selectableUserProfilesWithCountInit={userProfilesState}
         isOnBehalfOfToggle={isOnBehalfOfToggle}
         onConfirmSelection={(
@@ -192,7 +196,7 @@ export function TravellerSelection({
   const content = (
     <View style={styles.sectionContentContainer}>
       <View style={{flex: 1}}>
-        <ThemeText type="body__primary--bold">
+        <ThemeText type="body__primary--bold" testID="selectedTravellers">
           {multipleTravellerCategoriesSelectedFrom
             ? t(
                 PurchaseOverviewTexts.travellerSelection.travellers_title(
@@ -217,6 +221,7 @@ export function TravellerSelection({
             type="body__secondary"
             color="secondary"
             style={styles.multipleTravellersDetails}
+            testID="selectedTravellers"
           >
             {travellersDetailsText}
           </ThemeText>
@@ -256,6 +261,7 @@ export function TravellerSelection({
           <GenericClickableSectionItem
             onPress={travellerSelectionOnPress}
             ref={onCloseFocusRef}
+            testID="selectTravellerButton"
           >
             {content}
           </GenericClickableSectionItem>
