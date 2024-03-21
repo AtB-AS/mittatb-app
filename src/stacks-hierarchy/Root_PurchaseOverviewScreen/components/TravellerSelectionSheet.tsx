@@ -1,6 +1,9 @@
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
-import {TravellerSelectionMode} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  TravellerSelectionMode,
+} from '@atb/configuration';
 import {ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import {StyleSheet} from '@atb/theme';
@@ -14,7 +17,7 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 
 type TravellerSelectionSheetProps = {
   selectionMode: TravellerSelectionMode;
-  fareProductType: string;
+  fareProductTypeConfig: FareProductTypeConfig;
   selectableUserProfilesWithCountInit: UserProfileWithCount[];
   onConfirmSelection: (
     chosenSelectableUserProfiles: UserProfileWithCount[],
@@ -24,7 +27,7 @@ type TravellerSelectionSheetProps = {
 };
 export const TravellerSelectionSheet = ({
   selectionMode,
-  fareProductType,
+  fareProductTypeConfig,
   selectableUserProfilesWithCountInit,
   onConfirmSelection,
   isOnBehalfOfToggle,
@@ -52,7 +55,7 @@ export const TravellerSelectionSheet = ({
       <ScrollView style={style.container}>
         {selectionMode === 'multiple' ? (
           <MultipleTravellersSelection
-            fareProductType={fareProductType}
+            fareProductTypeConfig={fareProductTypeConfig}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
             setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}
@@ -60,7 +63,7 @@ export const TravellerSelectionSheet = ({
           />
         ) : (
           <SingleTravellerSelection
-            fareProductType={fareProductType}
+            fareProductTypeConfig={fareProductTypeConfig}
             {...userCountState}
             userProfilesWithCount={selectableUserProfilesWithCount}
             setIsTravelerOnBehalfOfToggle={setIsTravelerOnBehalfOfToggle}
