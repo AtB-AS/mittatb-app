@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  useTranslation,
-  TicketTravellerTexts,
-  PurchaseOverviewTexts,
-  getTextForLanguage,
-} from '@atb/translations';
+import {useTranslation, PurchaseOverviewTexts} from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
 import {
   RadioGroupSection,
@@ -17,6 +12,7 @@ import {StyleSheet} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useOnBehalfOf} from '@atb/on-behalf-of';
 import {TravellerSelectionBottomSheetType} from './types';
+import {getTravellerInfoByFareProductType} from './../../utils';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -29,7 +25,6 @@ export function SingleTravellerSelection({
   const {t, language} = useTranslation();
   const styles = useStyles();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
-
   const isOnBehalfOfEnabled =
     useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
@@ -40,26 +35,6 @@ export function SingleTravellerSelection({
     addCount(u.userTypeString);
   };
 
-  function travellerInfoByFareProductType(
-    fareProductType: string | undefined,
-    u: UserProfileWithCount,
-  ) {
-    const genericUserProfileDescription = getTextForLanguage(
-      u.alternativeDescriptions,
-      language,
-    );
-
-    return [
-      t(
-        TicketTravellerTexts.userProfileDescriptionOverride(
-          u.userTypeString,
-          fareProductType,
-        ),
-      ) || genericUserProfileDescription,
-      t(TicketTravellerTexts.information(u.userTypeString, fareProductType)),
-    ].join(' ');
-  }
-
   return (
     <View>
       <RadioGroupSection<UserProfileWithCount>
@@ -67,7 +42,7 @@ export function SingleTravellerSelection({
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
         itemToSubtext={(u) =>
-          travellerInfoByFareProductType(fareProductTypeConfig.type, u)
+          getTravellerInfoByFareProductType(fareProductTypeConfig.type, u, language, t)
         }
         selected={selectedProfile}
         onSelect={select}
