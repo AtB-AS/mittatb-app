@@ -387,6 +387,11 @@ const TripDetailsTexts = {
 };
 export default orgSpecificTranslations(TripDetailsTexts, {
   fram: {
+    trip: {
+      leg: {
+        live: _('Se direkte', 'See live', 'Sjå direkte'),
+      },
+    },
     messages: {
       correspondenceNotGuaranteed: _(
         'Kan ikke garantere korrespondanse.',

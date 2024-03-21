@@ -1,3 +1,4 @@
+import {orgSpecificTranslations} from '@atb/translations/orgSpecificTranslations';
 import {translation as _} from '../../commons';
 
 const DepartureDetailsTexts = {
@@ -42,4 +43,9 @@ const DepartureDetailsTexts = {
     ),
   },
 };
-export default DepartureDetailsTexts;
+
+export default orgSpecificTranslations(DepartureDetailsTexts, {
+  fram: {
+    live: _('Se direkte', 'See live', 'Sjå direkte'),
+  },
+});
