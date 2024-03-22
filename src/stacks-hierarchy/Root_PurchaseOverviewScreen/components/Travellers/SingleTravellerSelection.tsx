@@ -10,7 +10,7 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {HoldingHands} from '@atb/assets/svg/color/images';
-import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {TravellerSelectionBottomSheetType} from './types';
 import {getTravellerInfoByFareProductType} from './../../utils';
 
@@ -26,7 +26,8 @@ export function SingleTravellerSelection({
   const styles = useStyles();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
   const isOnBehalfOfEnabled =
-    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
+    useOnBehalfOfEnabled() &&
+    fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const select = (u: UserProfileWithCount) => {
     if (selectedProfile) {
@@ -42,7 +43,12 @@ export function SingleTravellerSelection({
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
         itemToSubtext={(u) =>
-          getTravellerInfoByFareProductType(fareProductTypeConfig.type, u, language, t)
+          getTravellerInfoByFareProductType(
+            fareProductTypeConfig.type,
+            u,
+            language,
+            t,
+          )
         }
         selected={selectedProfile}
         onSelect={select}
