@@ -19,10 +19,11 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 export const ValidityHeader: React.FC<{
   status: ValidityStatus;
   now: number;
+  createdDate: number;
   validFrom: number;
   validTo: number;
   fareProductType: string | undefined;
-}> = ({status, now, validFrom, validTo, fareProductType}) => {
+}> = ({status, now, createdDate, validFrom, validTo, fareProductType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
@@ -34,6 +35,7 @@ export const ValidityHeader: React.FC<{
   const validityTime: string = validityTimeText(
     status,
     now,
+    createdDate,
     validFrom,
     validTo,
     t,
@@ -75,6 +77,7 @@ export const ValidityHeader: React.FC<{
 function validityTimeText(
   status: ValidityStatus,
   now: number,
+  createdDate: number,
   validFrom: number,
   validTo: number,
   t: TranslateFunction,
@@ -117,7 +120,7 @@ function validityTimeText(
     case 'reserving':
       return t(FareContractTexts.validityHeader.reserving);
     case 'sent':
-      const dateTime = formatToLongDateTime(toDate(validFrom), language);
+      const dateTime = formatToLongDateTime(toDate(createdDate), language);
       return t(FareContractTexts.validityHeader.sent(dateTime));
     case 'unknown':
     default:
