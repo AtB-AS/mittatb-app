@@ -78,7 +78,7 @@ export const FareContractInfoHeader = ({
     : undefined;
   const productDescription = preassignedFareProduct
     ? getTextForLanguage(preassignedFareProduct.description, language)
-    : undefined; // Funker ikke så smuud å vise description fra youth ticket ...
+    : undefined;
   const warning = useNonInspectableTokenWarning();
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
 
