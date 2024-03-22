@@ -23,8 +23,8 @@ export const TransportationIconBoxList = ({
   const {t} = useTranslation();
   const modesCount: number = modes.length;
   const modesToDisplay = modes
-    .slice(0, modesDisplayLimit)
-    .filter(removeDuplicatesByIconNameFilter);
+    .filter(removeDuplicatesByIconNameFilter)
+    .slice(0, numberOfModesToDisplay);
 
   return (
     <>
