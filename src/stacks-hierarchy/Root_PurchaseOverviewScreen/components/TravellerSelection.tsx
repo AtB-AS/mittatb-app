@@ -24,7 +24,7 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/heading';
 import {LabelInfo} from '@atb/components/label-info';
-import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
@@ -62,7 +62,8 @@ export function TravellerSelection({
   } = useBottomSheet();
 
   const isOnBehalfOfEnabled =
-    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
+    useOnBehalfOfEnabled() &&
+    fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);

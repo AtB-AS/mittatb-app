@@ -15,7 +15,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {UserProfileWithCount} from '@atb/fare-contracts';
-import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
@@ -35,7 +35,8 @@ export function MultipleTravellersSelection({
   const travellersModified = useRef(false);
 
   const isOnBehalfOfEnabled =
-    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
+    useOnBehalfOfEnabled() &&
+    fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
   const addTraveller = (userTypeString: string) => {
     travellersModified.current = true;
