@@ -41,7 +41,8 @@ export const TransportationIconBoxList = ({
       {modesCount > modesDisplayLimit && (
         <CounterIconBox
           count={modesCount - modesDisplayLimit}
-          size="xSmall"
+          style={styles.icon}
+          size={iconSize}
           accessibilityLabel={t(
             FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
               modesCount,

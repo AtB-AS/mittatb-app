@@ -4,6 +4,7 @@ import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {iconSizes} from '@atb-as/theme';
 import {getTransportationColor, TextNames} from '@atb/theme/colors';
+import {useFontScale} from '@atb/utils/use-font-scale';
 
 interface CounterStyling {
   padding: number;
@@ -22,6 +23,7 @@ export const CounterIconBox = ({
 } & AccessibilityProps) => {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
+  const fontScale = useFontScale();
 
   if (count < 1) return null;
 
@@ -38,9 +40,9 @@ export const CounterIconBox = ({
   };
 
   const normalStyling: CounterStyling = {
-    padding: theme.spacings.small,
+    padding: theme.spacings.xSmall,
     lineHeight: iconSizes.normal,
-    type: 'body__primary--bold',
+    type: 'body__secondary',
   };
 
   const largeStyling: CounterStyling = {
@@ -82,7 +84,10 @@ export const CounterIconBox = ({
         type={styling().type}
         testID="tripLegMore"
         style={{
+          height: styling().lineHeight * fontScale,
+          minWidth: styling().lineHeight * fontScale,
           lineHeight: styling().lineHeight,
+          textAlign: 'center',
         }}
       >
         +{count}
