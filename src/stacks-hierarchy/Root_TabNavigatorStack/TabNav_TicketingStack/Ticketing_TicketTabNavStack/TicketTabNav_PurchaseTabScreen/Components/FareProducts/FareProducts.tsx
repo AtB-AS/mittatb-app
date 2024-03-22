@@ -39,23 +39,16 @@ export const FareProducts = ({
     (config) => sellableProductsInApp.some((p) => p.type === config.type),
   );
 
-  let groupedFareProducts: GroupedFareProducts[] = fareProductGroups.reduce<
-    GroupedFareProducts[]
-  >(function (result, item) {
-    const filteredFareProducts =
-      sellableFareProductTypeConfigs.filter((fareProduct) =>
-        item.types.includes(fareProduct.type),
-      ) ?? [];
-
-    if (filteredFareProducts.length > 0) {
-      result.push({
-        transportModes: item.transportModes,
-        fareProducts: filteredFareProducts,
-        heading: item.heading,
-      });
-    }
-    return result;
-  }, []);
+  let groupedFareProducts: GroupedFareProducts[] = fareProductGroups.map(
+    (group) => ({
+      transportModes: group.transportModes,
+      fareProducts:
+        sellableFareProductTypeConfigs.filter((fareProduct) =>
+          group.types.includes(fareProduct.type),
+        ) ?? [],
+      heading: group.heading,
+    }),
+  );
 
   const otherProducts = sellableFareProductTypeConfigs.filter(
     (p) => !flatMap(groupedFareProducts, (g) => g.fareProducts).includes(p),
@@ -63,7 +56,7 @@ export const FareProducts = ({
 
   if (otherProducts.length > 0) {
     groupedFareProducts = [
-      ...groupedFareProducts,
+      ...groupedFareProducts.filter((group) => group.fareProducts.length > 0),
       {
         transportModes: [],
         fareProducts: otherProducts,
