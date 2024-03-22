@@ -1,0 +1,12 @@
+diff --git a/node_modules/@turf/boolean-point-in-polygon/package.json b/node_modules/@turf/boolean-point-in-polygon/package.json
+index 8c05aa1..65a027a 100644
+--- a/node_modules/@turf/boolean-point-in-polygon/package.json
++++ b/node_modules/@turf/boolean-point-in-polygon/package.json
+@@ -29,6 +29,7 @@
+   "exports": {
+     "./package.json": "./package.json",
+     ".": {
++      "types": "./dist/js/index.d.ts",
+       "import": "./dist/es/index.js",
+       "require": "./dist/js/index.js"
+     }

@@ -21,7 +21,7 @@ import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Linking, ScrollView, View} from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {parseUrl} from 'query-string/base';
+import queryString from 'query-string';
 
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Button} from '@atb/components/button';
@@ -107,9 +107,9 @@ export const Root_LoginOptionsScreen = ({
       if (event.url.includes(VIPPS_CALLBACK_URL)) {
         InAppBrowser.close();
         setIsLoading(true);
-        const code = parseUrl(event.url).query.code;
+        const code = queryString.parseUrl(event.url).query.code;
         if (code) {
-          const state = parseUrl(event.url).query.state;
+          const state = queryString.parseUrl(event.url).query.state;
           const initialState = await storage.get('vipps_state');
           if (initialState?.toString() !== state?.toString()) {
             setError('unknown_error');
@@ -118,7 +118,7 @@ export const Root_LoginOptionsScreen = ({
             setAuthorizationCode(code.toString());
           }
         } else {
-          const error = parseUrl(event.url).query.error;
+          const error = queryString.parseUrl(event.url).query.error;
           if (error) {
             if (error === 'outdated_app_version' || error === 'access_denied') {
               setError(error);

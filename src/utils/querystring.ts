@@ -1,4 +1,4 @@
-import {stringify, StringifyOptions} from 'query-string/base';
+import queryString, {StringifyOptions} from 'query-string';
 
 export function stringifyWithDate(
   obj: {[key: string]: any},
@@ -13,7 +13,7 @@ export function stringifyWithDate(
       newObj[key] = item;
     }
   }
-  return stringify(newObj, opts);
+  return queryString.stringify(newObj, opts);
 }
 function isDate(a: any): a is Date {
   return a instanceof Date;

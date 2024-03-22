@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "INPUT_BRANCH=${{ github.event.inputs.branch || env.DEFAULT_BRANCH }}" >> $GITHUB_ENV
           echo "INPUT_API_LEVEL=${{ github.event.inputs.api_level || env.DEFAULT_API_LEVEL }}" >> $GITHUB_ENV
-          echo "JAVA_HOME=$JAVA_HOME_11_X64" >> $GITHUB_ENV
+          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
       - name: Checkout project
         uses: actions/checkout@v3
         with:
