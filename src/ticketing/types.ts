@@ -32,6 +32,7 @@ export type TravelRight = {
     | 'NightTicket'
     | 'SingleBoatTicket'
     | 'PeriodBoatTicket'
+    | 'YouthTicket'
     | 'UnknownTicket';
   direction: TravelRightDirection;
   fareProductRef: string;
