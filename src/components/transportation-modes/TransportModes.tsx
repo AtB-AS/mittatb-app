@@ -74,7 +74,7 @@ export const TransportModes = ({
     <View style={[styles.transportationMode, style]}>
       <TransportationIconBoxList
         modes={modes}
-        modesDisplayLimit={2}
+        maxNumberOfBoxes={2}
         iconSize={iconSize}
         disabled={disabled}
       />

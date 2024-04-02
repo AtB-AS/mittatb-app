@@ -8,23 +8,27 @@ import {CounterIconBox} from './CounterIconBox';
 
 type Props = {
   modes: TransportModePair[];
-  modesDisplayLimit?: number;
+  maxNumberOfBoxes?: number;
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
 };
 
 export const TransportationIconBoxList = ({
   modes,
-  modesDisplayLimit = 2,
+  maxNumberOfBoxes = 2,
   iconSize,
   disabled,
 }: Props) => {
   const styles = useStyles({iconSize})();
   const {t} = useTranslation();
-  const modesCount: number = modes.length;
+  const numberOfModes: number = modes.length;
+  const hasOverflow = numberOfModes > maxNumberOfBoxes;
+  const numberOfModesToDisplay = hasOverflow
+    ? maxNumberOfBoxes - 1
+    : numberOfModes;
   const modesToDisplay = modes
-    .slice(0, modesDisplayLimit)
-    .filter(removeDuplicatesByIconNameFilter);
+    .filter(removeDuplicatesByIconNameFilter)
+    .slice(0, numberOfModesToDisplay);
 
   return (
     <>
@@ -38,13 +42,17 @@ export const TransportationIconBoxList = ({
           disabled={disabled}
         />
       ))}
-      {modesCount > modesDisplayLimit && (
+      {hasOverflow && (
         <CounterIconBox
-          count={modesCount - modesDisplayLimit}
-          size="xSmall"
+          count={numberOfModes - numberOfModesToDisplay}
+          style={styles.icon}
+          size={iconSize}
+          textType={
+            iconSize === 'xSmall' ? 'label__uppercase' : 'body__secondary'
+          }
           accessibilityLabel={t(
             FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
-              modesCount,
+              numberOfModes,
             ),
           )}
         />
