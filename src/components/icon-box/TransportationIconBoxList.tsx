@@ -47,6 +47,9 @@ export const TransportationIconBoxList = ({
           count={numberOfModes - numberOfModesToDisplay}
           style={styles.icon}
           size={iconSize}
+          textType={
+            iconSize === 'xSmall' ? 'label__uppercase' : 'body__secondary'
+          }
           accessibilityLabel={t(
             FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
               numberOfModes,

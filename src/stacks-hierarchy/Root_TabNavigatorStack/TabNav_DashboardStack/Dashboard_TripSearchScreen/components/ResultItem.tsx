@@ -307,7 +307,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                   <LegDash />
                 </View>
               ) : null}
-              <CounterIconBox count={collapsedLegs.length} />
+              <CounterIconBox
+                count={collapsedLegs.length}
+                spacing="standard"
+                textType="body__primary--bold"
+              />
             </View>
             <View style={[styles.destinationLineContainer_grow, iconHeight]}>
               <View style={[styles.destinationLine_grow, lineHeight]} />
