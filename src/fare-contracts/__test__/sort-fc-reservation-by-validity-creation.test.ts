@@ -16,7 +16,13 @@ jest.mock('@atb/mobile-token/MobileTokenContext', () => {});
 jest.mock('@atb/ticketing/TicketingContext', () => {});
 jest.mock('@atb/configuration/FirestoreConfigurationContext', () => {});
 jest.mock('@atb/api', () => {});
+jest.mock('@atb/time', () => {});
 jest.mock('@react-native-firebase/remote-config', () => {});
+jest.mock('@entur-private/abt-mobile-client-sdk', () => {});
+jest.mock('@bugsnag/react-native', () => {});
+jest.mock('@react-native-firebase/auth', () => {});
+jest.mock('@entur-private/abt-token-server-javascript-interface', () => {});
+jest.mock('react-native-device-info', () => {});
 jest.mock('@atb/auth', () => ({
   useAuthState: () => ({
     authStatus: DEFAULT_MOCK_STATE,
