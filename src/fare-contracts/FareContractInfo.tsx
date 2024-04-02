@@ -188,7 +188,7 @@ export const getFareContractInfoDetails = (
     fareProductRef: productRef,
     tariffZoneRefs,
   } = firstTravelRight;
-  let validTo = endDateTime.toMillis();
+  let validTo = endDateTime.getTime();
   const validityStatus = getValidityStatus(now, fareContract);
 
   const firstZone = tariffZoneRefs?.[0];

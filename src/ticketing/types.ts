@@ -1,5 +1,3 @@
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-
 enum TravelRightStatus {
   UNSPECIFIED = 0,
   RESERVED = 1,
@@ -37,7 +35,7 @@ export type TravelRight = {
   fareProductRef: string;
 };
 
-export type Timestamp = FirebaseFirestoreTypes.Timestamp;
+export type Timestamp = Date;
 
 export type NormalTravelRight = TravelRight & {
   fareProductRef: string;
