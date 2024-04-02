@@ -5,17 +5,14 @@
  * directory of this source tree.
  */
 package no.mittatb;
-
 import android.content.Context;
 import com.facebook.react.ReactInstanceManager;
-import com.facebook.react.flipper.ReactNativeFlipper
-
 /**
- * Class responsible of loading Flipper inside your React Native application. This is the debug
- * flavor of it. Here you can add your own plugins and customize the Flipper setup.
+ * Class responsible of loading Flipper inside your React Native application. This is the release
+ * flavor of it so it's empty as we don't want to load Flipper.
  */
-public class ReactNativeFlipper {
+public class ReactNativeFlipperInitializer {
   public static void initializeFlipper(Context context, ReactInstanceManager reactInstanceManager) {
-    ReactNativeFlipper.initializeFlipper(context, reactInstanceManager)
+    // Do nothing as we don't want to initialize Flipper on Release.
   }
 }
