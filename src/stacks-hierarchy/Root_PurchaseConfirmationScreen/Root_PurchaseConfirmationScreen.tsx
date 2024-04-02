@@ -453,6 +453,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             isMarkdown={true}
           />
         )}
+        <GlobalMessage
+          style={styles.purchaseInformation}
+          globalMessageContext={GlobalMessageContextEnum.appPurchaseConfirmationBottom}
+          textColor="primary"
+          ruleVariables={{
+            preassignedFareProductType: preassignedFareProduct.type,
+          }}
+        />
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
@@ -674,6 +682,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   globalMessage: {
     marginTop: theme.spacings.small,
+  },
+  purchaseInformation: {
+    marginBottom: theme.spacings.medium,
   },
   smallTopMargin: {
     marginTop: theme.spacings.xSmall,
