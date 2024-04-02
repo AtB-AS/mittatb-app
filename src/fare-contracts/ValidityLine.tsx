@@ -17,6 +17,7 @@ type Props =
       validFrom: number;
       validTo: number;
       fareProductType?: string;
+      animate?: boolean;
     }
   | {status: Exclude<ValidityStatus, 'valid'>};
 
@@ -28,7 +29,7 @@ export const ValidityLine = (props: Props): ReactElement => {
   const {lineColor, backgroundColor} = useValidityLineColors(
     status === 'valid' ? props.fareProductType : undefined,
   );
-  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContextState();
 
   switch (status) {
     case 'reserving':
@@ -42,17 +43,17 @@ export const ValidityLine = (props: Props): ReactElement => {
         />
       );
     case 'valid':
-      const {now, validFrom, validTo, fareProductType} = props;
-      const validityPercent = getValidityPercent(now, validFrom, validTo);
+      const {now, validFrom, validTo, animate = true} = props;
+      const validityPercent = animate
+        ? getValidityPercent(now, validFrom, validTo)
+        : 100;
 
-      // Carnet fare contracts are not inspectable, but we still want to show
-      // the validity line
-      return deviceInspectionStatus === 'inspectable' ||
-        fareProductType === 'carnet' ? (
+      return isInspectable ? (
         <LineWithVerticalBars
           backgroundColor={backgroundColor}
           lineColor={lineColor}
           validityPercent={validityPercent}
+          animate={animate}
         />
       ) : (
         <View style={styles.container}>

@@ -221,14 +221,6 @@ export const DepartureDetailsScreenComponent = ({
           style={styles.scrollView__content}
           testID="departureDetailsContentView"
         >
-          {subMode === TransportSubmode.RailReplacementBus && (
-            <MessageInfoBox
-              type="warning"
-              message={t(
-                TripDetailsTexts.messages.departureIsRailReplacementBus,
-              )}
-            />
-          )}
           {screenReaderEnabled ? ( // Let users navigate other departures if screen reader is enabled
             activeItem ? (
               <PaginatedDetailsHeader
@@ -255,7 +247,19 @@ export const DepartureDetailsScreenComponent = ({
               <Divider style={styles.border} />
             </>
           ) : null}
+
+          {subMode === TransportSubmode.RailReplacementBus && (
+            <MessageInfoBox
+              type="warning"
+              message={t(
+                TripDetailsTexts.messages.departureIsRailReplacementBus,
+              )}
+              style={styles.messageBox}
+            />
+          )}
+
           {activeItem?.isTripCancelled && <CancelledDepartureMessage />}
+
           {situations.map((situation) => (
             <SituationMessageBox
               key={situation.id}
@@ -263,6 +267,7 @@ export const DepartureDetailsScreenComponent = ({
               style={styles.messageBox}
             />
           ))}
+
           {notices.map(
             (notice) =>
               notice.text && (
@@ -529,7 +534,10 @@ function EstimatedCallRow({
       ))}
 
       {isStartOfTripGroup && bookingStatus !== 'none' && (
-        <TripRow rowLabel={bookingIcon && <ThemeIcon svg={bookingIcon} />}>
+        <TripRow
+          rowLabel={bookingIcon && <ThemeIcon svg={bookingIcon} />}
+          accessible={false}
+        >
           <BookingInfoBox
             bookingArrangements={call.bookingArrangements}
             aimedStartTime={call.aimedDepartureTime}
@@ -542,7 +550,7 @@ function EstimatedCallRow({
       {isStartOfTripGroup &&
         !call.cancellation &&
         bookingStatus === 'bookable' && (
-          <TripRow>
+          <TripRow accessible={false}>
             <BookingOptions bookingArrangements={call.bookingArrangements} />
           </TripRow>
         )}

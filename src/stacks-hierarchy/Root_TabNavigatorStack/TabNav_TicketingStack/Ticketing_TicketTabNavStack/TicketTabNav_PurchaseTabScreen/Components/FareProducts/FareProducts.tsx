@@ -56,7 +56,7 @@ export const FareProducts = ({
 
   if (otherProducts.length > 0) {
     groupedFareProducts = [
-      ...groupedFareProducts,
+      ...groupedFareProducts.filter((group) => group.fareProducts.length > 0),
       {
         transportModes: [],
         fareProducts: otherProducts,

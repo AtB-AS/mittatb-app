@@ -16,7 +16,7 @@ import {TicketTabNavScreenProps} from './navigation-types';
 import {RefreshControl, ScrollView} from 'react-native-gesture-handler';
 import {usePopOver} from '@atb/popover';
 import {useOneTimePopover} from '@atb/popover/use-one-time-popover';
-import {isViewVisibleOnScreen} from '@atb/utils/is-view-visible-on-screen';
+import {isElementFullyInsideScreen} from '@atb/utils/is-element-fully-inside-screen';
 
 type Props =
   TicketTabNavScreenProps<'TicketTabNav_ActiveFareProductsTabScreen'>;
@@ -71,7 +71,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
       sentFareContractRef.current.measure(
         (x, y, width, height, pageX, pageY) => {
           const window = Dimensions.get('window');
-          const isViewVisible = isViewVisibleOnScreen(
+          const isElementVisible = isElementFullyInsideScreen(
             width,
             height,
             pageX,
@@ -80,7 +80,7 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
             window.height,
           );
 
-          if (isViewVisible) {
+          if (isElementVisible) {
             showPopOver();
           }
         },

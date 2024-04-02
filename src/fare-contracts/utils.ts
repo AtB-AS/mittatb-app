@@ -109,16 +109,16 @@ export const mapToUserProfilesWithCount = (
 
 export const useNonInspectableTokenWarning = () => {
   const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
-  switch (barcodeStatus) {
-    case 'mobiletoken':
-    case 'static':
+  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  switch (mobileTokenStatus) {
+    case 'success-and-inspectable':
+    case 'fallback':
     case 'staticQr':
     case 'loading':
       return undefined;
     case 'error':
       return t(FareContractTexts.warning.errorWithToken);
-    case 'other':
+    case 'success-not-inspectable':
       const inspectableToken = tokens.find((t) => t.isInspectable);
       return inspectableToken?.type === 'travel-card'
         ? t(FareContractTexts.warning.travelCardAsToken)
@@ -133,16 +133,16 @@ export const useNonInspectableTokenWarning = () => {
 
 export const useOtherDeviceIsInspectableWarning = () => {
   const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
-  switch (barcodeStatus) {
-    case 'mobiletoken':
-    case 'static':
+  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  switch (mobileTokenStatus) {
+    case 'success-and-inspectable':
+    case 'fallback':
     case 'staticQr':
     case 'loading':
       return undefined;
     case 'error':
       return t(FareContractTexts.warning.errorWithToken);
-    case 'other':
+    case 'success-not-inspectable':
       const inspectableToken = tokens.find((t) => t.isInspectable);
       const deviceName =
         inspectableToken?.name || t(FareContractTexts.warning.unnamedDevice);
@@ -265,11 +265,15 @@ export function getFareContractInfo(
   const validTo = lastUsedAccess?.validTo
     ? lastUsedAccess.validTo
     : fareContractValidTo;
-  const validityStatus = lastUsedAccess
-    ? lastUsedAccess.status
-    : fareContractValidityStatus;
 
-  const carnetAccessStatus = lastUsedAccess?.status;
+  const validityStatus = lastUsedAccess
+    ? isSent
+      ? 'sent'
+      : lastUsedAccess.status
+    : fareContractValidityStatus;
+  // TODO: Carnet access status should be part of validity status
+  const carnetAccessStatus = isSent ? 'inactive' : lastUsedAccess?.status;
+
   const maximumNumberOfAccesses =
     carnetTravelRightAccesses?.maximumNumberOfAccesses;
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;

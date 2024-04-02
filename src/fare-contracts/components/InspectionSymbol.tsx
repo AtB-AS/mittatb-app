@@ -11,7 +11,7 @@ import {
   TariffZone,
   useFirestoreConfiguration,
 } from '@atb/configuration';
-import {Moon} from '@atb/assets/svg/mono-icons/ticketing';
+import {Moon, Youth} from '@atb/assets/svg/mono-icons/ticketing';
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
 import {ContrastColor} from '@atb-as/theme';
 import {getTransportationColor} from '@atb/theme/colors';
@@ -43,14 +43,13 @@ export const InspectionSymbol = ({
     fareProductTypeConfig?.transportModes[0].subMode,
   );
 
-  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {isInspectable, mobileTokenStatus} = useMobileTokenContextState();
 
-  const themeColor =
-    deviceInspectionStatus === 'inspectable'
-      ? getTransportationColor(themeName, transportColor)
-      : theme.static.status['warning'];
+  const themeColor = isInspectable
+    ? getTransportationColor(themeName, transportColor)
+    : theme.static.status['warning'];
 
-  if (deviceInspectionStatus === 'loading') {
+  if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
   }
 
@@ -58,7 +57,7 @@ export const InspectionSymbol = ({
     <View
       style={[styles.symbolContainer, {borderColor: themeColor.background}]}
     >
-      {deviceInspectionStatus === 'inspectable' && !sentTicket ? (
+      {isInspectable && !sentTicket ? (
         <InspectableContent
           preassignedFareProduct={preassignedFareProduct}
           fromTariffZone={fromTariffZone}
@@ -93,12 +92,16 @@ const InspectableContent = ({
 
   const shouldFill =
     fareProductTypeConfig?.illustration?.includes('period') ||
-    fareProductTypeConfig?.illustration === 'hour24';
+    fareProductTypeConfig?.illustration === 'hour24' ||
+    fareProductTypeConfig?.illustration === 'youth';
+
   const InspectionSvg =
     fareProductTypeConfig?.illustration === 'night'
       ? Moon
       : fareProductTypeConfig?.illustration?.includes('boat')
       ? Boat
+      : fareProductTypeConfig?.illustration === 'youth'
+      ? Youth
       : Bus;
 
   const fromTariffZoneName =

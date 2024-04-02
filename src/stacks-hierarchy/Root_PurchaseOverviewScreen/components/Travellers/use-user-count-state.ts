@@ -1,5 +1,6 @@
 import {useCallback, useReducer} from 'react';
 import {UserProfileWithCount} from '@atb/fare-contracts';
+import {UserCountState} from './types';
 
 type ReducerState = {
   userProfilesWithCount: UserProfileWithCount[];
@@ -62,14 +63,6 @@ const countReducer: CountReducer = (prevState, action): ReducerState => {
       };
     }
   }
-};
-
-export type UserCountState = {
-  userProfilesWithCount: UserProfileWithCount[];
-  addCount: (userTypeString: string) => void;
-  removeCount: (userTypeString: string) => void;
-  updateSelectable: (selectableUserProfiles: UserProfileWithCount[]) => void;
-  fareProductType?: string;
 };
 
 export function useUserCountState(

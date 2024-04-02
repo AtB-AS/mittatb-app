@@ -109,7 +109,7 @@ export const Root_LoginPhoneInputScreen = ({
               {t(LoginTexts.phoneInput.description)}
             </ThemeText>
           </View>
-          <Section>
+          <Section style={styles.phoneInput}>
             <PhoneInputSectionItem
               label={t(PhoneInputTexts.input.title)}
               value={phoneNumber}
@@ -187,6 +187,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   description: {
     marginVertical: theme.spacings.large,
     textAlign: 'center',
+  },
+  phoneInput: {
+    marginVertical: theme.spacings.xSmall,
   },
   activityIndicator: {
     marginVertical: theme.spacings.large,

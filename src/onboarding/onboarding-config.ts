@@ -23,7 +23,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
         params: {},
       },
       shouldShowBeforeUserCreated: true,
-      shouldShowPredicate: () => true,
+      shouldShowPredicate: ({authenticationType}) => authenticationType === 'anonymous',
     },
     {
       isOnboardedStoreKey: '@ATB_location_when_in_use_permission_onboarded',
@@ -72,14 +72,8 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
       initialScreen: {
         name: 'Root_ConsiderTravelTokenChangeScreen',
       },
-      shouldShowPredicate: ({
-        mobileTokenStatus,
-        deviceInspectionStatus,
-        travelCardDisabled,
-      }) =>
-        mobileTokenStatus === 'success' &&
-        deviceInspectionStatus === 'not-inspectable' &&
-        !travelCardDisabled,
+      shouldShowPredicate: ({mobileTokenStatus, travelCardDisabled}) =>
+        mobileTokenStatus === 'success-not-inspectable' && !travelCardDisabled,
     },
     {
       isOnboardedStoreKey: '@ATB_mobile_token_without_travelcard_onboarded',
@@ -87,13 +81,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
       initialScreen: {
         name: 'Root_ConsiderTravelTokenChangeScreen',
       },
-      shouldShowPredicate: ({
-        mobileTokenStatus,
-        deviceInspectionStatus,
-        travelCardDisabled,
-      }) =>
-        mobileTokenStatus === 'success' &&
-        deviceInspectionStatus === 'not-inspectable' &&
-        travelCardDisabled,
+      shouldShowPredicate: ({mobileTokenStatus, travelCardDisabled}) =>
+        mobileTokenStatus === 'success-not-inspectable' && travelCardDisabled,
     },
   ];

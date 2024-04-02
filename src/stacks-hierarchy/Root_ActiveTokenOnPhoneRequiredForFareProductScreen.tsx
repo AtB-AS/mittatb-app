@@ -5,19 +5,20 @@ import {
   TravelTokenTexts,
   useTranslation,
 } from '@atb/translations';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, ScrollView, View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {Token, useMobileTokenContextState} from '@atb/mobile-token';
-import {RadioGroupSection, Section} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import MobileTokenOnboarding from '@atb/translations/screens/subscreens/MobileTokenOnboarding';
 import Ticketing from '@atb/translations/screens/Ticketing';
 import {getDeviceNameWithUnitInfo} from '@atb/select-travel-token-screen/utils';
+import {useToggleTokenMutation} from '@atb/mobile-token';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -33,30 +34,29 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
   const focusRef = useFocusOnLoad();
   const {nextScreen} = route.params;
 
-  const {tokens, toggleToken} = useMobileTokenContextState();
+  const {tokens} = useMobileTokenContextState();
+  const toggleMutation = useToggleTokenMutation();
   const [selectedToken, setSelectedToken] = useState<Token>();
   const mobileTokens = tokens.filter((t) => t.type === 'mobile');
 
-  const [saveState, setSaveState] = useState({
-    saving: false,
-    error: false,
-  });
+  useEffect(() => {
+    if (toggleMutation.isSuccess) {
+      navigation.navigate(nextScreen.screen, nextScreen.params as any);
+    }
+  }, [navigation, toggleMutation.isSuccess, nextScreen]);
 
   const onSave = useCallback(async () => {
     if (selectedToken) {
-      if (selectedToken.isInspectable && nextScreen) {
+      if (selectedToken.isInspectable) {
         navigation.navigate(nextScreen.screen, nextScreen.params as any);
         return;
       }
-      setSaveState({saving: true, error: false});
-      const success = await toggleToken(selectedToken.id, true);
-      if (success && nextScreen) {
-        navigation.navigate(nextScreen.screen, nextScreen.params as any);
-      } else {
-        setSaveState({saving: false, error: true});
-      }
+      toggleMutation.mutate({
+        tokenId: selectedToken.id,
+        bypassRestrictions: true,
+      });
     }
-  }, [toggleToken, selectedToken, nextScreen, navigation]);
+  }, [toggleMutation, selectedToken, nextScreen, navigation]);
 
   return (
     <View style={styles.container}>
@@ -98,18 +98,18 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         </ThemeText>
 
         {mobileTokens?.length ? (
-          <Section type="spacious" style={styles.selectDeviceSection}>
-            <RadioGroupSection<Token>
-              items={mobileTokens}
-              keyExtractor={(token) => token.id}
-              itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
-              selected={selectedToken}
-              onSelect={setSelectedToken}
-              headerText={t(
-                TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
-              )}
-            />
-          </Section>
+          <RadioGroupSection<Token>
+            type="spacious"
+            style={styles.selectDeviceSection}
+            items={mobileTokens}
+            keyExtractor={(token) => token.id}
+            itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
+            selected={selectedToken}
+            onSelect={setSelectedToken}
+            headerText={t(
+              TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
+            )}
+          />
         ) : (
           <MessageInfoBox
             type="warning"
@@ -119,7 +119,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
           />
         )}
 
-        {saveState.error && (
+        {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
             message={t(TravelTokenTexts.toggleToken.errorMessage)}
@@ -134,8 +134,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         >
           {t(ActiveTokenRequiredTexts.actionMessage)}
         </ThemeText>
-
-        {saveState.saving ? (
+        {toggleMutation.isLoading ? (
           <ActivityIndicator size="large" />
         ) : (
           <Button
@@ -144,6 +143,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
             interactiveColor="interactive_0"
             disabled={!selectedToken}
             testID="confirmSelectionButton"
+            style={styles.buttonStyle}
           />
         )}
       </ScrollView>
@@ -153,7 +153,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: theme.static.background[themeColor].background,
   },
   mainView: {
@@ -172,5 +172,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   errorMessageBox: {
     marginBottom: theme.spacings.medium,
+  },
+  buttonStyle: {
+    paddingVertical: theme.spacings.medium,
   },
 }));

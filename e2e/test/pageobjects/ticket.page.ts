@@ -10,6 +10,22 @@ class TicketPage {
     await $(reqId).click();
     await AppHelper.pause();
   }
+
+  /**
+   * Return the warning info for anonymous purchases
+   */
+  get anonymousWarning() {
+    const reqId = `//*[@resource-id="anonymousWarning"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Return the title of the warning info for anonymous purchases
+   */
+  get getAnonymousWarningTitle() {
+    const reqId = `//*[@resource-id="anonymousWarningTitle"]`;
+    return $(reqId).getText();
+  }
 }
 
 export default new TicketPage();

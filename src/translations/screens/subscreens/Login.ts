@@ -49,22 +49,28 @@ const LoginTexts = {
     title: _('Betingelser', 'Terms', 'Vilkår'),
   },
   activeFareContractPrompt: {
+    header: _('Logg inn', 'Log in', 'Logg inn'),
     title: _(
-      'Vent litt, du har en gyldig billett',
-      'Wait a sec – you have a valid ticket',
-      'Vent litt, du har ein gyldig billett',
+      'Billetten din slettes ved innlogging',
+      'Your ticket will be deleted upon logging in',
+      'Billetten din slettast ved innlogging',
     ),
     body: _(
-      'Billetten kan **ikke** overføres til din profil og vil slettes ved innlogging. Dersom du trenger billetten, vent til den er utløpt **før** du logger inn.',
-      'This ticket can **not** be transferred to your profile, and will be deleted upon login. If you need the ticket, wait until it has expired **before** logging in.',
-      'Billetten kan **ikkje** overførast til din profil og vil slettast ved innlogging. Dersom du treng billetten, vent til den er gått ut **før** du loggar inn.',
+      'Billetten din kan ikke overføres til en profil, fordi den er kjøpt anonymt. Vent med å logge inn til billetten utløper, for å unngå at den blir slettet. Slettede billetter **refunderes ikke.**',
+      'Your ticket cannot be transferred to a profile because it was purchased anonymously. Please wait until it expires before you log in, to avoid deletion. Deleted tickets are **non-refundable.**',
+      'Billetten din kan ikkje overførast til ein profil, sidan den vart kjøpt anonymt. Vent med å logge inn til billetten går ut, for å unngå at den blir sletta. Sletta billettar blir **ikkje refunderte.**',
     ),
-    laterButton: _('Logg inn senere', 'Log in later', 'Logg inn seinare'),
-    continueButton: _(
-      'Jeg vil logge inn likevel',
-      'I want to log in anyway',
-      'Eg vil logge inn likevel',
+    ticketReservationBody: _(
+      'Billetten din er under behandling og kan ikke overføres til en profil, fordi den er kjøpt anonymt. Vent med å logge inn til billetten er behandlet og utløpt, for å unngå at den blir slettet. Slettede billetter **refunderes ikke.**',
+      'Your ticket is being processed and cannot be transferred to a profile because it was purchased anonymously. Please wait until processing is finished and it expires before you log in, to avoid deletion. Deleted tickets are **non-refundable.**',
+      'Billetten din er under behandling og kan ikkje overførast til ein profil, sidan den vart kjøpt anonymt. Vent med å logge inn til billetten er behandla og går ut, for å unngå at den blir sletta. Sletta billettar blir **ikkje refunderte.**',
     ),
+    logInAndDeleteButton: _(
+      'Logg inn og slett',
+      'Log in and delete',
+      'Logg inn og slett',
+    ),
+    cancelButton: _('Avbryt', 'Cancel', 'Avbryt'),
   },
   onboarding: {
     title: _(

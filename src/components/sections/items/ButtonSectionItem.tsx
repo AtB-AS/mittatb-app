@@ -50,11 +50,6 @@ export function ButtonSectionItem({
   const hasIcon = Boolean(icon);
   const iconEl = isNavigationIcon(icon) ? <NavigationIcon mode={icon} /> : icon;
 
-  const wrapperStyle =
-    props.type == 'compact' || props.type == 'inline'
-      ? styles.wrapper__inline
-      : undefined;
-
   const padding = {padding: spacing};
 
   const handlerWithoutPress =
@@ -90,7 +85,7 @@ export function ButtonSectionItem({
   const containerPadding = hasIcon ? {paddingRight: 60} : undefined;
 
   return (
-    <View style={wrapperStyle}>
+    <View>
       <PressableOpacity
         onPress={onPress}
         style={[topContainer, styles.container, containerPadding]}

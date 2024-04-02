@@ -187,37 +187,34 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           />
         </Section>
 
-        <View style={css.emojiContainer}>
-          <Section>
-            <ButtonSectionItem
-              onPress={openEmojiPopup}
-              accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
-              accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
-              label={t(AddEditFavoriteTexts.fields.icon.label)}
-              icon="expand-more"
-              type="inline"
-              value={
-                !emoji ? (
-                  <ThemeIcon svg={Pin} />
-                ) : (
-                  <ThemeText type="body__primary">{emoji}</ThemeText>
-                )
-              }
-              testID="iconButton"
-            />
-          </Section>
-          {emoji && (
-            <Button
-              text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
-              type="small"
-              mode="tertiary"
-              backgroundColor={themeColor}
-              onPress={() => {
-                setEmoji(undefined);
-              }}
-            />
-          )}
-        </View>
+        <Section withPadding style={css.emojiContainer}>
+          <ButtonSectionItem
+            onPress={openEmojiPopup}
+            accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
+            accessibilityHint={t(AddEditFavoriteTexts.fields.icon.a11yHint)}
+            label={t(AddEditFavoriteTexts.fields.icon.label)}
+            icon="expand-more"
+            value={
+              !emoji ? (
+                <ThemeIcon svg={Pin} />
+              ) : (
+                <ThemeText type="body__primary">{emoji}</ThemeText>
+              )
+            }
+            testID="iconButton"
+          />
+        </Section>
+        {emoji && (
+          <Button
+            text={t(AddEditFavoriteTexts.emojiSheet.rightButton)}
+            type="small"
+            mode="tertiary"
+            backgroundColor={themeColor}
+            onPress={() => {
+              setEmoji(undefined);
+            }}
+          />
+        )}
       </ScrollView>
 
       <FullScreenFooter avoidKeyboard={true}>
@@ -250,13 +247,10 @@ const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
   },
   buttonContainer: {
-    gap: theme.spacings.small,
+    marginBottom: theme.spacings.medium,
   },
   emojiContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: theme.spacings.medium,
-    gap: theme.spacings.small,
+    width: '50%',
   },
   innerContainer: {
     flex: 1,
