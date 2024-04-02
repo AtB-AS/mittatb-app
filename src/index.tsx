@@ -73,64 +73,68 @@ export const App = () => {
     return <GestureHandlerRootView style={{flex: 1}} />;
   }
 
+  // For react-native-gesture-handler to work properly, it needs to be wrapped in a GestureHandlerRootView
+  // https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/installation
   return (
-    <SafeAreaProvider>
-      {IS_QA_OR_DEV && <FlipperAsyncStorage />}
-      <StorybookContextProvider>
-        <ErrorBoundary type="full-screen">
-          <PreferencesContextProvider>
-            <LocaleContextProvider>
-              <AuthContextProvider>
-                <RemoteConfigContextProvider>
-                  <TimeContextProvider>
-                    <AnalyticsContextProvider>
-                      <AccessibilityContextProvider>
-                        <ThemeContextProvider>
-                          <FavoritesContextProvider>
-                            <FiltersContextProvider>
-                              <SearchHistoryContextProvider>
-                                <FirestoreConfigurationContextProvider>
-                                  <TicketingContextProvider>
-                                    <ReactQueryProvider>
-                                      <MobileTokenContextProvider>
-                                        <AppLanguageProvider>
-                                          <GeolocationContextProvider>
-                                            <GlobalMessagesContextProvider>
-                                              <AnnouncementsContextProvider>
-                                                <NotificationContextProvider>
-                                                  <PopOverContextProvider>
-                                                    <BottomSheetProvider>
-                                                      <FeedbackQuestionsProvider>
-                                                        <BeaconsContextProvider>
-                                                          <OnboardingContextProvider>
-                                                            <RootStack />
-                                                          </OnboardingContextProvider>
-                                                        </BeaconsContextProvider>
-                                                      </FeedbackQuestionsProvider>
-                                                    </BottomSheetProvider>
-                                                  </PopOverContextProvider>
-                                                </NotificationContextProvider>
-                                              </AnnouncementsContextProvider>
-                                            </GlobalMessagesContextProvider>
-                                          </GeolocationContextProvider>
-                                        </AppLanguageProvider>
-                                      </MobileTokenContextProvider>
-                                    </ReactQueryProvider>
-                                  </TicketingContextProvider>
-                                </FirestoreConfigurationContextProvider>
-                              </SearchHistoryContextProvider>
-                            </FiltersContextProvider>
-                          </FavoritesContextProvider>
-                        </ThemeContextProvider>
-                      </AccessibilityContextProvider>
-                    </AnalyticsContextProvider>
-                  </TimeContextProvider>
-                </RemoteConfigContextProvider>
-              </AuthContextProvider>
-            </LocaleContextProvider>
-          </PreferencesContextProvider>
-        </ErrorBoundary>
-      </StorybookContextProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <SafeAreaProvider>
+        {IS_QA_OR_DEV && <FlipperAsyncStorage />}
+        <StorybookContextProvider>
+          <ErrorBoundary type="full-screen">
+            <PreferencesContextProvider>
+              <LocaleContextProvider>
+                <AuthContextProvider>
+                  <RemoteConfigContextProvider>
+                    <TimeContextProvider>
+                      <AnalyticsContextProvider>
+                        <AccessibilityContextProvider>
+                          <ThemeContextProvider>
+                            <FavoritesContextProvider>
+                              <FiltersContextProvider>
+                                <SearchHistoryContextProvider>
+                                  <FirestoreConfigurationContextProvider>
+                                    <TicketingContextProvider>
+                                      <ReactQueryProvider>
+                                        <MobileTokenContextProvider>
+                                          <AppLanguageProvider>
+                                            <GeolocationContextProvider>
+                                              <GlobalMessagesContextProvider>
+                                                <AnnouncementsContextProvider>
+                                                  <NotificationContextProvider>
+                                                    <PopOverContextProvider>
+                                                      <BottomSheetProvider>
+                                                        <FeedbackQuestionsProvider>
+                                                          <BeaconsContextProvider>
+                                                            <OnboardingContextProvider>
+                                                              <RootStack />
+                                                            </OnboardingContextProvider>
+                                                          </BeaconsContextProvider>
+                                                        </FeedbackQuestionsProvider>
+                                                      </BottomSheetProvider>
+                                                    </PopOverContextProvider>
+                                                  </NotificationContextProvider>
+                                                </AnnouncementsContextProvider>
+                                              </GlobalMessagesContextProvider>
+                                            </GeolocationContextProvider>
+                                          </AppLanguageProvider>
+                                        </MobileTokenContextProvider>
+                                      </ReactQueryProvider>
+                                    </TicketingContextProvider>
+                                  </FirestoreConfigurationContextProvider>
+                                </SearchHistoryContextProvider>
+                              </FiltersContextProvider>
+                            </FavoritesContextProvider>
+                          </ThemeContextProvider>
+                        </AccessibilityContextProvider>
+                      </AnalyticsContextProvider>
+                    </TimeContextProvider>
+                  </RemoteConfigContextProvider>
+                </AuthContextProvider>
+              </LocaleContextProvider>
+            </PreferencesContextProvider>
+          </ErrorBoundary>
+        </StorybookContextProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 };
