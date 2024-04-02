@@ -1,7 +1,6 @@
 import OnboardingPage from '../pageobjects/onboarding.page.ts';
 import AppHelper from '../utils/app.helper.ts';
 import ElementHelper from '../utils/element.helper.ts';
-import {HeadingTexts} from '../texts/index.ts';
 
 describe('Onboarding', () => {
   before(async () => {
@@ -29,7 +28,7 @@ describe('Onboarding', () => {
       await OnboardingPage.denyLocation();
 
       await ElementHelper.waitForElement('id', 'dashboardScrollView');
-      await ElementHelper.expectText(HeadingTexts.travelsearch);
+      await ElementHelper.expectText('Travel search');
     } catch (errMsg) {
       await AppHelper.screenshot('error_onboarding_should_onboard');
       throw errMsg;

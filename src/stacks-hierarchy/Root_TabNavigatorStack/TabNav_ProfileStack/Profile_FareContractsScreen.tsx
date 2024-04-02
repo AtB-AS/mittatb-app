@@ -81,6 +81,18 @@ export const Profile_FareContractsScreen = () => {
     ],
   };
 
+  const YOUTH_TICKET = {
+    ...BASE,
+    travelRights: [
+      {
+        ...BASE.travelRights[0],
+        type: 'YouthTicket',
+        fareProductRef: 'ATB:PreassignedFareProduct:47bb613e',
+        id: 'ATB:CustomerPurchasePackage:Y1EGBK3C',
+      },
+    ],
+  };
+
   const NIGHT_TICKET = {
     ...BASE,
     travelRights: [
@@ -174,6 +186,7 @@ export const Profile_FareContractsScreen = () => {
     WEEKLY_PASS_BOAT,
     CARNET_TICKET,
     CARNET_TICKET_INACTIVE,
+    YOUTH_TICKET,
   ] as FareContract[];
 
   return (

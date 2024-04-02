@@ -42,12 +42,14 @@ export function MessageSectionItem({
     ('action' in onPressConfig
       ? onPressConfig.action
       : () => Linking.openURL(onPressConfig.url));
+  const accessibilityRole =
+    onPressConfig && 'action' in onPressConfig ? 'button' : 'link';
 
   return (
     <PressableOpacityOrView
       onClick={onPress}
       accessible={true}
-      accessibilityRole={onPress && 'button'}
+      accessibilityRole={accessibilityRole}
       accessibilityLabel={a11yLabel}
       style={[
         topContainer,
@@ -66,6 +68,7 @@ export function MessageSectionItem({
             type="body__primary--bold"
             style={styles.title}
             color={messageType}
+            testID="title"
           >
             {title}
           </ThemeText>

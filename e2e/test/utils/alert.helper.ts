@@ -11,6 +11,14 @@ class AlertHelper {
   }
 
   /**
+   * Title of the pop-up alert
+   */
+  get alertTitle() {
+    const id = `//*[@resource-id="android:id/alertTitle"]`;
+    return $(id).getText();
+  }
+
+  /**
    * Cancel button in pop-up alerts
    */
   get alertCancel() {

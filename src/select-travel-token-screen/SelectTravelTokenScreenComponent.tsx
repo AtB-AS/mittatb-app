@@ -7,7 +7,6 @@ import {StyleSheet, Theme} from '@atb/theme';
 import {ThemedTokenPhone, ThemedTokenTravelCard} from '@atb/theme/ThemedAssets';
 import {
   filterActiveOrCanBeUsedFareContracts,
-  isCarnetTravelRight,
   useTicketingState,
 } from '@atb/ticketing';
 import {
@@ -20,7 +19,7 @@ import {flatMap} from '@atb/utils/array';
 import React, {useCallback, useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {RadioGroupSection, Section} from '@atb/components/sections';
+import {RadioGroupSection} from '@atb/components/sections';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {
   findReferenceDataById,
@@ -32,7 +31,8 @@ import {useTimeContextState} from '@atb/time';
 import {getDeviceNameWithUnitInfo} from './utils';
 import {TokenToggleInfo} from '@atb/token-toggle-info';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {useAppState} from '@atb/AppContext';
+import {useOnboardingState} from '@atb/onboarding';
+import {useToggleTokenMutation} from '@atb/mobile-token';
 
 type Props = {onAfterSave: () => void};
 
@@ -45,9 +45,10 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
   const {fareProductTypeConfigs, preassignedFareProducts} =
     useFirestoreConfiguration();
 
-  const {completeOnboardingSection} = useAppState();
+  const {completeOnboardingSection} = useOnboardingState();
 
-  const {tokens, toggleToken} = useMobileTokenContextState();
+  const {tokens} = useMobileTokenContextState();
+  const toggleMutation = useToggleTokenMutation();
   const {data} = useTokenToggleDetailsQuery();
 
   const {serverNow} = useTimeContextState();
@@ -65,9 +66,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     filterActiveOrCanBeUsedFareContracts(fareContracts, serverNow),
     (i) => i.travelRights,
   );
-
-  const hasActiveCarnetFareContract =
-    activeFareContracts.some(isCarnetTravelRight);
 
   // Filter for unique travel rights config types
   const activeFareContractsTypes = activeFareContracts
@@ -101,10 +99,9 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
     );
   }, [disable_travelcard, completeOnboardingSection]);
 
-  const [saveState, setSaveState] = useState({
-    saving: false,
-    error: false,
-  });
+  useEffect(() => {
+    if (toggleMutation.isSuccess) onAfterSave();
+  }, [toggleMutation.isSuccess, onAfterSave]);
 
   const onSave = useCallback(async () => {
     if (selectedToken) {
@@ -112,15 +109,12 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
         onAfterSave();
         return;
       }
-      setSaveState({saving: true, error: false});
-      const success = await toggleToken(selectedToken.id, false);
-      if (success) {
-        onAfterSave();
-      } else {
-        setSaveState({saving: false, error: true});
-      }
+      toggleMutation.mutate({
+        tokenId: selectedToken.id,
+        bypassRestrictions: false,
+      });
     }
-  }, [selectedToken, toggleToken, onAfterSave]);
+  }, [selectedToken, toggleMutation, onAfterSave]);
 
   const travelCardToken = tokens?.find((t) => t.type === 'travel-card');
   const mobileTokens = tokens?.filter((t) => t.type === 'mobile');
@@ -193,7 +187,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             testID="selectMobile"
           />
         </View>
-
         {selectedType === 'travel-card' && !travelCardToken && (
           <MessageInfoBox
             type="warning"
@@ -202,7 +195,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             isMarkdown={true}
           />
         )}
-
         {selectedType === 'mobile' && !mobileTokens?.length && (
           <MessageInfoBox
             type="warning"
@@ -211,21 +203,6 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
             isMarkdown={false}
           />
         )}
-
-        {/* Show warning if we have selected to switch to mobile, but the
-            current inspectable token is travelCard AND we have active carnet
-             fare contract */}
-        {selectedType === 'mobile' &&
-          inspectableToken?.type === 'travel-card' &&
-          hasActiveCarnetFareContract && (
-            <MessageInfoBox
-              type="warning"
-              message={t(TravelTokenTexts.toggleToken.hasCarnet)}
-              style={styles.errorMessageBox}
-              isMarkdown={false}
-            />
-          )}
-
         {requiresTokenOnMobile && (
           <MessageInfoBox
             type="error"
@@ -245,36 +222,33 @@ export const SelectTravelTokenScreenComponent = ({onAfterSave}: Props) => {
           />
         )}
         {selectedType === 'mobile' && mobileTokens?.length ? (
-          <Section type="spacious" style={styles.selectDeviceSection}>
-            <RadioGroupSection<Token>
-              items={mobileTokens}
-              keyExtractor={(token) => token.id}
-              itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
-              selected={selectedToken}
-              onSelect={setSelectedToken}
-              headerText={t(
-                TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
-              )}
-            />
-          </Section>
+          <RadioGroupSection<Token>
+            type="spacious"
+            style={styles.selectDeviceSection}
+            items={mobileTokens}
+            keyExtractor={(token) => token.id}
+            itemToText={(token) => getDeviceNameWithUnitInfo(t, token)}
+            selected={selectedToken}
+            onSelect={setSelectedToken}
+            headerText={t(
+              TravelTokenTexts.toggleToken.radioBox.phone.selection.heading,
+            )}
+          />
         ) : null}
-
-        {saveState.error && (
+        {toggleMutation.isError && (
           <MessageInfoBox
             type="error"
             message={t(TravelTokenTexts.toggleToken.errorMessage)}
             style={styles.errorMessageBox}
           />
         )}
-
         {data?.toggleLimit !== undefined && (
           <TokenToggleInfo
             style={styles.tokenInfo}
             textColor="background_accent_0"
           />
         )}
-
-        {saveState.saving ? (
+        {toggleMutation.isLoading ? (
           <ActivityIndicator size="large" />
         ) : (
           !requiresTokenOnMobile && (

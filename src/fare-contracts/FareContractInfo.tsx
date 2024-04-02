@@ -79,7 +79,7 @@ export const FareContractInfoHeader = ({
   const productDescription = preassignedFareProduct
     ? getTextForLanguage(preassignedFareProduct.description, language)
     : undefined;
-  const warning = useNonInspectableTokenWarning(preassignedFareProduct?.type);
+  const warning = useNonInspectableTokenWarning();
   const showTwoWayIcon = travelRight.direction === TravelRightDirection.Both;
 
   const {data: phoneNumber} = useGetPhoneByAccountIdQuery(

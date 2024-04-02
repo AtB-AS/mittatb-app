@@ -12,8 +12,8 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {SelectFavouritesBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_RootScreen/components/SelectFavouritesBottomSheet';
 import {StyleSheet, Theme} from '@atb/theme';
 import {
-  filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
+  useHasReservationOrActiveFareContract,
 } from '@atb/ticketing';
 import {
   getTextForLanguage,
@@ -40,7 +40,6 @@ import {
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
-import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
@@ -65,16 +64,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     customerNumber,
   } = useAuthState();
   const config = useLocalConfig();
-
-  const {fareContracts, customerProfile} = useTicketingState();
-  const {serverNow} = useTimeContextState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-    serverNow,
-  );
+  const {customerProfile} = useTicketingState();
+  const hasReservationOrActiveFareContract =
+    useHasReservationOrActiveFareContract();
   const {setEnabled: setStorybookEnabled} = useStorybookContext();
-
-  const hasActiveFareContracts = activeFareContracts.length > 0;
 
   const {configurableLinks} = useFirestoreConfiguration();
   const ticketingInfo = configurableLinks?.ticketingInfo;
@@ -171,7 +164,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 ProfileTexts.sections.account.linkSectionItems.login.label,
               )}
               onPress={() => {
-                if (hasActiveFareContracts) {
+                if (hasReservationOrActiveFareContract) {
                   navigation.navigate(
                     'Root_LoginActiveFareContractWarningScreen',
                     {},
@@ -386,6 +379,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems
                         .ticketing.a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}
@@ -403,6 +397,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems.terms
                         .a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}
@@ -421,6 +416,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems
                         .inspection.a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}
@@ -439,6 +435,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                       ProfileTexts.sections.information.linkSectionItems.refund
                         .a11yLabel,
                     ),
+                    accessibilityRole: 'link',
                   }}
                 />
               )}

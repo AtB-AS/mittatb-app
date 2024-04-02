@@ -25,8 +25,7 @@ export function TravelTokenBox({
 }) {
   const styles = useStyles(interactiveColor)();
   const {t} = useTranslation();
-  const {deviceInspectionStatus, mobileTokenStatus, tokens, retry} =
-    useMobileTokenContextState();
+  const {mobileTokenStatus, isInspectable, tokens, retry} = useMobileTokenContextState();
 
   const {themeName} = useTheme();
   const themeTextColor = getInteractiveColor(
@@ -38,7 +37,7 @@ export function TravelTokenBox({
   const onPressChangeButton = () =>
     navigation.navigate('Root_SelectTravelTokenScreen');
 
-  if (deviceInspectionStatus === 'loading') {
+  if (mobileTokenStatus === 'loading') {
     return (
       <View style={styles.loadingIndicator}>
         <ActivityIndicator size="large" />
@@ -47,8 +46,8 @@ export function TravelTokenBox({
   }
 
   const showTokensNotWorkingError =
-    mobileTokenStatus === 'error' &&
-    (alwaysShowErrors || deviceInspectionStatus === 'not-inspectable');
+    mobileTokenStatus === 'error' ||
+    (alwaysShowErrors && mobileTokenStatus === 'fallback');
   if (showTokensNotWorkingError) {
     return (
       <MessageInfoBox
@@ -64,7 +63,7 @@ export function TravelTokenBox({
     );
   }
 
-  if (deviceInspectionStatus === 'inspectable' && !showIfThisDevice) {
+  if (isInspectable && !showIfThisDevice) {
     return null;
   }
 

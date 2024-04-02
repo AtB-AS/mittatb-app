@@ -27,6 +27,11 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FullScreenView} from '@atb/components/screen-view';
 import {FareProductHeader} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/components/FareProductHeader';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
+import {Section, ToggleSectionItem} from '@atb/components/sections';
+import {HoldingHands} from '@atb/assets/svg/color/images';
+import {ContentHeading} from '@atb/components/heading';
+import {isUserProfileSelectable} from './utils';
+import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -87,6 +92,9 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     requiresTokenOnMobile,
   } = params.fareProductTypeConfig.configuration;
 
+  const fareProductOnBehalfOfEnabled =
+    params.fareProductTypeConfig.configuration.onBehalfOfEnabled;
+
   const offerEndpoint =
     zoneSelectionMode === 'none'
       ? 'authority'
@@ -125,6 +133,14 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     ?.latestActivationDate
     ? new Date(preassignedFareProduct.limitations.latestActivationDate * 1000)
     : undefined;
+
+  const canSelectUserProfile = isUserProfileSelectable(
+    travellerSelectionMode,
+    selectableTravellers,
+  );
+
+  const isOnBehalfOfEnabled =
+    useOnBehalfOfEnabled() && fareProductOnBehalfOfEnabled;
 
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
@@ -177,7 +193,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
         />
       )}
     >
-      <ScrollView testID="ticketingScrollView">
+      <ScrollView>
         <View style={styles.contentContainer}>
           {params.mode === 'TravelSearch' && (
             <MessageInfoBox
@@ -218,7 +234,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
           <TravellerSelection
             setTravellerSelection={setTravellerSelection}
-            fareProductType={preassignedFareProduct.type}
+            fareProductTypeConfig={params.fareProductTypeConfig}
             selectionMode={travellerSelectionMode}
             selectableUserProfiles={selectableTravellers}
             style={styles.selectionComponent}
@@ -255,6 +271,27 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
+          {isOnBehalfOfEnabled && !canSelectUserProfile && (
+            <>
+              <ContentHeading
+                text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+              />
+              <Section>
+                <ToggleSectionItem
+                  leftImage={<HoldingHands />}
+                  text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
+                  subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
+                  value={isOnBehalfOfToggle}
+                  label="new"
+                  textType="body__primary--bold"
+                  onValueChange={(checked) => {
+                    setIsOnBehalfOfToggle(checked);
+                  }}
+                />
+              </Section>
+            </>
+          )}
+
           <FlexTicketDiscountInfo
             userProfiles={userProfilesWithCountAndOffer}
             style={styles.selectionComponent}
@@ -268,11 +305,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           ) : (
             <View style={styles.messages}>
-              {!isOnBehalfOfToggle && (
-                <PurchaseMessages
-                  requiresTokenOnMobile={requiresTokenOnMobile}
-                />
-              )}
+              <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
               <GlobalMessage
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview

@@ -134,7 +134,7 @@ export const useFareContractInfoTexts = (
   } = props;
 
   const {t, language} = useTranslation();
-  const {deviceInspectionStatus} = useMobileTokenContextState();
+  const {isInspectable} = useMobileTokenContextState();
 
   const productName = preassignedFareProduct
     ? getReferenceDataName(preassignedFareProduct, language)
@@ -153,9 +153,7 @@ export const useFareContractInfoTexts = (
     serialComma: false,
   });
 
-  const tokenWarning = useNonInspectableTokenWarning(
-    preassignedFareProduct?.type,
-  );
+  const tokenWarning = useNonInspectableTokenWarning();
   const timeUntilExpireOrWarning: string | undefined =
     tokenWarning ?? t(FareContractTexts.validityHeader.valid(durationText));
 
@@ -169,7 +167,7 @@ export const useFareContractInfoTexts = (
   accessibilityLabel += productName + screenReaderPause;
   accessibilityLabel += tariffZoneSummary + screenReaderPause;
 
-  if (deviceInspectionStatus !== 'inspectable') {
+  if (!isInspectable) {
     accessibilityLabel += t(
       FareContractTexts.fareContractInfo.noInspectionIconA11yLabel,
     );

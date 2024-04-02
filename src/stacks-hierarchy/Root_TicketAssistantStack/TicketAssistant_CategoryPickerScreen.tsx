@@ -97,6 +97,7 @@ export const TicketAssistant_CategoryPickerScreen = ({
             type="body__secondary"
             style={[styles.expandedContent, {textDecorationLine: 'underline'}]}
             onPress={handleLinkPress}
+            accessibilityRole="link"
           >
             {t(TicketAssistantTexts.categoryPicker.childLinkText)}
           </ThemeText>

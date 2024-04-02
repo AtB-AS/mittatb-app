@@ -6,7 +6,6 @@ import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useAuthState} from '@atb/auth';
-import {useAppState} from '@atb/AppContext';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {KeyValuePair, storage, StorageModelKeysEnum} from '@atb/storage';
 import {useMobileTokenContextState} from '@atb/mobile-token';
@@ -59,8 +58,9 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useOnBehalfOfEnabledDebugOverride} from '@atb/on-behalf-of';
 import {useTicketInformationEnabledDebugOverride} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen/use-is-ticket-information-enabled';
 import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enabled';
-import {useOnboardingSections} from '@atb/utils/use-onboarding-sections';
+import {useOnboardingState} from '@atb/onboarding';
 import {useServerTimeEnabledDebugOverride} from '@atb/time';
+import Bugsnag from '@bugsnag/react-native';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -70,9 +70,11 @@ function setClipboard(content: string) {
 export const Profile_DebugInfoScreen = () => {
   const style = useProfileHomeStyle();
 
-  const {restartOnboardingSection, restartAllOnboardingSections} =
-    useAppState();
-  const onboardingSections = useOnboardingSections(false);
+  const {
+    onboardingSections,
+    restartOnboardingSection,
+    restartAllOnboardingSections,
+  } = useOnboardingState();
 
   const {
     onboardForBeacons,
@@ -138,10 +140,16 @@ export const Profile_DebugInfoScreen = () => {
     tokens,
     retry,
     wipeToken,
-    deviceInspectionStatus,
     mobileTokenStatus,
-    barcodeStatus,
-    debug: {nativeToken, validateToken, removeRemoteToken, renewToken},
+    isInspectable,
+    nativeToken,
+    debug: {
+      nativeTokenStatus,
+      remoteTokensStatus,
+      validateToken,
+      removeRemoteToken,
+      renewToken,
+    },
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
 
@@ -219,6 +227,27 @@ export const Profile_DebugInfoScreen = () => {
             onValueChange={(debugShowSeconds) => {
               setPreference({debugShowSeconds});
             }}
+          />
+          <LinkSectionItem
+            text="Send test Bugsnag report (name/message)"
+            onPress={() =>
+              Bugsnag.notify({
+                name: 'DEBUG_TEST_ERROR',
+                message: 'This is a test error',
+              })
+            }
+            subtitle='{"name":"DEBUG_TEST_ERROR","message":"This is a test error"}'
+          />
+          <LinkSectionItem
+            text="Send test Bugsnag report (JS error)"
+            onPress={() => {
+              try {
+                ('' as unknown as any).DEBUG_TEST_ERROR();
+              } catch (e: any) {
+                Bugsnag.notify(e);
+              }
+            }}
+            subtitle="TypeError: ''.DEBUG_TEST_ERROR is not a function (it is undefined)"
           />
           <LinkSectionItem
             text="Reset dismissed Global messages"
@@ -564,8 +593,9 @@ export const Profile_DebugInfoScreen = () => {
                   </View>
                 )}
                 <ThemeText>{`Mobile token status: ${mobileTokenStatus}`}</ThemeText>
-                <ThemeText>{`Device inspection status: ${deviceInspectionStatus}`}</ThemeText>
-                <ThemeText>{`Barcode status: ${barcodeStatus}`}</ThemeText>
+                <ThemeText>{`IsInspectable: ${isInspectable}`}</ThemeText>
+                <ThemeText>{`Native token status: ${nativeTokenStatus}`}</ThemeText>
+                <ThemeText>{`Remote tokens status: ${remoteTokensStatus}`}</ThemeText>
                 <ThemeText>{`Now: ${new Date(
                   serverNow,
                 ).toISOString()}`}</ThemeText>

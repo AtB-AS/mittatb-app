@@ -4,7 +4,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/queries/use-get-account-id-by-phone-query';
-import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of/types';
+import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
@@ -12,8 +12,8 @@ import {
   PhoneInputTexts,
   PurchaseOverviewTexts,
   useTranslation,
+  OnBehalfOfTexts,
 } from '@atb/translations';
-import {OnBehalfOfTexts} from '@atb/translations/screens/subscreens/OnBehalfOf';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import phone from 'phone';
 import {useState} from 'react';
@@ -113,7 +113,7 @@ export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
               {t(OnBehalfOfTexts.chooseReceiver.subtitle)}
             </ThemeText>
           </View>
-          <Section>
+          <Section style={styles.phoneInput}>
             <PhoneInputSectionItem
               label={t(PhoneInputTexts.input.title)}
               value={phoneNumber}
@@ -196,6 +196,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     textAlign: 'center',
     marginTop: theme.spacings.medium,
     marginBottom: theme.spacings.xLarge,
+  },
+  phoneInput: {
+    marginVertical: theme.spacings.xSmall,
   },
   activityIndicator: {
     marginVertical: theme.spacings.large,

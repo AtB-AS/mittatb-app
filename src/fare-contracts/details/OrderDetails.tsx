@@ -31,36 +31,33 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           ),
         )}
       </ThemeText>
-      {isPreActivatedTravelRight(firstTravelRight) ||
-        (isCarnetTravelRight(firstTravelRight) && (
-          <>
-            <ThemeText
-              type="body__secondary"
-              color="secondary"
-              style={style.marginTop}
-            >
-              {t(
-                FareContractTexts.details.validFrom(
-                  fullDateTime(
-                    firstTravelRight.startDateTime,
-                    language,
-                  ),
-                ),
-              )}
-            </ThemeText>
-            <ThemeText
-              type="body__secondary"
-              color="secondary"
-              style={style.marginTop}
-            >
-              {t(
-                FareContractTexts.details.validTo(
-                  fullDateTime(firstTravelRight.endDateTime, language),
-                ),
-              )}
-            </ThemeText>
-          </>
-        ))}
+      {(isPreActivatedTravelRight(firstTravelRight) ||
+        isCarnetTravelRight(firstTravelRight)) && (
+        <>
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={style.marginTop}
+          >
+            {t(
+              FareContractTexts.details.validFrom(
+                fullDateTime(firstTravelRight.startDateTime, language),
+              ),
+            )}
+          </ThemeText>
+          <ThemeText
+            type="body__secondary"
+            color="secondary"
+            style={style.marginTop}
+          >
+            {t(
+              FareContractTexts.details.validTo(
+                fullDateTime(firstTravelRight.endDateTime, language),
+              ),
+            )}
+          </ThemeText>
+        </>
+      )}
       <ThemeText
         type="body__secondary"
         color="secondary"

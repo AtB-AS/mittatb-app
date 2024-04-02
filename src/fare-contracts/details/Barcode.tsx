@@ -9,16 +9,16 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {FareContract} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
-import {useInterval} from '@atb/utils/use-interval';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import Bugsnag from '@bugsnag/react-native';
 import {renderAztec} from '@entur-private/abt-mobile-barcode-javascript-lib';
 import QRCode from 'qrcode';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
+import {useGetSignedTokenQuery} from '@atb/mobile-token/hooks/useGetSignedTokenQuery';
 
 type Props = {
   validityStatus: ValidityStatus;
@@ -26,20 +26,20 @@ type Props = {
 };
 
 export function Barcode({validityStatus, fc}: Props): JSX.Element | null {
-  const {barcodeStatus} = useMobileTokenContextState();
+  const {mobileTokenStatus} = useMobileTokenContextState();
   useScreenBrightnessIncrease();
   if (validityStatus !== 'valid') return null;
 
-  switch (barcodeStatus) {
+  switch (mobileTokenStatus) {
     case 'loading':
       return <LoadingBarcode />;
-    case 'static':
+    case 'fallback':
       return <StaticAztec fc={fc} />;
     case 'staticQr':
       return <StaticQrCode fc={fc} />;
-    case 'mobiletoken':
+    case 'success-and-inspectable':
       return <MobileTokenAztec fc={fc} />;
-    case 'other':
+    case 'success-not-inspectable':
       return <DeviceNotInspectable />;
     case 'error':
       return <BarcodeError />;
@@ -79,7 +79,6 @@ function useScreenBrightnessIncrease() {
   );
 }
 
-const UPDATE_INTERVAL = 10000;
 /**
  * Show aztec code for mobile token. This can also fall back to static aztec if
  * anything goes wrong when getting the signed mobile token.
@@ -87,21 +86,18 @@ const UPDATE_INTERVAL = 10000;
 const MobileTokenAztec = ({fc}: {fc: FareContract}) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {getSignedToken} = useMobileTokenContextState();
+  const {data: signedToken} = useGetSignedTokenQuery();
   const [aztecCodeError, setAztecCodeError] = useState(false);
   const [aztecXml, setAztecXml] = useState<string>();
 
-  const renderAztecCode = useCallback(async () => {
-    const signedToken = await getSignedToken();
+  useEffect(() => {
     if (!signedToken) {
       setAztecCodeError(true);
     } else {
       setAztecCodeError(false);
       setAztecXml(renderAztec(signedToken));
     }
-  }, [getSignedToken]);
-
-  useInterval(renderAztecCode, [renderAztecCode], UPDATE_INTERVAL, false, true);
+  }, [signedToken]);
 
   if (aztecCodeError) {
     return <StaticAztec fc={fc} />;

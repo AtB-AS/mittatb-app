@@ -9,9 +9,11 @@ import {
 
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {NoTravelTokenInfo} from './components/NoTravelTokenInfo';
-import {OnboardingFullScreenView} from '@atb/onboarding-screen';
+import {
+  OnboardingFullScreenView,
+  useOnboardingNavigation,
+} from '@atb/onboarding';
 import {TravelTokenBox} from '@atb/travel-token-box';
-import {useOnboardingNavigation} from '@atb/utils/use-onboarding-navigation';
 import {LoadingScreen} from '@atb/loading-screen';
 import {View} from 'react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
@@ -44,7 +46,11 @@ export const Root_ConsiderTravelTokenChangeScreen = () => {
 
   if (mobileTokenStatus === 'loading') return <LoadingScreen />;
 
-  if (mobileTokenStatus !== 'success') return NoTokenView;
+  if (
+    mobileTokenStatus === 'error' ||
+    mobileTokenStatus === 'fallback'
+  )
+    return NoTokenView;
 
   const hasInspectableToken = tokens.some((token) => token.isInspectable);
   if (!hasInspectableToken) return NoTokenView;

@@ -10,16 +10,12 @@ import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Psst} from '@atb/assets/svg/color/illustrations';
 import {Ticket} from '@atb/assets/svg/color/images';
-import {
-  filterActiveOrCanBeUsedFareContracts,
-  useTicketingState,
-} from '@atb/ticketing';
 import {useTextForLanguage} from '@atb/translations/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {useTimeContextState} from '@atb/time';
 import {TransitionPresets} from '@react-navigation/stack';
+import {useHasReservationOrActiveFareContract} from '@atb/ticketing';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -35,15 +31,11 @@ export const Root_LoginRequiredForFareProductScreen = ({
   const styles = useThemeStyles();
   const focusRef = useFocusOnLoad();
 
-  const {fareContracts} = useTicketingState();
-  const {serverNow} = useTimeContextState();
-  const activeFareContracts = filterActiveOrCanBeUsedFareContracts(
-    fareContracts,
-    serverNow,
-  );
+  const hasReservationOrActiveFareContract =
+    useHasReservationOrActiveFareContract();
+
   const onNext = async () => {
-    const hasActiveFareContracts = activeFareContracts.length > 0;
-    if (hasActiveFareContracts) {
+    if (hasReservationOrActiveFareContract) {
       navigation.navigate('Root_LoginActiveFareContractWarningScreen', {
         transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
       });
@@ -54,8 +46,7 @@ export const Root_LoginRequiredForFareProductScreen = ({
           transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
         });
       } else {
-        navigation.navigate('Root_LoginPhoneInputScreen', {
-        });
+        navigation.navigate('Root_LoginPhoneInputScreen', {});
       }
     }
   };
@@ -81,7 +72,11 @@ export const Root_LoginRequiredForFareProductScreen = ({
           </ThemeText>
         </View>
         <View accessible={true}>
-          <ThemeText style={styles.description} color={themeColor}>
+          <ThemeText
+            style={styles.description}
+            color={themeColor}
+            testID="logInPurchaseDescription"
+          >
             {t(LoginTexts.onboarding.description)}
           </ThemeText>
         </View>
@@ -92,14 +87,14 @@ export const Root_LoginRequiredForFareProductScreen = ({
             onPress={onNext}
             text={t(LoginTexts.onboarding.button)}
             rightIcon={{svg: ArrowRight}}
-            testID="loginButton"
+            testID="logInButton"
           />
         </View>
         <PressableOpacity
           style={styles.laterButton}
           onPress={navigation.goBack}
           accessibilityRole="button"
-          testID="loginLaterButton"
+          testID="logInLaterButton"
         >
           <ThemeText
             style={styles.laterButtonText}

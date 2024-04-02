@@ -19,6 +19,30 @@ class OnboardingPage {
   }
 
   /**
+   * Log in
+   */
+  get logIn() {
+    const reqId = `//*[@resource-id="logInButton"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Log in later
+   */
+  get logInLater() {
+    const reqId = `//*[@resource-id="logInLaterButton"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Description for log in to purchase
+   */
+  get logInPurchaseDescription() {
+    const reqId = `//*[@resource-id="logInPurchaseDescription"]`;
+    return $(reqId).getText();
+  }
+
+  /**
    * Next button on location screen
    */
   get locationPermission() {
@@ -37,6 +61,24 @@ class OnboardingPage {
     await driver
       .$(
         '//*[@resource-id="com.android.permissioncontroller:id/permission_deny_button"]',
+      )
+      .click();
+  }
+
+  /**
+   * Deny use of location - and don't ask again
+   * Possible other values:
+   * - com.android.permissioncontroller:id/permission_allow_foreground_only_button
+   * - com.android.permissioncontroller:id/permission_allow_one_time_button
+   */
+  async denyLocationAndDontAskAgain() {
+    await ElementHelper.waitForElement(
+      'id',
+      'com.android.permissioncontroller:id/permission_deny_and_dont_ask_again_button',
+    );
+    await driver
+      .$(
+        '//*[@resource-id="com.android.permissioncontroller:id/permission_deny_and_dont_ask_again_button"]',
       )
       .click();
   }

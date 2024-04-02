@@ -24,20 +24,18 @@ export function useSectionItem({
   radiusSize,
 }: BaseSectionItemProps): SectionReturnType {
   const {theme} = useTheme();
-  const isInline = type === 'compact' || type === 'inline';
 
   const spacing = useSpacing(type);
 
   const topContainer: ViewStyle = {
     padding: spacing,
-    alignSelf: isInline ? 'flex-start' : undefined,
     ...mapToBorderRadius(theme, radiusSize, radius),
     backgroundColor: transparent
       ? undefined
       : theme.static.background.background_0.background,
   };
   const contentContainer: ViewStyle = {
-    flex: isInline ? undefined : 1,
+    flex: 1,
   };
 
   return {
@@ -50,9 +48,6 @@ export function useSectionItem({
 function useSpacing(type: ContainerSizingType) {
   const {theme} = useTheme();
   switch (type) {
-    case 'compact':
-      return theme.spacings.small;
-    case 'inline':
     case 'block':
       return theme.spacings.medium;
     case 'spacious':

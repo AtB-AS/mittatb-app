@@ -137,50 +137,42 @@ export const mapToUserProfilesWithCount = (
         'id' in userProfileWithCount,
     );
 
-export const useNonInspectableTokenWarning = (fareProductType?: string) => {
+export const useNonInspectableTokenWarning = () => {
   const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
-  switch (barcodeStatus) {
-    case 'mobiletoken':
-    case 'static':
+  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  switch (mobileTokenStatus) {
+    case 'success-and-inspectable':
+    case 'fallback':
     case 'staticQr':
     case 'loading':
       return undefined;
     case 'error':
       return t(FareContractTexts.warning.errorWithToken);
-    case 'other':
+    case 'success-not-inspectable':
       const inspectableToken = tokens.find((t) => t.isInspectable);
-      if (fareProductType === 'carnet') {
-        if (inspectableToken?.type !== 'travel-card') {
-          return t(FareContractTexts.warning.carnetWarning);
-        } else {
-          return t(FareContractTexts.warning.travelCardAstoken);
-        }
-      } else {
-        return inspectableToken?.type === 'travel-card'
-          ? t(FareContractTexts.warning.travelCardAstoken)
-          : t(
-              FareContractTexts.warning.anotherMobileAsToken(
-                inspectableToken?.name ||
-                  t(FareContractTexts.warning.unnamedDevice),
-              ),
-            );
-      }
+      return inspectableToken?.type === 'travel-card'
+        ? t(FareContractTexts.warning.travelCardAsToken)
+        : t(
+            FareContractTexts.warning.anotherMobileAsToken(
+              inspectableToken?.name ||
+                t(FareContractTexts.warning.unnamedDevice),
+            ),
+          );
   }
 };
 
 export const useOtherDeviceIsInspectableWarning = () => {
   const {t} = useTranslation();
-  const {barcodeStatus, tokens} = useMobileTokenContextState();
-  switch (barcodeStatus) {
-    case 'mobiletoken':
-    case 'static':
+  const {mobileTokenStatus, tokens} = useMobileTokenContextState();
+  switch (mobileTokenStatus) {
+    case 'success-and-inspectable':
+    case 'fallback':
     case 'staticQr':
     case 'loading':
       return undefined;
     case 'error':
       return t(FareContractTexts.warning.errorWithToken);
-    case 'other':
+    case 'success-not-inspectable':
       const inspectableToken = tokens.find((t) => t.isInspectable);
       const deviceName =
         inspectableToken?.name || t(FareContractTexts.warning.unnamedDevice);
@@ -303,11 +295,15 @@ export function getFareContractInfo(
   const validTo = lastUsedAccess?.validTo
     ? lastUsedAccess.validTo
     : fareContractValidTo;
-  const validityStatus = lastUsedAccess
-    ? lastUsedAccess.status
-    : fareContractValidityStatus;
 
-  const carnetAccessStatus = lastUsedAccess?.status;
+  const validityStatus = lastUsedAccess
+    ? isSent
+      ? 'sent'
+      : lastUsedAccess.status
+    : fareContractValidityStatus;
+  // TODO: Carnet access status should be part of validity status
+  const carnetAccessStatus = isSent ? 'inactive' : lastUsedAccess?.status;
+
   const maximumNumberOfAccesses =
     carnetTravelRightAccesses?.maximumNumberOfAccesses;
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;

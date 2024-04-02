@@ -130,6 +130,7 @@ export const Profile_PrivacyScreen = () => {
               accessibilityHint: t(
                 ProfileTexts.sections.privacy.linkSectionItems.privacy.a11yHint,
               ),
+              accessibilityRole: 'link',
             }}
             testID="privacyButton"
             onPress={async () => {
@@ -150,8 +151,9 @@ export const Profile_PrivacyScreen = () => {
                 accessibilityHint: t(
                   PrivacySettingsTexts.sections.items.controlPanel.a11yHint,
                 ),
+                accessibilityRole: 'link',
               }}
-              testID="privacyButton"
+              testID="controlPanelButton"
               onPress={async () => {
                 const privacyDashboardUrl = await getPrivacyDashboardUrl();
                 privacyDashboardUrl &&
@@ -170,8 +172,9 @@ export const Profile_PrivacyScreen = () => {
               accessibility={{
                 accessibilityHint: t(
                   PrivacySettingsTexts.sections.items.dataSharingButton
-                     .a11yHint,
+                    .a11yHint,
                 ),
+                accessibilityRole: 'link',
               }}
               icon="external-link"
               testID="dataSharingInfoButton"
@@ -208,7 +211,7 @@ export const Profile_PrivacyScreen = () => {
                 },
               })
             }
-            testID="deleteLocalSearchData"
+            testID="deleteLocalSearchDataButton"
           />
           {isBeaconsSupported && (
             <Button
@@ -236,7 +239,7 @@ export const Profile_PrivacyScreen = () => {
                   },
                 });
               }}
-              testID="deleteLocalSearchData"
+              testID="deleteCollectedDataButton"
             />
           )}
         </Section>

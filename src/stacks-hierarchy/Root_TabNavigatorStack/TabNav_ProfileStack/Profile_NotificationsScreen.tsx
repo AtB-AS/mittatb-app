@@ -103,7 +103,7 @@ export const Profile_NotificationsScreen = ({
       {permissionStatus === 'loading' || profileQuery.isLoading ? (
         <Processing message={t(dictionary.loading)} />
       ) : (
-        <View style={style.content}>
+        <View style={style.content} testID="notificationsView">
           <ContentHeading
             text={t(
               ProfileTexts.sections.settings.linkSectionItems.notifications
@@ -130,6 +130,7 @@ export const Profile_NotificationsScreen = ({
               }
               value={mailEnabled}
               onValueChange={(enabled) => handleModeToggle('mail', enabled)}
+              testID="emailToggle"
             />
             {mailEnabled && authenticationType === 'anonymous' && (
               <MessageSectionItem
@@ -178,6 +179,7 @@ export const Profile_NotificationsScreen = ({
               )}
               value={pushEnabled}
               onValueChange={(enabled) => handleModeToggle('push', enabled)}
+              testID="pushToggle"
             />
             {shouldPromptForPushPermission && (
               <MessageSectionItem
@@ -258,6 +260,7 @@ export const Profile_NotificationsScreen = ({
                   onValueChange={(enabled) =>
                     handleGroupToggle(group.id, enabled)
                   }
+                  testID={`${group.id}Toggle`}
                 />
               ))}
           </Section>

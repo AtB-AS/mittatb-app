@@ -63,6 +63,7 @@ export const Root_PurchasePaymentWithVippsScreen = ({
               interactiveColor="interactive_0"
               text={t(PaymentVippsTexts.buttons.goToVipps)}
               onPress={() => openVipps()}
+              accessibilityRole="link"
               style={styles.button}
             />
           ))}
