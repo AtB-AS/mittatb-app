@@ -172,7 +172,11 @@ export const useTariffZoneSummary = (
   );
   const zoneSelectionModeDisabledForProduct =
     fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
-  if (zoneSelectionModeDisabledForProduct) return undefined;
+
+  const usesZoneOfferEndpointForProduct =
+    fareProductTypeConfig?.configuration.offerEndpoint === 'zones';
+
+  if (zoneSelectionModeDisabledForProduct && !usesZoneOfferEndpointForProduct) return undefined;
 
   return tariffZonesSummary(fromTariffZone, toTariffZone, language, t);
 };
