@@ -28,14 +28,8 @@ const removeDuplicateStringsFilter = (
 export const getTransportModeText = (
   modes: TransportModePair[],
   t: TranslateFunction,
-  modesDisplayLimit: number = 2,
 ): string => {
-  const modesCount: number = modes.length;
-
   if (!modes) return '';
-  if (modesCount > modesDisplayLimit) {
-    return t(FareContractTexts.transportModes.multipleTravelModes);
-  }
   return _.capitalize(
     modes
       .map((tm) => t(FareContractTexts.transportMode(tm.mode, tm.subMode)))
@@ -64,33 +58,37 @@ export const TransportModes = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const transportModeText: string = getTransportModeText(
-    modes,
-    t,
-    modesDisplayLimit,
-  );
+  const transportModeText: string = getTransportModeText(modes, t);
+
+  const description =
+    modes.length > modesDisplayLimit
+      ? t(FareContractTexts.transportModes.more)
+      : transportModeText;
 
   return (
-    <View style={[styles.transportationMode, style]}>
+    <View
+      style={[styles.transportationMode, style]}
+      accessibilityLabel={t(
+        customTransportModeText
+          ? FareContractTexts.transportModes.a11yLabelWithCustomText(
+              transportModeText,
+              customTransportModeText,
+            )
+          : FareContractTexts.transportModes.a11yLabel(transportModeText),
+      )}
+      accessible={true}
+    >
       <TransportationIconBoxList
         modes={modes}
-        maxNumberOfBoxes={2}
+        maxNumberOfBoxes={modesDisplayLimit}
         iconSize={iconSize}
         disabled={disabled}
       />
       <ThemeText
         type={textType ?? 'label__uppercase'}
         color={textColor ?? 'secondary'}
-        accessibilityLabel={t(
-          customTransportModeText
-            ? FareContractTexts.transportModes.a11yLabelWithCustomText(
-                transportModeText,
-                customTransportModeText,
-              )
-            : FareContractTexts.transportModes.a11yLabel(transportModeText),
-        )}
       >
-        {customTransportModeText ? customTransportModeText : transportModeText}
+        {customTransportModeText ?? description}
       </ThemeText>
     </View>
   );

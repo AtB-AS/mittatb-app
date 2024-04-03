@@ -1,5 +1,5 @@
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeText} from '@atb/components/text';
 import React from 'react';
 import {iconSizes} from '@atb-as/theme';
@@ -12,14 +12,13 @@ export const CounterIconBox = ({
   size = 'normal',
   spacing = 'compact',
   style,
-  ...a11yProps
 }: {
   count: number;
   textType: TextNames;
   size?: keyof Theme['icon']['size'];
   spacing?: 'compact' | 'standard';
   style?: StyleProp<ViewStyle>;
-} & AccessibilityProps) => {
+}) => {
   const styles = useStyles();
   const {theme, themeName} = useTheme();
   const fontScale = useFontScale();
@@ -39,7 +38,7 @@ export const CounterIconBox = ({
               : theme.spacings.small,
         },
       ]}
-      {...a11yProps}
+      importantForAccessibility="no-hide-descendants"
     >
       <ThemeText
         color={getTransportationColor(

@@ -286,11 +286,7 @@ const FareContractTexts = {
     unnamedDevice: _('Enhet uten navn', 'Unnamed device', 'Ukjent eining'),
   },
   transportModes: {
-    multipleTravelModes: _(
-      'Flere reisemåter',
-      'Several travel modes',
-      'Fleire reisemåtar',
-    ),
+    more: _('Flere', 'More', 'Fleire'),
     a11yLabel: (transportModes: string) =>
       _(
         `Billetten gjelder ${transportModes}`,
@@ -302,12 +298,6 @@ const FareContractTexts = {
         `Billetten gjelder ${transportModes}, produktgruppen heter ${customText}`,
         `Ticket is valid on ${transportModes}, product group is called ${customText}`,
         `Billetten gjeld ${transportModes}, produktgruppa heiter ${customText}`,
-      ),
-    a11yLabelMultipleTravelModes: (count: number) =>
-      _(
-        `Totalt ${count} reisemåter`,
-        `In total ${count} travel modes`,
-        `Totalt ${count} reisemåtar`,
       ),
     concatListWord: _('og', 'and', 'og'),
   },
