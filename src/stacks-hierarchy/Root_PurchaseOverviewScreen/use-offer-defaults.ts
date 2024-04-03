@@ -32,7 +32,7 @@ export function useOfferDefaults(
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
-  const selectableProducts = fareProducts!
+  const selectableProducts = fareProducts
     .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
   const defaultFareProduct =
