@@ -3,7 +3,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
@@ -11,8 +11,6 @@ import {UpgradeSplash} from './Components/UpgradeSplash';
 import {useRecentFareContracts} from './use-recent-fare-contracts';
 import {
   FareProductTypeConfig,
-  PreassignedFareProduct,
-  useFirestoreConfiguration,
 } from '@atb/configuration';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
@@ -35,12 +33,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {authenticationType} = useAuthState();
   const {theme} = useTheme();
   const {recentFareContracts, loading} = useRecentFareContracts();
-  const {data} = useGetFareProductsQuery();
-  const {preassignedFareProducts} = useFirestoreConfiguration();
-
-  const [fareProducts, setFareProducts] = useState<PreassignedFareProduct[]>(
-    preassignedFareProducts,
-  );
+  const {data: fareProducts} = useGetFareProductsQuery();
 
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
@@ -53,12 +46,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
   const harborsQuery = useHarborsQuery();
-
-  useEffect(() => {
-    if (data) {
-      setFareProducts(data);
-    }
-  }, [data]);
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 

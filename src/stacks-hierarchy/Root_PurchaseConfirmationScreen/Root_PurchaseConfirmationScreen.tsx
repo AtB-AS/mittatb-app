@@ -119,12 +119,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {travellerSelectionMode, zoneSelectionMode} =
     fareProductTypeConfig.configuration;
 
-  const offerEndpoint =
-    zoneSelectionMode === 'none'
-      ? 'authority'
-      : zoneSelectionMode === 'multiple-stop-harbor'
-      ? 'stop-places'
-      : 'zones';
+  const offerEndpoint = params.fareProductTypeConfig.configuration.offerEndpoint
+    ? params.fareProductTypeConfig.configuration.offerEndpoint
+    : 'zones';
 
   const {
     offerSearchTime,
@@ -155,7 +152,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const fromPlaceName = getPlaceName(fromPlace, language);
 
   const toPlaceName = getPlaceName(toPlace, language);
-  const vatAmount = totalPrice - (totalPrice / (1 + vatPercent / 100));
+  const vatAmount = totalPrice - totalPrice / (1 + vatPercent / 100);
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
@@ -455,7 +452,9 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         )}
         <GlobalMessage
           style={styles.purchaseInformation}
-          globalMessageContext={GlobalMessageContextEnum.appPurchaseConfirmationBottom}
+          globalMessageContext={
+            GlobalMessageContextEnum.appPurchaseConfirmationBottom
+          }
           textColor="primary"
           ruleVariables={{
             preassignedFareProductType: preassignedFareProduct.type,
