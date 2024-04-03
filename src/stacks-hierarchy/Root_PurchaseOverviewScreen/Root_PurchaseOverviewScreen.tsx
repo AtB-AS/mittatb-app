@@ -95,9 +95,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const fareProductOnBehalfOfEnabled =
     params.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const offerEndpoint = params.fareProductTypeConfig.configuration.offerEndpoint
-    ? params.fareProductTypeConfig.configuration.offerEndpoint
-    : 'zones';
+  const offerEndpoint = params.fareProductTypeConfig.configuration.offerEndpoint;
 
   const {
     isSearchingOffer,

@@ -119,9 +119,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {travellerSelectionMode, zoneSelectionMode} =
     fareProductTypeConfig.configuration;
 
-  const offerEndpoint = params.fareProductTypeConfig.configuration.offerEndpoint
-    ? params.fareProductTypeConfig.configuration.offerEndpoint
-    : 'zones';
+  const offerEndpoint = params.fareProductTypeConfig.configuration.offerEndpoint;
 
   const {
     offerSearchTime,
