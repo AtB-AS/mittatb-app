@@ -12,6 +12,7 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
 import {useMemo} from 'react';
 import {useDefaultPreassignedFareProduct} from '@atb/fare-contracts/utils';
+import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 
 type UserProfileTypeWithCount = {
   userTypeString: string;
@@ -25,13 +26,13 @@ export function useOfferDefaults(
   fromPlace?: TariffZoneWithMetadata | StopPlaceFragment,
   toPlace?: TariffZoneWithMetadata | StopPlaceFragment,
 ) {
-  const {tariffZones, userProfiles, preassignedFareProducts} =
-    useFirestoreConfiguration();
+  const {data: fareProducts} = useGetFareProductsQuery();
+  const {tariffZones, userProfiles} = useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
   // Get default PreassignedFareProduct
   const productType = preassignedFareProduct?.type ?? selectableProductType;
-  const selectableProducts = preassignedFareProducts
+  const selectableProducts = fareProducts!
     .filter((product) => isProductSellableInApp(product, customerProfile))
     .filter((product) => product.type === productType);
   const defaultFareProduct =

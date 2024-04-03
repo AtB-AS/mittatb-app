@@ -3,13 +3,17 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {AnonymousPurchaseWarning} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/AnonymousPurchaseWarning';
 import {FareProducts} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/Components/FareProducts/FareProducts';
 import {StyleSheet, useTheme} from '@atb/theme';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareContracts';
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {useRecentFareContracts} from './use-recent-fare-contracts';
-import {FareProductTypeConfig} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  PreassignedFareProduct,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
@@ -22,6 +26,7 @@ import {TariffZone} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
+import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -30,6 +35,13 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {authenticationType} = useAuthState();
   const {theme} = useTheme();
   const {recentFareContracts, loading} = useRecentFareContracts();
+  const {data} = useGetFareProductsQuery();
+  const {preassignedFareProducts} = useFirestoreConfiguration();
+
+  const [fareProducts, setFareProducts] = useState<PreassignedFareProduct[]>(
+    preassignedFareProducts,
+  );
+
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
   const {t} = useTranslation();
@@ -41,6 +53,12 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
   const harborsQuery = useHarborsQuery();
+
+  useEffect(() => {
+    if (data) {
+      setFareProducts(data);
+    }
+  }, [data]);
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
 
@@ -163,7 +181,11 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           />
         )}
 
-        <FareProducts onProductSelect={onProductSelect} />
+        <FareProducts
+          fareProducts={fareProducts}
+          onProductSelect={onProductSelect}
+        />
+
         {showTicketAssistant && (
           <>
             <ThemeText style={styles.heading} type="body__secondary">

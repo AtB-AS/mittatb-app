@@ -11,6 +11,7 @@ import {
   ReserveOffer,
   SendReceiptResponse,
 } from './types';
+import {PreassignedFareProduct} from '@atb/configuration';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
@@ -183,4 +184,13 @@ export async function cancelPayment(
       retry: true,
     },
   );
+}
+
+export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
+  const url = 'product/v1';
+  const response = await client.get<PreassignedFareProduct[]>(url, {
+    authWithIdToken: true,
+  });
+
+  return response.data;
 }

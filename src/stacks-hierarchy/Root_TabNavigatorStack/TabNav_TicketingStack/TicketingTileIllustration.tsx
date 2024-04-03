@@ -16,6 +16,8 @@ import {
   TicketMultiple,
 } from '@atb/assets/svg/mono-icons/ticketing/';
 
+import {City} from '@atb/assets/svg/mono-icons/places/';
+
 const ticketingTileIllustrations = {
   Ticket,
   PeriodTicket: Date,
@@ -26,6 +28,7 @@ const ticketingTileIllustrations = {
   Carnet: Klippekort,
   Boat,
   TicketMultiple,
+  City,
 };
 
 type ticketingTileIllustrationType = keyof typeof ticketingTileIllustrations;
@@ -67,6 +70,8 @@ const getIllustrationFileName = (
       return 'PeriodTicket';
     case 'ticketMultiple':
       return 'TicketMultiple';
+    case 'city':
+      return 'City';
     default:
       return 'Ticket';
   }
