@@ -173,10 +173,7 @@ export const useTariffZoneSummary = (
   const zoneSelectionModeDisabledForProduct =
     fareProductTypeConfig?.configuration.zoneSelectionMode === 'none';
 
-  const usesAuthorityOfferEndpointForProduct =
-    fareProductTypeConfig?.configuration.offerEndpoint === 'authority';
-
-  if (zoneSelectionModeDisabledForProduct && usesAuthorityOfferEndpointForProduct) return undefined;
+  if (zoneSelectionModeDisabledForProduct) return undefined;
 
   return tariffZonesSummary(fromTariffZone, toTariffZone, language, t);
 };
