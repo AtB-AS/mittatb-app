@@ -1,23 +1,28 @@
-import {TransportModePair} from '@atb/components/transportation-modes';
+import {
+  TransportModePair,
+  getTransportModeText,
+} from '@atb/components/transportation-modes';
 import {TransportationIconBox} from './TransportationIconBox';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {getTransportModeSvg} from './utils';
 import {StyleSheet, Theme} from '@atb/theme';
 import {CounterIconBox} from './CounterIconBox';
+import {AccessibilityProps, View} from 'react-native';
 
 type Props = {
   modes: TransportModePair[];
   maxNumberOfBoxes?: number;
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
-};
+} & AccessibilityProps;
 
 export const TransportationIconBoxList = ({
   modes,
   maxNumberOfBoxes = 2,
   iconSize,
   disabled,
+  ...props
 }: Props) => {
   const styles = useStyles({iconSize})();
   const {t} = useTranslation();
@@ -31,7 +36,12 @@ export const TransportationIconBoxList = ({
     .slice(0, numberOfModesToDisplay);
 
   return (
-    <>
+    <View
+      accessible={true}
+      accessibilityLabel={getTransportModeText(modes, t)}
+      style={{flexDirection: 'row'}}
+      {...props}
+    >
       {modesToDisplay.map(({mode, subMode}) => (
         <TransportationIconBox
           style={styles.icon}
@@ -50,14 +60,9 @@ export const TransportationIconBoxList = ({
           textType={
             iconSize === 'xSmall' ? 'label__uppercase' : 'body__secondary'
           }
-          accessibilityLabel={t(
-            FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
-              numberOfModes,
-            ),
-          )}
         />
       )}
-    </>
+    </View>
   );
 };
 
