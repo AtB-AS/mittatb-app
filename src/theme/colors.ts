@@ -26,6 +26,8 @@ const appOrgToThemeVariant = (appOrg: AppOrgs): ThemeVariant => {
       return ThemeVariant.Nfk;
     case 'fram':
       return ThemeVariant.FRAM;
+    case 'troms':
+      return ThemeVariant.Troms;
     case 'atb':
     default:
       return ThemeVariant.AtB;
