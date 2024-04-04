@@ -341,6 +341,28 @@ export default orgSpecificTranslations(ProfileTexts, {
               'Bruk billett på reisekort / mobil',
             ),
           },
+          notifications: {
+            pushToggle: {
+              subText: _(
+                'Tillat at Reisnordland sender varslinger til denne telefonen.',
+                'Allow Reisnordland to send notifications to this phone.',
+                'Gi Reisnordland løyve til å sende varslingar til denne telefonen.',
+              ),
+            },
+            emailToggle: {
+              subText: (email: string) =>
+                _(
+                  `Tillat at Reisnordland sender varslinger til ${email}`,
+                  `Allow Reisnordland to send notifications to ${email}`,
+                  `Gi Reisnordland løyve til å sende varslingar til ${email}`,
+                ),
+              noEmailPlaceholder: _(
+                'Tillat at Reisnordland sender varslinger til e-posten din.',
+                'Allow Reisnordland to send notifications to your e-mail.',
+                'Gi Reisnordland løyve til å sende varslingar til e-posten din.',
+              ),
+            },
+          },
         },
       },
     },
@@ -358,6 +380,28 @@ export default orgSpecificTranslations(ProfileTexts, {
               'Use ticket on travel card / phone',
               'Bruk billett på reisekort / mobil',
             ),
+          },
+          notifications: {
+            pushToggle: {
+              subText: _(
+                'Tillat at FRAM sender varslinger til denne telefonen.',
+                'Allow FRAM to send notifications to this phone.',
+                'Gi FRAM løyve til å sende varslingar til denne telefonen.',
+              ),
+            },
+            emailToggle: {
+              subText: (email: string) =>
+                _(
+                  `Tillat at FRAM sender varslinger til ${email}`,
+                  `Allow FRAM to send notifications to ${email}`,
+                  `Gi FRAM løyve til å sende varslingar til ${email}`,
+                ),
+              noEmailPlaceholder: _(
+                'Tillat at FRAM sender varslinger til e-posten din.',
+                'Allow FRAM to send notifications to your e-mail.',
+                'Gi FRAM løyve til å sende varslingar til e-posten din.',
+              ),
+            },
           },
         },
       },
