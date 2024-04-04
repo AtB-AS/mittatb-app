@@ -36,12 +36,10 @@ export type TravelRight = {
   fareProductRef: string;
 };
 
-export type Timestamp = Date;
-
 export type NormalTravelRight = TravelRight & {
   fareProductRef: string;
-  startDateTime: Timestamp;
-  endDateTime: Timestamp;
+  startDateTime: Date;
+  endDateTime: Date;
   usageValidityPeriodRef: string;
   userProfileRef: string;
   tariffZoneRefs: string[] | undefined;
@@ -52,8 +50,8 @@ export type NormalTravelRight = TravelRight & {
 export type PreActivatedTravelRight = NormalTravelRight;
 
 export type CarnetTravelRightUsedAccess = {
-  startDateTime: Timestamp;
-  endDateTime: Timestamp;
+  startDateTime: Date;
+  endDateTime: Date;
 };
 
 export type CarnetTravelRight = NormalTravelRight & {
@@ -72,7 +70,7 @@ export type PeriodTravelRight = PreActivatedTravelRight & {
 };
 
 export type FareContract = {
-  created: Timestamp;
+  created: Date;
   version: string;
   id: string;
   customerAccountId: string;
@@ -94,7 +92,7 @@ export enum FareContractState {
 }
 
 export type Reservation = {
-  created: Timestamp;
+  created: Date;
   orderId: string;
   paymentId: number;
   transactionId: number;
@@ -221,7 +219,7 @@ export type CustomerProfile = {
 };
 
 export type TravelCard = {
-  expires: Timestamp;
+  expires: Date;
   id: number;
   token_id?: string;
 };
