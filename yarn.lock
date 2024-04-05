@@ -27,10 +27,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^3.18.0":
-  version "3.18.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.18.0.tgz#b5d46a02a2d962e7e30d7fdfc8206d9a1e39c9cf"
-  integrity sha512-OHXi47GGYGlIl4QUPqIzl2pmIL+0pqwhzwIWBdjCWx/g8y6857Y0cnFSL6dAmVlBu3mK9u35x77ypVj3vXcQNQ==
+"@atb-as/config-specs@^3.20.0":
+  version "3.20.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.20.0.tgz#7ee4f803fe50e97e4a0bebdff6bd005258eb5d4d"
+  integrity sha512-yrP3bTfcPfio6Cfrs8LuFqAJOljTH9U/qlYo0gErNyngg+YcGUGyNc3+VTtl4P0+k/ljwgoxlm6U+/AUxs+c9g==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -40,22 +40,22 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-10.0.0.tgz#51cb2a8c9dc00f2223d7e661c979d896c89ce25a"
-  integrity sha512-NFXTYDyDnQcCmcEMudcyXeFXHy6cp76a0wBBhZDFfAyUaEsFMcPwRp+hyU71jyr+AyLiK2m3N8ugQr2lWhAl5A==
+"@atb-as/generate-assets@^10.1.1":
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-10.1.1.tgz#8c634026a1b9fb0fc9d535058fa9e1be162909ba"
+  integrity sha512-hYhqluNuql8l+bR47RNIVETsXCNkvyIKHSYW1+Rq/ul/+svrJqZrgJIBdtEZKgb+TRXnyoHaaKM5NAMRxUNELQ==
   dependencies:
-    "@atb-as/theme" "^8.0.0"
+    "@atb-as/theme" "^8.1.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-8.0.0.tgz#dec88c6983f235d5a18d9510665e10b7bb26de85"
-  integrity sha512-vh6Y2bXG0g4mt/qYlc6a4/h84wcoowAIY5FkTlBS65mBjleqNA9YHSX0Y7k9KUVQ7Iv4T9H4K4edYaRXyLMA4Q==
+"@atb-as/theme@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-8.1.0.tgz#b1318b9f4044db319634f230ffa30d1832c22b0f"
+  integrity sha512-vSul0l2HQXz9g3TUXuEFZpggcB03MCTiqR62lVHtTrnTvjAx+VxEUt+xIPXbuDOry9zEWcZiNBUHzLIaNCca1w==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"

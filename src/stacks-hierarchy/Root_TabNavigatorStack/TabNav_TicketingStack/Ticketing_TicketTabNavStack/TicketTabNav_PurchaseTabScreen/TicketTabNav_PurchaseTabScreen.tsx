@@ -9,7 +9,9 @@ import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareCo
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {useRecentFareContracts} from './use-recent-fare-contracts';
-import {FareProductTypeConfig} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+} from '@atb/configuration';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
@@ -22,6 +24,7 @@ import {TariffZone} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import {TransitionPresets} from '@react-navigation/stack';
+import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
 
@@ -30,6 +33,8 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {authenticationType} = useAuthState();
   const {theme} = useTheme();
   const {recentFareContracts, loading} = useRecentFareContracts();
+  const {data: fareProducts} = useGetFareProductsQuery();
+
   const hasRecentFareContracts = !!recentFareContracts.length;
   const styles = useStyles();
   const {t} = useTranslation();
@@ -163,7 +168,11 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
           />
         )}
 
-        <FareProducts onProductSelect={onProductSelect} />
+        <FareProducts
+          fareProducts={fareProducts}
+          onProductSelect={onProductSelect}
+        />
+
         {showTicketAssistant && (
           <>
             <ThemeText style={styles.heading} type="body__secondary">
