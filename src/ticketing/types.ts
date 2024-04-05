@@ -194,6 +194,7 @@ export type ReserveOfferRequestBody = {
   recurring_payment_id: number | undefined;
   sca_exemption: boolean;
   customer_account_id: string;
+  auto_sale: boolean;
 };
 
 export type OfferReservation = {
