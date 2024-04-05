@@ -150,7 +150,7 @@ export const DetailsContent: React.FC<Props> = ({
             <ValidityHeader
               status={fareContractValidityStatus}
               now={now}
-              createdDate={fc.created.toMillis()}
+              createdDate={fc.created.getTime()}
               validFrom={fareContractValidFrom}
               validTo={fareContractValidTo}
               fareProductType={preassignedFareProduct?.type}
