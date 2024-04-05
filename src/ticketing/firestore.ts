@@ -20,6 +20,68 @@ export function setupFirestoreListeners(
     customer: SnapshotListener<CustomerProfile>;
   },
 ) {
+  const mapTravelRight = (travelRight: FirebaseFirestoreTypes.DocumentData): FirebaseFirestoreTypes.DocumentData => {
+    if (travelRight.startDateTime && travelRight.endDateTime) {
+      const trStartDateTime = travelRight.startDateTime as FirebaseFirestoreTypes.Timestamp;
+      const trEndDateTime = travelRight.endDateTime as FirebaseFirestoreTypes.Timestamp;
+
+      travelRight.startDateTime = trStartDateTime.toDate();
+      travelRight.endDateTime = trEndDateTime.toDate();
+    }
+
+    if (travelRight.usedAccesses) {
+      travelRight.usedAccesses = travelRight.usedAccesses.map(mapUsedAccesses);
+    }
+
+    return travelRight;
+  }
+
+  const mapUsedAccesses = (usedAccesses: FirebaseFirestoreTypes.DocumentData): FirebaseFirestoreTypes.DocumentData => {
+    if (usedAccesses.startDateTime && usedAccesses.endDateTime) {
+      const uaStartDateTime = usedAccesses.startDateTime as FirebaseFirestoreTypes.Timestamp;
+      const uaEndDateTime = usedAccesses.endDateTime as FirebaseFirestoreTypes.Timestamp;
+
+      usedAccesses.startDateTime = uaStartDateTime.toDate();
+      usedAccesses.endDateTime = uaEndDateTime.toDate();
+    }
+
+    return usedAccesses;
+  }
+
+  const mapFareContract = (d: FirebaseFirestoreTypes.DocumentSnapshot): FareContract => {
+    const fareContract = d.data();
+    if (!fareContract) {
+      throw new Error('No fare contract data');
+    }
+
+    if (fareContract.created) {
+      const fcCreatedTimestamp = fareContract.created as FirebaseFirestoreTypes.Timestamp;
+
+      fareContract.created = fcCreatedTimestamp.toDate();
+    }
+
+    if (fareContract.travelRights) {
+      fareContract.travelRights = fareContract.travelRights.map(mapTravelRight);
+    }
+
+    return fareContract as FareContract;
+  };
+
+  const mapReservation = (d: FirebaseFirestoreTypes.DocumentSnapshot): Reservation => {
+    const reservation = d.data();
+    if (!reservation) {
+      throw new Error('No reservation data');
+    }
+
+    if (reservation.created) {
+      const rCreatedTimestamp = reservation.created as FirebaseFirestoreTypes.Timestamp;
+
+      reservation.created = rCreatedTimestamp.toDate();
+    }
+
+    return reservation as Reservation;
+  }
+
   const fareContractUnsub = firestore()
     .collection('customers')
     .doc(abtCustomerId)
@@ -27,9 +89,7 @@ export function setupFirestoreListeners(
     .orderBy('created', 'desc')
     .onSnapshot(
       (snapshot) => {
-        const fareContracts = (
-          snapshot as FirebaseFirestoreTypes.QuerySnapshot<FareContract>
-        ).docs.map<FareContract>((d) => d.data());
+        const fareContracts = snapshot.docs.map<FareContract>(mapFareContract);
         listeners.fareContracts.onSnapshot(fareContracts);
 
         Bugsnag.leaveBreadcrumb('farecontract_snapshot', {
@@ -51,9 +111,7 @@ export function setupFirestoreListeners(
     .orderBy('created', 'desc')
     .onSnapshot(
       (snapshot) => {
-        const sentFareContracts = (
-          snapshot as FirebaseFirestoreTypes.QuerySnapshot<FareContract>
-        ).docs.map<FareContract>((d) => d.data());
+        const sentFareContracts = snapshot.docs.map<FareContract>(mapFareContract);
         listeners.sentFareContracts.onSnapshot(sentFareContracts);
 
         Bugsnag.leaveBreadcrumb('sentfarecontract_snapshot', {
@@ -75,9 +133,7 @@ export function setupFirestoreListeners(
     .where('created', '>', addHours(Date.now(), -1))
     .onSnapshot(
       (snapshot) => {
-        const reservations = (
-          snapshot as FirebaseFirestoreTypes.QuerySnapshot<Reservation>
-        ).docs.map<Reservation>((d) => d.data());
+        const reservations = snapshot.docs.map<Reservation>(mapReservation);
         listeners.reservations.onSnapshot(reservations);
 
         Bugsnag.leaveBreadcrumb('reservations_snapshot', {
@@ -99,9 +155,7 @@ export function setupFirestoreListeners(
     .where('paymentStatus', '==', 'REJECT')
     .onSnapshot(
       (snapshot) => {
-        const rejectedReservations = (
-          snapshot as FirebaseFirestoreTypes.QuerySnapshot<Reservation>
-        ).docs.map<Reservation>((d) => d.data());
+        const rejectedReservations = snapshot.docs.map<Reservation>(mapReservation);
         listeners.rejectedReservations.onSnapshot(rejectedReservations);
         Bugsnag.leaveBreadcrumb('rejected_reservations_snapshot', {
           count: rejectedReservations.length,
