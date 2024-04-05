@@ -113,6 +113,18 @@ const PurchaseOverviewTexts = {
           'Vel haldeplassar eller soner',
         ),
       },
+      none: {
+        text: _(
+          'Sone',
+          'Zone',
+          'Sone'
+        ),
+        a11yLabel: _(
+          'Sone',
+          'Zone',
+          'Sone'
+        )
+      }
     },
     zoneName: (zoneName: string) =>
       _(`Sone ${zoneName}`, `Zone ${zoneName}`, `Sone ${zoneName}`),
