@@ -46,6 +46,7 @@ export function setupFirestoreListeners(
     }
     return {
       ...fareContract,
+      created: (fareContract.created as FirebaseFirestoreTypes.Timestamp).toDate(),
       ...fareContract.travelRights && { 
           travelRights: fareContract.travelRights.map(mapTravelRight),
       },
