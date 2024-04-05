@@ -1,8 +1,6 @@
 apply plugin: "com.android.application"
-
+apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-
-apply plugin: "kotlin-android"
 
 apply plugin: "com.bugsnag.android.gradle"
 /**
@@ -61,7 +59,7 @@ def appVersionCode = '1'
 
 android {
     ndkVersion rootProject.ext.ndkVersion
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
 
     compileOptions {
         coreLibraryDesugaringEnabled = true
@@ -169,7 +167,6 @@ android {
 }
 
 dependencies {
-
     implementation 'com.facebook.soloader:soloader:0.10.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"
@@ -189,16 +186,7 @@ dependencies {
 
     implementation 'com.kogenta.kettle:kettle-sdk:1.2.3'
 
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-        exclude group: 'com.facebook.fbjni'
-    }
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group: 'com.facebook.flipper'
-        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
-    }
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:0.182.0") {
-        exclude group: 'com.facebook.flipper'
-    }
+    debugImplementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
