@@ -77,14 +77,14 @@ export const useDefaultTariffZone = (
  */
 export const useFilterTariffZone = (
   tariffZones: TariffZone[],
-  allowedTariffZones: string[],
+  allowedTariffZoneRefs: string[],
 ): TariffZone[] => {
 
   return useMemo<TariffZone[]>(() => {
-    if (allowedTariffZones.length === 0) {
+    if (allowedTariffZoneRefs.length === 0) {
       return tariffZones;
     } 
   
-    return tariffZones.filter((tariffZone) => allowedTariffZones.some((allowedZone) => tariffZone.id === allowedZone));
-  }, [tariffZones, allowedTariffZones]);
+    return tariffZones.filter((tariffZone) => allowedTariffZoneRefs.some((allowedZone) => tariffZone.id === allowedZone));
+  }, [tariffZones, allowedTariffZoneRefs]);
 }

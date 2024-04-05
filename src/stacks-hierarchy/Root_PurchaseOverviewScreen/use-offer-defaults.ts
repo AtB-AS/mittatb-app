@@ -41,8 +41,8 @@ export function useOfferDefaults(
     preassignedFareProduct ?? defaultFareProduct;
 
   // Check for whitelisted zones
-  const allowedTariffZones = defaultPreassignedFareProduct.limitations.tariffZoneRefs ?? [];
-  const usableTariffZones = useFilterTariffZone(tariffZones, allowedTariffZones);
+  const allowedTariffZoneRefs = defaultPreassignedFareProduct.limitations.tariffZoneRefs ?? [];
+  const usableTariffZones = useFilterTariffZone(tariffZones, allowedTariffZoneRefs);
 
   // Get default TariffZones
   const defaultTariffZone = useDefaultTariffZone(usableTariffZones);
