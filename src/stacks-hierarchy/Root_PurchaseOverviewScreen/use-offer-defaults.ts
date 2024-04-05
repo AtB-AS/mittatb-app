@@ -9,7 +9,7 @@ import {UserProfileWithCount} from '@atb/fare-contracts';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {useTicketingState} from '@atb/ticketing';
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
-import {useDefaultTariffZone} from '@atb/stacks-hierarchy/utils';
+import {useDefaultTariffZone, useFilterTariffZone} from '@atb/stacks-hierarchy/utils';
 import {useMemo} from 'react';
 import {useDefaultPreassignedFareProduct} from '@atb/fare-contracts/utils';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
@@ -41,7 +41,9 @@ export function useOfferDefaults(
     preassignedFareProduct ?? defaultFareProduct;
 
   // Get default TariffZones
-  const defaultTariffZone = useDefaultTariffZone(tariffZones);
+  const tariffZoneLimitations = defaultPreassignedFareProduct.limitations.tariffZoneRefs ?? [];
+  const usableTariffZones = useFilterTariffZone(tariffZones, tariffZoneLimitations);
+  const defaultTariffZone = useDefaultTariffZone(usableTariffZones);
   const defaultFromPlace = fromPlace ?? defaultTariffZone;
   const defaultToPlace = toPlace ?? defaultTariffZone;
 

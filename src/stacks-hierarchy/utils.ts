@@ -69,3 +69,17 @@ export const useDefaultTariffZone = (
     return {...tariffZones[0], resultType: 'zone'};
   }, [tariffZones, tariffZoneFromLocation]);
 };
+
+export const useFilterTariffZone = (
+  tariffZones: TariffZone[],
+  allowedTariffZones: string[],
+): TariffZone[] => {
+
+  return useMemo<TariffZone[]>(() => {
+    if (allowedTariffZones.length === 0) {
+      return tariffZones;
+    } 
+  
+    return tariffZones.filter((tariffZone) => allowedTariffZones.some((allowedZone) => tariffZone.id === allowedZone));
+  }, [tariffZones, allowedTariffZones]);
+}
