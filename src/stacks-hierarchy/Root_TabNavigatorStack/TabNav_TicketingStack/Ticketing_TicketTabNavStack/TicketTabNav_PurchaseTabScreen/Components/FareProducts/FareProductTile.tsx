@@ -1,6 +1,9 @@
 import React from 'react';
 
-import {FareProductTypeConfig} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  ProductTypeTransportModes,
+} from '@atb/configuration';
 import {useTextForLanguage} from '@atb/translations/utils';
 
 import {useThemeColorForTransportMode} from '@atb/utils/use-transportation-color';
@@ -11,17 +14,17 @@ export const FareProductTile = ({
   onPress,
   testID,
   config,
+  productGroupTransportModes,
 }: {
   accented?: boolean;
   onPress: () => void;
   testID: string;
   config: FareProductTypeConfig;
+  productGroupTransportModes: ProductTypeTransportModes[];
 }) => {
-  const transportModes = config.transportModes;
-
   const transportColor = useThemeColorForTransportMode(
-    transportModes[0]?.mode,
-    transportModes[0]?.subMode,
+    productGroupTransportModes[0]?.mode,
+    productGroupTransportModes[0]?.subMode,
   );
   const title = useTextForLanguage(config.name);
   const description = useTextForLanguage(config.description);
