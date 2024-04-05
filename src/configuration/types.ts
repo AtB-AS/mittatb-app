@@ -26,6 +26,7 @@ export type PreassignedFareProduct = {
   zoneSelectionMode?: ZoneSelectionMode;
   limitations: {
     userProfileRefs: string[];
+    tariffZoneRefs?: string[];
     appVersionMin: string | undefined;
     appVersionMax: string | undefined;
     latestActivationDate?: number;
