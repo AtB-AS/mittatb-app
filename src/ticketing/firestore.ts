@@ -21,31 +21,22 @@ export function setupFirestoreListeners(
   },
 ) {
   const mapTravelRight = (travelRight: FirebaseFirestoreTypes.DocumentData): FirebaseFirestoreTypes.DocumentData => {
-    if (travelRight.startDateTime && travelRight.endDateTime) {
-      const trStartDateTime = travelRight.startDateTime as FirebaseFirestoreTypes.Timestamp;
-      const trEndDateTime = travelRight.endDateTime as FirebaseFirestoreTypes.Timestamp;
-
-      travelRight.startDateTime = trStartDateTime.toDate();
-      travelRight.endDateTime = trEndDateTime.toDate();
-    }
-
-    if (travelRight.usedAccesses) {
-      travelRight.usedAccesses = travelRight.usedAccesses.map(mapUsedAccesses);
-    }
-
-    return travelRight;
+    return {
+      ...travelRight,
+      startDateTime: (travelRight.startDateTime as FirebaseFirestoreTypes.Timestamp).toDate(),
+      endDateTime: (travelRight.endDateTime as FirebaseFirestoreTypes.Timestamp).toDate(),
+      ...travelRight.usedAccesses && {
+        usedAccesses: travelRight.usedAccesses.map(mapUsedAccesses),
+      },
+    };
   }
 
   const mapUsedAccesses = (usedAccesses: FirebaseFirestoreTypes.DocumentData): FirebaseFirestoreTypes.DocumentData => {
-    if (usedAccesses.startDateTime && usedAccesses.endDateTime) {
-      const uaStartDateTime = usedAccesses.startDateTime as FirebaseFirestoreTypes.Timestamp;
-      const uaEndDateTime = usedAccesses.endDateTime as FirebaseFirestoreTypes.Timestamp;
-
-      usedAccesses.startDateTime = uaStartDateTime.toDate();
-      usedAccesses.endDateTime = uaEndDateTime.toDate();
-    }
-
-    return usedAccesses;
+    return {
+      ...usedAccesses,
+      startDateTime: (usedAccesses.startDateTime as FirebaseFirestoreTypes.Timestamp).toDate(),
+      endDateTime: (usedAccesses.endDateTime as FirebaseFirestoreTypes.Timestamp).toDate(),
+    };
   }
 
   const mapFareContract = (d: FirebaseFirestoreTypes.DocumentSnapshot): FareContract => {
@@ -53,18 +44,12 @@ export function setupFirestoreListeners(
     if (!fareContract) {
       throw new Error('No fare contract data');
     }
-
-    if (fareContract.created) {
-      const fcCreatedTimestamp = fareContract.created as FirebaseFirestoreTypes.Timestamp;
-
-      fareContract.created = fcCreatedTimestamp.toDate();
-    }
-
-    if (fareContract.travelRights) {
-      fareContract.travelRights = fareContract.travelRights.map(mapTravelRight);
-    }
-
-    return fareContract as FareContract;
+    return {
+      ...fareContract,
+      ...fareContract.travelRights && { 
+          travelRights: fareContract.travelRights.map(mapTravelRight),
+      },
+    };
   };
 
   const mapReservation = (d: FirebaseFirestoreTypes.DocumentSnapshot): Reservation => {
