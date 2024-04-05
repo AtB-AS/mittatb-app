@@ -119,7 +119,12 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const {travellerSelectionMode, zoneSelectionMode} =
     fareProductTypeConfig.configuration;
 
-  const offerEndpoint = params.fareProductTypeConfig.configuration.offerEndpoint;
+  const offerEndpoint =
+    zoneSelectionMode === 'none'
+      ? 'authority'
+      : zoneSelectionMode === 'multiple-stop-harbor'
+      ? 'stop-places'
+      : 'zones';
 
   const {
     offerSearchTime,
