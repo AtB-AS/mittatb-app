@@ -19,6 +19,7 @@ import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
+import {useAuthState} from '@atb/auth';
 import {TravellerSelectionBottomSheetType} from './types';
 
 export function MultipleTravellersSelection({
@@ -37,6 +38,10 @@ export function MultipleTravellersSelection({
   const isOnBehalfOfEnabled =
     useOnBehalfOfEnabled() &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
+
+  const isLoggedIn = useAuthState().authenticationType === 'phone';
+
+  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 
   const addTraveller = (userTypeString: string) => {
     travellersModified.current = true;
@@ -78,7 +83,7 @@ export function MultipleTravellersSelection({
           />
         ))}
       </Section>
-      {isOnBehalfOfEnabled && (
+      {isOnBehalfOfAllowed && (
         <Section style={styles.onBehalfOfContainer}>
           <ToggleSectionItem
             leftImage={<HoldingHands />}
