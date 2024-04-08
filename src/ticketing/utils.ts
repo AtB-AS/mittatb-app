@@ -172,7 +172,12 @@ function isActiveNowOrCanBeUsedFareContract(f: FareContract, now: number) {
   return false;
 }
 
-export function isCanBeConsumedNowFareContract(f: FareContract, now: number) {
+export function isCanBeConsumedNowFareContract(
+  f: FareContract,
+  now: number,
+  currentUserId: string | undefined,
+) {
+  if (f.customerAccountId !== currentUserId) return false;
   if (!isCarnet(f)) return false;
   const travelRights = f.travelRights.filter(isCarnetTravelRight);
 
