@@ -55,6 +55,7 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {authenticationType} = useAuthState();
 
   const {
     open: openBottomSheet,
@@ -66,7 +67,7 @@ export function TravellerSelection({
     useOnBehalfOfEnabled() &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const isLoggedIn = useAuthState().authenticationType === 'phone';
+  const isLoggedIn = authenticationType === 'phone';
 
   const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 

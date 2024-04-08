@@ -25,12 +25,13 @@ export function SingleTravellerSelection({
 }: TravellerSelectionBottomSheetType) {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {authenticationType} = useAuthState();
   const selectedProfile = userProfilesWithCount.find((u) => u.count);
   const isOnBehalfOfEnabled =
     useOnBehalfOfEnabled() &&
     fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const isLoggedIn = useAuthState().authenticationType === 'phone';
+  const isLoggedIn = authenticationType === 'phone';
 
   const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 
