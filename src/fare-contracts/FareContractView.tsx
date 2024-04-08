@@ -173,7 +173,7 @@ export const FareContractView: React.FC<Props> = ({
           testID={testID + 'Details'}
         />
       )}
-      {isCanBeConsumedNowFareContract(fareContract, now) && (
+      {(isCanBeConsumedNowFareContract(fareContract, now) && !isSent) && (
         <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
       )}
     </Section>
