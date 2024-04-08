@@ -33,6 +33,7 @@ This will create a draft release in GitHub.
 
 - `git fetch` to locally pull all existing tags
 - Make sure you've checked out the release branch from which you want to make the release.
+- Make sure you're authenticated with the GitHub CLI (`gh auth status`).
 - `yarn release-draft` to create a tag for the new release.
 - You are asked to specify version. This should be the major-version with a release candidate version suffix, for example `v1.16-rc2`.
 - If this is the first release for the current major version use `rc1` as suffix like this: `v1.16-rc1`.
