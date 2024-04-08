@@ -239,7 +239,7 @@ export const DetailsContent: React.FC<Props> = ({
           onPress={onReceiptNavigate}
           testID="receiptButton"
         />
-        {(isCanBeConsumedNowFareContract(fc, now) && !isSent) && (
+        {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
           <ConsumeCarnetSectionItem fareContractId={fc.id} />
         )}
       </Section>
