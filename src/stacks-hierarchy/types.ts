@@ -32,4 +32,4 @@ export type RecurringPaymentOption = {
 
 export type SavedPaymentOption = DefaultPaymentOption | RecurringPaymentOption;
 
-export type WebViewStatus = 'loading' | 'success' | 'error';
+export type PaymentProcessorStatus = 'loading' | 'success' | 'error';

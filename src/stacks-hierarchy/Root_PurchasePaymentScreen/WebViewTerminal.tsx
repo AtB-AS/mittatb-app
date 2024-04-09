@@ -4,11 +4,11 @@ import React, {useEffect} from 'react';
 import {OfferReservation} from '@atb/ticketing';
 import {StyleSheet} from '@atb/theme';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
-import {WebViewStatus} from '@atb/stacks-hierarchy/types';
+import {PaymentProcessorStatus} from '@atb/stacks-hierarchy/types';
 
 type Props = {
   offerReservation: OfferReservation;
-  onWebViewStatusChange: (status: WebViewStatus) => void;
+  onWebViewStatusChange: (status: PaymentProcessorStatus) => void;
 };
 export const WebViewTerminal = ({
   offerReservation,
@@ -42,18 +42,7 @@ export const WebViewTerminal = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
   keyboardAvoidingView: {flex: 1},
-  loadingOverlay: {
-    zIndex: 100,
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flex: 1,
-    justifyContent: 'center',
-    padding: theme.spacings.medium,
-  },
 }));

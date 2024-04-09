@@ -1,8 +1,11 @@
-import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {StyleSheet} from '@atb/theme';
-import {PaymentCreditCardTexts, useTranslation} from '@atb/translations';
+import {
+  dictionary,
+  PaymentCreditCardTexts,
+  useTranslation,
+} from '@atb/translations';
 import React, {useCallback, useEffect, useState} from 'react';
 import {View} from 'react-native';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy';
@@ -12,7 +15,7 @@ import {useCancelPaymentMutation} from '@atb/stacks-hierarchy/Root_PurchasePayme
 import {WebViewTerminal} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/WebViewTerminal';
 import {usePurchaseCallbackListener} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/use-purchase-callback-listener';
 import {LoadingOverlay} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/LoadingOverlay';
-import {WebViewStatus} from '@atb/stacks-hierarchy/types';
+import {PaymentProcessorStatus} from '@atb/stacks-hierarchy/types';
 import {PaymentType} from '@atb/ticketing';
 import {useOpenVippsAfterReservation} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/use-open-vipps-after-reservation';
 
@@ -23,7 +26,8 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
   const {t} = useTranslation();
   const {offers, destinationAccountId, paymentMethod} = route.params;
   const analytics = useAnalytics();
-  const [webViewStatus, setWebViewStatus] = useState<WebViewStatus>('loading');
+  const [paymentProcessorStatus, setPaymentProcessorStatus] =
+    useState<PaymentProcessorStatus>('loading');
 
   const navigateToActiveTicketsScreen = useCallback(() => {
     navigation.navigate('Root_TabNavigatorStack', {
@@ -34,13 +38,6 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
       },
     });
   }, [navigation]);
-
-  const navigateBackFromTerminal = () => {
-    analytics.logEvent('Ticketing', 'Payment cancelled', {
-      paymentMethod: route.params.paymentMethod,
-    });
-    navigation.pop();
-  };
 
   const reserveMutation = useReserveOfferMutation({
     offers,
@@ -59,21 +56,24 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
     reserveOffer();
   }, [reserveOffer]);
 
-  const restart = () => {
-    setWebViewStatus('loading');
+  const restart = async () => {
+    setPaymentProcessorStatus('loading');
+    if (reserveMutation.isSuccess) {
+      await cancelPaymentMutation.mutateAsync(reserveMutation.data);
+    }
     reserveOffer();
   };
 
   const isLoading =
     reserveMutation.isLoading ||
-    (reserveMutation.isSuccess && webViewStatus === 'loading');
+    (reserveMutation.isSuccess && paymentProcessorStatus === 'loading');
 
-  const isError = reserveMutation.isError || webViewStatus === 'error';
+  const isError = reserveMutation.isError || paymentProcessorStatus === 'error';
 
   useOpenVippsAfterReservation(
     reserveMutation.data?.url,
     paymentMethod.paymentType,
-    useCallback(() => setWebViewStatus('error'), []),
+    useCallback(() => setPaymentProcessorStatus('error'), []),
   );
 
   return (
@@ -87,7 +87,7 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
               cancelPaymentMutation.mutate(reserveMutation.data);
             }
             analytics.logEvent('Ticketing', 'Payment cancelled');
-            navigateBackFromTerminal();
+            navigation.pop();
           },
         }}
       />
@@ -99,10 +99,10 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
 
         {reserveMutation.isSuccess &&
           paymentMethod.paymentType !== PaymentType.Vipps &&
-          webViewStatus !== 'error' && (
+          paymentProcessorStatus !== 'error' && (
             <WebViewTerminal
               offerReservation={reserveMutation.data}
-              onWebViewStatusChange={setWebViewStatus}
+              onWebViewStatusChange={setPaymentProcessorStatus}
             />
           )}
 
@@ -112,16 +112,10 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
               message={t(PaymentCreditCardTexts.error)}
               type="error"
               style={styles.messageBox}
-            />
-            <Button
-              onPress={restart}
-              text={t(PaymentCreditCardTexts.buttons.restart)}
-              style={styles.button}
-            />
-            <Button
-              interactiveColor="interactive_1"
-              onPress={() => navigateBackFromTerminal()}
-              text={t(PaymentCreditCardTexts.buttons.goBack)}
+              onPressConfig={{
+                action: restart,
+                text: t(dictionary.retry),
+              }}
             />
           </View>
         )}
