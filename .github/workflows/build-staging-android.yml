@@ -115,10 +115,16 @@ jobs:
         run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-      - uses: actions/upload-artifact@v4
+      - name: Upload build artifacts - android/app/build
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build
+          path: android/app/build/*
+      - name: Upload build artifacts - bundle
+        uses: actions/upload-artifact@v4
         with:
           name: android-bundle
-          path: ./android/app/build/
+          path: bundle/*
       - name: Register app version
         run: bash ./scripts/android/register-app-version.sh
         env:
