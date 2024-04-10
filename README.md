@@ -31,8 +31,11 @@ We love feedback and suggestions. The AtB app and service is continously improve
 > 🪟 Windows users: use Git Bash to run .sh scripts 
 
 1. Setup Entur private registry in `.npmrc` and `gradle.properties`.
+
    a. Get access to Entur jfrog registry (https://entur2.jfrog.io/) for your mittatb account
+
    b. Create an identity token for your jfrog user in jfrog user setting
+
    c. Run this script:
    > ⚠ Make sure to run this only once. This script appends to the token files and does not overwrite its contents.
    ```
@@ -40,7 +43,9 @@ We love feedback and suggestions. The AtB app and service is continously improve
    ```
    Note: Access token from jfrog has a one-year expiry
 2. Install dependencies:
+
    a. React Native: `yarn`
+
    b. Install Ruby dependencies `bundle install`
 
    > 🪟 Windows users: install [ImageMagick](https://imagemagick.org/script/download.php) and check `Install legacy utilities (e.g. convert)` during the installation. 
@@ -53,10 +58,12 @@ We love feedback and suggestions. The AtB app and service is continously improve
 
 > 🪟 Windows users: skip this step
 4. Install iOS Pods:
+
    a. Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
        ```
        cp .netrc ~/
        ```
+       
    b. Pod install: `cd ios/` and `pod install`
 
 > 🪟 Windows users: run in Git Bash
