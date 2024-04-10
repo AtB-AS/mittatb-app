@@ -63,7 +63,7 @@ We love feedback and suggestions. The AtB app and service is continously improve
        ```
        cp .netrc ~/
        ```
-       
+
    b. Pod install: `cd ios/` and `pod install`
 
 > 🪟 Windows users: run in Git Bash
@@ -104,7 +104,7 @@ See [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/mai
 
 Scripts for developing for and building the app do not support Windows natively. Expect to run into issues when using Windows. 
 
-Using `Git Bash` and `WSL` it _is possible_ to work around these issues. These steps are described in the setup with the `🪟 Windows users` tag.
+Using `Git Bash` and `WSL` it _is possible_ to work around these issues. These steps are tagged in the setup with the `🪟 Windows users` tag.
 
 ### Common errors
 
