@@ -7,7 +7,7 @@ const PurchasePaymentTexts = {
   error: _(
     'Oops - vi feila når vi prøvde å sette i gang betalingen. Supert om du prøver igjen 🤞',
     'Whoops - we failed when trying to set up the payment. Please try again 🤞',
-    'Oops - vi feila når vi prøvde å sette i gang betalingen. Supert om du prøver igjen 🤞',
+    'Oops - vi feila då vi prøvde å sette i gang betalinga. Supert om du prøver igjen 🤞',
   ),
   loading: _('Laster…', 'Loading…', 'Lastar…'),
 };
