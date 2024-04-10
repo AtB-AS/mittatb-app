@@ -22,7 +22,7 @@ We love feedback and suggestions. The AtB app and service is continously improve
 1. See [React Native: setting up the development environment](https://reactnative.dev/docs/environment-setup). (Click the `React Native CLI Quickstart` tab)
 2. yarn (https://yarnpkg.com/getting-started/install). Currently yarn 2.0 not supported, install `v1.22.0` or similar
 3. git-crypt: MacOS: `brew install git-crypt`, Linux: `apt install git-crypt`, Windows: Use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) terminal on Windows file system and follow Linux steps
-4. Ruby: Windows: [Run installer](https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-2.7.6-1/rubyinstaller-devkit-2.7.6-1-x64.exe) and add `C:\Ruby27-x64\bin` (or similar) to PATH.
+4. Ruby 2.7.6: Windows: [Install Ruby](https://rubyinstaller.org/downloads/) and add `C:\Ruby27-x64\bin` (or similar) to PATH.
 
 ### Starting locally
 
