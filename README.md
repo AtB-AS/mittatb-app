@@ -20,34 +20,44 @@ We love feedback and suggestions. The AtB app and service is continously improve
 ### Requirements
 
 1. See [React Native: setting up the development environment](https://reactnative.dev/docs/environment-setup). (Click the `React Native CLI Quickstart` tab)
-1. yarn (https://yarnpkg.com/getting-started/install). Currently yarn 2.0 not supported, install `v1.22.0` or similar
-1. git-crypt: MacOS: `brew install git-crypt`, Linux: `apt install git-crypt`
+2. yarn (https://yarnpkg.com/getting-started/install). Currently yarn 2.0 not supported, install `v1.22.0` or similar
+3. git-crypt: MacOS: `brew install git-crypt`, Linux: `apt install git-crypt`, Windows: Use [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) terminal on Windows file system and follow Linux steps
+4. Ruby: Windows: [Run installer](https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-2.7.6-1/rubyinstaller-devkit-2.7.6-1-x64.exe) and add `C:\Ruby27-x64\bin` (or similar) to PATH.
 
 ### Starting locally
 
 #### First time setup
 
+> 🪟 Windows users: use Git Bash to run .sh scripts 
+
 1. Setup Entur private registry in `.npmrc` and `gradle.properties`.
-   1. Get access to Entur jfrog registry (https://entur2.jfrog.io/) for your mittatb account
-   1. Create an identity token for your jfrog user in jfrog user setting
-   1. Run this script:
+   a. Get access to Entur jfrog registry (https://entur2.jfrog.io/) for your mittatb account
+   b. Create an identity token for your jfrog user in jfrog user setting
+   c. Run this script:
+   > ⚠ Make sure to run this only once. This script appends to the token files and does not overwrite its contents.
    ```
    ENTUR_REGISTRY_USER=<USER_EMAIL> ENTUR_REGISTRY_TOKEN=<IDENTITY_TOKEN> ./scripts/add-entur-private-registry.sh
    ```
    Note: Access token from jfrog has a one-year expiry
-1. Install dependencies:
-   1. React Native: `yarn`
-   1. Install Ruby dependencies `bundle install`
-   1. Install ImageMagick `brew install imagemagick`
-1. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
-1. Install iOS Pods:
-   1. Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
+2. Install dependencies:
+   a. React Native: `yarn`
+   b. Install Ruby dependencies `bundle install`
+   > 🪟 Windows users: install [ImageMagick](https://imagemagick.org/script/download.php) and check `Install legacy utilities (e.g. convert)` during the installation. 
+   > Add `C:\Program Files\ImageMagick-7.1.1-Q16-HDRI` (or similar) to PATH
+   c. Install ImageMagick `brew install imagemagick`
+> 🪟 Windows users: run in WSL (Windows Subsystem for Linux). 
+3. Decrypt sensitive files `git-crypt unlock <path/to/key>` (Key given to internal members)
+> 🪟 Windows users: skip this step
+4. Install iOS Pods:
+   a. Mapbox v6 requires token for installing dependencies. This means you need to set proper auth on curl for MapBox API. `git-crypt` should decrypt a `.netrc` file in root. You can copy this to set user info:
        ```
        cp .netrc ~/
        ```
-   1. Pod install: `cd ios/` and `pod install`
-1. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
-1. Run `yarn get_ios_certs` to install certificates. NOTE: In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
+   b. Pod install: `cd ios/` and `pod install`
+> 🪟 Windows users: run in Git Bash
+5. From root folder run: `yarn setup dev <organization>` where organization is either `atb` or `nfk`, to set root .env for local development and generate all icons and launch screens for iOS and Android
+> 🪟 Windows users: skip this step
+6. Run `yarn get_ios_certs` to install certificates. NOTE: In order to be able to set up this step you must have access to the certificates's repo for the organization you are working on.
 
 For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittatb-app/issues/35) before they are able to run the app.
 
@@ -57,7 +67,7 @@ For external contributors, we need to fix [#35](https://github.com/AtB-AS/mittat
 
 You may select which simulator/device the application will be deployed on in xcode.
 
-1. Android: `yarn android`
+2. Android: `yarn android`
 
 You may select which device/emulator to use from Android Studio. You may also use Android Debug Bridge (adb).
 
@@ -76,6 +86,12 @@ yarn setup dev atb
 ```
 
 See [`@atb-as/generate-assets`](https://github.com/AtB-AS/design-system/tree/main/packages/assets) in design system for more details. Assets will be outputted in `./assets/design-assets` and converted from SVGs to TypeScript React Native files.
+
+### Building on Windows
+
+Scripts for developing for and building the app do not support Windows natively. Expect to run into issues when using Windows. 
+
+Using `Git Bash` and `WSL` it _is possible_ to work around these issues. These steps are described in the setup with the `🪟 Windows users` tag.
 
 ### Common errors
 
