@@ -109,7 +109,12 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
         {isError && (
           <View style={styles.center}>
             <MessageInfoBox
-              message={t(PaymentCreditCardTexts.error)}
+              message={
+                t(PaymentCreditCardTexts.error) +
+                (reserveMutation.isSuccess
+                  ? t(PaymentCreditCardTexts.vippsInstalledError)
+                  : '')
+              }
               type="error"
               style={styles.messageBox}
               onPressConfig={{
