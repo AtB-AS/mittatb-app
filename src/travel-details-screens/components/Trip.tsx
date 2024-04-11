@@ -7,6 +7,7 @@ import {
   secondsBetween,
 } from '@atb/utils/date';
 import {AxiosError} from 'axios';
+import React from 'react';
 import {View} from 'react-native';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
 import {TripSummary} from './TripSummary';
