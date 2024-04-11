@@ -71,8 +71,9 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
         ? a11yLabel(fromTariffZone, toTariffZone, language, t) +
           screenReaderPause
         : t(
-            PurchaseOverviewTexts.travellerSelection
-              .a11yLabelPrefixNotSelectable,
+            PurchaseOverviewTexts.zones.zoneName(
+              getReferenceDataName(fromTariffZone, language),
+            ),
           ),
       accessibilityHint: canSelectZone
         ? t(PurchaseOverviewTexts.zones.a11yHint)
@@ -120,9 +121,15 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
     return (
       <View style={style}>
         <ContentHeading
-          text={t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
+          text={t(
+            PurchaseOverviewTexts.zones.title[
+              canSelectZone ? selectionMode : 'none'
+            ].text,
+          )}
           accessibilityLabel={t(
-            PurchaseOverviewTexts.zones.title[selectionMode].a11yLabel,
+            PurchaseOverviewTexts.zones.title[
+              canSelectZone ? selectionMode : 'none'
+            ].a11yLabel,
           )}
         />
         <Section {...accessibility}>

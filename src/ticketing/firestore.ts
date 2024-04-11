@@ -23,8 +23,8 @@ export function setupFirestoreListeners(
   const mapTravelRight = (travelRight: FirebaseFirestoreTypes.DocumentData): FirebaseFirestoreTypes.DocumentData => {
     return {
       ...travelRight,
-      startDateTime: (travelRight.startDateTime as FirebaseFirestoreTypes.Timestamp).toDate(),
-      endDateTime: (travelRight.endDateTime as FirebaseFirestoreTypes.Timestamp).toDate(),
+      startDateTime: (travelRight.startDateTime as FirebaseFirestoreTypes.Timestamp)?.toDate(),
+      endDateTime: (travelRight.endDateTime as FirebaseFirestoreTypes.Timestamp)?.toDate(),
       ...travelRight.usedAccesses && {
         usedAccesses: travelRight.usedAccesses.map(mapUsedAccesses),
       },
@@ -47,7 +47,7 @@ export function setupFirestoreListeners(
     return {
       ...fareContract,
       created: (fareContract.created as FirebaseFirestoreTypes.Timestamp).toDate(),
-      ...fareContract.travelRights && { 
+      ...fareContract.travelRights && {
           travelRights: fareContract.travelRights.map(mapTravelRight),
       },
     };
