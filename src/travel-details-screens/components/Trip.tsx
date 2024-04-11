@@ -7,7 +7,6 @@ import {
   secondsBetween,
 } from '@atb/utils/date';
 import {AxiosError} from 'axios';
-import React from 'react';
 import {View} from 'react-native';
 import {getPlaceName, InterchangeDetails, TripSection} from './TripSection';
 import {TripSummary} from './TripSummary';
@@ -108,6 +107,16 @@ export const Trip: React.FC<TripProps> = ({
     modesWeSellTicketsFor,
   );
 
+  const interChangeGuarenteed = filteredLegs.some(
+    (leg) =>
+      leg.interchangeTo?.guaranteed &&
+      getInterchangeDetails(
+        filteredLegs,
+        leg.interchangeTo?.toServiceJourney?.id,
+      ) &&
+      leg.line,
+  );
+
   return (
     <View style={styles.container}>
       {shouldShowDate && (
@@ -126,7 +135,8 @@ export const Trip: React.FC<TripProps> = ({
           type="info"
           message={[
             t(TripDetailsTexts.messages.shortTime),
-            shortWaitTimeAndNotGuaranteedCorrespondence
+            shortWaitTimeAndNotGuaranteedCorrespondence &&
+            !interChangeGuarenteed
               ? t(TripDetailsTexts.messages.correspondenceNotGuaranteed)
               : '',
           ].join(' ')}
