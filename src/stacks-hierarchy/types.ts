@@ -29,13 +29,7 @@ export type RecurringPaymentOption = {
   paymentType: PaymentType.Visa | PaymentType.Mastercard;
   recurringCard: SavedRecurringPayment;
 };
-export type RecurringPaymentWithoutCardOption = {
-  savedType: 'recurring-without-card';
-  paymentType: PaymentType.Visa | PaymentType.Mastercard;
-  recurringPaymentId: number;
-};
 
-export type SavedPaymentOption =
-  | DefaultPaymentOption
-  | RecurringPaymentOption
-  | RecurringPaymentWithoutCardOption;
+export type SavedPaymentOption = DefaultPaymentOption | RecurringPaymentOption;
+
+export type PaymentProcessorStatus = 'loading' | 'success' | 'error';

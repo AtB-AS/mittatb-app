@@ -53,6 +53,12 @@ export type RemoteConfig = {
   enable_ticket_information: boolean;
   enable_posthog: boolean;
   enable_server_time: boolean;
+  /**
+   * Configuration whether the app should use auto sale or not when reserving
+   * ticket. Auto sale means that there is no need for capturing the
+   * transaction.
+   */
+  enable_auto_sale: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -111,6 +117,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_ticket_information: false,
   enable_posthog: false,
   enable_server_time: true,
+  enable_auto_sale: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -300,6 +307,10 @@ export function getConfig(): RemoteConfig {
     values['enable_server_time']?.asBoolean() ??
     defaultRemoteConfig.enable_server_time;
 
+  const enable_auto_sale =
+    values['enable_auto_sale']?.asBoolean() ??
+    defaultRemoteConfig.enable_auto_sale;
+
   return {
     enable_ticketing,
     enable_intercom,
@@ -352,6 +363,7 @@ export function getConfig(): RemoteConfig {
     enable_on_behalf_of,
     enable_posthog,
     enable_server_time,
+    enable_auto_sale,
   };
 }
 
