@@ -3,7 +3,7 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature} from 'geojson';
+import {Feature, GeoJsonProperties, Geometry} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
@@ -15,7 +15,7 @@ import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {MapProps, MapRegion} from './types';
-import {isFeaturePoint} from './utils';
+import {isFeaturePolylineEncodedMultiPolygon, isFeaturePoint} from './utils';
 import isEqual from 'lodash.isequal';
 import {useGeofencingZones} from './hooks/use-geofencing-zones';
 import {GeofencingZones} from './components/mobility/GeofencingZones';
@@ -90,6 +90,61 @@ export const Map = (props: MapProps) => {
     );
   };
 
+  const getAllFeaturesAtFeaturePoint = async (
+    feature: Feature,
+  ): Promise<Feature<Geometry, GeoJsonProperties>[] | undefined> => {
+    if (!isFeaturePoint(feature)) return;
+
+    const pointInView = await mapViewRef.current?.getPointInView(
+      feature.geometry.coordinates,
+    );
+    if (!pointInView) return;
+
+    const featureCollectionAtPoint =
+      await mapViewRef.current?.queryRenderedFeaturesAtPoint(pointInView);
+
+    return featureCollectionAtPoint?.features;
+  };
+
+  /**
+   * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
+   * from being triggered, the onPress logic is handled here instead.
+   * This makes it possible to click directly on e.g. bus stops while GeofencingZones are visible.
+   * Step 1: query all rendered features
+   * Step 2: decide selected feature
+   * Step 3: handle click on the selected feature
+   */
+  const onFeatureClick = async (feature: Feature) => {
+    console.log('onFeatureClick');
+    const featuresAtPoint = await getAllFeaturesAtFeaturePoint(feature);
+    if (!featuresAtPoint || featuresAtPoint.length === 0) return;
+    console.log('featuresAtPoint', JSON.stringify(featuresAtPoint));
+
+    const selectedFeature = featuresAtPoint.reduce((selected, currentFeature) =>
+      getFeatureWeight(currentFeature) > getFeatureWeight(selected)
+        ? currentFeature
+        : selected,
+    );
+    console.log(
+      'getFeatureWeight(selectedFeature)',
+      getFeatureWeight(selectedFeature),
+    );
+    if (getFeatureWeight(selectedFeature) === 0) return;
+
+    if (isFeaturePoint(selectedFeature)) {
+      onMapClick({
+        source: 'map-click',
+        feature: selectedFeature,
+      });
+    } else if (isFeaturePolylineEncodedMultiPolygon(selectedFeature)) {
+      console.log('TODO: SHOW GEOFENCINGZONE EXPLANATION WITH SNACKBAR HERE');
+      console.log(
+        'selectedFeature.properties.geofencingZoneCategoryProps.name',
+        selectedFeature.properties.geofencingZoneCategoryProps.name,
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -107,14 +162,7 @@ export const Map = (props: MapProps) => {
           pitchEnabled={false}
           onDidFinishLoadingMap={onDidFinishLoadingMap}
           onMapIdle={onMapIdle}
-          onPress={async (feature: Feature) => {
-            if (isFeaturePoint(feature)) {
-              onMapClick({
-                source: 'map-click',
-                feature,
-              });
-            }
-          }}
+          onPress={onFeatureClick}
           {...MapViewConfig}
         >
           <MapboxGL.Camera
@@ -190,3 +238,13 @@ export const Map = (props: MapProps) => {
 const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
 }));
+
+function getFeatureWeight(feature: Feature): number {
+  if (isFeaturePoint(feature)) {
+    return 2;
+  } else if (isFeaturePolylineEncodedMultiPolygon(feature)) {
+    return 1;
+  } else {
+    return 0; // unknown feature type, no actions should be triggered for such features
+  }
+}
