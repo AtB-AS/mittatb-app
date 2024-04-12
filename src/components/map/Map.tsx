@@ -15,7 +15,11 @@ import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {MapProps, MapRegion} from './types';
-import {isFeaturePolylineEncodedMultiPolygon, isFeaturePoint} from './utils';
+import {
+  isFeaturePolylineEncodedMultiPolygon,
+  isFeaturePoint,
+  getFeaturesAtClick,
+} from './utils';
 import isEqual from 'lodash.isequal';
 import {useGeofencingZones} from './hooks/use-geofencing-zones';
 import {GeofencingZones} from './components/mobility/GeofencingZones';
@@ -90,22 +94,6 @@ export const Map = (props: MapProps) => {
     );
   };
 
-  const getAllFeaturesAtFeaturePoint = async (
-    feature: Feature,
-  ): Promise<Feature<Geometry, GeoJsonProperties>[] | undefined> => {
-    if (!isFeaturePoint(feature)) return;
-
-    const pointInView = await mapViewRef.current?.getPointInView(
-      feature.geometry.coordinates,
-    );
-    if (!pointInView) return;
-
-    const featureCollectionAtPoint =
-      await mapViewRef.current?.queryRenderedFeaturesAtPoint(pointInView);
-
-    return featureCollectionAtPoint?.features;
-  };
-
   /**
    * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
    * from being triggered, the onPress logic is handled here instead.
@@ -114,9 +102,13 @@ export const Map = (props: MapProps) => {
    * Step 2: decide selected feature
    * Step 3: handle click on the selected feature
    */
+
   const onFeatureClick = async (feature: Feature) => {
     console.log('onFeatureClick');
-    const featuresAtPoint = await getAllFeaturesAtFeaturePoint(feature);
+    if (!isFeaturePoint(feature)) return;
+
+    const featuresAtPoint = await getFeaturesAtClick(feature, mapViewRef);
+    //const featuresAtPoint = await getAllFeaturesAtFeaturePoint(feature);
     if (!featuresAtPoint || featuresAtPoint.length === 0) return;
     console.log('featuresAtPoint', JSON.stringify(featuresAtPoint));
 

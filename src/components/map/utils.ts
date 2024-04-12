@@ -132,11 +132,11 @@ export const getFeaturesAtClick = async (
   layerIds?: string[],
 ) => {
   if (!mapViewRef.current) return undefined;
-  const coords = mapPositionToCoordinates(clickedFeature.geometry.coordinates);
-  const point = await mapViewRef.current?.getPointInView([
-    coords.longitude,
-    coords.latitude,
-  ]);
+
+  const point = await mapViewRef.current?.getPointInView(
+    clickedFeature.geometry.coordinates,
+  );
+  if (!point) return undefined;
 
   const featuresAtPoint = await mapViewRef.current.queryRenderedFeaturesAtPoint(
     point,
