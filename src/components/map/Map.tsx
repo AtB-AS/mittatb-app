@@ -3,7 +3,7 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature, GeoJsonProperties, Geometry} from 'geojson';
+import {Feature} from 'geojson';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
@@ -21,7 +21,6 @@ import {
   getFeaturesAtClick,
 } from './utils';
 import isEqual from 'lodash.isequal';
-import {useGeofencingZones} from './hooks/use-geofencing-zones';
 import {GeofencingZones} from './components/mobility/GeofencingZones';
 
 export const Map = (props: MapProps) => {
@@ -31,8 +30,6 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-
-  const geofencingZones = useGeofencingZones();
 
   const startingCoordinates = useMemo(
     () =>
@@ -162,7 +159,7 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
 
-          <GeofencingZones geofencingZones={geofencingZones} />
+          <GeofencingZones />
 
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />

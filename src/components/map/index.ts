@@ -16,6 +16,11 @@ export {
   toFeaturePoint,
   toFeaturePoints,
 } from './utils';
+export {
+  sortFeaturesByLayerIndexWeight,
+  decodePolylineEncodedMultiPolygons,
+  addGeofencingZoneCategoryProps,
+} from './geofencing-zone-utils';
 export type {
   FormFactorFilterType,
   NavigateToTripSearchCallback,
@@ -31,6 +36,12 @@ export type {
   MapRegion,
   ParkingType,
   ParkingVehicleTypes,
+  PolylineEncodedMultiPolygon,
+  PreProcessedGeofencingZones,
+  GeofencingZoneCategory,
+  GeofencingZoneCategoryKey,
+  GeofencingZoneCategoryProps,
+  GeofencingZoneCategoriesProps,
 } from './types';
 export {
   useRealtimeMapEnabled,
@@ -38,3 +49,5 @@ export {
 } from './hooks/use-realtime-map-enabled';
 export {useUserMapFilters} from './hooks/use-map-filter';
 export {Stations} from './components/mobility';
+export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
+export {useGeofencingZoneCategoriesProps} from './hooks/use-geofencing-zone-categories-props';
