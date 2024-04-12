@@ -1,31 +1,47 @@
 import MapboxGL from '@rnmapbox/maps';
+import {GeofencingZones as GeofencingZonesType} from '@atb/api/types/generated/mobility-types_v2';
+import {FeatureCollection} from 'geojson';
 
-export const GeofencingZones = ({geofencingZones}) => {
-  return geofencingZones.map((geofencingZone, index) => (
-    <MapboxGL.ShapeSource
-      id="myShapeSource"
-      //key={String(feature.id)}
-      key={String(index)}
-      shape={geofencingZone.geojson} // ['geometry']['coordinates'][0][0]
-      hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
-      //onPress={(e) => console.log(JSON.stringify(e))}
-    >
-      <MapboxGL.FillLayer
-        id="parkingFill"
-        style={{
-          fillAntialias: true,
-          fillColor: ['get', 'color'],
-          fillOpacity: ['get', 'opacity'],
-        }}
-      />
-      <MapboxGL.LineLayer
-        id="tariffZonesLine"
-        style={{
-          lineWidth: 1,
-          lineColor: ['get', 'color'],
-          lineOpacity: ['get', 'opacity'],
-        }}
-      />
-    </MapboxGL.ShapeSource>
-  ));
+type GeofencingZonesProps = {
+  geofencingZones: GeofencingZonesType[];
+};
+
+export const GeofencingZones = ({geofencingZones}: GeofencingZonesProps) => {
+  const mappedGeofencingZones = geofencingZones
+    .filter((gfz) => !!gfz.geojson)
+    .map((geofencingZone) => (
+      <MapboxGL.ShapeSource
+        key={geofencingZone['renderKey']} // todo: yes it is defined, fix type
+        id="geofencingZonesShapeSource"
+        shape={geofencingZone.geojson as FeatureCollection} // todo: fix GeofencingZonesType in mobility-types_v2
+        hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
+      >
+        <MapboxGL.FillLayer
+          id="parkingFill"
+          style={{
+            fillAntialias: true,
+            fillColor: ['get', 'color', ['get', 'geofencingZoneCategoryProps']],
+            fillOpacity: [
+              'get',
+              'fillOpacity',
+              ['get', 'geofencingZoneCategoryProps'],
+            ],
+          }}
+        />
+        <MapboxGL.LineLayer
+          id="tariffZonesLine"
+          style={{
+            lineWidth: 3,
+            lineColor: ['get', 'color', ['get', 'geofencingZoneCategoryProps']],
+            lineOpacity: [
+              'get',
+              'strokeOpacity',
+              ['get', 'geofencingZoneCategoryProps'],
+            ], //['*', ['get', 'opacity'], 1.5],
+          }}
+        />
+      </MapboxGL.ShapeSource>
+    ));
+
+  return <>{mappedGeofencingZones}</>;
 };

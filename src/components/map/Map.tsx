@@ -104,23 +104,18 @@ export const Map = (props: MapProps) => {
    */
 
   const onFeatureClick = async (feature: Feature) => {
-    console.log('onFeatureClick');
     if (!isFeaturePoint(feature)) return;
 
-    const featuresAtPoint = await getFeaturesAtClick(feature, mapViewRef);
-    //const featuresAtPoint = await getAllFeaturesAtFeaturePoint(feature);
-    if (!featuresAtPoint || featuresAtPoint.length === 0) return;
-    console.log('featuresAtPoint', JSON.stringify(featuresAtPoint));
+    const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
+    if (!featuresAtClick || featuresAtClick.length === 0) return;
+    // console.log('featuresAtClick', JSON.stringify(featuresAtClick));
 
-    const selectedFeature = featuresAtPoint.reduce((selected, currentFeature) =>
+    const selectedFeature = featuresAtClick.reduce((selected, currentFeature) =>
       getFeatureWeight(currentFeature) > getFeatureWeight(selected)
         ? currentFeature
         : selected,
     );
-    console.log(
-      'getFeatureWeight(selectedFeature)',
-      getFeatureWeight(selectedFeature),
-    );
+
     if (getFeatureWeight(selectedFeature) === 0) return;
 
     if (isFeaturePoint(selectedFeature)) {
@@ -129,11 +124,11 @@ export const Map = (props: MapProps) => {
         feature: selectedFeature,
       });
     } else if (isFeaturePolylineEncodedMultiPolygon(selectedFeature)) {
-      console.log('TODO: SHOW GEOFENCINGZONE EXPLANATION WITH SNACKBAR HERE');
-      console.log(
-        'selectedFeature.properties.geofencingZoneCategoryProps.name',
-        selectedFeature.properties.geofencingZoneCategoryProps.name,
-      );
+      // console.log('TODO: SHOW GEOFENCINGZONE EXPLANATION WITH SNACKBAR HERE');
+      // console.log(
+      //   'selectedFeature.properties.geofencingZoneCategoryProps.name',
+      //   selectedFeature.properties.geofencingZoneCategoryProps.name,
+      // );
     }
   };
 
