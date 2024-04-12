@@ -178,7 +178,7 @@ export function isCanBeConsumedNowFareContract(
   currentUserId: string | undefined,
 ) {
   if (f.customerAccountId !== currentUserId) return false;
-  if (!isActiveNowOrCanBeUsedFareContract(f, now)) return false;
+  if (!isOrWillBeActivatedFareContract(f)) return false;
   if (!isCarnet(f)) return false;
   const travelRights = f.travelRights.filter(isCarnetTravelRight);
 
