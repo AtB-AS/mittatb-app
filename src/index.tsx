@@ -28,7 +28,7 @@ import {FeedbackQuestionsProvider} from '@atb/components/feedback';
 import {FirestoreConfigurationContextProvider} from '@atb/configuration/FirestoreConfigurationContext';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {LogBox, Platform, UIManager} from 'react-native';
-import {FiltersContextProvider} from '@atb/travel-search-filters/FiltersContext';
+import {MapContextProvider} from '@atb/travel-search-filters/MapContext';
 import {AnalyticsContextProvider} from '@atb/analytics';
 import {ReactQueryProvider} from '@atb/queries';
 import {TimeContextProvider} from '@atb/time';
@@ -90,7 +90,7 @@ export const App = () => {
                         <AccessibilityContextProvider>
                           <ThemeContextProvider>
                             <FavoritesContextProvider>
-                              <FiltersContextProvider>
+                              <MapContextProvider>
                                 <SearchHistoryContextProvider>
                                   <FirestoreConfigurationContextProvider>
                                     <TicketingContextProvider>
@@ -122,7 +122,7 @@ export const App = () => {
                                     </TicketingContextProvider>
                                   </FirestoreConfigurationContextProvider>
                                 </SearchHistoryContextProvider>
-                              </FiltersContextProvider>
+                              </MapContextProvider>
                             </FavoritesContextProvider>
                           </ThemeContextProvider>
                         </AccessibilityContextProvider>

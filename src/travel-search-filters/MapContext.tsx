@@ -2,16 +2,14 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import {storedFilters} from './storage';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 
-type FiltersContextState = {
+type MapContextState = {
   filters: TravelSearchFiltersSelectionType | undefined;
   setFilters(filters: TravelSearchFiltersSelectionType | undefined): void;
 };
 
-const FiltersContext = createContext<FiltersContextState | undefined>(
-  undefined,
-);
+const MapContext = createContext<MapContextState | undefined>(undefined);
 
-export const FiltersContextProvider: React.FC = ({children}) => {
+export const MapContextProvider: React.FC = ({children}) => {
   const [filters, setFiltersState] =
     useState<TravelSearchFiltersSelectionType>();
 
@@ -21,7 +19,7 @@ export const FiltersContextProvider: React.FC = ({children}) => {
       .then((filters) => setFiltersState(filters));
   }, []);
 
-  const contextValue: FiltersContextState = {
+  const contextValue: MapContextState = {
     filters,
     async setFilters(filters: TravelSearchFiltersSelectionType) {
       const setFilters = await storedFilters.setFilters(filters);
@@ -30,16 +28,14 @@ export const FiltersContextProvider: React.FC = ({children}) => {
   };
 
   return (
-    <FiltersContext.Provider value={contextValue}>
-      {children}
-    </FiltersContext.Provider>
+    <MapContext.Provider value={contextValue}>{children}</MapContext.Provider>
   );
 };
 
 export function useFilters() {
-  const context = useContext(FiltersContext);
+  const context = useContext(MapContext);
   if (context === undefined) {
-    throw new Error('useFilters must be used within a FiltersContextProvider');
+    throw new Error('useFilters must be used within a MapContextProvider');
   }
   return context;
 }
