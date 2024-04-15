@@ -72,25 +72,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         });
         return;
       }
-    } else {
-      if (
-        fareProductTypeConfig.configuration.requiresTokenOnMobile &&
-        !hasInspectableMobileToken
-      ) {
-        navigation.navigate(
-          'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
-          {
-            nextScreen: {
-              screen: 'Root_PurchaseOverviewScreen',
-              params: {
-                fareProductTypeConfig,
-                mode: 'Ticket',
-              },
-            },
-          },
-        );
-        return;
-      }
     }
 
     navigation.navigate('Root_PurchaseOverviewScreen', {
