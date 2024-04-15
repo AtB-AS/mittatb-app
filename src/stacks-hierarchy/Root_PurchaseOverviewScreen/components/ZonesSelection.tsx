@@ -16,7 +16,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {GenericClickableSectionItem, Section} from '@atb/components/sections';
+import {
+  GenericClickableSectionItem,
+  GenericSectionItem,
+  Section,
+} from '@atb/components/sections';
 import {PreassignedFareProduct, getReferenceDataName} from '@atb/configuration';
 
 import {Edit} from '@atb/assets/svg/mono-icons/actions';
@@ -56,72 +60,97 @@ export const ZonesSelection = forwardRef<FocusRefsType, ZonesSelectionProps>(
       zonesRef,
     }));
 
+    // Can select zone if there is no whitelisted zones, or there is more than 1 whitelisted zone
+    const canSelectZone =
+      preassignedFareProduct.limitations.tariffZoneRefs?.length !== 1;
+
     const accessibility: AccessibilityProps = {
       accessible: true,
-      accessibilityRole: 'button',
-      accessibilityLabel:
-        a11yLabel(fromTariffZone, toTariffZone, language, t) +
-        screenReaderPause,
-      accessibilityHint: t(PurchaseOverviewTexts.zones.a11yHint),
+      accessibilityRole: canSelectZone ? 'button' : 'none',
+      accessibilityLabel: canSelectZone
+        ? a11yLabel(fromTariffZone, toTariffZone, language, t) +
+          screenReaderPause
+        : t(
+            PurchaseOverviewTexts.zones.zoneName(
+              getReferenceDataName(fromTariffZone, language),
+            ),
+          ),
+      accessibilityHint: canSelectZone
+        ? t(PurchaseOverviewTexts.zones.a11yHint)
+        : undefined,
     };
 
     const displayAsOneZone =
       fromTariffZone.id === toTariffZone.id &&
       fromTariffZone.venueName === toTariffZone.venueName;
 
+    const content = (
+      <View style={styles.sectionContentContainer}>
+        <View>
+          {displayAsOneZone ? (
+            <ZoneLabel tariffZone={fromTariffZone} />
+          ) : (
+            <>
+              <View style={styles.fromZone}>
+                <ThemeText
+                  color="secondary"
+                  type="body__secondary"
+                  style={styles.toFromLabel}
+                >
+                  {t(PurchaseOverviewTexts.fromToLabel.from)}
+                </ThemeText>
+                <ZoneLabel tariffZone={fromTariffZone} />
+              </View>
+              <View style={styles.toZone}>
+                <ThemeText
+                  color="secondary"
+                  type="body__secondary"
+                  style={styles.toFromLabel}
+                >
+                  {t(PurchaseOverviewTexts.fromToLabel.to)}
+                </ThemeText>
+                <ZoneLabel tariffZone={toTariffZone} />
+              </View>
+            </>
+          )}
+        </View>
+        {canSelectZone && <ThemeIcon svg={Edit} size="normal" />}
+      </View>
+    );
+
     return (
       <View style={style}>
         <ContentHeading
-          text={t(PurchaseOverviewTexts.zones.title[selectionMode].text)}
+          text={t(
+            PurchaseOverviewTexts.zones.title[
+              canSelectZone ? selectionMode : 'none'
+            ].text,
+          )}
           accessibilityLabel={t(
-            PurchaseOverviewTexts.zones.title[selectionMode].a11yLabel,
+            PurchaseOverviewTexts.zones.title[
+              canSelectZone ? selectionMode : 'none'
+            ].a11yLabel,
           )}
         />
         <Section {...accessibility}>
-          <GenericClickableSectionItem
-            ref={zonesRef}
-            onPress={() =>
-              onSelect({
-                fromTariffZone,
-                toTariffZone,
-                fareProductTypeConfig,
-                preassignedFareProduct,
-              })
-            }
-            testID="selectZonesButton"
-          >
-            <View style={styles.sectionContentContainer}>
-              <View>
-                {displayAsOneZone ? (
-                  <ZoneLabel tariffZone={fromTariffZone}/>
-                ) : (
-                  <>
-                    <View style={styles.fromZone}>
-                      <ThemeText
-                        color="secondary"
-                        type="body__secondary"
-                        style={styles.toFromLabel}
-                      >
-                        {t(PurchaseOverviewTexts.fromToLabel.from)}
-                      </ThemeText>
-                      <ZoneLabel tariffZone={fromTariffZone} />
-                    </View>
-                    <View style={styles.toZone}>
-                      <ThemeText
-                        color="secondary"
-                        type="body__secondary"
-                        style={styles.toFromLabel}
-                      >
-                        {t(PurchaseOverviewTexts.fromToLabel.to)}
-                      </ThemeText>
-                      <ZoneLabel tariffZone={toTariffZone} />
-                    </View>
-                  </>
-                )}
-              </View>
-              <ThemeIcon svg={Edit} size="normal" />
-            </View>
-          </GenericClickableSectionItem>
+          {canSelectZone ? (
+            <GenericClickableSectionItem
+              ref={zonesRef}
+              onPress={() =>
+                onSelect({
+                  fromTariffZone,
+                  toTariffZone,
+                  fareProductTypeConfig,
+                  preassignedFareProduct,
+                })
+              }
+              testID="selectZonesButton"
+            >
+              {content}
+            </GenericClickableSectionItem>
+          ) : (
+            <GenericSectionItem>{content}</GenericSectionItem>
+          )}
         </Section>
       </View>
     );

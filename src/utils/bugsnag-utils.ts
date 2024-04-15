@@ -6,10 +6,15 @@ import Bugsnag, {Event, NotifiableError} from '@bugsnag/react-native';
 
 type MetaData = {[key: string]: any};
 
-export const notifyBugsnag = (error: NotifiableError, metadata: MetaData) =>
-  Bugsnag.notify(error, (event: Event) => {
-    event.addMetadata('metadata', metadata);
-  });
+export const notifyBugsnag = (error: NotifiableError, metadata?: MetaData) =>
+  Bugsnag.notify(
+    error,
+    metadata
+      ? (event: Event) => {
+          event.addMetadata('metadata', metadata);
+        }
+      : undefined,
+  );
 
-export const logToBugsnag = (message: string, metadata: MetaData) =>
+export const logToBugsnag = (message: string, metadata?: MetaData) =>
   Bugsnag.leaveBreadcrumb(message, metadata);

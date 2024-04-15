@@ -70,7 +70,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
               {t(
                 TicketingTexts.reservation.orderDate(
                   formatToLongDateTime(
-                    fromUnixTime(reservation.created.toMillis() / 1000),
+                    fromUnixTime(reservation.created.getTime() / 1000),
                     language,
                   ),
                 ),

@@ -69,3 +69,22 @@ export const useDefaultTariffZone = (
     return {...tariffZones[0], resultType: 'zone'};
   }, [tariffZones, tariffZoneFromLocation]);
 };
+
+/**
+ * Checks for whitelisting of tariff zones, if there is no whitelisting,
+ * return the original tariff zones. If there is a whitelist, return the
+ * filtered zones.
+ */
+export const useFilterTariffZone = (
+  tariffZones: TariffZone[],
+  allowedTariffZoneRefs: string[],
+): TariffZone[] => {
+
+  return useMemo<TariffZone[]>(() => {
+    if (allowedTariffZoneRefs.length === 0) {
+      return tariffZones;
+    } 
+  
+    return tariffZones.filter((tariffZone) => allowedTariffZoneRefs.some((allowedZone) => tariffZone.id === allowedZone));
+  }, [tariffZones, allowedTariffZoneRefs]);
+}

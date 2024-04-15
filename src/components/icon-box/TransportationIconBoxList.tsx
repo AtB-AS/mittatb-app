@@ -1,33 +1,47 @@
-import {TransportModePair} from '@atb/components/transportation-modes';
+import {
+  TransportModePair,
+  getTransportModeText,
+} from '@atb/components/transportation-modes';
 import {TransportationIconBox} from './TransportationIconBox';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {useTranslation} from '@atb/translations';
 import React from 'react';
 import {getTransportModeSvg} from './utils';
 import {StyleSheet, Theme} from '@atb/theme';
 import {CounterIconBox} from './CounterIconBox';
+import {AccessibilityProps, View} from 'react-native';
 
 type Props = {
   modes: TransportModePair[];
-  modesDisplayLimit?: number;
+  maxNumberOfBoxes?: number;
   iconSize?: keyof Theme['icon']['size'];
   disabled?: boolean;
-};
+} & AccessibilityProps;
 
 export const TransportationIconBoxList = ({
   modes,
-  modesDisplayLimit = 2,
+  maxNumberOfBoxes = 2,
   iconSize,
   disabled,
+  ...props
 }: Props) => {
   const styles = useStyles({iconSize})();
   const {t} = useTranslation();
-  const modesCount: number = modes.length;
+  const numberOfModes: number = modes.length;
+  const hasOverflow = numberOfModes > maxNumberOfBoxes;
+  const numberOfModesToDisplay = hasOverflow
+    ? maxNumberOfBoxes - 1
+    : numberOfModes;
   const modesToDisplay = modes
-    .slice(0, modesDisplayLimit)
-    .filter(removeDuplicatesByIconNameFilter);
+    .filter(removeDuplicatesByIconNameFilter)
+    .slice(0, numberOfModesToDisplay);
 
   return (
-    <>
+    <View
+      accessible={true}
+      accessibilityLabel={getTransportModeText(modes, t)}
+      style={{flexDirection: 'row'}}
+      {...props}
+    >
       {modesToDisplay.map(({mode, subMode}) => (
         <TransportationIconBox
           style={styles.icon}
@@ -38,18 +52,17 @@ export const TransportationIconBoxList = ({
           disabled={disabled}
         />
       ))}
-      {modesCount > modesDisplayLimit && (
+      {hasOverflow && (
         <CounterIconBox
-          count={modesCount - modesDisplayLimit}
-          size="xSmall"
-          accessibilityLabel={t(
-            FareContractTexts.transportModes.a11yLabelMultipleTravelModes(
-              modesCount,
-            ),
-          )}
+          count={numberOfModes - numberOfModesToDisplay}
+          style={styles.icon}
+          size={iconSize}
+          textType={
+            iconSize === 'xSmall' ? 'label__uppercase' : 'body__secondary'
+          }
         />
       )}
-    </>
+    </View>
   );
 };
 

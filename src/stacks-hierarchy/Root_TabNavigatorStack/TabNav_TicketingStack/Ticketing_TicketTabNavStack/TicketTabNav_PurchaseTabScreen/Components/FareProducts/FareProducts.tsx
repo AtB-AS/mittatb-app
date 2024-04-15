@@ -7,6 +7,7 @@ import {
   LanguageAndTextType,
   ProductTypeTransportModes,
   isProductSellableInApp,
+  PreassignedFareProduct,
 } from '@atb/configuration';
 import {flatMap} from '@atb/utils/array';
 import {
@@ -22,16 +23,18 @@ type GroupedFareProducts = {
 };
 
 export const FareProducts = ({
+  fareProducts,
   onProductSelect,
 }: {
+  fareProducts: PreassignedFareProduct[];
   onProductSelect: (config: FareProductTypeConfig) => void;
 }) => {
   const {t, language} = useTranslation();
-  const {preassignedFareProducts, fareProductTypeConfigs, fareProductGroups} =
+  const {fareProductTypeConfigs, fareProductGroups} =
     useFirestoreConfiguration();
   const {customerProfile} = useTicketingState();
 
-  const sellableProductsInApp = preassignedFareProducts.filter((product) =>
+  const sellableProductsInApp = fareProducts.filter((product) =>
     isProductSellableInApp(product, customerProfile),
   );
 
@@ -56,7 +59,7 @@ export const FareProducts = ({
 
   if (otherProducts.length > 0) {
     groupedFareProducts = [
-      ...groupedFareProducts,
+      ...groupedFareProducts.filter((group) => group.fareProducts.length > 0),
       {
         transportModes: [],
         fareProducts: otherProducts,

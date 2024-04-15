@@ -1,13 +1,15 @@
+import React from 'react';
 import {RootStackParamList} from '@atb/stacks-hierarchy';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 import {FareContract, Reservation, TravelCard} from '@atb/ticketing';
 import {TravelTokenBox} from '@atb/travel-token-box';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import React, {useMemo} from 'react';
 import {useAnalytics} from '@atb/analytics';
 import {HoldingHands, TicketTilted} from '@atb/assets/svg/color/images';
 import {EmptyState} from '@atb/components/empty-state';
 import {TicketHistoryMode} from '@atb/ticket-history';
+import {useSortFcOrReservationByValidityAndCreation} from './utils';
+import {getFareContractInfo} from './utils';
 
 type RootNavigationProp = NavigationProp<RootStackParamList>;
 
@@ -34,11 +36,16 @@ export const FareContractAndReservationsList: React.FC<Props> = ({
   const navigation = useNavigation<RootNavigationProp>();
   const analytics = useAnalytics();
 
-  const fareContractsAndReservationsSorted = useMemo(() => {
-    return [...(fareContracts || []), ...(reservations || [])].sort(
-      (a, b) => b.created.toMillis() - a.created.toMillis(),
+  const fcOrReservations = [...(fareContracts || []), ...(reservations || [])];
+
+  const fareContractsAndReservationsSorted =
+    useSortFcOrReservationByValidityAndCreation(
+      now,
+      fcOrReservations,
+      (currentTime, fareContract, currentUserId) =>
+        getFareContractInfo(currentTime, fareContract, currentUserId)
+          .validityStatus,
     );
-  }, [reservations, fareContracts]);
 
   return (
     <>

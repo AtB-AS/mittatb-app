@@ -37,7 +37,7 @@ import {
 } from '../Root_PurchaseOverviewScreen/use-offer-state';
 import {SelectPaymentMethodSheet} from './components/SelectPaymentMethodSheet';
 import {usePreviousPaymentMethod} from '../saved-payment-utils';
-import {CardPaymentMethod, PaymentMethod, SavedPaymentOption} from '../types';
+import {PaymentMethod, SavedPaymentOption} from '../types';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {useAnalytics} from '@atb/analytics';
@@ -76,11 +76,6 @@ function getPreviousPaymentMethod(
             recurringPaymentId: previousPaymentMethod.recurringCard.id,
           }
         : undefined;
-    case 'recurring-without-card':
-      return {
-        paymentType: previousPaymentMethod.paymentType,
-        recurringPaymentId: previousPaymentMethod.recurringPaymentId,
-      };
   }
 }
 
@@ -177,22 +172,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     setPreviousMethod(prevMethod);
   }, [previousPaymentMethod, paymentTypes]);
 
-  async function payWithVipps() {
-    if (offerExpirationTime && totalPrice > 0) {
-      if (offerExpirationTime < Date.now()) {
-        refreshOffer();
-      } else {
-        analytics.logEvent('Ticketing', 'Pay with Vipps selected');
-        navigation.push('Root_PurchasePaymentWithVippsScreen', {
-          offers,
-          preassignedFareProduct: params.preassignedFareProduct,
-          destinationAccountId: destinationAccountId,
-        });
-      }
-    }
-  }
-
-  async function payWithCard(option: CardPaymentMethod) {
+  function goToPayment(option: PaymentMethod) {
     if (offerExpirationTime && totalPrice > 0) {
       if (offerExpirationTime < Date.now()) {
         refreshOffer();
@@ -200,23 +180,13 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
         analytics.logEvent('Ticketing', 'Pay with card selected', {
           paymentMethod: option,
         });
-        navigation.push('Root_PurchasePaymentWithCreditCardScreen', {
+        navigation.push('Root_PurchasePaymentScreen', {
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
           paymentMethod: option,
           destinationAccountId: destinationAccountId,
         });
       }
-    }
-  }
-
-  function selectPaymentOption(option: PaymentMethod) {
-    switch (option.paymentType) {
-      case PaymentType.Vipps:
-        payWithVipps();
-        break;
-      default:
-        payWithCard(option);
     }
   }
 
@@ -247,7 +217,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       return (
         <SelectPaymentMethodSheet
           onSelect={(option: PaymentMethod) => {
-            selectPaymentOption(option);
+            goToPayment(option);
             closeBottomSheet();
           }}
           previousPaymentMethod={previousPaymentMethod}
@@ -453,6 +423,16 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             isMarkdown={true}
           />
         )}
+        <GlobalMessage
+          style={styles.purchaseInformation}
+          globalMessageContext={
+            GlobalMessageContextEnum.appPurchaseConfirmationBottom
+          }
+          textColor="primary"
+          ruleVariables={{
+            preassignedFareProductType: preassignedFareProduct.type,
+          }}
+        />
         {isSearchingOffer ? (
           <ActivityIndicator
             size="large"
@@ -484,7 +464,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                         mode: params.mode,
                       },
                     );
-                    selectPaymentOption(previousMethod);
+                    goToPayment(previousMethod);
                   }}
                 />
                 <PressableOpacity
@@ -674,6 +654,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   globalMessage: {
     marginTop: theme.spacings.small,
+  },
+  purchaseInformation: {
+    marginBottom: theme.spacings.medium,
   },
   smallTopMargin: {
     marginTop: theme.spacings.xSmall,

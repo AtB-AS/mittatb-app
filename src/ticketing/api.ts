@@ -11,6 +11,7 @@ import {
   ReserveOffer,
   SendReceiptResponse,
 } from './types';
+import {PreassignedFareProduct} from '@atb/configuration';
 
 export async function listRecentFareContracts(): Promise<
   RecentFareContractBackend[]
@@ -98,14 +99,9 @@ type ReserveOfferParams = {
   opts?: AxiosRequestConfig;
   scaExemption: boolean;
   customerAccountId: string;
-};
-
-export type ReserveOfferWithSavePaymentParams = ReserveOfferParams & {
   savePaymentMethod: boolean;
-};
-
-export type ReserveOfferWithRecurringParams = ReserveOfferParams & {
-  recurringPaymentId: number;
+  recurringPaymentId?: number;
+  autoSale: boolean;
 };
 
 export async function searchOffers(
@@ -135,33 +131,25 @@ export async function sendReceipt(
   return response.data;
 }
 
-export async function reserveOffers(
-  res: ReserveOfferWithSavePaymentParams,
-): Promise<OfferReservation>;
-export async function reserveOffers(
-  res: ReserveOfferWithRecurringParams,
-): Promise<OfferReservation>;
 export async function reserveOffers({
   offers,
   paymentType,
   opts,
   scaExemption,
   customerAccountId,
+  autoSale,
   ...rest
-}:
-  | ReserveOfferWithSavePaymentParams
-  | ReserveOfferWithRecurringParams): Promise<OfferReservation> {
+}: ReserveOfferParams): Promise<OfferReservation> {
   const url = 'ticket/v3/reserve';
   const body: ReserveOfferRequestBody = {
-    payment_redirect_url: `${APP_SCHEME}://ticketing?transaction_id={transaction_id}&payment_id={payment_id}`,
+    payment_redirect_url: `${APP_SCHEME}://purchase-callback`,
     offers,
     payment_type: paymentType,
-    store_payment:
-      'savePaymentMethod' in rest ? rest.savePaymentMethod : undefined,
-    recurring_payment_id:
-      'recurringPaymentId' in rest ? rest.recurringPaymentId : undefined,
+    store_payment: rest.savePaymentMethod,
+    recurring_payment_id: rest.recurringPaymentId,
     sca_exemption: scaExemption,
     customer_account_id: customerAccountId,
+    auto_sale: autoSale,
   };
   const response = await client.post<OfferReservation>(url, body, {
     ...opts,
@@ -175,12 +163,14 @@ export async function cancelPayment(
   transaction_id: number,
 ): Promise<void> {
   const url = `ticket/v3/payments/${payment_id}/transactions/${transaction_id}/cancel`;
-  await client.put<void>(
-    url,
-    {},
-    {
-      authWithIdToken: true,
-      retry: true,
-    },
-  );
+  await client.put(url, {}, {authWithIdToken: true, retry: true});
+}
+
+export async function getFareProducts(): Promise<PreassignedFareProduct[]> {
+  const url = 'product/v1';
+  const response = await client.get<PreassignedFareProduct[]>(url, {
+    authWithIdToken: true,
+  });
+
+  return response.data;
 }

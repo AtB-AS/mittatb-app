@@ -31,7 +31,7 @@ import {Section, ToggleSectionItem} from '@atb/components/sections';
 import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
-import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -95,12 +95,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const fareProductOnBehalfOfEnabled =
     params.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const offerEndpoint =
-    zoneSelectionMode === 'none'
-      ? 'authority'
-      : zoneSelectionMode === 'multiple-stop-harbor'
-      ? 'stop-places'
-      : 'zones';
+  const offerEndpoint = zoneSelectionMode === 'none'
+    ? 'authority'
+    : zoneSelectionMode === 'multiple-stop-harbor'
+    ? 'stop-places'
+    : 'zones';
 
   const {
     isSearchingOffer,
@@ -139,7 +138,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     selectableTravellers,
   );
 
-  const isOnBehalfOfEnabled = useOnBehalfOf() && fareProductOnBehalfOfEnabled;
+  const isOnBehalfOfEnabled =
+    useOnBehalfOfEnabled() && fareProductOnBehalfOfEnabled;
 
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
@@ -304,11 +304,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             />
           ) : (
             <View style={styles.messages}>
-              {!isOnBehalfOfToggle && (
-                <PurchaseMessages
-                  requiresTokenOnMobile={requiresTokenOnMobile}
-                />
-              )}
+              <PurchaseMessages requiresTokenOnMobile={requiresTokenOnMobile} />
               <GlobalMessage
                 globalMessageContext={
                   GlobalMessageContextEnum.appPurchaseOverview

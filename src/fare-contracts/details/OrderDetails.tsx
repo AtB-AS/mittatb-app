@@ -25,7 +25,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
         {t(
           FareContractTexts.details.purchaseTime(
             fullDateTime(
-              fromUnixTime(fareContract.created.toMillis() / 1000),
+              fromUnixTime(fareContract.created.getTime() / 1000),
               language,
             ),
           ),
@@ -41,7 +41,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           >
             {t(
               FareContractTexts.details.validFrom(
-                fullDateTime(firstTravelRight.startDateTime.toDate(), language),
+                fullDateTime(firstTravelRight.startDateTime, language),
               ),
             )}
           </ThemeText>
@@ -52,7 +52,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           >
             {t(
               FareContractTexts.details.validTo(
-                fullDateTime(firstTravelRight.endDateTime.toDate(), language),
+                fullDateTime(firstTravelRight.endDateTime, language),
               ),
             )}
           </ThemeText>

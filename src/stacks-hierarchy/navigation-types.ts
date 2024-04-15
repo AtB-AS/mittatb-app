@@ -12,7 +12,7 @@ import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
 import {Root_PurchaseTariffZonesSearchByTextScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseTariffZonesSearchByTextScreen/navigation-types';
 import {Root_PurchaseConfirmationScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen';
 import {ReserveOffer} from '@atb/ticketing';
-import {CardPaymentMethod} from '@atb/stacks-hierarchy/types';
+import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
 import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
@@ -33,12 +33,6 @@ export type Root_LocationSearchByMapScreenParams = {
   callerRouteName: string;
   callerRouteParam: string;
   initialLocation?: Location;
-};
-
-type PaymentParams = {
-  offers: ReserveOffer[];
-  preassignedFareProduct: PreassignedFareProduct;
-  destinationAccountId?: string;
 };
 
 type ReceiptScreenRouteParams = {
@@ -89,8 +83,11 @@ type Root_PurchaseAsAnonymousConsequencesScreenParams = {
   showLoginButton: boolean | undefined;
 };
 
-type Root_PurchasePaymentWithCreditCardScreenParams = PaymentParams & {
-  paymentMethod: CardPaymentMethod;
+type Root_PurchasePaymentScreenParams = {
+  offers: ReserveOffer[];
+  preassignedFareProduct: PreassignedFareProduct;
+  destinationAccountId?: string;
+  paymentMethod: PaymentMethod;
 };
 
 type Root_ConfirmationScreenParams = {
@@ -127,8 +124,7 @@ export type RootStackParamList = StackParams<{
   Root_PurchaseTariffZonesSearchByTextScreen: Root_PurchaseTariffZonesSearchByTextScreenParams;
   Root_PurchaseHarborSearchScreen: Root_PurchaseHarborSearchScreenParams;
   Root_PurchaseAsAnonymousConsequencesScreen: Root_PurchaseAsAnonymousConsequencesScreenParams;
-  Root_PurchasePaymentWithCreditCardScreen: Root_PurchasePaymentWithCreditCardScreenParams;
-  Root_PurchasePaymentWithVippsScreen: PaymentParams;
+  Root_PurchasePaymentScreen: Root_PurchasePaymentScreenParams;
   Root_FareContractDetailsScreen: FareContractDetailsRouteParams;
   Root_ReceiptScreen: ReceiptScreenRouteParams;
   Root_TicketInformationScreen: TicketInformationScreenParams;

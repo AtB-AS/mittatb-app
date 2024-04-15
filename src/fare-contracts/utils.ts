@@ -2,6 +2,7 @@ import {
   CarnetTravelRight,
   CarnetTravelRightUsedAccess,
   FareContract,
+  Reservation,
   FareContractState,
   NormalTravelRight,
   flattenCarnetTravelRightAccesses,
@@ -26,9 +27,10 @@ import {
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
-
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {UsedAccessStatus} from './carnet/types';
+import {useCallback, useMemo} from 'react';
+import {useAuthState} from '@atb/auth';
 
 export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 
@@ -72,10 +74,38 @@ export function getValidityStatus(
   )[0];
   return getRelativeValidity(
     now,
-    firstTravelRight.startDateTime.toMillis(),
-    firstTravelRight.endDateTime.toMillis(),
+    firstTravelRight.startDateTime.getTime(),
+    firstTravelRight.endDateTime.getTime(),
   );
 }
+
+export const useSortFcOrReservationByValidityAndCreation = (
+  now: number,
+  fcOrReservations: (Reservation | FareContract)[],
+  getFareContractStatus: (now: number, fc: FareContract, currentUserId?: string) => ValidityStatus | undefined,
+): (FareContract | Reservation)[] => {
+  const {abtCustomerId: currentUserId} = useAuthState();  
+  const getFcOrReservationOrder = useCallback(
+    (fcOrReservation: FareContract | Reservation) => {
+      const isFareContract = 'travelRights' in fcOrReservation;
+      // Make reservations go first, then fare contracts
+      if (!isFareContract) return 1;
+
+      const validityStatus = getFareContractStatus(now, fcOrReservation, currentUserId);
+      return validityStatus === 'valid' ? 1 : 0;
+    },
+    [getFareContractStatus, now, currentUserId],
+  );
+
+  const fareContractsAndReservationsSorted = useMemo(() => {
+    return fcOrReservations.sort((a, b) => {
+      const order = getFcOrReservationOrder(b) - getFcOrReservationOrder(a);
+      return order === 0 ? b.created.getTime() - a.created.getTime() : order;
+    });
+  }, [fcOrReservations, getFcOrReservationOrder]);
+
+  return fareContractsAndReservationsSorted;
+};
 
 export const mapToUserProfilesWithCount = (
   userProfileRefs: string[],
@@ -246,8 +276,8 @@ export function getFareContractInfo(
   );
   const firstTravelRight = travelRights[0];
 
-  const fareContractValidFrom = firstTravelRight.startDateTime.toMillis();
-  const fareContractValidTo = firstTravelRight.endDateTime.toMillis();
+  const fareContractValidFrom = firstTravelRight.startDateTime.getTime();
+  const fareContractValidTo = firstTravelRight.endDateTime.getTime();
 
   const fareContractValidityStatus = getValidityStatus(now, fc, isSent);
 
@@ -320,8 +350,8 @@ export function getLastUsedAccess(
   let validTo: number | undefined = undefined;
 
   if (lastUsedAccess) {
-    validFrom = lastUsedAccess.startDateTime.toMillis();
-    validTo = lastUsedAccess.endDateTime.toMillis();
+    validFrom = lastUsedAccess.startDateTime.getTime();
+    validTo = lastUsedAccess.endDateTime.getTime();
     status = getUsedAccessValidity(now, validFrom, validTo);
   }
 

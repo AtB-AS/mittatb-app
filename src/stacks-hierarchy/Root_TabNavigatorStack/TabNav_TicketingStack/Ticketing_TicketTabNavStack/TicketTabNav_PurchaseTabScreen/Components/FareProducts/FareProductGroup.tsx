@@ -73,12 +73,14 @@ export const FareProductGroup = ({
             onPress={() => onProductSelect(firstConfig)}
             testID={`${firstConfig.type}FareProduct`}
             config={firstConfig}
+            productGroupTransportModes={transportModes}
           />
           {secondConfig && (
             <FareProductTile
               onPress={() => onProductSelect(secondConfig)}
               testID={`${secondConfig.type}FareProduct`}
               config={secondConfig}
+              productGroupTransportModes={transportModes}
             />
           )}
         </View>

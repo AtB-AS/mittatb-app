@@ -168,7 +168,7 @@ export const TicketingContextProvider: React.FC = ({children}) => {
                 (r) =>
                   !!r.paymentStatus &&
                   !isAbortedPaymentStatus(r.paymentStatus) &&
-                  !isOlderThanAnHour(r.created.toDate()),
+                  !isOlderThanAnHour(r.created),
               ),
             }),
           onError: (err) => console.error(err),

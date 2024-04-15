@@ -20,13 +20,11 @@ export const Profile_FareContractsScreen = () => {
     findReferenceDataById(preassignedFareProducts, fcRef);
 
   const daysFromNow = (d: number) => addDays(new Date(), d);
-  const toTimeStamp = (date: Date) =>
-    new FirestoreTimestampMock(Math.floor(date.valueOf() / 1000), 0);
   const NOW = new Date();
   const {abtCustomerId} = useAuthState();
 
   const RESERVATION: Reservation = {
-    created: toTimeStamp(NOW),
+    created: NOW,
     customerAccountId: abtCustomerId,
     // discount: 0,
     orderId: 'DW2N19A6',
@@ -39,10 +37,10 @@ export const Profile_FareContractsScreen = () => {
   };
 
   const BASE = {
-    created: toTimeStamp(NOW),
+    created: NOW,
     customerAccountId: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     purchasedBy: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
-    eventTimestamp: toTimeStamp(daysFromNow(-1)),
+    eventTimestamp: daysFromNow(-1),
     id: 'ATB:FareContract:V3TZT6NE-xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
     minimumSecurityLevel: -200,
     orderId: 'V3TZT6NE',
@@ -58,8 +56,8 @@ export const Profile_FareContractsScreen = () => {
       {
         authorityRef: 'ATB:Authority:2',
         customerAccountId: 'ATB:CustomerAccount:xPWkGQzzmaRCdQ1JmERtk8eQtQA2',
-        endDateTime: toTimeStamp(daysFromNow(11)),
-        startDateTime: toTimeStamp(daysFromNow(-1)),
+        endDateTime: daysFromNow(11),
+        startDateTime: daysFromNow(-1),
         status: 5,
         usageValidityPeriodRef: '',
         userProfileRef: 'ATB:UserProfile:8ee842e3',
@@ -79,6 +77,18 @@ export const Profile_FareContractsScreen = () => {
         direction: TravelRightDirection.Both,
         startPointRef: 'NSR:StopPlace:74006',
         endPointRef: 'NSR:StopPlace:74009',
+      },
+    ],
+  };
+
+  const YOUTH_TICKET = {
+    ...BASE,
+    travelRights: [
+      {
+        ...BASE.travelRights[0],
+        type: 'YouthTicket',
+        fareProductRef: 'ATB:PreassignedFareProduct:47bb613e',
+        id: 'ATB:CustomerPurchasePackage:Y1EGBK3C',
       },
     ],
   };
@@ -139,8 +149,8 @@ export const Profile_FareContractsScreen = () => {
         status: 5,
         usedAccesses: [
           {
-            startDateTime: toTimeStamp(daysFromNow(-1)),
-            endDateTime: toTimeStamp(daysFromNow(1)),
+            startDateTime: daysFromNow(-1),
+            endDateTime: daysFromNow(1),
           },
         ],
       },
@@ -161,8 +171,8 @@ export const Profile_FareContractsScreen = () => {
         status: 1,
         usedAccesses: [
           {
-            startDateTime: toTimeStamp(daysFromNow(-2)),
-            endDateTime: toTimeStamp(daysFromNow(-1)),
+            startDateTime: daysFromNow(-2),
+            endDateTime: daysFromNow(-1),
           },
         ],
       },
@@ -176,6 +186,7 @@ export const Profile_FareContractsScreen = () => {
     WEEKLY_PASS_BOAT,
     CARNET_TICKET,
     CARNET_TICKET_INACTIVE,
+    YOUTH_TICKET,
   ] as FareContract[];
 
   return (
@@ -225,63 +236,3 @@ const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
     padding: theme.spacings.medium,
   },
 }));
-
-/*
-Mocks the Firestore Timestamp class, since importing it from the SDK is not
-possible. Not a complete implementation, only what is needed for the tests.
-
-Copied from here, with some modifications:
-https://github.com/invertase/react-native-firebase/blob/305d38b/packages/firestore/lib/modular/Timestamp.d.ts
-
-LICENSE:
-
-  Copyright (c) 2016-present Invertase Limited <oss@invertase.io>
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-*/
-class FirestoreTimestampMock {
-  _seconds: number;
-  _nanoseconds: number;
-  static now = () => FirestoreTimestampMock.fromMillis(Date.now());
-  static fromDate = (date: Date) =>
-    FirestoreTimestampMock.fromMillis(date.getTime());
-  static fromMillis(milliseconds: number) {
-    const seconds = Math.floor(milliseconds / 1000);
-    const nanoseconds = (milliseconds - seconds * 1000) * 1e6;
-    return new FirestoreTimestampMock(seconds, nanoseconds);
-  }
-  constructor(seconds: number, nanoseconds: number) {
-    this._seconds = seconds;
-    this._nanoseconds = nanoseconds;
-  }
-  get seconds() {
-    return this._seconds;
-  }
-  get nanoseconds() {
-    return this._nanoseconds;
-  }
-  isEqual = (other: FirestoreTimestampMock) =>
-    other.seconds === this._seconds && other.nanoseconds === this._nanoseconds;
-  toDate = () => new Date(this.toMillis());
-  toMillis = () => this._seconds * 1000 + this._nanoseconds / 1e6;
-  toString = () =>
-    `FirestoreTimestamp(seconds=${this.seconds}, nanoseconds=${this.nanoseconds})`;
-  toJSON = () => ({seconds: this.seconds, nanoseconds: this.nanoseconds});
-  valueOf() {
-    const MIN_SECONDS = -62135596800;
-    const adjustedSeconds = this.seconds - MIN_SECONDS;
-    const formattedSeconds = String(adjustedSeconds).padStart(12, '0');
-    const formattedNanoseconds = String(this.nanoseconds).padStart(9, '0');
-    return formattedSeconds + '.' + formattedNanoseconds;
-  }
-}

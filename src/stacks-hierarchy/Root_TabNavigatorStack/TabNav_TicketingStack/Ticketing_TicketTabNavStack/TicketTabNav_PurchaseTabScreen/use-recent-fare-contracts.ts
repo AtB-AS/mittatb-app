@@ -214,7 +214,7 @@ export const useRecentFareContracts = () => {
   };
 
   const latestCreatedTime = useMemo(
-    () => Math.max(0, ...fareContracts.map((fc) => fc.created.seconds)),
+    () => Math.max(0, ...fareContracts.map((fc) => fc.created.getSeconds())),
     [fareContracts],
   );
 

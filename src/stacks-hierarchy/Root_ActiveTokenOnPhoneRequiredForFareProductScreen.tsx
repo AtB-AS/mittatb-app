@@ -134,7 +134,6 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
         >
           {t(ActiveTokenRequiredTexts.actionMessage)}
         </ThemeText>
-
         {toggleMutation.isLoading ? (
           <ActivityIndicator size="large" />
         ) : (
@@ -144,6 +143,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
             interactiveColor="interactive_0"
             disabled={!selectedToken}
             testID="confirmSelectionButton"
+            style={styles.buttonStyle}
           />
         )}
       </ScrollView>
@@ -153,7 +153,7 @@ export const Root_ActiveTokenOnPhoneRequiredForFareProductScreen = ({
 
 const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: theme.static.background[themeColor].background,
   },
   mainView: {
@@ -172,5 +172,8 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   errorMessageBox: {
     marginBottom: theme.spacings.medium,
+  },
+  buttonStyle: {
+    paddingVertical: theme.spacings.medium,
   },
 }));

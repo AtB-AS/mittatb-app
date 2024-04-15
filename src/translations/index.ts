@@ -23,7 +23,7 @@ export {default as CancelledDepartureTexts} from './components/CancelledDepartur
 export {default as LocationSearchTexts} from './screens/subscreens/LocationSearch';
 export {default as TariffZonesTexts} from './screens/subscreens/TariffZones';
 export {default as TariffZoneSearchTexts} from './screens/subscreens/TariffZoneSearch';
-export {default as PaymentCreditCardTexts} from './screens/subscreens/PaymentCreditCard';
+export {default as PaymentCreditCardTexts} from './screens/subscreens/PurchasePayment';
 export {default as PaymentVippsTexts} from './screens/subscreens/PaymentVipps';
 export {default as PurchaseOverviewTexts} from './screens/subscreens/PurchaseOverview';
 export {default as PurchaseConfirmationTexts} from './screens/subscreens/PurchaseConfirmation';

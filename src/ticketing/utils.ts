@@ -33,7 +33,8 @@ export function isPreActivatedTravelRight(
     travelRight?.type === 'PreActivatedPeriodTicket' ||
     travelRight?.type === 'NightTicket' ||
     travelRight?.type === 'SingleBoatTicket' ||
-    travelRight?.type === 'PeriodBoatTicket'
+    travelRight?.type === 'PeriodBoatTicket' ||
+    travelRight?.type === 'YouthTicket'
   );
 }
 
@@ -54,7 +55,7 @@ function isValidPreActivatedTravelRight(
   travelRight: PreActivatedTravelRight,
   now: number,
 ): boolean {
-  return travelRight.endDateTime.toMillis() > now;
+  return travelRight.endDateTime.getTime() > now;
 }
 
 function hasValidCarnetTravelRight(
@@ -63,7 +64,7 @@ function hasValidCarnetTravelRight(
 ): boolean {
   const {usedAccesses} = flattenCarnetTravelRightAccesses(travelRights);
   const [lastUsedAccess] = usedAccesses?.slice(-1);
-  const validTo = lastUsedAccess?.endDateTime.toMillis() ?? 0;
+  const validTo = lastUsedAccess?.endDateTime.getTime() ?? 0;
   return now < validTo;
 }
 
@@ -98,7 +99,7 @@ export function hasUsableCarnetTravelRight(
 ) {
   // Travel right has not expired
   if (
-    travelRights.some((travelRight) => now > travelRight.endDateTime.toMillis())
+    travelRights.some((travelRight) => now > travelRight.endDateTime.getTime())
   )
     return false;
 
@@ -118,8 +119,8 @@ export function hasActiveCarnetTravelRight(
   return travelRights.some((travelRight) =>
     travelRight.usedAccesses.some(
       (access) =>
-        now > access.startDateTime.toMillis() &&
-        now < access.endDateTime.toMillis(),
+        now > access.startDateTime.getTime() &&
+        now < access.endDateTime.getTime(),
     ),
   );
 }
@@ -135,7 +136,7 @@ export function flattenCarnetTravelRightAccesses(
 ): FlattenedCarnetTravelRights {
   const allUsedAccesses = travelRights.map((t) => t.usedAccesses ?? []);
   const usedAccesses = flatten(allUsedAccesses).sort(
-    (a, b) => a.startDateTime.toMillis() - b.startDateTime.toMillis(),
+    (a, b) => a.startDateTime.getTime() - b.startDateTime.getTime(),
   );
   const maximumNumberOfAccesses = sumBy(
     travelRights,
@@ -171,7 +172,13 @@ function isActiveNowOrCanBeUsedFareContract(f: FareContract, now: number) {
   return false;
 }
 
-export function isCanBeConsumedNowFareContract(f: FareContract, now: number) {
+export function isCanBeConsumedNowFareContract(
+  f: FareContract,
+  now: number,
+  currentUserId: string | undefined,
+) {
+  if (f.customerAccountId !== currentUserId) return false;
+  if (!isOrWillBeActivatedFareContract(f)) return false;
   if (!isCarnet(f)) return false;
   const travelRights = f.travelRights.filter(isCarnetTravelRight);
 
@@ -256,8 +263,8 @@ export const filterValidRightNowFareContracts = (
 
     if (isPreActivatedTravelRight(firstTravelRight)) {
       return (
-        now >= firstTravelRight.startDateTime.toMillis() &&
-        now <= firstTravelRight.endDateTime.toMillis()
+        now >= firstTravelRight.startDateTime.getTime() &&
+        now <= firstTravelRight.endDateTime.getTime()
       );
     }
 

@@ -117,6 +117,7 @@ export const FareContractView: React.FC<Props> = ({
           <ValidityHeader
             status={fareContractValidityStatus}
             now={now}
+            createdDate={fareContract.created.getTime()}
             validFrom={fareContractValidFrom}
             validTo={fareContractValidTo}
             fareProductType={preassignedFareProduct?.type}
@@ -172,7 +173,7 @@ export const FareContractView: React.FC<Props> = ({
           testID={testID + 'Details'}
         />
       )}
-      {isCanBeConsumedNowFareContract(fareContract, now) && (
+      {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
         <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
       )}
     </Section>

@@ -24,11 +24,13 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/heading';
 import {LabelInfo} from '@atb/components/label-info';
-import {useOnBehalfOf} from '@atb/on-behalf-of';
+import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
+import {useAuthState} from '@atb/auth';
+import {getTravellerInfoByFareProductType} from './../utils';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -53,6 +55,7 @@ export function TravellerSelection({
 }: TravellerSelectionProps) {
   const {t, language} = useTranslation();
   const styles = useStyles();
+  const {authenticationType} = useAuthState();
 
   const {
     open: openBottomSheet,
@@ -61,7 +64,12 @@ export function TravellerSelection({
   } = useBottomSheet();
 
   const isOnBehalfOfEnabled =
-    useOnBehalfOf() && fareProductTypeConfig.configuration.onBehalfOfEnabled;
+    useOnBehalfOfEnabled() &&
+    fareProductTypeConfig.configuration.onBehalfOfEnabled;
+
+  const isLoggedIn = authenticationType === 'phone';
+
+  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 
   const {addPopOver} = usePopOver();
   const onBehalfOfIndicatorRef = useRef(null);
@@ -98,13 +106,13 @@ export function TravellerSelection({
 
   useFocusEffect(
     useCallback(() => {
-      if (isOnBehalfOfEnabled && canSelectUserProfile) {
+      if (isOnBehalfOfAllowed && canSelectUserProfile) {
         addPopOver({
           oneTimeKey: 'on-behalf-of-new-feature-introduction',
           target: onBehalfOfIndicatorRef,
         });
       }
-    }, [isOnBehalfOfEnabled, addPopOver, canSelectUserProfile]),
+    }, [isOnBehalfOfAllowed, addPopOver, canSelectUserProfile]),
   );
 
   if (selectionMode === 'none') {
@@ -127,12 +135,21 @@ export function TravellerSelection({
           .join(', ');
 
   const newLabelAccessibility =
-    isOnBehalfOfEnabled && canSelectUserProfile
+    isOnBehalfOfAllowed && canSelectUserProfile
       ? screenReaderPause + t(LabelInfoTexts.labels['new'])
       : '';
 
   const sendingToOthersAccessibility = isOnBehalfOfToggle
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
+    : '';
+
+  const travellerInfo = !canSelectUserProfile
+    ? getTravellerInfoByFareProductType(
+        fareProductTypeConfig.type,
+        userProfilesState[0],
+        language,
+        t,
+      )
     : '';
 
   const accessibility: AccessibilityProps = {
@@ -152,6 +169,7 @@ export function TravellerSelection({
       ' ' +
       travellersDetailsText +
       sendingToOthersAccessibility +
+      travellerInfo +
       newLabelAccessibility +
       screenReaderPause,
     accessibilityHint: canSelectUserProfile
@@ -194,8 +212,12 @@ export function TravellerSelection({
               )
             : travellersDetailsText}
         </ThemeText>
-
-        {isOnBehalfOfToggle && (
+        {!canSelectUserProfile && (
+          <ThemeText type="body__secondary" color="secondary">
+            {travellerInfo}
+          </ThemeText>
+        )}
+        {isOnBehalfOfToggle && canSelectUserProfile && (
           <ThemeText type="body__secondary" color="secondary">
             {t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)}
           </ThemeText>
@@ -214,7 +236,7 @@ export function TravellerSelection({
       </View>
 
       {/* remove new label when requested */}
-      {isOnBehalfOfEnabled && canSelectUserProfile && (
+      {isOnBehalfOfAllowed && canSelectUserProfile && (
         <View
           ref={onBehalfOfIndicatorRef}
           renderToHardwareTextureAndroid={true}
