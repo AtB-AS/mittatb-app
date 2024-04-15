@@ -1,7 +1,7 @@
 import {RadioSegments} from '@atb/components/radio';
 import React from 'react';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
-import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/map/types';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleProp, View, ViewStyle} from 'react-native';

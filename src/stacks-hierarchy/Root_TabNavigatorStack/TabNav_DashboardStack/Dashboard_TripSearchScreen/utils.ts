@@ -1,5 +1,5 @@
 import {Location} from '@atb/favorites';
-import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {TravelSearchFiltersSelectionType} from '@atb/map';
 import {
   Modes,
   TransportMode,

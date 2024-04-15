@@ -11,8 +11,8 @@ import {isValidTripLocations} from '@atb/utils/location';
 import {useNonTransitTripSearchEnabled} from './use-non-transit-trip-search-enabled';
 import {TripPatternFragment} from '@atb/api/types/generated/fragments/trips';
 import {NonTransitTripsQueryVariables} from '@atb/api/types/generated/TripsQuery';
-import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
-import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+import {TravelSearchFiltersSelectionType} from '@atb/map';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/map/types';
 import {TravelSearchPreferenceParameterType} from '@atb-as/config-specs';
 
 export const useNonTransitTripsQuery = (

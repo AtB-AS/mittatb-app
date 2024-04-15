@@ -2,12 +2,12 @@ import {useBottomSheet} from '@atb/components/bottom-sheet';
 import React, {useState} from 'react';
 import {TravelSearchFiltersBottomSheet} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchFiltersBottomSheet';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
-import {useFilters} from '@atb/travel-search-filters';
+import {useFilters} from '@atb/map';
 import {
   FlexibleTransportOptionTypeWithSelectionType,
   TravelSearchFiltersSelectionType,
-} from '@atb/travel-search-filters';
-import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+} from '@atb/map';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/map/types';
 
 type TravelSearchFiltersState =
   | {

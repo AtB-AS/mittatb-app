@@ -19,7 +19,7 @@ import {
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
   useFilters,
-} from '@atb/travel-search-filters';
+} from '@atb/map';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
 import {
@@ -29,7 +29,7 @@ import {
   ToggleSectionItem,
 } from '@atb/components/sections';
 import {useFlexibleTransportEnabled} from '../use-flexible-transport-enabled';
-import {TravelSearchPreferenceWithSelectionType} from '@atb/travel-search-filters/types';
+import {TravelSearchPreferenceWithSelectionType} from '@atb/map/types';
 import {TravelSearchPreference} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/components/TravelSearchPreference';
 import {ThemeIcon} from '@atb/components/theme-icon';
 

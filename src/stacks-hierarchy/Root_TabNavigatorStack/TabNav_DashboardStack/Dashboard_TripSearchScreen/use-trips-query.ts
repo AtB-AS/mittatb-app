@@ -15,7 +15,7 @@ import {CancelTokenSource} from 'axios';
 import {useCallback, useEffect, useRef, useState} from 'react';
 import {useJourneyModes} from './hooks';
 import {useAnalytics} from '@atb/analytics';
-import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {TravelSearchFiltersSelectionType} from '@atb/map';
 import {TripPatternWithKey} from '@atb/travel-details-screens/types';
 import {createQuery, sanitizeSearchTime, SearchInput} from './utils';
 
