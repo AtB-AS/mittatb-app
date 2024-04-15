@@ -18,7 +18,7 @@ import {
   FlexibleTransportOptionTypeWithSelectionType,
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
-  useFilters,
+  useMapContext,
 } from '@atb/map';
 import {ThemeText} from '@atb/components/text';
 import {Checkbox} from '@atb/components/checkbox';
@@ -44,7 +44,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
   const styles = useStyles();
   const {close} = useBottomSheet();
 
-  const {setFilters} = useFilters();
+  const {setFilters} = useMapContext();
   const [saveFilters, setSaveFilters] = useState(false);
 
   const [isFlexibleTransportEnabledInRemoteConfig, _] =

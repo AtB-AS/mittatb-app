@@ -32,10 +32,10 @@ export const MapContextProvider: React.FC = ({children}) => {
   );
 };
 
-export function useFilters() {
+export function useMapContext() {
   const context = useContext(MapContext);
   if (context === undefined) {
-    throw new Error('useFilters must be used within a MapContextProvider');
+    throw new Error('useMapContext must be used within a MapContextProvider');
   }
   return context;
 }
