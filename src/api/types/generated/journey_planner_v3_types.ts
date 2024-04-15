@@ -7,6 +7,13 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<T extends {[key: string]: unknown}, K extends keyof T> = {
+  [_ in K]?: never;
+};
+export type Incremental<T> =
+  | T
+  | {[P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never};
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -15,6 +22,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Coordinates: any;
+  Cost: any;
   Date: any;
   DateTime: any;
   DoubleFunction: any;
@@ -84,6 +92,8 @@ export enum AlternativeLegsFilter {
   SameAuthority = 'sameAuthority',
   SameLine = 'sameLine',
   SameMode = 'sameMode',
+  /** Must match both subMode and mode */
+  SameSubmode = 'sameSubmode',
 }
 
 export enum ArrivalDeparture {
@@ -201,7 +211,7 @@ export type Contact = {
 
 /** A planned journey on a specific day */
 export type DatedServiceJourney = {
-  /** Returns scheduled passingTimes for this dated service journey, updated with realtime-updates (if available).  */
+  /** Returns scheduled passingTimes for this dated service journey, updated with real-time-updates (if available).  */
   estimatedCalls?: Maybe<Array<Maybe<EstimatedCall>>>;
   id: Scalars['ID'];
   /** JourneyPattern for the dated service journey. */
@@ -240,6 +250,18 @@ export enum DirectionType {
   Unknown = 'unknown',
 }
 
+/** Individual step of an elevation profile. */
+export type ElevationProfileStep = {
+  /** The horizontal distance from the start of the step, in meters. */
+  distance?: Maybe<Scalars['Float']>;
+  /**
+   * The elevation at this distance, in meters above sea level. It is negative if the
+   * location is below sea level.
+   *
+   */
+  elevation?: Maybe<Scalars['Float']>;
+};
+
 /** List of visits to quays as part of vehicle journeys. Updated with real time information where available */
 export type EstimatedCall = {
   /** Actual time of arrival at quay. Updated from real time information if available. */
@@ -252,7 +274,7 @@ export type EstimatedCall = {
   aimedDepartureTime: Scalars['DateTime'];
   /** Booking arrangements for this EstimatedCall. */
   bookingArrangements?: Maybe<BookingArrangement>;
-  /** Whether stop is cancelled. This means that either the ServiceJourney has a planned cancellation, the ServiceJourney has been cancelled by realtime data, or this particular StopPoint has been cancelled. This also means that both boarding and alighting has been cancelled. */
+  /** Whether stop is cancelled. This means that either the ServiceJourney has a planned cancellation, the ServiceJourney has been cancelled by real-time data, or this particular StopPoint has been cancelled. This also means that both boarding and alighting has been cancelled. */
   cancellation: Scalars['Boolean'];
   /** The date the estimated call is valid for. */
   date: Scalars['Date'];
@@ -377,9 +399,9 @@ export type Interchange = {
   ToServiceJourney?: Maybe<ServiceJourney>;
   fromServiceJourney?: Maybe<ServiceJourney>;
   guaranteed?: Maybe<Scalars['Boolean']>;
-  /** Maximum time after scheduled departure time the connecting transport is guarantied to wait for the delayed trip. [NOT RESPECTED DURING ROUTING, JUST PASSED THROUGH] */
+  /** Maximum time after scheduled departure time the connecting transport is guaranteed to wait for the delayed trip. [NOT RESPECTED DURING ROUTING, JUST PASSED THROUGH] */
   maximumWaitTime?: Maybe<Scalars['Int']>;
-  /** The transfer priority is used to decide where a transfer should happen, at the highest prioritized location. If the guarantied flag is set it take precedence priority. A guarantied ALLOWED transfer is preferred over a PREFERRED none-guarantied transfer. */
+  /** The transfer priority is used to decide where a transfer should happen, at the highest prioritized location. If the guaranteed flag is set it take precedence priority. A guaranteed ALLOWED transfer is preferred over a PREFERRED none-guaranteed transfer. */
   priority?: Maybe<InterchangePriority>;
   staySeated?: Maybe<Scalars['Boolean']>;
   toServiceJourney?: Maybe<ServiceJourney>;
@@ -484,9 +506,16 @@ export type Leg = {
   distance: Scalars['Float'];
   /** The leg's duration in seconds */
   duration: Scalars['Long'];
-  /** The expected, realtime adjusted date and time this leg ends. */
+  /**
+   * The leg's elevation profile. All elevation values, including the first one, are in meters
+   * above sea level. The elevation is negative for places below sea level. The profile
+   * includes both the start and end coordinate.
+   *
+   */
+  elevationProfile: Array<Maybe<ElevationProfileStep>>;
+  /** The expected, real-time adjusted date and time this leg ends. */
   expectedEndTime: Scalars['DateTime'];
-  /** The expected, realtime adjusted date and time this leg starts. */
+  /** The expected, real-time adjusted date and time this leg starts. */
   expectedStartTime: Scalars['DateTime'];
   /** EstimatedCall for the quay where the leg originates. */
   fromEstimatedCall?: Maybe<EstimatedCall>;
@@ -613,6 +642,7 @@ export enum Mode {
   Monorail = 'monorail',
   Rail = 'rail',
   Scooter = 'scooter',
+  Taxi = 'taxi',
   Tram = 'tram',
   Trolleybus = 'trolleybus',
   Water = 'water',
@@ -651,18 +681,57 @@ export type Notice = {
   text?: Maybe<Scalars['String']>;
 };
 
+/** OccupancyStatus to be exposed in the API. The values are based on GTFS-RT */
 export enum OccupancyStatus {
-  /** The vehicle or carriage has a few seats available. */
+  /**
+   * The vehicle or carriage can currently accommodate only standing passengers and has limited
+   * space for them. There isn't a big difference between this and `full` so it's possible to
+   * handle them as the same value, if one wants to limit the number of different values.
+   * SIRI nordic profile: merge into `standingRoomOnly`.
+   *
+   */
+  CrushedStandingRoomOnly = 'crushedStandingRoomOnly',
+  /**
+   * The vehicle is considered empty by most measures, and has few or no passengers onboard, but is
+   * still accepting passengers. There isn't a big difference between this and `manySeatsAvailable`
+   * so it's possible to handle them as the same value, if one wants to limit the number of different
+   * values.
+   * SIRI nordic profile: merge these into `manySeatsAvailable`.
+   *
+   */
+  Empty = 'empty',
+  /**
+   * The vehicle or carriage has a few seats available.
+   * SIRI nordic profile: less than ~50% of seats available.
+   *
+   */
   FewSeatsAvailable = 'fewSeatsAvailable',
-  /** The vehicle or carriage is considered full by most measures, but may still be allowing passengers to board. */
+  /**
+   * The vehicle or carriage is considered full by most measures, but may still be allowing
+   * passengers to board.
+   *
+   */
   Full = 'full',
-  /** The vehicle or carriage has a large number of seats available. */
+  /**
+   * The vehicle or carriage has a large number of seats available.
+   * SIRI nordic profile: more than ~50% of seats available.
+   *
+   */
   ManySeatsAvailable = 'manySeatsAvailable',
   /** The vehicle or carriage doesn't have any occupancy data available. */
   NoData = 'noData',
-  /** The vehicle or carriage has no seats or standing room available. */
+  /**
+   * The vehicle or carriage has no seats or standing room available.
+   * SIRI nordic profile: if vehicle/carriage is not in use / unavailable, or passengers are only
+   * allowed to alight due to e.g. crowding.
+   *
+   */
   NotAcceptingPassengers = 'notAcceptingPassengers',
-  /** The vehicle or carriage only has standing room available. */
+  /**
+   * The vehicle or carriage only has standing room available.
+   * SIRI nordic profile: less than ~10% of seats available.
+   *
+   */
   StandingRoomOnly = 'standingRoomOnly',
 }
 
@@ -688,6 +757,18 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+/** Defines one point which the journey must pass through. */
+export type PassThroughPoint = {
+  /** Optional name of the pass-through point for debugging and logging. It is not used in routing. */
+  name?: InputMaybe<Scalars['String']>;
+  /**
+   * The list of *stop location ids* which define the pass-through point. At least one id is required.
+   * Quay, StopPlace, multimodal StopPlace, and GroupOfStopPlaces are supported location types.
+   * The journey must pass through at least one of these entities - not all of them.
+   */
+  placeIds?: InputMaybe<Array<Scalars['String']>>;
+};
+
 /** A series of turn by turn instructions used for walking, biking and driving. */
 export type PathGuidance = {
   /** This step is on an open area, such as a plaza or train platform, and thus the directions should say something like "cross" */
@@ -696,6 +777,13 @@ export type PathGuidance = {
   bogusName?: Maybe<Scalars['Boolean']>;
   /** The distance in meters that this step takes. */
   distance?: Maybe<Scalars['Float']>;
+  /**
+   * The step's elevation profile. All elevation values, including the first one, are in meters
+   * above sea level. The elevation is negative for places below sea level. The profile
+   * includes both the start and end coordinate.
+   *
+   */
+  elevationProfile: Array<Maybe<ElevationProfileStep>>;
   /** When exiting a highway or traffic circle, the exit name/number. */
   exit?: Maybe<Scalars['String']>;
   /** The absolute direction of this step. */
@@ -827,6 +915,8 @@ export type PtSituationElement = {
   summary: Array<MultilingualString>;
   /** Period this situation is in effect */
   validityPeriod?: Maybe<ValidityPeriod>;
+  /** Operator's version number for the situation element. */
+  version?: Maybe<Scalars['Int']>;
   /** Timestamp when the situation element was updated. */
   versionedAtTime?: Maybe<Scalars['DateTime']>;
 };
@@ -846,7 +936,7 @@ export type Quay = PlaceInterface & {
   estimatedCalls: Array<EstimatedCall>;
   /** Geometry for flexible area. */
   flexibleArea?: Maybe<Scalars['Coordinates']>;
-  /** the Quays part of an flexible group. */
+  /** the Quays part of a flexible group. */
   flexibleGroup?: Maybe<Array<Maybe<Quay>>>;
   id: Scalars['ID'];
   /** List of journey patterns servicing this quay */
@@ -883,7 +973,7 @@ export type QuayEstimatedCallsArgs = {
 
 /** A place such as platform, stance, or quayside where passengers have access to PT vehicles. */
 export type QuayNameArgs = {
-  lang?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']>;
 };
 
 export type QuayAtDistance = {
@@ -1117,7 +1207,6 @@ export type QueryTypeTripArgs = {
   boardSlackDefault?: InputMaybe<Scalars['Int']>;
   boardSlackList?: InputMaybe<Array<InputMaybe<TransportModeSlack>>>;
   dateTime?: InputMaybe<Scalars['DateTime']>;
-  debugItineraryFilter?: InputMaybe<Scalars['Boolean']>;
   extraSearchCoachReluctance?: InputMaybe<Scalars['Float']>;
   filters?: InputMaybe<Array<TripFilterInput>>;
   from: Location;
@@ -1127,12 +1216,14 @@ export type QueryTypeTripArgs = {
   itineraryFilters?: InputMaybe<ItineraryFilters>;
   locale?: InputMaybe<Locale>;
   maxAccessEgressDurationForMode?: InputMaybe<Array<StreetModeDurationInput>>;
+  maxDirectDurationForMode?: InputMaybe<Array<StreetModeDurationInput>>;
   maximumAdditionalTransfers?: InputMaybe<Scalars['Int']>;
   maximumTransfers?: InputMaybe<Scalars['Int']>;
   modes?: InputMaybe<Modes>;
   numTripPatterns?: InputMaybe<Scalars['Int']>;
   pageCursor?: InputMaybe<Scalars['String']>;
-  relaxTransitSearchGeneralizedCostAtDestination?: InputMaybe<Scalars['Float']>;
+  passThroughPoints?: InputMaybe<Array<PassThroughPoint>>;
+  relaxTransitGroupPriority?: InputMaybe<RelaxCostInput>;
   searchWindow?: InputMaybe<Scalars['Int']>;
   timetableView?: InputMaybe<Scalars['Boolean']>;
   to: Location;
@@ -1189,6 +1280,23 @@ export enum RelativeDirection {
   UturnRight = 'uturnRight',
 }
 
+/**
+ * A relax-cost is used to increase the limit when comparing one cost to another cost.
+ * This is used to include more results into the result. A `ratio=2.0` means a path(itinerary)
+ * with twice as high cost as another one, is accepted. A `constant=$300` means a "fixed"
+ * constant is added to the limit. A `{ratio=1.0, constant=0}` is said to be the NORMAL relaxed
+ * cost - the limit is the same as the cost used to calculate the limit. The NORMAL is usually
+ * the default. We can express the RelaxCost as a function `f(t) = constant + ratio * t`.
+ * `f(t)=t` is the NORMAL function.
+ *
+ */
+export type RelaxCostInput = {
+  /** The constant value to add to the limit. Must be a positive number. The value is equivalent to transit-cost-seconds. Integers are treated as seconds, but you may use the duration format. Example: '3665 = 'DT1h1m5s' = '1h1m5s'. */
+  constant?: InputMaybe<Scalars['Cost']>;
+  /** The factor to multiply with the 'other cost'. Minimum value is 1.0. */
+  ratio?: InputMaybe<Scalars['Float']>;
+};
+
 export type RentalVehicle = PlaceInterface & {
   currentRangeMeters?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
@@ -1230,14 +1338,12 @@ export enum RoutingErrorCode {
   NoStopsInRange = 'noStopsInRange',
   /** No transit connection was found between the origin and destination withing the operating day or the next day */
   NoTransitConnection = 'noTransitConnection',
-  /** Transit connection was found, but it was outside the search window, see metadata for the next search window */
+  /** A transit connection was found, but it was outside the search window. Use paging to navigate to a result. */
   NoTransitConnectionInSearchWindow = 'noTransitConnectionInSearchWindow',
   /** The coordinates are outside the bounds of the data currently loaded into the system */
   OutsideBounds = 'outsideBounds',
   /** The date specified is outside the range of data currently loaded into the system */
   OutsideServicePeriod = 'outsideServicePeriod',
-  /** The routing request timed out. */
-  ProcessingTimeout = 'processingTimeout',
   /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */
   WalkingBetterThanTransit = 'walkingBetterThanTransit',
 }
@@ -1276,7 +1382,10 @@ export type RoutingParameters = {
   carDecelerationSpeed?: Maybe<Scalars['Float']>;
   /** Time to park a car in a park and ride, w/o taking into account driving and walking cost. */
   carDropOffTime?: Maybe<Scalars['Int']>;
-  /** Max car speed along streets, in meters per second */
+  /**
+   * Max car speed along streets, in meters per second
+   * @deprecated This parameter is no longer configurable.
+   */
   carSpeed?: Maybe<Scalars['Float']>;
   /** @deprecated NOT IN USE IN OTP2. */
   compactLegsByReversedSearch?: Maybe<Scalars['Boolean']>;
@@ -1299,7 +1408,7 @@ export type RoutingParameters = {
   elevatorHopTime?: Maybe<Scalars['Int']>;
   /** Whether to apply the ellipsoid->geoid offset to all elevations in the response. */
   geoIdElevation?: Maybe<Scalars['Boolean']>;
-  /** When true, realtime updates are ignored during this search. */
+  /** When true, real-time updates are ignored during this search. */
   ignoreRealTimeUpdates?: Maybe<Scalars['Boolean']>;
   /** When true, service journeys cancelled in scheduled route data will be included during this search. */
   includedPlannedCancellations?: Maybe<Scalars['Boolean']>;
@@ -1387,7 +1496,7 @@ export type ServiceJourney = {
    */
   bookingArrangements?: Maybe<BookingArrangement>;
   directionType?: Maybe<DirectionType>;
-  /** Returns scheduled passingTimes for this ServiceJourney for a given date, updated with realtime-updates (if available). NB! This takes a date as argument (default=today) and returns estimatedCalls for that date and should only be used if the date is known when creating the request. For fetching estimatedCalls for a given trip.leg, use leg.serviceJourneyEstimatedCalls instead. */
+  /** Returns scheduled passingTimes for this ServiceJourney for a given date, updated with real-time-updates (if available). NB! This takes a date as argument (default=today) and returns estimatedCalls for that date and should only be used if the date is known when creating the request. For fetching estimatedCalls for a given trip.leg, use leg.serviceJourneyEstimatedCalls instead. */
   estimatedCalls?: Maybe<Array<Maybe<EstimatedCall>>>;
   id: Scalars['ID'];
   /** JourneyPattern for the service journey, according to scheduled data. If the ServiceJourney is not included in the scheduled data, null is returned. */
@@ -1395,7 +1504,7 @@ export type ServiceJourney = {
   line: Line;
   notices: Array<Notice>;
   operator?: Maybe<Operator>;
-  /** Returns scheduled passing times only - without realtime-updates, for realtime-data use 'estimatedCalls' */
+  /** Returns scheduled passing times only - without real-time-updates, for realtime-data use 'estimatedCalls' */
   passingTimes: Array<Maybe<TimetabledPassingTime>>;
   /** Detailed path travelled by service journey. Not available for flexible trips. */
   pointsOnLink?: Maybe<PointsOnLink>;
@@ -1497,7 +1606,7 @@ export type StopPlaceEstimatedCallsArgs = {
 
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
 export type StopPlaceNameArgs = {
-  lang?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']>;
 };
 
 /** Named place where public transport may be accessed. May be a building complex (e.g. a station) or an on-street location. */
@@ -1621,6 +1730,7 @@ export enum TransportMode {
   Metro = 'metro',
   Monorail = 'monorail',
   Rail = 'rail',
+  Taxi = 'taxi',
   Tram = 'tram',
   Trolleybus = 'trolleybus',
   Unknown = 'unknown',
@@ -1855,12 +1965,14 @@ export type TripPattern = {
    * @deprecated Replaced with expectedEndTime
    */
   endTime?: Maybe<Scalars['DateTime']>;
-  /** The expected, realtime adjusted date and time the trip ends. */
+  /** The expected, real-time adjusted date and time the trip ends. */
   expectedEndTime: Scalars['DateTime'];
-  /** The expected, realtime adjusted date and time the trip starts. */
+  /** The expected, real-time adjusted date and time the trip starts. */
   expectedStartTime: Scalars['DateTime'];
   /** Generalized cost or weight of the itinerary. Used for debugging. */
   generalizedCost?: Maybe<Scalars['Int']>;
+  /** A second cost or weight of the itinerary. Some use-cases like pass-through and transit-priority-groups use a second cost during routing. This is used for debugging. */
+  generalizedCost2?: Maybe<Scalars['Int']>;
   /** A list of legs. Each leg is either a walking (cycling, car) portion of the trip, or a ride leg on a particular vehicle. So a trip where the use walks to the Q train, transfers to the 6, then walks to their destination, has four legs. */
   legs: Array<Leg>;
   /**
@@ -1930,7 +2042,7 @@ export type ViaLocationInput = {
   maxSlack?: InputMaybe<Scalars['Duration']>;
   /** The minimum time the user wants to stay in the via location before continuing his journey */
   minSlack?: InputMaybe<Scalars['Duration']>;
-  /** The name of the location. This is pass-through informationand is not used in routing. */
+  /** The name of the location. This is pass-through information and is not used in routing. */
   name?: InputMaybe<Scalars['String']>;
   /** The id of an element in the OTP model. Currently supports Quay, StopPlace, multimodal StopPlace, and GroupOfStopPlaces. */
   place?: InputMaybe<Scalars['String']>;
