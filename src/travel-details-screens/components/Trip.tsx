@@ -107,17 +107,6 @@ export const Trip: React.FC<TripProps> = ({
     tripPattern,
     modesWeSellTicketsFor,
   );
-
-  const interChangeGuarenteed = filteredLegs.some(
-    (leg) =>
-      leg.interchangeTo?.guaranteed &&
-      getInterchangeDetails(
-        filteredLegs,
-        leg.interchangeTo?.toServiceJourney?.id,
-      ) &&
-      leg.line,
-  );
-
   return (
     <View style={styles.container}>
       {shouldShowDate && (
@@ -136,8 +125,7 @@ export const Trip: React.FC<TripProps> = ({
           type="info"
           message={[
             t(TripDetailsTexts.messages.shortTime),
-            shortWaitTimeAndNotGuaranteedCorrespondence &&
-            !interChangeGuarenteed
+            shortWaitTimeAndNotGuaranteedCorrespondence
               ? t(TripDetailsTexts.messages.correspondenceNotGuaranteed)
               : '',
           ].join(' ')}
@@ -263,7 +251,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-function getInterchangeDetails(
+export function getInterchangeDetails(
   legs: Leg[],
   id: string | undefined,
 ): InterchangeDetails | undefined {
