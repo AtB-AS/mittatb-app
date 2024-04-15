@@ -9,9 +9,7 @@ import {RecentFareContracts} from './Components/RecentFareContracts/RecentFareCo
 import {TicketTabNavScreenProps} from '../navigation-types';
 import {UpgradeSplash} from './Components/UpgradeSplash';
 import {useRecentFareContracts} from './use-recent-fare-contracts';
-import {
-  FareProductTypeConfig,
-} from '@atb/configuration';
+import {FareProductTypeConfig} from '@atb/configuration';
 import {RecentFareContract} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Ticketing_TicketTabNavStack/TicketTabNav_PurchaseTabScreen/types';
 import {useTicketingAssistantEnabled} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/use-ticketing-assistant-enabled';
 import {TicketAssistantTile} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_TicketingStack/Assistant/TicketAssistantTile';
@@ -42,9 +40,10 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const showTicketAssistant = useTicketingAssistantEnabled();
   const analytics = useAnalytics();
 
-  const {tokens} = useMobileTokenContextState();
+  const {tokens, mobileTokenStatus} = useMobileTokenContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
+  const isFallbackState = mobileTokenStatus === 'fallback';
   const harborsQuery = useHarborsQuery();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
@@ -72,6 +71,24 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
         });
         return;
       }
+    } else if (
+      fareProductTypeConfig.configuration.requiresTokenOnMobile &&
+      !hasInspectableMobileToken &&
+      !isFallbackState
+    ) {
+      navigation.navigate(
+        'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
+        {
+          nextScreen: {
+            screen: 'Root_PurchaseOverviewScreen',
+            params: {
+              fareProductTypeConfig,
+              mode: 'Ticket',
+            },
+          },
+        },
+      );
+      return;
     }
 
     navigation.navigate('Root_PurchaseOverviewScreen', {
