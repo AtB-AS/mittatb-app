@@ -43,7 +43,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
-  const isFallbackState = mobileTokenStatus === 'fallback';
+  const hasMobileTokenError = mobileTokenStatus === 'fallback' || mobileTokenStatus === 'error';
   const harborsQuery = useHarborsQuery();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
@@ -74,7 +74,7 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
     } else if (
       fareProductTypeConfig.configuration.requiresTokenOnMobile &&
       !hasInspectableMobileToken &&
-      !isFallbackState
+      !hasMobileTokenError
     ) {
       navigation.navigate(
         'Root_ActiveTokenOnPhoneRequiredForFareProductScreen',
