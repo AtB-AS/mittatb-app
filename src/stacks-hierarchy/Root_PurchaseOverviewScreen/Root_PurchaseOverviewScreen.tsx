@@ -32,6 +32,7 @@ import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
+import { useAuthState } from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -41,6 +42,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 }) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
+  const {authenticationType} = useAuthState();
+
   const isFree = params.toPlace
     ? 'isFree' in params.toPlace && !!params.toPlace.isFree
     : false;
@@ -140,6 +143,10 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const isOnBehalfOfEnabled =
     useOnBehalfOfEnabled() && fareProductOnBehalfOfEnabled;
+
+  const isLoggedIn = authenticationType === 'phone';
+
+  const isOnBehalfOfAllowed = isOnBehalfOfEnabled && isLoggedIn;
 
   const hasSelection =
     travellerSelection.some((u) => u.count) &&
@@ -270,7 +277,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             setShowActivationDateWarning={setShowActivationDateWarning}
           />
 
-          {isOnBehalfOfEnabled && !canSelectUserProfile && (
+          {isOnBehalfOfAllowed && !canSelectUserProfile && (
             <>
               <ContentHeading
                 text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
