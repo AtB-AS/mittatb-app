@@ -90,14 +90,14 @@ export const App = () => {
                         <AccessibilityContextProvider>
                           <ThemeContextProvider>
                             <FavoritesContextProvider>
-                              <MapContextProvider>
-                                <SearchHistoryContextProvider>
-                                  <FirestoreConfigurationContextProvider>
-                                    <TicketingContextProvider>
-                                      <ReactQueryProvider>
-                                        <MobileTokenContextProvider>
-                                          <AppLanguageProvider>
-                                            <GeolocationContextProvider>
+                              <SearchHistoryContextProvider>
+                                <FirestoreConfigurationContextProvider>
+                                  <TicketingContextProvider>
+                                    <ReactQueryProvider>
+                                      <MobileTokenContextProvider>
+                                        <AppLanguageProvider>
+                                          <GeolocationContextProvider>
+                                            <MapContextProvider>
                                               <GlobalMessagesContextProvider>
                                                 <AnnouncementsContextProvider>
                                                   <NotificationContextProvider>
@@ -115,14 +115,14 @@ export const App = () => {
                                                   </NotificationContextProvider>
                                                 </AnnouncementsContextProvider>
                                               </GlobalMessagesContextProvider>
-                                            </GeolocationContextProvider>
-                                          </AppLanguageProvider>
-                                        </MobileTokenContextProvider>
-                                      </ReactQueryProvider>
-                                    </TicketingContextProvider>
-                                  </FirestoreConfigurationContextProvider>
-                                </SearchHistoryContextProvider>
-                              </MapContextProvider>
+                                            </MapContextProvider>
+                                          </GeolocationContextProvider>
+                                        </AppLanguageProvider>
+                                      </MobileTokenContextProvider>
+                                    </ReactQueryProvider>
+                                  </TicketingContextProvider>
+                                </FirestoreConfigurationContextProvider>
+                              </SearchHistoryContextProvider>
                             </FavoritesContextProvider>
                           </ThemeContextProvider>
                         </AccessibilityContextProvider>
