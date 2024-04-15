@@ -41,8 +41,8 @@
 		5038614A28FD6EB900E16E13 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614B28FD750A00E16E13 /* LocationChangeManager.swift */; };
 		5038614E28FD81B700E16E13 /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		503D2E5A29674028002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		503D2E5C2967436E002E0A6A /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		503D2E5A29674028002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
+		503D2E5C2967436E002E0A6A /* (null) in Sources */ = {isa = PBXBuildFile; };
 		50488981293F4B660016DD7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 50488983293F4B660016DD7A /* Localizable.strings */; };
 		505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D9ECD291537E500AEFF94 /* DepartureTimesView.swift */; };
 		506538E028FEA57400A0DDCC /* WidgetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506538DF28FEA57400A0DDCC /* WidgetViewModel.swift */; };
@@ -54,11 +54,14 @@
 		6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DAA1D092A77D3EC00CC8016 /* PassKit.framework */; };
 		6DB88ADA2A7A35A10060CC31 /* PassPresentationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88AD92A7A35A10060CC31 /* PassPresentationBridge.m */; };
 		6DB88ADC2A7A55570060CC31 /* PassPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB88ADB2A7A55570060CC31 /* PassPresentation.swift */; };
-		86ADA222293F651800F1E080 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		86ADA222293F651800F1E080 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB1D1B473A9C41A79687569C /* Roboto-Regular.ttf */; };
 		F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59E90F341F04DB2B427E0EF /* Roboto-Bold.ttf */; };
 		FE09922928FFF47300E5046D /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922828FFF47300E5046D /* Storage.swift */; };
 		FE09922C28FFF50800E5046D /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE09922B28FFF50800E5046D /* Bundle.swift */; };
+		FE1DCA8D2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FE1DCA8C2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy */; };
+		FE1DCA8E2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FE1DCA8C2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy */; };
+		FE1DCA8F2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FE1DCA8C2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy */; };
 		FE55264928EC45ED0091F697 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264828EC45ED0091F697 /* WidgetKit.framework */; };
 		FE55264B28EC45ED0091F697 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE55264A28EC45ED0091F697 /* SwiftUI.framework */; };
 		FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
@@ -164,6 +167,7 @@
 		F414F94904E6D6734DFB7191 /* Pods-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-app.debug.xcconfig"; path = "Target Support Files/Pods-app/Pods-app.debug.xcconfig"; sourceTree = "<group>"; };
 		FE09922828FFF47300E5046D /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		FE09922B28FFF50800E5046D /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		FE1DCA8C2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		FE55264728EC45ED0091F697 /* departureWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = departureWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE55264828EC45ED0091F697 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		FE55264A28EC45ED0091F697 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -199,7 +203,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86ADA222293F651800F1E080 /* BuildFile in Frameworks */,
+				86ADA222293F651800F1E080 /* (null) in Frameworks */,
 				6DAA1D0A2A77D3EC00CC8016 /* PassKit.framework in Frameworks */,
 				FED22489286F06AC0049ECE3 /* CoreNFC.framework in Frameworks */,
 				FEBDDCD3293107D500C3755B /* WidgetKit.framework in Frameworks */,
@@ -251,6 +255,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				0FAAF32624069EFC00267583 /* GoogleService-Info.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				FE1DCA8C2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy */,
 				0FF6825C247C33BC00FB80EE /* Intercom.plist */,
 				0FF6825E247FE01600FB80EE /* BootSplash.storyboard */,
 				385EE0D2242C0AFC002E1272 /* enforce-bridge.swift */,
@@ -519,6 +524,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				298D19472AEBC45E00065733 /* InfoPlist.strings in Resources */,
 				0FF6825D247C33BC00FB80EE /* Intercom.plist in Resources */,
+				FE1DCA8D2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				0FAAF32724069EFC00267583 /* GoogleService-Info.plist in Resources */,
 				0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */,
@@ -531,6 +537,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE1DCA8F2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */,
 				50AAE58829897F2E00BA7611 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,6 +546,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE1DCA8E2BCD62EF00E6EA0D /* PrivacyInfo.xcprivacy in Resources */,
 				FE55265028EC45EE0091F697 /* Assets.xcassets in Resources */,
 				50488981293F4B660016DD7A /* Localizable.strings in Resources */,
 			);
@@ -709,8 +717,8 @@
 				505D9ECE291537E500AEFF94 /* DepartureTimesView.swift in Sources */,
 				500752EC29855E4D00AC5A7F /* IntentHandler.swift in Sources */,
 				FE7DE4F5294A2EDC009BE6DB /* String.swift in Sources */,
-				503D2E5C2967436E002E0A6A /* BuildFile in Sources */,
-				503D2E5A29674028002E0A6A /* BuildFile in Sources */,
+				503D2E5C2967436E002E0A6A /* (null) in Sources */,
+				503D2E5A29674028002E0A6A /* (null) in Sources */,
 				5038614C28FD750A00E16E13 /* LocationChangeManager.swift in Sources */,
 				FE7E785F29433F3900C57A1F /* DefaultFonts.swift in Sources */,
 				FE55264E28EC45ED0091F697 /* DepartureWidget.swift in Sources */,
@@ -1025,10 +1033,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -1092,10 +1097,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_CPLUSPLUSFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
