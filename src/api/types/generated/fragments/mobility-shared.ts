@@ -37,6 +37,7 @@ export type BrandAssetsFragment = {
 };
 
 export type SystemFragment = {
+  id: string;
   operator: OperatorFragment;
   name: TranslatedStringFragment;
   brandAssets?: BrandAssetsFragment;
