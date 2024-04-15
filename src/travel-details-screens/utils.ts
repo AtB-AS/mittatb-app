@@ -21,6 +21,7 @@ import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb-as/theme';
+import {getInterchangeDetails} from './components/Trip';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -160,6 +161,7 @@ export function hasShortWaitTime(legs: Leg[]) {
 }
 
 export function hasShortWaitTimeAndNotGuaranteedCorrespondence(legs: Leg[]) {
+  if (hasGuaranteedCorrespondence(legs)) return false;
   return iterateWithNext(legs)
     .map((pair) => {
       if (pair.current.interchangeTo?.guaranteed) {
@@ -172,6 +174,18 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(legs: Leg[]) {
     })
     .filter((waitTime) => waitTime > 0)
     .some((waitTime) => timeIsShort(waitTime));
+}
+
+function hasGuaranteedCorrespondence(filteredLegs: Leg[]) {
+  return filteredLegs.some(
+    (leg) =>
+      leg.interchangeTo?.guaranteed &&
+      getInterchangeDetails(
+        filteredLegs,
+        leg.interchangeTo?.toServiceJourney?.id,
+      ) &&
+      leg.line,
+  );
 }
 
 function parseDateIfString(date: any): Date {
