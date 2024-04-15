@@ -119,10 +119,10 @@ jobs:
         run: sh ./scripts/ios/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
-      - name: Upload build artifacts
+      - name: Upload bundle as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ios-bundle
+          name: ios-bundle-${{ matrix.org }}
           path: bundle/*
       - name: Upload dSYMs
         if: inputs.force-build == 'true' || steps.ipa-cache.outputs.cache-hit != 'true'
