@@ -39,7 +39,7 @@ export const Map = (props: MapProps) => {
     [currentCoordinatesRef, initialLocation],
   );
 
-  const {mapLines, selectedCoordinates, onMapClick} =
+  const {mapLines, selectedCoordinates, onMapClick, selectedFeature} =
     useMapSelectionChangeEffect(
       props,
       mapViewRef,
@@ -105,7 +105,7 @@ export const Map = (props: MapProps) => {
 
     const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
     if (!featuresAtClick || featuresAtClick.length === 0) return;
-    // console.log('featuresAtClick', JSON.stringify(featuresAtClick));
+    //console.log('featuresAtClick', JSON.stringify(featuresAtClick));
 
     const selectedFeature = featuresAtClick.reduce((selected, currentFeature) =>
       getFeatureWeight(currentFeature) > getFeatureWeight(selected)
@@ -159,7 +159,9 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
 
-          <GeofencingZones />
+          {selectedFeature && (
+            <GeofencingZones selectedFeature={selectedFeature} />
+          )}
 
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
