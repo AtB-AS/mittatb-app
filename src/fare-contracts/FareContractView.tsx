@@ -30,6 +30,7 @@ import {
   FareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
+import {StyleSheet} from '@atb/theme';
 
 type Props = {
   now: number;
@@ -50,6 +51,7 @@ export const FareContractView: React.FC<Props> = ({
   const {isInspectable} = useMobileTokenContextState();
 
   const {t} = useTranslation();
+  const styles = useStyles();
 
   const {
     isCarnetFareContract,
@@ -101,7 +103,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   return (
-    <Section withBottomPadding testID={testID}>
+    <Section style={styles.section} testID={testID}>
       <GenericSectionItem>
         {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
         {isCarnetFareContract &&
@@ -179,3 +181,9 @@ export const FareContractView: React.FC<Props> = ({
     </Section>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  section: {
+    marginBottom: theme.spacings.large,
+  },
+}));

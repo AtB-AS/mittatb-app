@@ -92,7 +92,7 @@ export function Root_ReceiptScreen({route}: Props) {
             {...translateStateToMessage(state, t, email, reference)}
           />
         </View>
-        <Section withTopPadding withBottomPadding>
+        <Section style={styles.section}>
           {profileStatus === 'loading' ? (
             <ActivityIndicator />
           ) : (
@@ -164,4 +164,8 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   content: {
     padding: theme.spacings.medium,
   },
+  section: {
+    marginTop: theme.spacings.large,
+    marginBottom: theme.spacings.large,
+  }
 }));

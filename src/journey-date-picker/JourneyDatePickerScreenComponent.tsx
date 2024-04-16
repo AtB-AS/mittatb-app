@@ -78,13 +78,13 @@ export const JourneyDatePickerScreenComponent = ({
           selected={option ?? dateItems[0]}
           keyExtractor={(s: string) => s}
           items={dateItems}
-          withBottomPadding
+          style={styles.section}
           onSelect={setOption}
           itemToText={(s: DateOptionType) => getDateOptionText(s, t)}
         />
 
         {option !== 'now' && (
-          <Section withBottomPadding testID="dateTimePickerSection">
+          <Section style={styles.section} testID="dateTimePickerSection">
             <DateInputSectionItem value={dateString} onChange={setDate} />
             <TimeInputSectionItem value={timeString} onChange={setTime} />
           </Section>
@@ -95,7 +95,7 @@ export const JourneyDatePickerScreenComponent = ({
           interactiveColor="interactive_0"
           text={t(JourneyDatePickerTexts.searchButton.text)}
           testID="searchButton"
-         />
+        />
       </ScrollView>
     </View>
   );
@@ -111,6 +111,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   dateOptions: {
     margin: theme.spacings.medium,
+  },
+  section: {
+    marginBottom: theme.spacings.large,
   },
 }));
 

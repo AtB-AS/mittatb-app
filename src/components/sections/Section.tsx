@@ -1,14 +1,10 @@
 import React, {PropsWithChildren} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {ContainerSizingType} from './types';
 import {BaseSectionItemProps} from './use-section-item';
 
 export type SectionProps = PropsWithChildren<{
-  withPadding?: boolean;
-  withFullPadding?: boolean;
-  withTopPadding?: boolean;
-  withBottomPadding?: boolean;
   type?: ContainerSizingType;
   style?: StyleProp<ViewStyle>;
   testID?: string;
@@ -17,10 +13,6 @@ export type SectionProps = PropsWithChildren<{
 
 export function Section({
   children,
-  withPadding = false,
-  withFullPadding = false,
-  withTopPadding = false,
-  withBottomPadding = false,
   type = 'block',
   style,
   ...props
@@ -31,16 +23,8 @@ export function Section({
   const firstIndex = validChildren.indexOf(true);
   const lastIndex = validChildren.lastIndexOf(true);
 
-  const containerStyle: Array<StyleProp<ViewStyle> | undefined> = [
-    style,
-    withPadding ? styles.container__padded : undefined,
-    withFullPadding ? styles.container__fullPadded : undefined,
-    withTopPadding ? styles.container__topPadded : undefined,
-    withBottomPadding ? styles.container__bottomPadded : undefined,
-  ];
-
   return (
-    <View style={containerStyle} {...props}>
+    <View style={style} {...props}>
       {React.Children.map(children, (child, index) => {
         if (!React.isValidElement(child)) return child;
         if (child == null) return child;
@@ -79,7 +63,7 @@ function toRadius(index: number, lastIndex: number, firstIndex: number) {
   return undefined;
 }
 
-const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   separator: {
     flexGrow: 0,
     backgroundColor: theme.static.background.background_2.background,
