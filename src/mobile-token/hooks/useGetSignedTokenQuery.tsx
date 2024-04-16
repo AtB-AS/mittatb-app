@@ -22,7 +22,7 @@ export const useGetSignedTokenQuery = () => {
       try {
         return await mobileTokenClient.encode(nativeToken);
       } catch (err: any) {
-        notifyBugsnag(err, {
+        notifyBugsnag(err, `GetSignedTokenError - ${err}`, {
           tokenId: nativeToken.tokenId,
           description: 'Error encoding signed token',
         });
