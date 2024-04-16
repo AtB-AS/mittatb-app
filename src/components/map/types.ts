@@ -1,13 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {
-  Feature,
-  FeatureCollection,
-  GeoJSON,
-  LineString,
-  Point,
-  Position,
-} from 'geojson';
+import {Feature, FeatureCollection, LineString, Point, Position} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
@@ -17,7 +10,10 @@ import {AnyMode} from '@atb/components/icon-box';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  FormFactor,
+  GeofencingZones,
+} from '@atb/api/types/generated/mobility-types_v2';
 import {Line} from '@atb/api/types/trips';
 
 /**
@@ -48,8 +44,8 @@ export type MapPadding =
   | [number, number, number, number];
 
 export type VehicleFeatures = {
-  bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
-  scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+  bicycles: FeatureCollection<Point, VehicleBasicFragment>;
+  scooters: FeatureCollection<Point, VehicleBasicFragment>;
 };
 
 export type VehiclesState = {
@@ -60,8 +56,8 @@ export type VehiclesState = {
 };
 
 export type StationFeatures = {
-  bicycles: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
-  cars: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
+  bicycles: FeatureCollection<Point, StationBasicFragment>;
+  cars: FeatureCollection<Point, StationBasicFragment>;
 };
 
 export type StationsState = {
@@ -181,4 +177,34 @@ export type ParkingType = {
   entityType: 'Parking';
   parkingVehicleTypes: ParkingVehicleTypes;
   totalCapacity: number;
+};
+
+export type PolylineEncodedMultiPolygon = String[][];
+
+export interface PreProcessedGeofencingZones extends GeofencingZones {
+  renderKey: string;
+}
+
+export enum GeofencingZoneCategory {
+  Allowed = 'Allowed',
+  Slow = 'Slow',
+  StationParking = 'StationParking',
+  NoParking = 'NoParking',
+  NoEntry = 'NoEntry',
+}
+
+export type GeofencingZoneCategoryKey = keyof typeof GeofencingZoneCategory;
+
+export type GeofencingZoneCategoryProps<
+  GZCKey extends GeofencingZoneCategoryKey,
+> = {
+  name: GZCKey;
+  color: string;
+  fillOpacity: number;
+  strokeOpacity: number;
+  layerIndexWeight: number;
+};
+
+export type GeofencingZoneCategoriesProps = {
+  [GZCKey in GeofencingZoneCategoryKey]: GeofencingZoneCategoryProps<GZCKey>;
 };
