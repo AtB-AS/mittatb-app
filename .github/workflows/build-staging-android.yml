@@ -126,11 +126,11 @@ jobs:
         with:
           name: android-metro-bundle-${{ matrix.org }}
           path: android/app/build/generated/sourcemaps/react/*
-      - name: Upload generated as artifact
+      - name: Upload build as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: android-generated-${{ matrix.org }}
-          path: android/app/build/generated/*
+          name: android-build-${{ matrix.org }}
+          path: android/app/build/*
 
       - name: Register app version
         run: bash ./scripts/android/register-app-version.sh
