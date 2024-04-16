@@ -1,4 +1,3 @@
-//import {addMinutes} from 'date-fns';
 import {hasShortWaitTimeAndNotGuaranteedCorrespondence} from '../utils';
 import {Leg} from '@atb/api/types/trips';
 
