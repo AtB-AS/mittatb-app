@@ -60,9 +60,10 @@ export const getVehicles = (
 };
 
 export const getVehicle = (
-  id: string,
+  id?: string,
   opts?: VehicleRequestOpts,
 ): Promise<VehicleExtendedFragment | undefined> => {
+  if (!id) return Promise.resolve(undefined);
   const url = '/bff/v2/mobility/vehicle';
   const query = qs.stringify({ids: id});
   return client
