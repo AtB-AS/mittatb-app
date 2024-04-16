@@ -21,7 +21,6 @@ import {APP_ORG} from '@env';
 import {BookingArrangementFragment} from '@atb/api/types/generated/fragments/booking-arrangements';
 import {BookingStatus, TripPatternBookingStatus} from './types';
 import {Statuses} from '@atb-as/theme';
-import {getInterchangeDetails} from './components/Trip';
 
 const DEFAULT_THRESHOLD_AIMED_EXPECTED_IN_MINUTES = 1;
 
@@ -159,10 +158,9 @@ export function hasShortWaitTime(legs: Leg[]) {
     .filter((waitTime) => waitTime > 0)
     .some((waitTime) => timeIsShort(waitTime));
 }
-
 export function hasShortWaitTimeAndNotGuaranteedCorrespondence(legs: Leg[]) {
-  if (hasGuaranteedCorrespondence(legs)) return false;
-  return iterateWithNext(legs)
+  const adjustedLegs = adjustExpectedEndTimeAndRemoveFootLegs(legs);
+  return iterateWithNext(adjustedLegs)
     .map((pair) => {
       if (pair.current.interchangeTo?.guaranteed) {
         return 0;
@@ -176,16 +174,15 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(legs: Leg[]) {
     .some((waitTime) => timeIsShort(waitTime));
 }
 
-function hasGuaranteedCorrespondence(filteredLegs: Leg[]) {
-  return filteredLegs.some(
-    (leg) =>
-      leg.interchangeTo?.guaranteed &&
-      getInterchangeDetails(
-        filteredLegs,
-        leg.interchangeTo?.toServiceJourney?.id,
-      ) &&
-      leg.line,
-  );
+function adjustExpectedEndTimeAndRemoveFootLegs(legs: Leg[]) {
+  return legs
+    .map((leg, idx) => {
+      if (idx < legs.length - 1 && legs[idx + 1].mode === 'foot') {
+        leg.expectedEndTime = legs[idx + 1].expectedEndTime;
+      }
+      return leg;
+    })
+    .filter((leg) => leg.mode !== 'foot');
 }
 
 function parseDateIfString(date: any): Date {
