@@ -68,7 +68,9 @@ export function decodePolylineEncodedMultiPolygons(
 export function addGeofencingZoneCategoryProps(
   geofencingZones: PreProcessedGeofencingZones[],
   geofencingZoneCategoriesProps: GeofencingZoneCategoriesProps,
+  vehicleTypeId?: string,
 ) {
+  if (!vehicleTypeId) return;
   forAllFeaturesInAllGeofencingZones(
     geofencingZones,
     (feature, geofencingZonesIndex) => {
@@ -76,26 +78,27 @@ export function addGeofencingZoneCategoryProps(
         geofencingZones[geofencingZonesIndex]['renderKey'] =
           geofencingZonesIndex.toString(); // fix type
       }
-      const rules = feature.properties?.rules || [];
-
-      if (rules.length > 1) {
-        console.log('EHIOAGHOIAEGIOANEOGOIAE');
-      }
-
-      const rideNotAllowed = rules.some((rule) => !rule.rideAllowed);
-
-      const rideThroughNotAllowed = rules.some(
-        (rule) => !rule.rideThroughAllowed,
+      // the option to have multiple rules, is to make it allow different rules per vehicle type
+      const applicableRules = feature.properties?.rules?.filter((rule) =>
+        rule.vehicleTypeIds?.includes(vehicleTypeId),
       );
+      // the first applicable rule for the given vehicly type is the decisive one
+      const rule = applicableRules?.[0];
 
-      const isSlowArea = rules.some(
-        (rule) =>
+      let rideNotAllowed = false,
+        rideThroughNotAllowed = false,
+        isSlowArea = false;
+      //let isStationParking = false
+
+      if (rule) {
+        rideNotAllowed = !rule.rideAllowed;
+        rideThroughNotAllowed = !rule.rideThroughAllowed;
+        isSlowArea =
           rule.maximumSpeedKph !== undefined &&
           rule.maximumSpeedKph !== null &&
-          Number(rule.maximumSpeedKph) < 20,
-      );
-
-      //const isStationParking = rules.some((rule) => !!rule.stationParking);
+          Number(rule.maximumSpeedKph) < 20;
+        //isStationParking = !!rule.stationParking
+      }
 
       const {
         Allowed,
