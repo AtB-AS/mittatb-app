@@ -27,7 +27,7 @@ export const WebViewTerminal = ({
         <WebView
           source={{uri: offerReservation.url}}
           onError={(e: any) => {
-            notifyBugsnag(e, `WebViewReservationError - ${e}`);
+            notifyBugsnag(e, 'WebViewReservationError');
             onWebViewStatusChange('error');
           }}
           onLoadStart={(event) =>
