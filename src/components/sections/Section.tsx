@@ -69,17 +69,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background.background_2.background,
     height: 1,
   },
-  container__padded: {
-    marginHorizontal: theme.spacings.medium,
-    marginBottom: theme.spacings.small,
-  },
-  container__fullPadded: {
-    margin: theme.spacings.medium,
-  },
-  container__topPadded: {
-    marginTop: theme.spacings.large,
-  },
-  container__bottomPadded: {
-    marginBottom: theme.spacings.large,
-  },
 }));
