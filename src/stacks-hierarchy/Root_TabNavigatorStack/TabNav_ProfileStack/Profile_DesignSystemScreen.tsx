@@ -9,7 +9,7 @@ import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   InteractiveColor,
   StaticColorByType,
@@ -49,7 +49,7 @@ type DesignSystemScreenProps = ProfileScreenProps<'Profile_DesignSystemScreen'>;
 export const Profile_DesignSystemScreen = ({
   navigation,
 }: DesignSystemScreenProps) => {
-  const style = useProfileHomeStyle();
+  const styles = useStyles();
   const fontScale = useFontScale();
   const {theme} = useTheme();
   const {t} = useTranslation();
@@ -151,7 +151,7 @@ export const Profile_DesignSystemScreen = ({
   // @TODO: add display of static colors
 
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       <FullScreenHeader
         title="Design System"
         leftButton={{type: 'back'}}
@@ -159,7 +159,7 @@ export const Profile_DesignSystemScreen = ({
       />
 
       <ScrollView>
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <HeaderSectionItem
             text={'Current font scale: ' + fontScale.toFixed(3)}
           />
@@ -168,11 +168,11 @@ export const Profile_DesignSystemScreen = ({
             onPress={() => navigation.navigate('Profile_FareContractsScreen')}
           />
         </Section>
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <HeaderSectionItem text="Icons" />
 
           <GenericSectionItem>
-            <View style={style.icons}>
+            <View style={styles.icons}>
               <ThemeIcon svg={Check} />
               <ThemeIcon svg={Check} colorType="info" />
               <ThemeIcon svg={Check} colorType="warning" />
@@ -182,7 +182,7 @@ export const Profile_DesignSystemScreen = ({
               <ThemeIcon svg={Ticket} colorType="error" />
               <ThemeIcon svg={Ticket} size="large" />
             </View>
-            <View style={style.icons}>
+            <View style={styles.icons}>
               <ThemeText style={{marginRight: 12}}>
                 With notification indicators:
               </ThemeText>
@@ -213,7 +213,7 @@ export const Profile_DesignSystemScreen = ({
                 notification={{color: 'error'}}
               />
             </View>
-            <View style={style.icons}>
+            <View style={styles.icons}>
               <ThemeText style={{marginRight: 12}}>
                 And notification spacing:
               </ThemeText>
@@ -247,16 +247,16 @@ export const Profile_DesignSystemScreen = ({
                 notification={{color: 'error', backgroundColor: 'background_0'}}
               />
             </View>
-            <View style={style.icons}>
+            <View style={styles.icons}>
               <TransportationIconBox
-                style={style.transportationIcon}
+                style={styles.transportationIcon}
                 mode={Mode.Bus}
                 subMode={TransportSubmode.LocalBus}
               />
               {Object.values(Mode).map((mode) => (
                 <TransportationIconBox
                   key={mode}
-                  style={style.transportationIcon}
+                  style={styles.transportationIcon}
                   mode={mode}
                 />
               ))}
@@ -264,7 +264,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <HeaderSectionItem text="Message Info Box" />
 
           <GenericSectionItem>
@@ -361,7 +361,7 @@ export const Profile_DesignSystemScreen = ({
             />
           </GenericSectionItem>
         </Section>
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <HeaderSectionItem text="Message Info Text" />
 
           <GenericSectionItem>
@@ -415,7 +415,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
         </Section>
 
-        <Section style={style.section}>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="LabelInfo"
             showIconText={false}
@@ -435,7 +435,7 @@ export const Profile_DesignSystemScreen = ({
           />
         </Section>
 
-        <Section style={style.section}>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Buttons"
             showIconText={false}
@@ -448,7 +448,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/0
                 </ThemeText>
-                <View style={style.buttonContainer}>
+                <View style={styles.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -484,7 +484,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/1
                 </ThemeText>
-                <View style={style.buttonContainer}>
+                <View style={styles.buttonContainer}>
                   <Button
                     text="Default - block"
                     onPress={presser}
@@ -520,7 +520,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/2
                 </ThemeText>
-                <View style={style.buttonContainer}>
+                <View style={styles.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -556,7 +556,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Primary - block - interactive/destructive
                 </ThemeText>
-                <View style={style.buttonContainer}>
+                <View style={styles.buttonContainer}>
                   <Button
                     text="Default"
                     onPress={presser}
@@ -592,7 +592,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   Secondary - block
                 </ThemeText>
-                <View style={style.buttonContainer}>
+                <View style={styles.buttonContainer}>
                   <Button text="Default" onPress={presser} mode="secondary" />
                   <Button
                     text="Active"
@@ -620,7 +620,7 @@ export const Profile_DesignSystemScreen = ({
                 >
                   tertiary - block
                 </ThemeText>
-                <View style={style.buttonContainer}>
+                <View style={styles.buttonContainer}>
                   <Button text="Default" onPress={presser} mode="tertiary" />
                   <Button
                     text="Active"
@@ -965,7 +965,7 @@ export const Profile_DesignSystemScreen = ({
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ActionSectionItem
             text="Some very long text over here which goes over multiple lines"
             subtext="With a subtext"
@@ -988,7 +988,7 @@ export const Profile_DesignSystemScreen = ({
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <LocationInputSectionItem
             label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
@@ -1001,7 +1001,7 @@ export const Profile_DesignSystemScreen = ({
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ButtonSectionItem
             label="Label"
             placeholder="My very long placeholder over here. Yes over multiple lines"
@@ -1036,7 +1036,7 @@ export const Profile_DesignSystemScreen = ({
           <LinkSectionItem text="Link with label" label="new" />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <TextInputSectionItem
             label="Input"
             placeholder="My very long placeholder over here. Yes over multiple lines"
@@ -1076,7 +1076,7 @@ export const Profile_DesignSystemScreen = ({
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <HeaderSectionItem text="Texts" />
 
           <GenericSectionItem>
@@ -1090,7 +1090,7 @@ export const Profile_DesignSystemScreen = ({
           </GenericSectionItem>
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <HeaderSectionItem text="Message section items" />
 
           <MessageSectionItem
@@ -1124,15 +1124,15 @@ export const Profile_DesignSystemScreen = ({
           />
         </Section>
 
-        <View style={style.section}>
-          <View style={style.buttonContainer}>{buttons}</View>
+        <View style={styles.section}>
+          <View style={styles.buttonContainer}>{buttons}</View>
         </View>
 
-        <View style={style.swatchGroup}>{backgroundSwatches}</View>
-        <View style={style.swatchGroup}>{transportSwatches}</View>
-        <View style={style.swatchGroup}>{secondaryTransportSwatches}</View>
-        <View style={style.swatchGroup}>{statusSwatches}</View>
-        <View style={style.swatchGroup}>
+        <View style={styles.swatchGroup}>{backgroundSwatches}</View>
+        <View style={styles.swatchGroup}>{transportSwatches}</View>
+        <View style={styles.swatchGroup}>{secondaryTransportSwatches}</View>
+        <View style={styles.swatchGroup}>{statusSwatches}</View>
+        <View style={styles.swatchGroup}>
           <ThemeText>Text colors:</ThemeText>
           {textSwatches}
         </View>
@@ -1150,7 +1150,7 @@ function presser() {
   Alert.alert('Heyo');
 }
 
-const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
@@ -1167,7 +1167,9 @@ const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
     flexWrap: 'wrap',
   },
   section: {
-    margin: theme.spacings.medium,
+    marginTop: theme.spacings.large,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
   },
   swatchGroup: {
     margin: theme.spacings.medium,

@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {useFilteredJourneySearch} from '../utils';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {StyleSheet} from '@atb/theme';
 
 type JourneyHistoryProps = {
   searchText?: string;
@@ -18,6 +19,7 @@ const DEFAULT_HISTORY_LIMIT = 3;
 
 export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   const {t} = useTranslation();
+  const styles = useStyles();
   const journeyHistory = useFilteredJourneySearch(searchText);
 
   if (!journeyHistory.length) {
@@ -25,7 +27,7 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
   }
 
   return (
-    <Section withTopPadding withBottomPadding>
+    <Section style={styles.section}>
       <HeaderSectionItem
         transparent
         text={t(
@@ -67,6 +69,13 @@ export function JourneyHistory({searchText, onSelect}: JourneyHistoryProps) {
     </Section>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  section: {
+    marginTop: theme.spacings.large,
+    marginBottom: theme.spacings.large,
+  },
+}));
 
 function mapToVisibleSearchResult(entry: JourneySearchHistoryEntry) {
   const [from, to] = entry;

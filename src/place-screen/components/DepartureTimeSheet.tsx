@@ -58,7 +58,7 @@ export const DepartureTimeSheet = forwardRef<ScrollView, Props>(
           style={{paddingBottom: keyboardHeight}}
           ref={focusRef}
         >
-          <Section withBottomPadding>
+          <Section style={styles.section}>
             <DateInputSectionItem value={date} onChange={setDate} />
             <TimeInputSectionItem value={time} onChange={setTime} />
           </Section>
@@ -84,6 +84,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => {
   return {
     contentContainer: {
       padding: theme.spacings.medium,
+    },
+    section: {
+      marginBottom: theme.spacings.large,
     },
   };
 });

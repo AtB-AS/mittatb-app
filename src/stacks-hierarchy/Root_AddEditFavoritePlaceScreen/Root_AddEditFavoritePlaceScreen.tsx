@@ -10,7 +10,7 @@ import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useFavorites} from '@atb/favorites';
 import {useOnlySingleLocation} from '@atb/stacks-hierarchy/Root_LocationSearchByTextScreen';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import {AddEditFavoriteTexts, useTranslation} from '@atb/translations';
 import React, {useEffect, useState} from 'react';
 import {Alert, Keyboard, ScrollView, View} from 'react-native';
@@ -30,7 +30,7 @@ export type Props = RootStackScreenProps<'Root_AddEditFavoritePlaceScreen'>;
 const themeColor: StaticColorByType<'background'> = 'background_3';
 
 export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
-  const css = useScreenStyle();
+  const styles = useStyles();
   const {
     addFavoriteLocation: addFavorite,
     removeFavoriteLocation: removeFavorite,
@@ -137,7 +137,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
   };
 
   return (
-    <View style={css.container}>
+    <View style={styles.container}>
       <FullScreenHeader
         title={
           editItem
@@ -147,17 +147,17 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
         leftButton={{type: !!editItem ? 'close' : 'back'}}
       />
 
-      <ScrollView style={css.innerContainer}>
+      <ScrollView style={styles.innerContainer}>
         <ScreenReaderAnnouncement message={errorMessage} />
         {errorMessage && (
           <MessageInfoBox
-            style={css.errorMessageBox}
+            style={styles.errorMessageBox}
             message={errorMessage}
             type="error"
           />
         )}
 
-        <Section withPadding>
+        <Section style={styles.section}>
           <LocationInputSectionItem
             label={t(AddEditFavoriteTexts.fields.location.label)}
             location={location}
@@ -174,7 +174,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           />
         </Section>
 
-        <Section withPadding>
+        <Section style={styles.section}>
           <TextInputSectionItem
             label={t(AddEditFavoriteTexts.fields.name.label)}
             onChangeText={setName}
@@ -187,7 +187,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
           />
         </Section>
 
-        <Section withPadding style={css.emojiContainer}>
+        <Section style={[styles.emojiContainer, styles.section]}>
           <ButtonSectionItem
             onPress={openEmojiPopup}
             accessibilityLabel={t(AddEditFavoriteTexts.fields.icon.a11yLabel)}
@@ -218,7 +218,7 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
       </ScrollView>
 
       <FullScreenFooter avoidKeyboard={true}>
-        <View style={css.buttonContainer}>
+        <View style={styles.buttonContainer}>
           {editItem && (
             <Button
               onPress={deleteItem}
@@ -241,16 +241,20 @@ export const Root_AddEditFavoritePlaceScreen = ({navigation, route}: Props) => {
     </View>
   );
 };
-const useScreenStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.static.background[themeColor].background,
   },
   buttonContainer: {
-    marginBottom: theme.spacings.medium,
+    marginBottom: theme.spacings.large,
   },
   emojiContainer: {
     width: '50%',
+  },
+  section: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
   },
   innerContainer: {
     flex: 1,

@@ -1,7 +1,7 @@
 import {deleteProfile} from '@atb/api/profile';
 import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useAuthState} from '@atb/auth';
-import {StyleSheet, Theme, useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {
   filterActiveOrCanBeUsedFareContracts,
   useTicketingState,
@@ -19,7 +19,7 @@ import {useTimeContextState} from '@atb/time';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 
 export const Profile_DeleteProfileScreen = () => {
-  const style = useStyle();
+  const styles = useStyles();
   const {t} = useTranslation();
   const {signOut, customerNumber} = useAuthState();
   const {fareContracts} = useTicketingState();
@@ -94,18 +94,18 @@ export const Profile_DeleteProfileScreen = () => {
       <MessageInfoBox
         message={t(DeleteProfileTexts.deleteInfo)}
         type="info"
-        style={style.contentMargin}
+        style={styles.contentMargin}
       />
 
       {activeFareContracts && (
         <MessageInfoBox
           message={t(DeleteProfileTexts.unableToDeleteWithFareContracts)}
           type="warning"
-          style={{...style.contentMargin, marginTop: 0}}
+          style={{...styles.contentMargin, marginTop: 0}}
         />
       )}
 
-      <Section withPadding>
+      <Section style={styles.section}>
         <LinkSectionItem
           subtitle={`${customerNumber}`}
           text={t(DeleteProfileTexts.customerNumber)}
@@ -123,12 +123,16 @@ export const Profile_DeleteProfileScreen = () => {
   );
 };
 
-const useStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   contentMargin: {
     margin: theme.spacings.medium,
+  },
+  section: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
   },
 }));

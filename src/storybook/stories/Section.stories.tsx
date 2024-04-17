@@ -41,10 +41,6 @@ const SectionMeta: Meta<SectionMetaProps> = {
   component: Section,
   argTypes: {
     ...themedStoryControls,
-    withPadding: {control: 'boolean'},
-    withFullPadding: {control: 'boolean'},
-    withTopPadding: {control: 'boolean'},
-    withBottomPadding: {control: 'boolean'},
     type: {
       control: 'select',
       options: containerSizingType,
@@ -58,7 +54,7 @@ const SectionMeta: Meta<SectionMetaProps> = {
 export default SectionMeta;
 
 export const ListedSectionItems: Meta<SectionMetaProps> = {
-  args: {withFullPadding: true, backgroundColor: 'background_2'},
+  args: {style: {margin: 12}, backgroundColor: 'background_2'},
   decorators: [
     (Story, {args}) => (
       <ScrollView>
@@ -159,7 +155,7 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
 };
 
 export const OneSectionItem: Meta<SectionMetaProps> = {
-  args: {withFullPadding: true},
+  args: {style: {margin: 12}},
   decorators: [
     (Story, {args}) => (
       <View style={{backgroundColor: 'pink'}}>
@@ -184,7 +180,7 @@ export const OneSectionItem: Meta<SectionMetaProps> = {
 };
 
 export const RadioSection: Meta<SectionMetaProps> = {
-  args: {withFullPadding: true, backgroundColor: 'background_1'},
+  args: {style: {margin: 12}, backgroundColor: 'background_1'},
   decorators: [
     (Story, {args}) => (
       <Story

@@ -134,7 +134,7 @@ export const DetailsContent: React.FC<Props> = ({
       benefits && benefits.length > 0 && validityStatus === 'valid';
 
     return (
-      <Section withBottomPadding>
+      <Section style={styles.section}>
         <GenericSectionItem>
           {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
           {isCarnetFareContract &&
@@ -171,18 +171,17 @@ export const DetailsContent: React.FC<Props> = ({
             sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
           />
         </GenericSectionItem>
-        {isInspectable &&
-          validityStatus === 'valid' && (
-            <GenericSectionItem
-              style={
-                mobileTokenStatus === 'staticQr'
-                  ? styles.enlargedWhiteBarcodePaddingView
-                  : undefined
-              }
-            >
-              <Barcode validityStatus={validityStatus} fc={fc} />
-            </GenericSectionItem>
-          )}
+        {isInspectable && validityStatus === 'valid' && (
+          <GenericSectionItem
+            style={
+              mobileTokenStatus === 'staticQr'
+                ? styles.enlargedWhiteBarcodePaddingView
+                : undefined
+            }
+          >
+            <Barcode validityStatus={validityStatus} fc={fc} />
+          </GenericSectionItem>
+        )}
         <GenericSectionItem>
           <FareContractInfoDetails
             fromTariffZone={fromTariffZone}
@@ -253,6 +252,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   globalMessages: {
     flex: 1,
     rowGap: theme.spacings.medium,
+  },
+  section: {
+    marginBottom: theme.spacings.large,
   },
   enlargedWhiteBarcodePaddingView: {
     backgroundColor: '#ffffff',
