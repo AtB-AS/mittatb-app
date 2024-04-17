@@ -123,12 +123,13 @@ android {
             matchingFallbacks = ['release']
             minifyEnabled enableProguardInReleaseBuilds
             shrinkResources enableProguardInReleaseBuilds
-            debuggable false
+            debuggable true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         staging {
             initWith buildTypes.release
             matchingFallbacks = ['release']
+            debuggable true
         }
         release {
             minifyEnabled enableProguardInReleaseBuilds
