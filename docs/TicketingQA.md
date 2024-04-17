@@ -4,11 +4,11 @@ When QA-testing ticketing in the app, we cannot use real payment cards / apps.
 
 ## NETS / Credit cards
 
-For credit cards, we use the NETS-terminal. NETS provides different test card numbers which will simulate different scenarios: https://shop.nets.eu/nb/web/partners/test-cards
+For credit cards, we use the NETS-terminal. NETS provides different test card numbers here: https://developer.nexigroup.com/nexi-checkout/en-EU/docs/test-card-processing/#build-sample-credit-cards
 
-The terminal accepts any three digit verification-code, but the month/year-combo always has to be newer or equal to the current date.
+To simulate various payment errors, see https://developer.nexigroup.com/netaxept/en-EU/docs/test-environment/#build-test-cards
 
-The payment card number most used for successful purchases is `4925000000000004`.
+The payment card number most used for successful purchases is `5413000000000000` (Mastercard). The terminal accepts any three digit verification-code, but the month/year-combo always has to be newer or equal to the current date.
 
 Goes without saying; but none of these card numbers will be valid in production.
 
