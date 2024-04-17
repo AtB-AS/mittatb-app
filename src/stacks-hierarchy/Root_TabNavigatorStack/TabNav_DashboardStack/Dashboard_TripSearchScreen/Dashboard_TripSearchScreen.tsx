@@ -60,14 +60,14 @@ type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 const headerBackgroundColor: StaticColorByType<'background'> =
   'background_accent_0';
 
-const ResultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
+const resultsBackgroundColor: StaticColorByType<'background'> = 'background_1';
 
 export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   navigation,
   route,
 }) => {
   const {callerRoute} = route.params;
-  const style = useStyle();
+  const styles = useStyles();
   const {theme} = useTheme();
   const {language, t} = useTranslation();
   const [updatingLocation] = useState<boolean>(false);
@@ -234,7 +234,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
   useEffect(refresh, [from, to]);
 
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       <FullScreenView
         headerProps={{
           title: t(TripSearchTexts.header.title),
@@ -271,7 +271,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           ) : undefined
         }
         parallaxContent={() => (
-          <View style={style.searchHeader}>
+          <View style={styles.searchHeader}>
             <Section>
               <LocationInputSectionItem
                 accessibilityLabel={
@@ -323,7 +323,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                 testID="searchToButton"
               />
             </Section>
-            <View style={style.searchParametersButtons}>
+            <View style={styles.searchParametersButtons}>
               <Button
                 text={getSearchTimeLabel(
                   searchTime,
@@ -338,10 +338,10 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   t,
                   language,
                 )}
-                backgroundColor={headerBackgroundColor}
-                mode="secondary"
+                mode="primary"
+                interactiveColor='interactive_1'
                 compact={true}
-                style={style.searchTimeButton}
+                style={styles.searchTimeButton}
                 onPress={onSearchTimePress}
                 testID="dashboardDateTimePicker"
                 rightIcon={{
@@ -357,8 +357,8 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   <Button
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
-                    backgroundColor={headerBackgroundColor}
-                    mode="secondary"
+                    mode="primary"
+                    interactiveColor='interactive_1'
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
@@ -385,7 +385,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
           {(!from || !to) && (
             <ThemeText
               color="secondary"
-              style={style.missingLocationText}
+              style={styles.missingLocationText}
               testID="missingLocation"
             >
               {t(TripSearchTexts.searchState.noResultReason.MissingLocation)}
@@ -443,16 +443,16 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
               />
             </View>
           )}
-          {!tripPatterns.length && <View style={style.emptyResultsSpacer} />}
+          {!tripPatterns.length && <View style={styles.emptyResultsSpacer} />}
           {!error && isValidLocations && (
             <PressableOpacity
               onPress={loadMore}
               disabled={searchState === 'searching'}
-              style={style.loadMoreButton}
+              style={styles.loadMoreButton}
               testID="loadMoreButton"
             >
               {searchState === 'searching' ? (
-                <View style={style.loadingIndicator}>
+                <View style={styles.loadingIndicator}>
                   {tripPatterns.length ? (
                     <>
                       <ActivityIndicator
@@ -633,14 +633,14 @@ function computeNoResultReasons(
   return reasons;
 }
 
-const useStyle = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
-    backgroundColor: theme.static.background[ResultsBackgroundColor].background,
+    backgroundColor: theme.static.background[resultsBackgroundColor].background,
     flex: 1,
   },
   scrollView: {
     paddingBottom: theme.spacings.medium,
-    backgroundColor: theme.static.background[ResultsBackgroundColor].background,
+    backgroundColor: theme.static.background[resultsBackgroundColor].background,
   },
   searchParametersButtons: {
     marginTop: theme.spacings.medium,
