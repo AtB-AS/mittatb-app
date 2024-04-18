@@ -357,7 +357,7 @@ export const Profile_DebugInfoScreen = () => {
           </GenericSectionItem>
           <GenericSectionItem>
             <DebugOverride
-              description="Enable geofenzing zones"
+              description="Enable geofencing zones"
               override={geofencingZonesDebugOverride}
             />
           </GenericSectionItem>
