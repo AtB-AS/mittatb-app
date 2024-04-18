@@ -74,10 +74,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
   const refundInfo = configurableLinks?.refundInfo;
+  const a11yStatement = configurableLinks?.a11yStatement;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
+  const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
   const {disable_travelcard} = useRemoteConfig();
 
@@ -434,6 +436,24 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     accessibilityHint: t(
                       ProfileTexts.sections.information.linkSectionItems.refund
                         .a11yLabel,
+                    ),
+                    accessibilityRole: 'link',
+                  }}
+                />
+              )}
+              {a11yStatementUrl && (
+                <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
+                  text={t(
+                    ProfileTexts.sections.information.linkSectionItems
+                      .accessibilityStatement.label,
+                  )}
+                  testID="a11yStatementButton"
+                  onPress={() => Linking.openURL(a11yStatementUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.information.linkSectionItems
+                        .accessibilityStatement.a11yLabel,
                     ),
                     accessibilityRole: 'link',
                   }}

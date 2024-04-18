@@ -312,6 +312,18 @@ const ProfileTexts = {
             'Refusjon, åpner side i nettlesar',
           ),
         },
+        accessibilityStatement: {
+          label: _(
+            'Tilgjengelighetserklæring',
+            'Accessibility statement',
+            'Tilgjengelegheitserklæring',
+          ),
+          a11yLabel: _(
+            'Tilgjengelighetserklæring, åpner side i nettleser',
+            'Accessibility statement, opens page in browser',
+            'Tilgjengelegheitserklæring, åpner side i nettlesar',
+          ),
+        },
       },
     },
   },
