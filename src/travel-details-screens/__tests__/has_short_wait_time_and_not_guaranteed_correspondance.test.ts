@@ -86,8 +86,6 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s6);
   });
 
-  it(`should .`, () => {});
-
   const s7 = false;
   it(`should be ${s7} even if there is short wait time between bus and walking.`, () => {
     const legs = [
