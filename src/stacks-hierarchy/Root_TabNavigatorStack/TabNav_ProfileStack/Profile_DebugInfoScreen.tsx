@@ -250,6 +250,14 @@ export const Profile_DebugInfoScreen = () => {
             subtitle="TypeError: ''.DEBUG_TEST_ERROR is not a function (it is undefined)"
           />
           <LinkSectionItem
+            text="Log stack trace"
+            onPress={() => {
+              Bugsnag.leaveBreadcrumb(Error().stack ?? 'No stack trace');
+              console.log('---- Direct log ----');
+              console.log(Error().stack);
+            }}
+          />
+          <LinkSectionItem
             text="Reset dismissed Global messages"
             onPress={resetDismissedGlobalMessages}
           />
