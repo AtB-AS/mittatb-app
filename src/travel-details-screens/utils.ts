@@ -158,31 +158,57 @@ export function hasShortWaitTime(legs: Leg[]) {
     .filter((waitTime) => waitTime > 0)
     .some((waitTime) => timeIsShort(waitTime));
 }
-export function hasShortWaitTimeAndNotGuaranteedCorrespondence(legs: Leg[]) {
-  const adjustedLegs = adjustExpectedEndTimeAndRemoveFootLegs(legs);
-  return iterateWithNext(adjustedLegs)
-    .map((pair) => {
-      if (pair.current.interchangeTo?.guaranteed) {
-        return 0;
-      }
-      return differenceInSeconds(
-        parseDateIfString(pair.next.expectedStartTime),
-        parseDateIfString(pair.current.expectedEndTime),
-      );
-    })
-    .filter((waitTime) => waitTime > 0)
-    .some((waitTime) => timeIsShort(waitTime));
-}
 
-function adjustExpectedEndTimeAndRemoveFootLegs(legs: Leg[]) {
-  return legs
-    .map((leg, idx) => {
-      if (idx < legs.length - 1 && legs[idx + 1].mode === 'foot') {
-        leg.expectedEndTime = legs[idx + 1].expectedEndTime;
+export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
+  legs: Leg[],
+): boolean {
+  return legs.reduce<{
+    conclusion: boolean;
+    prevEndTime: Date | undefined;
+    prevInterchangeGuaranteed: boolean;
+    prevMode: string | undefined;
+  }>(
+    (state, leg) => {
+      if (state.conclusion) return state;
+
+      if (leg.mode == 'foot') {
+        return {
+          ...state,
+          prevEndTime: leg.expectedEndTime,
+          prevMode: leg.mode,
+        };
       }
-      return leg;
-    })
-    .filter((leg) => leg.mode !== 'foot');
+      const waitTime = differenceInSeconds(
+        parseDateIfString(leg.expectedStartTime),
+        parseDateIfString(state.prevEndTime),
+      );
+
+      if (
+        timeIsShort(waitTime) &&
+        !state.prevInterchangeGuaranteed &&
+        state.prevMode !== 'foot'
+      )
+        return {
+          ...state,
+          conclusion: true,
+          prevEndTime: leg.expectedEndTime,
+          prevInterchangeGuaranteed: false,
+        };
+
+      return {
+        ...state,
+        prevEndTime: leg.expectedEndTime,
+        prevInterchangeGuaranteed: leg.interchangeTo?.guaranteed || false,
+        prevMode: leg.mode,
+      };
+    },
+    {
+      conclusion: false,
+      prevEndTime: undefined,
+      prevInterchangeGuaranteed: false,
+      prevMode: undefined,
+    },
+  ).conclusion;
 }
 
 function parseDateIfString(date: any): Date {
