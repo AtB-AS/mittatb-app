@@ -64,7 +64,11 @@ export const MessageInfoBox = ({
       ? onPressConfig.action
       : () => Linking.openURL(onPressConfig.url));
 
-  const a11yLabel = [title, message, onPressConfig?.hideText ? '' : onPressConfig?.text]
+  const a11yLabel = [
+    title,
+    message,
+    onPressConfig?.hideText ? '' : onPressConfig?.text,
+  ]
     .filter((s): s is string => !!s)
     .join(screenReaderPause);
 

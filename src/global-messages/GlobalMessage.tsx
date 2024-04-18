@@ -64,7 +64,10 @@ const GlobalMessage = ({
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
           if (!message) return null;
-          const displayMessageAndAction = getMessageAndAction(message, isScreenReaderEnabled);
+          const displayMessageAndAction = getMessageAndAction(
+            message,
+            isScreenReaderEnabled,
+          );
 
           return (
             <>
@@ -116,8 +119,8 @@ const parseLink = (message: string) => {
 
 const getMessageAndAction = (
   message: string,
-  isScreenReaderEnabled: boolean
-) : {message: string, action: OnPressConfig | undefined}=> {
+  isScreenReaderEnabled: boolean,
+): {message: string; action: OnPressConfig | undefined} => {
   const parsedLink = parseLink(message);
   const trimmedMessage = parsedLink.full
     ? message.replace(parsedLink.full, parsedLink.text)
@@ -133,8 +136,8 @@ const getMessageAndAction = (
 
   return {
     message: message,
-    action: undefined
-  }
+    action: undefined,
+  };
 };
 
 export {GlobalMessage};
