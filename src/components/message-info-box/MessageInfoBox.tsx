@@ -35,6 +35,7 @@ export type MessageInfoBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
+  isInlineOnPressText?: boolean;
   testID?: string;
 };
 export const MessageInfoBox = ({
@@ -45,6 +46,7 @@ export const MessageInfoBox = ({
   title,
   isMarkdown = false,
   onPressConfig,
+  isInlineOnPressText = false,
   onDismiss,
   testID,
 }: MessageInfoBoxProps) => {
@@ -62,7 +64,7 @@ export const MessageInfoBox = ({
       ? onPressConfig.action
       : () => Linking.openURL(onPressConfig.url));
 
-  const a11yLabel = [title, message, onPressConfig?.text]
+  const a11yLabel = [title, message, !isInlineOnPressText ?? onPressConfig?.text]
     .filter((s): s is string => !!s)
     .join(screenReaderPause);
 
@@ -110,7 +112,7 @@ export const MessageInfoBox = ({
         <ThemeText color={type} type="body__primary" isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
-        {onPressConfig?.text && (
+        {!isInlineOnPressText && onPressConfig?.text && (
           <ThemeText
             color={type}
             style={styles.linkText}

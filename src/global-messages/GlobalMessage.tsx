@@ -13,6 +13,7 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from '../rule-engine/rules';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum;
@@ -36,6 +37,8 @@ const GlobalMessage = ({
     dismissedGlobalMessages,
     addDismissedGlobalMessages,
   } = useGlobalMessagesState();
+
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   if (!globalMessageContext) return null;
 
@@ -61,6 +64,8 @@ const GlobalMessage = ({
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
           if (!message) return null;
+          const displayMessageAndAction = getMessageAndAction(message, isScreenReaderEnabled);
+
           return (
             <>
               {globalMessage.subtle ? (
@@ -81,7 +86,7 @@ const GlobalMessage = ({
                     globalMessage.title ?? [],
                     language,
                   )}
-                  message={message}
+                  message={displayMessageAndAction.message}
                   type={globalMessage.type}
                   isMarkdown={true}
                   onDismiss={
@@ -89,6 +94,8 @@ const GlobalMessage = ({
                       ? () => dismissGlobalMessage(globalMessage)
                       : undefined
                   }
+                  onPressConfig={displayMessageAndAction.action}
+                  isInlineOnPressText={true}
                   testID="globalMessage"
                 />
               )}
@@ -97,6 +104,37 @@ const GlobalMessage = ({
         })}
     </>
   );
+};
+
+const markdownLinkRegex = /\[([^\[]+)\]\((.*)\)/;
+
+const parseLink = (message: string) => {
+  const parsedArray = message.match(markdownLinkRegex) || [];
+  const [full, text, url] = parsedArray;
+  return {full, text, url};
+};
+
+const getMessageAndAction = (
+  message: string,
+  isScreenReaderEnabled: boolean,
+) => {
+  const parsedLink = parseLink(message);
+  const trimmedMessage = parsedLink.full
+    ? message.replace(parsedLink.full, parsedLink.text)
+    : message;
+  if (isScreenReaderEnabled) {
+    return {
+      message: parsedLink.full ? trimmedMessage : message,
+      action: parsedLink
+        ? {text: parsedLink.text, url: parsedLink.url}
+        : undefined,
+    };
+  }
+
+  return {
+    message: message,
+    action: undefined
+  }
 };
 
 export {GlobalMessage};
