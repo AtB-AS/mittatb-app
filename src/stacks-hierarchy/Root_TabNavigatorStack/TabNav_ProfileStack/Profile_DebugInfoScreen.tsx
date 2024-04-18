@@ -39,6 +39,7 @@ import {
 } from '@atb/components/sections';
 import {useDebugOverride} from '@atb/debug';
 import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
+import {useGeofencingZonesDebugOverride} from '@atb/mobility/use-geofencing-zones-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
 import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -108,6 +109,7 @@ export const Profile_DebugInfoScreen = () => {
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
+  const geofencingZonesDebugOverride = useGeofencingZonesDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
@@ -351,6 +353,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable car sharing in map."
               override={carSharingInMapDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable geofenzing zones"
+              override={geofencingZonesDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
