@@ -248,6 +248,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   buttonContainer: {
     marginBottom: theme.spacings.large,
+    rowGap: theme.spacings.medium,
   },
   emojiContainer: {
     width: '50%',
