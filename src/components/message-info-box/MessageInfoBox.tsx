@@ -24,6 +24,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
  */
 export type OnPressConfig = {
   text: string;
+  hideText?: boolean;
 } & ({action: () => void} | {url: string});
 
 export type MessageInfoBoxProps = {
@@ -46,7 +47,6 @@ export const MessageInfoBox = ({
   title,
   isMarkdown = false,
   onPressConfig,
-  isInlineOnPressText = false,
   onDismiss,
   testID,
 }: MessageInfoBoxProps) => {
@@ -64,7 +64,7 @@ export const MessageInfoBox = ({
       ? onPressConfig.action
       : () => Linking.openURL(onPressConfig.url));
 
-  const a11yLabel = [title, message, !isInlineOnPressText ?? onPressConfig?.text]
+  const a11yLabel = [title, message, onPressConfig?.hideText ? '' : onPressConfig?.text]
     .filter((s): s is string => !!s)
     .join(screenReaderPause);
 
@@ -112,7 +112,7 @@ export const MessageInfoBox = ({
         <ThemeText color={type} type="body__primary" isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
-        {!isInlineOnPressText && onPressConfig?.text && (
+        {!onPressConfig?.hideText && onPressConfig?.text && (
           <ThemeText
             color={type}
             style={styles.linkText}

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
-import {MessageInfoBox} from '@atb/components/message-info-box';
+import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
   GlobalMessageContextEnum,
@@ -95,7 +95,7 @@ const GlobalMessage = ({
                       : undefined
                   }
                   onPressConfig={displayMessageAndAction.action}
-                  isInlineOnPressText={true}
+                  isInlineOnPressText={isScreenReaderEnabled}
                   testID="globalMessage"
                 />
               )}
@@ -116,8 +116,8 @@ const parseLink = (message: string) => {
 
 const getMessageAndAction = (
   message: string,
-  isScreenReaderEnabled: boolean,
-) => {
+  isScreenReaderEnabled: boolean
+) : {message: string, action: OnPressConfig | undefined}=> {
   const parsedLink = parseLink(message);
   const trimmedMessage = parsedLink.full
     ? message.replace(parsedLink.full, parsedLink.text)
@@ -126,7 +126,7 @@ const getMessageAndAction = (
     return {
       message: parsedLink.full ? trimmedMessage : message,
       action: parsedLink
-        ? {text: parsedLink.text, url: parsedLink.url}
+        ? {text: parsedLink.text, hideText: true, url: parsedLink.url}
         : undefined,
     };
   }
