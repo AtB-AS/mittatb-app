@@ -252,7 +252,7 @@ const useStyle = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export function getInterchangeDetails(
+function getInterchangeDetails(
   legs: Leg[],
   id: string | undefined,
 ): InterchangeDetails | undefined {
