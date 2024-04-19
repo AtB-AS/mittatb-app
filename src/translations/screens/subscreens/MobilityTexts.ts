@@ -239,9 +239,9 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   },
   NoParking: {
     title: _(
-      'Ingen parkering tillatt her',
-      'No Parking',
-      'Ingen parkering tillatt her',
+      'Ingen parkering tillatt',
+      'No Parking Allowed',
+      'Ingen parkering tillatt',
     ),
     description: _(
       'Ikke parker her, du risikerer parkeringsbot.',
