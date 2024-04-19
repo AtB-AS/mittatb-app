@@ -141,6 +141,8 @@ export const TripSection: React.FC<TripSectionProps> = ({
     openBottomSheet(() => <FlexibleTransportBookingDetailsSheet leg={leg} />);
   }
 
+  const translatedModeName = getTranslatedModeName(leg.mode);
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -295,7 +297,11 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <Button
               type="small"
               leftIcon={{svg: Map}}
-              text={t(TripDetailsTexts.trip.leg.live)}
+              text={t(
+                TripDetailsTexts.trip.leg.live(
+                  t(translatedModeName).toLowerCase(),
+                ),
+              )}
               interactiveColor="interactive_3"
               onPress={() => onPressShowLive(mapData)}
             />
