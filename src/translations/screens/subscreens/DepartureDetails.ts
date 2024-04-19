@@ -31,9 +31,9 @@ const DepartureDetailsTexts = {
   notOnTime: _(`Etter rutetid`, `Behind scheduled time`, `Etter rutetid`),
   live: (transportMode: string) =>
     _(
-      `Følg ${transportMode}`,
-      `Follow ${transportMode}`,
-      `Følg ${transportMode}`,
+      `Følg ${transportMode.toLowerCase()}`,
+      `Follow ${transportMode.toLowerCase()}`,
+      `Følg ${transportMode.toLowerCase()}`,
     ),
   map: _('Se reiserute', 'Show trip', 'Sjå reiserute'),
   messages: {

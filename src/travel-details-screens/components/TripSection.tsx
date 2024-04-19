@@ -297,11 +297,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             <Button
               type="small"
               leftIcon={{svg: Map}}
-              text={t(
-                TripDetailsTexts.trip.leg.live(
-                  t(translatedModeName).toLowerCase(),
-                ),
-              )}
+              text={t(TripDetailsTexts.trip.leg.live(t(translatedModeName)))}
               interactiveColor="interactive_3"
               onPress={() => onPressShowLive(mapData)}
             />

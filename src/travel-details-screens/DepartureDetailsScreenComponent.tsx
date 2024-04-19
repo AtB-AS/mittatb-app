@@ -190,9 +190,7 @@ export const DepartureDetailsScreenComponent = ({
                     style={realtimeText ? styles.liveButton : undefined}
                     text={t(
                       vehiclePosition
-                        ? DepartureDetailsTexts.live(
-                            t(translatedModeName).toLowerCase(),
-                          )
+                        ? DepartureDetailsTexts.live(t(translatedModeName))
                         : DepartureDetailsTexts.map,
                     )}
                     interactiveColor="interactive_1"

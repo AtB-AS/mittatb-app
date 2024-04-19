@@ -114,9 +114,9 @@ const TripDetailsTexts = {
       },
       live: (transportMode: string) =>
         _(
-          `Følg ${transportMode}`,
-          `Follow ${transportMode}`,
-          `Følg ${transportMode}`,
+          `Følg ${transportMode.toLowerCase()}`,
+          `Follow ${transportMode.toLowerCase()}`,
+          `Følg ${transportMode.toLowerCase()}`,
         ),
       intermediateStops: {
         a11yLabel: (count: number, duration: string) =>
