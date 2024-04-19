@@ -31,6 +31,7 @@ function mapToGlobalMessage(
   const title = mapToLanguageAndTexts(result.title);
   const context = mapToContexts(result.context);
   const type = mapToMessageType(result.type);
+  const link = result.link;
   const subtle = result.subtle;
   const isDismissable = result.isDismissable;
   const appVersionMin = result.appVersionMin;
@@ -57,6 +58,7 @@ function mapToGlobalMessage(
     context,
     body,
     title,
+    link,
     isDismissable,
     startDate,
     endDate,

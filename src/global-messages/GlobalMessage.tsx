@@ -63,11 +63,8 @@ const GlobalMessage = ({
         .filter((gm) => isWithinTimeRange(gm, now))
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
+          const link = globalMessage.link;
           if (!message) return null;
-          const displayMessageAndAction = getMessageAndAction(
-            message,
-            isScreenReaderEnabled,
-          );
 
           return (
             <>
@@ -89,7 +86,7 @@ const GlobalMessage = ({
                     globalMessage.title ?? [],
                     language,
                   )}
-                  message={displayMessageAndAction.message}
+                  message={message}
                   type={globalMessage.type}
                   isMarkdown={true}
                   onDismiss={
@@ -97,8 +94,7 @@ const GlobalMessage = ({
                       ? () => dismissGlobalMessage(globalMessage)
                       : undefined
                   }
-                  onPressConfig={displayMessageAndAction.action}
-                  isInlineOnPressText={isScreenReaderEnabled}
+                  onPressConfig={{text: link, url: link}}
                   testID="globalMessage"
                 />
               )}
@@ -107,37 +103,6 @@ const GlobalMessage = ({
         })}
     </>
   );
-};
-
-const markdownLinkRegex = /\[([^\[]+)\]\((.*)\)/;
-
-const parseLink = (message: string) => {
-  const parsedArray = message.match(markdownLinkRegex) || [];
-  const [full, text, url] = parsedArray;
-  return {full, text, url};
-};
-
-const getMessageAndAction = (
-  message: string,
-  isScreenReaderEnabled: boolean,
-): {message: string; action: OnPressConfig | undefined} => {
-  const parsedLink = parseLink(message);
-  const trimmedMessage = parsedLink.full
-    ? message.replace(parsedLink.full, parsedLink.text)
-    : message;
-  if (isScreenReaderEnabled) {
-    return {
-      message: parsedLink.full ? trimmedMessage : message,
-      action: parsedLink
-        ? {text: parsedLink.text, hideText: true, url: parsedLink.url}
-        : undefined,
-    };
-  }
-
-  return {
-    message: message,
-    action: undefined,
-  };
 };
 
 export {GlobalMessage};

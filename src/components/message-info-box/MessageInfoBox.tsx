@@ -24,7 +24,6 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
  */
 export type OnPressConfig = {
   text: string;
-  hideText?: boolean;
 } & ({action: () => void} | {url: string});
 
 export type MessageInfoBoxProps = {
@@ -36,7 +35,6 @@ export type MessageInfoBoxProps = {
   isMarkdown?: boolean;
   style?: StyleProp<ViewStyle>;
   onPressConfig?: OnPressConfig;
-  isInlineOnPressText?: boolean;
   testID?: string;
 };
 export const MessageInfoBox = ({
@@ -64,11 +62,7 @@ export const MessageInfoBox = ({
       ? onPressConfig.action
       : () => Linking.openURL(onPressConfig.url));
 
-  const a11yLabel = [
-    title,
-    message,
-    onPressConfig?.hideText ? '' : onPressConfig?.text,
-  ]
+  const a11yLabel = [title, message, onPressConfig?.text]
     .filter((s): s is string => !!s)
     .join(screenReaderPause);
 
@@ -100,7 +94,9 @@ export const MessageInfoBox = ({
         accessibilityLabel={a11yLabel}
         accessibilityHint={
           onPressConfig &&
-          t(MessageBoxTexts.a11yHintPrefix) + onPressConfig.text
+          ('action' in onPressConfig
+            ? t(MessageBoxTexts.a11yHintActionPrefix)
+            : t(MessageBoxTexts.a11yHintUrlPrefix)) + onPressConfig.text
         }
       >
         {title && (
@@ -116,7 +112,7 @@ export const MessageInfoBox = ({
         <ThemeText color={type} type="body__primary" isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
-        {!onPressConfig?.hideText && onPressConfig?.text && (
+        {onPressConfig?.text && (
           <ThemeText
             color={type}
             style={styles.linkText}
