@@ -74,7 +74,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
   const refundInfo = configurableLinks?.refundInfo;
-  const a11yStatement = configurableLinks?.a11yStatement;
+  const a11yStatement = configurableLinks?.appA11yStatement;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
