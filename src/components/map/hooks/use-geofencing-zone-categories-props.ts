@@ -9,35 +9,35 @@ export const useGeofencingZoneCategoriesProps = () => {
 
   const geofencingZoneCategoriesProps: GeofencingZoneCategoriesProps = {
     Allowed: {
-      name: 'Allowed',
+      code: 'Allowed',
       color: '#007C92', // blue_500
       fillOpacity: 0.075,
       strokeOpacity: 0.5,
       layerIndexWeight: 1,
     },
     Slow: {
-      name: 'Slow',
+      code: 'Slow',
       color: '#F0E973', // yellow_100
       fillOpacity: 0.6,
       strokeOpacity: 0.8,
       layerIndexWeight: 2,
     },
     StationParking: {
-      name: 'StationParking',
+      code: 'StationParking',
       color: '#C75B12', // orange_500
       fillOpacity: 0.5,
       strokeOpacity: 0.7,
       layerIndexWeight: 1,
     },
     NoParking: {
-      name: 'NoParking',
+      code: 'NoParking',
       color: '#C76B89', // red_400
       fillOpacity: 0.5,
       strokeOpacity: 0.7,
       layerIndexWeight: 3,
     },
     NoEntry: {
-      name: 'NoEntry',
+      code: 'NoEntry',
       color: '#380616', // red_900
       fillOpacity: 0.55,
       strokeOpacity: 0.75,

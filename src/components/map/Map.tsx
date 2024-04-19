@@ -19,9 +19,13 @@ import {
   isFeaturePolylineEncodedMultiPolygon,
   isFeaturePoint,
   getFeaturesAtClick,
+  hasGeofencingZoneCategoryProps,
 } from './utils';
 import isEqual from 'lodash.isequal';
 import {GeofencingZones} from './components/mobility/GeofencingZones';
+
+import {useGeofencingZoneExplanation} from './hooks/use-geofencing-zone-explanation';
+import {GeofencingZoneExplanation} from './components/mobility/GeofencingZoneExplanation';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -30,6 +34,9 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
+
+  const {geofencingZoneCategoryCodeToExplain, geofencingZoneOnPress} =
+    useGeofencingZoneExplanation();
 
   const startingCoordinates = useMemo(
     () =>
@@ -120,12 +127,13 @@ export const Map = (props: MapProps) => {
         source: 'map-click',
         feature: selectedFeature,
       });
-    } else if (isFeaturePolylineEncodedMultiPolygon(selectedFeature)) {
-      // console.log('TODO: SHOW GEOFENCINGZONE EXPLANATION WITH SNACKBAR HERE');
-      // console.log(
-      //   'selectedFeature.properties.geofencingZoneCategoryProps.name',
-      //   selectedFeature.properties.geofencingZoneCategoryProps.name,
-      // );
+    } else if (
+      isFeaturePolylineEncodedMultiPolygon(selectedFeature) &&
+      hasGeofencingZoneCategoryProps(selectedFeature)
+    ) {
+      geofencingZoneOnPress(
+        selectedFeature?.properties?.geofencingZoneCategoryProps, // hmm, fix type?
+      );
     }
   };
 
@@ -216,6 +224,11 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
+        {geofencingZoneCategoryCodeToExplain && (
+          <GeofencingZoneExplanation
+            geofencingZoneCategoryCode={geofencingZoneCategoryCodeToExplain}
+          />
+        )}
       </View>
     </View>
   );

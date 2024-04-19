@@ -38,10 +38,11 @@ export type {
   ParkingVehicleTypes,
   PolylineEncodedMultiPolygon,
   PreProcessedGeofencingZones,
-  GeofencingZoneCategory,
   GeofencingZoneCategoryKey,
   GeofencingZoneCategoryProps,
   GeofencingZoneCategoriesProps,
+  GeofencingZoneCategoryCode,
+  GeofencingZoneExplanationsType,
 } from './types';
 export {
   useRealtimeMapEnabled,

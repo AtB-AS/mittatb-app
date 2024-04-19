@@ -4,7 +4,10 @@ import {
   FormFactor,
   PropulsionType,
 } from '@atb/api/types/generated/mobility-types_v2';
-import {ParkingVehicleTypes} from '@atb/components/map';
+import {
+  GeofencingZoneExplanationsType,
+  ParkingVehicleTypes,
+} from '@atb/components/map';
 
 export const MobilityTexts = {
   formFactor: (formFactor: FormFactor) => {
@@ -207,4 +210,51 @@ export const ParkAndRideTexts = {
     'Unknown number of spaces',
     'Ukjend antal plassar',
   ),
+};
+
+export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
+  Allowed: {
+    title: _('Tillatt område', 'Allowed Area', 'Tillatt område'),
+    description: _(
+      'Her kan du både kjøre og parkere.',
+      'Here you can both drive and park.',
+      'Her kan du både kjøre og parkere.',
+    ),
+  },
+  Slow: {
+    title: _('Saktegående sone', 'Slow Zone', 'Saktegåande sone'),
+    description: _(
+      'Her er det ofte travelt, så maks hastighet reduseres.',
+      'It is often busy here, so max speed is reduced.',
+      'Her er det ofte travelt, så maks hastighet reduserast.',
+    ),
+  },
+  StationParking: {
+    title: _('Stasjonsparkering', 'Station Parking', 'Stasjonsparkering'),
+    description: _(
+      'I dette området er det spesifikke parkeringsplasser du må bruke.',
+      'In this area, there are specific parking spots you need to use.',
+      'I dette området er det spesifikke parkeringsplassar du må bruke.',
+    ),
+  },
+  NoParking: {
+    title: _(
+      'Ingen parkering tillatt her',
+      'No Parking',
+      'Ingen parkering tillatt her',
+    ),
+    description: _(
+      'Ikke parker her, du risikerer parkeringsbot.',
+      'Do not park here, you will risk a parking ticket.',
+      'Ikkje parker her, du risikerer parkeringsbot.',
+    ),
+  },
+  NoEntry: {
+    title: _('Ingen adgang', 'No Entry', 'Ingen adgang'),
+    description: _(
+      'Det er forbudt å kjøre inn i dette området.',
+      'It is forbidden to drive into this area.',
+      'Det er forbode å køyre inn i dette området.',
+    ),
+  },
 };

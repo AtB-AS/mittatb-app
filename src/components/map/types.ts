@@ -15,6 +15,7 @@ import {
   GeofencingZones,
 } from '@atb/api/types/generated/mobility-types_v2';
 import {Line} from '@atb/api/types/trips';
+import {TranslatedString} from '@atb/translations';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -185,7 +186,7 @@ export interface PreProcessedGeofencingZones extends GeofencingZones {
   renderKey: string;
 }
 
-export enum GeofencingZoneCategory {
+export enum GeofencingZoneCategoryCode {
   Allowed = 'Allowed',
   Slow = 'Slow',
   StationParking = 'StationParking',
@@ -193,12 +194,12 @@ export enum GeofencingZoneCategory {
   NoEntry = 'NoEntry',
 }
 
-export type GeofencingZoneCategoryKey = keyof typeof GeofencingZoneCategory;
+export type GeofencingZoneCategoryKey = keyof typeof GeofencingZoneCategoryCode;
 
 export type GeofencingZoneCategoryProps<
   GZCKey extends GeofencingZoneCategoryKey,
 > = {
-  name: GZCKey;
+  code: GZCKey;
   color: string;
   fillOpacity: number;
   strokeOpacity: number;
@@ -207,4 +208,13 @@ export type GeofencingZoneCategoryProps<
 
 export type GeofencingZoneCategoriesProps = {
   [GZCKey in GeofencingZoneCategoryKey]: GeofencingZoneCategoryProps<GZCKey>;
+};
+
+type GeofencingZoneExplanationType = {
+  title: TranslatedString;
+  description: TranslatedString;
+};
+
+export type GeofencingZoneExplanationsType = {
+  [GZCKey in GeofencingZoneCategoryKey]: GeofencingZoneExplanationType;
 };
