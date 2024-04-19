@@ -54,7 +54,7 @@ type MobileTokenContextState = {
    */
   isInspectable: boolean;
   retry: () => void;
-  wipeToken: () => Promise<void>;
+  clearTokenAtLogout: () => Promise<void>;
   getTokenToggleDetails: () => Promise<TokenLimitResponse | undefined>;
   nativeToken?: ActivatedToken;
   /**
@@ -67,6 +67,7 @@ type MobileTokenContextState = {
     validateToken: () => void;
     removeRemoteToken: (tokenId: string) => void;
     renewToken: () => void;
+    wipeToken: () => void;
   };
 };
 
@@ -83,8 +84,14 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const [isTimeout, setTimout] = useState(false);
 
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  useEffect(() => setIsLoggingOut(false), [userId]);
+
   const enabled =
-    mobileTokenEnabled && !!userId && authStatus === 'authenticated';
+    mobileTokenEnabled &&
+    !!userId &&
+    authStatus === 'authenticated' &&
+    !isLoggingOut;
 
   const {data: nativeToken, status: nativeTokenStatus} =
     useLoadNativeTokenQuery(enabled, userId);
@@ -152,13 +159,12 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           Bugsnag.leaveBreadcrumb('Retrying mobile token load');
           queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]);
         }, [queryClient]),
-        wipeToken: useCallback(
-          () =>
-            wipeToken(nativeToken, uuid()).then(() =>
-              queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
-            ),
-          [queryClient, nativeToken],
-        ),
+        clearTokenAtLogout: useCallback(() => {
+          setIsLoggingOut(true);
+          return wipeToken(nativeToken, uuid()).then(() =>
+            queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
+          );
+        }, [queryClient, nativeToken]),
         getTokenToggleDetails,
         nativeToken,
         debug: {
@@ -190,6 +196,13 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
                   renewedToken,
                 );
               }),
+          wipeToken: useCallback(
+            () =>
+              wipeToken(nativeToken, uuid()).then(() =>
+                queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
+              ),
+            [queryClient, nativeToken],
+          ),
         },
       }}
     >
