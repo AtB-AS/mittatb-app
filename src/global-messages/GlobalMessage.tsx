@@ -60,7 +60,9 @@ const GlobalMessage = ({
         .filter((gm) => isWithinTimeRange(gm, now))
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
-          const link = globalMessage.link;
+          const onPressAction = globalMessage.link
+            ? {text: globalMessage.link, url: globalMessage.link}
+            : undefined;
           if (!message) return null;
 
           return (
@@ -91,7 +93,7 @@ const GlobalMessage = ({
                       ? () => dismissGlobalMessage(globalMessage)
                       : undefined
                   }
-                  onPressConfig={{text: link, url: link}}
+                  onPressConfig={onPressAction}
                   testID="globalMessage"
                 />
               )}
