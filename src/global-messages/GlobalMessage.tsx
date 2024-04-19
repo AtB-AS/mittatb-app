@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from '@atb/translations';
 import {useGlobalMessagesState} from '@atb/global-messages/GlobalMessagesContext';
-import {MessageInfoBox, OnPressConfig} from '@atb/components/message-info-box';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleProp, ViewStyle} from 'react-native';
 import {
   GlobalMessageContextEnum,
@@ -13,7 +13,6 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from '../rule-engine/rules';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
-import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum;
@@ -37,8 +36,6 @@ const GlobalMessage = ({
     dismissedGlobalMessages,
     addDismissedGlobalMessages,
   } = useGlobalMessagesState();
-
-  const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   if (!globalMessageContext) return null;
 
