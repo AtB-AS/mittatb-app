@@ -4,7 +4,7 @@ import Bugsnag, {Event} from '@bugsnag/react-native';
  * Set to true if you want Bugsnag breadcrumbs to be written to console.log
  * locally
  * */
-const LOG_BREADCRUMBS_LOCALLY = true;
+const LOG_BREADCRUMBS_LOCALLY = false;
 
 export function configureAndStartBugsnag() {
   if (!__DEV__) {
