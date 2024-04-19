@@ -65,39 +65,32 @@ const GlobalMessage = ({
             : undefined;
           if (!message) return null;
 
-          return (
-            <>
-              {globalMessage.subtle ? (
-                <MessageInfoText
-                  key={globalMessage.id}
-                  type={globalMessage.type}
-                  message={message}
-                  textColor={textColor}
-                  isMarkdown={true}
-                  style={style}
-                  testID="globalMessage"
-                />
-              ) : (
-                <MessageInfoBox
-                  key={globalMessage.id}
-                  style={style}
-                  title={getTextForLanguage(
-                    globalMessage.title ?? [],
-                    language,
-                  )}
-                  message={message}
-                  type={globalMessage.type}
-                  isMarkdown={true}
-                  onDismiss={
-                    globalMessage.isDismissable && !includeDismissed
-                      ? () => dismissGlobalMessage(globalMessage)
-                      : undefined
-                  }
-                  onPressConfig={onPressAction}
-                  testID="globalMessage"
-                />
-              )}
-            </>
+          return globalMessage.subtle ? (
+            <MessageInfoText
+              key={globalMessage.id}
+              type={globalMessage.type}
+              message={message}
+              textColor={textColor}
+              isMarkdown={true}
+              style={style}
+              testID="globalMessage"
+            />
+          ) : (
+            <MessageInfoBox
+              key={globalMessage.id}
+              style={style}
+              title={getTextForLanguage(globalMessage.title ?? [], language)}
+              message={message}
+              type={globalMessage.type}
+              isMarkdown={true}
+              onDismiss={
+                globalMessage.isDismissable && !includeDismissed
+                  ? () => dismissGlobalMessage(globalMessage)
+                  : undefined
+              }
+              onPressConfig={onPressAction}
+              testID="globalMessage"
+            />
           );
         })}
     </>
