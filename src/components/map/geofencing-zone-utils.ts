@@ -6,17 +6,27 @@ import {
   GeofencingZoneCategoryProps,
   PreProcessedGeofencingZones,
 } from '@atb/components/map';
+import {isDefined} from '@atb/utils/presence';
+import sortBy from 'lodash.sortby';
 import polyline from '@mapbox/polyline';
 
 export function sortFeaturesByLayerIndexWeight(
   geofencingZones: PreProcessedGeofencingZones[],
-) {
-  geofencingZones.forEach((geofencingZone) => {
-    geofencingZone?.geojson?.features?.sort(
-      (a, b) =>
-        a?.properties?.geofencingZoneCategoryProps?.layerIndexWeight -
-        b?.properties?.geofencingZoneCategoryProps?.layerIndexWeight, // todo: update types
+): PreProcessedGeofencingZones[] {
+  return geofencingZones.map((geofencingZone) => {
+    const sortedFeatures = sortBy(
+      geofencingZone?.geojson?.features,
+      (feature) =>
+        feature?.properties?.geofencingZoneCategoryProps?.layerIndexWeight, // todo: update types
     );
+
+    return {
+      ...geofencingZone,
+      geojson: {
+        ...geofencingZone.geojson,
+        features: sortedFeatures,
+      },
+    };
   });
 }
 
@@ -34,35 +44,30 @@ function flippedTuples(tuples: Array<Tuple<number>>): Array<Tuple<number>> {
 // todo: add test for this function
 export function decodePolylineEncodedMultiPolygons(
   geofencingZones: PreProcessedGeofencingZones[],
-) {
-  forAllFeaturesInAllGeofencingZones(geofencingZones, (feature: Feature) => {
-    if (!feature?.properties?.polylineEncodedMultiPolygon) return;
+): PreProcessedGeofencingZones[] {
+  return geofencingZones
+    ?.map((geofencingZone) => {
+      const features = geofencingZone?.geojson?.features
+        ?.map((feature) => {
+          const coordinates = feature.properties?.polylineEncodedMultiPolygon
+            ?.map((polygon) =>
+              polygon // the flip is because GeoJson is defined with [lon, lat], while mapbox uses [lat, lon])
+                .map((ring) => flippedTuples(polyline.decode(ring, 6)))
+                .filter(isDefined),
+            )
+            .filter(isDefined);
 
-    if (!feature.geometry) {
-      feature.geometry = {
-        type: 'MultiPolygon',
-        coordinates: [],
-      };
-    }
-
-    // init empty array
-    feature.geometry.coordinates =
-      feature.properties.polylineEncodedMultiPolygon.map(
-        (polygon) => new Array(polygon.length),
-      );
-
-    // fill in decoded coordinates
-    feature.properties.polylineEncodedMultiPolygon.forEach((polygon, i) => {
-      polygon.forEach((ring, j) => {
-        if (!feature?.geometry?.coordinates) return; // should never happen
-        // flip because GeoJson is defined with [lon, lat], while mapbox uses [lat, lon]
-        feature.geometry.coordinates[i][j] = flippedTuples(
-          polyline.decode(ring, 6),
-        );
-        // todo: consider "del polygon[j]" here
-      });
-    });
-  });
+          const geometry = {
+            ...feature.geometry,
+            coordinates,
+          };
+          return {...feature, geometry};
+        })
+        .filter(isDefined);
+      const geojson = {...geofencingZone.geojson, features};
+      return {...geofencingZone, geojson};
+    })
+    .filter(isDefined);
 }
 
 export function addGeofencingZoneCategoryProps(
@@ -70,7 +75,7 @@ export function addGeofencingZoneCategoryProps(
   geofencingZoneCategoriesProps: GeofencingZoneCategoriesProps,
   vehicleTypeId?: string,
 ) {
-  if (!vehicleTypeId) return;
+  if (!vehicleTypeId) return geofencingZones;
   forAllFeaturesInAllGeofencingZones(
     geofencingZones,
     (feature, geofencingZonesIndex) => {
@@ -129,6 +134,7 @@ export function addGeofencingZoneCategoryProps(
       };
     },
   );
+  return geofencingZones;
 }
 
 function forAllFeaturesInAllGeofencingZones(
@@ -147,3 +153,18 @@ function forAllFeaturesInAllGeofencingZones(
     }
   }
 }
+
+// function mapAllFeaturesInAllGeofencingZones(
+//   geofencingZones: PreProcessedGeofencingZones[],
+//   iteratorFunc: (
+//     feature: Feature,
+//     geofencingZoneIndex: number,
+//     featureIndex: number,
+//   ) => void,
+// ): PreProcessedGeofencingZones {
+//   return geofencingZones.map((geofencingZone, i) =>
+//     (geofencingZone?.geojson?.features || []).map((feature, j) => {
+//       return feature ? iteratorFunc(feature, i, j) : undefined;
+//     }),
+//   )
+// }

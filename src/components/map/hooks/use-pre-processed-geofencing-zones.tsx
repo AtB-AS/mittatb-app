@@ -27,7 +27,7 @@ import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicl
 // idea: check if both StationParking in NoParking + Allowed in another // probably no
 // idea: if more than one allowed zone assume bonus parking? // probably no
 // tier has some areas with more than one rule, handle this // done
-// system hours?
+// system hours? -> future work, not needed now
 
 export const usePreProcessedGeofencingZones = (
   vehicle?: VehicleExtendedFragment,
@@ -45,17 +45,20 @@ export const usePreProcessedGeofencingZones = (
   }, [res]);
 
   //filterOutFeaturesNotApplicableForCurrentVehicle(geofencingZones) // todo
-  addGeofencingZoneCategoryProps(
+  const geofencingZonesWithCategoryProps = addGeofencingZoneCategoryProps(
     geofencingZones,
     geofencingZoneCategoriesProps,
     vehicleTypeId,
   );
-  decodePolylineEncodedMultiPolygons(geofencingZones);
-  sortFeaturesByLayerIndexWeight(geofencingZones);
+  const geofencingZonesWithDecodedCoordinates =
+    decodePolylineEncodedMultiPolygons(geofencingZonesWithCategoryProps);
 
-  //forAllFeaturesInAllGeofencingZones(geofencingZones, (feature: Feature) => console.log('feature?.properties?.color', feature?.properties?.color))
+  const geofencingZonesWithSortedFeatures = sortFeaturesByLayerIndexWeight(
+    geofencingZonesWithDecodedCoordinates,
+  );
+
   return useMemo(
-    () => geofencingZones.filter((gz) => !!gz.geojson), // todo: move filter to a better place?
-    [geofencingZones],
+    () => geofencingZonesWithSortedFeatures.filter((gz) => !!gz.geojson), // todo: move filter to a better place?
+    [geofencingZonesWithSortedFeatures],
   );
 };
