@@ -26,6 +26,7 @@ import {GeofencingZones} from './components/mobility/GeofencingZones';
 
 import {useGeofencingZoneExplanation} from './hooks/use-geofencing-zone-explanation';
 import {GeofencingZoneExplanation} from './components/mobility/GeofencingZoneExplanation';
+import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -37,6 +38,8 @@ export const Map = (props: MapProps) => {
 
   const {geofencingZoneCategoryCodeToExplain, geofencingZoneOnPress} =
     useGeofencingZoneExplanation();
+  const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
+    useGeofencingZonesEnabled();
 
   const startingCoordinates = useMemo(
     () =>
@@ -132,7 +135,7 @@ export const Map = (props: MapProps) => {
       hasGeofencingZoneCategoryProps(selectedFeature)
     ) {
       geofencingZoneOnPress(
-        selectedFeature?.properties?.geofencingZoneCategoryProps, // hmm, fix type?
+        selectedFeature?.properties?.geofencingZoneCategoryProps,
       );
     }
   };
@@ -167,9 +170,11 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
 
-          {selectedFeature && (
-            <GeofencingZones selectedFeature={selectedFeature} />
-          )}
+          {geofencingZonesEnabled &&
+            geofencingZonesEnabledDebugOverrideReady &&
+            selectedFeature && (
+              <GeofencingZones selectedFeature={selectedFeature} />
+            )}
 
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
