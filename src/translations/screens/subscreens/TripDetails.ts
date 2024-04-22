@@ -112,7 +112,12 @@ const TripDetailsTexts = {
             `${modeName} linje ${lineName}`,
           ),
       },
-      live: _('Se live', 'See live', 'Sjå live'),
+      live: (transportMode: string) =>
+        _(
+          `Følg ${transportMode.toLowerCase()}`,
+          `Follow ${transportMode.toLowerCase()}`,
+          `Følg ${transportMode.toLowerCase()}`,
+        ),
       intermediateStops: {
         a11yLabel: (count: number, duration: string) =>
           _(
@@ -191,11 +196,7 @@ const TripDetailsTexts = {
     },
     summary: {
       showTripInMap: {
-        label: _(
-          'Vis reiserute i kart',
-          'Show trip in map',
-          'Vis reiserute i kart',
-        ),
+        label: _('Se reiserute', 'Show trip', 'Sjå reiserute'),
       },
       travelTime: {
         label: (time: string) =>

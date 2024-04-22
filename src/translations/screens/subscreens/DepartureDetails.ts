@@ -29,8 +29,13 @@ const DepartureDetailsTexts = {
     ),
   onTime: _(`I rute`, `On time`, `I rute`),
   notOnTime: _(`Etter rutetid`, `Behind scheduled time`, `Etter rutetid`),
-  live: _('Se live', 'See live', 'Sjå direkte'),
-  map: _('Se i kart', 'Show in map', 'Sjå i kart'),
+  live: (transportMode: string) =>
+    _(
+      `Følg ${transportMode.toLowerCase()}`,
+      `Follow ${transportMode.toLowerCase()}`,
+      `Følg ${transportMode.toLowerCase()}`,
+    ),
+  map: _('Se reiserute', 'Show trip', 'Sjå reiserute'),
   messages: {
     loading: _('Laster detaljer', 'Loading details', 'Lastar detaljar'),
     noAlighting: _('Ingen avstigning', 'No disembarking', 'Ingen avstiging'),

@@ -121,4 +121,32 @@ export default orgSpecificTranslations(OnboardingTexts, {
       ),
     },
   },
+  troms: {
+    welcome: {
+      title: _(
+        'Velkommen til Troms-appen',
+        'Welcome to the Troms app',
+        'Velkommen til Troms-appen',
+      ),
+      titleA11yLabel: _(
+        'Velkommen til Troms appen',
+        'Welcome to the Troms app',
+        'Velkommen til Troms-appen',
+      ),
+      description: {
+        part1: _(
+          'Her kan du planlegge, betale og gjennomføre reisen din i en og samme app. Appen oppdateres jevnlig med flere billettyper og innovative funksjoner!',
+          'Plan trips and buy tickets throughout Troms. The app will be continuously updated with more products and new functionality.',
+          'Her kan du planlegge, betale og gjennomføre reisa di i ein og same app. Appen vert oppdatert jevnleg med fleire billettypar og innovative funksjonar!',
+        ),
+      },
+    },
+    intercom: {
+      description: _(
+        'Vi ønsker dine innspill for å gjøre appen bedre. Trykk på snakkeboblen oppe til høyre for å gi tilbakemelding.',
+        'We appreciate your feedback to make the app better. Press the speech bubble in the upper right corner to give feedback.',
+        'Vi ønsker dine innspel for å gjere appen betre. Trykk på snakkebobla oppe til høgre for å gi tilbakemelding.',
+      ),
+    },
+  },
 });

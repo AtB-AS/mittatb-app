@@ -16,7 +16,7 @@ jobs:
     name: tsc
     strategy:
       matrix:
-        org: [atb, nfk, fram]
+        org: [atb, nfk, fram, troms]
     environment: ${{ matrix.org }}
     runs-on: ubuntu-latest
     steps:

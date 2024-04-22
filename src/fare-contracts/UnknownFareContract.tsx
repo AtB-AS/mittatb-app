@@ -4,12 +4,14 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {ValidityLine} from './ValidityLine';
 import {GenericSectionItem, Section} from '@atb/components/sections';
+import { StyleSheet } from '@atb/theme';
 
 export function UnknownFareContract({fc}: {fc: FareContract}) {
   const {t} = useTranslation();
+  const styles = useStyles();
 
   return (
-    <Section withBottomPadding>
+    <Section style={styles.section}>
       <GenericSectionItem>
         <ValidityLine status="unknown" />
         <ThemeText>
@@ -24,3 +26,9 @@ export function UnknownFareContract({fc}: {fc: FareContract}) {
     </Section>
   );
 }
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  section: {
+    marginBottom: theme.spacings.large,
+  },
+}));

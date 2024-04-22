@@ -53,7 +53,7 @@ type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_ticketing} = useRemoteConfig();
-  const {wipeToken} = useMobileTokenContextState();
+  const {clearTokenAtLogout} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {t, language} = useTranslation();
   const analytics = useAnalytics();
@@ -74,10 +74,12 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const termsInfo = configurableLinks?.termsInfo;
   const inspectionInfo = configurableLinks?.inspectionInfo;
   const refundInfo = configurableLinks?.refundInfo;
+  const a11yStatement = configurableLinks?.appA11yStatement;
   const ticketingInfoUrl = getTextForLanguage(ticketingInfo, language);
   const termsInfoUrl = getTextForLanguage(termsInfo, language);
   const inspectionInfoUrl = getTextForLanguage(inspectionInfo, language);
   const refundInfoUrl = getTextForLanguage(refundInfo, language);
+  const a11yStatementUrl = getTextForLanguage(a11yStatement, language);
 
   const {disable_travelcard} = useRemoteConfig();
 
@@ -221,7 +223,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     setIsLoading(true);
                     try {
                       // On logout we delete the user's token
-                      await wipeToken();
+                      await clearTokenAtLogout();
                     } catch (err: any) {
                       Bugsnag.notify(err);
                     }
@@ -434,6 +436,24 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     accessibilityHint: t(
                       ProfileTexts.sections.information.linkSectionItems.refund
                         .a11yLabel,
+                    ),
+                    accessibilityRole: 'link',
+                  }}
+                />
+              )}
+              {a11yStatementUrl && (
+                <LinkSectionItem
+                  icon={<ThemeIcon svg={ExternalLink} />}
+                  text={t(
+                    ProfileTexts.sections.information.linkSectionItems
+                      .accessibilityStatement.label,
+                  )}
+                  testID="a11yStatementButton"
+                  onPress={() => Linking.openURL(a11yStatementUrl)}
+                  accessibility={{
+                    accessibilityHint: t(
+                      ProfileTexts.sections.information.linkSectionItems
+                        .accessibilityStatement.a11yLabel,
                     ),
                     accessibilityRole: 'link',
                   }}

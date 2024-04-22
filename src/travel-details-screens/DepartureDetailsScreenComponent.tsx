@@ -28,7 +28,10 @@ import {
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen/TravelDetailsMapScreenComponent';
 import {animateNextChange} from '@atb/utils/animation';
 import {formatToVerboseFullDate, isWithinSameDate} from '@atb/utils/date';
-import {getQuayName} from '@atb/utils/transportation-names';
+import {
+  getQuayName,
+  getTranslatedModeName,
+} from '@atb/utils/transportation-names';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
@@ -111,6 +114,8 @@ export const DepartureDetailsScreenComponent = ({
     shouldShowLive ? [activeItem.serviceJourneyId] : undefined,
   );
 
+  const translatedModeName = getTranslatedModeName(mode);
+
   const vehiclePosition = vehiclePositions?.find(
     (s) => s.serviceJourney?.id === activeItem.serviceJourneyId,
   );
@@ -185,7 +190,7 @@ export const DepartureDetailsScreenComponent = ({
                     style={realtimeText ? styles.liveButton : undefined}
                     text={t(
                       vehiclePosition
-                        ? DepartureDetailsTexts.live
+                        ? DepartureDetailsTexts.live(t(translatedModeName))
                         : DepartureDetailsTexts.map,
                     )}
                     interactiveColor="interactive_1"

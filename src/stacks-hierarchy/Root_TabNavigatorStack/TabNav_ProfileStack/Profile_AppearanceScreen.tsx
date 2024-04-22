@@ -1,5 +1,5 @@
 import {Section, ToggleSectionItem} from '@atb/components/sections';
-import {useTheme} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {AppearanceSettingsTexts, useTranslation} from '@atb/translations';
 import React from 'react';
 import {Platform, View} from 'react-native';
@@ -16,6 +16,7 @@ export const Profile_AppearanceScreen = () => {
     updateAndroidFontOverride,
   } = useTheme();
   const {t} = useTranslation();
+  const styles = useStyles();
 
   return (
     <FullScreenView
@@ -31,7 +32,7 @@ export const Profile_AppearanceScreen = () => {
       )}
     >
       <View>
-        <Section withTopPadding withPadding>
+        <Section style={styles.section}>
           <ToggleSectionItem
             text={t(AppearanceSettingsTexts.actions.usePhoneTheme)}
             value={!overrideSystemAppearance}
@@ -49,7 +50,7 @@ export const Profile_AppearanceScreen = () => {
           )}
         </Section>
         {Platform.OS === 'android' && (
-          <Section withTopPadding withPadding>
+          <Section style={styles.section}>
             <ToggleSectionItem
               text={t(AppearanceSettingsTexts.actions.useSystemFont)}
               value={useAndroidSystemFont}
@@ -61,3 +62,11 @@ export const Profile_AppearanceScreen = () => {
     </FullScreenView>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  section: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
+    marginTop: theme.spacings.large,
+  },
+}));

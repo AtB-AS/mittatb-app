@@ -136,7 +136,7 @@ export const Profile_EditProfileScreen = ({
             </View>
           ) : (
             <>
-              <Section withPadding>
+              <Section style={styles.section}>
                 <TextInputSectionItem
                   editable={!isLoadingOrSubmittingProfile}
                   value={firstName}
@@ -150,7 +150,7 @@ export const Profile_EditProfileScreen = ({
                   autoCapitalize="words"
                 />
               </Section>
-              <Section withPadding>
+              <Section style={styles.section}>
                 <TextInputSectionItem
                   editable={!isLoadingOrSubmittingProfile}
                   value={surname}
@@ -177,26 +177,26 @@ export const Profile_EditProfileScreen = ({
                   </ThemeText>
                 </View>
               ) : (
-                  <Section withPadding withBottomPadding>
-                    <TextInputSectionItem
-                        editable={!isLoadingOrSubmittingProfile}
-                        value={email}
-                        onChangeText={(value) => {
-                          setEmail(value);
-                          setInvalidEmail(false);
-                        }}
-                        label={t(EditProfileTexts.personalDetails.email.label)}
-                        placeholder={t(
-                            EditProfileTexts.personalDetails.email.placeholder,
-                        )}
-                        keyboardType="email-address"
-                        autoComplete="email"
-                        showClear={!isLoadingOrSubmittingProfile}
-                        errorText={getEmailErrorText(invalidEmail, errorUpdate)}
-                        inlineLabel={false}
-                        autoCapitalize="none"
-                    />
-                  </Section>
+                <Section style={[styles.section, styles.sectionBottomPadding]}>
+                  <TextInputSectionItem
+                    editable={!isLoadingOrSubmittingProfile}
+                    value={email}
+                    onChangeText={(value) => {
+                      setEmail(value);
+                      setInvalidEmail(false);
+                    }}
+                    label={t(EditProfileTexts.personalDetails.email.label)}
+                    placeholder={t(
+                      EditProfileTexts.personalDetails.email.placeholder,
+                    )}
+                    keyboardType="email-address"
+                    autoComplete="email"
+                    showClear={!isLoadingOrSubmittingProfile}
+                    errorText={getEmailErrorText(invalidEmail, errorUpdate)}
+                    inlineLabel={false}
+                    autoCapitalize="none"
+                  />
+                </Section>
               )}
               <View style={styles.phone}>
                 <ThemeText>
@@ -308,6 +308,13 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   submitContent: {
     marginBottom: theme.spacings.medium,
+  },
+  section: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
+  },
+  sectionBottomPadding: {
+    marginBottom: theme.spacings.large,
   },
   profileContainer: {
     marginHorizontal: theme.spacings.xLarge,

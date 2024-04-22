@@ -12,6 +12,7 @@ import {
 import React from 'react';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {StyleSheet} from '@atb/theme';
 
 const identity = (s: string) => s;
 function toName(
@@ -34,6 +35,7 @@ export const Profile_SelectStartScreenScreen = () => {
     preferences: {startScreen},
   } = usePreferences();
   const {t} = useTranslation();
+  const styles = useStyles();
   const items = Array.from(preference_screenAlternatives);
 
   return (
@@ -50,8 +52,7 @@ export const Profile_SelectStartScreenScreen = () => {
       )}
     >
       <RadioGroupSection<Preference_ScreenAlternatives>
-        withPadding
-        withTopPadding
+        style={styles.section}
         items={items}
         keyExtractor={identity}
         itemToText={(alt) => toName(alt, t)}
@@ -61,3 +62,11 @@ export const Profile_SelectStartScreenScreen = () => {
     </FullScreenView>
   );
 };
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  section: {
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
+    marginTop: theme.spacings.large,
+  },
+}));

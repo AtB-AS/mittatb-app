@@ -1,6 +1,6 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
-import {StyleSheet, Theme} from '@atb/theme';
+import {StyleSheet} from '@atb/theme';
 import React, {useEffect, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -39,6 +39,7 @@ import {
 } from '@atb/components/sections';
 import {useDebugOverride} from '@atb/debug';
 import {useCarSharingInMapDebugOverride} from '@atb/mobility/use-car-sharing-enabled';
+import {useGeofencingZonesDebugOverride} from '@atb/mobility/use-geofencing-zones-enabled';
 import {useFromTravelSearchToTicketDebugOverride} from '@atb/travel-details-screens/use_from_travel_search_to_ticket_enabled';
 import {useNonTransitTripSearchDebugOverride} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
@@ -68,7 +69,7 @@ function setClipboard(content: string) {
 }
 
 export const Profile_DebugInfoScreen = () => {
-  const style = useProfileHomeStyle();
+  const styles = useStyles();
 
   const {
     onboardingSections,
@@ -108,6 +109,7 @@ export const Profile_DebugInfoScreen = () => {
   const vehiclesInMapDebugOverride = useVehiclesInMapDebugOverride();
   const cityBikesInMapDebugOverride = useCityBikesInMapDebugOverride();
   const carSharingInMapDebugOverride = useCarSharingInMapDebugOverride();
+  const geofencingZonesDebugOverride = useGeofencingZonesDebugOverride();
   const realtimeMapDebugOverride = useRealtimeMapDebugOverride();
   const ticketingAssistantOverride = useTicketingAssistantDebugOverride();
   const tipsAndInformationOverride = useTipsAndInformationDebugOverride();
@@ -139,7 +141,6 @@ export const Profile_DebugInfoScreen = () => {
   const {
     tokens,
     retry,
-    wipeToken,
     mobileTokenStatus,
     isInspectable,
     nativeToken,
@@ -149,6 +150,7 @@ export const Profile_DebugInfoScreen = () => {
       validateToken,
       removeRemoteToken,
       renewToken,
+      wipeToken,
     },
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();
@@ -182,14 +184,14 @@ export const Profile_DebugInfoScreen = () => {
   const {showTestIds, debugShowSeconds} = preferences;
 
   return (
-    <View style={style.container}>
+    <View style={styles.container}>
       <FullScreenHeader
         title="Debug info"
         leftButton={{type: 'back'}}
         rightButton={{type: 'chat'}}
       />
       <ScrollView testID="debugInfoScrollView">
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ButtonSectionItem
             label="Restart all onboarding sections"
             onPress={() => restartAllOnboardingSections()}
@@ -209,7 +211,7 @@ export const Profile_DebugInfoScreen = () => {
             })}
           />
         </Section>
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <LinkSectionItem
             text="Reset shareTravelHabits session counter"
             onPress={() => storage.set(shareTravelHabitsSessionCountKey, '0')}
@@ -299,7 +301,7 @@ export const Profile_DebugInfoScreen = () => {
             onPress={() => storage.remove(StorageModelKeysEnum.OneTimePopOver)}
           />
         </Section>
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <HeaderSectionItem
             text="Remote config override"
             subtitle="If undefined the value
@@ -351,6 +353,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable car sharing in map."
               override={carSharingInMapDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable geofencing zones"
+              override={geofencingZonesDebugOverride}
             />
           </GenericSectionItem>
           <GenericSectionItem>
@@ -439,7 +447,7 @@ export const Profile_DebugInfoScreen = () => {
           </GenericSectionItem>
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Firebase Auth user info"
             showIconText={true}
@@ -453,7 +461,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Firebase Auth user claims"
             showIconText={true}
@@ -471,7 +479,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Remote config"
             showIconText={true}
@@ -493,7 +501,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Notifications"
             showIconText={true}
@@ -503,17 +511,17 @@ export const Profile_DebugInfoScreen = () => {
                   Notification status: {pushNotificationPermissionStatus}
                 </ThemeText>
                 <Button
-                  style={style.button}
+                  style={styles.button}
                   onPress={requestPushNotificationPermissions}
                   text="Request permissions"
                 />
                 <Button
-                  style={style.button}
+                  style={styles.button}
                   onPress={checkPushNotificationPermissions}
                   text="Check permissions"
                 />
                 <Button
-                  style={style.button}
+                  style={styles.button}
                   onPress={() =>
                     registerNotifications(
                       pushNotificationPermissionStatus === 'granted',
@@ -527,7 +535,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Storage"
             showIconText={true}
@@ -548,7 +556,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Preferences"
             showIconText={true}
@@ -575,7 +583,7 @@ export const Profile_DebugInfoScreen = () => {
           />
         </Section>
 
-        <Section withPadding withTopPadding>
+        <Section style={styles.section}>
           <ExpandableSectionItem
             text="Mobile token state"
             showIconText={true}
@@ -600,27 +608,27 @@ export const Profile_DebugInfoScreen = () => {
                   serverNow,
                 ).toISOString()}`}</ThemeText>
                 <Button
-                  style={style.button}
+                  style={styles.button}
                   text="Reload token(s)"
                   onPress={retry}
                 />
                 {nativeToken && (
                   <Button
-                    style={style.button}
+                    style={styles.button}
                     text="Wipe token"
                     onPress={wipeToken}
                   />
                 )}
                 {nativeToken && (
                   <Button
-                    style={style.button}
+                    style={styles.button}
                     text="Validate token"
                     onPress={validateToken}
                   />
                 )}
                 {nativeToken && (
                   <Button
-                    style={style.button}
+                    style={styles.button}
                     text="Renew token"
                     onPress={renewToken}
                   />
@@ -629,7 +637,7 @@ export const Profile_DebugInfoScreen = () => {
                   text="Remote tokens"
                   showIconText={true}
                   expandContent={tokens?.map((token) => (
-                    <View key={token.id} style={style.remoteToken}>
+                    <View key={token.id} style={styles.remoteToken}>
                       {keys(token).map((k) => (
                         <ThemeText key={token.id + k}>
                           {k + ': ' + JSON.stringify(get(token, k))}
@@ -648,7 +656,7 @@ export const Profile_DebugInfoScreen = () => {
         </Section>
 
         {isBeaconsSupported && (
-          <Section withPadding withTopPadding>
+          <Section style={styles.section}>
             <ExpandableSectionItem
               text="Beacons"
               showIconText={true}
@@ -672,7 +680,7 @@ export const Profile_DebugInfoScreen = () => {
                       Alert.alert('Onboarding', `Access granted: ${granted}`);
                     }}
                     disabled={isConsentGranted}
-                    style={style.button}
+                    style={styles.button}
                     text="Onboard and give consent"
                   />
                   <Button
@@ -680,7 +688,7 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={async () => {
                       await revokeBeacons();
                     }}
-                    style={style.button}
+                    style={styles.button}
                     disabled={!isConsentGranted}
                     text="Revoke"
                   />
@@ -689,7 +697,7 @@ export const Profile_DebugInfoScreen = () => {
                     onPress={async () => {
                       await deleteCollectedData();
                     }}
-                    style={style.button}
+                    style={styles.button}
                     text="Delete Collected Data"
                   />
                   <Button
@@ -700,7 +708,7 @@ export const Profile_DebugInfoScreen = () => {
                       privacyDashboardUrl &&
                         Linking.openURL(privacyDashboardUrl);
                     }}
-                    style={style.button}
+                    style={styles.button}
                     disabled={!isConsentGranted}
                     text="Open Privacy Dashboard"
                   />
@@ -710,7 +718,7 @@ export const Profile_DebugInfoScreen = () => {
                       const privacyTermsUrl = await getPrivacyTermsUrl();
                       privacyTermsUrl && Linking.openURL(privacyTermsUrl);
                     }}
-                    style={style.button}
+                    style={styles.button}
                     disabled={!isConsentGranted}
                     text="Open Privacy Terms"
                   />
@@ -766,7 +774,7 @@ function MapValue({value}: {value: any}) {
 }
 
 function MapEntry({title, value}: {title: string; value: any}) {
-  const styles = useProfileHomeStyle();
+  const styles = useStyles();
   const isLongString =
     !!value && typeof value === 'string' && value.length > 300;
   const [isExpanded, setIsExpanded] = useState<boolean>(!isLongString);
@@ -810,13 +818,18 @@ function MapEntry({title, value}: {title: string; value: any}) {
   }
 }
 
-const useProfileHomeStyle = StyleSheet.createThemeHook((theme: Theme) => ({
+const useStyles = StyleSheet.createThemeHook((theme) => ({
   container: {
     backgroundColor: theme.static.background.background_1.background,
     flex: 1,
   },
   icons: {
     flexDirection: 'row',
+  },
+  section: {
+    marginTop: theme.spacings.large,
+    marginHorizontal: theme.spacings.medium,
+    marginBottom: theme.spacings.small,
   },
   buttons: {
     marginHorizontal: theme.spacings.medium,
