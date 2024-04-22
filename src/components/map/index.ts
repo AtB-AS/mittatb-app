@@ -17,6 +17,7 @@ export {
   toFeaturePoints,
 } from './utils';
 export {
+  filterOutFeaturesNotApplicableForCurrentVehicle,
   sortFeaturesByLayerIndexWeight,
   decodePolylineEncodedMultiPolygons,
   addGeofencingZoneCategoryProps,

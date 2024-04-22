@@ -7,6 +7,36 @@ import {
 import {isDefined} from '@atb/utils/presence';
 import sortBy from 'lodash.sortby';
 import polyline from '@mapbox/polyline';
+import {GeofencingZones} from '@atb/api/types/generated/mobility-types_v2';
+
+export function filterOutFeaturesNotApplicableForCurrentVehicle(
+  geofencingZones: GeofencingZones[],
+  vehicleTypeId?: string,
+): GeofencingZones[] {
+  if (!vehicleTypeId) {
+    return [];
+  }
+  return geofencingZones
+    ?.filter((gz) => !!gz.geojson) // only geofencingZones with geojson data are applicable
+    .map((geofencingZone) => {
+      const filteredFeatures = geofencingZone?.geojson?.features?.filter(
+        (feature) => {
+          const applicableRules = feature.properties?.rules?.filter((rule) =>
+            rule.vehicleTypeIds?.includes(vehicleTypeId),
+          );
+          return (applicableRules?.length || 0) > 0;
+        },
+      );
+
+      return {
+        ...geofencingZone,
+        geojson: {
+          ...geofencingZone.geojson,
+          features: filteredFeatures,
+        },
+      };
+    });
+}
 
 export function sortFeaturesByLayerIndexWeight(
   geofencingZones: PreProcessedGeofencingZones[],
@@ -140,12 +170,13 @@ export function addGeofencingZoneCategoryProps(
         };
       });
 
-      const preProcessedGeojson = {
-        ...geofencingZone.geojson,
-        features: preProcessedFeatures,
+      return {
+        ...geofencingZone,
+        geojson: {
+          ...geofencingZone.geojson,
+          features: preProcessedFeatures,
+        },
       };
-
-      return {...geofencingZone, geojson: preProcessedGeojson};
     },
   );
 

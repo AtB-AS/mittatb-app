@@ -1,9 +1,9 @@
 import {
-  PreProcessedGeofencingZones,
   addGeofencingZoneCategoryProps,
   decodePolylineEncodedMultiPolygons,
   sortFeaturesByLayerIndexWeight,
   useGeofencingZoneCategoriesProps,
+  filterOutFeaturesNotApplicableForCurrentVehicle,
 } from '@atb/components/map';
 
 import voitrondheim from '../voiTrondheimEncoded.json';
@@ -16,18 +16,7 @@ const geofencingZonesData = {
 
 import {useMemo} from 'react';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
-
-// TODO
-// filter by vehicle type id, see rules // half way done
-// if many rules for the same vehicle, choose the first one // done
-// question: immutability vs performance vs readability? ANSWER: TODO - use immutability
-// fix types
-// case: several zones at once - gløs -> slow zone + no parking + station parking = allowed?
-// order decides atm
-// idea: check if both StationParking in NoParking + Allowed in another // probably no
-// idea: if more than one allowed zone assume bonus parking? // probably no
-// tier has some areas with more than one rule, handle this // done
-// system hours? -> future work, not needed now
+import {GeofencingZones} from '@atb/api/types/generated/mobility-types_v2';
 
 export const usePreProcessedGeofencingZones = (
   vehicle?: VehicleExtendedFragment,
@@ -40,13 +29,16 @@ export const usePreProcessedGeofencingZones = (
   const res = geofencingZonesData[systemId]; // TODO: get geofencingZones from bff
 
   const geofencingZones = useMemo(() => {
-    return (res?.['data']?.['geofencingZones'] ||
-      []) as PreProcessedGeofencingZones[];
+    return (res?.['data']?.['geofencingZones'] || []) as GeofencingZones[];
   }, [res]);
 
-  //filterOutFeaturesNotApplicableForCurrentVehicle(geofencingZones) // todo
+  const applicableGeofencingZones =
+    filterOutFeaturesNotApplicableForCurrentVehicle(
+      geofencingZones,
+      vehicleTypeId,
+    );
   const geofencingZonesWithCategoryProps = addGeofencingZoneCategoryProps(
-    geofencingZones,
+    applicableGeofencingZones,
     geofencingZoneCategoriesProps,
     vehicleTypeId,
   );
@@ -58,7 +50,7 @@ export const usePreProcessedGeofencingZones = (
   );
 
   return useMemo(
-    () => geofencingZonesWithSortedFeatures.filter((gz) => !!gz.geojson), // todo: move filter to a better place?
+    () => geofencingZonesWithSortedFeatures,
     [geofencingZonesWithSortedFeatures],
   );
 };
