@@ -141,7 +141,6 @@ export const Profile_DebugInfoScreen = () => {
   const {
     tokens,
     retry,
-    wipeToken,
     mobileTokenStatus,
     isInspectable,
     nativeToken,
@@ -151,6 +150,7 @@ export const Profile_DebugInfoScreen = () => {
       validateToken,
       removeRemoteToken,
       renewToken,
+      wipeToken,
     },
   } = useMobileTokenContextState();
   const {serverNow} = useTimeContextState();

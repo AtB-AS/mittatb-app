@@ -53,7 +53,7 @@ type ProfileProps = ProfileScreenProps<'Profile_RootScreen'>;
 
 export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_ticketing} = useRemoteConfig();
-  const {wipeToken} = useMobileTokenContextState();
+  const {clearTokenAtLogout} = useMobileTokenContextState();
   const style = useProfileHomeStyle();
   const {t, language} = useTranslation();
   const analytics = useAnalytics();
@@ -223,7 +223,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                     setIsLoading(true);
                     try {
                       // On logout we delete the user's token
-                      await wipeToken();
+                      await clearTokenAtLogout();
                     } catch (err: any) {
                       Bugsnag.notify(err);
                     }
