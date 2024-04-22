@@ -60,8 +60,10 @@ const GlobalMessage = ({
         .filter((gm) => isWithinTimeRange(gm, now))
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
-          const onPressAction = globalMessage.link
-            ? {text: globalMessage.link, url: globalMessage.link}
+          const link = getTextForLanguage(globalMessage.link, language);
+          const linkText = getTextForLanguage(globalMessage.linkText, language);
+          const onPressAction = link
+            ? {text: linkText ? linkText : link, url: link}
             : undefined;
           if (!message) return null;
 

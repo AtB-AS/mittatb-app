@@ -23,7 +23,8 @@ export type GlobalMessageRaw = {
   active: boolean;
   title?: LanguageAndTextType[];
   body: LanguageAndTextType[];
-  link?: string;
+  link?: LanguageAndTextType[];
+  linkText?: LanguageAndTextType[];
   type: Statuses;
   subtle?: boolean;
   context: GlobalMessageContextEnum[];
