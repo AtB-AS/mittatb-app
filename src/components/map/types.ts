@@ -10,10 +10,16 @@ import {AnyMode} from '@atb/components/icon-box';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
+
+// prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
 import {
-  FormFactor,
-  GeofencingZones,
+  FormFactor as MobilityAPI_FormFactor,
+  GeofencingZoneProperties as MobilityAPI_GeofencingZoneProperties,
+  GeofencingZones as MobilityAPI_GeofencingZones,
+  Feature as MobilityAPI_Feature,
+  FeatureCollection as MobilityAPI_FeatureCollection,
 } from '@atb/api/types/generated/mobility-types_v2';
+
 import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
 
@@ -162,7 +168,10 @@ const FormFactorFilter = z.object({
 });
 export type FormFactorFilterType = z.infer<typeof FormFactorFilter>;
 
-const MobilityMapFilter = z.record(z.nativeEnum(FormFactor), FormFactorFilter);
+const MobilityMapFilter = z.record(
+  z.nativeEnum(MobilityAPI_FormFactor),
+  FormFactorFilter,
+);
 export type MobilityMapFilterType = z.infer<typeof MobilityMapFilter>;
 
 export const MapFilter = z.object({
@@ -182,8 +191,24 @@ export type ParkingType = {
 
 export type PolylineEncodedMultiPolygon = String[][];
 
-export interface PreProcessedGeofencingZones extends GeofencingZones {
-  renderKey: string;
+export interface PreProcessedGeofencingZoneProperties
+  extends MobilityAPI_GeofencingZoneProperties {
+  geofencingZoneCategoryProps?: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>;
+}
+
+export interface PreProcessedFeature extends MobilityAPI_Feature {
+  properties?: PreProcessedGeofencingZoneProperties;
+}
+
+export interface PreProcessedFeatureCollection
+  extends MobilityAPI_FeatureCollection {
+  features?: Array<PreProcessedFeature>;
+}
+
+export interface PreProcessedGeofencingZones
+  extends MobilityAPI_GeofencingZones {
+  renderKey?: string;
+  geojson?: PreProcessedFeatureCollection;
 }
 
 export enum GeofencingZoneCategoryCode {

@@ -1,5 +1,3 @@
-import {Feature} from '@atb/api/types/generated/mobility-types_v2';
-
 import {
   GeofencingZoneCategoriesProps,
   GeofencingZoneCategoryKey,
@@ -17,7 +15,7 @@ export function sortFeaturesByLayerIndexWeight(
     const sortedFeatures = sortBy(
       geofencingZone?.geojson?.features,
       (feature) =>
-        feature?.properties?.geofencingZoneCategoryProps?.layerIndexWeight, // todo: update types
+        feature?.properties?.geofencingZoneCategoryProps?.layerIndexWeight,
     );
 
     return {
@@ -76,95 +74,80 @@ export function addGeofencingZoneCategoryProps(
   vehicleTypeId?: string,
 ) {
   if (!vehicleTypeId) return geofencingZones;
-  forAllFeaturesInAllGeofencingZones(
-    geofencingZones,
-    (feature, geofencingZonesIndex) => {
-      if (geofencingZonesIndex === 0) {
-        geofencingZones[geofencingZonesIndex]['renderKey'] =
-          geofencingZonesIndex.toString(); // fix type
-      }
-      // the option to have multiple rules, is to make it allow different rules per vehicle type
-      const applicableRules = feature.properties?.rules?.filter((rule) =>
-        rule.vehicleTypeIds?.includes(vehicleTypeId),
-      );
-      // the first applicable rule for the given vehicly type is the decisive one
-      const rule = applicableRules?.[0];
 
-      let rideNotAllowed = false,
-        rideThroughNotAllowed = false,
-        isSlowArea = false;
-      //let isStationParking = false
+  const geofencingZonesWithCategoryProps = geofencingZones.map(
+    (geofencingZone, geofencingZonesIndex) => {
+      const preProcessedFeatures = (
+        geofencingZone?.geojson?.features || []
+      ).map((feature) => {
+        if (geofencingZonesIndex === 0) {
+          geofencingZones[geofencingZonesIndex]['renderKey'] =
+            geofencingZonesIndex.toString();
+        }
+        // the option to have multiple rules, is to make it allow different rules per vehicle type
+        const applicableRules = feature.properties?.rules?.filter((rule) =>
+          rule.vehicleTypeIds?.includes(vehicleTypeId),
+        );
+        // the first applicable rule for the given vehicly type is the decisive one
+        const rule = applicableRules?.[0];
 
-      if (rule) {
-        rideNotAllowed = !rule.rideAllowed;
-        rideThroughNotAllowed = !rule.rideThroughAllowed;
-        isSlowArea =
-          rule.maximumSpeedKph !== undefined &&
-          rule.maximumSpeedKph !== null &&
-          Number(rule.maximumSpeedKph) < 20;
-        //isStationParking = !!rule.stationParking
-      }
+        let rideNotAllowed = false,
+          rideThroughNotAllowed = false,
+          isSlowArea = false;
+        //let isStationParking = false
 
-      const {
-        Allowed,
-        Slow,
-        //StationParking,
-        NoParking,
-        NoEntry,
-      } = geofencingZoneCategoriesProps;
+        if (rule) {
+          rideNotAllowed = !rule.rideAllowed;
+          rideThroughNotAllowed = !rule.rideThroughAllowed;
+          isSlowArea =
+            rule.maximumSpeedKph !== undefined &&
+            rule.maximumSpeedKph !== null &&
+            Number(rule.maximumSpeedKph) < 20;
+          //isStationParking = !!rule.stationParking
+        }
 
-      let geofencingZoneCategoryProps: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey> =
-        Allowed;
+        const {
+          Allowed,
+          Slow,
+          //StationParking,
+          NoParking,
+          NoEntry,
+        } = geofencingZoneCategoriesProps;
 
-      if (rideThroughNotAllowed) {
-        geofencingZoneCategoryProps = NoEntry;
-      } else if (rideNotAllowed) {
-        geofencingZoneCategoryProps = NoParking;
-      } else if (isSlowArea) {
-        geofencingZoneCategoryProps = Slow;
-      }
+        let geofencingZoneCategoryProps: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey> =
+          Allowed;
 
-      // if (isStationParking) {
-      //   geofencingZoneCategoryProps = StationParking;
-      // }
+        if (rideThroughNotAllowed) {
+          geofencingZoneCategoryProps = NoEntry;
+        } else if (rideNotAllowed) {
+          geofencingZoneCategoryProps = NoParking;
+        } else if (isSlowArea) {
+          geofencingZoneCategoryProps = Slow;
+        }
 
-      feature.properties = {
-        ...feature.properties,
-        ...{geofencingZoneCategoryProps},
+        // if (isStationParking) {
+        //   geofencingZoneCategoryProps = StationParking;
+        // }
+
+        const preProcessedProperties = {
+          ...feature.properties,
+          ...{geofencingZoneCategoryProps},
+        };
+
+        return {
+          ...feature,
+          properties: preProcessedProperties,
+        };
+      });
+
+      const preProcessedGeojson = {
+        ...geofencingZone.geojson,
+        features: preProcessedFeatures,
       };
+
+      return {...geofencingZone, geojson: preProcessedGeojson};
     },
   );
-  return geofencingZones;
-}
 
-function forAllFeaturesInAllGeofencingZones(
-  geofencingZones: PreProcessedGeofencingZones[],
-  iteratorFunc: (
-    feature: Feature,
-    geofencingZoneIndex: number,
-    featureIndex: number,
-  ) => void,
-) {
-  for (const [i, geofencingZone] of geofencingZones.entries()) {
-    for (const [j, feature] of (
-      geofencingZone?.geojson?.features || []
-    ).entries()) {
-      !!feature && iteratorFunc(feature, i, j);
-    }
-  }
+  return geofencingZonesWithCategoryProps;
 }
-
-// function mapAllFeaturesInAllGeofencingZones(
-//   geofencingZones: PreProcessedGeofencingZones[],
-//   iteratorFunc: (
-//     feature: Feature,
-//     geofencingZoneIndex: number,
-//     featureIndex: number,
-//   ) => void,
-// ): PreProcessedGeofencingZones {
-//   return geofencingZones.map((geofencingZone, i) =>
-//     (geofencingZone?.geojson?.features || []).map((feature, j) => {
-//       return feature ? iteratorFunc(feature, i, j) : undefined;
-//     }),
-//   )
-// }
