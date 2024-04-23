@@ -20,7 +20,10 @@ import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
 import {TravelDetailsMapScreenParams} from '@atb/travel-details-map-screen';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
 import {useCurrentTripPatternWithUpdates} from '@atb/travel-details-screens/use-current-trip-pattern-with-updates';
-import {canSellCollabTicket} from '@atb/travel-details-screens/utils';
+import {
+  canSellCollabTicket,
+  ticketCoversEntireTrip,
+} from '@atb/travel-details-screens/utils';
 import {formatToClock, secondsBetween} from '@atb/utils/date';
 import analytics from '@react-native-firebase/analytics';
 import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
@@ -166,6 +169,8 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
 
   const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
+  const ticketCoverEntirePeriod = ticketCoversEntireTrip(tripPattern.legs);
+
   const canSellCollab = canSellCollabTicket(tripPattern);
 
   if (
@@ -174,7 +179,8 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
       fromTariffZoneWeSellSingleTicketsFor &&
       toTariffZoneWeSellTicketFor
     ) ||
-    hasTooLongWaitTime
+    hasTooLongWaitTime ||
+    ticketCoverEntirePeriod
   )
     return;
 

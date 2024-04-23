@@ -439,3 +439,70 @@ export const getShouldShowLiveVehicle = (
     ? minutesBetween(aimedStartTime, new Date()) > -10
     : false;
 };
+
+export const getUniqueTariffZones = (
+  tariffZones: TariffZone[],
+  uniqueZones: string[],
+) => {
+  tariffZones.forEach((t) => {
+    if (t.name && !uniqueZones.includes(t.name)) {
+      uniqueZones.push(t.name);
+    }
+  });
+  return uniqueZones;
+};
+
+export const getNumberOfZonesThroughoutTrip = (legs: Leg[]) => {
+  let uniqueZonesFromPlace: string[] = [];
+  let uniqueZonesToPlace: string[] = [];
+
+  legs.forEach((l) => {
+    const fromPlaceTariffZones = l.fromPlace?.quay?.tariffZones;
+    const toPlaceTariffZones = l.toPlace?.quay?.tariffZones;
+
+    if (fromPlaceTariffZones) {
+      uniqueZonesFromPlace = [
+        ...getUniqueTariffZones(fromPlaceTariffZones, uniqueZonesFromPlace),
+      ];
+    }
+
+    if (toPlaceTariffZones) {
+      uniqueZonesToPlace = [
+        ...getUniqueTariffZones(toPlaceTariffZones, uniqueZonesToPlace),
+      ];
+    }
+  });
+
+  // Check for differences betwene fromPlance and toPlace
+  uniqueZonesFromPlace.forEach((zone: string) => {
+    if (!uniqueZonesToPlace.includes(zone)) {
+      uniqueZonesToPlace.push(zone);
+    }
+  });
+
+  // If quay?.tariffZones is not defined return 1 zone.
+  return uniqueZonesToPlace.length !== 0 ? uniqueZonesToPlace.length : 1;
+};
+
+export const ticketCoversEntireTrip = (legs: Leg[]): boolean => {
+  // Can ticketValidityPeriod be found dynamically?
+  const invalidTicketEndTime = parseDateIfString(legs[0].expectedStartTime);
+
+  // Ticket for initial zone lasts 90 minutes. Add 60 minutes per additional zone.
+  const ticketValidityPeriod =
+    90 + 60 * (1 - getNumberOfZonesThroughoutTrip(legs));
+  invalidTicketEndTime.setMinutes(ticketValidityPeriod);
+
+  const lastInterchangeTime = parseDateIfString(
+    legs
+      .slice()
+      .reverse()
+      .find(
+        (leg) =>
+          leg.mode !== 'foot' &&
+          leg.mode !== 'scooter' &&
+          leg.mode !== 'bicycle',
+      )?.expectedStartTime,
+  );
+  return lastInterchangeTime < invalidTicketEndTime;
+};
