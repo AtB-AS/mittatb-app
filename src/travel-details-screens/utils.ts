@@ -490,7 +490,7 @@ export const ticketCoversEntireTrip = (legs: Leg[]): boolean => {
 
   // Ticket for initial zone lasts 90 minutes. Add 60 minutes per additional zone.
   const ticketValidityPeriod =
-    90 + 60 * (1 - getNumberOfZonesThroughoutTrip(legs));
+    90 + 60 * Math.abs(1 - getNumberOfZonesThroughoutTrip(legs));
   invalidTicketEndTime.setMinutes(ticketValidityPeriod);
 
   const lastInterchangeTime = parseDateIfString(
@@ -504,5 +504,6 @@ export const ticketCoversEntireTrip = (legs: Leg[]): boolean => {
           leg.mode !== 'bicycle',
       )?.expectedStartTime,
   );
+
   return lastInterchangeTime < invalidTicketEndTime;
 };

@@ -169,7 +169,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
 
   const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
-  const ticketCoverEntirePeriod = ticketCoversEntireTrip(tripPattern.legs);
+  const ticketCoversEntirePeriod = ticketCoversEntireTrip(tripPattern.legs);
 
   const canSellCollab = canSellCollabTicket(tripPattern);
 
@@ -180,7 +180,7 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
       toTariffZoneWeSellTicketFor
     ) ||
     hasTooLongWaitTime ||
-    ticketCoverEntirePeriod
+    !ticketCoversEntirePeriod
   )
     return;
 
