@@ -3,12 +3,11 @@
 # This script will register a specific Android application version with Entur's
 # MobileApplicationRegistryService API.
 # a base64 encoded SHA256 fingerprint as bytes of the signing certificate for the APK must be provided as an environment variable,
-# in addition to client ID and client secret for Entur ABT OAuth login.
+# in addition to a Entur ABT OAuth client configuration JSON object.
 
 # Check for secrets from env vars
 if [[
-  -z ${ENTUR_CLIENT_ID}
-  || -z ${ENTUR_CLIENT_SECRET}
+  -z ${ENTUR_PUBLISH_CLIENT}
   || -z ${APP_ENVIRONMENT}
   || -z ${AUTHORITY}
   || -z ${ANDROID_APPLICATION_ID}
@@ -19,8 +18,7 @@ if [[
 ]]; then
   echo "Argument error!"
   echo "Expected environment variables:
-  - ENTUR_CLIENT_ID
-  - ENTUR_CLIENT_SECRET
+  - ENTUR_PUBLISH_CLIENT
   - APP_ENVIRONMENT
   - AUTHORITY
   - ANDROID_APPLICATION_ID
@@ -35,7 +33,7 @@ fi
 # Get values based on environment
 case ${APP_ENVIRONMENT} in
   staging)
-    token_url="https://partner-abt.staging.entur.org/oauth/token"
+    token_url="https://partner.staging.entur.org/oauth/token"
     abt_url="https://core-abt-abt.staging.entur.io"
     ;;
   store)
@@ -48,6 +46,10 @@ case ${APP_ENVIRONMENT} in
     ;;
 esac
 
+ENTUR_CLIENT_ID=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.clientId')
+ENTUR_CLIENT_SECRET=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.clientSecret')
+AUDIENCE=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.endpointParams.audience[0]')
+
 echo "Fetching access token"
 # App login for register call
 login=$(curl --silent \
@@ -57,7 +59,7 @@ login=$(curl --silent \
   --data grant_type="client_credentials" \
   --data client_id="$ENTUR_CLIENT_ID" \
   --data client_secret="$ENTUR_CLIENT_SECRET" \
-  --data audience="https://v2.api.entur.no")
+  --data audience="$AUDIENCE")
 
 login_status=$?
 if [ $login_status -ne 0 ]; then
