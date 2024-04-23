@@ -13,6 +13,7 @@ import {isWithinTimeRange} from '@atb/utils/is-within-time-range';
 import {RuleVariables} from '../rule-engine/rules';
 import {StaticColor, TextColor} from '@atb/theme/colors';
 import {MessageInfoText} from '@atb/components/message-info-text';
+import {useAuthState} from '@atb/auth';
 
 type Props = {
   globalMessageContext?: GlobalMessageContextEnum;
@@ -31,6 +32,7 @@ const GlobalMessage = ({
 }: Props) => {
   const {language} = useTranslation();
   const now = useNow(2500);
+  const {authenticationType} = useAuthState();
   const {
     findGlobalMessages,
     dismissedGlobalMessages,
@@ -39,10 +41,14 @@ const GlobalMessage = ({
 
   if (!globalMessageContext) return null;
 
-  const globalMessages = findGlobalMessages(
-    globalMessageContext,
-    ruleVariables,
-  );
+  const globalRuleVariables = {
+    authenticationType,
+  };
+
+  const globalMessages = findGlobalMessages(globalMessageContext, {
+    ...ruleVariables,
+    ...globalRuleVariables,
+  });
 
   const dismissGlobalMessage = (globalMessage: GlobalMessageType) => {
     globalMessage.isDismissable && addDismissedGlobalMessages(globalMessage);
