@@ -16,6 +16,8 @@ export enum GlobalMessageContextEnum {
   appDepartureDetails = 'app-departure-details',
   appTripDetails = 'app-trip-details',
   appServiceDisruptions = 'app-service-disruptions',
+  appLogin = 'app-login',
+  appLoginPhone = 'app-login-phone',
 }
 
 export type GlobalMessageRaw = {

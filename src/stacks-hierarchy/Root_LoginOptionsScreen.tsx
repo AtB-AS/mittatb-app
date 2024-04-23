@@ -31,6 +31,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {APP_ORG} from '@env';
 import {useOnboardingState} from '@atb/onboarding';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -158,6 +159,7 @@ export const Root_LoginOptionsScreen = ({
         }
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
+        globalMessageContext={GlobalMessageContextEnum.appLogin}
       />
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View accessible={true} accessibilityRole="header">
