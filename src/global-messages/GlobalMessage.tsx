@@ -41,7 +41,7 @@ const GlobalMessage = ({
 
   if (!globalMessageContext) return null;
 
-  const globalRuleVariables = {
+  const globalRuleVariables: RuleVariables = {
     authenticationType,
   };
 
