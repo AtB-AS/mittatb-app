@@ -3,7 +3,7 @@ import {ticketCoversEntireTrip} from '../utils';
 
 describe('ticketCoversEntireTrip', () => {
   const s1 = true;
-  it(`should be ${s1} if ticket is valid before the last buss interchange.`, () => {
+  it(`should be ${s1} if ticket is valid before the last bus interchange.`, () => {
     const legs = [
       {
         mode: 'bus',
@@ -21,7 +21,7 @@ describe('ticketCoversEntireTrip', () => {
   });
 
   const s2 = false;
-  it(`should be ${s2} if ticket is not valid before the last buss interchange.`, () => {
+  it(`should be ${s2} if ticket is not valid before the last bus interchange.`, () => {
     const legs = [
       {
         mode: 'bus',
@@ -39,7 +39,7 @@ describe('ticketCoversEntireTrip', () => {
   });
 
   const s3 = true;
-  it(`should be ${s2} if ticket is valid before the last buss interchange and the trip continious with more legs after the last bus interchange.`, () => {
+  it(`should be ${s2} if ticket is valid before the last bus interchange and the trip continious with more legs after the last bus interchange.`, () => {
     const legs = [
       {
         mode: 'bus',
