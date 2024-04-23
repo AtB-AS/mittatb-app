@@ -14130,10 +14130,10 @@ react-native-intercom@21.1.1:
   resolved "https://registry.npmjs.org/react-native-intercom/-/react-native-intercom-21.1.1.tgz"
   integrity sha512-Cj7GoPIBeTKydLfA2123NZ6x49xueNmlX9LsAbYvv2CmEEyXDEI0rGuweqzumnJUp9tntrFr4piOZkrhhg6CYA==
 
-react-native-kettle-module@^1.1.7:
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.1.7.tgz#6ab04d887ae539eebdaba6b4b10e3c659c30c7dd"
-  integrity sha512-+jGleXG9p50u3xtg8Q1WwUsdZv8Xz6X4vSAV+W5jTn9+LT7FnTlYXexupe90uuUmg8CLLjSXnNc0RhocfZbRFA==
+react-native-kettle-module@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-kettle-module/-/react-native-kettle-module-1.2.0.tgz#52a4b0a9d70e2bdf9638242d38b03ee7c2cdd834"
+  integrity sha512-8rsjlqWecppYzRStFLvcCNWeOcBP0apZI2v1ZEccgMz47Kplp0WApI7FNrXK70TrEJUvniVEZ+3AA6iQ7gzI7g==
 
 react-native-linear-gradient@^2.6.2:
   version "2.6.2"
