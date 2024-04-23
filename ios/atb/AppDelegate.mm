@@ -1,6 +1,8 @@
 #import "AppDelegate.h"
 #import "AtBRootView.h"
 
+#import <atb-Swift.h>
+
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
@@ -62,6 +64,9 @@ static void InitializeFlipper(UIApplication *application) {
       config.releaseStage = bugsnagReleaseStage;
     [Bugsnag startWithConfiguration:config];
   }
+  
+  MobileAppCheckProviderFactory *providerFactory = [[MobileAppCheckProviderFactory alloc] init];
+  [FIRAppCheck setAppCheckProviderFactory:providerFactory];
 
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
