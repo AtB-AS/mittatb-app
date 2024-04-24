@@ -48,7 +48,6 @@ target 'app' do
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
-  pod 'FirebaseAppCheck', :modular_headers => true
 
   config = use_native_modules!
 

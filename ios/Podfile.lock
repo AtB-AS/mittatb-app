@@ -630,10 +630,6 @@ PODS:
     - abseil/meta/type_traits
   - AbtProtobufTokenIosStubs (2.724.0):
     - SwiftProtobuf (~> 1.22.0)
-  - AppCheckCore (10.19.0):
-    - GoogleUtilities/Environment (~> 7.13)
-    - GoogleUtilities/UserDefaults (~> 7.13)
-    - PromisesObjC (~> 2.3)
   - boost (1.83.0)
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
@@ -659,6 +655,9 @@ PODS:
     - Firebase/Core (= 10.15.0)
   - Firebase/Analytics (10.15.0):
     - Firebase/Core
+  - Firebase/AppCheck (10.15.0):
+    - Firebase/CoreOnly
+    - FirebaseAppCheck (~> 10.15.0)
   - Firebase/Auth (10.15.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.15.0)
@@ -696,9 +695,7 @@ PODS:
     - GoogleUtilities/Network (~> 7.11)
     - "GoogleUtilities/NSData+zlib (~> 7.11)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseAppCheck (10.24.0):
-    - AppCheckCore (~> 10.18)
-    - FirebaseAppCheckInterop (~> 10.17)
+  - FirebaseAppCheck (10.15.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - PromisesObjC (~> 2.1)
@@ -2058,6 +2055,10 @@ PODS:
   - RNFBApp (18.5.0):
     - Firebase/CoreOnly (= 10.15.0)
     - React-Core
+  - RNFBAppCheck (18.5.0):
+    - Firebase/AppCheck (= 10.15.0)
+    - React-Core
+    - RNFBApp
   - RNFBAuth (18.5.0):
     - Firebase/Auth (= 10.15.0)
     - React-Core
@@ -2127,7 +2128,6 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - Firebase
-  - FirebaseAppCheck
   - FirebaseCore
   - Flipper (= 0.201.0)
   - Flipper-Boost-iOSX (= 1.76.0.1.11)
@@ -2219,6 +2219,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBAppCheck (from `../node_modules/@react-native-firebase/app-check`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
@@ -2238,7 +2239,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
-    - AppCheckCore
     - BoringSSL-GRPC
     - CocoaAsyncSocket
     - Firebase
@@ -2430,6 +2430,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
+  RNFBAppCheck:
+    :path: "../node_modules/@react-native-firebase/app-check"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBFirestore:
@@ -2473,7 +2475,6 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
   AbtProtobufTokenIosStubs: 21a284b57088b5594b9a4c29ba576114fcfdbdee
-  AppCheckCore: 58dbd968d93b7c56650c28a1ac404d7a54307c0e
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   BugsnagReactNative: c681c456736c24344553f48013da8253eb00ee92
@@ -2485,7 +2486,7 @@ SPEC CHECKSUMS:
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
   FirebaseABTesting: 4431c2c56ac6e56f463b9cab05cc111078639f99
   FirebaseAnalytics: 47cef43728f81a839cf1306576bdd77ffa2eac7e
-  FirebaseAppCheck: afb42367002c12bbb5f58c4a954ecd2f0a171182
+  FirebaseAppCheck: 66eea1c882cddd1bce9d92a0a7efd596f7204782
   FirebaseAppCheckInterop: fecc08c89936c8acb1428d8088313aabedb348e4
   FirebaseAuth: a55ec5f7f8a5b1c2dd750235c1bb419bfb642445
   FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e
@@ -2587,6 +2588,7 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 4701f0bf2a06b34654745053db0ce4cb0c53ada7
   RNFBAnalytics: 30184f205f17c114a9e426806925331b9110f749
   RNFBApp: cc9384746945ac0eedd4759171a8abb4c4c5309d
+  RNFBAppCheck: 6e213103efa8b8cef25151dffafd85b95d6eca0b
   RNFBAuth: cf84aa347759beb4356bf79a3092c954ecbc449a
   RNFBFirestore: efd8996a791bb9edbd0a3b3acfd80d7a60d9a1d9
   RNFBMessaging: 3c573398dced30f6cbaf55a195080916ea23f819
@@ -2606,6 +2608,6 @@ SPEC CHECKSUMS:
   Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
   Yoga: c716aea2ee01df6258550c7505fa61b248145ced
 
-PODFILE CHECKSUM: 0f8d1b5ac064193f79ee7fbac596f5c6bd46f0ea
+PODFILE CHECKSUM: 5b6cee33a51f5952e8abb73c910173ac2c081339
 
 COCOAPODS: 1.14.3
