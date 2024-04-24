@@ -38,10 +38,11 @@ case $APP_ENVIRONMENT in
     ;;
 esac
 
-ENTUR_CLIENT_ID=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.clientId')
-ENTUR_CLIENT_SECRET=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.clientSecret')
-AUDIENCE=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.endpointParams.audience[0]')
-TOKEN_URL=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.tokenUrl')
+DECODED_ENTUR_PUBLISH_CLIENT=$(echo $ENTUR_PUBLISH_CLIENT | base64 --decode)
+ENTUR_CLIENT_ID=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.clientId')
+ENTUR_CLIENT_SECRET=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.clientSecret')
+AUDIENCE=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.endpointParams.audience[0]')
+TOKEN_URL=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.tokenUrl')
 
 # App login for register call
 login=$(curl --silent \
