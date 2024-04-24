@@ -186,9 +186,6 @@ dependencies {
 
     implementation 'com.kogenta.kettle:kettle-sdk:1.2.3'
 
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
-    implementation("com.google.firebase:firebase-appcheck-playintegrity")
-
     debugImplementation("com.facebook.react:flipper-integration")
 
     if (hermesEnabled.toBoolean()) {
