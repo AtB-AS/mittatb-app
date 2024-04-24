@@ -66,39 +66,39 @@ const GlobalMessage = ({
         .filter((gm) => isWithinTimeRange(gm, now))
         .map((globalMessage: GlobalMessageType) => {
           const message = getTextForLanguage(globalMessage.body, language);
+          const link = getTextForLanguage(globalMessage.link, language);
+          const linkText = getTextForLanguage(globalMessage.linkText, language);
+          const onPressAction = link
+            ? {text: linkText ? linkText : link, url: link}
+            : undefined;
           if (!message) return null;
-          return (
-            <>
-              {globalMessage.subtle ? (
-                <MessageInfoText
-                  key={globalMessage.id}
-                  type={globalMessage.type}
-                  message={message}
-                  textColor={textColor}
-                  isMarkdown={true}
-                  style={style}
-                  testID="globalMessage"
-                />
-              ) : (
-                <MessageInfoBox
-                  key={globalMessage.id}
-                  style={style}
-                  title={getTextForLanguage(
-                    globalMessage.title ?? [],
-                    language,
-                  )}
-                  message={message}
-                  type={globalMessage.type}
-                  isMarkdown={true}
-                  onDismiss={
-                    globalMessage.isDismissable && !includeDismissed
-                      ? () => dismissGlobalMessage(globalMessage)
-                      : undefined
-                  }
-                  testID="globalMessage"
-                />
-              )}
-            </>
+
+          return globalMessage.subtle ? (
+            <MessageInfoText
+              key={globalMessage.id}
+              type={globalMessage.type}
+              message={message}
+              textColor={textColor}
+              isMarkdown={true}
+              style={style}
+              testID="globalMessage"
+            />
+          ) : (
+            <MessageInfoBox
+              key={globalMessage.id}
+              style={style}
+              title={getTextForLanguage(globalMessage.title ?? [], language)}
+              message={message}
+              type={globalMessage.type}
+              isMarkdown={true}
+              onDismiss={
+                globalMessage.isDismissable && !includeDismissed
+                  ? () => dismissGlobalMessage(globalMessage)
+                  : undefined
+              }
+              onPressConfig={onPressAction}
+              testID="globalMessage"
+            />
           );
         })}
     </>
