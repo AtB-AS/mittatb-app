@@ -2,28 +2,25 @@ import {hasShortWaitTimeAndNotGuaranteedCorrespondence} from '../utils';
 import {Leg} from '@atb/api/types/trips';
 
 describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
-  const s1 = false;
-  it(`should be ${s1} if not short wait time`, () => {
+  it('should be false if not short wait time', () => {
     const legs = [
       {expectedEndTime: '2024-10-31T14:55:00Z'},
       {expectedStartTime: '2024-10-31T15:00:00Z'},
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s1);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  const s2 = true;
-  it(`should be ${s2} if short wait time and no guarenteed correspondance`, () => {
+  it('should be true if short wait time and no guarenteed correspondance', () => {
     const legs = [
       {expectedEndTime: '2024-10-31T14:59:00Z'},
       {expectedStartTime: '2024-10-31T15:00:00Z'},
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s2);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
   });
 
-  const s3 = false;
-  it(`should be ${s3} if short wait time, but correspondance is guarenteed`, () => {
+  it('should be false if short wait time, but correspondance is guarenteed', () => {
     const legs = [
       {
         expectedEndTime: '2024-10-31T14:59:00Z',
@@ -32,11 +29,10 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       {expectedStartTime: '2024-10-31T15:00:00Z'},
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s3);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  const s4 = false;
-  it(`should be ${s4} if not short wait time and correspondance is guarenteed`, () => {
+  it('should be false if not short wait time and correspondance is guarenteed', () => {
     const legs = [
       {
         expectedEndTime: '2024-10-31T14:55:00Z',
@@ -45,11 +41,10 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       {expectedStartTime: '2024-10-31T15:00:00Z'},
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s4);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  const s5 = true;
-  it(`should be ${s5} if wait time between two legs are short and correspondance is not guranteed.`, () => {
+  it('should be true if wait time between two legs are short and correspondance is not guranteed.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:59:00Z',
@@ -66,11 +61,10 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       },
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s5);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
   });
 
-  const s6 = false;
-  it(`should be ${s6} as even when short wait time at before the next bus departure.`, () => {
+  it('should be false as even when short wait time at before the next bus departure.', () => {
     const legs = [
       {
         mode: 'foot',
@@ -83,11 +77,10 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       },
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s6);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  const s7 = false;
-  it(`should be ${s7} even if there is short wait time between bus and walking.`, () => {
+  it('should be false even if there is short wait time between bus and walking.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -104,11 +97,10 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       },
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s7);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  const s8 = false;
-  it(`should be ${s8} even if there is short wait time between multiple bus and walking legs.`, () => {
+  it('should be false even if there is short wait time between multiple bus and walking legs.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -134,6 +126,6 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       },
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(s8);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 });
