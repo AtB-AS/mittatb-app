@@ -186,9 +186,13 @@ export const Root_LoginOptionsScreen = ({
         </ThemeText>
 
         <View style={styles.buttonContainer}>
+          <VippsLoginButton
+            onPress={authenticateUserByVipps}
+            disabled={isLoading}
+          />
           <Button
-            interactiveColor="interactive_0"
-            mode="primary"
+            mode="secondary"
+            backgroundColor={themeColor}
             onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
             text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
             accessibilityHint={t(
@@ -197,10 +201,6 @@ export const Root_LoginOptionsScreen = ({
             disabled={isLoading}
             rightIcon={{svg: ArrowRight}}
             testID="chooseLoginPhoneButton"
-          />
-          <VippsLoginButton
-            onPress={authenticateUserByVipps}
-            disabled={isLoading}
           />
           <Button
             mode="secondary"
