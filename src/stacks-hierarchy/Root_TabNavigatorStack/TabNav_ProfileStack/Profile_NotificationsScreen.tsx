@@ -25,6 +25,7 @@ import {ContentHeading} from '@atb/components/heading';
 import {useProfileQuery} from '@atb/queries';
 import {ProfileScreenProps} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_ProfileStack/navigation-types';
 import {useAuthState} from '@atb/auth';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 type NotificationsScreenProps =
@@ -46,6 +47,7 @@ export const Profile_NotificationsScreen = ({
   const {notificationConfig} = useFirestoreConfiguration();
   const profileQuery = useProfileQuery();
   const {authenticationType} = useAuthState();
+  const {disable_email_field_in_profile_page} = useRemoteConfig();
 
   useEffect(() => {
     if (isFocusedAndActive) {
@@ -110,63 +112,66 @@ export const Profile_NotificationsScreen = ({
                 .modesHeading,
             )}
           />
-          <Section>
-            <ToggleSectionItem
-              text={t(
-                ProfileTexts.sections.settings.linkSectionItems.notifications
-                  .emailToggle.text,
-              )}
-              subtext={
-                profileQuery.isLoading
-                  ? undefined
-                  : t(
-                      profileQuery.data?.email
-                        ? ProfileTexts.sections.settings.linkSectionItems.notifications.emailToggle.subText(
-                            profileQuery.data.email,
-                          )
-                        : ProfileTexts.sections.settings.linkSectionItems
-                            .notifications.emailToggle.noEmailPlaceholder,
-                    )
-              }
-              value={mailEnabled}
-              onValueChange={(enabled) => handleModeToggle('mail', enabled)}
-              testID="emailToggle"
-            />
-            {mailEnabled && authenticationType === 'anonymous' && (
-              <MessageSectionItem
-                messageType="info"
-                title={t(
+          {!disable_email_field_in_profile_page && (
+            <Section>
+              <ToggleSectionItem
+                text={t(
                   ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .loginRequired.title,
+                    .emailToggle.text,
                 )}
-                message={t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .loginRequired.message,
-                )}
+                subtext={
+                  profileQuery.isLoading
+                    ? undefined
+                    : t(
+                        profileQuery.data?.email
+                          ? ProfileTexts.sections.settings.linkSectionItems.notifications.emailToggle.subText(
+                              profileQuery.data.email,
+                            )
+                          : ProfileTexts.sections.settings.linkSectionItems
+                              .notifications.emailToggle.noEmailPlaceholder,
+                      )
+                }
+                value={mailEnabled}
+                onValueChange={(enabled) => handleModeToggle('mail', enabled)}
+                testID="emailToggle"
               />
-            )}
-            {hasNoEmail && mailEnabled && (
-              <MessageSectionItem
-                messageType="info"
-                title={t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .emailRequired.title,
-                )}
-                message={t(
-                  ProfileTexts.sections.settings.linkSectionItems.notifications
-                    .emailRequired.message,
-                )}
-                onPressConfig={{
-                  text: t(
+              {mailEnabled && authenticationType === 'anonymous' && (
+                <MessageSectionItem
+                  messageType="info"
+                  title={t(
                     ProfileTexts.sections.settings.linkSectionItems
-                      .notifications.emailRequired.action,
-                  ),
-                  action: () =>
-                    navigation.navigate('Profile_EditProfileScreen'),
-                }}
-              />
-            )}
-          </Section>
+                      .notifications.loginRequired.title,
+                  )}
+                  message={t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.loginRequired.message,
+                  )}
+                />
+              )}
+              {hasNoEmail && mailEnabled && (
+                <MessageSectionItem
+                  messageType="info"
+                  title={t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.emailRequired.title,
+                  )}
+                  message={t(
+                    ProfileTexts.sections.settings.linkSectionItems
+                      .notifications.emailRequired.message,
+                  )}
+                  onPressConfig={{
+                    text: t(
+                      ProfileTexts.sections.settings.linkSectionItems
+                        .notifications.emailRequired.action,
+                    ),
+                    action: () =>
+                      navigation.navigate('Profile_EditProfileScreen'),
+                  }}
+                />
+              )}
+            </Section>
+          )}
+
           <Section>
             <ToggleSectionItem
               text={t(
