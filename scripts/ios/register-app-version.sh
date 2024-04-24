@@ -27,11 +27,9 @@ fi
 # Get values based on environment
 case $APP_ENVIRONMENT in
   staging)
-    token_url="https://partner.staging.entur.org/oauth/token"
-    abt_url="https://core-abt-abt.staging.entur.io"
+    abt_url="https://core-abt.staging.entur.io"
     ;;
   store)
-    token_url="https://partner.entur.org/oauth/token"
     abt_url="https://core-abt.entur.io"
     ;;
   *)
@@ -43,11 +41,12 @@ esac
 ENTUR_CLIENT_ID=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.clientId')
 ENTUR_CLIENT_SECRET=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.clientSecret')
 AUDIENCE=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.endpointParams.audience[0]')
+TOKEN_URL=$(echo $ENTUR_PUBLISH_CLIENT | jq -r '.tokenUrl')
 
 # App login for register call
 login=$(curl --silent \
   --request POST \
-  --url "$token_url" \
+  --url "$TOKEN_URL" \
   --header 'content-type: application/x-www-form-urlencoded' \
   --data grant_type="client_credentials" \
   --data client_id="$ENTUR_CLIENT_ID" \
