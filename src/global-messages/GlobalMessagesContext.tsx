@@ -63,11 +63,6 @@ const GlobalMessagesContextProvider: React.FC = ({children}) => {
       firestore()
         .collection<GlobalMessageRaw>('globalMessagesV2')
         .where('active', '==', true)
-        .where(
-          'context',
-          'array-contains-any',
-          Object.values(GlobalMessageContextEnum),
-        )
         .onSnapshot(
           async (snapshot) => {
             const newGlobalMessages = mapToGlobalMessages(snapshot.docs);
