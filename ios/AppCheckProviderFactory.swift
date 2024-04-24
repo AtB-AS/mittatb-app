@@ -1,4 +1,5 @@
 import Firebase
+import FirebaseAppCheck
 
 @objc class MobileAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
   func createProvider(with app: FirebaseApp) -> AppCheckProvider? {
