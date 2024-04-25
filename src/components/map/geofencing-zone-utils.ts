@@ -4,16 +4,15 @@ import {
   GeofencingZoneCategoryProps,
   PreProcessedGeofencingZones,
 } from '@atb/components/map';
-import {isDefined} from '@atb/utils/presence';
 import sortBy from 'lodash.sortby';
-import polyline from '@mapbox/polyline';
+import {toGeoJSON} from '@mapbox/polyline';
 import {GeofencingZones} from '@atb/api/types/generated/mobility-types_v2';
 
 export function filterOutFeaturesNotApplicableForCurrentVehicle(
-  geofencingZones: GeofencingZones[],
+  geofencingZones?: GeofencingZones[],
   vehicleTypeId?: string,
 ): GeofencingZones[] {
-  if (!vehicleTypeId) {
+  if (!vehicleTypeId || !geofencingZones) {
     return [];
   }
   return geofencingZones
@@ -58,44 +57,32 @@ export function sortFeaturesByLayerIndexWeight(
   });
 }
 
-type Tuple<T> = [T, T];
-// generalized TypeScript-version of MapBox Polyline's "flipped": https://github.com/mapbox/polyline/blob/master/src/polyline.js#L118
-function flippedTuples(tuples: Array<Tuple<number>>): Array<Tuple<number>> {
-  const flipped: Array<Tuple<number>> = [];
-  for (let i = 0; i < tuples.length; i++) {
-    const tuple = tuples[i];
-    flipped.push([tuple[1], tuple[0]]);
-  }
-  return flipped;
-}
-
 // todo: add test for this function
+/**
+ * For lowering waiting times and to reduce network traffic, the coordinates data is fetched in an encoded format
+ * This function decodes the data from polylineEncodedMultiPolygon, and adds it to coordinates in the geojson object
+ *
+ * @param geofencingZones geojson with polylineEncodedMultiPolygon, but without coordinates
+ * @returns geofencingZones geojson with coordinates
+ */
 export function decodePolylineEncodedMultiPolygons(
   geofencingZones: PreProcessedGeofencingZones[],
 ): PreProcessedGeofencingZones[] {
-  return geofencingZones
-    ?.map((geofencingZone) => {
-      const features = geofencingZone?.geojson?.features
-        ?.map((feature) => {
-          const coordinates = feature.properties?.polylineEncodedMultiPolygon
-            ?.map((polygon) =>
-              polygon // the flip is because GeoJson is defined with [lon, lat], while mapbox uses [lat, lon])
-                .map((ring) => flippedTuples(polyline.decode(ring, 6)))
-                .filter(isDefined),
-            )
-            .filter(isDefined);
+  return geofencingZones?.map((geofencingZone) => {
+    const features = geofencingZone?.geojson?.features?.map((feature) => {
+      const coordinates = feature.properties?.polylineEncodedMultiPolygon?.map(
+        (polygon) => polygon.map((ring) => toGeoJSON(ring, 6).coordinates),
+      );
 
-          const geometry = {
-            ...feature.geometry,
-            coordinates,
-          };
-          return {...feature, geometry};
-        })
-        .filter(isDefined);
-      const geojson = {...geofencingZone.geojson, features};
-      return {...geofencingZone, geojson};
-    })
-    .filter(isDefined);
+      const geometry = {
+        ...feature.geometry,
+        coordinates,
+      };
+      return {...feature, geometry};
+    });
+    const geojson = {...geofencingZone.geojson, features};
+    return {...geofencingZone, geojson};
+  });
 }
 
 export function addGeofencingZoneCategoryProps(
