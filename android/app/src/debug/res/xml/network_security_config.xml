@@ -23,4 +23,12 @@
             <certificates src="system" />
         </trust-anchors>
     </debug-overrides>
+
+    <!-- NB REMOVE THIS! Temporary allowance for debugging in staging -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" overridePins="true"/>
+            <certificates src="user" overridePins="true"/>
+        </trust-anchors>
+    </base-config>
 </network-security-config>
