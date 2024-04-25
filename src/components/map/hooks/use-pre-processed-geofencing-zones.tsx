@@ -6,17 +6,9 @@ import {
   filterOutFeaturesNotApplicableForCurrentVehicle,
 } from '@atb/components/map';
 
-import voitrondheim from '../voiTrondheimEncoded.json';
-import tiertrondheim from '../tierTrondheimEncoded.json';
-
-const geofencingZonesData = {
-  voitrondheim,
-  tiertrondheim,
-};
-
 import {useMemo} from 'react';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
-import {GeofencingZones} from '@atb/api/types/generated/mobility-types_v2';
+import {useGeofencingZonesQuery} from '@atb/mobility/queries/use-geofencing-zones';
 
 export const usePreProcessedGeofencingZones = (
   vehicle?: VehicleExtendedFragment,
@@ -26,15 +18,13 @@ export const usePreProcessedGeofencingZones = (
 
   const geofencingZoneCategoriesProps = useGeofencingZoneCategoriesProps();
 
-  const res = geofencingZonesData[systemId]; // TODO: get geofencingZones from bff
-
-  const geofencingZones = useMemo(() => {
-    return (res?.['data']?.['geofencingZones'] || []) as GeofencingZones[];
-  }, [res]);
+  const {
+    data: geofencingZonesData, // load and error silently
+  } = useGeofencingZonesQuery(systemId ? [systemId] : []);
 
   const applicableGeofencingZones =
     filterOutFeaturesNotApplicableForCurrentVehicle(
-      geofencingZones,
+      geofencingZonesData,
       vehicleTypeId,
     );
   const geofencingZonesWithCategoryProps = addGeofencingZoneCategoryProps(
