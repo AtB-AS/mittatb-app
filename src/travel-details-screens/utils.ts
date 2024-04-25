@@ -168,7 +168,7 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
     prevInterchangeGuaranteed: boolean;
     prevMode: string | undefined;
   }>(
-    (state, leg) => {
+    (state, leg, idx) => {
       if (state.conclusion) return state;
 
       if (leg.mode == 'foot') {
@@ -178,6 +178,7 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
           prevMode: leg.mode,
         };
       }
+
       const waitTime = differenceInSeconds(
         parseDateIfString(leg.expectedStartTime),
         parseDateIfString(state.prevEndTime),
@@ -186,14 +187,15 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
       if (
         timeIsShort(waitTime) &&
         !state.prevInterchangeGuaranteed &&
-        state.prevMode !== 'foot'
-      )
+        !(legs[idx].interchangeTo?.guaranteed && nextLegIsFootLeg(legs, idx))
+      ) {
         return {
           ...state,
           conclusion: true,
           prevEndTime: leg.expectedEndTime,
           prevInterchangeGuaranteed: false,
         };
+      }
 
       return {
         ...state,
@@ -209,6 +211,11 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
       prevMode: undefined,
     },
   ).conclusion;
+}
+
+function nextLegIsFootLeg(legs: Leg[], idx: number) {
+  if (idx + 1 >= legs.length - 1) return false;
+  return legs[idx + 1].mode === 'foot';
 }
 
 function parseDateIfString(date: any): Date {
