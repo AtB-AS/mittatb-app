@@ -15,35 +15,35 @@ export type Incremental<T> =
   | {[P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: {input: string; output: string};
-  String: {input: string; output: string};
-  Boolean: {input: boolean; output: boolean};
-  Int: {input: number; output: number};
-  Float: {input: number; output: number};
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
 };
 
 export type BrandAssets = {
-  brandImageUrl: Scalars['String']['output'];
-  brandImageUrlDark?: Maybe<Scalars['String']['output']>;
-  brandLastModified: Scalars['String']['output'];
-  brandTermsUrl?: Maybe<Scalars['String']['output']>;
-  color?: Maybe<Scalars['String']['output']>;
+  brandImageUrl: Scalars['String'];
+  brandImageUrlDark?: Maybe<Scalars['String']>;
+  brandLastModified: Scalars['String'];
+  brandTermsUrl?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
 };
 
 export type EcoLabel = {
-  countryCode: Scalars['String']['output'];
-  ecoSticker: Scalars['String']['output'];
+  countryCode: Scalars['String'];
+  ecoSticker: Scalars['String'];
 };
 
 export type Feature = {
   geometry?: Maybe<MultiPolygon>;
   properties?: Maybe<GeofencingZoneProperties>;
-  type?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type FeatureCollection = {
   features?: Maybe<Array<Maybe<Feature>>>;
-  type?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export enum FormFactor {
@@ -58,43 +58,39 @@ export enum FormFactor {
 }
 
 export type GeofencingZoneProperties = {
-  end?: Maybe<Scalars['Int']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
+  end?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
   /** MultiPolygon where the lists of coordinates are encoded as polyline strings using precision of 6 decimals (see http://code.google.com/apis/maps/documentation/polylinealgorithm.html). Meant to be used instead of geometry.coordinates to minimize the response payload size. */
   polylineEncodedMultiPolygon?: Maybe<
-    Array<Maybe<Array<Maybe<Scalars['String']['output']>>>>
+    Array<Maybe<Array<Maybe<Scalars['String']>>>>
   >;
   rules?: Maybe<Array<Maybe<GeofencingZoneRule>>>;
-  start?: Maybe<Scalars['Int']['output']>;
+  start?: Maybe<Scalars['Int']>;
 };
 
 export type GeofencingZoneRule = {
-  maximumSpeedKph?: Maybe<Scalars['Int']['output']>;
-  rideAllowed: Scalars['Boolean']['output'];
-  rideThroughAllowed: Scalars['Boolean']['output'];
-  stationParking?: Maybe<Scalars['Boolean']['output']>;
-  vehicleTypeIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  maximumSpeedKph?: Maybe<Scalars['Int']>;
+  rideAllowed: Scalars['Boolean'];
+  rideThroughAllowed: Scalars['Boolean'];
+  stationParking?: Maybe<Scalars['Boolean']>;
+  vehicleTypeIds?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type GeofencingZones = {
   geojson?: Maybe<FeatureCollection>;
-  systemId?: Maybe<Scalars['ID']['output']>;
+  systemId?: Maybe<Scalars['ID']>;
 };
 
 export type MultiPolygon = {
   /** See properties.polylineEncodedMultiPolygon, and consider using that instead of coordinates */
   coordinates?: Maybe<
-    Array<
-      Maybe<
-        Array<Maybe<Array<Maybe<Array<Maybe<Scalars['Float']['output']>>>>>>
-      >
-    >
+    Array<Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Scalars['Float']>>>>>>>>
   >;
-  type?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type Operator = {
-  id: Scalars['ID']['output'];
+  id: Scalars['ID'];
   name: TranslatedString;
 };
 
@@ -107,23 +103,23 @@ export enum ParkingType {
 }
 
 export type PricingPlan = {
-  currency: Scalars['String']['output'];
+  currency: Scalars['String'];
   description: TranslatedString;
-  id: Scalars['ID']['output'];
-  isTaxable: Scalars['Boolean']['output'];
+  id: Scalars['ID'];
+  isTaxable: Scalars['Boolean'];
   name: TranslatedString;
   perKmPricing?: Maybe<Array<Maybe<PricingSegment>>>;
   perMinPricing?: Maybe<Array<Maybe<PricingSegment>>>;
-  price: Scalars['Float']['output'];
-  surgePricing?: Maybe<Scalars['Boolean']['output']>;
-  url?: Maybe<Scalars['String']['output']>;
+  price: Scalars['Float'];
+  surgePricing?: Maybe<Scalars['Boolean']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 export type PricingSegment = {
-  end?: Maybe<Scalars['Int']['output']>;
-  interval: Scalars['Int']['output'];
-  rate: Scalars['Float']['output'];
-  start: Scalars['Int']['output'];
+  end?: Maybe<Scalars['Int']>;
+  interval: Scalars['Int'];
+  rate: Scalars['Float'];
+  start: Scalars['Int'];
 };
 
 export enum PropulsionType {
@@ -138,7 +134,7 @@ export enum PropulsionType {
 }
 
 export type Query = {
-  codespaces?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  codespaces?: Maybe<Array<Maybe<Scalars['String']>>>;
   geofencingZones?: Maybe<Array<Maybe<GeofencingZones>>>;
   operators?: Maybe<Array<Maybe<Operator>>>;
   station?: Maybe<Station>;
@@ -150,57 +146,57 @@ export type Query = {
 };
 
 export type QueryGeofencingZonesArgs = {
-  systemIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  systemIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 export type QueryStationArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 export type QueryStationsArgs = {
   availableFormFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
   availablePropulsionTypes?: InputMaybe<Array<InputMaybe<PropulsionType>>>;
-  codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
-  ids?: InputMaybe<Array<Scalars['String']['input']>>;
-  lat?: InputMaybe<Scalars['Float']['input']>;
-  lon?: InputMaybe<Scalars['Float']['input']>;
-  operators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  range?: InputMaybe<Scalars['Int']['input']>;
-  systems?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  count?: InputMaybe<Scalars['Int']>;
+  ids?: InputMaybe<Array<Scalars['String']>>;
+  lat?: InputMaybe<Scalars['Float']>;
+  lon?: InputMaybe<Scalars['Float']>;
+  operators?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  range?: InputMaybe<Scalars['Int']>;
+  systems?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type QueryStationsByIdArgs = {
-  ids: Array<InputMaybe<Scalars['String']['input']>>;
+  ids: Array<InputMaybe<Scalars['String']>>;
 };
 
 export type QueryVehicleArgs = {
-  id: Scalars['String']['input'];
+  id: Scalars['String'];
 };
 
 export type QueryVehiclesArgs = {
-  codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
+  codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  count?: InputMaybe<Scalars['Int']>;
   formFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
-  ids?: InputMaybe<Array<Scalars['String']['input']>>;
-  includeDisabled?: InputMaybe<Scalars['Boolean']['input']>;
-  includeReserved?: InputMaybe<Scalars['Boolean']['input']>;
-  lat?: InputMaybe<Scalars['Float']['input']>;
-  lon?: InputMaybe<Scalars['Float']['input']>;
-  operators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  ids?: InputMaybe<Array<Scalars['String']>>;
+  includeDisabled?: InputMaybe<Scalars['Boolean']>;
+  includeReserved?: InputMaybe<Scalars['Boolean']>;
+  lat?: InputMaybe<Scalars['Float']>;
+  lon?: InputMaybe<Scalars['Float']>;
+  operators?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   propulsionTypes?: InputMaybe<Array<InputMaybe<PropulsionType>>>;
-  range?: InputMaybe<Scalars['Int']['input']>;
-  systems?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  range?: InputMaybe<Scalars['Int']>;
+  systems?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type Region = {
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export type RentalApp = {
-  discoveryUri?: Maybe<Scalars['String']['output']>;
-  storeUri?: Maybe<Scalars['String']['output']>;
+  discoveryUri?: Maybe<Scalars['String']>;
+  storeUri?: Maybe<Scalars['String']>;
 };
 
 export type RentalApps = {
@@ -220,9 +216,9 @@ export enum RentalMethod {
 }
 
 export type RentalUris = {
-  android?: Maybe<Scalars['String']['output']>;
-  ios?: Maybe<Scalars['String']['output']>;
-  web?: Maybe<Scalars['String']['output']>;
+  android?: Maybe<Scalars['String']>;
+  ios?: Maybe<Scalars['String']>;
+  web?: Maybe<Scalars['String']>;
 };
 
 export enum ReturnConstraint {
@@ -233,28 +229,28 @@ export enum ReturnConstraint {
 }
 
 export type Station = {
-  address?: Maybe<Scalars['String']['output']>;
-  capacity?: Maybe<Scalars['Int']['output']>;
-  contactPhone?: Maybe<Scalars['String']['output']>;
-  crossStreet?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  isChargingStation?: Maybe<Scalars['Boolean']['output']>;
-  isInstalled: Scalars['Boolean']['output'];
-  isRenting: Scalars['Boolean']['output'];
-  isReturning: Scalars['Boolean']['output'];
-  isValetStation?: Maybe<Scalars['Boolean']['output']>;
-  isVirtualStation?: Maybe<Scalars['Boolean']['output']>;
-  lastReported: Scalars['Int']['output'];
-  lat: Scalars['Float']['output'];
-  lon: Scalars['Float']['output'];
+  address?: Maybe<Scalars['String']>;
+  capacity?: Maybe<Scalars['Int']>;
+  contactPhone?: Maybe<Scalars['String']>;
+  crossStreet?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  isChargingStation?: Maybe<Scalars['Boolean']>;
+  isInstalled: Scalars['Boolean'];
+  isRenting: Scalars['Boolean'];
+  isReturning: Scalars['Boolean'];
+  isValetStation?: Maybe<Scalars['Boolean']>;
+  isVirtualStation?: Maybe<Scalars['Boolean']>;
+  lastReported: Scalars['Int'];
+  lat: Scalars['Float'];
+  lon: Scalars['Float'];
   name: TranslatedString;
-  numBikesAvailable: Scalars['Int']['output'];
-  numBikesDisabled?: Maybe<Scalars['Int']['output']>;
-  numDocksAvailable?: Maybe<Scalars['Int']['output']>;
-  numDocksDisabled?: Maybe<Scalars['Int']['output']>;
-  parkingHoop?: Maybe<Scalars['Boolean']['output']>;
+  numBikesAvailable: Scalars['Int'];
+  numBikesDisabled?: Maybe<Scalars['Int']>;
+  numDocksAvailable?: Maybe<Scalars['Int']>;
+  numDocksDisabled?: Maybe<Scalars['Int']>;
+  parkingHoop?: Maybe<Scalars['Boolean']>;
   parkingType?: Maybe<ParkingType>;
-  postCode?: Maybe<Scalars['String']['output']>;
+  postCode?: Maybe<Scalars['String']>;
   pricingPlans: Array<Maybe<PricingPlan>>;
   region?: Maybe<Region>;
   rentalMethods?: Maybe<Array<Maybe<RentalMethod>>>;
@@ -270,24 +266,24 @@ export type Station = {
 
 export type System = {
   brandAssets?: Maybe<BrandAssets>;
-  email?: Maybe<Scalars['String']['output']>;
-  feedContactEmail?: Maybe<Scalars['String']['output']>;
-  id: Scalars['ID']['output'];
-  language: Scalars['String']['output'];
-  licenseUrl?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']>;
+  feedContactEmail?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  language: Scalars['String'];
+  licenseUrl?: Maybe<Scalars['String']>;
   name: TranslatedString;
   operator: Operator;
-  phoneNumber?: Maybe<Scalars['String']['output']>;
-  privacyLastUpdated?: Maybe<Scalars['String']['output']>;
-  privacyUrl?: Maybe<Scalars['String']['output']>;
-  purchaseUrl?: Maybe<Scalars['String']['output']>;
+  phoneNumber?: Maybe<Scalars['String']>;
+  privacyLastUpdated?: Maybe<Scalars['String']>;
+  privacyUrl?: Maybe<Scalars['String']>;
+  purchaseUrl?: Maybe<Scalars['String']>;
   rentalApps?: Maybe<RentalApps>;
   shortName?: Maybe<TranslatedString>;
-  startDate?: Maybe<Scalars['String']['output']>;
-  termsLastUpdated?: Maybe<Scalars['String']['output']>;
-  termsUrl?: Maybe<Scalars['String']['output']>;
-  timezone: Scalars['String']['output'];
-  url?: Maybe<Scalars['String']['output']>;
+  startDate?: Maybe<Scalars['String']>;
+  termsLastUpdated?: Maybe<Scalars['String']>;
+  termsUrl?: Maybe<Scalars['String']>;
+  timezone: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type TranslatedString = {
@@ -295,19 +291,19 @@ export type TranslatedString = {
 };
 
 export type Translation = {
-  language: Scalars['String']['output'];
-  value: Scalars['String']['output'];
+  language: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type Vehicle = {
-  availableUntil?: Maybe<Scalars['String']['output']>;
-  currentFuelPercent?: Maybe<Scalars['Float']['output']>;
-  currentRangeMeters: Scalars['Float']['output'];
-  id: Scalars['ID']['output'];
-  isDisabled: Scalars['Boolean']['output'];
-  isReserved: Scalars['Boolean']['output'];
-  lat: Scalars['Float']['output'];
-  lon: Scalars['Float']['output'];
+  availableUntil?: Maybe<Scalars['String']>;
+  currentFuelPercent?: Maybe<Scalars['Float']>;
+  currentRangeMeters: Scalars['Float'];
+  id: Scalars['ID'];
+  isDisabled: Scalars['Boolean'];
+  isReserved: Scalars['Boolean'];
+  lat: Scalars['Float'];
+  lon: Scalars['Float'];
   pricingPlan: PricingPlan;
   rentalUris?: Maybe<RentalUris>;
   system: System;
@@ -329,13 +325,13 @@ export enum VehicleAccessory {
 }
 
 export type VehicleAssets = {
-  iconLastModified: Scalars['String']['output'];
-  iconUrl: Scalars['String']['output'];
-  iconUrlDark?: Maybe<Scalars['String']['output']>;
+  iconLastModified: Scalars['String'];
+  iconUrl: Scalars['String'];
+  iconUrlDark?: Maybe<Scalars['String']>;
 };
 
 export type VehicleDocksAvailability = {
-  count: Scalars['Int']['output'];
+  count: Scalars['Int'];
   vehicleTypes: Array<Maybe<VehicleType>>;
 };
 
@@ -348,37 +344,37 @@ export enum VehicleEquipment {
 }
 
 export type VehicleType = {
-  cargoLoadCapacity?: Maybe<Scalars['Int']['output']>;
-  cargoVolumeCapacity?: Maybe<Scalars['Int']['output']>;
-  color?: Maybe<Scalars['String']['output']>;
+  cargoLoadCapacity?: Maybe<Scalars['Int']>;
+  cargoVolumeCapacity?: Maybe<Scalars['Int']>;
+  color?: Maybe<Scalars['String']>;
   defaultPricingPlan?: Maybe<PricingPlan>;
-  defaultReserveTime?: Maybe<Scalars['Int']['output']>;
+  defaultReserveTime?: Maybe<Scalars['Int']>;
   ecoLabel?: Maybe<Array<Maybe<EcoLabel>>>;
   formFactor: FormFactor;
-  gCO2km?: Maybe<Scalars['Int']['output']>;
-  id: Scalars['ID']['output'];
-  make?: Maybe<Scalars['String']['output']>;
-  maxPermittedSpeed?: Maybe<Scalars['Int']['output']>;
-  maxRangeMeters?: Maybe<Scalars['Float']['output']>;
-  model?: Maybe<Scalars['String']['output']>;
+  gCO2km?: Maybe<Scalars['Int']>;
+  id: Scalars['ID'];
+  make?: Maybe<Scalars['String']>;
+  maxPermittedSpeed?: Maybe<Scalars['Int']>;
+  maxRangeMeters?: Maybe<Scalars['Float']>;
+  model?: Maybe<Scalars['String']>;
   name?: Maybe<TranslatedString>;
   pricingPlans?: Maybe<Array<Maybe<PricingPlan>>>;
   propulsionType: PropulsionType;
-  ratedPower?: Maybe<Scalars['Int']['output']>;
+  ratedPower?: Maybe<Scalars['Int']>;
   returnConstraint?: Maybe<ReturnConstraint>;
-  riderCapacity?: Maybe<Scalars['Int']['output']>;
+  riderCapacity?: Maybe<Scalars['Int']>;
   vehicleAccessories?: Maybe<Array<Maybe<VehicleAccessory>>>;
   vehicleAssets?: Maybe<VehicleAssets>;
-  vehicleImage?: Maybe<Scalars['String']['output']>;
-  wheelCount?: Maybe<Scalars['Int']['output']>;
+  vehicleImage?: Maybe<Scalars['String']>;
+  wheelCount?: Maybe<Scalars['Int']>;
 };
 
 export type VehicleTypeAvailability = {
-  count: Scalars['Int']['output'];
+  count: Scalars['Int'];
   vehicleType: VehicleType;
 };
 
 export type VehicleTypeCapacity = {
-  count: Scalars['Int']['output'];
+  count: Scalars['Int'];
   vehicleType: VehicleType;
 };
