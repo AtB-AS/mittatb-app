@@ -159,34 +159,7 @@
                                 "type": "MultiPolygon"
                             },
                             "properties": {
-                                "name": "Trondheim -  City SSZ 12KPH 8/29",
-                                "start": null,
-                                "end": null,
-                                "rules": [
-                                    {
-                                        "vehicleTypeIds": [
-                                            "YVO:VehicleType:voi_scooter"
-                                        ],
-                                        "rideAllowed": true,
-                                        "rideThroughAllowed": true,
-                                        "maximumSpeedKph": 12,
-                                        "stationParking": false
-                                    }
-                                ],
-                                "polylineEncodedMultiPolygon": [
-                                    [
-                                        "{dj~wB__}yR[~D{OhrC~JlKbP}|CtHQlOI@mMff@wGs@a_@{RlEaNtA{KxCqSrDm@mBQ}C_AyEe@pOM`Fe@hS"
-                                    ]
-                                ]
-                            }
-                        },
-                        {
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "MultiPolygon"
-                            },
-                            "properties": {
-                                "name": "Trondheim - 4/2",
+                                "name": "Trondheim - 4/19",
                                 "start": null,
                                 "end": null,
                                 "rules": [
@@ -307,6 +280,33 @@
                                 "type": "MultiPolygon"
                             },
                             "properties": {
+                                "name": "Trondheim -  City SSZ 12KPH 8/29",
+                                "start": null,
+                                "end": null,
+                                "rules": [
+                                    {
+                                        "vehicleTypeIds": [
+                                            "YVO:VehicleType:voi_scooter"
+                                        ],
+                                        "rideAllowed": true,
+                                        "rideThroughAllowed": true,
+                                        "maximumSpeedKph": 12,
+                                        "stationParking": false
+                                    }
+                                ],
+                                "polylineEncodedMultiPolygon": [
+                                    [
+                                        "{dj~wB__}yR[~D{OhrC~JlKbP}|CtHQlOI@mMff@wGs@a_@{RlEaNtA{KxCqSrDm@mBQ}C_AyEe@pOM`Fe@hS"
+                                    ]
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "MultiPolygon"
+                            },
+                            "properties": {
                                 "name": "Trondheim - 4/2",
                                 "start": null,
                                 "end": null,
@@ -403,6 +403,33 @@
                                     ],
                                     [
                                         "y}s~wBiha}RtAyRmL_IyAlRpLjI"
+                                    ]
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "MultiPolygon"
+                            },
+                            "properties": {
+                                "name": "Trondheim - Tourist Information",
+                                "start": null,
+                                "end": null,
+                                "rules": [
+                                    {
+                                        "vehicleTypeIds": [
+                                            "YVO:VehicleType:voi_scooter"
+                                        ],
+                                        "rideAllowed": true,
+                                        "rideThroughAllowed": true,
+                                        "maximumSpeedKph": 21,
+                                        "stationParking": false
+                                    }
+                                ],
+                                "polylineEncodedMultiPolygon": [
+                                    [
+                                        "mxr~wBqeryRlEYAcDiEl@AnC"
                                     ]
                                 ]
                             }
@@ -943,33 +970,6 @@
                                 "polylineEncodedMultiPolygon": [
                                     [
                                         "eep~wB_lgyRlGg@AwGmG~@@~F"
-                                    ]
-                                ]
-                            }
-                        },
-                        {
-                            "type": "Feature",
-                            "geometry": {
-                                "type": "MultiPolygon"
-                            },
-                            "properties": {
-                                "name": "Trondheim - Tourist Information",
-                                "start": null,
-                                "end": null,
-                                "rules": [
-                                    {
-                                        "vehicleTypeIds": [
-                                            "YVO:VehicleType:voi_scooter"
-                                        ],
-                                        "rideAllowed": true,
-                                        "rideThroughAllowed": true,
-                                        "maximumSpeedKph": 21,
-                                        "stationParking": false
-                                    }
-                                ],
-                                "polylineEncodedMultiPolygon": [
-                                    [
-                                        "mxr~wBqeryRlEYAcDiEl@AnC"
                                     ]
                                 ]
                             }

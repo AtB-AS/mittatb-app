@@ -57,7 +57,6 @@ export function sortFeaturesByLayerIndexWeight(
   });
 }
 
-// todo: add test for this function
 /**
  * For lowering waiting times and to reduce network traffic, the coordinates data is fetched in an encoded format
  * This function decodes the data from polylineEncodedMultiPolygon, and adds it to coordinates in the geojson object
