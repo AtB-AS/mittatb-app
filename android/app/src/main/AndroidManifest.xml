@@ -30,7 +30,7 @@
                 <data android:scheme="@string/app_scheme" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.bugsnag.android.API_KEY" android:value="${bugsnagApiKey}"/>
+        <meta-data android:name="com.bugsnag.android.API_KEY" android:value="${bugsnagApiKey}" tools:node="merge"/>
 
         <!-- Kogenta SDK remove receivers / services -->
         <service
