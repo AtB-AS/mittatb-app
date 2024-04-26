@@ -20,6 +20,7 @@ import {PhoneInputSectionItem, Section} from '@atb/components/sections';
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import phone from 'phone';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -86,6 +87,7 @@ export const Root_LoginPhoneInputScreen = ({
         setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.phoneInput.title)}
+        globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
       />
 
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>

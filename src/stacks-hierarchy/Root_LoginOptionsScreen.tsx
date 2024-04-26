@@ -31,6 +31,7 @@ import {TransitionPresets} from '@react-navigation/stack';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {APP_ORG} from '@env';
 import {useOnboardingState} from '@atb/onboarding';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -158,6 +159,7 @@ export const Root_LoginOptionsScreen = ({
         }
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
+        globalMessageContext={GlobalMessageContextEnum.appLogin}
       />
       <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
         <View accessible={true} accessibilityRole="header">
@@ -184,9 +186,13 @@ export const Root_LoginOptionsScreen = ({
         </ThemeText>
 
         <View style={styles.buttonContainer}>
+          <VippsLoginButton
+            onPress={authenticateUserByVipps}
+            disabled={isLoading}
+          />
           <Button
-            interactiveColor="interactive_0"
-            mode="primary"
+            mode="secondary"
+            backgroundColor={themeColor}
             onPress={() => navigation.navigate('Root_LoginPhoneInputScreen')}
             text={t(LoginTexts.logInOptions.options.phoneAndCode.label)}
             accessibilityHint={t(
@@ -195,10 +201,6 @@ export const Root_LoginOptionsScreen = ({
             disabled={isLoading}
             rightIcon={{svg: ArrowRight}}
             testID="chooseLoginPhoneButton"
-          />
-          <VippsLoginButton
-            onPress={authenticateUserByVipps}
-            disabled={isLoading}
           />
           <Button
             mode="secondary"

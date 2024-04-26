@@ -6,8 +6,7 @@
 
 # Check for config and secrets from env vars
 if [[
-    -z "${ENTUR_CLIENT_ID}"
-    || -z "${ENTUR_CLIENT_SECRET}"
+    -z "${ENTUR_PUBLISH_CLIENT}"
     || -z "${APP_ENVIRONMENT}"
     || -z "${IOS_BUNDLE_IDENTIFIER}"
     || -z "${IOS_DEVELOPMENT_TEAM_ID}"
@@ -15,9 +14,8 @@ if [[
     || -z "${AUTHORITY}"
    ]]; then
     echo "Argument error!"
-    echo "Expected the following 7 env variables to be set:
-  - ENTUR_CLIENT_ID
-  - ENTUR_CLIENT_SECRET
+    echo "Expected the following 6 env variables to be set:
+  - ENTUR_PUBLISH_CLIENT
   - APP_ENVIRONMENT
   - IOS_BUNDLE_IDENTIFIER
   - IOS_DEVELOPMENT_TEAM_ID
@@ -29,11 +27,9 @@ fi
 # Get values based on environment
 case $APP_ENVIRONMENT in
   staging)
-    token_url="https://partner-abt.staging.entur.org/oauth/token"
-    abt_url="https://core-abt-abt.staging.entur.io"
+    abt_url="https://core-abt.staging.entur.io"
     ;;
   store)
-    token_url="https://partner.entur.org/oauth/token"
     abt_url="https://core-abt.entur.io"
     ;;
   *)
@@ -42,15 +38,21 @@ case $APP_ENVIRONMENT in
     ;;
 esac
 
+DECODED_ENTUR_PUBLISH_CLIENT=$(echo $ENTUR_PUBLISH_CLIENT | base64 --decode)
+ENTUR_CLIENT_ID=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.clientId')
+ENTUR_CLIENT_SECRET=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.clientSecret')
+AUDIENCE=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.endpointParams.audience[0]')
+TOKEN_URL=$(echo $DECODED_ENTUR_PUBLISH_CLIENT | jq -r '.tokenUrl')
+
 # App login for register call
 login=$(curl --silent \
   --request POST \
-  --url "$token_url" \
+  --url "$TOKEN_URL" \
   --header 'content-type: application/x-www-form-urlencoded' \
   --data grant_type="client_credentials" \
   --data client_id="$ENTUR_CLIENT_ID" \
   --data client_secret="$ENTUR_CLIENT_SECRET" \
-  --data audience="https://v2.api.entur.no")
+  --data audience="$AUDIENCE")
 
 login_status=$?
 if [ $login_status -ne 0 ]; then

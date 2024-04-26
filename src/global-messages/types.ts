@@ -16,6 +16,8 @@ export enum GlobalMessageContextEnum {
   appDepartureDetails = 'app-departure-details',
   appTripDetails = 'app-trip-details',
   appServiceDisruptions = 'app-service-disruptions',
+  appLogin = 'app-login',
+  appLoginPhone = 'app-login-phone',
 }
 
 export type GlobalMessageRaw = {
@@ -23,6 +25,8 @@ export type GlobalMessageRaw = {
   active: boolean;
   title?: LanguageAndTextType[];
   body: LanguageAndTextType[];
+  link?: LanguageAndTextType[];
+  linkText?: LanguageAndTextType[];
   type: Statuses;
   subtle?: boolean;
   context: GlobalMessageContextEnum[];

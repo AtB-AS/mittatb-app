@@ -94,7 +94,9 @@ export const MessageInfoBox = ({
         accessibilityLabel={a11yLabel}
         accessibilityHint={
           onPressConfig &&
-          t(MessageBoxTexts.a11yHintPrefix) + onPressConfig.text
+          ('action' in onPressConfig
+            ? t(MessageBoxTexts.a11yHintActionPrefix)
+            : t(MessageBoxTexts.a11yHintUrlPrefix)) + onPressConfig.text
         }
       >
         {title && (

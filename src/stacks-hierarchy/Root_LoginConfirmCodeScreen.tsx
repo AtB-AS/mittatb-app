@@ -24,6 +24,7 @@ import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useOnboardingState} from '@atb/onboarding';
+import {GlobalMessageContextEnum} from '@atb/global-messages';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -71,6 +72,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
         setFocusOnLoad={false}
         color={themeColor}
         title={t(LoginTexts.logInOptions.title)}
+        globalMessageContext={GlobalMessageContextEnum.appLoginPhone}
       />
 
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
