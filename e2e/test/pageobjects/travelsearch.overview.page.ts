@@ -1,4 +1,5 @@
 import ElementHelper from '../utils/element.helper.ts';
+import AppHelper from '../utils/app.helper.js';
 
 class TravelSearchOverviewPage {
   /**
@@ -7,6 +8,41 @@ class TravelSearchOverviewPage {
   get firstTripResult() {
     const reqId = `//*[@resource-id="tripSearchSearchResult0"]`;
     return $(reqId);
+  }
+
+  /**
+   * Get the travel suggestion - for bike
+   */
+  get bikeResult() {
+    const reqId = `//*[@resource-id="bicycleResult"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Get the travel suggestion text - for bike
+   */
+  get bikeResultText() {
+    const reqId = `//*[@resource-id="bicycleResult"]`;
+    const textId = `//*[@resource-id="buttonText"]`;
+    //return await $(reqId).$(textId).getText();
+    return $(reqId).$(textId).getText();
+  }
+
+  /**
+   * Get the travel suggestion - for walking
+   */
+  get walkResult() {
+    const reqId = `//*[@resource-id="footResult"]`;
+    return $(reqId);
+  }
+
+  /**
+   * Get the travel suggestion text - for walking
+   */
+  get walkResultText() {
+    const reqId = `//*[@resource-id="footResult"]`;
+    const textId = `//*[@resource-id="buttonText"]`;
+    return $(reqId).$(textId).getText();
   }
 
   /**
@@ -98,6 +134,43 @@ class TravelSearchOverviewPage {
     const durationId = `//*[@resource-id="resultDuration"]`;
     const duration = await $(searchResultId).$(durationId).getText();
     return duration.split(' ')[0];
+  }
+
+  /**
+   * Get number of transport modes from X first travel search results
+   * NOTE! Only bus and rail modes
+   * @param numberOfResults the number of results to check
+   */
+  async getNumberOfTransportModesInSearch(numberOfResults: number = 5) {
+    let noBusLegs = 0;
+    let noRailLegs = 0;
+    // Loop through the search results and count the different modes
+    for (let i = 0; i < numberOfResults; i++) {
+      const tripId = `//*[@resource-id="tripSearchSearchResult${i}"]`;
+      const busModeId = `//*[@resource-id="busLeg"]`;
+      const railModeId = `//*[@resource-id="railLeg"]`;
+
+      // Scroll down if trip result is not displayed
+      const resultExists = await ElementHelper.isElementExisting(
+        `tripSearchSearchResult${i}`,
+        2,
+      );
+      if (!resultExists) {
+        await AppHelper.scrollDownUntilId(
+          'tripSearchContentView',
+          `tripSearchSearchResult${i}`,
+        );
+      }
+
+      noBusLegs += await $(tripId).$$(busModeId).length;
+      noRailLegs += await $(tripId).$$(railModeId).length;
+    }
+    await AppHelper.scrollUp('tripSearchContentView');
+
+    // Find and return number of different transport modes
+    const busLegsExists: number = noBusLegs > 0 ? 1 : 0;
+    const railLegsExists: number = noRailLegs > 0 ? 1 : 0;
+    return busLegsExists + railLegsExists;
   }
 }
 export default new TravelSearchOverviewPage();
