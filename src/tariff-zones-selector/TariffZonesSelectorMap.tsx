@@ -6,6 +6,7 @@ import {Language, TariffZonesTexts, useTranslation} from '@atb/translations';
 import MapboxGL, {UserLocationRenderMode} from '@rnmapbox/maps';
 import {
   flyToLocation,
+  hitboxCoveringIconOnly,
   MapCameraConfig,
   MapViewConfig,
   PositionArrow,
@@ -131,7 +132,7 @@ const TariffZonesSelectorMap = ({
             <MapboxGL.ShapeSource
               id="tariffZonesShape"
               shape={featureCollection}
-              hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
+              hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
               onPress={selectFeature}
             >
               <MapboxGL.FillLayer

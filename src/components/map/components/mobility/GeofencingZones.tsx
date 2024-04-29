@@ -5,6 +5,7 @@ import {FeatureCollection, GeoJsonProperties, Point, Feature} from 'geojson';
 import {usePreProcessedGeofencingZones} from '@atb/components/map';
 import {useVehicleQuery} from '@atb/mobility/queries/use-vehicle-query';
 import {isBicycle, isScooter} from '@atb/mobility';
+import {hitboxCoveringIconOnly} from '@atb/components/map';
 
 type GeofencingZonesProps = {
   selectedFeature: Feature<Point, GeoJsonProperties>;
@@ -103,7 +104,7 @@ export const GeofencingZones = ({selectedFeature}: GeofencingZonesProps) => {
         key={geofencingZone?.renderKey}
         id={'geofencingZonesShapeSource_' + geofencingZone?.renderKey}
         shape={geofencingZone.geojson as FeatureCollection} // todo: fix GeofencingZonesType in mobility-types_v2
-        hitbox={{width: 1, height: 1}} // to not be able to hit multiple zones with one click
+        hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
       >
         <MapboxGL.FillLayer
           id="parkingFill"

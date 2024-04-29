@@ -5,7 +5,6 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
   FeatureCollection,
-  GeoJSON,
   GeoJsonProperties,
   Geometry,
   MultiPolygon,
@@ -21,6 +20,8 @@ import {
 } from './types';
 import distance from '@turf/distance';
 import {isStation} from '@atb/mobility/utils';
+
+export const hitboxCoveringIconOnly = {width: 1, height: 1};
 
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
