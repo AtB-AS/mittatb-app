@@ -90,6 +90,9 @@ export const hasProperties = (f: Feature) =>
 export const hasGeofencingZoneCategoryProps = (f: Feature) =>
   Object.keys(f.properties?.geofencingZoneCategoryProps || {}).length > 0;
 
+export const isFeatureGeofencingZone = (f: Feature) =>
+  isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCategoryProps(f);
+
 export const isClusterFeature = (
   feature: Feature,
 ): feature is Feature<Point, Cluster> =>

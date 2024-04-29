@@ -96,10 +96,6 @@ export function addGeofencingZoneCategoryProps(
       const preProcessedFeatures = (
         geofencingZone?.geojson?.features || []
       ).map((feature) => {
-        if (geofencingZonesIndex === 0) {
-          geofencingZones[geofencingZonesIndex]['renderKey'] =
-            geofencingZonesIndex.toString();
-        }
         // the option to have multiple rules, is to make it allow different rules per vehicle type
         const applicableRules = feature.properties?.rules?.filter((rule) =>
           rule.vehicleTypeIds?.includes(vehicleTypeId),
@@ -162,6 +158,7 @@ export function addGeofencingZoneCategoryProps(
           ...geofencingZone.geojson,
           features: preProcessedFeatures,
         },
+        renderKey: geofencingZonesIndex.toString(),
       };
     },
   );

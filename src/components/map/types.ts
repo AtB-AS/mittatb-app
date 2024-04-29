@@ -217,6 +217,7 @@ export enum GeofencingZoneCategoryCode {
   StationParking = 'StationParking',
   NoParking = 'NoParking',
   NoEntry = 'NoEntry',
+  Unspecified = 'Unspecified',
 }
 
 export type GeofencingZoneCategoryKey = keyof typeof GeofencingZoneCategoryCode;

@@ -43,6 +43,13 @@ export const useGeofencingZoneCategoriesProps = () => {
       strokeOpacity: 0.75,
       layerIndexWeight: 5,
     },
+    Unspecified: {
+      code: 'Unspecified',
+      color: '#FFFFFF', // gray_0
+      fillOpacity: 0,
+      strokeOpacity: 0,
+      layerIndexWeight: 0,
+    },
   };
   return geofencingZoneCategoriesProps;
 };

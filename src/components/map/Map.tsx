@@ -14,12 +14,13 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {MapProps, MapRegion} from './types';
+import {GeofencingZoneCategoryCode, MapProps, MapRegion} from './types';
 import {
-  isFeaturePolylineEncodedMultiPolygon,
   isFeaturePoint,
   getFeaturesAtClick,
-  hasGeofencingZoneCategoryProps,
+  isFeatureGeofencingZone,
+  isStopPlace,
+  isParkAndRide,
 } from './utils';
 import isEqual from 'lodash.isequal';
 import {GeofencingZones} from './components/mobility/GeofencingZones';
@@ -27,6 +28,8 @@ import {GeofencingZones} from './components/mobility/GeofencingZones';
 import {useGeofencingZoneExplanation} from './hooks/use-geofencing-zone-explanation';
 import {GeofencingZoneExplanation} from './components/mobility/GeofencingZoneExplanation';
 import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
+import {isBicycle, isScooter} from '@atb/mobility';
+import {isCarStation, isStation} from '@atb/mobility/utils';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -35,11 +38,6 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-
-  const {geofencingZoneCategoryCodeToExplain, geofencingZoneOnPress} =
-    useGeofencingZoneExplanation();
-  const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
-    useGeofencingZonesEnabled();
 
   const startingCoordinates = useMemo(
     () =>
@@ -56,6 +54,14 @@ export const Map = (props: MapProps) => {
       mapCameraRef,
       startingCoordinates,
     );
+
+  const {
+    geofencingZoneCategoryCodeToExplain,
+    geofencingZoneOnPress,
+    resetGeofencingZoneExplanation,
+  } = useGeofencingZoneExplanation(!!selectedFeature);
+  const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
+    useGeofencingZonesEnabled();
 
   const updateRegionForVehicles = props.vehicles?.updateRegion;
   const updateRegionForStations = props.stations?.updateRegion;
@@ -106,8 +112,8 @@ export const Map = (props: MapProps) => {
    * from being triggered, the onPress logic is handled here instead.
    * This makes it possible to click directly on e.g. bus stops while GeofencingZones are visible.
    * Step 1: query all rendered features
-   * Step 2: decide selected feature
-   * Step 3: handle click on the selected feature
+   * Step 2: decide feature to select
+   * Step 3: selected the feature
    */
 
   const onFeatureClick = async (feature: Feature) => {
@@ -115,28 +121,28 @@ export const Map = (props: MapProps) => {
 
     const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
     if (!featuresAtClick || featuresAtClick.length === 0) return;
-    //console.log('featuresAtClick', JSON.stringify(featuresAtClick));
 
-    const selectedFeature = featuresAtClick.reduce((selected, currentFeature) =>
+    const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
       getFeatureWeight(currentFeature) > getFeatureWeight(selected)
         ? currentFeature
         : selected,
     );
 
-    if (getFeatureWeight(selectedFeature) === 0) return;
-
-    if (isFeaturePoint(selectedFeature)) {
-      onMapClick({
-        source: 'map-click',
-        feature: selectedFeature,
-      });
-    } else if (
-      isFeaturePolylineEncodedMultiPolygon(selectedFeature) &&
-      hasGeofencingZoneCategoryProps(selectedFeature)
-    ) {
+    if (isFeatureGeofencingZone(featureToSelect)) {
       geofencingZoneOnPress(
-        selectedFeature?.properties?.geofencingZoneCategoryProps,
+        featureToSelect?.properties?.geofencingZoneCategoryProps?.code,
       );
+    } else {
+      geofencingZoneCategoryCodeToExplain && resetGeofencingZoneExplanation();
+      if (isFeaturePoint(featureToSelect)) {
+        onMapClick({
+          source: 'map-click',
+          feature: featureToSelect,
+        });
+      } else if (isScooter(selectedFeature)) {
+        // outside of operational area
+        geofencingZoneOnPress(GeofencingZoneCategoryCode.Unspecified);
+      }
     }
   };
 
@@ -245,10 +251,17 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
 
 function getFeatureWeight(feature: Feature): number {
   if (isFeaturePoint(feature)) {
+    return isStopPlace(feature) ||
+      isScooter(feature) ||
+      isBicycle(feature) ||
+      isStation(feature) ||
+      isCarStation(feature) ||
+      isParkAndRide(feature)
+      ? 3
+      : 1;
+  } else if (isFeatureGeofencingZone(feature)) {
     return 2;
-  } else if (isFeaturePolylineEncodedMultiPolygon(feature)) {
-    return 1;
   } else {
-    return 0; // unknown feature type, no actions should be triggered for such features
+    return 0;
   }
 }

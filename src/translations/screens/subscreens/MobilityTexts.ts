@@ -257,4 +257,12 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
       'Det er forbode å køyre inn i dette området.',
     ),
   },
+  Unspecified: {
+    title: _('Uspesifisert', 'Unspecified', 'Uspesifisert'),
+    description: _(
+      'Ingen regler angitt for dette området.',
+      'No rules defined for this area.',
+      'Ingen reglar angitt for dette området.',
+    ),
+  },
 };
