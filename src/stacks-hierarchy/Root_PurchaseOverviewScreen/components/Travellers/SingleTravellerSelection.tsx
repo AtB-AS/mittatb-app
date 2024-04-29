@@ -73,6 +73,7 @@ export function SingleTravellerSelection({
             onValueChange={(checked) => {
               setIsTravelerOnBehalfOfToggle(checked);
             }}
+            testID="onBehalfOfToggle"
           />
         </Section>
       )}
