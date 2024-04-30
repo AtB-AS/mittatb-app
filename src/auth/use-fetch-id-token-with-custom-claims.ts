@@ -35,7 +35,7 @@ export const useFetchIdTokenWithCustomClaims = (
       logToBugsnag(
         `Fetching id token with force refresh ${
           shouldForceRefresh ? 'on' : 'off'
-        } ${state.authStatus} ${state.user?.uid}`,
+        }`,
       );
       const idToken = await state.user?.getIdTokenResult(shouldForceRefresh); // Force refresh from server if retry
       const isMissingCustomClaims = !idToken?.claims['customer_number'];
