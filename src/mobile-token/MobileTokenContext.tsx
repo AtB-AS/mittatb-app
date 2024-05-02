@@ -163,9 +163,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         }, [queryClient]),
         clearTokenAtLogout: useCallback(() => {
           setIsLoggingOut(true);
-          return wipeToken(nativeToken ? [nativeToken.tokenId] : [], uuid()).then(() =>
-            queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
-          );
+          return wipeToken(
+            nativeToken ? [nativeToken.tokenId] : [],
+            uuid(),
+          ).then(() => queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]));
         }, [queryClient, nativeToken]),
         getTokenToggleDetails,
         nativeToken,
@@ -200,8 +201,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
               }),
           wipeToken: useCallback(
             () =>
-              wipeToken(nativeToken, uuid()).then(() =>
-                queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
+              wipeToken(nativeToken ? [nativeToken.tokenId] : [], uuid()).then(
+                () => queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
               ),
             [queryClient, nativeToken],
           ),
