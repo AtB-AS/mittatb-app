@@ -41,4 +41,18 @@ export default orgSpecificTranslations(ServiceDisruptionsTexts, {
       text: _('Åpne i nettleser', 'Open in browser', 'Opne i nettlesar'),
     },
   },
+  troms: {
+    body: _(
+      'Oversikt over endringer, forsinkelser og avvik finner du på svipper.no:',
+      'Get an overview of changes, delays and service disruptions at svipper.no (Norwegian only):',
+      'Oversikt over endringar, forseinkingar og avvik finn du på svipper.no:',
+    ),
+    button: {
+      text: _(
+	'fylkestrafikk.no/trafikkmeldinger',
+	'fylkestrafikk.no/trafikkmeldinger',
+	'fylkestrafikk.no/trafikkmeldinger',
+      ),
+    },
+  },
 });

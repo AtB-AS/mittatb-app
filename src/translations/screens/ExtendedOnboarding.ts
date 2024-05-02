@@ -124,14 +124,14 @@ export default orgSpecificTranslations(OnboardingTexts, {
   troms: {
     welcome: {
       title: _(
-        'Velkommen til Troms-appen',
-        'Welcome to the Troms app',
-        'Velkommen til Troms-appen',
+        'Velkommen til Svipper-appen',
+        'Welcome to the Svipper app',
+        'Velkommen til Svipper-appen',
       ),
       titleA11yLabel: _(
-        'Velkommen til Troms appen',
-        'Welcome to the Troms app',
-        'Velkommen til Troms-appen',
+        'Velkommen til Svipper appen',
+        'Welcome to the Svipper app',
+        'Velkommen til Svipper-appen',
       ),
       description: {
         part1: _(
