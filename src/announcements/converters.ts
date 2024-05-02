@@ -77,13 +77,28 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
     (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
   );
 }
-
+ 
 function mapActionButton(data: any): ActionButton {
-  const {label = [], url, actionType = 'bottom_sheet'} = data ?? {};
-  const labelWithLanguage = mapToLanguageAndTexts(label);
+  const action = data ?? {};
+  const labelWithLanguage = mapToLanguageAndTexts(action.label);
+  const url = action.url;
+  const actionType = mapToActionType(action.actionType);
   return {
     label: labelWithLanguage,
     url,
     actionType,
   };
+}
+
+function mapToActionType(data:any, url?: string) {
+  const actionTypes = ['external', 'deeplink', 'bottom_sheet'];
+
+  if (url) {
+    if (url.startsWith('http')) return 'external';
+    return 'deeplink';
+  }
+  if (!data) return 'bottom_sheet';
+  if (typeof data !== 'string') return 'bottom_sheet';
+  if (!actionTypes.includes(data)) return 'bottom_sheet';
+  return data as ActionType;
 }
