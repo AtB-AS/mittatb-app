@@ -21,7 +21,6 @@ export function FullScreenErrorView({onRestartApp, errorCode}: ErrorProps) {
 
   return (
     <SafeAreaView style={styles.safearea}>
-      <ScreenHeader title="" />
       <View style={styles.svgContainer}>
         <Crash width="100%" height="100%" />
       </View>
