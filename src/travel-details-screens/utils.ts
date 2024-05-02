@@ -164,21 +164,14 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
 ): boolean {
   return legs.reduce<{
     conclusion: boolean;
-    prevEndTime: Date | undefined;
-    prevInterchangeGuaranteed: boolean;
-    prevMode: string | undefined;
-    initalLeg: boolean;
+    prevEndTime?: Date;
+    prevInterchangeGuaranteed?: boolean;
   }>(
-    (state, leg, idx) => {
+    (state, leg) => {
       if (state.conclusion) return state;
 
       if (leg.mode == 'foot') {
-        return {
-          ...state,
-          prevEndTime: leg.expectedEndTime,
-          prevMode: leg.mode,
-          initalLeg: idx === 0 ? true : false,
-        };
+        return {...state, prevEndTime: leg.expectedEndTime};
       }
 
       const waitTime = differenceInSeconds(
@@ -186,41 +179,18 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
         parseDateIfString(state.prevEndTime),
       );
 
-      if (
-        timeIsShort(waitTime) &&
-        !state.prevInterchangeGuaranteed &&
-        !(state.initalLeg && state.prevMode) &&
-        !(legs[idx].interchangeTo?.guaranteed && nextLegIsFootLeg(legs, idx))
-      ) {
-        return {
-          ...state,
-          conclusion: true,
-          prevEndTime: leg.expectedEndTime,
-          prevInterchangeGuaranteed: false,
-        };
+      if (timeIsShort(waitTime) && state.prevInterchangeGuaranteed === false) {
+        return {conclusion: true};
       }
 
       return {
         ...state,
         prevEndTime: leg.expectedEndTime,
         prevInterchangeGuaranteed: leg.interchangeTo?.guaranteed || false,
-        prevMode: leg.mode,
-        initalLeg: idx === 0 ? true : false,
       };
     },
-    {
-      conclusion: false,
-      prevEndTime: undefined,
-      prevInterchangeGuaranteed: false,
-      prevMode: undefined,
-      initalLeg: true,
-    },
+    {conclusion: false},
   ).conclusion;
-}
-
-function nextLegIsFootLeg(legs: Leg[], idx: number) {
-  if (idx + 1 >= legs.length - 1) return false;
-  return legs[idx + 1].mode === 'foot';
 }
 
 function parseDateIfString(date: any): Date {
