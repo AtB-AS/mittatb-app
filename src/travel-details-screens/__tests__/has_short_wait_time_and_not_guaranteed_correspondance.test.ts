@@ -2,7 +2,7 @@ import {hasShortWaitTimeAndNotGuaranteedCorrespondence} from '../utils';
 import {Leg} from '@atb/api/types/trips';
 
 describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
-  it('should be false because no short wait time.', () => {
+  it('should be false when no short wait time.', () => {
     const legs = [
       {expectedEndTime: '2024-10-31T14:55:00Z'},
       {expectedStartTime: '2024-10-31T15:00:00Z'},
@@ -11,7 +11,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  it('should be true because short wait time.', () => {
+  it('should be true when short wait time.', () => {
     const legs = [
       {expectedEndTime: '2024-10-31T14:59:00Z'},
       {expectedStartTime: '2024-10-31T15:00:00Z'},
@@ -20,7 +20,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
   });
 
-  it('should be false despite short wait time, because correspondance is guarenteed.', () => {
+  it('should be false when correspondance is guarenteed and short wait time.', () => {
     const legs = [
       {
         expectedEndTime: '2024-10-31T14:59:00Z',
@@ -32,7 +32,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  it('should be false because of no short wait time and correspondance is guarenteed.', () => {
+  it('should be false when correspondance is guarenteed and no short wait time.', () => {
     const legs = [
       {
         expectedEndTime: '2024-10-31T14:55:00Z',
@@ -43,7 +43,8 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
 
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
-  it('should be true because short wait time between second and third leg, with no correspondance guranteed.', () => {
+
+  it('should be true when no correspondance is guranteed, and short wait time between second and third leg.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:59:00Z',
@@ -63,7 +64,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
   });
 
-  it('should be false because short wait time between a pair of legs have no effect when the second leg of the pair have mode: foot.', () => {
+  it('should be false despite short wait time between a pair of legs, because the second leg of the pair is a foot leg.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -83,7 +84,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  it('should be false because short wait time between a pair of legs have no effect when the second leg of the pair have mode: foot.', () => {
+  it('should be false despite short wait time between multiple pair of legs, because the second leg of each pair is a foot leg.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -112,7 +113,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  it('should be true as there is short wait time between the second leg and the third leg.', () => {
+  it('should be true when short wait time between a pair of legs , as the first leg of the pair is not the initial leg of the trip, and the second leg of the pair is not a foot leg.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -132,7 +133,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
   });
 
-  it('should be false despite short wait time between second and third leg, beacuse interchange is guarenteed first leg and mode equals foot in second leg.', () => {
+  it('should be false despite short wait time a pair of legs, as interchange in the leg prior to the pair is guarenteed, and the first leg of the pair is a foot leg.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -153,7 +154,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  it('should be true because because of short wait time between second and third leg, and the mode in the second leg is not foot.', () => {
+  it('should be true when short wait time in a pair of legs, despite guarenteed interchange in the leg prior to a pair, as the first leg of the pair is not a foot leg.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -190,7 +191,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
-  it('should be true because of short wait time between third and forth leg.', () => {
+  it('should be true when short wait time between a pair of legs, following a foot leg and a guranteed interchange from the leg prior to the foot leg.', () => {
     const legs = [
       {
         expectedStartTime: '2024-10-31T14:45:00Z',
@@ -210,33 +211,6 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       {
         expectedStartTime: '2024-10-31T15:21:00Z',
         expectedEndTime: '2024-10-31T15:30:00Z',
-      },
-    ] as unknown as Leg[];
-
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
-  });
-
-  it('should be true because of short wait time between third and forth leg.', () => {
-    const legs = [
-      {
-        expectedStartTime: '2024-10-31T14:45:00Z',
-        expectedEndTime: '2024-10-31T15:00:00Z',
-        interchangeTo: {guaranteed: true},
-      },
-      {
-        mode: 'foot',
-        expectedStartTime: '2024-10-31T15:00:00Z',
-        expectedEndTime: '2024-10-31T15:05:00Z',
-      },
-
-      {
-        expectedStartTime: '2024-10-31T15:06:00Z',
-        expectedEndTime: '2024-10-31T15:20:00Z',
-      },
-      {
-        expectedStartTime: '2024-10-31T15:21:00Z',
-        expectedEndTime: '2024-10-31T15:30:00Z',
-        interchangeTo: {guaranteed: true},
       },
     ] as unknown as Leg[];
 
