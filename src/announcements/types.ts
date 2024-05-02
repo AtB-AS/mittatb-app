@@ -6,9 +6,9 @@ import {Rule} from '@atb/rule-engine/rules';
 export type AnnouncementId = string;
 
 export enum ActionType {
-  'external',
-  'deeplink',
-  'bottom_sheet',
+  external = 'external',
+  deeplink = 'deeplink',
+  bottom_sheet = 'bottom_sheet',
 }
 
 export type BottomSheetActionButton = {
