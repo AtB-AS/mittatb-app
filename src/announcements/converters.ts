@@ -1,5 +1,5 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {AnnouncementRaw, AnnouncementType, ActionButton} from './types';
+import {AnnouncementRaw, AnnouncementType, ActionButton, ActionType} from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 import {APP_VERSION} from '@env';
 import {AppPlatformType} from '@atb/global-messages/types';
@@ -44,6 +44,7 @@ export const mapToAnnouncement = (
   if (!isAppPlatformValid(platforms)) return;
   if (appVersionMin && appVersionMin > APP_VERSION) return;
   if (appVersionMax && appVersionMax < APP_VERSION) return;
+  if (!actionButton) return;
 
   return {
     id,
@@ -78,11 +79,14 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
   );
 }
  
-function mapActionButton(data: any): ActionButton {
+function mapActionButton(data: any): ActionButton | undefined {
   const action = data ?? {};
   const labelWithLanguage = mapToLanguageAndTexts(action.label);
   const url = action.url;
   const actionType = mapToActionType(action.actionType);
+
+  if (!actionType) return;
+
   return {
     label: labelWithLanguage,
     url,
@@ -90,15 +94,6 @@ function mapActionButton(data: any): ActionButton {
   };
 }
 
-function mapToActionType(data:any, url?: string) {
-  const actionTypes = ['external', 'deeplink', 'bottom_sheet'];
-
-  if (url) {
-    if (url.startsWith('http')) return 'external';
-    return 'deeplink';
-  }
-  if (!data) return 'bottom_sheet';
-  if (typeof data !== 'string') return 'bottom_sheet';
-  if (!actionTypes.includes(data)) return 'bottom_sheet';
-  return data as ActionType;
+function mapToActionType(data:any): ActionType | undefined {
+  if (Object.values(ActionType).includes(data)) return data;
 }

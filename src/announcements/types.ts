@@ -5,15 +5,21 @@ import {Rule} from '@atb/rule-engine/rules';
 
 export type AnnouncementId = string;
 
+export enum ActionType {
+  'external',
+  'deeplink',
+  'bottom_sheet',
+}
+
 export type BottomSheetActionButton = {
   label?: LanguageAndTextType[];
-  actionType: 'bottom_sheet';
+  actionType: Extract<ActionType, ActionType.bottom_sheet>;
 };
 
 export type UrlActionButton = {
   label?: LanguageAndTextType[];
   url: string;
-  actionType: 'external' | 'deeplink';
+  actionType: Extract<ActionType, ActionType.external | ActionType.deeplink>;
 };
 
 export type ActionButton = BottomSheetActionButton | UrlActionButton;
