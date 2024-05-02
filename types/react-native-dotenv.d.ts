@@ -10,6 +10,8 @@ declare module '@env' {
   export const AUTHORITY: string;
   export const APP_ORG: import('./app-orgs').AppOrgs;
   export const APP_GROUP_NAME: string;
+  export const IOS_APP_CHECK_DEBUG_TOKEN: string;
+  export const ANDROID_APP_CHECK_DEBUG_TOKEN: string;
   export const APP_SCHEME: string;
   export const TARIFF_ZONE_AUTHORITY: import('./app-orgs').TariffZoneAuthorities;
   export const FOCUS_LATITUDE: string;
