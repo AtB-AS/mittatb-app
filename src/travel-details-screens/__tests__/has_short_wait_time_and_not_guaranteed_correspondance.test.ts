@@ -174,7 +174,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
     expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
   });
 
-  it('should be true because of short wait time and no guarenteed correspondance.', () => {
+  it('should be false when foot leg is the initial leg.', () => {
     const legs = [
       {
         mode: 'foot',
@@ -187,7 +187,7 @@ describe('hasShortWaitTimeAndNotGuaranteedCorrespondence', () => {
       },
     ] as Leg[];
 
-    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(true);
+    expect(hasShortWaitTimeAndNotGuaranteedCorrespondence(legs)).toBe(false);
   });
 
   it('should be true because of short wait time between third and forth leg.', () => {

@@ -167,6 +167,7 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
     prevEndTime: Date | undefined;
     prevInterchangeGuaranteed: boolean;
     prevMode: string | undefined;
+    initalLeg: boolean;
   }>(
     (state, leg, idx) => {
       if (state.conclusion) return state;
@@ -176,6 +177,7 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
           ...state,
           prevEndTime: leg.expectedEndTime,
           prevMode: leg.mode,
+          initalLeg: idx === 0 ? true : false,
         };
       }
 
@@ -187,6 +189,7 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
       if (
         timeIsShort(waitTime) &&
         !state.prevInterchangeGuaranteed &&
+        !(state.initalLeg && state.prevMode) &&
         !(legs[idx].interchangeTo?.guaranteed && nextLegIsFootLeg(legs, idx))
       ) {
         return {
@@ -202,6 +205,7 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
         prevEndTime: leg.expectedEndTime,
         prevInterchangeGuaranteed: leg.interchangeTo?.guaranteed || false,
         prevMode: leg.mode,
+        initalLeg: idx === 0 ? true : false,
       };
     },
     {
@@ -209,6 +213,7 @@ export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
       prevEndTime: undefined,
       prevInterchangeGuaranteed: false,
       prevMode: undefined,
+      initalLeg: true,
     },
   ).conclusion;
 }
