@@ -1,4 +1,4 @@
-import {AnnouncementType} from '@atb/announcements/types';
+import {ActionType, AnnouncementType} from '@atb/announcements/types';
 import {ThemeText} from '@atb/components/text';
 import {
   DashboardTexts,
@@ -102,7 +102,7 @@ export const Announcement = ({announcement, style}: Props) => {
           }
           textType="body__secondary"
           icon={
-            announcement.actionButton?.actionType === 'external'
+            announcement.actionButton?.actionType === ActionType.external
               ? 'external-link'
               : 'arrow-right'
           }
@@ -113,12 +113,12 @@ export const Announcement = ({announcement, style}: Props) => {
               ],
             ),
             accessibilityRole:
-              announcement.actionButton.actionType === 'bottom_sheet'
+              announcement.actionButton.actionType === ActionType.bottom_sheet
                 ? 'button'
                 : 'link',
           }}
           onPress={async () => {
-            if (announcement.actionButton.actionType === 'bottom_sheet') {
+            if (announcement.actionButton.actionType === ActionType.bottom_sheet) {
               openBottomSheet(() => (
                 <AnnouncementSheet announcement={announcement} />
               ));
