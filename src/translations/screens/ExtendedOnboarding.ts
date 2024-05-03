@@ -129,7 +129,7 @@ export default orgSpecificTranslations(OnboardingTexts, {
         'Velkommen til Svipper-appen',
       ),
       titleA11yLabel: _(
-        'Velkommen til Svipper appen',
+        'Velkommen til Svipper-appen',
         'Welcome to the Svipper app',
         'Velkommen til Svipper-appen',
       ),

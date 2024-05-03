@@ -49,9 +49,9 @@ export default orgSpecificTranslations(ServiceDisruptionsTexts, {
     ),
     button: {
       text: _(
-	'fylkestrafikk.no/trafikkmeldinger',
-	'fylkestrafikk.no/trafikkmeldinger',
-	'fylkestrafikk.no/trafikkmeldinger',
+	'Trafikkmeldinger',
+	'Trafikkmeldinger',
+	'Trafikkmeldinger',
       ),
     },
   },

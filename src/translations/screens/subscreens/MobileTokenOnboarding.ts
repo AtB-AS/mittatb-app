@@ -313,7 +313,7 @@ export default orgSpecificTranslations(MobileTokenOnboardingTexts, {
   troms: {
     ticketSafetyInfo: {
       description: _(
-	'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du mister bytter mobil.',
+	'Billetten din er trygt lagret på **Min profil**. Dermed vil du aldri miste den — selv om du bytter mobil.',
 	"Your ticket is safely stored on **My profile**. That way you won't lose your ticket even if you switch phones.",
 	'Billetten din er trygt lagra på **Min profil**. Difor vil du aldri miste han - sjølv om du byter mobil.',
       ),
