@@ -3,6 +3,7 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
@@ -25,6 +26,8 @@ import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-
 import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from '@atb/auth/utils';
+import {useQueryClient} from '@tanstack/react-query';
+import {useClearQueriesOnUserChange} from "@atb/auth/use-clear-queries-on-user-change";
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -130,6 +133,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
+  useClearQueriesOnUserChange(state);
 
   const retryAuth = useCallback(() => {
     if (state.authStatus === 'fetch-id-token-timeout') {
