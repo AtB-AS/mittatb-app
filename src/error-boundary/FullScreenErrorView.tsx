@@ -1,6 +1,5 @@
 import {Crash} from '@atb/assets/svg/color/images';
 import {Button} from '@atb/components/button';
-import {ScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {useLocalConfig} from '@atb/utils/use-local-config';
@@ -21,7 +20,6 @@ export function FullScreenErrorView({onRestartApp, errorCode}: ErrorProps) {
 
   return (
     <SafeAreaView style={styles.safearea}>
-      <ScreenHeader title="" />
       <View style={styles.svgContainer}>
         <Crash width="100%" height="100%" />
       </View>
