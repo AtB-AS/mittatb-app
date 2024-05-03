@@ -362,7 +362,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
-                    testID="dashboardDateTimePicker"
+                    testID="filterButton"
                     rightIcon={{
                       svg: Filter,
                       notification: filtersState.anyFiltersApplied

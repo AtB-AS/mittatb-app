@@ -1,3 +1,6 @@
+import ElementHelper from '../utils/element.helper.js';
+import {$} from '@wdio/globals';
+
 class TravelSearchDetailsPage {
   /**
    * Get the travel time
@@ -5,6 +8,19 @@ class TravelSearchDetailsPage {
   get travelTime() {
     const reqId = `//*[@resource-id="travelTime"]`;
     return $(reqId);
+  }
+
+  /**
+   * Check that the single leg returned is @mode
+   * @param mode mode to check for (bike, foot)
+   */
+  async hasSingleLeg(mode: 'bike' | 'foot') {
+    const legId_0 = `//*[@resource-id="legContainer0"]`;
+    const legId_1 = `//*[@resource-id="legContainer1"]`;
+    const modeId = `//*[@resource-id="${mode}Leg"]`;
+    await ElementHelper.waitForElement('id', 'tripDetailsContentView');
+    expect(await $(legId_1).isExisting()).toBe(false);
+    return await $(legId_0).$(modeId).isExisting();
   }
 
   /**

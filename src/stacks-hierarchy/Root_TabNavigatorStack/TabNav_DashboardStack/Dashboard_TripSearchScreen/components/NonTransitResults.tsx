@@ -53,6 +53,7 @@ export const NonTransitResults = ({tripPatterns, onDetailsPressed}: Props) => {
             leftIcon={{svg: getTransportModeSvg(mode).svg}}
             rightIcon={{svg: arrowRight}}
             accessibilityLabel={`${modeText} ${duration}`}
+            testID={`${mode}Result`}
           />
         );
       })}

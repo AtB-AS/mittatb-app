@@ -49,7 +49,7 @@ export const TransportationIconBox: React.FC<TransportationIconBoxProps> = ({
       type="body__primary--bold"
       color={transportationColor}
       style={styles.lineNumberText}
-      testID={testID}
+      testID="lineNumber"
     >
       {lineNumber}
     </ThemeText>
