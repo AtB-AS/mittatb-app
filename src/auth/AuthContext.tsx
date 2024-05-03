@@ -3,7 +3,6 @@ import React, {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useReducer,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
@@ -15,7 +14,7 @@ import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
   VippsSignInErrorCode,
-} from '@atb/auth/types';
+} from './types';
 import {
   authConfirmCode,
   authSignInWithCustomToken,
@@ -25,9 +24,8 @@ import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-chang
 import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
 import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
-import {mapAuthenticationType} from '@atb/auth/utils';
-import {useQueryClient} from '@tanstack/react-query';
-import {useClearQueriesOnUserChange} from "@atb/auth/use-clear-queries-on-user-change";
+import {mapAuthenticationType} from './utils';
+import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
