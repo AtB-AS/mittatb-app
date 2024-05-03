@@ -229,14 +229,6 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
       'Her er det ofte travelt, så maks hastighet reduserast.',
     ),
   },
-  StationParking: {
-    title: _('Stasjonsparkering', 'Station Parking', 'Stasjonsparkering'),
-    description: _(
-      'I dette området er det spesifikke parkeringsplasser du må bruke.',
-      'In this area, there are specific parking spots you need to use.',
-      'I dette området er det spesifikke parkeringsplassar du må bruke.',
-    ),
-  },
   NoParking: {
     title: _(
       'Ingen parkering tillatt',
@@ -265,4 +257,12 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
       'Ingen reglar angitt for dette området.',
     ),
   },
+};
+
+export const GeofencingZoneExtraExplanations = {
+  isStationParking: _(
+    'I dette området finner du dedikerte parkeringsplasser. Se etter dem i kartet.',
+    'There are dedicated parking spots in this area. Look for them in the map.',
+    'I dette området finn du dedikerte parkeringsplassar. Sjå etter dei i kartet.',
+  ),
 };

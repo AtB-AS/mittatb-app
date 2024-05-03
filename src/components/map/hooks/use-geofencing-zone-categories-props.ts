@@ -22,13 +22,6 @@ export const useGeofencingZoneCategoriesProps = () => {
       strokeOpacity: 0.8,
       layerIndexWeight: 2,
     },
-    StationParking: {
-      code: 'StationParking',
-      color: '#C75B12', // orange_500
-      fillOpacity: 0.5,
-      strokeOpacity: 0.7,
-      layerIndexWeight: 1,
-    },
     NoParking: {
       code: 'NoParking',
       color: '#C76B89', // red_400

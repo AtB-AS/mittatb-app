@@ -14,7 +14,7 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {GeofencingZoneCategoryCode, MapProps, MapRegion} from './types';
+import {MapProps, MapRegion} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -30,6 +30,7 @@ import {GeofencingZoneExplanation} from './components/mobility/GeofencingZoneExp
 import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
 import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
+import {useGeofencingZoneCategoriesProps} from './hooks/use-geofencing-zone-categories-props';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -56,12 +57,14 @@ export const Map = (props: MapProps) => {
     );
 
   const {
-    geofencingZoneCategoryCodeToExplain,
+    geofencingZoneCategoryPropsToExplain,
     geofencingZoneOnPress,
     resetGeofencingZoneExplanation,
   } = useGeofencingZoneExplanation(!!selectedFeature);
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
     useGeofencingZonesEnabled();
+
+  const geofencingZoneCategoriesProps = useGeofencingZoneCategoriesProps();
 
   const updateRegionForVehicles = props.vehicles?.updateRegion;
   const updateRegionForStations = props.stations?.updateRegion;
@@ -121,7 +124,7 @@ export const Map = (props: MapProps) => {
 
     const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
     if (!featuresAtClick || featuresAtClick.length === 0) return;
-
+    //console.log('featuresAtClick', JSON.stringify(featuresAtClick));
     const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
       getFeatureWeight(currentFeature) > getFeatureWeight(selected)
         ? currentFeature
@@ -130,10 +133,10 @@ export const Map = (props: MapProps) => {
 
     if (isFeatureGeofencingZone(featureToSelect)) {
       geofencingZoneOnPress(
-        featureToSelect?.properties?.geofencingZoneCategoryProps?.code,
+        featureToSelect?.properties?.geofencingZoneCategoryProps,
       );
     } else {
-      geofencingZoneCategoryCodeToExplain && resetGeofencingZoneExplanation();
+      geofencingZoneCategoryPropsToExplain && resetGeofencingZoneExplanation();
       if (isFeaturePoint(featureToSelect)) {
         onMapClick({
           source: 'map-click',
@@ -141,7 +144,7 @@ export const Map = (props: MapProps) => {
         });
       } else if (isScooter(selectedFeature)) {
         // outside of operational area
-        geofencingZoneOnPress(GeofencingZoneCategoryCode.Unspecified);
+        geofencingZoneOnPress(geofencingZoneCategoriesProps.Unspecified);
       }
     }
   };
@@ -235,9 +238,9 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {geofencingZoneCategoryCodeToExplain && (
+        {geofencingZoneCategoryPropsToExplain && (
           <GeofencingZoneExplanation
-            geofencingZoneCategoryCode={geofencingZoneCategoryCodeToExplain}
+            geofencingZoneCategoryProps={geofencingZoneCategoryPropsToExplain}
           />
         )}
       </View>

@@ -1,31 +1,36 @@
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {GeofencingZoneCategoryCode} from '@atb/components/map';
+import {
+  GeofencingZoneCategoryKey,
+  GeofencingZoneCategoryProps,
+} from '@atb/components/map';
 
 export function useGeofencingZoneExplanation(hasSelectedFeature: boolean) {
   const [
-    geofencingZoneCategoryCodeToExplain,
-    setGeofencingZoneCategoryCodeToExplain,
-  ] = useState<GeofencingZoneCategoryCode>();
+    geofencingZoneCategoryPropsToExplain,
+    setGeofencingZoneCategoryPropsToExplain,
+  ] = useState<GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>>();
   const timeoutIdRef = useRef<NodeJS.Timeout>();
 
   const resetGeofencingZoneExplanation = () => {
     timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
-    setGeofencingZoneCategoryCodeToExplain(undefined);
+    setGeofencingZoneCategoryPropsToExplain(undefined);
   };
 
   const geofencingZoneOnPress = useCallback(
-    (geofencingZoneCategoryCode?: GeofencingZoneCategoryCode) => {
-      if (!geofencingZoneCategoryCode) {
+    (
+      geofencingZoneCategoryProps?: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>,
+    ) => {
+      if (!geofencingZoneCategoryProps) {
         resetGeofencingZoneExplanation();
         return;
       }
 
-      setGeofencingZoneCategoryCodeToExplain(geofencingZoneCategoryCode);
+      setGeofencingZoneCategoryPropsToExplain(geofencingZoneCategoryProps);
 
       timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
 
       timeoutIdRef.current = setTimeout(
-        () => setGeofencingZoneCategoryCodeToExplain(undefined),
+        () => setGeofencingZoneCategoryPropsToExplain(undefined),
         3000,
       );
     },
@@ -40,7 +45,7 @@ export function useGeofencingZoneExplanation(hasSelectedFeature: boolean) {
   }, [hasSelectedFeature]);
 
   return {
-    geofencingZoneCategoryCodeToExplain,
+    geofencingZoneCategoryPropsToExplain,
     geofencingZoneOnPress,
     resetGeofencingZoneExplanation,
   };

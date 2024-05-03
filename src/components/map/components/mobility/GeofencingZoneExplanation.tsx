@@ -1,17 +1,23 @@
-import {GeofencingZoneCategoryCode} from '@atb/components/map';
+import {
+  GeofencingZoneCategoryKey,
+  GeofencingZoneCategoryProps,
+} from '@atb/components/map';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {GeofencingZoneExplanations} from '@atb/translations/screens/subscreens/MobilityTexts';
+import {
+  GeofencingZoneExplanations,
+  GeofencingZoneExtraExplanations,
+} from '@atb/translations/screens/subscreens/MobilityTexts';
 
 type GeofencingZoneExplanationProps = {
-  geofencingZoneCategoryCode: GeofencingZoneCategoryCode;
+  geofencingZoneCategoryProps: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>;
 };
 
 export const GeofencingZoneExplanation = ({
-  geofencingZoneCategoryCode,
+  geofencingZoneCategoryProps,
 }: GeofencingZoneExplanationProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -26,12 +32,17 @@ export const GeofencingZoneExplanation = ({
           color="primary"
           style={styles.text}
         >
-          {t(GeofencingZoneExplanations[geofencingZoneCategoryCode].title)}
+          {t(
+            GeofencingZoneExplanations[geofencingZoneCategoryProps.code].title,
+          )}
         </ThemeText>
         <ThemeText type="body__secondary" color="secondary" style={styles.text}>
           {t(
-            GeofencingZoneExplanations[geofencingZoneCategoryCode].description,
+            GeofencingZoneExplanations[geofencingZoneCategoryProps.code]
+              .description,
           )}
+          {geofencingZoneCategoryProps.isStationParking &&
+            ' ' + t(GeofencingZoneExtraExplanations.isStationParking)}
         </ThemeText>
       </View>
     </View>

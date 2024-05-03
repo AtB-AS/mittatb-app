@@ -6,7 +6,23 @@ import {
 } from '@atb/components/map';
 import sortBy from 'lodash.sortby';
 import {toGeoJSON} from '@mapbox/polyline';
-import {GeofencingZones} from '@atb/api/types/generated/mobility-types_v2';
+import {
+  Feature,
+  GeofencingZoneRule,
+  GeofencingZones,
+} from '@atb/api/types/generated/mobility-types_v2';
+
+function getApplicableGeofencingZoneRules(
+  feature: Feature,
+  vehicleTypeId: string,
+): GeofencingZoneRule[] {
+  return (
+    feature.properties?.rules?.filter(
+      (rule) =>
+        rule.vehicleTypeIds?.includes(vehicleTypeId) || !rule.vehicleTypeIds, // if vehicleTypeIds is not defined, the rule applies to all vehicles
+    ) || []
+  );
+}
 
 export function filterOutFeaturesNotApplicableForCurrentVehicle(
   geofencingZones?: GeofencingZones[],
@@ -20,8 +36,9 @@ export function filterOutFeaturesNotApplicableForCurrentVehicle(
     .map((geofencingZone) => {
       const filteredFeatures = geofencingZone?.geojson?.features?.filter(
         (feature) => {
-          const applicableRules = feature.properties?.rules?.filter((rule) =>
-            rule.vehicleTypeIds?.includes(vehicleTypeId),
+          const applicableRules = getApplicableGeofencingZoneRules(
+            feature,
+            vehicleTypeId,
           );
           return (applicableRules?.length || 0) > 0;
         },
@@ -96,9 +113,9 @@ export function addGeofencingZoneCategoryProps(
       const preProcessedFeatures = (
         geofencingZone?.geojson?.features || []
       ).map((feature) => {
-        // the option to have multiple rules, is to make it allow different rules per vehicle type
-        const applicableRules = feature.properties?.rules?.filter((rule) =>
-          rule.vehicleTypeIds?.includes(vehicleTypeId),
+        const applicableRules = getApplicableGeofencingZoneRules(
+          feature,
+          vehicleTypeId,
         );
         // the first applicable rule for the given vehicly type is the decisive one
         const rule = applicableRules?.[0];
@@ -106,7 +123,7 @@ export function addGeofencingZoneCategoryProps(
         let rideNotAllowed = false,
           rideThroughNotAllowed = false,
           isSlowArea = false;
-        //let isStationParking = false
+        let isStationParking = false;
 
         if (rule) {
           rideNotAllowed = !rule.rideAllowed;
@@ -115,16 +132,11 @@ export function addGeofencingZoneCategoryProps(
             rule.maximumSpeedKph !== undefined &&
             rule.maximumSpeedKph !== null &&
             Number(rule.maximumSpeedKph) < 20;
-          //isStationParking = !!rule.stationParking
+          isStationParking = !!rule.stationParking;
         }
 
-        const {
-          Allowed,
-          Slow,
-          //StationParking,
-          NoParking,
-          NoEntry,
-        } = geofencingZoneCategoriesProps;
+        const {Allowed, Slow, NoParking, NoEntry} =
+          geofencingZoneCategoriesProps;
 
         let geofencingZoneCategoryProps: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey> =
           Allowed;
@@ -136,10 +148,7 @@ export function addGeofencingZoneCategoryProps(
         } else if (isSlowArea) {
           geofencingZoneCategoryProps = Slow;
         }
-
-        // if (isStationParking) {
-        //   geofencingZoneCategoryProps = StationParking;
-        // }
+        geofencingZoneCategoryProps.isStationParking = isStationParking;
 
         const preProcessedProperties = {
           ...feature.properties,

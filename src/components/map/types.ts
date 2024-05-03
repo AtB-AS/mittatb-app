@@ -214,7 +214,6 @@ export interface PreProcessedGeofencingZones
 export enum GeofencingZoneCategoryCode {
   Allowed = 'Allowed',
   Slow = 'Slow',
-  StationParking = 'StationParking',
   NoParking = 'NoParking',
   NoEntry = 'NoEntry',
   Unspecified = 'Unspecified',
@@ -230,6 +229,7 @@ export type GeofencingZoneCategoryProps<
   fillOpacity: number;
   strokeOpacity: number;
   layerIndexWeight: number;
+  isStationParking?: boolean;
 };
 
 export type GeofencingZoneCategoriesProps = {
