@@ -50,8 +50,8 @@ export default orgSpecificTranslations(ServiceDisruptionsTexts, {
     button: {
       text: _(
 	'Trafikkmeldinger',
-	'Trafikkmeldinger',
-	'Trafikkmeldinger',
+	'Customer information',
+	'Trafikkmeldingar',
       ),
     },
   },
