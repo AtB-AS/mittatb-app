@@ -147,7 +147,7 @@ const SelectTravelTokenTexts = {
           'Kan eg reise utan mobil?',
         ),
         answer: _(
-          'Du må alltid ha med deg det mobilen du har valgt å bruke billetten på.',
+          'Du må alltid ha med deg mobilen du har valgt å bruke billetten på.',
           'You must always travel with the mobile phone you have chosen to use the ticket on.',
           'Du må alltid ha med deg mobilen du har valt å bruke billetten på.',
         ),
