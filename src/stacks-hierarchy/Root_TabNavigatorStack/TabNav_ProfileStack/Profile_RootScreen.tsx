@@ -26,7 +26,7 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
@@ -106,14 +106,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
       );
     });
   }
-
-  useEffect(() => {
-    if (authStatus === 'fetching-id-token') {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [authStatus, setIsLoading]);
 
   return (
     <FullScreenView
@@ -551,7 +543,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           )}
         </View>
       </View>
-      {isLoading && <ActivityIndicatorOverlay />}
+      {(isLoading || authStatus === 'fetching-id-token') && (
+        <ActivityIndicatorOverlay />
+      )}
     </FullScreenView>
   );
 };
