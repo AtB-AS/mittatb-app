@@ -34,6 +34,7 @@ import {useIsLoading} from '@atb/utils/use-is-loading';
 import {
   GenericSectionItem,
   LinkSectionItem,
+  MessageSectionItem,
   Section,
 } from '@atb/components/sections';
 
@@ -62,6 +63,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     signOut,
     phoneNumber: authPhoneNumber,
     customerNumber,
+    retryAuth,
   } = useAuthState();
   const config = useLocalConfig();
   const {customerProfile} = useTicketingState();
@@ -123,7 +125,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               </ThemeText>
             </GenericSectionItem>
           )}
-          {customerNumber && (
+          {customerNumber ? (
             <GenericSectionItem>
               <ThemeText style={style.customerNumberHeading}>
                 {t(ProfileTexts.sections.account.infoItems.customerNumber)}
@@ -136,6 +138,21 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 {customerNumber}
               </ThemeText>
             </GenericSectionItem>
+          ) : (
+            <MessageSectionItem
+              message={t(ProfileTexts.sections.account.infoItems.claimsError)}
+              messageType="error"
+              onPressConfig={{
+                action: async () => {
+                  setIsLoading(true);
+                  await retryAuth();
+                  setIsLoading(false);
+                },
+                text: t(
+                  ProfileTexts.sections.account.infoItems.claimsErrorAction,
+                ),
+              }}
+            />
           )}
 
           {authenticationType == 'phone' && (
