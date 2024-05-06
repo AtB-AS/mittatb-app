@@ -47,9 +47,9 @@ const ProfileTexts = {
         customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
         phoneNumber: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
         claimsError: _(
-          'Det oppstod et problem med lasting av kontoen din. Trykk for å prøve igjen, eller kontakt kundeservice hvis problemet vedvarer.',
-          'There was a problem loading your account. Tap to try again, or contact customer service if the problem persists.',
-          'Det oppstod eit problem med lasting av kontoen din. Trykk for å prøve igjen, eller kontakt kundeservice hvis problemet blir verande.',
+          'Det oppstod et problem med lasting av kontoen din. Trykk for å laste inn på nytt, eller kontakt kundeservice hvis problemet vedvarer.',
+          'There was a problem loading your account. Tap to reload, or contact customer service if the problem persists.',
+          'Det oppstod eit problem med lasting av kontoen din. Trykk for å laste inn på nytt, eller kontakt kundeservice hvis problemet blir verande.',
         ),
       },
     },
