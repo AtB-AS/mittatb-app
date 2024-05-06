@@ -419,4 +419,34 @@ export default orgSpecificTranslations(ProfileTexts, {
       },
     },
   },
+  troms: {
+    sections: {
+      settings: {
+        linkSectionItems: {
+	  notifications: {
+            pushToggle: {
+              subText: _(
+		'Tillat at Svipper sender varslinger til denne telefonen.',
+		'Allow Svipper to send notifications to this phone.',
+		'Gi Svipper løyve til å sende varslingar til denne telefonen.',
+              ),
+            },
+            emailToggle: {
+              subText: (email: string) =>
+		_(
+                  `Tillat at Svipper sender varslinger til ${email}`,
+                  `Allow Svipper to send notifications to ${email}`,
+                  `Gi Svipper løyve til å sende varslingar til ${email}`,
+		),
+              noEmailPlaceholder: _(
+		'Tillat at Svipper sender varslinger til e-posten din.',
+		'Allow Svipper to send notifications to your e-mail.',
+		'Gi Svipper løyve til å sende varslingar til e-posten din.',
+              ),
+            },
+	  },
+	},
+      },
+    },
+  },
 });
