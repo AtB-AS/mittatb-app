@@ -51,7 +51,6 @@ const ProfileTexts = {
           'There was a problem loading your account. Tap to try again, or contact customer service if the problem persists.',
           'Det oppstod eit problem med lasting av kontoen din. Trykk for å prøve igjen, eller kontakt kundeservice hvis problemet blir verande.',
         ),
-        claimsErrorAction: _('Prøv igjen', 'Try again', 'Prøv igjen'),
       },
     },
     newFeatures: {

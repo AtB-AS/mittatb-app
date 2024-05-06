@@ -16,6 +16,7 @@ import {
   useHasReservationOrActiveFareContract,
 } from '@atb/ticketing';
 import {
+  dictionary,
   getTextForLanguage,
   ProfileTexts,
   useTranslation,
@@ -25,7 +26,7 @@ import {useLocalConfig} from '@atb/utils/use-local-config';
 import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
@@ -64,6 +65,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     phoneNumber: authPhoneNumber,
     customerNumber,
     retryAuth,
+    authStatus,
   } = useAuthState();
   const config = useLocalConfig();
   const {customerProfile} = useTicketingState();
@@ -105,6 +107,14 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     });
   }
 
+  useEffect(() => {
+    if (authStatus === 'fetching-id-token') {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [authStatus, setIsLoading]);
+
   return (
     <FullScreenView
       headerProps={{
@@ -143,14 +153,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               message={t(ProfileTexts.sections.account.infoItems.claimsError)}
               messageType="error"
               onPressConfig={{
-                action: async () => {
-                  setIsLoading(true);
-                  await retryAuth();
-                  setIsLoading(false);
-                },
-                text: t(
-                  ProfileTexts.sections.account.infoItems.claimsErrorAction,
-                ),
+                action: retryAuth,
+                text: t(dictionary.retry),
               }}
             />
           )}
