@@ -114,4 +114,11 @@ export default orgSpecificTranslations(DeleteProfileTexts, {
       ),
     },
   },
+  troms: {
+    unableToDeleteWithFareContracts: _(
+      'Kan ikke slette Min profil mens du har aktive billetter. Kontakt Svipper kundeservice for refusjon eller vent til billettene har utløpt.',
+      'Unable to delete My profile while you have active tickets. Please contact Svipper customer support to refund or wait until tickets expire.',
+      'Det er ikkje mogleg å slette Min profil mens du har aktive billettar. Kontakt Svipper kundeservice for refusjon eller vent til billettane har gått ut.',
+    ),
+  },
 });

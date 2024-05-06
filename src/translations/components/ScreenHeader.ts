@@ -70,4 +70,15 @@ export default orgSpecificTranslations(ScreenHeaderTexts, {
       },
     },
   },
+  troms: {
+    headerButton: {
+      chat: {
+	a11yHint: _(
+	  'Kontakt Svipper',
+	  'Contact Svipper',
+	  'Kontakt Svipper',
+	),
+      },
+    },
+  },
 });
