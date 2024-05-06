@@ -94,6 +94,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
   const {isBeaconsSupported} = useBeaconsState();
 
+  const {logEvent} = useAnalytics();
+
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
     openBottomSheet(() => {
@@ -145,7 +147,10 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               message={t(ProfileTexts.sections.account.infoItems.claimsError)}
               messageType="error"
               onPressConfig={{
-                action: retryAuth,
+                action: () => {
+                  logEvent('Profile', 'Retry fetching id token');
+                  retryAuth();
+                },
                 text: t(dictionary.retry),
               }}
             />
