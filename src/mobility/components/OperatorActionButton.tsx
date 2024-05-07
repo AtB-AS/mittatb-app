@@ -27,10 +27,15 @@ export const OperatorActionButton = ({
   const analytics = useAnalytics();
   const {t, language} = useTranslation();
   const {showAppMissingAlert} = useAppMissingAlert();
-  const {isUserEligibleForBenefit, isLoading: isLoadingEligible} =
-    useIsEligibleForBenefit(benefit);
+  const {
+    isUserEligibleForBenefit,
+    benefitRequiresValueCodeToUnlock,
+    isLoading: isLoadingEligible,
+  } = useIsEligibleForBenefit(benefit);
+
   const {data: valueCode, isLoading: isLoadingValueCode} = useValueCodeQuery(
-    isUserEligibleForBenefit ? operatorId : undefined,
+    operatorId,
+    isUserEligibleForBenefit && benefitRequiresValueCodeToUnlock,
   );
 
   const buttonText =

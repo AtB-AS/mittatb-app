@@ -10,14 +10,27 @@ export const useIsEligibleForBenefit = (
     isError,
   } = useUserBenefitsQuery(!!operatorBenefit);
 
-  const isUserEligibleForBenefit =
-    userBenefits && operatorBenefit?.id
-      ? userBenefits.flatMap((b) => b.benefitIds).includes(operatorBenefit.id)
-      : false;
+  const userBenefitIds = userBenefits?.flatMap((b) => b.benefitIds) || [];
+  const commonBenefitIds = userBenefitIds.filter(
+    (userBenefitId) => userBenefitId === operatorBenefit?.id,
+  );
+
+  const isUserEligibleForBenefit = commonBenefitIds.length > 0;
+
+  const benefitIdsThatRequireValueCode: OperatorBenefitType['id'][] = [
+    'single-unlock',
+    'free-unlock',
+  ];
+
+  const benefitRequiresValueCodeToUnlock = benefitIdsThatRequireValueCode.some(
+    (benefitIdThatRequiresValueCode) =>
+      commonBenefitIds.includes(benefitIdThatRequiresValueCode),
+  );
 
   return {
     isLoading,
     isError,
     isUserEligibleForBenefit,
+    benefitRequiresValueCodeToUnlock,
   };
 };
