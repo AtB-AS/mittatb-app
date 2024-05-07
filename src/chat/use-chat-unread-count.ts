@@ -1,14 +1,10 @@
-import Intercom from 'react-native-intercom';
-import {useEffect, useState, useCallback} from 'react';
+import Intercom, {IntercomEvents} from '@intercom/intercom-react-native';
+import {useEffect, useState} from 'react';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export function useChatUnreadCount() {
   const [count, setCount] = useState(0);
   const {enable_intercom} = useRemoteConfig();
-
-  const callback = useCallback(({count}: {count: number}) => {
-    setCount(count);
-  }, []);
 
   useEffect(() => {
     if (!enable_intercom) {
@@ -24,16 +20,17 @@ export function useChatUnreadCount() {
 
     getInitialUnreadCount();
 
-    Intercom.addEventListener(Intercom.Notifications.UNREAD_COUNT, callback);
+    const countListener = Intercom.addEventListener(
+      IntercomEvents.IntercomUnreadCountDidChange,
+      (response) => {
+        setCount(response.count as number)
+      }
+    );
 
     return () => {
       mounted = false;
-      Intercom.removeEventListener(
-        Intercom.Notifications.UNREAD_COUNT,
-        callback,
-      );
+      countListener.remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enable_intercom]);
 
   return count;
