@@ -33,6 +33,11 @@ export const SelectedFiltersButtons = ({
     ),
   );
 
+  const showFiltersSelectedMessage = filtersSelection.transportModes.some(
+    (tm) => tm.selectedAsDefault !== tm.selected,
+  );
+
+  if (!showFiltersSelectedMessage) return null;
   return (
     <View style={styles.container}>
       <Button
