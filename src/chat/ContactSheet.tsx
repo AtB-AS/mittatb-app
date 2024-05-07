@@ -8,7 +8,7 @@ import {
   useBottomSheet,
 } from '@atb/components/bottom-sheet';
 import {useChatUnreadCount} from './use-chat-unread-count';
-import Intercom from 'react-native-intercom';
+import Intercom, {Space} from '@intercom/intercom-react-native';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {screenReaderHidden} from '@atb/utils/accessibility';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
@@ -67,8 +67,8 @@ export const ContactSheet = ({onReportParkingViolation}: Props) => {
               )}
               onPress={() => {
                 unreadCount
-                  ? Intercom.displayMessenger()
-                  : Intercom.displayConversationsList();
+                  ? Intercom.presentSpace(Space.messages)
+                  : Intercom.presentSpace(Space.home);
                 analytics.logEvent('Contact', 'Send Intercom message clicked');
                 close();
               }}

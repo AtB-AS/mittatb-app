@@ -3634,6 +3634,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@intercom/intercom-react-native@6.8.1":
+  version "6.8.1"
+  resolved "https://registry.yarnpkg.com/@intercom/intercom-react-native/-/intercom-react-native-6.8.1.tgz#b8b944905f6dc5339f14476e308d4ae87e1455de"
+  integrity sha512-FNsdVllGg9dbw2KAdcwcN/2Omp0sudFXJ+jlyctRkEy4SjFSRYISKH5f9Ma0mi68CuJGXqaB0GxPV0srwwDKXA==
+
 "@isaacs/ttlcache@^1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@isaacs/ttlcache/-/ttlcache-1.4.1.tgz#21fb23db34e9b6220c6ba023a0118a2dd3461ea2"
@@ -14124,11 +14129,6 @@ react-native-inappbrowser-reborn@^3.7.0:
   dependencies:
     invariant "^2.2.4"
     opencollective-postinstall "^2.0.3"
-
-react-native-intercom@21.1.1:
-  version "21.1.1"
-  resolved "https://registry.npmjs.org/react-native-intercom/-/react-native-intercom-21.1.1.tgz"
-  integrity sha512-Cj7GoPIBeTKydLfA2123NZ6x49xueNmlX9LsAbYvv2CmEEyXDEI0rGuweqzumnJUp9tntrFr4piOZkrhhg6CYA==
 
 react-native-kettle-module@1.2.0:
   version "1.2.0"

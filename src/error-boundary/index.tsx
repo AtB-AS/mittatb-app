@@ -1,6 +1,6 @@
 import React, {ErrorInfo} from 'react';
 import Bugsnag from '@bugsnag/react-native';
-import Intercom from 'react-native-intercom';
+import Intercom from '@intercom/intercom-react-native';
 import {FullScreenErrorView} from './FullScreenErrorView';
 import {ComponentErrorView} from './ComponentErrorView';
 
