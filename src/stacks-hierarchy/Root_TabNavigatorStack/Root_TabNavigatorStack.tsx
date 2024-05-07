@@ -6,7 +6,7 @@ import {
 } from '@atb/assets/svg/mono-icons/tab-bar';
 import {MapPin} from '../../assets/svg/mono-icons/map';
 import {ThemeText} from '@atb/components/text';
-import {ThemeIcon} from '@atb/components/theme-icon';
+import {ThemeIcon, ThemeIconProps} from '@atb/components/theme-icon';
 import {usePreferenceItems} from '@atb/preferences';
 import {TabNav_DashboardStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack';
 import {TabNav_DeparturesStack} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DeparturesStack';
@@ -29,6 +29,7 @@ import {useOnPushNotificationOpened} from '@atb/notifications';
 import {useNavigation} from '@react-navigation/native';
 import {RootNavigationProps} from '../navigation-types';
 import {useOnboardingFlow, useOnboardingNavigation} from '@atb/onboarding';
+import {useAuthState} from '@atb/auth';
 
 const Tab = createBottomTabNavigator<TabNavigatorStackParams>();
 
@@ -44,6 +45,7 @@ export const Root_TabNavigatorStack = () => {
 
   const {nextOnboardingSection} = useOnboardingFlow(true); // assumeUserCreationOnboarded true to ensure outdated userCreationOnboarded value not used
   const {goToScreen} = useOnboardingNavigation();
+  const {customerNumber} = useAuthState();
 
   useEffect(() => {
     if (!navigation.isFocused()) return; // only show onboarding screens from Root_TabNavigatorStack path
@@ -122,6 +124,7 @@ export const Root_TabNavigatorStack = () => {
           Profile,
           lineHeight,
           'profileTab',
+          customerNumber === undefined ? {color: 'error'} : undefined,
         )}
       />
     </Tab.Navigator>
@@ -148,6 +151,7 @@ function tabSettings(
   Icon: (svg: SvgProps) => JSX.Element,
   lineHeight: number,
   testID: string,
+  notification?: ThemeIconProps['notification'],
 ): TabSettings {
   return {
     tabBarLabel: ({color}) => (
@@ -160,6 +164,8 @@ function tabSettings(
         {tabBarLabel}
       </ThemeText>
     ),
-    tabBarIcon: ({color}) => <ThemeIcon svg={Icon} fill={color} />,
+    tabBarIcon: ({color}) => (
+      <ThemeIcon svg={Icon} fill={color} notification={notification} />
+    ),
   };
 }

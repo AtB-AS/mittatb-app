@@ -16,6 +16,7 @@ import {
   useHasReservationOrActiveFareContract,
 } from '@atb/ticketing';
 import {
+  dictionary,
   getTextForLanguage,
   ProfileTexts,
   useTranslation,
@@ -34,6 +35,7 @@ import {useIsLoading} from '@atb/utils/use-is-loading';
 import {
   GenericSectionItem,
   LinkSectionItem,
+  MessageSectionItem,
   Section,
 } from '@atb/components/sections';
 
@@ -62,6 +64,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
     signOut,
     phoneNumber: authPhoneNumber,
     customerNumber,
+    retryAuth,
+    authStatus,
   } = useAuthState();
   const config = useLocalConfig();
   const {customerProfile} = useTicketingState();
@@ -89,6 +93,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const {enable_vipps_login} = useRemoteConfig();
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
   const {isBeaconsSupported} = useBeaconsState();
+
+  const {logEvent} = useAnalytics();
 
   const {open: openBottomSheet} = useBottomSheet();
   async function selectFavourites() {
@@ -123,7 +129,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               </ThemeText>
             </GenericSectionItem>
           )}
-          {customerNumber && (
+          {customerNumber ? (
             <GenericSectionItem>
               <ThemeText style={style.customerNumberHeading}>
                 {t(ProfileTexts.sections.account.infoItems.customerNumber)}
@@ -136,6 +142,18 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 {customerNumber}
               </ThemeText>
             </GenericSectionItem>
+          ) : (
+            <MessageSectionItem
+              message={t(ProfileTexts.sections.account.infoItems.claimsError)}
+              messageType="error"
+              onPressConfig={{
+                action: () => {
+                  logEvent('Profile', 'Retry fetching id token');
+                  retryAuth();
+                },
+                text: t(dictionary.retry),
+              }}
+            />
           )}
 
           {authenticationType == 'phone' && (
@@ -530,7 +548,9 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           )}
         </View>
       </View>
-      {isLoading && <ActivityIndicatorOverlay />}
+      {(isLoading || authStatus === 'fetching-id-token') && (
+        <ActivityIndicatorOverlay />
+      )}
     </FullScreenView>
   );
 };
