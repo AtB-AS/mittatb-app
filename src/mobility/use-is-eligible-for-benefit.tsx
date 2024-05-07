@@ -15,20 +15,24 @@ export const useIsEligibleForBenefit = (
     isInitialLoading: isLoading,
     isError,
   } = useUserBenefitsQuery(!!operatorBenefit);
+  const res = {
+    isLoading,
+    isError,
+    isUserEligibleForBenefit: false,
+    benefitRequiresValueCodeToUnlock: false,
+  };
+  if (!operatorBenefit) return res;
 
   const userBenefitIds =
     userBenefits?.flatMap((b) => b.benefitIds).filter(isDefined) || [];
 
-  const isUserEligibleForBenefit =
-    operatorBenefit && userBenefitIds.includes(operatorBenefit.id);
+  const isUserEligibleForBenefit = userBenefitIds.includes(operatorBenefit.id);
 
   const benefitRequiresValueCodeToUnlock =
-    operatorBenefit &&
     benefitIdsRequiringValueCode.includes(operatorBenefit.id);
 
   return {
-    isLoading,
-    isError,
+    ...res,
     isUserEligibleForBenefit,
     benefitRequiresValueCodeToUnlock,
   };
