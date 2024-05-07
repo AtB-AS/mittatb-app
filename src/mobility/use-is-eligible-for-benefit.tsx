@@ -1,5 +1,11 @@
 import {useUserBenefitsQuery} from '@atb/mobility/queries/use-user-benefits-query';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
+import {isDefined} from '@atb/utils/presence';
+
+const benefitIdsRequiringValueCode: OperatorBenefitType['id'][] = [
+  'single-unlock',
+  'free-unlock',
+];
 
 export const useIsEligibleForBenefit = (
   operatorBenefit: OperatorBenefitType | undefined,
@@ -10,22 +16,15 @@ export const useIsEligibleForBenefit = (
     isError,
   } = useUserBenefitsQuery(!!operatorBenefit);
 
-  const userBenefitIds = userBenefits?.flatMap((b) => b.benefitIds) || [];
-  const commonBenefitIds = userBenefitIds.filter(
-    (userBenefitId) => userBenefitId === operatorBenefit?.id,
-  );
+  const userBenefitIds =
+    userBenefits?.flatMap((b) => b.benefitIds).filter(isDefined) || [];
 
-  const isUserEligibleForBenefit = commonBenefitIds.length > 0;
+  const isUserEligibleForBenefit =
+    operatorBenefit && userBenefitIds.includes(operatorBenefit.id);
 
-  const benefitIdsThatRequireValueCode: OperatorBenefitType['id'][] = [
-    'single-unlock',
-    'free-unlock',
-  ];
-
-  const benefitRequiresValueCodeToUnlock = benefitIdsThatRequireValueCode.some(
-    (benefitIdThatRequiresValueCode) =>
-      commonBenefitIds.includes(benefitIdThatRequiresValueCode),
-  );
+  const benefitRequiresValueCodeToUnlock =
+    operatorBenefit &&
+    benefitIdsRequiringValueCode.includes(operatorBenefit.id);
 
   return {
     isLoading,
