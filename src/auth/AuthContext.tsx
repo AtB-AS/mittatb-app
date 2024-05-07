@@ -14,7 +14,7 @@ import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
   VippsSignInErrorCode,
-} from '@atb/auth/types';
+} from './types';
 import {
   authConfirmCode,
   authSignInWithCustomToken,
@@ -24,7 +24,8 @@ import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-chang
 import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
 import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
-import {mapAuthenticationType} from '@atb/auth/utils';
+import {mapAuthenticationType} from './utils';
+import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -130,6 +131,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
+  useClearQueriesOnUserChange(state);
 
   const retryAuth = useCallback(() => {
     if (state.authStatus === 'fetch-id-token-timeout') {
