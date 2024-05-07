@@ -24,7 +24,6 @@ export const SelectedFiltersButtons = ({
     (m) => m.selected,
   ).length;
   const allModesCount = filtersSelection.transportModes.length;
-  if (selectedModesCount === allModesCount) return null;
 
   const text = t(
     TripSearchTexts.filters.selection.transportModes(
