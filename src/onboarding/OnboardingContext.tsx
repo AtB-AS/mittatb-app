@@ -8,7 +8,6 @@ import React, {
   useReducer,
 } from 'react';
 import RNBootSplash from 'react-native-bootsplash';
-import {register as registerChatUser} from '../chat/user';
 import {storage} from '@atb/storage';
 
 import {
