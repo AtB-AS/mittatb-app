@@ -68,6 +68,7 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
+import {register as registerChatUser} from '@atb/chat/user';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -90,6 +91,11 @@ export const RootStack = () => {
   useEffect(() => {
     queryClient.invalidateQueries();
   }, [userId, queryClient]);
+
+  // init Intercom user
+  useEffect(() => {
+    registerChatUser();
+  }, []);
 
   if (isLoadingAppState) {
     return null;
