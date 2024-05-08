@@ -134,8 +134,6 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
         ),
       );
 
-      registerChatUser();
-
       dispatch({
         type: 'LOAD_ONBOARDING_SETTINGS',
         loadedOnboardingSections,
