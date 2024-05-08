@@ -134,13 +134,7 @@ export const OnboardingContextProvider: React.FC = ({children}) => {
         ),
       );
 
-      if (
-        loadedOnboardingSections.find(
-          (lOS) => lOS.onboardingSectionId === 'userCreation',
-        )?.isOnboarded
-      ) {
-        registerChatUser();
-      }
+      registerChatUser();
 
       dispatch({
         type: 'LOAD_ONBOARDING_SETTINGS',
