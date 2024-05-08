@@ -130,7 +130,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 </ThemeText>
               </GenericSectionItem>
             )}
-            {customerNumber ? (
+            {customerNumber && (
               <GenericSectionItem>
                 <ThemeText style={style.customerNumberHeading}>
                   {t(ProfileTexts.sections.account.infoItems.customerNumber)}
@@ -145,7 +145,8 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   {customerNumber}
                 </ThemeText>
               </GenericSectionItem>
-            ) : (
+            )}
+            {authStatus !== 'authenticated' && (
               <MessageSectionItem
                 message={t(ProfileTexts.sections.account.infoItems.claimsError)}
                 messageType="error"
