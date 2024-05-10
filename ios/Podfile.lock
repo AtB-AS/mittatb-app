@@ -940,12 +940,12 @@ PODS:
   - Kronos (4.2.2)
   - leveldb-library (1.22.4)
   - libevent (2.1.12)
-  - MapboxCommon (23.9.0)
-  - MapboxCoreMaps (10.16.5):
+  - MapboxCommon (23.9.2)
+  - MapboxCoreMaps (10.17.0):
     - MapboxCommon (~> 23.9)
-  - MapboxMaps (10.16.5):
-    - MapboxCommon (= 23.9.0)
-    - MapboxCoreMaps (= 10.16.5)
+  - MapboxMaps (10.17.0):
+    - MapboxCommon (= 23.9.2)
+    - MapboxCoreMaps (= 10.17.0)
     - MapboxMobileEvents (= 1.0.10)
     - Turf (= 2.7.0)
   - MapboxMobileEvents (1.0.10)
@@ -2075,13 +2075,13 @@ PODS:
   - RNLocalize (2.2.4):
     - React-Core
   - rnmapbox-maps (10.1.3):
-    - MapboxMaps (~> 10.16.2)
+    - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
     - rnmapbox-maps/DynamicLibrary (= 10.1.3)
     - Turf
   - rnmapbox-maps/DynamicLibrary (10.1.3):
-    - MapboxMaps (~> 10.16.2)
+    - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
     - Turf
@@ -2503,9 +2503,9 @@ SPEC CHECKSUMS:
   Kronos: dfa27819541f9f1bf6834d5bfefa792f499001bb
   leveldb-library: 06a69cc7582d64b29424a63e085e683cc188230a
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MapboxCommon: e89c490cccd7ea9efcdc0e74b4ce1dbd9b4a875a
-  MapboxCoreMaps: 920f194f4f8b37f5731e0bdb82296d96ac4276f5
-  MapboxMaps: e8d94fb4782295df68172ce7ed567da8228c629e
+  MapboxCommon: 768660d6fca8193529ecf82eb6f5f9ae7a5acdf9
+  MapboxCoreMaps: be412ff97b16aa7820922c818115a9a0d8211caa
+  MapboxMaps: 87ef0003e6db46e45e7a16939f29ae87e38e7ce2
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   NextLevelSessionExporter: 4d8aa5e617f1c709724f2453efe5d4628480f65a
@@ -2579,7 +2579,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 67fb54b3e6ca338a8044e85cd6f340265aa41091
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
-  rnmapbox-maps: c5a6bcd941aef23d9a14af7bbae5042e097687b6
+  rnmapbox-maps: 8f6b0c4b4dfc62c72c16df5578b1105426d02e68
   RNPermissions: 2a9336f58607a4ba0000dd6b8ad7b3dd19004966
   RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
@@ -2591,6 +2591,6 @@ SPEC CHECKSUMS:
   Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
   Yoga: c716aea2ee01df6258550c7505fa61b248145ced
 
-PODFILE CHECKSUM: 5b6cee33a51f5952e8abb73c910173ac2c081339
+PODFILE CHECKSUM: 537713174e766340c793ae51c216bde244a3a06c
 
 COCOAPODS: 1.14.3
