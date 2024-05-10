@@ -196,8 +196,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   } else if (enable_vipps_login) {
                     navigation.navigate('Root_LoginOptionsScreen', {
                       showGoBack: true,
-                      transitionPreset:
-                        TransitionPresets.ModalSlideFromBottomIOS,
                     });
                   } else {
                     navigation.navigate('Root_LoginPhoneInputScreen', {});
