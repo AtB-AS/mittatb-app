@@ -46,7 +46,6 @@ import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
-import {TransitionPresets} from '@react-navigation/stack';
 
 const buildNumber = getBuildNumber();
 const version = getVersion();
