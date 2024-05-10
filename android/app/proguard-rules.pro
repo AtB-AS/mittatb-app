@@ -64,4 +64,4 @@
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
--printmapping proguard-mapping.txt
+-printmapping ./build/outputs/mapping.txt
