@@ -115,6 +115,8 @@ jobs:
         run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
+      - name: Find mapping.txt
+        run: bash ./scripts/find-mapping.sh
       - name: Upload build as artifact
         uses: actions/upload-artifact@v4
         with:
