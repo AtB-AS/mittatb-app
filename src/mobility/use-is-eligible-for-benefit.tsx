@@ -8,7 +8,7 @@ const benefitIdsRequiringValueCode: OperatorBenefitType['id'][] = [
 ];
 
 export const useIsEligibleForBenefit = (
-  operatorBenefit: OperatorBenefitType | undefined,
+  operatorBenefit?: OperatorBenefitType,
 ) => {
   const {
     data: userBenefits,
