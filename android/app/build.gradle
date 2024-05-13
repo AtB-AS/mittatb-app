@@ -131,7 +131,7 @@ android {
             matchingFallbacks = ['release']
             minifyEnabled enableProguardOnBuilds
             shrinkResources enableProguardOnBuilds
-            debuggable true
+            debuggable false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         release {
