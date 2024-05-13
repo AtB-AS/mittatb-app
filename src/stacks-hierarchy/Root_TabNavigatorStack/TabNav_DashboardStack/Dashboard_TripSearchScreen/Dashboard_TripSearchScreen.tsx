@@ -54,7 +54,7 @@ import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/Ta
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOver} from '@atb/popover';
-import {areDefaultFiltersSelected} from './are-default-filters-selected';
+import {areDefaultFiltersSelected} from './utils';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -340,7 +340,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                   language,
                 )}
                 mode="primary"
-                interactiveColor='interactive_1'
+                interactiveColor="interactive_1"
                 compact={true}
                 style={styles.searchTimeButton}
                 onPress={onSearchTimePress}
@@ -359,7 +359,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     text={t(TripSearchTexts.filterButton.text)}
                     accessibilityHint={t(TripSearchTexts.filterButton.a11yHint)}
                     mode="primary"
-                    interactiveColor='interactive_1'
+                    interactiveColor="interactive_1"
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}

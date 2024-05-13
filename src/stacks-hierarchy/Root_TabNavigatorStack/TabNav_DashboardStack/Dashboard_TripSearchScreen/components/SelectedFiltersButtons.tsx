@@ -6,7 +6,7 @@ import React from 'react';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {StyleSheet} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
-import {areDefaultFiltersSelected} from '../are-default-filters-selected';
+import {areDefaultFiltersSelected} from '../utils';
 
 type Props = {
   filtersSelection: TravelSearchFiltersSelectionType;

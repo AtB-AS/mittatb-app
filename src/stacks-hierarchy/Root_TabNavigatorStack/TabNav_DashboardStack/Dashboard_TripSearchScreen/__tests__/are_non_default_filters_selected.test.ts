@@ -1,5 +1,5 @@
 import {TransportModeFilterOptionWithSelectionType} from '@atb/travel-search-filters';
-import {areDefaultFiltersSelected} from '../are-default-filters-selected';
+import {areDefaultFiltersSelected} from '../utils';
 
 describe('areDefaultFiltersSelected', () => {
   it('should return false if input `transportModes` is undefined.', () => {
