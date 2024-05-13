@@ -6,6 +6,7 @@ import React from 'react';
 import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
 import {StyleSheet} from '@atb/theme';
 import {TripSearchTexts, useTranslation} from '@atb/translations';
+import {areDefaultFiltersSelected} from '../are-default-filters-selected';
 
 type Props = {
   filtersSelection: TravelSearchFiltersSelectionType;
@@ -20,11 +21,7 @@ export const SelectedFiltersButtons = ({
   const {t} = useTranslation();
   if (!filtersSelection.transportModes) return null;
 
-  const showFiltersSelectedMessage = filtersSelection.transportModes.some(
-    (tm) => tm.selectedAsDefault !== tm.selected,
-  );
-
-  if (!showFiltersSelectedMessage) return null;
+  if (areDefaultFiltersSelected(filtersSelection?.transportModes)) return null;
 
   const selectedModesCount = filtersSelection.transportModes.filter(
     (m) => m.selected,
