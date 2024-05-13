@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   FareContract,
+  isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
   isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
@@ -47,6 +48,7 @@ import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-bene
 import {ValidityLine} from '../ValidityLine';
 import {ValidityHeader} from '../ValidityHeader';
 import {ConsumeCarnetSectionItem} from '../components/ConsumeCarnetSectionItem';
+import {ActivateNowSectionItem} from '../components/ActivateNowSectionItem';
 
 type Props = {
   fareContract: FareContract;
@@ -240,6 +242,9 @@ export const DetailsContent: React.FC<Props> = ({
         />
         {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
           <ConsumeCarnetSectionItem fareContractId={fc.id} />
+        )}
+        {isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
+          <ActivateNowSectionItem fareContractId={fc.id} />
         )}
       </Section>
     );

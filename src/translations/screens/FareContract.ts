@@ -166,6 +166,25 @@ const FareContractTexts = {
       'Aktivér for å gå til billetinformasjon',
     ),
   },
+  activateNow: {
+    startNow: _('Start billett nå', 'Start ticket now', 'Start billett no'),
+    bottomSheetTitle: _(
+      'Vil du starte billetten?',
+      'Do you want to start the ticket?',
+      'Vil du starte billetten?',
+    ),
+    bottomSheetDescription: _(
+      'Billetten blir gyldig med en gang du starter den.',
+      'The ticket becomes valid immediately after you start it.',
+      'Billetten blir gyldig med ein gong du startar han.',
+    ),
+    confirm: _('Bekreft og start', 'Confirm and start', 'Bekreft og start'),
+    genericError: _(
+      'En feil har oppstått under aktivering av billetten. Vennligst prøv igjen.',
+      'An error occurred while activating the ticket. Please try again.',
+      'Ein feil har oppstått under aktivering av billetten. Ver venleg og prøv igjen.',
+    ),
+  },
   carnet: {
     numberOfUsedAccessesRemaining: (count: number) =>
       _(

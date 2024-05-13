@@ -28,9 +28,11 @@ import {
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
   FareContract,
+  isCanBeActivatedNowFareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
+import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
 
 type Props = {
   now: number;
@@ -177,6 +179,9 @@ export const FareContractView: React.FC<Props> = ({
       )}
       {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
         <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
+      )}
+      {isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
+        <ActivateNowSectionItem fareContractId={fareContract.id} />
       )}
     </Section>
   );
