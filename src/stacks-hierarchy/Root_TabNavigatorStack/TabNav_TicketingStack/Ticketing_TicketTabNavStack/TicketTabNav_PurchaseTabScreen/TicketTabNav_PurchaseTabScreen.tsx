@@ -21,7 +21,6 @@ import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places'
 import {TariffZone} from '@atb/configuration';
 import {ThemeText} from '@atb/components/text';
 import {TicketingTexts, useTranslation} from '@atb/translations';
-import {TransitionPresets} from '@react-navigation/stack';
 import {useGetFareProductsQuery} from '@atb/ticketing/use-get-fare-products-query';
 
 type Props = TicketTabNavScreenProps<'TicketTabNav_PurchaseTabScreen'>;
@@ -43,7 +42,8 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
   const {tokens, mobileTokenStatus} = useMobileTokenContextState();
   const inspectableToken = tokens.find((t) => t.isInspectable);
   const hasInspectableMobileToken = inspectableToken?.type === 'mobile';
-  const hasMobileTokenError = mobileTokenStatus === 'fallback' || mobileTokenStatus === 'error';
+  const hasMobileTokenError =
+    mobileTokenStatus === 'fallback' || mobileTokenStatus === 'error';
   const harborsQuery = useHarborsQuery();
 
   if (must_upgrade_ticketing) return <UpgradeSplash />;
@@ -159,7 +159,6 @@ export const TicketTabNav_PurchaseTabScreen = ({navigation}: Props) => {
                 'Root_PurchaseAsAnonymousConsequencesScreen',
                 {
                   showLoginButton: true,
-                  transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
                 },
               )
             }

@@ -14,7 +14,6 @@ import {useTextForLanguage} from '@atb/translations/utils';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {TransitionPresets} from '@react-navigation/stack';
 import {useHasReservationOrActiveFareContract} from '@atb/ticketing';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -36,14 +35,11 @@ export const Root_LoginRequiredForFareProductScreen = ({
 
   const onNext = async () => {
     if (hasReservationOrActiveFareContract) {
-      navigation.navigate('Root_LoginActiveFareContractWarningScreen', {
-        transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
-      });
+      navigation.navigate('Root_LoginActiveFareContractWarningScreen');
     } else {
       if (enable_vipps_login) {
         navigation.navigate('Root_LoginOptionsScreen', {
           showGoBack: true,
-          transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
         });
       } else {
         navigation.navigate('Root_LoginPhoneInputScreen', {});

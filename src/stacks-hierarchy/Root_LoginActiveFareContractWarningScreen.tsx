@@ -14,7 +14,6 @@ import {
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {useTimeContextState} from '@atb/time';
-import {TransitionPresets} from '@react-navigation/stack';
 import {FullScreenFooter} from '@atb/components/screen-footer';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 
@@ -42,9 +41,7 @@ export const Root_LoginActiveFareContractWarningScreen = ({
         showGoBack: true,
       });
     } else {
-      navigation.navigate('Root_LoginPhoneInputScreen', {
-        transitionPreset: TransitionPresets.ModalSlideFromBottomIOS,
-      });
+      navigation.navigate('Root_LoginPhoneInputScreen');
     }
   };
 
