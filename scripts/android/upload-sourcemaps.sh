@@ -15,12 +15,12 @@ if [[
 
     exit 1
 else
-echo "Generating and uploading Android source maps"
+    echo "Generating and uploading Android source maps"
     curl --http1.1 https://upload.bugsnag.com/ \
-    -F proguard=bundle/mapping.txt \
-    -F apiKey=$BUGSNAG_API_KEY \
-    -F versionCode=$BUILD_ID \
-    -F appId=$ANDROID_APPLICATION_ID \
-    -F versionName=$APP_VERSION \
-    -F overwrite
+      -F "proguard=@bundle/mapping.txt" \
+      -F "apiKey=$BUGSNAG_API_KEY" \
+      -F "versionCode=$BUILD_ID" \
+      -F "appId=$ANDROID_APPLICATION_ID" \
+      -F "versionName=$APP_VERSION" \
+      -F "overwrite="
 fi
