@@ -214,5 +214,10 @@ export default orgSpecificTranslations(PurchaseConfirmationTexts, {
         ),
       },
     },
+    travelDate: {
+      futureDate: (time: string) =>
+        _(`Start ${time}`, `Start time ${time}`, `Start ${time}`),
+      now: _('Start nå', 'Starting now', 'Start no'),
+    },
   },
 });
