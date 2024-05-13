@@ -9,7 +9,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
-import {activateFareContract} from '@atb/ticketing';
+import {activateFareContractNow} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React, {useState} from 'react';
@@ -30,7 +30,7 @@ export const ActivateNowBottomSheet = ({fareContractId}: Props) => {
   const onActivate = async () => {
     setIsLoading(true);
     try {
-      await activateFareContract(fareContractId);
+      await activateFareContractNow(fareContractId);
       close();
     } catch (e: any) {
       const errorData = getAxiosErrorMetadata(e);

@@ -93,7 +93,7 @@ export async function consumeCarnet(fareContractId: string) {
   return response.data;
 }
 
-export async function activateFareContract(fareContractId: string) {
+export async function activateFareContractNow(fareContractId: string) {
   const url = `ticket/v4/start-time`;
   const response = await client.put<void>(
     url,
