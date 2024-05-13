@@ -1,4 +1,6 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
+import BugsnagPluginReactNavigation from '@bugsnag/plugin-react-navigation'
+
 
 /**
  * Set to true if you want Bugsnag breadcrumbs to be written to console.log
@@ -8,7 +10,9 @@ const LOG_BREADCRUMBS_LOCALLY = false;
 
 export function configureAndStartBugsnag() {
   if (!__DEV__) {
-    Bugsnag.start();
+    Bugsnag.start({
+      plugins: [new BugsnagPluginReactNavigation()]
+    });
   } else {
     Bugsnag.notify = function (error, onError) {
       const event = Event.create(

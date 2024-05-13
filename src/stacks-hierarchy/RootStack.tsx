@@ -10,6 +10,7 @@ import {
   Route,
   useNavigationContainerRef,
 } from '@react-navigation/native';
+import Bugsnag from '@bugsnag/react-native'
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import React from 'react';
 import {StatusBar} from 'react-native';
@@ -86,6 +87,11 @@ export const RootStack = () => {
   if (isLoadingAppState) {
     return null;
   }
+
+  // The ! is intended here, see https://github.com/bugsnag/bugsnag-js/issues/1481
+  const {createNavigationContainer} = Bugsnag.getPlugin('reactNavigation')!;
+
+  const BugsnagNavigationContainer = createNavigationContainer(NavigationContainer);
 
   const statusBarColor = theme.static.background.background_accent_0.background;
 
@@ -166,7 +172,7 @@ export const RootStack = () => {
       />
       <Host>
         <LoadingScreenBoundary>
-          <NavigationContainer<RootStackParamList>
+          <BugsnagNavigationContainer<RootStackParamList>
             onStateChange={trackNavigation}
             initialState={getInitialNavigationContainerState()}
             ref={navRef}
@@ -420,7 +426,7 @@ export const RootStack = () => {
                 component={Root_ChooseTicketReceiverScreen}
               />
             </Stack.Navigator>
-          </NavigationContainer>
+          </BugsnagNavigationContainer>
         </LoadingScreenBoundary>
       </Host>
     </>
