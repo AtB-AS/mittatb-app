@@ -18,6 +18,7 @@ export const useFetchIdTokenWithCustomClaims = (
     if (state.authStatus === 'fetching-id-token') {
       let retryCount = 0;
       const intervalId = setInterval(async () => {
+        Bugsnag.leaveBreadcrumb(`Fetching ID token with Custom Claims`);
         const idToken = await state.user?.getIdTokenResult(!!retryCount); // First try without force refresh from server
         if (idToken?.claims['customer_number']) {
           Bugsnag.leaveBreadcrumb(

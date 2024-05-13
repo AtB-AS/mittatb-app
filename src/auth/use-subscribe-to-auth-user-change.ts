@@ -16,6 +16,7 @@ export const useSubscribeToAuthUserChange = (
     let signInInitiated = false;
     const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
+        Bugsnag.leaveBreadcrumb(`Auth state changed, sign-in type : ${mapAuthenticationType(user)}`);
         updateMetadata({
           'AtB-Firebase-Auth-Id': user?.uid,
           'AtB-Auth-Type': mapAuthenticationType(user),
@@ -27,6 +28,7 @@ export const useSubscribeToAuthUserChange = (
         subscription did not include user data. In other words, user was not
         previously signed in.
          */
+        Bugsnag.leaveBreadcrumb('Signing-in anonymously');
         auth()
           .signInAnonymously()
           .then(() => {
