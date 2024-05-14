@@ -60,6 +60,14 @@
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
 
+"@atb-as/theme@^8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-8.2.1.tgz#82a60be93d5d72c29c01fe7954faca02d0b9d4a5"
+  integrity sha512-yy2G1nOaqeWNmRu/leA+QWoY/rN3A0eG7+X6b7f3dupALPOgffn0r9NG/qqzkBhVxZV1f9rTI8wpSoiGVV2blA==
+  dependencies:
+    hex-to-rgba "^2.0.1"
+    ts-deepmerge "^4.0.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4":
   version "7.10.4"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.10.4.tgz"
