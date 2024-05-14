@@ -59,7 +59,9 @@ export const useFetchIdTokenWithCustomClaims = (
   useEffect(() => {
     if (query.error) {
       notifyBugsnag(query.error as any, {
-        description: `No id token with custom claims received after ${RETRY_COUNT} retries`,
+        metadata: {
+          description: `No id token with custom claims received after ${RETRY_COUNT} retries`,
+        },
       });
       dispatch({type: 'SET_FETCH_ID_TOKEN_TIMEOUT'});
     }
