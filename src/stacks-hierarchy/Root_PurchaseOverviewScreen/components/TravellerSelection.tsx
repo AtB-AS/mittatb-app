@@ -23,9 +23,7 @@ import {Edit} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {UserProfileWithCount} from '@atb/fare-contracts';
 import {ContentHeading} from '@atb/components/heading';
-import {LabelInfo} from '@atb/components/label-info';
 import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
-import {LabelInfoTexts} from '@atb/translations/components/LabelInfo';
 import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
@@ -134,11 +132,6 @@ export function TravellerSelection({
           .map((u) => `${u.count} ${getReferenceDataName(u, language)}`)
           .join(', ');
 
-  const newLabelAccessibility =
-    isOnBehalfOfAllowed && canSelectUserProfile
-      ? screenReaderPause + t(LabelInfoTexts.labels['new'])
-      : '';
-
   const sendingToOthersAccessibility = isOnBehalfOfToggle
     ? screenReaderPause + t(PurchaseOverviewTexts.onBehalfOf.sendToOthersText)
     : '';
@@ -170,7 +163,6 @@ export function TravellerSelection({
       travellersDetailsText +
       sendingToOthersAccessibility +
       travellerInfo +
-      newLabelAccessibility +
       screenReaderPause,
     accessibilityHint: canSelectUserProfile
       ? t(PurchaseOverviewTexts.travellerSelection.a11yHint)
@@ -234,17 +226,6 @@ export function TravellerSelection({
           </ThemeText>
         )}
       </View>
-
-      {/* remove new label when requested */}
-      {isOnBehalfOfAllowed && canSelectUserProfile && (
-        <View
-          ref={onBehalfOfIndicatorRef}
-          renderToHardwareTextureAndroid={true}
-          collapsable={false}
-        >
-          <LabelInfo label="new" />
-        </View>
-      )}
 
       {canSelectUserProfile && <ThemeIcon svg={Edit} size="normal" />}
     </View>
