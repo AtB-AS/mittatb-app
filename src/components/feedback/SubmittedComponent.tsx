@@ -5,7 +5,7 @@ import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {FeedbackTexts, useTranslation} from '@atb/translations';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import Intercom from 'react-native-intercom';
+import Intercom from '@intercom/intercom-react-native';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {Chat} from '@atb/assets/svg/mono-icons/actions';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
@@ -41,7 +41,7 @@ export const SubmittedComponent = ({
           alternativeArrayConvertedToString || 'Ingen alternativer valgt.',
         firebaseId,
       });
-      Intercom.displayMessageComposer();
+      Intercom.presentMessageComposer();
     } else {
       Linking.openURL(customer_service_url);
     }

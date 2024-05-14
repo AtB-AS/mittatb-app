@@ -119,5 +119,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>IntercomApiKey</key>
+	<string>$(INTERCOM_IOS_API_KEY)</string>
+	<key>IntercomAppId</key>
+	<string>$(INTERCOM_APP_ID)</string>
 </dict>
 </plist>
