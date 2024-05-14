@@ -16,7 +16,6 @@ export const useSubscribeToAuthUserChange = (
     let signInInitiated = false;
     const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
-        Bugsnag.leaveBreadcrumb(`Auth state changed, sign-in type : ${mapAuthenticationType(user)}`);
         updateMetadata({
           'AtB-Firebase-Auth-Id': user?.uid,
           'AtB-Auth-Type': mapAuthenticationType(user),
