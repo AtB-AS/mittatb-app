@@ -27,6 +27,7 @@ export const useSubscribeToAuthUserChange = (
         subscription did not include user data. In other words, user was not
         previously signed in.
          */
+        Bugsnag.leaveBreadcrumb('Signing-in anonymously');
         auth()
           .signInAnonymously()
           .then(() => {
