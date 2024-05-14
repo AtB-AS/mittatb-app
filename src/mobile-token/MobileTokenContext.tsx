@@ -119,9 +119,11 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
           new Error(
             `Token loading timed out after ${token_timeout_in_seconds} seconds`,
           ),
-          'TokenLoadingTimeoutError',
           {
-            description: 'Native and remote tokens took too long to load.',
+            errorGroupHash: 'TokenLoadingTimeoutError',
+            metadata: {
+              description: 'Native and remote tokens took too long to load.',
+            },
           },
         );
       }, token_timeout_in_seconds);

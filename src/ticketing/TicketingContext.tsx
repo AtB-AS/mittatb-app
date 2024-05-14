@@ -147,8 +147,10 @@ export const TicketingContextProvider: React.FC = ({children}) => {
             dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
           onError: (err) =>
             notifyBugsnag(err, {
-              description:
-                'Error setting up Firestore listener for fare contracts',
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for fare contracts',
+              },
             }),
         },
         sentFareContracts: {
@@ -156,8 +158,10 @@ export const TicketingContextProvider: React.FC = ({children}) => {
             dispatch({type: 'UPDATE_SENT_FARE_CONTRACTS', fareContracts}),
           onError: (err) =>
             notifyBugsnag(err, {
-              description:
-                'Error setting up Firestore listener for sent fare contracts',
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for sent fare contracts',
+              },
             }),
         },
         reservations: {
@@ -173,8 +177,10 @@ export const TicketingContextProvider: React.FC = ({children}) => {
             }),
           onError: (err) =>
             notifyBugsnag(err, {
-              description:
-                'Error setting up Firestore listener for reservations',
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for reservations',
+              },
             }),
         },
         rejectedReservations: {
@@ -185,8 +191,10 @@ export const TicketingContextProvider: React.FC = ({children}) => {
             }),
           onError: (err) =>
             notifyBugsnag(err, {
-              description:
-                'Error setting up Firestore listener for rejected reservations',
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for rejected reservations',
+              },
             }),
         },
         // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
@@ -196,8 +204,10 @@ export const TicketingContextProvider: React.FC = ({children}) => {
             dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile}),
           onError: (err) =>
             notifyBugsnag(err, {
-              description:
-                'Error setting up Firestore listener for customer profile',
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for customer profile',
+              },
             }),
         },
       });

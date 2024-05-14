@@ -21,15 +21,14 @@ type MetaData = {[key: string]: any};
  */
 export const notifyBugsnag = (
   error: NotifiableError,
-  errorGroupHash: string,
-  metadata?: MetaData,
+  options?: {errorGroupHash?: string,  metadata?: MetaData},
 ) =>
   Bugsnag.notify(
     error,
-    metadata
+    options
       ? (event: Event) => {
-          event.groupingHash = errorGroupHash;
-          event.addMetadata('metadata', metadata);
+          event.groupingHash = options.errorGroupHash;
+          options.metadata && event.addMetadata('metadata', options.metadata);
         }
       : undefined,
   );
