@@ -128,10 +128,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
+  useClearQueriesOnUserChange(state);
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
-  useClearQueriesOnUserChange(state);
 
   const retryAuth = useCallback(() => {
     if (state.authStatus === 'fetch-id-token-timeout') {
