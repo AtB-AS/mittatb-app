@@ -8,8 +8,8 @@ import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 let mockBugsnagNotification: Parameters<typeof notifyBugsnag> | undefined;
 
 jest.mock('@atb/utils/bugsnag-utils', () => ({
-  notifyBugsnag: (error: string, metadata: any) => {
-    mockBugsnagNotification = [error, metadata];
+  notifyBugsnag: (error: string, errorGroupHash: string, metadata: any) => {
+    mockBugsnagNotification = [error, errorGroupHash, metadata];
   },
 }));
 
@@ -27,6 +27,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     renderHook(() => useNotifyBugsnagOnTimeoutStatus('timeout', ref));
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
+      jestExpect.stringMatching('LoadingBoundaryTimeoutError'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
@@ -62,6 +63,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     hook.rerender({status: 'timeout'});
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
+      jestExpect.stringMatching('LoadingBoundaryTimeoutError'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
@@ -76,6 +78,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     );
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
+      jestExpect.stringMatching('LoadingBoundaryTimeoutError'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',
@@ -103,6 +106,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     hook.rerender({status: 'timeout'});
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
+      jestExpect.stringMatching('LoadingBoundaryTimeoutError'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'fetching-id-token',
@@ -117,6 +121,7 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     );
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
+      jestExpect.stringMatching('LoadingBoundaryTimeoutError'),
       jestExpect.objectContaining({
         isLoadingAppState: true,
         authStatus: 'loading',

@@ -8,7 +8,7 @@ export const useNotifyBugsnagOnTimeoutStatus = (
 ) => {
   useEffect(() => {
     if (status === 'timeout') {
-      notifyBugsnag('Loading boundary timeout', {...paramsRef.current});
+      notifyBugsnag('Loading boundary timeout', 'LoadingBoundaryTimeoutError', {...paramsRef.current});
     }
   }, [status, paramsRef]);
 };
