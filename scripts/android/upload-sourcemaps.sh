@@ -23,4 +23,13 @@ else
       -F "appId=$ANDROID_APPLICATION_ID" \
       -F "versionName=$APP_VERSION" \
       -F "overwrite="
+
+    npx bugsnag-source-maps upload-react-native \
+        --api-key=$BUGSNAG_API_KEY \
+        --app-version=$APP_VERSION \
+        --app-version-code=$BUILD_ID \
+        --platform=android \
+        --bundle=bundle/index.android.bundle \
+        --source-map=bundle/index.android.bundle.map \
+        --overwrite
 fi
