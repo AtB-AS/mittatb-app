@@ -82,8 +82,8 @@ export const App = () => {
         <StorybookContextProvider>
           <ErrorBoundary type="full-screen">
             <PreferencesContextProvider>
-              <ReactQueryProvider>
-                <LocaleContextProvider>
+              <LocaleContextProvider>
+                <ReactQueryProvider>
                   <AuthContextProvider>
                     <RemoteConfigContextProvider>
                       <TimeContextProvider>
@@ -129,8 +129,8 @@ export const App = () => {
                       </TimeContextProvider>
                     </RemoteConfigContextProvider>
                   </AuthContextProvider>
-                </LocaleContextProvider>
-              </ReactQueryProvider>
+                </ReactQueryProvider>
+              </LocaleContextProvider>
             </PreferencesContextProvider>
           </ErrorBoundary>
         </StorybookContextProvider>

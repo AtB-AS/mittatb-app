@@ -88,6 +88,7 @@ describe('useLoadingState', () => {
     };
     const hook = renderHook(() => useLoadingState(100));
     expect(hook.result.current.status).toBe('success');
+    expect(hook.result.all.length).toBe(1); // Should not return once with state 'loading' on first render
   });
 
   it('Should go from loading to success', async () => {

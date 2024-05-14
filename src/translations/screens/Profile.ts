@@ -46,6 +46,11 @@ const ProfileTexts = {
       infoItems: {
         customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
         phoneNumber: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
+        claimsError: _(
+          'Det oppstod et problem ved lasting av kontoen din.',
+          'There was a problem loading your account.',
+          'Det oppstod eit problem ved lasting av kontoen din.',
+        ),
       },
     },
     newFeatures: {
@@ -412,6 +417,36 @@ export default orgSpecificTranslations(ProfileTexts, {
                 'Tillat at FRAM sender varslinger til e-posten din.',
                 'Allow FRAM to send notifications to your e-mail.',
                 'Gi FRAM løyve til å sende varslingar til e-posten din.',
+              ),
+            },
+          },
+        },
+      },
+    },
+  },
+  troms: {
+    sections: {
+      settings: {
+        linkSectionItems: {
+          notifications: {
+            pushToggle: {
+              subText: _(
+                'Tillat at Svipper sender varslinger til denne telefonen.',
+                'Allow Svipper to send notifications to this phone.',
+                'Gi Svipper løyve til å sende varslingar til denne telefonen.',
+              ),
+            },
+            emailToggle: {
+              subText: (email: string) =>
+                _(
+                  `Tillat at Svipper sender varslinger til ${email}`,
+                  `Allow Svipper to send notifications to ${email}`,
+                  `Gi Svipper løyve til å sende varslingar til ${email}`,
+                ),
+              noEmailPlaceholder: _(
+                'Tillat at Svipper sender varslinger til e-posten din.',
+                'Allow Svipper to send notifications to your e-mail.',
+                'Gi Svipper løyve til å sende varslingar til e-posten din.',
               ),
             },
           },

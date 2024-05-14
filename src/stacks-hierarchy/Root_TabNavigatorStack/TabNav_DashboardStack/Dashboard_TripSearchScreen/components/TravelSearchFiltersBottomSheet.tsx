@@ -87,7 +87,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
       maxHeightValue={0.9}
       title={t(TripSearchTexts.filters.bottomSheet.heading)}
     >
-      <ScrollView style={styles.filtersContainer} ref={focusRef}>
+      <ScrollView style={styles.filtersContainer} ref={focusRef} testID="filterView">
         <Section>
           <HeaderSectionItem
             text={t(TripSearchTexts.filters.bottomSheet.modes.heading)}
@@ -103,6 +103,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                 })),
               );
             }}
+            testID="allModesToggle"
           />
           {filtersSelection.transportModes?.map((option) => {
             const text = getTextForLanguage(option.text, language);
@@ -136,6 +137,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                     ),
                   );
                 }}
+                testID={`${option.id}Toggle`}
               />
             ) : null;
           })}
@@ -202,6 +204,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
                           .save,
                   ),
                 }}
+                testID="saveFilter"
               />
               <ThemeText type="body__secondary" color="secondary">
                 {t(TripSearchTexts.filters.bottomSheet.saveFilters.text)}
@@ -216,6 +219,7 @@ export const TravelSearchFiltersBottomSheet = forwardRef<
           text={t(TripSearchTexts.filters.bottomSheet.use)}
           onPress={save}
           rightIcon={{svg: Confirm}}
+          testID="confirmButton"
         />
       </FullScreenFooter>
     </BottomSheetContainer>

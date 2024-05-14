@@ -324,4 +324,13 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
       ),
     },
   },
+  troms: {
+    onBehalfOf: {
+      sectionSubText: _(
+        'Den du kjøper billett til, må være innlogget i Svipper-appen for å få billetten.',
+        'The person you buy a ticket for, must be logged in to the Svipper app to get the ticket.',
+        'Den du kjøper billett til, må vere logga inn i Svipper-appen for å få billetten.',
+      ),
+    },
+  },
 });

@@ -204,4 +204,15 @@ export default orgSpecificTranslations(PurchaseConfirmationTexts, {
       },
     },
   },
+  troms: {
+    validityTexts: {
+      harbor: {
+        messageInHarborZones: _(
+          'Gjelder for buss i sonene du reiser til og fra',
+          'Applies for bus in departure and destination zones',
+          'Gjeld for buss i sonene du reiser til og frå',
+        ),
+      },
+    },
+  },
 });

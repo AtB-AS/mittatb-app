@@ -47,6 +47,7 @@ export const SelectedFiltersButtons = ({
         active={true}
         leftIcon={{svg: Bus}}
         rightIcon={{svg: Close}}
+        testID="selectedFilterButton"
       />
     </View>
   );
