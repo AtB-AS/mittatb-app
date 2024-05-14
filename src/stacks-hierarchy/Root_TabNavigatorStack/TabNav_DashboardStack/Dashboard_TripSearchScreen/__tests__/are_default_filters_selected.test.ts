@@ -6,6 +6,10 @@ describe('areDefaultFiltersSelected', () => {
     expect(areDefaultFiltersSelected()).toBeFalsy();
   });
 
+  it('should return false if input `transportModes` is an empty array.', () => {
+    expect(areDefaultFiltersSelected([])).toBeFalsy();
+  });
+
   it('should return false if any filter other than the default filters is selected.', () => {
     const tmfInput = [
       {id: 'bus', selectedAsDefault: true, selected: true},

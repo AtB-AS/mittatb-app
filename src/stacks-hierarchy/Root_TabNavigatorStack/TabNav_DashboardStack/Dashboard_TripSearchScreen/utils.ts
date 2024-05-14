@@ -120,6 +120,6 @@ export const sanitizeSearchTime = (searchTime: SearchTime) =>
 export const areDefaultFiltersSelected = (
   transportModes?: TransportModeFilterOptionWithSelectionType[],
 ): boolean => {
-  if (!transportModes) return false;
-  return !transportModes.some((tm) => tm.selectedAsDefault !== tm.selected);
+  if (!transportModes || transportModes.length === 0) return false;
+  return transportModes.every((tm) => tm.selectedAsDefault === tm.selected);
 };
