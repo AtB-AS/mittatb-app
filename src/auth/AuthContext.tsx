@@ -49,7 +49,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       if (sameUser) {
         return prevState;
       } else {
-        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid});
+        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid, authType: mapAuthenticationType(action.user)});
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
