@@ -21,5 +21,5 @@ else
 
     npx bugsnag-cli upload android-proguard ./bundle/mapping.txt \
       --version-name=$APP_VERSION \
-      --version-code=$BUILD_ID \
+      --version-code=$BUILD_ID
 fi
