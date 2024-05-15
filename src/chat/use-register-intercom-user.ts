@@ -32,10 +32,8 @@ async function register() {
 export function useRegisterIntercomUser() {
   useEffect(() => {
     storage.get(StorageModelKeysEnum.IntercomUserRegistered).then((it) => {
-      console.log('Intercom storage', it);
       if (it !== 'true') {
         register().then(() => {
-          console.log('Intercom registration done');
           storage.set(StorageModelKeysEnum.IntercomUserRegistered, 'true');
         });
       }
