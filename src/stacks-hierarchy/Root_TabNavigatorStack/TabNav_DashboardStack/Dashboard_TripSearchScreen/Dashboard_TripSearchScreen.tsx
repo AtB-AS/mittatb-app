@@ -366,7 +366,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     testID="filterButton"
                     rightIcon={{
                       svg: Filter,
-                      notification: areDefaultFiltersSelected(
+                      notification: !areDefaultFiltersSelected(
                         filtersState.filtersSelection?.transportModes,
                       )
                         ? {
