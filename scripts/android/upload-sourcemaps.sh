@@ -17,10 +17,10 @@ else
     npx bugsnag-cli upload react-native-android \
       --version-name=$APP_VERSION \
       --version-code=$BUILD_ID \
-      --variant=$(echo ${APP_FLAVOR^}${APP_ENVIRONMENT^})
+      --variant=$(echo $APP_FLAVOR${APP_ENVIRONMENT^})
 
     npx bugsnag-cli upload android-proguard \
       --version-name=$APP_VERSION \
       --version-code=$BUILD_ID \
-      --variant=$(echo ${APP_FLAVOR^}${APP_ENVIRONMENT^})
+      --variant=$(echo $APP_FLAVOR${APP_ENVIRONMENT^})
 fi
