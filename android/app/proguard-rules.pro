@@ -77,4 +77,4 @@
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
 
--printmapping ./mapping.txt
+-printmapping ./bundle/mapping.txt
