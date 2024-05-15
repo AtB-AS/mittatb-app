@@ -288,7 +288,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
                   subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
                   value={isOnBehalfOfToggle}
-                  label="new"
                   textType="body__primary--bold"
                   onValueChange={(checked) => {
                     setIsOnBehalfOfToggle(checked);
