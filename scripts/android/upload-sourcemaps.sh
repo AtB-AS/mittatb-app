@@ -15,12 +15,12 @@ if [[
 else
     echo "Uploading Android source maps"
     npx bugsnag-cli upload react-native-android \
-      --version-name $APP_VERSION \
-      --version-code $BUILD_ID \
-      --variant $APP_FLAVOR
+      --version-name=$APP_VERSION \
+      --version-code=$BUILD_ID \
+      --variant=$APP_FLAVOR
 
     npx bugsnag-cli upload android-proguard \
-      --version-name $APP_VERSION \
-      --version-code $BUILD_ID \
-      --variant $APP_FLAVOR
+      --version-name=$APP_VERSION \
+      --version-code=$BUILD_ID \
+      --variant=$APP_FLAVOR
 fi
