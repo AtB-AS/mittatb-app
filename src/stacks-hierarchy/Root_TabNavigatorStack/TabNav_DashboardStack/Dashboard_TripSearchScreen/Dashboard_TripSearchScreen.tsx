@@ -363,7 +363,7 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
-                    testID='filterButton'
+                    testID="filterButton"
                     rightIcon={{
                       svg: Filter,
                       notification: !areDefaultFiltersSelected(
