@@ -1,26 +1,26 @@
 #!/bin/bash
 
 if [[
-    -z "${BUGSNAG_API_KEY}"
-    || -z "${BUILD_ID}"
+    -z "${BUILD_ID}"
     || -z "${APP_VERSION}"
-    || -z "${ANDROID_APPLICATION_ID}"
+    || -z "${APP_FLAVOR}"
    ]]; then
     echo "Argument error!"
-    echo "Expected three env variables:
-  - BUGSNAG_API_KEY
+    echo "Expected env variables:
   - APP_VERSION
   - BUILD_ID
-  - ANDROID_APPLICATION_ID"
+  - APP_FLAVOR"
 
     exit 1
 else
-    echo "Generating and uploading Android source maps"
-    curl --http1.1 https://upload.bugsnag.com/ \
-      -F "proguard=@./bundle/mapping.txt" \
-      -F "apiKey=$BUGSNAG_API_KEY" \
-      -F "versionCode=$BUILD_ID" \
-      -F "appId=$ANDROID_APPLICATION_ID" \
-      -F "versionName=$APP_VERSION" \
-      -F "overwrite="
+    echo "Uploading Android source maps"
+    npx bugsnag-cli upload react-native-android \
+      --version-name $APP_VERSION \
+      --version-code $BUILD_ID \
+      --variant $APP_FLAVOR
+
+    npx bugsnag-cli upload android-proguard \
+      --version-name $APP_VERSION \
+      --version-code $BUILD_ID \
+      --variant $APP_FLAVOR
 fi
