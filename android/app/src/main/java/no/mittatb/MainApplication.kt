@@ -12,7 +12,7 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
-import io.intercom.android.sdk.Intercom
+import com.intercom.reactnative.IntercomModule
 
 class MainApplication : MultiDexApplication(), ReactApplication {
     override val reactNativeHost: ReactNativeHost = object : DefaultReactNativeHost(this) {
@@ -68,7 +68,7 @@ class MainApplication : MultiDexApplication(), ReactApplication {
             val intercomApiKey = getString(R.string.IntercomApiKey)
             val intercomAppId = getString(R.string.IntercomAppId)
             if (!TextUtils.isEmpty(intercomApiKey) && !TextUtils.isEmpty(intercomAppId)) {
-                Intercom.initialize(this, intercomApiKey, intercomAppId)
+                IntercomModule.initialize(this, intercomApiKey, intercomAppId)
             }
         } catch (e: Exception) {
             e.printStackTrace()

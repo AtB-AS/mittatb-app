@@ -1,17 +1,34 @@
-/*
-This utils is a slightly simpler to use facade against Bugsnag, and is
-easier to mock when needing to mock or test Bugsnag notifications.
- */
 import Bugsnag, {Event, NotifiableError} from '@bugsnag/react-native';
 
 type MetaData = {[key: string]: any};
 
-export const notifyBugsnag = (error: NotifiableError, metadata?: MetaData) =>
+/**
+ * A utility function that acts as a facade against Bugsnag,
+ * ensures that the correct grouping is provided,
+ * and is easier to mock for testing Bugsnag notifications.
+ *
+ * Please see 
+ * {@link https://github.com/AtB-AS/docs-private/blob/main/bugsnag.md|bugsnag.md}
+ *
+ * @param error error object (@see {@link NotifiableError})
+ * 
+ * @param errorGroupHash error group hash, determines the grouping of issues 
+ * ({@link https://docs.bugsnag.com/product/error-grouping/#custom-grouping-hash|see official docs} for more info)
+ * 
+ * @param metadata metadata to send with the error report.
+ * 
+ * @returns
+ */
+export const notifyBugsnag = (
+  error: NotifiableError,
+  options?: {errorGroupHash?: string,  metadata?: MetaData},
+) =>
   Bugsnag.notify(
     error,
-    metadata
+    options
       ? (event: Event) => {
-          event.addMetadata('metadata', metadata);
+          event.groupingHash = options.errorGroupHash;
+          options.metadata && event.addMetadata('metadata', options.metadata);
         }
       : undefined,
   );

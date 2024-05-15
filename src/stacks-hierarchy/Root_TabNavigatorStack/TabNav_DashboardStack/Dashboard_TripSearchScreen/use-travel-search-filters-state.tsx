@@ -40,7 +40,7 @@ export const useTravelSearchFiltersState = (): TravelSearchFiltersState => {
   const defaultTransportModeFilterOptions =
     transportModeFilterOptionsFromFirestore?.map((option) => ({
       ...option,
-      selected: true,
+      selected: option.selectedAsDefault,
     }));
   const defaultFlexibleTransportFilterOption =
     flexibleTransportFilterOptionFromFirestore &&

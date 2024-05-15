@@ -1,7 +1,11 @@
 import {Location} from '@atb/favorites';
-import {TravelSearchFiltersSelectionType} from '@atb/travel-search-filters';
+import {
+  TransportModeFilterOptionWithSelectionType,
+  TravelSearchFiltersSelectionType,
+} from '@atb/travel-search-filters';
 import {
   Modes,
+  StreetMode,
   TransportMode,
   TransportModes,
   TransportSubmode,
@@ -11,7 +15,6 @@ import {flatMap} from '@atb/utils/array';
 import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {SearchTime} from '@atb/journey-date-picker';
-import {defaultJourneyModes} from './hooks';
 import {isDefined} from '@atb/utils/presence';
 
 export type TimeSearch = {
@@ -25,6 +28,12 @@ export type CursorSearch = {
 };
 
 export type SearchInput = TimeSearch | CursorSearch;
+
+export const defaultJourneyModes = {
+  accessMode: StreetMode.Foot,
+  directMode: StreetMode.Foot,
+  egressMode: StreetMode.Foot,
+};
 
 export function createQuery(
   fromLocation: Location,
@@ -107,3 +116,10 @@ export const sanitizeSearchTime = (searchTime: SearchTime) =>
   searchTime.option === 'now'
     ? {...searchTime, date: new Date().toISOString()}
     : searchTime;
+
+export const areDefaultFiltersSelected = (
+  transportModes?: TransportModeFilterOptionWithSelectionType[],
+): boolean => {
+  if (!transportModes || transportModes.length === 0) return false;
+  return transportModes.every((tm) => tm.selectedAsDefault === tm.selected);
+};

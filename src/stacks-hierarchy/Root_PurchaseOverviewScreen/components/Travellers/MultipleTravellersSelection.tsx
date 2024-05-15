@@ -90,7 +90,6 @@ export function MultipleTravellersSelection({
             text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
             subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
             value={isTravelerOnBehalfOfToggle}
-            label="new"
             textType="body__primary--bold"
             onValueChange={(checked) => {
               setIsTravelerOnBehalfOfToggle(checked);

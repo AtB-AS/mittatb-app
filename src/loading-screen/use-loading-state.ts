@@ -1,13 +1,13 @@
 import {useAuthState} from '@atb/auth';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import {LoadingState, LoadingStatus} from '@atb/loading-screen/types';
+import {LoadingState} from '@atb/loading-screen/types';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {useIsLoadingAppState} from '@atb/loading-screen';
 
 export const useLoadingState = (timeoutMs: number): LoadingState => {
   const isLoadingAppState = useIsLoadingAppState();
   const {authStatus, retryAuth} = useAuthState();
-  const [status, setStatus] = useState<LoadingStatus>('loading');
+  const [isTimeout, setIsTimeout] = useState(false);
   const {resubscribeFirestoreConfig, firestoreConfigStatus} =
     useFirestoreConfiguration();
   const paramsRef = useRef({
@@ -16,16 +16,14 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
     firestoreConfigStatus,
   });
 
+  const loadSuccessful =
+    !isLoadingAppState &&
+    authStatus === 'authenticated' &&
+    firestoreConfigStatus === 'success';
+
+  const status = loadSuccessful ? 'success' : isTimeout ? 'timeout' : 'loading';
+
   useEffect(() => {
-    if (
-      !isLoadingAppState &&
-      authStatus === 'authenticated' &&
-      firestoreConfigStatus === 'success'
-    ) {
-      setStatus('success');
-    } else {
-      setStatus((prev) => (prev === 'timeout' ? 'timeout' : 'loading'));
-    }
     paramsRef.current = {
       isLoadingAppState,
       authStatus,
@@ -35,14 +33,14 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
 
   useEffect(() => {
     if (status === 'loading') {
-      const id = setTimeout(() => setStatus('timeout'), timeoutMs);
+      const id = setTimeout(() => setIsTimeout(true), timeoutMs);
       return () => clearTimeout(id);
     }
   }, [timeoutMs, status]);
 
   const retry = useCallback(() => {
     if (status !== 'loading') {
-      setStatus('loading');
+      setIsTimeout(false);
       if (authStatus !== 'authenticated') retryAuth();
       if (firestoreConfigStatus === 'loading') {
         resubscribeFirestoreConfig();

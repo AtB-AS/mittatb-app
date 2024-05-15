@@ -13,6 +13,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {RemoteConfigKeys} from '@atb/remote-config';
 
 import {useNonTransitTripSearchEnabled} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/TabNav_DashboardStack/Dashboard_TripSearchScreen/use-non-transit-trip-search-enabled';
+import {defaultJourneyModes} from './utils';
 
 export const useFindCityZoneInLocation = (
   location: Location | undefined,
@@ -32,12 +33,6 @@ export const useFindCityZoneInLocation = (
     location?.coordinates.longitude,
     location?.coordinates.latitude,
   ]);
-};
-
-export const defaultJourneyModes = {
-  accessMode: StreetMode.Foot,
-  directMode: StreetMode.Foot,
-  egressMode: StreetMode.Foot,
 };
 
 export function useJourneyModes(): [Modes, boolean] {

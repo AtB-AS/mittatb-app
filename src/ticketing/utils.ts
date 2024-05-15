@@ -89,6 +89,13 @@ export function isValidRightNowFareContract(
   return false;
 }
 
+export function willBeValidInTheFutureTravelRight(
+  travelRight: PreActivatedTravelRight,
+  now: number,
+): boolean {
+  return travelRight.startDateTime.getTime() > now;
+}
+
 export function isSentOrReceivedFareContract(fc: FareContract) {
   return fc.customerAccountId !== fc.purchasedBy;
 }
@@ -191,6 +198,20 @@ export function isCanBeConsumedNowFareContract(
     hasUsableCarnetTravelRight(travelRights, now) &&
     !hasActiveCarnetTravelRight(travelRights, now)
   );
+}
+
+export function isCanBeActivatedNowFareContract(
+  f: FareContract,
+  now: number,
+  currentUserId: string | undefined,
+) {
+  if (f.customerAccountId !== currentUserId) return false;
+  if (!isOrWillBeActivatedFareContract(f)) return false;
+  if (isCarnet(f)) return false;
+  const travelRights = f.travelRights
+    .filter(isPreActivatedTravelRight)
+    .filter((tr) => willBeValidInTheFutureTravelRight(tr, now));
+  return travelRights.length > 0;
 }
 
 export const filterActiveOrCanBeUsedFareContracts = (

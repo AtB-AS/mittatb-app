@@ -8,8 +8,11 @@ import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 let mockBugsnagNotification: Parameters<typeof notifyBugsnag> | undefined;
 
 jest.mock('@atb/utils/bugsnag-utils', () => ({
-  notifyBugsnag: (error: string, metadata: any) => {
-    mockBugsnagNotification = [error, metadata];
+  notifyBugsnag: (
+    error: string,
+    options: {errorGroupHash: string; metadata: any},
+  ) => {
+    mockBugsnagNotification = [error, options];
   },
 }));
 
@@ -23,25 +26,41 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
   afterAll(() => jest.useRealTimers());
 
   it('Should log event if status timeout', async () => {
-    const ref = createRef({isLoadingAppState: true, authStatus: 'loading',firestoreConfigStatus: 'success'});
+    const ref = createRef({
+      isLoadingAppState: true,
+      authStatus: 'loading',
+      firestoreConfigStatus: 'success',
+    });
     renderHook(() => useNotifyBugsnagOnTimeoutStatus('timeout', ref));
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
-        isLoadingAppState: true,
-        authStatus: 'loading',
+        errorGroupHash: 'LoadingBoundaryTimeoutError',
+        metadata: {
+          isLoadingAppState: true,
+          authStatus: 'loading',
+          firestoreConfigStatus: 'success',
+        },
       }),
     ]);
   });
 
   it('Should not log event if status loading', async () => {
-    const ref = createRef({isLoadingAppState: true, authStatus: 'loading', firestoreConfigStatus: 'success'});
+    const ref = createRef({
+      isLoadingAppState: true,
+      authStatus: 'loading',
+      firestoreConfigStatus: 'success',
+    });
     renderHook(() => useNotifyBugsnagOnTimeoutStatus('loading', ref));
     expect(mockBugsnagNotification).toEqual(undefined);
   });
 
   it('Should not log event if status success', async () => {
-    const ref = createRef({isLoadingAppState: true, authStatus: 'loading', firestoreConfigStatus: 'success'});
+    const ref = createRef({
+      isLoadingAppState: true,
+      authStatus: 'loading',
+      firestoreConfigStatus: 'success',
+    });
     renderHook(() => useNotifyBugsnagOnTimeoutStatus('success', ref));
     expect(mockBugsnagNotification).toEqual(undefined);
   });
@@ -63,22 +82,34 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
-        isLoadingAppState: true,
-        authStatus: 'loading',
+        errorGroupHash: 'LoadingBoundaryTimeoutError',
+        metadata: {
+          isLoadingAppState: true,
+          authStatus: 'loading',
+          firestoreConfigStatus: 'success',
+        },
       }),
     ]);
   });
 
   it('Should not log event on rerender when no params change', async () => {
-    const ref = createRef({isLoadingAppState: true, authStatus: 'loading', firestoreConfigStatus: 'success'});
+    const ref = createRef({
+      isLoadingAppState: true,
+      authStatus: 'loading',
+      firestoreConfigStatus: 'success',
+    });
     const hook = renderHook(() =>
       useNotifyBugsnagOnTimeoutStatus('timeout', ref),
     );
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
-        isLoadingAppState: true,
-        authStatus: 'loading',
+        errorGroupHash: 'LoadingBoundaryTimeoutError',
+        metadata: {
+          isLoadingAppState: true,
+          authStatus: 'loading',
+          firestoreConfigStatus: 'success',
+        },
       }),
     ]);
     mockBugsnagNotification = undefined;
@@ -99,31 +130,51 @@ describe('useNotifyBugsnagOnTimeoutStatus', () => {
       },
     );
     expect(mockBugsnagNotification).toEqual(undefined);
-    ref.current = {isLoadingAppState: true, authStatus: 'fetching-id-token', firestoreConfigStatus: 'success'};
+    ref.current = {
+      isLoadingAppState: true,
+      authStatus: 'fetching-id-token',
+      firestoreConfigStatus: 'success',
+    };
     hook.rerender({status: 'timeout'});
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
-        isLoadingAppState: true,
-        authStatus: 'fetching-id-token',
+        errorGroupHash: 'LoadingBoundaryTimeoutError',
+        metadata: {
+          isLoadingAppState: true,
+          authStatus: 'fetching-id-token',
+          firestoreConfigStatus: 'success',
+        },
       }),
     ]);
   });
 
   it('Should not log event again when ref params change', async () => {
-    const ref = createRef({isLoadingAppState: true, authStatus: 'loading', firestoreConfigStatus: 'success'});
+    const ref = createRef({
+      isLoadingAppState: true,
+      authStatus: 'loading',
+      firestoreConfigStatus: 'success',
+    });
     const hook = renderHook(() =>
       useNotifyBugsnagOnTimeoutStatus('timeout', ref),
     );
     expect(mockBugsnagNotification).toEqual([
       jestExpect.stringMatching('Loading boundary timeout'),
       jestExpect.objectContaining({
-        isLoadingAppState: true,
-        authStatus: 'loading',
+        errorGroupHash: 'LoadingBoundaryTimeoutError',
+        metadata: {
+          isLoadingAppState: true,
+          authStatus: 'loading',
+          firestoreConfigStatus: 'success',
+        },
       }),
     ]);
     mockBugsnagNotification = undefined;
-    ref.current = {isLoadingAppState: true, authStatus: 'fetching-id-token', firestoreConfigStatus: 'success'};
+    ref.current = {
+      isLoadingAppState: true,
+      authStatus: 'fetching-id-token',
+      firestoreConfigStatus: 'success',
+    };
     hook.rerender();
     expect(mockBugsnagNotification).toEqual(undefined);
   });

@@ -49,7 +49,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       if (sameUser) {
         return prevState;
       } else {
-        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid});
+        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid, authType: mapAuthenticationType(action.user)});
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
@@ -128,10 +128,10 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
+  useClearQueriesOnUserChange(state);
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
-  useClearQueriesOnUserChange(state);
 
   const retryAuth = useCallback(() => {
     if (state.authStatus === 'fetch-id-token-timeout') {
