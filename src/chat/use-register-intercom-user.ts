@@ -1,11 +1,12 @@
 import Intercom from '@intercom/intercom-react-native';
 import {Dimensions, PixelRatio, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {storage} from '@atb/storage';
+import {StorageModelKeysEnum, storage} from '@atb/storage';
 import {checkGeolocationPermission} from '@atb/GeolocationContext';
 import {updateMetadata} from './metadata';
+import {useEffect} from 'react';
 
-export async function register() {
+async function register() {
   await Intercom.loginUnidentifiedUser();
   await Intercom.setBottomPadding(Platform.OS === 'ios' ? 40 : 80);
 
@@ -26,4 +27,18 @@ export async function register() {
     'AtB-OS-Font-Scale': PixelRatio.getFontScale(),
     'AtB-Screen-Size': `${width}x${height}`,
   });
+}
+
+export function useRegisterIntercomUser() {
+  useEffect(() => {
+    storage.get(StorageModelKeysEnum.IntercomUserRegistered).then((it) => {
+      console.log('Intercom storage', it);
+      if (it !== 'true') {
+        register().then(() => {
+          console.log('Intercom registration done');
+          storage.set(StorageModelKeysEnum.IntercomUserRegistered, 'true');
+        });
+      }
+    });
+  }, []);
 }

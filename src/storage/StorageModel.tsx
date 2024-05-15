@@ -28,6 +28,7 @@ export enum StorageModelKeysEnum {
   EnablePosthogDebugOverride = '@ATB_enable_posthog_debug_override',
   EnableServerTimeDebugOverride = '@ATB_server_time_debug_override',
   EnableActivateTicketNowDebugOverride = '@ATB_enable_activate_ticket_now_debug_override',
+  IntercomUserRegistered = '@ATB_intercom_user_registered'
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
