@@ -67,6 +67,7 @@ import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_Choose
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {register as registerChatUser} from '@atb/chat/user';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -79,6 +80,8 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
+  const {enable_intercom} = useRemoteConfig();
+
   useFlipper(navRef);
 
   useBeaconsState();
@@ -86,8 +89,10 @@ export const RootStack = () => {
 
   // init Intercom user
   useEffect(() => {
-    registerChatUser();
-  }, []);
+    if (enable_intercom) {
+      registerChatUser();
+    }
+  }, [enable_intercom]);
 
   if (isLoadingAppState) {
     return null;
