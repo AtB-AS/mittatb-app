@@ -1,6 +1,7 @@
 import {
   GeofencingZoneCategoryKey,
   GeofencingZoneCategoryProps,
+  shadows,
 } from '@atb/components/map';
 import {ThemeText} from '@atb/components/text';
 import {useTranslation} from '@atb/translations';
@@ -42,7 +43,7 @@ export const GeofencingZoneExplanation = ({
               .description,
           )}
           {geofencingZoneCategoryProps.isStationParking &&
-            ' ' + t(GeofencingZoneExtraExplanations.isStationParking)}
+            '. ' + t(GeofencingZoneExtraExplanations.isStationParking)}
         </ThemeText>
       </View>
     </View>
@@ -57,16 +58,17 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   geofencingZoneExplanation: {
-    padding: theme.spacings.medium,
-    marginHorizontal: theme.spacings.medium,
-    borderRadius: theme.border.radius.regular,
-    alignItems: 'center',
-    backgroundColor: theme.interactive.interactive_2.default.background,
-    // borderWidth: 2,
-    // borderColor: theme.interactive.interactive_2.default.text,
-    rowGap: theme.spacings.xSmall,
+    ...shadows,
+    ...{
+      padding: theme.spacings.medium,
+      marginHorizontal: theme.spacings.medium,
+      borderRadius: theme.border.radius.regular,
+      alignItems: 'center',
+      backgroundColor: theme.interactive.interactive_2.default.background,
+      rowGap: theme.spacings.xSmall,
+    },
   },
   text: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
 }));

@@ -216,53 +216,77 @@ export const GeofencingZoneExplanations: GeofencingZoneExplanationsType = {
   Allowed: {
     title: _('Tillatt område', 'Allowed Area', 'Tillatt område'),
     description: _(
-      'Her kan du både kjøre og parkere.',
-      'Here you can both drive and park.',
-      'Her kan du både kjøre og parkere.',
+      'Her kan du både kjøre og parkere',
+      'Here you can both drive and park',
+      'Her kan du både køyre og parkere',
     ),
   },
   Slow: {
-    title: _('Saktegående sone', 'Slow Zone', 'Saktegåande sone'),
+    title: _('Saktesone', 'Slow Zone', 'Saktesone'),
     description: _(
-      'Her er det ofte travelt, så maks hastighet reduseres.',
-      'It is often busy here, so max speed is reduced.',
-      'Her er det ofte travelt, så maks hastighet reduserast.',
+      'Farten blir redusert i dette området',
+      'The speed will be reduced in this area',
+      'Farta vert redusert i dette området',
     ),
   },
+
+  /*** future features, pending support from Entur's Mobility API: ***/
+  // https://github.com/entur/lamassu/issues/448
+  // Parking: {
+  //   title: _('Parkeringssone', 'Parking Zone', 'Parkeringssone'),
+  //   description: _(
+  //     'Dette er et passende sted å parkere',
+  //     'This is a suitable place to park',
+  //     'Dette er ein passande stad å parkere',
+  //   ),
+  // },
+  // BonusParking: {
+  //   title: _(
+  //     'Bonusparkeringssone',
+  //     'Bonus Parking Zone',
+  //     'Bonusparkeringssone',
+  //   ),
+  //   description: _(
+  //     'Her får du rabatt for å parkere',
+  //     'By parking here you get a discount',
+  //     'Her får du rabatt for å parkere',
+  //   ),
+  // },
+
   NoParking: {
     title: _(
-      'Ingen parkering tillatt',
-      'No Parking Allowed',
-      'Ingen parkering tillatt',
+      'Parkering forbudt-sone',
+      'No Parking Zone',
+      'Parkering forboden-sone',
     ),
     description: _(
-      'Ikke parker her, du risikerer parkeringsbot.',
-      'Do not park here, you will risk a parking ticket.',
-      'Ikkje parker her, du risikerer parkeringsbot.',
+      'Du kan ikke parkere i dette området',
+      'You cannot park in this area',
+      'Du kan ikkje parkere i dette området',
     ),
   },
   NoEntry: {
-    title: _('Ingen adgang', 'No Entry', 'Ingen adgang'),
+    title: _('Kjøring forbudt-sone', 'No Riding Zone', 'Kjøring forboden-sone'),
     description: _(
-      'Det er forbudt å kjøre inn i dette området.',
-      'It is forbidden to drive into this area.',
-      'Det er forbode å køyre inn i dette området.',
+      'Du kan ikke kjøre inn i dette området',
+      'You cannot ride in this area',
+      'Du kan ikkje køyre inn i dette området',
     ),
   },
   Unspecified: {
     title: _('Uspesifisert', 'Unspecified', 'Uspesifisert'),
     description: _(
-      'Ingen regler angitt for dette området.',
-      'No rules defined for this area.',
-      'Ingen reglar angitt for dette området.',
+      'Ingen regler angitt for dette området',
+      'No rules defined for this area',
+      'Ingen reglar angitt for dette området',
     ),
   },
 };
 
 export const GeofencingZoneExtraExplanations = {
   isStationParking: _(
-    'I dette området finner du dedikerte parkeringsplasser. Se etter dem i kartet.',
-    'There are dedicated parking spots in this area. Look for them in the map.',
-    'I dette området finn du dedikerte parkeringsplassar. Sjå etter dei i kartet.',
+    'Se etter parkeringssoner i kartet.',
+    'Look for parking zones on the map.',
+    'Se etter parkeringssoner i kartet.',
   ),
 };
