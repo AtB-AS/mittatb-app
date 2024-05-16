@@ -60,6 +60,7 @@ export type RemoteConfig = {
    * transaction.
    */
   enable_auto_sale: boolean;
+  enable_activate_ticket_now: boolean;
 };
 
 export const defaultRemoteConfig: RemoteConfig = {
@@ -120,6 +121,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_posthog: false,
   enable_server_time: true,
   enable_auto_sale: false,
+  enable_activate_ticket_now: false,
 };
 
 export type RemoteConfigKeys = keyof RemoteConfig;
@@ -317,6 +319,10 @@ export function getConfig(): RemoteConfig {
     values['enable_auto_sale']?.asBoolean() ??
     defaultRemoteConfig.enable_auto_sale;
 
+  const enable_activate_ticket_now =
+    values['enable_activate_ticket_now']?.asBoolean() ??
+    defaultRemoteConfig.enable_activate_ticket_now;
+
   return {
     enable_ticketing,
     enable_intercom,
@@ -371,6 +377,7 @@ export function getConfig(): RemoteConfig {
     enable_posthog,
     enable_server_time,
     enable_auto_sale,
+    enable_activate_ticket_now,
   };
 }
 

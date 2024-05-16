@@ -19,66 +19,6 @@ describe('Ticket', () => {
     await ElementHelper.waitForElement('id', 'purchaseTab');
   });
 
-  // Choose to buy a ticket on behalf of others, and check the information along the purchase flow
-  it('should be able to buy on behalf of others', async () => {
-    const onBehalfOfPhoneNumber: number = 91111111;
-
-    try {
-      await TicketPage.chooseFareProduct('single');
-      await AppHelper.removePopover();
-      await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
-
-      expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
-
-      // Set on-behalf-of
-      await PurchaseOverviewPage.selectTraveller();
-      await PurchaseOverviewPage.decreaseTravellerCount('adult');
-      await PurchaseOverviewPage.increaseTravellerCount('child');
-      expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toBeChecked();
-      await PurchaseOverviewPage.onBehalfOfToggle.click();
-      await PurchaseOverviewPage.confirmTravellers();
-
-      const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
-      // Ensure an offer
-      if (totalPrice > 0) {
-        expect(await PurchaseOverviewPage.goToPayment).toBeEnabled();
-        await PurchaseOverviewPage.goToPayment.click();
-
-        // On-behalf-of
-        await ElementHelper.waitForElement('text', 'Buy for others');
-        expect(await PurchaseOverviewPage.goToPaymentOnBehalfOf).toBeDisabled();
-        await PurchaseOverviewPage.setPhoneNumber(onBehalfOfPhoneNumber);
-        expect(await PurchaseOverviewPage.goToPaymentOnBehalfOf).toBeEnabled();
-        await PurchaseOverviewPage.goToPaymentOnBehalfOf.click();
-
-        // Ticket summary
-        await ElementHelper.waitForElement('text', 'Ticket summary', 15000);
-        expect(
-          await PurchaseSummaryPage.summaryOnBehalfOfText.getText(),
-        ).toContain(`Sending to +47${onBehalfOfPhoneNumber}`);
-        expect(
-          await PurchaseSummaryPage.userProfileCountAndName.getText(),
-        ).toContain('1 Child');
-        expect(await PurchaseSummaryPage.getTotalPrice()).toBeGreaterThan(0);
-        expect(await PurchaseSummaryPage.choosePayment).toBeEnabled();
-
-        await NavigationHelper.back();
-        await AppHelper.pause();
-        await NavigationHelper.back();
-        await AppHelper.pause();
-        await NavigationHelper.back();
-      }
-      // No offer
-      else {
-        expect(await PurchaseOverviewPage.goToPayment).toBeDisabled();
-        await NavigationHelper.back();
-      }
-    } catch (errMsg) {
-      await AppHelper.screenshot('error_ticket_buy_on_behalf_of_others');
-      throw errMsg;
-    }
-  });
-
   // Show warnings for anonymous users
   it('should have restrictions for anonymous users', async () => {
     try {
@@ -194,6 +134,92 @@ describe('Ticket', () => {
       }
     } catch (errMsg) {
       await AppHelper.screenshot('error_ticket_correct_purchase_flow');
+      throw errMsg;
+    }
+  });
+
+  // Cannot buy a ticket on behalf of others when anonymous
+  it('should not be able to buy on behalf of others when anonymous', async () => {
+    try {
+      // Single ticket
+      await TicketPage.chooseFareProduct('single');
+      await AppHelper.removePopover();
+      await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
+
+      // Check on-behalf-of
+      await PurchaseOverviewPage.selectTraveller();
+      expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toExist();
+      await PurchaseOverviewPage.confirmTravellers();
+      await NavigationHelper.back();
+
+      // Night ticket
+      await TicketPage.chooseFareProduct('night_v2');
+      await ElementHelper.waitForElement('text', 'Night ticket, bus and tram');
+      expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toExist();
+      await NavigationHelper.back();
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_ticket_on_behalf_of_anonymous');
+      throw errMsg;
+    }
+  });
+
+  // Choose to buy a ticket on behalf of others, and check the information along the purchase flow
+  // NB! Disabled since on-behalf-of is only for logged-in users
+  xit('should be able to buy on behalf of others', async () => {
+    const onBehalfOfPhoneNumber: number = 91111111;
+
+    try {
+      await TicketPage.chooseFareProduct('single');
+      await AppHelper.removePopover();
+      await ElementHelper.waitForElement('text', 'Single ticket, bus and tram');
+
+      expect(await PurchaseOverviewPage.getTraveller()).toContain('1 Adult');
+
+      // Set on-behalf-of
+      await PurchaseOverviewPage.selectTraveller();
+      await PurchaseOverviewPage.decreaseTravellerCount('adult');
+      await PurchaseOverviewPage.increaseTravellerCount('child');
+      expect(await PurchaseOverviewPage.onBehalfOfToggle).not.toBeChecked();
+      await PurchaseOverviewPage.onBehalfOfToggle.click();
+      await PurchaseOverviewPage.confirmTravellers();
+
+      const totalPrice: number = await PurchaseOverviewPage.getTotalPrice();
+      // Ensure an offer
+      if (totalPrice > 0) {
+        expect(await PurchaseOverviewPage.goToPayment).toBeEnabled();
+        await PurchaseOverviewPage.goToPayment.click();
+
+        // On-behalf-of
+        await ElementHelper.waitForElement('text', 'Buy for others');
+        expect(await PurchaseOverviewPage.goToPaymentOnBehalfOf).toBeDisabled();
+        await PurchaseOverviewPage.setPhoneNumber(onBehalfOfPhoneNumber);
+        expect(await PurchaseOverviewPage.goToPaymentOnBehalfOf).toBeEnabled();
+        await PurchaseOverviewPage.goToPaymentOnBehalfOf.click();
+
+        // Ticket summary
+        await ElementHelper.waitForElement('text', 'Ticket summary', 15000);
+        expect(
+          await PurchaseSummaryPage.summaryOnBehalfOfText.getText(),
+        ).toContain(`Sending to +47${onBehalfOfPhoneNumber}`);
+        expect(
+          await PurchaseSummaryPage.userProfileCountAndName.getText(),
+        ).toContain('1 Child');
+        expect(await PurchaseSummaryPage.getTotalPrice()).toBeGreaterThan(0);
+        expect(await PurchaseSummaryPage.choosePayment).toBeEnabled();
+
+        await NavigationHelper.back();
+        await AppHelper.pause();
+        await NavigationHelper.back();
+        await AppHelper.pause();
+        await NavigationHelper.back();
+      }
+      // No offer
+      else {
+        expect(await PurchaseOverviewPage.goToPayment).toBeDisabled();
+        await NavigationHelper.back();
+      }
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_ticket_buy_on_behalf_of');
       throw errMsg;
     }
   });

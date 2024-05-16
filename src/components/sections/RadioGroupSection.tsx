@@ -36,7 +36,9 @@ export function RadioGroupSection<T>({
         const text = itemToText(item, index);
         const subtext = itemToSubtext ? itemToSubtext(item, index) : undefined;
         const a11yLabel = `${text}, ${hideSubtext ? '' : subtext}`;
-        const checked = item === selected;
+        const checked =
+          selected &&
+          keyExtractor(item, index) === keyExtractor(selected, index);
         return (
           <ActionSectionItem
             key={keyExtractor(item, index)}

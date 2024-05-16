@@ -54,6 +54,7 @@ import {NonTransitResults} from '@atb/stacks-hierarchy/Root_TabNavigatorStack/Ta
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useIsFocusedAndActive} from '@atb/utils/use-is-focused-and-active';
 import {usePopOver} from '@atb/popover';
+import {areDefaultFiltersSelected} from './utils';
 
 type RootProps = DashboardScreenProps<'Dashboard_TripSearchScreen'>;
 
@@ -362,10 +363,12 @@ export const Dashboard_TripSearchScreen: React.FC<RootProps> = ({
                     type="medium"
                     compact={true}
                     onPress={filtersState.openBottomSheet}
-                    testID="dashboardDateTimePicker"
+                    testID="filterButton"
                     rightIcon={{
                       svg: Filter,
-                      notification: filtersState.anyFiltersApplied
+                      notification: !areDefaultFiltersSelected(
+                        filtersState.filtersSelection?.transportModes,
+                      )
                         ? {
                             color: 'valid',
                             backgroundColor: 'background_accent_0',

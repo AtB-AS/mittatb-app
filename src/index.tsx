@@ -83,18 +83,18 @@ export const App = () => {
           <ErrorBoundary type="full-screen">
             <PreferencesContextProvider>
               <LocaleContextProvider>
-                <AuthContextProvider>
+                <ReactQueryProvider>
                   <RemoteConfigContextProvider>
-                    <TimeContextProvider>
-                      <AnalyticsContextProvider>
-                        <AccessibilityContextProvider>
-                          <ThemeContextProvider>
-                            <FavoritesContextProvider>
-                              <FiltersContextProvider>
-                                <SearchHistoryContextProvider>
-                                  <FirestoreConfigurationContextProvider>
-                                    <TicketingContextProvider>
-                                      <ReactQueryProvider>
+                    <AuthContextProvider>
+                      <TimeContextProvider>
+                        <AnalyticsContextProvider>
+                          <AccessibilityContextProvider>
+                            <ThemeContextProvider>
+                              <FavoritesContextProvider>
+                                <FiltersContextProvider>
+                                  <SearchHistoryContextProvider>
+                                    <FirestoreConfigurationContextProvider>
+                                      <TicketingContextProvider>
                                         <MobileTokenContextProvider>
                                           <AppLanguageProvider>
                                             <GeolocationContextProvider>
@@ -118,18 +118,18 @@ export const App = () => {
                                             </GeolocationContextProvider>
                                           </AppLanguageProvider>
                                         </MobileTokenContextProvider>
-                                      </ReactQueryProvider>
-                                    </TicketingContextProvider>
-                                  </FirestoreConfigurationContextProvider>
-                                </SearchHistoryContextProvider>
-                              </FiltersContextProvider>
-                            </FavoritesContextProvider>
-                          </ThemeContextProvider>
-                        </AccessibilityContextProvider>
-                      </AnalyticsContextProvider>
-                    </TimeContextProvider>
+                                      </TicketingContextProvider>
+                                    </FirestoreConfigurationContextProvider>
+                                  </SearchHistoryContextProvider>
+                                </FiltersContextProvider>
+                              </FavoritesContextProvider>
+                            </ThemeContextProvider>
+                          </AccessibilityContextProvider>
+                        </AnalyticsContextProvider>
+                      </TimeContextProvider>
+                    </AuthContextProvider>
                   </RemoteConfigContextProvider>
-                </AuthContextProvider>
+                </ReactQueryProvider>
               </LocaleContextProvider>
             </PreferencesContextProvider>
           </ErrorBoundary>

@@ -1,5 +1,6 @@
 import ElementHelper from './element.helper.ts';
 import {driver} from '@wdio/globals';
+import {numberToStringWithZeros} from './utils.js';
 
 const screenshotsFolder: string = './screenshots';
 
@@ -137,6 +138,33 @@ class AppHelper {
       j++;
     }
     await expect(elem).toBeDisplayed({wait: 200, interval: 100});
+  }
+
+  /**
+   * Set the time in the time picker once it's opened
+   * @param hours set the hours
+   * @param minutes set the minutes
+   */
+  async setTimePickerTime(hours: number, minutes: number) {
+    const hoursS = numberToStringWithZeros(hours);
+    const minutesS = numberToStringWithZeros(minutes);
+
+    // Open keyboard input
+    await ElementHelper.waitForElement('id', 'android:id/timePicker');
+    const toggle = await ElementHelper.getElement('android:id/toggle_mode');
+    await toggle.click();
+    await this.pause(500);
+    // Set values
+    const inputHour = await ElementHelper.getElement('android:id/input_hour');
+    const inputMin = await ElementHelper.getElement('android:id/input_minute');
+    await inputHour.click();
+    await inputHour.setValue(hoursS);
+    await inputMin.click();
+    await inputMin.setValue(minutesS);
+    // Confirm
+    const okButton = await ElementHelper.getElement('android:id/button1');
+    await okButton.click();
+    await this.pause(1000);
   }
 }
 

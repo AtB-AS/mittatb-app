@@ -1,5 +1,5 @@
 import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {AnnouncementRaw, AnnouncementType, ActionButton} from './types';
+import {AnnouncementRaw, AnnouncementType, ActionButton, ActionType} from './types';
 import {mapToLanguageAndTexts} from '@atb/utils/map-to-language-and-texts';
 import {APP_VERSION} from '@env';
 import {AppPlatformType} from '@atb/global-messages/types';
@@ -44,6 +44,7 @@ export const mapToAnnouncement = (
   if (!isAppPlatformValid(platforms)) return;
   if (appVersionMin && appVersionMin > APP_VERSION) return;
   if (appVersionMax && appVersionMax < APP_VERSION) return;
+  if (!actionButton) return;
 
   return {
     id,
@@ -77,13 +78,22 @@ function isAppPlatformValid(platforms: AppPlatformType[]) {
     (platform) => platform.toLowerCase() === Platform.OS.toLowerCase(),
   );
 }
+ 
+function mapActionButton(data: any): ActionButton | undefined {
+  const action = data ?? {};
+  const labelWithLanguage = mapToLanguageAndTexts(action.label);
+  const url = action.url;
+  const actionType = mapToActionType(action.actionType);
 
-function mapActionButton(data: any): ActionButton {
-  const {label = [], url, actionType = 'bottom_sheet'} = data ?? {};
-  const labelWithLanguage = mapToLanguageAndTexts(label);
+  if (!actionType) return;
+
   return {
     label: labelWithLanguage,
     url,
     actionType,
   };
+}
+
+function mapToActionType(data:any): ActionType | undefined {
+  if (Object.values(ActionType).includes(data)) return data;
 }

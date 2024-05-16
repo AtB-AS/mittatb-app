@@ -37,6 +37,7 @@ import {
   LOAD_NATIVE_TOKEN_QUERY_KEY,
   useLoadNativeTokenQuery,
 } from '@atb/mobile-token/hooks/use-load-native-token-query';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
 
@@ -81,6 +82,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
+  const {enable_intercom} = useRemoteConfig();
 
   const [isTimeout, setTimout] = useState(false);
 
@@ -94,7 +96,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     !isLoggingOut;
 
   const {data: nativeToken, status: nativeTokenStatus} =
-    useLoadNativeTokenQuery(enabled, userId);
+    useLoadNativeTokenQuery(enabled, userId, enable_intercom);
 
   const {data: remoteTokens, status: remoteTokensStatus} =
     useListRemoteTokensQuery(enabled, nativeToken);
@@ -114,14 +116,15 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         // and set state that indicates timeout.
         setTimout(true);
 
-        Bugsnag.notify(
+        notifyBugsnag(
           new Error(
             `Token loading timed out after ${token_timeout_in_seconds} seconds`,
           ),
-          (event) => {
-            event.addMetadata('token', {
+          {
+            errorGroupHash: 'TokenLoadingTimeoutError',
+            metadata: {
               description: 'Native and remote tokens took too long to load.',
-            });
+            },
           },
         );
       }, token_timeout_in_seconds);

@@ -46,6 +46,11 @@ const ProfileTexts = {
       infoItems: {
         customerNumber: _('Kundenummer', 'Customer number', 'Kundenummer'),
         phoneNumber: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
+        claimsError: _(
+          'Det oppstod et problem ved lasting av kontoen din.',
+          'There was a problem loading your account.',
+          'Det oppstod eit problem ved lasting av kontoen din.',
+        ),
       },
     },
     newFeatures: {
@@ -106,7 +111,7 @@ const ProfileTexts = {
             subText: _(
               'Tillat at AtB sender varslinger til denne telefonen.',
               'Allow AtB to send notifications to this phone.',
-              'Gi AtB løyve til å sende varslingar til denne telefonen.',
+              'Tillet AtB å sende varslingar til denne telefonen.',
             ),
           },
           emailToggle: {
@@ -115,12 +120,12 @@ const ProfileTexts = {
               _(
                 `Tillat at AtB sender varslinger til ${email}`,
                 `Allow AtB to send notifications to ${email}`,
-                `Gi AtB løyve til å sende varslingar til ${email}`,
+                `Tillet AtB å sende varslingar til ${email}`,
               ),
             noEmailPlaceholder: _(
               'Tillat at AtB sender varslinger til e-posten din.',
               'Allow AtB to send notifications to your e-mail.',
-              'Gi AtB løyve til å sende varslingar til e-posten din.',
+              'Tillet AtB å sende varslingar til e-posten din.',
             ),
           },
           button: _('Legg til e-post', 'Add e-mail address', 'Legg til e-post'),
@@ -149,7 +154,7 @@ const ProfileTexts = {
             title: _(
               'Tillatelse kreves',
               'Permission required',
-              'Løyve krevjast',
+              'Tillating krevjast',
             ),
             message: _(
               'Skru på varslinger i telefoninnstillingene for å motta varslinger fra AtB.',
@@ -166,14 +171,18 @@ const ProfileTexts = {
             title: _(
               'Tillatelse kreves',
               'Permission required',
-              'Løyve krevjast',
+              'Tillating krevjast',
             ),
             message: _(
               'Du må tillate appen å sende deg varslinger for å få beskjed før billettene dine utløper.',
               'You have to allow the app to send you notifications to be informed before your tickets expire.',
               'Du må tillate appen å sende deg varsel for å bli informert før billettane dine går ut.',
             ),
-            action: _('Velg tillatelser', 'Choose permissions', 'Vel løyve'),
+            action: _(
+              'Velg tillatelser',
+              'Choose permissions',
+              'Vel tillating',
+            ),
           },
           permissionError: {
             title: _('Oops!', 'Whoops!', 'Oops!'),
@@ -241,12 +250,12 @@ const ProfileTexts = {
           title: _(
             'Tillatelse kreves',
             'Permission required',
-            'Løyve krevjast',
+            'Tillating krevjast',
           ),
           message: _(
             'Gi tilgang til Bluetooth for å dele dine reisevaner.',
             'Enable Bluetooth to share your travel habits.',
-            'Gi løyve til Bluetooth for å dele dine reisevanar.',
+            'Gi tilgang til Bluetooth for å dele dine reisevanar.',
           ),
           action: _(
             'Åpne telefoninnstillinger',
@@ -358,7 +367,7 @@ export default orgSpecificTranslations(ProfileTexts, {
               subText: _(
                 'Tillat at Reisnordland sender varslinger til denne telefonen.',
                 'Allow Reisnordland to send notifications to this phone.',
-                'Gi Reisnordland løyve til å sende varslingar til denne telefonen.',
+                'Tillet Reisnordland å sende varslingar til denne telefonen.',
               ),
             },
             emailToggle: {
@@ -366,12 +375,12 @@ export default orgSpecificTranslations(ProfileTexts, {
                 _(
                   `Tillat at Reisnordland sender varslinger til ${email}`,
                   `Allow Reisnordland to send notifications to ${email}`,
-                  `Gi Reisnordland løyve til å sende varslingar til ${email}`,
+                  `Tillet Reisnordland å sende varslingar til ${email}`,
                 ),
               noEmailPlaceholder: _(
                 'Tillat at Reisnordland sender varslinger til e-posten din.',
                 'Allow Reisnordland to send notifications to your e-mail.',
-                'Gi Reisnordland løyve til å sende varslingar til e-posten din.',
+                'Tillet Reisnordland å sende varslingar til e-posten din.',
               ),
             },
           },
@@ -398,7 +407,7 @@ export default orgSpecificTranslations(ProfileTexts, {
               subText: _(
                 'Tillat at FRAM sender varslinger til denne telefonen.',
                 'Allow FRAM to send notifications to this phone.',
-                'Gi FRAM løyve til å sende varslingar til denne telefonen.',
+                'Tillet FRAM å sende varslingar til denne telefonen.',
               ),
             },
             emailToggle: {
@@ -406,12 +415,42 @@ export default orgSpecificTranslations(ProfileTexts, {
                 _(
                   `Tillat at FRAM sender varslinger til ${email}`,
                   `Allow FRAM to send notifications to ${email}`,
-                  `Gi FRAM løyve til å sende varslingar til ${email}`,
+                  `Tillet FRAM å sende varslingar til ${email}`,
                 ),
               noEmailPlaceholder: _(
                 'Tillat at FRAM sender varslinger til e-posten din.',
                 'Allow FRAM to send notifications to your e-mail.',
-                'Gi FRAM løyve til å sende varslingar til e-posten din.',
+                'Tillet FRAM å sende varslingar til e-posten din.',
+              ),
+            },
+          },
+        },
+      },
+    },
+  },
+  troms: {
+    sections: {
+      settings: {
+        linkSectionItems: {
+          notifications: {
+            pushToggle: {
+              subText: _(
+                'Tillat at Svipper sender varslinger til denne telefonen.',
+                'Allow Svipper to send notifications to this phone.',
+                'Tillet Svipper å sende varslingar til denne telefonen.',
+              ),
+            },
+            emailToggle: {
+              subText: (email: string) =>
+                _(
+                  `Tillat at Svipper sender varslinger til ${email}`,
+                  `Allow Svipper to send notifications to ${email}`,
+                  `Tillet Svipper å sende varslingar til ${email}`,
+                ),
+              noEmailPlaceholder: _(
+                'Tillat at Svipper sender varslinger til e-posten din.',
+                'Allow Svipper to send notifications to your e-mail.',
+                'Tillet Svipper å sende varslingar til e-posten din.',
               ),
             },
           },

@@ -62,6 +62,7 @@ import {usePosthogEnabledDebugOverride} from '@atb/analytics/use-is-posthog-enab
 import {useOnboardingState} from '@atb/onboarding';
 import {useServerTimeEnabledDebugOverride} from '@atb/time';
 import Bugsnag from '@bugsnag/react-native';
+import {useActivateTicketNowEnabledDebugOverride} from '@atb/fare-contracts/use-is-activate-now-enabled';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -130,6 +131,8 @@ export const Profile_DebugInfoScreen = () => {
     useTicketInformationEnabledDebugOverride();
   const posthogEnabledDebugOverride = usePosthogEnabledDebugOverride();
   const serverTimeEnabledDebugOverride = useServerTimeEnabledDebugOverride();
+  const activateTicketNowEnabledDebugOverride =
+    useActivateTicketNowEnabledDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -443,6 +446,12 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable server time"
               override={serverTimeEnabledDebugOverride}
+            />
+          </GenericSectionItem>
+          <GenericSectionItem>
+            <DebugOverride
+              description="Enable activate ticket now"
+              override={activateTicketNowEnabledDebugOverride}
             />
           </GenericSectionItem>
         </Section>

@@ -41,4 +41,13 @@ export default orgSpecificTranslations(OnBehalfOfTexts, {
       ),
     },
   },
+  troms: {
+    chooseReceiver: {
+      subtitle: _(
+        'Den du kjøper billett til, må være innlogget i Svipper-appen for å få billetten.',
+        'The person receiving the ticket must be logged in to the Svipper app to get the ticket.',
+        'Den du kjøper billett til, må vere logga inn i Svipper-appen for å få billetten.',
+      ),
+    },
+  },
 });
