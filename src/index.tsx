@@ -84,8 +84,8 @@ export const App = () => {
             <PreferencesContextProvider>
               <LocaleContextProvider>
                 <ReactQueryProvider>
-                  <AuthContextProvider>
-                    <RemoteConfigContextProvider>
+                  <RemoteConfigContextProvider>
+                    <AuthContextProvider>
                       <TimeContextProvider>
                         <AnalyticsContextProvider>
                           <AccessibilityContextProvider>
@@ -127,8 +127,8 @@ export const App = () => {
                           </AccessibilityContextProvider>
                         </AnalyticsContextProvider>
                       </TimeContextProvider>
-                    </RemoteConfigContextProvider>
-                  </AuthContextProvider>
+                    </AuthContextProvider>
+                  </RemoteConfigContextProvider>
                 </ReactQueryProvider>
               </LocaleContextProvider>
             </PreferencesContextProvider>
