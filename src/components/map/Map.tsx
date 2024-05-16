@@ -3,7 +3,8 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature} from 'geojson';
+import {Feature, Position} from 'geojson';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
@@ -121,12 +122,14 @@ export const Map = (props: MapProps) => {
 
   const onFeatureClick = async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
+    const {coordinates: positionClicked} = feature.geometry;
 
     const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
     if (!featuresAtClick || featuresAtClick.length === 0) return;
     //console.log('featuresAtClick', JSON.stringify(featuresAtClick));
     const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
-      getFeatureWeight(currentFeature) > getFeatureWeight(selected)
+      getFeatureWeight(currentFeature, positionClicked) >
+      getFeatureWeight(selected, positionClicked)
         ? currentFeature
         : selected,
     );
@@ -252,7 +255,7 @@ const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
 }));
 
-function getFeatureWeight(feature: Feature): number {
+function getFeatureWeight(feature: Feature, positionClicked: Position): number {
   if (isFeaturePoint(feature)) {
     return isStopPlace(feature) ||
       isScooter(feature) ||
@@ -263,7 +266,11 @@ function getFeatureWeight(feature: Feature): number {
       ? 3
       : 1;
   } else if (isFeatureGeofencingZone(feature)) {
-    return 2;
+    const positionClickedIsInsidePolygon = turfBooleanPointInPolygon(
+      positionClicked,
+      feature.geometry,
+    );
+    return positionClickedIsInsidePolygon ? 2 : 0;
   } else {
     return 0;
   }
