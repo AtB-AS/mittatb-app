@@ -76,3 +76,5 @@
   @org.greenrobot.eventbus.Subscribe <methods>;
 }
 -keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+-printmapping ./bundle/mapping.txt
