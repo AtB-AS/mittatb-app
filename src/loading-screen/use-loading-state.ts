@@ -6,11 +6,12 @@ import {useIsLoadingAppState} from '@atb/loading-screen';
 
 export const useLoadingState = (timeoutMs: number): LoadingState => {
   const isLoadingAppState = useIsLoadingAppState();
-  const {authStatus, retryAuth} = useAuthState();
+  const {userId, authStatus, retryAuth} = useAuthState();
   const [isTimeout, setIsTimeout] = useState(false);
   const {resubscribeFirestoreConfig, firestoreConfigStatus} =
     useFirestoreConfiguration();
   const paramsRef = useRef({
+    userId,
     isLoadingAppState,
     authStatus,
     firestoreConfigStatus,
@@ -23,15 +24,22 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
 
   const status = loadSuccessful ? 'success' : isTimeout ? 'timeout' : 'loading';
 
+  useEffect(() => setIsTimeout(false), [userId]);
+
   useEffect(() => {
     paramsRef.current = {
+      userId,
       isLoadingAppState,
       authStatus,
       firestoreConfigStatus,
     };
-  }, [isLoadingAppState, authStatus, firestoreConfigStatus]);
+  }, [userId, isLoadingAppState, authStatus, firestoreConfigStatus]);
 
   useEffect(() => {
+    if (status === 'success') {
+      setIsTimeout(false);
+    }
+
     if (status === 'loading') {
       const id = setTimeout(() => setIsTimeout(true), timeoutMs);
       return () => clearTimeout(id);
