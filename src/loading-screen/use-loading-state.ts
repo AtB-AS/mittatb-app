@@ -38,9 +38,7 @@ export const useLoadingState = (timeoutMs: number): LoadingState => {
   useEffect(() => {
     if (status === 'success') {
       setIsTimeout(false);
-    }
-
-    if (status === 'loading') {
+    } else if (status === 'loading') {
       const id = setTimeout(() => setIsTimeout(true), timeoutMs);
       return () => clearTimeout(id);
     }
