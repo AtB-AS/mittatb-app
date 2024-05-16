@@ -27,6 +27,7 @@ import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/sdk';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const config: GeoOptions = {
   enableHighAccuracy: true,
@@ -134,6 +135,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
   const currentCoordinatesRef = useRef<Coordinates | undefined>();
+  const {enable_intercom} = useRemoteConfig();
 
   const openSettingsAlert = useCallback(() => {
     Alert.alert(
@@ -256,12 +258,14 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
 
         if (state.status != status) {
           dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
-          await updateChatUserMetadata({'AtB-App-Location-Status': status});
+          if (enable_intercom) {
+            await updateChatUserMetadata({'AtB-App-Location-Status': status});
+          }
         }
       }
     }
     checkPermission();
-  }, [appStatus, state.status]);
+  }, [appStatus, state.status, enable_intercom]);
 
   useEffect(() => {
     currentCoordinatesRef.current = state.location?.coordinates;

@@ -5,21 +5,25 @@ import {AuthReducerAction} from './types';
 import {mapAuthenticationType} from './utils';
 import Bugsnag from '@bugsnag/react-native';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
+import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 export const useSubscribeToAuthUserChange = (
   dispatch: Dispatch<AuthReducerAction>,
 ) => {
   const {resubscribeToggle, resubscribe} = useResubscribeToggle();
+  const {enable_intercom} = useRemoteConfig();
 
   useEffect(() => {
     Bugsnag.leaveBreadcrumb('Subscribing to auth user changes');
     let signInInitiated = false;
     const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
-        updateMetadata({
-          'AtB-Firebase-Auth-Id': user?.uid,
-          'AtB-Auth-Type': mapAuthenticationType(user),
-        });
+        if (enable_intercom) {
+          updateMetadata({
+            'AtB-Firebase-Auth-Id': user?.uid,
+            'AtB-Auth-Type': mapAuthenticationType(user),
+          });
+        }
         dispatch({type: 'SET_USER', user});
       } else if (!signInInitiated) {
         /*
@@ -35,7 +39,7 @@ export const useSubscribeToAuthUserChange = (
       }
     });
     return () => unsubscribe();
-  }, [resubscribeToggle, dispatch]);
+  }, [resubscribeToggle, dispatch, enable_intercom]);
 
   return {
     resubscribe: resubscribe,
