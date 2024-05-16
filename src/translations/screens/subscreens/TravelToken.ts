@@ -559,4 +559,176 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
       ),
     },
   },
+  troms: {
+    travelToken: {
+      header: {
+        title: _(
+          'Bruk billett på reisekort / mobil',
+          'Use ticket on travel card / phone',
+          'Bruk billett på reisekort / mobil',
+        ),
+      },
+      changeTokenButton: _(
+        'Bytt mellom reisekort / mobil',
+        'Switch between travel card / phone',
+        'Byt mellom reisekort / mobil',
+      ),
+      faqs: [
+        {
+          question: _(
+            'Hva skjer om jeg mister reisekortet eller mobilen?',
+            'What happens if I lose my travel card or phone?',
+            'Kva skjer om eg mistar reisekortet eller mobilen?',
+          ),
+          answer: _(
+            'Billetten din ligger trygt lagret i Min profile. Velg å bruke billetten på en annen mobil eller reisekort.',
+            'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone or travel card.',
+            'Billetten din ligg trygt lagra i Min profil. Vel å bruke billetten på ein annan mobil eller eit anna reisekort.',
+          ),
+        },
+        {
+          question: _(
+            'Kan jeg bruke billetten på både reisekort og mobil samtidig?',
+            'Can I use the ticket on both travel card and mobile phone at the same time?',
+            'Kan eg bruke billetten på både reisekort og mobil samtidig?',
+          ),
+          answer: _(
+            'Nei, du kan kun bruke en av gangen, og billetten kan ikke deles med andre reisende.',
+            'No, you can only use one at a time and the ticket cannot be shared with other travellers.',
+            'Nei, du kan berre bruke ein om gongen, og billetten kan ikkje delast med andre reisande.',
+          ),
+        },
+        {
+          question: _(
+            'Kan jeg reise uten reisekort eller mobil?',
+            'Can I travel without my travel card or phone?',
+            'Kan eg reise utan reisekort eller mobil?',
+          ),
+          answer: _(
+            'Du må alltid ha med deg det reisekortet eller mobilen du har valgt å bruke billetten på.',
+            'You must always travel with the travel card or mobile phone you have chosen to use the ticket on.',
+            'Du må alltid ha med deg det reisekortet eller mobilen du har valt å bruke billetten på.',
+          ),
+        },
+        {
+          question: _(
+            `Jeg får ikke logget inn i Svipper med e-post`,
+            `I can not log into Svipper with e-mail`,
+            `Eg får ikkje logga inn i Svipper med e-post`,
+          ),
+          answer: _(
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+            `It is not possible to log into the app with e-mail as of today. You can continue to use your travel card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukarprofilen. Du kan kontakte kundesenteret for refusjon dersom du likevel vil laga ein ny brukarprofil i appen.`,
+          ),
+        },
+        {
+          question: _(
+            `Har du flere spørsmål om billettkjøp?`,
+            `Do you have any other questions about ticket purchases?`,
+            `Har du fleire spørsmål om billettkjøp?`,
+          ),
+          answer: _(
+            `Se flere måter å kontakte oss på fylkestrafikk.no/meny/hjelp-og-kontakt/`,
+            `See how to contact us at fylkestrafikk.no/menu/help-and-contact/?sprak=3`,
+            `Sjå fleire måtar å kontakte oss på fylkestrafikk.no/meny/hjelp-og-kontakt/`,
+          ),
+        },
+      ],
+      faqsWithoutTravelcard: [
+        {
+          question: _(
+            'Hva skjer om jeg mister mobilen?',
+            'What happens if I lose my phone?',
+            'Kva skjer om eg mistar mobilen?',
+          ),
+          answer: _(
+            'Billetten din ligger trygt lagret i Min bruker. Velg å bruke billetten på en annen mobil.',
+            'Your ticket is safely stored in My user. Switch to use the ticket on another mobile phone.',
+            'Billetten din blir trygt lagra i Min brukar. Vel å bruke billetten på ein annan mobil.',
+          ),
+        },
+        {
+          question: _(
+            'Kan jeg bruke billetten på flere mobiler samtidig?',
+            'Can I use the ticket on several mobile phones at the same time?',
+            'Kan eg bruke billetten på fleire mobilar samtidig?',
+          ),
+          answer: _(
+            'Nei, du kan kun bruke en av gangen, og billetten kan ikke deles med andre reisende.',
+            'No, you can only use one at a time and the ticket cannot be shared with other travellers.',
+            'Nei, du kan berre bruke den på éin mobil av gongen, og billetten kan ikkje delast med andre reisande.',
+          ),
+        },
+        {
+          question: _(
+            'Kan jeg reise uten mobil?',
+            'Can I travel without my phone?',
+            'Kan eg reise utan mobil?',
+          ),
+          answer: _(
+            'Du må alltid ha med deg det mobilen du har valgt å bruke billetten på.',
+            'You must always travel with the mobile phone you have chosen to use the ticket on.',
+            'Du må alltid ha med deg mobilen du har valgt å bruke billetten på.',
+          ),
+        },
+        {
+          question: _(
+            `Jeg får ikke logget inn i Svipper med e-post`,
+            `I can not log into the Svipper with e-mail`,
+            `Eg får ikkje logga inn i Svipper med e-post`,
+          ),
+          answer: _(
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service for a refund if you still want to create a new user profile in the app.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukarprofile. Du kan kontakte kundesenteret for refusjon dersom du likevel vil opprette ein ny brukarprofil i appen.`,
+          ),
+        },
+        {
+          question: _(
+            `Har du flere spørsmål om billettkjøp?`,
+            `Do you have any other questions about ticket purchases?`,
+            `Har du fleire spørsmål om billettkjøp?`,
+          ),
+          answer: _(
+            `Se flere måter å kontakte oss på fylkestrafikk.no/meny/hjelp-og-kontakt/`,
+            `See how to contact us at fylkestrafikk.no/menu/help-and-contact/?sprak=3`,
+            `Sjå fleire måtar å kontakte oss på fylkestrafikk.no/meny/hjelp-og-kontakt/`,
+          ),
+        },
+      ],
+    },
+    toggleToken: {
+      title: _(
+        'Bytt mellom reisekort / mobil',
+        'Switch between travel card / phone',
+        'Byt mellom reisekort / mobil',
+      ),
+      radioBox: {
+        tCard: {
+          title: _('Reisekort', 'Travel card', 'Reisekort'),
+          description: _(
+            'Les av reisekortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
+            'Validate your travel card at the bus stop or on board. The card will be scanned in a ticket inspection.',
+            'Les av reisekortet ditt på holdeplass eller om bord. Kortet vil lesast av ved kontroll.',
+          ),
+          a11yLabel: _(
+            'reisekort. Les av reisekortet ditt på holdeplass eller om bord. Kortet leses av ved kontroll.',
+            'travel card. Validate your travel card at the bus stop or on board. The card will be scanned in a ticket inspection.',
+            'reisekort. Les av reisekortet ditt på holdeplass eller om bord. Kortet vil lesast av ved kontroll.',
+          ),
+          a11yHint: _(
+            'Aktivér for å velge reisekort.',
+            'Activate to select travel card',
+            'Aktivér for å velge reisekort.',
+          ),
+        },
+      },
+      noTravelCard: _(
+        'Du har ikke et reisekort registrert.',
+        'You have no travel card registered.',
+        'Du har ikkje registrert eit reisekort.',
+      ),
+    },
+  },
 });
