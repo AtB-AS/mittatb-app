@@ -64,7 +64,7 @@ export type RemoteConfig = {
 
 export const defaultRemoteConfig: RemoteConfig = {
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
-  enable_intercom: true,
+  enable_intercom: false,
   feedback_questions: '',
   must_upgrade_ticketing: false,
   customer_service_url: CUSTOMER_SERVICE_URL,
@@ -127,7 +127,7 @@ export type RemoteConfigKeys = keyof RemoteConfig;
 export function getConfig(): RemoteConfig {
   const values = remoteConfig().getAll();
   const enable_ticketing = values['enable_ticketing']?.asBoolean() ?? false;
-  const enable_intercom = values['enable_intercom']?.asBoolean() ?? true;
+  const enable_intercom = values['enable_intercom']?.asBoolean() ?? false;
   const enable_flex_tickets =
     values['enable_flex_tickets']?.asBoolean() ??
     defaultRemoteConfig.enable_flex_tickets;
