@@ -214,5 +214,8 @@ export default orgSpecificTranslations(PurchaseConfirmationTexts, {
         ),
       },
     },
+    travelDate: {
+      now: _('Start nå', 'Starting now', 'Start no'),
+    },
   },
 });
