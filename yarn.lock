@@ -40,10 +40,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-10.2.2.tgz#812d6ddc69ec1ce1a0a7da3f840a84d3c5214945"
-  integrity sha512-lLulCo5jVIhAv4dT8sd7eZ0acO/NRna4imdJfeLnF1ied9+o9qVboqrPproYri8LRCdo8HDqZgM2dto4eTtcKQ==
+"@atb-as/generate-assets@^10.2.3":
+  version "10.2.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-10.2.3.tgz#46c0db9aee48b86c9b98b11c748eb86382c4663e"
+  integrity sha512-7od8JTZ+86jUAXpFV8q8b3rKgGF/95VZbjsRQAU9UEW5XYL6n6UmBNGG8hBCYsxlusbJ+pZSbosah3Xvuya2Yw==
   dependencies:
     "@atb-as/theme" "^8.2.2"
     commander "^9.4.0"
