@@ -389,10 +389,9 @@ platform :android do
         "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
         "android.injected.signing.key.password" => ENV["KEY_PASS"],
       })
-    sh("cp", "../android/app/build/outputs/apk/#{app_flavor}/#{build_type}/app-#{app_flavor}-#{build_type}.apk", "../#{ENV["APK_FILE_NAME"]}")
+    sh("cp", lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH], "../#{ENV["APK_FILE_NAME"]}")
     sh("mkdir", "-p", "../bundle")
-    sh("cp", "../android/app/build/generated/assets/createBundle#{app_flavor.capitalize}#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
-    sh("cp", "../android/app/build/generated/sourcemaps/react/#{app_flavor}#{build_type.capitalize}/index.android.bundle.map", "../bundle/index.android.bundle.map")
+    sh("cp", lane_context[SharedValues::GRADLE_MAPPING_TXT_OUTPUT_PATH], "../bundle/mapping.txt")
   end
 
   lane :build_aab do
@@ -416,8 +415,7 @@ platform :android do
       })
       sh("cp", "../android/app/build/outputs/bundle/#{app_flavor}#{build_type.capitalize}/app-#{app_flavor}-#{build_type}.aab", "../#{ENV["AAB_FILE_NAME"]}")
       sh("mkdir", "-p", "../bundle")
-      sh("cp", "../android/app/build/generated/assets/createBundle#{app_flavor.capitalize}#{build_type.capitalize}JsAndAssets/index.android.bundle", "../bundle")
-      sh("cp", "../android/app/build/generated/sourcemaps/react/#{app_flavor}#{build_type.capitalize}/index.android.bundle.map", "../bundle/index.android.bundle.map")
+      sh("cp", lane_context[SharedValues::GRADLE_MAPPING_TXT_OUTPUT_PATH], "../bundle/mapping.txt")
   end
 
   lane :firebase_distribution_staging do

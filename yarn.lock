@@ -40,10 +40,10 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^10.2.2":
-  version "10.2.2"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-10.2.2.tgz#812d6ddc69ec1ce1a0a7da3f840a84d3c5214945"
-  integrity sha512-lLulCo5jVIhAv4dT8sd7eZ0acO/NRna4imdJfeLnF1ied9+o9qVboqrPproYri8LRCdo8HDqZgM2dto4eTtcKQ==
+"@atb-as/generate-assets@^10.2.3":
+  version "10.2.3"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-10.2.3.tgz#46c0db9aee48b86c9b98b11c748eb86382c4663e"
+  integrity sha512-7od8JTZ+86jUAXpFV8q8b3rKgGF/95VZbjsRQAU9UEW5XYL6n6UmBNGG8hBCYsxlusbJ+pZSbosah3Xvuya2Yw==
   dependencies:
     "@atb-as/theme" "^8.2.2"
     commander "^9.4.0"
@@ -3415,6 +3415,14 @@
   version "0.2.3"
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
+
+"@bugsnag/cli@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-2.2.0.tgz#6b37c8831fb72f0b04fc38f16bdf825142ac15f6"
+  integrity sha512-Caa5NGB7WNwlZPKjqBsKU/caT81YXCkuQSHEedaxS5kvbX9E9k07rcPf0j4yJUZwVIgwNL1GtkFx79qS8jrQJA==
+  dependencies:
+    axios "^1.6.2"
+    js-yaml "^4.1.0"
 
 "@bugsnag/core@^7.19.0":
   version "7.19.0"
@@ -6798,6 +6806,15 @@ axios@^0.28.0:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
+axios@^1.6.2:
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
+  integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 babel-core@^7.0.0-bridge.0:
   version "7.0.0-bridge.0"
   resolved "https://registry.npmjs.org/babel-core/-/babel-core-7.0.0-bridge.0.tgz"
@@ -9755,6 +9772,11 @@ follow-redirects@^1.15.0:
   version "1.15.5"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
   integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
+
+follow-redirects@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
+  integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
 
 for-each@^0.3.3:
   version "0.3.3"

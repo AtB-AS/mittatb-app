@@ -98,24 +98,24 @@ const FareContractTexts = {
       'Få kvittering tilsendt',
     ),
     barcodeA11yLabel: _(
-      'Barkode. Vis frem denne koden ved billettkontroll.',
-      'Barcode. Show this code in case of inspection.',
-      'Barkode. Vis denne koden ved billettkontroll.',
+      'QR-kode. Vis frem denne koden ved billettkontroll.',
+      'QR code. Show this code in case of inspection.',
+      'QR-kode. Vis denne koden ved billettkontroll.',
     ),
     barcodeA11yLabelWithActivation: _(
-      'Barkode. Vis frem denne koden ved billettkontroll. Aktivér for å vise større barkode.',
-      'Barcode. Show this code in case of inspection. Activate for to show larger barcode.',
-      'Barkode. Vis denne koden ved billettkontroll. Aktivér for større barkode.',
+      'QR-kode. Vis frem denne koden ved billettkontroll. Aktivér for å vise større QR-kode.',
+      'QR code. Show this code in case of inspection. Activate for to show larger QR code.',
+      'QR-kode. Vis denne koden ved billettkontroll. Aktivér for større QR-kode.',
     ),
     barcodeBottomSheetA11yLabel: _(
-      'Stor barkode. Vis frem denne koden ved billettkontroll. Aktivér for å lukke dialog med stor barkode.',
-      'Large barcode. Show this code in case of inspection. Activate to close dialog with small barcode',
-      'Stor barkode. Vis denne koden ved billettkontroll. Aktivér for å late att dialog med stor barkode.',
+      'Stor QR-kode. Vis frem denne koden ved billettkontroll. Aktivér for å lukke dialog med stor QR-kode.',
+      'Large QR code. Show this code in case of inspection. Activate to close dialog with small QR code',
+      'Stor QR-kode. Vis denne koden ved billettkontroll. Aktivér for å late att dialog med stor QR-kode.',
     ),
-    bottomSheetTitle: _('Barkode', 'Barcode', 'Barkode'),
+    bottomSheetTitle: _('QR-kode', 'QR code', 'QR-kode'),
     barcodeErrors: {
       notInspectableDevice: {
-        title: _('Barkode', 'Barcode', 'Barkode'),
+        title: _('QR-kode', 'QR code', 'QR-kode'),
         wrongDevice: (deviceName: string) =>
           _(
             `Du bruker billetter på din mobil, "${deviceName}". Husk å ta den med deg når du reiser.\nDu kan alltid bytte til t:kort eller en annen mobil ved å gå til **Min profil**.`,
@@ -140,9 +140,9 @@ const FareContractTexts = {
           'Ein feil har oppstått',
         ),
         text: _(
-          'Får ikke generert barkode.',
-          'Cannot generate a barcode.',
-          'Får ikkje generert barkode.',
+          'Får ikke generert QR-kode.',
+          'Cannot generate a QR code.',
+          'Får ikkje generert QR-kode.',
         ),
         retry: _('Prøv på nytt.', 'Try again.', 'Prøv på nytt.'),
       },

@@ -82,6 +82,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
+  const {enable_intercom} = useRemoteConfig();
 
   const [isTimeout, setTimout] = useState(false);
 
@@ -95,7 +96,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     !isLoggingOut;
 
   const {data: nativeToken, status: nativeTokenStatus} =
-    useLoadNativeTokenQuery(enabled, userId);
+    useLoadNativeTokenQuery(enabled, userId, enable_intercom);
 
   const {data: remoteTokens, status: remoteTokensStatus} =
     useListRemoteTokensQuery(enabled, nativeToken);

@@ -61,7 +61,7 @@ const PurchaseConfirmationTexts = {
         `Billettvarigheit ${validTime} frå oppstart`,
       ),
   },
-  sendingTo: (phoneNumber: string) => 
+  sendingTo: (phoneNumber: string) =>
     _(
       `Sendes til ${phoneNumber}`,
       `Sending to ${phoneNumber}`,
@@ -207,12 +207,11 @@ export default orgSpecificTranslations(PurchaseConfirmationTexts, {
   troms: {
     validityTexts: {
       harbor: {
-        messageInHarborZones: _(
-          'Gjelder for buss i sonene du reiser til og fra',
-          'Applies for bus in departure and destination zones',
-          'Gjeld for buss i sonene du reiser til og frå',
-        ),
+        messageInHarborZones: _('', '', ''),
       },
+    },
+    travelDate: {
+      now: _('Start nå', 'Starting now', 'Start no'),
     },
   },
 });

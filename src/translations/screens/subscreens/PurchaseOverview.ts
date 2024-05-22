@@ -332,5 +332,9 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
         'Den du kjøper billett til, må vere logga inn i Svipper-appen for å få billetten.',
       ),
     },
+    startTime: {
+      now: _('Start nå', 'Start now', 'Start no'),
+      later: _('Start senere', 'Start later', 'Start seinare'),
+    },
   },
 });

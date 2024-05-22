@@ -432,6 +432,13 @@ export default orgSpecificTranslations(ProfileTexts, {
     sections: {
       settings: {
         linkSectionItems: {
+          userProfile: {
+            label: _(
+              'Standard billettkategori',
+              'Default ticket category',
+              'Standard billettkategori',
+            ),
+          },
           notifications: {
             pushToggle: {
               subText: _(
