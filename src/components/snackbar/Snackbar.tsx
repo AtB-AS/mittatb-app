@@ -23,9 +23,9 @@ type SnackbarProps = {
   description: string;
   position: SnackbarPosition;
   actionButton: ButtonProps;
-  dismissable?: boolean;
   closeOnPress?: () => void;
-  visible?: boolean;
+  isDismissable?: boolean;
+  isVisible?: boolean;
 };
 
 export const Snackbar = ({
@@ -33,20 +33,20 @@ export const Snackbar = ({
   description = '',
   position,
   actionButton,
-  dismissable = false,
   closeOnPress,
-  visible = true,
+  isDismissable = false,
+  isVisible = true,
 }: SnackbarProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
   const {verticalPositionStyle, animatedViewOnLayout} =
-    useSnackbarVerticalPositionAnimation(position, visible);
+    useSnackbarVerticalPositionAnimation(position, isVisible);
 
   const focusRef = useFocusOnLoad();
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  if (!visible && isScreenReaderEnabled) {
+  if (!isVisible && isScreenReaderEnabled) {
     return <></>;
   }
 
@@ -80,7 +80,7 @@ export const Snackbar = ({
             <Button type="medium" mode="tertiary" {...actionButton} />
           )}
 
-          {(dismissable || isScreenReaderEnabled) && (
+          {(isDismissable || isScreenReaderEnabled) && (
             <TouchableOpacity
               onPress={closeOnPress}
               style={styles.closeButton}
