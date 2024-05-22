@@ -24,7 +24,7 @@ type SnackbarProps = {
   position: SnackbarPosition;
   actionButton: ButtonProps;
   dismissable?: boolean;
-  onDismiss?: () => void;
+  closeOnPress?: () => void;
   visible?: boolean;
 };
 
@@ -34,7 +34,7 @@ export const Snackbar = ({
   position,
   actionButton,
   dismissable = false,
-  onDismiss,
+  closeOnPress,
   visible = true,
 }: SnackbarProps) => {
   const styles = useStyles();
@@ -82,7 +82,7 @@ export const Snackbar = ({
 
           {(dismissable || isScreenReaderEnabled) && (
             <TouchableOpacity
-              onPress={onDismiss}
+              onPress={closeOnPress}
               style={styles.closeButton}
               accessible={true}
               accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
