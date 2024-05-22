@@ -1,0 +1,135 @@
+import {shadows} from '@atb/components/map';
+import {ThemeText} from '@atb/components/text';
+import {Animated, View, ViewStyle} from 'react-native';
+import {StyleSheet} from '@atb/theme';
+import {Button, ButtonProps} from '@atb/components/button';
+import {Close} from '@atb/assets/svg/mono-icons/actions';
+import {ThemeIcon} from '@atb/components/theme-icon';
+import {useSnackbarVerticalPositionAnimation} from '@atb/components/snackbar';
+
+// todo:
+// jsdoc
+// pressable opacity
+// screenreader ensurer, focus onDidAppear, show close icon
+// skip animation with screenreader
+// integrated visible hook stuff?
+// storybook
+
+export type SnackbarPosition = 'top' | 'bottom';
+
+type SnackbarProps = {
+  title?: string;
+  description: string;
+  position: SnackbarPosition;
+  actionButton: ButtonProps;
+  dismissable?: boolean;
+
+  onDismiss?: () => void;
+  visible?: boolean;
+};
+
+export const Snackbar = ({
+  title,
+  description = '',
+  position,
+  actionButton,
+
+  dismissable = false,
+
+  onDismiss,
+  visible = true,
+}: SnackbarProps) => {
+  const styles = useStyles();
+
+  const {verticalPositionStyle, animatedViewOnLayout} =
+    useSnackbarVerticalPositionAnimation(position, visible, onDismiss);
+
+  return (
+    <Animated.View
+      style={[styles.snackbarContainer, verticalPositionStyle]}
+      onLayout={animatedViewOnLayout}
+    >
+      <View style={styles.snackbar}>
+        <View style={styles.snackbarTexts}>
+          {title && (
+            <ThemeText
+              type="body__primary--bold"
+              color="primary"
+              numberOfLines={1}
+            >
+              {title}
+            </ThemeText>
+          )}
+          <ThemeText
+            type="body__primary"
+            color={title ? 'secondary' : 'primary'}
+            numberOfLines={title ? 1 : 2}
+          >
+            {description}
+          </ThemeText>
+        </View>
+
+        <View style={styles.snackbarButtons}>
+          {actionButton && (
+            <Button type="medium" mode="tertiary" {...actionButton} />
+          )}
+          {/* todo: add pressable opacity */}
+          {/* <TouchableOpacity
+                onPress={handleClose}
+                hitSlop={insets.all(10)}
+                style={[styles.button, {backgroundColor: backgroundColor}]}
+                accessible={true}
+                accessibilityLabel={t(BottomSheetTexts.closeButton.a11yLabel)}
+                accessibilityHint={t(BottomSheetTexts.closeButton.a11yHint)}
+                accessibilityRole="button"
+                testID="closeButton"
+            >
+                <ThemeIcon fill={textColor} svg={Close} size="normal" />
+            </TouchableOpacity> */}
+          {dismissable && (
+            <ThemeIcon svg={Close} size="normal" style={styles.closeButton} />
+          )}
+        </View>
+      </View>
+    </Animated.View>
+  );
+};
+
+const flowHorizontallyAndCenterAlignVertically: ViewStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+};
+
+const useStyles = StyleSheet.createThemeHook((theme) => ({
+  snackbarContainer: {
+    position: 'absolute',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    zIndex: 99, // just beneath LoadingOverlay
+  },
+  snackbar: {
+    ...shadows,
+    ...flowHorizontallyAndCenterAlignVertically,
+    ...{
+      backgroundColor: theme.static.background.background_0.background,
+      width: '88%',
+      paddingLeft: theme.spacings.large,
+      paddingRight: theme.spacings.xSmall,
+      borderRadius: theme.border.radius.regular,
+    },
+  },
+  snackbarTexts: {
+    flex: 1,
+    paddingVertical: theme.spacings.medium,
+    marginRight: theme.spacings.medium,
+    rowGap: theme.spacings.xSmall,
+  },
+  snackbarButtons: {
+    ...flowHorizontallyAndCenterAlignVertically,
+  },
+  closeButton: {
+    padding: theme.spacings.medium,
+  },
+}));
