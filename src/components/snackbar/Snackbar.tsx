@@ -8,11 +8,11 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSnackbarVerticalPositionAnimation} from '@atb/components/snackbar';
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useTranslation} from '@atb/translations';
+import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 // todo:
 // jsdoc
-// screenreader ensurer, focus onDidAppear, show close icon
-// skip animation with screenreader
 // integrated visible hook stuff?
 // storybook
 
@@ -24,7 +24,6 @@ type SnackbarProps = {
   position: SnackbarPosition;
   actionButton: ButtonProps;
   dismissable?: boolean;
-
   onDismiss?: () => void;
   visible?: boolean;
 };
@@ -34,7 +33,6 @@ export const Snackbar = ({
   description = '',
   position,
   actionButton,
-
   dismissable = false,
   onDismiss,
   visible = true,
@@ -43,7 +41,14 @@ export const Snackbar = ({
   const {t} = useTranslation();
 
   const {verticalPositionStyle, animatedViewOnLayout} =
-    useSnackbarVerticalPositionAnimation(position, visible, onDismiss);
+    useSnackbarVerticalPositionAnimation(position, visible);
+
+  const focusRef = useFocusOnLoad();
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+
+  if (!visible && isScreenReaderEnabled) {
+    return <></>;
+  }
 
   return (
     <Animated.View
@@ -51,7 +56,7 @@ export const Snackbar = ({
       onLayout={animatedViewOnLayout}
     >
       <View style={styles.snackbar}>
-        <View style={styles.snackbarTexts}>
+        <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
           {title && (
             <ThemeText
               type="body__primary--bold"
@@ -75,7 +80,7 @@ export const Snackbar = ({
             <Button type="medium" mode="tertiary" {...actionButton} />
           )}
 
-          {dismissable && (
+          {(dismissable || isScreenReaderEnabled) && (
             <TouchableOpacity
               onPress={onDismiss}
               style={styles.closeButton}

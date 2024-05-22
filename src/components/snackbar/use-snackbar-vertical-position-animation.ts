@@ -3,12 +3,14 @@ import {Animated, Easing, LayoutChangeEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {shadows} from '@atb/components/map';
 import {SnackbarPosition} from '@atb/components/snackbar';
+import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 export const useSnackbarVerticalPositionAnimation = (
   position: SnackbarPosition,
   visible: boolean,
-  onDismiss?: () => void,
 ) => {
+  const isScreenReaderEnabled = useIsScreenReaderEnabled();
+
   const {top, bottom} = useSafeAreaInsets();
 
   // the y position when visible and the animation is done
@@ -21,13 +23,14 @@ export const useSnackbarVerticalPositionAnimation = (
     setHeight(nativeEvent.layout.height);
   };
 
+  const visibleY = 0; // no offset
   // make sure to move it far enough out to also hide the shadow
   const viewHeightIncludingShadow = height + (shadows?.shadowRadius || 8);
-  const hiddenY =
-    position === 'top'
-      ? -top - viewHeightIncludingShadow
-      : bottom + viewHeightIncludingShadow;
-  const visibleY = 0;
+  const hiddenY = isScreenReaderEnabled
+    ? visibleY // jump directly to visible position when screen reader enabled
+    : position === 'top'
+    ? -top - viewHeightIncludingShadow
+    : bottom + viewHeightIncludingShadow;
 
   const translateY = useRef(new Animated.Value(hiddenY)).current;
 
@@ -38,17 +41,8 @@ export const useSnackbarVerticalPositionAnimation = (
       duration: 300,
       easing: visible ? Easing.out(Easing.exp) : Easing.in(Easing.linear),
       useNativeDriver: true,
-    }).start(() => {
-      if (!visible && onDismiss) onDismiss();
-    });
-  }, [
-    visible,
-    translateY,
-    position,
-    onDismiss,
-    hiddenY,
-    viewHeightIncludingShadow,
-  ]);
+    }).start();
+  }, [visible, translateY, position, hiddenY, viewHeightIncludingShadow]);
 
   return {
     verticalPositionStyle: {
