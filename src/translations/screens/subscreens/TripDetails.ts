@@ -112,6 +112,17 @@ const TripDetailsTexts = {
             `${modeName} linje ${lineName}`,
           ),
       },
+      buyTicketFrom: _(
+        'Kjøp billett fra',
+        'Buy ticket from',
+        'Kjøp billett frå',
+      ),
+      buyTicketFromA11yLabel: (authorityName: string) =>
+        _(
+          `Kjøp billett fra ${authorityName}, åpner side i nettleser`,
+          `Buy ticket from ${authorityName}, opens page in browser`,
+          `Kjøp billett frå ${authorityName}, opnar side i nettlesar`,
+        ),
       live: (transportMode: string) =>
         _(
           `Følg ${transportMode.toLowerCase()}`,

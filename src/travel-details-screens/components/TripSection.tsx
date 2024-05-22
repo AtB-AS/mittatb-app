@@ -26,7 +26,7 @@ import {
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import React from 'react';
-import {View} from 'react-native';
+import {Linking, View} from 'react-native';
 import {
   getLineName,
   getNoticesForLeg,
@@ -60,6 +60,9 @@ import {
   Mode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
+import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
+import {AUTHORITY} from '@env';
+import {AuthorityFragment} from '@atb/api/types/generated/fragments/authority';
 
 type TripSectionProps = {
   isLast?: boolean;
@@ -292,6 +295,7 @@ export const TripSection: React.FC<TripSectionProps> = ({
             />
           </TripRow>
         )}
+        {leg.authority && <AuthorityRow {...leg.authority} />}
         {onPressShowLive && mapData ? (
           <TripRow>
             <Button
@@ -499,6 +503,46 @@ const BikeSection = (leg: Leg) => {
   );
 };
 
+const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
+  const style = useSectionStyles();
+  const {t} = useTranslation();
+
+  if (id === AUTHORITY) return null;
+  if (!url) {
+    return (
+      <TripRow>
+        <View style={style.authoritySection}>
+          <ThemeText type="body__secondary" color="secondary">
+            {t(TripDetailsTexts.trip.leg.buyTicketFrom) + ' ' + name}
+          </ThemeText>
+        </View>
+      </TripRow>
+    );
+  }
+  return (
+    <TripRow
+      accessibilityLabel={t(
+        TripDetailsTexts.trip.leg.buyTicketFromA11yLabel(name),
+      )}
+      accessibilityRole="link"
+    >
+      <View style={style.authoritySection}>
+        <ThemeText type="body__secondary" color="secondary">
+          {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
+        </ThemeText>
+        <Button
+          leftIcon={{svg: ExternalLink}}
+          onPress={() => url && Linking.openURL(url)}
+          mode="primary"
+          type="small"
+          interactiveColor="interactive_3"
+          text={name}
+        />
+      </View>
+    </TripRow>
+  );
+};
+
 export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';
   return place.quay ? getQuayName(place.quay) ?? fallback : fallback;
@@ -588,5 +632,8 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   realtimeText: {
     flex: 1,
+  },
+  authoritySection: {
+    rowGap: theme.spacings.medium,
   },
 }));
