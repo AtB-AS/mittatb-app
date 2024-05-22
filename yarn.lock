@@ -3525,57 +3525,57 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@entur-private/abt-log-javascript-lib@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-log-javascript-lib/-/@entur-private/abt-log-javascript-lib-2.0.1.tgz#1e3b98dd0dcffcddbf5d1d224cbd5b789e392e7a"
-  integrity sha512-lbRtWfHGrpl6puCs5lAHJhWt7qrlFv6Sf1OVqvqKPqhe2iooqullfNJSdsSzg3cgrtOuAjoVE0UuTHkZ9L1rBw==
+"@entur-private/abt-log-javascript-lib@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-log-javascript-lib/-/@entur-private/abt-log-javascript-lib-2.1.1.tgz#d83e2dcd38356cf08d9f13ce85c9aaebccf7050f"
+  integrity sha512-j3+ejGmajhuwbMgpb9xm5/6GXOrXLeuQitGxr59IXa/pBUwYOgRX363gRxdkXmZLspP4/HLvqTCMKkILAK4hvg==
 
-"@entur-private/abt-mobile-barcode-javascript-lib@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-barcode-javascript-lib/-/@entur-private/abt-mobile-barcode-javascript-lib-2.0.1.tgz#27a0a5513807ee8f970c22cdcc2778611200d6da"
-  integrity sha512-3F+/2BsYTf9Lat2Id/6qNObL3b8KyHOg5zRvWrKlrvKMR8aWw2gSjcKmDHGi7qxz8skBXwjKBfuYimUCd/IaAA==
+"@entur-private/abt-mobile-barcode-javascript-lib@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-barcode-javascript-lib/-/@entur-private/abt-mobile-barcode-javascript-lib-2.1.1.tgz#f8e708ba83d77a695e33e11589d82ac7d1691ef4"
+  integrity sha512-HlUMmeXGKZ26KXEzTH2W447EOdH+QeV60Z6uUQvUnObrj65jg8h8u0da3ncYErJkIm5VLkp5lRVMulcXEHHUzQ==
 
-"@entur-private/abt-mobile-client-sdk@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-client-sdk/-/@entur-private/abt-mobile-client-sdk-2.0.1.tgz#19c6b7708ad634d5d1f234e890114b692cd5b602"
-  integrity sha512-tTIFhALIee9qaZ7/aDI4MpKC+g1RAIos1OOw0ybp6mGz2v8K6ee48IelFhgUt1ajDB632eVvuGrmW5UaEV8PkA==
+"@entur-private/abt-mobile-client-sdk@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-mobile-client-sdk/-/@entur-private/abt-mobile-client-sdk-2.1.1.tgz#51de20be08671d352eb0f9696611a916c7eebfad"
+  integrity sha512-15imCJ+aL+1QiKQnJ2KMLGXaRMyfvdL/GDd58HWmWBh7oUdi4crVeGjRC091efVa7xF10fHITsR+9IfHrxQSxw==
   dependencies:
-    "@entur-private/abt-log-javascript-lib" "2.0.1"
-    "@entur-private/abt-token-core-javascript-lib" "2.0.1"
-    "@entur-private/abt-token-server-javascript-interface" "2.0.1"
-    "@entur-private/abt-token-state-react-native-lib" "2.0.1"
+    "@entur-private/abt-log-javascript-lib" "2.1.1"
+    "@entur-private/abt-token-core-javascript-lib" "2.1.1"
+    "@entur-private/abt-token-server-javascript-interface" "2.1.1"
+    "@entur-private/abt-token-state-react-native-lib" "2.1.1"
 
-"@entur-private/abt-time-javascript-lib@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-2.0.1.tgz#493bf6bd4cf1f14748145c550df77e5aa9a1ad88"
-  integrity sha512-R3Uedzx1f9Zo+PAobR06JiKZJeFt7NZHhLk5LeagtvLT+Oofx3fa6Hq0C9ed0eOL3mAmzXnZ54/n1zrkExuJmw==
+"@entur-private/abt-time-javascript-lib@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-2.1.1.tgz#c37b4a343fc2a9518bff269d8eaa08c30ce8246a"
+  integrity sha512-N8UmdoMLpJsgDaI0yUYSUKrAY3Ss6/ZtC6MfiaNy+RDMJ2TMXmXBt+rnGFv4pnBXaulexfH4N1DH+sHtzKDbwQ==
 
-"@entur-private/abt-time-react-native-lib@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-react-native-lib/-/@entur-private/abt-time-react-native-lib-2.0.1.tgz#09782c8c97863cd6013546eff1db0b600df4d2e1"
-  integrity sha512-H2KkuOY6D18H/fXXKgUQp9ro2mUwC9I2MyPWfggnyeU9jOmej6K2s8LDjUuGVo0NkUmOm2ivyR/F8NrvYwNFeQ==
+"@entur-private/abt-time-react-native-lib@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-react-native-lib/-/@entur-private/abt-time-react-native-lib-2.1.1.tgz#1f0466671e734f55e0438df67035ad57d69455e7"
+  integrity sha512-mx2UBNWTHutLnZUjZKIiLJ8RS8fEtnmUj3Jbkn7cvpje3rNorMeAgy1iu8JnD3I6173SlAPaGdiUn7cubCtXXQ==
   dependencies:
-    "@entur-private/abt-time-javascript-lib" "2.0.1"
+    "@entur-private/abt-time-javascript-lib" "2.1.1"
 
-"@entur-private/abt-token-core-javascript-lib@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-2.0.1.tgz#3b47f818167968aa11e250eb23633e56a81706d3"
-  integrity sha512-X8ricx5Id9YWESPk/y+6ByDOl19qI7J4L/C9OAvIITSrTa0gM2RRF3dFPOmGXIz9EcEimC1796WO42wqoi1SGQ==
+"@entur-private/abt-token-core-javascript-lib@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-2.1.1.tgz#3816a6ac3b93c7be2d482be65b9babb62ba494f0"
+  integrity sha512-z7jO9iUXQYPLgCC+V+m7kjHblJp5ObksB/3vsa4m80EuPyrSRdOjaw9fJJ1CzncmoBWDfyzXaqeOndidhCc2Rg==
 
-"@entur-private/abt-token-server-javascript-interface@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-2.0.1.tgz#0b0e02dbf783d43cc1909c18b4ca9bbcfe6309af"
-  integrity sha512-FbtYt9Yna4+JCTel7jREqLbumdPv3Qhq2xat1RkgpqEvHG3MhfvSl3mKCNL0iaC6CZT9//mxMKEonhN/QhgkyQ==
+"@entur-private/abt-token-server-javascript-interface@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-server-javascript-interface/-/@entur-private/abt-token-server-javascript-interface-2.1.1.tgz#073db95d33ea4a0a6c89958db003c5c8a3a293f6"
+  integrity sha512-FELbIuMoKnGQMzKfXHc2ap8QJEDd2wN1TP7Z0P3UDbzwXDhegieRR2aDOzs1V54RVwzRgaa6CN2d3b17zU0wjQ==
 
-"@entur-private/abt-token-state-react-native-lib@2.0.1":
-  version "2.0.1"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-state-react-native-lib/-/@entur-private/abt-token-state-react-native-lib-2.0.1.tgz#6c35a006bdff8cdf0eb53be8213b5e397b3e5da4"
-  integrity sha512-Vq9j8txrx+VLUhWTweMUWwF2+VIidycjZNLXeJqYsvANm2Tm78ti44Y7hbPJIqV2nSejKQkmC5d5TaVk4t6iUw==
+"@entur-private/abt-token-state-react-native-lib@2.1.1":
+  version "2.1.1"
+  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-state-react-native-lib/-/@entur-private/abt-token-state-react-native-lib-2.1.1.tgz#64fadea4d27543fcbb2f224a47ea2fc48c3e738d"
+  integrity sha512-Sdw8pC4fabrJPNQP8nwiUgUiVQBi2tVtzbs5FVsP53Ow3mwQOoRc/Gh0ElvalirxzCPfT7l4U9FF4ztA4pWdQQ==
   dependencies:
-    "@entur-private/abt-log-javascript-lib" "2.0.1"
-    "@entur-private/abt-time-javascript-lib" "2.0.1"
-    "@entur-private/abt-token-core-javascript-lib" "2.0.1"
-    "@entur-private/abt-token-server-javascript-interface" "2.0.1"
+    "@entur-private/abt-log-javascript-lib" "2.1.1"
+    "@entur-private/abt-time-javascript-lib" "2.1.1"
+    "@entur-private/abt-token-core-javascript-lib" "2.1.1"
+    "@entur-private/abt-token-server-javascript-interface" "2.1.1"
 
 "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0":
   version "4.4.0"

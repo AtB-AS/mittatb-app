@@ -134,7 +134,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   }, [enabled, nativeTokenStatus, token_timeout_in_seconds]);
 
   useInterval(
-    () => checkRenewMutate({token: nativeToken, traceId: 'uuid'}),
+    () => checkRenewMutate({token: nativeToken, traceId: uuid()}),
     [checkRenewMutate, nativeToken],
     SIX_HOURS_MS,
     false,
