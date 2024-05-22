@@ -1,7 +1,8 @@
 #!/bin/bash
 
 if [[
-    -z "${BUILD_ID}"
+    -z "${BUGSNAG_API_KEY}"
+    || -z "${BUILD_ID}"
     || -z "${APP_VERSION}"
     || -z "${APP_FLAVOR}"
    ]]; then
@@ -17,5 +18,6 @@ else
     npx bugsnag-cli upload react-native-android \
       --version-name=$APP_VERSION \
       --version-code=$BUILD_ID \
+      --api-key=$BUGSNAG_API_KEY \
       --variant=$(echo $APP_FLAVOR${APP_ENVIRONMENT^})
 fi
