@@ -1,15 +1,16 @@
 import {shadows} from '@atb/components/map';
 import {ThemeText} from '@atb/components/text';
-import {Animated, View, ViewStyle} from 'react-native';
+import {Animated, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 import {Button, ButtonProps} from '@atb/components/button';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {useSnackbarVerticalPositionAnimation} from '@atb/components/snackbar';
+import SnackbarTexts from '@atb/translations/components/Snackbar';
+import {useTranslation} from '@atb/translations';
 
 // todo:
 // jsdoc
-// pressable opacity
 // screenreader ensurer, focus onDidAppear, show close icon
 // skip animation with screenreader
 // integrated visible hook stuff?
@@ -35,11 +36,11 @@ export const Snackbar = ({
   actionButton,
 
   dismissable = false,
-
   onDismiss,
   visible = true,
 }: SnackbarProps) => {
   const styles = useStyles();
+  const {t} = useTranslation();
 
   const {verticalPositionStyle, animatedViewOnLayout} =
     useSnackbarVerticalPositionAnimation(position, visible, onDismiss);
@@ -73,21 +74,19 @@ export const Snackbar = ({
           {actionButton && (
             <Button type="medium" mode="tertiary" {...actionButton} />
           )}
-          {/* todo: add pressable opacity */}
-          {/* <TouchableOpacity
-                onPress={handleClose}
-                hitSlop={insets.all(10)}
-                style={[styles.button, {backgroundColor: backgroundColor}]}
-                accessible={true}
-                accessibilityLabel={t(BottomSheetTexts.closeButton.a11yLabel)}
-                accessibilityHint={t(BottomSheetTexts.closeButton.a11yHint)}
-                accessibilityRole="button"
-                testID="closeButton"
-            >
-                <ThemeIcon fill={textColor} svg={Close} size="normal" />
-            </TouchableOpacity> */}
+
           {dismissable && (
-            <ThemeIcon svg={Close} size="normal" style={styles.closeButton} />
+            <TouchableOpacity
+              onPress={onDismiss}
+              style={styles.closeButton}
+              accessible={true}
+              accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
+              accessibilityHint={t(SnackbarTexts.closeButton.a11yHint)}
+              accessibilityRole="button"
+              testID="closeSnackbarButton"
+            >
+              <ThemeIcon svg={Close} size="normal" />
+            </TouchableOpacity>
           )}
         </View>
       </View>
