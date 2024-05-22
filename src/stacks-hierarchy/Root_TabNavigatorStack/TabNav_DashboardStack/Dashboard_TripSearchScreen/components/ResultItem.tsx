@@ -59,6 +59,7 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
 import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
+import {APP_ORG} from '@env';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -401,7 +402,10 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     flexGrow: 1,
   },
   legLine: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor:
+      APP_ORG === 'fram'
+        ? theme.border.primary
+        : theme.static.background.background_3.background,
     flexDirection: 'row',
     borderRadius: theme.border.radius.regular,
     width: 5,
@@ -422,13 +426,20 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
     width: theme.spacings.large,
   },
   destinationLine_grow: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor:
+      APP_ORG === 'fram'
+        ? theme.border.primary
+        : theme.static.background.background_3.background,
     marginLeft: theme.spacings.xSmall,
     borderBottomLeftRadius: theme.border.radius.regular,
     borderTopLeftRadius: theme.border.radius.regular,
   },
   destinationLine: {
-    backgroundColor: theme.static.background.background_3.background,
+    backgroundColor:
+      APP_ORG === 'fram'
+        ? theme.border.primary
+        : theme.static.background.background_3.background,
+
     marginRight: theme.spacings.xSmall,
     borderBottomRightRadius: theme.border.radius.regular,
     borderTopRightRadius: theme.border.radius.regular,
