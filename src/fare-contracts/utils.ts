@@ -1,6 +1,5 @@
 import {
   CarnetTravelRight,
-  CarnetTravelRightUsedAccess,
   FareContract,
   Reservation,
   FareContractState,
@@ -10,6 +9,7 @@ import {
   isCarnetTravelRight,
   isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
+  getLastUsedAccess,
 } from '@atb/ticketing';
 import {
   findReferenceDataById,
@@ -319,40 +319,4 @@ export function getFareContractInfo(
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   };
-}
-
-type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
-type LastUsedAccessState = {
-  status: UsedAccessStatus;
-  validFrom: number | undefined;
-  validTo: number | undefined;
-};
-
-function getUsedAccessValidity(
-  now: number,
-  validFrom: number,
-  validTo: number,
-): UsedAccessStatus {
-  if (now > validTo) return 'inactive';
-  if (now < validFrom) return 'upcoming';
-  return 'valid';
-}
-
-export function getLastUsedAccess(
-  now: number,
-  usedAccesses: CarnetTravelRightUsedAccess[],
-): LastUsedAccessState {
-  const lastUsedAccess = usedAccesses.slice(-1).pop();
-
-  let status: UsedAccessStatus = 'inactive';
-  let validFrom: number | undefined = undefined;
-  let validTo: number | undefined = undefined;
-
-  if (lastUsedAccess) {
-    validFrom = lastUsedAccess.startDateTime.getTime();
-    validTo = lastUsedAccess.endDateTime.getTime();
-    status = getUsedAccessValidity(now, validFrom, validTo);
-  }
-
-  return {status, validFrom, validTo};
 }

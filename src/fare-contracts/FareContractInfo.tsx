@@ -10,6 +10,7 @@ import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
   flattenCarnetTravelRightAccesses,
+  getLastUsedAccess,
   isCarnet,
   isCarnetTravelRight,
   NormalTravelRight,
@@ -24,7 +25,6 @@ import {
 import React from 'react';
 import {View} from 'react-native';
 import {
-  getLastUsedAccess,
   getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,

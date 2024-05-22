@@ -61,6 +61,14 @@ export type CarnetTravelRight = NormalTravelRight & {
   usedAccesses: CarnetTravelRightUsedAccess[];
 };
 
+export type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
+
+export type LastUsedAccessState = {
+  status: UsedAccessStatus;
+  validFrom: number | undefined;
+  validTo: number | undefined;
+};
+
 export type PreActivatedSingleTravelRight = PreActivatedTravelRight & {
   type: 'PreActivatedSingleTicket';
 };

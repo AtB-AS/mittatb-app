@@ -1,19 +1,16 @@
 import {flatten, sumBy} from 'lodash';
 import {
-  CarnetTravelRightUsedAccess,
-  PreActivatedSingleTravelRight,
-  PreActivatedTravelRight,
-  Reservation,
-} from '.';
-import {
   FareContract,
   FareContractState,
   CarnetTravelRight,
   TravelRight,
+  PreActivatedTravelRight,
+  PreActivatedSingleTravelRight,
+  CarnetTravelRightUsedAccess,
+  Reservation,
+  LastUsedAccessState,
+  UsedAccessStatus,
 } from './types';
-import {WebViewNavigation} from 'react-native-webview/lib/WebViewTypes';
-import {parse as parseURL} from 'search-params';
-import {getLastUsedAccess} from '@atb/fare-contracts/utils';
 
 export function isCarnetTravelRight(
   travelRight: TravelRight | undefined,
@@ -288,11 +285,30 @@ export const filterValidRightNowFareContracts = (
   });
 };
 
-/**
- * Get response code from query param. iOS uses 'responseCode' and Android
- * uses 'response_code'.
- */
-export function getResponseCode(event: WebViewNavigation) {
-  const params = parseURL(event.url);
-  return params['responseCode'] ?? params['response_code'];
+export function getLastUsedAccess(
+  now: number,
+  usedAccesses: CarnetTravelRightUsedAccess[],
+): LastUsedAccessState {
+  const lastUsedAccess = usedAccesses.slice(-1).pop();
+
+  let status: UsedAccessStatus = 'inactive';
+  let validFrom: number | undefined = undefined;
+  let validTo: number | undefined = undefined;
+
+  if (lastUsedAccess) {
+    validFrom = lastUsedAccess.startDateTime.getTime();
+    validTo = lastUsedAccess.endDateTime.getTime();
+    status = getUsedAccessValidity(now, validFrom, validTo);
+  }
+
+  return {status, validFrom, validTo};
+}
+function getUsedAccessValidity(
+  now: number,
+  validFrom: number,
+  validTo: number,
+): UsedAccessStatus {
+  if (now > validTo) return 'inactive';
+  if (now < validFrom) return 'upcoming';
+  return 'valid';
 }
