@@ -70,12 +70,6 @@ jobs:
           KEYSTORE: ${{ secrets.KEYSTORE }}
       - name: Generate native assets
         run: yarn generate-native-assets
-      - name: Get potential cached source maps
-        uses: actions/cache@v2
-        id: source-maps-cache
-        with:
-          path: android/app/build
-          key: ${{ matrix.org }}-${{ runner.os }}-android-source-maps-${{ hashFiles('android/app/build/**') }}
       - name: Run fastlane build APK
         if: (matrix.org == 'atb') || (matrix.org == 'nfk')
         run: bundle exec fastlane android build
@@ -107,7 +101,6 @@ jobs:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
       - name: Upload bundle and source maps
-        if: inputs.force-build == 'true' || steps.source-maps-cache.outputs.cache-hit != 'true'
         run: bash ./scripts/android/upload-sourcemaps.sh
         env:
           BUGSNAG_API_KEY: ${{ secrets.BUGSNAG_API_KEY }}
