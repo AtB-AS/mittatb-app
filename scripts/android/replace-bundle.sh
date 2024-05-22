@@ -24,7 +24,7 @@ if [[
 else
     mkdir -p bundle
 
-    BUNDLE_PATH="android/app/build/generated/assets/createBundle$(echo $APP_FLAVOR${APP_ENVIRONMENT^})JsAndAssets/index.android.bundle"
+    BUNDLE_PATH="android/app/build/generated/assets/createBundle$(echo ${$APP_FLAVOR^}${APP_ENVIRONMENT^})JsAndAssets/index.android.bundle"
     SOURCEMAP_PATH="android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})/index.android.bundle.map"
 
     echo "Re-generate bundle"
