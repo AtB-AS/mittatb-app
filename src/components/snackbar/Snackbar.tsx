@@ -5,43 +5,56 @@ import {StyleSheet} from '@atb/theme';
 import {Button, ButtonProps} from '@atb/components/button';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {ThemeIcon} from '@atb/components/theme-icon';
-import {useSnackbarVerticalPositionAnimation} from '@atb/components/snackbar';
-import SnackbarTexts from '@atb/translations/components/Snackbar';
+import {
+  useSnackbarVerticalPositionAnimation,
+  useSnackbarIsVisible,
+  useSnackbarScreenReaderFocus,
+} from '@atb/components/snackbar';
 import {useTranslation} from '@atb/translations';
-import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
-// todo:
-// jsdoc
-// integrated visible hook stuff?
-// storybook
-
+import SnackbarTexts from '@atb/translations/components/Snackbar';
+import {usePrevious} from '@atb/utils/use-previous';
 export type SnackbarPosition = 'top' | 'bottom';
 
-type SnackbarProps = {
+export type SnackbarTextContent = {
   title?: string;
-  description: string;
+  description?: string;
+};
+
+type SnackbarProps = {
+  texts?: SnackbarTextContent;
   position: SnackbarPosition;
   actionButton?: ButtonProps; // optional action button, only shown if this is provided.
-  closeOnPress?: () => void; // the close x button is only shown if this is provided. Use this to trigger isVisible=false.
-  isVisible?: boolean; // the exit animation requires that the element still exists. Use isVisible to toggle its presence (i.e. use <Snackbar isVisible={isVisible} /> instead of {isVisible && <Snackbar />}).
+  isDismissable?: boolean; // whether to show the close x button
+  isVisible?: boolean; // the exit animation requires that the element still exists
+  customVisibleDurationMS?: number; // how many milliseconds the snackbar should show. Infinite if not provided.
 };
 
 export const Snackbar = ({
-  title,
-  description = '',
+  texts,
   position,
   actionButton,
-  closeOnPress,
-  isVisible = true,
+  isDismissable,
+  customVisibleDurationMS,
 }: SnackbarProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const {isVisible, hideSnackbar} = useSnackbarIsVisible(
+    texts,
+    customVisibleDurationMS,
+  );
+
   const {verticalPositionStyle, animatedViewOnLayout} =
     useSnackbarVerticalPositionAnimation(position, isVisible);
 
-  const focusRef = useFocusOnLoad();
+  // to show the correct texts during exit animation, keep track of the previous value
+  const previousTexts = usePrevious(texts);
+  const activeTexts =
+    !isVisible && !texts && previousTexts ? previousTexts : texts;
+
+  const focusRef = useSnackbarScreenReaderFocus(activeTexts, previousTexts);
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   if (!isVisible && isScreenReaderEnabled) {
@@ -55,32 +68,39 @@ export const Snackbar = ({
     >
       <View style={styles.snackbar}>
         <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
-          {title && (
+          {activeTexts?.title && (
             <ThemeText
               type="body__primary--bold"
               color="primary"
-              numberOfLines={1}
+              numberOfLines={4} // max limit, should normally not come into play
             >
-              {title}
+              {activeTexts?.title}
             </ThemeText>
           )}
-          <ThemeText
-            type="body__primary"
-            color={title ? 'secondary' : 'primary'}
-            numberOfLines={title ? 1 : 2}
-          >
-            {description}
-          </ThemeText>
+          {activeTexts?.description && (
+            <ThemeText
+              type="body__primary"
+              color={activeTexts?.title ? 'secondary' : 'primary'}
+              numberOfLines={7} // max limit, should normally not come into play
+            >
+              {activeTexts?.description}
+            </ThemeText>
+          )}
         </View>
 
         <View style={styles.snackbarButtons}>
           {actionButton && (
-            <Button type="medium" mode="tertiary" {...actionButton} />
+            <Button
+              type="medium"
+              mode="tertiary"
+              {...actionButton}
+              onPress={() => isVisible && actionButton.onPress()}
+            />
           )}
 
-          {(closeOnPress || isScreenReaderEnabled) && (
+          {(isDismissable || isScreenReaderEnabled) && (
             <TouchableOpacity
-              onPress={isVisible ? closeOnPress : undefined}
+              onPress={hideSnackbar}
               style={styles.closeButton}
               accessible={true}
               accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
