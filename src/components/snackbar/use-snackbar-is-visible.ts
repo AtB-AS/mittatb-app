@@ -18,9 +18,9 @@ export const useSnackbarIsVisible = (
     customVisibleDurationMS ||
     Math.max(5000, totalNumberOfTextCharacters * 100);
 
-  const snackbarHasTextToShow = getSnackbarTextHasContent(texts);
+  const snackbarTextHasContent = getSnackbarTextHasContent(texts);
 
-  const [isVisible, setIsVisible] = useState(snackbarHasTextToShow);
+  const [isVisible, setIsVisible] = useState(snackbarTextHasContent);
 
   const hideSnackbar = () => setIsVisible(false);
 
@@ -30,19 +30,19 @@ export const useSnackbarIsVisible = (
     timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
 
   useEffect(() => {
-    setIsVisible(snackbarHasTextToShow);
-  }, [snackbarHasTextToShow]);
+    setIsVisible(snackbarTextHasContent);
+  }, [snackbarTextHasContent]);
 
   useEffect(() => {
     clearCurrentTimeout();
-    if (snackbarHasTextToShow) {
+    if (snackbarTextHasContent) {
       setIsVisible(true);
       timeoutIdRef.current = setTimeout(() => {
         !isScreenReaderEnabled && hideSnackbar();
       }, visibleDurationMS);
     }
     return clearCurrentTimeout;
-  }, [texts, visibleDurationMS, isScreenReaderEnabled, snackbarHasTextToShow]);
+  }, [texts, visibleDurationMS, isScreenReaderEnabled, snackbarTextHasContent]);
 
   return {isVisible, hideSnackbar};
 };
