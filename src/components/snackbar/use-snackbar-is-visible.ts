@@ -1,7 +1,9 @@
-import {isDefined} from '@atb/utils/presence';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 import {useState, useEffect, useRef} from 'react';
-import {SnackbarTextContent} from './Snackbar';
+import {
+  SnackbarTextContent,
+  getSnackbarTextHasContent,
+} from '@atb/components/snackbar';
 
 export const useSnackbarIsVisible = (
   texts?: SnackbarTextContent,
@@ -18,9 +20,7 @@ export const useSnackbarIsVisible = (
     customVisibleDurationMS ||
     Math.max(5000, totalNumberOfTextCharacters * 100);
 
-  const snackbarHasTextToShow =
-    isDefined(texts) &&
-    (isDefined(texts?.title) || isDefined(texts?.description));
+  const snackbarHasTextToShow = getSnackbarTextHasContent(texts);
 
   const [isVisible, setIsVisible] = useState(snackbarHasTextToShow);
 

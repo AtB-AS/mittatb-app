@@ -1,8 +1,10 @@
-import {isDefined} from '@atb/utils/presence';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import isEqual from 'lodash.isequal';
 import {useRef, useEffect} from 'react';
-import {SnackbarTextContent} from './Snackbar';
+import {
+  SnackbarTextContent,
+  getSnackbarTextHasContent,
+} from '@atb/components/snackbar';
 
 export const useSnackbarScreenReaderFocus = (
   activeTexts?: SnackbarTextContent,
@@ -12,8 +14,7 @@ export const useSnackbarScreenReaderFocus = (
   const hasFocusedOnLoad = useRef(false);
   useEffect(() => {
     if (
-      isDefined(activeTexts) &&
-      (isDefined(activeTexts?.title) || isDefined(activeTexts.title)) &&
+      getSnackbarTextHasContent(activeTexts) &&
       (!isEqual(previousTexts, activeTexts) || !hasFocusedOnLoad.current)
     ) {
       hasFocusedOnLoad.current = true;
