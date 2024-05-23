@@ -22,10 +22,9 @@ type SnackbarProps = {
   title?: string;
   description: string;
   position: SnackbarPosition;
-  actionButton: ButtonProps;
-  closeOnPress?: () => void;
-  isDismissable?: boolean;
-  isVisible?: boolean;
+  actionButton?: ButtonProps; // optional action button, only shown if this is provided.
+  closeOnPress?: () => void; // the close x button is only shown if this is provided. Use this to trigger isVisible=false.
+  isVisible?: boolean; // the exit animation requires that the element still exists. Use isVisible to toggle its presence (i.e. use <Snackbar isVisible={isVisible} /> instead of {isVisible && <Snackbar />}).
 };
 
 export const Snackbar = ({
@@ -34,7 +33,6 @@ export const Snackbar = ({
   position,
   actionButton,
   closeOnPress,
-  isDismissable = false,
   isVisible = true,
 }: SnackbarProps) => {
   const styles = useStyles();
@@ -80,9 +78,9 @@ export const Snackbar = ({
             <Button type="medium" mode="tertiary" {...actionButton} />
           )}
 
-          {(isDismissable || isScreenReaderEnabled) && (
+          {(closeOnPress || isScreenReaderEnabled) && (
             <TouchableOpacity
-              onPress={closeOnPress}
+              onPress={isVisible ? closeOnPress : undefined}
               style={styles.closeButton}
               accessible={true}
               accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
