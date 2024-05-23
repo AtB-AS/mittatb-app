@@ -21,7 +21,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
   return (
     <View style={linkSectionItemStyle.flag}>
-      <ThemeText color="background_accent_3" type="body__tertiary">
+      <ThemeText color="info" type="body__tertiary">
         {flagTranslated}
       </ThemeText>
     </View>
@@ -30,7 +30,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   flag: {
-    backgroundColor: theme.static.background.background_accent_3.background,
+    backgroundColor: theme.static.status.info.background,
     marginRight: theme.spacings.medium,
     paddingHorizontal: theme.spacings.small,
     paddingVertical: theme.spacings.xSmall,
