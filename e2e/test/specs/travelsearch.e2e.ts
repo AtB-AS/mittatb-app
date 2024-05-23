@@ -236,7 +236,7 @@ describe('Travel search', () => {
   /**
    * Walking and bike travels are shown separately depending on the travel search
    */
-  it.only('should show walk and bike options', async () => {
+  it('should show walk and bike options', async () => {
     const longDeparture = 'Prinsens gate';
     const longArrival = 'Melhus skysstasjon';
     const shortDeparture = 'Prinsens gate';
