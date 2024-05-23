@@ -36,6 +36,25 @@ class TimeHelper {
     endDate.setHours(endHr, endMin);
     return initDate <= endDate;
   }
+
+  /**
+   * Helper method to parse the minutes from a non-transit travel. Checks if the minutes are acceptable.
+   * E.g. "Bike 1 h 30 min" and "Walk 19 min"
+   * @param travelTime The travel time from the button text
+   * @param expectedMins The expected minutes
+   * @param minVariation Acceptable variation in minutes
+   */
+  isAcceptableMinVariation(
+    travelTime: string,
+    expectedMins: number,
+    minVariation: number,
+  ): boolean {
+    const travelTimeMin = parseInt(/\s(\d+)\smin/.exec(travelTime)[0]);
+    return (
+      travelTimeMin <= expectedMins + minVariation &&
+      travelTimeMin >= expectedMins - minVariation
+    );
+  }
 }
 
 export default new TimeHelper();
