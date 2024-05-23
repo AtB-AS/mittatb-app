@@ -35,6 +35,8 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {appTexts} = useFirestoreConfiguration();
   const {flex_ticket_url} = useRemoteConfig();
 
+  if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
+  
   const description =
     getTextForLanguage(appTexts?.discountInfo, language) ||
     t(PurchaseOverviewTexts.flexDiscount.description);
