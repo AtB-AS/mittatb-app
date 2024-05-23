@@ -36,6 +36,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {flex_ticket_url} = useRemoteConfig();
 
   if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
+  
   const description =
     getTextForLanguage(appTexts?.discountInfo, language) ||
     t(PurchaseOverviewTexts.flexDiscount.description);
@@ -47,6 +48,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
           textType="heading__component"
+          label="new"
           expanded={expanded}
           onPress={setExpanded}
         />
