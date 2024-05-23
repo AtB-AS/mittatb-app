@@ -11,8 +11,6 @@ export const useSnackbarIsVisible = (
 ) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>();
-
   const totalNumberOfTextCharacters =
     (texts?.title?.length || 0) + (texts?.description?.length || 0);
 
@@ -25,6 +23,8 @@ export const useSnackbarIsVisible = (
   const [isVisible, setIsVisible] = useState(snackbarHasTextToShow);
 
   const hideSnackbar = () => setIsVisible(false);
+
+  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>();
 
   const clearCurrentTimeout = () =>
     timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
