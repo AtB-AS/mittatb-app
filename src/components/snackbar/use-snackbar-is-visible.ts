@@ -2,7 +2,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {useState, useEffect, useRef} from 'react';
 import {
   SnackbarTextContent,
-  getSnackbarTextHasContent,
+  getSnackbarTextsHaveContent,
 } from '@atb/components/snackbar';
 
 export const useSnackbarIsVisible = (
@@ -18,9 +18,9 @@ export const useSnackbarIsVisible = (
     customVisibleDurationMS ||
     Math.max(5000, totalNumberOfTextCharacters * 100);
 
-  const snackbarTextHasContent = getSnackbarTextHasContent(texts);
+  const snackbarTextsHaveContent = getSnackbarTextsHaveContent(texts);
 
-  const [isVisible, setIsVisible] = useState(snackbarTextHasContent);
+  const [isVisible, setIsVisible] = useState(snackbarTextsHaveContent);
 
   const hideSnackbar = () => setIsVisible(false);
 
@@ -30,19 +30,24 @@ export const useSnackbarIsVisible = (
     timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
 
   useEffect(() => {
-    setIsVisible(snackbarTextHasContent);
-  }, [snackbarTextHasContent]);
+    setIsVisible(snackbarTextsHaveContent);
+  }, [snackbarTextsHaveContent]);
 
   useEffect(() => {
     clearCurrentTimeout();
-    if (snackbarTextHasContent) {
+    if (snackbarTextsHaveContent) {
       setIsVisible(true);
       timeoutIdRef.current = setTimeout(() => {
         !isScreenReaderEnabled && hideSnackbar();
       }, visibleDurationMS);
     }
     return clearCurrentTimeout;
-  }, [texts, visibleDurationMS, isScreenReaderEnabled, snackbarTextHasContent]);
+  }, [
+    texts,
+    visibleDurationMS,
+    isScreenReaderEnabled,
+    snackbarTextsHaveContent,
+  ]);
 
   return {isVisible, hideSnackbar};
 };

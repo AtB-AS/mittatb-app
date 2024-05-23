@@ -3,7 +3,7 @@ import isEqual from 'lodash.isequal';
 import {useRef, useEffect} from 'react';
 import {
   SnackbarTextContent,
-  getSnackbarTextHasContent,
+  getSnackbarTextsHaveContent,
 } from '@atb/components/snackbar';
 
 export const useSnackbarScreenReaderFocus = (
@@ -14,7 +14,7 @@ export const useSnackbarScreenReaderFocus = (
   const hasFocusedOnLoad = useRef(false);
   useEffect(() => {
     if (
-      getSnackbarTextHasContent(activeTexts) &&
+      getSnackbarTextsHaveContent(activeTexts) &&
       (!isEqual(previousTexts, activeTexts) || !hasFocusedOnLoad.current)
     ) {
       hasFocusedOnLoad.current = true;
