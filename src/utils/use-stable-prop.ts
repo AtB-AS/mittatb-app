@@ -1,5 +1,5 @@
 import isEqual from 'lodash.isequal';
-import {useEffect, useRef} from 'react';
+import {useEffect, useState} from 'react';
 
 /**
  * Custom hook to memoize a prop using deep comparison. The memoized value
@@ -9,13 +9,13 @@ import {useEffect, useRef} from 'react';
  * @returns {any} - The memoized prop.
  */
 export const useStableProp = (prop: any) => {
-  const memoedPropRef = useRef(prop);
+  const [stableProp, setStableProp] = useState(prop);
 
   useEffect(() => {
-    if (!isEqual(memoedPropRef.current, prop)) {
-      memoedPropRef.current = prop;
+    if (!isEqual(stableProp, prop)) {
+      setStableProp(prop);
     }
-  }, [prop]);
+  }, [prop, stableProp]);
 
-  return memoedPropRef.current;
+  return stableProp;
 };
