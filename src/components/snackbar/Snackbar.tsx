@@ -94,7 +94,12 @@ export const Snackbar = ({
               type="medium"
               mode="tertiary"
               {...actionButton}
-              onPress={() => isVisible && actionButton.onPress()}
+              onPress={() => {
+                if (isVisible) {
+                  actionButton.onPress();
+                  hideSnackbar();
+                }
+              }}
             />
           )}
 
