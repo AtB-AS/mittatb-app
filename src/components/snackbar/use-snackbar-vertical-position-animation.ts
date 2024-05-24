@@ -5,6 +5,8 @@ import {shadows} from '@atb/components/map';
 import {SnackbarPosition} from '@atb/components/snackbar';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
+export const snackbarAnimationDurationMS = 300; // 0.3 seconds
+
 export const useSnackbarVerticalPositionAnimation = (
   position: SnackbarPosition,
   visible: boolean,
@@ -26,6 +28,7 @@ export const useSnackbarVerticalPositionAnimation = (
   const visibleY = 0; // no offset
   // make sure to move it far enough out to also hide the shadow
   const viewHeightIncludingShadow = height + (shadows?.shadowRadius || 8);
+  console.log('isScreenReaderEnabled', isScreenReaderEnabled);
   const hiddenY = isScreenReaderEnabled
     ? visibleY // jump directly to visible position when screen reader enabled
     : position === 'top'
@@ -38,7 +41,7 @@ export const useSnackbarVerticalPositionAnimation = (
     // run animation
     Animated.timing(translateY, {
       toValue: visible ? visibleY : hiddenY,
-      duration: 300,
+      duration: snackbarAnimationDurationMS,
       easing: visible ? Easing.out(Easing.exp) : Easing.in(Easing.linear),
       useNativeDriver: true,
     }).start();

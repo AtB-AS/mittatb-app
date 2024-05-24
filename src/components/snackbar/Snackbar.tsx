@@ -28,7 +28,7 @@ type SnackbarProps = {
   actionButton?: ButtonProps; // optional action button, only shown if this is provided.
   isDismissable?: boolean; // whether to show the close x button
   isVisible?: boolean; // the exit animation requires that the element still exists
-  customVisibleDurationMS?: number; // how many milliseconds the snackbar should show. Infinite if not provided.
+  customVisibleDurationMS?: number; // how many milliseconds the snackbar should stay in the visible position
 };
 
 export const Snackbar = ({
