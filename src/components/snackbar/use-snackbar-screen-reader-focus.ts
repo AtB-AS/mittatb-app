@@ -1,6 +1,7 @@
 import {giveFocus} from '@atb/utils/use-focus-on-load';
 import isEqual from 'lodash.isequal';
 import {useRef, useEffect} from 'react';
+import {InteractionManager} from 'react-native';
 import {
   SnackbarTextContent,
   getSnackbarTextsHaveContent,
@@ -11,15 +12,17 @@ export const useSnackbarScreenReaderFocus = (
   previousTexts?: SnackbarTextContent,
 ) => {
   const focusRef = useRef(null);
-  const hasFocusedOnLoad = useRef(false);
+
   useEffect(() => {
     if (
       getSnackbarTextsHaveContent(activeTexts) &&
-      (!isEqual(previousTexts, activeTexts) || !hasFocusedOnLoad.current)
+      !isEqual(previousTexts, activeTexts)
     ) {
-      hasFocusedOnLoad.current = true;
-      giveFocus(focusRef);
+      InteractionManager.runAfterInteractions(() => {
+        giveFocus(focusRef);
+      });
     }
-  }, [previousTexts, activeTexts]);
+  }, [previousTexts, activeTexts, focusRef]);
+
   return focusRef;
 };
