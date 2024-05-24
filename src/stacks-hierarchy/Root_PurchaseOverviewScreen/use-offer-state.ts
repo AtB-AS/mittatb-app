@@ -26,7 +26,7 @@ type OfferState = {
   offerSearchTime?: number;
   isSearchingOffer: boolean;
   validDurationSeconds?: number;
-  originalPrice?: number;
+  originalPrice: number;
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
@@ -111,21 +111,15 @@ const getOfferReducer =
           userProfilesWithCountAndOffer: [],
         };
       case 'SET_OFFER':
-        const totalPrice = calculateTotalPrice(
-          userProfilesWithCounts,
-          action.offers,
-        );
-        const originalPrice = calculateOriginalPrice(
-          userProfilesWithCounts,
-          action.offers,
-        );
-
         return {
           ...prevState,
           offerSearchTime: Date.now(),
           isSearchingOffer: false,
           validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
-          originalPrice: originalPrice !== totalPrice ? originalPrice : undefined,
+          originalPrice: calculateOriginalPrice(
+            userProfilesWithCounts,
+            action.offers,
+          ),
           totalPrice: calculateTotalPrice(
             userProfilesWithCounts,
             action.offers,
@@ -150,6 +144,7 @@ const initialState: OfferState = {
   isSearchingOffer: false,
   offerSearchTime: undefined,
   totalPrice: 0,
+  originalPrice: 0,
   error: undefined,
   userProfilesWithCountAndOffer: [],
 };
