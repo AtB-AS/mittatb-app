@@ -37,7 +37,7 @@ const TravelTokenBoxTexts = {
 
 export default orgSpecificTranslations(TravelTokenBoxTexts, {
   nfk: {
-    tcardName: _('reisekort', 'travelcard', 'reisekort'),
+    tcardName: _('reisekort', 'travel card', 'reisekort'),
     errorMessages: {
       tokensNotLoadedTitle: _(
         'Klarer ikke hente informasjon om reisekort / mobil.',
@@ -57,7 +57,7 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
     },
   },
   fram: {
-    tcardName: _('reisekort', 'travelcard', 'reisekort'),
+    tcardName: _('reisekort', 'travel card', 'reisekort'),
     errorMessages: {
       tokensNotLoadedTitle: _(
         'Klarer ikke hente informasjon om reisekort / mobil.',
@@ -77,7 +77,7 @@ export default orgSpecificTranslations(TravelTokenBoxTexts, {
     },
   },
   troms: {
-    tcardName: _('reisekort', 'travelcard', 'reisekort'),
+    tcardName: _('reisekort', 'travel card', 'reisekort'),
     errorMessages: {
       tokensNotLoadedTitle: _(
         'Klarer ikke hente informasjon om reisekort / mobil.',
