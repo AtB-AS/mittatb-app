@@ -113,15 +113,15 @@ const TripDetailsTexts = {
           ),
       },
       buyTicketFrom: _(
-        'Kjøp billett fra',
-        'Buy ticket from',
-        'Kjøp billett frå',
+        'Billett kan kjøpes fra',
+        'Ticket can be bought from',
+        'Billett kan kjøpast frå',
       ),
       buyTicketFromA11yLabel: (authorityName: string) =>
         _(
-          `Kjøp billett fra ${authorityName}, åpner side i nettleser`,
-          `Buy ticket from ${authorityName}, opens page in browser`,
-          `Kjøp billett frå ${authorityName}, opnar side i nettlesar`,
+          `Billett kan kjøpes fra ${authorityName}, åpner side i nettleser`,
+          `Ticket can be bought from ${authorityName}, opens page in browser`,
+          `Billett kan kjøpast frå ${authorityName}, opnar side i nettlesar`,
         ),
       live: (transportMode: string) =>
         _(
