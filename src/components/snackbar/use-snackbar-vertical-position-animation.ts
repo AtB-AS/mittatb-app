@@ -9,7 +9,7 @@ export const snackbarAnimationDurationMS = 300; // 0.3 seconds
 
 export const useSnackbarVerticalPositionAnimation = (
   position: SnackbarPosition,
-  visible: boolean,
+  snackbarIsVisible: boolean,
 ) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
@@ -40,12 +40,20 @@ export const useSnackbarVerticalPositionAnimation = (
   useEffect(() => {
     // run animation
     Animated.timing(translateY, {
-      toValue: visible ? visibleY : hiddenY,
+      toValue: snackbarIsVisible ? visibleY : hiddenY,
       duration: snackbarAnimationDurationMS,
-      easing: visible ? Easing.out(Easing.exp) : Easing.in(Easing.linear),
+      easing: snackbarIsVisible
+        ? Easing.out(Easing.exp)
+        : Easing.in(Easing.linear),
       useNativeDriver: true,
     }).start();
-  }, [visible, translateY, position, hiddenY, viewHeightIncludingShadow]);
+  }, [
+    snackbarIsVisible,
+    translateY,
+    position,
+    hiddenY,
+    viewHeightIncludingShadow,
+  ]);
 
   return {
     verticalPositionStyle: {
