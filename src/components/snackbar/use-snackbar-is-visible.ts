@@ -7,11 +7,12 @@ import {
 import {snackbarAnimationDurationMS} from './use-snackbar-vertical-position-animation';
 
 export const useSnackbarIsVisible = (
-  textContent?: SnackbarTextContent,
+  stableTextContent?: SnackbarTextContent, // must be stable to avoid triggering the useEffect at wrong times
   customVisibleDurationMS?: number,
 ) => {
   const totalNumberOfTextCharacters =
-    (textContent?.title?.length || 0) + (textContent?.description?.length || 0);
+    (stableTextContent?.title?.length || 0) +
+    (stableTextContent?.description?.length || 0);
 
   const estimatedTimeRequiredToReadTextMS = totalNumberOfTextCharacters * 100; // 0.1 seconds per character
   const minimumVisibleTimeMS = 5000; // 5 seconds
@@ -20,7 +21,7 @@ export const useSnackbarIsVisible = (
     customVisibleDurationMS ||
     Math.max(minimumVisibleTimeMS, estimatedTimeRequiredToReadTextMS);
 
-  const shouldShowSnackbar = getSnackbarHasTextContent(textContent); // if there is new textContent to show, it should be shown
+  const shouldShowSnackbar = getSnackbarHasTextContent(stableTextContent); // if there is new textContent to show, it should be shown
 
   const [snackbarIsVisible, setSnackbarIsVisible] =
     useState(shouldShowSnackbar);
@@ -43,7 +44,7 @@ export const useSnackbarIsVisible = (
     }
     return clearCurrentTimeout; // clear timeout when the component is unmounted
   }, [
-    textContent,
+    stableTextContent,
     visibleDurationMS,
     isScreenReaderEnabled,
     shouldShowSnackbar,
