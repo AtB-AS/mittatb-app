@@ -16,6 +16,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {usePrevious} from '@atb/utils/use-previous';
 import {useStableProp} from '@atb/utils/use-stable-prop';
+
 export type SnackbarPosition = 'top' | 'bottom';
 
 export type SnackbarTextContent = {
@@ -43,28 +44,25 @@ export const Snackbar = ({
 
   const stableTextContent = useStableProp(textContent); // avoid triggering useEffects if no text has been changed
 
-  const {isVisible, hideSnackbar} = useSnackbarIsVisible(
+  const {snackbarIsVisible, hideSnackbar} = useSnackbarIsVisible(
     stableTextContent,
     customVisibleDurationMS,
   );
 
   const {verticalPositionStyle, animatedViewOnLayout} =
-    useSnackbarVerticalPositionAnimation(position, isVisible);
+    useSnackbarVerticalPositionAnimation(position, snackbarIsVisible);
 
   // to show the correct textContent during exit animation, keep track of the previous value
   const previousTextContent = usePrevious(stableTextContent);
   const activeTextContent =
-    !isVisible && !stableTextContent && previousTextContent
+    !snackbarIsVisible && !stableTextContent && previousTextContent
       ? previousTextContent
       : stableTextContent;
 
-  const focusRef = useSnackbarScreenReaderFocus(
-    activeTextContent,
-    previousTextContent,
-  );
+  const focusRef = useSnackbarScreenReaderFocus(activeTextContent);
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  if (!isVisible && isScreenReaderEnabled) {
+  if (!snackbarIsVisible && isScreenReaderEnabled) {
     return <></>;
   }
 
@@ -102,7 +100,7 @@ export const Snackbar = ({
               mode="tertiary"
               {...actionButton}
               onPress={() => {
-                if (isVisible) {
+                if (snackbarIsVisible) {
                   actionButton.onPress();
                   hideSnackbar();
                 }

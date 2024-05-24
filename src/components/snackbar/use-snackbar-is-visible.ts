@@ -22,7 +22,8 @@ export const useSnackbarIsVisible = (
 
   const shouldShowSnackbar = getSnackbarHasTextContent(textContent); // if there is new textContent to show, it should be shown
 
-  const [isVisible, setIsVisible] = useState(shouldShowSnackbar);
+  const [snackbarIsVisible, setSnackbarIsVisible] =
+    useState(shouldShowSnackbar);
 
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
@@ -31,16 +32,16 @@ export const useSnackbarIsVisible = (
     timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
 
   useEffect(() => {
-    setIsVisible(shouldShowSnackbar);
+    setSnackbarIsVisible(shouldShowSnackbar);
     if (shouldShowSnackbar) {
-      clearCurrentTimeout(); // cancel the old timeout, preventing it from interfering with the new
+      clearCurrentTimeout(); // clear possibly existing current timeout, preventing it from interfering with the new
 
       timeoutIdRef.current = setTimeout(
-        () => !isScreenReaderEnabled && setIsVisible(false), // only auto-hide when the screen reader is off
+        () => !isScreenReaderEnabled && setSnackbarIsVisible(false), // only auto-hide when the screen reader is off
         snackbarAnimationDurationMS + visibleDurationMS,
       ); // first wait for the animation to complete, then wait visibleDurationMS before hiding
     }
-    return clearCurrentTimeout;
+    return clearCurrentTimeout; // clear timeout when the component is unmounted
   }, [
     textContent,
     visibleDurationMS,
@@ -48,7 +49,7 @@ export const useSnackbarIsVisible = (
     shouldShowSnackbar,
   ]);
 
-  const hideSnackbar = () => setIsVisible(false);
+  const hideSnackbar = () => setSnackbarIsVisible(false);
 
-  return {isVisible, hideSnackbar};
+  return {snackbarIsVisible, hideSnackbar};
 };
