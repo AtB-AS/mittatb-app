@@ -69,14 +69,6 @@ export type LastUsedAccessState = {
   validTo: number | undefined;
 };
 
-export type PreActivatedSingleTravelRight = PreActivatedTravelRight & {
-  type: 'PreActivatedSingleTicket';
-};
-
-export type PeriodTravelRight = PreActivatedTravelRight & {
-  type: 'PreActivatedPeriodTicket';
-};
-
 export type FareContract = {
   created: Date;
   version: string;

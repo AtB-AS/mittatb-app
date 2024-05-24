@@ -5,7 +5,6 @@ import {
   CarnetTravelRight,
   TravelRight,
   PreActivatedTravelRight,
-  PreActivatedSingleTravelRight,
   CarnetTravelRightUsedAccess,
   Reservation,
   LastUsedAccessState,
@@ -33,12 +32,6 @@ export function isPreActivatedTravelRight(
     travelRight?.type === 'PeriodBoatTicket' ||
     travelRight?.type === 'YouthTicket'
   );
-}
-
-export function isSingleTravelRight(
-  travelRight: TravelRight | undefined,
-): travelRight is PreActivatedSingleTravelRight {
-  return travelRight?.type === 'PreActivatedSingleTicket';
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {
