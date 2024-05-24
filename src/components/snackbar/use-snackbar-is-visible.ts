@@ -2,16 +2,16 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import {useState, useEffect, useRef} from 'react';
 import {
   SnackbarTextContent,
-  getSnackbarTextsHaveContent,
+  getSnackbarHasTextContent,
 } from '@atb/components/snackbar';
 import {snackbarAnimationDurationMS} from './use-snackbar-vertical-position-animation';
 
 export const useSnackbarIsVisible = (
-  texts?: SnackbarTextContent,
+  textContent?: SnackbarTextContent,
   customVisibleDurationMS?: number,
 ) => {
   const totalNumberOfTextCharacters =
-    (texts?.title?.length || 0) + (texts?.description?.length || 0);
+    (textContent?.title?.length || 0) + (textContent?.description?.length || 0);
 
   const estimatedTimeRequiredToReadTextMS = totalNumberOfTextCharacters * 100; // 0.1 seconds per character
   const minimumVisibleTimeMS = 5000; // 5 seconds
@@ -20,7 +20,7 @@ export const useSnackbarIsVisible = (
     customVisibleDurationMS ||
     Math.max(minimumVisibleTimeMS, estimatedTimeRequiredToReadTextMS);
 
-  const shouldShowSnackbar = getSnackbarTextsHaveContent(texts); // if there is new text to show, it should be shown
+  const shouldShowSnackbar = getSnackbarHasTextContent(textContent); // if there is new textContent to show, it should be shown
 
   const [isVisible, setIsVisible] = useState(shouldShowSnackbar);
 
@@ -41,7 +41,12 @@ export const useSnackbarIsVisible = (
       ); // first wait for the animation to complete, then wait visibleDurationMS before hiding
     }
     return clearCurrentTimeout;
-  }, [texts, visibleDurationMS, isScreenReaderEnabled, shouldShowSnackbar]);
+  }, [
+    textContent,
+    visibleDurationMS,
+    isScreenReaderEnabled,
+    shouldShowSnackbar,
+  ]);
 
   const hideSnackbar = () => setIsVisible(false);
 

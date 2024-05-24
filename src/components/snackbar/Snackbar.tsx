@@ -15,6 +15,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {usePrevious} from '@atb/utils/use-previous';
+import {useStableProp} from '@atb/utils/use-stable-prop';
 export type SnackbarPosition = 'top' | 'bottom';
 
 export type SnackbarTextContent = {
@@ -23,7 +24,7 @@ export type SnackbarTextContent = {
 };
 
 type SnackbarProps = {
-  texts?: SnackbarTextContent;
+  textContent?: SnackbarTextContent;
   position: SnackbarPosition;
   actionButton?: ButtonProps; // optional action button, only shown if this is provided.
   isDismissable?: boolean; // whether to show the close x button
@@ -31,7 +32,7 @@ type SnackbarProps = {
 };
 
 export const Snackbar = ({
-  texts,
+  textContent,
   position,
   actionButton,
   isDismissable,
@@ -40,20 +41,27 @@ export const Snackbar = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
+  const stableTextContent = useStableProp(textContent); // avoid triggering useEffects if no text has been changed
+
   const {isVisible, hideSnackbar} = useSnackbarIsVisible(
-    texts,
+    stableTextContent,
     customVisibleDurationMS,
   );
 
   const {verticalPositionStyle, animatedViewOnLayout} =
     useSnackbarVerticalPositionAnimation(position, isVisible);
 
-  // to show the correct texts during exit animation, keep track of the previous value
-  const previousTexts = usePrevious(texts);
-  const activeTexts =
-    !isVisible && !texts && previousTexts ? previousTexts : texts;
+  // to show the correct textContent during exit animation, keep track of the previous value
+  const previousTextContent = usePrevious(stableTextContent);
+  const activeTextContent =
+    !isVisible && !stableTextContent && previousTextContent
+      ? previousTextContent
+      : stableTextContent;
 
-  const focusRef = useSnackbarScreenReaderFocus(activeTexts, previousTexts);
+  const focusRef = useSnackbarScreenReaderFocus(
+    activeTextContent,
+    previousTextContent,
+  );
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   if (!isVisible && isScreenReaderEnabled) {
@@ -67,22 +75,22 @@ export const Snackbar = ({
     >
       <View style={styles.snackbar}>
         <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
-          {activeTexts?.title && (
+          {activeTextContent?.title && (
             <ThemeText
               type="body__primary--bold"
               color="primary"
               numberOfLines={4} // max limit, should normally not come into play
             >
-              {activeTexts?.title}
+              {activeTextContent?.title}
             </ThemeText>
           )}
-          {activeTexts?.description && (
+          {activeTextContent?.description && (
             <ThemeText
               type="body__primary"
-              color={activeTexts?.title ? 'secondary' : 'primary'}
+              color={activeTextContent?.title ? 'secondary' : 'primary'}
               numberOfLines={7} // max limit, should normally not come into play
             >
-              {activeTexts?.description}
+              {activeTextContent?.description}
             </ThemeText>
           )}
         </View>

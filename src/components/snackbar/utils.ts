@@ -1,6 +1,6 @@
 import {isDefined} from '@atb/utils/presence';
 import {SnackbarTextContent} from '@atb/components/snackbar';
 
-export const getSnackbarTextsHaveContent = (texts?: SnackbarTextContent) =>
-  isDefined(texts) &&
-  (isDefined(texts?.title) || isDefined(texts?.description));
+export const getSnackbarHasTextContent = (textContent?: SnackbarTextContent) =>
+  isDefined(textContent) &&
+  (isDefined(textContent?.title) || isDefined(textContent?.description));

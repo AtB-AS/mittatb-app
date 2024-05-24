@@ -4,25 +4,25 @@ import {useRef, useEffect} from 'react';
 import {InteractionManager} from 'react-native';
 import {
   SnackbarTextContent,
-  getSnackbarTextsHaveContent,
+  getSnackbarHasTextContent,
 } from '@atb/components/snackbar';
 
 export const useSnackbarScreenReaderFocus = (
-  activeTexts?: SnackbarTextContent,
-  previousTexts?: SnackbarTextContent,
+  activeTextContent?: SnackbarTextContent,
+  previousTextContent?: SnackbarTextContent,
 ) => {
   const focusRef = useRef(null);
 
   useEffect(() => {
     if (
-      getSnackbarTextsHaveContent(activeTexts) &&
-      !isEqual(previousTexts, activeTexts)
+      getSnackbarHasTextContent(activeTextContent) &&
+      !isEqual(previousTextContent, activeTextContent)
     ) {
       InteractionManager.runAfterInteractions(() => {
         giveFocus(focusRef);
       });
     }
-  }, [previousTexts, activeTexts, focusRef]);
+  }, [previousTextContent, activeTextContent, focusRef]);
 
   return focusRef;
 };
