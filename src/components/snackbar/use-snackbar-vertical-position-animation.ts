@@ -28,7 +28,7 @@ export const useSnackbarVerticalPositionAnimation = (
   const visibleY = 0; // no offset
   // make sure to move it far enough out to also hide the shadow
   const viewHeightIncludingShadow = height + (shadows?.shadowRadius || 8);
-  console.log('isScreenReaderEnabled', isScreenReaderEnabled);
+
   const hiddenY = isScreenReaderEnabled
     ? visibleY // jump directly to visible position when screen reader enabled
     : position === 'top'
