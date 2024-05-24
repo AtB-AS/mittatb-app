@@ -232,9 +232,9 @@ const PurchaseOverviewTexts = {
   flexDiscount: {
     heading: _('Rabatt', 'Discount', 'Rabatt'),
     expandableLabel: _(
-      'Din rabatt og pris',
-      'Your discount and price',
-      'Din rabatt og pris',
+      'Din rabatt',
+      'Your discount',
+      'Din rabatt',
     ),
     description: _(
       'Enkeltbillett voksen har rabatt i Sone A basert på antall kjøp de siste 14 dagene når du er med i pilot for Fleksibel billett.',

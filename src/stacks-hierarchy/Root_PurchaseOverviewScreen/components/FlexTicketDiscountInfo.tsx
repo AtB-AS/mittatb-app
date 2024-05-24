@@ -3,6 +3,7 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
+  Language,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
@@ -22,21 +23,30 @@ import {
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
+import {Offer} from '@atb/ticketing';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
   style: StyleProp<ViewStyle>;
 };
 
+type FlexProfileList = {
+  userProfileKey: string;
+  userProfileName: string;
+  offer: Offer;
+};
+
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {t, language} = useTranslation();
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const styles = useStyles();
   const {appTexts} = useFirestoreConfiguration();
   const {flex_ticket_url} = useRemoteConfig();
 
-  if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
-  
+  const flexProfileList = mapToFlexProfileList(userProfiles, language);
+
+  if (!flexProfileList.every((u) => u.offer.flex_discount_ladder)) return null;
+
   const description =
     getTextForLanguage(appTexts?.discountInfo, language) ||
     t(PurchaseOverviewTexts.flexDiscount.description);
@@ -54,21 +64,24 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         />
         {expanded && (
           <GenericSectionItem accessibility={{accessible: true}}>
-            <ThemeText>{description}</ThemeText>
+            <ThemeText type="body__secondary" color="secondary">
+              {description}
+            </ThemeText>
           </GenericSectionItem>
         )}
         {expanded &&
-          [...userProfiles].map((u) => {
+          flexProfileList.map((u) => {
             const ladder = u.offer.flex_discount_ladder;
             const discountPercent = ladder?.steps[ladder.current].discount;
-            if (!discountPercent) return null;
 
-            const userProfileName = getReferenceDataName(u, language);
-            const discountText = t(
-              PurchaseOverviewTexts.flexDiscount.discountPercentage(
-                discountPercent.toFixed(0),
-              ),
-            );
+            const userProfileName = u.userProfileName;
+            const discountText =
+              discountPercent &&
+              t(
+                PurchaseOverviewTexts.flexDiscount.discountPercentage(
+                  discountPercent.toFixed(0),
+                ),
+              );
             const priceText =
               formatDecimalNumber(
                 u.offer.prices[0].amount_float || 0,
@@ -82,7 +95,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                   accessible: true,
                   accessibilityLabel: `${userProfileName}, ${discountText}, ${priceText}`,
                 }}
-                key={userProfileName}
+                key={u.userProfileKey}
               >
                 <View style={styles.userProfileDiscountInfo}>
                   <ThemeText type="body__secondary" color="secondary">
@@ -92,18 +105,18 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                       ),
                     )}
                   </ThemeText>
-                  <View style={styles.infoChips}>
-                    <BorderedInfoBox
-                      style={styles.infoChips_first}
-                      type="small"
-                      backgroundColor="background_0"
-                      text={discountText}
-                    />
-                    <BorderedInfoBox
-                      type="small"
-                      backgroundColor="background_0"
-                      text={priceText}
-                    />
+                  <View style={styles.discountInfoContainer}>
+                    {discountText && (
+                      <BorderedInfoBox
+                        style={styles.discountInfo}
+                        type="small"
+                        backgroundColor="background_0"
+                        text={discountText}
+                      />
+                    )}
+                    <ThemeText style={styles.priceInfo} type="body__tertiary" color="primary">
+                      {priceText}
+                    </ThemeText>
                   </View>
                 </View>
               </GenericSectionItem>
@@ -125,6 +138,24 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   );
 };
 
+const mapToFlexProfileList = (
+  userProfileWithCounts: UserProfileWithCountAndOffer[],
+  language: Language,
+): FlexProfileList[] => {
+  const flexProfileList: FlexProfileList[] = [];
+
+  for (const u of userProfileWithCounts) {
+    for (let i = 0; i < u.count; i++) {
+      flexProfileList.push({
+        userProfileKey: u.id + i,
+        userProfileName: getReferenceDataName(u, language),
+        offer: u.offer,
+      });
+    }
+  }
+  return flexProfileList;
+};
+
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   userProfileDiscountInfo: {
     flex: 1,
@@ -133,6 +164,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  infoChips: {flexDirection: 'row'},
-  infoChips_first: {marginRight: theme.spacings.small},
+  discountInfoContainer: {flexDirection: 'row'},
+  discountInfo: {marginRight: theme.spacings.small},
+  priceInfo: {alignSelf:'center'},
 }));
