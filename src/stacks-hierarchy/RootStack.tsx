@@ -1,7 +1,7 @@
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useTheme} from '@atb/theme';
-import {APP_SCHEME} from '@env';
+import {APP_SCHEME, APP_VERSION} from '@env';
 import {
   DefaultTheme,
   getStateFromPath,
@@ -68,6 +68,7 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {register as registerChatUser} from '@atb/chat/user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {Root_ForceUpdateScreen} from '@atb/stacks-hierarchy/Root_ForceUpdateScreen.tsx';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -80,7 +81,7 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
-  const {enable_intercom} = useRemoteConfig();
+  const {enable_intercom, minimum_app_version} = useRemoteConfig();
 
   useFlipper(navRef);
 
@@ -167,6 +168,48 @@ export const RootStack = () => {
       ],
     };
   }
+
+  const enforceUpdateOfAppVersion = (
+    minAppVersion: string,
+    appVersion: string,
+  ) => {
+    const splitAndNormalize = (version: string) => {
+      const parts: number[] = version.split('.').map(Number);
+      while (parts.length < 3) {
+        parts.push(0);
+      }
+      return parts;
+    };
+
+    if (minAppVersion && appVersion) {
+      const currentAppVersionList = splitAndNormalize(appVersion);
+      const minAppVersionlist = splitAndNormalize(minAppVersion);
+      const result = currentAppVersionList.find(
+        (part, index) => part < minAppVersionlist[index],
+      );
+      return result !== undefined;
+      // const result = currentAppVersionList.find(
+      //   (part, index) => part !== minAppVersionlist[index],
+      // );
+      // if (result !== undefined) {
+      //   return currentAppVersionList[currentAppVersionList.indexOf(result)]
+      // }
+    }
+    return false;
+  };
+  // if (minimum_app_version && minimum_app_version > APP_VERSION)
+  //   // fix logic
+  //   // run comparison, split at . and compare from front to back.
+  //   return <Root_ForceUpdateScreen navigation={() => {}} />;
+
+  console.log(
+    'enforceUpdateOfAppVersion',
+    enforceUpdateOfAppVersion(minimum_app_version, APP_VERSION),
+    APP_VERSION,
+    minimum_app_version,
+  );
+  if (enforceUpdateOfAppVersion(minimum_app_version, APP_VERSION))
+    return <Root_ForceUpdateScreen />;
 
   return (
     <>
@@ -429,6 +472,10 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ChooseTicketReceiverScreen"
                 component={Root_ChooseTicketReceiverScreen}
+              />
+              <Stack.Screen
+                name="Root_ForceUpdateScreen"
+                component={Root_ForceUpdateScreen}
               />
             </Stack.Navigator>
           </NavigationContainer>

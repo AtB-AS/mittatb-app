@@ -37,6 +37,7 @@ export type RemoteConfig = {
   use_flexible_on_directMode: boolean;
   use_flexible_on_egressMode: boolean;
   use_trygg_overgang_qr_code: boolean;
+  minimum_app_version: string;
   disable_email_field_in_profile_page: boolean;
   disable_travelcard: boolean;
   live_vehicle_stale_threshold: number;
@@ -90,6 +91,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_car_sharing_in_map: false,
   enable_geofencing_zones: false,
   enable_vehicle_operator_logo: false,
+  minimum_app_version: '1.52.0',
   default_map_filter: JSON.stringify({
     vehicles: {
       showVehicles: false,
@@ -323,6 +325,10 @@ export function getConfig(): RemoteConfig {
     values['enable_activate_ticket_now']?.asBoolean() ??
     defaultRemoteConfig.enable_activate_ticket_now;
 
+  const minimum_app_version =
+    values['minimum_app_version']?.asString() ??
+    defaultRemoteConfig.minimum_app_version;
+
   return {
     enable_ticketing,
     enable_intercom,
@@ -355,6 +361,7 @@ export function getConfig(): RemoteConfig {
     enable_ticketing_assistant,
     enable_tips_and_information,
     enable_flexible_transport,
+    minimum_app_version,
     use_flexible_on_accessMode,
     use_flexible_on_directMode,
     use_flexible_on_egressMode,

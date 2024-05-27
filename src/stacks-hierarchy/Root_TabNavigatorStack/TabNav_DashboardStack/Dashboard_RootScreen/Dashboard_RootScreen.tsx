@@ -39,6 +39,7 @@ import {DashboardScreenProps} from '../navigation-types';
 import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
+import {Button} from '@atb/components/button';
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -247,6 +248,12 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
             onAddFavorite={() =>
               navigation.navigate('Root_SearchStopPlaceScreen')
             }
+          />
+          <Button
+            onPress={() => {
+              navigation.navigate('Root_ForceUpdateScreen');
+            }}
+            text="Open my page"
           />
         </View>
 

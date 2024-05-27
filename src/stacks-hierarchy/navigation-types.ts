@@ -143,6 +143,7 @@ export type RootStackParamList = StackParams<{
   Root_LocationWhenInUsePermissionScreen: undefined;
   Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
+  Root_ForceUpdateScreen: undefined;
 }>;
 
 export type RootNavigationProps = NavigationProp<RootStackParamList>;
