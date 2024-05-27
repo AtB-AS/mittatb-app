@@ -10,6 +10,7 @@ import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 
 type Props = {
   price: number;
+  originalPrice: number;
   isFree: boolean;
   isLoading: boolean;
   isError: boolean;
@@ -21,6 +22,7 @@ type Props = {
 
 export function Summary({
   price,
+  originalPrice,
   isFree,
   isLoading,
   isError,
@@ -33,6 +35,7 @@ export function Summary({
   const {t, language} = useTranslation();
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
+  const formattedOriginalPrice = formatDecimalNumber(originalPrice, language, 2);
   const hasSelection = userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {
@@ -52,6 +55,15 @@ export function Summary({
           {t(PurchaseOverviewTexts.summary.price(formattedPrice))}
         </ThemeText>
       )}
+      {originalPrice !== price && (
+        <ThemeText
+          type="body__tertiary--strike"
+          style={styles.originalPrice}
+          testID="offerTotalPriceText"
+        >
+          {t(PurchaseOverviewTexts.summary.price(formattedOriginalPrice))}
+        </ThemeText>
+      )}
       <Button
         interactiveColor="interactive_0"
         text={summaryButtonText}
@@ -68,6 +80,10 @@ export function Summary({
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   price: {
     textAlign: 'center',
+  },
+  originalPrice: {
+    textAlign: 'center',
+    marginTop: theme.spacings.medium,
   },
   free: {
     marginTop: theme.spacings.medium,
