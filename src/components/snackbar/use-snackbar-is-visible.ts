@@ -9,7 +9,7 @@ import {snackbarAnimationDurationMS} from './use-snackbar-vertical-position-anim
 export const useSnackbarIsVisible = (
   stableTextContent?: SnackbarTextContent, // must be stable to avoid triggering the useEffect at wrong times
   customVisibleDurationMS?: number,
-) => {
+): {snackbarIsVisible: boolean; hideSnackbar: () => void} => {
   const totalNumberOfTextCharacters =
     (stableTextContent?.title?.length || 0) +
     (stableTextContent?.description?.length || 0);
