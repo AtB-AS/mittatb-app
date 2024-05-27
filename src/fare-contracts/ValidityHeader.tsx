@@ -15,6 +15,7 @@ import {TransportModes} from '@atb/components/transportation-modes';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useMobileTokenContextState} from '@atb/mobile-token';
+import {UsedAccessStatus} from './carnet/types';
 
 export const ValidityHeader: React.FC<{
   status: ValidityStatus;
@@ -23,7 +24,16 @@ export const ValidityHeader: React.FC<{
   validFrom: number;
   validTo: number;
   fareProductType: string | undefined;
-}> = ({status, now, createdDate, validFrom, validTo, fareProductType}) => {
+  carnetAccessStatus?: UsedAccessStatus;
+}> = ({
+  status,
+  now,
+  createdDate,
+  validFrom,
+  validTo,
+  fareProductType,
+  carnetAccessStatus,
+}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
@@ -32,8 +42,8 @@ export const ValidityHeader: React.FC<{
   );
   const {isInspectable} = useMobileTokenContextState();
 
-  const validityTime: string = validityTimeText(
-    status,
+  const label: string = validityTimeText(
+    carnetAccessStatus ?? status,
     now,
     createdDate,
     validFrom,
@@ -45,12 +55,13 @@ export const ValidityHeader: React.FC<{
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        {isValidFareContract(status) ? (
+        {isValidFareContract(status) || carnetAccessStatus ? (
           fareProductTypeConfig && (
             <TransportModes
               modes={fareProductTypeConfig.transportModes}
               iconSize="xSmall"
               style={{flex: 2}}
+              disabled={carnetAccessStatus === 'inactive'}
             />
           )
         ) : (
@@ -61,13 +72,13 @@ export const ValidityHeader: React.FC<{
           type="body__secondary"
           accessibilityLabel={
             !isInspectable
-              ? validityTime +
+              ? label +
                 ', ' +
                 t(FareContractTexts.fareContractInfo.noInspectionIconA11yLabel)
               : undefined
           }
         >
-          {validityTime}
+          {label}
         </ThemeText>
       </View>
     </View>
@@ -122,6 +133,8 @@ function validityTimeText(
     case 'sent':
       const dateTime = formatToLongDateTime(toDate(createdDate), language);
       return t(FareContractTexts.validityHeader.sent(dateTime));
+    case 'inactive':
+      return t(FareContractTexts.validityHeader.inactiveCarnet);
     default:
       return t(FareContractTexts.validityHeader.unknown);
   }

@@ -39,7 +39,6 @@ import {MapFilterType} from '@atb/components/map';
 import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 import {useAuthState} from '@atb/auth';
-import {UsedAccessValidityHeader} from '../carnet/UsedAccessValidityHeader';
 import {CarnetFooter} from '../carnet/CarnetFooter';
 import {MobilityBenefitsActionSectionItem} from '@atb/mobility/components/MobilityBenefitsActionSectionItem';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
@@ -137,26 +136,15 @@ export const DetailsContent: React.FC<Props> = ({
   return (
     <Section style={styles.section}>
       <GenericSectionItem>
-        {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
-        {isCarnetFareContract &&
-        fareContractValidityStatus === 'valid' &&
-        carnetAccessStatus ? (
-          <UsedAccessValidityHeader
-            now={now}
-            status={carnetAccessStatus}
-            validFrom={validFrom}
-            validTo={validTo}
-          />
-        ) : (
-          <ValidityHeader
-            status={fareContractValidityStatus}
-            now={now}
-            createdDate={fc.created.getTime()}
-            validFrom={fareContractValidFrom}
-            validTo={fareContractValidTo}
-            fareProductType={preassignedFareProduct?.type}
-          />
-        )}
+        <ValidityHeader
+          status={fareContractValidityStatus}
+          now={now}
+          createdDate={fc.created.getTime()}
+          validFrom={fareContractValidFrom}
+          validTo={fareContractValidTo}
+          fareProductType={preassignedFareProduct?.type}
+          carnetAccessStatus={carnetAccessStatus}
+        />
         <ValidityLine
           status={validityStatus}
           now={now}
