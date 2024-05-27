@@ -3,7 +3,6 @@ import {ThemeText} from '@atb/components/text';
 import {Linking, StyleProp, View, ViewStyle} from 'react-native';
 import {
   getTextForLanguage,
-  Language,
   PurchaseOverviewTexts,
   useTranslation,
 } from '@atb/translations';
@@ -23,17 +22,10 @@ import {
 } from '@atb/components/sections';
 import {ContentHeading} from '@atb/components/heading';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
-import {Offer} from '@atb/ticketing';
 
 type Props = {
   userProfiles: UserProfileWithCountAndOffer[];
   style: StyleProp<ViewStyle>;
-};
-
-type FlexProfileList = {
-  userProfileKey: string;
-  userProfileName: string;
-  offer: Offer;
 };
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
@@ -43,9 +35,8 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {appTexts} = useFirestoreConfiguration();
   const {flex_ticket_url} = useRemoteConfig();
 
-  const flexProfileList = mapToFlexProfileList(userProfiles, language);
 
-  if (!flexProfileList.every((u) => u.offer.flex_discount_ladder)) return null;
+  if (!userProfiles.every((u) => u.offer.flex_discount_ladder)) return null;
 
   const description =
     getTextForLanguage(appTexts?.discountInfo, language) ||
@@ -70,11 +61,11 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
           </GenericSectionItem>
         )}
         {expanded &&
-          flexProfileList.map((u) => {
+          userProfiles.map((u) => {
             const ladder = u.offer.flex_discount_ladder;
             const discountPercent = ladder?.steps[ladder.current].discount;
 
-            const userProfileName = u.userProfileName;
+            const userProfileName = getReferenceDataName(u, language);
             const discountText =
               discountPercent &&
               t(
@@ -95,7 +86,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                   accessible: true,
                   accessibilityLabel: `${userProfileName}, ${discountText}, ${priceText}`,
                 }}
-                key={u.userProfileKey}
+                key={u.id}
               >
                 <View style={styles.userProfileDiscountInfo}>
                   <ThemeText type="body__secondary" color="secondary">
@@ -136,24 +127,6 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
       </Section>
     </View>
   );
-};
-
-const mapToFlexProfileList = (
-  userProfileWithCounts: UserProfileWithCountAndOffer[],
-  language: Language,
-): FlexProfileList[] => {
-  const flexProfileList: FlexProfileList[] = [];
-
-  for (const u of userProfileWithCounts) {
-    for (let i = 0; i < u.count; i++) {
-      flexProfileList.push({
-        userProfileKey: u.id + i,
-        userProfileName: getReferenceDataName(u, language),
-        offer: u.offer,
-      });
-    }
-  }
-  return flexProfileList;
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
