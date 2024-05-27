@@ -1,4 +1,4 @@
-import {useRef, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import isEqual from 'lodash.isequal';
 
 /**
@@ -9,15 +9,15 @@ import isEqual from 'lodash.isequal';
  * @returns {T | undefined} - The previous value before the current update.
  */
 export function usePrevious<T>(value: T): T | undefined {
-  const currentRef = useRef<T>(value);
-  const previousRef = useRef<T | undefined>();
+  const [previousValue, setPreviousValue] = useState<T | undefined>();
+  const currentRef = useRef<T | undefined>(value);
 
   useEffect(() => {
     if (!isEqual(currentRef.current, value)) {
-      previousRef.current = currentRef.current;
+      setPreviousValue(currentRef.current);
       currentRef.current = value;
     }
   }, [value]);
 
-  return previousRef.current;
+  return previousValue;
 }
