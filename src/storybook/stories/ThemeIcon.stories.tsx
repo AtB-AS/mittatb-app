@@ -171,6 +171,28 @@ const ThemeIconMeta: Meta<ThemeIconMetaProps> = {
     fill: {
       type: 'string',
     },
+    notification: {
+      control: 'select',
+      options: [
+        'error',
+        'warning',
+        'valid',
+        'error with border',
+        'warning with border',
+        'valid with border',
+      ],
+      mapping: {
+        error: {color: 'error'},
+        warning: {color: 'warning'},
+        valid: {color: 'valid'},
+        'error with border': {color: 'error', backgroundColor: 'background_0'},
+        'warning with border': {
+          color: 'warning',
+          backgroundColor: 'background_0',
+        },
+        'valid with border': {color: 'valid', backgroundColor: 'background_0'},
+      },
+    },
     svg: {
       control: 'select',
       options: [
