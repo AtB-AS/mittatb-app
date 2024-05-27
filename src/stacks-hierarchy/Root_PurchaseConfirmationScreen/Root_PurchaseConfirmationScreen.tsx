@@ -26,7 +26,6 @@ import {
   ActivityIndicator,
   ScrollView,
   StyleProp,
-  Text,
   View,
   ViewStyle,
 } from 'react-native';
@@ -319,7 +318,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             <GenericSectionItem>
               <View accessible={true} style={styles.ticketInfoContainer}>
                 <ThemeText>
-                  {getReferenceDataName(preassignedFareProduct, language)}
+                  {getTextForLanguage(fareProductTypeConfig.name, language)}
                 </ThemeText>
                 {phoneNumber && (
                   <ThemeText
@@ -569,16 +568,12 @@ const PricePerUserProfile = ({
           <ThemeText
             type="body__tertiary"
             color="secondary"
-            style={styles.userProfileOriginalPriceText}
+            style={styles.userProfileOriginalPriceAmount}
           >
-            ({`${t(PurchaseConfirmationTexts.ordinaryPricePrefix)} `}
-            <Text style={styles.userProfileOriginalPriceAmount}>
-              {originalPriceString} kr
-            </Text>
-            )
+            {originalPriceString} kr
           </ThemeText>
         )}
-        <ThemeText color="secondary" type="body__secondary">
+        <ThemeText color="secondary" type="body__primary">
           {priceString} kr
         </ThemeText>
       </View>
@@ -627,11 +622,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   userProfileCountAndName: {marginRight: theme.spacings.small},
   userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
-  userProfileOriginalPriceText: {
-    marginRight: theme.spacings.small,
-    alignSelf: 'center',
-  },
   userProfileOriginalPriceAmount: {
+    marginEnd: theme.spacings.small,
+    alignSelf: 'flex-end',
     textDecorationLine: 'line-through',
   },
   paymentSummaryContainer: {
