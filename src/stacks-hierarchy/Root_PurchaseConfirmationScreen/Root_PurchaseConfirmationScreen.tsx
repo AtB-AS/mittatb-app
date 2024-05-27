@@ -573,7 +573,7 @@ const PricePerUserProfile = ({
             {originalPriceString} kr
           </ThemeText>
         )}
-        <ThemeText color="secondary" type="body__primary">
+        <ThemeText color="secondary" type="body__secondary">
           {priceString} kr
         </ThemeText>
       </View>
