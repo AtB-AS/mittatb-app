@@ -1,4 +1,4 @@
-import {renderHook, act} from '@testing-library/react-hooks';
+import {renderHook} from '@testing-library/react-hooks';
 import {usePrevious} from '../use-previous';
 
 describe('usePrevious', () => {
@@ -8,40 +8,26 @@ describe('usePrevious', () => {
   });
 
   it('should return the previous value after update', () => {
-    let value = 0;
-    const {result, rerender} = renderHook(() => usePrevious(value));
-
-    act(() => {
-      value = 1;
-      rerender();
+    const {result, rerender} = renderHook((value) => usePrevious(value), {
+      initialProps: 0,
     });
 
+    rerender(1);
     expect(result.current).toBe(0);
 
-    act(() => {
-      value = 2;
-      rerender();
-    });
-
+    rerender(2);
     expect(result.current).toBe(1);
   });
 
   it('should not update previous value if current value does not change', () => {
-    let value = {a: 1};
-    const {result, rerender} = renderHook(() => usePrevious(value));
-
-    act(() => {
-      value = {a: 1}; // new object with the same content
-      rerender();
+    const {result, rerender} = renderHook((value) => usePrevious(value), {
+      initialProps: {a: 1},
     });
 
+    rerender({a: 1}); // new object with the same content
     expect(result.current).toBeUndefined();
 
-    act(() => {
-      value = {a: 2}; // change content
-      rerender();
-    });
-
+    rerender({a: 2}); // change content
     expect(result.current).toEqual({a: 1});
   });
 });
