@@ -318,7 +318,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             <GenericSectionItem>
               <View accessible={true} style={styles.ticketInfoContainer}>
                 <ThemeText>
-                  {getTextForLanguage(fareProductTypeConfig.name, language)}
+                  {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
                 {phoneNumber && (
                   <ThemeText
