@@ -13,9 +13,9 @@ const ForceUpdateTexts = {
   ),
   externalButton: _('Oppdater appen', 'Update the app', 'Oppdater appen'),
   errorMessage: _(
-    'Noe gikk galt og vi får ikke videresendt deg til portalen for oppdatering. Vennligst åpne portalen manuelt for å oppdatere appen.',
-    'Something went wrong and we were not able to redirect you to the portal for app updates. Please go to the portal manually to update the app.',
-    'Noe gikk galt og vi får ikkje videresendt deg til portalen for oppdatering. Ver vennleg å˝ åpne portalen manuelt for å oppdatere appen.',
+    'Noe gikk galt. Vennligst prøv på nytt, eller gå inn i app-butikken på enheten din for å oppdatere.',
+    'Something went wrong. Please try again, or go to the store on your device to update the app.',
+    'Noko gikk galt. Ver venleg og prøv på nytt, eller gå inn i app-butikken på einheiten din for å oppdatere.',
   ),
 };
 export default ForceUpdateTexts;
