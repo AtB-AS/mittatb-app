@@ -26,9 +26,16 @@ export const useSnackbarVerticalPositionAnimation = (
   };
 
   const visibleY = 0; // no offset
-  // make sure to move it far enough out to also hide the shadow
-  const viewHeightIncludingShadow = height + (shadows?.shadowRadius || 8) * 2;
-  const shadowOffsetY = shadows?.shadowOffset?.height || 2;
+
+  const shadowRadius = shadows?.shadowRadius || 8;
+  const estimatedShadowHeight = 2 * shadowRadius; // https://drafts.csswg.org/css-backgrounds/#shadow-blur
+
+  const viewHeightIncludingShadow = height + estimatedShadowHeight;
+
+  const shadowOffsetY = Math.min(
+    shadows?.shadowOffset?.height || 2,
+    estimatedShadowHeight,
+  ); // avoid overcompensation by limiting shadowOffsetY to be no more than estimatedShadowHeight
 
   const hiddenY = isScreenReaderEnabled
     ? visibleY // jump directly to visible position when screen reader enabled
