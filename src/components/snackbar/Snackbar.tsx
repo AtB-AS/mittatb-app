@@ -27,9 +27,12 @@ export type SnackbarTextContent = {
 type SnackbarProps = {
   textContent?: SnackbarTextContent;
   position: SnackbarPosition;
-  actionButton?: ButtonProps; // optional action button, only shown if this is provided.
-  isDismissable?: boolean; // whether to show the close x button
-  customVisibleDurationMS?: number; // how many milliseconds the snackbar should stay in the visible position
+  /** Optional action button, only shown if this is provided */
+  actionButton?: ButtonProps;
+  /** Whether to show the close x button */
+  isDismissable?: boolean;
+  /** How many milliseconds the snackbar should stay in the visible position */
+  customVisibleDurationMS?: number;
 };
 
 export const Snackbar = ({
