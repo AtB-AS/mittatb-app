@@ -8,39 +8,29 @@ import {ANDROID_STORE_ID, IOS_STORE_ID} from '@env';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors.ts';
 import {ForceUpdateTexts, useTranslation} from '@atb/translations';
-import {FullScreenHeader} from '@atb/components/screen-header';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
-import {ThemeIcon} from '@atb/components/theme-icon';
-// type Props = RootStackScreenProps<'Root_ForceUpdateScreen'>;
+import Bugsnag from '@bugsnag/react-native';
 
-// can use APP_VERSION from env file for comparison with firestore min value.
-// Where to put this versoin check and how to prompt this new page
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const Root_ForceUpdateScreen = () => {
+export const ForceUpdateScreen = () => {
   const [error, setError] = useState<boolean>(false);
   const styles = useStyles();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const iconDimension = 80;
 
   return (
     <View style={styles.container}>
-      <FullScreenHeader
-        leftButton={{
-          type: 'back',
-        }}
-        setFocusOnLoad={false}
-        color={themeColor}
-        title={t(ForceUpdateTexts.header)}
-      />
       <View style={styles.mainView}>
         <ScrollView>
-          <ThemeIcon
-            svg={Logo}
-            size="large"
-            style={styles.icon}
-            fill={theme.static.background.background_accent_0.text}
-          />
+          <View style={styles.icon}>
+            <Logo
+              width={iconDimension}
+              height={iconDimension}
+              fill={theme.static.background.background_accent_0.text}
+            />
+          </View>
           <ThemeText
             type="body__primary--big--bold"
             style={styles.title}
@@ -48,44 +38,27 @@ export const Root_ForceUpdateScreen = () => {
           >
             {t(ForceUpdateTexts.header)}
           </ThemeText>
-          <ThemeText style={styles.subText}>
+          <ThemeText style={styles.subText} color={themeColor}>
             {t(ForceUpdateTexts.subText)}
           </ThemeText>
           <Button
             rightIcon={{svg: ExternalLink}}
-            /* can we have the id or full url in the env-file? Or in Firestore? Take backwards compatability into account here. How likely is it that some of those will change / have something breaking? */
             onPress={() => {
-              if (Platform.OS === 'android') {
-                // const link = 'market://details?id=no.mittatb.store';
-                const link = `market://details?id=${ANDROID_STORE_ID}`;
-
-                Linking.canOpenURL(link).then(
-                  (supported) => {
-                    supported && Linking.openURL(link);
-                    setError(false);
-                  },
-                  (err) => {
-                    console.log('android', err);
-                    setError(true);
-                  },
-                );
-              } else {
-                // const link = 'itms-apps://apps.apple.com/us/app/id1502395251'; //IOS_BUNDLE_INDETIFIER?
-                const link = `itms-apps://apps.apple.com/us/app/${IOS_STORE_ID}`;
-
-                Linking.canOpenURL(link).then(
-                  (supported) => {
-                    supported && Linking.openURL(link);
-                    setError(false);
-                  },
-                  (err) => {
-                    console.log('ios', err);
-                    setError(true);
-                  },
-                  // Show some good error message telling the user what to do
-                  // Report to Bugsnag the error
-                );
-              }
+              const link = Platform.select({
+                ios: `itms-apps://apps.apple.com/us/app/${IOS_STORE_ID}`,
+                android: `market://details?id=${ANDROID_STORE_ID}`,
+                default: '',
+              });
+              setError(false);
+              Linking.canOpenURL(link).then(
+                (supported) => {
+                  supported && Linking.openURL(link);
+                },
+                (err) => {
+                  Bugsnag.notify(err as any);
+                  setError(true);
+                },
+              );
             }}
             text={t(ForceUpdateTexts.externalButton)}
           />
