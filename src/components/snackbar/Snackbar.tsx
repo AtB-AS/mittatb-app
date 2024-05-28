@@ -147,13 +147,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   snackbar: {
     ...shadows,
     ...flowHorizontallyAndCenterAlignVertically,
-    ...{
-      backgroundColor: theme.static.background.background_0.background,
-      width: '88%',
-      paddingLeft: theme.spacings.large,
-      paddingRight: theme.spacings.xSmall,
-      borderRadius: theme.border.radius.regular,
-    },
+    backgroundColor: theme.static.background.background_0.background,
+    width: '88%',
+    paddingLeft: theme.spacings.large,
+    paddingRight: theme.spacings.xSmall,
+    borderRadius: theme.border.radius.regular,
   },
   snackbarTexts: {
     flex: 1,
