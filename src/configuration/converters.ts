@@ -6,6 +6,7 @@ import {
   MobilityOperator,
   FareProductGroup,
   FareProductGroupType,
+  OperatorBenefitId,
 } from './types';
 import {LanguageAndTextType} from '@atb/translations/types';
 import Bugsnag from '@bugsnag/react-native';
@@ -130,6 +131,24 @@ export function mapToMobilityOperators(operators?: any) {
   return operators
     .map((operator) => {
       const parseResult = MobilityOperator.safeParse(operator);
+      if (!parseResult.success) {
+        return;
+      }
+      return parseResult.data;
+    })
+    .filter(isDefined);
+}
+
+export function mapToBenefitIdsRequiringValueCode(
+  benefitIdsRequiringValueCode?: any,
+) {
+  if (!benefitIdsRequiringValueCode) return;
+  if (!Array.isArray(benefitIdsRequiringValueCode)) return;
+  return benefitIdsRequiringValueCode
+    .map((benefitIdRequiringValueCode) => {
+      const parseResult = OperatorBenefitId.safeParse(
+        benefitIdRequiringValueCode,
+      );
       if (!parseResult.success) {
         return;
       }

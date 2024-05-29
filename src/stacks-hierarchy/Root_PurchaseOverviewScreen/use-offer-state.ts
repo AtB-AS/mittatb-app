@@ -26,6 +26,7 @@ type OfferState = {
   offerSearchTime?: number;
   isSearchingOffer: boolean;
   validDurationSeconds?: number;
+  originalPrice: number;
   totalPrice: number;
   error?: OfferError;
   userProfilesWithCountAndOffer: UserProfileWithCountAndOffer[];
@@ -46,6 +47,9 @@ type OfferReducer = (
 const getCurrencyAsFloat = (prices: OfferPrice[], currency: string) =>
   prices.find((p) => p.currency === currency)?.amount_float ?? 0;
 
+const getOriginalPriceAsFloat = (prices: OfferPrice[], currency: string) =>
+  prices.find((p) => p.currency === currency)?.original_amount_float ?? 0;
+
 const getValidDurationSeconds = (offer: Offer): number =>
   secondsBetween(offer.valid_from, offer.valid_to);
 
@@ -59,6 +63,20 @@ const calculateTotalPrice = (
     );
     const price = maybeOffer
       ? getCurrencyAsFloat(maybeOffer.prices, 'NOK') * traveller.count
+      : 0;
+    return total + price;
+  }, 0);
+
+const calculateOriginalPrice = (
+  userProfileWithCounts: UserProfileWithCount[],
+  offers: Offer[],
+) =>
+  userProfileWithCounts.reduce((total, traveller) => {
+    const maybeOffer = offers.find(
+      (o) => o.traveller_id === traveller.userTypeString,
+    );
+    const price = maybeOffer
+      ? getOriginalPriceAsFloat(maybeOffer.prices, 'NOK') * traveller.count
       : 0;
     return total + price;
   }, 0);
@@ -98,6 +116,10 @@ const getOfferReducer =
           offerSearchTime: Date.now(),
           isSearchingOffer: false,
           validDurationSeconds: getValidDurationSeconds(action.offers?.[0]),
+          originalPrice: calculateOriginalPrice(
+            userProfilesWithCounts,
+            action.offers,
+          ),
           totalPrice: calculateTotalPrice(
             userProfilesWithCounts,
             action.offers,
@@ -122,6 +144,7 @@ const initialState: OfferState = {
   isSearchingOffer: false,
   offerSearchTime: undefined,
   totalPrice: 0,
+  originalPrice: 0,
   error: undefined,
   userProfilesWithCountAndOffer: [],
 };

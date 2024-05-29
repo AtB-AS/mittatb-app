@@ -27,7 +27,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {IS_QA_ENV} from '@env';
 import parsePhoneNumber from 'libphonenumber-js';
 import React from 'react';
-import {Linking, View} from 'react-native';
+import {ActivityIndicator, Linking, View} from 'react-native';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
@@ -144,6 +144,13 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 >
                   {customerNumber}
                 </ThemeText>
+              </GenericSectionItem>
+            )}
+            {authStatus === 'fetching-id-token' && (
+              <GenericSectionItem
+                style={{justifyContent: 'center', flexDirection: 'row'}}
+              >
+                <ActivityIndicator />
               </GenericSectionItem>
             )}
             {authStatus !== 'authenticated' && (
@@ -560,9 +567,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
           </View>
         </View>
       </FullScreenView>
-      {(isLoading || authStatus === 'fetching-id-token') && (
-        <ActivityIndicatorOverlay />
-      )}
+      {isLoading && <ActivityIndicatorOverlay />}
     </>
   );
 };

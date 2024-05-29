@@ -110,7 +110,7 @@ export type TripPatternFragment = {
       date: any;
       quay: {name: string; id: string};
     }>;
-    authority?: {id: string};
+    authority?: {id: string; name: string; url?: string};
     serviceJourneyEstimatedCalls: Array<{
       actualDepartureTime?: any;
       realtime: boolean;

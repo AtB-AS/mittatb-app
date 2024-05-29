@@ -11,11 +11,14 @@ import {useSectionStyle} from '../use-section-style';
 import {animateNextChange} from '@atb/utils/animation';
 import {TextNames} from '@atb/theme/colors';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {LabelType} from '@atb-as/config-specs';
+import {LabelInfo} from '@atb/components/label-info';
 
 type Props = SectionItemProps<
   {
     text: string;
     textType?: TextNames;
+    label?: LabelType;
     showIconText?: boolean;
     testID?: string;
     accessibility?: AccessibilityProps;
@@ -41,6 +44,7 @@ export function ExpandableSectionItem({
   text,
   textType,
   showIconText = false,
+  label,
   accessibility,
   testID,
   ...props
@@ -90,6 +94,7 @@ export function ExpandableSectionItem({
         <ThemeText style={contentContainer} type={textType}>
           {text}
         </ThemeText>
+        {label && <LabelInfo label={label} />}
         <ExpandIcon expanded={expanded} showText={showIconText} />
       </PressableOpacity>
       {expanded && 'expandContent' in props && (

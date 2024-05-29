@@ -232,9 +232,9 @@ const PurchaseOverviewTexts = {
   flexDiscount: {
     heading: _('Rabatt', 'Discount', 'Rabatt'),
     expandableLabel: _(
-      'Din rabatt og pris',
-      'Your discount and price',
-      'Din rabatt og pris',
+      'Din rabatt',
+      'Your discount',
+      'Din rabatt',
     ),
     description: _(
       'Enkeltbillett voksen har rabatt i Sone A basert på antall kjøp de siste 14 dagene når du er med i pilot for Fleksibel billett.',
@@ -331,6 +331,10 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
         'The person you buy a ticket for, must be logged in to the Svipper app to get the ticket.',
         'Den du kjøper billett til, må vere logga inn i Svipper-appen for å få billetten.',
       ),
+    },
+    startTime: {
+      now: _('Start nå', 'Start now', 'Start no'),
+      later: _('Start senere', 'Start later', 'Start seinare'),
     },
   },
 });

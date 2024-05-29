@@ -6,7 +6,11 @@ import {checkGeolocationPermission} from '@atb/GeolocationContext';
 import {updateMetadata} from './metadata';
 
 export async function register() {
-  await Intercom.loginUnidentifiedUser();
+  try {
+    await Intercom.loginUnidentifiedUser();
+  } catch (error: any){
+    // do nothing
+  }
   await Intercom.setBottomPadding(Platform.OS === 'ios' ? 40 : 80);
 
   const installId = await storage.get('install_id');

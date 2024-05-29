@@ -26,7 +26,6 @@ import {
   ActivityIndicator,
   ScrollView,
   StyleProp,
-  Text,
   View,
   ViewStyle,
 } from 'react-native';
@@ -569,13 +568,9 @@ const PricePerUserProfile = ({
           <ThemeText
             type="body__tertiary"
             color="secondary"
-            style={styles.userProfileOriginalPriceText}
+            style={styles.userProfileOriginalPriceAmount}
           >
-            ({`${t(PurchaseConfirmationTexts.ordinaryPricePrefix)} `}
-            <Text style={styles.userProfileOriginalPriceAmount}>
-              {originalPriceString} kr
-            </Text>
-            )
+            {originalPriceString} kr
           </ThemeText>
         )}
         <ThemeText color="secondary" type="body__secondary">
@@ -627,11 +622,9 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   userProfileCountAndName: {marginRight: theme.spacings.small},
   userProfilePrice: {flexDirection: 'row', flexWrap: 'wrap'},
-  userProfileOriginalPriceText: {
-    marginRight: theme.spacings.small,
-    alignSelf: 'center',
-  },
   userProfileOriginalPriceAmount: {
+    marginEnd: theme.spacings.small,
+    alignSelf: 'flex-end',
     textDecorationLine: 'line-through',
   },
   paymentSummaryContainer: {
