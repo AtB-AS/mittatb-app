@@ -28,7 +28,7 @@ export const ForceUpdateScreen = () => {
             <Logo
               width={iconDimension}
               height={iconDimension}
-              fill={theme.static.background.background_accent_0.text}
+              fill={theme.static.background[themeColor].text}
             />
           </View>
           <ThemeText

@@ -15,7 +15,7 @@ const ForceUpdateTexts = {
   errorMessage: _(
     'Noe gikk galt. Vennligst prøv på nytt, eller gå inn i app-butikken på enheten din for å oppdatere.',
     'Something went wrong. Please try again, or go to the store on your device to update the app.',
-    'Noko gikk galt. Ver venleg og prøv på nytt, eller gå inn i app-butikken på einheiten din for å oppdatere.',
+    'Noko gjekk gale. Ver venleg og prøv på nytt, eller gå inn i app-butikken på eininga di for å oppdatere.',
   ),
 };
 export default ForceUpdateTexts;

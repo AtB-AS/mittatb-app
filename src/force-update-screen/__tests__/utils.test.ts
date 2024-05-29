@@ -51,6 +51,9 @@ describe('enforceUpdateOfAppVersion', () => {
     expect(isCurrentAppVersionLowerThanMinVersion('1.2.3', undefined)).toBe(
       false,
     );
+    expect(isCurrentAppVersionLowerThanMinVersion(undefined, undefined)).toBe(
+      false,
+    );
   });
 
   test('should handle edge cases correctly', () => {

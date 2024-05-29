@@ -91,7 +91,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_car_sharing_in_map: false,
   enable_geofencing_zones: false,
   enable_vehicle_operator_logo: false,
-  minimum_app_version: '1.52.0',
+  minimum_app_version: '',
   default_map_filter: JSON.stringify({
     vehicles: {
       showVehicles: false,
