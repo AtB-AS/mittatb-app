@@ -4,6 +4,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {shadows} from '@atb/components/map';
 import {SnackbarPosition} from '@atb/components/snackbar';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
+import {useTheme} from '@atb/theme';
 
 export const snackbarAnimationDurationMS = 300; // 0.3 seconds
 
@@ -13,7 +14,13 @@ export const useSnackbarVerticalPositionAnimation = (
 ) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  const {top, bottom} = useSafeAreaInsets();
+  const {theme} = useTheme();
+  const withSnackbarPadding = (safeAreaHeight: number) =>
+    Math.max(safeAreaHeight, theme.spacings.medium) + theme.spacings.small;
+
+  const {top: safeAreaTop, bottom: safeAreaBottom} = useSafeAreaInsets();
+  const top = withSnackbarPadding(safeAreaTop);
+  const bottom = withSnackbarPadding(safeAreaBottom);
 
   // the y position when visible and the animation is done
   const topOrBottomStyle = position === 'top' ? {top} : {bottom};
