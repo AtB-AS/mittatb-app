@@ -108,6 +108,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const {
     isSearchingOffer,
     error,
+    originalPrice,
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
@@ -331,6 +332,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isLoading={isSearchingOffer}
             isFree={isFree}
             isError={!!error || !hasSelection}
+            originalPrice={originalPrice}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
             summaryButtonText={

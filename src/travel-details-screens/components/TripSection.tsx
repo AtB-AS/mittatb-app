@@ -520,17 +520,16 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
     );
   }
   return (
-    <TripRow
-      accessibilityLabel={t(
-        TripDetailsTexts.trip.leg.buyTicketFromA11yLabel(name),
-      )}
-      accessibilityRole="link"
-    >
+    <TripRow accessible={false}>
       <View style={style.authoritySection}>
-        <ThemeText type="body__secondary" color="secondary">
+        <ThemeText type="body__secondary" color="secondary" accessible={false}>
           {t(TripDetailsTexts.trip.leg.buyTicketFrom)}
         </ThemeText>
         <Button
+          accessibilityRole="link"
+          accessibilityLabel={t(
+            TripDetailsTexts.trip.leg.buyTicketFromA11yLabel(name),
+          )}
           leftIcon={{svg: ExternalLink}}
           onPress={() => url && Linking.openURL(url)}
           mode="primary"
