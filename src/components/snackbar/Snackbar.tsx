@@ -24,7 +24,7 @@ export type SnackbarTextContent = {
   description?: string;
 };
 
-type SnackbarProps = {
+export type SnackbarProps = {
   textContent?: SnackbarTextContent;
   position: SnackbarPosition;
   /** Optional action button, only shown if this is provided */
