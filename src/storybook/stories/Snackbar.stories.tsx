@@ -51,7 +51,7 @@ const SnackbarMeta: Meta<SnackbarMetaProps> = {
       <View
         style={{
           flex: 0.5,
-          backgroundColor: '#eee',
+          backgroundColor: args.theme === 'light' ? '#eee' : '#333',
           alignItems: 'center',
           justifyContent: 'center',
         }}
