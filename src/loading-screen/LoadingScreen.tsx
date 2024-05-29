@@ -9,6 +9,7 @@ const themeColor = 'background_accent_0';
 export const LoadingScreen = React.memo(() => {
   const styles = useStyles();
   const {t} = useTranslation();
+
   return (
     <View
       style={styles.container}
@@ -16,7 +17,10 @@ export const LoadingScreen = React.memo(() => {
       accessibilityLabel={t(dictionary.loading)}
       testID="loadingScreen"
     >
-      <ActivityIndicator size="large" />
+      <ActivityIndicator
+        size="large"
+        color={styles.activityIndicator.backgroundColor}
+      />
       <ThemeText
         style={styles.loadingText}
         type="body__primary"
@@ -36,4 +40,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
   },
   loadingText: {textAlign: 'center', marginTop: theme.spacings.medium},
+  activityIndicator: {
+    backgroundColor: theme.static.background[themeColor].text,
+  },
 }));
