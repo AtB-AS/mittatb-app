@@ -14,7 +14,7 @@ import {useTranslation} from '@atb/translations';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
-import {usePrevious} from '@atb/utils/use-previous';
+import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useStableProp} from '@atb/utils/use-stable-prop';
 
 export type SnackbarPosition = 'top' | 'bottom';
@@ -56,10 +56,10 @@ export const Snackbar = ({
     useSnackbarVerticalPositionAnimation(position, snackbarIsVisible);
 
   // to show the correct textContent during exit animation, keep track of the previous value
-  const previousTextContent = usePrevious(stableTextContent);
+  const stablePreviousTextContent = useStablePreviousValue(stableTextContent);
   const activeTextContent =
-    !snackbarIsVisible && !stableTextContent && previousTextContent
-      ? previousTextContent
+    !snackbarIsVisible && !stableTextContent && stablePreviousTextContent
+      ? stablePreviousTextContent
       : stableTextContent;
 
   const focusRef = useSnackbarScreenReaderFocus(activeTextContent);
