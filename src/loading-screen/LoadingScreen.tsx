@@ -41,6 +41,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   loadingText: {textAlign: 'center', marginTop: theme.spacings.medium},
   activityIndicator: {
-    backgroundColor: theme.static.status.info.background,
+    backgroundColor: theme.static.background[themeColor].text,
   },
 }));
