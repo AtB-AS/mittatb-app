@@ -15,7 +15,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
-import {useStableProp} from '@atb/utils/use-stable-prop';
+import {useStableValue} from '@atb/utils/use-stable-value';
 
 export type SnackbarPosition = 'top' | 'bottom';
 
@@ -45,7 +45,7 @@ export const Snackbar = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const stableTextContent = useStableProp(textContent); // avoid triggering useEffects if no text has been changed
+  const stableTextContent = useStableValue(textContent); // avoid triggering useEffects if no text has been changed
 
   const {snackbarIsVisible, hideSnackbar} = useSnackbarIsVisible(
     stableTextContent,
