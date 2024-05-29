@@ -51,10 +51,14 @@ export const MessageInfoBox = ({
   const {theme} = useTheme();
   const styles = useStyles();
   const {t} = useTranslation();
-  const iconColorProps = {fill: theme.static.status[type].text};
-  const backgroundColorStyle = {
-    backgroundColor: theme.static.status[type].background,
+  const iconColorProps = {fill: theme.status[type].secondary.text};
+  const borderColorStyle = {
+    borderColor: theme.status[type].primary.background,
   };
+  const backgroundColorStyle = {
+    backgroundColor: theme.status[type].secondary.background,
+  };
+  const textColor = theme.status[type].secondary;
 
   const onPress =
     onPressConfig &&
@@ -72,6 +76,7 @@ export const MessageInfoBox = ({
       style={[
         styles.container,
         styles.withBackground,
+        borderColorStyle,
         backgroundColorStyle,
         style,
       ]}
@@ -102,19 +107,19 @@ export const MessageInfoBox = ({
         {title && (
           <ThemeText
             type="body__primary--bold"
-            color={type}
+            color={textColor}
             style={styles.title}
             testID={testID ? `${testID}Title` : 'title'}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={type} type="body__primary" isMarkdown={isMarkdown}>
+        <ThemeText color={textColor} type="body__primary" isMarkdown={isMarkdown}>
           {message}
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={type}
+            color={textColor}
             style={styles.linkText}
             type="body__primary--underline"
           >
@@ -147,6 +152,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   withBackground: {
     padding: theme.spacings.medium,
     borderRadius: theme.border.radius.regular,
+    borderWidth: theme.border.width.medium,
   },
   icon: {
     marginRight: theme.spacings.medium,

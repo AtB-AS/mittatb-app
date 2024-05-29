@@ -35,7 +35,10 @@ export function MessageSectionItem({
     onPressConfig?.text,
   );
 
-  const themeColor = theme.static.status[messageType];
+  const themeColor = theme.status[messageType].secondary;
+  const borderColorStyle = {
+    borderColor: theme.status[messageType].primary.background,
+  };
 
   const onPress =
     onPressConfig &&
@@ -54,6 +57,7 @@ export function MessageSectionItem({
       style={[
         topContainer,
         {backgroundColor: themeColor.background},
+        borderColorStyle,
         styles.container,
       ]}
     >
@@ -104,7 +108,7 @@ const useA11yLabel = (
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flexDirection: 'row'},
+  container: {flexDirection: 'row', borderWidth: theme.border.width.medium},
   icon: {marginRight: theme.spacings.medium},
   textContent: {flex: 1},
   title: {marginBottom: theme.spacings.small},

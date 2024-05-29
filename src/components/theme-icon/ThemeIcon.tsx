@@ -66,7 +66,7 @@ function getFill(theme: Theme, themeType: Mode, colorType?: IconColor): string {
   if (colorType && typeof colorType !== 'string') {
     return colorType.text;
   } else if (isStatusColor(colorType)) {
-    return theme.static.status[colorType].background;
+    return theme.status[colorType].primary.background;
   } else if (isStaticColor(colorType)) {
     return flatStaticColors[themeType][colorType].text;
   } else {
