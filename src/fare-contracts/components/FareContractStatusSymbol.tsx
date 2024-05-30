@@ -57,7 +57,6 @@ export const FareContractStatusSymbol = ({
         />
       );
     case 'reserving':
-    case 'unknown':
     default:
       return null;
   }
