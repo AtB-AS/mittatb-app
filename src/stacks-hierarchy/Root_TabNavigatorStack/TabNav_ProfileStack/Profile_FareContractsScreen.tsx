@@ -1,7 +1,7 @@
 import {FullScreenHeader} from '@atb/components/screen-header';
 import {ThemeText} from '@atb/components/text';
 import {useFirestoreConfiguration} from '@atb/configuration';
-import {DetailsContent, SimpleFareContract} from '@atb/fare-contracts';
+import {DetailsContent} from '@atb/fare-contracts';
 import {FareContractOrReservation} from '@atb/fare-contracts/FareContractOrReservation';
 import {findReferenceDataById} from '@atb/configuration';
 import {StyleSheet, Theme} from '@atb/theme';
@@ -202,11 +202,12 @@ export const Profile_FareContractsScreen = () => {
         />
         <ThemeText type="heading--jumbo">Fare Contracts</ThemeText>
         {fareContracts.map((fc, i) => (
-          <SimpleFareContract
+          <FareContractOrReservation
             key={i}
-            fareContract={fc}
+            index={i}
+            fcOrReservation={fc}
             now={Date.now()}
-            onPressDetails={() => {}}
+            onPressFareContract={() => {}}
           />
         ))}
         <ThemeText type="heading--jumbo">Fare contract details</ThemeText>
