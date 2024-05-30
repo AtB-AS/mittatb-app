@@ -30,7 +30,6 @@ export function FareContractOrReservation({
   } else {
     return (
       <ErrorBoundary
-        key={fcOrReservation.orderId}
         message={t(
           TicketingTexts.scrollView.errorLoadingTicket(fcOrReservation.orderId),
         )}

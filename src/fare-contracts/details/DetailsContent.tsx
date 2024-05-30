@@ -3,7 +3,6 @@ import {
   FareContract,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
-  isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
   NormalTravelRight,
 } from '@atb/ticketing';
@@ -105,9 +104,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: purchaserPhoneNumber} =
     useGetPhoneByAccountIdQuery(senderAccountId);
 
-  if (!isPreActivatedTravelRight(firstTravelRight) && !isCarnetFareContract) {
-    return null;
-  }
   const firstZone = firstTravelRight.tariffZoneRefs?.[0];
   const lastZone = firstTravelRight.tariffZoneRefs?.slice(-1)?.[0];
 
