@@ -122,7 +122,6 @@ function validityTimeText(
     case 'sent':
       const dateTime = formatToLongDateTime(toDate(createdDate), language);
       return t(FareContractTexts.validityHeader.sent(dateTime));
-    case 'unknown':
     default:
       return t(FareContractTexts.validityHeader.unknown);
   }
