@@ -4,6 +4,7 @@ import {Platform} from 'react-native';
 
 export enum StorageModelKeysEnum {
   EnableActivateTicketNowDebugOverride = '@ATB_enable_activate_ticket_now_debug_override',
+  EnableBackendSmsAuth = '@ATB_backend_sms_auth',
   EnableBeaconsDebugOverride = '@ATB_beacons_debug_override',
   EnableCarSharingInMapDebugOverride = 'ATB_enable_car_sharing_in_map_debug_override',
   EnableCityBikesInMapDebugOverride = 'ATB_enable_city_bikes_in_map_debug_override',
