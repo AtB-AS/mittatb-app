@@ -49,12 +49,10 @@ export const MessageInfoBox = ({
   testID,
 }: MessageInfoBoxProps) => {
   const {theme} = useTheme();
-  const styles = useStyles();
+  const styles = useStyles(type)();
   const {t} = useTranslation();
-  const iconColorProps = {fill: theme.static.status[type].text};
-  const backgroundColorStyle = {
-    backgroundColor: theme.static.status[type].background,
-  };
+  const iconColorProps = {fill: theme.status[type].secondary.text};
+  const textColor = theme.status[type].secondary;
 
   const onPress =
     onPressConfig &&
@@ -69,12 +67,7 @@ export const MessageInfoBox = ({
   return (
     <PressableOpacityOrView
       onClick={onPress}
-      style={[
-        styles.container,
-        styles.withBackground,
-        backgroundColorStyle,
-        style,
-      ]}
+      style={[styles.container, style]}
       accessible={false}
       testID={testID}
     >
@@ -102,19 +95,23 @@ export const MessageInfoBox = ({
         {title && (
           <ThemeText
             type="body__primary--bold"
-            color={type}
+            color={textColor}
             style={styles.title}
             testID={testID ? `${testID}Title` : 'title'}
           >
             {title}
           </ThemeText>
         )}
-        <ThemeText color={type} type="body__primary" isMarkdown={isMarkdown}>
+        <ThemeText
+          color={textColor}
+          type="body__primary"
+          isMarkdown={isMarkdown}
+        >
           {message}
         </ThemeText>
         {onPressConfig?.text && (
           <ThemeText
-            color={type}
+            color={textColor}
             style={styles.linkText}
             type="body__primary--underline"
           >
@@ -140,24 +137,26 @@ export const MessageInfoBox = ({
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {
-    flexDirection: 'row',
-  },
-  withBackground: {
-    padding: theme.spacings.medium,
-    borderRadius: theme.border.radius.regular,
-  },
-  icon: {
-    marginRight: theme.spacings.medium,
-  },
-  content: {
-    flex: 1,
-  },
-  linkText: {
-    marginTop: theme.spacings.medium,
-  },
-  title: {
-    marginBottom: theme.spacings.small,
-  },
-}));
+const useStyles = (type: Statuses) =>
+  StyleSheet.createThemeHook((theme) => ({
+    container: {
+      backgroundColor: theme.status[type].secondary.background,
+      borderColor: theme.status[type].primary.background,
+      borderRadius: theme.border.radius.regular,
+      borderWidth: theme.border.width.medium,
+      flexDirection: 'row',
+      padding: theme.spacings.medium,
+    },
+    content: {
+      flex: 1,
+    },
+    icon: {
+      marginRight: theme.spacings.medium,
+    },
+    linkText: {
+      marginTop: theme.spacings.medium,
+    },
+    title: {
+      marginBottom: theme.spacings.small,
+    },
+  }));
