@@ -248,11 +248,6 @@ const FareContractTexts = {
       ),
     },
   },
-  unknownFareContract: {
-    message: _('Ukjent billett', 'Unknown ticket', 'Ukjent billett'),
-    orderId: (orderId: string) =>
-      _(`Ordre-id: ${orderId}`, `Order ID: ${orderId}`, `Ordre-id: ${orderId}`),
-  },
   fareContractInfo: {
     noInspectionIcon: _(
       'Ugyldig\ni kontroll',

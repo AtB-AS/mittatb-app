@@ -37,7 +37,6 @@ export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 export type ValidityStatus =
   | RelativeValidityStatus
   | 'reserving'
-  | 'unknown'
   | 'refunded'
   | 'cancelled'
   | 'inactive'

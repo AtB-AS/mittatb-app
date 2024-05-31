@@ -6,13 +6,15 @@ import {MAX_FONT_SCALE} from './utils';
 import {
   getStaticColor,
   isStaticColor,
+  isStatusColor,
   StaticColor,
+  StatusColor,
   TextColor,
   TextNames,
 } from '@atb/theme/colors';
 import {ContrastColor} from '@atb-as/theme';
 
-type ColorType = TextColor | StaticColor | ContrastColor;
+type ColorType = TextColor | StaticColor | ContrastColor | StatusColor;
 
 export type ThemeTextProps = TextProps & {
   type?: TextNames;
@@ -79,7 +81,9 @@ const useColor = (color: ColorType): string => {
 
   if (typeof color !== 'string') {
     return color.text;
-  }
+  } else if (isStatusColor(color)) {
+    return theme.status[color].secondary.text;
+  } 
   return isStaticColor(color)
     ? getStaticColor(themeName, color).text
     : theme.text.colors[color];

@@ -20,7 +20,7 @@ const ThemeTextMeta: Meta<ThemeTextMetaProps> = {
       control: 'select',
       options: [
         ...Object.keys(themes['light'].static.background),
-        ...Object.keys(themes['light'].static.status),
+        ...Object.keys(themes['light'].status),
         ...Object.keys(themes['light'].text.colors),
       ],
     },

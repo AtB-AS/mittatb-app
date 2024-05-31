@@ -3,7 +3,6 @@ import {
   FareContract,
   isCanBeActivatedNowFareContract,
   isCanBeConsumedNowFareContract,
-  isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
   NormalTravelRight,
 } from '@atb/ticketing';
@@ -18,7 +17,6 @@ import {
 } from '@atb/fare-contracts/utils';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {OrderDetails} from '@atb/fare-contracts/details/OrderDetails';
-import {UnknownFareContractDetails} from '@atb/fare-contracts/details/UnknownFareContractDetails';
 import {
   GenericSectionItem,
   LinkSectionItem,
@@ -106,154 +104,150 @@ export const DetailsContent: React.FC<Props> = ({
   const {data: purchaserPhoneNumber} =
     useGetPhoneByAccountIdQuery(senderAccountId);
 
-  if (isPreActivatedTravelRight(firstTravelRight) || isCarnetFareContract) {
-    const firstZone = firstTravelRight.tariffZoneRefs?.[0];
-    const lastZone = firstTravelRight.tariffZoneRefs?.slice(-1)?.[0];
+  const firstZone = firstTravelRight.tariffZoneRefs?.[0];
+  const lastZone = firstTravelRight.tariffZoneRefs?.slice(-1)?.[0];
 
-    const fromTariffZone = firstZone
-      ? findReferenceDataById(tariffZones, firstZone)
-      : undefined;
-    const toTariffZone = lastZone
-      ? findReferenceDataById(tariffZones, lastZone)
-      : undefined;
-    const userProfilesWithCount = mapToUserProfilesWithCount(
-      fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
-      userProfiles,
-    );
+  const fromTariffZone = firstZone
+    ? findReferenceDataById(tariffZones, firstZone)
+    : undefined;
+  const toTariffZone = lastZone
+    ? findReferenceDataById(tariffZones, lastZone)
+    : undefined;
+  const userProfilesWithCount = mapToUserProfilesWithCount(
+    fc.travelRights.map((tr) => (tr as NormalTravelRight).userProfileRef),
+    userProfiles,
+  );
 
-    const globalMessageRuleVariables = {
-      fareProductType: preassignedFareProduct?.type ?? 'unknown',
-      firstTravelRightType: firstTravelRight.type,
-      validityStatus: validityStatus,
-      tariffZones: firstTravelRight.tariffZoneRefs ?? [],
-      numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,
-      numberOfTravelRights: fc.travelRights.length,
-    };
-    const globalMessageCount = findGlobalMessages(
-      GlobalMessageContextEnum.appFareContractDetails,
-      globalMessageRuleVariables,
-    ).length;
+  const globalMessageRuleVariables = {
+    fareProductType: preassignedFareProduct?.type ?? 'unknown',
+    firstTravelRightType: firstTravelRight.type,
+    validityStatus: validityStatus,
+    tariffZones: firstTravelRight.tariffZoneRefs ?? [],
+    numberOfZones: firstTravelRight.tariffZoneRefs?.length ?? 0,
+    numberOfTravelRights: fc.travelRights.length,
+  };
+  const globalMessageCount = findGlobalMessages(
+    GlobalMessageContextEnum.appFareContractDetails,
+    globalMessageRuleVariables,
+  ).length;
 
-    const shouldShowBundlingInfo =
-      benefits && benefits.length > 0 && validityStatus === 'valid';
+  const shouldShowBundlingInfo =
+    benefits && benefits.length > 0 && validityStatus === 'valid';
 
-    return (
-      <Section style={styles.section}>
-        <GenericSectionItem>
-          {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
-          {isCarnetFareContract &&
-          fareContractValidityStatus === 'valid' &&
-          carnetAccessStatus ? (
-            <UsedAccessValidityHeader
-              now={now}
-              status={carnetAccessStatus}
-              validFrom={validFrom}
-              validTo={validTo}
-            />
-          ) : (
-            <ValidityHeader
-              status={fareContractValidityStatus}
-              now={now}
-              createdDate={fc.created.getTime()}
-              validFrom={fareContractValidFrom}
-              validTo={fareContractValidTo}
-              fareProductType={preassignedFareProduct?.type}
-            />
-          )}
-          <ValidityLine
-            status={validityStatus}
+  return (
+    <Section style={styles.section}>
+      <GenericSectionItem>
+        {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
+        {isCarnetFareContract &&
+        fareContractValidityStatus === 'valid' &&
+        carnetAccessStatus ? (
+          <UsedAccessValidityHeader
             now={now}
+            status={carnetAccessStatus}
             validFrom={validFrom}
             validTo={validTo}
+          />
+        ) : (
+          <ValidityHeader
+            status={fareContractValidityStatus}
+            now={now}
+            createdDate={fc.created.getTime()}
+            validFrom={fareContractValidFrom}
+            validTo={fareContractValidTo}
             fareProductType={preassignedFareProduct?.type}
           />
-          <FareContractInfoHeader
-            travelRight={firstTravelRight}
-            status={validityStatus}
-            testID="details"
-            preassignedFareProduct={preassignedFareProduct}
-            sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
-          />
-        </GenericSectionItem>
-        {isInspectable && validityStatus === 'valid' && (
-          <GenericSectionItem
-            style={
-              mobileTokenStatus === 'staticQr'
-                ? styles.enlargedWhiteBarcodePaddingView
-                : undefined
-            }
-          >
-            <Barcode validityStatus={validityStatus} fc={fc} />
-          </GenericSectionItem>
         )}
-        <GenericSectionItem>
-          <FareContractInfoDetails
-            fromTariffZone={fromTariffZone}
-            toTariffZone={toTariffZone}
-            userProfilesWithCount={userProfilesWithCount}
-            status={validityStatus}
-            preassignedFareProduct={preassignedFareProduct}
-          />
-        </GenericSectionItem>
-        {isCarnetFareContract && (
-          <GenericSectionItem>
-            <CarnetFooter
-              active={validityStatus === 'valid'}
-              maximumNumberOfAccesses={maximumNumberOfAccesses!}
-              numberOfUsedAccesses={numberOfUsedAccesses!}
-            />
-          </GenericSectionItem>
-        )}
-        {globalMessageCount > 0 && (
-          <GenericSectionItem>
-            <View style={styles.globalMessages}>
-              <GlobalMessage
-                globalMessageContext={
-                  GlobalMessageContextEnum.appFareContractDetails
-                }
-                textColor="background_0"
-                ruleVariables={globalMessageRuleVariables}
-                style={styles.globalMessages}
-              />
-            </View>
-          </GenericSectionItem>
-        )}
-        {purchaserPhoneNumber && (
-          <GenericSectionItem>
-            <MessageInfoText
-              type="info"
-              message={t(
-                FareContractTexts.details.purchasedBy(purchaserPhoneNumber),
-              )}
-            />
-          </GenericSectionItem>
-        )}
-        {shouldShowBundlingInfo && (
-          <MobilityBenefitsActionSectionItem
-            benefits={benefits}
-            onNavigateToMap={onNavigateToMap}
-          />
-        )}
-        <GenericSectionItem>
-          <OrderDetails fareContract={fc} />
-        </GenericSectionItem>
-        <LinkSectionItem
-          text={t(FareContractTexts.details.askForReceipt)}
-          onPress={onReceiptNavigate}
-          testID="receiptButton"
+        <ValidityLine
+          status={validityStatus}
+          now={now}
+          validFrom={validFrom}
+          validTo={validTo}
+          fareProductType={preassignedFareProduct?.type}
         />
-        {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
-          <ConsumeCarnetSectionItem fareContractId={fc.id} />
+        <FareContractInfoHeader
+          travelRight={firstTravelRight}
+          status={validityStatus}
+          testID="details"
+          preassignedFareProduct={preassignedFareProduct}
+          sentToCustomerAccountId={isSent ? fc.customerAccountId : undefined}
+        />
+      </GenericSectionItem>
+      {isInspectable && validityStatus === 'valid' && (
+        <GenericSectionItem
+          style={
+            mobileTokenStatus === 'staticQr'
+              ? styles.enlargedWhiteBarcodePaddingView
+              : undefined
+          }
+        >
+          <Barcode validityStatus={validityStatus} fc={fc} />
+        </GenericSectionItem>
+      )}
+      <GenericSectionItem>
+        <FareContractInfoDetails
+          fromTariffZone={fromTariffZone}
+          toTariffZone={toTariffZone}
+          userProfilesWithCount={userProfilesWithCount}
+          status={validityStatus}
+          preassignedFareProduct={preassignedFareProduct}
+        />
+      </GenericSectionItem>
+      {isCarnetFareContract && (
+        <GenericSectionItem>
+          <CarnetFooter
+            active={validityStatus === 'valid'}
+            maximumNumberOfAccesses={maximumNumberOfAccesses!}
+            numberOfUsedAccesses={numberOfUsedAccesses!}
+          />
+        </GenericSectionItem>
+      )}
+      {globalMessageCount > 0 && (
+        <GenericSectionItem>
+          <View style={styles.globalMessages}>
+            <GlobalMessage
+              globalMessageContext={
+                GlobalMessageContextEnum.appFareContractDetails
+              }
+              textColor="background_0"
+              ruleVariables={globalMessageRuleVariables}
+              style={styles.globalMessages}
+            />
+          </View>
+        </GenericSectionItem>
+      )}
+      {purchaserPhoneNumber && (
+        <GenericSectionItem>
+          <MessageInfoText
+            type="info"
+            message={t(
+              FareContractTexts.details.purchasedBy(purchaserPhoneNumber),
+            )}
+          />
+        </GenericSectionItem>
+      )}
+      {shouldShowBundlingInfo && (
+        <MobilityBenefitsActionSectionItem
+          benefits={benefits}
+          onNavigateToMap={onNavigateToMap}
+        />
+      )}
+      <GenericSectionItem>
+        <OrderDetails fareContract={fc} />
+      </GenericSectionItem>
+      <LinkSectionItem
+        text={t(FareContractTexts.details.askForReceipt)}
+        onPress={onReceiptNavigate}
+        testID="receiptButton"
+      />
+      {isCanBeConsumedNowFareContract(fc, now, currentUserId) && (
+        <ConsumeCarnetSectionItem fareContractId={fc.id} />
+      )}
+      {isActivateTicketNowEnabled &&
+        isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
+          <ActivateNowSectionItem fareContractId={fc.id} />
         )}
-        {isActivateTicketNowEnabled &&
-          isCanBeActivatedNowFareContract(fc, now, currentUserId) && (
-            <ActivateNowSectionItem fareContractId={fc.id} />
-          )}
-      </Section>
-    );
-  } else {
-    return <UnknownFareContractDetails fc={fc} />;
-  }
+    </Section>
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
