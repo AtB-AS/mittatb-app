@@ -30,7 +30,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
   flag: {
-    backgroundColor: theme.static.status.info.background,
+    backgroundColor: theme.status.info.primary.background,
     marginRight: theme.spacings.medium,
     paddingHorizontal: theme.spacings.small,
     paddingVertical: theme.spacings.xSmall,

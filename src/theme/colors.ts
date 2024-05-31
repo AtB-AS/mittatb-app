@@ -90,6 +90,7 @@ export type Theme = Themes['light'];
 
 export type InteractiveColor = keyof Theme['interactive'];
 export type TransportColor = keyof Theme['transport'];
+export type StatusColor = keyof Theme['status'];
 
 export const isInteractiveColor = (
   color?: string,
@@ -167,6 +168,6 @@ export const getStaticColorType = (color: StaticColor): StaticColorType => {
 
 export const isStatusColor = (
   color?: string,
-): color is StaticColorByType<'status'> => {
-  return !!color && color in themes.light.static.status;
+): color is StatusColor => {
+  return !!color && color in themes.light.status;
 };
