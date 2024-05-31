@@ -27,6 +27,7 @@ export type OfferSearchParams = SearchParams &
   (ZoneOfferSearchParams | StopPlaceOfferSearchParams);
 
 type SearchParams = {
+  is_on_behalf_of: boolean;
   travellers: Traveller[];
   products: string[];
   travel_date?: string;
