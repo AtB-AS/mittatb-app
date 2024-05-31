@@ -171,14 +171,11 @@ export const RootStack = () => {
   }
 
   const isCurrentAppVersionLowerThanMinVersion =
-    compareVersion(APP_VERSION, minimum_app_version) > 0;
-
-  if (
     APP_VERSION &&
     minimum_app_version &&
-    isCurrentAppVersionLowerThanMinVersion
-  )
-    return <ForceUpdateScreen />;
+    compareVersion(APP_VERSION, minimum_app_version) < 0;
+
+  if (isCurrentAppVersionLowerThanMinVersion) return <ForceUpdateScreen />;
 
   return (
     <>
