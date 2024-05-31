@@ -15,6 +15,7 @@ export type RemoteConfig = {
    * transaction.
    */
   enable_auto_sale: boolean;
+  enable_backend_sms_auth: boolean;
   enable_beacons: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
@@ -76,6 +77,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   disable_travelcard: false,
   enable_activate_ticket_now: false,
   enable_auto_sale: false,
+  enable_backend_sms_auth: false,
   enable_beacons: false,
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
@@ -152,6 +154,9 @@ export function getConfig(): RemoteConfig {
   const enable_auto_sale =
     values['enable_auto_sale']?.asBoolean() ??
     defaultRemoteConfig.enable_auto_sale;
+  const enable_backend_sms_auth =
+    values['enable_backend_sms_auth']?.asBoolean() ??
+    defaultRemoteConfig.enable_backend_sms_auth;
   const enable_beacons =
     values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
   const enable_car_sharing_in_map =
@@ -293,6 +298,7 @@ export function getConfig(): RemoteConfig {
     disable_travelcard,
     enable_activate_ticket_now,
     enable_auto_sale,
+    enable_backend_sms_auth,
     enable_beacons,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
