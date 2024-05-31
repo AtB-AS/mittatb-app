@@ -72,6 +72,7 @@ import {
   ForceUpdateScreen,
   isCurrentAppVersionLowerThanMinVersion,
 } from '@atb/force-update-screen';
+import {compareVersion} from '@atb/utils/compare-version.ts';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -172,7 +173,20 @@ export const RootStack = () => {
     };
   }
 
-  if (isCurrentAppVersionLowerThanMinVersion(APP_VERSION, minimum_app_version))
+  console.log(
+    'compareVersion',
+    compareVersion('1.6.0', '1.5.0'),
+    '1.6.0',
+    '1.5.0',
+  );
+  console.log(
+    'isCurrentAppVersionLowerThanMinVersion',
+    isCurrentAppVersionLowerThanMinVersion('1.6.0', '1.5.0'),
+    '1.6.0',
+    '1.5.0',
+  );
+
+  if (!isCurrentAppVersionLowerThanMinVersion(APP_VERSION, minimum_app_version))
     return <ForceUpdateScreen />;
 
   return (

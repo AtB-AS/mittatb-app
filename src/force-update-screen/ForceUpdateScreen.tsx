@@ -4,12 +4,16 @@ import {Logo} from '@atb/assets/svg/mono-icons/logo';
 import {Linking, Platform, ScrollView, View} from 'react-native';
 import React, {useState} from 'react';
 import {MessageInfoBox} from '@atb/components/message-info-box';
-import {ANDROID_STORE_ID, IOS_STORE_ID} from '@env';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors.ts';
-import {ForceUpdateTexts, useTranslation} from '@atb/translations';
+import {
+  ForceUpdateTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import Bugsnag from '@bugsnag/react-native';
+import {useFirestoreConfiguration} from '@atb/configuration';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -17,7 +21,9 @@ export const ForceUpdateScreen = () => {
   const [error, setError] = useState<boolean>(false);
   const styles = useStyles();
   const {theme} = useTheme();
-  const {t} = useTranslation();
+  const {t, language} = useTranslation();
+  const {configurableLinks} = useFirestoreConfiguration();
+
   const iconDimension = 80;
 
   return (
@@ -45,8 +51,14 @@ export const ForceUpdateScreen = () => {
             rightIcon={{svg: ExternalLink}}
             onPress={() => {
               const link = Platform.select({
-                ios: `itms-apps://apps.apple.com/us/app/${IOS_STORE_ID}`,
-                android: `market://details?id=${ANDROID_STORE_ID}`,
+                ios: getTextForLanguage(
+                  configurableLinks?.iosStoreListing,
+                  language,
+                ),
+                android: getTextForLanguage(
+                  configurableLinks?.androidStoreListing,
+                  language,
+                ),
                 default: '',
               });
               setError(false);

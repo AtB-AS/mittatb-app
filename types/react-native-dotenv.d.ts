@@ -2,8 +2,6 @@ declare module '@env' {
   export const API_BASE_URL: string;
   export const WS_API_BASE_URL: string;
   export const APP_VERSION: string;
-  export const ANDROID_STORE_ID: string;
-  export const IOS_STORE_ID: string;
   export const IOS_BUNDLE_IDENTIFIER: string;
   export const PRIVACY_POLICY_URL: string;
   export const CUSTOMER_SERVICE_URL: string;

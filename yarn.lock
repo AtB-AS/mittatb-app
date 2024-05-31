@@ -27,10 +27,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^3.24.0":
-  version "3.24.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.24.0.tgz#6dec1e1c9fee04603167afae53d67b401fd7016d"
-  integrity sha512-lcJqW0E6HM65dl05vH/Npa9HUt8KmyueXTHAgcd9WUkwm4UEUAh/SAnC76ADN+uRlJcn1/cgGNkxR3IowW5IkA==
+"@atb-as/config-specs@^3.25.0":
+  version "3.25.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.25.0.tgz#88ca9e3ba170b825993cd458210b6cd2ed025cfc"
+  integrity sha512-rt0cuGHznFDYT7OGYbXgn0UVUpkT24IAne2KNVmEItdV0vROnfJRv6UbJpjr3rKhHUPZ24ekBR1xK2Dz4v7HbQ==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
