@@ -163,36 +163,36 @@ describe('Function compareVersion', () => {
     ['1.3.0', '1.2.3', 1],
     ['2.0.3', '1.2.0', 1],
     ['2.1', '1.1.1', 1],
-    ['2.3.1', '2.1.2', 2],
+    ['2.3.1', '2.1.2', 1],
     ['2.1.1', '2.0.2', 1],
     ['2.0.0', '1.2.3', 1],
     ['2.1', '1.1', 1],
     // second version is greater
-    ['1.4', '1.31', -27],
-    ['1.4.1', '1.31.1', -27],
+    ['1.4', '1.31', -1],
+    ['1.4.1', '1.31.1', -1],
     ['1.1', '1.1.1', -1],
     ['1.1', '2.1', -1],
     ['1.2.3', '1.2.4', -1],
     ['1.2.0', '1.2.1', -1],
     ['1.2.3', '2.0.0', -1],
     // same version
-    ['1.2', '1.2.0', 0], // these
-    ['1.2.0', '1.2', 0], // these
+    ['1.2', '1.2.0', 0],
+    ['1.2.0', '1.2', 0],
     ['1.1', '1.1', 0],
     ['1', '1', 0],
     // empty strings
     ['', '1.0.0', NaN],
     ['1.2.0', '', NaN],
-    ['', '', NaN], // this
+    ['', '', NaN],
     // edge cases
     ['0.0.0', '0.0.0', 0],
     ['0.0.0', '0.0.1', -1],
     ['0.0.1', '0.0.0', 1],
   ];
 
-  versions.forEach((v) => {
-    it('returns correct comparison', () => {
-      expectNumber(compareVersion(v[0], v[1]), v[2]);
+  versions.forEach(([versionA, versionB, expected]) => {
+    it(`correctly compares ${versionA} and ${versionB}`, () => {
+      expectNumber(compareVersion(versionA, versionB), expected);
     });
   });
 });
