@@ -68,10 +68,7 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {register as registerChatUser} from '@atb/chat/user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {
-  ForceUpdateScreen,
-  isCurrentAppVersionLowerThanMinVersion,
-} from '@atb/force-update-screen';
+import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version.ts';
 
 type ResultState = PartialState<NavigationState> & {
@@ -173,20 +170,14 @@ export const RootStack = () => {
     };
   }
 
-  console.log(
-    'compareVersion',
-    compareVersion('1.6.0', '1.5.0'),
-    '1.6.0',
-    '1.5.0',
-  );
-  console.log(
-    'isCurrentAppVersionLowerThanMinVersion',
-    isCurrentAppVersionLowerThanMinVersion('1.6.0', '1.5.0'),
-    '1.6.0',
-    '1.5.0',
-  );
+  const isCurrentAppVersionLowerThanMinVersion =
+    compareVersion(APP_VERSION, minimum_app_version) > 0;
 
-  if (!isCurrentAppVersionLowerThanMinVersion(APP_VERSION, minimum_app_version))
+  if (
+    APP_VERSION &&
+    minimum_app_version &&
+    isCurrentAppVersionLowerThanMinVersion
+  )
     return <ForceUpdateScreen />;
 
   return (
