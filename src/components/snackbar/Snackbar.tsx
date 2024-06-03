@@ -22,11 +22,13 @@ export type SnackbarPosition = 'top' | 'bottom';
 export type SnackbarTextContent = {
   title?: string;
   description?: string;
+  /** Unique key for the message. Makes it possible to re-show the exact same message */
+  messageKey?: number;
 };
 
 export type SnackbarProps = {
   textContent?: SnackbarTextContent;
-  position: SnackbarPosition;
+  position?: SnackbarPosition;
   /** Optional action button, only shown if this is provided */
   actionButton?: ButtonProps;
   /** Whether to show the close x button */
@@ -37,7 +39,7 @@ export type SnackbarProps = {
 
 export const Snackbar = ({
   textContent,
-  position,
+  position = 'top',
   actionButton,
   isDismissable,
   customVisibleDurationMS,
