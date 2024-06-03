@@ -79,11 +79,13 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 2,
               ) + ' kr';
 
+            const accessibilityLabel = `${userProfileName}, ${discountText ? discountText : ''}, ${priceText}`
+
             return (
               <GenericSectionItem
                 accessibility={{
                   accessible: true,
-                  accessibilityLabel: `${userProfileName}, ${discountText}, ${priceText}`,
+                  accessibilityLabel: accessibilityLabel,
                 }}
                 key={u.id}
               >

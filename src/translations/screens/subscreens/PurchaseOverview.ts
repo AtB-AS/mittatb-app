@@ -228,6 +228,12 @@ const PurchaseOverviewTexts = {
       payment: _('Til betaling', 'To payment', 'Til betaling'),
       sendToOthers: _('Gå videre', 'Continue', 'Gå vidare'),
     },
+    ordinaryPriceA11yLabel: (priceString: string) =>
+      _(
+        `Ordinær pris ${priceString} kr`,
+        `Ordinary price ${priceString} kr`,
+        `Ordinær pris ${priceString} kr`,
+      ),
   },
   flexDiscount: {
     heading: _('Rabatt', 'Discount', 'Rabatt'),
