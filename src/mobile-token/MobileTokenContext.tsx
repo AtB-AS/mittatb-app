@@ -84,7 +84,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const mobileTokenEnabled = hasEnabledMobileToken();
   const {enable_intercom} = useRemoteConfig();
 
-  const [isTimeout, setTimout] = useState(false);
+  const [isTimeout, setIsTimeout] = useState(false);
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   useEffect(() => setIsLoggingOut(false), [userId]);
@@ -110,11 +110,11 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   }, [queryClient, nativeToken?.tokenId]);
 
   useEffect(() => {
-    if (enabled && nativeTokenStatus === 'loading') {
+    if (nativeTokenStatus === 'loading') {
       cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        setTimout(true);
+        setIsTimeout(true);
 
         notifyBugsnag(
           new Error(
@@ -130,9 +130,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
       }, token_timeout_in_seconds);
     } else {
       // We've finished with remote tokens. Cancel timeout notification.
+      setIsTimeout(false)
       cancelTimeoutHandler?.();
     }
-  }, [enabled, nativeTokenStatus, token_timeout_in_seconds]);
+  }, [nativeTokenStatus, token_timeout_in_seconds]);
 
   useInterval(
     () => checkRenewMutate(nativeToken),
