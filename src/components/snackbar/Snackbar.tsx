@@ -28,7 +28,7 @@ export type SnackbarTextContent = {
 
 export type SnackbarProps = {
   textContent?: SnackbarTextContent;
-  position: SnackbarPosition;
+  position?: SnackbarPosition;
   /** Optional action button, only shown if this is provided */
   actionButton?: ButtonProps;
   /** Whether to show the close x button */
@@ -39,7 +39,7 @@ export type SnackbarProps = {
 
 export const Snackbar = ({
   textContent,
-  position,
+  position = 'top',
   actionButton,
   isDismissable,
   customVisibleDurationMS,
