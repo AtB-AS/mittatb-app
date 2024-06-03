@@ -21,7 +21,7 @@ export {
   filterOutFeaturesNotApplicableForCurrentVehicle,
   sortFeaturesByLayerIndexWeight,
   decodePolylineEncodedMultiPolygons,
-  addGeofencingZoneCategoryProps,
+  addGeofencingZoneCustomProps,
 } from './geofencing-zone-utils';
 export type {
   FormFactorFilterType,
@@ -40,10 +40,9 @@ export type {
   ParkingVehicleTypes,
   PolylineEncodedMultiPolygon,
   PreProcessedGeofencingZones,
-  GeofencingZoneCategoryKey,
-  GeofencingZoneCategoryProps,
-  GeofencingZoneCategoriesProps,
-  GeofencingZoneCategoryCode,
+  GeofencingZoneKeys,
+  GeofencingZoneCustomProps,
+  GeofencingZonesCustomProps,
   GeofencingZoneExplanationsType,
 } from './types';
 export {
@@ -54,4 +53,4 @@ export {useUserMapFilters} from './hooks/use-map-filter';
 export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
 export {Stations, GeofencingZones} from './components/mobility';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
-export {useGeofencingZoneCategoriesProps} from './hooks/use-geofencing-zone-categories-props';
+export {useGeofencingZonesCustomProps} from './hooks/use-geofencing-zones-custom-props';

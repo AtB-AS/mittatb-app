@@ -35,41 +35,48 @@ export const GeofencingZones = ({selectedFeature}: GeofencingZonesProps) => {
   }
 
   const mappedGeofencingZones = preProcessedGeofencingZones.map(
-    (geofencingZone) => (
-      <MapboxGL.ShapeSource
-        key={geofencingZone?.renderKey}
-        id={'geofencingZonesShapeSource_' + geofencingZone?.renderKey}
-        shape={geofencingZone.geojson as FeatureCollection} // todo: fix GeofencingZonesType in mobility-types_v2
-        hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
-      >
-        <MapboxGL.FillLayer
-          id="parkingFill"
-          style={{
-            fillAntialias: true,
-            fillColor: ['get', 'color', ['get', 'geofencingZoneCategoryProps']],
-            fillOpacity: [
-              'get',
-              'fillOpacity',
-              ['get', 'geofencingZoneCategoryProps'],
-            ],
-          }}
-          aboveLayerID="water-point-label"
-        />
-        <MapboxGL.LineLayer
-          id="tariffZonesLine"
-          style={{
-            lineWidth: 3,
-            lineColor: ['get', 'color', ['get', 'geofencingZoneCategoryProps']],
-            lineOpacity: [
-              'get',
-              'strokeOpacity',
-              ['get', 'geofencingZoneCategoryProps'],
-            ],
-          }}
-          aboveLayerID="water-point-label"
-        />
-      </MapboxGL.ShapeSource>
-    ),
+    (geofencingZone) => {
+      const getGeofencingZoneCustomProps = ['get', 'geofencingZoneCustomProps'];
+      const bgColor = [
+        'get',
+        'background',
+        ['get', 'color', getGeofencingZoneCustomProps],
+      ];
+      const fillOpacity = ['get', 'fillOpacity', getGeofencingZoneCustomProps];
+      const lineOpacity = [
+        'get',
+        'background',
+        ['get', 'strokeOpacity', getGeofencingZoneCustomProps],
+      ];
+
+      return (
+        <MapboxGL.ShapeSource
+          key={geofencingZone?.renderKey}
+          id={'geofencingZonesShapeSource_' + geofencingZone?.renderKey}
+          shape={geofencingZone.geojson as FeatureCollection} // todo: fix GeofencingZonesType in mobility-types_v2
+          hitbox={hitboxCoveringIconOnly} // to not be able to hit multiple zones with one click
+        >
+          <MapboxGL.FillLayer
+            id="parkingFill"
+            style={{
+              fillAntialias: true,
+              fillColor: bgColor,
+              fillOpacity,
+            }}
+            aboveLayerID="water-point-label"
+          />
+          <MapboxGL.LineLayer
+            id="tariffZonesLine"
+            style={{
+              lineWidth: 3,
+              lineColor: bgColor,
+              lineOpacity,
+            }}
+            aboveLayerID="water-point-label"
+          />
+        </MapboxGL.ShapeSource>
+      );
+    },
   );
 
   return <>{mappedGeofencingZones}</>;

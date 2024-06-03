@@ -22,6 +22,7 @@ import {
 
 import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
+import {ContrastColor} from '@atb-as/theme';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -193,7 +194,7 @@ export type PolylineEncodedMultiPolygon = String[][];
 
 export interface PreProcessedGeofencingZoneProperties
   extends MobilityAPI_GeofencingZoneProperties {
-  geofencingZoneCategoryProps?: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>;
+  geofencingZoneCustomProps?: GeofencingZoneCustomProps<GeofencingZoneKeys>;
 }
 
 export interface PreProcessedFeature extends MobilityAPI_Feature {
@@ -211,29 +212,31 @@ export interface PreProcessedGeofencingZones
   geojson?: PreProcessedFeatureCollection;
 }
 
-export enum GeofencingZoneCategoryCode {
+enum GeofencingZoneCodes {
   Allowed = 'Allowed',
   Slow = 'Slow',
   NoParking = 'NoParking',
   NoEntry = 'NoEntry',
-  Unspecified = 'Unspecified',
 }
 
-export type GeofencingZoneCategoryKey = keyof typeof GeofencingZoneCategoryCode;
+export type GeofencingZoneKeys = keyof typeof GeofencingZoneCodes;
 
-export type GeofencingZoneCategoryProps<
-  GZCKey extends GeofencingZoneCategoryKey,
-> = {
-  code: GZCKey;
-  color: string;
+// NB NB todo - get this from design theme!
+export type GeofencingZonePaintProps = {
+  color: ContrastColor;
   fillOpacity: number;
   strokeOpacity: number;
   layerIndexWeight: number;
-  isStationParking?: boolean;
 };
 
-export type GeofencingZoneCategoriesProps = {
-  [GZCKey in GeofencingZoneCategoryKey]: GeofencingZoneCategoryProps<GZCKey>;
+export type GeofencingZoneCustomProps<GZCKey extends GeofencingZoneKeys> =
+  GeofencingZonePaintProps & {
+    code: GZCKey;
+    isStationParking?: boolean;
+  };
+
+export type GeofencingZonesCustomProps = {
+  [GZCKey in GeofencingZoneKeys]: GeofencingZoneCustomProps<GZCKey>;
 };
 
 type GeofencingZoneExplanationType = {
@@ -242,5 +245,5 @@ type GeofencingZoneExplanationType = {
 };
 
 export type GeofencingZoneExplanationsType = {
-  [GZCKey in GeofencingZoneCategoryKey]: GeofencingZoneExplanationType;
+  [GZCKey in GeofencingZoneKeys | 'Unspecified']: GeofencingZoneExplanationType;
 };

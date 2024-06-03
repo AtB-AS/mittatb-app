@@ -16,8 +16,8 @@ import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
 import {
-  GeofencingZoneCategoryKey,
-  GeofencingZoneCategoryProps,
+  GeofencingZoneKeys,
+  GeofencingZoneCustomProps,
   MapProps,
   MapRegion,
 } from './types';
@@ -37,7 +37,6 @@ import {
 import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
 import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
-import {useGeofencingZoneCategoriesProps} from './hooks/use-geofencing-zone-categories-props';
 
 import {Snackbar, useSnackbar} from '../snackbar';
 
@@ -75,12 +74,10 @@ export const Map = (props: MapProps) => {
 
   const geofencingZoneOnPress = useCallback(
     (
-      geofencingZoneCategoryProps?: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>,
+      geofencingZoneCustomProps?: GeofencingZoneCustomProps<GeofencingZoneKeys>,
     ) => {
-      if (!geofencingZoneCategoryProps) return;
-
       const textContent = getGeofencingZoneTextContent(
-        geofencingZoneCategoryProps,
+        geofencingZoneCustomProps,
       );
       showSnackbar({textContent, position: 'top'});
     },
@@ -89,8 +86,6 @@ export const Map = (props: MapProps) => {
 
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
     useGeofencingZonesEnabled();
-
-  const geofencingZoneCategoriesProps = useGeofencingZoneCategoriesProps();
 
   const updateRegionForVehicles = props.vehicles?.updateRegion;
   const updateRegionForStations = props.stations?.updateRegion;
@@ -168,7 +163,7 @@ export const Map = (props: MapProps) => {
 
     if (isFeatureGeofencingZone(featureToSelect)) {
       geofencingZoneOnPress(
-        featureToSelect?.properties?.geofencingZoneCategoryProps,
+        featureToSelect?.properties?.geofencingZoneCustomProps,
       );
     } else {
       if (isFeaturePoint(featureToSelect)) {
@@ -177,8 +172,8 @@ export const Map = (props: MapProps) => {
           feature: featureToSelect,
         });
       } else if (isScooter(selectedFeature)) {
-        // outside of operational area
-        geofencingZoneOnPress(geofencingZoneCategoriesProps.Unspecified);
+        // outside of operational area, rules unspecified
+        geofencingZoneOnPress(undefined);
       }
     }
   };

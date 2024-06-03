@@ -1,7 +1,7 @@
 import {
-  GeofencingZoneCategoriesProps,
-  GeofencingZoneCategoryKey,
-  GeofencingZoneCategoryProps,
+  GeofencingZonesCustomProps,
+  GeofencingZoneKeys,
+  GeofencingZoneCustomProps,
   PreProcessedGeofencingZones,
 } from '@atb/components/map';
 import sortBy from 'lodash.sortby';
@@ -61,7 +61,7 @@ export function sortFeaturesByLayerIndexWeight(
     const sortedFeatures = sortBy(
       geofencingZone?.geojson?.features,
       (feature) =>
-        feature?.properties?.geofencingZoneCategoryProps?.layerIndexWeight,
+        feature?.properties?.geofencingZoneCustomProps?.layerIndexWeight,
     );
 
     return {
@@ -101,14 +101,14 @@ export function decodePolylineEncodedMultiPolygons(
   });
 }
 
-export function addGeofencingZoneCategoryProps(
+export function addGeofencingZoneCustomProps(
   geofencingZones: PreProcessedGeofencingZones[],
-  geofencingZoneCategoriesProps: GeofencingZoneCategoriesProps,
+  geofencingZonesCustomProps: GeofencingZonesCustomProps,
   vehicleTypeId?: string,
 ) {
   if (!vehicleTypeId) return geofencingZones;
 
-  const geofencingZonesWithCategoryProps = geofencingZones.map(
+  const geofencingZonesWithCustomProps = geofencingZones.map(
     (geofencingZone, geofencingZonesIndex) => {
       const preProcessedFeatures = (
         geofencingZone?.geojson?.features || []
@@ -135,24 +135,23 @@ export function addGeofencingZoneCategoryProps(
           isStationParking = !!rule.stationParking;
         }
 
-        const {Allowed, Slow, NoParking, NoEntry} =
-          geofencingZoneCategoriesProps;
+        const {Allowed, Slow, NoParking, NoEntry} = geofencingZonesCustomProps;
 
-        let geofencingZoneCategoryProps: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey> =
+        let geofencingZoneCustomProps: GeofencingZoneCustomProps<GeofencingZoneKeys> =
           Allowed;
 
         if (rideThroughNotAllowed) {
-          geofencingZoneCategoryProps = NoEntry;
+          geofencingZoneCustomProps = NoEntry;
         } else if (rideNotAllowed) {
-          geofencingZoneCategoryProps = NoParking;
+          geofencingZoneCustomProps = NoParking;
         } else if (isSlowArea) {
-          geofencingZoneCategoryProps = Slow;
+          geofencingZoneCustomProps = Slow;
         }
-        geofencingZoneCategoryProps.isStationParking = isStationParking;
+        geofencingZoneCustomProps.isStationParking = isStationParking;
 
         const preProcessedProperties = {
           ...feature.properties,
-          ...{geofencingZoneCategoryProps},
+          ...{geofencingZoneCustomProps},
         };
 
         return {
@@ -172,5 +171,5 @@ export function addGeofencingZoneCategoryProps(
     },
   );
 
-  return geofencingZonesWithCategoryProps;
+  return geofencingZonesWithCustomProps;
 }

@@ -1,8 +1,8 @@
 import {
-  addGeofencingZoneCategoryProps,
+  addGeofencingZoneCustomProps,
   decodePolylineEncodedMultiPolygons,
   sortFeaturesByLayerIndexWeight,
-  useGeofencingZoneCategoriesProps,
+  useGeofencingZonesCustomProps,
   filterOutFeaturesNotApplicableForCurrentVehicle,
 } from '@atb/components/map';
 
@@ -16,7 +16,7 @@ export const usePreProcessedGeofencingZones = (
   const systemId = vehicle?.system.id;
   const vehicleTypeId = vehicle?.vehicleType.id;
 
-  const geofencingZoneCategoriesProps = useGeofencingZoneCategoriesProps();
+  const geofencingZonesCustomProps = useGeofencingZonesCustomProps();
 
   const {
     data: geofencingZonesData, // load and error silently
@@ -27,13 +27,13 @@ export const usePreProcessedGeofencingZones = (
       geofencingZonesData,
       vehicleTypeId,
     );
-  const geofencingZonesWithCategoryProps = addGeofencingZoneCategoryProps(
+  const geofencingZonesWithCustomProps = addGeofencingZoneCustomProps(
     applicableGeofencingZones,
-    geofencingZoneCategoriesProps,
+    geofencingZonesCustomProps,
     vehicleTypeId,
   );
   const geofencingZonesWithDecodedCoordinates =
-    decodePolylineEncodedMultiPolygons(geofencingZonesWithCategoryProps);
+    decodePolylineEncodedMultiPolygons(geofencingZonesWithCustomProps);
 
   const geofencingZonesWithSortedFeatures = sortFeaturesByLayerIndexWeight(
     geofencingZonesWithDecodedCoordinates,

@@ -88,11 +88,11 @@ export const isFeaturePolylineEncodedMultiPolygon = (f: Feature): boolean =>
 export const hasProperties = (f: Feature) =>
   Object.keys(f.properties || {}).length > 0;
 
-export const hasGeofencingZoneCategoryProps = (f: Feature) =>
-  Object.keys(f.properties?.geofencingZoneCategoryProps || {}).length > 0;
+export const hasGeofencingZoneCustomProps = (f: Feature) =>
+  Object.keys(f.properties?.geofencingZoneCustomProps || {}).length > 0;
 
 export const isFeatureGeofencingZone = (f: Feature) =>
-  isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCategoryProps(f);
+  isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
 
 export const isClusterFeature = (
   feature: Feature,

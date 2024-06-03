@@ -3,29 +3,31 @@ import {
   GeofencingZoneExplanations,
   GeofencingZoneExtraExplanations,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {GeofencingZoneCategoryProps, GeofencingZoneCategoryKey} from '../types';
+import {GeofencingZoneCustomProps, GeofencingZoneKeys} from '../types';
 
 export const useGeofencingZoneTextContent = () => {
   const {t} = useTranslation();
 
   const getGeofencingZoneTextContent = (
-    geofencingZoneCategoryProps: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>,
+    geofencingZoneCustomProps?: GeofencingZoneCustomProps<GeofencingZoneKeys>,
   ) => {
-    const title = geofencingZoneCategoryProps
-      ? t(GeofencingZoneExplanations[geofencingZoneCategoryProps.code].title)
+    const title = t(
+      GeofencingZoneExplanations[
+        geofencingZoneCustomProps?.code || 'Unspecified'
+      ].title,
+    );
+
+    const isStationParkingPostfix = geofencingZoneCustomProps?.isStationParking
+      ? '. ' + t(GeofencingZoneExtraExplanations.isStationParking)
       : '';
 
-    const isStationParkingPostfix =
-      geofencingZoneCategoryProps?.isStationParking
-        ? '. ' + t(GeofencingZoneExtraExplanations.isStationParking)
-        : '';
+    const description =
+      t(
+        GeofencingZoneExplanations[
+          geofencingZoneCustomProps?.code || 'Unspecified'
+        ].description,
+      ) + isStationParkingPostfix;
 
-    const description = geofencingZoneCategoryProps
-      ? t(
-          GeofencingZoneExplanations[geofencingZoneCategoryProps.code]
-            .description,
-        ) + isStationParkingPostfix
-      : '';
     return {
       title,
       description,
