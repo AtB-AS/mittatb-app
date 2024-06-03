@@ -6,32 +6,52 @@ import {single} from './fixtures/single-travelright';
 import {singleBoat} from './fixtures/single-boat-travelright';
 import {youth} from './fixtures/youth-travelright';
 
-import {TravelRight} from '../types';
-import {isCarnetTravelRight, isPreActivatedTravelRight} from '../utils';
+import {CarnetTravelRight, TravelRight} from '../types';
+import {
+  hasValidCarnetTravelRight,
+  isCarnetTravelRight,
+  isPreActivatedTravelRight,
+} from '../utils';
+
+const now = Date.now();
 
 describe('Travelright type', () => {
   it('preactivated should resolve to preassigned', async () => {
-    expect(isPreActivatedTravelRight(night as TravelRight)).toBe(true);
-    expect(isPreActivatedTravelRight(period as TravelRight)).toBe(true);
+    expect(isPreActivatedTravelRight(night)).toBe(true);
+    expect(isPreActivatedTravelRight(period)).toBe(true);
     expect(isPreActivatedTravelRight(periodBoat as TravelRight)).toBe(true);
-    expect(isPreActivatedTravelRight(single as TravelRight)).toBe(true);
+    expect(isPreActivatedTravelRight(single)).toBe(true);
     expect(isPreActivatedTravelRight(singleBoat as TravelRight)).toBe(true);
-    expect(isPreActivatedTravelRight(youth as TravelRight)).toBe(true);
+    expect(isPreActivatedTravelRight(youth)).toBe(true);
   });
 
   it('preactivated should not resolve to carnet', async () => {
-    expect(isCarnetTravelRight(night as TravelRight)).toBe(false);
-    expect(isCarnetTravelRight(period as TravelRight)).toBe(false);
+    expect(isCarnetTravelRight(night)).toBe(false);
+    expect(isCarnetTravelRight(period)).toBe(false);
     expect(isCarnetTravelRight(periodBoat as TravelRight)).toBe(false);
-    expect(isCarnetTravelRight(single as TravelRight)).toBe(false);
+    expect(isCarnetTravelRight(single)).toBe(false);
     expect(isCarnetTravelRight(singleBoat as TravelRight)).toBe(false);
-    expect(isCarnetTravelRight(youth as TravelRight)).toBe(false);
+    expect(isCarnetTravelRight(youth)).toBe(false);
   });
 
   it('carnet should resolve to carnet', async () => {
-    expect(isCarnetTravelRight(carnet as TravelRight)).toBe(true);
+    expect(isCarnetTravelRight(carnet)).toBe(true);
   });
   it('carnet should not resolve to preassigned', async () => {
-    expect(isPreActivatedTravelRight(carnet as TravelRight)).toBe(false);
+    expect(isPreActivatedTravelRight(carnet)).toBe(false);
+  });
+});
+
+describe('Carnet travel rights', () => {
+  it('is valid', async () => {
+    expect(hasValidCarnetTravelRight([carnet], now)).toBe(true);
+  });
+
+  it('is not valid', async () => {
+    const noAccessesCarnet: CarnetTravelRight = {
+      ...carnet,
+      usedAccesses: [],
+    };
+    expect(hasValidCarnetTravelRight([noAccessesCarnet], now)).toBe(false);
   });
 });

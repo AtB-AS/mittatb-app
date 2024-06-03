@@ -48,7 +48,7 @@ function isValidPreActivatedTravelRight(
   return travelRight.endDateTime.getTime() > now;
 }
 
-function hasValidCarnetTravelRight(
+export function hasValidCarnetTravelRight(
   travelRights: CarnetTravelRight[],
   now: number,
 ): boolean {
