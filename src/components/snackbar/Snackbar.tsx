@@ -22,6 +22,8 @@ export type SnackbarPosition = 'top' | 'bottom';
 export type SnackbarTextContent = {
   title?: string;
   description?: string;
+  /** Unique key for the message. Makes it possible to re-show the exact same message */
+  messageKey?: number;
 };
 
 export type SnackbarProps = {
