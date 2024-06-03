@@ -1,7 +1,7 @@
 import {trackNavigation} from '@atb/diagnostics/trackNavigation';
 import {Root_ExtendedOnboardingStack} from './Root_ExtendedOnboardingStack';
 import {useTheme} from '@atb/theme';
-import {APP_SCHEME} from '@env';
+import {APP_SCHEME, APP_VERSION} from '@env';
 import {
   DefaultTheme,
   getStateFromPath,
@@ -68,6 +68,8 @@ import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {register as registerChatUser} from '@atb/chat/user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {ForceUpdateScreen} from '@atb/force-update-screen';
+import {compareVersion} from '@atb/utils/compare-version.ts';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -80,7 +82,7 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
-  const {enable_intercom} = useRemoteConfig();
+  const {enable_intercom, minimum_app_version} = useRemoteConfig();
 
   useFlipper(navRef);
 
@@ -167,6 +169,13 @@ export const RootStack = () => {
       ],
     };
   }
+
+  const isCurrentAppVersionLowerThanMinVersion =
+    APP_VERSION &&
+    minimum_app_version &&
+    compareVersion(APP_VERSION, minimum_app_version) < 0;
+
+  if (isCurrentAppVersionLowerThanMinVersion) return <ForceUpdateScreen />;
 
   return (
     <>

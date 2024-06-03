@@ -49,6 +49,7 @@ export type RemoteConfig = {
   flex_booking_number_of_days_available: number;
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
+  minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
   privacy_policy_url: string;
@@ -111,6 +112,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
+  minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
   privacy_policy_url: PRIVACY_POLICY_URL,
@@ -250,6 +252,9 @@ export function getConfig(): RemoteConfig {
   const live_vehicle_stale_threshold =
     values['live_vehicle_stale_threshold']?.asNumber() ??
     defaultRemoteConfig.live_vehicle_stale_threshold;
+  const minimum_app_version =
+      values['minimum_app_version']?.asString() ??
+      defaultRemoteConfig.minimum_app_version;
   const must_upgrade_ticketing =
     values['must_upgrade_ticketing']?.asBoolean() ?? false;
   const new_favourites_info_url =
@@ -332,6 +337,7 @@ export function getConfig(): RemoteConfig {
     flex_booking_number_of_days_available,
     flex_ticket_url,
     live_vehicle_stale_threshold,
+    minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,
     privacy_policy_url,
