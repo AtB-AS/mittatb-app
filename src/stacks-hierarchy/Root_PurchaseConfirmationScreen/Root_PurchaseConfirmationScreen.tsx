@@ -120,6 +120,8 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       ? 'stop-places'
       : 'zones';
 
+  const isOnBehalfOf = !!phoneNumber && !!destinationAccountId;
+
   const {
     offerSearchTime,
     isSearchingOffer,
@@ -134,6 +136,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     fromPlace,
     toPlace,
     userProfilesWithCount,
+    isOnBehalfOf,
     travelDate,
   );
 

@@ -35,7 +35,11 @@ export function Summary({
   const {t, language} = useTranslation();
 
   const formattedPrice = formatDecimalNumber(price, language, 2);
-  const formattedOriginalPrice = formatDecimalNumber(originalPrice, language, 2);
+  const formattedOriginalPrice = formatDecimalNumber(
+    originalPrice,
+    language,
+    2,
+  );
   const hasSelection = userProfilesWithCount.some((u) => u.count);
 
   const toPaymentFunction = () => {
@@ -60,6 +64,11 @@ export function Summary({
           type="body__tertiary--strike"
           style={styles.originalPrice}
           testID="offerTotalPriceText"
+          accessibilityLabel={t(
+            PurchaseOverviewTexts.summary.ordinaryPriceA11yLabel(
+              formattedOriginalPrice,
+            ),
+          )}
         >
           {t(PurchaseOverviewTexts.summary.price(formattedOriginalPrice))}
         </ThemeText>
