@@ -66,7 +66,7 @@ export const Map = (props: MapProps) => {
     );
 
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
-  const {snackbarTextContent, showSnackbar, hideSnackbar} = useSnackbar();
+  const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
   useEffect(() => {
     // hide the snackbar when the bottom sheet is closed
@@ -82,7 +82,7 @@ export const Map = (props: MapProps) => {
       const textContent = getGeofencingZoneTextContent(
         geofencingZoneCategoryProps,
       );
-      showSnackbar(textContent);
+      showSnackbar({textContent, position: 'top'});
     },
     [showSnackbar, getGeofencingZoneTextContent],
   );
@@ -273,7 +273,7 @@ export const Map = (props: MapProps) => {
           />
         </View>
 
-        <Snackbar position="top" textContent={snackbarTextContent} />
+        <Snackbar {...snackbarProps} />
       </View>
     </View>
   );
