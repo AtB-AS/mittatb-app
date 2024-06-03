@@ -1,24 +1,28 @@
 import {useState} from 'react';
-import {SnackbarTextContent} from './Snackbar';
+import {SnackbarProps} from './Snackbar';
 import {getSnackbarHasTextContent} from './utils';
 
 export const useSnackbar = () => {
-  const [textContent, setTextContent] = useState<SnackbarTextContent>();
+  const [snackbarProps, setSnackbarProps] = useState<SnackbarProps>();
   const [messageKey, setMessageKey] = useState(0);
 
-  const showSnackbar = (textContent?: SnackbarTextContent) => {
+  const showSnackbar = (snackbarProps?: SnackbarProps) => {
     setMessageKey((messageKey) => messageKey + 1);
-    setTextContent(textContent);
+    setSnackbarProps(snackbarProps);
   };
-  const hideSnackbar = () => setTextContent(undefined);
+  const hideSnackbar = () => setSnackbarProps(undefined);
+
+  const snackbarTextContent = getSnackbarHasTextContent(
+    snackbarProps?.textContent,
+  )
+    ? {
+        ...snackbarProps?.textContent,
+        messageKey, // add unique key to each message
+      }
+    : undefined;
 
   return {
-    snackbarTextContent: getSnackbarHasTextContent(textContent)
-      ? {
-          ...textContent,
-          messageKey,
-        }
-      : undefined,
+    snackbarProps: {...snackbarProps, snackbarTextContent},
     showSnackbar,
     hideSnackbar,
   };
