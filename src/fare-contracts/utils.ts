@@ -68,14 +68,22 @@ export function getValidityStatus(
   if (fc.state === FareContractState.Refunded) return 'refunded';
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
-  const firstTravelRight = fc.travelRights.filter(
-    isCarnet(fc) ? isCarnetTravelRight : isPreActivatedTravelRight,
-  )[0];
-  return getRelativeValidity(
-    now,
-    firstTravelRight.startDateTime.getTime(),
-    firstTravelRight.endDateTime.getTime(),
-  );
+
+  if (isCarnet(fc)) {
+    const usedAccesses = flattenCarnetTravelRightAccesses(
+      fc.travelRights as CarnetTravelRight[],
+    ).usedAccesses;
+    return getLastUsedAccess(now, usedAccesses).status;
+  } else {
+    const firstTravelRight = fc.travelRights.filter(
+      isPreActivatedTravelRight,
+    )[0];
+    return getRelativeValidity(
+      now,
+      firstTravelRight.startDateTime.getTime(),
+      firstTravelRight.endDateTime.getTime(),
+    );
+  }
 }
 
 export const useSortFcOrReservationByValidityAndCreation = (
@@ -257,9 +265,6 @@ export const getFareProductRef = (fc: FareContract) =>
 type FareContractInfoProps = {
   isCarnetFareContract: boolean;
   travelRights: NormalTravelRight[];
-  fareContractValidityStatus: ValidityStatus;
-  fareContractValidFrom: number;
-  fareContractValidTo: number;
   carnetAccessStatus?: UsedAccessStatus;
   validityStatus: ValidityStatus;
   validFrom: number;
@@ -286,7 +291,7 @@ export function getFareContractInfo(
   const fareContractValidFrom = firstTravelRight.startDateTime.getTime();
   const fareContractValidTo = firstTravelRight.endDateTime.getTime();
 
-  const fareContractValidityStatus = getValidityStatus(now, fc, isSent);
+  const validityStatus = getValidityStatus(now, fc, isSent);
 
   const carnetTravelRightAccesses = isCarnetFareContract
     ? flattenCarnetTravelRightAccesses(travelRights as CarnetTravelRight[])
@@ -303,11 +308,6 @@ export function getFareContractInfo(
     ? lastUsedAccess.validTo
     : fareContractValidTo;
 
-  const validityStatus = lastUsedAccess
-    ? isSent
-      ? 'sent'
-      : lastUsedAccess.status
-    : fareContractValidityStatus;
   // TODO: Carnet access status should be part of validity status
   const carnetAccessStatus = isSent ? 'inactive' : lastUsedAccess?.status;
 
@@ -318,9 +318,6 @@ export function getFareContractInfo(
   return {
     isCarnetFareContract,
     travelRights,
-    fareContractValidityStatus,
-    fareContractValidFrom,
-    fareContractValidTo,
     carnetAccessStatus,
     validityStatus,
     validFrom,

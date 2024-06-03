@@ -59,9 +59,6 @@ export const FareContractView: React.FC<Props> = ({
   const {
     isCarnetFareContract,
     travelRights,
-    fareContractValidityStatus,
-    fareContractValidFrom,
-    fareContractValidTo,
     carnetAccessStatus,
     validityStatus,
     validFrom,
@@ -81,7 +78,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   const shouldShowBundlingInfo =
-    benefits && benefits.length > 0 && fareContractValidityStatus === 'valid';
+    benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -109,11 +106,11 @@ export const FareContractView: React.FC<Props> = ({
     <Section style={styles.section} testID={testID}>
       <GenericSectionItem>
         <ValidityHeader
-          status={fareContractValidityStatus}
+          status={validityStatus}
           now={now}
           createdDate={fareContract.created.getTime()}
-          validFrom={fareContractValidFrom}
-          validTo={fareContractValidTo}
+          validFrom={validFrom}
+          validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
           carnetAccessStatus={carnetAccessStatus}
         />

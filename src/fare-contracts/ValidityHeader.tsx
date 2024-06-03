@@ -10,7 +10,7 @@ import {formatToLongDateTime, secondsToDuration} from '@atb/utils/date';
 import {toDate} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
-import {isValidFareContract, ValidityStatus} from './utils';
+import {ValidityStatus} from './utils';
 import {TransportModes} from '@atb/components/transportation-modes';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
@@ -43,7 +43,7 @@ export const ValidityHeader: React.FC<{
   const {isInspectable} = useMobileTokenContextState();
 
   const label: string = validityTimeText(
-    carnetAccessStatus ?? status,
+    status,
     now,
     createdDate,
     validFrom,
@@ -55,13 +55,13 @@ export const ValidityHeader: React.FC<{
   return (
     <View style={styles.validityHeader}>
       <View style={styles.validityContainer}>
-        {isValidFareContract(status) || carnetAccessStatus ? (
+        {status === 'valid' || status === 'inactive' ? (
           fareProductTypeConfig && (
             <TransportModes
               modes={fareProductTypeConfig.transportModes}
               iconSize="xSmall"
               style={{flex: 2}}
-              disabled={carnetAccessStatus === 'inactive'}
+              disabled={status === 'inactive'}
             />
           )
         ) : (

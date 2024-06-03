@@ -75,9 +75,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {
     isCarnetFareContract,
     travelRights,
-    fareContractValidityStatus,
-    fareContractValidFrom,
-    fareContractValidTo,
     carnetAccessStatus,
     validityStatus,
     validFrom,
@@ -137,11 +134,11 @@ export const DetailsContent: React.FC<Props> = ({
     <Section style={styles.section}>
       <GenericSectionItem>
         <ValidityHeader
-          status={fareContractValidityStatus}
+          status={validityStatus}
           now={now}
           createdDate={fc.created.getTime()}
-          validFrom={fareContractValidFrom}
-          validTo={fareContractValidTo}
+          validFrom={validFrom}
+          validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
           carnetAccessStatus={carnetAccessStatus}
         />
