@@ -22,7 +22,6 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthState} from '@atb/auth';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
-import {UsedAccessValidityHeader} from '@atb/fare-contracts/carnet/UsedAccessValidityHeader';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {
   isCanBeConsumedNowFareContract,
@@ -60,10 +59,6 @@ export const FareContractView: React.FC<Props> = ({
   const {
     isCarnetFareContract,
     travelRights,
-    fareContractValidityStatus,
-    fareContractValidFrom,
-    fareContractValidTo,
-    carnetAccessStatus,
     validityStatus,
     validFrom,
     validTo,
@@ -82,7 +77,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   const shouldShowBundlingInfo =
-    benefits && benefits.length > 0 && fareContractValidityStatus === 'valid';
+    benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -109,26 +104,14 @@ export const FareContractView: React.FC<Props> = ({
   return (
     <Section style={styles.section} testID={testID}>
       <GenericSectionItem>
-        {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
-        {isCarnetFareContract &&
-        fareContractValidityStatus === 'valid' &&
-        carnetAccessStatus ? (
-          <UsedAccessValidityHeader
-            now={now}
-            status={carnetAccessStatus}
-            validFrom={validFrom}
-            validTo={validTo}
-          />
-        ) : (
-          <ValidityHeader
-            status={fareContractValidityStatus}
-            now={now}
-            createdDate={fareContract.created.getTime()}
-            validFrom={fareContractValidFrom}
-            validTo={fareContractValidTo}
-            fareProductType={preassignedFareProduct?.type}
-          />
-        )}
+        <ValidityHeader
+          status={validityStatus}
+          now={now}
+          createdDate={fareContract.created.getTime()}
+          validFrom={validFrom}
+          validTo={validTo}
+          fareProductType={preassignedFareProduct?.type}
+        />
         <ValidityLine
           status={validityStatus}
           now={now}
