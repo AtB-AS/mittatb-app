@@ -81,16 +81,24 @@ export function getValidityStatus(
 export const useSortFcOrReservationByValidityAndCreation = (
   now: number,
   fcOrReservations: (Reservation | FareContract)[],
-  getFareContractStatus: (now: number, fc: FareContract, currentUserId?: string) => ValidityStatus | undefined,
+  getFareContractStatus: (
+    now: number,
+    fc: FareContract,
+    currentUserId?: string,
+  ) => ValidityStatus | undefined,
 ): (FareContract | Reservation)[] => {
-  const {abtCustomerId: currentUserId} = useAuthState();  
+  const {abtCustomerId: currentUserId} = useAuthState();
   const getFcOrReservationOrder = useCallback(
     (fcOrReservation: FareContract | Reservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       // Make reservations go first, then fare contracts
       if (!isFareContract) return 1;
 
-      const validityStatus = getFareContractStatus(now, fcOrReservation, currentUserId);
+      const validityStatus = getFareContractStatus(
+        now,
+        fcOrReservation,
+        currentUserId,
+      );
       return validityStatus === 'valid' ? 1 : 0;
     },
     [getFareContractStatus, now, currentUserId],
