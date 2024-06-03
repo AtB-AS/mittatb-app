@@ -15,7 +15,6 @@ import {TransportModes} from '@atb/components/transportation-modes';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurationContext';
 import {useMobileTokenContextState} from '@atb/mobile-token';
-import {UsedAccessStatus} from './carnet/types';
 
 export const ValidityHeader: React.FC<{
   status: ValidityStatus;
@@ -24,16 +23,7 @@ export const ValidityHeader: React.FC<{
   validFrom: number;
   validTo: number;
   fareProductType: string | undefined;
-  carnetAccessStatus?: UsedAccessStatus;
-}> = ({
-  status,
-  now,
-  createdDate,
-  validFrom,
-  validTo,
-  fareProductType,
-  carnetAccessStatus,
-}) => {
+}> = ({status, now, createdDate, validFrom, validTo, fareProductType}) => {
   const styles = useStyles();
   const {t, language} = useTranslation();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();

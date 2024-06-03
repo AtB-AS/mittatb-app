@@ -28,7 +28,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {useMobileTokenContextState} from '@atb/mobile-token';
-import {UsedAccessStatus} from './carnet/types';
 import {useCallback, useMemo} from 'react';
 import {useAuthState} from '@atb/auth';
 
@@ -265,7 +264,6 @@ export const getFareProductRef = (fc: FareContract) =>
 type FareContractInfoProps = {
   isCarnetFareContract: boolean;
   travelRights: NormalTravelRight[];
-  carnetAccessStatus?: UsedAccessStatus;
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
@@ -308,9 +306,6 @@ export function getFareContractInfo(
     ? lastUsedAccess.validTo
     : fareContractValidTo;
 
-  // TODO: Carnet access status should be part of validity status
-  const carnetAccessStatus = isSent ? 'inactive' : lastUsedAccess?.status;
-
   const maximumNumberOfAccesses =
     carnetTravelRightAccesses?.maximumNumberOfAccesses;
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
@@ -318,7 +313,6 @@ export function getFareContractInfo(
   return {
     isCarnetFareContract,
     travelRights,
-    carnetAccessStatus,
     validityStatus,
     validFrom,
     validTo,
@@ -327,6 +321,7 @@ export function getFareContractInfo(
   };
 }
 
+type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
 type LastUsedAccessState = {
   status: UsedAccessStatus;
   validFrom: number | undefined;

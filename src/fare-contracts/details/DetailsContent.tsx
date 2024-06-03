@@ -75,7 +75,6 @@ export const DetailsContent: React.FC<Props> = ({
   const {
     isCarnetFareContract,
     travelRights,
-    carnetAccessStatus,
     validityStatus,
     validFrom,
     validTo,
@@ -140,7 +139,6 @@ export const DetailsContent: React.FC<Props> = ({
           validFrom={validFrom}
           validTo={validTo}
           fareProductType={preassignedFareProduct?.type}
-          carnetAccessStatus={carnetAccessStatus}
         />
         <ValidityLine
           status={validityStatus}
