@@ -5,7 +5,7 @@ import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
 import {Feature, Position} from 'geojson';
 import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
@@ -15,7 +15,12 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {MapProps, MapRegion} from './types';
+import {
+  GeofencingZoneCategoryKey,
+  GeofencingZoneCategoryProps,
+  MapProps,
+  MapRegion,
+} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -24,14 +29,17 @@ import {
   isParkAndRide,
 } from './utils';
 import isEqual from 'lodash.isequal';
-import {GeofencingZones} from './components/mobility/GeofencingZones';
+import {
+  GeofencingZones,
+  useGeofencingZoneTextContent,
+} from '@atb/components/map';
 
-import {useGeofencingZoneExplanation} from './hooks/use-geofencing-zone-explanation';
-import {GeofencingZoneExplanation} from './components/mobility/GeofencingZoneExplanation';
 import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
 import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 import {useGeofencingZoneCategoriesProps} from './hooks/use-geofencing-zone-categories-props';
+
+import {Snackbar, useSnackbar} from '../snackbar';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -57,11 +65,28 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
-  const {
-    geofencingZoneCategoryPropsToExplain,
-    geofencingZoneOnPress,
-    resetGeofencingZoneExplanation,
-  } = useGeofencingZoneExplanation(!!selectedFeature);
+  const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
+  const {snackbarTextContent, showSnackbar, hideSnackbar} = useSnackbar();
+
+  useEffect(() => {
+    // hide the snackbar when the bottom sheet is closed
+    !selectedFeature && hideSnackbar();
+  }, [selectedFeature, hideSnackbar]);
+
+  const geofencingZoneOnPress = useCallback(
+    (
+      geofencingZoneCategoryProps?: GeofencingZoneCategoryProps<GeofencingZoneCategoryKey>,
+    ) => {
+      if (!geofencingZoneCategoryProps) return;
+
+      const textContent = getGeofencingZoneTextContent(
+        geofencingZoneCategoryProps,
+      );
+      showSnackbar(textContent);
+    },
+    [showSnackbar, getGeofencingZoneTextContent],
+  );
+
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
     useGeofencingZonesEnabled();
 
@@ -134,12 +159,18 @@ export const Map = (props: MapProps) => {
         : selected,
     );
 
+    /**
+     * this hides the Snackbar when a feature is clicked,
+     * unless the feature is a geofencingZone, in which case
+     * geofencingZoneOnPress will be called which sets it visible again
+     */
+    hideSnackbar();
+
     if (isFeatureGeofencingZone(featureToSelect)) {
       geofencingZoneOnPress(
         featureToSelect?.properties?.geofencingZoneCategoryProps,
       );
     } else {
-      geofencingZoneCategoryPropsToExplain && resetGeofencingZoneExplanation();
       if (isFeaturePoint(featureToSelect)) {
         onMapClick({
           source: 'map-click',
@@ -241,11 +272,8 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
-        {geofencingZoneCategoryPropsToExplain && (
-          <GeofencingZoneExplanation
-            geofencingZoneCategoryProps={geofencingZoneCategoryPropsToExplain}
-          />
-        )}
+
+        <Snackbar position="top" textContent={snackbarTextContent} />
       </View>
     </View>
   );
