@@ -118,8 +118,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     fromPlace,
     toPlace,
     travellerSelection,
+    isOnBehalfOfToggle,
     travelDate,
-    isOnBehalfOfToggle
   );
 
   const rootPurchaseConfirmationScreenParams: Root_PurchaseConfirmationScreenParams =

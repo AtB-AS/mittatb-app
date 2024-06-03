@@ -155,8 +155,8 @@ export function useOfferState(
   fromPlace: TariffZone | StopPlaceFragmentWithIsFree,
   toPlace: TariffZone | StopPlaceFragmentWithIsFree,
   userProfilesWithCount: UserProfileWithCount[],
-  travelDate?: string,
   isOnBehalfOf: boolean = false,
+  travelDate?: string,
 ) {
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
