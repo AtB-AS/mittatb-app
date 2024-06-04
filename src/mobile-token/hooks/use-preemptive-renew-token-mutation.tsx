@@ -54,7 +54,7 @@ export const usePreemptiveRenewTokenMutation = (userId?: string) => {
     },
     onError: async (err: any, {token, traceId}) => {
       notifyBugsnag(err, {
-        errorGroupHash: 'AuthError',
+        errorGroupHash: 'GetSignedTokenError',
         metadata: {
           description: `Error renewing token ${token?.tokenId}`,
         },
