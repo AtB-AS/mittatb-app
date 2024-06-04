@@ -163,11 +163,21 @@ export function flattenCarnetTravelRightAccesses(
   };
 }
 
-function isActiveNowOrCanBeUsedFareContract(f: FareContract, now: number) {
+export function isActiveNowOrCanBeUsedFareContract(
+  f: FareContract,
+  now: number,
+) {
+  if (!isOrWillBeActivatedFareContract(f)) return false;
   if (isValidRightNowFareContract(f, now)) return true;
 
-  const carnetTravelRights = f.travelRights.filter(isCarnetTravelRight);
-  return hasUsableCarnetTravelRight(carnetTravelRights, now);
+  if (
+    hasUsableCarnetTravelRight(f.travelRights.filter(isCarnetTravelRight), now)
+  )
+    return true;
+
+  return f.travelRights
+    .filter(isNormalTravelRight)
+    .some((travelright) => willBeValidInTheFutureTravelRight(travelright, now));
 }
 
 export function isCanBeConsumedNowFareContract(
