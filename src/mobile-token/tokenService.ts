@@ -69,7 +69,6 @@ export const tokenService: TokenService = {
         authWithIdToken: true,
         skipErrorLogging: isRemoteTokenStateError,
         timeout: 15000,
-        baseURL: 'http://Grans-MacBook-Pro.local:8080',
       })
       .then((res) => res.data.pendingTokenDetails)
       .catch(handleError);
