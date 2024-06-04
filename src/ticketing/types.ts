@@ -32,8 +32,8 @@ export type TravelRight = {
     | 'PeriodBoatTicket'
     | 'YouthTicket'
     | 'UnknownTicket';
-  direction: TravelRightDirection;
   fareProductRef: string;
+  direction?: TravelRightDirection;
 };
 
 export type NormalTravelRight = TravelRight & {
@@ -42,9 +42,9 @@ export type NormalTravelRight = TravelRight & {
   endDateTime: Date;
   usageValidityPeriodRef: string;
   userProfileRef: string;
-  tariffZoneRefs: string[] | undefined;
-  startPointRef: string | undefined;
-  endPointRef: string | undefined;
+  tariffZoneRefs?: string[];
+  startPointRef?: string;
+  endPointRef?: string;
 };
 
 export type PreActivatedTravelRight = NormalTravelRight;
