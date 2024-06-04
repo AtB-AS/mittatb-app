@@ -6,15 +6,16 @@ import {
 } from '@atb/components/snackbar';
 
 export const useSnackbarScreenReaderFocus = (
+  isDisabled: boolean,
   stableTextContent?: SnackbarTextContent,
 ) => {
   const focusRef = useRef(null);
 
   useEffect(() => {
-    if (getSnackbarHasTextContent(stableTextContent)) {
+    if (getSnackbarHasTextContent(stableTextContent) && !isDisabled) {
       setTimeout(() => giveFocus(focusRef), 50);
     }
-  }, [stableTextContent, focusRef]);
+  }, [stableTextContent, focusRef, isDisabled]);
 
   return focusRef;
 };

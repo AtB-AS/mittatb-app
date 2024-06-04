@@ -43,19 +43,19 @@ export const Snackbar = (snackbarProps: SnackbarProps) => (
     <SnackbarInstance
       {...snackbarProps}
       position="top"
-      disabled={snackbarProps.position !== 'top'}
+      isDisabled={snackbarProps.position !== 'top'}
     />
     <SnackbarInstance
       {...snackbarProps}
       position="bottom"
-      disabled={snackbarProps.position !== 'bottom'}
+      isDisabled={snackbarProps.position !== 'bottom'}
     />
   </>
 );
 
 type SnackbarInstanceProps = SnackbarProps & {
   /** setting this true moves the SnackbarInstance to the hidden position */
-  disabled?: boolean;
+  isDisabled: boolean;
 };
 
 const SnackbarInstance = ({
@@ -64,7 +64,7 @@ const SnackbarInstance = ({
   actionButton,
   isDismissable,
   customVisibleDurationMS,
-  disabled = false,
+  isDisabled,
 }: SnackbarInstanceProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
@@ -72,7 +72,7 @@ const SnackbarInstance = ({
   const stableTextContent = useStableValue(textContent); // avoid triggering useEffects if no text has been changed
 
   const {snackbarIsVisible, hideSnackbar} = useSnackbarIsVisible(
-    disabled,
+    isDisabled,
     stableTextContent,
     customVisibleDurationMS,
   );
@@ -87,7 +87,7 @@ const SnackbarInstance = ({
       ? stablePreviousTextContent
       : stableTextContent;
 
-  const focusRef = useSnackbarScreenReaderFocus(activeTextContent);
+  const focusRef = useSnackbarScreenReaderFocus(isDisabled, activeTextContent);
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   if (!snackbarIsVisible && isScreenReaderEnabled) {

@@ -7,7 +7,7 @@ import {
 import {snackbarAnimationDurationMS} from './use-snackbar-vertical-position-animation';
 
 export const useSnackbarIsVisible = (
-  disabled: boolean,
+  isDisabled: boolean,
   /** Must be stable to avoid triggering the useEffect at wrong times */
   stableTextContent?: SnackbarTextContent,
   customVisibleDurationMS?: number,
@@ -55,7 +55,7 @@ export const useSnackbarIsVisible = (
   const hideSnackbar = () => setSnackbarIsVisible(false);
 
   return {
-    snackbarIsVisible: snackbarIsVisible && !disabled,
+    snackbarIsVisible: snackbarIsVisible && !isDisabled,
     hideSnackbar,
   };
 };
