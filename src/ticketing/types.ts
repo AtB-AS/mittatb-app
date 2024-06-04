@@ -23,15 +23,7 @@ export enum TravelRightDirection {
 export type TravelRight = {
   id: string;
   status: TravelRightStatus;
-  type:
-    | 'PreActivatedSingleTicket'
-    | 'PreActivatedPeriodTicket'
-    | 'CarnetTicket'
-    | 'NightTicket'
-    | 'SingleBoatTicket'
-    | 'PeriodBoatTicket'
-    | 'YouthTicket'
-    | 'UnknownTicket';
+  type: string;
   fareProductRef: string;
   direction?: TravelRightDirection;
 };
@@ -55,7 +47,7 @@ export type CarnetTravelRightUsedAccess = {
 };
 
 export type CarnetTravelRight = NormalTravelRight & {
-  type: 'CarnetTicket';
+  type: string;
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
   usedAccesses: CarnetTravelRightUsedAccess[];
