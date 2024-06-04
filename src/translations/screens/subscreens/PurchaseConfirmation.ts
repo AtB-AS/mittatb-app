@@ -61,7 +61,7 @@ const PurchaseConfirmationTexts = {
         `Billettvarigheit ${validTime} frå oppstart`,
       ),
   },
-  sendingTo: (phoneNumber: string) => 
+  sendingTo: (phoneNumber: string) =>
     _(
       `Sendes til ${phoneNumber}`,
       `Sending to ${phoneNumber}`,
@@ -202,6 +202,16 @@ export default orgSpecificTranslations(PurchaseConfirmationTexts, {
       harbor: {
         messageInHarborZones: _('', '', ''),
       },
+    },
+  },
+  troms: {
+    validityTexts: {
+      harbor: {
+        messageInHarborZones: _('', '', ''),
+      },
+    },
+    travelDate: {
+      now: _('Start nå', 'Starting now', 'Start no'),
     },
   },
 });

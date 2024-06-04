@@ -6,6 +6,9 @@ import SearchPage from '../pageobjects/search.page.ts';
 import TravelsearchOverviewPage from '../pageobjects/travelsearch.overview.page.ts';
 import TravelsearchDetailsPage from '../pageobjects/travelsearch.details.page.ts';
 import NavigationHelper from '../utils/navigation.helper.ts';
+import TravelsearchFilterPage from '../pageobjects/travelsearch.filter.page.js';
+import TimeHelper from '../utils/time.helper.js';
+import {stringToNumArray} from '../utils/utils.js';
 
 describe('Travel search', () => {
   before(async () => {
@@ -31,8 +34,6 @@ describe('Travel search', () => {
      */
 
     try {
-      timeIsCorrect('28 min', 'Times is: 29 minutes');
-
       await ElementHelper.waitForElement('id', 'searchFromButton');
       await FrontPagePage.searchFrom.click();
       await SearchPage.setSearchLocation(departure);
@@ -143,10 +144,167 @@ describe('Travel search', () => {
         noLegs - 1,
       );
       expect(endLocation).toContain(arrival);
+
+      await NavigationHelper.back();
     } catch (errMsg) {
       await AppHelper.screenshot(
         'error_travelsearch_should_have_correct_legs_in_the_details',
       );
+      throw errMsg;
+    }
+  });
+
+  /**
+   * Changing departure time should give correct travel search results
+   */
+  it('should search based on time', async () => {
+    const departure = 'Prinsens gate';
+    const arrival = 'Melhus skysstasjon';
+    const depTimeHr = 21;
+    const depTimeMin = 0;
+
+    try {
+      // Search and get start times of 3 first trip results
+      await ElementHelper.waitForElement('id', 'searchFromButton');
+      await FrontPagePage.searchFrom.click();
+      await SearchPage.setSearchLocation(departure);
+
+      await ElementHelper.waitForElement('id', 'searchToButton');
+      await FrontPagePage.searchTo.click();
+      await SearchPage.setSearchLocation(arrival);
+
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
+      const initStartTime_1: string =
+        await TravelsearchOverviewPage.getStartTime(0);
+      const initStartTime_2: string =
+        await TravelsearchOverviewPage.getStartTime(1);
+      const initStartTime_3: string =
+        await TravelsearchOverviewPage.getStartTime(2);
+
+      // Set new departure time
+      await TravelsearchFilterPage.openTravelSearchTimePicker();
+      await TravelsearchFilterPage.chooseSearchBasedOn('Departure');
+      await TravelsearchFilterPage.openNativeTimePicker();
+      await AppHelper.setTimePickerTime(depTimeHr, depTimeMin);
+      await TravelsearchFilterPage.searchButton.click();
+
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
+
+      const endStartTime_1: string =
+        await TravelsearchOverviewPage.getStartTime(0);
+      const endStartTime_2: string =
+        await TravelsearchOverviewPage.getStartTime(1);
+      const endStartTime_3: string =
+        await TravelsearchOverviewPage.getStartTime(2);
+
+      // Departure times are changed
+      await expect(initStartTime_1).not.toEqual(endStartTime_1);
+      await expect(initStartTime_2).not.toEqual(endStartTime_2);
+      await expect(initStartTime_3).not.toEqual(endStartTime_3);
+
+      // Departure times are after search time
+      expect(
+        TimeHelper.gtTime(
+          depTimeHr,
+          depTimeMin,
+          stringToNumArray(endStartTime_1)[0],
+          stringToNumArray(endStartTime_1)[1],
+        ),
+      ).toBe(true);
+      expect(
+        TimeHelper.gtTime(
+          depTimeHr,
+          depTimeMin,
+          stringToNumArray(endStartTime_2)[0],
+          stringToNumArray(endStartTime_2)[1],
+        ),
+      ).toBe(true);
+      expect(
+        TimeHelper.gtTime(
+          depTimeHr,
+          depTimeMin,
+          stringToNumArray(endStartTime_3)[0],
+          stringToNumArray(endStartTime_3)[1],
+        ),
+      ).toBe(true);
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_travelsearch_departure_time');
+      throw errMsg;
+    }
+  });
+
+  /**
+   * Walking and bike travels are shown separately depending on the travel search
+   */
+  it('should show walk and bike options', async () => {
+    const longDeparture = 'Prinsens gate';
+    const longArrival = 'Melhus skysstasjon';
+    const shortDeparture = 'Prinsens gate';
+    const shortArrival = 'Solsiden';
+
+    try {
+      // Search "long": only bike
+      await ElementHelper.waitForElement('id', 'searchFromButton');
+      await FrontPagePage.searchFrom.click();
+      await SearchPage.setSearchLocation(longDeparture);
+      await ElementHelper.waitForElement('id', 'searchToButton');
+      await FrontPagePage.searchTo.click();
+      await SearchPage.setSearchLocation(longArrival);
+
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
+
+      await expect(TravelsearchOverviewPage.bikeResult).toExist();
+      // "Bike 1 h 30 min"
+      await expect(
+        TimeHelper.isAcceptableMinVariation(
+          await TravelsearchOverviewPage.bikeResultText,
+          30,
+          2,
+        ),
+      ).toBe(true);
+      await expect(TravelsearchOverviewPage.walkResult).not.toExist();
+
+      // Details
+      await TravelsearchOverviewPage.bikeResult.click();
+      await expect(await TravelsearchDetailsPage.hasSingleLeg('bike')).toBe(
+        true,
+      );
+
+      // Reset
+      await NavigationHelper.back();
+      await NavigationHelper.tapMenu('assistant');
+      await NavigationHelper.tapMenu('assistant');
+
+      // Search "short": walk + bike
+      await ElementHelper.waitForElement('id', 'searchFromButton');
+      await FrontPagePage.searchFrom.click();
+      await SearchPage.setSearchLocation(shortDeparture);
+      await ElementHelper.waitForElement('id', 'searchToButton');
+      await FrontPagePage.searchTo.click();
+      await SearchPage.setSearchLocation(shortArrival);
+
+      await TravelsearchOverviewPage.waitForTravelSearchResults();
+
+      await expect(TravelsearchOverviewPage.bikeResult).toExist();
+      await expect(TravelsearchOverviewPage.walkResult).toExist();
+      // "Walk 19 min"
+      await expect(
+        TimeHelper.isAcceptableMinVariation(
+          await TravelsearchOverviewPage.walkResultText,
+          19,
+          2,
+        ),
+      ).toBe(true);
+
+      // Details
+      await TravelsearchOverviewPage.walkResult.click();
+      await expect(await TravelsearchDetailsPage.hasSingleLeg('foot')).toBe(
+        true,
+      );
+
+      await NavigationHelper.back();
+    } catch (errMsg) {
+      await AppHelper.screenshot('error_travelsearch_walk_bike_travels');
       throw errMsg;
     }
   });

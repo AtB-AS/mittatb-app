@@ -30,12 +30,13 @@ type Props = {
 
 export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {t, language} = useTranslation();
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const styles = useStyles();
   const {appTexts} = useFirestoreConfiguration();
   const {flex_ticket_url} = useRemoteConfig();
 
   if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
+
   const description =
     getTextForLanguage(appTexts?.discountInfo, language) ||
     t(PurchaseOverviewTexts.flexDiscount.description);
@@ -47,26 +48,30 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
         <ExpandableSectionItem
           text={t(PurchaseOverviewTexts.flexDiscount.expandableLabel)}
           textType="heading__component"
+          label="new"
           expanded={expanded}
           onPress={setExpanded}
         />
         {expanded && (
           <GenericSectionItem accessibility={{accessible: true}}>
-            <ThemeText>{description}</ThemeText>
+            <ThemeText type="body__secondary" color="secondary">
+              {description}
+            </ThemeText>
           </GenericSectionItem>
         )}
         {expanded &&
-          [...userProfiles].map((u) => {
+          userProfiles.map((u) => {
             const ladder = u.offer.flex_discount_ladder;
             const discountPercent = ladder?.steps[ladder.current].discount;
-            if (!discountPercent) return null;
 
             const userProfileName = getReferenceDataName(u, language);
-            const discountText = t(
-              PurchaseOverviewTexts.flexDiscount.discountPercentage(
-                discountPercent.toFixed(0),
-              ),
-            );
+            const discountText =
+              (discountPercent !== undefined) &&
+              t(
+                PurchaseOverviewTexts.flexDiscount.discountPercentage(
+                  discountPercent.toFixed(0),
+                ),
+              );
             const priceText =
               formatDecimalNumber(
                 u.offer.prices[0].amount_float || 0,
@@ -74,13 +79,15 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 2,
               ) + ' kr';
 
+            const accessibilityLabel = `${userProfileName}, ${discountText ? discountText : ''}, ${priceText}`
+
             return (
               <GenericSectionItem
                 accessibility={{
                   accessible: true,
-                  accessibilityLabel: `${userProfileName}, ${discountText}, ${priceText}`,
+                  accessibilityLabel: accessibilityLabel,
                 }}
-                key={userProfileName}
+                key={u.id}
               >
                 <View style={styles.userProfileDiscountInfo}>
                   <ThemeText type="body__secondary" color="secondary">
@@ -90,18 +97,18 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                       ),
                     )}
                   </ThemeText>
-                  <View style={styles.infoChips}>
-                    <BorderedInfoBox
-                      style={styles.infoChips_first}
-                      type="small"
-                      backgroundColor="background_0"
-                      text={discountText}
-                    />
-                    <BorderedInfoBox
-                      type="small"
-                      backgroundColor="background_0"
-                      text={priceText}
-                    />
+                  <View style={styles.discountInfoContainer}>
+                    {discountText && (
+                      <BorderedInfoBox
+                        style={styles.discountInfo}
+                        type="small"
+                        backgroundColor="background_0"
+                        text={discountText}
+                      />
+                    )}
+                    <ThemeText style={styles.priceInfo} type="body__tertiary" color="primary">
+                      {priceText}
+                    </ThemeText>
                   </View>
                 </View>
               </GenericSectionItem>
@@ -131,6 +138,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  infoChips: {flexDirection: 'row'},
-  infoChips_first: {marginRight: theme.spacings.small},
+  discountInfoContainer: {flexDirection: 'row'},
+  discountInfo: {marginRight: theme.spacings.small},
+  priceInfo: {alignSelf:'center'},
 }));

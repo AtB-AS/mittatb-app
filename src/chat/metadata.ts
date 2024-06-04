@@ -1,4 +1,4 @@
-import Intercom from 'react-native-intercom';
+import Intercom from '@intercom/intercom-react-native';
 import {PlatformOSType} from 'react-native';
 import {PermissionStatus} from 'react-native-permissions';
 import pickBy from 'lodash.pickby';
@@ -26,6 +26,6 @@ export async function updateMetadata(metadata: Partial<Metadata>) {
   };
 
   await Intercom.updateUser({
-    custom_attributes,
+    customAttributes: custom_attributes,
   });
 }

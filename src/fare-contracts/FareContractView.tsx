@@ -22,15 +22,17 @@ import {FareContractTexts, useTranslation} from '@atb/translations';
 import {useAuthState} from '@atb/auth';
 import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useOperatorBenefitsForFareProduct} from '@atb/mobility/use-operator-benefits-for-fare-product';
-import {UsedAccessValidityHeader} from '@atb/fare-contracts/carnet/UsedAccessValidityHeader';
 import {CarnetFooter} from '@atb/fare-contracts/carnet/CarnetFooter';
 import {
   isCanBeConsumedNowFareContract,
   isSentOrReceivedFareContract,
   FareContract,
+  isCanBeActivatedNowFareContract,
 } from '@atb/ticketing';
 import {ConsumeCarnetSectionItem} from './components/ConsumeCarnetSectionItem';
 import {StyleSheet} from '@atb/theme';
+import {ActivateNowSectionItem} from './components/ActivateNowSectionItem';
+import {useIsActivateTicketNowEnabled} from './use-is-activate-now-enabled';
 
 type Props = {
   now: number;
@@ -49,6 +51,7 @@ export const FareContractView: React.FC<Props> = ({
 }) => {
   const {abtCustomerId: currentUserId} = useAuthState();
   const {isInspectable} = useMobileTokenContextState();
+  const isActivateTicketNowEnabled = useIsActivateTicketNowEnabled();
 
   const {t} = useTranslation();
   const styles = useStyles();
@@ -56,10 +59,6 @@ export const FareContractView: React.FC<Props> = ({
   const {
     isCarnetFareContract,
     travelRights,
-    fareContractValidityStatus,
-    fareContractValidFrom,
-    fareContractValidTo,
-    carnetAccessStatus,
     validityStatus,
     validFrom,
     validTo,
@@ -78,7 +77,7 @@ export const FareContractView: React.FC<Props> = ({
   );
 
   const shouldShowBundlingInfo =
-    benefits && benefits.length > 0 && fareContractValidityStatus === 'valid';
+    benefits && benefits.length > 0 && validityStatus === 'valid';
 
   const {tariffZones, userProfiles, preassignedFareProducts} =
     useFirestoreConfiguration();
@@ -105,26 +104,14 @@ export const FareContractView: React.FC<Props> = ({
   return (
     <Section style={styles.section} testID={testID}>
       <GenericSectionItem>
-        {/* TODO: Should remove UsedAccessValidityHeader, and instead only rely on ValidityHeader */}
-        {isCarnetFareContract &&
-        fareContractValidityStatus === 'valid' &&
-        carnetAccessStatus ? (
-          <UsedAccessValidityHeader
-            now={now}
-            status={carnetAccessStatus}
-            validFrom={validFrom}
-            validTo={validTo}
-          />
-        ) : (
-          <ValidityHeader
-            status={fareContractValidityStatus}
-            now={now}
-            createdDate={fareContract.created.getTime()}
-            validFrom={fareContractValidFrom}
-            validTo={fareContractValidTo}
-            fareProductType={preassignedFareProduct?.type}
-          />
-        )}
+        <ValidityHeader
+          status={validityStatus}
+          now={now}
+          createdDate={fareContract.created.getTime()}
+          validFrom={validFrom}
+          validTo={validTo}
+          fareProductType={preassignedFareProduct?.type}
+        />
         <ValidityLine
           status={validityStatus}
           now={now}
@@ -178,6 +165,10 @@ export const FareContractView: React.FC<Props> = ({
       {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
         <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
       )}
+      {isActivateTicketNowEnabled &&
+        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
+          <ActivateNowSectionItem fareContractId={fareContract.id} />
+        )}
     </Section>
   );
 };

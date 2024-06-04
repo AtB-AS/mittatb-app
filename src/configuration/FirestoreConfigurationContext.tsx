@@ -22,6 +22,7 @@ import {
   TariffZone,
   UserProfile,
   MobilityOperatorType,
+  OperatorBenefitIdType,
   FirestoreConfigStatus,
   NotificationConfigType,
 } from './types';
@@ -32,6 +33,7 @@ import {
   mapToFlexibleTransportOption,
   mapToHarborConnectionOverride,
   mapToMobilityOperators,
+  mapToBenefitIdsRequiringValueCode,
   mapToNotificationConfig,
   mapToTransportModeFilterOptions,
   mapToTravelSearchPreferences,
@@ -59,6 +61,7 @@ type ConfigurationContextState = {
   appTexts: AppTexts | undefined;
   configurableLinks: ConfigurableLinksType | undefined;
   mobilityOperators: MobilityOperatorType[] | undefined;
+  benefitIdsRequiringValueCode: OperatorBenefitIdType[] | undefined;
   harborConnectionOverrides: HarborConnectionOverrideType[] | undefined;
   firestoreConfigStatus: FirestoreConfigStatus;
   notificationConfig: NotificationConfigType | undefined;
@@ -95,6 +98,8 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
   const [mobilityOperators, setMobilityOperators] = useState<
     MobilityOperatorType[]
   >([]);
+  const [benefitIdsRequiringValueCode, setBenefitIdsRequiringValueCode] =
+    useState<OperatorBenefitIdType[]>([]);
   const [harborConnectionOverrides, setHarborConnectionOverrides] = useState<
     HarborConnectionOverrideType[]
   >([]);
@@ -179,6 +184,12 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
             setMobilityOperators(mobilityOperators);
           }
 
+          const benefitIdsRequiringValueCode =
+            getBenefitIdsRequiringValueCodeFromSnapshot(snapshot);
+          if (benefitIdsRequiringValueCode) {
+            setBenefitIdsRequiringValueCode(benefitIdsRequiringValueCode);
+          }
+
           const harborConnectionOverrides =
             getHarborConnectionOverridesFromSnapshot(snapshot);
           if (harborConnectionOverrides) {
@@ -216,6 +227,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     setAppTexts(undefined);
     setConfigurableLinks(undefined);
     setMobilityOperators([]);
+    setBenefitIdsRequiringValueCode([]);
     setHarborConnectionOverrides([]);
     setNotificationConfig(undefined);
   };
@@ -243,6 +255,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
       appTexts,
       configurableLinks,
       mobilityOperators,
+      benefitIdsRequiringValueCode,
       harborConnectionOverrides,
       notificationConfig,
       firestoreConfigStatus,
@@ -261,6 +274,7 @@ export const FirestoreConfigurationContextProvider: React.FC = ({children}) => {
     appTexts,
     configurableLinks,
     mobilityOperators,
+    benefitIdsRequiringValueCode,
     harborConnectionOverrides,
     notificationConfig,
     firestoreConfigStatus,
@@ -496,6 +510,10 @@ function getConfigurableLinksFromSnapshot(
   const appA11yStatement = mapLanguageAndTextType(
     urls?.get('appA11yStatement'),
   );
+  const iosStoreListing = mapLanguageAndTextType(urls?.get('iosStoreListing'));
+  const androidStoreListing = mapLanguageAndTextType(
+    urls?.get('androidStoreListing'),
+  );
 
   return {
     ticketingInfo,
@@ -505,6 +523,8 @@ function getConfigurableLinksFromSnapshot(
     flexTransportInfo,
     dataSharingInfo,
     appA11yStatement,
+    iosStoreListing,
+    androidStoreListing,
   };
 }
 
@@ -513,6 +533,17 @@ function getMobilityOperatorsFromSnapshot(
 ): MobilityOperatorType[] | undefined {
   const operators = snapshot.docs.find((doc) => doc.id == 'mobility');
   return mapToMobilityOperators(operators?.get('operators'));
+}
+
+function getBenefitIdsRequiringValueCodeFromSnapshot(
+  snapshot: FirebaseFirestoreTypes.QuerySnapshot,
+): OperatorBenefitIdType[] | undefined {
+  const mobilityConfiguration = snapshot.docs.find(
+    (doc) => doc.id == 'mobility',
+  );
+  return mapToBenefitIdsRequiringValueCode(
+    mobilityConfiguration?.get('benefitIdsRequiringValueCode'),
+  );
 }
 
 function getHarborConnectionOverridesFromSnapshot(

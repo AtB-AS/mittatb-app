@@ -6,6 +6,7 @@ import {differenceInMinutes} from 'date-fns';
 import {CustomerProfile} from '.';
 import {setupFirestoreListeners} from './firestore';
 import {useResubscribeToggle} from '@atb/utils/use-resubscribe-toggle';
+import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 type TicketingReducerState = {
   fareContracts: FareContract[];
@@ -13,12 +14,10 @@ type TicketingReducerState = {
   reservations: Reservation[];
   rejectedReservations: Reservation[];
   isRefreshingFareContracts: boolean;
-  errorRefreshingFareContracts: boolean;
   customerProfile: CustomerProfile | undefined;
 };
 
 type TicketingReducerAction =
-  | {type: 'SET_ERROR_REFRESHING_FARE_CONTRACTS'}
   | {
       type: 'UPDATE_FARE_CONTRACTS';
       fareContracts: FareContract[];
@@ -50,13 +49,6 @@ const ticketingReducer: TicketingReducer = (
   action,
 ): TicketingReducerState => {
   switch (action.type) {
-    case 'SET_ERROR_REFRESHING_FARE_CONTRACTS': {
-      return {
-        ...prevState,
-        isRefreshingFareContracts: false,
-        errorRefreshingFareContracts: true,
-      };
-    }
     case 'UPDATE_FARE_CONTRACTS': {
       const currentFareContractOrderIds = action.fareContracts.map(
         (fc) => fc.orderId,
@@ -133,7 +125,6 @@ const initialReducerState: TicketingReducerState = {
   reservations: [],
   rejectedReservations: [],
   isRefreshingFareContracts: false,
-  errorRefreshingFareContracts: false,
   customerProfile: undefined,
 };
 
@@ -147,18 +138,31 @@ export const TicketingContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     if (userId && enable_ticketing) {
+      logToBugsnag(
+        `Setting up ticketing Firestore listeners for user ${userId}`,
+      );
       const removeListeners = setupFirestoreListeners(userId, {
         fareContracts: {
           onSnapshot: (fareContracts) =>
             dispatch({type: 'UPDATE_FARE_CONTRACTS', fareContracts}),
-          onError: () =>
-            dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACTS'}),
+          onError: (err) =>
+            notifyBugsnag(err, {
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for fare contracts',
+              },
+            }),
         },
         sentFareContracts: {
           onSnapshot: (fareContracts) =>
             dispatch({type: 'UPDATE_SENT_FARE_CONTRACTS', fareContracts}),
-          onError: () =>
-            dispatch({type: 'SET_ERROR_REFRESHING_FARE_CONTRACTS'}),
+          onError: (err) =>
+            notifyBugsnag(err, {
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for sent fare contracts',
+              },
+            }),
         },
         reservations: {
           onSnapshot: (reservations) =>
@@ -171,7 +175,13 @@ export const TicketingContextProvider: React.FC = ({children}) => {
                   !isOlderThanAnHour(r.created),
               ),
             }),
-          onError: (err) => console.error(err),
+          onError: (err) =>
+            notifyBugsnag(err, {
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for reservations',
+              },
+            }),
         },
         rejectedReservations: {
           onSnapshot: (rejectedReservations) =>
@@ -179,14 +189,26 @@ export const TicketingContextProvider: React.FC = ({children}) => {
               type: 'UPDATE_REJECTED_RESERVATIONS',
               rejectedReservations: rejectedReservations,
             }),
-          onError: (err) => console.error(err),
+          onError: (err) =>
+            notifyBugsnag(err, {
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for rejected reservations',
+              },
+            }),
         },
         // TODO: Temporary hack to get travelcard ID before we have tokens. Should be
         // replaced when tokens are implemented.
         customer: {
           onSnapshot: (customerProfile) =>
             dispatch({type: 'UPDATE_CUSTOMER_PROFILE', customerProfile}),
-          onError: (err) => console.error(err),
+          onError: (err) =>
+            notifyBugsnag(err, {
+              metadata: {
+                description:
+                  'Error setting up Firestore listener for customer profile',
+              },
+            }),
         },
       });
 

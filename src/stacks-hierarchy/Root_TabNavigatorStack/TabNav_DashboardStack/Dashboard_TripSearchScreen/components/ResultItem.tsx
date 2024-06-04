@@ -565,7 +565,7 @@ const FootLeg = ({leg, nextLeg}: {leg: Leg; nextLeg?: Leg}) => {
       : t(TripSearchTexts.results.resultItem.footLeg.walkLabel(walkDuration));
 
   return (
-    <View style={styles.walkContainer} testID="fLeg">
+    <View style={styles.walkContainer} testID="footLeg">
       <ThemeIcon accessibilityLabel={a11yText} svg={Walk} />
       <Text style={styles.walkDuration}>{secondsToMinutes(leg.duration)}</Text>
     </View>
@@ -587,7 +587,7 @@ const TransportationLeg = ({
       isFlexible={isLineFlexibleTransport(leg.line)}
       lineNumber={leg.line?.publicCode}
       type="standard"
-      testID="trLeg"
+      testID={`${leg.mode}Leg`}
     />
   );
 };

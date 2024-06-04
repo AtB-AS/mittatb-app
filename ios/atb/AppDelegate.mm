@@ -6,7 +6,7 @@
 
 #import <Bugsnag/Bugsnag.h>
 #import <Firebase.h>
-@import Intercom;
+#import <IntercomModule.h>
 
 #import "RNBootSplash.h"
 
@@ -51,7 +51,7 @@ static void InitializeFlipper(UIApplication *application) {
   NSString* intercomAppId = [intercomDict objectForKey:@"IntercomAppId"];
 
   if ([intercomApiKey length] != 0 && [intercomAppId length] != 0) {
-    [Intercom setApiKey:intercomApiKey forAppId:intercomAppId];
+    [IntercomModule initialize:intercomApiKey withAppId:intercomAppId];
   }
 
   NSString* bugsnagApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"BugsnagAPIKey"];

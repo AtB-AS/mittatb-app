@@ -90,7 +90,6 @@ class OnboardingPage {
     try {
       await ElementHelper.waitForElement('id', 'useAppAnonymouslyButton');
       await this.useAppAnonymously.click();
-      //await AppHelper.pause(10000, true);
       await ElementHelper.waitForElement('id', 'acceptLimitationsButton');
       await this.acceptLimitations.click();
       await ElementHelper.waitForElement(

@@ -22,13 +22,18 @@ if [[
 
     exit 1
 else
-    mkdir -p bundle
+
+    BUNDLE_DIR="android/app/build/generated/assets/createBundle$(echo ${APP_FLAVOR^}${APP_ENVIRONMENT^})JsAndAssets"
+    SOURCEMAP_DIR="android/app/build/generated/sourcemaps/react/$(echo $APP_FLAVOR${APP_ENVIRONMENT^})"
+
+    mkdir -p $BUNDLE_DIR
+    mkdir -p $SOURCEMAP_DIR
+
+    BUNDLE_PATH="$BUNDLE_DIR/index.android.bundle"
+    SOURCEMAP_PATH="$SOURCEMAP_DIR/index.android.bundle.map"
 
     echo "Re-generate bundle"
-    npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output bundle/temp.bundle --sourcemap-output bundle/temp.bundle.map
-
-    echo "Compile JS to Hermes Bytecode"
-    ./node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -emit-binary -source-map=bundle/temp.bundle.map -output-source-map -out bundle/index.android.bundle bundle/temp.bundle
+    npx react-native bundle --platform android --dev false --reset-cache --entry-file index.js --bundle-output $BUNDLE_PATH --sourcemap-output $SOURCEMAP_PATH
 
     # Temporary brew update until Ubuntu runner image uses brew >= 4.0.19
     brew update
@@ -41,7 +46,7 @@ else
 
     echo "Replace bundle in decompiled APK"
     rm decompiled-apk/assets/index.android.bundle
-    cp bundle/index.android.bundle decompiled-apk/assets/
+    cp $BUNDLE_PATH decompiled-apk/assets/
 
     echo "Set version code to build id: $BUILD_ID"
     yq e ".versionInfo.versionCode = env(BUILD_ID)" -i decompiled-apk/apktool.yml

@@ -28,7 +28,6 @@ import {
   useTranslation,
 } from '@atb/translations';
 import {useMobileTokenContextState} from '@atb/mobile-token';
-import {UsedAccessStatus} from './carnet/types';
 import {useCallback, useMemo} from 'react';
 import {useAuthState} from '@atb/auth';
 
@@ -37,7 +36,6 @@ export type RelativeValidityStatus = 'upcoming' | 'valid' | 'expired';
 export type ValidityStatus =
   | RelativeValidityStatus
   | 'reserving'
-  | 'unknown'
   | 'refunded'
   | 'cancelled'
   | 'inactive'
@@ -69,29 +67,45 @@ export function getValidityStatus(
   if (fc.state === FareContractState.Refunded) return 'refunded';
   if (fc.state === FareContractState.Cancelled) return 'cancelled';
   if (isSentFareContract) return 'sent';
-  const firstTravelRight = fc.travelRights.filter(
-    isCarnet(fc) ? isCarnetTravelRight : isPreActivatedTravelRight,
-  )[0];
-  return getRelativeValidity(
-    now,
-    firstTravelRight.startDateTime.getTime(),
-    firstTravelRight.endDateTime.getTime(),
-  );
+
+  if (isCarnet(fc)) {
+    const usedAccesses = flattenCarnetTravelRightAccesses(
+      fc.travelRights as CarnetTravelRight[],
+    ).usedAccesses;
+    return getLastUsedAccess(now, usedAccesses).status;
+  } else {
+    const firstTravelRight = fc.travelRights.filter(
+      isPreActivatedTravelRight,
+    )[0];
+    return getRelativeValidity(
+      now,
+      firstTravelRight.startDateTime.getTime(),
+      firstTravelRight.endDateTime.getTime(),
+    );
+  }
 }
 
 export const useSortFcOrReservationByValidityAndCreation = (
   now: number,
   fcOrReservations: (Reservation | FareContract)[],
-  getFareContractStatus: (now: number, fc: FareContract, currentUserId?: string) => ValidityStatus | undefined,
+  getFareContractStatus: (
+    now: number,
+    fc: FareContract,
+    currentUserId?: string,
+  ) => ValidityStatus | undefined,
 ): (FareContract | Reservation)[] => {
-  const {abtCustomerId: currentUserId} = useAuthState();  
+  const {abtCustomerId: currentUserId} = useAuthState();
   const getFcOrReservationOrder = useCallback(
     (fcOrReservation: FareContract | Reservation) => {
       const isFareContract = 'travelRights' in fcOrReservation;
       // Make reservations go first, then fare contracts
       if (!isFareContract) return 1;
 
-      const validityStatus = getFareContractStatus(now, fcOrReservation, currentUserId);
+      const validityStatus = getFareContractStatus(
+        now,
+        fcOrReservation,
+        currentUserId,
+      );
       return validityStatus === 'valid' ? 1 : 0;
     },
     [getFareContractStatus, now, currentUserId],
@@ -250,10 +264,6 @@ export const getFareProductRef = (fc: FareContract) =>
 type FareContractInfoProps = {
   isCarnetFareContract: boolean;
   travelRights: NormalTravelRight[];
-  fareContractValidityStatus: ValidityStatus;
-  fareContractValidFrom: number;
-  fareContractValidTo: number;
-  carnetAccessStatus?: UsedAccessStatus;
   validityStatus: ValidityStatus;
   validFrom: number;
   validTo: number;
@@ -279,7 +289,7 @@ export function getFareContractInfo(
   const fareContractValidFrom = firstTravelRight.startDateTime.getTime();
   const fareContractValidTo = firstTravelRight.endDateTime.getTime();
 
-  const fareContractValidityStatus = getValidityStatus(now, fc, isSent);
+  const validityStatus = getValidityStatus(now, fc, isSent);
 
   const carnetTravelRightAccesses = isCarnetFareContract
     ? flattenCarnetTravelRightAccesses(travelRights as CarnetTravelRight[])
@@ -296,14 +306,6 @@ export function getFareContractInfo(
     ? lastUsedAccess.validTo
     : fareContractValidTo;
 
-  const validityStatus = lastUsedAccess
-    ? isSent
-      ? 'sent'
-      : lastUsedAccess.status
-    : fareContractValidityStatus;
-  // TODO: Carnet access status should be part of validity status
-  const carnetAccessStatus = isSent ? 'inactive' : lastUsedAccess?.status;
-
   const maximumNumberOfAccesses =
     carnetTravelRightAccesses?.maximumNumberOfAccesses;
   const numberOfUsedAccesses = carnetTravelRightAccesses?.numberOfUsedAccesses;
@@ -311,10 +313,6 @@ export function getFareContractInfo(
   return {
     isCarnetFareContract,
     travelRights,
-    fareContractValidityStatus,
-    fareContractValidFrom,
-    fareContractValidTo,
-    carnetAccessStatus,
     validityStatus,
     validFrom,
     validTo,
@@ -323,6 +321,7 @@ export function getFareContractInfo(
   };
 }
 
+type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
 type LastUsedAccessState = {
   status: UsedAccessStatus;
   validFrom: number | undefined;

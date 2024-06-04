@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk, fram]
+        org: [atb, nfk, fram, troms]
     environment: ${{ matrix.org }}
     timeout-minutes: 180
     runs-on: ubuntu-latest
@@ -17,7 +17,8 @@ jobs:
       - name: Check if release tag is org specific and exit for other orgs
         if: ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') ||
           (contains(github.ref, 'nfk') && matrix.org != 'nfk') ||
-          (contains(github.ref, 'fram') && matrix.org != 'fram') }}
+          (contains(github.ref, 'fram') && matrix.org != 'fram') ||
+          (contains(github.ref, 'troms') && matrix.org != 'troms') }}
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v1
@@ -77,7 +78,7 @@ jobs:
           KEY_PASS: ${{ secrets.KEYSTORE_KEY_PASS }}
           KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
       - name: Run fastlane build AAB
-        if: matrix.org == 'fram'
+        if: (matrix.org == 'fram') || (matrix.org == 'troms')
         run: bundle exec fastlane android build_aab
         env:
           KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
@@ -92,7 +93,7 @@ jobs:
           GOOGLE_PLAY_SERVICE_ACCOUNT_PATH: google-play-service-account.json
           ANDROID_PACKAGE_NAME: ${{ env.ANDROID_APPLICATION_ID }}
       - name: Distrubute AAB to Google Play Internal Testing
-        if: matrix.org == 'fram'
+        if: (matrix.org == 'fram') || (matrix.org == 'troms')
         run: |
           echo ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT}} | base64 --decode > google-play-service-account.json
           bundle exec fastlane android playstore_internal_aab

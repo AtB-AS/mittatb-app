@@ -159,19 +159,38 @@ export function hasShortWaitTime(legs: Leg[]) {
     .some((waitTime) => timeIsShort(waitTime));
 }
 
-export function hasShortWaitTimeAndNotGuaranteedCorrespondence(legs: Leg[]) {
-  return iterateWithNext(legs)
-    .map((pair) => {
-      if (pair.current.interchangeTo?.guaranteed) {
-        return 0;
+export function hasShortWaitTimeAndNotGuaranteedCorrespondence(
+  legs: Leg[],
+): boolean {
+  return legs.reduce<{
+    conclusion: boolean;
+    prevEndTime?: Date;
+    prevInterchangeGuaranteed?: boolean;
+  }>(
+    (state, leg) => {
+      if (state.conclusion) return state;
+
+      if (leg.mode == 'foot') {
+        return {...state, prevEndTime: leg.expectedEndTime};
       }
-      return differenceInSeconds(
-        parseDateIfString(pair.next.expectedStartTime),
-        parseDateIfString(pair.current.expectedEndTime),
+
+      const waitTime = differenceInSeconds(
+        parseDateIfString(leg.expectedStartTime),
+        parseDateIfString(state.prevEndTime),
       );
-    })
-    .filter((waitTime) => waitTime > 0)
-    .some((waitTime) => timeIsShort(waitTime));
+
+      if (timeIsShort(waitTime) && state.prevInterchangeGuaranteed === false) {
+        return {conclusion: true};
+      }
+
+      return {
+        ...state,
+        prevEndTime: leg.expectedEndTime,
+        prevInterchangeGuaranteed: leg.interchangeTo?.guaranteed || false,
+      };
+    },
+    {conclusion: false},
+  ).conclusion;
 }
 
 function parseDateIfString(date: any): Date {

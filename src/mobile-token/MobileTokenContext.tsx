@@ -38,6 +38,7 @@ import {
   useLoadNativeTokenQuery,
 } from './hooks/use-load-native-token-query';
 import {wipeToken} from '@atb/mobile-token/helpers';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
 
@@ -82,8 +83,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
 
   const {token_timeout_in_seconds} = useRemoteConfig();
   const mobileTokenEnabled = hasEnabledMobileToken();
+  const {enable_intercom} = useRemoteConfig();
 
-  const [isTimeout, setIsTimout] = useState(false);
+  const [isTimeout, setIsTimeout] = useState(false);
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   useEffect(() => setIsLoggingOut(false), [userId]);
@@ -95,7 +97,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     !isLoggingOut;
 
   const {data: nativeToken, status: nativeTokenStatus} =
-    useLoadNativeTokenQuery(enabled, userId);
+    useLoadNativeTokenQuery(enabled, userId, enable_intercom);
 
   const {data: remoteTokens, status: remoteTokensStatus} =
     useListRemoteTokensQuery(enabled, nativeToken);
@@ -109,29 +111,30 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   }, [queryClient, nativeToken?.tokenId]);
 
   useEffect(() => {
-    if (enabled && nativeTokenStatus === 'loading') {
+    if (nativeTokenStatus === 'loading') {
       cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        setIsTimout(true);
+        setIsTimeout(true);
 
-        Bugsnag.notify(
+        notifyBugsnag(
           new Error(
             `Token loading timed out after ${token_timeout_in_seconds} seconds`,
           ),
-          (event) => {
-            event.addMetadata('token', {
+          {
+            errorGroupHash: 'TokenLoadingTimeoutError',
+            metadata: {
               description: 'Native and remote tokens took too long to load.',
-            });
+            },
           },
         );
       }, token_timeout_in_seconds);
     } else {
       // We've finished with remote tokens. Cancel timeout notification.
       cancelTimeoutHandler?.();
-      setIsTimout(false);
+      setIsTimeout(false);
     }
-  }, [enabled, nativeTokenStatus, token_timeout_in_seconds]);
+  }, [nativeTokenStatus, token_timeout_in_seconds]);
 
   useInterval(
     () => checkRenewMutate({token: nativeToken, traceId: uuid()}),

@@ -10,15 +10,17 @@ import {
 import {Token} from '@atb/mobile-token/types';
 
 import {v4 as uuid} from 'uuid';
+import {useAuthState} from "@atb/auth";
 
 export const LIST_REMOTE_TOKENS_QUERY_KEY = 'listRemoteTokens';
 
 export const useListRemoteTokensQuery = (
   enabled: boolean,
   nativeToken?: ActivatedToken,
-) =>
-  useQuery({
-    queryKey: [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY],
+) => {
+  const {userId} = useAuthState();
+  return useQuery({
+    queryKey: [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY, userId],
     queryFn: () => tokenService.listTokens(uuid()),
     enabled,
     select: (tokens) =>
@@ -32,3 +34,4 @@ export const useListRemoteTokensQuery = (
         }),
       ),
   });
+};

@@ -58,7 +58,7 @@ function useNotificationColor(color?: NotificationColor): string | undefined {
   if (typeof color !== 'string') {
     return color.background;
   } else if (isStatusColor(color)) {
-    return theme.static.status[color].background;
+    return theme.status[color].primary.background;
   } else if (isStaticColor(color)) {
     return flatStaticColors[themeName][color].background;
   } else if (isInteractiveColor(color)) {

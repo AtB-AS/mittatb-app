@@ -26,7 +26,7 @@ export function MessageSectionItem({
   ...props
 }: Props) {
   const {topContainer} = useSectionItem(props);
-  const styles = useStyles();
+  const styles = useStyles(messageType)();
   const {theme} = useTheme();
   const a11yLabel = useA11yLabel(
     messageType,
@@ -35,7 +35,7 @@ export function MessageSectionItem({
     onPressConfig?.text,
   );
 
-  const themeColor = theme.static.status[messageType];
+  const themeColor = theme.status[messageType].secondary;
 
   const onPress =
     onPressConfig &&
@@ -51,11 +51,7 @@ export function MessageSectionItem({
       accessible={true}
       accessibilityRole={accessibilityRole}
       accessibilityLabel={a11yLabel}
-      style={[
-        topContainer,
-        {backgroundColor: themeColor.background},
-        styles.container,
-      ]}
+      style={[topContainer, styles.container]}
     >
       <ThemeIcon
         style={styles.icon}
@@ -103,10 +99,16 @@ const useA11yLabel = (
   `;
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
-  container: {flexDirection: 'row'},
-  icon: {marginRight: theme.spacings.medium},
-  textContent: {flex: 1},
-  title: {marginBottom: theme.spacings.small},
-  linkText: {marginTop: theme.spacings.medium},
-}));
+const useStyles = (type: Statuses) =>
+  StyleSheet.createThemeHook((theme) => ({
+    container: {
+      backgroundColor: theme.status[type].secondary.background,
+      flexDirection: 'row',
+      borderWidth: theme.border.width.medium,
+      borderColor: theme.status[type].primary.background,
+    },
+    icon: {marginRight: theme.spacings.medium},
+    textContent: {flex: 1},
+    title: {marginBottom: theme.spacings.small},
+    linkText: {marginTop: theme.spacings.medium},
+  }));

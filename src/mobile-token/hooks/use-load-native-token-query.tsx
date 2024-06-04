@@ -19,24 +19,26 @@ import {
   MOBILE_TOKEN_QUERY_KEY,
 } from '../utils';
 import {updateMetadata} from '@atb/chat/metadata';
-import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {logToBugsnag} from '@atb/utils/bugsnag-utils';
 import {wipeToken} from '@atb/mobile-token/helpers';
+import Bugsnag from '@bugsnag/react-native';
 
 export const LOAD_NATIVE_TOKEN_QUERY_KEY = 'loadNativeToken';
 export const useLoadNativeTokenQuery = (
   enabled: boolean,
   userId: string | undefined,
+  intercomEnabled: boolean,
 ) =>
   useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, LOAD_NATIVE_TOKEN_QUERY_KEY, userId],
     queryFn: async () => {
       const traceId = uuid();
       try {
-        const token = await loadNativeToken(userId!, traceId);
-        logSuccess(token);
+        const token = await loadNativeToken(userId!, traceId, intercomEnabled);
+        logSuccess(token, intercomEnabled);
         return token;
       } catch (err: any) {
-        logError(err, traceId);
+        logError(err, traceId, intercomEnabled);
         throw err;
       }
     },
@@ -59,8 +61,12 @@ export const useLoadNativeTokenQuery = (
  * found that breaking it up into smaller parts made it even more hard to
  * follow what is happening.
  */
-const loadNativeToken = async (userId: string, traceId: string) => {
-  logToBugsnag(`Loading mobile token state for user ${userId}`);
+const loadNativeToken = async (
+  userId: string,
+  traceId: string,
+  intercomEnabled: boolean,
+) => {
+  Bugsnag.leaveBreadcrumb(`Loading mobile token state for user ${userId}`);
 
   /*
     Check if there has been a user change.
@@ -77,7 +83,7 @@ const loadNativeToken = async (userId: string, traceId: string) => {
       const errHandling = getSdkErrorHandlingStrategy(err);
       switch (errHandling) {
         case 'reset':
-          logError(err, traceId);
+          logError(err, traceId, intercomEnabled);
           await wipeToken(getSdkErrorTokenIds(err), traceId);
           break;
         case 'unspecified':
@@ -127,25 +133,38 @@ const loadNativeToken = async (userId: string, traceId: string) => {
     token = await mobileTokenClient.create(traceId);
   }
   await storage.set('@ATB_last_mobile_token_user', userId!);
+  if (intercomEnabled) {
+    updateMetadata({
+      'AtB-Mobile-Token-Id': token.tokenId,
+      'AtB-Mobile-Token-Status': 'success',
+      'AtB-Mobile-Token-Error-Correlation-Id': undefined,
+    });
+  }
   return token;
 };
 
-const logSuccess = (token: ActivatedToken) => {
-  updateMetadata({
-    'AtB-Mobile-Token-Id': token.tokenId,
-    'AtB-Mobile-Token-Status': 'success',
-    'AtB-Mobile-Token-Error-Correlation-Id': undefined,
-  });
+const logSuccess = (token: ActivatedToken, intercomEnabled: boolean) => {
+  if (intercomEnabled) {
+    updateMetadata({
+      'AtB-Mobile-Token-Id': token.tokenId,
+      'AtB-Mobile-Token-Status': 'success',
+      'AtB-Mobile-Token-Error-Correlation-Id': undefined,
+    });
+  }
 };
 
-const logError = (err: Error, traceId: string) => {
-  updateMetadata({
-    'AtB-Mobile-Token-Id': undefined,
-    'AtB-Mobile-Token-Status': 'error',
-    'AtB-Mobile-Token-Error-Correlation-Id': traceId,
-  });
-  notifyBugsnag(err, {
-    traceId,
-    description: 'Error loading mobile token state',
+const logError = (err: Error, traceId: string, intercomEnabled: boolean) => {
+  if (intercomEnabled) {
+    updateMetadata({
+      'AtB-Mobile-Token-Id': undefined,
+      'AtB-Mobile-Token-Status': 'error',
+      'AtB-Mobile-Token-Error-Correlation-Id': traceId,
+    });
+  }
+  Bugsnag.notify(err, (event) => {
+    event.addMetadata('token', {
+      traceId,
+      description: 'Error loading mobile token state',
+    });
   });
 };

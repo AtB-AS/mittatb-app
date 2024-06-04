@@ -2,7 +2,11 @@ import {FullScreenHeader, useTicketInfo} from '@atb/components/screen-header';
 import {DetailsContent} from '@atb/fare-contracts';
 import {useApplePassPresentationSuppression} from '@atb/suppress-pass-presentation';
 import {StyleSheet} from '@atb/theme';
-import {FareContractTexts, useTranslation} from '@atb/translations';
+import {
+  FareContractTexts,
+  TicketingTexts,
+  useTranslation,
+} from '@atb/translations';
 import React from 'react';
 import {ScrollView, View} from 'react-native';
 import {RootStackScreenProps} from '../stacks-hierarchy/navigation-types';
@@ -11,6 +15,7 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {useAnalytics} from '@atb/analytics';
 import {MapFilterType} from '@atb/components/map';
 import {useAuthState} from '@atb/auth';
+import {ErrorBoundary} from '@atb/error-boundary';
 
 type Props = RootStackScreenProps<'Root_FareContractDetailsScreen'>;
 
@@ -76,14 +81,22 @@ export function Root_FareContractDetailsScreen({navigation, route}: Props) {
       />
       <ScrollView contentContainerStyle={styles.content}>
         {fareContract && (
-          <DetailsContent
-            fareContract={fareContract}
-            preassignedFareProduct={preassignedFareProduct}
-            now={serverNow}
-            isSentFareContract={isSentFareContract}
-            onReceiptNavigate={onReceiptNavigate}
-            onNavigateToMap={onNavigateToMap}
-          />
+          <ErrorBoundary
+            message={t(
+              TicketingTexts.scrollView.errorLoadingTicket(
+                fareContract.orderId,
+              ),
+            )}
+          >
+            <DetailsContent
+              fareContract={fareContract}
+              preassignedFareProduct={preassignedFareProduct}
+              now={serverNow}
+              isSentFareContract={isSentFareContract}
+              onReceiptNavigate={onReceiptNavigate}
+              onNavigateToMap={onNavigateToMap}
+            />
+          </ErrorBoundary>
         )}
       </ScrollView>
     </View>

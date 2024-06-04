@@ -72,13 +72,6 @@ export const ValidityLine = (props: Props): ReactElement => {
           <SectionSeparator />
         </View>
       );
-    case 'unknown':
-      return (
-        <LineWithVerticalBars
-          backgroundColor={theme.static.background.background_0.background}
-          lineColor={lineColor}
-        />
-      );
   }
 };
 

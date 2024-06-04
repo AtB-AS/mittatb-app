@@ -22,7 +22,6 @@ export const FareContractStatusSymbol = ({
         <ThemeIcon
           svg={TicketInvalid}
           colorType="error"
-          size="large"
           accessibilityLabel={t(
             TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}
@@ -33,7 +32,6 @@ export const FareContractStatusSymbol = ({
         <ThemeIcon
           svg={Time}
           colorType="primary"
-          size="large"
           accessibilityLabel={t(
             TicketingTexts.ticketStatusSymbolA11yLabel[status],
           )}
@@ -59,7 +57,6 @@ export const FareContractStatusSymbol = ({
         />
       );
     case 'reserving':
-    case 'unknown':
     default:
       return null;
   }

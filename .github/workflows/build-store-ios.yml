@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [atb, nfk, fram]
+        org: [atb, nfk, fram, troms]
     environment: ${{ matrix.org }}
     timeout-minutes: 360
     runs-on: macOS-13
@@ -17,7 +17,8 @@ jobs:
       - name: Check if release tag is org specific and exit for other orgs
         if: ${{ (contains(github.ref, 'atb') && matrix.org != 'atb') ||
           (contains(github.ref, 'nfk') && matrix.org != 'nfk') ||
-          (contains(github.ref, 'fram') && matrix.org != 'fram') }}
+          (contains(github.ref, 'fram') && matrix.org != 'fram') ||
+          (contains(github.ref, 'troms') && matrix.org != 'troms') }}
         run: exit 1
       - name: Checkout project
         uses: actions/checkout@v3

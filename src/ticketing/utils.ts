@@ -89,6 +89,13 @@ export function isValidRightNowFareContract(
   return false;
 }
 
+export function willBeValidInTheFutureTravelRight(
+  travelRight: PreActivatedTravelRight,
+  now: number,
+): boolean {
+  return travelRight.startDateTime.getTime() > now;
+}
+
 export function isSentOrReceivedFareContract(fc: FareContract) {
   return fc.customerAccountId !== fc.purchasedBy;
 }
@@ -182,15 +189,24 @@ export function isCanBeConsumedNowFareContract(
   if (!isCarnet(f)) return false;
   const travelRights = f.travelRights.filter(isCarnetTravelRight);
 
-  // @TODO: This is a temporary limitation because of issues with consumption of
-  // carnets with more than one travel right. Should be removed once there is a
-  // solution for this in the backend.
-  if (travelRights.length > 1) return false;
-
   return (
     hasUsableCarnetTravelRight(travelRights, now) &&
     !hasActiveCarnetTravelRight(travelRights, now)
   );
+}
+
+export function isCanBeActivatedNowFareContract(
+  f: FareContract,
+  now: number,
+  currentUserId: string | undefined,
+) {
+  if (f.customerAccountId !== currentUserId) return false;
+  if (!isOrWillBeActivatedFareContract(f)) return false;
+  if (isCarnet(f)) return false;
+  const travelRights = f.travelRights
+    .filter(isPreActivatedTravelRight)
+    .filter((tr) => willBeValidInTheFutureTravelRight(tr, now));
+  return travelRights.length > 0;
 }
 
 export const filterActiveOrCanBeUsedFareContracts = (

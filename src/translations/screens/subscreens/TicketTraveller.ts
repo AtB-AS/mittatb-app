@@ -44,6 +44,13 @@ const SpecificExtensions = orgSpecificTranslations(SpecificExtensionsInternal, {
     periodStudent: _('', '', ''),
     periodSenior: _('', '', ''),
   },
+  troms: {
+    singleChild: _('', '', ''),
+    periodAdult: _('', '', ''),
+    periodChild: _('', '', ''),
+    periodStudent: _('', '', ''),
+    periodSenior: _('', '', ''),
+  },
 });
 
 function specificOverrides(

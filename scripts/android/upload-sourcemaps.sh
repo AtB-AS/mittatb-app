@@ -4,22 +4,20 @@ if [[
     -z "${BUGSNAG_API_KEY}"
     || -z "${BUILD_ID}"
     || -z "${APP_VERSION}"
+    || -z "${APP_FLAVOR}"
    ]]; then
     echo "Argument error!"
-    echo "Expected three env variables:
-  - BUGSNAG_API_KEY
+    echo "Expected env variables:
   - APP_VERSION
-  - BUILD_ID"
+  - BUILD_ID
+  - APP_FLAVOR"
 
     exit 1
 else
-echo "Generating and uploading Android source maps"
-    npx bugsnag-source-maps upload-react-native \
-        --api-key=$BUGSNAG_API_KEY \
-        --app-version=$APP_VERSION \
-        --app-version-code=$BUILD_ID \
-        --platform=android \
-        --bundle=bundle/index.android.bundle \
-        --source-map=bundle/index.android.bundle.map \
-        --overwrite
+    echo "Uploading Android source maps"
+    npx bugsnag-cli upload react-native-android \
+      --version-name=$APP_VERSION \
+      --version-code=$BUILD_ID \
+      --api-key=$BUGSNAG_API_KEY \
+      --variant=$(echo $APP_FLAVOR${APP_ENVIRONMENT^})
 fi

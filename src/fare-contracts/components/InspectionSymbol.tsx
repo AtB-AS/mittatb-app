@@ -47,7 +47,7 @@ export const InspectionSymbol = ({
 
   const themeColor = isInspectable
     ? getTransportationColor(themeName, transportColor)
-    : theme.static.status['warning'];
+    : theme.status['warning'].primary;
 
   if (mobileTokenStatus === 'loading') {
     return <ActivityIndicator size="large" />;
@@ -171,7 +171,7 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     overflow: 'hidden',
     alignSelf: 'center',
     borderRadius: 1000,
-    borderColor: theme.static.status.warning.background,
+    borderColor: theme.status.warning.primary.background,
     borderWidth: 5,
   },
   symbolContent: {

@@ -27,6 +27,7 @@ export type OfferSearchParams = SearchParams &
   (ZoneOfferSearchParams | StopPlaceOfferSearchParams);
 
 type SearchParams = {
+  is_on_behalf_of: boolean;
   travellers: Traveller[];
   products: string[];
   travel_date?: string;
@@ -84,6 +85,18 @@ export async function cancelRecurringPayment(paymentId: number) {
 export async function consumeCarnet(fareContractId: string) {
   const url = `ticket/v4/consume`;
   const response = await client.post<void>(
+    url,
+    {
+      fareContractId,
+    },
+    {authWithIdToken: true},
+  );
+  return response.data;
+}
+
+export async function activateFareContractNow(fareContractId: string) {
+  const url = `ticket/v4/start-time`;
+  const response = await client.put<void>(
     url,
     {
       fareContractId,

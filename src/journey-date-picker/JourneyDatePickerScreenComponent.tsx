@@ -85,8 +85,16 @@ export const JourneyDatePickerScreenComponent = ({
 
         {option !== 'now' && (
           <Section style={styles.section} testID="dateTimePickerSection">
-            <DateInputSectionItem value={dateString} onChange={setDate} />
-            <TimeInputSectionItem value={timeString} onChange={setTime} />
+            <DateInputSectionItem
+              value={dateString}
+              onChange={setDate}
+              testID="datePicker"
+            />
+            <TimeInputSectionItem
+              value={timeString}
+              onChange={setTime}
+              testID="timePicker"
+            />
           </Section>
         )}
 

@@ -66,7 +66,7 @@ export function ProductSelectionByAlias({
             <ProductAliasChip
               color={color}
               text={text}
-              selected={selectedProduct == fp}
+              selected={selectedProduct.id === fp.id}
               onPress={() => setSelectedProduct(fp)}
               key={i}
             />

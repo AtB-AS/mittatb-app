@@ -27,10 +27,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@atb-as/config-specs@^3.21.0":
-  version "3.21.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.21.0.tgz#ad3cbca7897c368ee28e7e3d980affb8a13b42a4"
-  integrity sha512-CRWlFb15UbW8ODoEbJJ+8vElZnr+qVtuC3s0+SyqDhIM/u1zGnJ0MlQckjQs69OGn5CwAAAxlJP553uZkm6ydQ==
+"@atb-as/config-specs@^3.25.0":
+  version "3.25.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/config-specs/-/config-specs-3.25.0.tgz#88ca9e3ba170b825993cd458210b6cd2ed025cfc"
+  integrity sha512-rt0cuGHznFDYT7OGYbXgn0UVUpkT24IAne2KNVmEItdV0vROnfJRv6UbJpjr3rKhHUPZ24ekBR1xK2Dz4v7HbQ==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"
@@ -40,22 +40,22 @@
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-"@atb-as/generate-assets@^10.1.1":
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-10.1.1.tgz#8c634026a1b9fb0fc9d535058fa9e1be162909ba"
-  integrity sha512-hYhqluNuql8l+bR47RNIVETsXCNkvyIKHSYW1+Rq/ul/+svrJqZrgJIBdtEZKgb+TRXnyoHaaKM5NAMRxUNELQ==
+"@atb-as/generate-assets@^12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/generate-assets/-/generate-assets-12.1.0.tgz#c7d84610436b256f27c3fc53c4b58c862099e3d4"
+  integrity sha512-T+fmP4Wz/W7gNjBvwjw+P11HGd1IGmdFwDUr0TzkLdLciJQhp7xjUxdpRVjmp8z5cjVNh71OtjfVz1utTKjIdQ==
   dependencies:
-    "@atb-as/theme" "^8.1.0"
+    "@atb-as/theme" "^10.1.0"
     commander "^9.4.0"
     fast-glob "^3.2.11"
     micromatch "^4.0.5"
     normalize-path "^3.0.0"
     stream-editor "^1.11.0"
 
-"@atb-as/theme@^8.1.0":
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-8.1.0.tgz#b1318b9f4044db319634f230ffa30d1832c22b0f"
-  integrity sha512-vSul0l2HQXz9g3TUXuEFZpggcB03MCTiqR62lVHtTrnTvjAx+VxEUt+xIPXbuDOry9zEWcZiNBUHzLIaNCca1w==
+"@atb-as/theme@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@atb-as/theme/-/theme-10.1.0.tgz#50bbfcc8b8cab002b3f49044db187af2f19bfc3e"
+  integrity sha512-NYtJyfRUFXZtQVlpwc/j7eGLW+jFJkBpeUyvIiFe6AoRI40RENATt213Hbi81ttCI2v0CKPVf+o/L6H8+Cq8YA==
   dependencies:
     hex-to-rgba "^2.0.1"
     ts-deepmerge "^4.0.0"
@@ -3416,6 +3416,14 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bugsnag/cli@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-2.2.0.tgz#6b37c8831fb72f0b04fc38f16bdf825142ac15f6"
+  integrity sha512-Caa5NGB7WNwlZPKjqBsKU/caT81YXCkuQSHEedaxS5kvbX9E9k07rcPf0j4yJUZwVIgwNL1GtkFx79qS8jrQJA==
+  dependencies:
+    axios "^1.6.2"
+    js-yaml "^4.1.0"
+
 "@bugsnag/core@^7.19.0":
   version "7.19.0"
   resolved "https://registry.yarnpkg.com/@bugsnag/core/-/core-7.19.0.tgz#7663a4addb1322e8315a4012dc9db2aad3fea53b"
@@ -3639,6 +3647,11 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
+
+"@intercom/intercom-react-native@6.8.1":
+  version "6.8.1"
+  resolved "https://registry.yarnpkg.com/@intercom/intercom-react-native/-/intercom-react-native-6.8.1.tgz#b8b944905f6dc5339f14476e308d4ae87e1455de"
+  integrity sha512-FNsdVllGg9dbw2KAdcwcN/2Omp0sudFXJ+jlyctRkEy4SjFSRYISKH5f9Ma0mi68CuJGXqaB0GxPV0srwwDKXA==
 
 "@isaacs/ttlcache@^1.4.1":
   version "1.4.1"
@@ -6799,6 +6812,15 @@ axios@^0.28.0:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
+axios@^1.6.2:
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
+  integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
+  dependencies:
+    follow-redirects "^1.15.6"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
 babel-core@^7.0.0-bridge.0:
   version "7.0.0-bridge.0"
   resolved "https://registry.npmjs.org/babel-core/-/babel-core-7.0.0-bridge.0.tgz"
@@ -9756,6 +9778,11 @@ follow-redirects@^1.15.0:
   version "1.15.5"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
   integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
+
+follow-redirects@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
+  integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -14130,11 +14157,6 @@ react-native-inappbrowser-reborn@^3.7.0:
   dependencies:
     invariant "^2.2.4"
     opencollective-postinstall "^2.0.3"
-
-react-native-intercom@21.1.1:
-  version "21.1.1"
-  resolved "https://registry.npmjs.org/react-native-intercom/-/react-native-intercom-21.1.1.tgz"
-  integrity sha512-Cj7GoPIBeTKydLfA2123NZ6x49xueNmlX9LsAbYvv2CmEEyXDEI0rGuweqzumnJUp9tntrFr4piOZkrhhg6CYA==
 
 react-native-kettle-module@1.2.0:
   version "1.2.0"

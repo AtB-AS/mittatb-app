@@ -13,6 +13,7 @@ import {StyleSheet, useTheme} from '@atb/theme';
 import {
   InteractiveColor,
   StaticColorByType,
+  StatusColor,
   textNames,
   TextNames,
   TransportColor,
@@ -103,10 +104,10 @@ export const Profile_DesignSystemScreen = ({
     },
   );
 
-  const statusSwatches = Object.keys(theme.static.status).map((color) => {
+  const statusSwatches = Object.keys(theme.status).map((color) => {
     const staticColor =
-      theme.static.status[color as StaticColorByType<'status'>];
-    return <Swatch color={staticColor} name={color} key={color} />;
+      theme.status[color as StatusColor];
+    return <Swatch color={staticColor.primary} name={color} key={color} />;
   });
 
   const textSwatches = Object.keys(theme.text.colors).map((color) => {

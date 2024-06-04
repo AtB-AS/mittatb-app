@@ -14,7 +14,7 @@ import {
   ConfirmationErrorCode,
   PhoneSignInErrorCode,
   VippsSignInErrorCode,
-} from '@atb/auth/types';
+} from './types';
 import {
   authConfirmCode,
   authSignInWithCustomToken,
@@ -24,7 +24,8 @@ import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-chang
 import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
 import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
-import {mapAuthenticationType} from '@atb/auth/utils';
+import {mapAuthenticationType} from './utils';
+import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -48,7 +49,7 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       if (sameUser) {
         return prevState;
       } else {
-        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid});
+        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid, authType: mapAuthenticationType(action.user)});
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
@@ -127,6 +128,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
+  useClearQueriesOnUserChange(state);
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();

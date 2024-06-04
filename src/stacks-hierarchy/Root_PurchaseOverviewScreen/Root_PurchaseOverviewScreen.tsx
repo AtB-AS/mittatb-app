@@ -32,7 +32,7 @@ import {HoldingHands} from '@atb/assets/svg/color/images';
 import {ContentHeading} from '@atb/components/heading';
 import {isUserProfileSelectable} from './utils';
 import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
-import { useAuthState } from '@atb/auth';
+import {useAuthState} from '@atb/auth';
 
 type Props = RootStackScreenProps<'Root_PurchaseOverviewScreen'>;
 
@@ -98,15 +98,17 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
   const fareProductOnBehalfOfEnabled =
     params.fareProductTypeConfig.configuration.onBehalfOfEnabled;
 
-  const offerEndpoint = zoneSelectionMode === 'none'
-    ? 'authority'
-    : zoneSelectionMode === 'multiple-stop-harbor'
-    ? 'stop-places'
-    : 'zones';
+  const offerEndpoint =
+    zoneSelectionMode === 'none'
+      ? 'authority'
+      : zoneSelectionMode === 'multiple-stop-harbor'
+      ? 'stop-places'
+      : 'zones';
 
   const {
     isSearchingOffer,
     error,
+    originalPrice,
     totalPrice,
     refreshOffer,
     userProfilesWithCountAndOffer,
@@ -116,6 +118,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
     fromPlace,
     toPlace,
     travellerSelection,
+    isOnBehalfOfToggle,
     travelDate,
   );
 
@@ -288,11 +291,11 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
                   subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
                   value={isOnBehalfOfToggle}
-                  label="new"
                   textType="body__primary--bold"
                   onValueChange={(checked) => {
                     setIsOnBehalfOfToggle(checked);
                   }}
+                  testID="onBehalfOfToggle"
                 />
               </Section>
             </>
@@ -330,6 +333,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
             isLoading={isSearchingOffer}
             isFree={isFree}
             isError={!!error || !hasSelection}
+            originalPrice={originalPrice}
             price={totalPrice}
             userProfilesWithCount={travellerSelection}
             summaryButtonText={

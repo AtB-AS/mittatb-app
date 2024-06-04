@@ -68,11 +68,11 @@ export function SingleTravellerSelection({
             text={t(PurchaseOverviewTexts.onBehalfOf.sectionTitle)}
             subtext={t(PurchaseOverviewTexts.onBehalfOf.sectionSubText)}
             value={isTravelerOnBehalfOfToggle}
-            label="new"
             textType="body__primary--bold"
             onValueChange={(checked) => {
               setIsTravelerOnBehalfOfToggle(checked);
             }}
+            testID="onBehalfOfToggle"
           />
         </Section>
       )}
