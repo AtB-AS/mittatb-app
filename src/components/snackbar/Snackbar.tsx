@@ -37,19 +37,42 @@ export type SnackbarProps = {
   customVisibleDurationMS?: number;
 };
 
-export const Snackbar = ({
+// Snackbar uses two SnackbarInstances to support toggling of top and bottom
+export const Snackbar = (snackbarProps: SnackbarProps) => (
+  <>
+    <SnackbarInstance
+      {...snackbarProps}
+      position="top"
+      disabled={snackbarProps.position !== 'top'}
+    />
+    <SnackbarInstance
+      {...snackbarProps}
+      position="bottom"
+      disabled={snackbarProps.position !== 'bottom'}
+    />
+  </>
+);
+
+type SnackbarInstanceProps = SnackbarProps & {
+  /** setting this true moves the SnackbarInstance to the hidden position */
+  disabled?: boolean;
+};
+
+const SnackbarInstance = ({
   textContent,
   position = 'top',
   actionButton,
   isDismissable,
   customVisibleDurationMS,
-}: SnackbarProps) => {
+  disabled = false,
+}: SnackbarInstanceProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
   const stableTextContent = useStableValue(textContent); // avoid triggering useEffects if no text has been changed
 
   const {snackbarIsVisible, hideSnackbar} = useSnackbarIsVisible(
+    disabled,
     stableTextContent,
     customVisibleDurationMS,
   );
