@@ -5,7 +5,7 @@ import {
   Token,
   TokenAction,
 } from '@entur-private/abt-mobile-client-sdk';
-import {logger} from './abtClientLogger';
+import {localLogger, remoteLogger} from './abtClientLogger';
 import {tokenService} from './tokenService';
 
 const CONTEXT_ID = 'main';
@@ -18,7 +18,8 @@ const abtClient = createClient({
     attestationType: 'PlayIntegrityAPIAttestation',
   },
   remoteTokenService: tokenService,
-  logger,
+  localLogger,
+  remoteLogger,
 });
 
 export const mobileTokenClient = {

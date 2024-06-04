@@ -1,7 +1,7 @@
 import Bugsnag, {Event} from '@bugsnag/react-native';
 import {ClientConfig} from '@entur-private/abt-mobile-client-sdk';
 
-export const logger: ClientConfig['logger'] = {
+export const localLogger: ClientConfig['localLogger'] = {
   debug: (msg, metadata?) => {
     Bugsnag.leaveBreadcrumb('Mobiletoken sdk debug message: ' + msg, metadata);
   },
@@ -16,6 +16,14 @@ export const logger: ClientConfig['logger'] = {
     const onError = toOnErrorCallback('error', msg, metadata);
     if (err) Bugsnag.notify(err, onError);
   },
+};
+
+export const remoteLogger: ClientConfig['remoteLogger'] = (err) => {
+  const onError = toOnErrorCallback(
+    'error',
+    'Mobiletoken sdk remote logger error',
+  );
+  Bugsnag.notify(err, onError);
 };
 
 const toOnErrorCallback =
