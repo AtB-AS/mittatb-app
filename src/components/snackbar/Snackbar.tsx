@@ -16,6 +16,7 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useStableValue} from '@atb/utils/use-stable-value';
+import {useEffect, useState} from 'react';
 
 export type SnackbarPosition = 'top' | 'bottom';
 
@@ -37,21 +38,43 @@ export type SnackbarProps = {
   customVisibleDurationMS?: number;
 };
 
-// Snackbar uses two SnackbarInstances to support toggling of top and bottom
+// if position is ever toggled, it starts using two SnackbarInstances, one for top and one for bottom
+// one of them is always disabled
 export const Snackbar = (snackbarProps: SnackbarProps) => (
   <>
-    <SnackbarInstance
-      {...snackbarProps}
-      position="top"
-      isDisabled={snackbarProps.position !== 'top'}
-    />
-    <SnackbarInstance
-      {...snackbarProps}
+    <SnackbarInstanceAtPosition snackbarProps={snackbarProps} position="top" />
+    <SnackbarInstanceAtPosition
+      snackbarProps={snackbarProps}
       position="bottom"
-      isDisabled={snackbarProps.position !== 'bottom'}
     />
   </>
 );
+
+const SnackbarInstanceAtPosition = ({
+  snackbarProps,
+  position,
+}: {
+  snackbarProps: SnackbarProps;
+  position: SnackbarPosition;
+}) => {
+  // isDisabled means whether the SnackbarInstance should move to the hidden location
+  const isDisabled = snackbarProps.position !== position;
+  // isActivated means whether the SnackbarInstance component should exist
+  const [isActivated, setIsActivated] = useState(!isDisabled);
+  // the SnackbarInstance doesn't need to exist in its position until the position matches
+  // however don't revert it again, as it would ruin the exit animation
+  useEffect(() => {
+    if (!isDisabled) setIsActivated(true);
+  }, [isDisabled]);
+
+  return isActivated ? (
+    <SnackbarInstance
+      {...snackbarProps}
+      position={position}
+      isDisabled={isDisabled}
+    />
+  ) : null;
+};
 
 type SnackbarInstanceProps = SnackbarProps & {
   /** setting this true moves the SnackbarInstance to the hidden position */
