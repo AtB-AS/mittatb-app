@@ -100,7 +100,7 @@ const displayReservations = (
   switch (mode) {
     case 'expired':
       return reservations.filter(
-        (reservation) => customerAccountId === reservation.customerAccountId,
+        (reservation) => reservation.customerAccountId === customerAccountId,
       );
     case 'sent':
       return reservations.filter(
