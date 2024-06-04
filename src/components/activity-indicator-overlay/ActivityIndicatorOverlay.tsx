@@ -14,7 +14,7 @@ export const ActivityIndicatorOverlay = () => {
   );
 };
 
-const useStyles = StyleSheet.createThemeHook((theme) => ({
+const useStyles = StyleSheet.createThemeHook(() => ({
   spinner: {
     position: 'absolute',
     left: 0,
@@ -27,6 +27,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     opacity: 0.4,
   },
   activityIndicator: {
-    backgroundColor: theme.static.background['background_accent_0'].text,
+    backgroundColor: 'white',
   },
 }));
