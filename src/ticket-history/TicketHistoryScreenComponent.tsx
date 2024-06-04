@@ -4,6 +4,7 @@ import {FareContractAndReservationsList} from '@atb/fare-contracts';
 import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
+  Reservation,
   filterExpiredFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
@@ -16,6 +17,7 @@ import {
   TicketHistoryScreenParams,
 } from '@atb/ticket-history';
 import {TicketHistoryModeTexts} from '@atb/translations/screens/Ticketing';
+import {useAuthState} from '@atb/auth';
 
 export const TicketHistoryScreenComponent = ({
   mode,
@@ -27,6 +29,8 @@ export const TicketHistoryScreenComponent = ({
     rejectedReservations,
     resubscribeFirestoreListeners,
   } = useTicketingState();
+
+  const {abtCustomerId: customerAccountId} = useAuthState();
 
   const {serverNow} = useTimeContextState();
   const {t} = useTranslation();
@@ -59,7 +63,11 @@ export const TicketHistoryScreenComponent = ({
             sentFareContracts,
             serverNow,
           )}
-          reservations={rejectedReservations}
+          reservations={displayReservations(
+            mode,
+            rejectedReservations,
+            customerAccountId,
+          )}
           now={serverNow}
           mode={mode}
           emptyStateTitleText={t(TicketingTexts.ticketHistory.emptyState)}
@@ -81,6 +89,23 @@ const displayFareContracts = (
       return filterExpiredFareContracts(fareContracts, serverNow);
     case 'sent':
       return sentFareContracts;
+  }
+};
+
+const displayReservations = (
+  mode: TicketHistoryMode,
+  reservations: Reservation[],
+  customerAccountId?: string,
+) => {
+  switch (mode) {
+    case 'expired':
+      return reservations.filter(
+        (reservation) => customerAccountId === reservation.customerAccountId,
+      );
+    case 'sent':
+      return reservations.filter(
+        (reservation) => reservation.customerAccountId !== customerAccountId,
+      );
   }
 };
 
