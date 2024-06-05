@@ -3,10 +3,13 @@ import {ActivityIndicator, View} from 'react-native';
 import {StyleSheet} from '@atb/theme';
 
 export const ActivityIndicatorOverlay = () => {
-  const style = useStyles();
+  const styles = useStyles();
   return (
-    <View style={style.spinner}>
-      <ActivityIndicator size="large" />
+    <View style={styles.spinner}>
+      <ActivityIndicator
+        size="large"
+        color={styles.activityIndicator.backgroundColor}
+      />
     </View>
   );
 };
@@ -22,5 +25,8 @@ const useStyles = StyleSheet.createThemeHook(() => ({
     justifyContent: 'center',
     backgroundColor: 'black',
     opacity: 0.4,
+  },
+  activityIndicator: {
+    backgroundColor: 'white',
   },
 }));
