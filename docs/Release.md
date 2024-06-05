@@ -23,7 +23,11 @@ Bump the version number in these files:
 
 Do this in a commit with message "chore: Bump to version x.xx". You can check earlier commits with the message "chore: Bump to version x.xx" to see if all necessary files are bumped.
 
-After bumping the version number the new version should be registered at Entur for mobile token to work. This is done by running this command:
+After bumping the version number the new version should be registered at Entur for mobile token to work. 
+
+Please make sure that you have [jq](https://jqlang.github.io/jq/) installed, you can run `brew install jq` (or [similar instructions](https://jqlang.github.io/jq/download/) on other environments) to install it.
+
+Finally, run this command:
 
 `./scripts/register-local-app-version.sh`
 
