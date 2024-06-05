@@ -90,7 +90,7 @@ export const useSnackbarVerticalPositionAnimation = (
     verticalPositionStyle: {
       ...topOrBottomStyle,
       ...{transform: [{translateY}]},
-      ...(isHidden && {opacity: 0}),
+      ...(isHidden && {opacity: 0, pointerEvents: 'none'}),
     },
     animatedViewOnLayout,
   };
