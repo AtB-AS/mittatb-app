@@ -54,6 +54,29 @@ async function getPreviousPaymentMethodByUser(
   return methods[userId];
 }
 
+export async function deleteSavedPaymentMethodByUser(
+  userId: string | undefined,
+  paymentId: number,
+): Promise<void> {
+  try {
+    if (userId) {
+      const methods = await getStoredMethods();
+      const paymentForUserId = methods[userId];
+      if (paymentForUserId && paymentForUserId.savedType === 'recurring') {
+        if (paymentForUserId.recurringCard.id === paymentId) {
+          delete methods[userId];
+          await storage.set(
+            '@ATB_saved_payment_methods',
+            JSON.stringify(methods),
+          );
+        }
+      }
+    }
+  } catch (err: any) {
+    Bugsnag.notify(err);
+  }
+}
+
 export async function savePreviousPaymentMethodByUser(
   userId: string,
   option: SavedPaymentOption,

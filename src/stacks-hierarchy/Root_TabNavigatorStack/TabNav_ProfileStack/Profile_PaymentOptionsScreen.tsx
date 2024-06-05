@@ -31,6 +31,7 @@ import {destructiveAlert} from './utils';
 import {animateNextChange} from '@atb/utils/animation';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {deleteSavedPaymentMethodByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
@@ -39,7 +40,7 @@ export const Profile_PaymentOptionsScreen = ({
 }: PaymentOptionsProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {authenticationType} = useAuthState();
+  const {authenticationType, userId} = useAuthState();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [storedCards, setStoredCards] = useState<RecurringPayment[]>([]);
@@ -99,7 +100,9 @@ export const Profile_PaymentOptionsScreen = ({
   async function handleRemovePayment(paymentOption: RecurringPayment) {
     setIsLoading(true);
     try {
-      await deleteRecurringPayment(paymentOption.id);
+      await deleteRecurringPayment(paymentOption.id).then(() =>
+        deleteSavedPaymentMethodByUser(userId, paymentOption.id),
+      );
     } catch (error: any) {
     } finally {
       refreshCards();
