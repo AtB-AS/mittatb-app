@@ -134,13 +134,9 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   useUpdateAuthLanguageOnChange();
 
   const retryAuth = useCallback(() => {
-    if (state.authStatus === 'fetch-id-token-timeout') {
-      dispatch({type: 'RETRY_FETCH_ID_TOKEN'});
-    } else if (state.authStatus === 'loading') {
-      dispatch({type: 'RESET_AUTH_STATUS'});
-      resubscribe();
-    }
-  }, [state.authStatus, resubscribe]);
+    dispatch({type: 'RESET_AUTH_STATUS'});
+    resubscribe();
+  }, [resubscribe]);
 
   return (
     <AuthContext.Provider
