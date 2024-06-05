@@ -16,9 +16,9 @@ import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled'
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
 import {useStableValue} from '@atb/utils/use-stable-value';
-import {useEffect, useState} from 'react';
 
 export type SnackbarPosition = 'top' | 'bottom';
+const SNACKBAR_POSITIONS: SnackbarPosition[] = ['top', 'bottom'];
 
 export type SnackbarTextContent = {
   title?: string;
@@ -42,39 +42,16 @@ export type SnackbarProps = {
 // one of them is always disabled
 export const Snackbar = (snackbarProps: SnackbarProps) => (
   <>
-    <SnackbarInstanceAtPosition snackbarProps={snackbarProps} position="top" />
-    <SnackbarInstanceAtPosition
-      snackbarProps={snackbarProps}
-      position="bottom"
-    />
+    {SNACKBAR_POSITIONS.map((position) => (
+      <SnackbarInstance
+        key={position}
+        {...snackbarProps}
+        position={position}
+        isDisabled={position !== (snackbarProps.position || 'top')}
+      />
+    ))}
   </>
 );
-
-const SnackbarInstanceAtPosition = ({
-  snackbarProps,
-  position,
-}: {
-  snackbarProps: SnackbarProps;
-  position: SnackbarPosition;
-}) => {
-  // isDisabled means whether the SnackbarInstance should move to the hidden location
-  const isDisabled = snackbarProps.position !== position;
-  // isActivated means whether the SnackbarInstance component should exist
-  const [isActivated, setIsActivated] = useState(!isDisabled);
-  // the SnackbarInstance doesn't need to exist in its position until the position matches
-  // however don't revert it again, as it would ruin the exit animation
-  useEffect(() => {
-    if (!isDisabled) setIsActivated(true);
-  }, [isDisabled]);
-
-  return isActivated ? (
-    <SnackbarInstance
-      {...snackbarProps}
-      position={position}
-      isDisabled={isDisabled}
-    />
-  ) : null;
-};
 
 type SnackbarInstanceProps = SnackbarProps & {
   /** setting this true moves the SnackbarInstance to the hidden position */
