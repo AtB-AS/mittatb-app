@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {Animated, Easing, LayoutChangeEvent, ViewStyle} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {shadows} from '@atb/components/map';
@@ -10,9 +10,10 @@ export const snackbarAnimationDurationMS = 300; // 0.3 seconds
 
 export const useSnackbarVerticalPositionAnimation = (
   position: SnackbarPosition,
-  snackbarIsVisible: boolean,
+  snackbarShouldBeVisible: boolean,
 ) => {
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
+  const [snackbarIsVisible, setSnackbarIsVisible] = useState(false);
 
   const {theme} = useTheme();
   const withSnackbarPadding = (safeAreaHeight: number) =>
@@ -50,46 +51,45 @@ export const useSnackbarVerticalPositionAnimation = (
     ? -top - viewHeightIncludingShadow - shadowOffsetY
     : bottom + viewHeightIncludingShadow - shadowOffsetY;
 
-  const translateY = useRef(new Animated.Value(hiddenY)).current;
+  const translateYRef = useRef(new Animated.Value(hiddenY));
 
-  const [isInHiddenY, setIsInHiddenY] = useState(!snackbarIsVisible);
+  const animateIn = useCallback(() => {
+    Animated.timing(translateYRef.current, {
+      toValue: visibleY,
+      duration: snackbarAnimationDurationMS,
+      easing: Easing.out(Easing.exp),
+      useNativeDriver: true,
+    }).start(({finished}) => {
+      finished && setSnackbarIsVisible(true);
+    });
+  }, []);
+
+  const animateOut = useCallback(() => {
+    Animated.timing(translateYRef.current, {
+      toValue: hiddenY,
+      duration: snackbarAnimationDurationMS,
+      easing: Easing.in(Easing.linear),
+      useNativeDriver: true,
+    }).start(({finished}) => {
+      finished && setSnackbarIsVisible(false);
+    });
+  }, [hiddenY]);
 
   useEffect(() => {
     // run animation
-    setIsInHiddenY(false);
-    Animated.timing(translateY, {
-      toValue: snackbarIsVisible ? visibleY : hiddenY,
-      duration: snackbarAnimationDurationMS,
-      easing: snackbarIsVisible
-        ? Easing.out(Easing.exp)
-        : Easing.in(Easing.linear),
-      useNativeDriver: true,
-    }).start(({finished}) => finished && setIsInHiddenY(!snackbarIsVisible));
-  }, [
-    snackbarIsVisible,
-    translateY,
-    position,
-    hiddenY,
-    viewHeightIncludingShadow,
-  ]);
-
-  // when the Snackbar is disabled, and textContent changes to make the Snackbar taller,
-  // it takes a moment for it to move into the new hiddenY,
-  // however the Snackbar should not be visible during this transition.
-  // isHidden remains true during this transition.
-  const [isHidden, setIsHidden] = useState(!snackbarIsVisible);
-  useEffect(() => {
-    if (snackbarIsVisible) {
-      setIsHidden(false);
-    } else if (isInHiddenY) {
-      setIsHidden(true);
+    if (snackbarShouldBeVisible && !snackbarIsVisible) {
+      animateIn();
+    } else if (!snackbarShouldBeVisible && snackbarIsVisible) {
+      animateOut();
     }
-  }, [snackbarIsVisible, isInHiddenY]);
+  }, [snackbarShouldBeVisible, snackbarIsVisible, animateIn, animateOut]);
+
+  const isHidden = !snackbarIsVisible && !snackbarShouldBeVisible;
 
   return {
     verticalPositionStyle: {
       ...topOrBottomStyle,
-      ...{transform: [{translateY}]},
+      ...{transform: [{translateY: translateYRef.current}]},
       ...(isHidden && {
         opacity: 0,
         pointerEvents: 'none' as ViewStyle['pointerEvents'],
