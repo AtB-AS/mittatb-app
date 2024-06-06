@@ -336,7 +336,7 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
 export const getSvgForDeparture = (departure: DepartureTime) => {
   const msgTypeForSituationOrNotice =
     getMsgTypeForMostCriticalSituationOrNotice(
-      [],
+      departure.situations,
       filterNotices(departure.notices || []),
       departure.cancellation,
     );
