@@ -39,6 +39,7 @@ import {DashboardScreenProps} from '../navigation-types';
 import {CompactFareContracts} from './components/CompactFareContracts';
 import {DeparturesWidget} from './components/DeparturesWidget';
 import {Announcements} from './components/Announcements';
+import {Snackbar, useSnackbar} from "@atb/components/snackbar";
 
 type DashboardRouteName = 'Dashboard_RootScreen';
 const DashboardRouteNameStatic: DashboardRouteName = 'Dashboard_RootScreen';
@@ -98,6 +99,29 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [to, from, navigation]);
+
+  const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
+  useEffect(() => {
+    showSnackbar({
+      textContent: {description: 'First message!'},
+      //position: 'bottom',
+    });
+    setTimeout(() => {
+      showSnackbar({
+        textContent: {title: 'Title 2', description: 'Second message!'},
+        position: 'top',
+      });
+      setTimeout(() => {
+        hideSnackbar();
+        setTimeout(() => {
+          showSnackbar({
+            textContent: {description: 'Third message'},
+            position: 'bottom',
+          });
+        }, 1000);
+      }, 1000);
+    }, 4000);
+  }, []);
 
   const setCurrentLocationAsFrom = useCallback(
     function setCurrentLocationAsFrom() {
@@ -174,6 +198,8 @@ export const Dashboard_RootScreen: React.FC<RootProps> = ({
         leftButton={{type: 'status-disruption'}}
         globalMessageContext={GlobalMessageContextEnum.appAssistant}
       />
+
+      <Snackbar {...snackbarProps} />
 
       <View style={style.backdrop}>
         <DashboardBackground width="100%" height="100%" />
