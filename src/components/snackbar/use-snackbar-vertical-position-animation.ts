@@ -52,11 +52,8 @@ export const useSnackbarVerticalPositionAnimation = (
 
   const translateY = useRef(new Animated.Value(hiddenY)).current;
 
-  const [isInHiddenY, setIsInHiddenY] = useState(!snackbarIsVisible);
-
   useEffect(() => {
     // run animation
-    setIsInHiddenY(false);
     Animated.timing(translateY, {
       toValue: snackbarIsVisible ? visibleY : hiddenY,
       duration: snackbarAnimationDurationMS,
@@ -64,7 +61,7 @@ export const useSnackbarVerticalPositionAnimation = (
         ? Easing.out(Easing.exp)
         : Easing.in(Easing.linear),
       useNativeDriver: true,
-    }).start(({finished}) => finished && setIsInHiddenY(!snackbarIsVisible));
+    }).start();
   }, [
     snackbarIsVisible,
     translateY,
@@ -73,24 +70,10 @@ export const useSnackbarVerticalPositionAnimation = (
     viewHeightIncludingShadow,
   ]);
 
-  // when the Snackbar is disabled, and textContent changes to make the Snackbar taller,
-  // it takes a moment for it to move into the new hiddenY,
-  // however the Snackbar should not be visible during this transition.
-  // isHidden remains true during this transition.
-  const [isHidden, setIsHidden] = useState(!snackbarIsVisible);
-  useEffect(() => {
-    if (snackbarIsVisible) {
-      setIsHidden(false);
-    } else if (isInHiddenY) {
-      setIsHidden(true);
-    }
-  }, [snackbarIsVisible, isInHiddenY]);
-
   return {
     verticalPositionStyle: {
       ...topOrBottomStyle,
       ...{transform: [{translateY}]},
-      ...(isHidden && {opacity: 0}),
     },
     animatedViewOnLayout,
   };
