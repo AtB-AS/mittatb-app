@@ -1,7 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {AccessibilityProps, StyleProp, View, ViewStyle} from 'react-native';
 
-import {PurchaseOverviewTexts, useTranslation} from '@atb/translations';
+import {
+  PurchaseOverviewTexts,
+  getTextForLanguage,
+  useTranslation,
+} from '@atb/translations';
 import {
   FareProductTypeConfig,
   TravellerSelectionMode,
@@ -28,7 +32,6 @@ import {usePopOver} from '@atb/popover';
 import {useFocusEffect} from '@react-navigation/native';
 import {isUserProfileSelectable} from '../utils';
 import {useAuthState} from '@atb/auth';
-import {getTravellerInfoByFareProductType} from './../utils';
 
 type TravellerSelectionProps = {
   selectableUserProfiles: UserProfileWithCount[];
@@ -137,12 +140,7 @@ export function TravellerSelection({
     : '';
 
   const travellerInfo = !canSelectUserProfile
-    ? getTravellerInfoByFareProductType(
-        fareProductTypeConfig.type,
-        userProfilesState[0],
-        language,
-        t,
-      )
+    ? getTextForLanguage(userProfilesState[0].alternativeDescriptions, language)
     : '';
 
   const accessibility: AccessibilityProps = {

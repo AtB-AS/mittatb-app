@@ -1,5 +1,9 @@
 import React from 'react';
-import {useTranslation, PurchaseOverviewTexts} from '@atb/translations';
+import {
+  useTranslation,
+  PurchaseOverviewTexts,
+  getTextForLanguage,
+} from '@atb/translations';
 import {getReferenceDataName} from '@atb/configuration';
 import {
   RadioGroupSection,
@@ -13,7 +17,6 @@ import {HoldingHands} from '@atb/assets/svg/color/images';
 import {useOnBehalfOfEnabled} from '@atb/on-behalf-of';
 import {TravellerSelectionBottomSheetType} from './types';
 import {useAuthState} from '@atb/auth';
-import {getTravellerInfoByFareProductType} from './../../utils';
 
 export function SingleTravellerSelection({
   userProfilesWithCount,
@@ -49,12 +52,7 @@ export function SingleTravellerSelection({
         keyExtractor={(u) => u.userTypeString}
         itemToText={(u) => getReferenceDataName(u, language)}
         itemToSubtext={(u) =>
-          getTravellerInfoByFareProductType(
-            fareProductTypeConfig.type,
-            u,
-            language,
-            t,
-          )
+          getTextForLanguage(u.alternativeDescriptions, language)
         }
         selected={selectedProfile}
         onSelect={select}
