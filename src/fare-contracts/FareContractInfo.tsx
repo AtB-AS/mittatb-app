@@ -14,7 +14,6 @@ import {
   isCarnet,
   isCarnetTravelRight,
   NormalTravelRight,
-  PreActivatedTravelRight,
   TravelRightDirection,
 } from '@atb/ticketing';
 import {
@@ -41,7 +40,7 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 
 export type FareContractInfoProps = {
-  travelRight: PreActivatedTravelRight;
+  travelRight: NormalTravelRight;
   status: ValidityStatus;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;

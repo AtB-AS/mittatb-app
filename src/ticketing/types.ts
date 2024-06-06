@@ -39,8 +39,6 @@ export type NormalTravelRight = TravelRight & {
   endPointRef?: string;
 };
 
-export type PreActivatedTravelRight = NormalTravelRight;
-
 export type CarnetTravelRightUsedAccess = {
   startDateTime: Date;
   endDateTime: Date;

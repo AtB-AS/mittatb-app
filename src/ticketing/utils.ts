@@ -4,7 +4,6 @@ import {
   FareContractState,
   CarnetTravelRight,
   TravelRight,
-  PreActivatedTravelRight,
   CarnetTravelRightUsedAccess,
   Reservation,
   LastUsedAccessState,
@@ -20,19 +19,6 @@ export function isCarnetTravelRight(
 
 export function isCarnet(fareContract: FareContract): boolean {
   return fareContract.travelRights.some(isCarnetTravelRight);
-}
-
-export function isPreActivatedTravelRight(
-  travelRight: TravelRight | undefined,
-): travelRight is PreActivatedTravelRight {
-  return (
-    travelRight?.type === 'PreActivatedSingleTicket' ||
-    travelRight?.type === 'PreActivatedPeriodTicket' ||
-    travelRight?.type === 'NightTicket' ||
-    travelRight?.type === 'SingleBoatTicket' ||
-    travelRight?.type === 'PeriodBoatTicket' ||
-    travelRight?.type === 'YouthTicket'
-  );
 }
 
 export function isNormalTravelRight(
@@ -93,7 +79,7 @@ export function isValidRightNowFareContract(
 }
 
 export function willBeValidInTheFutureTravelRight(
-  travelRight: PreActivatedTravelRight,
+  travelRight: NormalTravelRight,
   now: number,
 ): boolean {
   return travelRight.startDateTime.getTime() > now;
@@ -205,7 +191,7 @@ export function isCanBeActivatedNowFareContract(
   if (!isOrWillBeActivatedFareContract(f)) return false;
   if (isCarnet(f)) return false;
   const travelRights = f.travelRights
-    .filter(isPreActivatedTravelRight)
+    .filter(isNormalTravelRight)
     .filter((tr) => willBeValidInTheFutureTravelRight(tr, now));
   return travelRights.length > 0;
 }
@@ -253,40 +239,7 @@ export const filterValidRightNowFareContracts = (
   fareContracts: FareContract[],
   now: number,
 ) => {
-  return fareContracts.filter((f: FareContract): boolean => {
-    if (f.state !== FareContractState.Activated) return false;
-
-    const travelRights = f.travelRights;
-    if (travelRights.length < 1) return false;
-
-    const firstTravelRight = travelRights?.[0];
-
-    const carnetTravelRights = travelRights.filter(isCarnetTravelRight);
-    if (carnetTravelRights.length > 0) {
-      const {usedAccesses} =
-        flattenCarnetTravelRightAccesses(carnetTravelRights);
-
-      const {status: usedAccessValidityStatus} = getLastUsedAccess(
-        now,
-        usedAccesses,
-      );
-
-      if (usedAccessValidityStatus === 'valid') {
-        return true;
-      }
-
-      return false;
-    }
-
-    if (isPreActivatedTravelRight(firstTravelRight)) {
-      return (
-        now >= firstTravelRight.startDateTime.getTime() &&
-        now <= firstTravelRight.endDateTime.getTime()
-      );
-    }
-
-    return false;
-  });
+  return fareContracts.filter((fc) => isValidRightNowFareContract(fc, now));
 };
 
 export function getLastUsedAccess(

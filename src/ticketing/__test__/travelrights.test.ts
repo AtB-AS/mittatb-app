@@ -10,22 +10,23 @@ import {CarnetTravelRight, TravelRight} from '../types';
 import {
   hasActiveTravelRight,
   isCarnetTravelRight,
-  isPreActivatedTravelRight,
+  isNormalTravelRight,
 } from '../utils';
 
 const now = Date.now();
 
 describe('Travelright type', () => {
-  it('preactivated should resolve to preassigned', async () => {
-    expect(isPreActivatedTravelRight(night)).toBe(true);
-    expect(isPreActivatedTravelRight(period)).toBe(true);
-    expect(isPreActivatedTravelRight(periodBoat as TravelRight)).toBe(true);
-    expect(isPreActivatedTravelRight(single)).toBe(true);
-    expect(isPreActivatedTravelRight(singleBoat as TravelRight)).toBe(true);
-    expect(isPreActivatedTravelRight(youth)).toBe(true);
+  it('all should resolve to normal', async () => {
+    expect(isNormalTravelRight(night)).toBe(true);
+    expect(isNormalTravelRight(period)).toBe(true);
+    expect(isNormalTravelRight(periodBoat as TravelRight)).toBe(true);
+    expect(isNormalTravelRight(single)).toBe(true);
+    expect(isNormalTravelRight(singleBoat as TravelRight)).toBe(true);
+    expect(isNormalTravelRight(youth)).toBe(true);
+    expect(isNormalTravelRight(carnet)).toBe(true);
   });
 
-  it('preactivated should not resolve to carnet', async () => {
+  it('non carnets should not resolve to carnet', async () => {
     expect(isCarnetTravelRight(night)).toBe(false);
     expect(isCarnetTravelRight(period)).toBe(false);
     expect(isCarnetTravelRight(periodBoat as TravelRight)).toBe(false);
@@ -36,9 +37,6 @@ describe('Travelright type', () => {
 
   it('carnet should resolve to carnet', async () => {
     expect(isCarnetTravelRight(carnet)).toBe(true);
-  });
-  it('carnet should not resolve to preassigned', async () => {
-    expect(isPreActivatedTravelRight(carnet)).toBe(false);
   });
 });
 
