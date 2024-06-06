@@ -3,10 +3,7 @@ import {useFirestoreConfiguration} from '@atb/configuration/FirestoreConfigurati
 import {CompactFareContractInfo} from '@atb/fare-contracts/CompactFareContractInfo';
 import {getFareContractInfoDetails} from '@atb/fare-contracts/FareContractInfo';
 import {StyleSheet} from '@atb/theme';
-import {
-  filterValidRightNowFareContracts,
-  useTicketingState,
-} from '@atb/ticketing';
+import {useValidRightNowFareContract} from '@atb/ticketing';
 import {
   DashboardTexts,
   TicketingTexts,
@@ -31,11 +28,7 @@ export const CompactFareContracts: React.FC<Props> = ({
   const itemStyle = useStyles();
 
   const {serverNow} = useTimeContextState();
-  const {fareContracts} = useTicketingState();
-  const validFareContracts = filterValidRightNowFareContracts(
-    fareContracts,
-    serverNow,
-  );
+  const validFareContracts = useValidRightNowFareContract();
 
   const {t} = useTranslation();
   const {tariffZones, userProfiles, preassignedFareProducts} =
