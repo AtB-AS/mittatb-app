@@ -495,7 +495,7 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             'Kan eg reise utan mobil?',
           ),
           answer: _(
-            'Du må alltid ha med deg det mobilen du har valgt å bruke billetten på.',
+            'Du må alltid ha med deg den mobilen du har valgt å bruke billetten på.',
             'You must always travel with the mobile phone you have chosen to use the ticket on.',
             'Du må alltid ha med deg mobilen du har valgt å bruke billetten på.',
           ),
@@ -563,34 +563,34 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
     travelToken: {
       header: {
         title: _(
-          'Bruk billett på reisekort / mobil',
+          'Bruk billett på reisekort / telefon',
           'Use ticket on travel card / phone',
-          'Bruk billett på reisekort / mobil',
+          'Bruk billett på reisekort / telefon',
         ),
       },
       changeTokenButton: _(
-        'Bytt mellom reisekort / mobil',
+        'Bytt mellom reisekort / telefon',
         'Switch between travel card / phone',
-        'Byt mellom reisekort / mobil',
+        'Byt mellom reisekort / telefon',
       ),
       faqs: [
         {
           question: _(
-            'Hva skjer om jeg mister reisekortet eller mobilen?',
+            'Hva skjer om jeg mister reisekortet eller telefonen?',
             'What happens if I lose my travel card or phone?',
-            'Kva skjer om eg mistar reisekortet eller mobilen?',
+            'Kva skjer om eg mistar reisekortet eller telefonen?',
           ),
           answer: _(
-            'Billetten din ligger trygt lagret i Min profile. Velg å bruke billetten på en annen mobil eller reisekort.',
-            'Your ticket is safely stored in My profile. Switch to use the ticket on another mobile phone or travel card.',
-            'Billetten din ligg trygt lagra i Min profil. Vel å bruke billetten på ein annan mobil eller eit anna reisekort.',
+            'Billetten din ligger trygt lagret i Min profile. Velg å bruke billetten på en annen telefon eller reisekort.',
+            'Your ticket is safely stored in My profile. Switch to use the ticket on another phone or travel card.',
+            'Billetten din ligg trygt lagra i Min profil. Vel å bruke billetten på ein annan telefon eller eit anna reisekort.',
           ),
         },
         {
           question: _(
-            'Kan jeg bruke billetten på både reisekort og mobil samtidig?',
-            'Can I use the ticket on both travel card and mobile phone at the same time?',
-            'Kan eg bruke billetten på både reisekort og mobil samtidig?',
+            'Kan jeg bruke billetten på både reisekort og telefon samtidig?',
+            'Can I use the ticket on both travel card and phone at the same time?',
+            'Kan eg bruke billetten på både reisekort og telefon samtidig?',
           ),
           answer: _(
             'Nei, du kan kun bruke en av gangen, og billetten kan ikke deles med andre reisende.',
@@ -600,14 +600,14 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
         },
         {
           question: _(
-            'Kan jeg reise uten reisekort eller mobil?',
+            'Kan jeg reise uten reisekort eller telefon?',
             'Can I travel without my travel card or phone?',
-            'Kan eg reise utan reisekort eller mobil?',
+            'Kan eg reise utan reisekort eller telefon?',
           ),
           answer: _(
-            'Du må alltid ha med deg det reisekortet eller mobilen du har valgt å bruke billetten på.',
-            'You must always travel with the travel card or mobile phone you have chosen to use the ticket on.',
-            'Du må alltid ha med deg det reisekortet eller mobilen du har valt å bruke billetten på.',
+            'Du må alltid ha med deg det reisekortet eller telefonen du har valgt å bruke billetten på.',
+            'You must always travel with the travel card or phone you have chosen to use the ticket on.',
+            'Du må alltid ha med deg det reisekortet eller telefonen du har valt å bruke billetten på.',
           ),
         },
         {
@@ -617,9 +617,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Eg får ikkje logga inn i Svipper med e-post`,
           ),
           answer: _(
-            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
-            `It is not possible to log into the app with e-mail as of today. You can continue to use your travel card or create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
-            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukarprofilen. Du kan kontakte kundesenteret for refusjon dersom du likevel vil laga ein ny brukarprofil i appen.`,
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette en ny brukerprofil med telefonnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+            `It is not possible to log into the app with e-mail as of today. You can continue to use your travel card or create a new user profile with a phone number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service regarding a refund if you still want to create a new user profile in the app.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan fortsette å bruke reisekort eller opprette ein ny brukarprofil med telefonnummer som innlogging. Merk at billettane ikkje vil bli overført til den nye brukarprofilen. Du kan kontakte kundesenteret for refusjon dersom du likevel vil laga ein ny brukarprofil i appen.`,
           ),
         },
         {
@@ -638,38 +638,38 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
       faqsWithoutTravelcard: [
         {
           question: _(
-            'Hva skjer om jeg mister mobilen?',
+            'Hva skjer om jeg mister telefonen?',
             'What happens if I lose my phone?',
-            'Kva skjer om eg mistar mobilen?',
+            'Kva skjer om eg mistar telefonen?',
           ),
           answer: _(
-            'Billetten din ligger trygt lagret i Min bruker. Velg å bruke billetten på en annen mobil.',
-            'Your ticket is safely stored in My user. Switch to use the ticket on another mobile phone.',
-            'Billetten din blir trygt lagra i Min brukar. Vel å bruke billetten på ein annan mobil.',
+            'Billetten din ligger trygt lagret i Min bruker. Velg å bruke billetten på en annen telefon.',
+            'Your ticket is safely stored in My user. Switch to use the ticket on another phone.',
+            'Billetten din blir trygt lagra i Min brukar. Vel å bruke billetten på ein annan telefon.',
           ),
         },
         {
           question: _(
-            'Kan jeg bruke billetten på flere mobiler samtidig?',
-            'Can I use the ticket on several mobile phones at the same time?',
-            'Kan eg bruke billetten på fleire mobilar samtidig?',
+            'Kan jeg bruke billetten på flere telefoner samtidig?',
+            'Can I use the ticket on several phones at the same time?',
+            'Kan eg bruke billetten på fleire telefonar samtidig?',
           ),
           answer: _(
             'Nei, du kan kun bruke en av gangen, og billetten kan ikke deles med andre reisende.',
             'No, you can only use one at a time and the ticket cannot be shared with other travellers.',
-            'Nei, du kan berre bruke den på éin mobil av gongen, og billetten kan ikkje delast med andre reisande.',
+            'Nei, du kan berre bruke den på éin telefon av gongen, og billetten kan ikkje delast med andre reisande.',
           ),
         },
         {
           question: _(
-            'Kan jeg reise uten mobil?',
+            'Kan jeg reise uten telefon?',
             'Can I travel without my phone?',
-            'Kan eg reise utan mobil?',
+            'Kan eg reise utan telefon?',
           ),
           answer: _(
-            'Du må alltid ha med deg det mobilen du har valgt å bruke billetten på.',
-            'You must always travel with the mobile phone you have chosen to use the ticket on.',
-            'Du må alltid ha med deg mobilen du har valgt å bruke billetten på.',
+            'Du må alltid ha med deg den telefonen du har valgt å bruke billetten på.',
+            'You must always travel with the phone you have chosen to use the ticket on.',
+            'Du må alltid ha med deg telefonen du har valgt å bruke billetten på.',
           ),
         },
         {
@@ -679,9 +679,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
             `Eg får ikkje logga inn i Svipper med e-post`,
           ),
           answer: _(
-            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med mobilnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
-            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a mobile number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service for a refund if you still want to create a new user profile in the app.`,
-            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med mobilnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukarprofile. Du kan kontakte kundesenteret for refusjon dersom du likevel vil opprette ein ny brukarprofil i appen.`,
+            `Det er ikke mulig å logge inn i appen med e-post per i dag. Du kan opprette en ny brukerprofil med telefonnummer som innlogging. Merk at billettene ikke vil bli overført til din nye brukerprofil. Du kan kontakte kundesenteret for refusjon dersom du likevel vil lage en ny brukerprofil i appen.`,
+            `It is not possible to log into the app with e-mail as of today. You can create a new user profile with a phone number as login. Note that the tickets will not be transferred to your new user profile. You can contact customer service for a refund if you still want to create a new user profile in the app.`,
+            `Det er ikkje mogleg å logga inn i appen med e-post per i dag. Du kan opprette ein ny brukarprofil med telefonnummer som innlogging. Merk at billettane ikkje vil verte overførte til den nye brukarprofile. Du kan kontakte kundesenteret for refusjon dersom du likevel vil opprette ein ny brukarprofil i appen.`,
           ),
         },
         {
@@ -700,9 +700,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
     },
     toggleToken: {
       title: _(
-        'Bytt mellom reisekort / mobil',
-        'Switch between travel card / phone',
-        'Byt mellom reisekort / mobil',
+        'Bytt mellom reisekort/telefon',
+        'Switch between travel card/phone',
+        'Byt mellom reisekort/telefon',
       ),
       radioBox: {
         tCard: {
