@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Animated, Easing, LayoutChangeEvent, ViewStyle} from 'react-native';
+import {Animated, Easing, LayoutChangeEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {shadows} from '@atb/components/map';
 import {SnackbarPosition} from '@atb/components/snackbar';
@@ -90,10 +90,7 @@ export const useSnackbarVerticalPositionAnimation = (
     verticalPositionStyle: {
       ...topOrBottomStyle,
       ...{transform: [{translateY}]},
-      ...(isHidden && {
-        opacity: 0,
-        pointerEvents: 'none' as ViewStyle['pointerEvents'],
-      }),
+      ...(isHidden && {opacity: 0, pointerEvents: 'none'}),
     },
     animatedViewOnLayout,
   };
