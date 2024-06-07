@@ -7,7 +7,7 @@ import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts'
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
 import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ActivityIndicator, Linking} from 'react-native';
-import {useValueCodeQuery} from '@atb/mobility/queries/use-value-code-query';
+import {useValueCodeMutation} from '@atb/mobility/queries/use-value-code-mutation';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 
@@ -115,21 +115,20 @@ const OperatorActionButtonWithValueCode = ({
   const {t} = useTranslation();
 
   const {
-    isRefetching: isRefetchingValueCode,
-    isRefetchError: isRefetchingValueCodeError,
-    refetch: refetchValueCode,
-  } = useValueCodeQuery(operatorId, false);
+    mutate: fetchValueCode,
+    isLoading: isFetchingValueCode,
+    isError: isFetchingValueCodeError,
+  } = useValueCodeMutation(operatorId);
 
   const appSwitchButtonOnPress = useCallback(() => {
-    refetchValueCode().then((res) => {
-      const valueCode = res?.data;
-      valueCode && buttonOnPress(valueCode);
+    fetchValueCode(undefined, {
+      onSuccess: (valueCode) => valueCode && buttonOnPress(valueCode),
     });
-  }, [buttonOnPress, refetchValueCode]);
+  }, [buttonOnPress, fetchValueCode]);
 
-  if (isRefetchingValueCode) {
+  if (isFetchingValueCode) {
     return <ActivityIndicator />;
-  } else if (isRefetchingValueCodeError) {
+  } else if (isFetchingValueCodeError) {
     return (
       <MessageInfoBox
         type="error"
