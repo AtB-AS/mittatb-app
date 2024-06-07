@@ -56,6 +56,23 @@ describe('useStableValue', () => {
     expect(result.current).toEqual({a: 2});
   });
 
+  it('should not update the stable value when lockValue is true', () => {
+    const lockValue = true;
+    const initialValue: TestValue = {a: 1};
+    const {result, rerender} = renderHook(
+      (value: TestValue) => useStableValue(value, lockValue),
+      {
+        initialProps: initialValue,
+      },
+    );
+
+    rerender({a: 1}); // new object with the same content
+    expect(result.current).toEqual(initialValue);
+
+    rerender({a: 2}); // change content
+    expect(result.current).toEqual(initialValue); // but shouldnt change since lockValue is true
+  });
+
   it('should update the stable value from undefined to a defined value', () => {
     const initialValue = undefined;
     const {result, rerender} = renderHook(

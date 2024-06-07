@@ -69,7 +69,7 @@ const SnackbarInstance = ({
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const stableTextContent = useStableValue(textContent); // avoid triggering useEffects if no text has been changed
+  const stableTextContent = useStableValue(textContent, isDisabled); // avoid triggering useEffects if no text has been changed
 
   const {snackbarIsVisible, hideSnackbar} = useSnackbarIsVisible(
     isDisabled,
