@@ -22,9 +22,6 @@ export const useSnackbarVerticalPositionAnimation = (
   const top = withSnackbarPadding(safeAreaTop);
   const bottom = withSnackbarPadding(safeAreaBottom);
 
-  // the y position when visible and the animation is done
-  const topOrBottomStyle = position === 'top' ? {top} : {bottom};
-
   // height of the Animated.View component in Snackbar
   const [height, setHeight] = useState<number>(55);
   // 55 is just an estimate, use onLayout to measure exact height
@@ -32,7 +29,19 @@ export const useSnackbarVerticalPositionAnimation = (
     setHeight(nativeEvent.layout.height);
   };
 
-  const visibleY = 0; // no offset
+  // height of a custom view in Snackbar with position absolute and height 100%
+  const [parentHeight, setParentHeight] = useState<number>(9999999);
+  const parentMeasurerOnLayout = ({nativeEvent}: LayoutChangeEvent) => {
+    setParentHeight(nativeEvent.layout.height);
+  };
+
+  // When the height of the Snackbar changes, it takes some time to animate into the new hiddenY.
+  // To avoid the new pixels being shown on screen until the new hiddenY has been reached while disabled,
+  // this uses bottom for position="top" and top for position="bottom"
+  const topOrBottomStyle =
+    position === 'top'
+      ? {bottom: parentHeight - top}
+      : {top: parentHeight - bottom};
 
   const shadowRadius = shadows?.shadowRadius || 8;
   const estimatedShadowHeight = 2 * shadowRadius; // https://drafts.csswg.org/css-backgrounds/#shadow-blur
@@ -43,6 +52,9 @@ export const useSnackbarVerticalPositionAnimation = (
     shadows?.shadowOffset?.height || 2,
     estimatedShadowHeight,
   ); // avoid overcompensation by limiting shadowOffsetY to be no more than estimatedShadowHeight
+
+  const visibleY =
+    position === 'top' ? viewHeightIncludingShadow : -viewHeightIncludingShadow;
 
   const hiddenY = isScreenReaderEnabled
     ? visibleY // jump directly to visible position when screen reader enabled
@@ -66,6 +78,7 @@ export const useSnackbarVerticalPositionAnimation = (
     snackbarIsVisible,
     translateY,
     position,
+    visibleY,
     hiddenY,
     viewHeightIncludingShadow,
   ]);
@@ -76,5 +89,6 @@ export const useSnackbarVerticalPositionAnimation = (
       ...{transform: [{translateY}]},
     },
     animatedViewOnLayout,
+    parentMeasurerOnLayout,
   };
 };
