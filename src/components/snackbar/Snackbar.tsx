@@ -9,13 +9,13 @@ import {
   useSnackbarVerticalPositionAnimation,
   useSnackbarIsVisible,
   useSnackbarScreenReaderFocus,
+  useStableValue,
 } from '@atb/components/snackbar';
 import {useTranslation} from '@atb/translations';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
-import {useStableValue} from '@atb/utils/use-stable-value';
 
 export type SnackbarPosition = 'top' | 'bottom';
 const SNACKBAR_POSITIONS: SnackbarPosition[] = ['top', 'bottom'];
