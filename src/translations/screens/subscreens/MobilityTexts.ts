@@ -93,6 +93,19 @@ export const MobilityTexts = {
     'Activate to show in map',
     'Aktiver for å sjå i kart',
   ),
+  errorLoadingValueCode: {
+    title: _(
+      'Henting av verdikode feilet',
+      'Fetching value code failed',
+      'Henting av verdikode feila',
+    ),
+    text: _(
+      'Et problem oppstod ved henting av verdikode. Denne er nødvendig for å få med fordelen over til den andre appen.',
+      'A problem occured while fetching the value code. This is required to get the benefits in the other app.',
+      'Et problem oppstod ved henting av verdikode. Denne er nødvendig for å få med fordelen over til den andre appen.',
+    ),
+    retry: _('Prøv igjen', 'Retry', 'Prøv igjen'),
+  },
 };
 
 export const ScooterTexts = {

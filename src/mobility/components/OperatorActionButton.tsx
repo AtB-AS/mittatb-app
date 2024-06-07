@@ -1,7 +1,7 @@
 import {useAnalytics} from '@atb/analytics';
 import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useAppMissingAlert} from '@atb/mobility/use-app-missing-alert';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Button} from '@atb/components/button';
 import {MobilityTexts} from '@atb/translations/screens/subscreens/MobilityTexts';
 import {OperatorBenefitType} from '@atb-as/config-specs/lib/mobility-operators';
@@ -9,6 +9,7 @@ import {ExternalLink} from '@atb/assets/svg/mono-icons/navigation';
 import {ActivityIndicator, Linking} from 'react-native';
 import {useValueCodeQuery} from '@atb/mobility/queries/use-value-code-query';
 import {useIsEligibleForBenefit} from '@atb/mobility/use-is-eligible-for-benefit';
+import {MessageInfoBox} from '@atb/components/message-info-box';
 
 type OperatorActionButtonProps = {
   operatorId: string | undefined;
@@ -111,17 +112,40 @@ const OperatorActionButtonWithValueCode = ({
   buttonOnPress,
   buttonText,
 }: OperatorActionButtonWithValueCodeProps) => {
-  const {data: valueCode, isLoading: isLoadingValueCode} =
-    useValueCodeQuery(operatorId);
+  const {t} = useTranslation();
 
-  if (isLoadingValueCode) {
+  const {
+    isRefetching: isRefetchingValueCode,
+    isRefetchError: isRefetchingValueCodeError,
+    refetch: refetchValueCode,
+  } = useValueCodeQuery(operatorId, false);
+
+  const appSwitchButtonOnPress = useCallback(() => {
+    refetchValueCode().then((res) => {
+      const valueCode = res?.data;
+      valueCode && buttonOnPress(valueCode);
+    });
+  }, [buttonOnPress, refetchValueCode]);
+
+  if (isRefetchingValueCode) {
     return <ActivityIndicator />;
+  } else if (isRefetchingValueCodeError) {
+    return (
+      <MessageInfoBox
+        type="error"
+        title={t(MobilityTexts.errorLoadingValueCode.title)}
+        message={t(MobilityTexts.errorLoadingValueCode.text)}
+        onPressConfig={{
+          action: appSwitchButtonOnPress,
+          text: t(MobilityTexts.errorLoadingValueCode.retry),
+        }}
+      />
+    );
   }
 
   return (
     <AppSwitchButton
-      // would be nice to handle invalid valueCode as well here at some point
-      buttonOnPress={() => valueCode && buttonOnPress(valueCode)}
+      buttonOnPress={appSwitchButtonOnPress}
       buttonText={buttonText}
     />
   );
