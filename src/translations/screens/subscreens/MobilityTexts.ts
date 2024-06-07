@@ -101,7 +101,7 @@ export const MobilityTexts = {
     ),
     text: _(
       'Et problem oppstod ved henting av verdikode. Denne er nødvendig for å få med fordelen over til den andre appen.',
-      'A problem occured while fetching the value code. This is required to get the benefits in the other app.',
+      'A problem occured while fetching the value code. This is required to get the benefit in the other app.',
       'Et problem oppstod ved henting av verdikode. Denne er nødvendig for å få med fordelen over til den andre appen.',
     ),
     retry: _('Prøv igjen', 'Retry', 'Prøv igjen'),
