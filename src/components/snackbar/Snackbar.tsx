@@ -9,15 +9,16 @@ import {
   useSnackbarVerticalPositionAnimation,
   useSnackbarIsVisible,
   useSnackbarScreenReaderFocus,
+  useStableValue,
 } from '@atb/components/snackbar';
 import {useTranslation} from '@atb/translations';
 import {useIsScreenReaderEnabled} from '@atb/utils/use-is-screen-reader-enabled';
 
 import SnackbarTexts from '@atb/translations/components/Snackbar';
 import {useStablePreviousValue} from '@atb/utils/use-stable-previous-value';
-import {useStableValue} from '@atb/utils/use-stable-value';
 
 export type SnackbarPosition = 'top' | 'bottom';
+const SNACKBAR_POSITIONS: SnackbarPosition[] = ['top', 'bottom'];
 
 export type SnackbarTextContent = {
   title?: string;
@@ -37,24 +38,46 @@ export type SnackbarProps = {
   customVisibleDurationMS?: number;
 };
 
-export const Snackbar = ({
+// if position is ever toggled, it starts using two SnackbarInstances, one for top and one for bottom
+// one of them is always disabled
+export const Snackbar = (snackbarProps: SnackbarProps) => (
+  <>
+    {SNACKBAR_POSITIONS.map((position) => (
+      <SnackbarInstance
+        key={position}
+        {...snackbarProps}
+        position={position}
+        isDisabled={position !== (snackbarProps.position || 'top')}
+      />
+    ))}
+  </>
+);
+
+type SnackbarInstanceProps = SnackbarProps & {
+  /** setting this true moves the SnackbarInstance to the hidden position */
+  isDisabled: boolean;
+};
+
+const SnackbarInstance = ({
   textContent,
   position = 'top',
   actionButton,
   isDismissable,
   customVisibleDurationMS,
-}: SnackbarProps) => {
+  isDisabled,
+}: SnackbarInstanceProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
 
-  const stableTextContent = useStableValue(textContent); // avoid triggering useEffects if no text has been changed
+  const stableTextContent = useStableValue(textContent, isDisabled); // avoid triggering useEffects if no text has been changed
 
   const {snackbarIsVisible, hideSnackbar} = useSnackbarIsVisible(
+    isDisabled,
     stableTextContent,
     customVisibleDurationMS,
   );
 
-  const {verticalPositionStyle, animatedViewOnLayout} =
+  const {verticalPositionStyle, animatedViewOnLayout, parentMeasurerOnLayout} =
     useSnackbarVerticalPositionAnimation(position, snackbarIsVisible);
 
   // to show the correct textContent during exit animation, keep track of the previous value
@@ -64,7 +87,7 @@ export const Snackbar = ({
       ? stablePreviousTextContent
       : stableTextContent;
 
-  const focusRef = useSnackbarScreenReaderFocus(activeTextContent);
+  const focusRef = useSnackbarScreenReaderFocus(isDisabled, activeTextContent);
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
   if (!snackbarIsVisible && isScreenReaderEnabled) {
@@ -72,63 +95,66 @@ export const Snackbar = ({
   }
 
   return (
-    <Animated.View
-      style={[styles.snackbarContainer, verticalPositionStyle]}
-      onLayout={animatedViewOnLayout}
-    >
-      <View style={styles.snackbar}>
-        <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
-          {activeTextContent?.title && (
-            <ThemeText
-              type="body__primary--bold"
-              color="primary"
-              numberOfLines={4} // max limit, should normally not come into play
-            >
-              {activeTextContent?.title}
-            </ThemeText>
-          )}
-          {activeTextContent?.description && (
-            <ThemeText
-              type="body__primary"
-              color={activeTextContent?.title ? 'secondary' : 'primary'}
-              numberOfLines={7} // max limit, should normally not come into play
-            >
-              {activeTextContent?.description}
-            </ThemeText>
-          )}
-        </View>
+    <>
+      <Animated.View
+        style={[styles.snackbarContainer, verticalPositionStyle]}
+        onLayout={animatedViewOnLayout}
+      >
+        <View style={styles.snackbar}>
+          <View style={styles.snackbarTexts} ref={focusRef} accessible={true}>
+            {activeTextContent?.title && (
+              <ThemeText
+                type="body__primary--bold"
+                color="primary"
+                numberOfLines={4} // max limit, should normally not come into play
+              >
+                {activeTextContent?.title}
+              </ThemeText>
+            )}
+            {activeTextContent?.description && (
+              <ThemeText
+                type="body__primary"
+                color={activeTextContent?.title ? 'secondary' : 'primary'}
+                numberOfLines={7} // max limit, should normally not come into play
+              >
+                {activeTextContent?.description}
+              </ThemeText>
+            )}
+          </View>
 
-        <View style={styles.snackbarButtons}>
-          {actionButton && (
-            <Button
-              type="medium"
-              mode="tertiary"
-              {...actionButton}
-              onPress={() => {
-                if (snackbarIsVisible) {
-                  actionButton.onPress();
-                  hideSnackbar();
-                }
-              }}
-            />
-          )}
+          <View style={styles.snackbarButtons}>
+            {actionButton && (
+              <Button
+                type="medium"
+                mode="tertiary"
+                {...actionButton}
+                onPress={() => {
+                  if (snackbarIsVisible) {
+                    actionButton.onPress();
+                    hideSnackbar();
+                  }
+                }}
+              />
+            )}
 
-          {(isDismissable || isScreenReaderEnabled) && (
-            <TouchableOpacity
-              onPress={hideSnackbar}
-              style={styles.closeButton}
-              accessible={true}
-              accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
-              accessibilityHint={t(SnackbarTexts.closeButton.a11yHint)}
-              accessibilityRole="button"
-              testID="closeSnackbarButton"
-            >
-              <ThemeIcon svg={Close} size="normal" />
-            </TouchableOpacity>
-          )}
+            {(isDismissable || isScreenReaderEnabled) && (
+              <TouchableOpacity
+                onPress={hideSnackbar}
+                style={styles.closeButton}
+                accessible={true}
+                accessibilityLabel={t(SnackbarTexts.closeButton.a11yLabel)}
+                accessibilityHint={t(SnackbarTexts.closeButton.a11yHint)}
+                accessibilityRole="button"
+                testID="closeSnackbarButton"
+              >
+                <ThemeIcon svg={Close} size="normal" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-      </View>
-    </Animated.View>
+      </Animated.View>
+      <View onLayout={parentMeasurerOnLayout} style={styles.parentMeasurer} />
+    </>
   );
 };
 
@@ -166,5 +192,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   closeButton: {
     padding: theme.spacings.medium,
+  },
+  parentMeasurer: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    pointerEvents: 'none',
   },
 }));
