@@ -1,6 +1,4 @@
 import {
-  GeofencingZonesCustomProps,
-  GeofencingZoneKeys,
   GeofencingZoneCustomProps,
   PreProcessedGeofencingZones,
 } from '@atb/components/map';
@@ -11,6 +9,7 @@ import {
   GeofencingZoneRule,
   GeofencingZones,
 } from '@atb/api/types/generated/mobility-types_v2';
+import {GeofencingZoneStyles} from '@atb-as/theme';
 
 function getApplicableGeofencingZoneRules(
   feature: Feature,
@@ -103,7 +102,7 @@ export function decodePolylineEncodedMultiPolygons(
 
 export function addGeofencingZoneCustomProps(
   geofencingZones: PreProcessedGeofencingZones[],
-  geofencingZonesCustomProps: GeofencingZonesCustomProps,
+  geofencingZoneStyles: GeofencingZoneStyles,
   vehicleTypeId?: string,
 ) {
   if (!vehicleTypeId) return geofencingZones;
@@ -117,13 +116,13 @@ export function addGeofencingZoneCustomProps(
           feature,
           vehicleTypeId,
         );
-        // the first applicable rule for the given vehicly type is the decisive one
+        // the first applicable rule for the given vehicle type is the decisive one
         const rule = applicableRules?.[0];
 
         let rideNotAllowed = false,
           rideThroughNotAllowed = false,
-          isSlowArea = false;
-        let isStationParking = false;
+          isSlowArea = false,
+          isStationParking = false;
 
         if (rule) {
           rideNotAllowed = !rule.rideAllowed;
@@ -135,17 +134,19 @@ export function addGeofencingZoneCustomProps(
           isStationParking = !!rule.stationParking;
         }
 
-        const {Allowed, Slow, NoParking, NoEntry} = geofencingZonesCustomProps;
+        const {Allowed, Slow, NoParking, NoEntry} = geofencingZoneStyles;
 
-        let geofencingZoneCustomProps: GeofencingZoneCustomProps<GeofencingZoneKeys> =
-          Allowed;
+        let geofencingZoneCustomProps: GeofencingZoneCustomProps = {
+          ...Allowed,
+          code: 'Allowed',
+        };
 
         if (rideThroughNotAllowed) {
-          geofencingZoneCustomProps = NoEntry;
+          geofencingZoneCustomProps = {...NoEntry, code: 'NoEntry'};
         } else if (rideNotAllowed) {
-          geofencingZoneCustomProps = NoParking;
+          geofencingZoneCustomProps = {...NoParking, code: 'NoParking'};
         } else if (isSlowArea) {
-          geofencingZoneCustomProps = Slow;
+          geofencingZoneCustomProps = {...Slow, code: 'Slow'};
         }
         geofencingZoneCustomProps.isStationParking = isStationParking;
 

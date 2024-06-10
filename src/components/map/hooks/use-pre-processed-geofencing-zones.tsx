@@ -2,13 +2,13 @@ import {
   addGeofencingZoneCustomProps,
   decodePolylineEncodedMultiPolygons,
   sortFeaturesByLayerIndexWeight,
-  useGeofencingZonesCustomProps,
   filterOutFeaturesNotApplicableForCurrentVehicle,
 } from '@atb/components/map';
 
 import {useMemo} from 'react';
 import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {useGeofencingZonesQuery} from '@atb/mobility/queries/use-geofencing-zones';
+import {useTheme} from '@atb/theme';
 
 export const usePreProcessedGeofencingZones = (
   vehicle?: VehicleExtendedFragment,
@@ -16,7 +16,7 @@ export const usePreProcessedGeofencingZones = (
   const systemId = vehicle?.system.id;
   const vehicleTypeId = vehicle?.vehicleType.id;
 
-  const geofencingZonesCustomProps = useGeofencingZonesCustomProps();
+  const {theme} = useTheme();
 
   const {
     data: geofencingZonesData, // load and error silently
@@ -29,7 +29,7 @@ export const usePreProcessedGeofencingZones = (
     );
   const geofencingZonesWithCustomProps = addGeofencingZoneCustomProps(
     applicableGeofencingZones,
-    geofencingZonesCustomProps,
+    theme.geofencingZones,
     vehicleTypeId,
   );
   const geofencingZonesWithDecodedCoordinates =

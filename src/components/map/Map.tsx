@@ -15,12 +15,7 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {
-  GeofencingZoneKeys,
-  GeofencingZoneCustomProps,
-  MapProps,
-  MapRegion,
-} from './types';
+import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
 import {
   isFeaturePoint,
   getFeaturesAtClick,
@@ -73,9 +68,7 @@ export const Map = (props: MapProps) => {
   }, [selectedFeature, hideSnackbar]);
 
   const geofencingZoneOnPress = useCallback(
-    (
-      geofencingZoneCustomProps?: GeofencingZoneCustomProps<GeofencingZoneKeys>,
-    ) => {
+    (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
       const textContent = getGeofencingZoneTextContent(
         geofencingZoneCustomProps,
       );

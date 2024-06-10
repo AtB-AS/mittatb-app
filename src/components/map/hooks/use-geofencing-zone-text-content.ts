@@ -3,13 +3,13 @@ import {
   GeofencingZoneExplanations,
   GeofencingZoneExtraExplanations,
 } from '@atb/translations/screens/subscreens/MobilityTexts';
-import {GeofencingZoneCustomProps, GeofencingZoneKeys} from '../types';
+import {GeofencingZoneCustomProps} from '../types';
 
 export const useGeofencingZoneTextContent = () => {
   const {t} = useTranslation();
 
   const getGeofencingZoneTextContent = (
-    geofencingZoneCustomProps?: GeofencingZoneCustomProps<GeofencingZoneKeys>,
+    geofencingZoneCustomProps?: GeofencingZoneCustomProps,
   ) => {
     const title = t(
       GeofencingZoneExplanations[
