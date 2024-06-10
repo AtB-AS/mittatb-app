@@ -41,7 +41,6 @@ export type {
   PolylineEncodedMultiPolygon,
   PreProcessedGeofencingZones,
   GeofencingZoneCustomProps,
-  GeofencingZonesCustomProps,
   GeofencingZoneExplanationsType,
 } from './types';
 export {
