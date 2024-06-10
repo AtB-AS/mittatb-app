@@ -115,15 +115,14 @@ const OperatorActionButtonWithValueCode = ({
   const {t} = useTranslation();
 
   const {
-    mutate: fetchValueCode,
+    mutateAsync: fetchValueCode,
     isLoading: isFetchingValueCode,
     isError: isFetchingValueCodeError,
   } = useValueCodeMutation(operatorId);
 
-  const appSwitchButtonOnPress = useCallback(() => {
-    fetchValueCode(undefined, {
-      onSuccess: (valueCode) => valueCode && buttonOnPress(valueCode),
-    });
+  const appSwitchButtonOnPress = useCallback(async () => {
+    const valueCode = await fetchValueCode();
+    valueCode && buttonOnPress(valueCode);
   }, [buttonOnPress, fetchValueCode]);
 
   if (isFetchingValueCode) {
