@@ -42,11 +42,7 @@ export const getValueCode = (
         skipErrorLogging: (error) => error.response?.status === 404,
       },
     )
-    .then((response) => String(response.data.code))
-    .catch((error) => {
-      if (getAxiosErrorMetadata(error).responseStatus === 404) return null;
-      throw error;
-    });
+    .then((response) => String(response.data.code));
 };
 
 const FareProductBenefitMapping = z.object({
