@@ -7,6 +7,12 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<T extends {[key: string]: unknown}, K extends keyof T> = {
+  [_ in K]?: never;
+};
+export type Incremental<T> =
+  | T
+  | {[P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -54,6 +60,10 @@ export enum FormFactor {
 export type GeofencingZoneProperties = {
   end?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
+  /** MultiPolygon where the lists of coordinates are encoded as polyline strings using precision of 6 decimals (see http://code.google.com/apis/maps/documentation/polylinealgorithm.html). Meant to be used instead of geometry.coordinates to minimize the response payload size. */
+  polylineEncodedMultiPolygon?: Maybe<
+    Array<Maybe<Array<Maybe<Scalars['String']>>>>
+  >;
   rules?: Maybe<Array<Maybe<GeofencingZoneRule>>>;
   start?: Maybe<Scalars['Int']>;
 };
@@ -72,6 +82,7 @@ export type GeofencingZones = {
 };
 
 export type MultiPolygon = {
+  /** See properties.polylineEncodedMultiPolygon, and consider using that instead of coordinates */
   coordinates?: Maybe<
     Array<Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Scalars['Float']>>>>>>>>
   >;
@@ -126,8 +137,11 @@ export type Query = {
   codespaces?: Maybe<Array<Maybe<Scalars['String']>>>;
   geofencingZones?: Maybe<Array<Maybe<GeofencingZones>>>;
   operators?: Maybe<Array<Maybe<Operator>>>;
+  station?: Maybe<Station>;
   stations?: Maybe<Array<Maybe<Station>>>;
+  /** @deprecated stationsById is deprecated. Use stations query instead. */
   stationsById?: Maybe<Array<Maybe<Station>>>;
+  vehicle?: Maybe<Vehicle>;
   vehicles?: Maybe<Array<Maybe<Vehicle>>>;
 };
 
@@ -135,15 +149,20 @@ export type QueryGeofencingZonesArgs = {
   systemIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
+export type QueryStationArgs = {
+  id: Scalars['String'];
+};
+
 export type QueryStationsArgs = {
   availableFormFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
   availablePropulsionTypes?: InputMaybe<Array<InputMaybe<PropulsionType>>>;
   codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   count?: InputMaybe<Scalars['Int']>;
-  lat: Scalars['Float'];
-  lon: Scalars['Float'];
+  ids?: InputMaybe<Array<Scalars['String']>>;
+  lat?: InputMaybe<Scalars['Float']>;
+  lon?: InputMaybe<Scalars['Float']>;
   operators?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  range: Scalars['Int'];
+  range?: InputMaybe<Scalars['Int']>;
   systems?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -151,17 +170,22 @@ export type QueryStationsByIdArgs = {
   ids: Array<InputMaybe<Scalars['String']>>;
 };
 
+export type QueryVehicleArgs = {
+  id: Scalars['String'];
+};
+
 export type QueryVehiclesArgs = {
   codespaces?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   count?: InputMaybe<Scalars['Int']>;
   formFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
+  ids?: InputMaybe<Array<Scalars['String']>>;
   includeDisabled?: InputMaybe<Scalars['Boolean']>;
   includeReserved?: InputMaybe<Scalars['Boolean']>;
-  lat: Scalars['Float'];
-  lon: Scalars['Float'];
+  lat?: InputMaybe<Scalars['Float']>;
+  lon?: InputMaybe<Scalars['Float']>;
   operators?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   propulsionTypes?: InputMaybe<Array<InputMaybe<PropulsionType>>>;
-  range: Scalars['Int'];
+  range?: InputMaybe<Scalars['Int']>;
   systems?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 

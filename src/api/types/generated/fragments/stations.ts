@@ -28,7 +28,7 @@ export type BikeStationFragment = {
 } & StationBasicFragment;
 
 export type CarVehicleTypeFragment = {
-  id: string,
+  id: string;
   formFactor: Types.FormFactor;
   propulsionType: Types.PropulsionType;
   maxRangeMeters?: number;
