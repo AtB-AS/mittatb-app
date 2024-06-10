@@ -44,7 +44,6 @@ export const getValueCode = (
     )
     .then((response) => String(response.data.code))
     .catch((error) => {
-      if (getAxiosErrorMetadata(error).responseStatus === 404) return null;
       throw error;
     });
 };
