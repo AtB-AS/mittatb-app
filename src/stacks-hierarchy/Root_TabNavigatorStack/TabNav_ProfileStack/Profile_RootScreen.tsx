@@ -159,7 +159,7 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                 messageType="error"
                 onPressConfig={{
                   action: () => {
-                    logEvent('Profile', 'Retry fetching id token');
+                    logEvent('Profile', 'Retry auth');
                     retryAuth();
                   },
                   text: t(dictionary.retry),

@@ -15,11 +15,11 @@ export type RemoteConfig = {
    * transaction.
    */
   enable_auto_sale: boolean;
+  enable_backend_sms_auth: boolean;
   enable_beacons: boolean;
   enable_car_sharing_in_map: boolean;
   enable_city_bikes_in_map: boolean;
   enable_extended_onboarding: boolean;
-  enable_flex_tickets: boolean;
   enable_flexible_transport: boolean;
   enable_from_travel_search_to_ticket: boolean;
   enable_geofencing_zones: boolean;
@@ -48,6 +48,7 @@ export type RemoteConfig = {
   flex_booking_number_of_days_available: number;
   flex_ticket_url: string;
   live_vehicle_stale_threshold: number;
+  minimum_app_version: string;
   must_upgrade_ticketing: boolean;
   new_favourites_info_url: string;
   privacy_policy_url: string;
@@ -76,11 +77,11 @@ export const defaultRemoteConfig: RemoteConfig = {
   disable_travelcard: false,
   enable_activate_ticket_now: false,
   enable_auto_sale: false,
+  enable_backend_sms_auth: false,
   enable_beacons: false,
   enable_car_sharing_in_map: false,
   enable_city_bikes_in_map: false,
   enable_extended_onboarding: false,
-  enable_flex_tickets: false,
   enable_flexible_transport: false,
   enable_from_travel_search_to_ticket: false,
   enable_geofencing_zones: false,
@@ -109,6 +110,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   flex_booking_number_of_days_available: 7,
   flex_ticket_url: '',
   live_vehicle_stale_threshold: 15,
+  minimum_app_version: '',
   must_upgrade_ticketing: false,
   new_favourites_info_url: '',
   privacy_policy_url: PRIVACY_POLICY_URL,
@@ -152,6 +154,9 @@ export function getConfig(): RemoteConfig {
   const enable_auto_sale =
     values['enable_auto_sale']?.asBoolean() ??
     defaultRemoteConfig.enable_auto_sale;
+  const enable_backend_sms_auth =
+    values['enable_backend_sms_auth']?.asBoolean() ??
+    defaultRemoteConfig.enable_backend_sms_auth;
   const enable_beacons =
     values['enable_beacons']?.asBoolean() ?? defaultRemoteConfig.enable_beacons;
   const enable_car_sharing_in_map =
@@ -163,9 +168,6 @@ export function getConfig(): RemoteConfig {
   const enable_extended_onboarding =
     values['enable_extended_onboarding']?.asBoolean() ??
     defaultRemoteConfig.enable_extended_onboarding;
-  const enable_flex_tickets =
-    values['enable_flex_tickets']?.asBoolean() ??
-    defaultRemoteConfig.enable_flex_tickets;
   const enable_flexible_transport =
     values['enable_flexible_transport']?.asBoolean() ??
     defaultRemoteConfig.enable_flexible_transport;
@@ -245,6 +247,9 @@ export function getConfig(): RemoteConfig {
   const live_vehicle_stale_threshold =
     values['live_vehicle_stale_threshold']?.asNumber() ??
     defaultRemoteConfig.live_vehicle_stale_threshold;
+  const minimum_app_version =
+      values['minimum_app_version']?.asString() ??
+      defaultRemoteConfig.minimum_app_version;
   const must_upgrade_ticketing =
     values['must_upgrade_ticketing']?.asBoolean() ?? false;
   const new_favourites_info_url =
@@ -293,11 +298,11 @@ export function getConfig(): RemoteConfig {
     disable_travelcard,
     enable_activate_ticket_now,
     enable_auto_sale,
+    enable_backend_sms_auth,
     enable_beacons,
     enable_car_sharing_in_map,
     enable_city_bikes_in_map,
     enable_extended_onboarding,
-    enable_flex_tickets,
     enable_flexible_transport,
     enable_from_travel_search_to_ticket,
     enable_geofencing_zones,
@@ -326,6 +331,7 @@ export function getConfig(): RemoteConfig {
     flex_booking_number_of_days_available,
     flex_ticket_url,
     live_vehicle_stale_threshold,
+    minimum_app_version,
     must_upgrade_ticketing,
     new_favourites_info_url,
     privacy_policy_url,

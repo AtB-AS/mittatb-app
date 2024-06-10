@@ -18,7 +18,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {SvgXml} from 'react-native-svg';
 import {GenericSectionItem} from '@atb/components/sections';
-import {useGetSignedTokenQuery} from '@atb/mobile-token/hooks/useGetSignedTokenQuery';
+import {useGetSignedTokenQuery} from '@atb/mobile-token/hooks/use-get-signed-token-query';
 
 type Props = {
   validityStatus: ValidityStatus;

@@ -35,8 +35,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
   const {appTexts} = useFirestoreConfiguration();
   const {flex_ticket_url} = useRemoteConfig();
 
-
-  if (!userProfiles.every((u) => u.offer.flex_discount_ladder)) return null;
+  if (!userProfiles.some((u) => u.offer.flex_discount_ladder)) return null;
 
   const description =
     getTextForLanguage(appTexts?.discountInfo, language) ||
@@ -67,7 +66,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
 
             const userProfileName = getReferenceDataName(u, language);
             const discountText =
-              discountPercent &&
+              (discountPercent !== undefined) &&
               t(
                 PurchaseOverviewTexts.flexDiscount.discountPercentage(
                   discountPercent.toFixed(0),
@@ -80,11 +79,13 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 2,
               ) + ' kr';
 
+            const accessibilityLabel = `${userProfileName}, ${discountText ? discountText : ''}, ${priceText}`
+
             return (
               <GenericSectionItem
                 accessibility={{
                   accessible: true,
-                  accessibilityLabel: `${userProfileName}, ${discountText}, ${priceText}`,
+                  accessibilityLabel: accessibilityLabel,
                 }}
                 key={u.id}
               >

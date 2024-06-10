@@ -1,5 +1,10 @@
 import {RemoteToken} from './types';
-import {TokenAction} from '@entur-private/abt-mobile-client-sdk';
+import {
+  TokenAction,
+  TokenErrorResolution,
+  TokenFactoryError,
+} from '@entur-private/abt-mobile-client-sdk';
+import {isDefined} from '@atb/utils/presence';
 
 export const MOBILE_TOKEN_QUERY_KEY = 'mobileToken';
 
@@ -19,3 +24,39 @@ export const hasNoTokenType = (remoteToken?: RemoteToken) =>
 
 export const getTravelCardId = (remoteToken?: RemoteToken) =>
   remoteToken?.keyValues?.find((kv) => kv.key === 'travelCardId')?.value;
+
+/**
+ * Get the error handling strategy from a sdk error. As of now we only differ
+ * between 'reset' and 'fail', but more handling strategies may be added later.
+ *
+ * Handling strategies which may be returned:
+ * 'reset' - Wipe tokens locally and remotely and start over
+ * 'unspecified' - No explicit handling strategy given. May often result in an
+ * error message and retry possibility for the user.
+ */
+export const getSdkErrorHandlingStrategy = (
+  err: any,
+): 'reset' | 'unspecified' => {
+  if (err instanceof TokenFactoryError) {
+    switch (err.resolution) {
+      case TokenErrorResolution.RESET:
+        return 'reset';
+      case TokenErrorResolution.GIVE_UP:
+      case TokenErrorResolution.RETRY_NOW:
+      case TokenErrorResolution.UNKNOWN:
+      case TokenErrorResolution.ASK_USER:
+      case TokenErrorResolution.IGNORE:
+      case TokenErrorResolution.RETRY_LATER:
+        return 'unspecified';
+    }
+  }
+  return 'unspecified';
+};
+
+/**
+ * Get the token ids that are encapsulated in some sdk errors.
+ */
+export const getSdkErrorTokenIds = (err: any): string[] =>
+  err instanceof TokenFactoryError
+    ? [err.pendingTokenId, err.activatedTokenId].filter(isDefined)
+    : [];

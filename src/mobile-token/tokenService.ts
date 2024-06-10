@@ -2,7 +2,7 @@ import {
   ActivatedToken,
   handleRemoteTokenStateError,
   isEmulator,
-  RemoteTokenServiceWithInitiate,
+  RemoteTokenService,
 } from '@entur-private/abt-mobile-client-sdk';
 
 import {client} from '@atb/api/client';
@@ -31,7 +31,7 @@ const AttestationHeaderName = 'Atb-Token-Attestation';
 const AttestationTypeHeaderName = 'Atb-Token-Attestation-Type';
 const IsEmulatorHeaderName = 'Atb-Is-Emulator';
 
-export type TokenService = RemoteTokenServiceWithInitiate & {
+export type TokenService = RemoteTokenService & {
   removeToken: (tokenId: string, traceId: string) => Promise<boolean>;
   listTokens: (traceId: string) => Promise<RemoteToken[]>;
   toggle: (

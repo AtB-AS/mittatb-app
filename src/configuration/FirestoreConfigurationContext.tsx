@@ -510,6 +510,10 @@ function getConfigurableLinksFromSnapshot(
   const appA11yStatement = mapLanguageAndTextType(
     urls?.get('appA11yStatement'),
   );
+  const iosStoreListing = mapLanguageAndTextType(urls?.get('iosStoreListing'));
+  const androidStoreListing = mapLanguageAndTextType(
+    urls?.get('androidStoreListing'),
+  );
 
   return {
     ticketingInfo,
@@ -519,6 +523,8 @@ function getConfigurableLinksFromSnapshot(
     flexTransportInfo,
     dataSharingInfo,
     appA11yStatement,
+    iosStoreListing,
+    androidStoreListing,
   };
 }
 

@@ -1,5 +1,4 @@
 import {useQuery} from '@tanstack/react-query';
-import Bugsnag from '@bugsnag/react-native';
 import {storage} from '@atb/storage';
 import {
   ActivatedToken,
@@ -14,8 +13,15 @@ import {
   TokenNotFoundRemoteTokenStateError,
 } from '@entur-private/abt-token-server-javascript-interface';
 import {v4 as uuid} from 'uuid';
-import {MOBILE_TOKEN_QUERY_KEY} from '@atb/mobile-token/utils';
+import {
+  getSdkErrorHandlingStrategy,
+  getSdkErrorTokenIds,
+  MOBILE_TOKEN_QUERY_KEY,
+} from '../utils';
 import {updateMetadata} from '@atb/chat/metadata';
+import {logToBugsnag} from '@atb/utils/bugsnag-utils';
+import {wipeToken} from '@atb/mobile-token/helpers';
+import Bugsnag from '@bugsnag/react-native';
 
 export const LOAD_NATIVE_TOKEN_QUERY_KEY = 'loadNativeToken';
 export const useLoadNativeTokenQuery = (
@@ -37,6 +43,7 @@ export const useLoadNativeTokenQuery = (
       }
     },
     enabled,
+    retry: 0,
   });
 
 /**
@@ -70,7 +77,19 @@ const loadNativeToken = async (
   let token: ActivatedToken | undefined;
   if (noUserChange) {
     // Retrieve the token from the native layer
-    token = await mobileTokenClient.get(traceId);
+    try {
+      token = await mobileTokenClient.get(traceId);
+    } catch (err: any) {
+      const errHandling = getSdkErrorHandlingStrategy(err);
+      switch (errHandling) {
+        case 'reset':
+          logError(err, traceId, intercomEnabled);
+          await wipeToken(getSdkErrorTokenIds(err), traceId);
+          break;
+        case 'unspecified':
+          throw err;
+      }
+    }
 
     if (token) {
       /*
@@ -79,7 +98,7 @@ const loadNativeToken = async (
       as best possible.
        */
       try {
-        Bugsnag.leaveBreadcrumb(`Validating token ${token.getTokenId()}`);
+        logToBugsnag(`Validating token ${token.getTokenId()}`);
         const signedToken = await mobileTokenClient.encode(token, [
           TokenAction.TOKEN_ACTION_GET_FARECONTRACTS,
         ]);
@@ -91,9 +110,7 @@ const loadNativeToken = async (
         ) {
           token = undefined;
         } else if (err instanceof TokenEncodingInvalidRemoteTokenStateError) {
-          Bugsnag.leaveBreadcrumb('Wiping token with id ' + token.tokenId);
-          await tokenService.removeToken(token.getTokenId(), traceId);
-          await mobileTokenClient.clear();
+          wipeToken([token.tokenId], traceId);
           token = undefined;
         } else if (err instanceof TokenMustBeRenewedRemoteTokenStateError) {
           token = await mobileTokenClient.renew(token, traceId);
@@ -112,7 +129,7 @@ const loadNativeToken = async (
     - There was a validation error which signaled that a new token should
       be created.
      */
-    Bugsnag.leaveBreadcrumb(`Creating new mobile token`);
+    logToBugsnag(`Creating new mobile token`);
     token = await mobileTokenClient.create(traceId);
   }
   await storage.set('@ATB_last_mobile_token_user', userId!);

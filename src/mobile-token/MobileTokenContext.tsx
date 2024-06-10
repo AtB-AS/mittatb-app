@@ -31,12 +31,13 @@ import {useInterval} from '@atb/utils/use-interval';
 import {
   LIST_REMOTE_TOKENS_QUERY_KEY,
   useListRemoteTokensQuery,
-} from '@atb/mobile-token/hooks/useListRemoteTokensQuery';
-import {usePreemptiveRenewTokenMutation} from '@atb/mobile-token/hooks/usePreemptiveRenewTokenMutation';
+} from '@atb/mobile-token/hooks/use-list-remote-tokens-query';
+import {usePreemptiveRenewTokenMutation} from '@atb/mobile-token/hooks/use-preemptive-renew-token-mutation';
 import {
   LOAD_NATIVE_TOKEN_QUERY_KEY,
   useLoadNativeTokenQuery,
-} from '@atb/mobile-token/hooks/use-load-native-token-query';
+} from './hooks/use-load-native-token-query';
+import {wipeToken} from '@atb/mobile-token/helpers';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
@@ -84,7 +85,7 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const mobileTokenEnabled = hasEnabledMobileToken();
   const {enable_intercom} = useRemoteConfig();
 
-  const [isTimeout, setTimout] = useState(false);
+  const [isTimeout, setIsTimeout] = useState(false);
 
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   useEffect(() => setIsLoggingOut(false), [userId]);
@@ -110,11 +111,11 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   }, [queryClient, nativeToken?.tokenId]);
 
   useEffect(() => {
-    if (enabled && nativeTokenStatus === 'loading') {
+    if (nativeTokenStatus === 'loading') {
       cancelTimeoutHandler = timeoutHandler(() => {
         // When timeout has occured, we notify errors in Bugsnag
         // and set state that indicates timeout.
-        setTimout(true);
+        setIsTimeout(true);
 
         notifyBugsnag(
           new Error(
@@ -131,11 +132,12 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
     } else {
       // We've finished with remote tokens. Cancel timeout notification.
       cancelTimeoutHandler?.();
+      setIsTimeout(false);
     }
-  }, [enabled, nativeTokenStatus, token_timeout_in_seconds]);
+  }, [nativeTokenStatus, token_timeout_in_seconds]);
 
   useInterval(
-    () => checkRenewMutate(nativeToken),
+    () => checkRenewMutate({token: nativeToken, traceId: uuid()}),
     [checkRenewMutate, nativeToken],
     SIX_HOURS_MS,
     false,
@@ -164,9 +166,10 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
         }, [queryClient]),
         clearTokenAtLogout: useCallback(() => {
           setIsLoggingOut(true);
-          return wipeToken(nativeToken, uuid()).then(() =>
-            queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
-          );
+          return wipeToken(
+            nativeToken ? [nativeToken.tokenId] : [],
+            uuid(),
+          ).then(() => queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]));
         }, [queryClient, nativeToken]),
         getTokenToggleDetails,
         nativeToken,
@@ -201,8 +204,8 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
               }),
           wipeToken: useCallback(
             () =>
-              wipeToken(nativeToken, uuid()).then(() =>
-                queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
+              wipeToken(nativeToken ? [nativeToken.tokenId] : [], uuid()).then(
+                () => queryClient.resetQueries([MOBILE_TOKEN_QUERY_KEY]),
               ),
             [queryClient, nativeToken],
           ),
@@ -305,16 +308,6 @@ const deviceInspectable = (
   const matchingRemoteToken = remoteTokens.find((r) => r.id === token.tokenId);
   if (!matchingRemoteToken) return false;
   return isInspectable(matchingRemoteToken);
-};
-
-const wipeToken = async (
-  token: ActivatedToken | undefined,
-  traceId: string,
-) => {
-  if (!token) return;
-  Bugsnag.leaveBreadcrumb('Wiping token with id ' + token.tokenId);
-  await tokenService.removeToken(token.getTokenId(), traceId);
-  await mobileTokenClient.clear();
 };
 
 export const getIsInspectableFromStatus = (

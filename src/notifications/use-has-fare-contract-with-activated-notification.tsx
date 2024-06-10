@@ -2,8 +2,7 @@ import {
   findReferenceDataById,
   useFirestoreConfiguration,
 } from '@atb/configuration';
-
-import {useValidRightNowFareContract} from '@atb/ticketing/use-valid-right-now-fare-contracts';
+import {useValidRightNowFareContract} from '@atb/ticketing';
 import {useNotifications} from '@atb/notifications';
 
 export function useHasFareContractWithActivatedNotification(): boolean {
