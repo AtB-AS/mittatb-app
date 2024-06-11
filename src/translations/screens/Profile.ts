@@ -439,6 +439,18 @@ export default orgSpecificTranslations(ProfileTexts, {
               'Standard billettkategori',
             ),
           },
+          travelToken: {
+            label: _(
+              'Bruk billett på reisekort / telefon',
+              'Use ticket on travel card / phone',
+              'Bruk billett på reisekort / telefon',
+            ),
+            labelWithoutTravelcard: _(
+              'Bruk billett på telefon',
+              'Use ticket on phone',
+              'Bruk billett på telefon',
+            ),
+          },
           notifications: {
             pushToggle: {
               subText: _(
