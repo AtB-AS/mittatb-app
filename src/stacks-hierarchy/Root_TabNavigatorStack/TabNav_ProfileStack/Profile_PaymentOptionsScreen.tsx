@@ -1,6 +1,5 @@
 import {Add} from '@atb/assets/svg/mono-icons/actions';
 import SvgDelete from '@atb/assets/svg/mono-icons/actions/Delete';
-import {useAuthState} from '@atb/auth';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {
@@ -13,24 +12,21 @@ import {ThemeIcon} from '@atb/components/theme-icon';
 import {PaymentBrand} from '@atb/stacks-hierarchy/Root_PurchaseConfirmationScreen/components/PaymentBrand';
 import {getExpireDate, getPaymentTypeName} from '@atb/stacks-hierarchy/utils';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
-import {
-  RecurringPayment,
-  authorizeRecurringPayment,
-  cancelRecurringPayment,
-  deleteRecurringPayment,
-  listRecurringPayments,
-} from '@atb/ticketing';
+import {RecurringPayment} from '@atb/ticketing';
 import {useTranslation} from '@atb/translations';
 import PaymentOptionsTexts from '@atb/translations/screens/subscreens/PaymentOptions';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import queryString from 'query-string';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Linking, RefreshControl, View} from 'react-native';
 import {ProfileScreenProps} from './navigation-types';
 import {destructiveAlert} from './utils';
-import {animateNextChange} from '@atb/utils/animation';
 import {FullScreenView} from '@atb/components/screen-view';
 import {ScreenHeading} from '@atb/components/heading';
+import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
+import {useDeleteRecurringPaymentMutation} from '@atb/ticketing/use-delete-recurring-payment-mutation';
+import {useAuthorizeRecurringPaymentMutation} from '@atb/ticketing/use-authorize-recurring-payment-mutation';
+import {useCancelRecurringPaymentMutation} from '@atb/ticketing/use-cancel-recurring-payment-mutation';
 
 type PaymentOptionsProps = ProfileScreenProps<'Profile_PaymentOptionsScreen'>;
 
@@ -39,22 +35,34 @@ export const Profile_PaymentOptionsScreen = ({
 }: PaymentOptionsProps) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {authenticationType} = useAuthState();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [storedCards, setStoredCards] = useState<RecurringPayment[]>([]);
-  const [showError, setShowError] = useState<boolean>(false);
+  const {
+    data: recurringPayment,
+    refetch: refetchRecurringPayment,
+    isError: recurringPaymentError,
+    isFetching: recurringPaymentLoading,
+  } = useListRecurringPaymentsQuery();
 
-  async function getRecurringPaymentOptions(): Promise<RecurringPayment[]> {
-    if (authenticationType !== 'phone') return [];
-    try {
-      const recurringOptions = await listRecurringPayments();
-      return recurringOptions.reverse();
-    } catch (error: any) {
-      setShowError(true);
-      return [];
-    }
-  }
+  const {
+    mutateAsync: deleteRecurringPayment,
+    isError: deleteRecurringPaymentError,
+  } = useDeleteRecurringPaymentMutation();
+
+  const {
+    mutateAsync: authorizeRecurringPayment,
+    isError: authorizeRecurringPaymentError,
+  } = useAuthorizeRecurringPaymentMutation();
+
+  const {
+    mutateAsync: cancelRecurringPayment,
+    isError: cancelRecurringPaymentError,
+  } = useCancelRecurringPaymentMutation();
+
+  const isError =
+    recurringPaymentError ||
+    deleteRecurringPaymentError ||
+    authorizeRecurringPaymentError ||
+    cancelRecurringPaymentError;
 
   useEffect(() => {
     const addPaymentMethodCallbackHandler = async ({url}: {url: string}) => {
@@ -62,29 +70,17 @@ export const Profile_PaymentOptionsScreen = ({
         url.includes('response_code') &&
         url.includes('recurring_payment_id')
       ) {
-        // Timeout required to make loading spinner appear,
-        // see https://github.com/facebook/react-native/issues/37308
-        setTimeout(() => setIsLoading(true), 20);
         const responseCode = queryString.parseUrl(url).query.response_code;
         const paymentId = Number(
           queryString.parseUrl(url).query.recurring_payment_id,
         );
-        try {
-          if (responseCode === 'OK') {
-            await authorizeRecurringPayment(paymentId);
-            await refreshCards();
-          } else if (responseCode === 'Cancel') {
-            await cancelRecurringPayment(paymentId);
-          }
-        } catch (error: any) {
-          setShowError(true);
-        } finally {
-          setIsLoading(false);
+        if (responseCode === 'OK') {
+          await authorizeRecurringPayment(paymentId);
+        } else if (responseCode === 'Cancel') {
+          await cancelRecurringPayment(paymentId);
         }
       }
     };
-
-    refreshCards();
 
     // Listen to deep link redirects back here after
     // the add card process completes.
@@ -95,28 +91,6 @@ export const Profile_PaymentOptionsScreen = ({
     return () => eventSubscription.remove();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  async function handleRemovePayment(paymentOption: RecurringPayment) {
-    setIsLoading(true);
-    try {
-      await deleteRecurringPayment(paymentOption.id);
-    } catch (error: any) {
-    } finally {
-      refreshCards();
-    }
-  }
-
-  async function refreshCards() {
-    setIsLoading(true);
-    try {
-      const remoteOptions = await getRecurringPaymentOptions();
-      animateNextChange();
-      setStoredCards(remoteOptions);
-    } catch (error: any) {
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   const onAddRecurringPayment = async () => {
     navigation.push('Root_AddPaymentMethodScreen');
@@ -129,7 +103,10 @@ export const Profile_PaymentOptionsScreen = ({
         leftButton: {type: 'back', withIcon: true},
       }}
       refreshControl={
-        <RefreshControl refreshing={isLoading} onRefresh={refreshCards} />
+        <RefreshControl
+          refreshing={recurringPaymentLoading}
+          onRefresh={refetchRecurringPayment}
+        />
       }
       parallaxContent={(focusRef) => (
         <ScreenHeading
@@ -139,17 +116,26 @@ export const Profile_PaymentOptionsScreen = ({
       )}
     >
       <View style={styles.content}>
-        {showError && <GenericError />}
-        {storedCards.length > 0 && (
+        {isError && <GenericError />}
+        {recurringPayment && recurringPayment.length > 0 && (
           <Section>
-            {storedCards.map((sc) => (
-              <GenericSectionItem key={'card-' + sc.id}>
-                <Card card={sc} removePaymentHandler={handleRemovePayment} />
+            {recurringPayment.map((card) => (
+              <GenericSectionItem key={'card-' + card.id}>
+                <Card
+                  card={card}
+                  removePaymentHandler={(card) =>
+                    deleteRecurringPayment(card.id)
+                  }
+                />
               </GenericSectionItem>
             ))}
           </Section>
         )}
-        {!isLoading && storedCards.length == 0 && <NoCardsInfo />}
+        {!recurringPaymentLoading &&
+          (!recurringPayment || recurringPayment?.length == 0) && (
+            <NoCardsInfo />
+          )}
+
         <Section>
           <LinkSectionItem
             text={t(PaymentOptionsTexts.addPaymentMethod)}
