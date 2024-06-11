@@ -567,11 +567,21 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
           'Use ticket on travel card / phone',
           'Bruk billett på reisekort / telefon',
         ),
+        titleWithoutTravelcard: _(
+          'Bruk billett på telefon',
+          'Use ticket on phone',
+          'Bruk billett på telefon',
+        ),
       },
       changeTokenButton: _(
         'Bytt mellom reisekort / telefon',
         'Switch between travel card / phone',
         'Byt mellom reisekort / telefon',
+      ),
+      changeTokenWithoutTravelcardButton: _(
+        'Bytt mellom telefoner',
+        'Switch between phones',
+        'Byt mellom telefonar',
       ),
       faqs: [
         {
