@@ -710,9 +710,9 @@ export default orgSpecificTranslations(SelectTravelTokenTexts, {
     },
     toggleToken: {
       title: _(
-        'Bytt mellom reisekort/telefon',
-        'Switch between travel card/phone',
-        'Byt mellom reisekort/telefon',
+        'Bytt mellom reisekort / telefon',
+        'Switch between travel card / phone',
+        'Byt mellom reisekort / telefon',
       ),
       radioBox: {
         tCard: {
