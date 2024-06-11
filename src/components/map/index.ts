@@ -31,6 +31,7 @@ export type {
   MapRegion,
   ParkingType,
   ParkingVehicleTypes,
+  GeofencingZoneExplanationsType,
 } from './types';
 export {
   useRealtimeMapEnabled,

@@ -20,6 +20,9 @@ import {z} from 'zod';
 import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
 import {Line} from '@atb/api/types/trips';
 
+import {TranslatedString} from '@atb/translations';
+import {GeofencingZoneKeys} from '@atb-as/theme';
+
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
  * should behave
@@ -181,4 +184,13 @@ export type ParkingType = {
   entityType: 'Parking';
   parkingVehicleTypes: ParkingVehicleTypes;
   totalCapacity: number;
+};
+
+type GeofencingZoneExplanationType = {
+  title: TranslatedString;
+  description: TranslatedString;
+};
+
+export type GeofencingZoneExplanationsType = {
+  [GZKey in GeofencingZoneKeys | 'Unspecified']: GeofencingZoneExplanationType;
 };
