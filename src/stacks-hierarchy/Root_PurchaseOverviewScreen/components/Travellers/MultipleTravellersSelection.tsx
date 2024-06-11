@@ -3,7 +3,6 @@ import {
   getTextForLanguage,
   Language,
   PurchaseOverviewTexts,
-  TicketTravellerTexts,
   TranslateFunction,
   useTranslation,
 } from '@atb/translations';
@@ -71,15 +70,7 @@ export function MultipleTravellersSelection({
             type="spacious"
             testID={'counterInput_' + u.userTypeString.toLowerCase()}
             color="interactive_2"
-            subtext={[
-              getTextForLanguage(u.alternativeDescriptions, language),
-              t(
-                TicketTravellerTexts.information(
-                  u.userTypeString,
-                  fareProductTypeConfig.type,
-                ),
-              ),
-            ].join(' ')}
+            subtext={getTextForLanguage(u.alternativeDescriptions, language)}
           />
         ))}
       </Section>
