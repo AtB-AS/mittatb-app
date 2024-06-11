@@ -5,6 +5,7 @@ import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {useTransportationColor} from '@atb/utils/use-transportation-color';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
+import {hitboxCoveringIconOnly} from '@atb/components/map';
 
 type Props = {
   bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
@@ -27,6 +28,7 @@ export const Bicycles = ({bicycles, onClusterClick}: Props) => {
         shape={bicycles}
         tolerance={0}
         cluster
+        hitbox={hitboxCoveringIconOnly}
         maxZoomLevel={22}
         clusterMaxZoomLevel={21}
         onPress={(e) => onClusterClick(e, clustersSource)}
@@ -72,6 +74,7 @@ export const Bicycles = ({bicycles, onClusterClick}: Props) => {
         shape={bicycles}
         tolerance={0}
         cluster
+        hitbox={hitboxCoveringIconOnly}
         maxZoomLevel={22}
         clusterMaxZoomLevel={21}
       >

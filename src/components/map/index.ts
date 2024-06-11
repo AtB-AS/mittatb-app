@@ -15,6 +15,7 @@ export {
   toFeatureCollection,
   toFeaturePoint,
   toFeaturePoints,
+  hitboxCoveringIconOnly,
 } from './utils';
 export type {
   FormFactorFilterType,
