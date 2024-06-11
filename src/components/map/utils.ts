@@ -21,6 +21,8 @@ import {
 import distance from '@turf/distance';
 import {isStation} from '@atb/mobility/utils';
 
+export const hitboxCoveringIconOnly = {width: 1, height: 1};
+
 export async function zoomIn(
   mapViewRef: RefObject<MapboxGL.MapView>,
   mapCameraRef: RefObject<MapboxGL.Camera>,

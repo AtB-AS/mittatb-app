@@ -4,6 +4,7 @@ import MapboxGL, {ShapeSource} from '@rnmapbox/maps';
 import {OnPressEvent} from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import React, {RefObject, useRef} from 'react';
 import {StationsWithCount} from './Stations';
+import {hitboxCoveringIconOnly} from '@atb/components/map';
 
 type Props = {
   stations: StationsWithCount;
@@ -39,6 +40,7 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
         shape={stations}
         tolerance={0}
         cluster
+        hitbox={hitboxCoveringIconOnly}
       >
         <MapboxGL.SymbolLayer
           id="bikeStationPin"
@@ -56,6 +58,7 @@ export const BikeStations = ({stations, onClusterClick}: Props) => {
         ref={clustersSource}
         tolerance={0}
         cluster
+        hitbox={hitboxCoveringIconOnly}
         clusterProperties={{
           sum: ['+', ['get', 'count']],
         }}
