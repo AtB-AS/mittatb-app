@@ -1,4 +1,4 @@
-export const singleBoat = {
+export const singleBoatTravelRight = {
   startDateTime: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
   endDateTime: new Date(Date.now() + 1000 * 60 * 10), // 10 minutes from now
   direction: '2',

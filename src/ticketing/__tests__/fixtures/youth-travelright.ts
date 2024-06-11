@@ -1,4 +1,4 @@
-export const youth = {
+export const youthTravelRight = {
   startDateTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 20), // 20 days ago
   endDateTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), // in 10 days
   usageValidityPeriodRef: '',

@@ -1,4 +1,4 @@
-export const night = {
+export const nightTravelRight = {
   startDateTime: new Date(Date.now() - 1000 * 60 * 10), // 10 minutes ago
   endDateTime: new Date(Date.now() + 1000 * 60 * 60 * 3), // in 3 hours
   usageValidityPeriodRef: '',

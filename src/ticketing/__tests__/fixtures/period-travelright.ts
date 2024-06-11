@@ -1,4 +1,4 @@
-export const period = {
+export const periodTravelRight = {
   startDateTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // 30 days ago
   endDateTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), // in 10 days
   status: 5,

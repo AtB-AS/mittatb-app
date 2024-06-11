@@ -1,4 +1,4 @@
-import {carnet} from './carnet-travelright';
+import {carnetTravelRight} from './carnet-travelright';
 
 export const carnetFareContract = {
   paymentType: ['MASTERCARD'],
@@ -14,7 +14,7 @@ export const carnetFareContract = {
   customerAccountId: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   orderId: 'E69J9NJH',
   created: new Date(Date.now() - 1000 * 60 * 60 * 10), // 10 hours ago
-  travelRights: [carnet],
+  travelRights: [carnetTravelRight],
   paymentTypeGroup: ['PAYMENTCARD'],
   totalTaxAmount: '46.07',
 };

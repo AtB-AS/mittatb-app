@@ -1,4 +1,4 @@
-import {single} from './single-travelright';
+import {singleTravelRight} from './single-travelright';
 
 export const singleFareContract = {
   paymentType: ['MASTERCARD'],
@@ -16,17 +16,17 @@ export const singleFareContract = {
   created: new Date(Date.now() - 1000 * 60 * 60 * 10), // 10 hours ago
   travelRights: [
     {
-      ...single,
+      ...singleTravelRight,
       userProfileRef: 'ATB:UserProfile:8ee842e3',
       id: 'ATB:CustomerPurchasePackage:dbb29b35-2d4a-451f-a3ae-c4bb2f323c41',
     },
     {
-      ...single,
+      ...singleTravelRight,
       userProfileRef: 'ATB:UserProfile:d3e4ec09',
       id: 'ATB:CustomerPurchasePackage:d12aca63-79ee-488b-9a26-a17db1622d2c',
     },
     {
-      ...single,
+      ...singleTravelRight,
       userProfileRef: 'ATB:UserProfile:d3e4ec09',
       id: 'ATB:CustomerPurchasePackage:556ebc7d-6d55-4096-98fc-d5bf6243b36b',
     },

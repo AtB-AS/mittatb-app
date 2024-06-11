@@ -1,4 +1,4 @@
-export const single = {
+export const singleTravelRight = {
   startDateTime: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
   endDateTime: new Date(Date.now() + 1000 * 60 * 10), // 10 minutes from now
   authorityRef: 'ATB:Authority:2',

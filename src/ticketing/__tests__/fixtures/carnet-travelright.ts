@@ -1,4 +1,4 @@
-export const carnet = {
+export const carnetTravelRight = {
   startDateTime: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // 30 days ago
   endDateTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days from now
   usedAccesses: [

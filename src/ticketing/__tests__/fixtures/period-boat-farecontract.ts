@@ -1,4 +1,4 @@
-import {periodBoat} from './period-boat-travelright';
+import {periodBoatTravelRight} from './period-boat-travelright';
 
 export const periodBoatFareContract = {
   paymentType: ['MASTERCARD'],
@@ -14,7 +14,7 @@ export const periodBoatFareContract = {
   customerAccountId: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   orderId: '8MTTWRI4',
   created: new Date(Date.now() - 1000 * 60 * 60 * 10), // 10 hours ago
-  travelRights: [periodBoat],
+  travelRights: [periodBoatTravelRight],
   paymentTypeGroup: ['PAYMENTCARD'],
   totalTaxAmount: '895.82',
 };
