@@ -14,6 +14,10 @@ import {
   GetStationsQuery,
   GetStationsQueryVariables,
 } from '@atb/api/types/generated/StationsQuery';
+
+import {GeofencingZones} from '@atb/api/types/generated/mobility-types_v2';
+import {GetGeofencingZonesQuery} from '@atb/api/types/generated/GeofencingZonesQuery';
+
 import {
   BikeStationFragment,
   CarStationFragment,
@@ -118,6 +122,18 @@ export const getCarStation = (
   return client
     .get<GetCarStationQuery>(stringifyUrl(url, query), opts)
     .then((res) => res.data.stations?.[0]);
+};
+
+export const getGeofencingZones = (
+  systemIds: string[],
+  opts?: AxiosRequestConfig,
+): Promise<GeofencingZones[] | undefined> => {
+  if (systemIds.length < 1) return Promise.resolve(undefined);
+  const url = '/bff/v2/mobility/geofencing-zones';
+  const query = qs.stringify({systemIds});
+  return client
+    .get<GetGeofencingZonesQuery>(stringifyUrl(url, query), opts)
+    .then((res) => res.data.geofencingZones);
 };
 
 export const initViolationsReporting = (
