@@ -442,8 +442,8 @@ export default orgSpecificTranslations(ProfileTexts, {
           travelToken: {
             label: _(
               'Bruk billett på reisekort / telefon',
-              'Use ticket on reisekort / telefon',
-              'Bruk billett på reisekort / relefon',
+              'Use ticket on travel card / phone',
+              'Bruk billett på reisekort / telefon',
             ),
             labelWithoutTravelcard: _(
               'Bruk billett på telefon',
