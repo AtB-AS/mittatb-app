@@ -2,7 +2,6 @@ import {singleTravelRight} from './single-travelright';
 
 export const singleFareContract = {
   paymentType: ['MASTERCARD'],
-  eventTimestamp: {seconds: 1717504492, nanoseconds: 415405000},
   state: 2,
   purchasedBy: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   id: 'ATB:FareContract:1MNPXN7A-Qw3fhcJudvgCYR7yHScbFd1mPtP2',

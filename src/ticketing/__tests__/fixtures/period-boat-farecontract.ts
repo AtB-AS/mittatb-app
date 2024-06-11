@@ -2,7 +2,6 @@ import {periodBoatTravelRight} from './period-boat-travelright';
 
 export const periodBoatFareContract = {
   paymentType: ['MASTERCARD'],
-  eventTimestamp: {seconds: 1717146273, nanoseconds: 4296000},
   state: 2,
   purchasedBy: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   id: 'ATB:FareContract:8MTTWRI4-Qw3fhcJudvgCYR7yHScbFd1mPtP2',

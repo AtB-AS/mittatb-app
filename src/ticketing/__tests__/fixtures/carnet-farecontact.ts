@@ -2,7 +2,6 @@ import {carnetTravelRight} from './carnet-travelright';
 
 export const carnetFareContract = {
   paymentType: ['MASTERCARD'],
-  eventTimestamp: {seconds: 1717503984, nanoseconds: 847945000},
   state: 2,
   purchasedBy: 'ATB:CustomerAccount:Qw3fhcJudvgCYR7yHScbFd1mPtP2',
   id: 'ATB:FareContract:E69J9NJH-Qw3fhcJudvgCYR7yHScbFd1mPtP2',
