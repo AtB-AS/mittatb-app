@@ -8,7 +8,7 @@ import {youth} from './fixtures/youth-travelright';
 
 import {CarnetTravelRight, TravelRight} from '../types';
 import {
-  hasActiveTravelRight,
+  hasValidRightNowTravelRight,
   isCarnetTravelRight,
   isNormalTravelRight,
 } from '../utils';
@@ -42,7 +42,7 @@ describe('Travelright type', () => {
 
 describe('Carnet travel rights', () => {
   it('is active', async () => {
-    expect(hasActiveTravelRight([carnet], now)).toBe(true);
+    expect(hasValidRightNowTravelRight([carnet], now)).toBe(true);
   });
 
   it('is not active due to no active access', async () => {
@@ -55,7 +55,9 @@ describe('Carnet travel rights', () => {
         },
       ],
     };
-    expect(hasActiveTravelRight([noActiveAccessCarnet], now)).toBe(false);
+    expect(hasValidRightNowTravelRight([noActiveAccessCarnet], now)).toBe(
+      false,
+    );
   });
 
   it('is not active due to no accesses', async () => {
@@ -63,7 +65,7 @@ describe('Carnet travel rights', () => {
       ...carnet,
       usedAccesses: [],
     };
-    expect(hasActiveTravelRight([noAccessesCarnet], now)).toBe(false);
+    expect(hasValidRightNowTravelRight([noAccessesCarnet], now)).toBe(false);
   });
 
   it('is not active due to expired travel right', async () => {
@@ -71,6 +73,6 @@ describe('Carnet travel rights', () => {
       ...carnet,
       endDateTime: new Date(Date.now() - 1000 * 60 * 10), // 10 minutes ago
     };
-    expect(hasActiveTravelRight([expiredCarnet], now)).toBe(false);
+    expect(hasValidRightNowTravelRight([expiredCarnet], now)).toBe(false);
   });
 });

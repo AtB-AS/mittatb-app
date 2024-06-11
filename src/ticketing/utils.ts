@@ -34,16 +34,16 @@ function isOrWillBeActivatedFareContract(f: FareContract): boolean {
   );
 }
 
-export function hasActiveTravelRight(
+export function hasValidRightNowTravelRight(
   travelRights: TravelRight[],
   now: number,
 ): boolean {
   return travelRights.some((travelRight) =>
-    isActiveTravelRight(travelRight, now),
+    isValidRightNowTravelRight(travelRight, now),
   );
 }
 
-function isActiveTravelRight(travelRight: TravelRight, now: number) {
+function isValidRightNowTravelRight(travelRight: TravelRight, now: number) {
   // Unknown travel rights are not active
   if (!isNormalTravelRight(travelRight)) return false;
 
@@ -75,7 +75,7 @@ export function isValidRightNowFareContract(
     return false;
   }
 
-  return hasActiveTravelRight(f.travelRights, now);
+  return hasValidRightNowTravelRight(f.travelRights, now);
 }
 
 export function willBeValidInTheFutureTravelRight(
@@ -107,7 +107,7 @@ export function hasUsableCarnetTravelRight(
   return true;
 }
 
-export function hasActiveCarnetTravelRight(
+export function hasValidRightNowCarnetTravelRight(
   travelRights: CarnetTravelRight[],
   now: number,
 ) {
@@ -149,7 +149,7 @@ export function flattenCarnetTravelRightAccesses(
   };
 }
 
-export function isActiveNowOrCanBeUsedFareContract(
+export function isValidRightNowOrCanBeUsedFareContract(
   f: FareContract,
   now: number,
 ) {
@@ -178,7 +178,7 @@ export function isCanBeConsumedNowFareContract(
 
   return (
     hasUsableCarnetTravelRight(travelRights, now) &&
-    !hasActiveCarnetTravelRight(travelRights, now)
+    !hasValidRightNowCarnetTravelRight(travelRights, now)
   );
 }
 
@@ -201,11 +201,11 @@ export const filterActiveOrCanBeUsedFareContracts = (
   now: number,
 ) => {
   return fareContracts.filter((f) =>
-    isActiveNowOrCanBeUsedFareContract(f, now),
+    isValidRightNowOrCanBeUsedFareContract(f, now),
   );
 };
 
-export const filterAndSortActiveOrCanBeUsedFareContracts = (
+export const filterAndSortValidRightNowOrCanBeUsedFareContracts = (
   fareContracts: FareContract[],
   now: number,
 ) => {
@@ -228,7 +228,7 @@ export const filterExpiredFareContracts = (
   const isRefunded = (f: FareContract) =>
     f.state === FareContractState.Refunded;
   const isExpiredOrRefunded = (f: FareContract) =>
-    !isActiveNowOrCanBeUsedFareContract(f, now) || isRefunded(f);
+    !isValidRightNowOrCanBeUsedFareContract(f, now) || isRefunded(f);
   return fareContracts.filter(isExpiredOrRefunded);
 };
 
