@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {getGeofencingZones} from '@atb/api/mobility';
 import {useGeofencingZonesEnabled} from '../use-geofencing-zones-enabled';
 
-const ONE_MINUTE = 1000 * 60;
+const TWELVE_HOURS_MS = 1000 * 60 * 60 * 12;
 
 export const useGeofencingZonesQuery = (systemIds: string[]) => {
   const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
@@ -14,7 +14,7 @@ export const useGeofencingZonesQuery = (systemIds: string[]) => {
       geofencingZonesEnabledDebugOverrideReady,
     queryKey: ['getGeofencingZones', ...systemIds],
     queryFn: ({signal}) => getGeofencingZones(systemIds, {signal}),
-    staleTime: ONE_MINUTE,
-    cacheTime: ONE_MINUTE,
+    staleTime: TWELVE_HOURS_MS,
+    cacheTime: TWELVE_HOURS_MS,
   });
 };
