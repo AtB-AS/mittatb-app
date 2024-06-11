@@ -1,13 +1,6 @@
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {GeoLocation, Location, SearchLocation} from '@atb/favorites';
-import {
-  Feature,
-  FeatureCollection,
-  GeoJSON,
-  LineString,
-  Point,
-  Position,
-} from 'geojson';
+import {Feature, FeatureCollection, LineString, Point, Position} from 'geojson';
 import {Coordinates} from '@atb/utils/coordinates';
 import {
   PointsOnLink,
@@ -17,11 +10,19 @@ import {AnyMode} from '@atb/components/icon-box';
 import {StationBasicFragment} from '@atb/api/types/generated/fragments/stations';
 import {VehicleBasicFragment} from '@atb/api/types/generated/fragments/vehicles';
 import {z} from 'zod';
-import {FormFactor} from '@atb/api/types/generated/mobility-types_v2';
-import {Line} from '@atb/api/types/trips';
 
+// prefixes added to distinguish between geojson types and generated mobility api types, as they are not exact matches
+import {
+  FormFactor as MobilityAPI_FormFactor,
+  GeofencingZoneProperties as MobilityAPI_GeofencingZoneProperties,
+  GeofencingZones as MobilityAPI_GeofencingZones,
+  Feature as MobilityAPI_Feature,
+  FeatureCollection as MobilityAPI_FeatureCollection,
+} from '@atb/api/types/generated/mobility-types_v2';
+
+import {Line} from '@atb/api/types/trips';
 import {TranslatedString} from '@atb/translations';
-import {GeofencingZoneKeys} from '@atb-as/theme';
+import {GeofencingZoneKeys, GeofencingZoneStyle} from '@atb-as/theme';
 
 /**
  * MapSelectionMode: Parameter to decide how on-select/ on-click on the map
@@ -51,8 +52,8 @@ export type MapPadding =
   | [number, number, number, number];
 
 export type VehicleFeatures = {
-  bicycles: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
-  scooters: FeatureCollection<GeoJSON.Point, VehicleBasicFragment>;
+  bicycles: FeatureCollection<Point, VehicleBasicFragment>;
+  scooters: FeatureCollection<Point, VehicleBasicFragment>;
 };
 
 export type VehiclesState = {
@@ -63,8 +64,8 @@ export type VehiclesState = {
 };
 
 export type StationFeatures = {
-  bicycles: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
-  cars: FeatureCollection<GeoJSON.Point, StationBasicFragment>;
+  bicycles: FeatureCollection<Point, StationBasicFragment>;
+  cars: FeatureCollection<Point, StationBasicFragment>;
 };
 
 export type StationsState = {
@@ -168,7 +169,10 @@ const FormFactorFilter = z.object({
 });
 export type FormFactorFilterType = z.infer<typeof FormFactorFilter>;
 
-const MobilityMapFilter = z.record(z.nativeEnum(FormFactor), FormFactorFilter);
+const MobilityMapFilter = z.record(
+  z.nativeEnum(MobilityAPI_FormFactor),
+  FormFactorFilter,
+);
 export type MobilityMapFilterType = z.infer<typeof MobilityMapFilter>;
 
 export const MapFilter = z.object({
@@ -185,6 +189,40 @@ export type ParkingType = {
   parkingVehicleTypes: ParkingVehicleTypes;
   totalCapacity: number;
 };
+
+export type PolylineEncodedMultiPolygon = String[][];
+
+type GeofencingZoneProps<GZKey extends GeofencingZoneKeys> =
+  GeofencingZoneStyle & {
+    code: GZKey;
+    isStationParking?: boolean;
+  };
+
+export type GeofencingZoneCustomProps = GeofencingZoneProps<GeofencingZoneKeys>;
+
+// two things differ PreProcessed vs not:
+// 1. geofencingZoneCustomProps on GeofencingZoneProperties
+// 2. renderKey on GeofencingZones
+
+export interface PreProcessedGeofencingZoneProperties
+  extends MobilityAPI_GeofencingZoneProperties {
+  geofencingZoneCustomProps?: GeofencingZoneCustomProps;
+}
+
+export interface PreProcessedFeature extends MobilityAPI_Feature {
+  properties?: PreProcessedGeofencingZoneProperties;
+}
+
+export interface PreProcessedFeatureCollection
+  extends MobilityAPI_FeatureCollection {
+  features?: Array<PreProcessedFeature>;
+}
+
+export interface PreProcessedGeofencingZones
+  extends MobilityAPI_GeofencingZones {
+  renderKey?: string;
+  geojson?: PreProcessedFeatureCollection;
+}
 
 type GeofencingZoneExplanationType = {
   title: TranslatedString;
