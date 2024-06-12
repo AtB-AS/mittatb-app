@@ -11,7 +11,9 @@ export const authorizeUser = async (setIsLoading: any) => {
   const state = await generateState();
   const nonce = await generateNonce();
   return client
-    .get(`/bff/login/vipps/authorization-url?callbackUrl=${VIPPS_CALLBACK_URL}`)
+    .get(
+      `/identity/v1/vipps/authorization-url?callbackUrl=${VIPPS_CALLBACK_URL}`,
+    )
     .then(async (response) => {
       const authorisationUrl = response.data;
       setIsLoading(false);
@@ -34,7 +36,7 @@ export const getOrCreateVippsUserCustomToken = async (
     throw new Error('unknown_error');
   }
   return client.post(
-    `/bff/login/vipps/user-custom-token?callbackUrl=${VIPPS_CALLBACK_URL}`,
+    `/identity/v1/vipps/user-custom-token?callbackUrl=${VIPPS_CALLBACK_URL}`,
     {
       state: state,
       nonce: nonce,
