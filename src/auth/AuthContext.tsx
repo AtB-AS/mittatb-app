@@ -26,6 +26,7 @@ import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
+import {useUpdateIntercomOnUserChange} from "@atb/auth/use-update-intercom-on-user-change";
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -132,6 +133,7 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
   useFetchIdTokenWithCustomClaims(state, dispatch);
 
   useUpdateAuthLanguageOnChange();
+  useUpdateIntercomOnUserChange(state)
 
   const retryAuth = useCallback(() => {
     dispatch({type: 'RESET_AUTH_STATUS'});
