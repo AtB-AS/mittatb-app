@@ -9,8 +9,9 @@ export type AuthStatus =
   | 'fetch-id-token-timeout';
 
 export type AuthReducerAction =
+  | {type: 'SIGN_IN_INITIATED'; phoneNumber: string}
   | {
-      type: 'SIGN_IN_INITIATED';
+      type: 'LEGACY_SIGN_IN_INITIATED';
       confirmationHandler: FirebaseAuthTypes.ConfirmationResult;
     }
   | {type: 'SET_USER'; user: FirebaseAuthTypes.User}
