@@ -27,7 +27,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
       await Linking.openURL(vippsUrl);
     } catch (err: any) {
       Bugsnag.notify(err);
-    } 
+    }
   }
   const getStatus = () => {
     const paymentStatus = reservation.paymentStatus;
@@ -41,11 +41,13 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
     }
   };
 
+  const isSubAccountReservation = customerProfile?.subAccounts?.some(
+    (id) => id === reservation.customerAccountId,
+  );
+  
   // filter out reservations for subaccount
-  const subaccounts = customerProfile?.subAccounts;
-  if (subaccounts) {
-    const subaccountReservation = subaccounts.filter((subaccountId) => subaccountId === reservation.customerAccountId);
-    if (subaccountReservation.length > 0) return null;
+  if (isSubAccountReservation) {
+    return null;
   }
 
   const status = getStatus();
