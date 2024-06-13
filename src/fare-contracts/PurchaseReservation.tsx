@@ -1,7 +1,7 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Reservation, PaymentType} from '@atb/ticketing';
+import {Reservation, PaymentType, useTicketingState} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
@@ -19,6 +19,7 @@ type Props = {
 export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
+  const {customerProfile} = useTicketingState();
   const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
@@ -26,7 +27,7 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
       await Linking.openURL(vippsUrl);
     } catch (err: any) {
       Bugsnag.notify(err);
-    }
+    } 
   }
   const getStatus = () => {
     const paymentStatus = reservation.paymentStatus;
@@ -39,6 +40,13 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
         return 'reserving';
     }
   };
+
+  // filter out reservations for subaccount
+  const subaccounts = customerProfile?.subAccounts;
+  if (subaccounts) {
+    const subaccountReservation = subaccounts.filter((subaccountId) => subaccountId === reservation.customerAccountId);
+    if (subaccountReservation.length > 0) return null;
+  }
 
   const status = getStatus();
 
