@@ -217,6 +217,7 @@ export type CustomerProfile = {
   id?: string;
   surname?: string;
   debug?: boolean;
+  subAccounts?: string[];
 };
 
 export type TravelCard = {
