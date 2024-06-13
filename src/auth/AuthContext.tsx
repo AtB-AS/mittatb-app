@@ -29,6 +29,7 @@ import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
 import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
+import {useLocaleContext} from '@atb/LocaleProvider';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
@@ -136,6 +137,7 @@ type AuthContextState = {
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
 
 export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
+  const {language} = useLocaleContext();
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
 
   const backendSmsEnabled = useIsBackendSmsAuthEnabled();
@@ -170,10 +172,11 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
             }
             return await authSignInWithPhoneNumber(
               phoneNumberWithPrefix,
+              language,
               dispatch,
             );
           },
-          [backendSmsEnabled],
+          [backendSmsEnabled, language],
         ),
         confirmCode: useCallback(
           (code: string) => {

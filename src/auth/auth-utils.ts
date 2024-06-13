@@ -3,6 +3,7 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {AuthReducerAction} from './types';
 import {authenticateWithSms, verifySms} from '@atb/api/identity';
+import {Language} from '@atb/translations';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
@@ -31,10 +32,11 @@ export const legacyAuthSignInWithPhoneNumber = async (
 
 export const authSignInWithPhoneNumber = async (
   phoneNumberWithPrefix: string,
+  language: Language,
   dispatch: Dispatch<AuthReducerAction>,
 ) => {
   try {
-    await authenticateWithSms(phoneNumberWithPrefix);
+    await authenticateWithSms(phoneNumberWithPrefix, language);
     dispatch({type: 'SIGN_IN_INITIATED', phoneNumber: phoneNumberWithPrefix});
   } catch (error) {
     // TODO: Should we have more granular error handling here?
