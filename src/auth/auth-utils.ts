@@ -4,6 +4,7 @@ import Bugsnag from '@bugsnag/react-native';
 import {AuthReducerAction} from './types';
 import {authenticateWithSms, verifySms} from '@atb/api/identity';
 import {Language} from '@atb/translations';
+import {getAxiosErrorMetadata} from '@atb/api/utils';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
@@ -38,8 +39,10 @@ export const authSignInWithPhoneNumber = async (
   try {
     await authenticateWithSms(phoneNumberWithPrefix, language);
     dispatch({type: 'SIGN_IN_INITIATED', phoneNumber: phoneNumberWithPrefix});
-  } catch (error) {
-    // TODO: Should we have more granular error handling here?
+  } catch (error: any) {
+    if (getAxiosErrorMetadata(error).responseStatus === 400) {
+      return 'invalid_phone';
+    }
     Bugsnag.notify(error as any);
     return 'unknown_error';
   }
