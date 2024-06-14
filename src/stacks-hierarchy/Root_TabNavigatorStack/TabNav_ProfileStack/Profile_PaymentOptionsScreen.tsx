@@ -131,7 +131,8 @@ export const Profile_PaymentOptionsScreen = ({
             ))}
           </Section>
         )}
-        {!recurringPaymentLoading &&
+        {!recurringPaymentError &&
+          !recurringPaymentLoading &&
           (!recurringPayment || recurringPayment?.length == 0) && (
             <NoCardsInfo />
           )}
