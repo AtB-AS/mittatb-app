@@ -2,9 +2,10 @@ import {Dispatch} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
 import {AuthReducerAction} from './types';
-import {authenticateWithSms, verifySms} from '@atb/api/identity';
+import {TwilioStatus, authenticateWithSms, verifySms} from '@atb/api/identity';
 import {Language} from '@atb/translations';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
+import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const ERROR_INVALID_PHONE_NUMBER = 'auth/invalid-phone-number';
 const ERROR_INVALID_CONFIRMATION_CODE = 'auth/invalid-verification-code';
@@ -76,17 +77,22 @@ export const authConfirmCode = async (code: string, phoneNumber?: string) => {
       return await authSignInWithCustomToken(token);
     }
     switch (status) {
-      case 'approved':
+      case TwilioStatus.APPROVED:
         return;
-      case 'failed':
+      case TwilioStatus.PENDING:
         return 'invalid_code';
-      case 'canceled':
-      case 'expired':
+      case TwilioStatus.CANCELED:
+      case TwilioStatus.EXPIRED:
         return 'session_expired';
-      case 'max_attempts_reached':
-      case 'deleted':
-      case 'pending':
+      case TwilioStatus.MAX_ATTEMPTS_REACHED:
+        return 'unknown_error';
+      case TwilioStatus.FAILED:
+      case TwilioStatus.DELETED:
       default:
+        notifyBugsnag('Unexpected status on login OTP attempt', {
+          errorGroupHash: 'LoginConfirmCode',
+          metadata: {status},
+        });
         return 'unknown_error';
     }
   } catch (error) {

@@ -11,20 +11,26 @@ export const authenticateWithSms = async (
   });
 };
 
+/**
+ * Status codes from Twilio:
+ * https://www.twilio.com/docs/verify/api/verification-check
+ */
+export enum TwilioStatus {
+  /** Authentication succeeded */
+  APPROVED = 'approved',
+  /** The user entered the wrong OTP code */
+  PENDING = 'pending',
+  CANCELED = 'canceled',
+  /** 5 attempts to verify the code failed */
+  MAX_ATTEMPTS_REACHED = 'max_attempts_reached',
+  DELETED = 'deleted',
+  FAILED = 'failed',
+  /** 10 minutes passed since the code was sent */
+  EXPIRED = 'expired',
+}
 type VerifySmsResponse = {
   token?: string;
-  /**
-   * Status codes from Twilio:
-   * https://www.twilio.com/docs/verify/api/verification-check
-   */
-  status:
-    | 'pending'
-    | 'approved'
-    | 'canceled'
-    | 'max_attempts_reached'
-    | 'deleted'
-    | 'failed'
-    | 'expired';
+  status: TwilioStatus;
 };
 export const verifySms = async (
   phoneNumber: string,
