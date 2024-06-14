@@ -52,7 +52,7 @@ export async function listRecurringPayments(): Promise<RecurringPayment[]> {
   const response = await client.get<RecurringPayment[]>(url, {
     authWithIdToken: true,
   });
-  return response.data.reverse();
+  return response.data;
 }
 
 export async function addPaymentMethod(paymentRedirectUrl: string) {
