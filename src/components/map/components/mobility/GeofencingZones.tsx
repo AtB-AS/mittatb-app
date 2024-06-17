@@ -1,41 +1,39 @@
 import MapboxGL from '@rnmapbox/maps';
 
-import {FeatureCollection, GeoJsonProperties, Point, Feature} from 'geojson';
+import {FeatureCollection} from 'geojson';
 
 import {
   PreProcessedGeofencingZones,
   usePreProcessedGeofencingZones,
 } from '@atb/components/map';
 import {useVehicleQuery} from '@atb/mobility/queries/use-vehicle-query';
-import {isBicycle, isScooter} from '@atb/mobility';
+
 import {hitboxCoveringIconOnly} from '@atb/components/map';
+import {VehicleExtendedFragment} from '@atb/api/types/generated/fragments/vehicles';
 
 type GeofencingZonesProps = {
-  selectedFeature: Feature<Point, GeoJsonProperties>;
+  selectedVehicleId: string;
 };
-
-export const GeofencingZones = ({selectedFeature}: GeofencingZonesProps) => {
-  const selectedVehicleId =
-    isScooter(selectedFeature) || isBicycle(selectedFeature)
-      ? selectedFeature.properties.id
-      : undefined;
-
+export const GeofencingZones = ({selectedVehicleId}: GeofencingZonesProps) => {
   const {
     data: vehicle,
     isLoading,
     isError,
   } = useVehicleQuery(selectedVehicleId);
 
-  const preProcessedGeofencingZones = usePreProcessedGeofencingZones(vehicle);
-
-  if (
-    !selectedVehicleId ||
-    isLoading ||
-    isError ||
-    preProcessedGeofencingZones.length === 0
-  ) {
+  if (!vehicle || !selectedVehicleId || isLoading || isError) {
     return <></>;
   }
+  return <GeofencingZonesForVehicle vehicle={vehicle} />;
+};
+
+type GeofencingZonesForVehicleProps = {
+  vehicle: VehicleExtendedFragment;
+};
+const GeofencingZonesForVehicle = ({
+  vehicle,
+}: GeofencingZonesForVehicleProps) => {
+  const preProcessedGeofencingZones = usePreProcessedGeofencingZones(vehicle);
 
   return (
     <>

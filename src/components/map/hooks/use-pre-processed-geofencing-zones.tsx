@@ -11,7 +11,7 @@ import {useGeofencingZonesQuery} from '@atb/mobility/queries/use-geofencing-zone
 import {useTheme} from '@atb/theme';
 
 export const usePreProcessedGeofencingZones = (
-  vehicle?: VehicleExtendedFragment,
+  vehicle: VehicleExtendedFragment,
 ) => {
   const systemId = vehicle?.system.id;
   const vehicleTypeId = vehicle?.vehicleType.id;
