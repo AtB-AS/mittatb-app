@@ -143,7 +143,6 @@ export const Map = (props: MapProps) => {
 
     const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
     if (!featuresAtClick || featuresAtClick.length === 0) return;
-    //console.log('featuresAtClick', JSON.stringify(featuresAtClick));
     const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
       getFeatureWeight(currentFeature, positionClicked) >
       getFeatureWeight(selected, positionClicked)
