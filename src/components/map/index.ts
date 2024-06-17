@@ -48,5 +48,6 @@ export {
   useRealtimeMapDebugOverride,
 } from './hooks/use-realtime-map-enabled';
 export {useUserMapFilters} from './hooks/use-map-filter';
+export {useGeofencingZoneTextContent} from './hooks/use-geofencing-zone-text-content';
 export {Stations, GeofencingZones} from './components/mobility';
 export {usePreProcessedGeofencingZones} from './hooks/use-pre-processed-geofencing-zones';
