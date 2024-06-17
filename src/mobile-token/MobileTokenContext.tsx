@@ -38,7 +38,7 @@ import {
   useLoadNativeTokenQuery,
 } from './hooks/use-load-native-token-query';
 import {wipeToken} from '@atb/mobile-token/helpers';
-import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
 
 const SIX_HOURS_MS = 1000 * 60 * 60 * 6;
 
@@ -104,6 +104,9 @@ export const MobileTokenContextProvider: React.FC = ({children}) => {
   const {mutate: checkRenewMutate} = usePreemptiveRenewTokenMutation(userId);
 
   useEffect(() => {
+    logToBugsnag('Invalidating list tokens query after token change', {
+      tokenId: nativeToken?.tokenId,
+    });
     queryClient.invalidateQueries([
       MOBILE_TOKEN_QUERY_KEY,
       LIST_REMOTE_TOKENS_QUERY_KEY,
