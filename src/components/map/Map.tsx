@@ -59,6 +59,14 @@ export const Map = (props: MapProps) => {
       startingCoordinates,
     );
 
+  const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
+    useGeofencingZonesEnabled();
+
+  const showGeofencingZones =
+    geofencingZonesEnabled &&
+    geofencingZonesEnabledDebugOverrideReady &&
+    (isScooter(selectedFeature) || isBicycle(selectedFeature));
+
   const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
   const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
 
@@ -76,9 +84,6 @@ export const Map = (props: MapProps) => {
     },
     [showSnackbar, getGeofencingZoneTextContent],
   );
-
-  const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
-    useGeofencingZonesEnabled();
 
   const updateRegionForVehicles = props.vehicles?.updateRegion;
   const updateRegionForStations = props.stations?.updateRegion;
@@ -201,11 +206,11 @@ export const Map = (props: MapProps) => {
             {...MapCameraConfig}
           />
 
-          {geofencingZonesEnabled &&
-            geofencingZonesEnabledDebugOverrideReady &&
-            selectedFeature && (
-              <GeofencingZones selectedFeature={selectedFeature} />
-            )}
+          {showGeofencingZones && (
+            <GeofencingZones
+              selectedVehicleId={selectedFeature.properties.id}
+            />
+          )}
 
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
