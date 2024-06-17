@@ -137,7 +137,6 @@ export const Map = (props: MapProps) => {
    * Step 2: decide feature to select
    * Step 3: selected the feature
    */
-
   const onFeatureClick = async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
     const {coordinates: positionClicked} = feature.geometry;
