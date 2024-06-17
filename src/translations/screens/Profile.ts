@@ -365,22 +365,29 @@ export default orgSpecificTranslations(ProfileTexts, {
           notifications: {
             pushToggle: {
               subText: _(
-                'Tillat at Reisnordland sender varslinger til denne telefonen.',
-                'Allow Reisnordland to send notifications to this phone.',
-                'Tillet Reisnordland å sende varslingar til denne telefonen.',
+                'Tillat at Reis Nordland sender varslinger til denne telefonen.',
+                'Allow Reis Nordland to send notifications to this phone.',
+                'Tillet Reis Nordland å sende varslingar til denne telefonen.',
               ),
             },
             emailToggle: {
               subText: (email: string) =>
                 _(
-                  `Tillat at Reisnordland sender varslinger til ${email}`,
-                  `Allow Reisnordland to send notifications to ${email}`,
-                  `Tillet Reisnordland å sende varslingar til ${email}`,
+                  `Tillat at Reis Nordland sender varslinger til ${email}`,
+                  `Allow Reis Nordland to send notifications to ${email}`,
+                  `Tillet Reis Nordland å sende varslingar til ${email}`,
                 ),
               noEmailPlaceholder: _(
-                'Tillat at Reisnordland sender varslinger til e-posten din.',
-                'Allow Reisnordland to send notifications to your e-mail.',
-                'Tillet Reisnordland å sende varslingar til e-posten din.',
+                'Tillat at Reis Nordland sender varslinger til e-posten din.',
+                'Allow Reis Nordland to send notifications to your e-mail.',
+                'Tillet Reis Nordland å sende varslingar til e-posten din.',
+              ),
+            },
+            permissionRequired: {
+              message: _(
+                'Skru på varslinger i telefoninnstillingene for å motta varslinger fra Reis Nordland.',
+                'Enable notifications in Settings to receive notifications from Reis Nordland.',
+                'Skru på varslingar i telefoninnstillingane for å få varslingar frå Reis Nordland.',
               ),
             },
           },
@@ -423,6 +430,13 @@ export default orgSpecificTranslations(ProfileTexts, {
                 'Tillet FRAM å sende varslingar til e-posten din.',
               ),
             },
+            permissionRequired: {
+              message: _(
+                'Skru på varslinger i telefoninnstillingene for å motta varslinger fra FRAM.',
+                'Enable notifications in Settings to receive notifications from FRAM.',
+                'Skru på varslingar i telefoninnstillingane for å få varslingar frå FRAM.',
+              ),
+            },
           },
         },
       },
@@ -458,6 +472,13 @@ export default orgSpecificTranslations(ProfileTexts, {
                 'Tillat at Svipper sender varslinger til e-posten din.',
                 'Allow Svipper to send notifications to your e-mail.',
                 'Tillet Svipper å sende varslingar til e-posten din.',
+              ),
+            },
+            permissionRequired: {
+              message: _(
+                'Skru på varslinger i telefoninnstillingene for å motta varslinger fra Svipper.',
+                'Enable notifications in Settings to receive notifications from Svipper.',
+                'Skru på varslingar i telefoninnstillingane for å få varslingar frå Svipper.',
               ),
             },
           },
