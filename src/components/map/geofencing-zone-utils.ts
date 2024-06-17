@@ -152,7 +152,7 @@ export function addGeofencingZoneCustomProps(
 
         const preProcessedProperties = {
           ...feature.properties,
-          ...{geofencingZoneCustomProps},
+          geofencingZoneCustomProps,
         };
 
         return {

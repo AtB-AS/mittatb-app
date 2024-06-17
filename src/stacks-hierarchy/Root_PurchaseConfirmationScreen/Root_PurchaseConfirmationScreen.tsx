@@ -246,30 +246,10 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const SummaryText = () => {
     switch (zoneSelectionMode) {
       case 'multiple-stop-harbor':
-        return (
-          <>
-            {summary(
-              fareProductTypeConfig.type.includes('single')
-                ? t(
-                    PurchaseConfirmationTexts.validityTexts.harbor.single(
-                      fromPlaceName,
-                      toPlaceName,
-                    ),
-                  )
-                : t(
-                    PurchaseConfirmationTexts.validityTexts.harbor.period(
-                      fromPlaceName,
-                      toPlaceName,
-                    ),
-                  ),
-            )}
-            {summary(
-              t(
-                PurchaseConfirmationTexts.validityTexts.harbor
-                  .messageInHarborZones,
-              ),
-            )}
-          </>
+        return summary(
+          t(
+            PurchaseConfirmationTexts.validityTexts.harbor.messageInHarborZones,
+          ),
         );
       case 'none':
         return summary(
@@ -333,7 +313,14 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                     {t(PurchaseConfirmationTexts.sendingTo(phoneNumber))}
                   </ThemeText>
                 )}
-
+                {fareProductTypeConfig.direction &&
+                  summary(
+                    t(
+                      PurchaseConfirmationTexts.validityTexts.direction[
+                        fareProductTypeConfig.direction
+                      ](fromPlaceName, toPlaceName),
+                    ),
+                  )}
                 <SummaryText />
                 {!isSearchingOffer &&
                   validDurationSeconds &&

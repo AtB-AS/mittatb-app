@@ -1,4 +1,5 @@
 import {translation as _} from '../commons';
+import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const PhoneInputTexts = {
   input: {
@@ -35,4 +36,10 @@ const PhoneInputTexts = {
   },
 };
 
-export default PhoneInputTexts;
+export default orgSpecificTranslations(PhoneInputTexts, {
+  troms: {
+    input: {
+      title: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
+    },
+  },
+});
