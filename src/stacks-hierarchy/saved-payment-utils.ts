@@ -26,6 +26,8 @@ export function usePreviousPaymentMethod(): SavedPaymentOption | undefined {
             recurringPayment.id === savedMethod.recurringCard.id,
         );
         if (method) setPaymentMethod(savedMethod);
+      } else {
+        setPaymentMethod(savedMethod);
       }
     }
 
