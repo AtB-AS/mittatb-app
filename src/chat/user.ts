@@ -3,16 +3,17 @@ import {Dimensions, PixelRatio, Platform} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {storage} from '@atb/storage';
 import {checkGeolocationPermission} from '@atb/GeolocationContext';
-import {updateMetadata} from './metadata';
 
-export async function register() {
+export async function registerIntercomUser() {
   try {
     await Intercom.loginUnidentifiedUser();
-  } catch (error: any){
+  } catch (error: any) {
     // do nothing
   }
   await Intercom.setBottomPadding(Platform.OS === 'ios' ? 40 : 80);
+}
 
+export async function setIntercomUserData() {
   const installId = await storage.get('install_id');
   const buildNumber = DeviceInfo.getBuildNumber();
   const deviceId = DeviceInfo.getDeviceId();
@@ -20,7 +21,7 @@ export async function register() {
   const appLocationStatus = await checkGeolocationPermission();
   const {width, height} = Dimensions.get('window');
 
-  await updateMetadata({
+  return {
     'AtB-Install-Id': installId ?? 'unknown',
     'AtB-Build-Number': buildNumber,
     'AtB-Device-Type': deviceId,
@@ -29,5 +30,5 @@ export async function register() {
     'AtB-Platform-OS': Platform.OS,
     'AtB-OS-Font-Scale': PixelRatio.getFontScale(),
     'AtB-Screen-Size': `${width}x${height}`,
-  });
+  };
 }

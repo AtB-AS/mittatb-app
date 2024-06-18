@@ -66,10 +66,11 @@ import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInf
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
-import {register as registerChatUser} from '@atb/chat/user';
+import {registerIntercomUser, setIntercomUserData} from '@atb/chat/user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version.ts';
+import {useIntercomMetadata} from '@atb/chat/metadata';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -82,7 +83,8 @@ export const RootStack = () => {
   const {getInitialNavigationContainerState} = useOnboardingFlow();
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
-  const {enable_intercom, minimum_app_version} = useRemoteConfig();
+  const {minimum_app_version} = useRemoteConfig();
+  const {updateMetadata} = useIntercomMetadata();
 
   useFlipper(navRef);
 
@@ -91,10 +93,13 @@ export const RootStack = () => {
 
   // init Intercom user
   useEffect(() => {
-    if (enable_intercom) {
-      registerChatUser();
-    }
-  }, [enable_intercom]);
+    registerIntercomUser();
+    const setMetadata = async () => {
+      const data = await setIntercomUserData();
+      updateMetadata(data);
+    };
+    setMetadata();
+  }, [updateMetadata]);
 
   if (isLoadingAppState) {
     return null;
