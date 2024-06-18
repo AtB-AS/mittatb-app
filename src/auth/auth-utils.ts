@@ -40,12 +40,16 @@ export const authSignInWithPhoneNumber = async (
   try {
     await authenticateWithSms(phoneNumberWithPrefix, language);
     dispatch({type: 'SIGN_IN_INITIATED', phoneNumber: phoneNumberWithPrefix});
-  } catch (error: any) {
-    if (getAxiosErrorMetadata(error).responseStatus === 400) {
+  } catch (e: any) {
+    const error = getAxiosErrorMetadata(e);
+    if (error.responseStatus === 400) {
       const errorData = error.responseData && JSON.parse(error.responseData);
       if (errorData?.error_code === 'BAD_REQUEST') {
         return 'invalid_phone';
       }
+    }
+    if (error.responseStatus === 429) {
+      return 'too_many_attempts';
     }
     Bugsnag.notify(error as any);
     return 'unknown_error';

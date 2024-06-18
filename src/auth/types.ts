@@ -25,7 +25,10 @@ export type ConfirmationErrorCode =
   | 'unknown_error'
   | 'session_expired'
   | 'too_many_attempts';
-export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
+export type PhoneSignInErrorCode =
+  | 'invalid_phone'
+  | 'unknown_error'
+  | 'too_many_attempts';
 export type VippsSignInErrorCode =
   | 'access_denied'
   | 'outdated_app_version'
