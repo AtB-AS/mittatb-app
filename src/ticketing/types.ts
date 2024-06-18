@@ -23,17 +23,9 @@ export enum TravelRightDirection {
 export type TravelRight = {
   id: string;
   status: TravelRightStatus;
-  type:
-    | 'PreActivatedSingleTicket'
-    | 'PreActivatedPeriodTicket'
-    | 'CarnetTicket'
-    | 'NightTicket'
-    | 'SingleBoatTicket'
-    | 'PeriodBoatTicket'
-    | 'YouthTicket'
-    | 'UnknownTicket';
-  direction: TravelRightDirection;
+  type: string;
   fareProductRef: string;
+  direction?: TravelRightDirection;
 };
 
 export type NormalTravelRight = TravelRight & {
@@ -42,12 +34,10 @@ export type NormalTravelRight = TravelRight & {
   endDateTime: Date;
   usageValidityPeriodRef: string;
   userProfileRef: string;
-  tariffZoneRefs: string[] | undefined;
-  startPointRef: string | undefined;
-  endPointRef: string | undefined;
+  tariffZoneRefs?: string[];
+  startPointRef?: string;
+  endPointRef?: string;
 };
-
-export type PreActivatedTravelRight = NormalTravelRight;
 
 export type CarnetTravelRightUsedAccess = {
   startDateTime: Date;
@@ -55,18 +45,18 @@ export type CarnetTravelRightUsedAccess = {
 };
 
 export type CarnetTravelRight = NormalTravelRight & {
-  type: 'CarnetTicket';
+  type: string;
   maximumNumberOfAccesses: number;
   numberOfUsedAccesses: number;
   usedAccesses: CarnetTravelRightUsedAccess[];
 };
 
-export type PreActivatedSingleTravelRight = PreActivatedTravelRight & {
-  type: 'PreActivatedSingleTicket';
-};
+export type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
 
-export type PeriodTravelRight = PreActivatedTravelRight & {
-  type: 'PreActivatedPeriodTicket';
+export type LastUsedAccessState = {
+  status: UsedAccessStatus;
+  validFrom: number | undefined;
+  validTo: number | undefined;
 };
 
 export type FareContract = {
