@@ -19,6 +19,8 @@ import {
   authConfirmCode,
   authSignInWithCustomToken,
   authSignInWithPhoneNumber,
+  legacyAuthConfirmCode,
+  legacyAuthSignInWithPhoneNumber,
 } from './auth-utils';
 import {useUpdateAuthLanguageOnChange} from './use-update-auth-language-on-change';
 import {useFetchIdTokenWithCustomClaims} from './use-fetch-id-token-with-custom-claims';
@@ -26,11 +28,15 @@ import Bugsnag from '@bugsnag/react-native';
 import isEqual from 'lodash.isequal';
 import {mapAuthenticationType} from './utils';
 import {useClearQueriesOnUserChange} from './use-clear-queries-on-user-change';
+import {useIsBackendSmsAuthEnabled} from './use-is-backend-sms-auth-enabled';
+import {useLocaleContext} from '@atb/LocaleProvider';
 
 export type AuthReducerState = {
   authStatus: AuthStatus;
   user?: FirebaseAuthTypes.User;
   idToken?: FirebaseAuthTypes.IdTokenResult;
+  phoneNumberToBeVerified?: string;
+  /** @deprecated Remove once legacy login is removed */
   confirmationHandler?: FirebaseAuthTypes.ConfirmationResult;
 };
 
@@ -42,6 +48,9 @@ type AuthReducer = (
 const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
   switch (action.type) {
     case 'SIGN_IN_INITIATED': {
+      return {...prevState, phoneNumberToBeVerified: action.phoneNumber};
+    }
+    case 'LEGACY_SIGN_IN_INITIATED': {
       return {...prevState, confirmationHandler: action.confirmationHandler};
     }
     case 'SET_USER': {
@@ -49,7 +58,10 @@ const authReducer: AuthReducer = (prevState, action): AuthReducerState => {
       if (sameUser) {
         return prevState;
       } else {
-        Bugsnag.leaveBreadcrumb('Auth user change', {userId: action.user.uid, authType: mapAuthenticationType(action.user)});
+        Bugsnag.leaveBreadcrumb('Auth user change', {
+          userId: action.user.uid,
+          authType: mapAuthenticationType(action.user),
+        });
         return {user: action.user, authStatus: 'fetching-id-token'};
       }
     }
@@ -125,7 +137,10 @@ type AuthContextState = {
 const AuthContext = createContext<AuthContextState | undefined>(undefined);
 
 export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
+  const {language} = useLocaleContext();
   const [state, dispatch] = useReducer(authReducer, initialReducerState);
+
+  const backendSmsEnabled = useIsBackendSmsAuthEnabled();
 
   const {resubscribe} = useSubscribeToAuthUserChange(dispatch);
   useClearQueriesOnUserChange(state);
@@ -147,17 +162,34 @@ export const AuthContextProvider = ({children}: PropsWithChildren<{}>) => {
         customerNumber: state.idToken?.claims['customer_number'],
         abtCustomerId: state.idToken?.claims['abt_id'],
         signInWithPhoneNumber: useCallback(
-          async (phoneNumberWithPrefix: string, forceResend?: boolean) =>
-            authSignInWithPhoneNumber(
+          async (phoneNumberWithPrefix: string, forceResend?: boolean) => {
+            if (!backendSmsEnabled) {
+              return await legacyAuthSignInWithPhoneNumber(
+                phoneNumberWithPrefix,
+                forceResend,
+                dispatch,
+              );
+            }
+            return await authSignInWithPhoneNumber(
               phoneNumberWithPrefix,
-              forceResend,
+              language,
               dispatch,
-            ),
-          [],
+            );
+          },
+          [backendSmsEnabled, language],
         ),
         confirmCode: useCallback(
-          (code: string) => authConfirmCode(state.confirmationHandler, code),
-          [state.confirmationHandler],
+          (code: string) => {
+            if (!backendSmsEnabled) {
+              return legacyAuthConfirmCode(state.confirmationHandler, code);
+            }
+            return authConfirmCode(code, state.phoneNumberToBeVerified);
+          },
+          [
+            state.phoneNumberToBeVerified,
+            state.confirmationHandler,
+            backendSmsEnabled,
+          ],
         ),
         signOut: useCallback(async () => {
           await auth().signInAnonymously();
