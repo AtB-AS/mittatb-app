@@ -12,11 +12,10 @@ export const useListRecurringPaymentsQuery = () => {
   return useQuery({
     queryKey: [LIST_RECURRING_PAYMENTS_QUERY_KEY, abtCustomerId, authenticationType],
     queryFn: async () => {
-      if (authenticationType !== 'phone') {
-        return undefined
+      if (authenticationType === 'phone') {
+        return await listRecurringPayments();          
       }
-      const list = await listRecurringPayments();
-      return list;
+      return [];
     },
     cacheTime: ONE_HOUR_MS,
   });
