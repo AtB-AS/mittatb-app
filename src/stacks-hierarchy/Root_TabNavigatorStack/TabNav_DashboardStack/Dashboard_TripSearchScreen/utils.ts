@@ -46,14 +46,14 @@ export function createQuery(
   const from = {
     ...fromLocation,
     place:
-      fromLocation.resultType === 'search' && fromLocation.layer === 'venue'
+      isVenue(fromLocation) || isGroupOfStopPlaces(fromLocation)
         ? fromLocation.id
         : undefined,
   };
   const to = {
     ...toLocation,
     place:
-      toLocation.resultType === 'search' && toLocation.layer === 'venue'
+      isVenue(toLocation) || isGroupOfStopPlaces(toLocation)
         ? toLocation.id
         : undefined,
   };
@@ -122,4 +122,15 @@ export const areDefaultFiltersSelected = (
 ): boolean => {
   if (!transportModes || transportModes.length === 0) return false;
   return transportModes.every((tm) => tm.selectedAsDefault === tm.selected);
+};
+
+export const isVenue = (location: Location): boolean => {
+  return location.resultType === 'search' && location.layer === 'venue';
+};
+
+export const isGroupOfStopPlaces = (location: Location): boolean => {
+  return (
+    location.resultType === 'search' &&
+    location.category[0] === 'GroupOfStopPlaces'
+  );
 };
