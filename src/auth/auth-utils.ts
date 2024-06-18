@@ -1,8 +1,8 @@
 import {Dispatch} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import Bugsnag from '@bugsnag/react-native';
-import {AuthReducerAction} from './types';
-import {TwilioStatus, authenticateWithSms, verifySms} from '@atb/api/identity';
+import {AuthReducerAction, ConfirmationErrorCode} from './types';
+import {authenticateWithSms, verifySms} from '@atb/api/identity';
 import {Language} from '@atb/translations';
 import {getAxiosErrorMetadata} from '@atb/api/utils';
 import {notifyBugsnag} from '@atb/utils/bugsnag-utils';
@@ -42,7 +42,10 @@ export const authSignInWithPhoneNumber = async (
     dispatch({type: 'SIGN_IN_INITIATED', phoneNumber: phoneNumberWithPrefix});
   } catch (error: any) {
     if (getAxiosErrorMetadata(error).responseStatus === 400) {
-      return 'invalid_phone';
+      const errorData = error.responseData && JSON.parse(error.responseData);
+      if (errorData?.error_code === 'BAD_REQUEST') {
+        return 'invalid_phone';
+      }
     }
     Bugsnag.notify(error as any);
     return 'unknown_error';
@@ -69,34 +72,36 @@ export const legacyAuthConfirmCode = async (
   }
 };
 
-export const authConfirmCode = async (code: string, phoneNumber?: string) => {
+export const authConfirmCode = async (
+  code: string,
+  phoneNumber?: string,
+): Promise<undefined | ConfirmationErrorCode> => {
   if (!phoneNumber) return 'unknown_error';
   try {
-    const {token, status} = await verifySms(phoneNumber, code);
-    if (token) {
-      return await authSignInWithCustomToken(token);
-    }
+    const token = await verifySms(phoneNumber, code);
+    return await authSignInWithCustomToken(token);
+  } catch (e) {
+    const error = getAxiosErrorMetadata(e as any);
+    const status = error.responseStatus;
     switch (status) {
-      case TwilioStatus.APPROVED:
-        return;
-      case TwilioStatus.PENDING:
-        return 'invalid_code';
-      case TwilioStatus.CANCELED:
-      case TwilioStatus.EXPIRED:
-        return 'session_expired';
-      case TwilioStatus.MAX_ATTEMPTS_REACHED:
-        return 'unknown_error';
-      case TwilioStatus.FAILED:
-      case TwilioStatus.DELETED:
-      default:
-        notifyBugsnag('Unexpected status on login OTP attempt', {
-          errorGroupHash: 'LoginConfirmCode',
-          metadata: {status},
-        });
-        return 'unknown_error';
+      case 400:
+        const errorData = error.responseData && JSON.parse(error.responseData);
+        if (errorData?.error_code === 'INVALID_CODE') {
+          return 'invalid_code';
+        }
+        if (errorData?.error_code === 'NOT_FOUND') {
+          // 10 minutes passed since the code was sent
+          return 'session_expired';
+        }
+        break;
+      case 429:
+        // 5 attempts to verify the code failed
+        return 'too_many_attempts';
     }
-  } catch (error) {
-    Bugsnag.notify(error as any);
+    notifyBugsnag('Unexpected response on login OTP attempt', {
+      errorGroupHash: 'LoginConfirmCode',
+      metadata: {status, responseData: error.responseData, error: e},
+    });
     return 'unknown_error';
   }
 };

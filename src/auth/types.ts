@@ -23,7 +23,8 @@ export type AuthReducerAction =
 export type ConfirmationErrorCode =
   | 'invalid_code'
   | 'unknown_error'
-  | 'session_expired';
+  | 'session_expired'
+  | 'too_many_attempts';
 export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
 export type VippsSignInErrorCode =
   | 'access_denied'
