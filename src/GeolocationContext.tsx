@@ -257,12 +257,17 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
 
         if (state.status != status) {
           dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
-          updateMetadata({'AtB-App-Location-Status': status});
         }
       }
     }
     checkPermission();
-  }, [appStatus, state.status, updateMetadata]);
+  }, [appStatus, state.status]);
+
+  useEffect(() => {
+    if (state.status !== null) {
+      updateMetadata({'AtB-App-Location-Status': state.status});
+    }
+  }, [state.status, updateMetadata]);
 
   useEffect(() => {
     currentCoordinatesRef.current = state.location?.coordinates;
