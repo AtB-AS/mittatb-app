@@ -5,10 +5,11 @@ import {Coordinates} from '@atb/utils/coordinates';
 import {
   Feature,
   FeatureCollection,
-  GeoJSON,
   GeoJsonProperties,
+  MultiPolygon,
   Geometry,
   Point,
+  Polygon,
   Position,
 } from 'geojson';
 import {
@@ -67,8 +68,31 @@ export const findEntityAtClick = async (
 export const isFeaturePoint = (f: Feature): f is Feature<Point> =>
   f.geometry.type === 'Point';
 
+export const isFeaturePolygon = (f: Feature): f is Feature<Polygon> =>
+  f.geometry.type === 'Polygon';
+
+export const isFeatureMultiPolygon = (f: Feature): f is Feature<MultiPolygon> =>
+  f.geometry.type === 'MultiPolygon';
+
+/**
+ * When including MultiPolygons in GeoJSON as shape prop for MapboxGL.ShapeSource,
+ * they are rendered as multiple Features with geometry.type="Polygon".
+ * So the GeoJSON input has type MultiPolygon, but queried features from the map have type Polygon
+ * @param   {object}  feature GeoJson feature
+ * @returns {boolean} whether a feature has properties.polylineEncodedMultiPolygon instead of geometry.coordinates. Only GeofencingZones are known to use this.
+ */
+export const isFeaturePolylineEncodedMultiPolygon = (f: Feature): boolean =>
+  (isFeatureMultiPolygon(f) || isFeaturePolygon(f)) &&
+  !!f.properties?.polylineEncodedMultiPolygon;
+
 export const hasProperties = (f: Feature) =>
   Object.keys(f.properties || {}).length > 0;
+
+export const hasGeofencingZoneCustomProps = (f: Feature) =>
+  Object.keys(f.properties?.geofencingZoneCustomProps || {}).length > 0;
+
+export const isFeatureGeofencingZone = (f: Feature) =>
+  isFeaturePolylineEncodedMultiPolygon(f) && hasGeofencingZoneCustomProps(f);
 
 export const isClusterFeature = (
   feature: Feature,

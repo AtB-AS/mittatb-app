@@ -3,8 +3,9 @@ import {FOCUS_ORIGIN} from '@atb/api/geocoder';
 import {StyleSheet} from '@atb/theme';
 import {MapRoute} from '@atb/travel-details-map-screen/components/MapRoute';
 import MapboxGL, {LocationPuck, MapState} from '@rnmapbox/maps';
-import {Feature} from 'geojson';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Feature, Position} from 'geojson';
+import turfBooleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {MapCameraConfig, MapViewConfig} from './MapConfig';
 import {SelectionPin} from './components/SelectionPin';
@@ -14,9 +15,25 @@ import {MapFilter} from './components/filter/MapFilter';
 import {Stations, Vehicles} from './components/mobility';
 import {useControlPositionsStyle} from './hooks/use-control-styles';
 import {useMapSelectionChangeEffect} from './hooks/use-map-selection-change-effect';
-import {MapProps, MapRegion} from './types';
-import {isFeaturePoint} from './utils';
+import {GeofencingZoneCustomProps, MapProps, MapRegion} from './types';
+import {
+  isFeaturePoint,
+  getFeaturesAtClick,
+  isFeatureGeofencingZone,
+  isStopPlace,
+  isParkAndRide,
+} from './utils';
 import isEqual from 'lodash.isequal';
+import {
+  GeofencingZones,
+  useGeofencingZoneTextContent,
+} from '@atb/components/map';
+
+import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
+import {isBicycle, isScooter} from '@atb/mobility';
+import {isCarStation, isStation} from '@atb/mobility/utils';
+
+import {Snackbar, useSnackbar} from '../snackbar';
 
 export const Map = (props: MapProps) => {
   const {initialLocation} = props;
@@ -34,13 +51,39 @@ export const Map = (props: MapProps) => {
     [currentCoordinatesRef, initialLocation],
   );
 
-  const {mapLines, selectedCoordinates, onMapClick} =
+  const {mapLines, selectedCoordinates, onMapClick, selectedFeature} =
     useMapSelectionChangeEffect(
       props,
       mapViewRef,
       mapCameraRef,
       startingCoordinates,
     );
+
+  const [geofencingZonesEnabled, geofencingZonesEnabledDebugOverrideReady] =
+    useGeofencingZonesEnabled();
+
+  const showGeofencingZones =
+    geofencingZonesEnabled &&
+    geofencingZonesEnabledDebugOverrideReady &&
+    (isScooter(selectedFeature) || isBicycle(selectedFeature));
+
+  const {getGeofencingZoneTextContent} = useGeofencingZoneTextContent();
+  const {snackbarProps, showSnackbar, hideSnackbar} = useSnackbar();
+
+  useEffect(() => {
+    // hide the snackbar when the bottom sheet is closed
+    !selectedFeature && hideSnackbar();
+  }, [selectedFeature, hideSnackbar]);
+
+  const geofencingZoneOnPress = useCallback(
+    (geofencingZoneCustomProps?: GeofencingZoneCustomProps) => {
+      const textContent = getGeofencingZoneTextContent(
+        geofencingZoneCustomProps,
+      );
+      showSnackbar({textContent, position: 'top'});
+    },
+    [showSnackbar, getGeofencingZoneTextContent],
+  );
 
   const updateRegionForVehicles = props.vehicles?.updateRegion;
   const updateRegionForStations = props.stations?.updateRegion;
@@ -86,6 +129,51 @@ export const Map = (props: MapProps) => {
     );
   };
 
+  /**
+   * As setting onPress on the GeofencingZones ShapeSource prevents MapView's onPress
+   * from being triggered, the onPress logic is handled here instead.
+   * This makes it possible to click directly on e.g. bus stops while GeofencingZones are visible.
+   * Step 1: query all rendered features
+   * Step 2: decide feature to select
+   * Step 3: selected the feature
+   */
+  const onFeatureClick = async (feature: Feature) => {
+    if (!isFeaturePoint(feature)) return;
+    const {coordinates: positionClicked} = feature.geometry;
+
+    const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
+    if (!featuresAtClick || featuresAtClick.length === 0) return;
+    const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
+      getFeatureWeight(currentFeature, positionClicked) >
+      getFeatureWeight(selected, positionClicked)
+        ? currentFeature
+        : selected,
+    );
+
+    /**
+     * this hides the Snackbar when a feature is clicked,
+     * unless the feature is a geofencingZone, in which case
+     * geofencingZoneOnPress will be called which sets it visible again
+     */
+    hideSnackbar();
+
+    if (isFeatureGeofencingZone(featureToSelect)) {
+      geofencingZoneOnPress(
+        featureToSelect?.properties?.geofencingZoneCustomProps,
+      );
+    } else {
+      if (isFeaturePoint(featureToSelect)) {
+        onMapClick({
+          source: 'map-click',
+          feature: featureToSelect,
+        });
+      } else if (isScooter(selectedFeature)) {
+        // outside of operational area, rules unspecified
+        geofencingZoneOnPress(undefined);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -103,14 +191,7 @@ export const Map = (props: MapProps) => {
           pitchEnabled={false}
           onDidFinishLoadingMap={onDidFinishLoadingMap}
           onMapIdle={onMapIdle}
-          onPress={async (feature: Feature) => {
-            if (isFeaturePoint(feature)) {
-              onMapClick({
-                source: 'map-click',
-                feature,
-              });
-            }
-          }}
+          onPress={onFeatureClick}
           {...MapViewConfig}
         >
           <MapboxGL.Camera
@@ -122,6 +203,13 @@ export const Map = (props: MapProps) => {
             ]}
             {...MapCameraConfig}
           />
+
+          {showGeofencingZones && (
+            <GeofencingZones
+              selectedVehicleId={selectedFeature.properties.id}
+            />
+          )}
+
           {mapLines && <MapRoute lines={mapLines} />}
           <LocationPuck puckBearing="heading" puckBearingEnabled={true} />
           {props.selectionMode === 'ExploreLocation' && selectedCoordinates && (
@@ -175,6 +263,8 @@ export const Map = (props: MapProps) => {
             }}
           />
         </View>
+
+        <Snackbar {...snackbarProps} />
       </View>
     </View>
   );
@@ -183,3 +273,24 @@ export const Map = (props: MapProps) => {
 const useMapStyles = StyleSheet.createThemeHook(() => ({
   container: {flex: 1},
 }));
+
+function getFeatureWeight(feature: Feature, positionClicked: Position): number {
+  if (isFeaturePoint(feature)) {
+    return isStopPlace(feature) ||
+      isScooter(feature) ||
+      isBicycle(feature) ||
+      isStation(feature) ||
+      isCarStation(feature) ||
+      isParkAndRide(feature)
+      ? 3
+      : 1;
+  } else if (isFeatureGeofencingZone(feature)) {
+    const positionClickedIsInsidePolygon = turfBooleanPointInPolygon(
+      positionClicked,
+      feature.geometry,
+    );
+    return positionClickedIsInsidePolygon ? 2 : 0;
+  } else {
+    return 0;
+  }
+}

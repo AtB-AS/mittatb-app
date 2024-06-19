@@ -10,10 +10,10 @@ import {StyleSheet} from '@atb/theme';
 import {
   FareContract,
   flattenCarnetTravelRightAccesses,
+  getLastUsedAccess,
   isCarnet,
   isCarnetTravelRight,
   NormalTravelRight,
-  PreActivatedTravelRight,
   TravelRightDirection,
 } from '@atb/ticketing';
 import {
@@ -24,7 +24,6 @@ import {
 import React from 'react';
 import {View} from 'react-native';
 import {
-  getLastUsedAccess,
   getValidityStatus,
   isValidFareContract,
   mapToUserProfilesWithCount,
@@ -41,7 +40,7 @@ import {MessageInfoText} from '@atb/components/message-info-text';
 import {useGetPhoneByAccountIdQuery} from '@atb/on-behalf-of/queries/use-get-phone-by-account-id-query';
 
 export type FareContractInfoProps = {
-  travelRight: PreActivatedTravelRight;
+  travelRight: NormalTravelRight;
   status: ValidityStatus;
   testID?: string;
   preassignedFareProduct?: PreassignedFareProduct;

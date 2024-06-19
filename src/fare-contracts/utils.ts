@@ -1,6 +1,5 @@
 import {
   CarnetTravelRight,
-  CarnetTravelRightUsedAccess,
   FareContract,
   Reservation,
   FareContractState,
@@ -8,8 +7,9 @@ import {
   flattenCarnetTravelRightAccesses,
   isCarnet,
   isCarnetTravelRight,
-  isPreActivatedTravelRight,
   isSentOrReceivedFareContract,
+  getLastUsedAccess,
+  isNormalTravelRight,
 } from '@atb/ticketing';
 import {
   findReferenceDataById,
@@ -74,9 +74,7 @@ export function getValidityStatus(
     ).usedAccesses;
     return getLastUsedAccess(now, usedAccesses).status;
   } else {
-    const firstTravelRight = fc.travelRights.filter(
-      isPreActivatedTravelRight,
-    )[0];
+    const firstTravelRight = fc.travelRights.filter(isNormalTravelRight)[0];
     return getRelativeValidity(
       now,
       firstTravelRight.startDateTime.getTime(),
@@ -282,7 +280,7 @@ export function getFareContractInfo(
   const isSent = isSentOrReceived && fc.customerAccountId !== currentUserId;
 
   const travelRights = fc.travelRights.filter(
-    isCarnetFareContract ? isCarnetTravelRight : isPreActivatedTravelRight,
+    isCarnetFareContract ? isCarnetTravelRight : isNormalTravelRight,
   );
   const firstTravelRight = travelRights[0];
 
@@ -319,40 +317,4 @@ export function getFareContractInfo(
     maximumNumberOfAccesses,
     numberOfUsedAccesses,
   };
-}
-
-type UsedAccessStatus = 'valid' | 'upcoming' | 'inactive';
-type LastUsedAccessState = {
-  status: UsedAccessStatus;
-  validFrom: number | undefined;
-  validTo: number | undefined;
-};
-
-function getUsedAccessValidity(
-  now: number,
-  validFrom: number,
-  validTo: number,
-): UsedAccessStatus {
-  if (now > validTo) return 'inactive';
-  if (now < validFrom) return 'upcoming';
-  return 'valid';
-}
-
-export function getLastUsedAccess(
-  now: number,
-  usedAccesses: CarnetTravelRightUsedAccess[],
-): LastUsedAccessState {
-  const lastUsedAccess = usedAccesses.slice(-1).pop();
-
-  let status: UsedAccessStatus = 'inactive';
-  let validFrom: number | undefined = undefined;
-  let validTo: number | undefined = undefined;
-
-  if (lastUsedAccess) {
-    validFrom = lastUsedAccess.startDateTime.getTime();
-    validTo = lastUsedAccess.endDateTime.getTime();
-    status = getUsedAccessValidity(now, validFrom, validTo);
-  }
-
-  return {status, validFrom, validTo};
 }

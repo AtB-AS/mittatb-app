@@ -9,8 +9,9 @@ export type AuthStatus =
   | 'fetch-id-token-timeout';
 
 export type AuthReducerAction =
+  | {type: 'SIGN_IN_INITIATED'; phoneNumber: string}
   | {
-      type: 'SIGN_IN_INITIATED';
+      type: 'LEGACY_SIGN_IN_INITIATED';
       confirmationHandler: FirebaseAuthTypes.ConfirmationResult;
     }
   | {type: 'SET_USER'; user: FirebaseAuthTypes.User}
@@ -22,8 +23,12 @@ export type AuthReducerAction =
 export type ConfirmationErrorCode =
   | 'invalid_code'
   | 'unknown_error'
-  | 'session_expired';
-export type PhoneSignInErrorCode = 'invalid_phone' | 'unknown_error';
+  | 'session_expired'
+  | 'too_many_attempts';
+export type PhoneSignInErrorCode =
+  | 'invalid_phone'
+  | 'unknown_error'
+  | 'too_many_attempts';
 export type VippsSignInErrorCode =
   | 'access_denied'
   | 'outdated_app_version'

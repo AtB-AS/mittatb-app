@@ -1,7 +1,7 @@
 import {Button} from '@atb/components/button';
 import {ThemeText} from '@atb/components/text';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {Reservation, PaymentType} from '@atb/ticketing';
+import {Reservation, PaymentType, useTicketingState} from '@atb/ticketing';
 import {TicketingTexts, useTranslation} from '@atb/translations';
 import Bugsnag from '@bugsnag/react-native';
 import React from 'react';
@@ -10,7 +10,6 @@ import {ValidityLine} from './ValidityLine';
 import {FareContractStatusSymbol} from './components/FareContractStatusSymbol';
 import {formatToLongDateTime} from '@atb/utils/date';
 import {fromUnixTime} from 'date-fns';
-import {useAuthState} from '@atb/auth';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 
 type Props = {
@@ -20,7 +19,7 @@ type Props = {
 export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
   const styles = useStyles();
   const {theme} = useTheme();
-  const {abtCustomerId} = useAuthState();
+  const {customerProfile} = useTicketingState();
   const {t, language} = useTranslation();
 
   async function openVippsUrl(vippsUrl: string) {
@@ -42,8 +41,14 @@ export const PurchaseReservation: React.FC<Props> = ({reservation}) => {
     }
   };
 
-  // Filter out reservations for subaccounts
-  if (reservation.customerAccountId !== abtCustomerId) return null;
+  const isSubAccountReservation = customerProfile?.subAccounts?.some(
+    (id) => id === reservation.customerAccountId,
+  );
+  
+  // filter out reservations for subaccount
+  if (isSubAccountReservation) {
+    return null;
+  }
 
   const status = getStatus();
 

@@ -3,6 +3,7 @@ import {SavedPaymentOption} from './types';
 import {storage} from '@atb/storage';
 import Bugsnag from '@bugsnag/react-native';
 import {useAuthState} from '@atb/auth';
+import {useListRecurringPaymentsQuery} from '@atb/ticketing/use-list-recurring-payments-query';
 
 export function usePreviousPaymentMethod(): SavedPaymentOption | undefined {
   const [paymentMethod, setPaymentMethod] = useState<
@@ -10,10 +11,24 @@ export function usePreviousPaymentMethod(): SavedPaymentOption | undefined {
   >(undefined);
   const {userId} = useAuthState();
 
+  const {data: recurringPayments} = useListRecurringPaymentsQuery();
+
   useEffect(() => {
     async function run(uid: string) {
-      const method = await getPreviousPaymentMethodByUser(uid);
-      setPaymentMethod(method);
+      const savedMethod = await getPreviousPaymentMethodByUser(uid);
+      if (
+        recurringPayments &&
+        savedMethod &&
+        savedMethod.savedType === 'recurring'
+      ) {
+        const method = recurringPayments.find(
+          (recurringPayment) =>
+            recurringPayment.id === savedMethod.recurringCard.id,
+        );
+        if (method) setPaymentMethod(savedMethod);
+      } else {
+        setPaymentMethod(savedMethod);
+      }
     }
 
     if (!userId) {
@@ -22,7 +37,7 @@ export function usePreviousPaymentMethod(): SavedPaymentOption | undefined {
     } else {
       run(userId);
     }
-  }, [userId]);
+  }, [recurringPayments, userId]);
 
   return paymentMethod;
 }

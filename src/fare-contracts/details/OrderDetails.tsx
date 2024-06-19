@@ -1,8 +1,4 @@
-import {
-  FareContract,
-  isCarnetTravelRight,
-  isPreActivatedTravelRight,
-} from '@atb/ticketing';
+import {FareContract, isNormalTravelRight} from '@atb/ticketing';
 import {FareContractTexts, useTranslation} from '@atb/translations';
 import {View} from 'react-native';
 import {ThemeText} from '@atb/components/text';
@@ -31,8 +27,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           ),
         )}
       </ThemeText>
-      {(isPreActivatedTravelRight(firstTravelRight) ||
-        isCarnetTravelRight(firstTravelRight)) && (
+      {isNormalTravelRight(firstTravelRight) && (
         <>
           <ThemeText
             type="body__secondary"

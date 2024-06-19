@@ -1,6 +1,6 @@
 import {StyleSheet} from '@atb/theme';
 import {
-  filterAndSortActiveOrCanBeUsedFareContracts,
+  filterAndSortValidRightNowOrCanBeUsedFareContracts,
   filterExpiredFareContracts,
   useTicketingState,
 } from '@atb/ticketing';
@@ -34,10 +34,11 @@ export const TicketTabNav_ActiveFareProductsTabScreen = ({
   const {serverNow} = useTimeContextState();
   const analytics = useAnalytics();
 
-  const activeFareContracts = filterAndSortActiveOrCanBeUsedFareContracts(
-    fareContracts,
-    serverNow,
-  );
+  const activeFareContracts =
+    filterAndSortValidRightNowOrCanBeUsedFareContracts(
+      fareContracts,
+      serverNow,
+    );
 
   const styles = useStyles();
   const {t} = useTranslation();

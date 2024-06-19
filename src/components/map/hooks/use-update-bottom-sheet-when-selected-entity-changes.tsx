@@ -4,7 +4,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useBottomSheet} from '@atb/components/bottom-sheet';
 import {DeparturesDialogSheet} from '../components/DeparturesDialogSheet';
 import MapboxGL from '@rnmapbox/maps';
-import {Feature, Point} from 'geojson';
+import {Feature, GeoJsonProperties, Point} from 'geojson';
 import {findEntityAtClick, isParkAndRide, isStopPlace} from '../utils';
 import {
   BikeStationBottomSheet,
@@ -32,7 +32,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
   mapSelectionAction: MapSelectionActionType | undefined,
   mapViewRef: RefObject<MapboxGL.MapView>,
   closeCallback: () => void,
-) => {
+): Feature<Point, GeoJsonProperties> | undefined => {
   const isFocused = useIsFocused();
   const [selectedFeature, setSelectedFeature] = useState<Feature<Point>>();
   const {open: openBottomSheet, close: closeBottomSheet} = useBottomSheet();
@@ -174,4 +174,6 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapSelectionAction, selectedFeature, isFocused, distance, analytics]);
+
+  return selectedFeature;
 };
