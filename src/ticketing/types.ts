@@ -22,14 +22,12 @@ export enum TravelRightDirection {
 
 export type TravelRight = {
   id: string;
-  status: TravelRightStatus;
   type: string;
-  fareProductRef: string;
-  direction?: TravelRightDirection;
 };
 
 export type NormalTravelRight = TravelRight & {
-  fareProductRef: string;
+  fareProductRef?: string;
+  status: TravelRightStatus;
   startDateTime: Date;
   endDateTime: Date;
   usageValidityPeriodRef: string;
@@ -37,6 +35,7 @@ export type NormalTravelRight = TravelRight & {
   tariffZoneRefs?: string[];
   startPointRef?: string;
   endPointRef?: string;
+  direction?: TravelRightDirection;
 };
 
 export type CarnetTravelRightUsedAccess = {
