@@ -5,6 +5,7 @@ import {periodBoatTravelRight} from './fixtures/period-boat-travelright';
 import {singleTravelRight} from './fixtures/single-travelright';
 import {singleBoatTravelRight} from './fixtures/single-boat-travelright';
 import {youthTravelRight} from './fixtures/youth-travelright';
+import {skoleskyssTravelRight} from './fixtures/skoleskyss-travelright';
 
 import {CarnetTravelRight, TravelRight} from '../types';
 import {
@@ -45,6 +46,10 @@ describe('Travelright type', () => {
 
   it('carnet should resolve to carnet', async () => {
     expect(isCarnetTravelRight(carnetTravelRight)).toBe(true);
+  });
+
+  it('skoleskyss should not resolve to normal', async () => {
+    expect(isNormalTravelRight(skoleskyssTravelRight)).toBe(false);
   });
 });
 
