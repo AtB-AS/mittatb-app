@@ -11,7 +11,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StatusBar} from 'react-native';
 import {Host} from 'react-native-portalize';
 import {Root_TabNavigatorStack} from './Root_TabNavigatorStack';
@@ -66,11 +66,10 @@ import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInf
 import {Root_ChooseTicketReceiverScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
-import {registerIntercomUser, setIntercomUserData} from '@atb/chat/user';
+import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version.ts';
-import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
@@ -84,22 +83,14 @@ export const RootStack = () => {
   const {theme} = useTheme();
   const navRef = useNavigationContainerRef<RootStackParamList>();
   const {minimum_app_version} = useRemoteConfig();
-  const {updateMetadata} = useIntercomMetadata();
-
+  
   useFlipper(navRef);
 
   useBeaconsState();
   useTestIds();
 
   // init Intercom user
-  useEffect(() => {
-    registerIntercomUser();
-    const setMetadata = async () => {
-      const data = await setIntercomUserData();
-      updateMetadata(data);
-    };
-    setMetadata();
-  }, [updateMetadata]);
+  useRegisterIntercomUser();
 
   if (isLoadingAppState) {
     return null;
