@@ -18,7 +18,7 @@ import {
   getSdkErrorTokenIds,
   MOBILE_TOKEN_QUERY_KEY,
 } from '../utils';
-import {useIntercomMetadata} from '@atb/chat/metadata';
+import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 import {logToBugsnag} from '@atb/utils/bugsnag-utils';
 import {wipeToken} from '@atb/mobile-token/helpers';
 import Bugsnag from '@bugsnag/react-native';

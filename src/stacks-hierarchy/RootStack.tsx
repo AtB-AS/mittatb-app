@@ -70,7 +70,7 @@ import {registerIntercomUser, setIntercomUserData} from '@atb/chat/user';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 import {ForceUpdateScreen} from '@atb/force-update-screen';
 import {compareVersion} from '@atb/utils/compare-version.ts';
-import {useIntercomMetadata} from '@atb/chat/metadata';
+import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 
 type ResultState = PartialState<NavigationState> & {
   state?: ResultState;
