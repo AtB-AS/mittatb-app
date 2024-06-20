@@ -92,6 +92,7 @@ export type MapProps = {
   initialLocation?: Location;
   vehicles?: VehiclesState;
   stations?: StationsState;
+  includeSnackbar?: boolean;
 } & (
   | {
       selectionMode: 'ExploreLocation';
