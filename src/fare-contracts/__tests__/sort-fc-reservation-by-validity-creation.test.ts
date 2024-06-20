@@ -50,6 +50,7 @@ function mockupFareContract(id: string, validityStatus: ValidityStatus, minutes:
     purchasedBy: "1",
     orderId: "1",
     state: 0,
+    totalAmount: "0",
     minimumSecurityLevel: 1,
     travelRights: [],
     qrCode: "",

@@ -70,6 +70,7 @@ export type FareContract = {
   minimumSecurityLevel: number;
   travelRights: TravelRight[];
   qrCode: string;
+  totalAmount: string;
   paymentType?: string[];
 };
 
