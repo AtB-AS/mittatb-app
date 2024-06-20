@@ -78,6 +78,7 @@ export const Map_RootScreen = ({
         navigateToQuay={navigateToQuay}
         navigateToDetails={navigateToDetails}
         navigateToTripSearch={navigateToTripSearch}
+        includeSnackbar={true}
       />
     </>
   );

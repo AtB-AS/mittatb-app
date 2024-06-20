@@ -36,7 +36,7 @@ import {isCarStation, isStation} from '@atb/mobility/utils';
 import {Snackbar, useSnackbar} from '../snackbar';
 
 export const Map = (props: MapProps) => {
-  const {initialLocation} = props;
+  const {initialLocation, includeSnackbar} = props;
   const {currentCoordinatesRef, getCurrentCoordinates} = useGeolocationState();
   const mapCameraRef = useRef<MapboxGL.Camera>(null);
   const mapViewRef = useRef<MapboxGL.MapView>(null);
@@ -264,7 +264,7 @@ export const Map = (props: MapProps) => {
           />
         </View>
 
-        <Snackbar {...snackbarProps} />
+        {includeSnackbar && <Snackbar {...snackbarProps} />}
       </View>
     </View>
   );
