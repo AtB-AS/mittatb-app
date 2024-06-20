@@ -26,7 +26,7 @@ export type TravelRight = {
 };
 
 export type NormalTravelRight = TravelRight & {
-  fareProductRef?: string;
+  fareProductRef: string;
   status: TravelRightStatus;
   startDateTime: Date;
   endDateTime: Date;
