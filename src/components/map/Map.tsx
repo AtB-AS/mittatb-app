@@ -137,42 +137,58 @@ export const Map = (props: MapProps) => {
    * Step 2: decide feature to select
    * Step 3: selected the feature
    */
-  const onFeatureClick = async (feature: Feature) => {
-    if (!isFeaturePoint(feature)) return;
-    const {coordinates: positionClicked} = feature.geometry;
+  const onFeatureClick = useCallback(
+    async (feature: Feature) => {
+      if (!isFeaturePoint(feature)) return;
 
-    const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
-    if (!featuresAtClick || featuresAtClick.length === 0) return;
-    const featureToSelect = featuresAtClick.reduce((selected, currentFeature) =>
-      getFeatureWeight(currentFeature, positionClicked) >
-      getFeatureWeight(selected, positionClicked)
-        ? currentFeature
-        : selected,
-    );
-
-    /**
-     * this hides the Snackbar when a feature is clicked,
-     * unless the feature is a geofencingZone, in which case
-     * geofencingZoneOnPress will be called which sets it visible again
-     */
-    hideSnackbar();
-
-    if (isFeatureGeofencingZone(featureToSelect)) {
-      geofencingZoneOnPress(
-        featureToSelect?.properties?.geofencingZoneCustomProps,
-      );
-    } else {
-      if (isFeaturePoint(featureToSelect)) {
-        onMapClick({
-          source: 'map-click',
-          feature: featureToSelect,
-        });
-      } else if (isScooter(selectedFeature)) {
-        // outside of operational area, rules unspecified
-        geofencingZoneOnPress(undefined);
+      if (!showGeofencingZones) {
+        onMapClick({source: 'map-click', feature});
+        return;
       }
-    }
-  };
+
+      const {coordinates: positionClicked} = feature.geometry;
+
+      const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
+      if (!featuresAtClick || featuresAtClick.length === 0) return;
+      const featureToSelect = featuresAtClick.reduce(
+        (selected, currentFeature) =>
+          getFeatureWeight(currentFeature, positionClicked) >
+          getFeatureWeight(selected, positionClicked)
+            ? currentFeature
+            : selected,
+      );
+
+      /**
+       * this hides the Snackbar when a feature is clicked,
+       * unless the feature is a geofencingZone, in which case
+       * geofencingZoneOnPress will be called which sets it visible again
+       */
+      hideSnackbar();
+
+      if (isFeatureGeofencingZone(featureToSelect)) {
+        geofencingZoneOnPress(
+          featureToSelect?.properties?.geofencingZoneCustomProps,
+        );
+      } else {
+        if (isFeaturePoint(featureToSelect)) {
+          onMapClick({
+            source: 'map-click',
+            feature: featureToSelect,
+          });
+        } else if (isScooter(selectedFeature)) {
+          // outside of operational area, rules unspecified
+          geofencingZoneOnPress(undefined);
+        }
+      }
+    },
+    [
+      geofencingZoneOnPress,
+      hideSnackbar,
+      onMapClick,
+      showGeofencingZones,
+      selectedFeature,
+    ],
+  );
 
   return (
     <View style={styles.container}>
