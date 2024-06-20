@@ -334,7 +334,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
               text={t(
                 ProfileTexts.sections.settings.linkSectionItems.privacy.label,
               )}
-              label={isBeaconsSupported ? 'new' : undefined}
               onPress={() => navigation.navigate('Profile_PrivacyScreen')}
               testID="privacyButton"
             />
@@ -344,7 +343,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
                   ProfileTexts.sections.settings.linkSectionItems.notifications
                     .label,
                 )}
-                label="new"
                 onPress={() =>
                   navigation.navigate('Profile_NotificationsScreen')
                 }
