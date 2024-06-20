@@ -1,4 +1,4 @@
-import {Location} from '@atb/favorites';
+import {Location, SearchLocation} from '@atb/favorites';
 import {
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
@@ -16,6 +16,7 @@ import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {SearchTime} from '@atb/journey-date-picker';
 import {isDefined} from '@atb/utils/presence';
+import {FeatureCategory} from '@atb/sdk';
 
 export type TimeSearch = {
   searchTime: SearchTime;
@@ -45,17 +46,11 @@ export function createQuery(
 ): TripsQueryVariables {
   const from = {
     ...fromLocation,
-    place:
-      isVenue(fromLocation) || isGroupOfStopPlaces(fromLocation)
-        ? fromLocation.id
-        : undefined,
+    place: getSearchPlace(fromLocation),
   };
   const to = {
     ...toLocation,
-    place:
-      isVenue(toLocation) || isGroupOfStopPlaces(toLocation)
-        ? toLocation.id
-        : undefined,
+    place: getSearchPlace(toLocation),
   };
 
   const query: TripsQueryVariables = {
@@ -124,13 +119,20 @@ export const areDefaultFiltersSelected = (
   return transportModes.every((tm) => tm.selectedAsDefault === tm.selected);
 };
 
-export const isVenue = (location: Location): boolean => {
-  return location.resultType === 'search' && location.layer === 'venue';
+const isVenue = (location: SearchLocation): boolean => {
+  return location.layer === 'venue';
 };
 
-export const isGroupOfStopPlaces = (location: Location): boolean => {
+const isGroupOfStopPlaces = (location: SearchLocation): boolean => {
   return (
-    location.resultType === 'search' &&
-    location.category[0] === 'GroupOfStopPlaces'
+    !!location.category?.length &&
+    location.category[0] === FeatureCategory.GROUP_OF_STOP_PLACES
   );
 };
+
+export const getSearchPlace = (location: Location) =>
+  location.resultType === 'search' &&
+  (isVenue(location as SearchLocation) ||
+    isGroupOfStopPlaces(location as SearchLocation))
+    ? location.id
+    : undefined;
