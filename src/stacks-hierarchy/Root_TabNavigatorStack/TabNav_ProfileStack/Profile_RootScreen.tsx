@@ -42,7 +42,6 @@ import {
 import {ClickableCopy} from './components/ClickableCopy';
 import {usePushNotificationsEnabled} from '@atb/notifications';
 import {useAnalytics} from '@atb/analytics';
-import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {useStorybookContext} from '@atb/storybook/StorybookContext';
 import {ContentHeading} from '@atb/components/heading';
 import {FullScreenView} from '@atb/components/screen-view';
@@ -92,7 +91,6 @@ export const Profile_RootScreen = ({navigation}: ProfileProps) => {
   const phoneNumber = parsePhoneNumber(authPhoneNumber ?? '');
   const {enable_vipps_login} = useRemoteConfig();
   const isPushNotificationsEnabled = usePushNotificationsEnabled();
-  const {isBeaconsSupported} = useBeaconsState();
 
   const {logEvent} = useAnalytics();
 
