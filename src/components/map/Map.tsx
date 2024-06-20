@@ -139,6 +139,12 @@ export const Map = (props: MapProps) => {
    */
   const onFeatureClick = async (feature: Feature) => {
     if (!isFeaturePoint(feature)) return;
+
+    if (!showGeofencingZones) {
+      onMapClick({source: 'map-click', feature});
+      return;
+    }
+
     const {coordinates: positionClicked} = feature.geometry;
 
     const featuresAtClick = await getFeaturesAtClick(feature, mapViewRef);
