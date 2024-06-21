@@ -16,6 +16,7 @@ import {TravelSearchTransportModesType} from '@atb-as/config-specs';
 import {enumFromString} from '@atb/utils/enum-from-string';
 import {SearchTime} from '@atb/journey-date-picker';
 import {isDefined} from '@atb/utils/presence';
+import {FeatureCategory} from '@atb/sdk';
 
 export type TimeSearch = {
   searchTime: SearchTime;
@@ -45,17 +46,11 @@ export function createQuery(
 ): TripsQueryVariables {
   const from = {
     ...fromLocation,
-    place:
-      fromLocation.resultType === 'search' && fromLocation.layer === 'venue'
-        ? fromLocation.id
-        : undefined,
+    place: getSearchPlace(fromLocation),
   };
   const to = {
     ...toLocation,
-    place:
-      toLocation.resultType === 'search' && toLocation.layer === 'venue'
-        ? toLocation.id
-        : undefined,
+    place: getSearchPlace(toLocation),
   };
 
   const query: TripsQueryVariables = {
@@ -122,4 +117,23 @@ export const areDefaultFiltersSelected = (
 ): boolean => {
   if (!transportModes || transportModes.length === 0) return false;
   return transportModes.every((tm) => tm.selectedAsDefault === tm.selected);
+};
+
+const isVenue = (location: Location): boolean => {
+  return 'layer' in location && location.layer === 'venue';
+};
+
+const isGroupOfStopPlaces = (location: Location): boolean => {
+  return (
+    'category' in location &&
+    !!location.category?.length &&
+    location.category[0] === FeatureCategory.GROUP_OF_STOP_PLACES
+  );
+};
+
+export const getSearchPlace = (location: Location) => {
+  return location.resultType === 'search' &&
+    (isVenue(location) || isGroupOfStopPlaces(location))
+    ? location.id
+    : undefined;
 };
