@@ -22,12 +22,11 @@ import {
   request,
   requestMultiple,
 } from 'react-native-permissions';
-import {updateMetadata as updateChatUserMetadata} from './chat/metadata';
+import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 import {useAppStateStatus} from './utils/use-app-state-status';
 import {GeoLocation} from '@atb/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/sdk';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
 
 const config: GeoOptions = {
   enableHighAccuracy: true,
@@ -135,7 +134,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const {t} = useTranslation();
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
   const currentCoordinatesRef = useRef<Coordinates | undefined>();
-  const {enable_intercom} = useRemoteConfig();
+  const {updateMetadata} = useIntercomMetadata();
 
   const openSettingsAlert = useCallback(() => {
     Alert.alert(
@@ -258,14 +257,17 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
 
         if (state.status != status) {
           dispatch({type: 'PERMISSION_CHANGED', status, locationEnabled});
-          if (enable_intercom) {
-            await updateChatUserMetadata({'AtB-App-Location-Status': status});
-          }
         }
       }
     }
     checkPermission();
-  }, [appStatus, state.status, enable_intercom]);
+  }, [appStatus, state.status]);
+
+  useEffect(() => {
+    if (state.status !== null) {
+      updateMetadata({'AtB-App-Location-Status': state.status});
+    }
+  }, [state.status, updateMetadata]);
 
   useEffect(() => {
     currentCoordinatesRef.current = state.location?.coordinates;

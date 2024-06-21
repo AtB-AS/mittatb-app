@@ -1,18 +1,15 @@
 import {useEffect} from 'react';
-import {useRemoteConfig} from '@atb/RemoteConfigContext';
-import {updateMetadata} from '@atb/chat/metadata';
+import {useIntercomMetadata} from '@atb/chat/use-intercom-metadata';
 import {AuthReducerState} from '@atb/auth/AuthContext';
 import {mapAuthenticationType} from '@atb/auth/utils';
 
 export const useUpdateIntercomOnUserChange = (state: AuthReducerState) => {
-  const {enable_intercom} = useRemoteConfig();
+  const {updateMetadata} = useIntercomMetadata();
 
   useEffect(() => {
-    if (enable_intercom) {
-      updateMetadata({
+    updateMetadata({
         'AtB-Firebase-Auth-Id': state.user?.uid,
         'AtB-Auth-Type': mapAuthenticationType(state.user),
       });
-    }
-  }, [state.user, enable_intercom]);
+  }, [state.user, updateMetadata]);
 };
