@@ -26,7 +26,7 @@ export const TicketHistoryScreenComponent = ({
     fareContracts,
     sentFareContracts,
     isRefreshingFareContracts,
-    rejectedReservations,
+    reservations,
     resubscribeFirestoreListeners,
   } = useTicketingState();
 
@@ -65,7 +65,7 @@ export const TicketHistoryScreenComponent = ({
           )}
           reservations={displayReservations(
             mode,
-            rejectedReservations,
+            reservations,
             customerAccountId,
           )}
           now={serverNow}
