@@ -10,7 +10,8 @@ import {
 import {Token} from '@atb/mobile-token/types';
 
 import {v4 as uuid} from 'uuid';
-import {useAuthState} from "@atb/auth";
+import {useAuthState} from '@atb/auth';
+import {logToBugsnag} from '@atb/utils/bugsnag-utils.ts';
 
 export const LIST_REMOTE_TOKENS_QUERY_KEY = 'listRemoteTokens';
 
@@ -21,7 +22,10 @@ export const useListRemoteTokensQuery = (
   const {userId} = useAuthState();
   return useQuery({
     queryKey: [MOBILE_TOKEN_QUERY_KEY, LIST_REMOTE_TOKENS_QUERY_KEY, userId],
-    queryFn: () => tokenService.listTokens(uuid()),
+    queryFn: () => {
+      logToBugsnag('Listing tokens for user ' + userId);
+      return tokenService.listTokens(uuid());
+    },
     enabled,
     select: (tokens) =>
       tokens.map(
