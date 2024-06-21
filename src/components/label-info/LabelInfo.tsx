@@ -26,7 +26,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
         // Setting color="info" uses the secondary text color, so we need to set
         // the primary text color manually for it to work with the label
         // background.
-        style={{color: theme.status.info.primary.text}}
+        color={theme.status.info.primary}
         type="body__tertiary"
       >
         {flagTranslated}
