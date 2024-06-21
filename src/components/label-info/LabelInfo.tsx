@@ -1,4 +1,4 @@
-import {StyleSheet} from '@atb/theme';
+import {StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '../text';
 import {View} from 'react-native';
 import {LabelType} from '@atb/configuration';
@@ -11,6 +11,7 @@ export type LabelInfoProps = {
 
 export const LabelInfo = ({label}: LabelInfoProps) => {
   const {t} = useTranslation();
+  const {theme} = useTheme();
   const linkSectionItemStyle = useStyles();
 
   const flagTranslated = t(LabelInfoTexts.labels[label]);
@@ -21,7 +22,13 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
   return (
     <View style={linkSectionItemStyle.flag}>
-      <ThemeText color="info" type="body__tertiary">
+      <ThemeText
+        // Setting color="info" uses the secondary text color, so we need to set
+        // the primary text color manually for it to work with the label
+        // background.
+        style={{color: theme.status.info.primary.text}}
+        type="body__tertiary"
+      >
         {flagTranslated}
       </ThemeText>
     </View>
