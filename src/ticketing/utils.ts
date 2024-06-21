@@ -24,7 +24,11 @@ export function isCarnet(fareContract: FareContract): boolean {
 export function isNormalTravelRight(
   travelRight: TravelRight | undefined,
 ): travelRight is NormalTravelRight {
-  return !!travelRight && 'startDateTime' in travelRight;
+  return (
+    !!travelRight &&
+    'startDateTime' in travelRight &&
+    !!travelRight.startDateTime
+  );
 }
 
 function isOrWillBeActivatedFareContract(f: FareContract): boolean {

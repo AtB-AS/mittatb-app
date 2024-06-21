@@ -256,9 +256,6 @@ export const useDefaultPreassignedFareProduct = (
   return preAssignedFareProducts[0];
 };
 
-export const getFareProductRef = (fc: FareContract) =>
-  fc.travelRights[0]?.fareProductRef;
-
 type FareContractInfoProps = {
   isCarnetFareContract: boolean;
   travelRights: NormalTravelRight[];
