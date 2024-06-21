@@ -1,4 +1,4 @@
-import {Location, SearchLocation} from '@atb/favorites';
+import {Location} from '@atb/favorites';
 import {
   TransportModeFilterOptionWithSelectionType,
   TravelSearchFiltersSelectionType,
@@ -119,20 +119,21 @@ export const areDefaultFiltersSelected = (
   return transportModes.every((tm) => tm.selectedAsDefault === tm.selected);
 };
 
-const isVenue = (location: SearchLocation): boolean => {
-  return location.layer === 'venue';
+const isVenue = (location: Location): boolean => {
+  return 'layer' in location && location.layer === 'venue';
 };
 
-const isGroupOfStopPlaces = (location: SearchLocation): boolean => {
+const isGroupOfStopPlaces = (location: Location): boolean => {
   return (
+    'category' in location &&
     !!location.category?.length &&
     location.category[0] === FeatureCategory.GROUP_OF_STOP_PLACES
   );
 };
 
-export const getSearchPlace = (location: Location) =>
-  location.resultType === 'search' &&
-  (isVenue(location as SearchLocation) ||
-    isGroupOfStopPlaces(location as SearchLocation))
+export const getSearchPlace = (location: Location) => {
+  return location.resultType === 'search' &&
+    (isVenue(location) || isGroupOfStopPlaces(location))
     ? location.id
     : undefined;
+};
