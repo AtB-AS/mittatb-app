@@ -16,11 +16,9 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
     FareContractTexts.details.orderId(fareContract.orderId),
   );
   const firstTravelRight = fareContract.travelRights[0];
-  const priceString = formatDecimalNumber(
-    parseFloat(fareContract.totalAmount),
-    language,
-    2,
-  );
+  const priceString =
+    fareContract.totalAmount !== '' &&
+    formatDecimalNumber(parseFloat(fareContract.totalAmount), language, 2);
   return (
     <View accessible={true}>
       <ThemeText type="body__secondary" color="secondary">
@@ -67,13 +65,15 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
         {t(FareContractTexts.details.paymentMethod)}
         {_.capitalize(fareContract?.paymentType?.join(', '))}
       </ThemeText>
-      <ThemeText
-        type="body__secondary"
-        color="secondary"
-        style={style.marginTop}
-      >
-        {t(FareContractTexts.details.totalPrice(priceString))}
-      </ThemeText>
+      {priceString && (
+        <ThemeText
+          type="body__secondary"
+          color="secondary"
+          style={style.marginTop}
+        >
+          {t(FareContractTexts.details.totalPrice(priceString))}
+        </ThemeText>
+      )}
       <ThemeText style={style.marginTop}>{orderIdText}</ThemeText>
     </View>
   );
