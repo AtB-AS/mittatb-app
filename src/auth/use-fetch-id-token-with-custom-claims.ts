@@ -3,6 +3,7 @@ import {AuthReducerAction} from './types';
 import {AuthReducerState} from '@atb/auth/AuthContext';
 import {useQuery} from '@tanstack/react-query';
 import {logToBugsnag, notifyBugsnag} from '@atb/utils/bugsnag-utils';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 const RETRY_COUNT = 3;
 
@@ -37,15 +38,24 @@ export const useFetchIdTokenWithCustomClaims = (
           shouldForceRefresh ? 'on' : 'off'
         }`,
       );
-      const idToken = await state.user?.getIdTokenResult(shouldForceRefresh); // Force refresh from server if retry
+
+      let idToken: FirebaseAuthTypes.IdTokenResult;
+      try {
+        idToken = await state.user!.getIdTokenResult(shouldForceRefresh); // Force refresh from server if retry
+      } catch (err) {
+        logToBugsnag('Error when fetching id token', errorToMetadata(err));
+        throw err;
+      }
       const isMissingCustomClaims = !idToken?.claims['customer_number'];
       if (isMissingCustomClaims) {
+        const errMsg = 'Fetched id token, but custom claims are missing';
+        logToBugsnag(errMsg);
         shouldForceRefresh = true;
-        throw new Error("Token doesn't contain custom claims");
+        throw new Error(errMsg);
       }
       return idToken;
     },
-    enabled: state.authStatus === 'fetching-id-token',
+    enabled: !!state.user && state.authStatus === 'fetching-id-token',
     retry: RETRY_COUNT,
     retryDelay: (attempt) => (attempt + 1) * 3000,
   });
@@ -58,13 +68,17 @@ export const useFetchIdTokenWithCustomClaims = (
 
   useEffect(() => {
     if (query.error) {
-      notifyBugsnag(query.error as any, {
-        errorGroupHash: 'AuthError',
-        metadata: {
-          description: `No id token with custom claims received after ${RETRY_COUNT} retries`,
+      notifyBugsnag(
+        `No id token with custom claims received after ${RETRY_COUNT} retries`,
+        {
+          errorGroupHash: 'AuthError',
+          metadata: errorToMetadata(query.error),
         },
-      });
+      );
       dispatch({type: 'SET_FETCH_ID_TOKEN_TIMEOUT'});
     }
   }, [dispatch, query.error]);
 };
+
+const errorToMetadata = (error: any) =>
+  'message' in error ? {errorMessage: error.message} : undefined;
