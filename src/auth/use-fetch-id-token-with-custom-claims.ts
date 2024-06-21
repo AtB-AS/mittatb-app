@@ -57,7 +57,7 @@ export const useFetchIdTokenWithCustomClaims = (
     },
     enabled: !!state.user && state.authStatus === 'fetching-id-token',
     retry: RETRY_COUNT,
-    retryDelay: (attempt) => (attempt + 1) * 3000,
+    retryDelay: (attempt) => (attempt + 1) * 2000,
   });
 
   useEffect(() => {
