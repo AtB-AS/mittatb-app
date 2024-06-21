@@ -22,13 +22,7 @@ export const LabelInfo = ({label}: LabelInfoProps) => {
 
   return (
     <View style={linkSectionItemStyle.flag}>
-      <ThemeText
-        // Setting color="info" uses the secondary text color, so we need to set
-        // the primary text color manually for it to work with the label
-        // background.
-        color={theme.status.info.primary}
-        type="body__tertiary"
-      >
+      <ThemeText color={theme.status.info.primary} type="body__tertiary">
         {flagTranslated}
       </ThemeText>
     </View>
