@@ -53,9 +53,6 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
   );
 
   useEffect(() => {
-  }, [reserveMutation.data]);
-
-  useEffect(() => {
     const orderId = reserveMutation.data?.order_id;
     if (orderId) {
       const fareContract = [...(fareContracts ?? []), ...(sentFareContracts ?? [])].map((fc) => {
