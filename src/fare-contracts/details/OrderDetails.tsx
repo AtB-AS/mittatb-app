@@ -17,8 +17,10 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
   );
   const firstTravelRight = fareContract.travelRights[0];
   const priceString =
+    fareContract.totalAmount &&
     fareContract.totalAmount !== '' &&
     formatDecimalNumber(parseFloat(fareContract.totalAmount), language, 2);
+
   return (
     <View accessible={true}>
       <ThemeText type="body__secondary" color="secondary">
