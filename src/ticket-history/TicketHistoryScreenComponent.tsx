@@ -27,6 +27,7 @@ export const TicketHistoryScreenComponent = ({
     sentFareContracts,
     isRefreshingFareContracts,
     reservations,
+    rejectedReservations,
     resubscribeFirestoreListeners,
   } = useTicketingState();
 
@@ -66,6 +67,7 @@ export const TicketHistoryScreenComponent = ({
           reservations={displayReservations(
             mode,
             reservations,
+            rejectedReservations,
             customerAccountId,
           )}
           now={serverNow}
@@ -95,11 +97,12 @@ const displayFareContracts = (
 const displayReservations = (
   mode: TicketHistoryMode,
   reservations: Reservation[],
+  rejectedReservations: Reservation[],
   customerAccountId?: string,
 ) => {
   switch (mode) {
     case 'expired':
-      return reservations.filter(
+      return rejectedReservations.filter(
         (reservation) => reservation.customerAccountId === customerAccountId,
       );
     case 'sent':
