@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from 'react';
+import {useEffect} from 'react';
 import {Linking} from 'react-native';
 import {savePreviousPaymentMethodByUser} from '@atb/stacks-hierarchy/saved-payment-utils';
 import {listRecurringPayments} from '@atb/ticketing';
@@ -11,33 +11,19 @@ export const usePurchaseCallbackListener = (
   recurringPaymentId?: number,
 ) => {
   const {userId} = useAuthState();
-
-  const completeListener = useCallback(async () => {
-    await saveLastUsedPaymentMethod(
-      userId,
-      paymentMethod,
-      recurringPaymentId,
-    );
-    onCallback();
-  }, [userId, paymentMethod, recurringPaymentId, onCallback]);
-
   useEffect(() => {
-    const timeout = setTimeout(async () => {
-      completeListener();
-    }, 30000);
-
-    const { remove: unsub } = Linking.addEventListener('url', async (event) => {
+    const {remove: unsub} = Linking.addEventListener('url', async (event) => {
       if (event.url.includes('purchase-callback')) {
-        clearTimeout(timeout);
-        completeListener();
+        await saveLastUsedPaymentMethod(
+          userId,
+          paymentMethod,
+          recurringPaymentId,
+        );
+        onCallback();
       }
     });
-
-    return () => {
-      clearTimeout(timeout);
-      unsub();
-    };
-  }, [completeListener]);
+    return () => unsub();
+  }, [onCallback, userId, paymentMethod, recurringPaymentId]);
 };
 
 const saveLastUsedPaymentMethod = async (
