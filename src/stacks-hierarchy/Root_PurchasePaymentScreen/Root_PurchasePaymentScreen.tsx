@@ -55,12 +55,9 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
   useEffect(() => {
     const orderId = reserveMutation.data?.order_id;
     if (orderId) {
-      const fareContract = [...(fareContracts ?? []), ...(sentFareContracts ?? [])].map((fc) => {
-        return {
-          orderId: fc.orderId,
-        };
-      }).find((contract) => contract.orderId === orderId);
-      if (fareContract) {
+      const allPossibleFareContracts = [...(fareContracts ?? []), ...(sentFareContracts ?? [])];
+      const fareContractReceived = allPossibleFareContracts.some((fc) => fc.orderId === orderId);
+      if (fareContractReceived) {
         navigateToActiveTicketsScreen();
       }
     }
