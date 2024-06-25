@@ -61,7 +61,7 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
         navigateToActiveTicketsScreen();
       }
     }
-  }, [fareContracts, sentFareContracts, reserveMutation.data, navigateToActiveTicketsScreen]);
+  }, [fareContracts, sentFareContracts, reserveMutation.data?.order_id, navigateToActiveTicketsScreen]);
 
   const reserveOffer = reserveMutation.mutate;
   useEffect(() => {
