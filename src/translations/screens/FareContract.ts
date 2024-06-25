@@ -92,6 +92,11 @@ const FareContractTexts = {
         `This ticket was purchased by ${phoneNumber}`,
         `Denne billetten vart kjøpt av ${phoneNumber}`,
       ),
+    totalPrice: (priceString: string) => _(
+      `Totalt: ${priceString} kr`,
+      `Total: ${priceString} kr`,
+      `Totalt: ${priceString} kr`,
+    ),
     askForReceipt: _(
       'Få kvittering tilsendt',
       'Get receipt sent',
