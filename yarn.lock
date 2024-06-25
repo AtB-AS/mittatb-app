@@ -3558,13 +3558,6 @@
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-javascript-lib/-/@entur-private/abt-time-javascript-lib-2.1.6.tgz#2fcf596e669f652083ad2c6c7090c52eb4d4c350"
   integrity sha512-znf5DVfBOqD9cXUU7rK1bWu3ghQzRCVtBmKDEgs0qV+U65uh1wtZBXLnTmVfiQyDohJdON5XyUV8OPXfkjyi7A==
 
-"@entur-private/abt-time-react-native-lib@2.1.6":
-  version "2.1.6"
-  resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-time-react-native-lib/-/@entur-private/abt-time-react-native-lib-2.1.6.tgz#4bd2f23392b2b07142f2cb192e1f3d4f9e39f2a5"
-  integrity sha512-keEf8Jkcdlnfxf3tC+nkjWCj/nKI40B2yQ7tfr+1t6W9PEg1bi/YX/8v/qK8NgXQV7iYVYi88HYki1l1EMwZSQ==
-  dependencies:
-    "@entur-private/abt-time-javascript-lib" "2.1.6"
-
 "@entur-private/abt-token-core-javascript-lib@2.1.6":
   version "2.1.6"
   resolved "https://entur2.jfrog.io/entur2/api/npm/partner-npm-local/@entur-private/abt-token-core-javascript-lib/-/@entur-private/abt-token-core-javascript-lib-2.1.6.tgz#b16b3a23b4a2801411062a034ab0ac86d76de93d"
