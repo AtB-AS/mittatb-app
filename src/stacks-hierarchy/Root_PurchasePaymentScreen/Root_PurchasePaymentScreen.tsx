@@ -52,16 +52,17 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
     reserveMutation.data?.recurring_payment_id,
   );
 
+  const orderId = reserveMutation.data?.order_id;
+  const fareContractReceived = React.useMemo(() => {
+    const allPossibleFareContracts = [...(fareContracts ?? []), ...(sentFareContracts ?? [])];
+    return allPossibleFareContracts.some((fc) => fc.orderId === orderId && orderId !== undefined);
+  }, [fareContracts, orderId, sentFareContracts]);
+
   useEffect(() => {
-    const orderId = reserveMutation.data?.order_id;
-    if (orderId) {
-      const allPossibleFareContracts = [...(fareContracts ?? []), ...(sentFareContracts ?? [])];
-      const fareContractReceived = allPossibleFareContracts.some((fc) => fc.orderId === orderId);
-      if (fareContractReceived) {
-        navigateToActiveTicketsScreen();
-      }
+    if (fareContractReceived) {
+      navigateToActiveTicketsScreen();
     }
-  }, [fareContracts, sentFareContracts, reserveMutation.data?.order_id, navigateToActiveTicketsScreen]);
+  }, [fareContractReceived, navigateToActiveTicketsScreen]);
 
   const reserveOffer = reserveMutation.mutate;
   useEffect(() => {
