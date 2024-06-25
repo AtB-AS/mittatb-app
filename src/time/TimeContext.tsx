@@ -1,5 +1,5 @@
 import {useInterval} from '@atb/utils/use-interval';
-import {clock, start} from '@entur-private/abt-time-react-native-lib';
+import {clock, startNativeModule as start} from '@entur-private/abt-token-state-react-native-lib';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useServerTimeEnabled} from '@atb/time';
 
@@ -29,7 +29,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     if (serverTimeEnabled) {
-      start({
+      start([], [], {
         autoStart: true,
         maxDelayInMilliSeconds: 1000,
         parallelizationCount: 3,
