@@ -68,7 +68,7 @@ export const OrderDetails = ({fareContract}: {fareContract: FareContract}) => {
           color="secondary"
           style={style.marginTop}
         >
-          {t(FareContractTexts.details.totalPrice(priceString))}
+          {t(FareContractTexts.details.totalPrice(priceString))}
         </ThemeText>
       )}
       {fareContract.state !== FareContractState.Refunded && (
