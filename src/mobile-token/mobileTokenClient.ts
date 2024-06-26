@@ -12,11 +12,15 @@ const CONTEXT_ID = 'main';
 
 const TWELVE_HOURS_MS = 1000 * 60 * 60 * 12;
 
+export const abtContextIds = [CONTEXT_ID];
+
+export const abtAttestationConfig = {
+  attestationType: 'PlayIntegrityAPIAttestation',
+};
+
 const abtClient = createClient({
-  tokenContextIds: [CONTEXT_ID],
-  attestation: {
-    attestationType: 'PlayIntegrityAPIAttestation',
-  },
+  tokenContextIds: abtContextIds,
+  attestation: abtAttestationConfig,
   remoteTokenService: tokenService,
   localLogger,
   remoteLogger,
