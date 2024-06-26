@@ -10,7 +10,7 @@ export const localLogger: ClientConfig['localLogger'] = {
   },
   warn: (msg, err, metadata?) => {
     const onError = toOnErrorCallback('warning', msg, metadata);
-    Bugsnag.notify(err, onError);
+    if (err) Bugsnag.notify(err, onError);
   },
   error: (msg, err, metadata?) => {
     const onError = toOnErrorCallback('error', msg, metadata);
