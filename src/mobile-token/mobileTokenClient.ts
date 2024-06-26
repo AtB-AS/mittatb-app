@@ -20,6 +20,12 @@ const abtClient = createClient({
   remoteTokenService: tokenService,
   localLogger,
   remoteLogger,
+  time: {
+    autoStart: true,
+    maxDelayInMilliSeconds: 1000,
+    parallelizationCount: 3,
+    host: 'time.google.com',
+  }
 });
 
 export const mobileTokenClient = {
@@ -44,4 +50,5 @@ export const mobileTokenClient = {
    */
   shouldRenew: (token: ActivatedToken) =>
     abtClient.shouldPreemptiveRenew(token, TWELVE_HOURS_MS, 10),
+  currentTimeMillis: () => abtClient.getCurrentTimeMillis(),
 };

@@ -1,6 +1,6 @@
 import {useInterval} from '@atb/utils/use-interval';
-import {clock, startNativeModule as start} from '@entur-private/abt-token-state-react-native-lib';
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import {mobileTokenClient} from '@atb/mobile-token/mobileTokenClient';
+import React, {createContext, useContext, useState} from 'react';
 import {useServerTimeEnabled} from '@atb/time';
 
 type TimeContextState = {
@@ -23,25 +23,13 @@ let serverDiff = 0;
 export const getServerNow = () => Date.now() - serverDiff;
 
 export const TimeContextProvider: React.FC = ({children}) => {
-  const [clockIsRunning, setClockIsRunning] = useState(false);
   const [serverNow, setServerNow] = useState(Date.now());
   const [serverTimeEnabled] = useServerTimeEnabled();
 
-  useEffect(() => {
-    if (serverTimeEnabled) {
-      start([], [], {
-        autoStart: true,
-        maxDelayInMilliSeconds: 1000,
-        parallelizationCount: 3,
-        host: 'time.google.com',
-      }).then(() => setClockIsRunning(true));
-    }
-  }, [serverTimeEnabled]);
-
   useInterval(
     () => {
-      if (serverTimeEnabled && clockIsRunning) {
-        clock.currentTimeMillis().then((ms) => {
+      if (serverTimeEnabled) {
+        mobileTokenClient.currentTimeMillis().then((ms) => {
           serverDiff = Date.now() - ms;
           setServerNow(ms);
         });
@@ -50,7 +38,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
         setServerNow(Date.now());
       }
     },
-    [clockIsRunning, serverTimeEnabled],
+    [serverTimeEnabled],
     2500,
     false,
     true,
