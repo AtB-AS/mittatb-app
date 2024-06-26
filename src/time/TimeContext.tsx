@@ -1,5 +1,6 @@
 import {useInterval} from '@atb/utils/use-interval';
 import {clock, startNativeModule as start} from '@entur-private/abt-token-state-react-native-lib';
+import {abtContextIds, abtAttestationConfig} from '@atb/mobile-token/mobileTokenClient';
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useServerTimeEnabled} from '@atb/time';
 
@@ -29,7 +30,7 @@ export const TimeContextProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     if (serverTimeEnabled) {
-      start([], [], {
+      start(abtContextIds, abtAttestationConfig, {
         autoStart: true,
         maxDelayInMilliSeconds: 1000,
         parallelizationCount: 3,
