@@ -72,8 +72,8 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
       initialScreen: {
         name: 'Root_ConsiderTravelTokenChangeScreen',
       },
-      shouldShowPredicate: ({mobileTokenStatus, travelCardDisabled}) =>
-        mobileTokenStatus === 'success-not-inspectable' && !travelCardDisabled,
+      shouldShowPredicate: ({mobileTokenStatus, travelCardDisabled, authenticationType}) =>
+        mobileTokenStatus === 'success-not-inspectable' && !travelCardDisabled && authenticationType === 'phone',
     },
     {
       isOnboardedStoreKey: '@ATB_mobile_token_without_travelcard_onboarded',
@@ -81,7 +81,7 @@ export const onboardingSectionsInPrioritizedOrder: OnboardingSectionConfig[] =
       initialScreen: {
         name: 'Root_ConsiderTravelTokenChangeScreen',
       },
-      shouldShowPredicate: ({mobileTokenStatus, travelCardDisabled}) =>
-        mobileTokenStatus === 'success-not-inspectable' && travelCardDisabled,
+      shouldShowPredicate: ({mobileTokenStatus, travelCardDisabled, authenticationType}) =>
+        mobileTokenStatus === 'success-not-inspectable' && travelCardDisabled && authenticationType === 'phone',
     },
   ];
