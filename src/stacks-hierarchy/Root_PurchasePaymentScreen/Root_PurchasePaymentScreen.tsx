@@ -16,7 +16,7 @@ import {WebViewTerminal} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/
 import {usePurchaseCallbackListener} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/use-purchase-callback-listener';
 import {LoadingOverlay} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/LoadingOverlay';
 import {PaymentProcessorStatus} from '@atb/stacks-hierarchy/types';
-import {PaymentType} from '@atb/ticketing';
+import {PaymentType, useTicketingState} from '@atb/ticketing';
 import {useOpenVippsAfterReservation} from '@atb/stacks-hierarchy/Root_PurchasePaymentScreen/use-open-vipps-after-reservation';
 
 type Props = RootStackScreenProps<'Root_PurchasePaymentScreen'>;
@@ -26,6 +26,7 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
   const {t} = useTranslation();
   const {offers, destinationAccountId, paymentMethod} = route.params;
   const analytics = useAnalytics();
+  const {fareContracts, sentFareContracts} = useTicketingState();
   const [paymentProcessorStatus, setPaymentProcessorStatus] =
     useState<PaymentProcessorStatus>('loading');
 
@@ -50,6 +51,18 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
     paymentMethod,
     reserveMutation.data?.recurring_payment_id,
   );
+
+  const orderId = reserveMutation.data?.order_id;
+  const fareContractReceived = React.useMemo(() => {
+    const allPossibleFareContracts = [...(fareContracts ?? []), ...(sentFareContracts ?? [])];
+    return allPossibleFareContracts.some((fc) => fc.orderId === orderId && orderId !== undefined);
+  }, [fareContracts, orderId, sentFareContracts]);
+
+  useEffect(() => {
+    if (fareContractReceived) {
+      navigateToActiveTicketsScreen();
+    }
+  }, [fareContractReceived, navigateToActiveTicketsScreen]);
 
   const reserveOffer = reserveMutation.mutate;
   useEffect(() => {
