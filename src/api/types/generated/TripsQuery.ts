@@ -127,7 +127,7 @@ export type TripFragment = {
         notices: Array<{id: string; text?: string}>;
         journeyPattern?: {notices: Array<{id: string; text?: string}>};
       };
-      interchangeTo?: {guaranteed?: boolean; toServiceJourney?: {id: string}};
+      interchangeTo?: {guaranteed?: boolean; toServiceJourney?: {id: string}; maximumWaitTime?: number};
       pointsOnLink?: {points?: string; length?: number};
       intermediateEstimatedCalls: Array<{
         date: any;
