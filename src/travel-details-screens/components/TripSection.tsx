@@ -146,6 +146,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
 
   const translatedModeName = getTranslatedModeName(leg.mode);
 
+  const showInterchangeSection =
+    leg.interchangeTo?.guaranteed && interchangeDetails && leg.line;
+
   const sectionOutput = (
     <>
       <View style={style.tripSection} testID={testID}>
@@ -355,32 +358,13 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
       </View>
-      {leg.interchangeTo?.guaranteed && interchangeDetails && leg.line && (
-        <View>
-          <TripLegDecoration
-            color={iconColor}
-            hasStart={false}
-            hasEnd={false}
-          />
-          <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
-            <MessageInfoBox
-              noStatusIcon={true}
-              type="info"
-              message={t(
-                publicCode
-                  ? TripDetailsTexts.messages.interchange(
-                      publicCode,
-                      interchangeDetails.publicCode,
-                      interchangeDetails.fromPlace,
-                    )
-                  : TripDetailsTexts.messages.interchangeWithUnknownFromPublicCode(
-                      interchangeDetails.publicCode,
-                      interchangeDetails.fromPlace,
-                    ),
-              )}
-            />
-          </TripRow>
-        </View>
+      {showInterchangeSection && (
+        <InterchangeSection
+          iconColor={iconColor}
+          publicCode={publicCode}
+          interchangeDetails={interchangeDetails}
+          maximumWaitTime={leg.interchangeTo?.maximumWaitTime}
+        />
       )}
     </>
   );
@@ -541,6 +525,61 @@ const AuthorityRow = ({id, name, url}: AuthorityFragment) => {
     </TripRow>
   );
 };
+
+type InterchangeSectionProps = {
+  iconColor: string;
+  publicCode: string;
+  interchangeDetails: InterchangeDetails;
+  maximumWaitTime?: number;
+};
+function InterchangeSection({
+  iconColor,
+  publicCode,
+  interchangeDetails,
+  maximumWaitTime,
+}: InterchangeSectionProps) {
+  const {t, language} = useTranslation();
+
+  let text = '';
+  if (publicCode) {
+    text = t(
+      TripDetailsTexts.messages.interchange(
+        publicCode,
+        interchangeDetails.publicCode,
+        interchangeDetails.fromPlace,
+      ),
+    );
+  } else {
+    text = t(
+      TripDetailsTexts.messages.interchangeWithUnknownFromPublicCode(
+        interchangeDetails.publicCode,
+        interchangeDetails.fromPlace,
+      ),
+    );
+  }
+
+  // If maximum wait time is defined or over 0, append it to the message.
+  // In some cases with missing data the maximum wait time can be -1.
+  if (maximumWaitTime && maximumWaitTime > 0) {
+    text =
+      text +
+      ' ' +
+      t(
+        TripDetailsTexts.messages.interchangeMaxWait(
+          secondsToDuration(maximumWaitTime, language),
+        ),
+      );
+  }
+
+  return (
+    <View>
+      <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
+      <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
+        <MessageInfoBox noStatusIcon={true} type="info" message={text} />
+      </TripRow>
+    </View>
+  );
+}
 
 export function getPlaceName(place: Place): string {
   const fallback = place.name ?? '';

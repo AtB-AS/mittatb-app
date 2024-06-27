@@ -307,6 +307,12 @@ const TripDetailsTexts = {
         `Correspondance with ${toPublicCode} on ${location}.`,
         `Korrespondanse med ${toPublicCode} på ${location}.`,
       ),
+    interchangeMaxWait: (maxWaitTime: string) =>
+      _(
+        `Venter inntil ${maxWaitTime}.`,
+        `Waiting up to ${maxWaitTime}.`,
+        `Ventar i opp til ${maxWaitTime}.`,
+      ),
   },
   flexibleTransport: {
     needsBookingWhatIsThisTitle: (publicCode: string) =>
