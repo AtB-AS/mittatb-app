@@ -1,5 +1,5 @@
 import {StyleSheet} from '@atb/theme';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
@@ -60,8 +60,11 @@ export const DeparturesDialogSheet = ({
 
   const closestLocation = filteredLocations?.[0];
 
+  const stopPlaceId = stopPlaceFeature.properties && stopPlaceFeature.properties['id'];
+
   const {state: stopDetailsState, forceRefresh: forceRefreshStopDetailsData} =
-    useStopsDetailsData(closestLocation && [closestLocation.id]);
+    useStopsDetailsData(!isGeocoderSearching && (closestLocation? closestLocation.id : stopPlaceId));
+    
   const {
     data: stopDetailsData,
     isLoading: isStopDetailsLoading,
