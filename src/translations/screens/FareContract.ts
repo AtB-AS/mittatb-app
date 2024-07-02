@@ -92,11 +92,12 @@ const FareContractTexts = {
         `This ticket was purchased by ${phoneNumber}`,
         `Denne billetten vart kjøpt av ${phoneNumber}`,
       ),
-    totalPrice: (priceString: string) => _(
-      `Totalt: ${priceString} kr`,
-      `Total: ${priceString} kr`,
-      `Totalt: ${priceString} kr`,
-    ),
+    totalPrice: (priceString: string) =>
+      _(
+        `Totalt: ${priceString} kr`,
+        `Total: ${priceString} kr`,
+        `Totalt: ${priceString} kr`,
+      ),
     askForReceipt: _(
       'Få kvittering tilsendt',
       'Get receipt sent',
@@ -179,9 +180,9 @@ const FareContractTexts = {
       'Vil du starte billetten?',
     ),
     bottomSheetDescription: _(
-      'Billetten blir gyldig med en gang du starter den.',
-      'The ticket becomes valid immediately after you start it.',
-      'Billetten blir gyldig med ein gong du startar han.',
+      'Billetten starter med en gang du bekrefter. Dette valget kan ikke angres.',
+      'The ticket will start as soon as you confirm. This choice cannot be undone.',
+      'Billetten startar med ein gong du bekreftar. Dette valet kan ikkje gjerast om på.',
     ),
     confirm: _('Bekreft og start', 'Confirm and start', 'Bekreft og start'),
     genericError: _(
