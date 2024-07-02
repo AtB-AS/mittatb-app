@@ -51,10 +51,10 @@ export const DeparturesDialogSheet = ({
   const stopPlaceId =
     stopPlaceFeature.properties && stopPlaceFeature.properties['id'];
 
-  const {data: lookupId} = useStopIdLookupQuery(stopPlaceId);
+  const {data: lookupId, isFetched: hasFinishedFetching} = useStopIdLookupQuery(stopPlaceId);
 
   const {state: stopDetailsState, forceRefresh: forceRefreshStopDetailsData} =
-    useStopsDetailsData(lookupId ? [lookupId] : []);
+    useStopsDetailsData(lookupId ? [lookupId] : undefined);
 
   const {
     data: stopDetailsData,
@@ -72,7 +72,7 @@ export const DeparturesDialogSheet = ({
   };
 
   const StopPlaceViewOrError = () => {
-    if (!isStopDetailsLoading && !didLoadingDataFail) {
+    if (hasFinishedFetching && !isStopDetailsLoading && !didLoadingDataFail) {
       if (stopPlace?.quays?.length) {
         return (
           <StopPlaceView
@@ -108,7 +108,7 @@ export const DeparturesDialogSheet = ({
       );
     }
 
-    if (!isStopDetailsLoading && didLoadingDataFail) {
+    if (hasFinishedFetching && !isStopDetailsLoading && didLoadingDataFail) {
       return (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox
