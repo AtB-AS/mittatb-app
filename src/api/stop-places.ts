@@ -44,3 +44,19 @@ export const getStopPlaceConnections = async (
 
   return result.data;
 };
+
+export const getStopPlaceLookupId = async (
+  fromStopPlaceId: string,
+  opts?: AxiosRequestConfig,
+): Promise<string> => {
+  const url = '/bff/v2/stop-places/parent';
+  const query = qs.stringify({
+    fromStopPlaceId,
+  });
+  const result = await client.get<string>(
+    stringifyUrl(url, query),
+    opts,
+  );
+
+  return result.data;
+}

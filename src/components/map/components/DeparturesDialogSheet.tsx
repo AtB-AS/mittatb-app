@@ -11,10 +11,10 @@ import {
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
-import {useReverseGeocoder} from '@atb/geocoder';
 import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
+import {useStopIdLookupQuery} from '@atb/place-screen/hooks/use-lookup-stop-id';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
@@ -46,24 +46,15 @@ export const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
-  const {
-    locations,
-    isSearching: isGeocoderSearching,
-    error: geocoderError,
-    forceRefresh: forceRefreshReverseGeocode,
-  } = useReverseGeocoder({longitude, latitude} || null, ['venue']);
   const appStateStatus = useAppStateStatus();
 
-  const filteredLocations = locations?.filter((location) =>
-    stopPlaceFeature.properties?.name.includes(location.name),
-  );
+  const stopPlaceId =
+    stopPlaceFeature.properties && stopPlaceFeature.properties['id'];
 
-  const closestLocation = filteredLocations?.[0];
-
-  const stopPlaceId = stopPlaceFeature.properties && stopPlaceFeature.properties['id'];
+  const {data: lookupId} = useStopIdLookupQuery(stopPlaceId);
 
   const {state: stopDetailsState, forceRefresh: forceRefreshStopDetailsData} =
-    useStopsDetailsData(!isGeocoderSearching && (closestLocation? closestLocation.id : stopPlaceId));
+    useStopsDetailsData(lookupId ? [lookupId] : []);
 
   const {
     data: stopDetailsData,
@@ -72,21 +63,16 @@ export const DeparturesDialogSheet = ({
   } = stopDetailsState;
 
   const stopPlace = stopDetailsData?.stopPlaces?.[0];
-  const isLoading = isStopDetailsLoading || isGeocoderSearching;
-  const didLoadingDataFail = !!geocoderError || !!stopDetailsError;
+  const didLoadingDataFail = !!stopDetailsError;
 
   const refresh = () => {
-    if (!!geocoderError) {
-      return forceRefreshReverseGeocode();
-    }
-
     if (!!stopDetailsError) {
       return forceRefreshStopDetailsData();
     }
   };
 
   const StopPlaceViewOrError = () => {
-    if (!isLoading && !didLoadingDataFail) {
+    if (!isStopDetailsLoading && !didLoadingDataFail) {
       if (stopPlace?.quays?.length) {
         return (
           <StopPlaceView
@@ -122,7 +108,7 @@ export const DeparturesDialogSheet = ({
       );
     }
 
-    if (!isLoading && didLoadingDataFail) {
+    if (!isStopDetailsLoading && didLoadingDataFail) {
       return (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox
