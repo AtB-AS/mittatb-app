@@ -47,6 +47,11 @@ const PaymentOptionsTexts = {
     'Add payment card',
     'Legg til betalingskort',
   ),
+  vippsInfo: _(
+    'Betaling med Vipps er tilgjengelig ved kjøp av billett',
+    'Payment with Vipps is available when purchasing a ticket',
+    'Betaling med Vipps er tilgjengeleg ved kjøp av billett',
+  ),
 };
 
 export default PaymentOptionsTexts;
