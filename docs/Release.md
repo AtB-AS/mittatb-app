@@ -15,13 +15,13 @@ Branch out from master to a new branch with prefix `release/`, like `release/1.3
 
 Now that a release branch is created, the version-number on master should be increased. So if `release/1.30` is created, then master should be incremented to `1.31` as version number.
 
-Bump the version number in these files:
+Version number can be updated by running the following command:
 
-- All .env-files
-- package.json
-- e2e/package.json
+```bash
+./scripts/update-app-version.sh x.xx`
+```
 
-Do this in a commit with message "chore: Bump to version x.xx". You can check earlier commits with the message "chore: Bump to version x.xx" to see if all necessary files are bumped.
+Then push your changes with commit message "chore: Bump to version x.xx".
 
 ### Register new version at Entur registry
 
