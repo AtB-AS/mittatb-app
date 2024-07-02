@@ -33,7 +33,7 @@ const ProfileTexts = {
           label: _('Billetthistorikk', 'Ticket history', 'Billetthistorikk'),
         },
         paymentOptions: {
-          label: _('Betalingsmåter', 'Payment options', 'Betalingsmåtar'),
+          label: _('Betalingskort', 'Payment cards', 'Betalingskort'),
         },
         editProfile: {
           label: _(

@@ -144,6 +144,10 @@ export const Profile_PaymentOptionsScreen = ({
             icon={<ThemeIcon svg={Add} />}
           />
         </Section>
+        <MessageInfoBox
+          message={t(PaymentOptionsTexts.vippsInfo)}
+          type="info"
+        />
       </View>
     </FullScreenView>
   );

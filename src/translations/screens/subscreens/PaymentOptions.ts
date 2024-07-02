@@ -2,12 +2,12 @@ import {translation as _} from '../../commons';
 
 const PaymentOptionsTexts = {
   header: {
-    title: _('Betalingsmåter', 'Payment options', 'Betalingsmåtar'),
+    title: _('Betalingskort', 'Payment cards', 'Betalingskort'),
   },
   noStoredCards: _(
-    'Du har ingen lagrede betalingmåter.',
-    'You have no stored payment options.',
-    'Du har ingen lagra betalingsmåtar.',
+    'Du har ingen lagrede betalingkort.',
+    'You have no stored payment cards.',
+    'Du har ingen lagra betalingskort.',
   ),
   genericError: _(
     'Det oppstod en feil. Vennligst prøv igjen.',
@@ -43,9 +43,14 @@ const PaymentOptionsTexts = {
       ),
   },
   addPaymentMethod: _(
-    'Legg til betalingsmåte',
-    'Add payment method',
-    'Legg til betalingsmåte',
+    'Legg til betalingskort',
+    'Add payment card',
+    'Legg til betalingskort',
+  ),
+  vippsInfo: _(
+    'Betaling med Vipps er tilgjengelig ved kjøp av billett',
+    'Payment with Vipps is available when purchasing a ticket',
+    'Betaling med Vipps er tilgjengeleg ved kjøp av billett',
   ),
 };
 
