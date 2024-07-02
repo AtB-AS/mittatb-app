@@ -26,6 +26,7 @@ export async function autocomplete(
       tariff_zone_authorities: onlyLocalTariffZoneAuthority
         ? TARIFF_ZONE_AUTHORITY
         : null,
+      multiModal: 'parent'
     },
     {skipNull: true},
   );
