@@ -27,13 +27,7 @@ export function ActivateNowSectionItem({
     <LinkSectionItem
       text={t(FareContractTexts.activateNow.startNow)}
       onPress={onPress}
-      icon={
-        <ThemeIcon
-          svg={TicketValid}
-          fill={theme.interactive.interactive_0.default.text}
-        />
-      }
-      interactiveColor="interactive_0"
+      icon={<ThemeIcon svg={TicketValid} />}
       {...sectionProps}
     />
   );

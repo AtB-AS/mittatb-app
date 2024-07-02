@@ -151,6 +151,10 @@ export const FareContractView: React.FC<Props> = ({
       {shouldShowBundlingInfo && (
         <MobilityBenefitsInfoSectionItem benefits={benefits} />
       )}
+      {isActivateTicketNowEnabled &&
+        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
+          <ActivateNowSectionItem fareContractId={fareContract.id} />
+        )}
       {!isStatic && (
         <LinkSectionItem
           text={t(
@@ -165,10 +169,6 @@ export const FareContractView: React.FC<Props> = ({
       {isCanBeConsumedNowFareContract(fareContract, now, currentUserId) && (
         <ConsumeCarnetSectionItem fareContractId={fareContract.id} />
       )}
-      {isActivateTicketNowEnabled &&
-        isCanBeActivatedNowFareContract(fareContract, now, currentUserId) && (
-          <ActivateNowSectionItem fareContractId={fareContract.id} />
-        )}
     </Section>
   );
 };
