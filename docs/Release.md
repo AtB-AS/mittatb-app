@@ -11,25 +11,30 @@ Skip the first two steps of creating release-branch and bumping version number o
 ### Create release branch
 Branch out from master to a new branch with prefix `release/`, like `release/1.30`.
 
-### On master: Bump version number and register new version at Entur registry
+### On master: Bump version number
 
 Now that a release branch is created, the version-number on master should be increased. So if `release/1.30` is created, then master should be incremented to `1.31` as version number.
 
-Bump the version number in these files:
+Version number can be updated by running the following command:
 
-- All .env-files
-- package.json
-- e2e/package.json
+```bash
+./scripts/update-app-version.sh x.xx`
+```
 
-Do this in a commit with message "chore: Bump to version x.xx". You can check earlier commits with the message "chore: Bump to version x.xx" to see if all necessary files are bumped.
+Then push your changes with commit message "chore: Bump to version x.xx".
 
-After bumping the version number the new version should be registered at Entur for mobile token to work. 
+### Register new version at Entur registry
 
-Please make sure that you have [jq](https://jqlang.github.io/jq/) installed, you can run `brew install jq` (or [similar instructions](https://jqlang.github.io/jq/download/) on other environments) to install it.
+After bumping the version number the new version should be registered at Entur for mobile token to work.
+
+> [!NOTE]
+> Please make sure that you have [jq](https://jqlang.github.io/jq/) installed. You can run `brew install jq` (or [similar instructions](https://jqlang.github.io/jq/download/) on other environments) to install it.
 
 Finally, run this command:
 
-`./scripts/register-local-app-version.sh`
+```bash
+./scripts/register-local-app-version.sh
+```
 
 ### Create release candidate with the command line
 
