@@ -16,14 +16,14 @@ const PaymentOptionsTexts = {
   ),
   deleteModal: {
     title: _(
-      'Fjerne betalingsmåte?',
-      'Delete payment option?',
-      'Fjerne betalingsmåte?',
+      'Fjerne betalingskort?',
+      'Delete payment card?',
+      'Fjerne betalingskort?',
     ),
     message: _(
-      'Sikker på at du vil fjerne denne betalingsmåten?',
-      'Are you sure you want to remove this payment option?',
-      'Er du sikker på at du vil fjerne denne betalingsmetoden?',
+      'Sikker på at du vil fjerne dette betalingskortet?',
+      'Are you sure you want to remove this payment card?',
+      'Er du sikker på at du vil fjerne dette betalingskortet?',
     ),
     confirmButton: _('Fjern', 'Remove', 'Fjern'),
     cancelButton: _('Avbryt', 'Cancel', 'Avbryt'),
