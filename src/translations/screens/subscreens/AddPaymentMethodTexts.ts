@@ -2,9 +2,9 @@ import {translation as _} from '../../commons';
 
 const AddPaymentMethodTexts = {
   header: _(
-    'Legg til betalingsmåte',
-    'Add payment method',
-    'Legg til betalingsmåte',
+    'Legg til betalingskort',
+    'Add payment card',
+    'Legg til betalingskort',
   ),
   genericError: _(
     'Det oppstod en feil. Vennligst prøv igjen',
