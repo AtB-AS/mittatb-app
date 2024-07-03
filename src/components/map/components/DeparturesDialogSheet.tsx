@@ -43,8 +43,7 @@ export const DeparturesDialogSheet = ({
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
   const appStateStatus = useAppStateStatus();
 
-  const stopPlaceId =
-    stopPlaceFeature.properties && stopPlaceFeature.properties['id'];
+  const stopPlaceId = stopPlaceFeature.properties?.['id'];
 
   const {
     data: parentId,
@@ -64,7 +63,7 @@ export const DeparturesDialogSheet = ({
 
   const refresh = () => {
     if (isParentIdError) {
-      refetchParentId();
+      return refetchParentId();
     }
 
     if (isStopDetailsError) {
