@@ -3,15 +3,10 @@ import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {
-  SearchTime,
-  StopPlaceView,
-  useStopsDetailsData,
-} from '@atb/place-screen';
+import {SearchTime, StopPlaceView, useStopPlaceParentIdQuery, useStopsDetailsDataQuery} from '@atb/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
-import {useReverseGeocoder} from '@atb/geocoder';
 import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
@@ -46,44 +41,42 @@ export const DeparturesDialogSheet = ({
     date: new Date().toISOString(),
   });
   const [longitude, latitude] = stopPlaceFeature.geometry.coordinates;
-  const {
-    locations,
-    isSearching: isGeocoderSearching,
-    error: geocoderError,
-    forceRefresh: forceRefreshReverseGeocode,
-  } = useReverseGeocoder({longitude, latitude} || null, ['venue']);
   const appStateStatus = useAppStateStatus();
 
-  const filteredLocations = locations?.filter((location) =>
-    stopPlaceFeature.properties?.name.includes(location.name),
-  );
+  const stopPlaceId = stopPlaceFeature.properties?.['id'];
 
-  const closestLocation = filteredLocations?.[0];
+  const {
+    data: parentId,
+    isFetched: hasFinishedFetchingParentId,
+    isError: isParentIdError,
+    refetch: refetchParentId,
+  } = useStopPlaceParentIdQuery(stopPlaceId);
 
-  const {state: stopDetailsState, forceRefresh: forceRefreshStopDetailsData} =
-    useStopsDetailsData(closestLocation && [closestLocation.id]);
   const {
     data: stopDetailsData,
-    isLoading: isStopDetailsLoading,
-    error: stopDetailsError,
-  } = stopDetailsState;
+    isFetching: isStopDetailsLoading,
+    isError: isStopDetailsError,
+    refetch: refetchStopDetailsData,
+  } = useStopsDetailsDataQuery(parentId ? [parentId] : undefined);
 
   const stopPlace = stopDetailsData?.stopPlaces?.[0];
-  const isLoading = isStopDetailsLoading || isGeocoderSearching;
-  const didLoadingDataFail = !!geocoderError || !!stopDetailsError;
 
   const refresh = () => {
-    if (!!geocoderError) {
-      return forceRefreshReverseGeocode();
+    if (isParentIdError) {
+      return refetchParentId();
     }
 
-    if (!!stopDetailsError) {
-      return forceRefreshStopDetailsData();
+    if (isStopDetailsError) {
+      return refetchStopDetailsData();
     }
   };
 
   const StopPlaceViewOrError = () => {
-    if (!isLoading && !didLoadingDataFail) {
+    if (
+      hasFinishedFetchingParentId &&
+      !isStopDetailsLoading &&
+      !isStopDetailsError
+    ) {
       if (stopPlace?.quays?.length) {
         return (
           <StopPlaceView
@@ -119,7 +112,11 @@ export const DeparturesDialogSheet = ({
       );
     }
 
-    if (!isLoading && didLoadingDataFail) {
+    if (
+      hasFinishedFetchingParentId &&
+      !isStopDetailsLoading &&
+      isStopDetailsError
+    ) {
       return (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox
