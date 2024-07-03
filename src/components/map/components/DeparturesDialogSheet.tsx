@@ -3,18 +3,13 @@ import React, {useState} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {BottomSheetContainer} from '@atb/components/bottom-sheet';
 import {DeparturesTexts, dictionary, useTranslation} from '@atb/translations';
-import {
-  SearchTime,
-  StopPlaceView,
-  useStopsDetailsData,
-} from '@atb/place-screen';
+import {SearchTime, StopPlaceView, useStopPlaceParentIdQuery, useStopsDetailsDataQuery} from '@atb/place-screen';
 import {Quay, StopPlace} from '@atb/api/types/departures';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Feature, Point} from 'geojson';
 import {Location, SearchLocation} from '@atb/favorites';
 import {NavigateToTripSearchCallback} from '../types';
 import {useAppStateStatus} from '@atb/utils/use-app-state-status';
-import {useStopIdLookupQuery} from '@atb/place-screen/hooks/use-lookup-stop-id';
 
 type DeparturesDialogSheetProps = {
   onClose: () => void;
@@ -51,28 +46,38 @@ export const DeparturesDialogSheet = ({
   const stopPlaceId =
     stopPlaceFeature.properties && stopPlaceFeature.properties['id'];
 
-  const {data: lookupId, isFetched: hasFinishedFetching} = useStopIdLookupQuery(stopPlaceId);
-
-  const {state: stopDetailsState, forceRefresh: forceRefreshStopDetailsData} =
-    useStopsDetailsData(lookupId ? [lookupId] : undefined);
+  const {
+    data: parentId,
+    isFetched: hasFinishedFetchingParentId,
+    isError: isParentIdError,
+    refetch: refetchParentId,
+  } = useStopPlaceParentIdQuery(stopPlaceId);
 
   const {
     data: stopDetailsData,
-    isLoading: isStopDetailsLoading,
-    error: stopDetailsError,
-  } = stopDetailsState;
+    isFetching: isStopDetailsLoading,
+    isError: isStopDetailsError,
+    refetch: refetchStopDetailsData,
+  } = useStopsDetailsDataQuery(parentId ? [parentId] : undefined);
 
   const stopPlace = stopDetailsData?.stopPlaces?.[0];
-  const didLoadingDataFail = !!stopDetailsError;
 
   const refresh = () => {
-    if (!!stopDetailsError) {
-      return forceRefreshStopDetailsData();
+    if (isParentIdError) {
+      refetchParentId();
+    }
+
+    if (isStopDetailsError) {
+      return refetchStopDetailsData();
     }
   };
 
   const StopPlaceViewOrError = () => {
-    if (hasFinishedFetching && !isStopDetailsLoading && !didLoadingDataFail) {
+    if (
+      hasFinishedFetchingParentId &&
+      !isStopDetailsLoading &&
+      !isStopDetailsError
+    ) {
       if (stopPlace?.quays?.length) {
         return (
           <StopPlaceView
@@ -108,7 +113,11 @@ export const DeparturesDialogSheet = ({
       );
     }
 
-    if (hasFinishedFetching && !isStopDetailsLoading && didLoadingDataFail) {
+    if (
+      hasFinishedFetchingParentId &&
+      !isStopDetailsLoading &&
+      isStopDetailsError
+    ) {
       return (
         <View style={styles.paddingHorizontal}>
           <MessageInfoBox

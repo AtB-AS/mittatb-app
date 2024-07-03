@@ -45,7 +45,7 @@ export const getStopPlaceConnections = async (
   return result.data;
 };
 
-export const getStopPlaceLookupId = async (
+export const getStopPlaceParentId = async (
   id: string,
   opts?: AxiosRequestConfig,
 ): Promise<string> => {

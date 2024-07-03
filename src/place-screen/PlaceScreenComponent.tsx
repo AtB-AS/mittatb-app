@@ -10,10 +10,10 @@ import {View} from 'react-native';
 import {StopPlacesMode} from '@atb/nearby-stop-places';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {useStopsDetailsData} from './hooks/use-stop-details-data';
 import {StopPlaceAndQuaySelection} from './components/StopPlaceAndQuaySelection';
 import {QuayView} from './components/QuayView';
 import {StopPlaceView} from './components/StopPlaceView';
+import {useStopsDetailsDataQuery} from '@atb/place-screen';
 
 export type PlaceScreenParams = {
   place: StopPlace;
@@ -56,22 +56,24 @@ export const PlaceScreenComponent = ({
     showOnlyFavoritesByDefault || false,
   );
 
-  const {state} = useStopsDetailsData(
-    place.quays === undefined ? [place.id] : undefined,
-  );
+  const {data: stopsDetailsData, isError: isStopsDetailsError} =
+    useStopsDetailsDataQuery(
+      place.quays === undefined ? [place.id] : undefined,
+    );
+
   const isFocused = useIsFocused();
 
   let missingStopData = false;
 
-  if (state.data && place.quays === undefined) {
-    if (state.data.stopPlaces[0]) {
-      place = state.data.stopPlaces[0];
+  if (stopsDetailsData && place.quays === undefined) {
+    if (stopsDetailsData.stopPlaces[0]) {
+      place = stopsDetailsData.stopPlaces[0];
     } else {
       missingStopData = true;
     }
   }
 
-  if (state.error || missingStopData) {
+  if (isStopsDetailsError || missingStopData) {
     return (
       <View style={styles.container}>
         <FullScreenHeader title={place.name} leftButton={{type: 'back'}} />
