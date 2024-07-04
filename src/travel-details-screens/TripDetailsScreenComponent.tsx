@@ -230,7 +230,7 @@ function getTicketInfoForBus(
     tariffZones,
   );
 
-  if (!fromTariffZone || !fromTariffZone) return;
+  if (!fromTariffZone || !toTariffZone) return;
 
   const fareProductTypeConfig = fareProductTypeConfigs.find(
     (config) => config.type === 'single',
