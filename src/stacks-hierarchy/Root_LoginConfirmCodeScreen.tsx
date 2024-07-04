@@ -43,24 +43,35 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
   const {completeOnboardingSection} = useOnboardingState();
+  const [isRateLimited, setIsRateLimited] = useState(false);
 
   const onLogin = async () => {
+    if (isRateLimited) return;
     setIsLoading(true);
     completeOnboardingSection('userCreation');
     const errorCode = await confirmCode(code);
     if (errorCode) {
+      if (errorCode === 'too_many_attempts') {
+        setIsRateLimited(true);
+        setTimeout(() => setIsRateLimited(false), 10000);
+      }
       setError(errorCode);
       setIsLoading(false);
     }
   };
 
   const onResendCode = async () => {
+    if (isRateLimited) return;
     setIsLoading(true);
     setError(undefined);
     setCode('');
     const errorCode = await signInWithPhoneNumber(phoneNumber, true);
     setIsLoading(false);
     if (errorCode) {
+      if (errorCode === 'too_many_attempts') {
+        setIsRateLimited(true);
+        setTimeout(() => setIsRateLimited(false), 10000);
+      }
       setError(errorCode);
     }
   };
@@ -133,7 +144,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
                   interactiveColor="interactive_0"
                   onPress={onLogin}
                   text={t(LoginTexts.confirmCode.mainButton)}
-                  disabled={!code}
+                  disabled={!code || isRateLimited}
                   rightIcon={{svg: ArrowRight}}
                   style={styles.submitButton}
                   testID="submitButton"

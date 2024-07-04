@@ -39,6 +39,7 @@ export const Root_LoginPhoneInputScreen = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<PhoneSignInErrorCode>();
   const {themeName} = useTheme();
+  const [isRateLimited, setIsRateLimited] = useState(false);
 
   const phoneValidationParams = {
     strictDetection: true,
@@ -53,6 +54,7 @@ export const Root_LoginPhoneInputScreen = ({
   const isValidPhoneNumber = phoneValidation.isValid;
 
   const onNext = async () => {
+    if (isRateLimited) return;
     setIsSubmitting(true);
     if (!phoneValidation.phoneNumber) {
       setIsSubmitting(false);
@@ -65,6 +67,10 @@ export const Root_LoginPhoneInputScreen = ({
     setIsSubmitting(false);
 
     if (result) {
+      if (result === 'too_many_attempts') {
+        setIsRateLimited(true);
+        setTimeout(() => setIsRateLimited(false), 10000);
+      }
       setError(result);
     } else {
       setError(undefined);
@@ -152,7 +158,7 @@ export const Root_LoginPhoneInputScreen = ({
                 interactiveColor="interactive_0"
                 onPress={onNext}
                 text={t(LoginTexts.phoneInput.mainButton)}
-                disabled={!isValidPhoneNumber}
+                disabled={!isValidPhoneNumber || isRateLimited}
                 testID="sendCodeButton"
                 rightIcon={{svg: ArrowRight}}
               />

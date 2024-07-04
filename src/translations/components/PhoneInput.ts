@@ -29,9 +29,9 @@ const PhoneInputTexts = {
       'Ingen konto knytta til dette telefonnummeret',
     ),
     too_many_attempts: _(
-      'Du har prøvd for mange ganger. Vennligst vent litt før du prøver igjen.',
-      'You have tried too many times. Please wait a bit before trying again.',
-      'Du har prøvd for mange gangar. Ver venleg og vent litt før du prøver igjen.',
+      'Du har prøvd for mange ganger. Vennligst vent noen minutter før du prøver igjen.',
+      'You have tried too many times. Please wait a few minutes before trying again.',
+      'Du har prøvd for mange gangar. Ver venleg og vent nokon minutt før du prøver igjen.',
     ),
     unknown_error: _(
       'Oops - noe gikk galt. Supert om du prøver på nytt 🤞',
