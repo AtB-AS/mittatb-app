@@ -59,7 +59,7 @@ export const TripDetailsScreenComponent = ({
   const {updatedTripPattern, error} =
     useCurrentTripPatternWithUpdates(tripPattern);
 
-  const tripTicketDetails = useGetTicketInfoFromTrip(updatedTripPattern);
+  const tripTicketDetails = useTicketInfoFromTrip(updatedTripPattern);
   const fromToNames = getFromToName(updatedTripPattern.legs);
   const startEndTime = getStartEndTime(updatedTripPattern, language);
 
@@ -150,7 +150,7 @@ export const TripDetailsScreenComponent = ({
   );
 };
 
-function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
+function useTicketInfoFromTrip(tripPattern: TripPattern) {
   const {enable_ticketing} = useRemoteConfig();
   const isFromTravelSearchToTicketEnabled =
     useFromTravelSearchToTicketEnabled();
