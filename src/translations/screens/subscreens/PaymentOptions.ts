@@ -5,7 +5,7 @@ const PaymentOptionsTexts = {
     title: _('Betalingskort', 'Payment cards', 'Betalingskort'),
   },
   noStoredCards: _(
-    'Du har ingen lagrede betalingkort.',
+    'Du har ingen lagrede betalingskort.',
     'You have no stored payment cards.',
     'Du har ingen lagra betalingskort.',
   ),
