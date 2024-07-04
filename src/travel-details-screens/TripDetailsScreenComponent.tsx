@@ -1,6 +1,6 @@
 import {StopPlaceFragment} from '@atb/api/types/generated/fragments/stop-places';
 import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
-import {Leg, TripPattern} from '@atb/api/types/trips';
+import {Leg, Place, TripPattern} from '@atb/api/types/trips';
 import {Ticket} from '@atb/assets/svg/mono-icons/ticketing';
 import SvgDuration from '@atb/assets/svg/mono-icons/time/Duration';
 import {Button} from '@atb/components/button';
@@ -8,7 +8,11 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {hasLegsWeCantSellTicketsFor} from '@atb/operator-config';
-import {TariffZone, useFirestoreConfiguration} from '@atb/configuration';
+import {
+  FareProductTypeConfig,
+  TariffZone,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
@@ -27,6 +31,7 @@ import {addMinutes, formatISO, hoursToSeconds, parseISO} from 'date-fns';
 import React from 'react';
 import {View} from 'react-native';
 import {Trip} from './components/Trip';
+import {useHarbors} from '@atb/harbors';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -50,11 +55,6 @@ export const TripDetailsScreenComponent = ({
 }: Props) => {
   const {t, language} = useTranslation();
   const styles = useStyle();
-
-  const {fareProductTypeConfigs} = useFirestoreConfiguration();
-  const singleTicketConfig = fareProductTypeConfigs.find(
-    (fareProductTypeConfig) => fareProductTypeConfig.type === 'single',
-  );
 
   const {updatedTripPattern, error} =
     useCurrentTripPatternWithUpdates(tripPattern);
@@ -124,7 +124,7 @@ export const TripDetailsScreenComponent = ({
           </View>
         )}
       </FullScreenView>
-      {tripTicketDetails && singleTicketConfig && (
+      {tripTicketDetails && (
         <View style={styles.borderTop}>
           <Button
             accessibilityRole="button"
@@ -133,9 +133,9 @@ export const TripDetailsScreenComponent = ({
             onPress={() => {
               analytics().logEvent('click_trip_purchase_button');
               onPressBuyTicket({
-                fareProductTypeConfig: singleTicketConfig,
-                fromPlace: tripTicketDetails.tariffZoneFrom,
-                toPlace: tripTicketDetails.tariffZoneTo,
+                fareProductTypeConfig: tripTicketDetails.fareProductTypeConfig,
+                fromPlace: tripTicketDetails.fromPlace,
+                toPlace: tripTicketDetails.toPlace,
                 travelDate: tripTicketDetails.ticketStartTime,
                 mode: 'TravelSearch',
               });
@@ -151,47 +151,66 @@ export const TripDetailsScreenComponent = ({
 };
 
 function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
-  const fromTripsSearchToTicketEnabled = useFromTravelSearchToTicketEnabled();
   const {enable_ticketing} = useRemoteConfig();
-
-  const nonHumanLegs = tripPattern.legs.filter(
-    (leg) => leg.mode !== Mode.Foot && leg.mode !== Mode.Bicycle,
-  );
-  const fromTariffZones = nonHumanLegs[0]?.fromPlace.quay?.tariffZones;
-  const toTariffZones =
-    nonHumanLegs[nonHumanLegs.length - 1]?.toPlace.quay?.tariffZones;
-  const fromTariffZoneWeSellSingleTicketsFor =
-    useGetFirstTariffZoneWeSellTicketFor(fromTariffZones);
-  const toTariffZoneWeSellTicketFor =
-    useGetFirstTariffZoneWeSellTicketFor(toTariffZones);
+  const isFromTravelSearchToTicketEnabled =
+    useFromTravelSearchToTicketEnabled();
+  const {fareProductTypeConfigs} = useFirestoreConfiguration();
+  const {tariffZones} = useFirestoreConfiguration();
+  const {data: harbors} = useHarbors();
 
   const hasTooLongWaitTime = totalWaitTimeIsMoreThanAnHour(tripPattern.legs);
-  const canSellCollab = canSellCollabTicket(tripPattern);
 
   if (
-    !(
-      fromTripsSearchToTicketEnabled &&
-      fromTariffZoneWeSellSingleTicketsFor &&
-      toTariffZoneWeSellTicketFor
-    ) ||
+    !enable_ticketing ||
+    !isFromTravelSearchToTicketEnabled ||
     hasTooLongWaitTime
   )
     return;
 
-  const tariffZoneTo: TariffZoneWithMetadata = {
-    resultType: 'zone',
-    venueName: nonHumanLegs[nonHumanLegs.length - 1]?.toPlace?.name,
-    ...toTariffZoneWeSellTicketFor,
-  };
-  const tariffZoneFrom: TariffZoneWithMetadata = {
-    resultType: 'zone',
-    venueName: nonHumanLegs[0]?.fromPlace?.name,
-    ...fromTariffZoneWeSellSingleTicketsFor,
-  };
+  const nonHumanLegs = getNonHumanLegs(tripPattern.legs);
+  const ticketStartTime = calculateTicketStartTime(nonHumanLegs);
 
-  // modes we can sell single tickets for. Might not always match modes we sell tickets for,
-  // as from travel search to ticket currently only supports single ticket
-  const someLegsAreNotSingleTicket = hasLegsWeCantSellTicketsFor(tripPattern, [
+  const ticketInfoForBus = getTicketInfoForBus(
+    tripPattern,
+    nonHumanLegs,
+    fareProductTypeConfigs,
+    tariffZones,
+    ticketStartTime,
+  );
+  if (ticketInfoForBus) return ticketInfoForBus;
+
+  const ticketInfoForBoat = getTicketInfoForBoat(
+    tripPattern,
+    nonHumanLegs,
+    fareProductTypeConfigs,
+    harbors,
+    ticketStartTime,
+  );
+  if (ticketInfoForBoat) return ticketInfoForBoat;
+}
+
+function getNonHumanLegs(legs: Leg[]) {
+  return legs.filter(
+    (leg) => leg.mode !== Mode.Foot && leg.mode !== Mode.Bicycle,
+  );
+}
+
+function calculateTicketStartTime(legs: Leg[]) {
+  const tripStartWithBuffer = addMinutes(parseISO(legs[0]?.aimedStartTime), -5);
+  return tripStartWithBuffer.getTime() <= Date.now()
+    ? undefined
+    : formatISO(tripStartWithBuffer);
+}
+
+function getTicketInfoForBus(
+  tripPattern: TripPattern,
+  nonHumanLegs: Leg[],
+  fareProductTypeConfigs: FareProductTypeConfig[],
+  tariffZones: TariffZone[],
+  ticketStartTime?: string,
+) {
+  const canSellCollab = canSellCollabTicket(tripPattern);
+  const hasOnlyValidBusLegs = !hasLegsWeCantSellTicketsFor(tripPattern, [
     'cityTram',
     'expressBus',
     'localBus',
@@ -199,23 +218,86 @@ function useGetTicketInfoFromTrip(tripPattern: TripPattern) {
     'regionalBus',
     'shuttleBus',
   ]);
-  if (!enable_ticketing || (someLegsAreNotSingleTicket && !canSellCollab))
-    return;
 
-  const tripStartWithBuffer = addMinutes(
-    parseISO(nonHumanLegs[0]?.aimedStartTime),
-    -5,
+  if (!hasOnlyValidBusLegs && !canSellCollab) return;
+
+  const fromTariffZone = getTariffZoneWithMetadata(
+    nonHumanLegs[0].fromPlace,
+    tariffZones,
   );
-  const ticketStartTime =
-    tripStartWithBuffer.getTime() <= Date.now()
-      ? undefined
-      : formatISO(tripStartWithBuffer);
+  const toTariffZone = getTariffZoneWithMetadata(
+    nonHumanLegs[nonHumanLegs.length - 1].toPlace,
+    tariffZones,
+  );
+
+  if (!fromTariffZone || !fromTariffZone) return;
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (config) => config.type === 'single',
+  );
+  if (!fareProductTypeConfig) return;
 
   return {
-    tariffZoneFrom,
-    tariffZoneTo,
+    fromPlace: fromTariffZone,
+    toPlace: toTariffZone,
     ticketStartTime,
+    fareProductTypeConfig,
   };
+}
+
+function getTicketInfoForBoat(
+  tripPattern: TripPattern,
+  nonHumanLegs: Leg[],
+  fareProductTypeConfigs: FareProductTypeConfig[],
+  harbors: StopPlaceFragment[],
+  ticketStartTime?: string,
+) {
+  const hasOnlyValidBoatLegs = !hasLegsWeCantSellTicketsFor(tripPattern, [
+    'highSpeedPassengerService',
+    'highSpeedVehicleService',
+  ]);
+
+  if (!hasOnlyValidBoatLegs) return;
+
+  const fromHarbor = harbors.find(
+    (harbor) => harbor.id === nonHumanLegs[0]?.fromPlace.quay?.stopPlace?.id,
+  );
+  const toHarbor = harbors.find(
+    (harbor) =>
+      harbor.id ===
+      nonHumanLegs[nonHumanLegs.length - 1]?.toPlace.quay?.stopPlace?.id,
+  );
+
+  if (!fromHarbor || !toHarbor) return;
+
+  const fareProductTypeConfig = fareProductTypeConfigs.find(
+    (config) => config.type === 'boat-single',
+  );
+  if (!fareProductTypeConfig) return;
+
+  return {
+    fromPlace: fromHarbor,
+    toPlace: toHarbor,
+    ticketStartTime,
+    fareProductTypeConfig,
+  };
+}
+
+function getTariffZoneWithMetadata(place: Place, tariffZones: TariffZone[]) {
+  const firstTariffZoneWeSellTicketFor = getFirstTariffZoneWeSellTicketFor(
+    tariffZones,
+    place.quay?.tariffZones,
+  );
+
+  if (!firstTariffZoneWeSellTicketFor) return;
+
+  const tariffZoneWithMetadata: TariffZoneWithMetadata = {
+    resultType: 'zone',
+    venueName: place.name,
+    ...firstTariffZoneWeSellTicketFor,
+  };
+
+  return tariffZoneWithMetadata;
 }
 
 function getFromToName(legs: Leg[]) {
@@ -252,15 +334,14 @@ function getWaitTime(leg: Leg, nextLeg: Leg) {
     : 0;
 }
 
-function useGetFirstTariffZoneWeSellTicketFor(
+function getFirstTariffZoneWeSellTicketFor(
+  tariffZones: TariffZone[],
   tripTariffZones?: {id: string; name?: string}[],
 ): TariffZone | undefined {
-  const {tariffZones: referenceTariffZones} = useFirestoreConfiguration();
-
   if (!tripTariffZones) return;
 
   // match tariff zone to zones in reference data to find zones we sell tickets for
-  const matchingZones = referenceTariffZones.filter((referenceTariffZone) =>
+  const matchingZones = tariffZones.filter((referenceTariffZone) =>
     tripTariffZones.find((z2) => referenceTariffZone.id === z2.id),
   );
 
