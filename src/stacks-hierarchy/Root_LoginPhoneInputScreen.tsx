@@ -21,6 +21,7 @@ import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import phone from 'phone';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
@@ -39,7 +40,10 @@ export const Root_LoginPhoneInputScreen = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<PhoneSignInErrorCode>();
   const {themeName} = useTheme();
-  const [isRateLimited, setIsRateLimited] = useState(false);
+  const {isRateLimited, rateLimitIfNeeded} =
+    useRateLimitWhen<PhoneSignInErrorCode>(
+      (code) => code === 'too_many_attempts',
+    );
 
   const phoneValidationParams = {
     strictDetection: true,
@@ -67,10 +71,7 @@ export const Root_LoginPhoneInputScreen = ({
     setIsSubmitting(false);
 
     if (result) {
-      if (result === 'too_many_attempts') {
-        setIsRateLimited(true);
-        setTimeout(() => setIsRateLimited(false), 10000);
-      }
+      rateLimitIfNeeded(result);
       setError(result);
     } else {
       setError(undefined);
