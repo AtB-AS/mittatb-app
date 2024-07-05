@@ -34,6 +34,7 @@ export const ExternalMapSheet = ({
           text={t(MapTexts.externalRealtimeMap.bottomSheet.button)}
           onPress={() => {
             Linking.openURL(url);
+            onClose();
           }}
           rightIcon={{svg: ExternalLink}}
         />
