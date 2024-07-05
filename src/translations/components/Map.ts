@@ -36,7 +36,7 @@ const MapTexts = {
         'An overview of all buses in real-time and the number of passengers on the bus can be found at the link below.',
         'Ei oversikt over alle bussane i sanntid og talet på passasjerar i bussen finn du på lenka nedenfor.',
       ),
-      button: _('Sanntidskart', 'Realtime map', 'Sanntidskart'),
+      button: _('Sanntidskart', 'Real-time map', 'Sanntidskart'),
     },
   },
 };
