@@ -98,7 +98,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                   <View style={styles.discountInfoContainer}>
                     {discountLabel && (
                       <BorderedInfoBox
-                        style={styles.discountInfo}
+                        style={styles.discountLabel}
                         type="small"
                         backgroundColor="background_0"
                         text={discountLabel}
@@ -141,6 +141,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   discountInfoContainer: {flexDirection: 'row'},
-  discountInfo: {marginRight: theme.spacings.small},
+  discountLabel: {marginRight: theme.spacings.small},
   priceInfo: {alignSelf: 'center'},
 }));
