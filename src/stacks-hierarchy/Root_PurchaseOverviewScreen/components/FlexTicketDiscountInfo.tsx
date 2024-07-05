@@ -65,13 +65,9 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
             const discountPercent = ladder?.steps[ladder.current].discount;
 
             const userProfileName = getReferenceDataName(u, language);
-            const discountText =
+            const discountLabel =
               discountPercent !== undefined &&
-              t(
-                PurchaseOverviewTexts.flexDiscount.discountPercentage(
-                  discountPercent.toFixed(0),
-                ),
-              );
+              t(PurchaseOverviewTexts.flexDiscount.discountLabel);
             const priceText =
               formatDecimalNumber(
                 u.offer.prices[0].amount_float || 0,
@@ -80,7 +76,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
               ) + ' kr';
 
             const accessibilityLabel = `${userProfileName}, ${
-              discountText ? discountText : ''
+              discountLabel ? discountLabel : ''
             }, ${priceText}`;
 
             return (
@@ -100,12 +96,12 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     )}
                   </ThemeText>
                   <View style={styles.discountInfoContainer}>
-                    {discountText && (
+                    {discountLabel && (
                       <BorderedInfoBox
                         style={styles.discountInfo}
                         type="small"
                         backgroundColor="background_0"
-                        text={discountText}
+                        text={discountLabel}
                       />
                     )}
                     <ThemeText
