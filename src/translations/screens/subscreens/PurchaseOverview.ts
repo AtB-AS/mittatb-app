@@ -253,9 +253,9 @@ const PurchaseOverviewTexts = {
       'Les meir og sjå rabattabell',
     ),
     a11yHint: _(
-      'Aktivér for å lese mer om rabatt på fleksibel billett på ekstern side',
-      'Activate to read more about the details for discount on flexible tickets (external content)',
-      'Aktiver for å lese meir om rabatt på fleksibel billett på ekstern side',
+      'Aktivér for å lese mer på ekstern side',
+      'Activate to read more on external page',
+      'Aktiver for å lese meir på ekstern side',
     ),
   },
   onBehalfOf: {
