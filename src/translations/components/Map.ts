@@ -46,7 +46,7 @@ export default orgSpecificTranslations(MapTexts, {
     externalRealtimeMap: {
       bottomSheet: {
         description: _(
-          'Oversikt over all bussene i sanntid og antall passasjerer i bussen finner du på kart.svipper.no',
+          'Oversikt over alle bussene i sanntid og antall passasjerer i bussen finner du på kart.svipper.no',
           'An overview of all buses in real-time and the number of passengers on the bus can be found at kart.svipper.no',
           'Ei oversikt over alle bussane i sanntid og talet på passasjerar i bussen finn du på kart.svipper.no',
         ),
