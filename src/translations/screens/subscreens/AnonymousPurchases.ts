@@ -27,9 +27,9 @@ const AnonymousPurchases = {
     ),
     messages: [
       _(
-        'Du mister tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon.',
-        'You lose access to previously purchased tickets if you lose or get a new phone.',
-        'Du mistar tilgongen til tidlegare kjøpte billettar om du mistar eller får ny telefon.',
+        'Du mister tilgangen på tidligere kjøpte billetter og din opparbeidede personlige pris hvis du mister eller får ny telefon.',
+        'You lose access to previously purchased tickets and your accumulated personal price if you lose or get a new phone.',
+        'Du mistar tilgongen til tidlegare kjøpte billettar og din opparbeidde personlege pris om du mistar eller får ny telefon.',
       ),
       _(
         'Kvitteringer etter kjøp er bare tilgjengelig i en begrenset periode.',
@@ -131,6 +131,48 @@ export default orgSpecificTranslations(AnonymousPurchases, {
           ),
         },
       },
+    },
+  },
+  nfk: {
+    consequences: {
+      messages: [
+        _(
+          'Du mister tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon.',
+          'You lose access to previously purchased tickets if you lose or get a new phone.',
+          'Du mistar tilgongen til tidlegare kjøpte billettar om du mistar eller får ny telefon.',
+        ),
+        _(
+          'Kvitteringer etter kjøp er bare tilgjengelig i en begrenset periode.',
+          'Receipts after purchase are available for a limited time only.',
+          'Kvitteringar etter kjøp er berre tilgjengeleg i ein begrensa periode.',
+        ),
+        _(
+          'Du har selv ansvar for å ta vare på ordre-ID hvis du trenger hjelp med billettkjøp.',
+          'You are responsible for taking care of your order ID if you need help with ticket purchases.',
+          'Du har sjølv ansvar for å ta vare på ordre-ID om du treng hjelp med billettkjøp.',
+        ),
+      ],
+    },
+  },
+  troms: {
+    consequences: {
+      messages: [
+        _(
+          'Du mister tilgangen på tidligere kjøpte billetter hvis du mister eller får ny telefon.',
+          'You lose access to previously purchased tickets if you lose or get a new phone.',
+          'Du mistar tilgongen til tidlegare kjøpte billettar om du mistar eller får ny telefon.',
+        ),
+        _(
+          'Kvitteringer etter kjøp er bare tilgjengelig i en begrenset periode.',
+          'Receipts after purchase are available for a limited time only.',
+          'Kvitteringar etter kjøp er berre tilgjengeleg i ein begrensa periode.',
+        ),
+        _(
+          'Du har selv ansvar for å ta vare på ordre-ID hvis du trenger hjelp med billettkjøp.',
+          'You are responsible for taking care of your order ID if you need help with ticket purchases.',
+          'Du har sjølv ansvar for å ta vare på ordre-ID om du treng hjelp med billettkjøp.',
+        ),
+      ],
     },
   },
 });
