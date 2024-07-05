@@ -1842,8 +1842,10 @@ PODS:
     - react-native-flipper-performance-plugin/FBDefines (= 0.4.0)
   - react-native-flipper-performance-plugin/FBDefines (0.4.0):
     - React-Core
-  - react-native-geolocation-service (5.3.1):
-    - React
+  - react-native-geolocation (3.2.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-get-random-values (1.8.0):
     - React-Core
   - react-native-kettle-module (1.2.0):
@@ -2176,7 +2178,7 @@ DEPENDENCIES:
   - "react-native-device-brightness (from `../node_modules/@adrianso/react-native-device-brightness`)"
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-flipper-performance-plugin (from `../node_modules/react-native-flipper-performance-plugin`)
-  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-kettle-module (from `../node_modules/react-native-kettle-module`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -2353,8 +2355,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-flipper"
   react-native-flipper-performance-plugin:
     :path: "../node_modules/react-native-flipper-performance-plugin"
-  react-native-geolocation-service:
-    :path: "../node_modules/react-native-geolocation-service"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-kettle-module:
@@ -2555,7 +2557,7 @@ SPEC CHECKSUMS:
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
   react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
   react-native-flipper-performance-plugin: 42ec5017abd26e7c5a1f527f2db92c14a90cabdb
-  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
+  react-native-geolocation: ed9e1d132f576b9a4a503af46f9704413ea0dec1
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-kettle-module: e61ea63ecfb741d7e23fb9ea121d3039bab0b0cb
   react-native-pager-view: 54bed894cecebe28cede54c01038d9d1e122de43
