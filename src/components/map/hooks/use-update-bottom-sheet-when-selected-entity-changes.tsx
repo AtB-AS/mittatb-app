@@ -20,6 +20,7 @@ import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {MapFilterSheet} from '../components/filter/MapFilterSheet';
+import {ExternalMapSheet} from '../components/external-realtime-map/ExternalMapSheet';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -74,6 +75,15 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
           />
         ));
         return;
+      }
+
+      if (mapSelectionAction?.source === 'external-map-button') {
+        openBottomSheet(() => {
+          <ExternalMapSheet
+            onClose={closeCallback}
+            url={mapSelectionAction.url}
+          />;
+        });
       }
 
       if (!selectedFeature) {
