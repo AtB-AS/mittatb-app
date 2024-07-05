@@ -78,12 +78,13 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
       }
 
       if (mapSelectionAction?.source === 'external-map-button') {
-        openBottomSheet(() => {
+        openBottomSheet(() => (
           <ExternalMapSheet
             onClose={closeCallback}
             url={mapSelectionAction.url}
-          />;
-        });
+          />
+        ));
+        return;
       }
 
       if (!selectedFeature) {
