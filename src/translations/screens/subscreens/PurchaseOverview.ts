@@ -231,9 +231,9 @@ const PurchaseOverviewTexts = {
     heading: _('Rabatt', 'Discount', 'Rabatt'),
     expandableLabel: _('Din rabatt', 'Your discount', 'Din rabatt'),
     description: _(
-      'Enkeltbillett voksen har rabatt i Sone A basert på antall kjøp de siste 14 dagene når du er med i pilot for Fleksibel billett.',
-      "Adult single tickets get discounts in zone A based on the number of purchases in the last 14 days when you're participating in the Flexible ticket pilot.",
-      'Enkeltbillett vaksen har rabatt i Sone A basert på talet på kjøp dei siste 14 dagane når du er med på prøveordninga for Fleksibel billett.',
+      'Du bygger personlig rabatt på enkeltbilletter, basert på antall nylige kjøp. Rabatten gjelder kun kjøp til din egen konto.',
+      'You build a personal discount on single tickets, based on the number of recent purchases. The discount applies only to purchases to your own account.',
+      'Du byggjer personleg rabatt på enkeltbillettar, basert på mengden nylege kjøp. Rabatten gjeld berre kjøp til din eigen konto.',
     ),
     per: (userProfileName: string) =>
       _(
