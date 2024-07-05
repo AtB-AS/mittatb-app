@@ -65,13 +65,9 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
             const discountPercent = ladder?.steps[ladder.current].discount;
 
             const userProfileName = getReferenceDataName(u, language);
-            const discountText =
-              (discountPercent !== undefined) &&
-              t(
-                PurchaseOverviewTexts.flexDiscount.discountPercentage(
-                  discountPercent.toFixed(0),
-                ),
-              );
+            const discountLabel =
+              discountPercent !== undefined &&
+              t(PurchaseOverviewTexts.flexDiscount.discountLabel);
             const priceText =
               formatDecimalNumber(
                 u.offer.prices[0].amount_float || 0,
@@ -79,7 +75,9 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 2,
               ) + ' kr';
 
-            const accessibilityLabel = `${userProfileName}, ${discountText ? discountText : ''}, ${priceText}`
+            const accessibilityLabel = `${userProfileName}, ${
+              discountLabel ? discountLabel : ''
+            }, ${priceText}`;
 
             return (
               <GenericSectionItem
@@ -98,15 +96,19 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     )}
                   </ThemeText>
                   <View style={styles.discountInfoContainer}>
-                    {discountText && (
+                    {discountLabel && (
                       <BorderedInfoBox
-                        style={styles.discountInfo}
+                        style={styles.discountLabel}
                         type="small"
                         backgroundColor="background_0"
-                        text={discountText}
+                        text={discountLabel}
                       />
                     )}
-                    <ThemeText style={styles.priceInfo} type="body__tertiary" color="primary">
+                    <ThemeText
+                      style={styles.priceInfo}
+                      type="body__tertiary"
+                      color="primary"
+                    >
                       {priceText}
                     </ThemeText>
                   </View>
@@ -139,6 +141,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   discountInfoContainer: {flexDirection: 'row'},
-  discountInfo: {marginRight: theme.spacings.small},
-  priceInfo: {alignSelf:'center'},
+  discountLabel: {marginRight: theme.spacings.small},
+  priceInfo: {alignSelf: 'center'},
 }));
