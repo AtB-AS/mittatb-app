@@ -65,9 +65,13 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
             const discountPercent = ladder?.steps[ladder.current].discount;
 
             const userProfileName = getReferenceDataName(u, language);
-            const discountLabel =
+            const discountText =
               discountPercent !== undefined &&
-              t(PurchaseOverviewTexts.flexDiscount.discountLabel);
+              t(
+                PurchaseOverviewTexts.flexDiscount.discountPercentage(
+                  discountPercent.toFixed(0),
+                ),
+              );
             const priceText =
               formatDecimalNumber(
                 u.offer.prices[0].amount_float || 0,
@@ -76,7 +80,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
               ) + ' kr';
 
             const accessibilityLabel = `${userProfileName}, ${
-              discountLabel ? discountLabel : ''
+              discountText ? discountText : ''
             }, ${priceText}`;
 
             return (
@@ -96,12 +100,12 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                     )}
                   </ThemeText>
                   <View style={styles.discountInfoContainer}>
-                    {discountLabel && (
+                    {discountText && (
                       <BorderedInfoBox
-                        style={styles.discountLabel}
+                        style={styles.discountInfo}
                         type="small"
                         backgroundColor="background_0"
-                        text={discountLabel}
+                        text={discountText}
                       />
                     )}
                     <ThemeText
@@ -141,6 +145,6 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     alignItems: 'center',
   },
   discountInfoContainer: {flexDirection: 'row'},
-  discountLabel: {marginRight: theme.spacings.small},
+  discountInfo: {marginRight: theme.spacings.small},
   priceInfo: {alignSelf: 'center'},
 }));

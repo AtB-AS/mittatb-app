@@ -27,9 +27,9 @@ const AnonymousPurchases = {
     ),
     messages: [
       _(
-        'Du mister tilgangen på tidligere kjøpte billetter og din opparbeidede personlige pris hvis du mister eller får ny telefon.',
-        'You lose access to previously purchased tickets and your accumulated personal price if you lose or get a new phone.',
-        'Du mistar tilgongen til tidlegare kjøpte billettar og din opparbeidde personlege pris om du mistar eller får ny telefon.',
+        'Du mister tilgangen på tidligere kjøpte billetter, historikk og rabatter hvis du mister eller får ny telefon.',
+        'You lose access to previously purchased tickets, history and discounts if you lose or get a new phone.',
+        'Du mistar tilgongen til tidlegare kjøpte billettar, historikk og rabattar om du mistar eller får ny telefon.',
       ),
       _(
         'Kvitteringer etter kjøp er bare tilgjengelig i en begrenset periode.',
