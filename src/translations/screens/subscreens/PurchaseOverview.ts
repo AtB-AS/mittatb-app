@@ -114,17 +114,9 @@ const PurchaseOverviewTexts = {
         ),
       },
       none: {
-        text: _(
-          'Sone',
-          'Zone',
-          'Sone'
-        ),
-        a11yLabel: _(
-          'Sone',
-          'Zone',
-          'Sone'
-        )
-      }
+        text: _('Sone', 'Zone', 'Sone'),
+        a11yLabel: _('Sone', 'Zone', 'Sone'),
+      },
     },
     zoneName: (zoneName: string) =>
       _(`Sone ${zoneName}`, `Zone ${zoneName}`, `Sone ${zoneName}`),
@@ -237,11 +229,7 @@ const PurchaseOverviewTexts = {
   },
   flexDiscount: {
     heading: _('Rabatt', 'Discount', 'Rabatt'),
-    expandableLabel: _(
-      'Din rabatt',
-      'Your discount',
-      'Din rabatt',
-    ),
+    expandableLabel: _('Din rabatt', 'Your discount', 'Din rabatt'),
     description: _(
       'Enkeltbillett voksen har rabatt i Sone A basert på antall kjøp de siste 14 dagene når du er med i pilot for Fleksibel billett.',
       "Adult single tickets get discounts in zone A based on the number of purchases in the last 14 days when you're participating in the Flexible ticket pilot.",
