@@ -66,7 +66,7 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
 
             const userProfileName = getReferenceDataName(u, language);
             const discountText =
-              (discountPercent !== undefined) &&
+              discountPercent !== undefined &&
               t(
                 PurchaseOverviewTexts.flexDiscount.discountPercentage(
                   discountPercent.toFixed(0),
@@ -79,7 +79,9 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                 2,
               ) + ' kr';
 
-            const accessibilityLabel = `${userProfileName}, ${discountText ? discountText : ''}, ${priceText}`
+            const accessibilityLabel = `${userProfileName}, ${
+              discountText ? discountText : ''
+            }, ${priceText}`;
 
             return (
               <GenericSectionItem
@@ -106,7 +108,11 @@ export const FlexTicketDiscountInfo = ({userProfiles, style}: Props) => {
                         text={discountText}
                       />
                     )}
-                    <ThemeText style={styles.priceInfo} type="body__tertiary" color="primary">
+                    <ThemeText
+                      style={styles.priceInfo}
+                      type="body__tertiary"
+                      color="primary"
+                    >
                       {priceText}
                     </ThemeText>
                   </View>
@@ -140,5 +146,5 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   },
   discountInfoContainer: {flexDirection: 'row'},
   discountInfo: {marginRight: theme.spacings.small},
-  priceInfo: {alignSelf:'center'},
+  priceInfo: {alignSelf: 'center'},
 }));
