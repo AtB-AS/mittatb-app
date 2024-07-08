@@ -228,12 +228,12 @@ const PurchaseOverviewTexts = {
       ),
   },
   flexDiscount: {
-    heading: _('Rabatt', 'Discount', 'Rabatt'),
-    expandableLabel: _('Din rabatt', 'Your discount', 'Din rabatt'),
+    heading: _('Pris', 'Price', 'Pris'),
+    expandableLabel: _('Din pris', 'Your price', 'Din pris'),
     description: _(
-      'Du bygger personlig rabatt på enkeltbilletter, basert på antall nylige kjøp. Rabatten gjelder kun kjøp til din egen konto.',
-      'You build a personal discount on single tickets, based on the number of recent purchases. The discount applies only to purchases to your own account.',
-      'Du byggjer personleg rabatt på enkeltbillettar, basert på mengden nylege kjøp. Rabatten gjeld berre kjøp til din eigen konto.',
+      'Din pris på enkeltbillett voksen baseres på antall kjøpte billetter de siste 14 dagene. Etter tre kjøpte billetter får du en litt lavere pris.',
+      'Your price on single tickets for adult is based on the number of tickets you have bought in the last 14 days. After three purchased tickets, you get a slightly lower price.',
+      'Din pris på enkeltbillett vaksen er basert på antall kjøpte billettar dei siste 14 dagane. Etter tre kjøpte billettar får du ein litt lågare pris.',
     ),
     per: (userProfileName: string) =>
       _(
@@ -247,11 +247,7 @@ const PurchaseOverviewTexts = {
         `${discount} % discount`,
         `${discount} % rabatt`,
       ),
-    link: _(
-      'Les mer og se rabattabell',
-      'Read more and see discount details',
-      'Les meir og sjå rabattabell',
-    ),
+    link: _('Les mer på atb.no', 'Read more on atb.no', 'Les meir på atb.no'),
     a11yHint: _(
       'Aktivér for å lese mer på ekstern side',
       'Activate to read more on external page',
@@ -303,6 +299,13 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
         'Den du kjøper billett til, må vere logga inn i Reis-appen for å få billetten.',
       ),
     },
+    flexDiscount: {
+      link: _(
+        'Les mer på reisnordland.no',
+        'Read more on reisnordland.no',
+        'Les meir på reisnordland.no',
+      ),
+    },
   },
   fram: {
     warning: _(
@@ -317,6 +320,13 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
         'Den du kjøper billett til, må vere logga inn i FRAM-appen for å få billetten.',
       ),
     },
+    flexDiscount: {
+      link: _(
+        'Les mer på frammr.no',
+        'Read more on frammr.no',
+        'Les meir på frammr.no',
+      ),
+    },
   },
   troms: {
     onBehalfOf: {
@@ -329,6 +339,13 @@ export default orgSpecificTranslations(PurchaseOverviewTexts, {
     startTime: {
       now: _('Start nå', 'Start now', 'Start no'),
       later: _('Start senere', 'Start later', 'Start seinare'),
+    },
+    flexDiscount: {
+      link: _(
+        'Les mer på fylkestrafikk.no',
+        'Read more on fylkestrafikk.no',
+        'Les meir på fylkestrafikk.no',
+      ),
     },
   },
 });
