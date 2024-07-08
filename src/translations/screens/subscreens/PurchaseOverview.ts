@@ -229,11 +229,11 @@ const PurchaseOverviewTexts = {
   },
   flexDiscount: {
     heading: _('Pris', 'Price', 'Pris'),
-    expandableLabel: _('Din pris', 'Your price', 'Din pris'),
+    expandableLabel: _('Min pris', 'My price', 'Min pris'),
     description: _(
-      'Din pris på enkeltbillett voksen baseres på antall kjøpte billetter de siste 14 dagene. Etter tre kjøpte billetter får du en litt lavere pris.',
-      'Your price on single tickets for adult is based on the number of tickets you have bought in the last 14 days. After three purchased tickets, you get a slightly lower price.',
-      'Din pris på enkeltbillett vaksen er basert på antall kjøpte billettar dei siste 14 dagane. Etter tre kjøpte billettar får du ein litt lågare pris.',
+      'Min pris på enkeltbillett voksen baseres på antall kjøpte billetter de siste 14 dagene. Etter tre kjøpte billetter får du en litt lavere pris.',
+      'My price on single tickets for adult is based on the number of tickets you have bought in the last 14 days. After three purchased tickets, you get a slightly lower price.',
+      'Min pris på enkeltbillett vaksen er basert på antall kjøpte billettar dei siste 14 dagane. Etter tre kjøpte billettar får du ein litt lågare pris.',
     ),
     per: (userProfileName: string) =>
       _(
