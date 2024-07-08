@@ -25,10 +25,12 @@ import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useOnboardingState} from '@atb/onboarding';
 import {GlobalMessageContextEnum} from '@atb/global-messages';
+import {useRateLimitWhen} from '@atb/utils/use-rate-limit-when';
 
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
 type Props = RootStackScreenProps<'Root_LoginConfirmCodeScreen'>;
+type LoginErrorCode = ConfirmationErrorCode | PhoneSignInErrorCode;
 
 export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const {phoneNumber} = route.params;
@@ -37,13 +39,13 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
   const {themeName} = useTheme();
   const {confirmCode, signInWithPhoneNumber} = useAuthState();
   const [code, setCode] = useState('');
-  const [error, setError] = useState<
-    ConfirmationErrorCode | PhoneSignInErrorCode
-  >();
+  const [error, setError] = useState<LoginErrorCode>();
   const [isLoading, setIsLoading] = useState(false);
   const focusRef = useFocusOnLoad();
   const {completeOnboardingSection} = useOnboardingState();
-  const [isRateLimited, setIsRateLimited] = useState(false);
+  const {isRateLimited, rateLimitIfNeeded} = useRateLimitWhen<LoginErrorCode>(
+    (code) => code === 'too_many_attempts',
+  );
 
   const onLogin = async () => {
     if (isRateLimited) return;
@@ -51,10 +53,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
     completeOnboardingSection('userCreation');
     const errorCode = await confirmCode(code);
     if (errorCode) {
-      if (errorCode === 'too_many_attempts') {
-        setIsRateLimited(true);
-        setTimeout(() => setIsRateLimited(false), 10000);
-      }
+      rateLimitIfNeeded(errorCode);
       setError(errorCode);
       setIsLoading(false);
     }
@@ -68,10 +67,7 @@ export const Root_LoginConfirmCodeScreen = ({route}: Props) => {
     const errorCode = await signInWithPhoneNumber(phoneNumber, true);
     setIsLoading(false);
     if (errorCode) {
-      if (errorCode === 'too_many_attempts') {
-        setIsRateLimited(true);
-        setTimeout(() => setIsRateLimited(false), 10000);
-      }
+      rateLimitIfNeeded(errorCode);
       setError(errorCode);
     }
   };
