@@ -24,6 +24,7 @@ import {Time} from '@atb/assets/svg/mono-icons/time';
 import {screenReaderPause} from '@atb/components/text';
 import {GenericSectionItem, Section} from '@atb/components/sections';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {getMsgTypeForMostCriticalSituationOrNotice} from './utils';
 
 type Props = {
   situation: SituationType;
@@ -38,10 +39,13 @@ export const SituationBottomSheet = forwardRef<View, Props>(
     const advice = getTextForLanguage(situation.advice, language);
     const infoLinks = filterInfoLinks(situation.infoLinks);
     const validityPeriodText = useValidityPeriodText(situation.validityPeriod);
+    const msgType = getMsgTypeForMostCriticalSituationOrNotice([situation]);
     const {close} = useBottomSheet();
 
     return (
-      <BottomSheetContainer>
+      <BottomSheetContainer
+        title={t(SituationsTexts.bottomSheet.title[msgType ?? 'info'])}
+      >
         <ScrollView centerContent={true}>
           <View>
             <Section style={styles.section}>
