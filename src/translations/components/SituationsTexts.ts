@@ -11,6 +11,11 @@ const SituationsTexts = {
     info: _('Med ekstra info', 'With extra information', 'Med ekstra info'),
   },
   bottomSheet: {
+    title: {
+      info: _('Informasjon', 'Information', 'Informasjon'),
+      warning: _('Advarsel', 'Warning', 'Advarsel'),
+      error: _('Feil', 'Error', 'Feil'),
+    },
     button: _('Lukk', 'Close', 'Lukk'),
     validity: {
       from: (fromDate: string) =>
