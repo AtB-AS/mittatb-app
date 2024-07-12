@@ -18,8 +18,8 @@ import {SectionItemProps} from '../types';
 import {dictionary, SectionTexts, useTranslation} from '@atb/translations';
 import composeRefs from '@seznam/compose-react-refs';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {Error} from '@atb/assets/svg/color/icons/status';
 import {giveFocus} from '@atb/utils/use-focus-on-load';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -160,7 +160,8 @@ export const TextInputSectionItem = forwardRef<InternalTextInput, TextProps>(
               dictionary.messageTypes.error,
             )}, ${errorText}`}
           >
-            <ThemeIcon svg={Error} />
+            {/* TODO: Use MessageText */}
+            <ThemeIcon svg={messageTypeToIcon('error', true, themeName)} />
             <ThemeText type="body__secondary" style={styles.errorMessage}>
               {errorText}
             </ThemeText>

@@ -7,7 +7,6 @@ import {
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
-import {Error, Warning} from '@atb/assets/svg/color/icons/status';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -59,6 +58,7 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
 import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -345,6 +345,7 @@ const ResultItemFooter: React.FC<{
 }> = ({tripPattern}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
+  const {themeName} = useTheme();
 
   const now = useNow(30000);
   const tripPatternBookingStatus = getTripPatternBookingStatus(
@@ -358,8 +359,13 @@ const ResultItemFooter: React.FC<{
       <View style={styles.footerNotice}>
         {bookingText && (
           <>
+            {/* TODO: Use MessageText */}
             <ThemeIcon
-              svg={tripPatternBookingStatus === 'late' ? Error : Warning}
+              svg={messageTypeToIcon(
+                tripPatternBookingStatus === 'late' ? 'error' : 'warning',
+                true,
+                themeName,
+              )}
               style={styles.footerNoticeIcon}
             />
             <ThemeText type="body__secondary" color="secondary">

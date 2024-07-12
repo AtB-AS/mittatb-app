@@ -27,7 +27,7 @@ export function MessageSectionItem({
 }: Props) {
   const {topContainer} = useSectionItem(props);
   const styles = useStyles(messageType)();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const a11yLabel = useA11yLabel(
     messageType,
     title,
@@ -56,7 +56,7 @@ export function MessageSectionItem({
       <ThemeIcon
         style={styles.icon}
         fill={themeColor.text}
-        svg={messageTypeToIcon(messageType, true)}
+        svg={messageTypeToIcon(messageType, true, themeName)}
       />
       <View style={styles.textContent}>
         {title && (

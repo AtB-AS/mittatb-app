@@ -261,7 +261,7 @@ function LineChip({
 }: Pick<EstimatedCallItemProps, 'departure' | 'mode' | 'testID'>) {
   const styles = useStyles();
   const fontScale = useFontScale();
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const publicCode = departure.serviceJourney.line.publicCode;
   const {transportMode, transportSubmode} = departure.serviceJourney;
   const {svg} = getTransportModeSvg(transportMode, transportSubmode);
@@ -277,7 +277,7 @@ function LineChip({
   );
 
   const msgType = mode !== 'Favourite' && getMsgTypeForEstimatedCall(departure);
-  const icon = msgType && messageTypeToIcon(msgType, true);
+  const icon = msgType && messageTypeToIcon(msgType, true, themeName);
 
   if (!publicCode && !transportMode) return null;
 

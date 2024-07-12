@@ -48,7 +48,7 @@ export const MessageInfoBox = ({
   onDismiss,
   testID,
 }: MessageInfoBoxProps) => {
-  const {theme} = useTheme();
+  const {theme, themeName} = useTheme();
   const styles = useStyles(type)();
   const {t} = useTranslation();
   const iconColorProps = {fill: theme.status[type].secondary.text};
@@ -74,7 +74,7 @@ export const MessageInfoBox = ({
       {!noStatusIcon && (
         <ThemeIcon
           style={styles.icon}
-          svg={messageTypeToIcon(type, true)}
+          svg={messageTypeToIcon(type, true, themeName)}
           {...iconColorProps}
         />
       )}
