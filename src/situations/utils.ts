@@ -5,7 +5,6 @@ import {
   SituationsTexts,
   TranslateFunction,
 } from '@atb/translations';
-import {Info, Warning} from '@atb/assets/svg/color/icons/status';
 import {SvgProps} from 'react-native-svg';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {isAfter, isBefore, isBetween} from '@atb/utils/date';
@@ -50,18 +49,6 @@ export const getMessageTypeForSituation = (
   situation: SituationType,
 ): Extract<Statuses, 'warning' | 'info'> =>
   situation.reportType === 'incident' ? 'warning' : 'info';
-
-export const getSvgForSituation = (
-  situation: SituationType,
-): ((p: SvgProps) => JSX.Element) => {
-  const msgType = getMessageTypeForSituation(situation);
-  switch (msgType) {
-    case 'info':
-      return Info;
-    case 'warning':
-      return Warning;
-  }
-};
 
 export const getMsgTypeForMostCriticalSituationOrNotice = (
   situations: SituationType[],
