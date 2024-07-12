@@ -74,7 +74,7 @@ export const MessageInfoBox = ({
       {!noStatusIcon && (
         <ThemeIcon
           style={styles.icon}
-          svg={messageTypeToIcon(type, false)}
+          svg={messageTypeToIcon(type, true)}
           {...iconColorProps}
         />
       )}

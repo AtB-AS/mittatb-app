@@ -56,7 +56,7 @@ export function MessageSectionItem({
       <ThemeIcon
         style={styles.icon}
         fill={themeColor.text}
-        svg={messageTypeToIcon(messageType, false)}
+        svg={messageTypeToIcon(messageType, true)}
       />
       <View style={styles.textContent}>
         {title && (
