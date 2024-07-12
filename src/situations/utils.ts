@@ -94,11 +94,6 @@ export const toMostCriticalStatus = <T extends Statuses | undefined>(
     : msgType;
 };
 
-export const bookingStatusToIcon = (bookingStatus: BookingStatus) => {
-  const bookingMsgType = bookingStatusToMsgType(bookingStatus);
-  return bookingMsgType && messageTypeToIcon(bookingMsgType, true);
-};
-
 export const getSvgForMostCriticalSituationOrNotice = (
   situations: SituationType[],
   notices?: NoticeFragment[],
