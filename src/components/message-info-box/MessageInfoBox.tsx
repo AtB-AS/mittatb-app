@@ -151,7 +151,7 @@ const useStyles = (type: Statuses) =>
       flex: 1,
     },
     icon: {
-      marginRight: theme.spacings.medium,
+      marginRight: theme.spacings.small,
     },
     linkText: {
       marginTop: theme.spacings.medium,

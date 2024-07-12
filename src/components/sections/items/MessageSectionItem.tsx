@@ -107,7 +107,7 @@ const useStyles = (type: Statuses) =>
       borderWidth: theme.border.width.medium,
       borderColor: theme.status[type].primary.background,
     },
-    icon: {marginRight: theme.spacings.medium},
+    icon: {marginRight: theme.spacings.small},
     textContent: {flex: 1},
     title: {marginBottom: theme.spacings.small},
     linkText: {marginTop: theme.spacings.medium},
