@@ -59,6 +59,7 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
 import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -358,20 +359,10 @@ const ResultItemFooter: React.FC<{
     <View style={styles.resultFooter}>
       <View style={styles.footerNotice}>
         {bookingText && (
-          <>
-            {/* TODO: Use MessageText */}
-            <ThemeIcon
-              svg={messageTypeToIcon(
-                tripPatternBookingStatus === 'late' ? 'error' : 'warning',
-                true,
-                themeName,
-              )}
-              style={styles.footerNoticeIcon}
-            />
-            <ThemeText type="body__secondary" color="secondary">
-              {bookingText}
-            </ThemeText>
-          </>
+          <MessageInfoText
+            message={bookingText}
+            type={tripPatternBookingStatus === 'late' ? 'error' : 'warning'}
+          />
         )}
       </View>
       <View style={styles.detailsTextWrapper}>
@@ -505,9 +496,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   footerNotice: {
     flexDirection: 'row',
-  },
-  footerNoticeIcon: {
-    paddingRight: theme.spacings.small,
   },
   fromPlaceText: {
     flex: 3,

@@ -26,9 +26,7 @@ import {GenericClickableSectionItem} from '@atb/components/sections';
 import {giveFocus, useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {loginPhoneInputId} from '@atb/test-ids';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
-import {Error as ErrorDark} from '@atb/assets/svg/color/icons/status/dark';
-import {Error as ErrorLight} from '@atb/assets/svg/color/icons/status/light';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type FocusEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
@@ -152,8 +150,6 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
       })
       .sort((a, b) => (a.country_name > b.country_name ? 1 : -1));
 
-    const ErrorSvg = themeName === 'dark' ? ErrorDark : ErrorLight;
-
     return (
       <View>
         <View
@@ -223,11 +219,7 @@ export const PhoneInputSectionItem = forwardRef<InternalTextInput, Props>(
                 dictionary.messageTypes.error,
               )}, ${errorText}`}
             >
-              {/* TODO: Use MessageText */}
-              <ThemeIcon svg={messageTypeToIcon('error', true, themeName)} />
-              <ThemeText type="body__secondary" style={styles.errorMessage}>
-                {errorText}
-              </ThemeText>
+              <MessageInfoText message={errorText} type="error" />
             </View>
           )}
         </View>
@@ -306,10 +298,7 @@ const useInputStyle = StyleSheet.createTheme((theme) => ({
   countryName: {
     width: '83%',
   },
-  error: {flexDirection: 'row'},
-  errorMessage: {
-    paddingLeft: theme.spacings.medium,
-    paddingBottom: theme.spacings.small,
-    flex: 1,
+  error: {
+    paddingBottom: theme.spacings.medium,
   },
 }));
