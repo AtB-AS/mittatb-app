@@ -5,14 +5,11 @@ import {
   SituationsTexts,
   TranslateFunction,
 } from '@atb/translations';
-import {SvgProps} from 'react-native-svg';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {isAfter, isBefore, isBetween} from '@atb/utils/date';
 import {statusComparator} from '@atb/utils/status-comparator';
 import {Statuses} from '@atb/theme';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {bookingStatusToMsgType} from '@atb/travel-details-screens/utils';
-import {BookingStatus} from '@atb/travel-details-screens/types';
 import {Mode} from '@atb-as/theme';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {

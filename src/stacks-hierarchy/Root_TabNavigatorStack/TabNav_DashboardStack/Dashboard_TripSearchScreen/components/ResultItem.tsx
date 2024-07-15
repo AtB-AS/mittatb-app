@@ -58,7 +58,6 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
 import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
-import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {MessageInfoText} from '@atb/components/message-info-text';
 
 type ResultItemProps = {
@@ -346,7 +345,6 @@ const ResultItemFooter: React.FC<{
 }> = ({tripPattern}) => {
   const styles = useThemeStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
 
   const now = useNow(30000);
   const tripPatternBookingStatus = getTripPatternBookingStatus(
