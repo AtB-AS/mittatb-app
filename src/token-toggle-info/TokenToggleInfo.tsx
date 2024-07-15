@@ -9,16 +9,7 @@ import {
 import {StyleSheet, useTheme} from '@atb/theme';
 import {Mode, StaticColor} from '@atb/theme/colors';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
-import {
-  Error as ErrorDark,
-  Info as InfoDark,
-  Warning as WarningDark,
-} from '@atb/assets/svg/color/icons/status/dark';
-import {
-  Error as ErrorLight,
-  Info as InfoLight,
-  Warning as WarningLight,
-} from '@atb/assets/svg/color/icons/status/light';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 type TokenToggleInfoProps = {
   style?: StyleProp<ViewStyle>;
@@ -112,11 +103,11 @@ const TokenToggleContent = ({
 const getToggleInfoIcon = (toggleLimit: number, themeName: Mode) => {
   switch (toggleLimit) {
     case 0:
-      return themeName === 'dark' ? ErrorDark : ErrorLight;
+      return messageTypeToIcon('error', true, themeName);
     case 1:
-      return themeName === 'dark' ? WarningDark : WarningLight;
+      return messageTypeToIcon('warning', true, themeName);
     default:
-      return themeName === 'dark' ? InfoDark : InfoLight;
+      return messageTypeToIcon('info', true, themeName);
   }
 };
 
