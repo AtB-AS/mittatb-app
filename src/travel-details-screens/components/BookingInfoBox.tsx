@@ -15,7 +15,6 @@ type Props = {
   bookingArrangements?: BookingArrangementFragment;
   aimedStartTime: string;
   now: number;
-  showStatusIcon: boolean;
   onPressConfig?: OnPressConfig;
 };
 
@@ -23,7 +22,6 @@ export const BookingInfoBox = ({
   bookingArrangements,
   aimedStartTime,
   now,
-  showStatusIcon,
   onPressConfig,
 }: Props) => {
   const bookingMessage = useBookingMessage(
@@ -43,7 +41,6 @@ export const BookingInfoBox = ({
   return (
     <MessageInfoBox
       type={bookingStatus === 'late' ? 'error' : 'warning'}
-      noStatusIcon={!showStatusIcon}
       message={bookingMessage}
       onPressConfig={onPressConfig}
     />

@@ -1,6 +1,4 @@
 import {Leg, Place, Quay} from '@atb/api/types/trips';
-import {Info, Warning, Error} from '@atb/assets/svg/color/icons/status';
-import {Interchange} from '@atb/assets/svg/mono-icons/actions';
 import {
   AccessibleText,
   screenReaderPause,
@@ -10,7 +8,7 @@ import {MessageInfoBox} from '@atb/components/message-info-box';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {TransportationIconBox} from '@atb/components/icon-box';
 import {ServiceJourneyDeparture} from '@atb/travel-details-screens/types';
-import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
+import {SituationMessageBox} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
   Language,
@@ -236,34 +234,21 @@ export const TripSection: React.FC<TripSectionProps> = ({
           </TripRow>
         )}
         {leg.situations.map((situation) => (
-          <TripRow
-            key={situation.id}
-            rowLabel={<SituationOrNoticeIcon situation={situation} />}
-          >
-            <SituationMessageBox noStatusIcon={true} situation={situation} />
+          <TripRow key={situation.id}>
+            <SituationMessageBox situation={situation} />
           </TripRow>
         ))}
         {notices.map((notice) => (
-          <TripRow key={notice.id} rowLabel={<ThemeIcon svg={Info} />}>
-            <MessageInfoBox
-              noStatusIcon={true}
-              type="info"
-              message={notice.text}
-            />
+          <TripRow key={notice.id}>
+            <MessageInfoBox type="info" message={notice.text} />
           </TripRow>
         ))}
         {bookingStatus !== 'none' && (
-          <TripRow
-            rowLabel={
-              <ThemeIcon svg={bookingStatus === 'late' ? Error : Warning} />
-            }
-            accessible={false}
-          >
+          <TripRow accessible={false}>
             <BookingInfoBox
               bookingArrangements={leg.bookingArrangements}
               aimedStartTime={leg.aimedStartTime}
               now={now}
-              showStatusIcon={false}
               onPressConfig={
                 shouldShowButtonForOpeningFlexBottomSheet
                   ? {
@@ -288,10 +273,9 @@ export const TripSection: React.FC<TripSectionProps> = ({
         )}
 
         {leg.transportSubmode === TransportSubmode.RailReplacementBus && (
-          <TripRow rowLabel={<ThemeIcon svg={Warning} />}>
+          <TripRow>
             <MessageInfoBox
               type="warning"
-              noStatusIcon={true}
               message={t(
                 TripDetailsTexts.messages.departureIsRailReplacementBus,
               )}
@@ -574,8 +558,8 @@ function InterchangeSection({
   return (
     <View>
       <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
-      <TripRow rowLabel={<ThemeIcon svg={Interchange} />}>
-        <MessageInfoBox noStatusIcon={true} type="info" message={text} />
+      <TripRow>
+        <MessageInfoBox type="info" message={text} />
       </TripRow>
     </View>
   );

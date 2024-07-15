@@ -17,7 +17,7 @@ import {FullScreenView} from '@atb/components/screen-view';
 import {AccessibleText, ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CancelledDepartureMessage} from '@atb/travel-details-screens/components/CancelledDepartureMessage';
-import {SituationMessageBox, SituationOrNoticeIcon} from '@atb/situations';
+import {SituationMessageBox} from '@atb/situations';
 import {useGetServiceJourneyVehicles} from '@atb/travel-details-screens/use-get-service-journey-vehicles';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -61,7 +61,6 @@ import {
 } from '@atb/travel-details-screens/utils';
 import {BookingOptions} from '@atb/travel-details-screens/components/BookingOptions';
 import {BookingInfoBox} from '@atb/travel-details-screens/components/BookingInfoBox';
-import {bookingStatusToIcon} from '@atb/situations/utils';
 
 export type DepartureDetailsScreenParams = {
   items: ServiceJourneyDeparture[];
@@ -478,8 +477,6 @@ function EstimatedCallRow({
     flex_booking_number_of_days_available,
   );
 
-  const bookingIcon = bookingStatusToIcon(bookingStatus);
-
   return (
     <View style={[styles.place, isStartOfGroup && styles.startPlace]}>
       <TripLegDecoration
@@ -531,23 +528,18 @@ function EstimatedCallRow({
       {situations.map((situation) => (
         <TripRow
           key={situation.situationNumber}
-          rowLabel={<SituationOrNoticeIcon situation={situation} />}
           style={styles.situationTripRow}
         >
-          <SituationMessageBox noStatusIcon={true} situation={situation} />
+          <SituationMessageBox situation={situation} />
         </TripRow>
       ))}
 
       {isStartOfTripGroup && bookingStatus !== 'none' && (
-        <TripRow
-          rowLabel={bookingIcon && <ThemeIcon svg={bookingIcon} />}
-          accessible={false}
-        >
+        <TripRow accessible={false}>
           <BookingInfoBox
             bookingArrangements={call.bookingArrangements}
             aimedStartTime={call.aimedDepartureTime}
             now={Date.now()}
-            showStatusIcon={false}
           />
         </TripRow>
       )}

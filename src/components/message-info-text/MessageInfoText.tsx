@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleProp, View, ViewStyle} from 'react-native';
-import {Statuses, StyleSheet} from '@atb/theme';
+import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
@@ -26,6 +26,7 @@ export const MessageInfoText = ({
   isMarkdown = false,
 }: MessageInfoTextProps) => {
   const styles = useStyles();
+  const {themeName} = useTheme();
 
   const iconColorProps = {colorType: textColor};
 
@@ -37,7 +38,10 @@ export const MessageInfoText = ({
       accessibilityLabel={message}
     >
       {iconPosition === 'left' && (
-        <ThemeIcon svg={messageTypeToIcon(type, true)} {...iconColorProps} />
+        <ThemeIcon
+          svg={messageTypeToIcon(type, true, themeName)}
+          {...iconColorProps}
+        />
       )}
 
       <ThemeText
@@ -50,7 +54,10 @@ export const MessageInfoText = ({
       </ThemeText>
 
       {iconPosition === 'right' && (
-        <ThemeIcon svg={messageTypeToIcon(type, true)} {...iconColorProps} />
+        <ThemeIcon
+          svg={messageTypeToIcon(type, true, themeName)}
+          {...iconColorProps}
+        />
       )}
     </View>
   );

@@ -1,6 +1,3 @@
-import Warning from '@atb/assets/svg/color/icons/status/Warning';
-import Info from '@atb/assets/svg/color/icons/status/Info';
-import Error from '@atb/assets/svg/color/icons/status/Error';
 import {TravelTokenTexts, useTranslation} from '@atb/translations';
 import {ActivityIndicator, StyleProp, View, ViewStyle} from 'react-native';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -9,9 +6,10 @@ import {
   formatToShortDateWithYear,
   formatToVerboseFullDate,
 } from '@atb/utils/date';
-import {StyleSheet} from '@atb/theme';
-import {StaticColor} from '@atb/theme/colors';
+import {StyleSheet, useTheme} from '@atb/theme';
+import {Mode, StaticColor} from '@atb/theme/colors';
 import {useTokenToggleDetailsQuery} from '@atb/mobile-token/use-token-toggle-details';
+import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 
 type TokenToggleInfoProps = {
   style?: StyleProp<ViewStyle>;
@@ -47,6 +45,7 @@ const TokenToggleContent = ({
   textColor,
 }: TokenToggleContentProps) => {
   const {t, language} = useTranslation();
+  const {themeName} = useTheme();
   const styles = useStyles();
   const now = new Date();
   const nextMonthStartDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -85,7 +84,7 @@ const TokenToggleContent = ({
 
   return (
     <View style={style}>
-      <ThemeIcon svg={getToggleInfoIcon(toggleLimit)} />
+      <ThemeIcon svg={getToggleInfoIcon(toggleLimit, themeName)} />
       <ThemeText
         style={styles.content}
         accessibilityLabel={getToggleInfo(
@@ -101,14 +100,14 @@ const TokenToggleContent = ({
   );
 };
 
-const getToggleInfoIcon = (toggleLimit: number) => {
+const getToggleInfoIcon = (toggleLimit: number, themeName: Mode) => {
   switch (toggleLimit) {
     case 0:
-      return Error;
+      return messageTypeToIcon('error', true, themeName);
     case 1:
-      return Warning;
+      return messageTypeToIcon('warning', true, themeName);
     default:
-      return Info;
+      return messageTypeToIcon('info', true, themeName);
   }
 };
 

@@ -7,7 +7,6 @@ import {
 } from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import {CounterIconBox, TransportationIconBox} from '@atb/components/icon-box';
-import {Error, Warning} from '@atb/assets/svg/color/icons/status';
 import {SituationOrNoticeIcon} from '@atb/situations';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
@@ -59,6 +58,7 @@ import {Mode} from '@atb/api/types/generated/journey_planner_v3_types';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {useNow} from '@atb/utils/use-now';
 import {TripPatternBookingStatus} from '@atb/travel-details-screens/types';
+import {MessageInfoText} from '@atb/components/message-info-text';
 
 type ResultItemProps = {
   tripPattern: TripPattern;
@@ -357,15 +357,10 @@ const ResultItemFooter: React.FC<{
     <View style={styles.resultFooter}>
       <View style={styles.footerNotice}>
         {bookingText && (
-          <>
-            <ThemeIcon
-              svg={tripPatternBookingStatus === 'late' ? Error : Warning}
-              style={styles.footerNoticeIcon}
-            />
-            <ThemeText type="body__secondary" color="secondary">
-              {bookingText}
-            </ThemeText>
-          </>
+          <MessageInfoText
+            message={bookingText}
+            type={tripPatternBookingStatus === 'late' ? 'error' : 'warning'}
+          />
         )}
       </View>
       <View style={styles.detailsTextWrapper}>
@@ -499,9 +494,6 @@ const useThemeStyles = StyleSheet.createThemeHook((theme) => ({
   },
   footerNotice: {
     flexDirection: 'row',
-  },
-  footerNoticeIcon: {
-    paddingRight: theme.spacings.small,
   },
   fromPlaceText: {
     flex: 3,

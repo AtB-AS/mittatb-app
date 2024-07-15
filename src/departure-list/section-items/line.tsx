@@ -44,7 +44,7 @@ import {
   toMostCriticalStatus,
 } from '@atb/situations/utils';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {Statuses} from '@atb-as/theme';
+import {Mode, Statuses} from '@atb-as/theme';
 
 export type LineItemProps = SectionItemProps<{
   group: DepartureGroup;
@@ -233,7 +233,7 @@ function DepartureTimeItem({
   const {t, language} = useTranslation();
   const {themeName} = useTheme();
 
-  const rightIcon = getSvgForDeparture(departure);
+  const rightIcon = getSvgForDeparture(departure, themeName);
   const leftIcon =
     !departure.cancellation && departure.realtime
       ? themeName === 'dark'
@@ -333,7 +333,10 @@ const useItemStyles = StyleSheet.createThemeHook((theme) => ({
   },
 }));
 
-export const getSvgForDeparture = (departure: DepartureTime) => {
+export const getSvgForDeparture = (
+  departure: DepartureTime,
+  themeName: Mode,
+) => {
   const msgTypeForSituationOrNotice =
     getMsgTypeForMostCriticalSituationOrNotice(
       departure.situations,
@@ -350,5 +353,5 @@ export const getSvgForDeparture = (departure: DepartureTime) => {
   const msgType = [msgTypeForSituationOrNotice, msgTypeForBooking].reduce<
     Statuses | undefined
   >(toMostCriticalStatus, undefined);
-  return msgType && messageTypeToIcon(msgType, true);
+  return msgType && messageTypeToIcon(msgType, true, themeName);
 };

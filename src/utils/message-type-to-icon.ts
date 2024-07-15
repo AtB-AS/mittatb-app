@@ -1,23 +1,34 @@
-import {Check, Error, Info, Warning} from '../assets/svg/mono-icons/status';
+import {Mode} from '@atb-as/theme';
 import {
-  Check as ColorCheck,
-  Error as ColorError,
-  Info as ColorInfo,
-  Warning as ColorWarning,
-} from '../assets/svg/color/icons/status';
+  Check as CheckDark,
+  Error as ErrorDark,
+  Info as InfoDark,
+  Warning as WarningDark,
+} from '@atb/assets/svg/color/icons/status/dark';
+import {
+  Check as CheckLight,
+  Error as ErrorLight,
+  Info as InfoLight,
+  Warning as WarningLight,
+} from '@atb/assets/svg/color/icons/status/light';
+import {Check, Error, Info, Warning} from '@atb/assets/svg/mono-icons/status';
 import {Statuses} from '@atb/theme';
 
-export const messageTypeToIcon = (messageType: Statuses, colored: boolean) => {
+export const messageTypeToIcon = (
+  messageType: Statuses,
+  colored: boolean,
+  themeName: Mode,
+) => {
   if (colored) {
     switch (messageType) {
       case 'warning':
-        return ColorWarning;
+        return themeName === 'dark' ? WarningDark : WarningLight;
       case 'error':
-        return ColorError;
+        return themeName === 'dark' ? ErrorDark : ErrorLight;
       case 'valid':
-        return ColorCheck;
-      default:
-        return ColorInfo;
+        return themeName === 'dark' ? CheckDark : CheckLight;
+      case 'info':
+        return themeName === 'dark' ? InfoDark : InfoLight;
     }
   }
   switch (messageType) {
@@ -27,7 +38,7 @@ export const messageTypeToIcon = (messageType: Statuses, colored: boolean) => {
       return Error;
     case 'valid':
       return Check;
-    default:
+    case 'info':
       return Info;
   }
 };

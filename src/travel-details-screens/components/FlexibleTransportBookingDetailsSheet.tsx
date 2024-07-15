@@ -73,7 +73,6 @@ export const FlexibleTransportBookingDetailsSheet: React.FC<
               bookingArrangements={leg.bookingArrangements}
               aimedStartTime={leg.aimedStartTime}
               now={now}
-              showStatusIcon={true}
             />
           </View>
 

@@ -1,5 +1,4 @@
 import {Time} from '@atb/assets/svg/mono-icons/time';
-import {Info} from '@atb/assets/svg/color/icons/status';
 import {ThemeText} from '@atb/components/text';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {StyleSheet} from '@atb/theme';
@@ -29,9 +28,8 @@ export const WaitSection: React.FC<WaitDetails> = (wait) => {
     <View style={style.section}>
       <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
       {shortWait && (
-        <TripRow rowLabel={<ThemeIcon svg={Info} />}>
+        <TripRow>
           <MessageInfoBox
-            noStatusIcon={true}
             type="info"
             message={t(TripDetailsTexts.trip.leg.wait.messages.shortTime)}
           />

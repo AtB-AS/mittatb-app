@@ -5,15 +5,12 @@ import {
   SituationsTexts,
   TranslateFunction,
 } from '@atb/translations';
-import {Info, Warning} from '@atb/assets/svg/color/icons/status';
-import {SvgProps} from 'react-native-svg';
 import {NoticeFragment} from '@atb/api/types/generated/fragments/notices';
 import {isAfter, isBefore, isBetween} from '@atb/utils/date';
 import {statusComparator} from '@atb/utils/status-comparator';
 import {Statuses} from '@atb/theme';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
-import {bookingStatusToMsgType} from '@atb/travel-details-screens/utils';
-import {BookingStatus} from '@atb/travel-details-screens/types';
+import {Mode} from '@atb-as/theme';
 
 export const getUniqueSituations = (situations: SituationType[] = []) => {
   const seenIds: string[] = [];
@@ -50,18 +47,6 @@ export const getMessageTypeForSituation = (
 ): Extract<Statuses, 'warning' | 'info'> =>
   situation.reportType === 'incident' ? 'warning' : 'info';
 
-export const getSvgForSituation = (
-  situation: SituationType,
-): ((p: SvgProps) => JSX.Element) => {
-  const msgType = getMessageTypeForSituation(situation);
-  switch (msgType) {
-    case 'info':
-      return Info;
-    case 'warning':
-      return Warning;
-  }
-};
-
 export const getMsgTypeForMostCriticalSituationOrNotice = (
   situations: SituationType[],
   notices?: NoticeFragment[],
@@ -94,13 +79,9 @@ export const toMostCriticalStatus = <T extends Statuses | undefined>(
     : msgType;
 };
 
-export const bookingStatusToIcon = (bookingStatus: BookingStatus) => {
-  const bookingMsgType = bookingStatusToMsgType(bookingStatus);
-  return bookingMsgType && messageTypeToIcon(bookingMsgType, true);
-};
-
 export const getSvgForMostCriticalSituationOrNotice = (
   situations: SituationType[],
+  themeName: Mode,
   notices?: NoticeFragment[],
   cancellation: boolean = false,
 ) => {
@@ -109,7 +90,7 @@ export const getSvgForMostCriticalSituationOrNotice = (
     notices,
     cancellation,
   );
-  return msgType && messageTypeToIcon(msgType, true);
+  return msgType && messageTypeToIcon(msgType, true, themeName);
 };
 
 export const getSituationOrNoticeA11yLabel = (
