@@ -406,31 +406,33 @@ extension QuayGroup {
             latitude: 63.43457,
             longitude: 10.39844
         ),
-        group: [
-            DepartureGroup(
-                lineInfo:
-                DepartureLineInfo(
-                    lineId: "",
-                    lineName: "Ranheim",
-                    lineNumber: "1",
-                    transportMode: TransportMode.bus,
-                    transportSubmode: TransportSubMode.undefined,
-                    quayId: "NSR:Quay:71184"
-                ),
-                departures: [Int](0 ..< 10).map { index in
-                    let timeInterval = CGFloat(index) * 300
-                    let timeDate = Date.now.addingTimeInterval(timeInterval)
-                    return DepartureTime(
-                        time: timeDate,
-                        aimedTime: timeDate,
-                        predictionInaccurate: false,
-                        realtime: false,
-                        situations: [],
-                        serviceJourneyId: "",
-                        serviceDate: ""
-                    )
-                }
-            ),
-        ]
+        group: [DepartureGroup.dummy]
     )
+}
+
+extension DepartureGroup {
+  static let dummy = DepartureGroup(
+    lineInfo:
+    DepartureLineInfo(
+        lineId: "",
+        lineName: "Ranheim",
+        lineNumber: "1",
+        transportMode: TransportMode.bus,
+        transportSubmode: TransportSubMode.undefined,
+        quayId: "NSR:Quay:71184"
+    ),
+    departures: [Int](0 ..< 10).map { index in
+        let timeInterval = CGFloat(index) * 300
+        let timeDate = Date.now.addingTimeInterval(timeInterval)
+        return DepartureTime(
+            time: timeDate,
+            aimedTime: timeDate,
+            predictionInaccurate: false,
+            realtime: false,
+            situations: [],
+            serviceJourneyId: "",
+            serviceDate: ""
+        )
+    }
+  )
 }
