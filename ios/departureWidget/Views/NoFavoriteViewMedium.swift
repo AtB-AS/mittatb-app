@@ -11,6 +11,6 @@ struct NoFavoriteViewMedium: View {
                 .foregroundColor(Color("LineInformationTextColor"))
                 .lineLimit(2)
                 .minimumScaleFactor(0.1)
-        }.padding(16)
+        }
     }
 }

@@ -18,7 +18,7 @@ struct DepartureTimesView: View {
     let deepLink: String
 
     var width: CGFloat {
-        parentSize.width - K.padding * 2
+        parentSize.width
     }
 
     var departuresWidth: CGFloat {

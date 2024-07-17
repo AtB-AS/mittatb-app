@@ -14,10 +14,16 @@ struct DepartureWidgetEntryView: View {
     }
 
     var body: some View {
-        ZStack {
-            Color("WidgetBackgroundColor")
-            WidgetInfoView(widgetFamily: family, viewModel: viewModel)
-        }.widgetURL(URL(string: viewModel.deepLink(departure: nil)))
+      if #available(iOSApplicationExtension 17.0, *) {
+        WidgetInfoView(widgetFamily: family, viewModel: viewModel)
+          .containerBackground(Color("WidgetBackgroundColor"), for: .widget)
+          .widgetURL(URL(string: viewModel.deepLink(departure: nil)))
+      } else {
+        WidgetInfoView(widgetFamily: family, viewModel: viewModel)
+          .padding(16)
+          .background(Color("WidgetBackgroundColor"))
+          .widgetURL(URL(string: viewModel.deepLink(departure: nil)))
+      }
     }
 }
 
