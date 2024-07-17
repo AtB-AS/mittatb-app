@@ -40,3 +40,31 @@ struct DepartureWidget: Widget {
         .supportedFamilies([.systemMedium])
     }
 }
+
+struct DepartureWidget_Preview: PreviewProvider {
+  static var previews: some View {
+    Group {
+      DepartureWidgetEntryView(
+        entry: Provider.Entry(
+          date: Date(),
+          favouriteDeparture: FavouriteDeparture.dummy,
+          stopPlaceGroup: StopPlaceGroup.dummy,
+          departures: DepartureGroup.dummy.departures,
+          state: EntryState.complete)
+      ).previewContext(
+        WidgetPreviewContext(family: .systemMedium)
+      ).previewDisplayName("Default")
+
+      DepartureWidgetEntryView(
+        entry: Provider.Entry(
+          date: Date(),
+          favouriteDeparture: FavouriteDeparture.dummy,
+          stopPlaceGroup: StopPlaceGroup.dummy,
+          departures: [],
+          state: EntryState.noFavouriteDepartures)
+      ).previewContext(
+        WidgetPreviewContext(family: .systemMedium)
+      ).previewDisplayName("No Favorites")
+    }
+  }
+}
