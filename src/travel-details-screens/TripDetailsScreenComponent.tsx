@@ -150,7 +150,9 @@ export const TripDetailsScreenComponent = ({
   );
 };
 
-function useTicketInfoFromTrip(tripPattern: TripPattern) {
+function useTicketInfoFromTrip(
+  tripPattern: TripPattern,
+): TicketInfoForBus | TicketInfoForBoat | undefined {
   const {enable_ticketing} = useRemoteConfig();
   const isFromTravelSearchToTicketEnabled =
     useFromTravelSearchToTicketEnabled();
@@ -202,13 +204,20 @@ function calculateTicketStartTime(legs: Leg[]) {
     : formatISO(tripStartWithBuffer);
 }
 
+type TicketInfoForBus = {
+  fromPlace: TariffZoneWithMetadata;
+  toPlace: TariffZoneWithMetadata;
+  ticketStartTime: string | undefined;
+  fareProductTypeConfig: FareProductTypeConfig;
+};
+
 function getTicketInfoForBus(
   tripPattern: TripPattern,
   nonHumanLegs: Leg[],
   fareProductTypeConfigs: FareProductTypeConfig[],
   tariffZones: TariffZone[],
   ticketStartTime?: string,
-) {
+): TicketInfoForBus | undefined {
   const canSellCollab = canSellCollabTicket(tripPattern);
   const hasOnlyValidBusLegs = !hasLegsWeCantSellTicketsFor(tripPattern, [
     'cityTram',
@@ -245,13 +254,20 @@ function getTicketInfoForBus(
   };
 }
 
+type TicketInfoForBoat = {
+  fromPlace: StopPlaceFragment;
+  toPlace: StopPlaceFragment;
+  ticketStartTime: string | undefined;
+  fareProductTypeConfig: FareProductTypeConfig;
+};
+
 function getTicketInfoForBoat(
   tripPattern: TripPattern,
   nonHumanLegs: Leg[],
   fareProductTypeConfigs: FareProductTypeConfig[],
   harbors: StopPlaceFragment[],
   ticketStartTime?: string,
-) {
+): TicketInfoForBoat | undefined {
   const hasOnlyValidBoatLegs = !hasLegsWeCantSellTicketsFor(tripPattern, [
     'highSpeedPassengerService',
     'highSpeedVehicleService',
