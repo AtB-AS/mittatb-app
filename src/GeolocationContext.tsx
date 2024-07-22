@@ -10,10 +10,10 @@ import React, {
 import {Alert, Linking, Platform} from 'react-native';
 import {isLocationEnabled} from 'react-native-device-info';
 import Geolocation, {
-  GeoOptions,
-  GeoPosition,
-  GeoError,
-} from 'react-native-geolocation-service';
+  GeolocationOptions,
+  GeolocationResponse,
+  GeolocationError,
+} from '@react-native-community/geolocation';
 import {
   check,
   checkMultiple,
@@ -28,7 +28,7 @@ import {GeoLocation} from '@atb/favorites';
 import {dictionary, GeoLocationTexts, useTranslation} from '@atb/translations';
 import {Coordinates} from '@atb/sdk';
 
-const config: GeoOptions = {
+const config: GeolocationOptions = {
   enableHighAccuracy: true,
   distanceFilter: 20,
 };
@@ -38,7 +38,7 @@ type GeolocationState = {
   locationEnabled: boolean;
   locationIsAvailable: boolean;
   location: GeoLocation | null;
-  locationError: GeoError | null;
+  locationError: GeolocationError | null;
   getCurrentCoordinates: (
     askForPermissionIfBlocked?: boolean,
   ) => Promise<Coordinates | undefined>;
@@ -52,12 +52,12 @@ type GeolocationReducerAction =
       type: 'PERMISSION_CHANGED';
     }
   | {
-      position: GeoPosition | null;
+      position: GeolocationResponse | null;
       locationName: string;
       type: 'LOCATION_CHANGED';
     }
   | {
-      locationError: GeoError | null;
+      locationError: GeolocationError | null;
       type: 'LOCATION_ERROR';
     };
 
@@ -90,7 +90,7 @@ const geolocationReducer: GeolocationReducer = (prevState, action) => {
 };
 
 const mapPositionToLocation = (
-  position: GeoPosition | null,
+  position: GeolocationResponse | null,
   name: string,
 ): GeoLocation | null =>
   position
@@ -124,6 +124,11 @@ const defaultState: GeolocationState = {
   getCurrentCoordinates: () => Promise.resolve(undefined),
   currentCoordinatesRef: undefined,
 };
+
+Geolocation.setRNConfiguration({
+  locationProvider: 'playServices',
+  skipPermissionRequests: true,
+});
 
 export const GeolocationContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<GeolocationReducer>(
@@ -203,7 +208,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
     }
   }, [requestGeolocationPermission, t]);
 
-  async function handleLocationError(locationError: GeoError) {
+  async function handleLocationError(locationError: GeolocationError) {
     const status = await checkGeolocationPermission();
     const locationEnabled = await isLocationEnabled();
     if (status !== 'granted' || !locationEnabled) {
@@ -216,7 +221,7 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const locationIsAvailable =
     state.status === 'granted' && state.locationEnabled;
 
-  const updateLocation = (position: GeoPosition | null, locationName: string) =>
+  const updateLocation = (position: GeolocationResponse | null, locationName: string) =>
     dispatch({
       type: 'LOCATION_CHANGED',
       position,
