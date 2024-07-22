@@ -125,6 +125,11 @@ const defaultState: GeolocationState = {
   currentCoordinatesRef: undefined,
 };
 
+Geolocation.setRNConfiguration({
+  locationProvider: 'playServices',
+  skipPermissionRequests: true,
+});
+
 export const GeolocationContextProvider: React.FC = ({children}) => {
   const [state, dispatch] = useReducer<GeolocationReducer>(
     geolocationReducer,
@@ -135,10 +140,6 @@ export const GeolocationContextProvider: React.FC = ({children}) => {
   const geoLocationName = t(dictionary.myPosition); // TODO: Other place for this fallback
   const currentCoordinatesRef = useRef<Coordinates | undefined>();
   const {updateMetadata} = useIntercomMetadata();
-  Geolocation.setRNConfiguration({
-    locationProvider: 'playServices',
-    skipPermissionRequests: true,
-  });
 
   const openSettingsAlert = useCallback(() => {
     Alert.alert(
