@@ -27,7 +27,6 @@
 		500752F62985620A00AC5A7F /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614928FD6EB900E16E13 /* APIService.swift */; };
 		500752F72985620A00AC5A7F /* DefaultFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7E785D29433F3900C57A1F /* DefaultFonts.swift */; };
 		500752F92985620A00AC5A7F /* Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614D28FD81B700E16E13 /* Structs.swift */; };
-		500752FA2985620A00AC5A7F /* DepartureWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE55264D28EC45ED0091F697 /* DepartureWidget.swift */; };
 		500752FB2985620A00AC5A7F /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5038614528FD509400E16E13 /* Provider.swift */; };
 		500752FC2985622900AC5A7F /* ChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9C416C293744B100EC2D53 /* ChipView.swift */; };
 		500752FD2985622900AC5A7F /* NoFavoriteViewSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DD2968501400B7DEC4 /* NoFavoriteViewSmall.swift */; };
@@ -683,7 +682,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				500752FA2985620A00AC5A7F /* DepartureWidget.swift in Sources */,
 				500752F92985620A00AC5A7F /* Structs.swift in Sources */,
 				500752F52985620A00AC5A7F /* WidgetViewModel.swift in Sources */,
 				500752FD2985622900AC5A7F /* NoFavoriteViewSmall.swift in Sources */,
