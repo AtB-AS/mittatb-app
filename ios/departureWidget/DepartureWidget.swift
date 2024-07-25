@@ -41,7 +41,7 @@ struct DepartureWidget: Widget {
     }
 }
 
-struct DepartureWidget_Preview: PreviewProvider {
+struct DepartureWidget_Previews: PreviewProvider {
   static var previews: some View {
     Group {
       DepartureWidgetEntryView(
