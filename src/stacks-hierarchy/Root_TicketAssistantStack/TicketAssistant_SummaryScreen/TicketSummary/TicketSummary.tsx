@@ -10,7 +10,7 @@ import {InteractiveColor, StaticColorByType} from '@atb/theme/colors';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {getReferenceDataName} from '@atb/configuration';
 import {formatDecimalNumber} from '@atb/utils/numbers';
-import {daysInWeek} from 'date-fns';
+import {daysInWeek} from '@atb/utils/date';
 import {BorderedInfoBox} from '@atb/components/bordered-info-box';
 
 const interactiveColorName: InteractiveColor = 'interactive_2';

@@ -23,6 +23,8 @@ import {format as formatInternal, formatInTimeZone} from 'date-fns-tz';
 import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
 
+export {daysInWeek} from 'date-fns/constants';
+
 import {
   parse as parseIso8601Duration,
   toSeconds as toSecondsIso8601Duration,
@@ -30,7 +32,6 @@ import {
 
 const CET = 'Europe/Oslo';
 const format: typeof formatInternal = (date, formatString, options) => {
-  console.log(date, formatInTimeZone(date, CET, formatString, options));
   return formatInTimeZone(date, CET, formatString, options);
 };
 
