@@ -3,7 +3,6 @@ import {
   differenceInCalendarDays,
   differenceInMinutes,
   differenceInSeconds,
-  format,
   getHours,
   getMinutes,
   isAfter as fnsIsAfter,
@@ -19,14 +18,21 @@ import {
   set,
   getSeconds,
 } from 'date-fns';
-import en from 'date-fns/locale/en-GB';
-import nb from 'date-fns/locale/nb';
+import {format as formatInternal, formatInTimeZone} from 'date-fns-tz';
+
+import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
 
 import {
   parse as parseIso8601Duration,
   toSeconds as toSecondsIso8601Duration,
 } from 'iso8601-duration';
+
+const CET = 'Europe/Oslo';
+const format: typeof formatInternal = (date, formatString, options) => {
+  console.log(date, formatInTimeZone(date, CET, formatString, options));
+  return formatInTimeZone(date, CET, formatString, options);
+};
 
 import {
   DEFAULT_LANGUAGE,
@@ -199,14 +205,15 @@ export function isRelativeButNotNow(
 }
 
 export function formatLocaleTime(date: Date | string, language: Language) {
+  const parsed = parseIfNeeded(date);
   const lang = language ?? DEFAULT_LANGUAGE;
   switch (lang) {
     case Language.Norwegian:
-      return format(parseIfNeeded(date), 'HH:mm');
+      return format(parsed, 'HH:mm', {timeZone: CET});
     case Language.English:
-      return format(parseIfNeeded(date), 'HH:mm');
+      return format(parsed, 'HH:mm', {timeZone: CET});
     case Language.Nynorsk:
-      return format(parseIfNeeded(date), 'HH:mm');
+      return format(parsed, 'HH:mm', {timeZone: CET});
   }
 }
 export function isInThePast(isoDate: string | Date) {
