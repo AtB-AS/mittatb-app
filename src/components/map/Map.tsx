@@ -29,14 +29,12 @@ import {
   useGeofencingZoneTextContent,
 } from '@atb/components/map';
 import {ExternalMapButton} from './components/external-realtime-map/ExternalMapButton';
-import {useFirestoreConfiguration} from '@atb/configuration';
 
 import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
 import {isBicycle, isScooter} from '@atb/mobility';
 import {isCarStation, isStation} from '@atb/mobility/utils';
 
 import {Snackbar, useSnackbar} from '../snackbar';
-import {getTextForLanguage, useTranslation} from '@atb/translations';
 
 export const Map = (props: MapProps) => {
   const {initialLocation, includeSnackbar} = props;
@@ -45,8 +43,6 @@ export const Map = (props: MapProps) => {
   const mapViewRef = useRef<MapboxGL.MapView>(null);
   const styles = useMapStyles();
   const controlStyles = useControlPositionsStyle();
-  const {language} = useTranslation();
-  const {configurableLinks} = useFirestoreConfiguration();
 
   const startingCoordinates = useMemo(
     () =>
@@ -195,11 +191,6 @@ export const Map = (props: MapProps) => {
     ],
   );
 
-  const externalRealtimeMapUrl = getTextForLanguage(
-    configurableLinks?.externalRealtimeMap,
-    language,
-  );
-
   return (
     <View style={styles.container}>
       {props.selectionMode === 'ExploreLocation' && (
@@ -268,16 +259,8 @@ export const Map = (props: MapProps) => {
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
-          {externalRealtimeMapUrl && (
-            <ExternalMapButton
-              onPress={() =>
-                onMapClick({
-                  source: 'external-map-button',
-                  url: externalRealtimeMapUrl,
-                })
-              }
-            />
-          )}
+          <ExternalMapButton onMapClick={onMapClick} />
+
           {(props.vehicles || props.stations) && (
             <MapFilter
               onPress={() => onMapClick({source: 'filters-button'})}
