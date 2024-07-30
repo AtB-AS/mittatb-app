@@ -58,6 +58,11 @@ export const useDecideCameraFocusMode = (
         return;
       }
 
+      if (mapSelectionAction.source === 'external-map-button') {
+        setCameraFocusMode(undefined);
+        return;
+      }
+
       if (mapSelectionAction.source === 'cluster-click') {
         setCameraFocusMode(undefined);
         return;
@@ -113,7 +118,7 @@ const fetchMapLines = async (
     walkingTripPattern?.walkDistance &&
     walkingTripPattern.walkDistance <= MAX_LIMIT_TO_SHOW_WALKING_TRIP
   ) {
-    const tripLegs: MapLeg[] = walkingTripPattern?.legs
+    const tripLegs: MapLeg[] = walkingTripPattern?.legs;
     const distance = walkingTripPattern.walkDistance;
     const mapLines = tripLegs ? createMapLines(tripLegs) : undefined;
     return {mapLines, distance};

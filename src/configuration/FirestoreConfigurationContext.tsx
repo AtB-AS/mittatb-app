@@ -514,6 +514,9 @@ function getConfigurableLinksFromSnapshot(
   const androidStoreListing = mapLanguageAndTextType(
     urls?.get('androidStoreListing'),
   );
+  const externalRealtimeMap = mapLanguageAndTextType(
+    urls?.get('externalRealtimeMap'),
+  );
 
   return {
     ticketingInfo,
@@ -525,6 +528,7 @@ function getConfigurableLinksFromSnapshot(
     appA11yStatement,
     iosStoreListing,
     androidStoreListing,
+    externalRealtimeMap,
   };
 }
 

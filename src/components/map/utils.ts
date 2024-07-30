@@ -128,6 +128,7 @@ export const getCoordinatesFromMapSelectionAction = (
     case 'cluster-click':
       return mapPositionToCoordinates(sc.feature.geometry.coordinates);
     case 'filters-button':
+    case 'external-map-button':
       return undefined;
   }
 };

@@ -28,6 +28,7 @@ import {
   GeofencingZones,
   useGeofencingZoneTextContent,
 } from '@atb/components/map';
+import {ExternalRealtimeMapButton} from './components/external-realtime-map/ExternalRealtimeMapButton';
 
 import {useGeofencingZonesEnabled} from '@atb/mobility/use-geofencing-zones-enabled';
 import {isBicycle, isScooter} from '@atb/mobility';
@@ -258,6 +259,8 @@ export const Map = (props: MapProps) => {
           )}
         </MapboxGL.MapView>
         <View style={controlStyles.controlsContainer}>
+          <ExternalRealtimeMapButton onMapClick={onMapClick} />
+
           {(props.vehicles || props.stations) && (
             <MapFilter
               onPress={() => onMapClick({source: 'filters-button'})}
