@@ -9,7 +9,14 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
   const {value, onChange, ...innerprops} = props;
   const {t, language} = useTranslation();
   const [show, setShow] = useState(false);
-  const time = useMemo(() => dateWithReplacedTime(new Date(), value), [value]);
+  const time = useMemo(
+    () =>
+      dateWithReplacedTime(new Date(), value, {
+        // No need to adjust timezone here as we do that in formatLocalTime
+        adjustWithTimeZone: false,
+      }),
+    [value],
+  );
 
   return (
     <>

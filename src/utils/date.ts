@@ -1,24 +1,29 @@
 import {
+  Locale,
   addHours,
   differenceInCalendarDays,
   differenceInMinutes,
   differenceInSeconds,
-  getHours,
-  getMinutes,
+  format as fnsFormat,
   isAfter as fnsIsAfter,
   isBefore as fnsIsBefore,
+  getHours,
+  getMinutes,
+  getSeconds,
   isPast,
   isSameDay,
   isSameYear,
   isToday,
   isWithinInterval,
-  Locale,
   parse,
   parseISO,
   set,
-  getSeconds,
 } from 'date-fns';
-import {format as formatInternal, formatInTimeZone} from 'date-fns-tz';
+import {
+  formatInTimeZone,
+  format as formatInternal,
+  fromZonedTime,
+} from 'date-fns-tz';
 
 import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
@@ -32,15 +37,14 @@ import {
 
 const CET = 'Europe/Oslo';
 const format: typeof formatInternal = (date, formatString, options) => {
-  return formatInTimeZone(date, CET, formatString, options);
+  if (options?.timeZone) {
+    return formatInTimeZone(date, options.timeZone, formatString, options);
+  } else {
+    return fnsFormat(date, formatString);
+  }
 };
 
-import {
-  DEFAULT_LANGUAGE,
-  Language,
-  TranslateFunction,
-  dictionary,
-} from '@atb/translations';
+import {Language, TranslateFunction, dictionary} from '@atb/translations';
 
 const humanizer = humanizeDuration.humanizer({});
 
@@ -205,18 +209,19 @@ export function isRelativeButNotNow(
   return !(diff / 60 >= minuteThreshold || diff / 60 <= 1);
 }
 
-export function formatLocaleTime(date: Date | string, language: Language) {
+type FormatOptions = {
+  ignoreTimeZone?: boolean;
+};
+export function formatLocaleTime(
+  date: Date | string,
+  // @TODO: No longer in use. deprecate and remove
+  _language: Language,
+  options: FormatOptions = {ignoreTimeZone: false},
+) {
   const parsed = parseIfNeeded(date);
-  const lang = language ?? DEFAULT_LANGUAGE;
-  switch (lang) {
-    case Language.Norwegian:
-      return format(parsed, 'HH:mm', {timeZone: CET});
-    case Language.English:
-      return format(parsed, 'HH:mm', {timeZone: CET});
-    case Language.Nynorsk:
-      return format(parsed, 'HH:mm', {timeZone: CET});
-  }
+  return format(parsed, 'HH:mm', options.ignoreTimeZone ? {} : {timeZone: CET});
 }
+
 export function isInThePast(isoDate: string | Date) {
   return isPast(parseIfNeeded(isoDate));
 }
@@ -422,9 +427,22 @@ export function isSeveralDays(items: string[]) {
 export function dateWithReplacedTime(
   date: Date | string,
   time: string,
-  formatString?: string,
+  options: {
+    formatString?: string;
+    adjustWithTimeZone?: boolean;
+  } = {},
 ) {
-  const parsedTime = parse(time, formatString || 'HH:mm', new Date());
+  // Set with preferred default values (even if some of the options are passed)
+  const opts = {
+    adjustWithTimeZone: true,
+    ...options,
+  };
+
+  let parsedTime = parse(time, opts.formatString || 'HH:mm', new Date());
+  if (opts.adjustWithTimeZone) {
+    parsedTime = fromZonedTime(parsedTime, CET);
+  }
+
   return set(parseIfNeeded(date), {
     hours: getHours(parsedTime),
     minutes: getMinutes(parsedTime),
