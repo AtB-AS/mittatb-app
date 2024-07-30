@@ -4,7 +4,7 @@ import {Statuses, StyleSheet, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
 import MessageBoxTexts from '@atb/translations/components/MessageBox';
-import {useTranslation} from '@atb/translations';
+import {dictionary, useTranslation} from '@atb/translations';
 import {Close} from '@atb/assets/svg/mono-icons/actions';
 import {messageTypeToIcon} from '@atb/utils/message-type-to-icon';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
@@ -60,7 +60,8 @@ export const MessageInfoBox = ({
       ? onPressConfig.action
       : () => Linking.openURL(onPressConfig.url));
 
-  const a11yLabel = [title, message, onPressConfig?.text]
+  const a11yCriticalityPrefix = t(dictionary.messageTypes[type]);
+  const a11yLabel = [a11yCriticalityPrefix, title, message, onPressConfig?.text]
     .filter((s): s is string => !!s)
     .join(screenReaderPause);
 
