@@ -14,7 +14,7 @@ type ExternalRealtimeMapLinkSheetProps = {
   onClose: () => void;
   url: string;
 };
-export const ExternalMapSheet = ({
+export const ExternalRealtimeMapSheet = ({
   onClose,
   url,
 }: ExternalRealtimeMapLinkSheetProps) => {

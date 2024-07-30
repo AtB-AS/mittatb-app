@@ -20,7 +20,7 @@ import {useMapSelectionAnalytics} from './use-map-selection-analytics';
 import {BicycleSheet} from '@atb/mobility/components/BicycleSheet';
 import {RootNavigationProps} from '@atb/stacks-hierarchy';
 import {MapFilterSheet} from '../components/filter/MapFilterSheet';
-import {ExternalMapSheet} from '../components/external-realtime-map/ExternalMapSheet';
+import {ExternalRealtimeMapSheet} from '../components/external-realtime-map/ExternalRealtimeMapSheet';
 
 /**
  * Open or close the bottom sheet based on the selected coordinates. Will also
@@ -79,7 +79,7 @@ export const useUpdateBottomSheetWhenSelectedEntityChanges = (
 
       if (mapSelectionAction?.source === 'external-map-button') {
         openBottomSheet(() => (
-          <ExternalMapSheet
+          <ExternalRealtimeMapSheet
             onClose={closeCallback}
             url={mapSelectionAction.url}
           />

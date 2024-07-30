@@ -6,10 +6,12 @@ import {getTextForLanguage, useTranslation} from '@atb/translations';
 import {useFirestoreConfiguration} from '@atb/configuration';
 import {MapSelectionActionType} from '../../types';
 
-type ExternalMapButtonProps = {
+type ExternalRealtimeMapButtonProps = {
   onMapClick: (sc: MapSelectionActionType) => void;
 };
-export const ExternalMapButton = ({onMapClick}: ExternalMapButtonProps) => {
+export const ExternalRealtimeMapButton = ({
+  onMapClick,
+}: ExternalRealtimeMapButtonProps) => {
   const style = useStyle();
   const {language} = useTranslation();
   const {configurableLinks} = useFirestoreConfiguration();
@@ -25,7 +27,7 @@ export const ExternalMapButton = ({onMapClick}: ExternalMapButtonProps) => {
 
   return (
     <Button
-      style={style.externalMapButton}
+      style={style.button}
       type="medium"
       compact={true}
       interactiveColor="interactive_2"
@@ -43,7 +45,7 @@ export const ExternalMapButton = ({onMapClick}: ExternalMapButtonProps) => {
 };
 
 const useStyle = StyleSheet.createThemeHook((theme) => ({
-  externalMapButton: {
+  button: {
     marginBottom: theme.spacings.small,
   },
 }));
