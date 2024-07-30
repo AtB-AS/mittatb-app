@@ -11,6 +11,7 @@ export type Root_PurchaseOverviewScreenParams = {
   userProfilesWithCount?: UserProfileWithCount[];
   fromPlace?: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
   toPlace?: TariffZoneWithMetadata | StopPlaceFragmentWithIsFree;
+  datedServiceJourneyIds?: string[];
   mode?: 'Ticket' | 'TravelSearch';
   travelDate?: string;
   onFocusElement?: string;
