@@ -267,7 +267,10 @@ export function formatToShortDateTimeWithoutYear(
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed, language, 'floor');
   }
-  return format(parsed, 'dd. MMM HH:mm', {locale: languageToLocale(language)});
+  return format(parsed, 'dd. MMM HH:mm', {
+    locale: languageToLocale(language),
+    timeZone: CET,
+  });
 }
 
 function formatToShortDateTimeWithoutYearWithAtTime(
@@ -282,7 +285,10 @@ function formatToShortDateTimeWithoutYearWithAtTime(
     return hourTime;
   } else {
     return (
-      format(parsed, 'dd. MMM', {locale: languageToLocale(language)}) +
+      format(parsed, 'dd. MMM', {
+        locale: languageToLocale(language),
+        timeZone: CET,
+      }) +
       ' ' +
       hourTime
     );
@@ -311,7 +317,10 @@ export function formatToShortDateTimeWithRelativeDayNames(
 
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
-  return format(parsed, 'PP, p', {locale: languageToLocale(language)});
+  return format(parsed, 'PP, p', {
+    locale: languageToLocale(language),
+    timeZone: CET,
+  });
 }
 
 export {isSameDay};
@@ -319,6 +328,7 @@ export {isSameDay};
 export function formatToShortDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'dd. MMM', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
 }
 
@@ -328,12 +338,14 @@ export function formatToShortDateWithYear(
 ) {
   return format(parseIfNeeded(date), 'dd.MM.yy', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
 }
 
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
 }
 
@@ -343,6 +355,7 @@ export function formatToVerboseFullDate(
 ) {
   return format(parseIfNeeded(date), 'do MMMM yyyy', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
 }
 
@@ -359,9 +372,11 @@ export function formatToVerboseDateTime(
 
   const dateString = format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
   const timeString = format(parseIfNeeded(date), 'HH:mm', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
 
   return isToday(parseIfNeeded(date))
@@ -396,6 +411,7 @@ export function formatToShortSimpleDate(
 ) {
   return format(parseIfNeeded(date), 'do MMM', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
 }
 
@@ -406,6 +422,7 @@ export function formatToWeekday(
 ) {
   return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEEEE', {
     locale: languageToLocale(language),
+    timeZone: CET,
   });
 }
 
