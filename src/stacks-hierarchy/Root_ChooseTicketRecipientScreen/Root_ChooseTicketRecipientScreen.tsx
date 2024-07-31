@@ -20,10 +20,10 @@ import {useState} from 'react';
 import {ActivityIndicator, KeyboardAvoidingView, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
-type Props = RootStackScreenProps<'Root_ChooseTicketReceiverScreen'>;
+type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
 
-export const Root_ChooseTicketReceiverScreen: React.FC<Props> = ({
+export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
   navigation,
   route: {params},
 }) => {
