@@ -63,7 +63,7 @@ import {Root_NotificationPermissionScreen} from '@atb/stacks-hierarchy/Root_Noti
 import {Root_LocationWhenInUsePermissionScreen} from '@atb/stacks-hierarchy/Root_LocationWhenInUsePermissionScreen';
 import {useBeaconsState} from '@atb/beacons/BeaconsContext';
 import {Root_TicketInformationScreen} from '@atb/stacks-hierarchy/Root_TicketInformationScreen';
-import {Root_ChooseTicketRecipientScreen} from 'src/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
+import {Root_ChooseTicketRecipientScreen} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen';
 import {screenOptions} from '@atb/stacks-hierarchy/navigation-utils';
 import {useOnboardingFlow} from '@atb/onboarding';
 import {useRegisterIntercomUser} from '@atb/chat/use-register-intercom-user';
