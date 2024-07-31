@@ -7,18 +7,19 @@ import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/queries/use-get-
 import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
+import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {
+  OnBehalfOfTexts,
   PhoneInputTexts,
   PurchaseOverviewTexts,
   useTranslation,
-  OnBehalfOfTexts,
 } from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import phone from 'phone';
 import {useState} from 'react';
 import {ActivityIndicator, KeyboardAvoidingView, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -157,6 +158,7 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
                 text={t(PurchaseOverviewTexts.summary.button.payment)}
                 disabled={!isValidPhoneNumber}
                 testID="toPaymentButton"
+                rightIcon={{svg: ArrowRight}}
               />
             )}
           </View>
