@@ -18,10 +18,11 @@ import {
   parse,
   parseISO,
   set,
+  FormatOptions,
 } from 'date-fns';
 import {
+  FormatOptionsWithTZ,
   formatInTimeZone,
-  format as formatInternal,
   fromZonedTime,
 } from 'date-fns-tz';
 
@@ -36,13 +37,20 @@ import {
 } from 'iso8601-duration';
 
 const CET = 'Europe/Oslo';
-const format: typeof formatInternal = (date, formatString, options) => {
-  if (options?.timeZone) {
-    return formatInTimeZone(date, options.timeZone, formatString, options);
+function format(
+  date: string | number | Date,
+  formatStr: string,
+  options?: FormatOptions & {ignoreTimeZone?: boolean},
+) {
+  if (options?.ignoreTimeZone) {
+    return fnsFormat(date, formatStr, options);
   } else {
-    return fnsFormat(date, formatString);
+    return formatInTimeZone(date, CET, formatStr, {
+      ...(options as FormatOptionsWithTZ),
+      timeZone: CET,
+    });
   }
-};
+}
 
 import {Language, TranslateFunction, dictionary} from '@atb/translations';
 
@@ -209,17 +217,21 @@ export function isRelativeButNotNow(
   return !(diff / 60 >= minuteThreshold || diff / 60 <= 1);
 }
 
-type FormatOptions = {
-  ignoreTimeZone?: boolean;
+type LocalTimeFormatOptions = {
+  ignoreTimeZone: boolean;
 };
 export function formatLocaleTime(
   date: Date | string,
   // @TODO: No longer in use. deprecate and remove
   _language: Language,
-  options: FormatOptions = {ignoreTimeZone: false},
+  options: Partial<LocalTimeFormatOptions> = {ignoreTimeZone: false},
 ) {
   const parsed = parseIfNeeded(date);
-  return format(parsed, 'HH:mm', options.ignoreTimeZone ? {} : {timeZone: CET});
+  const opts = {
+    ignoreTimeZone: false,
+    ...options,
+  };
+  return format(parsed, 'HH:mm', opts);
 }
 
 export function isInThePast(isoDate: string | Date) {
@@ -269,7 +281,6 @@ export function formatToShortDateTimeWithoutYear(
   }
   return format(parsed, 'dd. MMM HH:mm', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
@@ -287,7 +298,6 @@ function formatToShortDateTimeWithoutYearWithAtTime(
     return (
       format(parsed, 'dd. MMM', {
         locale: languageToLocale(language),
-        timeZone: CET,
       }) +
       ' ' +
       hourTime
@@ -319,7 +329,6 @@ export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
   return format(parsed, 'PP, p', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
@@ -328,7 +337,6 @@ export {isSameDay};
 export function formatToShortDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'dd. MMM', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
@@ -338,14 +346,12 @@ export function formatToShortDateWithYear(
 ) {
   return format(parseIfNeeded(date), 'dd.MM.yy', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
 export function formatToSimpleDate(date: Date | string, language: Language) {
   return format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
@@ -355,7 +361,6 @@ export function formatToVerboseFullDate(
 ) {
   return format(parseIfNeeded(date), 'do MMMM yyyy', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
@@ -372,11 +377,9 @@ export function formatToVerboseDateTime(
 
   const dateString = format(parseIfNeeded(date), 'do MMMM', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
   const timeString = format(parseIfNeeded(date), 'HH:mm', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 
   return isToday(parseIfNeeded(date))
@@ -411,7 +414,6 @@ export function formatToShortSimpleDate(
 ) {
   return format(parseIfNeeded(date), 'do MMM', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
@@ -422,7 +424,6 @@ export function formatToWeekday(
 ) {
   return format(parseIfNeeded(date), dateFormat ? dateFormat : 'EEEEEE', {
     locale: languageToLocale(language),
-    timeZone: CET,
   });
 }
 
@@ -456,11 +457,10 @@ export function dateWithReplacedTime(
   };
 
   let parsedTime = parse(time, opts.formatString || 'HH:mm', new Date());
-  let parsedDate = parseIfNeeded(date);
+  const parsedDate = parseIfNeeded(date);
 
   if (opts.adjustWithTimeZone) {
     parsedTime = fromZonedTime(parsedTime, CET);
-    parsedDate = fromZonedTime(parsedDate, CET);
   }
 
   return set(parsedDate, {
