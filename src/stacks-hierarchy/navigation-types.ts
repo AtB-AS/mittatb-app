@@ -15,7 +15,7 @@ import {ReserveOffer} from '@atb/ticketing';
 import {PaymentMethod} from '@atb/stacks-hierarchy/types';
 import {Root_PurchaseHarborSearchScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseHarborSearchScreen/navigation-types';
 import {ParkingViolationType} from '@atb/api/types/mobility';
-import {Root_ChooseTicketReceiverScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketReceiverScreen/navigation-types';
+import {Root_ChooseTicketRecipientScreenParams} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/navigation-types';
 
 export type Root_AddEditFavoritePlaceScreenParams = {
   editItem?: StoredLocationFavorite;
@@ -141,7 +141,7 @@ export type RootStackParamList = StackParams<{
   Root_ParkingViolationsConfirmationScreen: Root_ParkingViolationsConfirmationParams;
   Root_NotificationPermissionScreen: undefined;
   Root_LocationWhenInUsePermissionScreen: undefined;
-  Root_ChooseTicketReceiverScreen: Root_ChooseTicketReceiverScreenParams;
+  Root_ChooseTicketRecipientScreen: Root_ChooseTicketRecipientScreenParams;
   Root_ConfirmationScreen: Root_ConfirmationScreenParams;
 }>;
 

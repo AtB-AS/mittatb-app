@@ -358,7 +358,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
               });
               isOnBehalfOfToggle
                 ? navigation.navigate(
-                    'Root_ChooseTicketReceiverScreen',
+                    'Root_ChooseTicketRecipientScreen',
                     rootPurchaseConfirmationScreenParams,
                   )
                 : navigation.navigate(
