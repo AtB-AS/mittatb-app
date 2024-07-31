@@ -90,9 +90,7 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView
-          centerContent={true}
           keyboardShouldPersistTaps="handled"
-          style={styles.scrollView}
           contentContainerStyle={styles.contentContainerStyle}
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
@@ -139,7 +137,6 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
           <View style={styles.buttonView}>
             {isSubmitting && (
               <ActivityIndicator
-                style={styles.activityIndicator}
                 size="large"
                 color={getStaticColor(themeName, themeColor).text}
               />
@@ -155,7 +152,6 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
 
             {!isSubmitting && (
               <Button
-                style={styles.submitButton}
                 interactiveColor="interactive_0"
                 onPress={onNext}
                 text={t(PurchaseOverviewTexts.summary.button.payment)}
@@ -175,41 +171,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
   },
-  mainView: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scrollView: {
-    paddingBottom: theme.spacings.xLarge,
-  },
-  contentContainerStyle: {
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
-  },
-  header: {
-    alignContent: 'space-around',
-    textAlign: 'center',
-  },
-  subheader: {
-    textAlign: 'center',
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
-  },
-  phoneInput: {
-    marginVertical: theme.spacings.xSmall,
-  },
-  activityIndicator: {
-    marginVertical: theme.spacings.large,
-  },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
-  },
-  buttonView: {
-    marginTop: theme.spacings.medium,
-  },
-  submitButton: {
-    marginTop: theme.spacings.medium,
-  },
+  mainView: {flex: 1},
+  contentContainerStyle: {paddingHorizontal: theme.spacings.medium},
+  header: {marginTop: theme.spacings.xLarge, textAlign: 'center'},
+  subheader: {textAlign: 'center', marginTop: theme.spacings.medium},
+  phoneInput: {marginTop: theme.spacings.xLarge},
+  errorMessage: {marginBottom: theme.spacings.medium},
+  buttonView: {marginTop: theme.spacings.xLarge},
 }));

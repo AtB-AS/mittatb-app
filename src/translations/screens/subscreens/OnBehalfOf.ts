@@ -3,16 +3,16 @@ import {translation as _} from '../../commons';
 
 const OnBehalfOfTexts = {
   chooseReceiver: {
-    header: _('Kjøp til andre', 'Buy for others', 'Kjøp til andre'),
+    header: _('Kjøp for andre', 'Buy for others', 'Kjøp for andre'),
     title: _(
       'Hvem skal motta billetten?',
       'Who will receive the ticket?',
       'Kven skal få billetten?',
     ),
     subtitle: _(
-      'Den du kjøper billett til, må være innlogget i AtB-appen for å få billetten.',
-      'The person receiving the ticket must be logged in to the AtB app to get the ticket.',
-      'Den du kjøper billett til, må vere logga inn i AtB-appen for å få billetten.',
+      'Husk at mottakeren må ha AtB-appen for å få billetten.',
+      'Remember that the person receiving the ticket must have the AtB app to get the ticket.',
+      'Husk at mottakaren må ha AtB-appen for å få billetten.',
     ),
     errorText: _(
       'Ingen konto tilknyttet dette telefonnummeret',
