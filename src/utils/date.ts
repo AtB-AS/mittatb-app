@@ -456,11 +456,14 @@ export function dateWithReplacedTime(
   };
 
   let parsedTime = parse(time, opts.formatString || 'HH:mm', new Date());
+  let parsedDate = parseIfNeeded(date);
+
   if (opts.adjustWithTimeZone) {
     parsedTime = fromZonedTime(parsedTime, CET);
+    parsedDate = fromZonedTime(parsedDate, CET);
   }
 
-  return set(parseIfNeeded(date), {
+  return set(parsedDate, {
     hours: getHours(parsedTime),
     minutes: getMinutes(parsedTime),
     seconds: getSeconds(parsedTime),
