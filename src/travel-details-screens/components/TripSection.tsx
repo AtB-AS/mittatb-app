@@ -523,6 +523,7 @@ function InterchangeSection({
   maximumWaitTime,
 }: InterchangeSectionProps) {
   const {t, language} = useTranslation();
+  const style = useSectionStyles();
 
   let text = '';
   if (publicCode) {
@@ -556,7 +557,7 @@ function InterchangeSection({
   }
 
   return (
-    <View>
+    <View style={style.interchangeSection}>
       <TripLegDecoration color={iconColor} hasStart={false} hasEnd={false} />
       <TripRow>
         <MessageInfoBox type="info" message={text} />
@@ -657,5 +658,8 @@ const useSectionStyles = StyleSheet.createThemeHook((theme) => ({
   },
   authoritySection: {
     rowGap: theme.spacings.medium,
+  },
+  interchangeSection: {
+    marginBottom: theme.spacings.large,
   },
 }));
