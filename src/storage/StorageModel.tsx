@@ -24,11 +24,12 @@ export enum StorageModelKeysEnum {
   EnableTicketingAssistantOverride = '@ATB_enable_ticketing_assistant_override',
   EnableTipsAndInformationOverride = '@ATB_enable_tips_and_information_override',
   EnableVehiclesInMapDebugOverride = '@ATB_enable_vehicles_in_map_debug_override',
+  EnableSaveTicketRecipientsDebugOverride = '@ATB_enable_save_ticket_recipients_debug_override',
   OneTimePopOver = '@ATB_one_time_popovers_seen',
   ShowValidTimeInfoDebugOverride = '@ATB_show_valid_time_info_debug_override',
   UseFlexibleTransportAccessModeDebugOverride = '@ATB_use_flexible_on_accessMode',
   UseFlexibleTransportDirectModeDebugOverride = '@ATB_use_flexible_on_directMode',
-  UseFlexibleTransportEgressModeDebugOverride = '@ATB_use_flexible_on_egressMode', 
+  UseFlexibleTransportEgressModeDebugOverride = '@ATB_use_flexible_on_egressMode',
 }
 
 type StorageModelKeysTypes = keyof typeof StorageModelKeysEnum;
