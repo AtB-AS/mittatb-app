@@ -1,4 +1,6 @@
+import {Language, TranslateFunction, dictionary} from '@atb/translations';
 import {
+  FormatOptions,
   Locale,
   addHours,
   differenceInCalendarDays,
@@ -18,14 +20,12 @@ import {
   parse,
   parseISO,
   set,
-  FormatOptions,
 } from 'date-fns';
 import {
   FormatOptionsWithTZ,
   formatInTimeZone,
   fromZonedTime,
 } from 'date-fns-tz';
-
 import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
 
@@ -37,6 +37,15 @@ import {
 } from 'iso8601-duration';
 
 const CET = 'Europe/Oslo';
+/**
+ * Wrapped default formatting to take CET timezone into account
+ * should be used instead of normal format function from date-fns
+ *
+ * @param date Date to format
+ * @param formatStr Format string
+ * @param options options with if time zone should not be considered
+ * @returns formatted date
+ */
 function format(
   date: string | number | Date,
   formatStr: string,
@@ -51,8 +60,6 @@ function format(
     });
   }
 }
-
-import {Language, TranslateFunction, dictionary} from '@atb/translations';
 
 const humanizer = humanizeDuration.humanizer({});
 
