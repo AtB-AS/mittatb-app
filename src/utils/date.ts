@@ -227,9 +227,17 @@ export function isRelativeButNotNow(
 type LocalTimeFormatOptions = {
   ignoreTimeZone: boolean;
 };
+
+/**
+ * Formats date or string to HH:mm format, with optional time zone consideration
+ *
+ * @param date Date to format
+ * @param _language @deprecated No longer in use
+ * @param options if time zone should not be considered
+ * @returns
+ */
 export function formatLocaleTime(
   date: Date | string,
-  // @TODO: No longer in use. deprecate and remove
   _language: Language,
   options?: LocalTimeFormatOptions,
 ) {
