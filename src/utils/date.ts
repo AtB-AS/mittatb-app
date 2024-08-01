@@ -456,6 +456,8 @@ export function dateWithReplacedTime(
   const parsedDate = parseIfNeeded(date);
 
   if (!options.ignoreTimeZone) {
+    // Time pickers show dates in CET timezone, so when updating
+    // time we want to convert from CET before replacing hour/minute/second.
     parsedTime = fromZonedTime(parsedTime, CET);
   }
 
