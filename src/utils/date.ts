@@ -55,9 +55,9 @@ function format(
     return fnsFormat(date, formatStr, options);
   } else {
     return formatInTimeZone(date, CET, formatStr, {
-      ...(options as FormatOptionsWithTZ),
+      ...options,
       timeZone: CET,
-    });
+    } as FormatOptionsWithTZ);
   }
 }
 
