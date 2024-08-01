@@ -231,14 +231,9 @@ export function formatLocaleTime(
   date: Date | string,
   // @TODO: No longer in use. deprecate and remove
   _language: Language,
-  options: Partial<LocalTimeFormatOptions> = {ignoreTimeZone: false},
+  options?: LocalTimeFormatOptions,
 ) {
-  const parsed = parseIfNeeded(date);
-  const opts = {
-    ignoreTimeZone: false,
-    ...options,
-  };
-  return format(parsed, 'HH:mm', opts);
+  return format(parseIfNeeded(date), 'HH:mm', options);
 }
 
 export function isInThePast(isoDate: string | Date) {
