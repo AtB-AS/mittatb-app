@@ -324,14 +324,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   preassignedFareProductType: preassignedFareProduct.type,
                   fromTariffZone: fromPlace.id,
                   toTariffZone: toPlace.id,
-                }}
-              />
-              <GlobalMessage
-                globalMessageContext={
-                  GlobalMessageContextEnum.appAnonymousFlexibleTickets
-                }
-                textColor="background_0"
-                ruleVariables={{
                   isLoggedIn: isLoggedIn,
                 }}
               />
