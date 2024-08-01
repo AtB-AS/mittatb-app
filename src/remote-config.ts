@@ -36,6 +36,7 @@ export type RemoteConfig = {
   enable_show_valid_time_info: boolean;
   enable_ticket_information: boolean;
   enable_ticketing: boolean;
+  enable_from_trip_details_to_ticket_boat: boolean;
   enable_ticketing_assistant: boolean;
   enable_tips_and_information: boolean;
   enable_token_fallback: boolean;
@@ -99,6 +100,7 @@ export const defaultRemoteConfig: RemoteConfig = {
   enable_show_valid_time_info: true,
   enable_ticket_information: false,
   enable_ticketing: !!JSON.parse(ENABLE_TICKETING || 'false'),
+  enable_from_trip_details_to_ticket_boat: false,
   enable_ticketing_assistant: false,
   enable_tips_and_information: false,
   enable_token_fallback: true,
@@ -216,6 +218,9 @@ export function getConfig(): RemoteConfig {
   const enable_ticketing_assistant =
     values['enable_ticketing_assistant']?.asBoolean() ??
     defaultRemoteConfig.enable_ticketing_assistant;
+  const enable_from_trip_details_to_ticket_boat =
+    values['enable_from_trip_details_to_ticket_boat']?.asBoolean() ??
+    defaultRemoteConfig.enable_from_trip_details_to_ticket_boat;
   const enable_tips_and_information =
     values['enable_tips_and_information']?.asBoolean() ??
     defaultRemoteConfig.enable_tips_and_information;
@@ -253,8 +258,8 @@ export function getConfig(): RemoteConfig {
     values['live_vehicle_stale_threshold']?.asNumber() ??
     defaultRemoteConfig.live_vehicle_stale_threshold;
   const minimum_app_version =
-      values['minimum_app_version']?.asString() ??
-      defaultRemoteConfig.minimum_app_version;
+    values['minimum_app_version']?.asString() ??
+    defaultRemoteConfig.minimum_app_version;
   const must_upgrade_ticketing =
     values['must_upgrade_ticketing']?.asBoolean() ?? false;
   const new_favourites_info_url =
@@ -325,6 +330,7 @@ export function getConfig(): RemoteConfig {
     enable_ticket_information,
     enable_ticketing,
     enable_ticketing_assistant,
+    enable_from_trip_details_to_ticket_boat,
     enable_tips_and_information,
     enable_token_fallback,
     enable_token_fallback_on_timeout,

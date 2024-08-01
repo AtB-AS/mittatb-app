@@ -153,7 +153,8 @@ export const TripDetailsScreenComponent = ({
 function useTicketInfoFromTrip(
   tripPattern: TripPattern,
 ): TicketInfoForBus | TicketInfoForBoat | undefined {
-  const {enable_ticketing} = useRemoteConfig();
+  const {enable_ticketing, enable_from_trip_details_to_ticket_boat} =
+    useRemoteConfig();
   const isFromTravelSearchToTicketEnabled =
     useFromTravelSearchToTicketEnabled();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
@@ -180,6 +181,11 @@ function useTicketInfoFromTrip(
     ticketStartTime,
   );
   if (ticketInfoForBus) return ticketInfoForBus;
+
+  if (!enable_from_trip_details_to_ticket_boat) {
+    // Boat ticket is disabled, avoid returning any ticket info
+    return;
+  }
 
   const ticketInfoForBoat = getTicketInfoForBoat(
     tripPattern,
