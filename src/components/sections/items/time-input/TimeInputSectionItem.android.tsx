@@ -13,7 +13,7 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
     () =>
       dateWithReplacedTime(new Date(), value, {
         // No need to adjust timezone here as we do that in formatLocalTime
-        adjustWithTimeZone: false,
+        ignoreTimeZone: true,
       }),
     [value],
   );

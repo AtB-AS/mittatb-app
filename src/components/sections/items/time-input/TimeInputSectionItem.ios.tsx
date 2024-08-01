@@ -24,7 +24,7 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
         <RNDateTimePicker
           value={dateWithReplacedTime(new Date(), value, {
             // Value is already adjusted to the timezone
-            adjustWithTimeZone: false,
+            ignoreTimeZone: true,
           })}
           mode="time"
           locale={locale.localeString}

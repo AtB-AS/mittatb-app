@@ -447,19 +447,13 @@ export function dateWithReplacedTime(
   time: string,
   options: {
     formatString?: string;
-    adjustWithTimeZone?: boolean;
+    ignoreTimeZone?: boolean;
   } = {},
 ) {
-  // Set with preferred default values (even if some of the options are passed)
-  const opts = {
-    adjustWithTimeZone: true,
-    ...options,
-  };
-
-  let parsedTime = parse(time, opts.formatString || 'HH:mm', new Date());
+  let parsedTime = parse(time, options.formatString || 'HH:mm', new Date());
   const parsedDate = parseIfNeeded(date);
 
-  if (opts.adjustWithTimeZone) {
+  if (!options.ignoreTimeZone) {
     parsedTime = fromZonedTime(parsedTime, CET);
   }
 
