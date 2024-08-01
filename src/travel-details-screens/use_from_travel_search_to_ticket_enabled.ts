@@ -18,3 +18,21 @@ export const useFromTravelSearchToTicketDebugOverride = () => {
     StorageModelKeysEnum.EnableFromTravelSearchToTicketDebugOverride,
   );
 };
+
+export const useFromTravelSearchToTicketForBoatEnabled = () => {
+  const [debugOverride] = useFromTravelSearchToTicketForBoatDebugOverride();
+  const {enable_from_travel_search_to_ticket_boat: enabledInRemoteConfig} =
+    useRemoteConfig();
+
+  if (debugOverride !== undefined) {
+    return debugOverride;
+  }
+  return enabledInRemoteConfig;
+};
+
+export const useFromTravelSearchToTicketForBoatDebugOverride = () => {
+  const ret = useDebugOverride(
+    StorageModelKeysEnum.EnableFromTravelSearchToTicketBoatDebugOverride,
+  );
+  return ret;
+};
