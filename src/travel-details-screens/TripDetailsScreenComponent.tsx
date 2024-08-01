@@ -17,7 +17,10 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 // eslint-disable-next-line no-restricted-imports
 import {Root_PurchaseOverviewScreenParams} from '@atb/stacks-hierarchy/Root_PurchaseOverviewScreen';
 import {TariffZoneWithMetadata} from '@atb/tariff-zones-selector';
-import {useFromTravelSearchToTicketEnabled} from './use_from_travel_search_to_ticket_enabled';
+import {
+  useFromTravelSearchToTicketEnabled,
+  useFromTravelSearchToTicketForBoatEnabled,
+} from './use_from_travel_search_to_ticket_enabled';
 import {StyleSheet} from '@atb/theme';
 import {StaticColorByType} from '@atb/theme/colors';
 import {Language, TripDetailsTexts, useTranslation} from '@atb/translations';
@@ -156,6 +159,8 @@ function useTicketInfoFromTrip(
   const {enable_ticketing} = useRemoteConfig();
   const isFromTravelSearchToTicketEnabled =
     useFromTravelSearchToTicketEnabled();
+  const isFromTravelSearchToTicketForBoatEnabled =
+    useFromTravelSearchToTicketForBoatEnabled();
   const {fareProductTypeConfigs} = useFirestoreConfiguration();
   const {tariffZones} = useFirestoreConfiguration();
   const {data: harbors} = useHarbors();
@@ -180,6 +185,11 @@ function useTicketInfoFromTrip(
     ticketStartTime,
   );
   if (ticketInfoForBus) return ticketInfoForBus;
+
+  if (!isFromTravelSearchToTicketForBoatEnabled) {
+    // Boat ticket is disabled, avoid returning any ticket info
+    return;
+  }
 
   const ticketInfoForBoat = getTicketInfoForBoat(
     tripPattern,

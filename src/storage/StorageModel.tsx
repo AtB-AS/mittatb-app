@@ -10,6 +10,7 @@ export enum StorageModelKeysEnum {
   EnableCityBikesInMapDebugOverride = 'ATB_enable_city_bikes_in_map_debug_override',
   EnableFlexibleTransportDebugOverride = '@ATB_enable_flexible_transport',
   EnableFromTravelSearchToTicketDebugOverride = '@ATB_enable_from_travel_search_to_ticket_debug_override',
+  EnableFromTravelSearchToTicketBoatDebugOverride = '@ATB_enable_from_travel_search_to_ticket_boat_debug_override',
   EnableGeofencingZonesDebugOverride = '@ATB_enable_geofencing_zones_debug_override',
   EnableLoadingScreenDebugOverride = '@ATB_loading_screen_debug_override',
   EnableLoadingErrorScreenDebugOverride = '@ATB_loading_error_screen_debug_override',
