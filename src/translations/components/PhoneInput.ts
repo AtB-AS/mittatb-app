@@ -1,9 +1,8 @@
 import {translation as _} from '../commons';
-import {orgSpecificTranslations} from '../orgSpecificTranslations';
 
 const PhoneInputTexts = {
   input: {
-    title: _('Mobilnummer', 'Phone number', 'Mobilnummer'),
+    title: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
     placeholder: {
       login: _(
         'Skriv inn ditt telefonnummer',
@@ -41,10 +40,4 @@ const PhoneInputTexts = {
   },
 };
 
-export default orgSpecificTranslations(PhoneInputTexts, {
-  troms: {
-    input: {
-      title: _('Telefonnummer', 'Phone number', 'Telefonnummer'),
-    },
-  },
-});
+export default PhoneInputTexts;

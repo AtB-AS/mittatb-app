@@ -7,18 +7,19 @@ import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/queries/use-get-
 import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of';
 import {RootStackScreenProps} from '@atb/stacks-hierarchy/navigation-types';
 import {StyleSheet, useTheme} from '@atb/theme';
-import {StaticColorByType, getStaticColor} from '@atb/theme/colors';
+import {getStaticColor, StaticColorByType} from '@atb/theme/colors';
 import {
+  OnBehalfOfTexts,
   PhoneInputTexts,
   PurchaseOverviewTexts,
   useTranslation,
-  OnBehalfOfTexts,
 } from '@atb/translations';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import phone from 'phone';
 import {useState} from 'react';
 import {ActivityIndicator, KeyboardAvoidingView, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -90,9 +91,7 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
       />
       <KeyboardAvoidingView behavior="padding" style={styles.mainView}>
         <ScrollView
-          centerContent={true}
           keyboardShouldPersistTaps="handled"
-          style={styles.scrollView}
           contentContainerStyle={styles.contentContainerStyle}
         >
           <View accessible={true} accessibilityRole="header" ref={focusRef}>
@@ -139,7 +138,6 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
           <View style={styles.buttonView}>
             {isSubmitting && (
               <ActivityIndicator
-                style={styles.activityIndicator}
                 size="large"
                 color={getStaticColor(themeName, themeColor).text}
               />
@@ -155,12 +153,12 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
 
             {!isSubmitting && (
               <Button
-                style={styles.submitButton}
                 interactiveColor="interactive_0"
                 onPress={onNext}
                 text={t(PurchaseOverviewTexts.summary.button.payment)}
                 disabled={!isValidPhoneNumber}
                 testID="toPaymentButton"
+                rightIcon={{svg: ArrowRight}}
               />
             )}
           </View>
@@ -175,41 +173,11 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     backgroundColor: theme.static.background[themeColor].background,
     flex: 1,
   },
-  mainView: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  scrollView: {
-    paddingBottom: theme.spacings.xLarge,
-  },
-  contentContainerStyle: {
-    paddingHorizontal: theme.spacings.large,
-    paddingBottom: theme.spacings.xLarge,
-  },
-  header: {
-    alignContent: 'space-around',
-    textAlign: 'center',
-  },
-  subheader: {
-    textAlign: 'center',
-    marginTop: theme.spacings.medium,
-    marginBottom: theme.spacings.xLarge,
-  },
-  phoneInput: {
-    marginVertical: theme.spacings.xSmall,
-  },
-  activityIndicator: {
-    marginVertical: theme.spacings.large,
-  },
-  errorMessage: {
-    marginBottom: theme.spacings.medium,
-  },
-  buttonView: {
-    marginTop: theme.spacings.medium,
-  },
-  submitButton: {
-    marginTop: theme.spacings.medium,
-  },
+  mainView: {flex: 1},
+  contentContainerStyle: {paddingHorizontal: theme.spacings.medium},
+  header: {marginTop: theme.spacings.xLarge, textAlign: 'center'},
+  subheader: {textAlign: 'center', marginTop: theme.spacings.medium},
+  phoneInput: {marginTop: theme.spacings.xLarge},
+  errorMessage: {marginBottom: theme.spacings.medium},
+  buttonView: {marginTop: theme.spacings.xLarge},
 }));
