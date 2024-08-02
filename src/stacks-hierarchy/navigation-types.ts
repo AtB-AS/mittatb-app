@@ -89,6 +89,7 @@ type Root_PurchasePaymentScreenParams = {
   paymentMethod: PaymentMethod;
   recipient?: {
     accountId: string;
+    phoneNumber: string;
     name?: string;
   };
 };

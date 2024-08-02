@@ -9,6 +9,7 @@ type Args = {
   paymentMethod: PaymentMethod;
   recipient?: {
     accountId: string;
+    phoneNumber: string;
     name?: string;
   };
 };
@@ -42,6 +43,7 @@ export const useReserveOfferMutation = ({
         scaExemption: true,
         customerAccountId: recipient?.accountId || abtCustomerId!,
         customerAlias: recipient?.name,
+        phoneNumber: recipient?.phoneNumber,
         autoSale,
       });
     },
