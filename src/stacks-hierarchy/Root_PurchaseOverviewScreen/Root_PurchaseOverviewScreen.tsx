@@ -181,6 +181,8 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const focusRefs = useFocusRefs(params.onFocusElement);
 
+  const userTypeStrings = userProfilesWithCountAndOffer.map((u) => u.userTypeString);
+
   return (
     <FullScreenView
       headerProps={{
@@ -325,6 +327,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   fromTariffZone: fromPlace.id,
                   toTariffZone: toPlace.id,
                   isLoggedIn: isLoggedIn,
+                  userTypes: userTypeStrings,
                 }}
               />
             </View>
