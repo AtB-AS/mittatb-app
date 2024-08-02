@@ -24,7 +24,7 @@ type Props = RootStackScreenProps<'Root_PurchasePaymentScreen'>;
 export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {offers, destinationAccountId, paymentMethod} = route.params;
+  const {offers, recipient, paymentMethod} = route.params;
   const analytics = useAnalytics();
   const {fareContracts, sentFareContracts} = useTicketingState();
   const [paymentProcessorStatus, setPaymentProcessorStatus] =
@@ -43,7 +43,7 @@ export const Root_PurchasePaymentScreen = ({route, navigation}: Props) => {
   const reserveMutation = useReserveOfferMutation({
     offers,
     paymentMethod,
-    destinationAccountId,
+    recipient,
   });
   const cancelPaymentMutation = useCancelPaymentMutation();
   usePurchaseCallbackListener(

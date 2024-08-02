@@ -86,8 +86,11 @@ type Root_PurchaseAsAnonymousConsequencesScreenParams = {
 type Root_PurchasePaymentScreenParams = {
   offers: ReserveOffer[];
   preassignedFareProduct: PreassignedFareProduct;
-  destinationAccountId?: string;
   paymentMethod: PaymentMethod;
+  recipient?: {
+    accountId: string;
+    name?: string;
+  };
 };
 
 type Root_ConfirmationScreenParams = {

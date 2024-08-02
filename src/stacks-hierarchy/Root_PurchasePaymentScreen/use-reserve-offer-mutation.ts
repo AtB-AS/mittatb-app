@@ -7,13 +7,16 @@ import {useRemoteConfig} from '@atb/RemoteConfigContext';
 type Args = {
   offers: ReserveOffer[];
   paymentMethod: PaymentMethod;
-  destinationAccountId: string | undefined;
+  recipient?: {
+    accountId: string;
+    name?: string;
+  };
 };
 
 export const useReserveOfferMutation = ({
   offers,
   paymentMethod,
-  destinationAccountId,
+  recipient,
 }: Args) => {
   const {abtCustomerId} = useAuthState();
   const {enable_auto_sale: autoSale} = useRemoteConfig();
@@ -37,7 +40,8 @@ export const useReserveOfferMutation = ({
         savePaymentMethod: saveRecurringCard,
         opts: {retry: true},
         scaExemption: true,
-        customerAccountId: destinationAccountId || abtCustomerId!,
+        customerAccountId: recipient?.accountId || abtCustomerId!,
+        customerAlias: recipient?.name,
         autoSale,
       });
     },

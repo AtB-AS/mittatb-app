@@ -180,6 +180,7 @@ export type ReserveOfferRequestBody = {
   recurring_payment_id: number | undefined;
   sca_exemption: boolean;
   customer_account_id: string;
+  customer_alias: string | undefined;
   auto_sale: boolean;
 };
 

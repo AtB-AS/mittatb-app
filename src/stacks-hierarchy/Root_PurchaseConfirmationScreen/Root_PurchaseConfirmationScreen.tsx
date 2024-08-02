@@ -106,8 +106,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
     userProfilesWithCount,
     travelDate,
     headerLeftButton,
-    phoneNumber,
-    destinationAccountId,
+    recipient,
   } = params;
 
   const {travellerSelectionMode, zoneSelectionMode} =
@@ -120,7 +119,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
       ? 'stop-places'
       : 'zones';
 
-  const isOnBehalfOf = !!phoneNumber && !!destinationAccountId;
+  const isOnBehalfOf = !!recipient;
 
   const {
     offerSearchTime,
@@ -152,7 +151,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
   const fromPlaceName = getPlaceName(fromPlace, language);
 
   const toPlaceName = getPlaceName(toPlace, language);
-  const vatAmount = totalPrice - (totalPrice / (1 + vatPercent / 100));
+  const vatAmount = totalPrice - totalPrice / (1 + vatPercent / 100);
 
   const vatAmountString = formatDecimalNumber(vatAmount, language);
   const vatPercentString = formatDecimalNumber(vatPercent, language);
@@ -186,7 +185,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
           offers,
           preassignedFareProduct: params.preassignedFareProduct,
           paymentMethod: option,
-          destinationAccountId: destinationAccountId,
+          recipient,
         });
       }
     }
@@ -303,14 +302,18 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                 <ThemeText>
                   {getReferenceDataName(preassignedFareProduct, language)}
                 </ThemeText>
-                {phoneNumber && (
+                {recipient && (
                   <ThemeText
                     type="body__secondary"
                     color="secondary"
                     style={styles.sendingToText}
                     testID="onBehalfOfText"
                   >
-                    {t(PurchaseConfirmationTexts.sendingTo(phoneNumber))}
+                    {t(
+                      PurchaseConfirmationTexts.sendingTo(
+                        recipient.phoneNumber,
+                      ),
+                    )}
                   </ThemeText>
                 )}
                 {fareProductTypeConfig.direction &&
@@ -404,7 +407,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
             </View>
           </GenericSectionItem>
         </Section>
-        {inspectableTokenWarningText && !phoneNumber && (
+        {inspectableTokenWarningText && !recipient && (
           <MessageInfoBox
             type="warning"
             message={inspectableTokenWarningText}

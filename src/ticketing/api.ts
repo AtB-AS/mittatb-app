@@ -115,6 +115,7 @@ type ReserveOfferParams = {
   savePaymentMethod: boolean;
   recurringPaymentId?: number;
   autoSale: boolean;
+  customerAlias?: string;
 };
 
 export async function searchOffers(
@@ -151,6 +152,7 @@ export async function reserveOffers({
   scaExemption,
   customerAccountId,
   autoSale,
+  customerAlias,
   ...rest
 }: ReserveOfferParams): Promise<OfferReservation> {
   const url = 'ticket/v3/reserve';
@@ -163,6 +165,7 @@ export async function reserveOffers({
     sca_exemption: scaExemption,
     customer_account_id: customerAccountId,
     auto_sale: autoSale,
+    customer_alias: customerAlias,
   };
   const response = await client.post<OfferReservation>(url, body, {
     ...opts,
