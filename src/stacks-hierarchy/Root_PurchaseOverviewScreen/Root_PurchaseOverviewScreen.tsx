@@ -326,7 +326,6 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
                   preassignedFareProductType: preassignedFareProduct.type,
                   fromTariffZone: fromPlace.id,
                   toTariffZone: toPlace.id,
-                  isLoggedIn: isLoggedIn,
                   userTypes: userTypeStrings,
                 }}
               />
