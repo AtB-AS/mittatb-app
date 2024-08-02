@@ -1,6 +1,5 @@
 import React from 'react';
-import {AccessibilityProps, AccessibilityRole, View} from 'react-native';
-import {Confirm} from '@atb/assets/svg/mono-icons/actions';
+import {AccessibilityProps, View} from 'react-native';
 import {StyleSheet, Theme, useTheme} from '@atb/theme';
 import {ThemeText} from '@atb/components/text';
 import {ThemeIcon} from '@atb/components/theme-icon';
@@ -10,6 +9,7 @@ import {useSectionStyle} from '../use-section-style';
 import {InteractiveColor} from '@atb/theme/colors';
 import {SvgProps} from 'react-native-svg';
 import {PressableOpacity} from '@atb/components/pressable-opacity';
+import {RadioIcon} from '@atb/components/radio';
 
 type ActionModes = 'check';
 type Props = SectionItemProps<{
@@ -18,19 +18,18 @@ type Props = SectionItemProps<{
   hideSubtext?: boolean;
   onPress(checked: boolean): void;
   leftIcon?: (props: SvgProps) => JSX.Element;
-  checked?: boolean;
+  selected: boolean;
   mode?: ActionModes;
   accessibility?: AccessibilityProps;
   color?: InteractiveColor;
 }>;
-export function ActionSectionItem({
+export function RadioSectionItem({
   text,
   subtext,
   hideSubtext,
   onPress,
   leftIcon,
-  mode = 'check',
-  checked = false,
+  selected,
   accessibility,
   testID,
   color,
@@ -40,39 +39,41 @@ export function ActionSectionItem({
   const style = useSectionStyle();
   const styles = useStyles();
   const {theme} = useTheme();
-  const interactiveColor =
-    color && checked ? theme.interactive[color].active : undefined;
+  const interactiveColor = color ? theme.interactive[color] : undefined;
 
-  const role: AccessibilityRole = mode === 'check' ? 'radio' : 'switch';
-  const stateName = mode === 'check' ? 'selected' : 'expanded';
+  const backgroundColor = interactiveColor
+    ? selected
+      ? interactiveColor.active.background
+      : interactiveColor.default.background
+    : topContainer.backgroundColor;
+
+  const textColor = interactiveColor
+    ? selected
+      ? interactiveColor.active.text
+      : interactiveColor.default.text
+    : theme.text.colors.primary;
+
+  const selectedRadioColor = interactiveColor
+    ? interactiveColor.outline.background
+    : theme.text.colors.primary;
 
   return (
     <PressableOpacity
-      onPress={() => onPress(!checked)}
-      style={[
-        style.spaceBetween,
-        topContainer,
-        {
-          backgroundColor: interactiveColor
-            ? interactiveColor.background
-            : topContainer.backgroundColor,
-        },
-      ]}
+      onPress={() => onPress(!selected)}
+      style={[style.spaceBetween, topContainer, {backgroundColor}]}
       testID={testID}
-      accessibilityRole={role}
-      accessibilityState={{
-        [stateName]: checked,
-      }}
+      accessibilityRole="radio"
+      accessibilityState={{selected: selected}}
       {...accessibility}
     >
+      <View style={styles.radioIcon}>
+        <RadioIcon checked={selected} color={selectedRadioColor || 'black'} />
+      </View>
       {leftIcon && <ThemeIcon svg={leftIcon} style={styles.leftIcon} />}
-      <View style={{flexShrink: 1}}>
+      <View style={styles.textContainer}>
         <ThemeText
           type="body__primary"
-          style={[
-            contentContainer,
-            interactiveColor ? {color: interactiveColor.text} : undefined,
-          ]}
+          style={[contentContainer, {color: textColor}]}
         >
           {text}
         </ThemeText>
@@ -86,40 +87,12 @@ export function ActionSectionItem({
           </ThemeText>
         )}
       </View>
-      <ActionModeIcon
-        mode={mode}
-        checked={checked}
-        color={interactiveColor ? color : undefined}
-      />
     </PressableOpacity>
   );
 }
 
-function ActionModeIcon({
-  mode,
-  checked,
-  color,
-}: Pick<Props, 'mode' | 'checked' | 'color'>) {
-  const {theme} = useTheme();
-
-  switch (mode) {
-    case 'check': {
-      return (
-        <ThemeIcon
-          svg={Confirm}
-          {...(color
-            ? {fill: theme.interactive[color].active.text}
-            : undefined)}
-          fillOpacity={checked ? 1 : 0}
-        />
-      );
-    }
-  }
-  return null;
-}
-
 const useStyles = StyleSheet.createThemeHook((theme: Theme) => ({
-  leftIcon: {
-    marginRight: theme.spacings.small,
-  },
+  radioIcon: {marginRight: theme.spacings.medium},
+  leftIcon: {marginRight: theme.spacings.small},
+  textContainer: {flex: 1},
 }));
