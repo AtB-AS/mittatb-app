@@ -181,7 +181,7 @@ export const Root_PurchaseOverviewScreen: React.FC<Props> = ({
 
   const focusRefs = useFocusRefs(params.onFocusElement);
 
-  const userTypeStrings = userProfilesWithCountAndOffer.map((u) => u.userTypeString);
+  const userTypeStrings = userProfilesWithCountAndOffer.filter((u) => u.count > 0).map((u) => u.userTypeString);
 
   return (
     <FullScreenView
