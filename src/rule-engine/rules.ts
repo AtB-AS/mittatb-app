@@ -20,6 +20,7 @@ export enum RuleOperator {
   lessThanOrEqualTo = 'lessThanOrEqualTo',
   contains = 'contains',
   notContains = 'notContains',
+  onlyContains = 'onlyContains',
 }
 
 export const checkRules = (
@@ -111,6 +112,10 @@ const checkRule = (
       return false;
     case RuleOperator.notContains:
       if (Array.isArray(localValue)) return !localValue.includes(ruleValue);
+      return false;
+    case RuleOperator.onlyContains:
+      if (Array.isArray(localValue))
+        return localValue.every((v) => v === ruleValue);
       return false;
     default:
       return false;
