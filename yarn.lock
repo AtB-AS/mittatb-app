@@ -14930,7 +14930,7 @@ schema-utils@^2.6.5:
 
 search-params@^4.0.1:
   version "4.0.1"
-  resolved "https://registry.npmjs.org/search-params/-/search-params-4.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/search-params/-/search-params-4.0.1.tgz#bd32bf8c11febbd760c27cde24a885ac8e969ae5"
   integrity sha512-axiHDzALAbvAB1gQ7gh2K69Md9FJ6Cz/QOreaksDHQWjfwa+5rTR6twUnJg2f/luob2zRqVWENQcQgCUZYut5A==
 
 "semver@2 || 3 || 4 || 5", semver@^5.5.0, semver@^5.5.1, semver@^5.6.0:
