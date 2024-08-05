@@ -4278,7 +4278,7 @@
 
 "@leile/lobo-t@^1.0.5":
   version "1.0.5"
-  resolved "https://registry.npmjs.org/@leile/lobo-t/-/lobo-t-1.0.5.tgz"
+  resolved "https://registry.yarnpkg.com/@leile/lobo-t/-/lobo-t-1.0.5.tgz#a7db1be91d3bba0fa639af5ccc99a6e6aad608fe"
   integrity sha512-A2OaWFEFfs9Gvs5K8IhMgGeHvve+zABWM4kWs849ypvOKDNlWzUFp6rGe6SDAPdUyl3D/9zSNSm5WcKzsqpy1w==
 
 "@mapbox/polyline@^1.1.1":
