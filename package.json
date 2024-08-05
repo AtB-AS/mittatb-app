@@ -36,7 +36,7 @@
     "@entur-private/abt-mobile-client-sdk": "2.1.6",
     "@intercom/intercom-react-native": "6.8.1",
     "@leile/lobo-t": "^1.0.5",
-    "@mapbox/polyline": "^1.1.1",
+    "@mapbox/polyline": "^1.2.1",
     "@miblanchard/react-native-slider": "^2.3.1",
     "@react-native-async-storage/async-storage": "^1.19.8",
     "@react-native-clipboard/clipboard": "^1.11.1",
