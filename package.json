@@ -87,7 +87,7 @@
     "posthog-react-native": "^2.7.1",
     "prop-types": "^15.8.1",
     "qrcode": "^1.5.3",
-    "query-string": "^9.0.0",
+    "query-string": "^9.1.0",
     "react": "18.2.0",
     "react-native": "0.73.7",
     "react-native-bootsplash": "^4.4.1",
