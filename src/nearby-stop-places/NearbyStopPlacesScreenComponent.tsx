@@ -84,6 +84,12 @@ export const NearbyStopPlacesScreenComponent = ({
     ) {
       onSelectStopPlace(location);
     }
+    /*
+     Refreshing (by dragging down) doesn't work since the location id doesn't
+     change. Take a look at fixing this when looking at the exchaustive-deps
+     error. May also consider using react-query instead of the custom reducer
+     with side effect flow.
+    */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location?.id]);
 
