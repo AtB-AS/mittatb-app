@@ -112,7 +112,7 @@
     "react-native-webview": "^13.8.1",
     "rn-flipper-async-storage-advanced": "^1.0.5",
     "search-params": "^4.0.1",
-    "string.fromcodepoint": "^1.0.0",
+    "string.fromcodepoint": "^1.0.3",
     "use-reducer-with-side-effects": "^2.2.0",
     "uuid": "^9.0.0"
   },
