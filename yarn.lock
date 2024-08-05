@@ -5468,14 +5468,6 @@
     "@turf/helpers" "^6.3.0"
     "@turf/meta" "^6.3.0"
 
-"@turf/bbox@^6.5.0":
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-6.5.0.tgz#bec30a744019eae420dac9ea46fb75caa44d8dc5"
-  integrity sha512-RBbLaao5hXTYyyg577iuMtDB8ehxMlUqHEJiMs8jT1GHkFhr6sYre3lmLsPeYEi/ZKj5TP5tt7fkzNdJ4GIVyw==
-  dependencies:
-    "@turf/helpers" "^6.5.0"
-    "@turf/meta" "^6.5.0"
-
 "@turf/bbox@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-7.0.0.tgz#1f892bb71f429aaa1d746c92d901567d5667f9b2"
@@ -5513,14 +5505,6 @@
     "@turf/meta" "^7.0.0"
     "@turf/projection" "^7.0.0"
     d3-geo "1.7.1"
-
-"@turf/center@^6.5.0":
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/@turf/center/-/center-6.5.0.tgz#3bcb6bffcb8ba147430cfea84aabaed5dbdd4f07"
-  integrity sha512-T8KtMTfSATWcAX088rEDKjyvQCBkUsLnK/Txb6/8WUXIeOZyHu42G7MkdkHRoHtwieLdduDdmPLFyTdG5/e7ZQ==
-  dependencies:
-    "@turf/bbox" "^6.5.0"
-    "@turf/helpers" "^6.5.0"
 
 "@turf/center@^7.0.0":
   version "7.0.0"
