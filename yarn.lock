@@ -5539,14 +5539,15 @@
     "@turf/helpers" "^6.5.0"
     "@turf/invariant" "^6.5.0"
 
-"@turf/difference@^6.5.0":
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/@turf/difference/-/difference-6.5.0.tgz#677b0d5641a93bba2e82f2c683f0d880105b3197"
-  integrity sha512-l8iR5uJqvI+5Fs6leNbhPY5t/a3vipUF/3AeVLpwPQcgmedNXyheYuy07PcMGH5Jdpi5gItOiTqwiU/bUH4b3A==
+"@turf/difference@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/difference/-/difference-7.0.0.tgz#d68464fce33585a93ae36519a6b84304016b6eaf"
+  integrity sha512-JCPRuGcOkT+Hq5PJcEUhkCheTyJcwB5dS1SIJGhDDNOJp8m8REHFJCmvxA3K40demovbyDLk85AojYpJ3jlALQ==
   dependencies:
-    "@turf/helpers" "^6.5.0"
-    "@turf/invariant" "^6.5.0"
+    "@turf/helpers" "^7.0.0"
+    "@turf/meta" "^7.0.0"
     polygon-clipping "^0.15.3"
+    tslib "^2.6.2"
 
 "@turf/distance@6.5.0", "@turf/distance@^6.5.0":
   version "6.5.0"
