@@ -120,11 +120,11 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/plugin-transform-template-literals": "^7.24.7",
-    "@babel/preset-env": "^7.25.3",
-    "@babel/preset-typescript": "^7.24.7",
-    "@babel/runtime": "^7.25.0",
+    "@babel/core": "^7.22.10",
+    "@babel/plugin-transform-template-literals": "^7.22.5",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-typescript": "^7.22.5",
+    "@babel/runtime": "^7.22.10",
     "@bugsnag/cli": "^2.2.0",
     "@entur-private/abt-token-state-react-native-lib": "2.1.6",
     "@react-native-community/slider": "^4.4.3",
