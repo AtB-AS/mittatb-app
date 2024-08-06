@@ -5558,6 +5558,15 @@
     "@turf/helpers" "^6.5.0"
     "@turf/invariant" "^6.5.0"
 
+"@turf/distance@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-7.0.0.tgz#e2e1fdfd1b577dbb1a6dd05ab15efaa3d494508c"
+  integrity sha512-DBPKhHABpPZ0KRduRpEaoi8MB6r1DVuyyps68VFH2Qi5H0ZnFtJFj7nQxBPZR3bVpbUq4zzu7I+MiNAd3ujFWQ==
+  dependencies:
+    "@turf/helpers" "^7.0.0"
+    "@turf/invariant" "^7.0.0"
+    tslib "^2.6.2"
+
 "@turf/helpers@6.5.0", "@turf/helpers@^6.5.0":
   version "6.5.0"
   resolved "https://registry.npmjs.org/@turf/helpers/-/helpers-6.5.0.tgz"
@@ -5582,6 +5591,14 @@
   integrity sha512-Wv8PRNCtPD31UVbdJE/KVAWKe7l6US+lJItRR/HOEW3eh+U/JwRCSUl/KZ7bmjM/C+zLNoreM2TU6OoLACs4eg==
   dependencies:
     "@turf/helpers" "^6.5.0"
+
+"@turf/invariant@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/invariant/-/invariant-7.0.0.tgz#489334f8fad643ae9e7c08c982df55ac25fdb432"
+  integrity sha512-Kayszfz3W8yJ1/cIA3/aNSzAuw7QgSp+IwsSmhLAfp4DbjV0o6sjxRZXRY2gRstZHqkNHSSEeir8V/icdO8sjA==
+  dependencies:
+    "@turf/helpers" "^7.0.0"
+    tslib "^2.6.2"
 
 "@turf/jsts@^2.7.1":
   version "2.7.1"
