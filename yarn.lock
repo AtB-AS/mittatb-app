@@ -16801,7 +16801,7 @@ use-latest-callback@^0.1.5:
 
 use-reducer-with-side-effects@^2.2.0:
   version "2.2.0"
-  resolved "https://registry.npmjs.org/use-reducer-with-side-effects/-/use-reducer-with-side-effects-2.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/use-reducer-with-side-effects/-/use-reducer-with-side-effects-2.2.0.tgz#c314d5e76f1196799792af94fd1a20361697107d"
   integrity sha512-/5XGudjgG8c+HoqQlSa/kp6RzaO10wBLZj6pbgpl2abp9xX2KuHa7KDJLf7UshHuI0sCZRWEYve6NK7uGURGOg==
 
 use-sync-external-store@^1.2.0:
