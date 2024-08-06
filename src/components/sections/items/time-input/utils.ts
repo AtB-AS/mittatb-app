@@ -11,5 +11,5 @@ export function dateToTimeString(
   date: Date | string | undefined,
   language: Language,
 ) {
-  return formatLocaleTime(date ?? new Date(), language);
+  return formatLocaleTime(date ?? new Date(), language, {ignoreTimeZone: true});
 }

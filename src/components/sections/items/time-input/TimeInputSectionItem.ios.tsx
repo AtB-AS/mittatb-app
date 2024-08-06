@@ -22,7 +22,10 @@ export function TimeInputSectionItem(props: TimeInputSectionItemProps) {
     >
       <View style={{flex: 1}}>
         <RNDateTimePicker
-          value={dateWithReplacedTime(new Date(), value)}
+          value={dateWithReplacedTime(new Date(), value, {
+            // Value is already adjusted to the timezone
+            ignoreTimeZone: true,
+          })}
           mode="time"
           locale={locale.localeString}
           textColor={theme.text.colors.primary}

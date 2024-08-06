@@ -9,7 +9,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {TicketAssistantScreenProps} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/navigation-types';
 import {useTicketAssistantState} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistantContext';
 import {DurationPicker} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/TicketAssistant_DurationScreen/durationPicker';
-import {daysInWeek} from 'date-fns';
+import {daysInWeek} from '@atb/utils/date';
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import {TICKET_ASSISTANT_ZONE_PICKER_SCREEN} from '@atb/stacks-hierarchy/Root_TicketAssistantStack/Root_TicketAssistantStack';
 type DurationProps =
