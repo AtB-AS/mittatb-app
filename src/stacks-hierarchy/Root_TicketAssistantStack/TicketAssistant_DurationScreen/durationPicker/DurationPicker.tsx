@@ -4,7 +4,8 @@ import SvgDate from '@atb/assets/svg/mono-icons/time/Date';
 import {ThemeText} from '@atb/components/text';
 import {TicketAssistantTexts, useTranslation} from '@atb/translations';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import {addDays, daysInWeek} from 'date-fns';
+import {addDays} from 'date-fns';
+import {daysInWeek} from '@atb/utils/date';
 import {
   dateDiffInDays,
   getSliderIndex,

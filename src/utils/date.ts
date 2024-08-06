@@ -1,39 +1,65 @@
+import {Language, TranslateFunction, dictionary} from '@atb/translations';
 import {
+  FormatOptions,
+  Locale,
   addHours,
   differenceInCalendarDays,
   differenceInMinutes,
   differenceInSeconds,
-  format,
-  getHours,
-  getMinutes,
+  format as fnsFormat,
   isAfter as fnsIsAfter,
   isBefore as fnsIsBefore,
+  getHours,
+  getMinutes,
+  getSeconds,
   isPast,
   isSameDay,
   isSameYear,
   isToday,
   isWithinInterval,
-  Locale,
   parse,
   parseISO,
   set,
-  getSeconds,
 } from 'date-fns';
-import en from 'date-fns/locale/en-GB';
-import nb from 'date-fns/locale/nb';
+import {
+  FormatOptionsWithTZ,
+  formatInTimeZone,
+  fromZonedTime,
+} from 'date-fns-tz';
+import {enGB as en, nb} from 'date-fns/locale';
 import humanizeDuration from 'humanize-duration';
+
+export {daysInWeek} from 'date-fns/constants';
 
 import {
   parse as parseIso8601Duration,
   toSeconds as toSecondsIso8601Duration,
 } from 'iso8601-duration';
 
-import {
-  DEFAULT_LANGUAGE,
-  Language,
-  TranslateFunction,
-  dictionary,
-} from '@atb/translations';
+const CET = 'Europe/Oslo';
+/**
+ * Wrapped default formatting to take CET timezone into account
+ * should be used instead of normal format function from date-fns
+ *
+ * @param date Date to format
+ * @param formatStr Format string
+ * @param options options with if time zone should not be considered
+ * @returns formatted date
+ */
+function format(
+  date: string | number | Date,
+  formatStr: string,
+  options?: FormatOptions & {ignoreTimeZone?: boolean},
+) {
+  if (options?.ignoreTimeZone) {
+    return fnsFormat(date, formatStr, options);
+  } else {
+    return formatInTimeZone(date, CET, formatStr, {
+      ...options,
+      timeZone: CET,
+    } as FormatOptionsWithTZ);
+  }
+}
 
 const humanizer = humanizeDuration.humanizer({});
 
@@ -198,17 +224,26 @@ export function isRelativeButNotNow(
   return !(diff / 60 >= minuteThreshold || diff / 60 <= 1);
 }
 
-export function formatLocaleTime(date: Date | string, language: Language) {
-  const lang = language ?? DEFAULT_LANGUAGE;
-  switch (lang) {
-    case Language.Norwegian:
-      return format(parseIfNeeded(date), 'HH:mm');
-    case Language.English:
-      return format(parseIfNeeded(date), 'HH:mm');
-    case Language.Nynorsk:
-      return format(parseIfNeeded(date), 'HH:mm');
-  }
+type LocalTimeFormatOptions = {
+  ignoreTimeZone: boolean;
+};
+
+/**
+ * Formats date or string to HH:mm format, with optional time zone consideration
+ *
+ * @param date Date to format
+ * @param _language @deprecated No longer in use
+ * @param options if time zone should not be considered
+ * @returns
+ */
+export function formatLocaleTime(
+  date: Date | string,
+  _language: Language,
+  options?: LocalTimeFormatOptions,
+) {
+  return format(parseIfNeeded(date), 'HH:mm', options);
 }
+
 export function isInThePast(isoDate: string | Date) {
   return isPast(parseIfNeeded(isoDate));
 }
@@ -254,7 +289,9 @@ export function formatToShortDateTimeWithoutYear(
   if (isSameDay(parsed, new Date())) {
     return formatToClock(parsed, language, 'floor');
   }
-  return format(parsed, 'dd. MMM HH:mm', {locale: languageToLocale(language)});
+  return format(parsed, 'dd. MMM HH:mm', {
+    locale: languageToLocale(language),
+  });
 }
 
 function formatToShortDateTimeWithoutYearWithAtTime(
@@ -269,7 +306,9 @@ function formatToShortDateTimeWithoutYearWithAtTime(
     return hourTime;
   } else {
     return (
-      format(parsed, 'dd. MMM', {locale: languageToLocale(language)}) +
+      format(parsed, 'dd. MMM', {
+        locale: languageToLocale(language),
+      }) +
       ' ' +
       hourTime
     );
@@ -298,7 +337,9 @@ export function formatToShortDateTimeWithRelativeDayNames(
 
 export function fullDateTime(isoDate: string | Date, language: Language) {
   const parsed = parseIfNeeded(isoDate);
-  return format(parsed, 'PP, p', {locale: languageToLocale(language)});
+  return format(parsed, 'PP, p', {
+    locale: languageToLocale(language),
+  });
 }
 
 export {isSameDay};
@@ -414,10 +455,21 @@ export function isSeveralDays(items: string[]) {
 export function dateWithReplacedTime(
   date: Date | string,
   time: string,
-  formatString?: string,
+  options: {
+    formatString?: string;
+    ignoreTimeZone?: boolean;
+  } = {},
 ) {
-  const parsedTime = parse(time, formatString || 'HH:mm', new Date());
-  return set(parseIfNeeded(date), {
+  let parsedTime = parse(time, options.formatString || 'HH:mm', new Date());
+  const parsedDate = parseIfNeeded(date);
+
+  if (!options.ignoreTimeZone) {
+    // Time pickers show dates in CET timezone, so when updating
+    // time we want to convert from CET before replacing hour/minute/second.
+    parsedTime = fromZonedTime(parsedTime, CET);
+  }
+
+  return set(parsedDate, {
     hours: getHours(parsedTime),
     minutes: getMinutes(parsedTime),
     seconds: getSeconds(parsedTime),

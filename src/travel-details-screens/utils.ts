@@ -287,7 +287,7 @@ export function getLatestBookingDate(
       latestBookingDate = dateWithReplacedTime(
         aimedStartDate,
         latestBookingTime,
-        'HH:mm:ss',
+        {formatString: 'HH:mm:ss'},
       );
     }
 
