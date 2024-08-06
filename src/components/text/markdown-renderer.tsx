@@ -1,18 +1,15 @@
 import React from 'react';
-import {marked, Token, Tokens} from 'marked';
+import {marked} from 'marked';
 import {Linking, Text} from 'react-native';
 import {textTypeStyles} from '@atb/theme/colors';
 import Bugsnag from '@bugsnag/react-native';
-import {markedSmartypants} from 'marked-smartypants';
-
-marked.use(markedSmartypants());
 
 export function renderMarkdown(markdown: string): React.ReactElement[] {
-  const tree = marked.lexer(markdown);
+  const tree = marked.lexer(markdown, {smartypants: true});
   return tree.map(renderToken);
 }
 
-function renderToken(token: Token, index: number): React.ReactElement {
+function renderToken(token: marked.Token, index: number): React.ReactElement {
   switch (token.type) {
     case 'text':
       return <Text key={index}>{token.text}</Text>;
@@ -36,10 +33,6 @@ function renderToken(token: Token, index: number): React.ReactElement {
       );
 
     case 'paragraph':
-      if (!token.tokens) {
-        return <Text key={index}>{token.text}</Text>;
-      }
-      
       return (
         <React.Fragment key={index}>
           {token.tokens.map(renderToken)}
@@ -78,7 +71,7 @@ function renderToken(token: Token, index: number): React.ReactElement {
     case 'list':
       return (
         <Text key={index}>
-          {token.items.map((item: Tokens.ListItem) => `\u2022 ${item.text}\n`)}
+          {token.items.map((item) => `\u2022 ${item.text}\n`)}
         </Text>
       );
 

@@ -1,16 +1,13 @@
 import React from 'react';
-import {marked, Token, Tokens} from 'marked';
-import {markedSmartypants} from "marked-smartypants";
+import {marked} from 'marked';
 import {Text} from 'react-native';
 
-marked.use(markedSmartypants());
-
 export function stripMarkdown(markdown: string): React.ReactElement[] {
-  const tree = marked.lexer(markdown);
+  const tree = marked.lexer(markdown, {smartypants: true});
   return tree.map(stripToken);
 }
 
-const stripToken = (token: Token, index: number) => {
+const stripToken = (token: marked.Token, index: number) => {
   switch (token.type) {
     case 'text':
     case 'heading':
@@ -20,20 +17,17 @@ const stripToken = (token: Token, index: number) => {
     case 'link':
       return <Text key={index}>{token.text}</Text>;
     case 'paragraph':
-      if (token.tokens) {
-        return (
-          <React.Fragment key={index}>
-            {token.tokens.map(stripToken)}
-          </React.Fragment>
-        );
-      }
-      return <Text key={index}>{token.text}</Text>;
+      return (
+        <React.Fragment key={index}>
+          {token.tokens.map(stripToken)}
+        </React.Fragment>
+      );
     case 'br':
     case 'space':
       return <Text key={index}> </Text>;
     case 'list':
       return (
-        <Text key={index}>{token.items.map((item: Tokens.ListItem) => `${item.text} `)}</Text>
+        <Text key={index}>{token.items.map((item) => `${item.text} `)}</Text>
       );
     default:
       return <Text key={index}>{token.raw}</Text>;
