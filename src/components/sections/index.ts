@@ -8,7 +8,7 @@ export {InternalLabeledSectionItem} from './items/InternalLabeledSectionItem';
 // Links and actions
 export {LinkSectionItem} from './items/LinkSectionItem';
 export {HeaderSectionItem} from './items/HeaderSectionItem';
-export {ActionSectionItem} from './items/ActionSectionItem';
+export {RadioSectionItem} from './items/RadioSectionItem.tsx';
 export {GenericSectionItem} from './items/GenericSectionItem';
 export {GenericClickableSectionItem} from './items/GenericClickableSectionItem';
 export {FavoriteSectionItem} from './items/FavoriteSectionItem';

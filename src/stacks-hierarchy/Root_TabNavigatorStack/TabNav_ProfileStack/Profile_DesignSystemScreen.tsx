@@ -25,7 +25,7 @@ import {dictionary, useTranslation} from '@atb/translations';
 import {Bus} from '@atb/assets/svg/mono-icons/transportation';
 import {useFontScale} from '@atb/utils/use-font-scale';
 import {
-  ActionSectionItem,
+  RadioSectionItem,
   ButtonSectionItem,
   ExpandableSectionItem,
   GenericSectionItem,
@@ -54,6 +54,7 @@ export const Profile_DesignSystemScreen = ({
   const fontScale = useFontScale();
   const {theme} = useTheme();
   const {t} = useTranslation();
+  const [selected, setSelected] = useState(false);
 
   const [segmentedSelection, setSegmentedSelection] = useState(0);
 
@@ -105,8 +106,7 @@ export const Profile_DesignSystemScreen = ({
   );
 
   const statusSwatches = Object.keys(theme.status).map((color) => {
-    const staticColor =
-      theme.status[color as StatusColor];
+    const staticColor = theme.status[color as StatusColor];
     return <Swatch color={staticColor.primary} name={color} key={color} />;
   });
 
@@ -967,25 +967,23 @@ export const Profile_DesignSystemScreen = ({
         </Section>
 
         <Section style={styles.section}>
-          <ActionSectionItem
-            text="Some very long text over here which goes over multiple lines"
-            subtext="With a subtext"
-            mode="check"
-            onPress={() => {}}
-            leftIcon={Bus}
-            checked
-          />
           <ToggleSectionItem
             text="Some short text"
             leftImage={<ThemeIcon svg={Bus} />}
             onValueChange={() => {}}
           />
-          <ActionSectionItem
-            text="Some short text"
-            mode="check"
-            checked
+          <RadioSectionItem
+            text="Some short text and interactive color"
+            selected={selected}
+            onPress={() => setSelected(!selected)}
+            color="interactive_2"
+          />
+          <RadioSectionItem
+            text="Some very long text over here which goes over multiple lines"
+            subtext="With a subtext and icon, no interactive color"
             leftIcon={Bus}
-            onPress={() => {}}
+            selected={selected}
+            onPress={() => setSelected(!selected)}
           />
         </Section>
 

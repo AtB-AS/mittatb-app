@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActionSectionItem} from './items/ActionSectionItem';
+import {RadioSectionItem} from './items/RadioSectionItem.tsx';
 import {Section, SectionProps} from './Section';
 import {HeaderSectionItem} from './items/HeaderSectionItem';
 import {InteractiveColor} from '@atb/theme/colors';
@@ -36,14 +36,13 @@ export function RadioGroupSection<T>({
         const text = itemToText(item, index);
         const subtext = itemToSubtext ? itemToSubtext(item, index) : undefined;
         const a11yLabel = `${text}, ${hideSubtext ? '' : subtext}`;
-        const checked =
-          selected &&
+        const thisItemSelected =
+          !!selected &&
           keyExtractor(item, index) === keyExtractor(selected, index);
         return (
-          <ActionSectionItem
+          <RadioSectionItem
             key={keyExtractor(item, index)}
-            mode="check"
-            checked={checked}
+            selected={thisItemSelected}
             text={itemToText(item, index)}
             hideSubtext={hideSubtext}
             subtext={subtext}
@@ -51,7 +50,7 @@ export function RadioGroupSection<T>({
             testID={'radioButton' + itemToText(item, index)}
             color={color}
             accessibility={{
-              accessibilityHint: checked ? '' : accessibilityHint,
+              accessibilityHint: thisItemSelected ? '' : accessibilityHint,
               accessibilityLabel: a11yLabel,
             }}
           />

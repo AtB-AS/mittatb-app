@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ActionSectionItem,
+  RadioSectionItem,
   ButtonSectionItem,
   CounterSectionItem,
   DateInputSectionItem,
@@ -72,9 +72,10 @@ export const ListedSectionItems: Meta<SectionMetaProps> = {
                   label="ButtonSectionItem"
                   onPress={() => {}}
                 />
-                <ActionSectionItem
-                  text="ActionSectionItem"
+                <RadioSectionItem
+                  text="RadioSectionItem"
                   onPress={() => {}}
+                  selected={false}
                 />
                 <CounterSectionItem
                   text="CounterSectionItem"
