@@ -77,5 +77,18 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" tools:node="merge"/>
             </intent-filter>
         </receiver>
+        <!-- Added as part of https://github.com/AtB-AS/kundevendt/issues/18747 -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="merge" />
+        </provider>
+        <meta-data android:name="com.kogenta.kettle.sdk.SKIP_AUTO_INIT" android:value="true" tools:node="merge"/>
+        <meta-data android:name="com.kogenta.kettle.sdk.SKIP_WM_INIT" android:value="true" tools:node="merge"/>
     </application>
 </manifest>
