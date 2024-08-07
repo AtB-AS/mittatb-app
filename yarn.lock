@@ -6546,7 +6546,7 @@ anymatch@~3.1.2:
 
 app-icon@^0.13.2:
   version "0.13.2"
-  resolved "https://registry.npmjs.org/app-icon/-/app-icon-0.13.2.tgz"
+  resolved "https://registry.yarnpkg.com/app-icon/-/app-icon-0.13.2.tgz#8b0264221eb8ce4f4e580b3583713a15edf581b5"
   integrity sha512-HD5BuIs/6Y4wQVYNqCXLmBaOgKaYoZHbMkkUT5FdU99rIvWl+LGNN41Nxeqv22kpc9LMHKek/DGGk6ouZ/GcRg==
   dependencies:
     chalk "^2.3.0"
