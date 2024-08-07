@@ -13,6 +13,9 @@ export type Root_PurchaseConfirmationScreenParams = {
   travelDate?: string;
   headerLeftButton: LeftButtonProps;
   mode?: 'TravelSearch' | 'Ticket';
-  phoneNumber?: string;
-  destinationAccountId?: string;
+  recipient?: {
+    phoneNumber: string;
+    accountId: string;
+    name?: string;
+  };
 };

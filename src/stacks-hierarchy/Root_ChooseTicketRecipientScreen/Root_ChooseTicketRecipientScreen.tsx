@@ -1,7 +1,11 @@
 import {Button} from '@atb/components/button';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {FullScreenHeader} from '@atb/components/screen-header';
-import {PhoneInputSectionItem, Section} from '@atb/components/sections';
+import {
+  PhoneInputSectionItem,
+  Section,
+  TextInputSectionItem,
+} from '@atb/components/sections';
 import {ThemeText} from '@atb/components/text';
 import {useGetAccountIdByPhoneMutation} from '@atb/on-behalf-of/queries/use-get-account-id-by-phone-query';
 import {GetAccountByPhoneErrorCode} from '@atb/on-behalf-of';
@@ -17,9 +21,21 @@ import {
 import {useFocusOnLoad} from '@atb/utils/use-focus-on-load';
 import phone from 'phone';
 import {useState} from 'react';
-import {ActivityIndicator, KeyboardAvoidingView, View} from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
+import {useIsSaveTicketRecipientsEnabled} from '@atb/ticket-recipients';
+import {Checkbox} from '@atb/components/checkbox';
+import {animateNextChange} from '@atb/utils/animation.ts';
+
+type ChooseRecipientErrorCode = 'missing_recipient_name';
+
+type OnBehalfOfError = GetAccountByPhoneErrorCode | ChooseRecipientErrorCode;
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -38,8 +54,11 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [error, setError] = useState<GetAccountByPhoneErrorCode>();
+  const [error, setError] = useState<OnBehalfOfError>();
   const {themeName} = useTheme();
+  const isSaveTicketRecipientsEnabled = useIsSaveTicketRecipientsEnabled();
+  const [shouldSaveRecipientName, setShouldSaveRecipientName] = useState(false);
+  const [recipientName, setRecipientName] = useState('');
 
   const phoneValidationParams = {
     strictDetection: true,
@@ -62,16 +81,25 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
       return;
     }
 
+    if (shouldSaveRecipientName && !recipientName) {
+      setIsSubmitting(false);
+      setError('missing_recipient_name');
+      return;
+    }
+
     try {
-      const result = await getAccountIdByPhone(phoneValidation.phoneNumber);
+      const accountId = await getAccountIdByPhone(phoneValidation.phoneNumber);
 
       setIsSubmitting(false);
 
-      if (result) {
+      if (accountId) {
         navigation.navigate('Root_PurchaseConfirmationScreen', {
           ...params,
-          phoneNumber: phoneValidation.phoneNumber,
-          destinationAccountId: result,
+          recipient: {
+            accountId,
+            phoneNumber: phoneValidation.phoneNumber,
+            name: shouldSaveRecipientName ? recipientName : undefined,
+          },
         });
       } else {
         setError('no_associated_account');
@@ -112,7 +140,7 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
               {t(OnBehalfOfTexts.chooseReceiver.subtitle)}
             </ThemeText>
           </View>
-          <Section style={styles.phoneInput}>
+          <Section style={styles.inputs}>
             <PhoneInputSectionItem
               label={t(PhoneInputTexts.input.title)}
               value={phoneNumber}
@@ -128,12 +156,47 @@ export const Root_ChooseTicketRecipientScreen: React.FC<Props> = ({
               autoFocus={true}
               textContentType="telephoneNumber"
               errorText={
-                error !== 'unknown_error'
-                  ? error && t(PhoneInputTexts.errors[error])
+                error === 'invalid_phone' || error === 'no_associated_account'
+                  ? t(PhoneInputTexts.errors[error])
                   : undefined
               }
             />
+            {shouldSaveRecipientName && (
+              <TextInputSectionItem
+                label={t(OnBehalfOfTexts.nameInputLabel)}
+                placeholder={t(OnBehalfOfTexts.nameInputPlaceholder)}
+                onChangeText={(text) => {
+                  setRecipientName(text);
+                  setError(undefined);
+                }}
+                value={recipientName}
+                inlineLabel={false}
+                autoFocus={true}
+                errorText={
+                  error === 'missing_recipient_name'
+                    ? t(OnBehalfOfTexts.errors[error])
+                    : undefined
+                }
+              />
+            )}
           </Section>
+
+          {isSaveTicketRecipientsEnabled && (
+            <TouchableOpacity
+              style={styles.saveRecipientCheckbox}
+              onPress={() => {
+                animateNextChange();
+                setShouldSaveRecipientName((prev) => !prev);
+              }}
+              accessibilityRole="checkbox"
+              accessibilityState={{checked: shouldSaveRecipientName}}
+            >
+              <Checkbox checked={shouldSaveRecipientName} />
+              <ThemeText color={themeColor}>
+                {t(OnBehalfOfTexts.saveCheckBoxLabel)}
+              </ThemeText>
+            </TouchableOpacity>
+          )}
 
           <View style={styles.buttonView}>
             {isSubmitting && (
@@ -174,10 +237,15 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
     flex: 1,
   },
   mainView: {flex: 1},
-  contentContainerStyle: {paddingHorizontal: theme.spacings.medium},
-  header: {marginTop: theme.spacings.xLarge, textAlign: 'center'},
+  contentContainerStyle: {padding: theme.spacings.medium},
+  header: {marginTop: theme.spacings.medium, textAlign: 'center'},
   subheader: {textAlign: 'center', marginTop: theme.spacings.medium},
-  phoneInput: {marginTop: theme.spacings.xLarge},
+  inputs: {marginTop: theme.spacings.xLarge},
+  saveRecipientCheckbox: {
+    marginTop: theme.spacings.medium,
+    flexDirection: 'row',
+    gap: theme.spacings.medium,
+  },
   errorMessage: {marginBottom: theme.spacings.medium},
   buttonView: {marginTop: theme.spacings.xLarge},
 }));

@@ -20,6 +20,20 @@ const OnBehalfOfTexts = {
       'Ingen konto knytta til dette telefonnummeret',
     ),
   },
+  nameInputLabel: _('Navn', 'Name', 'Namn'),
+  nameInputPlaceholder: _('Skriv inn navn', 'Enter name', 'Skriv inn namn'),
+  saveCheckBoxLabel: _(
+    'Lagre denne mottakeren til senere',
+    'Save this recipient for later',
+    'Lagre denne mottakaren til seinare',
+  ),
+  errors: {
+    missing_recipient_name: _(
+      'Du må legge inn navn på mottaker',
+      'You need too add recipient name',
+      'Du må leggja inn namn på mottakar',
+    ),
+  },
 };
 
 export default orgSpecificTranslations(OnBehalfOfTexts, {
