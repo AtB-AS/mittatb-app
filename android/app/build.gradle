@@ -185,7 +185,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.core:core-splashscreen:1.0.0"
 
-    implementation 'com.kogenta.kettle:kettle-sdk:1.2.3'
+    implementation 'com.kogenta.kettle:kettle-sdk:1.2.6'
 
     debugImplementation("com.facebook.react:flipper-integration")
 
