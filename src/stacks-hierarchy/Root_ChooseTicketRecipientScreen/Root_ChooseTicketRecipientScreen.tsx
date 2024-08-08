@@ -16,7 +16,6 @@ import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipien
 import {TitleAndDescription} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/TitleAndDescription.tsx';
 import {
     FETCH_RECIPIENTS_QUERY_KEY,
-    useFetchRecipientsQuery
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
 
@@ -32,7 +31,6 @@ export const Root_ChooseTicketRecipientScreen = ({
   const {themeName} = useTheme();
 
   const [state, dispatch] = useRecipientSelectionState();
-  const recipientsQuery = useFetchRecipientsQuery();
 
   const queryClient = useQueryClient();
 
@@ -62,7 +60,6 @@ export const Root_ChooseTicketRecipientScreen = ({
 
           <ExistingRecipientsList
             state={state}
-            recipientsQuery={recipientsQuery}
             onSelect={(recipient) => {
               animateNextChange();
               dispatch({type: 'SELECT_RECIPIENT', recipient});
@@ -100,7 +97,6 @@ export const Root_ChooseTicketRecipientScreen = ({
 
           <SubmitButton
             state={state}
-            recipientsQuery={recipientsQuery}
             onSubmit={(recipient) =>
               navigation.navigate('Root_PurchaseConfirmationScreen', {
                 ...params,

@@ -1,4 +1,5 @@
 import {
+  ExistingRecipientType,
   OnBehalfOfErrorCode,
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
@@ -17,17 +18,17 @@ import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {Button} from '@atb/components/button';
 import {ArrowRight} from '@atb/assets/svg/mono-icons/navigation';
-import {RecipientsQuery} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
+import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
+import {useQueryClient} from '@tanstack/react-query';
+import {useAuthState} from '@atb/auth';
 
 export const SubmitButton = ({
   state: {settingName, recipient, phone, prefix, name, error},
-  recipientsQuery,
   onSubmit,
   onError,
   themeColor,
 }: {
   state: RecipientSelectionState;
-  recipientsQuery: RecipientsQuery;
   onSubmit: (r: TicketRecipientType) => void;
   onError: (c?: OnBehalfOfErrorCode) => void;
   themeColor: StaticColor;
@@ -35,6 +36,8 @@ export const SubmitButton = ({
   const styles = useStyles();
   const {themeName} = useTheme();
   const {t} = useTranslation();
+  const queryClient = useQueryClient();
+  const {userId} = useAuthState();
   const {mutateAsync: getAccountIdByPhone} = useGetAccountIdByPhoneMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -64,7 +67,12 @@ export const SubmitButton = ({
       return;
     }
 
-    const phoneAlreadyExists = recipientsQuery.data?.some(
+    const recipients = queryClient.getQueryData<ExistingRecipientType[]>([
+      FETCH_RECIPIENTS_QUERY_KEY,
+      userId,
+    ]);
+
+    const phoneAlreadyExists = recipients?.some(
       (r) => r.phoneNumber === fullPhoneNumber,
     );
     if (phoneAlreadyExists) {
@@ -74,7 +82,7 @@ export const SubmitButton = ({
     }
 
     const nameAlreadyExists =
-      settingName && recipientsQuery.data?.some((r) => r.name === name);
+      settingName && recipients?.some((r) => r.name === name);
     if (nameAlreadyExists) {
       setIsSubmitting(false);
       onError('name_already_exists');

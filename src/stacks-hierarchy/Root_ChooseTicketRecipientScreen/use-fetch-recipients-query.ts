@@ -1,13 +1,12 @@
 import {useAuthState} from '@atb/auth';
-import {useQuery, UseQueryResult} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {fetchOnBehalfOfAccounts} from '@atb/api/profile.ts';
 import {ExistingRecipientType} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 import {HALF_DAY_MS} from '@atb/utils/durations.ts';
 
 export const FETCH_RECIPIENTS_QUERY_KEY = 'FETCH_RECIPIENTS';
-export type RecipientsQuery = UseQueryResult<ExistingRecipientType[]>;
 
-export const useFetchRecipientsQuery = (): RecipientsQuery => {
+export const useFetchRecipientsQuery = () => {
   const {userId} = useAuthState();
 
   return useQuery({

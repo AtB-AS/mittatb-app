@@ -14,30 +14,35 @@ const OnBehalfOfTexts = {
       'Remember that the person receiving the ticket must have the AtB app to get the ticket.',
       'Husk at mottakaren må ha AtB-appen for å få billetten.',
     ),
-    errorText: _(
-      'Ingen konto tilknyttet dette telefonnummeret',
-      'No account is associated with this phone number',
-      'Ingen konto knytta til dette telefonnummeret',
-    ),
   },
-  newRecipientLabel: _("Ny mottaker", "New recipient", "Ny mottakar"),
+  newRecipientLabel: _('Ny mottaker', 'New recipient', 'Ny mottakar'),
   nameInputLabel: _('Navn', 'Name', 'Namn'),
   nameInputPlaceholder: _('Skriv inn navn', 'Enter name', 'Skriv inn namn'),
+  sendToOtherButton: _(
+    'Send til noen andre',
+    'Send to someone else',
+    'Send til nokon andre',
+  ),
   saveCheckBoxLabel: _(
     'Lagre denne mottakeren til senere',
     'Save this recipient for later',
     'Lagre denne mottakaren til seinare',
   ),
   errors: {
+    fetchRecipients: _(
+      'Kunne ikke hente mottakere',
+      "Couldn't retrieve recipients",
+      'Kunne ikkje hente mottakarar',
+    ),
     missing_recipient_name: _(
       'Du må legge inn navn på mottaker',
       'You need too add recipient name',
       'Du må leggja inn namn på mottakar',
     ),
     name_already_exists: _(
-        'Navnet er allerede tilknyttet en annen mottaker',
-        'The phone number is used for another recipient',
-        'Namnet er allerede knytta til ein annan mottakar',
+      'Navnet er allerede tilknyttet en annen mottaker',
+      'The phone number is used for another recipient',
+      'Namnet er allerede knytta til ein annan mottakar',
     ),
   },
 };

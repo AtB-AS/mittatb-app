@@ -3,23 +3,22 @@ import {
   RecipientSelectionState,
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 import {dictionary, useTranslation} from '@atb/translations';
-import {RecipientsQuery} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
+import {useFetchRecipientsQuery} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
+import OnBehalfOfTexts from "@atb/translations/screens/subscreens/OnBehalfOf.ts";
 
 export const ExistingRecipientsList = ({
   state: {recipient},
-  recipientsQuery,
   onSelect,
   onErrorOrEmpty,
   themeColor,
 }: {
   state: RecipientSelectionState;
-  recipientsQuery: RecipientsQuery;
   onSelect: (r: ExistingRecipientType) => void;
   onErrorOrEmpty: () => void;
   themeColor: StaticColor;
@@ -27,6 +26,8 @@ export const ExistingRecipientsList = ({
   const styles = useStyles();
   const {t} = useTranslation();
   const {themeName} = useTheme();
+
+  const recipientsQuery = useFetchRecipientsQuery();
 
   useEffect(() => {
     const isError = recipientsQuery.status === 'error';
@@ -37,29 +38,27 @@ export const ExistingRecipientsList = ({
     }
   }, [recipientsQuery.status, recipientsQuery.data, onErrorOrEmpty]);
 
-  switch (recipientsQuery.status) {
-    case 'loading':
-      return (
+  return (
+    <>
+      {recipientsQuery.status === 'loading' && (
         <ActivityIndicator
           style={styles.loadingSpinner}
           size="large"
           color={getStaticColor(themeName, themeColor).text}
         />
-      );
-    case 'error':
-      return (
+      )}
+      {recipientsQuery.status === 'error' && (
         <MessageInfoBox
           type="error"
-          message="Kunne ikke hente mottakere"
+          message={t(OnBehalfOfTexts.errors.fetchRecipients)}
           onPressConfig={{
             action: recipientsQuery.refetch,
             text: t(dictionary.retry),
           }}
           style={styles.errorMessage}
         />
-      );
-    case 'success':
-      return recipientsQuery.data?.length ? (
+      )}
+      {recipientsQuery.status === 'success' && recipientsQuery.data?.length ? (
         <RadioGroupSection
           items={recipientsQuery.data}
           itemToText={(i) => i.name}
@@ -70,8 +69,9 @@ export const ExistingRecipientsList = ({
           color="interactive_2"
           style={styles.recipientList}
         />
-      ) : null;
-  }
+      ) : null}
+    </>
+  );
 };
 
 const useStyles = StyleSheet.createThemeHook((theme) => ({
