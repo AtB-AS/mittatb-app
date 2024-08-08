@@ -1,4 +1,8 @@
-import {CustomerProfile, CustomerProfileUpdate} from '@atb/api/types/profile';
+import {
+  CustomerProfile,
+  CustomerProfileUpdate,
+  OnBehalfOfAccountsResponse,
+} from '@atb/api/types/profile';
 import Bugsnag from '@bugsnag/react-native';
 import {AxiosRequestConfig} from 'axios';
 import {client} from './client';
@@ -71,6 +75,18 @@ export const getCustomerAccountId = async (
       throw error;
     });
 };
+
+/**
+ * Function to fetch saved recipients
+ */
+export const fetchOnBehalfOfAccounts =
+  (): Promise<OnBehalfOfAccountsResponse> =>
+    client
+      .get(`${profileEndpoint}/on-behalf-of/accounts`, {
+        authWithIdToken: true,
+        retry: false,
+      })
+      .then((response) => response.data);
 
 /**
  * Function to get phone number from an account ID

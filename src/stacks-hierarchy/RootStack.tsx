@@ -434,6 +434,7 @@ export const RootStack = () => {
               <Stack.Screen
                 name="Root_ChooseTicketRecipientScreen"
                 component={Root_ChooseTicketRecipientScreen}
+                options={screenOptions(TransitionPresets.SlideFromRightIOS)}
               />
             </Stack.Navigator>
           </NavigationContainer>

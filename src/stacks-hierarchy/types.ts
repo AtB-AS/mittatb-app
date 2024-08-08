@@ -33,3 +33,9 @@ export type RecurringPaymentOption = {
 export type SavedPaymentOption = DefaultPaymentOption | RecurringPaymentOption;
 
 export type PaymentProcessorStatus = 'loading' | 'success' | 'error';
+
+export type TicketRecipientType = {
+  accountId: string;
+  phoneNumber: string;
+  name?: string;
+};

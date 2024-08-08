@@ -67,7 +67,6 @@ import {useServerTimeEnabledDebugOverride} from '@atb/time';
 import Bugsnag from '@bugsnag/react-native';
 import {useActivateTicketNowEnabledDebugOverride} from '@atb/fare-contracts/use-is-activate-now-enabled';
 import {useBackendSmsAuthEnabledDebugOverride} from '@atb/auth/use-is-backend-sms-auth-enabled';
-import {useSaveTicketRecipientsDebugOverride} from '@atb/ticket-recipients';
 
 function setClipboard(content: string) {
   Clipboard.setString(content);
@@ -142,8 +141,6 @@ export const Profile_DebugInfoScreen = () => {
     useActivateTicketNowEnabledDebugOverride();
   const backendSmsAuthEnabledDebugOverride =
     useBackendSmsAuthEnabledDebugOverride();
-  const saveTicketRecipientsDebugOverride =
-    useSaveTicketRecipientsDebugOverride();
 
   useEffect(() => {
     (async function () {
@@ -475,12 +472,6 @@ export const Profile_DebugInfoScreen = () => {
             <DebugOverride
               description="Enable new backend sms auth"
               override={backendSmsAuthEnabledDebugOverride}
-            />
-          </GenericSectionItem>
-          <GenericSectionItem>
-            <DebugOverride
-              description="Enable save ticket recipients"
-              override={saveTicketRecipientsDebugOverride}
             />
           </GenericSectionItem>
         </Section>
