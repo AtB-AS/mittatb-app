@@ -3,7 +3,6 @@ import {RadioSectionItem} from './items/RadioSectionItem.tsx';
 import {Section, SectionProps} from './Section';
 import {HeaderSectionItem} from './items/HeaderSectionItem';
 import {InteractiveColor} from '@atb/theme/colors';
-import {SvgProps} from 'react-native-svg';
 
 type Props<T> = Omit<SectionProps, 'children'> & {
   items: T[];
@@ -16,11 +15,9 @@ type Props<T> = Omit<SectionProps, 'children'> & {
   onSelect?(item: T, index: number): void;
   headerText?: string;
   color?: InteractiveColor;
-  rightAction?: (item: T) => {
-    icon: (props: SvgProps) => JSX.Element;
-    onPress: () => void;
-    isLoading?: boolean;
-  };
+  itemToRightAction?: (
+    item: T,
+  ) => React.ComponentProps<typeof RadioSectionItem>['rightAction'];
 };
 
 export function RadioGroupSection<T>({
@@ -35,7 +32,7 @@ export function RadioGroupSection<T>({
   headerText,
   color,
   accessibilityHint,
-  rightAction,
+  itemToRightAction,
   ...props
 }: Props<T>) {
   return (
@@ -44,7 +41,8 @@ export function RadioGroupSection<T>({
       {items.map((item: T, index) => {
         const text = itemToText(item, index);
         const subtext = itemToSubtext ? itemToSubtext(item, index) : undefined;
-        const a11yLabel = itemToA11yLabel?.(item) ?? `${text}, ${hideSubtext ? '' : subtext}`;
+        const a11yLabel =
+          itemToA11yLabel?.(item) ?? `${text}, ${hideSubtext ? '' : subtext}`;
         const thisItemSelected =
           !!selected &&
           keyExtractor(item, index) === keyExtractor(selected, index);
@@ -62,7 +60,7 @@ export function RadioGroupSection<T>({
               accessibilityHint: thisItemSelected ? '' : accessibilityHint,
               accessibilityLabel: a11yLabel,
             }}
-            rightAction={rightAction?.(item)}
+            rightAction={itemToRightAction?.(item)}
           />
         );
       })}

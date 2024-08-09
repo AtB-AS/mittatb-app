@@ -12,7 +12,6 @@ import {PressableOpacity} from '@atb/components/pressable-opacity';
 import {RadioIcon} from '@atb/components/radio';
 import {PressableOpacityOrView} from '@atb/components/touchable-opacity-or-view';
 
-type ActionModes = 'check';
 type Props = SectionItemProps<{
   text: string;
   subtext?: string;
@@ -20,7 +19,6 @@ type Props = SectionItemProps<{
   onPress(checked: boolean): void;
   leftIcon?: (props: SvgProps) => JSX.Element;
   selected: boolean;
-  mode?: ActionModes;
   accessibility?: AccessibilityProps;
   color?: InteractiveColor;
   rightAction?: {
