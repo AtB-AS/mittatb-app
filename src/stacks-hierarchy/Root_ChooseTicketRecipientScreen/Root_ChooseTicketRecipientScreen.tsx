@@ -12,11 +12,8 @@ import {SubmitButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScre
 import {SaveRecipientToggle} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SaveRecipientToggle.tsx';
 import {ExistingRecipientsList} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/ExistingRecipientsList.tsx';
 import {PhoneAndNameInputSection} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/PhoneAndNameInputSection.tsx';
-import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SendToOtherButton.tsx';
 import {TitleAndDescription} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/TitleAndDescription.tsx';
-import {
-    FETCH_RECIPIENTS_QUERY_KEY,
-} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
+import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
@@ -64,18 +61,14 @@ export const Root_ChooseTicketRecipientScreen = ({
               animateNextChange();
               dispatch({type: 'SELECT_RECIPIENT', recipient});
             }}
+            onAddOther={() => {
+              animateNextChange();
+              dispatch({type: 'SELECT_SEND_TO_OTHER'});
+            }}
             onErrorOrEmpty={useCallback(() => {
               animateNextChange();
               dispatch({type: 'SELECT_SEND_TO_OTHER'});
             }, [dispatch])}
-            themeColor={themeColor}
-          />
-          <SendToOtherButton
-            state={state}
-            onPress={() => {
-              animateNextChange();
-              dispatch({type: 'SELECT_SEND_TO_OTHER'});
-            }}
             themeColor={themeColor}
           />
 
