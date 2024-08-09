@@ -7,7 +7,7 @@ import {
 
 type RecipientSelectionAction =
   | {type: 'SET_RECIPIENTS'; recipients: ExistingRecipientType[]}
-  | {type: 'SELECT_RECIPIENT'; recipient: ExistingRecipientType}
+  | {type: 'SELECT_RECIPIENT'; recipient?: ExistingRecipientType}
   | {type: 'SELECT_SEND_TO_OTHER'}
   | {type: 'SET_PREFIX'; prefix: string}
   | {type: 'SET_PHONE'; phoneNumber: string}

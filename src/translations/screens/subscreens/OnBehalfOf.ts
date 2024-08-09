@@ -15,6 +15,11 @@ const OnBehalfOfTexts = {
       'Husk at mottakaren må ha AtB-appen for å få billetten.',
     ),
   },
+  tooManyRecipients: _(
+    'Du kan ikke legge til flere mottakere. Om du ønsker å sende til noen andre, må du fjerne en av mottakerne i listen ovenfor.',
+    "You can't add more recipients. If you wish to send to someone else, then you need to remove one of the recipients in the list above.",
+    'Du kan ikke leggje til fleire mottakarar. Om du ønskjer sende til nokon andre, må du fjerne ein av mottakarane i lista ovanfor.',
+  ),
   newRecipientLabel: _('Ny mottaker', 'New recipient', 'Ny mottakar'),
   nameInputLabel: _('Navn', 'Name', 'Namn'),
   nameInputPlaceholder: _('Skriv inn navn', 'Enter name', 'Skriv inn namn'),
@@ -29,10 +34,20 @@ const OnBehalfOfTexts = {
     'Lagre denne mottakaren til seinare',
   ),
   errors: {
-    fetchRecipients: _(
+    fetch_recipients_failed: _(
       'Kunne ikke hente mottakere',
       "Couldn't retrieve recipients",
       'Kunne ikkje hente mottakarar',
+    ),
+    no_recipient_selected: _(
+      'Du må velge mottaker',
+      'You need to choose recipient',
+      'Du må velje mottakar',
+    ),
+    delete_recipient_failed: _(
+      'Klarte ikke slette mottaker',
+      "Weren't able to delete recipient",
+      'Klarte ikkje slette mottakar',
     ),
     missing_recipient_name: _(
       'Du må legge inn navn på mottaker',
