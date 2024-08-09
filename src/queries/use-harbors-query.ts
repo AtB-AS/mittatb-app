@@ -7,8 +7,7 @@ import {
   TransportMode,
   TransportSubmode,
 } from '@atb/api/types/generated/journey_planner_v3_types';
-
-const ONE_HOUR_MS = 1000 * 60 * 60;
+import {ONE_HOUR_MS} from "@atb/utils/durations.ts";
 
 export const useHarborsQuery = (fromHarborId?: string) =>
   useQuery({

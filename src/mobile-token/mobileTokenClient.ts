@@ -7,10 +7,9 @@ import {
 } from '@entur-private/abt-mobile-client-sdk';
 import {localLogger, remoteLogger} from './abtClientLogger';
 import {tokenService} from './tokenService';
+import {HALF_DAY_MS} from "@atb/utils/durations.ts";
 
 const CONTEXT_ID = 'main';
-
-const TWELVE_HOURS_MS = 1000 * 60 * 60 * 12;
 
 const abtClient = createClient({
   tokenContextIds: [CONTEXT_ID],
@@ -49,6 +48,6 @@ export const mobileTokenClient = {
    - Less than 10 % of the token validity time is left
    */
   shouldRenew: (token: ActivatedToken) =>
-    abtClient.shouldPreemptiveRenew(token, TWELVE_HOURS_MS, 10),
+    abtClient.shouldPreemptiveRenew(token, HALF_DAY_MS, 10),
   currentTimeMillis: () => abtClient.getCurrentTimeMillis(),
 };

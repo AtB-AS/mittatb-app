@@ -2,8 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import {PreassignedFareProductId} from '@atb/configuration/types';
 import {getFareProductBenefits} from '@atb/mobility/api/api';
 import {useAuthState} from '@atb/auth';
-
-const ONE_HOUR = 1000 * 60 * 60;
+import {ONE_HOUR_MS} from "@atb/utils/durations.ts";
 
 export const useFareProductBenefitsQuery = (
   productId: PreassignedFareProductId | undefined,
@@ -12,8 +11,8 @@ export const useFareProductBenefitsQuery = (
   return useQuery({
     queryKey: ['fare-product-benefits', userId, productId],
     queryFn: () => (productId ? getFareProductBenefits(productId) : []),
-    staleTime: ONE_HOUR,
-    cacheTime: ONE_HOUR,
+    staleTime: ONE_HOUR_MS,
+    cacheTime: ONE_HOUR_MS,
     enabled: authStatus === 'authenticated',
   });
 };

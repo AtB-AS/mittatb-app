@@ -1,13 +1,12 @@
 import {useQuery} from '@tanstack/react-query';
 import {getGeofencingZones} from '@atb/api/mobility';
-
-const TWELVE_HOURS_MS = 1000 * 60 * 60 * 12;
+import {HALF_DAY_MS} from "@atb/utils/durations.ts";
 
 export const useGeofencingZonesQuery = (systemId: string) => {
   return useQuery({
     queryKey: ['getGeofencingZones', systemId],
     queryFn: ({signal}) => getGeofencingZones([systemId], {signal}),
-    staleTime: TWELVE_HOURS_MS,
-    cacheTime: TWELVE_HOURS_MS,
+    staleTime: HALF_DAY_MS,
+    cacheTime: HALF_DAY_MS,
   });
 };
