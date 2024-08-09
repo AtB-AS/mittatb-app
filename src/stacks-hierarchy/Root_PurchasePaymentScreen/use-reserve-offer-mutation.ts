@@ -1,17 +1,14 @@
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {OfferReservation, ReserveOffer, reserveOffers} from '@atb/ticketing';
 import {useAuthState} from '@atb/auth';
-import {PaymentMethod} from '@atb/stacks-hierarchy/types';
+import {PaymentMethod, TicketRecipientType} from '@atb/stacks-hierarchy/types';
 import {useRemoteConfig} from '@atb/RemoteConfigContext';
+import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 
 type Args = {
   offers: ReserveOffer[];
   paymentMethod: PaymentMethod;
-  recipient?: {
-    accountId: string;
-    phoneNumber: string;
-    name?: string;
-  };
+  recipient?: TicketRecipientType;
 };
 
 export const useReserveOfferMutation = ({
@@ -21,6 +18,7 @@ export const useReserveOfferMutation = ({
 }: Args) => {
   const {abtCustomerId} = useAuthState();
   const {enable_auto_sale: autoSale} = useRemoteConfig();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (): Promise<OfferReservation> => {
@@ -46,6 +44,11 @@ export const useReserveOfferMutation = ({
         phoneNumber: recipient?.phoneNumber,
         autoSale,
       });
+    },
+    onSuccess: () => {
+      if (recipient?.name) {
+        queryClient.invalidateQueries([FETCH_RECIPIENTS_QUERY_KEY]);
+      }
     },
   });
 };

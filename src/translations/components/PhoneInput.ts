@@ -27,6 +27,11 @@ const PhoneInputTexts = {
       'No account is associated with this phone number',
       'Ingen konto knytta til dette telefonnummeret',
     ),
+    phone_already_exists: _(
+      'Telefonnummeret er allerede tilknyttet en annen mottaker',
+      'The phone number is used for another recipient',
+      'Telefonnummeret er allereie knytta til ein annan mottakar',
+    ),
     too_many_attempts: _(
       'Du har prøvd for mange ganger. Vennligst vent noen minutter før du prøver igjen.',
       'You have tried too many times. Please wait a few minutes before trying again.',

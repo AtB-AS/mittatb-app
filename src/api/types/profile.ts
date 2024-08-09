@@ -13,3 +13,10 @@ export type CustomerProfile = {
   surname: string;
   phone: string;
 };
+
+export type OnBehalfOfAccountsResponse = {
+  customerAccountId: string;
+  sentToAccountId: string;
+  sentToAlias: string;
+  sentToPhoneNumber: string;
+}[]
