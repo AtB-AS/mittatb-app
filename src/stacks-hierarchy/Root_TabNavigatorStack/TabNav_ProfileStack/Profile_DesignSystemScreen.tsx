@@ -985,6 +985,15 @@ export const Profile_DesignSystemScreen = ({
             selected={selected}
             onPress={() => setSelected(!selected)}
           />
+          <RadioSectionItem
+            text="With right action"
+            selected={selected}
+            onPress={() => setSelected(!selected)}
+            rightAction={{
+              onPress: presser,
+              icon: Delete,
+            }}
+          />
         </Section>
 
         <Section style={styles.section}>

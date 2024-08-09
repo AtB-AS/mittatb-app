@@ -10,16 +10,21 @@ type Props<T> = Omit<SectionProps, 'children'> & {
   keyExtractor(item: T, index: number): string;
   itemToText(item: T, index: number): string;
   itemToSubtext?(item: T, index: number): string | undefined;
+  itemToA11yLabel?(item: T): string | undefined;
   hideSubtext?: boolean;
   onSelect?(item: T, index: number): void;
   headerText?: string;
   color?: InteractiveColor;
+  itemToRightAction?: (
+    item: T,
+  ) => React.ComponentProps<typeof RadioSectionItem>['rightAction'];
 };
 
 export function RadioGroupSection<T>({
   keyExtractor,
   itemToText,
   itemToSubtext,
+  itemToA11yLabel,
   hideSubtext,
   items,
   selected,
@@ -27,6 +32,7 @@ export function RadioGroupSection<T>({
   headerText,
   color,
   accessibilityHint,
+  itemToRightAction,
   ...props
 }: Props<T>) {
   return (
@@ -35,7 +41,8 @@ export function RadioGroupSection<T>({
       {items.map((item: T, index) => {
         const text = itemToText(item, index);
         const subtext = itemToSubtext ? itemToSubtext(item, index) : undefined;
-        const a11yLabel = `${text}, ${hideSubtext ? '' : subtext}`;
+        const a11yLabel =
+          itemToA11yLabel?.(item) ?? `${text}, ${hideSubtext ? '' : subtext}`;
         const thisItemSelected =
           !!selected &&
           keyExtractor(item, index) === keyExtractor(selected, index);
@@ -53,6 +60,7 @@ export function RadioGroupSection<T>({
               accessibilityHint: thisItemSelected ? '' : accessibilityHint,
               accessibilityLabel: a11yLabel,
             }}
+            rightAction={itemToRightAction?.(item)}
           />
         );
       })}
