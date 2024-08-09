@@ -140,6 +140,8 @@ export const TripDetailsScreenComponent = ({
                 fromPlace: tripTicketDetails.fromPlace,
                 toPlace: tripTicketDetails.toPlace,
                 travelDate: tripTicketDetails.ticketStartTime,
+                datedServiceJourneyIds:
+                  tripTicketDetails.datedServiceJourneyIds,
                 mode: 'TravelSearch',
               });
             }}
@@ -219,6 +221,7 @@ type TicketInfoForBus = {
   toPlace: TariffZoneWithMetadata;
   ticketStartTime: string | undefined;
   fareProductTypeConfig: FareProductTypeConfig;
+  datedServiceJourneyIds: string[];
 };
 
 function getTicketInfoForBus(
@@ -261,6 +264,7 @@ function getTicketInfoForBus(
     toPlace: toTariffZone,
     ticketStartTime,
     fareProductTypeConfig,
+    datedServiceJourneyIds: getDatedServiceJourneyIds(tripPattern),
   };
 }
 
@@ -269,6 +273,7 @@ type TicketInfoForBoat = {
   toPlace: StopPlaceFragment;
   ticketStartTime: string | undefined;
   fareProductTypeConfig: FareProductTypeConfig;
+  datedServiceJourneyIds: string[];
 };
 
 function getTicketInfoForBoat(
@@ -306,7 +311,14 @@ function getTicketInfoForBoat(
     toPlace: toHarbor,
     ticketStartTime,
     fareProductTypeConfig,
+    datedServiceJourneyIds: getDatedServiceJourneyIds(tripPattern),
   };
+}
+
+function getDatedServiceJourneyIds(tripPattern: TripPattern): string[] {
+  return tripPattern.legs
+    .map((leg) => leg.datedServiceJourney?.id)
+    .filter(Boolean) as string[];
 }
 
 function getTariffZoneWithMetadata(place: Place, tariffZones: TariffZone[]) {
