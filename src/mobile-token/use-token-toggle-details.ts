@@ -2,8 +2,8 @@ import {useMobileTokenContextState} from '@atb/mobile-token';
 import {useIsFocused} from '@react-navigation/native';
 import {useQuery} from '@tanstack/react-query';
 import {MOBILE_TOKEN_QUERY_KEY} from '@atb/mobile-token/utils';
+import {ONE_MINUTE_MS} from "@atb/utils/durations.ts";
 
-const ONE_MINUTE = 1000 * 60;
 export const GET_TOKEN_TOGGLE_DETAILS_QUERY_KEY = 'getTokenToggleDetails';
 
 const useTokenToggleDetailsQuery = () => {
@@ -34,8 +34,8 @@ const useTokenToggleDetailsQuery = () => {
       }
       return {toggleLimit, maxToggleLimit};
     },
-    staleTime: ONE_MINUTE,
-    cacheTime: ONE_MINUTE,
+    staleTime: ONE_MINUTE_MS,
+    cacheTime: ONE_MINUTE_MS,
   });
 };
 
