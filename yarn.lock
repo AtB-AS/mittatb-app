@@ -14397,10 +14397,10 @@ react-native-camera-kit@14.0.0-beta12:
   resolved "https://registry.yarnpkg.com/react-native-camera-kit/-/react-native-camera-kit-14.0.0-beta12.tgz#a9fb9dfe9e913b2b0bff54a5b236adc32069e125"
   integrity sha512-SUBcjq/lcGX3unEXSDWkdegx/kw9Z7b3zj9Zo1vI7V/bvT7CFdSeZS39Z+LE5peVFbU74I58ETnqpIKjgj2STA==
 
-react-native-compressor@^1.8.12:
-  version "1.8.12"
-  resolved "https://registry.yarnpkg.com/react-native-compressor/-/react-native-compressor-1.8.12.tgz#6e50247d3d2a12845eb27cfa983ef4c56a00738f"
-  integrity sha512-KyS9hk2LnWiuZyqQcUrQv38kW0R9C8B9FLTc4ML3S9MglXhzbarfBMECxc+23GR7r/NkImMzQc0j9mgIDtRp9A==
+react-native-compressor@^1.8.25:
+  version "1.8.25"
+  resolved "https://registry.yarnpkg.com/react-native-compressor/-/react-native-compressor-1.8.25.tgz#11fb31b9883f9249f59196a146667f2be3610dd3"
+  integrity sha512-ldQvBEFJpGa9FlBF6ijBoOGg5e/vRYJOZ97ElEERwC9tO9qmt87Nj80LAuASaY0JDFfYDJi8mFSWM/uUaXaMsA==
 
 react-native-device-info@^10.3.0:
   version "10.3.0"

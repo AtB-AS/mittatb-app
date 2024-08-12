@@ -954,7 +954,6 @@ PODS:
     - nanopb/encode (= 2.30909.1)
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
-  - NextLevelSessionExporter (0.4.6)
   - OpenSSL-Universal (1.1.1100)
   - PromisesObjC (2.4.0)
   - RCT-Folly (2022.05.16.00):
@@ -1828,9 +1827,8 @@ PODS:
   - React-Mapbuffer (0.73.7):
     - glog
     - React-debug
-  - react-native-compressor (1.8.12):
+  - react-native-compressor (1.8.25):
     - glog
-    - NextLevelSessionExporter
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - react-native-device-brightness (1.2.7):
@@ -2271,7 +2269,6 @@ SPEC REPOS:
     - MapboxMaps
     - MapboxMobileEvents
     - nanopb
-    - NextLevelSessionExporter
     - OpenSSL-Universal
     - PromisesObjC
     - RecaptchaInterop
@@ -2529,7 +2526,6 @@ SPEC CHECKSUMS:
   MapboxMaps: 87ef0003e6db46e45e7a16939f29ae87e38e7ce2
   MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
-  NextLevelSessionExporter: 4d8aa5e617f1c709724f2453efe5d4628480f65a
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
@@ -2553,7 +2549,7 @@ SPEC CHECKSUMS:
   React-jsinspector: f356e49aa086380d3a4892708ca173ad31ac69c1
   React-logger: 7b19bdfb254772a0332d6cd4d66eceb0678b6730
   React-Mapbuffer: 6f392912435adb8fbf4c3eee0e79a0a0b4e4b717
-  react-native-compressor: 8a237db7081ffee2f726225fce3eb02e03c8bcae
+  react-native-compressor: db1b725658367d9aa0f8bdabed4b0aec88cd1c0b
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
   react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
   react-native-flipper-performance-plugin: 42ec5017abd26e7c5a1f527f2db92c14a90cabdb
