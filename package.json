@@ -31,7 +31,7 @@
     "@atb-as/generate-assets": "^13.0.1",
     "@atb-as/theme": "^10.4.1",
     "@bugsnag/react-native": "^7.25.0",
-    "@bugsnag/source-maps": "^2.3.1",
+    "@bugsnag/source-maps": "^2.3.3",
     "@entur-private/abt-mobile-barcode-javascript-lib": "2.1.6",
     "@entur-private/abt-mobile-client-sdk": "2.1.6",
     "@intercom/intercom-react-native": "6.8.1",
