@@ -2087,7 +2087,7 @@ PODS:
     - React
     - React-Core
     - Turf
-  - RNPermissions (3.10.0):
+  - RNPermissions (4.1.5):
     - React-Core
   - RNScreens (3.29.0):
     - glog
@@ -2599,7 +2599,7 @@ SPEC CHECKSUMS:
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   rnmapbox-maps: 0c466efc30f3562a84f789372a167ccfd3f17f3f
-  RNPermissions: 2a9336f58607a4ba0000dd6b8ad7b3dd19004966
+  RNPermissions: cf6089c104db6d9a1aa9ea1773cbc802a6719e87
   RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

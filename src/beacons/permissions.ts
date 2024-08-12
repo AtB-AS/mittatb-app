@@ -54,7 +54,7 @@ function getBluetoothPermission(): Permission {
     }
   }
 
-  return PERMISSIONS.IOS.BLUETOOTH_PERIPHERAL;
+  return PERMISSIONS.IOS.BLUETOOTH;
 }
 
 // This function checks if the required permissions are granted for Android
