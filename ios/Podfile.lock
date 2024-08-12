@@ -1855,7 +1855,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-safe-area-context (4.7.4):
+  - react-native-safe-area-context (4.10.8):
     - React-Core
   - react-native-slider (4.4.3):
     - React-Core
@@ -2559,7 +2559,7 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-kettle-module: e61ea63ecfb741d7e23fb9ea121d3039bab0b0cb
   react-native-pager-view: 4cc7e44dbc04cad0ca9e0a49c62c593d0fa793cc
-  react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
+  react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-webview: 05fa0e766f1c408e8c293cbcb84b2c199711cfd1
   React-nativeconfig: 754233aac2a769578f828093b672b399355582e6
