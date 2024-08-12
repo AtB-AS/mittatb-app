@@ -22,7 +22,7 @@ export const useRealtimeText = (
         formatToClock(
           lastPassedStop.actualDepartureTime,
           language,
-          'nearest',
+          'round',
           debugShowSeconds,
         ),
       ),

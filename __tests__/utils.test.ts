@@ -249,15 +249,15 @@ describe('Date rounding', () => {
   });
 
   it('formatToClock rounds to nearest', () => {
-    expectStringEqual(formatToClock(upper, lang, 'nearest'), '12:47');
-    expectStringEqual(formatToClock(lower, lang, 'nearest'), '12:46');
-    expectStringEqual(formatToClock(mid, lang, 'nearest'), '12:47');
+    expectStringEqual(formatToClock(upper, lang, 'round'), '12:47');
+    expectStringEqual(formatToClock(lower, lang, 'round'), '12:46');
+    expectStringEqual(formatToClock(mid, lang, 'round'), '12:47');
   });
 
   it('formatToClock stays exact', () => {
     const shouldRoundTo = '12:46';
     expectStringEqual(formatToClock(exact, lang, 'ceil'), shouldRoundTo);
     expectStringEqual(formatToClock(exact, lang, 'floor'), shouldRoundTo);
-    expectStringEqual(formatToClock(exact, lang, 'nearest'), shouldRoundTo);
+    expectStringEqual(formatToClock(exact, lang, 'round'), shouldRoundTo);
   });
 });
