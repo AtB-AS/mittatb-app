@@ -13921,10 +13921,10 @@ possible-typed-array-names@^1.0.0:
   resolved "https://registry.yarnpkg.com/possible-typed-array-names/-/possible-typed-array-names-1.0.0.tgz#89bb63c6fada2c3e90adc4a647beeeb39cc7bf8f"
   integrity sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==
 
-posthog-react-native@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/posthog-react-native/-/posthog-react-native-2.7.1.tgz#96a119557bb9cdcd890f0f07668d8960298ea411"
-  integrity sha512-YJHt5d94uYpAGkndZpW72a1IdDmkSl0otUgwsQfIIpAgn7YVoxbtsF4QyPn/oCbqNGpWF7WwAjyvCD+hRh6DrA==
+posthog-react-native@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/posthog-react-native/-/posthog-react-native-3.1.1.tgz#570fb330e939d0cf1facc67eb7bc478d13c37441"
+  integrity sha512-t26bUkJNDJzl/qKA1VPNxbNYZSv/Htduny31yOWvphnXP67TwFmGjTmj66yo1NXY1o8kpokQY2VH3F8uxQOYqA==
 
 postinstall-postinstall@^2.1.0:
   version "2.1.0"
