@@ -2072,7 +2072,7 @@ PODS:
     - React-Core
   - RNInAppBrowser (3.7.0):
     - React-Core
-  - RNLocalize (2.2.4):
+  - RNLocalize (3.2.1):
     - React-Core
   - rnmapbox-maps (10.1.28):
     - MapboxMaps (~> 10.17.0)
@@ -2595,7 +2595,7 @@ SPEC CHECKSUMS:
   RNFBRemoteConfig: 3b872da757ed617b83d4a780d7bd0915cc82bd03
   RNGestureHandler: 1155b1898ceddefeebf77792927360d44fe11e77
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
-  RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
+  RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   rnmapbox-maps: 0c466efc30f3562a84f789372a167ccfd3f17f3f
   RNPermissions: 2a9336f58607a4ba0000dd6b8ad7b3dd19004966
   RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
