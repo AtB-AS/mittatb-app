@@ -203,6 +203,11 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
   };
   const lineHeight = {height: (theme.spacings.xSmall / 2) * fontScale};
 
+  const staySeated = (idx: number) => {
+    const previousLeg = expandedLegs[idx - 1];
+    return previousLeg && previousLeg.interchangeTo?.staySeated === true;
+  };
+
   return (
     <PressableOpacity
       accessibilityLabel={tripSummary(
@@ -253,7 +258,7 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                     <View testID="tripLeg">
                       {leg.mode === 'foot' ? (
                         <FootLeg leg={leg} nextLeg={filteredLegs[i + 1]} />
-                      ) : (
+                      ) : staySeated(i) ? null : (
                         <TransportationLeg
                           leg={leg}
                           style={
@@ -264,20 +269,22 @@ const ResultItem: React.FC<ResultItemProps & AccessibilityProps> = ({
                         />
                       )}
                       <View style={styles.departureTimes}>
-                        <ThemeText
-                          type="body__tertiary"
-                          color="primary"
-                          testID={'schTime' + i}
-                        >
-                          {(isLineFlexibleTransport(leg.line)
-                            ? t(dictionary.missingRealTimePrefix)
-                            : '') +
-                            formatToClock(
-                              leg.expectedStartTime,
-                              language,
-                              'floor',
-                            )}
-                        </ThemeText>
+                        {staySeated(i) ? null : (
+                          <ThemeText
+                            type="body__tertiary"
+                            color="primary"
+                            testID={'schTime' + i}
+                          >
+                            {(isLineFlexibleTransport(leg.line)
+                              ? t(dictionary.missingRealTimePrefix)
+                              : '') +
+                              formatToClock(
+                                leg.expectedStartTime,
+                                language,
+                                'floor',
+                              )}
+                          </ThemeText>
+                        )}
                         {isSignificantDifference(leg) && (
                           <ThemeText
                             style={styles.scheduledTime}
