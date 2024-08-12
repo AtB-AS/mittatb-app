@@ -1833,7 +1833,7 @@ PODS:
     - React-Core
   - react-native-device-brightness (1.2.7):
     - React
-  - react-native-flipper (0.212.0):
+  - react-native-flipper (0.262.0):
     - React-Core
   - react-native-flipper-performance-plugin (0.4.0):
     - React-Core
@@ -2551,7 +2551,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 6f392912435adb8fbf4c3eee0e79a0a0b4e4b717
   react-native-compressor: db1b725658367d9aa0f8bdabed4b0aec88cd1c0b
   react-native-device-brightness: 886cfbfb49a32b6de4ccfc1f720776dc5f381d24
-  react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
+  react-native-flipper: 1733f4a047493bb631ac9edaf87f714ca216a375
   react-native-flipper-performance-plugin: 42ec5017abd26e7c5a1f527f2db92c14a90cabdb
   react-native-geolocation: ed9e1d132f576b9a4a503af46f9704413ea0dec1
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
