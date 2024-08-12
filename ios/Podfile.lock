@@ -2089,10 +2089,11 @@ PODS:
     - Turf
   - RNPermissions (4.1.5):
     - React-Core
-  - RNScreens (3.29.0):
+  - RNScreens (3.34.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+    - React-RCTImage
   - RNSVG (13.7.0):
     - React-Core
   - SocketRocket (0.6.1)
@@ -2600,7 +2601,7 @@ SPEC CHECKSUMS:
   RNLocalize: 4f22418187ecd5ca693231093ff1d912d1b3c9bc
   rnmapbox-maps: 0c466efc30f3562a84f789372a167ccfd3f17f3f
   RNPermissions: cf6089c104db6d9a1aa9ea1773cbc802a6719e87
-  RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
+  RNScreens: 29418ceffb585b8f0ebd363de304288c3dce8323
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
