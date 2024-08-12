@@ -29,15 +29,13 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
     authTypeRef.current = authenticationType;
   }, [authenticationType]);
 
-  if (isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY && !client) {
-    const postHog = new PostHog(POSTHOG_API_KEY, {
-      host: POSTHOG_HOST
-    })
-    setClient(postHog);
-  }
-
   useEffect(() => {
-    
+    if (isPosthogEnabled && POSTHOG_HOST && POSTHOG_API_KEY && !client) {
+      const postHog = new PostHog(POSTHOG_API_KEY, {
+        host: POSTHOG_HOST
+      })
+      setClient(postHog);
+    }
   }, [isPosthogEnabled, client]);
 
   useEffect(() => {
