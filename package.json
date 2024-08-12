@@ -176,7 +176,7 @@
     "jest-circus": "^29.7.0",
     "jest-junit": "^16.0.0",
     "metro-react-native-babel-preset": "^0.77.0",
-    "patch-package": "^6.5.1",
+    "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.8.8",
     "react-dom": "18.2.0",
