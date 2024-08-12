@@ -3409,10 +3409,10 @@
   resolved "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bugsnag/cli@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-2.2.0.tgz#6b37c8831fb72f0b04fc38f16bdf825142ac15f6"
-  integrity sha512-Caa5NGB7WNwlZPKjqBsKU/caT81YXCkuQSHEedaxS5kvbX9E9k07rcPf0j4yJUZwVIgwNL1GtkFx79qS8jrQJA==
+"@bugsnag/cli@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/cli/-/cli-2.5.0.tgz#27ee0a479abcb00f97fefd0085d4359382678365"
+  integrity sha512-x8S/vVv4SKD+vYfOu/1yAgrM1OelTG50nyCbKO0GULDVVS/YLKve8sssw+2osmuIBeJwLO/ucDHwYuGbZrgEDQ==
   dependencies:
     axios "^1.6.2"
     js-yaml "^4.1.0"
