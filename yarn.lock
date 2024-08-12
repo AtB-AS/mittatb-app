@@ -5593,10 +5593,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/child-process-promise@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.npmjs.org/@types/child-process-promise/-/child-process-promise-2.2.2.tgz"
-  integrity sha512-4eGTIhKW0jb9DlS81Fgo/UyZ12DMhDhz3Ec8tdHW53l4ubteynNIuy7Z1HNnyHn1jTzXa/o9iX0WoAdiSoDs+Q==
+"@types/child-process-promise@^2.2.6":
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/@types/child-process-promise/-/child-process-promise-2.2.6.tgz#3936229dd9c88d14a52cb05a061d9a67f0d0374e"
+  integrity sha512-g0pOHijr6Trug43D2bV0PLSIsSHa/xHEES2HeX5BAlduq1vW0nZcq27Zeud5lgmNB+kPYYVqiMap32EHGTco/w==
   dependencies:
     "@types/node" "*"
 
