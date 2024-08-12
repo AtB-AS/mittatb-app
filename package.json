@@ -130,7 +130,7 @@
     "@react-native-community/slider": "^4.5.2",
     "@react-native/babel-preset": "0.73.21",
     "@react-native/eslint-config": "^0.72.2",
-    "@react-native/metro-config": "^0.73.5",
+    "@react-native/metro-config": "^0.74.87",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-controls": "^6.5.16",
     "@storybook/addon-ondevice-actions": "^6.5.7",
