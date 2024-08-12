@@ -82,6 +82,7 @@
 		FED3D5E02968501400B7DEC4 /* NoFavoriteViewMedium.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */; };
 		FEE4FE192AE6F08600E1821B /* BeaconsPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */; };
 		FEE4FE1B2AE6F0C200E1821B /* BeaconsPermissionsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */; };
+		C18256D729E9412DA315E055 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80CBD2ACDD97450583702DEF /* Colors.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,6 +196,7 @@
 		FED3D5DE2968501400B7DEC4 /* NoFavoriteViewMedium.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoFavoriteViewMedium.swift; sourceTree = "<group>"; };
 		FEE4FE182AE6F08600E1821B /* BeaconsPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconsPermissions.swift; sourceTree = "<group>"; };
 		FEE4FE1A2AE6F0C200E1821B /* BeaconsPermissionsBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BeaconsPermissionsBridge.m; sourceTree = "<group>"; };
+		80CBD2ACDD97450583702DEF /* Colors.xcassets */ = {isa = PBXFileReference; name = "Colors.xcassets"; path = "atb/Colors.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +265,7 @@
 				FE8186AC297593DA000D2195 /* Configs */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				298D19492AEBC45E00065733 /* InfoPlist.strings */,
+				80CBD2ACDD97450583702DEF /* Colors.xcassets */,
 			);
 			name = atb;
 			sourceTree = "<group>";
@@ -529,6 +532,7 @@
 				0FF6825F247FE01600FB80EE /* BootSplash.storyboard in Resources */,
 				F19471F4FCE444CF931BA221 /* Roboto-Bold.ttf in Resources */,
 				E6A5C3E919C3475F907B3CE4 /* Roboto-Regular.ttf in Resources */,
+				C18256D729E9412DA315E055 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
