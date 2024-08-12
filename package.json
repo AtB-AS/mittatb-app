@@ -49,7 +49,7 @@
     "@react-native-firebase/messaging": "^20.3.0",
     "@react-native-firebase/remote-config": "^20.3.0",
     "@react-native/typescript-config": "^0.74.87",
-    "@react-navigation/bottom-tabs": "^6.5.8",
+    "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/devtools": "^6.0.19",
     "@react-navigation/material-top-tabs": "^6.6.3",
     "@react-navigation/native": "^6.1.7",
