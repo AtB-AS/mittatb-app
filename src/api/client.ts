@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosRequestConfig} from 'axios';
+import axios, {AxiosError, InternalAxiosRequestConfig} from 'axios';
 import {v4 as uuid} from 'uuid';
 import {API_BASE_URL, APP_VERSION, IOS_BUNDLE_IDENTIFIER} from '@env';
 import {getAxiosErrorMetadata, getAxiosErrorType} from './utils';
@@ -11,6 +11,7 @@ import {
   PlatformHeaderName,
   PlatformVersionHeaderName,
   RequestIdHeaderName,
+  Authorization,
 } from './headers';
 import axiosRetry, {isIdempotentRequestError} from 'axios-retry';
 import axiosBetterStacktrace from 'axios-better-stacktrace';
@@ -79,10 +80,7 @@ export function setInstallId(installId: string) {
 export const CancelToken = axios.CancelToken;
 export const isCancel = axios.isCancel;
 
-function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
-  if (!config.headers) {
-    config.headers = {};
-  }
+function requestHandler(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
   config.headers[RequestIdHeaderName] = uuid();
 
   if (installIdHeaderValue) {
@@ -102,14 +100,11 @@ function requestHandler(config: AxiosRequestConfig): AxiosRequestConfig {
   return config;
 }
 
-async function requestIdTokenHandler(config: AxiosRequestConfig) {
+async function requestIdTokenHandler(config: InternalAxiosRequestConfig) {
   if (config.authWithIdToken) {
     const user = auth().currentUser;
     const idToken = await user?.getIdToken(config.forceRefreshIdToken);
-    config.headers = {
-      ...(config.headers || {}),
-      Authorization: 'Bearer ' + idToken,
-    };
+    config.headers[Authorization] = 'Bearer ' + idToken;
   }
   return config;
 }
