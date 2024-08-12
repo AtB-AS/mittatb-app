@@ -37,7 +37,6 @@ const reducer: ReducerType = (prevState, action): RecipientSelectionState => {
     case 'SELECT_RECIPIENT':
       return {
         ...prevState,
-        recipients: prevState.recipients,
         settingPhone: false,
         settingName: false,
         recipient: action.recipient,
