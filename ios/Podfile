@@ -51,12 +51,6 @@ $RNMapboxMapsVersion = '~> 10.17.0'
 
 target 'app' do
   pod 'Firebase', :modular_headers => true
-  pod 'FirebaseFirestore', :modular_headers => true
-  pod 'FirebaseRemoteConfig', :modular_headers => true
-  pod 'FirebaseFirestoreInternal', :modular_headers => true
-  pod 'FirebaseInstallations', :modular_headers => true
-  pod 'FirebaseABTesting', :modular_headers => true
-  pod 'FirebaseCoreExtension', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
 
