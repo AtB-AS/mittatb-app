@@ -2,6 +2,7 @@ import {Language, TranslateFunction, dictionary} from '@atb/translations';
 import {
   FormatOptions,
   Locale,
+  RoundingMethod,
   addHours,
   differenceInCalendarDays,
   differenceInMinutes,
@@ -19,6 +20,7 @@ import {
   isWithinInterval,
   parse,
   parseISO,
+  roundToNearestMinutes,
   set,
 } from 'date-fns';
 import {
@@ -153,7 +155,9 @@ export function formatToClock(
   showSeconds?: boolean,
 ) {
   const parsed = parseIfNeeded(isoDate);
-  const rounded = !showSeconds ? roundMinute(parsed, roundingMethod) : parsed;
+  const rounded = !showSeconds
+    ? roundToNearestMinutes(parsed, {roundingMethod})
+    : parsed;
   const seconds = showSeconds ? ':' + format(parsed, 'ss') : '';
 
   return formatLocaleTime(rounded, language) + seconds;
@@ -564,26 +568,4 @@ function getHumanizer(
   };
 
   return humanizer(ms, opts);
-}
-
-export type RoundingMethod = 'ceil' | 'floor' | 'nearest';
-
-/**
- * date-fns also has a rounding function, `roundToNearestMinutes`, but it
- * doesn't work correctly: https://github.com/date-fns/date-fns/issues/3129
- *
- * TODO: Replace with date-fns `roundToNearestMinutes`
- */
-function roundMinute(date: Date, roundingMethod: RoundingMethod) {
-  // Round based on minutes (60000 milliseconds)
-  const coeff = 1000 * 60;
-
-  switch (roundingMethod) {
-    case 'nearest':
-      return new Date(Math.round(date.getTime() / coeff) * coeff);
-    case 'ceil':
-      return new Date(Math.ceil(date.getTime() / coeff) * coeff);
-    case 'floor':
-      return new Date(Math.floor(date.getTime() / coeff) * coeff);
-  }
 }
