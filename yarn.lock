@@ -10531,10 +10531,10 @@ hasown@^2.0.1, hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
-haversine-distance@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.npmjs.org/haversine-distance/-/haversine-distance-1.2.1.tgz"
-  integrity sha512-rQpG89d6NlAis0eqOSFXDqNU/GZcMPlHNVMqTSzD16niD9s1fDK8T6kwrK0WJ7OMU+iRNy3cgGYnNQihMqmaHg==
+haversine-distance@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/haversine-distance/-/haversine-distance-1.2.3.tgz#8414ab56a9fb85ecd5733c420d31294779f0f284"
+  integrity sha512-cRKtuukt+/fVprlLueX30mytMNtiQ4tff93FDW9yrBx3BYrq6gujiw1+hEaaxssKlOZTm8R3BPtMbNM+n0+bqQ==
 
 he@1.2.0:
   version "1.2.0"
