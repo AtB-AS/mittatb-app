@@ -30,9 +30,9 @@ export const useSnackbarIsVisible = (
 
   const isScreenReaderEnabled = useIsScreenReaderEnabled();
 
-  const timeoutIdRef = useRef<NodeJS.Timeout | undefined>();
+  const timeoutIdRef = useRef<number | undefined>();
   const clearCurrentTimeout = () =>
-    timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
+    timeoutIdRef.current ? clearTimeout(timeoutIdRef.current) : void 0;
 
   useEffect(() => {
     setSnackbarIsVisible(shouldShowSnackbar);
