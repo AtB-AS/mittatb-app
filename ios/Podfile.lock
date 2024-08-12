@@ -2033,7 +2033,7 @@ PODS:
   - ReactNativeCameraKit (14.0.0-beta12):
     - React-Core
   - RecaptchaInterop (100.0.0)
-  - RNBootSplash (4.4.1):
+  - RNBootSplash (6.1.1):
     - React-Core
   - RNCAsyncStorage (1.19.8):
     - React-Core
@@ -2076,13 +2076,13 @@ PODS:
     - React-Core
   - RNLocalize (2.2.4):
     - React-Core
-  - rnmapbox-maps (10.1.3):
+  - rnmapbox-maps (10.1.28):
     - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
-    - rnmapbox-maps/DynamicLibrary (= 10.1.3)
+    - rnmapbox-maps/DynamicLibrary (= 10.1.28)
     - Turf
-  - rnmapbox-maps/DynamicLibrary (10.1.3):
+  - rnmapbox-maps/DynamicLibrary (10.1.28):
     - MapboxMaps (~> 10.17.0)
     - React
     - React-Core
@@ -2586,7 +2586,7 @@ SPEC CHECKSUMS:
   ReactCommon: 8cae78d3c3eceff20ee4bbca8bb73b675a45fd5d
   ReactNativeCameraKit: 80ee467bdc72ab04dea312eb275c0d2cd682f2db
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  RNBootSplash: 4f968c1e098c7ec97939ace039f735e3d335bd4b
+  RNBootSplash: 5951974a5271183d06d3279bd4b9d7d093f4e2fc
   RNCAsyncStorage: 687bb9e85dd3d45b966662440dcfc0cd962347e6
   RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
   RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
@@ -2600,7 +2600,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 67fb54b3e6ca338a8044e85cd6f340265aa41091
   RNInAppBrowser: e36d6935517101ccba0e875bac8ad7b0cb655364
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
-  rnmapbox-maps: 8f6b0c4b4dfc62c72c16df5578b1105426d02e68
+  rnmapbox-maps: 0c466efc30f3562a84f789372a167ccfd3f17f3f
   RNPermissions: 2a9336f58607a4ba0000dd6b8ad7b3dd19004966
   RNScreens: 17e2f657f1b09a71ec3c821368a04acbb7ebcb46
   RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
