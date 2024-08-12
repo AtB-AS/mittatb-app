@@ -7500,8 +7500,8 @@ char-regex@^1.0.2:
 
 child-process-promise@^2.2.1:
   version "2.2.1"
-  resolved "https://registry.npmjs.org/child-process-promise/-/child-process-promise-2.2.1.tgz"
-  integrity sha1-RzChHvYQ+tRQuPIjx50x172tgHQ=
+  resolved "https://registry.yarnpkg.com/child-process-promise/-/child-process-promise-2.2.1.tgz#4730a11ef610fad450b8f223c79d31d7bdad8074"
+  integrity sha512-Fi4aNdqBsr0mv+jgWxcZ/7rAIC2mgihrptyVI4foh/rrjY/3BNjfP9+oaiFx/fzim+1ZyCNBae0DlyfQhSugog==
   dependencies:
     cross-spawn "^4.0.2"
     node-version "^1.0.0"
