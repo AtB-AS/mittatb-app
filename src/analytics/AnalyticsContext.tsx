@@ -55,9 +55,12 @@ export const AnalyticsContextProvider: React.FC = ({children}) => {
 
   return (
     <AnalyticsContext.Provider value={client}>
-      <PostHogProvider autocapture={false} client={client}>
-        {children}
-      </PostHogProvider>
+      {client && (
+        <PostHogProvider autocapture={false} client={client}>
+          {children}
+        </PostHogProvider>
+      )}
+      {!client && children}
     </AnalyticsContext.Provider>
   );
 };
