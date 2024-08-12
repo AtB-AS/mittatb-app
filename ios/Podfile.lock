@@ -638,7 +638,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - BugsnagReactNative (7.21.0):
+  - BugsnagReactNative (7.25.0):
     - React-Core
   - BVLinearGradient (2.8.3):
     - React-Core
@@ -2484,7 +2484,7 @@ SPEC CHECKSUMS:
   BarcodeiOSLib: 9f460686e7d7150cde46c652e5244d9fa6b516ab
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  BugsnagReactNative: c681c456736c24344553f48013da8253eb00ee92
+  BugsnagReactNative: 5b7370cd797d247983ace25aa07cca0058d7d505
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
