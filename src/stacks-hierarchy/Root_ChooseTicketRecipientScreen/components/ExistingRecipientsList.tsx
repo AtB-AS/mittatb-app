@@ -63,7 +63,7 @@ export const ExistingRecipientsList = ({
           items={recipientsQuery.data}
           itemToText={(i) => i.name}
           itemToSubtext={(i) => i.phoneNumber}
-          keyExtractor={(i) => i.name}
+          keyExtractor={(i) => i.accountId}
           selected={recipient}
           onSelect={onSelect}
           color="interactive_2"
