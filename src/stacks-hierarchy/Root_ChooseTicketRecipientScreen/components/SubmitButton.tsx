@@ -6,6 +6,7 @@ import {
 import {TicketRecipientType} from '@atb/stacks-hierarchy/types.ts';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {
+  OnBehalfOfTexts,
   PhoneInputTexts,
   PurchaseOverviewTexts,
   useTranslation,
@@ -23,7 +24,7 @@ import {useQueryClient} from '@tanstack/react-query';
 import {useAuthState} from '@atb/auth';
 
 export const SubmitButton = ({
-  state: {settingName, recipient, phone, prefix, name, error},
+  state: {settingPhone, settingName, recipient, phone, prefix, name, error},
   onSubmit,
   onError,
   themeColor,
@@ -44,10 +45,17 @@ export const SubmitButton = ({
   const onPress = async () => {
     if (recipient) {
       onSubmit(recipient);
+      return;
     }
 
     setIsSubmitting(true);
     onError(undefined);
+
+    if (!settingPhone) {
+      setIsSubmitting(false);
+      onError('no_recipient_selected');
+      return;
+    }
 
     if (!phone) {
       setIsSubmitting(false);
@@ -124,6 +132,14 @@ export const SubmitButton = ({
           style={styles.errorMessage}
           type="error"
           message={t(PhoneInputTexts.errors[error])}
+        />
+      )}
+
+      {error === 'no_recipient_selected' && !isSubmitting && (
+        <MessageInfoBox
+          style={styles.errorMessage}
+          type="error"
+          message={t(OnBehalfOfTexts.errors[error])}
         />
       )}
 

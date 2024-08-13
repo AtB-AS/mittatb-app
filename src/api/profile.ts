@@ -109,3 +109,11 @@ export const getPhoneNumberFromId = async (
     )
     .then((response) => response.data.phone);
 };
+
+export const deleteOnBehalfOfAccount = async (accountId: string) => {
+  await client.patch(
+    `${profileEndpoint}/on-behalf-of/${accountId}`,
+    {customerAlias: undefined, phoneNumber: undefined},
+    {authWithIdToken: true},
+  );
+};

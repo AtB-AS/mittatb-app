@@ -6,7 +6,7 @@ import {
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 
 type RecipientSelectionAction =
-  | {type: 'SELECT_RECIPIENT'; recipient: ExistingRecipientType}
+  | {type: 'SELECT_RECIPIENT'; recipient?: ExistingRecipientType}
   | {type: 'SELECT_SEND_TO_OTHER'}
   | {type: 'SET_PREFIX'; prefix: string}
   | {type: 'SET_PHONE'; phoneNumber: string}

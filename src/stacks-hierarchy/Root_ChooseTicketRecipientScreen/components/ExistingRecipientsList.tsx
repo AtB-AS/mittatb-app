@@ -4,39 +4,53 @@ import {
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 import {dictionary, useTranslation} from '@atb/translations';
 import {useFetchRecipientsQuery} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
-import {useEffect} from 'react';
+import {useEffect, useLayoutEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {MessageInfoBox} from '@atb/components/message-info-box';
 import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
-import OnBehalfOfTexts from "@atb/translations/screens/subscreens/OnBehalfOf.ts";
+import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf.ts';
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
+import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation.ts';
+import {animateNextChange} from '@atb/utils/animation.ts';
+import {screenReaderPause} from '@atb/components/text';
 
 export const ExistingRecipientsList = ({
   state: {recipient},
   onSelect,
-  onErrorOrEmpty,
+  onEmptyRecipients,
   themeColor,
 }: {
   state: RecipientSelectionState;
-  onSelect: (r: ExistingRecipientType) => void;
-  onErrorOrEmpty: () => void;
+  onSelect: (r?: ExistingRecipientType) => void;
+  onEmptyRecipients: () => void;
   themeColor: StaticColor;
 }) => {
   const styles = useStyles();
   const {t} = useTranslation();
-  const {themeName} = useTheme();
+  const {theme, themeName} = useTheme();
 
   const recipientsQuery = useFetchRecipientsQuery();
+  const {mutation: deleteMutation, activeDeletions} =
+    useDeleteRecipientMutation();
+
+  useLayoutEffect(() => {
+    if (deleteMutation.status !== 'idle') animateNextChange();
+  }, [deleteMutation.status]);
 
   useEffect(() => {
-    const isError = recipientsQuery.status === 'error';
-    const isEmpty =
-      recipientsQuery.status === 'success' && !recipientsQuery.data.length;
-    if (isError || isEmpty) {
-      onErrorOrEmpty();
+    if (recipientsQuery.status === 'success' && !recipientsQuery.data.length) {
+      onEmptyRecipients();
     }
-  }, [recipientsQuery.status, recipientsQuery.data, onErrorOrEmpty]);
+  }, [recipientsQuery.status, recipientsQuery.data, onEmptyRecipients]);
+
+  const onDelete = ({accountId}: ExistingRecipientType) => {
+    if (recipient?.accountId === accountId) {
+      onSelect(undefined);
+    }
+    deleteMutation.mutate(accountId);
+  };
 
   return (
     <>
@@ -50,11 +64,18 @@ export const ExistingRecipientsList = ({
       {recipientsQuery.status === 'error' && (
         <MessageInfoBox
           type="error"
-          message={t(OnBehalfOfTexts.errors.fetchRecipients)}
+          message={t(OnBehalfOfTexts.errors.fetch_recipients_failed)}
           onPressConfig={{
             action: recipientsQuery.refetch,
             text: t(dictionary.retry),
           }}
+          style={styles.errorMessage}
+        />
+      )}
+      {deleteMutation.isError && (
+        <MessageInfoBox
+          type="error"
+          message={t(OnBehalfOfTexts.errors.delete_recipient_failed)}
           style={styles.errorMessage}
         />
       )}
@@ -63,11 +84,25 @@ export const ExistingRecipientsList = ({
           items={recipientsQuery.data}
           itemToText={(i) => i.name}
           itemToSubtext={(i) => i.phoneNumber}
+          itemToA11yLabel={(i) =>
+            i.name +
+            screenReaderPause +
+            i.phoneNumber.split('').join(screenReaderPause)
+          }
           keyExtractor={(i) => i.accountId}
           selected={recipient}
-          onSelect={onSelect}
+          onSelect={(item) =>
+            !activeDeletions.includes(item.accountId) && onSelect(item)
+          }
           color="interactive_2"
           style={styles.recipientList}
+          itemToRightAction={(item) => ({
+            icon: (props) => (
+              <Delete {...props} fill={theme.status.error.primary.background} />
+            ),
+            onPress: () => onDelete(item),
+            isLoading: activeDeletions.includes(item.accountId),
+          })}
         />
       ) : null}
     </>

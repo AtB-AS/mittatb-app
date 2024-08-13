@@ -5,6 +5,7 @@ export type ExistingRecipientType = Required<TicketRecipientType>;
 
 export type OnBehalfOfErrorCode =
   | GetAccountByPhoneErrorCode
+  | 'no_recipient_selected'
   | 'missing_recipient_name'
   | 'name_already_exists'
   | 'phone_already_exists';
