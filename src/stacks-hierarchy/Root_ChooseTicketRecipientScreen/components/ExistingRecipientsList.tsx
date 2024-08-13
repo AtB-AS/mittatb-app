@@ -89,7 +89,7 @@ export const ExistingRecipientsList = ({
             screenReaderPause +
             i.phoneNumber.split('').join(screenReaderPause)
           }
-          keyExtractor={(i) => i.name}
+          keyExtractor={(i) => i.accountId}
           selected={recipient}
           onSelect={(item) =>
             !activeDeletions.includes(item.accountId) && onSelect(item)

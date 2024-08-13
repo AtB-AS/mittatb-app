@@ -28,7 +28,7 @@ export const PhoneAndNameInputSection = ({
 }) => {
   const {t} = useTranslation();
   const styles = useStyles();
-  if (!settingPhone && !settingName) return null; // What if recipients is empty?
+  if (!settingPhone && !settingName) return null;
   return (
     <>
       {settingName && (
@@ -69,7 +69,8 @@ export const PhoneAndNameInputSection = ({
             inlineLabel={false}
             autoFocus={true}
             errorText={
-              error === 'missing_recipient_name' || error === 'name_already_exists'
+              error === 'missing_recipient_name' ||
+              error === 'name_already_exists'
                 ? t(OnBehalfOfTexts.errors[error])
                 : undefined
             }

@@ -6,7 +6,6 @@ import {
 } from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
 
 type RecipientSelectionAction =
-  | {type: 'SET_RECIPIENTS'; recipients: ExistingRecipientType[]}
   | {type: 'SELECT_RECIPIENT'; recipient?: ExistingRecipientType}
   | {type: 'SELECT_SEND_TO_OTHER'}
   | {type: 'SET_PREFIX'; prefix: string}
@@ -35,16 +34,9 @@ export const useRecipientSelectionState = (): [
 
 const reducer: ReducerType = (prevState, action): RecipientSelectionState => {
   switch (action.type) {
-    case 'SET_RECIPIENTS':
-      return {
-        ...prevState,
-        settingPhone: prevState.settingPhone || !action.recipients?.length,
-        recipients: action.recipients,
-      };
     case 'SELECT_RECIPIENT':
       return {
         ...prevState,
-        recipients: prevState.recipients,
         settingPhone: false,
         settingName: false,
         recipient: action.recipient,

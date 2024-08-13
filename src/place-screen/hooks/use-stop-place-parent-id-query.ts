@@ -1,7 +1,6 @@
 import {getStopPlaceParentId} from '@atb/api/stop-places';
 import {useQuery} from '@tanstack/react-query';
-
-const ONE_HOUR_MS = 1000 * 60 * 60;
+import {ONE_HOUR_MS} from "@atb/utils/durations.ts";
 
 export const useStopPlaceParentIdQuery = (id: string) =>
   useQuery({

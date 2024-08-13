@@ -175,6 +175,12 @@ function useTicketInfoFromTrip(
     return;
 
   const nonHumanLegs = getNonHumanLegs(tripPattern.legs);
+
+  if (!nonHumanLegs.length) {
+    // Non-transit route, so no tickets needed.
+    return;
+  }
+
   const ticketStartTime = calculateTicketStartTime(nonHumanLegs);
 
   const ticketInfoForBus = getTicketInfoForBus(
@@ -208,7 +214,8 @@ function getNonHumanLegs(legs: Leg[]) {
 }
 
 function calculateTicketStartTime(legs: Leg[]) {
-  const tripStartWithBuffer = addMinutes(parseISO(legs[0]?.aimedStartTime), -5);
+  if (!legs[0]) return undefined;
+  const tripStartWithBuffer = addMinutes(parseISO(legs[0].aimedStartTime), -5);
   return tripStartWithBuffer.getTime() <= Date.now()
     ? undefined
     : formatISO(tripStartWithBuffer);
