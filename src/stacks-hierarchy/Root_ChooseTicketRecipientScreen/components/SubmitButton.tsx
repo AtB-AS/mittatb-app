@@ -45,6 +45,7 @@ export const SubmitButton = ({
   const onPress = async () => {
     if (recipient) {
       onSubmit(recipient);
+      return;
     }
 
     setIsSubmitting(true);

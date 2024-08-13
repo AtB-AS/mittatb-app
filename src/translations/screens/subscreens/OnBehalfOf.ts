@@ -18,7 +18,7 @@ const OnBehalfOfTexts = {
   tooManyRecipients: _(
     'Du kan ikke legge til flere mottakere. Om du ønsker å sende til noen andre, må du fjerne en av mottakerne i listen ovenfor.',
     "You can't add more recipients. If you wish to send to someone else, then you need to remove one of the recipients in the list above.",
-    'Du kan ikke leggje til fleire mottakarar. Om du ønskjer sende til nokon andre, må du fjerne ein av mottakarane i lista ovanfor.',
+    'Du kan ikkje leggje til fleire mottakarar. Om du ønskjer sende til nokon andre, må du fjerne ein av mottakarane i lista ovanfor.',
   ),
   newRecipientLabel: _('Ny mottaker', 'New recipient', 'Ny mottakar'),
   nameInputLabel: _('Navn', 'Name', 'Namn'),
@@ -35,9 +35,9 @@ const OnBehalfOfTexts = {
   ),
   errors: {
     fetch_recipients_failed: _(
-      'Kunne ikke hente mottakere',
+      'Kunne ikke laste mottakere',
       "Couldn't retrieve recipients",
-      'Kunne ikkje hente mottakarar',
+      'Kunne ikkje laste mottakarar',
     ),
     no_recipient_selected: _(
       'Du må velge mottaker',

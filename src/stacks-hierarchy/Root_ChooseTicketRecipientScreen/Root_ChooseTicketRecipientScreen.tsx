@@ -15,6 +15,7 @@ import {PhoneAndNameInputSection} from '@atb/stacks-hierarchy/Root_ChooseTicketR
 import {TitleAndDescription} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/TitleAndDescription.tsx';
 import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {useQueryClient} from '@tanstack/react-query';
+import {SendToOtherButton} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/components/SendToOtherButton.tsx';
 
 type Props = RootStackScreenProps<'Root_ChooseTicketRecipientScreen'>;
 const themeColor: StaticColorByType<'background'> = 'background_accent_0';
@@ -61,14 +62,18 @@ export const Root_ChooseTicketRecipientScreen = ({
               animateNextChange();
               dispatch({type: 'SELECT_RECIPIENT', recipient});
             }}
-            onAddOther={() => {
-              animateNextChange();
-              dispatch({type: 'SELECT_SEND_TO_OTHER'});
-            }}
-            onErrorOrEmpty={useCallback(() => {
+            onEmptyRecipients={useCallback(() => {
               animateNextChange();
               dispatch({type: 'SELECT_SEND_TO_OTHER'});
             }, [dispatch])}
+            themeColor={themeColor}
+          />
+          <SendToOtherButton
+            state={state}
+            onPress={() => {
+              animateNextChange();
+              dispatch({type: 'SELECT_SEND_TO_OTHER'});
+            }}
             themeColor={themeColor}
           />
 

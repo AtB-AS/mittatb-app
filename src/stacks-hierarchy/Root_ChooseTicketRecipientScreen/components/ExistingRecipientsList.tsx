@@ -11,25 +11,20 @@ import {RadioGroupSection} from '@atb/components/sections';
 import {StyleSheet, useTheme} from '@atb/theme';
 import {getStaticColor, StaticColor} from '@atb/theme/colors.ts';
 import OnBehalfOfTexts from '@atb/translations/screens/subscreens/OnBehalfOf.ts';
-import {Add, Delete} from '@atb/assets/svg/mono-icons/actions';
+import {Delete} from '@atb/assets/svg/mono-icons/actions';
 import {useDeleteRecipientMutation} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-delete-recipient-mutation.ts';
 import {animateNextChange} from '@atb/utils/animation.ts';
 import {screenReaderPause} from '@atb/components/text';
-import {Button} from '@atb/components/button';
-
-const MAX_RECIPIENTS = 10;
 
 export const ExistingRecipientsList = ({
-  state: {settingPhone, recipient},
+  state: {recipient},
   onSelect,
-  onAddOther,
-  onErrorOrEmpty,
+  onEmptyRecipients,
   themeColor,
 }: {
   state: RecipientSelectionState;
   onSelect: (r?: ExistingRecipientType) => void;
-  onAddOther: () => void;
-  onErrorOrEmpty: () => void;
+  onEmptyRecipients: () => void;
   themeColor: StaticColor;
 }) => {
   const styles = useStyles();
@@ -37,30 +32,25 @@ export const ExistingRecipientsList = ({
   const {theme, themeName} = useTheme();
 
   const recipientsQuery = useFetchRecipientsQuery();
-  const {mutation, activeDeletions} = useDeleteRecipientMutation();
+  const {mutation: deleteMutation, activeDeletions} =
+    useDeleteRecipientMutation();
 
   useLayoutEffect(() => {
-    if (mutation.status !== 'idle') animateNextChange();
-  }, [mutation.status]);
+    if (deleteMutation.status !== 'idle') animateNextChange();
+  }, [deleteMutation.status]);
 
   useEffect(() => {
-    const isError = recipientsQuery.status === 'error';
-    const isEmpty =
-      recipientsQuery.status === 'success' && !recipientsQuery.data.length;
-    if (isError || isEmpty) {
-      onErrorOrEmpty();
+    if (recipientsQuery.status === 'success' && !recipientsQuery.data.length) {
+      onEmptyRecipients();
     }
-  }, [recipientsQuery.status, recipientsQuery.data, onErrorOrEmpty]);
+  }, [recipientsQuery.status, recipientsQuery.data, onEmptyRecipients]);
 
   const onDelete = ({accountId}: ExistingRecipientType) => {
     if (recipient?.accountId === accountId) {
       onSelect(undefined);
     }
-    mutation.mutate(accountId);
+    deleteMutation.mutate(accountId);
   };
-
-  const isAtMaxRecipients =
-    (recipientsQuery.data?.length || 0) >= MAX_RECIPIENTS;
 
   return (
     <>
@@ -82,7 +72,7 @@ export const ExistingRecipientsList = ({
           style={styles.errorMessage}
         />
       )}
-      {mutation.isError && (
+      {deleteMutation.isError && (
         <MessageInfoBox
           type="error"
           message={t(OnBehalfOfTexts.errors.delete_recipient_failed)}
@@ -101,7 +91,9 @@ export const ExistingRecipientsList = ({
           }
           keyExtractor={(i) => i.name}
           selected={recipient}
-          onSelect={(item) => onSelect(item)}
+          onSelect={(item) =>
+            !activeDeletions.includes(item.accountId) && onSelect(item)
+          }
           color="interactive_2"
           style={styles.recipientList}
           itemToRightAction={(item) => ({
@@ -113,25 +105,6 @@ export const ExistingRecipientsList = ({
           })}
         />
       ) : null}
-      {isAtMaxRecipients && (
-        <MessageInfoBox
-          type="warning"
-          message={t(OnBehalfOfTexts.tooManyRecipients)}
-          style={styles.maxRecipientsWarning}
-        />
-      )}
-      {!settingPhone && (
-        <Button
-          text={t(OnBehalfOfTexts.sendToOtherButton)}
-          onPress={onAddOther}
-          mode="secondary"
-          type="medium"
-          compact={true}
-          backgroundColor={themeColor}
-          leftIcon={{svg: Add}}
-          disabled={isAtMaxRecipients}
-        />
-      )}
     </>
   );
 };
@@ -140,5 +113,4 @@ const useStyles = StyleSheet.createThemeHook((theme) => ({
   loadingSpinner: {marginBottom: theme.spacings.medium},
   errorMessage: {marginBottom: theme.spacings.medium},
   recipientList: {marginBottom: theme.spacings.medium},
-  maxRecipientsWarning: {marginBottom: theme.spacings.medium},
 }));
