@@ -39,10 +39,6 @@ export function RadioGroupSection<T>({
     <Section {...props} accessibilityRole="radiogroup">
       {headerText && <HeaderSectionItem text={headerText} mode="subheading" />}
       {items.map((item: T, index) => {
-        const text = itemToText(item, index);
-        const subtext = itemToSubtext ? itemToSubtext(item, index) : undefined;
-        const a11yLabel =
-          itemToA11yLabel?.(item) ?? `${text}, ${hideSubtext ? '' : subtext}`;
         const thisItemSelected =
           !!selected &&
           keyExtractor(item, index) === keyExtractor(selected, index);
@@ -52,14 +48,12 @@ export function RadioGroupSection<T>({
             selected={thisItemSelected}
             text={itemToText(item, index)}
             hideSubtext={hideSubtext}
-            subtext={subtext}
+            subtext={itemToSubtext?.(item, index)}
             onPress={() => onSelect?.(item, index)}
             testID={'radioButton' + itemToText(item, index)}
             color={color}
-            accessibility={{
-              accessibilityHint: thisItemSelected ? '' : accessibilityHint,
-              accessibilityLabel: a11yLabel,
-            }}
+            accessibilityHint={thisItemSelected ? '' : accessibilityHint}
+            accessibilityLabel={itemToA11yLabel?.(item)}
             rightAction={itemToRightAction?.(item)}
           />
         );

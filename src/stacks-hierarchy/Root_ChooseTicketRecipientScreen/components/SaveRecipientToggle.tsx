@@ -1,7 +1,7 @@
 import {RecipientSelectionState} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/types.ts';
-import {OnBehalfOfTexts, useTranslation} from '@atb/translations';
+import {dictionary, OnBehalfOfTexts, useTranslation} from '@atb/translations';
 import {Checkbox} from '@atb/components/checkbox';
-import {ThemeText} from '@atb/components/text';
+import {screenReaderPause, ThemeText} from '@atb/components/text';
 import {StyleSheet} from '@atb/theme';
 import {StaticColor} from '@atb/theme/colors.ts';
 import {useFetchRecipientsQuery} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
@@ -26,6 +26,11 @@ export const SaveRecipientToggle = ({
 
   const isAtMaxRecipients = (recipients?.length || 0) >= MAX_RECIPIENTS;
 
+  const a11yLabel =
+    t(OnBehalfOfTexts.saveCheckBoxLabel) +
+    screenReaderPause +
+    t(settingName ? dictionary.checked : dictionary.unchecked);
+
   return (
     <>
       {isAtMaxRecipients && (
@@ -38,8 +43,8 @@ export const SaveRecipientToggle = ({
       <PressableOpacity
         style={[styles.container, isAtMaxRecipients && {opacity: 0.2}]}
         onPress={onPress}
-        accessibilityRole="checkbox"
-        accessibilityState={{checked: settingPhone}}
+        accessibilityRole="button"
+        accessibilityLabel={a11yLabel}
         disabled={isAtMaxRecipients}
       >
         <Checkbox checked={settingName} />

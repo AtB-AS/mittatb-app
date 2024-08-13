@@ -123,6 +123,10 @@ const dictionary = {
   loading: _('Laster…', 'Loading…', `Lastar…`),
   listConcatWord: _('og', 'and', 'og'),
   via: _('via', 'via', 'via'),
+  checked: _('avhuket', 'checked', 'avhuket'),
+  unchecked: _('ikke avhuket', 'unchecked', 'Ikkje avhuket'),
+  selected: _('Valgt', 'selected', 'Valgt'),
+  unselected: _('Ikke valgt', 'Unselected', 'Ikkje valgt'),
 };
 
 export default orgSpecificTranslations(dictionary, {
