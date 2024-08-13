@@ -45,9 +45,9 @@ const OnBehalfOfTexts = {
       'Du må velje mottakar',
     ),
     delete_recipient_failed: _(
-      'Klarte ikke slette mottaker',
+      'Klarte ikke å slette mottaker',
       "Weren't able to delete recipient",
-      'Klarte ikkje slette mottakar',
+      'Klarte ikkje å slette mottakar',
     ),
     missing_recipient_name: _(
       'Du må legge inn navn på mottaker',
