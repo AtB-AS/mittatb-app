@@ -1,9 +1,9 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {deleteOnBehalfOfAccount} from '@atb/api/profile.ts';
 import {useAuthState} from '@atb/auth';
-import {FETCH_RECIPIENTS_QUERY_KEY} from '@atb/stacks-hierarchy/Root_ChooseTicketRecipientScreen/use-fetch-recipients-query.ts';
 import {OnBehalfOfAccountsResponse} from '@atb/api/types/profile.ts';
 import {useState} from 'react';
+import {FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY} from '@atb/on-behalf-of/queries/use-fetch-on-behalf-of-accounts-query.ts';
 
 export const useDeleteRecipientMutation = () => {
   const {userId} = useAuthState();
@@ -16,7 +16,7 @@ export const useDeleteRecipientMutation = () => {
     onSuccess: (_, accountId) => {
       removeActive(accountId);
       queryClient.setQueryData(
-        [FETCH_RECIPIENTS_QUERY_KEY, userId],
+        [FETCH_ON_BEHALF_OF_ACCOUNTS_QUERY_KEY, userId],
         (oldData?: OnBehalfOfAccountsResponse) =>
           oldData?.filter((r) => r.sentToAccountId !== accountId),
       );

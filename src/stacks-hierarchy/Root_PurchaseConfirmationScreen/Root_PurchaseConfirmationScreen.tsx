@@ -311,7 +311,7 @@ export const Root_PurchaseConfirmationScreen: React.FC<Props> = ({
                   >
                     {t(
                       PurchaseConfirmationTexts.sendingTo(
-                        recipient.phoneNumber,
+                        recipient.name || recipient.phoneNumber,
                       ),
                     )}
                   </ThemeText>
