@@ -1,6 +1,10 @@
 import {CancelToken as CancelTokenStatic} from '@atb/api';
 import {ErrorType, getAxiosErrorType} from '@atb/api/utils';
-import {PreassignedFareProduct, TariffZone} from '@atb/configuration';
+import {
+  PreassignedFareProduct,
+  TariffZone,
+  useFirestoreConfiguration,
+} from '@atb/configuration';
 import {
   FlexDiscountLadder,
   Offer,
@@ -160,6 +164,7 @@ export function useOfferState(
   isOnBehalfOf: boolean = false,
   travelDate?: string,
 ) {
+  const {preassignedFareProducts} = useFirestoreConfiguration();
   const offerReducer = getOfferReducer(userProfilesWithCount);
   const [state, dispatch] = useReducer(offerReducer, initialState);
   const zones = useMemo(
@@ -193,6 +198,14 @@ export function useOfferState(
             dispatch({type: 'CLEAR_OFFER'});
             return;
           }
+
+          const productAliasId = preassignedFareProduct.productAliasId;
+          const productAlternatives = productAliasId
+            ? preassignedFareProducts.filter(
+                (fp) => fp.productAliasId === productAliasId,
+              )
+            : [preassignedFareProduct];
+
           const placeParams =
             offerEndpoint === 'stop-places'
               ? {from: fromPlace.id, to: toPlace.id}
@@ -201,7 +214,7 @@ export function useOfferState(
             ...placeParams,
             is_on_behalf_of: isOnBehalfOf,
             travellers: offerTravellers,
-            products: [preassignedFareProduct.id],
+            products: productAlternatives.map((p) => p?.id),
             travel_date: travelDate,
           };
           dispatch({type: 'SEARCHING_OFFER'});
