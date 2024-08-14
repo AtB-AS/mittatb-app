@@ -76,6 +76,8 @@ export const NearbyStopPlacesScreenComponent = ({
     [data],
   );
 
+  const openLocationSearch = () => onPressLocationSearch(location);
+
   useEffect(() => {
     if (
       (location?.resultType == 'search' ||
@@ -85,8 +87,6 @@ export const NearbyStopPlacesScreenComponent = ({
       onSelectStopPlaceRef.current(location);
     }
   }, [location]);
-
-  const openLocationSearch = () => onPressLocationSearch(location);
 
   function setCurrentLocationAsFrom() {
     onUpdateLocation(
